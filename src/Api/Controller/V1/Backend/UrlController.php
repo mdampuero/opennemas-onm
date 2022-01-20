@@ -35,6 +35,15 @@ class UrlController extends ApiController
         'update' => 'MASTER'
     ];
 
+    protected $propertyName = 'url';
+
+    protected $translations = [
+        [
+            'name' => 'redirection',
+            'title' => 'Redirection',
+        ]
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -53,7 +62,11 @@ class UrlController extends ApiController
                     ['name' => 'tag', 'title' => _('Tag')],
                     ['name' => 'user', 'title' => _('User')],
                 ]
-            )
+            ),
+                'formSettings'  => [
+                    'name'             => $this->propertyName,
+                    'expansibleFields' => $this->translateFields($this->translations)
+                ]
         ];
     }
 }

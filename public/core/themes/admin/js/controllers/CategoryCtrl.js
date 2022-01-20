@@ -18,21 +18,8 @@
       function($controller, $scope, $timeout) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
-        $scope.expanded = {};
-        $scope.formSettings = {
-          name: 'categorie',
-          expansibleFields: [
-            { name: 'category', title: 'Subsection of' },
-            { name: 'color', title: 'Color' },
-            { name: 'logo', title: 'Logo' },
-            { name: 'type', title: 'Type' },
-          ]
-        };
 
-        /**
-         * @inheritdoc
-         */
-        $scope.contentKey = 'category';
+        $scope.expanded = {};
 
         /**
          * @inheritdoc

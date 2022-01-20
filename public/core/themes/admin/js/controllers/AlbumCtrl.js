@@ -20,19 +20,8 @@
       function($controller, $scope, $timeout, $uibModal, $window, related, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
         $scope.expanded = {};
-        $scope.formSettings = {
-          name: 'album',
-          expansibleFields: [
-            { name: 'author', title: 'Author' },
-            { name: 'category', title: 'Category' },
-            { name: 'tags', title: 'Tags' },
-            { name: 'slug', title: 'Slug' },
-            { name: 'schedule', title: 'Schedule' },
-            { name: 'featuredFrontpage', title: 'Featured frontpage' },
-            { name: 'agency', title: 'Agency' }
-          ]
-        };
 
         /**
          * @inheritdoc
@@ -43,11 +32,6 @@
          * @inheritdoc
          */
         $scope.draftKey = 'album-draft';
-
-        /**
-         * @inheritdoc
-         */
-        $scope.contentKey = 'album';
 
         /**
          * @inheritdoc
@@ -129,6 +113,7 @@
          * @type {Object}
          */
         $scope.treeOptions = {
+
           /**
            * Sorts the list of original items when the list of localized items
            * is re-ordered.

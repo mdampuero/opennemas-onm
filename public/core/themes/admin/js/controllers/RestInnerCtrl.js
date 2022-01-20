@@ -31,26 +31,6 @@
          * @memberOf RestInnerCtrl
          *
          * @description
-         *  The content key.
-         *
-         * @type {String}
-         */
-        $scope.contentKey = null;
-
-        /**
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *  The list of expanded fields
-         *
-         * @type {Array}
-         */
-        $scope.expanded = [];
-
-        /**
-         * @memberOf RestInnerCtrl
-         *
-         * @description
          *  The item object.
          *
          * @type {Object}
@@ -183,6 +163,9 @@
 
             if (!response.data.item) {
               $scope.data.item = {};
+            }
+            if (response.data.extra && response.data.extra.formSettings) {
+              $scope.formSettings = response.data.extra.formSettings;
             }
 
             $scope.data.item = angular.extend($scope.item, $scope.data.item);
@@ -330,23 +313,6 @@
           }
 
           return 0;
-        };
-
-        /**
-         * @function setExpandedFields
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   Set 'value' expanded from 'fields'
-         *
-         * @param {Array} data The data fields.
-         * @param {Boolean} data The value (true/false).
-         *
-         */
-        $scope.setExpandedFields = function(fields, value) {
-          fields.forEach(function(item) {
-            $scope.expanded[item] = value;
-          });
         };
       }
     ]);

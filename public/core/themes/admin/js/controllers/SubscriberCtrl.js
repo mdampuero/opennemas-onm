@@ -23,18 +23,8 @@
       function($controller, $scope, $uibModal, $window, cleaner, http, messenger, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
-        $scope.expanded = {};
-        $scope.formSettings = {
-          name: 'subscriber',
-          expansibleFields: [
-            { name: 'subscriptions', title: 'Lists' },
-          ]
-        };
 
-        /**
-         * @inheritdoc
-         */
-        $scope.contentKey = 'subscriber';
+        $scope.expanded = {};
 
         /**
          * @memberOf SubscriberCtrl

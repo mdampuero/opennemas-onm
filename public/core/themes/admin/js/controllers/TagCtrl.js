@@ -16,8 +16,8 @@
      *   Handles actions for tag edit form.
      */
     .controller('TagCtrl', [
-      '$controller', '$scope', '$timeout', 'cleaner', 'http',
-      function($controller, $scope, $timeout, cleaner, http) {
+      '$controller', '$scope', '$timeout', 'http',
+      function($controller, $scope, $timeout, http) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
@@ -28,13 +28,6 @@
           description: '',
           locale: null
         };
-
-        /**
-         * @memberOf TagCtrl
-         * @description
-         *  Flag to hide the list of fields
-         */
-        $scope.noFields = true;
 
         /**
          * @inheritdoc

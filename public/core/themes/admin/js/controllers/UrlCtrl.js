@@ -24,10 +24,7 @@
         // Initialize the super class and extend it
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
-        /**
-         * @inheritdoc
-         */
-        $scope.contentKey = 'url';
+        $scope.expanded = {};
 
         /**
          * @memberOf UserGroupCtrl
@@ -59,6 +56,10 @@
           redirect:   'backend_url_show',
           saveItem:   'api_v1_backend_url_save_item',
           updateItem: 'api_v1_backend_url_update_item'
+        };
+
+        $scope.buildScope = function() {
+          $scope.expandFields();
         };
 
         // Updates item target when selected content from content picker changes

@@ -19,13 +19,8 @@
       function($controller, $scope, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
         $scope.expanded = {};
-        $scope.formSettings = {
-          name: 'staticPage',
-          expansibleFields: [
-            { name: 'slug', title: 'Slug' },
-          ]
-        };
 
         /**
          * @inheritdoc
@@ -36,11 +31,6 @@
          * @inheritdoc
          */
         $scope.draftKey = 'static-page-draft';
-
-        /**
-         * @inheritdoc
-         */
-        $scope.contentKey = 'staticpage';
 
         /**
          * @inheritdoc

@@ -23,14 +23,6 @@
       function($controller, $scope, $timeout, $uibModal, $window, cleaner, http, messenger, routing) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
         $scope.expanded = {};
-        $scope.formSettings = {
-          name: 'user',
-          expansibleFields: [
-            { name: 'slug', title: 'Slug' },
-            { name: 'user_groups', title: 'User groups' },
-            { name: 'language', title: 'Language and time' },
-          ]
-        };
 
         /**
          * @inheritdoc

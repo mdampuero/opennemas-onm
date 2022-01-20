@@ -36,6 +36,15 @@ class SubscriberController extends ApiController
         'update' => 'SUBSCRIBER_UPDATE',
     ];
 
+    protected $propertyName = 'article';
+
+    protected $translations = [
+        [
+            'name' => 'subscriptions',
+            'title' => 'Lists'
+        ]
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -172,7 +181,11 @@ class SubscriberController extends ApiController
             'countries'     => $this->get('core.geo')->getCountries(),
             'photos'        => $this->getPhotos($items),
             'settings'      => $this->getSettings(),
-            'subscriptions' => $this->getSubscriptions()
+            'subscriptions' => $this->getSubscriptions(),
+            'formSettings'  => [
+                'name'             => $this->propertyName,
+                'expansibleFields' => $this->translateFields($this->translations)
+            ]
         ];
     }
 

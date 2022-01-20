@@ -16,21 +16,11 @@
      *   Check billing information when saving author.
      */
     .controller('AuthorCtrl', [
-      '$controller', '$http', '$scope', '$timeout', '$uibModal', 'cleaner',
-      function($controller, $http, $scope, $timeout, $uibModal, cleaner) {
+      '$controller', '$scope', '$timeout', 'cleaner',
+      function($controller, $scope, $timeout, cleaner) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
-        $scope.expanded = {};
-        $scope.formSettings = {
-          name: 'author',
-          expansibleFields: [
-            { name: 'slug', title: 'Slug' },
-          ]
-        };
 
-        /**
-         * @inheritdoc
-         */
-        $scope.contentKey = 'author';
+        $scope.expanded = {};
 
         /**
          * @memberOf AuthorCtrl

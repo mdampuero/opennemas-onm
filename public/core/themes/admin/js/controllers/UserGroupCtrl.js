@@ -19,17 +19,12 @@
      *   Handles all actions in user groups listing.
      */
     .controller('UserGroupCtrl', [
-      '$controller', '$scope', '$window', 'cleaner', 'http', 'messenger', 'routing',
-      function($controller, $scope, $window, cleaner, http, messenger, routing) {
+      '$controller', '$scope',
+      function($controller, $scope) {
         // Initialize the super class and extend it
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+
         $scope.expanded = {};
-        $scope.formSettings = {
-          name: 'userGroup',
-          expansibleFields: [
-            { name: 'visibility', title: 'Visibility' },
-          ]
-        };
 
         /**
          * @inheritdoc

@@ -20,10 +20,7 @@
       function($controller, $scope, http) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
-        /**
-         * @inheritdoc
-         */
-        $scope.contentKey = 'newsagency';
+        $scope.expanded = {};
 
         $scope.item = {
           authors_map: [],

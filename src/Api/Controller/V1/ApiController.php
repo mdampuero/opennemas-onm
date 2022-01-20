@@ -390,4 +390,21 @@ class ApiController extends Controller
             $this->checkSecurity($this->extension, $permission, $this->get($this->service)->getItem($id));
         }
     }
+
+    /**
+     * Translate fields for extra fields
+     *
+     * @param array $translations list of items to translate
+     *
+     * @return array The translated items
+     */
+    public function translateFields($translations)
+    {
+        $translationResult = [];
+        foreach ($translations as $item) {
+            $item['title'] = _($item['title']);
+            array_push($translationResult, $item);
+        }
+        return $translationResult;
+    }
 }

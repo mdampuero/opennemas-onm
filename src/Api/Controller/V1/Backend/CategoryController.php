@@ -40,6 +40,27 @@ class CategoryController extends ApiController
         'update' => 'CATEGORY_UPDATE',
     ];
 
+    protected $propertyName = 'category';
+
+    protected $translations = [
+        [
+            'name' => 'category',
+            'title' => 'Subsection of'
+        ],
+        [
+            'name' => 'color',
+            'title' => 'Color'
+        ],
+        [
+            'name' => 'logo',
+            'title' => 'Logo'
+        ],
+        [
+            'name' => 'type',
+            'title' => 'Type'
+        ]
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -158,13 +179,18 @@ class CategoryController extends ApiController
      */
     protected function getExtraData($items = null)
     {
-        return [
+        $extra = parent::getExtraData($items);
+        return array_merge([
             'keys'   => $this->get($this->service)->getL10nKeys(),
             'locale' => $this->get('core.helper.locale')->getConfiguration(),
             'menu'   => $this->get('core.theme')->canCategoriesChangeMenu(),
             'stats'  => $this->get($this->service)->getStats($items),
-            'types'  => $this->get('core.theme')->getTypesForCategories()
-        ];
+            'types'  => $this->get('core.theme')->getTypesForCategories(),
+            'formSettings'  => [
+                'name'             => $this->propertyName,
+                'expansibleFields' => $this->translateFields($this->translations)
+            ]
+        ], $extra);
     }
 
     /**

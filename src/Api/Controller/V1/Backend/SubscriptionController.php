@@ -39,6 +39,19 @@ class SubscriptionController extends ApiController
         'update' => 'SUBSCRIPTION_UPDATE',
     ];
 
+    protected $propertyName = 'article';
+
+    protected $translations = [
+        [
+            'name' => 'visibility',
+            'title' => 'Visibility'
+        ],
+        [
+            'name' => 'request',
+            'title' => 'Requests'
+        ]
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -50,7 +63,11 @@ class SubscriptionController extends ApiController
     protected function getExtraData($items = null)
     {
         return [
-            'modules' => $this->get('core.helper.permission')->getByModule()
+            'modules' => $this->get('core.helper.permission')->getByModule(),
+            'formSettings'  => [
+                'name'             => $this->propertyName,
+                'expansibleFields' => $this->translateFields($this->translations)
+            ]
         ];
     }
 

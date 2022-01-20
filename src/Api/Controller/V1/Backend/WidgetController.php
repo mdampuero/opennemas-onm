@@ -38,6 +38,15 @@ class WidgetController extends ContentOldController
         'show'   => 'WIDGET_UPDATE',
     ];
 
+    protected $propertyName = 'widget';
+
+    protected $translations = [
+        [
+            'name' => 'schedule',
+            'title' => 'Schedule'
+        ]
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -76,7 +85,11 @@ class WidgetController extends ContentOldController
         return array_merge(parent::getExtraData($items), [
             'categories' => $this->getCategories($items),
             'tags'       => $this->getTags($items),
-            'types'      => $this->getTypes()
+            'types'      => $this->getTypes(),
+            'formSettings'  => [
+                'name'             => $this->propertyName,
+                'expansibleFields' => $this->translateFields($this->translations)
+            ]
         ]);
     }
 

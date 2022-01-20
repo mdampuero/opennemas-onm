@@ -18,19 +18,8 @@
       function($controller, $scope) {
         // Initialize the super class and extend it
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
-        $scope.expanded = {};
-        $scope.formSettings = {
-          name: 'subscription',
-          expansibleFields: [
-            { name: 'visibility', title: 'Visibility' },
-            { name: 'request', title: 'Requests' },
-          ]
-        };
 
-        /**
-         * @inheritdoc
-         */
-        $scope.contentKey = 'subscription';
+        $scope.expanded = {};
 
         /**
          * @memberOf SubscriptionCtrl

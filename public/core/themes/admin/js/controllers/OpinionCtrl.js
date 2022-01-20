@@ -8,19 +8,8 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
     $scope.expanded = {};
-    $scope.formSettings = {
-      name: 'opinion',
-      expansibleFields: [
-        { name: 'author', title: 'Author' },
-        { name: 'tags', title: 'Tags' },
-        { name: 'slug', title: 'Slug' },
-        { name: 'bodyLink', title: 'External link' },
-        { name: 'schedule', title: 'Schedule' },
-        { name: 'featuredFrontpage', title: 'Featured frontpage' },
-        { name: 'featuredInner', title: 'Featured inner' },
-      ]
-    };
 
     /**
      * @inheritdoc

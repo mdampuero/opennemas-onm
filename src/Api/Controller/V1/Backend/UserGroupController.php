@@ -39,6 +39,15 @@ class UserGroupController extends ApiController
         'update' => 'GROUP_UPDATE',
     ];
 
+    protected $propertyName = 'userGroup';
+
+    protected $translations = [
+        [
+            'name' => 'visibility',
+            'title' => 'Visibility'
+        ]
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -77,7 +86,11 @@ class UserGroupController extends ApiController
 
         return [
             'extensions' => $this->getExtensions(array_keys($permissions)),
-            'modules'    => $permissions
+            'modules'    => $permissions,
+            'formSettings'  => [
+                'name'             => $this->propertyName,
+                'expansibleFields' => $this->translateFields($this->translations)
+            ]
         ];
     }
 

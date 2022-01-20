@@ -9,17 +9,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     // Initialize the super class and extend it.
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
     $scope.expanded = {};
-    $scope.formSettings = {
-      name: 'video',
-      expansibleFields: [
-        { name: 'author', title: 'Author' },
-        { name: 'category', title: 'Category' },
-        { name: 'tags', title: 'Tags' },
-        { name: 'slug', title: 'Slug' },
-        { name: 'schedule', title: 'Schedule' },
-        { name: 'featuredFrontpage', title: 'Featured frontpage' },
-      ]
-    };
 
     /**
      * @inheritdoc

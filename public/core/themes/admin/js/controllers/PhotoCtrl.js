@@ -2,8 +2,8 @@
  * Handle actions for image inner.
  */
 angular.module('BackendApp.controllers').controller('PhotoCtrl', [
-  '$controller', '$scope', '$timeout', '$uibModal', '$window', 'linker', 'localizer', 'messenger', 'routing',
-  function($controller, $scope, $timeout, $uibModal, $window, linker, localizer, messenger, routing) {
+  '$controller', '$scope',
+  function($controller, $scope) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -18,11 +18,6 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
      * @inheritdoc
      */
     $scope.draftKey = 'photo-draft';
-
-    /**
-     * @inheritdoc
-     */
-    $scope.contentKey = 'photo';
 
     /**
      * @inheritdoc

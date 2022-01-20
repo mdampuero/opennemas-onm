@@ -29,23 +29,8 @@
           http, related, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
         $scope.expanded = {};
-        $scope.formSettings = {
-          name: 'article',
-          expansibleFields: [
-            { name: 'author', title: 'Author' },
-            { name: 'category', title: 'Category' },
-            { name: 'tags', title: 'Tags' },
-            { name: 'slug', title: 'Slug' },
-            { name: 'bodyLink', title: 'External link' },
-            { name: 'schedule', title: 'Schedule' },
-            { name: 'lists', title: 'Lists' },
-            { name: 'featuredFrontpage', title: 'Featured frontpage' },
-            { name: 'featuredInner', title: 'Featured inner' },
-            { name: 'relatedFrontpage', title: 'Related frontpage' },
-            { name: 'relatedInner', title: 'Related inner' }
-          ]
-        };
 
         /**
          * @inheritdoc

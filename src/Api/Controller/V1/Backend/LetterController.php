@@ -22,6 +22,23 @@ class LetterController extends ContentController
         'show'   => 'LETTER_UPDATE',
     ];
 
+    protected $propertyName = 'letter';
+
+    protected $translations = [
+        [
+            'name' => 'tags',
+            'title' => 'Tags'
+        ],
+        [
+            'name' => 'slug',
+            'title' => 'Slug'
+        ],
+        [
+            'name' => 'schedule',
+            'title' => 'Schedule'
+        ]
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -38,9 +55,14 @@ class LetterController extends ContentController
     protected function getExtraData($items = null)
     {
         $extra['tags'] = $this->getTags($items);
-
         $extraData = parent::getExtraData($items);
 
-        return array_merge($extraData, $extra);
+        return array_merge([
+            'tags'    => $this->getTags($items),
+            'formSettings'  => [
+                'name'             => $this->propertyName,
+                'expansibleFields' => $this->translateFields($this->translations)
+            ]
+        ], $extraData);
     }
 }

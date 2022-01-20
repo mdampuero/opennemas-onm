@@ -27,15 +27,8 @@
           routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
         $scope.expanded = {};
-        $scope.formSettings = {
-          name: 'letter',
-          expansibleFields: [
-            { name: 'tags', title: 'Tags' },
-            { name: 'slug', title: 'Slug' },
-            { name: 'schedule', title: 'Schedule' },
-          ]
-        };
 
         /**
          * @inheritdoc
@@ -46,11 +39,6 @@
          * @inheritdoc
          */
         $scope.draftKey = 'letter-draft';
-
-        /**
-         * @inheritdoc
-         */
-        $scope.contentKey = 'letter';
 
         /**
          * @inheritdoc

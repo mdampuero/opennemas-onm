@@ -19,19 +19,8 @@
       function($controller, $scope, $window, linker, localizer, related, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
         $scope.expanded = {};
-        $scope.formSettings = {
-          name: 'poll',
-          expansibleFields: [
-            { name: 'author', title: 'Author' },
-            { name: 'category', title: 'Category' },
-            { name: 'tags', title: 'Tags' },
-            { name: 'slug', title: 'Slug' },
-            { name: 'schedule', title: 'Schedule' },
-            { name: 'closed', title: 'Vote end date' },
-            { name: 'featuredInner', title: 'Featured inner' },
-          ]
-        };
 
         /**
          * @inheritdoc
@@ -42,11 +31,6 @@
          * @inheritdoc
          */
         $scope.draftKey = 'poll-draft';
-
-        /**
-         * @inheritdoc
-         */
-        $scope.contentKey = 'poll';
 
         /**
          * @inheritdoc

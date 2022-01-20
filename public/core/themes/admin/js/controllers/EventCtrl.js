@@ -18,22 +18,8 @@
       '$controller', '$scope', 'related', 'routing', 'translator',
       function($controller, $scope, related, routing, translator) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
         $scope.expanded = {};
-        $scope.formSettings = {
-          name: 'event',
-          expansibleFields: [
-            { name: 'author', title: 'Author' },
-            { name: 'category', title: 'Category' },
-            { name: 'tags', title: 'Tags' },
-            { name: 'slug', title: 'Slug' },
-            { name: 'schedule', title: 'Schedule' },
-            { name: 'when', title: 'Date of the event' },
-            { name: 'where', title: 'Location of the event' },
-            { name: 'external_website', title: 'External website' },
-            { name: 'featuredFrontpage', title: 'Featured frontpage' },
-            { name: 'featuredInner', title: 'Featured inner' },
-          ]
-        };
 
         /**
          * @inheritdoc
@@ -44,11 +30,6 @@
          * @inheritdoc
          */
         $scope.draftKey = 'event-draft';
-
-        /**
-         * @inheritdoc
-         */
-        $scope.contentKey = 'event';
 
         /**
          * @inheritdoc

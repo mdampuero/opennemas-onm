@@ -17,16 +17,8 @@
       '$controller', '$scope', '$timeout', '$window', 'routing', 'translator',
       function($controller, $scope, $timeout, $window, routing, translator) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
         $scope.expanded = {};
-        $scope.formSettings = {
-          name: 'newsstand',
-          expansibleFields: [
-            { name: 'category', title: 'Category' },
-            { name: 'slug', title: 'Slug' },
-            { name: 'schedule', title: 'Schedule' },
-            { name: 'date', title: 'Date' },
-          ]
-        };
 
         /**
          * @inheritdoc
@@ -37,11 +29,6 @@
          * @inheritdoc
          */
         $scope.draftKey = 'kiosko-draft';
-
-        /**
-         * @inheritdoc
-         */
-        $scope.contentKey = 'kiosko';
 
         /**
          * @inheritdoc
