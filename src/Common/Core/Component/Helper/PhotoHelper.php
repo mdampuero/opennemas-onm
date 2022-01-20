@@ -82,7 +82,7 @@ class PhotoHelper
         }
 
         // Added for Content Listing RSS. Check that it does not cause failures on other places.
-        if (!empty($item->path) && preg_match('/^https?.*/',$item->path)) {
+        if (!empty($item->path) && preg_match('/^https?.*/', $item->path)) {
             return $item->path;
         }
 
