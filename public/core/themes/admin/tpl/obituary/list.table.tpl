@@ -43,6 +43,12 @@
 
 {block name="customColumns"}
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-date" checklist-model="app.columns.selected" checklist-value="'date'" type="checkbox">
+    <label for="checkbox-date">
+      {t}Date{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-mortuary" checklist-model="app.columns.selected" checklist-value="'mortuary'" type="checkbox">
     <label for="checkbox-mortuary">
       {t}Mortuary{/t}
@@ -71,6 +77,11 @@
 {/block}
 
 {block name="customColumnsHeader"}
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('date')" width="150">
+    <span class="m-l-5">
+      {t}Date{/t}
+    </span>
+  </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('mortuary')" width="150">
     <span class="m-l-5">
       {t}Mortuary{/t}
@@ -96,6 +107,11 @@
 {/block}
 
 {block name="customColumnsBody"}
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('date')">
+    <div class="table-text">
+      [% item.date %]
+    </div>
+  </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('mortuary')">
     <div class="table-text">
       [% item.mortuary %]
