@@ -37,18 +37,7 @@ class AttachmentController extends ContentController
         'show'   => 'ATTACHMENT_UPDATE',
     ];
 
-    protected $propertyName = 'attachment';
-
-    protected $translations = [
-        [
-            'name' => 'category',
-            'title' => 'Category'
-        ],
-        [
-            'name' => 'schedule',
-            'title' => 'Schedule'
-        ]
-    ];
+    protected $module = 'attachment';
 
     /**
      * {@inheritdoc}
@@ -109,8 +98,8 @@ class AttachmentController extends ContentController
             'categories' => $this->getCategories($items),
             'tags'       => $this->getTags($items),
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ]);
     }

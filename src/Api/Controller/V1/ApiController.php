@@ -113,6 +113,7 @@ class ApiController extends Controller
      */
     public function getItemAction($id)
     {
+        $this->filename = 'asdasd';
         $ss   = $this->get($this->service);
         $item = $ss->getItem($id);
 
@@ -394,17 +395,13 @@ class ApiController extends Controller
     /**
      * Translate fields for extra fields
      *
-     * @param array $translations list of items to translate
+     * @param string $moduleName module key
      *
-     * @return array The translated items
+     * @return array The translated and structured items
      */
-    public function translateFields($translations)
+    public function getFormSettings($moduleName = '')
     {
-        $translationResult = [];
-        foreach ($translations as $item) {
-            $item['title'] = _($item['title']);
-            array_push($translationResult, $item);
-        }
-        return $translationResult;
+        $ffh = $this->get('core.helper.form_field');
+        return $ffh->filterFields($moduleName);
     }
 }

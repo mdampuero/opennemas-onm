@@ -37,26 +37,7 @@ class NewsstandController extends ContentController
         'show'   => 'KIOSKO_UPDATE',
     ];
 
-    protected $propertyName = 'newsstand';
-
-    protected $translations = [
-        [
-            'name' => 'category',
-            'title' => 'Category'
-        ],
-        [
-            'name' => 'slug',
-            'title' => 'Slug'
-        ],
-        [
-            'name' => 'schedule',
-            'title' => 'Schedule'
-        ],
-        [
-            'name' => 'date',
-            'title' => 'Date'
-        ]
-    ];
+    protected $module = 'newsstand';
 
     /**
      * {@inheritdoc}
@@ -147,8 +128,8 @@ class NewsstandController extends ContentController
         return array_merge(parent::getExtraData($items), [
             'categories' => $this->getCategories($items),
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ]);
     }

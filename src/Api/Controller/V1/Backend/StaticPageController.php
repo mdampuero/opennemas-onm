@@ -40,14 +40,7 @@ class StaticPageController extends ContentController
         'show'   => 'STATIC_PAGE_UPDATE',
     ];
 
-    protected $propertyName = 'staticPage';
-
-    protected $translations = [
-        [
-            'name' => 'slug',
-            'title' => 'Slug'
-        ]
-    ];
+    protected $module = 'staticPage';
 
     /**
      * The API service name.
@@ -68,8 +61,8 @@ class StaticPageController extends ContentController
         $extra = parent::getExtraData($items);
         return array_merge([
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ], $extra);
     }

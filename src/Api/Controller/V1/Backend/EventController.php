@@ -39,50 +39,7 @@ class EventController extends ContentController
         'show'   => 'EVENT_UPDATE',
     ];
 
-    protected $propertyName = 'event';
-
-    protected $translations = [
-        [
-            'name' => 'author',
-            'title' => 'Author'
-        ],
-        [
-            'name' => 'category',
-            'title' => 'Category'
-        ],
-        [
-            'name' => 'tags',
-            'title' => 'Tags'
-        ],
-        [
-            'name' => 'slug',
-            'title' => 'Slug'
-        ],
-        [
-            'name' => 'schedule',
-            'title' => 'Schedule'
-        ],
-        [
-            'name' => 'when',
-            'title' => 'Event date'
-        ],
-        [
-            'name' => 'where',
-            'title' => 'Event location'
-        ],
-        [
-            'name' => 'external_website',
-            'title' => 'External website'
-        ],
-        [
-            'name' => 'featuredFrontpage',
-            'title' => 'Featured in frontpage'
-        ],
-        [
-            'name' => 'featuredInner',
-            'title' => 'Featured in inner'
-        ],
-    ];
+    protected $module = 'event';
 
     /**
      * {@inheritdoc}
@@ -98,8 +55,8 @@ class EventController extends ContentController
             'categories' => $this->getCategories($items),
             'tags'       => $this->getTags($items),
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ]);
     }

@@ -22,22 +22,7 @@ class LetterController extends ContentController
         'show'   => 'LETTER_UPDATE',
     ];
 
-    protected $propertyName = 'letter';
-
-    protected $translations = [
-        [
-            'name' => 'tags',
-            'title' => 'Tags'
-        ],
-        [
-            'name' => 'slug',
-            'title' => 'Slug'
-        ],
-        [
-            'name' => 'schedule',
-            'title' => 'Schedule'
-        ]
-    ];
+    protected $module = 'letter';
 
     /**
      * {@inheritdoc}
@@ -60,8 +45,8 @@ class LetterController extends ContentController
         return array_merge([
             'tags'    => $this->getTags($items),
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ], $extraData);
     }

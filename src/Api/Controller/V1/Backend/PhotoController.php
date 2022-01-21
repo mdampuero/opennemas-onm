@@ -30,14 +30,7 @@ class PhotoController extends ContentController
         'show'   => 'PHOTO_UPDATE',
     ];
 
-    protected $propertyName = 'photo';
-
-    protected $translations = [
-        [
-            'name' => 'tags',
-            'title' => 'Tags'
-        ]
-    ];
+    protected $module = 'photo';
 
     /**
      * {@inheritdoc}
@@ -107,8 +100,8 @@ class PhotoController extends ContentController
         return array_merge(parent::getExtraData($items), [
             'years' => array_values($years),
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ]);
     }

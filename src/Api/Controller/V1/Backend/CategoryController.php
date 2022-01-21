@@ -40,26 +40,7 @@ class CategoryController extends ApiController
         'update' => 'CATEGORY_UPDATE',
     ];
 
-    protected $propertyName = 'category';
-
-    protected $translations = [
-        [
-            'name' => 'category',
-            'title' => 'Subsection of'
-        ],
-        [
-            'name' => 'color',
-            'title' => 'Color'
-        ],
-        [
-            'name' => 'logo',
-            'title' => 'Logo'
-        ],
-        [
-            'name' => 'type',
-            'title' => 'Type'
-        ]
-    ];
+    protected $module = 'category';
 
     /**
      * {@inheritdoc}
@@ -187,8 +168,8 @@ class CategoryController extends ApiController
             'stats'  => $this->get($this->service)->getStats($items),
             'types'  => $this->get('core.theme')->getTypesForCategories(),
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ], $extra);
     }

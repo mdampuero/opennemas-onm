@@ -41,34 +41,7 @@ class OpinionController extends ContentController
         'show'   => 'OPINION_UPDATE',
     ];
 
-    protected $propertyName = 'opinion';
-
-    protected $translations = [
-        [
-            'name' => 'tags',
-            'title' => 'Tags'
-        ],
-        [
-            'name' => 'slug',
-            'title' => 'Slug'
-        ],
-        [
-            'name' => 'bodyLink',
-            'title' => 'External link'
-        ],
-        [
-            'name' => 'schedule',
-            'title' => 'Schedule'
-        ],
-        [
-            'name' => 'featuredFrontpage',
-            'title' => 'Featured in frontpage'
-        ],
-        [
-            'name' => 'featuredInner',
-            'title' => 'Featured in inner'
-        ]
-    ];
+    protected $module = 'opinion';
 
     /**
      * {@inheritdoc}
@@ -220,8 +193,8 @@ class OpinionController extends ContentController
             'extra_fields' => $extraFields,
             'tags'         => $this->getTags($items),
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ], $extra);
     }

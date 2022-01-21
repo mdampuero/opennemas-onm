@@ -39,14 +39,7 @@ class AuthorController extends ApiController
         'update' => 'AUTHOR_UPDATE',
     ];
 
-    protected $propertyName = 'author';
-
-    protected $translations = [
-        [
-            'name' => 'slug',
-            'title' => 'Slug'
-        ]
-    ];
+    protected $module = 'author';
 
     /**
      * {@inheritdoc}
@@ -60,8 +53,8 @@ class AuthorController extends ApiController
     {
         $response = [
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ];
         if (empty($items)) {

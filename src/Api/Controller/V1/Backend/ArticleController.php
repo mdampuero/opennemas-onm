@@ -28,50 +28,7 @@ class ArticleController extends ContentController
         'show'   => 'ARTICLE_UPDATE',
     ];
 
-    protected $propertyName = 'article';
-
-    protected $translations = [
-        [
-            'name' => 'author',
-            'title' => 'Author'
-        ],
-        [
-            'name' => 'category',
-            'title' => 'Category'
-        ],
-        [
-            'name' => 'tags',
-            'title' => 'Tags'
-        ],
-        [
-            'name' => 'slug',
-            'title' => 'Slug'
-        ],
-        [
-            'name' => 'bodyLink',
-            'title' => 'External link'
-        ],
-        [
-            'name' => 'schedule',
-            'title' => 'Schedule'
-        ],
-        [
-            'name' => 'featuredFrontpage',
-            'title' => 'Featured in frontpage'
-        ],
-        [
-            'name' => 'featuredInner',
-            'title' => 'Featured in inner'
-        ],
-        [
-            'name' => 'relatedFrontpage',
-            'title' => 'Related in frontpage'
-        ],
-        [
-            'name' => 'relatedInner',
-            'title' => 'Related in inner'
-        ]
-    ];
+    protected $module = 'article';
 
     /**
      * {@inheritdoc}
@@ -116,8 +73,8 @@ class ArticleController extends ContentController
             'subscriptions' => $subscriptions,
             'tags'          => $this->getTags($items),
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ], $extra);
     }

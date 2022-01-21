@@ -32,34 +32,7 @@ class VideoController extends ContentController
         'show'   => 'VIDEO_UPDATE',
     ];
 
-    protected $propertyName = 'video';
-
-    protected $translations = [
-        [
-            'name' => 'author',
-            'title' => 'Author'
-        ],
-        [
-            'name' => 'category',
-            'title' => 'Category'
-        ],
-        [
-            'name' => 'tags',
-            'title' => 'Tags'
-        ],
-        [
-            'name' => 'slug',
-            'title' => 'Slug'
-        ],
-        [
-            'name' => 'schedule',
-            'title' => 'Schedule'
-        ],
-        [
-            'name' => 'featuredFrontpage',
-            'title' => 'Featured in frontpage'
-        ]
-    ];
+    protected $module = 'video';
 
     /**
      * {@inheritdoc}
@@ -76,8 +49,8 @@ class VideoController extends ContentController
             'categories' => $this->getCategories($items),
             'tags'       => $this->getTags($items),
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ]);
     }

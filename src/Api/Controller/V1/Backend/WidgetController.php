@@ -38,14 +38,7 @@ class WidgetController extends ContentOldController
         'show'   => 'WIDGET_UPDATE',
     ];
 
-    protected $propertyName = 'widget';
-
-    protected $translations = [
-        [
-            'name' => 'schedule',
-            'title' => 'Schedule'
-        ]
-    ];
+    protected $module = 'widget';
 
     /**
      * {@inheritdoc}
@@ -87,8 +80,8 @@ class WidgetController extends ContentOldController
             'tags'       => $this->getTags($items),
             'types'      => $this->getTypes(),
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ]);
     }

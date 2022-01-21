@@ -41,22 +41,7 @@ class UserController extends ApiController
         'update' => 'USER_UPDATE',
     ];
 
-    protected $propertyName = 'user';
-
-    protected $translations = [
-        [
-            'name' => 'slug',
-            'title' => 'Slug'
-        ],
-        [
-            'name' => 'user_groups',
-            'title' => 'User groups'
-        ],
-        [
-            'name' => 'language',
-            'title' => 'Language and time'
-        ]
-    ];
+    protected $module = 'user';
 
     /**
      * {@inheritdoc}
@@ -107,8 +92,8 @@ class UserController extends ApiController
             'taxes'       => $this->get('vat')->getTaxes(),
             'user_groups' => $this->getUserGroups(),
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ];
     }

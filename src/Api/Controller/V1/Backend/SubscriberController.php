@@ -36,14 +36,7 @@ class SubscriberController extends ApiController
         'update' => 'SUBSCRIBER_UPDATE',
     ];
 
-    protected $propertyName = 'article';
-
-    protected $translations = [
-        [
-            'name' => 'subscriptions',
-            'title' => 'Lists'
-        ]
-    ];
+    protected $module = 'subscriber';
 
     /**
      * {@inheritdoc}
@@ -183,8 +176,8 @@ class SubscriberController extends ApiController
             'settings'      => $this->getSettings(),
             'subscriptions' => $this->getSubscriptions(),
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ];
     }

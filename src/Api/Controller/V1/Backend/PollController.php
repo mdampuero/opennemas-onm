@@ -38,38 +38,7 @@ class PollController extends ContentController
         'show'   => 'POLL_UPDATE',
     ];
 
-    protected $propertyName = 'poll';
-
-    protected $translations = [
-        [
-            'name' => 'author',
-            'title' => 'Author'
-        ],
-        [
-            'name' => 'category',
-            'title' => 'Category'
-        ],
-        [
-            'name' => 'tags',
-            'title' => 'Tags'
-        ],
-        [
-            'name' => 'slug',
-            'title' => 'Slug'
-        ],
-        [
-            'name' => 'schedule',
-            'title' => 'Schedule'
-        ],
-        [
-            'name' => 'closed',
-            'title' => 'Vote end date'
-        ],
-        [
-            'name' => 'featuredInner',
-            'title' => 'Featured in inner'
-        ]
-    ];
+    protected $module = 'poll';
 
     /**
      * The route name to generate URL from when creating a new item.
@@ -93,8 +62,8 @@ class PollController extends ContentController
             'tags'        => $this->getTags($items),
             'total_votes' => $this->container->get('core.helper.poll')->getTotalVotes($items),
             'formSettings'  => [
-                'name'             => $this->propertyName,
-                'expansibleFields' => $this->translateFields($this->translations)
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ]);
     }
