@@ -4,6 +4,18 @@
  *
  * @param Content $item        The item to get property from.
  *
+ * @return mixed The date value.
+ */
+function get_date($item = null)
+{
+    return getService('core.helper.obituary')->getDate($item);
+}
+
+/**
+ * Returns a property for the provided item.
+ *
+ * @param Content $item        The item to get property from.
+ *
  * @return mixed The maps value.
  */
 function get_maps($item = null)
@@ -33,6 +45,18 @@ function get_mortuary($item = null)
 function get_website($item = null)
 {
     return getService('core.helper.obituary')->getWebsite($item);
+}
+
+/**
+ * Returns true if the obituary has date.
+ *
+ * @param Content $item The item to check if has date or not.
+ *
+ * @return Boolean True if the item has date, False otherwise.
+ */
+function has_date($item = null)
+{
+    return getService('core.helper.obituary')->hasDate($item);
 }
 
 /**

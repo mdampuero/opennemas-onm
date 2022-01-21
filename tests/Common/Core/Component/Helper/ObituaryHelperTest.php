@@ -24,7 +24,8 @@ class ObituaryHelperTest extends \PHPUnit\Framework\TestCase
             'starttime'      => new \Datetime('2020-01-01 00:00:00'),
             'maps'           => 'Link to GoogleMaps',
             'mortuary'       => 'Location',
-            'website'        => 'Website'
+            'website'        => 'Website',
+            'date'           => '2019-02-01'
         ]);
 
         $this->cache = $this->getMockBuilder('Cache' . uniqid())
@@ -118,6 +119,18 @@ class ObituaryHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getDate.
+     */
+    public function testGetDate()
+    {
+        $this->assertEquals('2019-02-01', $this->contentHelper->getDate($this->content));
+
+        $this->content->date = '';
+
+        $this->assertNull($this->contentHelper->getDate($this->content));
+    }
+
+    /**
      * Tests getMaps.
      */
     public function testGetMaps()
@@ -151,5 +164,53 @@ class ObituaryHelperTest extends \PHPUnit\Framework\TestCase
         $this->content->website = '';
 
         $this->assertNull($this->contentHelper->getWebsite($this->content));
+    }
+
+    /**
+     * Tests hasDate function.
+     */
+    public function testHasDate()
+    {
+        $this->assertTrue($this->contentHelper->hasDate($this->content));
+
+        $this->content->date = '';
+
+        $this->assertFalse($this->contentHelper->hasDate($this->content));
+    }
+
+    /**
+     * Tests hasMaps function.
+     */
+    public function testHasMaps()
+    {
+        $this->assertTrue($this->contentHelper->hasMaps($this->content));
+
+        $this->content->maps = '';
+
+        $this->assertFalse($this->contentHelper->hasMaps($this->content));
+    }
+
+    /**
+     * Tests hasMortuary function.
+     */
+    public function testHasMortuary()
+    {
+        $this->assertTrue($this->contentHelper->hasMortuary($this->content));
+
+        $this->content->mortuary = '';
+
+        $this->assertFalse($this->contentHelper->hasMortuary($this->content));
+    }
+
+    /**
+     * Tests hasWebsite function.
+     */
+    public function testHasWebsite()
+    {
+        $this->assertTrue($this->contentHelper->hasWebsite($this->content));
+
+        $this->content->website = '';
+
+        $this->assertFalse($this->contentHelper->hasWebsite($this->content));
     }
 }
