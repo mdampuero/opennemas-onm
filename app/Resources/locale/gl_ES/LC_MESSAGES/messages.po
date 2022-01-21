@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-17 09:58+0000\n"
+"POT-Creation-Date: 2022-01-21 08:31+0000\n"
 "PO-Revision-Date: 2022-01-17 11:00+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
@@ -388,7 +388,7 @@ msgid "Comments"
 msgstr "Comentarios"
 
 msgid "Obituaries"
-msgstr "Esquelas"
+msgstr "Necrolóxicas"
 
 msgid "Static Pages"
 msgstr "Páxinas estáticas"
@@ -1941,7 +1941,7 @@ msgid "Letter to editor"
 msgstr "Cartas ao director"
 
 msgid "Obituary"
-msgstr "Esquela"
+msgstr "Necrolóxica"
 
 msgid "Menu"
 msgstr "Menú"
@@ -4323,6 +4323,9 @@ msgstr "Funeraria"
 msgid "Google Maps"
 msgstr "Google Maps"
 
+msgid "Event date"
+msgstr "Data do evento"
+
 msgid "Google maps url"
 msgstr "Url de Google Maps"
 
@@ -4339,7 +4342,7 @@ msgid "Alternative signature for newsletter"
 msgstr "Sinatura alternativa para o boletín"
 
 msgid "New obituary"
-msgstr "Nova esquela"
+msgstr "Nova necrolóxica"
 
 msgid "Write here the text for search..."
 msgstr "Escribe aquí o texto a buscar…"
@@ -5198,10 +5201,10 @@ msgid "Show less…"
 msgstr "Mostrar menos…"
 
 msgid "Obituary: frontpage"
-msgstr "Esquela: portada"
+msgstr "Necrolóxica: portada"
 
 msgid "Obituary: inner"
-msgstr "Esquela: interior"
+msgstr "Necrolóxica: interior"
 
 msgid "Google AMP"
 msgstr "Google AMP"
@@ -6140,9 +6143,6 @@ msgstr "Non poderá restauralos de novo."
 
 msgid "Yes, remove"
 msgstr "Si, eliminar"
-
-msgid "Event date"
-msgstr "Data do evento"
 
 msgid "Start hour"
 msgstr "Hora de inicio"

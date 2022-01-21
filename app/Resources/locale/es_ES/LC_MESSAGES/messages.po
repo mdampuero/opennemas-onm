@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-17 09:58+0000\n"
+"POT-Creation-Date: 2022-01-21 08:31+0000\n"
 "PO-Revision-Date: 2022-01-17 11:00+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
@@ -4346,6 +4346,9 @@ msgstr "Funeraria"
 msgid "Google Maps"
 msgstr "Google Maps"
 
+msgid "Event date"
+msgstr "Fecha del evento"
+
 msgid "Google maps url"
 msgstr "Url de Google Maps"
 
@@ -6173,9 +6176,6 @@ msgstr "No podrás restaurarlos"
 
 msgid "Yes, remove"
 msgstr "Si, eliminar"
-
-msgid "Event date"
-msgstr "Fecha del evento"
 
 msgid "Start hour"
 msgstr "Hora de inicio"
