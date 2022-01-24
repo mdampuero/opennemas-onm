@@ -56,10 +56,10 @@ class UrlController extends ApiController
                     ['name' => 'user', 'title' => _('User')],
                 ]
             ),
-                'formSettings'  => [
-                    'name'             => $this->module,
-                    'expansibleFields' => $this->getFormSettings($this->module)
-                ]
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ];
     }
 }
