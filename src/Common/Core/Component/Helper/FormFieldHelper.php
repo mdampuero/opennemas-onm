@@ -222,8 +222,10 @@ class FormFieldHelper
             return [];
         }
 
-        return array_filter($this->fields, function ($field) use ($module) {
+        $result = array_filter($this->fields, function ($field) use ($module) {
             return in_array($module, $field['available']);
         });
+
+        return array_values($result);
     }
 }
