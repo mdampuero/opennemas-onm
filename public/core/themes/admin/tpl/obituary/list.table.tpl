@@ -45,7 +45,7 @@
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-date" checklist-model="app.columns.selected" checklist-value="'date'" type="checkbox">
     <label for="checkbox-date">
-      {t}Date{/t}
+      {t}Event date{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
@@ -79,7 +79,7 @@
 {block name="customColumnsHeader"}
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('date')" width="150">
     <span class="m-l-5">
-      {t}Date{/t}
+      {t}Event date{/t}
     </span>
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('mortuary')" width="150">

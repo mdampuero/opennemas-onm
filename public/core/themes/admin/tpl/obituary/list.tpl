@@ -21,7 +21,7 @@
     <ul class="nav quick-section">
       {acl isAllowed="OBITUARY_CREATE"}
         <li class="quicklinks">
-            <a class="btn btn-success text-uppercase" href="{url name=backend_obituaries_create}" title="{t}New obituary{/t}" id="create-button">
+            <a class="btn btn-success text-uppercase" href="{url name=backend_obituary_create}" title="{t}New obituary{/t}" id="create-button">
               <i class="fa fa-plus"></i>
               {t}Create{/t}
             </a>

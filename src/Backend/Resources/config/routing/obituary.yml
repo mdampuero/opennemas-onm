@@ -2,7 +2,7 @@ backend_obituaries_content_provider:
     path:     /obituaries/content-provider
     defaults: { _controller: BackendBundle:Obituary:contentProvider }
 
-backend_obituaries_create:
+backend_obituary_create:
     path:     /obituaries/create
     defaults: { _controller: BackendBundle:Obituary:create }
 
