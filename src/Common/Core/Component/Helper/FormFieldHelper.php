@@ -156,6 +156,11 @@ class FormFieldHelper
                     ]
             ],
             [
+                'name' => 'redirection',
+                'title' => _('Redirection'),
+                'available' => [ 'url' ]
+            ],
+            [
                 'name' => 'request',
                 'title' => _('Requests'),
                 'available' => [ 'subscription' ]
