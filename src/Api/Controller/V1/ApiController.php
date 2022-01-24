@@ -113,7 +113,6 @@ class ApiController extends Controller
      */
     public function getItemAction($id)
     {
-        $this->filename = 'asdasd';
         $ss   = $this->get($this->service);
         $item = $ss->getItem($id);
 
