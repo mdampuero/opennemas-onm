@@ -60,6 +60,12 @@
           <h4 class="no-margin m-b-15">{t}Extra fields{/t}</h4>
           <p class="m-b-15">{t}This fields will be asked during registration and can be edited in the control panel.{/t}</p>
           <div class="row" ng-repeat="field in settings.fields track by $index">
+            <div class="form-group col-md-1">
+              <label class="form-label checkbox-label" for="label-[% $index %]-title">{t}Required{/t}</label>
+              <div class="checkbox check-default check-required">
+                <input ng-model="field.required" type="checkbox">
+              </div>
+            </div>
             <div class="form-group col-md-2">
               <label class="form-label" for="label-[% $index %]-name">{t}Internal name{/t}</label>
               <div class="controls">
@@ -83,7 +89,7 @@
                 </select>
               </div>
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-5">
               <div class="pull-left">
                 <label class="form-label">&nbsp;</label>
                 <div class="controls">
