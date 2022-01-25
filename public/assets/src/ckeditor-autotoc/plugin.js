@@ -13,11 +13,18 @@ CKEDITOR.plugins.add('autotoc', {
           str = str.replace(/^\s+|\s+$/g, '');
           str = str.toLowerCase();
 
-          var from = 'àáäâèéëêìíïîòóöôùúüûñç·/_,:;';
-          var to   = 'aaaaeeeeiiiioooouuuunc------';
+          var from    = 'àáäâèéëêìíïîòóöôùúüûñç·/_,:;#"\'()$';
+          var to      = 'aaaaeeeeiiiioooouuuunc------------';
+          var escape  = '()$\'';
 
           for (var i = 0, l = from.length; i < l; i++) {
-            str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+            var char = from.charAt(i);
+
+            if (escape.includes(char)) {
+              char = '\\' + char;
+            }
+
+            str = str.replace(new RegExp(char, 'g'), to.charAt(i));
           }
 
           str = str.replace(/[^a-z0-9 -]/g, '')
@@ -29,13 +36,13 @@ CKEDITOR.plugins.add('autotoc', {
 
         var generate = function(text) {
           var text    = text + '[end]';
-          var element = text.match(/<(h([1-5]).*?)>.*?(<h\2|\[end\])/);
+          var element = text.match(/<(h([1-6]).*?)>.*?(<h\2|\[end\])/);
 
           if (!element) {
             return '';
           }
 
-          var header = element[0].match(/<(h([1-5])(.*id="(.*?)")?)>(.*?)(<\/h\2>)/);
+          var header = element[0].match(/<(h([1-6])(.*id="(.*?)")?)>(.*?)(<\/h\2>)/);
           var title  = header[5] ? header[5] : '';
           var id     = header[4] ? header[4] : slugify(title);
 
@@ -59,7 +66,7 @@ CKEDITOR.plugins.add('autotoc', {
 
         var result =  '[toc]' + editor.getData();
 
-        var headers = result.match(/<h[0-9].*>/g);
+        var headers = result.match(/<h[1-6].*>/g);
 
         for (var i = 0; i < headers.length; i++) {
           var resultHeader = headers[i].replace(/id="[^"]"/, '')
