@@ -113,6 +113,11 @@ class FormFieldHelper
                 'available' => [ 'subscriber' ]
             ],
             [
+                'name' => 'lists',
+                'title' => _('Lists'),
+                'available' => [ 'article' ]
+            ],
+            [
                 'name' => 'when',
                 'title' => _('Event date'),
                 'available' => [ 'event' ]

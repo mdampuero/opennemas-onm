@@ -27,7 +27,7 @@
   <div class="all-actions pull-right">
     <ul class="nav quick-section">
       <li class="quicklinks">
-        <a class="btn btn-link" ng-click="expansibleSettings()" title="{t 1=_('User group')}Config form: '%1'{/t}">
+        <a class="btn btn-link" ng-click="expansibleSettings()" title="{t 1=_('User groups')}Config form: '%1'{/t}">
           <span class="fa fa-cog fa-lg"></span>
         </a>
       </li>
