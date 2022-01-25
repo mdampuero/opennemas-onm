@@ -39,6 +39,7 @@ class EntityManager extends BaseManager
         'photo',
         'poll',
         'video',
+        'widget'
     ];
 
     /**
