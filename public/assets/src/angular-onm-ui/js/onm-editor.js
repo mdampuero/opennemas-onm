@@ -193,6 +193,19 @@
         };
 
         /**
+         * @function overrideTimestamp
+         * @memberOf Editor
+         *
+         * @description
+         *   Overrides the default timestamp of the ckeditor.
+         *
+         * @param {String} timestamp The timestamp to use in the ckeditor.
+         */
+        this.overrideTimestamp = function(timestamp) {
+          $windowProvider.$get().CKEDITOR.timestamp = timestamp;
+        };
+
+        /**
          * @function addExternal
          * @memberOf Editor
          *
@@ -218,9 +231,10 @@
          * @param {String} path The path of the file with the custom css.
          */
         this.addCustomCss = function(path) {
-          var editor = $windowProvider.$get().CKEDITOR;
+          var editor    = $windowProvider.$get().CKEDITOR;
+          var timestamp = $windowProvider.$get().CKEDITOR.timestamp;
 
-          editor.config.contentsCss = [ editor.config.contentsCss ].concat(path);
+          editor.config.contentsCss = [ editor.config.contentsCss ].concat(path + '?' + timestamp);
         };
 
         /**

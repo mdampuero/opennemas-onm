@@ -39,6 +39,9 @@
     });
   }]).config(['EditorProvider', function (EditorProvider) {
     // Add external plugins
+    EditorProvider.overrideTimestamp('F61H');
+
+    // Add external plugins
     EditorProvider.addExternal('imageresize', '/assets/components/imageresize/');
     EditorProvider.addExternal('wordcount', '/assets/components/wordcount/wordcount/');
 
@@ -48,7 +51,7 @@
     EditorProvider.addExternal('pastespecial', '/assets/src/ckeditor-pastespecial/');
 
     // Add custom css
-    EditorProvider.addCustomCss('/assets/css/ckeditor.css?t=F61G');
+    EditorProvider.addCustomCss('/assets/css/ckeditor.css');
 
     // Add custom class for image2 plugin
     EditorProvider.addCustomImageClass();
