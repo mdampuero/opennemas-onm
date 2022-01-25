@@ -93,6 +93,15 @@ instances:
         users:
             type: integer
             options: { default: 0, unsigned: true }
+        comments:
+            type: integer
+            options: { default: 0, unsigned: true }
+        kioskos:
+            type: integer
+            options: { default: 0, unsigned: true }
+        events:
+            type: integer
+            options: { default: 0, unsigned: true }
     index:
         -
             name: PRIMARY

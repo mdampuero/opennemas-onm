@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class WidgetController extends ContentOldController
+class WidgetController extends ContentController
 {
     /**
      * {@inheritdoc}
@@ -76,7 +76,7 @@ class WidgetController extends ContentOldController
         return array_merge(parent::getExtraData($items), [
             'categories' => $this->getCategories($items),
             'tags'       => $this->getTags($items),
-            'types'      => $this->getTypes()
+            'classes'    => $this->getTypes()
         ]);
     }
 

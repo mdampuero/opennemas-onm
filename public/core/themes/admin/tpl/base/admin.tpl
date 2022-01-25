@@ -184,7 +184,7 @@
                       {is_module_activated name="LETTER_MANAGER"}
                         {acl isAllowed="LETTER_CREATE"}
                           <div class="quick-item">
-                            <a href="{url name=admin_letter_create}">
+                            <a href="{url name=backend_letter_create}">
                               <i class="fa fa-envelope"></i>
                               <span class="title">{t}Letter{/t}</span>
                             </a>

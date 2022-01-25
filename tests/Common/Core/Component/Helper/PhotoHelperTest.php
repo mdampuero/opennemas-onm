@@ -23,7 +23,7 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
             ->disableOriginalConstructor()
-            ->setMethods(['isReadyForPublish'])
+            ->setMethods(['isReadyForPublish', 'getContent'])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -125,6 +125,10 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
         $this->ugh->expects($this->once())->method('generate')
             ->with($photo)->willReturn('/glorp/xyzzy/foobar.jpg');
 
+        $this->contentHelper->expects($this->once())->method('getContent')
+            ->with($photo, 'Photo')
+            ->willReturn($photo);
+
         $this->assertEquals('/plugh', $this->helper->getPhotoPath('/plugh'));
         $this->assertEquals('/glorp/xyzzy/foobar.jpg', $this->helper->getPhotoPath($photo));
     }
@@ -142,6 +146,10 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
         $this->ugh->expects($this->once())->method('generate')
             ->with($photo)->willReturn('/glorp/xyzzy/foobar.jpg');
 
+        $this->contentHelper->expects($this->once())->method('getContent')
+            ->with($photo, 'Photo')
+            ->willReturn($photo);
+
         $this->router->expects($this->once())->method('generate')
             ->with('asset_image', [
                 'params' => 'grault',
@@ -149,6 +157,26 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
             ])->willReturn('/glorp/xyzzy/foobar.jpg');
 
         $this->assertEquals('/glorp/xyzzy/foobar.jpg', $this->helper->getPhotoPath($photo, 'grault'));
+    }
+
+    /**
+     * Tests getPhotoPath when content empty on $item.
+     */
+    public function testGetPhotoPathWhenEmptyContent()
+    {
+        $emptyContent = new Content([
+            'content_type'   => 'photo',
+            'content_status' => 1,
+        ]);
+
+        $this->contentHelper->expects($this->once())->method('getContent')
+            ->with($emptyContent, 'Photo')
+            ->willReturn(null);
+
+        $this->assertEquals(
+            null,
+            $this->helper->getPhotoPath($emptyContent)
+        );
     }
 
     /**
@@ -160,6 +188,10 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
             'content_status' => 1,
             'starttime'      => new \Datetime('2000-01-01 00:00:00')
         ]);
+
+        $this->contentHelper->expects($this->once())->method('getContent')
+            ->with($photo, 'Photo')
+            ->willReturn($photo);
 
         $this->ugh->expects($this->at(0))->method('generate')
             ->with($photo)
@@ -189,6 +221,10 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
             ->with($photo)
             ->willReturn('/glorp/xyzzy/foobar.jpg');
 
+        $this->contentHelper->expects($this->once())->method('getContent')
+            ->with($photo, 'Photo')
+            ->willReturn($photo);
+
         $this->router->expects($this->once())->method('generate')
             ->with('asset_image', [
                 'params' => 'grault',
@@ -206,6 +242,9 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetPhotoSize()
     {
         $this->assertNull($this->helper->getPhotoSize($this->content));
+
+        $this->contentHelper->expects($this->any())->method('getContent')
+            ->willReturn($this->content);
 
         $this->content->size = '222';
         $this->assertEquals('222', $this->helper->getPhotoSize($this->content));
@@ -254,6 +293,10 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
         $this->theme->expects($this->at(0))->method('getCuts')
             ->willReturn(null);
 
+        $this->contentHelper->expects($this->any())->method('getContent')
+            ->with($photo, 'Photo')
+            ->willReturn($photo);
+
         $this->assertEmpty($this->helper->getPhotoSrcSet(null));
 
         $this->theme->expects($this->at(0))->method('getCuts')
@@ -284,6 +327,9 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertNull($this->helper->getPhotoWidth($this->content));
 
+        $this->contentHelper->expects($this->any())->method('getContent')
+            ->willReturn($this->content);
+
         $this->content->width = '222';
         $this->assertEquals('222', $this->helper->getPhotoWidth($this->content));
     }
@@ -294,6 +340,9 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetPhotoHeight()
     {
         $this->assertNull($this->helper->getPhotoHeight($this->content));
+
+        $this->contentHelper->expects($this->any())->method('getContent')
+            ->willReturn($this->content);
 
         $this->content->height = '222';
         $this->assertEquals('222', $this->helper->getPhotoHeight($this->content));
@@ -345,6 +394,9 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
         );
 
         $externalThumbnail = 'https://glorp.com/glorp/xyzzy/foobar.jpg';
+
+        $this->contentHelper->expects($this->any())->method('getContent')
+            ->willReturn($photo);
 
         $this->assertTrue($this->helper->hasPhotoSize($photo));
 

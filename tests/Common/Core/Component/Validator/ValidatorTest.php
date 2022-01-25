@@ -133,6 +133,63 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testValidateLetter()
+    {
+        $this->symfonyValidator->expects($this->once())->method('validate')
+            ->willReturn([]);
+
+        $validator = new Validator\Validator(
+            $this->em,
+            $this->symfonyValidator,
+            $this->commentHelper
+        );
+        $data      = [];
+
+        $this->assertEquals([], $validator->validate($data, Validator\Validator::BLACKLIST_RULESET_LETTERS));
+    }
+
+    public function testValidateLetterWhenError()
+    {
+        $this->symfonyValidator->expects($this->once())->method('validate')
+            ->willReturn([
+                new \Exception('Error message.')
+            ]);
+
+        $validator = new Validator\Validator(
+            $this->em,
+            $this->symfonyValidator,
+            $this->commentHelper
+        );
+        $data      = [];
+
+        $this->assertEquals(
+            ['type' => 'fatal', 'errors' => ['Error message.']],
+            $validator->validate($data, Validator\Validator::BLACKLIST_RULESET_LETTERS)
+        );
+    }
+
+    public function testValidateLetterWhenEmailError()
+    {
+        $this->symfonyValidator->expects($this->once())->method('validate')
+            ->willReturn([
+                new \Exception('Error message.')
+            ]);
+
+        $validator = new Validator\Validator(
+            $this->em,
+            $this->symfonyValidator,
+            $this->commentHelper
+        );
+        $data      = [
+            'email' => 'email-erroneo'
+        ];
+
+        $this->assertEquals(
+            ['type' => 'fatal', 'errors' => ['Error message.']],
+            $validator->validate($data, Validator\Validator::BLACKLIST_RULESET_LETTERS)
+        );
+    }
+
     public function testGetConfig()
     {
         $rules = 'test@foo';

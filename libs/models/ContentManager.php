@@ -27,13 +27,6 @@ class ContentManager
     public $content_type = null;
 
     /**
-     * The maximum number of element to show in a frontpage.
-     *
-     * @var integer
-     */
-    public static $frontpage_limit = 100;
-
-    /**
      * When working with an specific content type, this contains the table
      * that contains that specific content type
      *

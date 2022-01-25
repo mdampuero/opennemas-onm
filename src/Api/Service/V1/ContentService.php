@@ -9,6 +9,9 @@
  */
 namespace Api\Service\V1;
 
+use Api\Exception\DeleteItemException;
+use Api\Exception\DeleteListException;
+
 class ContentService extends OrmService
 {
     /**
@@ -22,6 +25,72 @@ class ContentService extends OrmService
         $data = $this->assignUser($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
 
         return parent::createItem($data);
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteItem($id)
+    {
+        $related = $this->getRelatedContents($id);
+
+        try {
+            $item = $this->getItem($id);
+
+            $this->em->remove($item, $item->getOrigin());
+
+            $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
+                'action'  => __METHOD__,
+                'id'      => $id,
+                'item'    => $item,
+                'related' => $related
+            ]);
+        } catch (\Exception $e) {
+            throw new DeleteItemException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteList($ids)
+    {
+        if (!is_array($ids)) {
+            throw new DeleteListException('Invalid ids', 400);
+        }
+
+        try {
+            $response = $this->getListByIds($ids);
+        } catch (\Exception $e) {
+            throw new DeleteListException($e->getMessage(), $e->getCode());
+        }
+
+        $items   = [];
+        $deleted = array_map(function ($a) {
+                return $a->pk_content;
+        }, $response['items']);
+
+        $related = $this->getRelatedContents(implode(',', $deleted));
+
+        foreach ($response['items'] as $item) {
+            try {
+                $this->em->remove($item, $item->getOrigin());
+
+                $items[] = $item;
+            } catch (\Exception $e) {
+                throw new DeleteListException($e->getMessage(), $e->getCode());
+            }
+        }
+
+        $this->dispatcher->dispatch($this->getEventName('deleteList'), [
+            'action'  => __METHOD__,
+            'ids'     => $deleted,
+            'item'    => $items,
+            'related' => $related
+        ]);
+
+        return count($deleted);
     }
 
     /**
@@ -71,6 +140,22 @@ class ContentService extends OrmService
     }
 
     /**
+     * Returns the diferent related contents for ids passeds
+     *
+     * @param string $ids The list of ids for search related contents comma separated
+     *
+     * @return array The list of related contents.
+     */
+    protected function getRelatedContents($ids)
+    {
+        $sql = 'SELECT contents.* FROM contents'
+            . ' INNER JOIN content_content ON contents.pk_content = content_content.source_id'
+            . ' WHERE content_content.target_id in (' . $ids . ')';
+
+        return $this->getListBySql($sql)['items'];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function patchItem($id, $data)
@@ -102,7 +187,6 @@ class ContentService extends OrmService
         $data['changed'] = new \DateTime();
 
         $data = $this->assignUser($data, [ 'fk_user_last_editor' ]);
-
         parent::updateItem($id, $data);
     }
 
@@ -176,5 +260,23 @@ class ContentService extends OrmService
         }
 
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function validate($item)
+    {
+        if (!empty($item->related_contents)) {
+            $item->related_contents = array_filter($item->related_contents, function ($related) {
+                try {
+                    return !empty($this->getItem($related['target_id'])) ? true : false;
+                } catch (\Exception $e) {
+                    return false;
+                }
+            });
+        }
+
+        parent::validate($item);
     }
 }

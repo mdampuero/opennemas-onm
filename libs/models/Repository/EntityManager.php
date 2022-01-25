@@ -33,6 +33,7 @@ class EntityManager extends BaseManager
         'attachment',
         'event',
         'kiosko',
+        'letter',
         'obituary',
         'opinion',
         'photo',

@@ -100,7 +100,9 @@ class RendererTest extends TestCase
     public function testRenderWhenSpecificContent()
     {
         $params  = [];
-        $content = new Widget();
+        $content = new Content([
+            'content_type_name' => 'widget'
+        ]);
 
         $this->assertEquals('WidgetRenderer Code', $this->renderer->render($content, $params));
     }

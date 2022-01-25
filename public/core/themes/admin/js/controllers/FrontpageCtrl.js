@@ -27,7 +27,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     };
 
     $scope.init = function(frontpages, versions, categoryId, versionId, time,
-        frontpageLastSaved, layouts, layout) {
+        frontpageLastSaved, layouts, layout, maxItemsFrontpage) {
       $scope.categoryId              = parseInt(categoryId);
       $scope.frontpages              = frontpages;
       $scope.frontpage               = frontpages[$scope.categoryId];
@@ -37,6 +37,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       $scope.scheduledFFuture        = [];
       $scope.layouts                 = layouts;
       $scope.layout                  = layout;
+      $scope.maxItemsFrontpage       = parseInt(maxItemsFrontpage);
 
       if (versions.length === 0) {
         $scope.version = {
@@ -398,8 +399,8 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       }).length;
 
       // If there is a new version available for this frontpage avoid to save
-      if (numberOfContents > 100) {
-        var message = frontpage_messages.frontpage_too_long.replace('%number%', 100);
+      if (numberOfContents > $scope.maxItemsFrontpage) {
+        var message = frontpage_messages.frontpage_too_long.replace('%number%', $scope.maxItemsFrontpage);
 
         $scope.disableFlags('http');
         $scope.showMessage(message, 'error');

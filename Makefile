@@ -1,7 +1,7 @@
-themes = amon anemoi auris base basic bastet bragi cronicas dryads eurus \
-forseti freya hathor hermes horus kalliope kibele kronos lrinternacional mega \
-mercury mihos moura nemo nemty notus nyx odin olympus pekka rhea selket \
-skanda slido tecnofisis televisionlr verbeia xaman
+themes = amon anemoi auris base basic bastet cronicas dryads eurus \
+forseti freya horus kalliope kibele lrinternacional mega mercury \
+mihos moura nemo nemty notus nyx odin olympus pekka rhea selket \
+skanda slido tecnofisis televisionlr verbeia
 
 www-data = $(shell id -u www-data > /dev/null 2>&1 && echo 'www-data' || echo 'http')
 

@@ -101,3 +101,9 @@ orm:
                             primary: false
                             unique: false
                             flags: {  }
+                        -
+                            name: comment_status
+                            columns: [status]
+                            primary: false
+                            unique: false
+                            flags: {  }
