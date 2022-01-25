@@ -7,6 +7,25 @@ CKEDITOR.plugins.add('autotoc', {
         var template = '<ol class="table-of-contents">[contents]</ol>';
         var body     = editor.getData();
         var contents = '';
+        var ids      = [];
+
+        var slugify = function(str) {
+          str = str.replace(/^\s+|\s+$/g, '');
+          str = str.toLowerCase();
+
+          var from = 'àáäâèéëêìíïîòóöôùúüûñç·/_,:;';
+          var to   = 'aaaaeeeeiiiioooouuuunc------';
+
+          for (var i = 0, l = from.length; i < l; i++) {
+            str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+          }
+
+          str = str.replace(/[^a-z0-9 -]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-');
+
+          return str;
+        };
 
         var generate = function(text) {
           var text    = text + '[end]';
@@ -17,8 +36,10 @@ CKEDITOR.plugins.add('autotoc', {
           }
 
           var header = element[0].match(/<(h([1-5])(.*id="(.*?)")?)>(.*?)(<\/h\2>)/);
-          var id     = header[4] ? header[4] : '';
           var title  = header[5] ? header[5] : '';
+          var id     = header[4] ? header[4] : slugify(title);
+
+          ids.push(id);
 
           contents += '<li><a href="#' + id + '">' + title + '</a><ul>';
 
@@ -37,6 +58,15 @@ CKEDITOR.plugins.add('autotoc', {
         template = template.replace('[contents]', contents);
 
         var result =  '[toc]' + editor.getData();
+
+        var headers = result.match(/<h[0-9].*>/g);
+
+        for (var i = 0; i < headers.length; i++) {
+          var resultHeader = headers[i].replace(/id="[^"]"/, '')
+            .replace(/<h([0-9])/, '<h$1 id="' + ids[i] + '"');
+
+          result = result.replace(headers[i], resultHeader);
+        }
 
         editor.setData(result.replace('[toc]', template));
       }
