@@ -1,7 +1,8 @@
-(function () {
+(function() {
   'use strict';
 
   angular.module('BackendApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  MenuCtrl
@@ -16,13 +17,48 @@
      * @description
      *   Handle actions for article inner.
      */
-    .controller('MenuCtrl', ['$controller', '$http', '$uibModal', '$rootScope', '$scope', 'routing',
+    .controller('MenuCtrl', [
+      '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'routing',
       function($controller, $http, $uibModal, $rootScope, $scope, routing) {
         // Initialize the super class and extend it.
-        $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+        $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
-         * memberOf MenuCtrl
+         * @memberOf MenuCtrl
+         *
+         * @description
+         *  The item object.
+         *
+         * @type {Object}
+         */
+        $scope.item = {
+          name: '',
+          position: ''
+        };
+
+        /**
+         * @memberOf CommentCtrl
+         *
+         * @description
+         *  The list of routes for the controller.
+         *
+         * @type {Object}
+         */
+        $scope.routes = {
+          getItem:    'api_v1_backend_menu_get_item',
+          list:       'backend_menus_list',
+          updateItem: 'api_v1_backend_menu_update_item',
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.getItemId = function() {
+          return $scope.item.pk_menu;
+        };
+
+        /**
+         * MemberOf MenuCtrl
          *
          * @description
          *   Default menu object
@@ -66,8 +102,8 @@
               var link = {};
 
               Object.keys($scope.languageData.available).forEach(function(langAux) {
-                title[langAux] = item.title
-                link[langAux] = item.link
+                title[langAux] = item.title;
+                link[langAux] = item.link;
               });
 
               item.title = title;

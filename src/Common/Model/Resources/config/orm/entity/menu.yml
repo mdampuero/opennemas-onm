@@ -1,0 +1,58 @@
+orm:
+    metadata:
+        -
+            name:  Menu
+            class: Common\Model\Entity\Menu
+            properties:
+                id:             integer
+                name:           string
+                position:       string
+            converters:
+                default:
+                    class:     Common\Model\Database\Data\Converter\ContentConverter
+                    arguments: [ '@orm.metadata.menu' ]
+            repositories:
+                instance:
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.menu', '@cache.connection.instance' ]
+            persisters:
+                instance:
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.menu', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: menus
+                    metas:
+                        table: menumetas
+                        key:   meta_name
+                        ids:
+                            id: fk_content
+                    columns:
+                        pk_menu:
+                            type: integer
+                            options: { default: null, unsigned: true, autoincrement: true }
+                        name:
+                            type: string
+                            options: { length: 255, default: null, notnull: true }
+                        position:
+                            type: string
+                            options: { default: null, notnull: false, length: 50 }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [pk_menu]
+                            primary: true
+                            unique: true
+                            flags: {  }
+                        -
+                            name: name
+                            columns: [name]
+                            primary: false
+                            unique: true
+                            flags: {  }
+                        -
+                            name: position
+                            columns: [position]
+                            primary: false
+                            unique: false
+                            flags: {  }

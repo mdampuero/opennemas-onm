@@ -222,6 +222,10 @@ backend_letter:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/letter.yml'
 
+backend_menu:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/menu.yml'
+
 backend_newsletter:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/newsletter.yml'

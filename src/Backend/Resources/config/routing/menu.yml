@@ -1,0 +1,17 @@
+backend_menus_list:
+    path:     /menus
+    defaults: { _controller: BackendBundle:Menu:list }
+    options:
+        expose: true
+
+backend_menu_show:
+    path:     /menus/{id}
+    defaults: { _controller: BackendBundle:Menu:show }
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+backend_menu_config:
+    path:     /menus/config
+    defaults: { _controller: BackendBundle:Menu:config }

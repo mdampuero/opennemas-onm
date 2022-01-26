@@ -18,55 +18,138 @@ angular.module('BackendApp.controllers')
     '$controller', '$location', '$uibModal', '$scope', 'http', 'routing', 'messenger', 'oqlEncoder',
     function($controller, $location, $uibModal, $scope, http, routing, messenger, oqlEncoder) {
       // Initialize the super class and extend it.
-      $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
+      $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
+
+      /**
+       * The criteria to search.
+       *
+       * @type {Object}
+       */
+      $scope.criteria = {
+        epp: 10,
+        orderBy: { name:  'desc' },
+        page: 1
+      };
+
+      /**
+       * @memberOf MenuListCtrl
+       *
+       * @description
+       *  The list of routes for the controller.
+       *
+       * @type {Object}
+       */
+      $scope.routes = {
+        deleteItem: 'api_v1_backend_menu_delete_item',
+        deleteList: 'api_v1_backend_menu_delete_list',
+        getList:    'api_v1_backend_menu_get_list',
+        patchItem:  'api_v1_backend_menu_patch_item',
+        patchList:  'api_v1_backend_menu_patch_list'
+      };
+
+      /**
+       * @inheritdoc
+       */
+      $scope.getItemId = function(item) {
+        return item.pk_menu;
+      };
+
+      /**
+       * @function init
+       * @memberOf MenuListCtrl
+       *
+       * @description
+       *   Configures and initializes the list.
+       */
+      $scope.init = function() {
+        $scope.backup.criteria    = $scope.criteria;
+        $scope.app.columns.hidden = [];
+
+        oqlEncoder.configure({
+          placeholder: {
+            name: 'name ~ "%[value]%"'
+          }
+        });
+
+        $scope.list();
+      };
+
+      /**
+       * @inheritdoc
+       */
+      $scope.parseList = function(data) {
+        $scope.configure(data.extra);
+
+        if (!data.items) {
+          $scope.data.items = [];
+        }
+
+        $scope.items = $scope.data.items;
+
+        $scope.extra = $scope.data.extra;
+      };
 
       /**
        * Updates the array of contents.
        *
        * @param string route Route name.
        */
-      $scope.list = function(route) {
-        $scope.contents = [];
-        $scope.loading  = 1;
-        $scope.selected = { all: false, contents: [] };
+      /*
+       * $scope.list = function(route) {
+       *   $scope.contents = [];
+       *   $scope.loading  = 1;
+       *   $scope.selected = { all: false, contents: [] };
+       */
 
-        oqlEncoder.configure({
-          placeholder: {
-            name: 'name ~ "%[value]%"',
-          }
-        });
+      /*
+       *   OqlEncoder.configure({
+       *     placeholder: {
+       *       name: 'name ~ "%[value]%"',
+       *     }
+       *   });
+       */
 
-        var oql   = oqlEncoder.getOql($scope.criteria);
-        var route = {
-          name: $scope.route,
-          params:  { oql: oql }
-        };
+      /*
+       *   Var oql   = oqlEncoder.getOql($scope.criteria);
+       *   var route = {
+       *     name: $scope.route,
+       *     params:  { oql: oql }
+       *   };
+       */
 
-        $location.search('oql', oql);
+      //   $location.search('oql', oql);
 
-        http.get(route).then(function(response) {
-          $scope.total    = parseInt(response.data.total);
-          $scope.contents = response.data.results;
+      /*
+       *   Http.get(route).then(function(response) {
+       *     $scope.total    = parseInt(response.data.total);
+       *     $scope.contents = response.data.results;
+       */
 
-          $scope.getContentsLocalizeTitle();
+      //     $scope.getContentsLocalizeTitle();
 
-          if (response.data.hasOwnProperty('extra')) {
-            $scope.extra = response.data.extra;
-          }
+      /*
+       *     If (response.data.hasOwnProperty('extra')) {
+       *       $scope.extra = response.data.extra;
+       *     }
+       */
 
-          // Disable spinner
-          $scope.loading = 0;
-        }, function() {
-          $scope.loading = 0;
-          var params = {
-            id: new Date().getTime(),
-            message: 'Error while fetching data from backend',
-            type: 'error'
-          };
+      /*
+       *     // Disable spinner
+       *     $scope.loading = 0;
+       *   }, function() {
+       *     $scope.loading = 0;
+       *     var params = {
+       *       id: new Date().getTime(),
+       *       message: 'Error while fetching data from backend',
+       *       type: 'error'
+       *     };
+       */
 
-          messenger.post(params);
-        });
-      };
+      /*
+       *     Messenger.post(params);
+       *   });
+       * };
+       */
 
       /**
        * Permanently removes a list of contents by using a confirmation dialog
