@@ -38,7 +38,7 @@
       fallback: true
     });
   }]).config(['EditorProvider', function (EditorProvider) {
-    // Add external plugins
+    // Add custom timestamp
     EditorProvider.overrideTimestamp('F61H');
 
     // Add external plugins
