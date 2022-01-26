@@ -192,6 +192,36 @@ class RelatedHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests HasRelatedContentsWithNoContent.
+     */
+    public function testHasRelatedContentsWithNoContent()
+    {
+        $content                    = new \Content();
+        $content->content_status    = 1;
+        $content->in_litter         = 0;
+        $content->starttime         = '2020-01-01 00:00:00';
+        $content->content_type_name = 'article';
+        $content->related_contents  = [ [
+            'content_type_name' => 'article',
+            'target_id'         => 205,
+            'type'              => 'related_inner',
+            'caption'           => null,
+            'position'          => 2
+        ] ];
+
+        $this->contentHelper->expects($this->at(0))->method('getContent')
+            ->willReturn(null);
+
+        $this->assertFalse($this->helper->hasRelatedContents($content, 'mumble'));
+        $this->assertFalse($this->helper->hasRelatedContents($content, 'inner'));
+
+        $this->contentHelper->expects($this->at(0))->method('getContent')
+            ->willReturn(null);
+
+        $this->assertFalse($this->helper->hasRelatedContents($content, 'inner'));
+    }
+
+    /**
      * Tests hasRelatedContentswithRelatedObject.
      */
     public function testHasRelatedContentswithRelatedObject()
@@ -208,7 +238,7 @@ class RelatedHelperTest extends \PHPUnit\Framework\TestCase
         $content->in_litter         = 0;
         $content->starttime         = '2020-01-01 00:00:00';
         $content->content_type_name = 'article';
-        $content->related_contents  = $photo;
+        $content->externalRelated   = $photo;
 
         $this->assertTrue($this->helper->hasRelatedContents($content, 'mumble'));
         $this->assertTrue($this->helper->hasRelatedContents($content, 'inner'));

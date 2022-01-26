@@ -57,13 +57,13 @@ class RelatedHelper
      */
     public function getRelated($item, string $type) : array
     {
-        if (empty($item->related_contents)) {
+        if (empty($item->related_contents) && empty($item->externalRelated)) {
             return [];
         }
 
-        // Added for Content Listing RSS. Check that it does not cause failures on other places.
-        if (is_object($item->related_contents)) {
-            return [ $item->related_contents ];
+        // Added for external contents.
+        if (is_object($item->externalRelated)) {
+            return [ $item->externalRelated ];
         }
 
         $items = array_filter($item->related_contents, function ($a) use ($type) {

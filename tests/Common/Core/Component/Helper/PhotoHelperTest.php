@@ -339,7 +339,7 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoMimeTypeWhenExternal()
     {
-        $this->content->path = 'https://glorp.com/glorp/xyzzy/foobar.jpg';
+        $this->content->externalPath = 'https://glorp.com/glorp/xyzzy/foobar.jpg';
         $this->instance->expects($this->any())->method('getBaseUrl')
             ->willReturn('http://glorp.com/ppp.jpg');
         $this->assertEquals('image/jpeg', $this->helper->getPhotoMimeType($this->content));
