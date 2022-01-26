@@ -150,6 +150,12 @@ class SubscriberController extends ApiController
             $settings = ['fields' => []];
         }
 
+        // Convert required values to boolean
+        for ($i = 0; $i < count($settings['fields']); $i++) {
+            $settings['fields'][$i] = $this->get('core.helper.setting')
+                ->toBoolean($settings['fields'][$i], [ 'required' ]);
+        }
+
         try {
             $this->get('orm.manager')->getDataSet('Settings', 'instance')
                 ->set('user_settings', $settings);
