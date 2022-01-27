@@ -156,18 +156,13 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoPathWhenNoItem()
     {
-        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+        $contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
             ->disableOriginalConstructor()
             ->setMethods([ 'getContent' ])
             ->getMock();
 
-        $this->contentHelper->expects($this->any())->method('getContent')
+        $contentHelper->expects($this->any())->method('getContent')
             ->willReturn(null);
-
-        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getContent' ])
-            ->getMock();
 
         $this->assertNull(
             $this->helper->getPhotoPath([ 25 ], null, [], true)
