@@ -324,6 +324,7 @@ class UserController extends Controller
                 ->getHtml(),
             'settings'      => $this->getSettings(),
             'subscriptions' => $this->getSubscriptions(),
+            'name'          => ''
         ]);
     }
 
