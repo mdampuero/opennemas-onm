@@ -144,7 +144,17 @@
                     });
                   }
 
-                  return http.put(route, data);
+                  return http.get(
+                    {
+                      name: 'api_v1_backend_tools_slug',
+                      params: { slug: data.name }
+                    }
+                  ).then(function(response) {
+                    data.username = response.data.slug;
+                    data.slug     = response.data.slug;
+
+                    return http.put(route, data);
+                  });
                 };
               }
             }
