@@ -165,6 +165,18 @@
         };
 
         /**
+         * @funcion isSubscription
+         * @memberOf SubscriptionCtrl
+         *
+         * @param {Object} userGroup The user group to filter.
+         *
+         * @returns {Boolean} True if the user group is a subscription.
+         */
+        $scope.isSubscription = function(userGroup) {
+          return Object.keys($scope.data.extra.subscriptions).includes(String(userGroup.user_group_id));
+        };
+
+        /**
          * @function getData
          * @memberOf SubscriberCtrl
          *
