@@ -140,7 +140,7 @@
                   // Remove subscriptions when the subscriber is changed to only user.
                   if (value === 0) {
                     data.user_groups = data.user_groups.filter(function(group) {
-                      return !Object.keys($scope.data.extra.subscriptions).includes(String(group.user_group_id));
+                      return !$scope.isSubscription(group);
                     });
                   }
 
