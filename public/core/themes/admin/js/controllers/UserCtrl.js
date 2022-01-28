@@ -166,12 +166,10 @@
 
                   data.type = value;
 
+                  // Remove all the user groups if the user is changed to only subscriber.
                   if (value === 1) {
-                    var ids = Object.keys($scope.data.extra.user_groups);
-
-                    // Remove all user groups
                     data.user_groups = data.user_groups.filter(function(group) {
-                      return ids.indexOf(group.user_group_id) !== -1;
+                      return !Object.keys($scope.data.extra.user_groups).includes(String(group.user_group_id));
                     });
                   }
 

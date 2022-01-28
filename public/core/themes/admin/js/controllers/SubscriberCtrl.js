@@ -137,12 +137,10 @@
 
                   data.type = value;
 
-                  if (value === 1) {
-                    var ids = Object.keys($scope.data.extra.subscriptions);
-
-                    // Remove all subscriptions
+                  // Remove subscriptions when the subscriber is changed to only user.
+                  if (value === 0) {
                     data.user_groups = data.user_groups.filter(function(group) {
-                      return ids.indexOf(group.user_group_id) !== -1;
+                      return !Object.keys($scope.data.extra.subscriptions).includes(String(group.user_group_id));
                     });
                   }
 
