@@ -60,6 +60,9 @@
     "author": {
       "@type": "Person",
       "name": "{$author|escape:'html'}"
+      {if has_author_url($content)}
+        , "url": "{$app.instance->getBaseUrl()}{get_author_url($content)}"
+      {/if}
     },
     "datePublished": "{format_date date=$content->created format="yyyy-MM-dd HH:mm:ss" type="custom"}",
     "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd HH:mm:ss" type="custom"}",
