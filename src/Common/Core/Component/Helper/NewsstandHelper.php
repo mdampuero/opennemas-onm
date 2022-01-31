@@ -27,7 +27,7 @@ class NewsstandHelper extends FileHelper
             $this->getPathForFile(),
             $date->format('Y/m/d'),
             $date->format('YmdHis'),
-            substr(gettimeofday()['usec'], 0, 5),
+            str_pad(substr(gettimeofday()['usec'], 0, 5), 5, '0'),
             'pdf'
         ));
     }
