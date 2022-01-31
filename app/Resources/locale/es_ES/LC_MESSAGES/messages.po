@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-26 08:34+0000\n"
-"PO-Revision-Date: 2022-01-26 09:35+0100\n"
+"POT-Creation-Date: 2022-01-31 11:20+0000\n"
+"PO-Revision-Date: 2022-01-31 12:24+0100\n"
 "Last-Translator: adan <adan@openhost.es>\n"
 "Language-Team: Spanish - Spain <adan@openhost.es>\n"
 "Language: es_ES\n"
@@ -3637,6 +3637,9 @@ msgstr ""
 msgid "Keep"
 msgstr "Mantener"
 
+msgid "Are you sure you want to remove this frontpage?"
+msgstr "¿Estás seguro de que quieres borrar esta portada?"
+
 msgid "This front page will be published in less than 1 hour. Are you sure?"
 msgstr "Esta portada se publicará en menos de 1 hora. Estás seguro?"
 
@@ -5561,28 +5564,25 @@ msgid "Chartbeat Domain"
 msgstr "Dominio de Chartbeat"
 
 msgid "GFK"
-msgstr ""
+msgstr "GFK"
 
-#, fuzzy
 msgid "GFK Media ID"
-msgstr "ID de medios de Prometeo"
+msgstr "GFK Media ID"
 
-#, fuzzy
 msgid "GFK Domain"
-msgstr "Dominio"
+msgstr "GFK Domain"
 
 msgid "GFK Region ID"
-msgstr ""
+msgstr "GFK Region ID"
 
 msgid "Default will be set with \"es\""
-msgstr ""
+msgstr "El valor por defecto será \"es\""
 
-#, fuzzy
 msgid "GFK Content ID"
-msgstr "Id de contenido"
+msgstr "GFK Content ID"
 
 msgid "Default will be set with \"default\""
-msgstr ""
+msgstr "El valor por defecto será \"default\""
 
 msgid "Prometeo"
 msgstr "Prometeo"
