@@ -39,7 +39,7 @@
             $scope.settings.fields = [];
           }
 
-          $scope.settings.fields.push({ name: '', title: '', type: 'text' });
+          $scope.settings.fields.push({ name: '', title: '', type: 'text', required: false });
         };
 
         /**

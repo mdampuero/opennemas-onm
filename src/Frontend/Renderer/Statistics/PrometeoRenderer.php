@@ -34,6 +34,7 @@ class PrometeoRenderer extends StatisticsRenderer
             'content'    => $content,
             'accessType' => $dataLayer->customizeIsRestricted($extractor->get('isRestricted')),
             'id'         => $this->config['id'],
+            'section'    => $extractor->get('categoryName'),
             'type'       => $dataLayer->customizeExtension($extractor->get('extension')),
             'seoTags'    => $extractor->get('tagSlugs'),
             'imagePath'  => $this->container->get('core.helper.photo')->getPhotoPath(
