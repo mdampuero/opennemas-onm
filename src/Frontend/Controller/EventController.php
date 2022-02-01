@@ -61,6 +61,11 @@ class EventController extends FrontendController
     /**
      * {@inheritdoc}
      */
+    protected $service = 'api.service.event';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $templates = [
         'list' => 'event/list.tpl',
         'show' => 'event/item.tpl'
