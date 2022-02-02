@@ -179,7 +179,7 @@
                 enabled:   [ ],
                 available: [
                   'album', 'article', 'attachment', 'letter', 'opinion',
-                  'photo', 'poll', 'video', 'special'
+                  'photo', 'poll', 'video', 'special', 'event'
                 ]
               },
 
