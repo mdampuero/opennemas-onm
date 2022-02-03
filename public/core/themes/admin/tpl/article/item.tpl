@@ -117,7 +117,7 @@
   <div class="grid simple">
     <div class="grid-body">
       {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-      {include file="ui/component/input/text.tpl" iCounter=true iField="title_int" iRequired=true iTitle="{t}Inner title{/t}" iValidation=true}
+      {include file="ui/component/input/text.tpl" iBlock="title_int" iCounter=true iField="title_int" iRequired=true iTitle="{t}Inner title{/t}" iValidation=true}
       <div class="row">
         <div class="col-sm-6">
           {include file="ui/component/input/text.tpl" iCounter=true iField="agency" iTitle="{t}Signature{/t}"}
