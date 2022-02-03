@@ -41,6 +41,8 @@ class UserController extends ApiController
         'update' => 'USER_UPDATE',
     ];
 
+    protected $module = 'user';
+
     /**
      * {@inheritdoc}
      */
@@ -88,7 +90,11 @@ class UserController extends ApiController
             'languages'   => $languages,
             'photos'      => $this->getPhotos($items),
             'taxes'       => $this->get('vat')->getTaxes(),
-            'user_groups' => $this->getUserGroups()
+            'user_groups' => $this->getUserGroups(),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ];
     }
 

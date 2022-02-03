@@ -85,7 +85,7 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
-
+          $scope.expandFields();
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'static-page-' + $scope.data.item.pk_content + '-draft';
           }

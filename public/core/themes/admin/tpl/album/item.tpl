@@ -27,20 +27,29 @@
 {/block}
 
 {block name="primaryActions"}
-  <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
-    <h5>
-      <i class="p-r-15">
-        <i class="fa fa-check"></i>
-        {t}Draft saved at {/t}[% draftSaved %]
-      </i>
-    </h5>
-  </li>
-  <li class="quicklinks">
-    <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="button">
-      <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
-      {t}Save{/t}
-    </button>
-  </li>
+  <div class="all-actions pull-right">
+    <ul class="nav quick-section">
+      <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
+        <h5>
+          <i class="p-r-15">
+            <i class="fa fa-check"></i>
+            {t}Draft saved at {/t}[% draftSaved %]
+          </i>
+        </h5>
+      </li>
+      <li class="quicklinks">
+        <a class="btn btn-link" ng-click="expansibleSettings()" title="{t 1=_('Album')}Config form: '%1'{/t}">
+          <span class="fa fa-cog fa-lg"></span>
+        </a>
+      </li>
+      <li class="quicklinks">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="button">
+          <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+          {t}Save{/t}
+        </button>
+      </li>
+    </ul>
+  </div>
 {/block}
 
 {block name="rightColumn"}
@@ -78,7 +87,14 @@
         {t}Parameters{/t}
       </div>
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired=true iTitle="{t}Featured in frontpage{/t}" types="photo"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" field="agency" icon="fa-microphone" title="{t}Agency{/t}"}
+      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.agency = !expanded.agency">
+        <i class="fa fa-microphone m-r-10"></i>{t}Agency{/t}
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.agency }"></i>
+        </a>
+      </div>
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.agency }">
+        {include file="ui/component/input/text.tpl" iField="agency"}
+      </div>
     </div>
   </div>
 {/block}
@@ -173,5 +189,8 @@
   </script>
   <script type="text/ng-template" id="modal-translate">
     {include file="common/modals/_translate.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-expansible-fields">
+    {include file="common/modals/_modalExpansibleFields.tpl"}
   </script>
 {/block}
