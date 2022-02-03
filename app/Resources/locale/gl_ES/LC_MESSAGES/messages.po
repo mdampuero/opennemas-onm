@@ -1,14 +1,14 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Opennemas Developers <developers@opennemas.com>, 2020-2021.
+# Opennemas Developers <developers@opennemas.com>, 2020-2021, 2021.
 # adan <adan@openhost.es>, 2021-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-03 11:54+0000\n"
-"PO-Revision-Date: 2022-02-03 13:12+0100\n"
+"POT-Creation-Date: 2022-02-03 12:22+0000\n"
+"PO-Revision-Date: 2022-02-03 13:35+0100\n"
 "Last-Translator: adan <adan@openhost.es>\n"
 "Language-Team: Spanish - Spain <adan@openhost.es>\n"
 "Language: es_ES\n"
@@ -746,7 +746,7 @@ msgid "Something is wrong!"
 msgstr "Algo foi mal!"
 
 msgid "You don't have permission to perform this action"
-msgstr "Non tes permiso para realizar esta acción."
+msgstr "Non tes permiso para realizar esta acción"
 
 msgid "Something unexpected happened!"
 msgstr "¡Acaba de pasar algo inesperado!"
@@ -1549,13 +1549,13 @@ msgid "Language & time"
 msgstr "Idioma e hora"
 
 msgid "Featured in frontpage"
-msgstr "Destacado de portada"
+msgstr "Destacado en portadas"
 
 msgid "Featured in inner"
-msgstr "Destacado de interior"
+msgstr "Destacado en interior"
 
 msgid "Related in frontpage"
-msgstr "Relacionado en portada"
+msgstr "Relacionado en portadas"
 
 msgid "Related in inner"
 msgstr "Relacionado en interior"
@@ -2037,6 +2037,9 @@ msgstr "Restabelecer"
 msgid "Insert image"
 msgstr "Inserir imaxe"
 
+msgid "Insert related"
+msgstr "Inserir relacionado"
+
 msgid "Are you sure?"
 msgstr "Estas seguro?"
 
@@ -2402,7 +2405,7 @@ msgid "I understand and accept the cost of the operation."
 msgstr "Entendo e acepto os custos da operación."
 
 msgid "Config form: '%1'"
-msgstr "Configuración do formulario \"%1\""
+msgstr "Configuración do formulario: '%1'"
 
 msgid "Convert to"
 msgstr "Converter a"
@@ -3568,7 +3571,7 @@ msgid "Website URL"
 msgstr "URL do sitio web"
 
 msgid "Search by tag"
-msgstr "Buscar por eqtiqueta"
+msgstr "Busca por etiqueta"
 
 msgid "Start"
 msgstr "Iniciar"
@@ -3952,7 +3955,7 @@ msgstr ""
 "enderezo de correo electrónico baixo petición"
 
 msgid "The item doesn't exists or you don't have permission to see it."
-msgstr "O contido non existe ou non tes permiso para velo."
+msgstr "O elemento non existe ou non tes permiso para velo."
 
 msgid "Click here to return to the list"
 msgstr "Pincha aquí para volver ao listado"
@@ -4496,7 +4499,7 @@ msgid "Prometeo"
 msgstr "Prometeo"
 
 msgid "Prometeo Media ID"
-msgstr "ID de medios de Prometeo"
+msgstr "Prometeo Media ID"
 
 msgid "Internal settings"
 msgstr "Preferencias internas"
@@ -4865,7 +4868,7 @@ msgid "Ok"
 msgstr "Aceptar"
 
 msgid "Do you want to translate to \"%1\"?"
-msgstr "¿Queres traducir automáticamente a \"%1\"?"
+msgstr "¿Quere traducir a \"%1\"?"
 
 msgid "Translating content into \"%1\""
 msgstr "Traducindo o contido a «%1»"
@@ -5020,8 +5023,7 @@ msgstr "Recargar"
 
 msgid "Unable to find any item or you don't have permission to see the list."
 msgstr ""
-"Non se puideron atopar elementos que coincidan coa túa busca ou non tes "
-"permiso para ver a lista."
+"Non se puido atopar ningún elemento ou non tes permiso para ver a lista."
 
 msgid "Columns"
 msgstr "Columnas"
@@ -5384,8 +5386,8 @@ msgstr "Optimizar imaxes"
 msgid ""
 "If set, images will be automaticaly optimized when uploaded and imported"
 msgstr ""
-"Se se define, as imaxes optimizaranse automaticamente cando se carguen e se "
-"importen"
+"Se está configurado, as imaxes optimizaranse automaticamente cando se "
+"carguen e se importen"
 
 msgid "Delete multiple images"
 msgstr "Eliminar varias imaxes"
@@ -6198,13 +6200,13 @@ msgid "No themes available"
 msgstr "Non hai temas dispoñíbeis"
 
 msgid "Link video from other services"
-msgstr "Ligar un vídeo desde outros servizos"
+msgstr "Vincula o vídeo doutros servizos"
 
 msgid "Use HTML code"
 msgstr "Usar código HTML"
 
 msgid "Use file video URLs"
-msgstr "Usar URLs a ficheiros de vídeo"
+msgstr "Usar URLs a ficheiros de vídeo (HTML5/FLV externo)"
 
 msgid "Video URL"
 msgstr "URL do vídeo"
@@ -7022,88 +7024,11 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 msgid "Group name"
 msgstr "Nome do grupo"
 
-#, fuzzy
-#~ msgid "Config opinion form"
-#~ msgstr "Configuración do módulo de opinión"
-
-#, fuzzy
-#~ msgid "Config article form"
-#~ msgstr "Configuración do módulo «Artigo»"
-
-#, fuzzy
-#~ msgid "Config video form"
-#~ msgstr "Configuración do módulo «Video»"
-
-#, fuzzy
-#~ msgid "Config poll form"
-#~ msgstr "Confirmar"
-
-#, fuzzy
-#~ msgid "Config letter form"
-#~ msgstr "Configuración do módulo de boletín de novas"
-
-#, fuzzy
-#~ msgid "Config user group form"
-#~ msgstr "Configuración do módulo «usuarios»"
-
-#, fuzzy
-#~ msgid "Config categories form"
-#~ msgstr "Categorias dispoñibeis para sincronizar"
-
-#, fuzzy
-#~ msgid "Config subscriber form"
-#~ msgstr "Configuración do módulo «usuarios»"
-
-#, fuzzy
-#~ msgid "Config lists form"
-#~ msgstr "Configuración do módulo «usuarios»"
-
-#, fuzzy
-#~ msgid "Config widget form"
-#~ msgstr "Configuración do módulo «Video»"
-
-#, fuzzy
-#~ msgid "[% item.title %]"
-#~ msgstr "Titulo do sitio"
-
-#~ msgid "Expand"
-#~ msgstr "Expandir"
-
-#~ msgid "Keyword"
-#~ msgstr "Palabra clave"
-
-#~ msgid "Editing keyword"
-#~ msgstr "Editando palabra chave"
-
-#~ msgid "Creating keyword"
-#~ msgstr "Creando palabra chave"
-
-#~ msgid "Internal Search"
-#~ msgstr "Busca interna"
-
 #~ msgid "Keyword created successfully"
 #~ msgstr "Palabra chave creada correctamente"
 
 #~ msgid "Keyword updated successfully"
 #~ msgstr "Palabra chave actualizada correctamente"
-
-#~ msgid "Author information"
-#~ msgstr "Información do autor"
-
-#~ msgid "Unable to find any keyword that matches your search."
-#~ msgstr "Non se puideron atopar palabras clave que coincidan coa súa busca."
-
-#~ msgid "Edit this content"
-#~ msgstr "Editar este contido"
-
-#~ msgid "Are you sure that do you want remove \"%1\"?"
-#~ msgstr "Tes certeza que queres eliminar «%1»?"
-
-#~ msgid "Delete letter"
-#~ msgstr "Eliminar carta"
-
-#~ msgid "Delete letters"
-#~ msgstr "Eliminar cartas"
 
 #~ msgid "Letter successfully created."
 #~ msgstr "Carta creada correctamente"
@@ -7130,17 +7055,14 @@ msgstr "Nome do grupo"
 #~ "A tua carta non foi salvada, asegúrate de completar todos os campos "
 #~ "correctamente."
 
-#~ msgid "Unable to find any letter that matches your search."
-#~ msgstr "Non se puideron atopar cartas que coincidan coa súa busca."
-
-#~ msgid "Publish/Unpublish"
-#~ msgstr "Publicar/despublicar"
-
 #~ msgid "Editing letter"
 #~ msgstr "Editar carta"
 
 #~ msgid "Creating letter"
 #~ msgstr "Creando carta"
+
+#~ msgid "Author information"
+#~ msgstr "Información do autor"
 
 #~ msgid "Related url"
 #~ msgstr "Url relacionado"
@@ -7148,8 +7070,35 @@ msgstr "Nome do grupo"
 #~ msgid "Image assigned"
 #~ msgstr "Imaxe asignada"
 
-#~ msgid "Manage poll comments"
-#~ msgstr "Xestionar comentarios de enquisas"
+#~ msgid "Unable to find any letter that matches your search."
+#~ msgstr "Non se puideron atopar cartas que coincidan coa súa busca."
+
+#~ msgid "Publish/Unpublish"
+#~ msgstr "Publicar/despublicar"
+
+#~ msgid "Delete letter"
+#~ msgstr "Eliminar carta"
+
+#~ msgid "Delete letters"
+#~ msgstr "Eliminar cartas"
+
+#~ msgid "Editing keyword"
+#~ msgstr "Editando palabra chave"
+
+#~ msgid "Creating keyword"
+#~ msgstr "Creando palabra chave"
+
+#~ msgid "Unable to find any keyword that matches your search."
+#~ msgstr "Non se puideron atopar palabras clave que coincidan coa súa busca."
+
+#~ msgid "Keyword"
+#~ msgstr "Palabra clave"
+
+#~ msgid "Edit this content"
+#~ msgstr "Editar este contido"
+
+#~ msgid "Are you sure that do you want remove \"%1\"?"
+#~ msgstr "Tes certeza que queres eliminar «%1»?"
 
 #~ msgid "Comment data sent not valid."
 #~ msgstr "Os datos enviados do comentario non son válidos."
@@ -7194,6 +7143,9 @@ msgstr "Nome do grupo"
 #~ msgid "Your comment is valid and now is waiting for moderation."
 #~ msgstr "O teu comentario é válido e agora deberá moderarse."
 
+#~ msgid "Manage poll comments"
+#~ msgstr "Xestionar comentarios de enquisas"
+
 #~ msgid "Not valid comment id."
 #~ msgstr "Non é un id de comentario válido."
 
@@ -7215,36 +7167,15 @@ msgstr "Nome do grupo"
 #~ msgid "Maybe changing any filter could help."
 #~ msgstr "Pode que cambiar un filtro axude."
 
+#~ msgid ""
+#~ "Are you sure that do you want send to the trash this comment from \"%1\"?"
+#~ msgstr "Tes certeza que queres enviar ao lixo este comentario  «%1»?"
+
 #~ msgid "Update"
 #~ msgstr "Actualizar"
 
 #~ msgid "Updating"
 #~ msgstr "Actualizando"
-
-#~ msgid ""
-#~ "Are you sure that do you want send to the trash this comment from \"%1\"?"
-#~ msgstr "Tes certeza que queres enviar ao lixo este comentario  «%1»?"
-
-#~ msgid "Video type and file URLs"
-#~ msgstr "Tipo de vídeo e URLs aos ficheiros"
-
-#~ msgid "HTML5 video"
-#~ msgstr "Video HTML5"
-
-#~ msgid "Flash video"
-#~ msgstr "Video Flash"
-
-#~ msgid "FLV format"
-#~ msgstr "Formato FLV"
-
-#~ msgid "http://www.example.com/path/to/file.flv"
-#~ msgstr "http://www.exemplo.com/ruta/ao/ficheiro.flv"
-
-#~ msgid "Allowed video sources:"
-#~ msgstr "Orixes de vídeo permitidas:"
-
-#~ msgid "Pick the method to add the video"
-#~ msgstr "Escolla o método para engadir o vídeo"
 
 #~ msgid "Unable to create the new article."
 #~ msgstr "Non se puido crear o novo artigo."
@@ -7265,20 +7196,8 @@ msgstr "Nome do grupo"
 #~ msgid "Article successfully updated."
 #~ msgstr "Artigo actualizado correctamente."
 
-#~ msgid "No available selectedTranslators for \"%1&rarr;%2\""
-#~ msgstr "Non hai ningún tradutor disponible para «%1&rarr;%2»"
-
 #~ msgid "Unable to find the article with the id \"%d\""
 #~ msgstr "Non se puido atopar o artigo co identificador «%d»"
-
-#~ msgid "Style"
-#~ msgstr "Estilo"
-
-#~ msgid "Custom CSS"
-#~ msgstr "CSS personalizado"
-
-#~ msgid "This sripts will be included in the global.css file."
-#~ msgstr "Estos scripts incluiranse no ficheiro global.css"
 
 #~ msgid "Translate selected"
 #~ msgstr "Traducir seleccionados"
@@ -7355,14 +7274,48 @@ msgstr "Nome do grupo"
 #~ msgid "Gallery for Home"
 #~ msgstr "Galería para portada principal"
 
+#~ msgid "Allowed video sources:"
+#~ msgstr "Orixes de vídeo permitidas:"
+
+#~ msgid "Video type and file URLs"
+#~ msgstr "Tipo de vídeo e URLs aos ficheiros"
+
+#~ msgid "HTML5 video"
+#~ msgstr "Video HTML5"
+
+#~ msgid "Flash video"
+#~ msgstr "Video Flash"
+
+#~ msgid "FLV format"
+#~ msgstr "Formato FLV"
+
+#~ msgid "http://www.example.com/path/to/file.flv"
+#~ msgstr "http://www.exemplo.com/ruta/ao/ficheiro.flv"
+
 #~ msgid "Frontpage image"
 #~ msgstr "Imaxe de portada"
 
-#~ msgid "There is no opinions yet."
-#~ msgstr "Aínda non hai ningún artigo de opinión."
+#~ msgid "Pick the method to add the video"
+#~ msgstr "Escolla o método para engadir o vídeo"
 
 #~ msgid "Inner image"
 #~ msgstr "Imaxe de interior"
+
+#, fuzzy
+#~ msgid "Elements perpage"
+#~ msgstr "Elementos por páxina"
+
+#~ msgid "Style"
+#~ msgstr "Estilo"
+
+#~ msgid "Custom CSS"
+#~ msgstr "CSS personalizado"
+
+#~ msgid "This sripts will be included in the global.css file."
+#~ msgstr "Estos scripts incluiranse no ficheiro global.css"
+
+#~ msgid "There is no opinions yet."
+#~ msgstr "Aínda non hai ningún artigo de opinión."
 
 #~ msgid "Piwik Statistics"
 #~ msgstr "Estatisticas de Piwik"
@@ -7403,6 +7356,9 @@ msgstr "Nome do grupo"
 
 #~ msgid "Total number of videos to show per page in the frontpage"
 #~ msgstr "Número máximo de vídeos para mostrar por páxina en portada"
+
+#~ msgid "Config video module"
+#~ msgstr "Configuración do módulo «Video»"
 
 #~ msgid "Add contents to groups by using the \"Add contents\" button"
 #~ msgstr "Engadir contidos a grupos usando o botón «Engadir contidos»"
