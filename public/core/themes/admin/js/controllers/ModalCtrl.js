@@ -66,9 +66,7 @@
         $scope.confirm = function() {
           $scope.loading = 1;
 
-          var getType = {};
-
-          if (!success || !getType.toString.call(success) === '[object Function]') {
+          if (!success || typeof success !== 'function') {
             $uibModalInstance.close(true);
             return;
           }
