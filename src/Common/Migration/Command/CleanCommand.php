@@ -192,10 +192,12 @@ class CleanCommand extends Command
         $conn = $this->getContainer()->get('orm.manager')->getConnection('instance');
         $conn->selectDatabase($database);
 
-        $rs = $conn->fetchAll('SELECT path FROM attachments');
+        $rs = $conn->fetchAll('SELECT `meta_value` FROM `contentmeta` ' .
+            'INNER JOIN `contents` ON `pk_content` = `fk_content` ' .
+            'AND `content_type_name` = "attachment" WHERE `meta_name` = "path"');
 
         return !$rs ? [] : array_map(function ($a) {
-            return 'files' . $a['path'];
+            return 'files' . $a['meta_value'];
         }, $rs);
     }
 

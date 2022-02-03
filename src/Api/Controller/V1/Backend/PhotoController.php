@@ -105,4 +105,54 @@ class PhotoController extends ContentController
             ]
         ]);
     }
+
+    /**
+     * Returns photos configuration
+     *
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getConfigAction()
+    {
+        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+        $sh = $this->get('core.helper.setting');
+
+        $config = $ds->get('photo_settings', []);
+        $config = $sh->toBoolean($config, ['optimize_images']);
+
+        return new JsonResponse([
+            'config' => $config
+        ]);
+    }
+
+    /**
+     * Returns comments configuration
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveConfigAction(Request $request)
+    {
+        $msg = $this->get('core.messenger');
+        $ds  = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+        $sh  = $this->get('core.helper.setting');
+
+        $config = $request->request->get('config', []);
+
+        $config = $sh->toInt($config, ['number_elements']);
+
+        try {
+            $ds->set('photo_settings', $config);
+
+            $this->get('core.dispatcher')
+                ->dispatch('photos.config');
+
+            $msg->add(_('Settings saved.'), 'success', 200);
+        } catch (\Exception $e) {
+            $msg->add(_('There was an error while saving the settings'), 'error', 400);
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
 }

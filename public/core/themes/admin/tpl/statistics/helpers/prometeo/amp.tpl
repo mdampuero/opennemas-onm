@@ -22,6 +22,7 @@
             "keywords": "{$seoTags}",
             "image": "{$imagePath}",
             "tags": "{$seoTags}",
+            "accesstype": "{$accessType}",
             "subs_mode": "",
             "subs_period": "",
             "subs_id": "",

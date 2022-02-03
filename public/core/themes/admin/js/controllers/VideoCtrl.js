@@ -30,11 +30,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $scope.dtm = null;
 
     /**
-     * @inheritdoc
-     */
-    $scope.incomplete = true;
-
-    /**
      * @memberOf VideoCtrl
      *
      * @description

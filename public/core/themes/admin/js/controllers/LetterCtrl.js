@@ -44,11 +44,6 @@
         $scope.dtm = null;
 
         /**
-         * @inheritdoc
-         */
-        $scope.incomplete = true;
-
-        /**
          * @memberOf LetterCtrl
          *
          * @description

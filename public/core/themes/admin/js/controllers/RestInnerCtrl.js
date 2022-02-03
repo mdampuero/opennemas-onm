@@ -143,7 +143,7 @@
 
         /**
          * @function getData
-         * @memberOf SubscriberCtrl
+         * @memberOf RestInnerCtrl
          *
          * @description
          *   Returns the data to send when saving/updating an item.

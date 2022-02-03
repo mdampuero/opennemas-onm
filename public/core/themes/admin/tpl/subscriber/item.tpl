@@ -84,7 +84,7 @@
           <i class="fa fa-warning m-r-5 text-warning"></i>
           {t escape=off 1="[% routing.generate('backend_subscriptions_list') %]"}There are no <a href="%1">subscriptions</a>{/t}
         </div>
-        <div class="p-l-15 p-t-15 p-b-15 p-r-15 b-t" ng-repeat="subscription in item.user_groups">
+        <div class="p-l-15 p-t-15 p-b-15 p-r-15 b-t" ng-repeat="subscription in item.user_groups | filter:isSubscription">
           <label class="form-label">
             <span ng-class="{ 'text-danger': subscription.status === 2 }">
               [% data.extra.subscriptions[subscription.user_group_id].name %]

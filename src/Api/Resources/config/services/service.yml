@@ -166,5 +166,5 @@ services:
 
     api.service.widget:
         class:     Api\Service\V1\WidgetService
-        arguments: [ '@service_container', '\Widget' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
         public:    true

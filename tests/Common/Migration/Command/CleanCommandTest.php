@@ -525,7 +525,7 @@ class CleanCommandTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->container);
 
         $this->conn->expects($this->once())->method('fetchAll')
-            ->willReturn([ [ 'path' => '/file.pdf' ] ]);
+            ->willReturn([ [ 'meta_value' => '/file.pdf' ] ]);
 
         $method = new \ReflectionMethod($command, 'getAttachments');
         $method->setAccessible(true);
