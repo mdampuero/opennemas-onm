@@ -40,10 +40,30 @@ class StaticPageController extends ContentController
         'show'   => 'STATIC_PAGE_UPDATE',
     ];
 
+    protected $module = 'staticPage';
+
     /**
      * The API service name.
      *
      * @var string
      */
     protected $service = 'api.service.content';
+
+    /**
+     * Loads extra data related to the given contents.
+     *
+     * @param array $items The items array
+     *
+     * @return array Array of extra data.
+     */
+    protected function getExtraData($items = null)
+    {
+        $extra = parent::getExtraData($items);
+        return array_merge([
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
+        ], $extra);
+    }
 }

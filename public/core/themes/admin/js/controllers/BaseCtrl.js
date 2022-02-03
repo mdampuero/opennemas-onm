@@ -518,10 +518,12 @@
             return null;
           }
 
-          var route = { name: 'api_v1_backend_photo_save_item' };
-          var body  = {};
-
-          body['imgData.name'] = image;
+          var route  = { name: 'api_v1_backend_photo_save_item' };
+          var body   = {
+            image: image,
+            optimize: true,
+            description: imgData.description
+          };
 
           http.post(route, body).then(function() {
             if (typeof $scope.list === 'function') {

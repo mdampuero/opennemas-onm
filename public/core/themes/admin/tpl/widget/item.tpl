@@ -23,6 +23,24 @@
   </a>
 {/block}
 
+{block name="primaryActions"}
+  <div class="all-actions pull-right">
+    <ul class="nav quick-section">
+      <li class="quicklinks">
+        <a class="btn btn-link" ng-click="expansibleSettings()" title="{t 1=_('Widget')}Config form: '%1'{/t}">
+          <span class="fa fa-cog fa-lg"></span>
+        </a>
+      </li>
+      <li class="quicklinks">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+          <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+          {t}Save{/t}
+        </button>
+      </li>
+    </ul>
+  </div>
+{/block}
+
 {block name="rightColumn" append}
   <div class="grid simple">
     <div class="grid-body no-padding">
@@ -49,43 +67,43 @@
                 {t}Type{/t}
               </label>
               <div class="radio m-b-5 m-t-5">
-                <input id="renderlet-html" ng-change="resetContent()" ng-model="item.renderlet" ng-value="'html'" type="radio">
+                <input id="renderlet-html" ng-change="resetContent()" ng-model="item.widget_type" ng-value="" type="radio" ng-checked="!item.widget_type">
                 <label for="renderlet-html">
                   HTML
                 </label>
               </div>
               <div class="radio m-t-5">
-                <input id="renderlet-intelligent" ng-change="resetContent()" ng-model="item.renderlet" ng-value="'intelligentwidget'" type="radio">
+                <input id="renderlet-intelligent" ng-change="resetContent()" ng-model="item.widget_type" ng-value="'intelligentwidget'" type="radio">
                 <label for="renderlet-intelligent">
                   {t}IntelligentWidget{/t}
                 </label>
               </div>
             </div>
           </div>
-          <div class="col-lg-6 col-md-6" ng-if="item.renderlet !== 'html'">
+          <div class="col-lg-6 col-md-6" ng-if="item.widget_type">
             <div class="form-group no-margin">
               <label class="form-label">
                 {t}Content{/t}
               </label>
               <div class="controls controls-validation">
-                <ui-select class="block" name="content" theme="select2" ng-model="item.content" required>
+                <ui-select class="block" name="content" theme="select2" ng-model="item.class" required>
                   <ui-select-match placeholder="{t}Select a type{/t}">
                     [% $select.selected.name %]
                   </ui-select-match>
-                  <ui-select-choices position="up" repeat="item.id as item in data.extra.types | filter: { name: $select.search }">
+                  <ui-select-choices position="up" repeat="item.id as item in data.extra.classes | filter: { name: $select.search }">
                     <div ng-bind-html="item.name | highlight: $select.search"></div>
                   </ui-select-choices>
                 </ui-select>
-                {include file="common/component/icon/status.tpl" iClass="form-status-absolute" iForm="form.content" iNgModel="item.content" iValidation=true}
+                {include file="common/component/icon/status.tpl" iClass="form-status-absolute" iForm="form.content" iNgModel="item.class" iValidation=true}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="ng-cloak" ng-show="item.renderlet === 'html'">
-        {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Content{/t}" field="content" imagepicker=true rows=5}
+      <div class="ng-cloak" ng-show="!item.widget_type">
+        {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Content{/t}" field="body" imagepicker=true rows=5}
       </div>
-      <div class="ng-cloak" ng-show="item.renderlet !== 'html' && item.content">
+      <div class="ng-cloak" ng-show="item.widget_type && item.class">
         <div class="p-b-50 p-t-50 spinner-wrapper" ng-if="flags.http.formLoading">
           <div class="loading-spinner"></div>
           <div class="spinner-text">{t}Loading{/t}...</div>
@@ -122,3 +140,8 @@
   </div>
 {/block}
 
+{block name="modals"}
+  <script type="text/ng-template" id="modal-expansible-fields">
+    {include file="common/modals/_modalExpansibleFields.tpl"}
+  </script>
+{/block}

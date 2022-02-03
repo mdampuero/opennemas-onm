@@ -30,6 +30,8 @@ class AlbumController extends ContentController
         'show'   => 'ALBUM_UPDATE',
     ];
 
+    protected $module = 'album';
+
     /**
      * {@inheritdoc}
      */
@@ -42,7 +44,11 @@ class AlbumController extends ContentController
     {
         return array_merge(parent::getExtraData($items), [
             'categories' => $this->getCategories($items),
-            'tags'       => $this->getTags($items)
+            'tags'       => $this->getTags($items),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ]);
     }
 

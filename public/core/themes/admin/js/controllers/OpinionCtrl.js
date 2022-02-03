@@ -25,11 +25,6 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
     $scope.dtm = null;
 
     /**
-     * @inheritdoc
-     */
-    $scope.incomplete = true;
-
-    /**
      * @memberOf OpinionCtrl
      *
      * @description
@@ -91,7 +86,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      */
     $scope.buildScope = function() {
       $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
-
+      $scope.expandFields();
       // Check if item is new (created) or existing for use default value or not
       if (!$scope.data.item.pk_content) {
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;

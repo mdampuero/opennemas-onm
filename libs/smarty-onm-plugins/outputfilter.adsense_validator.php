@@ -42,13 +42,15 @@ function smarty_outputfilter_adsense_validator($output, $smarty)
             return $output;
         }
 
-        $code = '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({
-google_ad_client: "' . $adsenseId . '",
-enable_page_level_ads: true
-});
-</script>';
+        $content = $smarty->getValue('content');
+        $sh      = $smarty->getContainer()->get('core.helper.subscription');
+
+        if (!empty($content) && !$sh->hasAdvertisements($sh->getToken($content))) {
+            return $output;
+        }
+
+        $code = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='
+            . $adsenseId . '" crossorigin="anonymous"></script>';
 
         $output = preg_replace('@(</head>)@', "\n" . $code . '${1}', $output);
     }

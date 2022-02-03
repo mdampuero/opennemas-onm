@@ -1,0 +1,1 @@
+<amp-analytics data-block-on-consent="_till_responded" config="https://{$regionId}-config.sensic.net/tp?ty=IM&m={$mediaId}Amp&c={$contentId}&pr=RANDOM&cp_c1={$domain}&cp_c2={$category}&gdpr=1&gdpr_consent=CONSENT_STRING"></amp-analytics>

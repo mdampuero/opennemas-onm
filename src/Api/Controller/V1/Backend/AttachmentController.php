@@ -37,6 +37,8 @@ class AttachmentController extends ContentController
         'show'   => 'ATTACHMENT_UPDATE',
     ];
 
+    protected $module = 'attachment';
+
     /**
      * {@inheritdoc}
      */
@@ -94,7 +96,11 @@ class AttachmentController extends ContentController
     {
         return array_merge(parent::getExtraData($items), [
             'categories' => $this->getCategories($items),
-            'tags'       => $this->getTags($items)
+            'tags'       => $this->getTags($items),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ]);
     }
 }

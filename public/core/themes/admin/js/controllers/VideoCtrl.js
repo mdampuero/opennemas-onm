@@ -22,12 +22,12 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     /**
      * @inheritdoc
      */
-    $scope.dtm = null;
+    $scope.contentKey = 'video';
 
     /**
      * @inheritdoc
      */
-    $scope.incomplete = true;
+    $scope.dtm = null;
 
     /**
      * @memberOf VideoCtrl
@@ -123,7 +123,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      */
     $scope.buildScope = function() {
       $scope.localize($scope.data.item, 'item', true);
-
+      $scope.expandFields();
       // Check if item is new (created) or existing for use default value or not
       if (!$scope.data.item.pk_content) {
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;

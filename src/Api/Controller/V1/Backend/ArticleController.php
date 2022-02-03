@@ -28,6 +28,8 @@ class ArticleController extends ContentController
         'show'   => 'ARTICLE_UPDATE',
     ];
 
+    protected $module = 'article';
+
     /**
      * {@inheritdoc}
      */
@@ -69,7 +71,11 @@ class ArticleController extends ContentController
             'categories'    => $categories,
             'extra_fields'  => $extraFields,
             'subscriptions' => $subscriptions,
-            'tags'          => $this->getTags($items)
+            'tags'          => $this->getTags($items),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ], $extra);
     }
 

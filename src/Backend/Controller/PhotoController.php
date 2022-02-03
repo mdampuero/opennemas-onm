@@ -9,6 +9,8 @@
  */
 namespace Backend\Controller;
 
+use Common\Core\Annotation\Security;
+
 class PhotoController extends BackendController
 {
     /**
@@ -30,4 +32,16 @@ class PhotoController extends BackendController
      * {@inheritdoc}
      */
     protected $resource = 'photo';
+
+    /**
+     * Config for photo system
+     *
+     * @return Response the response object
+     *
+     * @Security("hasExtension('MASTER')")
+     */
+    public function configAction()
+    {
+        return $this->render('photo/config.tpl');
+    }
 }

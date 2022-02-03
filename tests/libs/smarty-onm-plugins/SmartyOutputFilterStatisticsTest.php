@@ -117,7 +117,7 @@ class SmartyOutputFilterStatisticsTest extends \PHPUnit\Framework\TestCase
 
         $this->fr->expects($this->any())->method('render')
             ->with(null, [
-                'types'  => [ 'Default', 'Chartbeat', 'Comscore', 'Ojd', 'GAnalytics', 'Prometeo' ],
+                'types'  => [ 'Default', 'Chartbeat', 'Comscore', 'Ojd', 'GAnalytics', 'Gfk', 'Prometeo' ],
                 'output' => $output,
             ])
             ->willReturn($returnvalue);

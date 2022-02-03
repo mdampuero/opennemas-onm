@@ -1,14 +1,14 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Opennemas Developers <developers@opennemas.com>, 2020-2021, 2021.
-# adan <adan@openhost.es>, 2021.
+# adan <adan@openhost.es>, 2021-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-28 11:26+0000\n"
-"PO-Revision-Date: 2021-12-14 15:09+0100\n"
+"POT-Creation-Date: 2022-02-03 12:22+0000\n"
+"PO-Revision-Date: 2022-02-03 13:35+0100\n"
 "Last-Translator: adan <adan@openhost.es>\n"
 "Language-Team: Spanish - Spain <adan@openhost.es>\n"
 "Language: es_ES\n"
@@ -1497,6 +1497,72 @@ msgstr "Pagar con PayPal"
 msgid "There is no billing information."
 msgstr "Non hai información de facturación."
 
+msgid "Author"
+msgstr "Autor"
+
+msgid "Slug"
+msgstr "Slug"
+
+msgid "External link"
+msgstr "Engadir ligazón externa"
+
+msgid "Schedule"
+msgstr "Planificación"
+
+msgid "Vote end date"
+msgstr "Data de fin de votación"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Event date"
+msgstr "Data do evento"
+
+msgid "Event location"
+msgstr "Localización do evento"
+
+msgid "External website"
+msgstr "Sitio web externo"
+
+msgid "Subsection of"
+msgstr "Subsección de"
+
+msgid "Color"
+msgstr "Cor"
+
+msgid "Logo"
+msgstr "Logo"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Visibility"
+msgstr "Visibilidade"
+
+msgid "Redirection"
+msgstr "Redirección"
+
+msgid "Requests"
+msgstr "Solicitudes"
+
+msgid "Language & time"
+msgstr "Idioma e hora"
+
+msgid "Featured in frontpage"
+msgstr "Destacado en portadas"
+
+msgid "Featured in inner"
+msgstr "Destacado en interior"
+
+msgid "Related in frontpage"
+msgstr "Relacionado en portadas"
+
+msgid "Related in inner"
+msgstr "Relacionado en interior"
+
+msgid "Agency"
+msgstr "Axencia"
+
 msgid "Max sents reached"
 msgstr "Alcanzouse o número máximo de envios"
 
@@ -1950,12 +2016,6 @@ msgstr "URL"
 msgid "Internal search"
 msgstr "Busca interna"
 
-msgid "Type"
-msgstr "Tipo"
-
-msgid "Author"
-msgstr "Autor"
-
 msgid "Select an author"
 msgstr "Selecciona un autor"
 
@@ -1995,17 +2055,11 @@ msgstr "Ligazón"
 msgid "No author"
 msgstr "Sen autor"
 
-msgid "Slug"
-msgstr "Slug"
-
 msgid "Allow comments"
 msgstr "Permitir comentarios"
 
 msgid "Select a category"
 msgstr "Selecciona unha categoría"
-
-msgid "Schedule"
-msgstr "Planificación"
 
 msgid "Planned"
 msgstr "Planificado"
@@ -2034,9 +2088,6 @@ msgstr "Gardar"
 
 msgid "Cover image"
 msgstr "Imaxe principal"
-
-msgid "Date"
-msgstr "Data"
 
 msgid "Editorial"
 msgstr "Editorial"
@@ -2353,6 +2404,9 @@ msgstr ""
 msgid "I understand and accept the cost of the operation."
 msgstr "Entendo e acepto os custos da operación."
 
+msgid "Config form: '%1'"
+msgstr "Configuración do formulario: '%1'"
+
 msgid "Convert to"
 msgstr "Converter a"
 
@@ -2367,9 +2421,6 @@ msgstr "Grupos de usuarios"
 
 msgid "selected"
 msgstr "seleccionados"
-
-msgid "Language & time"
-msgstr "Idioma e hora"
 
 msgid "Used for interface, messages and units in the control panel"
 msgstr ""
@@ -2471,6 +2522,9 @@ msgstr "Tes certeza que queres eliminar a portada seleccionada?"
 
 msgid "Newsstand"
 msgstr "Portadas de papel"
+
+msgid "Draft saved at "
+msgstr "Borrador gardado ás "
 
 msgid "Favorite"
 msgstr "Favorito"
@@ -2581,9 +2635,6 @@ msgstr ""
 msgid "Logged in users"
 msgstr "Usuarios conectados"
 
-msgid "Redirection"
-msgstr "Redirección"
-
 msgid "HTTP code"
 msgstr "Código HTTP"
 
@@ -2649,9 +2700,6 @@ msgstr "até"
 msgid "Servers"
 msgstr "Servidores"
 
-msgid "Color"
-msgstr "Cor"
-
 msgid "Synchronization"
 msgstr "Sincronización"
 
@@ -2660,9 +2708,6 @@ msgstr "Sincronizar elementos máis actuais que"
 
 msgid "Less time means faster synchronizations"
 msgstr "Menos tempo significa sincronizacións máis rápidas"
-
-msgid "External link"
-msgstr "Engadir ligazón externa"
 
 msgid "None"
 msgstr "Ningún"
@@ -2675,9 +2720,6 @@ msgstr "Redirixir a"
 
 msgid "When importing assign an external link to the elements"
 msgstr "Ao importar asignar unha ligazón externa aos elementos"
-
-msgid "Agency"
-msgstr "Axencia"
 
 msgid "When importing elements this will be the signature"
 msgstr "Ao importar elementos esta será a firma"
@@ -2817,6 +2859,9 @@ msgid ""
 msgstr ""
 "Estes campos serán solicitados durante o rexistro e poden editarse no panel "
 "de control."
+
+msgid "Required"
+msgstr "Obrigatorio"
 
 msgid "Internal name"
 msgstr "Nome interno"
@@ -3175,6 +3220,9 @@ msgstr "Tes certeza que queres enviar ao lixo o seguinte elemento?"
 msgid "Keep"
 msgstr "Manter"
 
+msgid "Are you sure you want to remove this frontpage?"
+msgstr "Tes certeza que queres eliminar esta portada?"
+
 msgid "Archive this element"
 msgstr "Arquivar este elemento"
 
@@ -3504,12 +3552,6 @@ msgstr "Personalizar contido"
 msgid "Remove from all frontpages"
 msgstr "Quitar de todas as portadas"
 
-msgid "Draft saved at "
-msgstr "Borrador gardado ás "
-
-msgid "Event date"
-msgstr "Data do evento"
-
 msgid "Start date"
 msgstr "Data de inicio"
 
@@ -3522,23 +3564,11 @@ msgstr "Data de fin"
 msgid "End hour"
 msgstr "Hora de fin"
 
-msgid "Event location"
-msgstr "Localización do evento"
-
 msgid "Place"
 msgstr "Lugar"
 
-msgid "External website"
-msgstr "Sitio web externo"
-
 msgid "Website URL"
 msgstr "URL do sitio web"
-
-msgid "Featured in frontpage"
-msgstr "Destacado en portadas"
-
-msgid "Featured in inner"
-msgstr "Destacado en interior"
 
 msgid "Search by tag"
 msgstr "Busca por etiqueta"
@@ -3738,9 +3768,6 @@ msgstr "Notas"
 msgid "Remove element from this frontpage"
 msgstr "Eliminar elemento desta portada"
 
-msgid "Vote end date"
-msgstr "Data de fin de votación"
-
 msgid "Open"
 msgstr "Aberta"
 
@@ -3805,12 +3832,6 @@ msgstr ""
 "O contido só estará dispoñíbel para os subscritores das subscripcións "
 "seleccionadas."
 
-msgid "Related in frontpage"
-msgstr "Relacionado en portadas"
-
-msgid "Related in inner"
-msgstr "Relacionado en interior"
-
 msgid "Inner title"
 msgstr "Titulo interior:"
 
@@ -3849,12 +3870,6 @@ msgstr "Se está activado, a categoría mostrarase nos selectores de categoría"
 
 msgid "If enabled, category will be included in RSS feeds"
 msgstr "Se está activado, a categoría mostrarase nos rss"
-
-msgid "Subsection of"
-msgstr "Subsección de"
-
-msgid "Logo"
-msgstr "Logo"
 
 msgid "Move contents"
 msgstr "Mover contidos"
@@ -4459,6 +4474,27 @@ msgstr ""
 msgid "Chartbeat Domain"
 msgstr "Dominio de Chartbeat"
 
+msgid "GFK"
+msgstr "GFK"
+
+msgid "GFK Media ID"
+msgstr "GFK Media ID"
+
+msgid "GFK Domain"
+msgstr "GFK Domain"
+
+msgid "GFK Region ID"
+msgstr "GFK Region ID"
+
+msgid "Default will be set with \"es\""
+msgstr "O valor predeterminado establecerase con \"es\""
+
+msgid "GFK Content ID"
+msgstr "GFK Content ID"
+
+msgid "Default will be set with \"default\""
+msgstr "O valor predeterminado establecerase con \"default\""
+
 msgid "Prometeo"
 msgstr "Prometeo"
 
@@ -4882,6 +4918,14 @@ msgstr "Tes certeza que queres restaurar %1 elemento(s)?"
 
 msgid "Yes, restore them all"
 msgstr "Si, restaurar todos"
+
+msgid "Default expanded fields"
+msgstr "Campos expandidos por defecto"
+
+msgid "Selected fields will be automatically expanded when the form loads"
+msgstr ""
+"Os campos seleccionados serán expandidos automaticamente cando se cargue o "
+"formulario"
 
 msgid "Drop these elements"
 msgstr "Eliminar estes elementos"
@@ -5336,6 +5380,15 @@ msgstr "Planificacións"
 msgid "Not set"
 msgstr "Non estabelecido"
 
+msgid "Optimize images"
+msgstr "Optimizar imaxes"
+
+msgid ""
+"If set, images will be automaticaly optimized when uploaded and imported"
+msgstr ""
+"Se está configurado, as imaxes optimizaranse automaticamente cando se "
+"carguen e se importen"
+
 msgid "Delete multiple images"
 msgstr "Eliminar varias imaxes"
 
@@ -5363,6 +5416,9 @@ msgstr "Detalles da imaxe"
 
 msgid "Resolution"
 msgstr "Resolución"
+
+msgid "Config photos module"
+msgstr "Configuración do módulo «Fotos»"
 
 msgid "Do you want to empty the trash?"
 msgstr "¿Queres baleirar a papeleira?"
@@ -5453,9 +5509,6 @@ msgstr ""
 "Estamos realizando tarefas de mantemento na plataforma Opennemas, agarda uns "
 "minutos."
 
-msgid "Visibility"
-msgstr "Visibilidade"
-
 msgid "Private"
 msgstr "Privada"
 
@@ -5468,9 +5521,6 @@ msgid ""
 msgstr ""
 "Se está activado, os subscritores no poderán ver esta subscrición mentras se "
 "rexistran ou editan ou seu perfil"
-
-msgid "Requests"
-msgstr "Solicitudes"
 
 msgid "Manual"
 msgstr "Manual"

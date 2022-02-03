@@ -2,9 +2,9 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
-  '$controller', '$http', '$uibModal', '$rootScope', '$scope', 'cleaner',
+  '$controller', '$uibModal', '$scope', 'cleaner',
   'messenger', 'routing', '$timeout', 'webStorage', '$window', 'translator',
-  function($controller, $http, $uibModal, $rootScope, $scope, cleaner,
+  function($controller, $uibModal, $scope, cleaner,
       messenger, routing, $timeout, webStorage, $window, translator) {
     'use strict';
 
@@ -40,6 +40,11 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      * @type {Function}
      */
     $scope.dtm = null;
+
+    /**
+     * @inheritdoc
+     */
+    $scope.incomplete = true;
 
     /**
      * @function checkDraft
@@ -99,6 +104,10 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      */
     $scope.getData = function() {
       var data = angular.extend({}, $scope.data.item);
+
+      if ($scope.item.params && Object.keys($scope.item.params).length > 0) {
+        data.params = angular.extend(data.params, $scope.item.params);
+      }
 
       return cleaner.clean(data);
     };
@@ -342,5 +351,24 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         }
       }, true);
     }, 5000);
+
+    /**
+     * @function localizeText
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @param {any} String or Object to localize.
+     *
+     * @return {String} Localized text.
+     *
+     * @description
+     *   Localize and return text
+     */
+    $scope.localizeText = function(text) {
+      if (typeof text === 'object') {
+        return text[$scope.config.locale.selected];
+      }
+
+      return text;
+    };
   }
 ]);

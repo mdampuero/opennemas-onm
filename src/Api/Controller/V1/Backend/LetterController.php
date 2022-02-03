@@ -22,6 +22,8 @@ class LetterController extends ContentController
         'show'   => 'LETTER_UPDATE',
     ];
 
+    protected $module = 'letter';
+
     /**
      * {@inheritdoc}
      */
@@ -38,9 +40,14 @@ class LetterController extends ContentController
     protected function getExtraData($items = null)
     {
         $extra['tags'] = $this->getTags($items);
-
         $extraData = parent::getExtraData($items);
 
-        return array_merge($extraData, $extra);
+        return array_merge([
+            'tags'    => $this->getTags($items),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
+        ], $extraData);
     }
 }

@@ -31,6 +31,13 @@ class PhotoService extends ContentService
      */
     public function createItem($data = [], $file = null, bool $copy = false)
     {
+        $optimize = false;
+
+        if (!empty($data['optimize'])) {
+            unset($data['optimize']);
+            $optimize = true;
+        }
+
         if (empty($file)) {
             throw new CreateItemException('No file provided');
         }
@@ -72,20 +79,60 @@ class PhotoService extends ContentService
             $this->em->persist($item, $this->getOrigin());
 
             $id = $this->em->getMetadata($item)->getId($item);
-
+            $id = array_pop($id);
             $this->dispatcher->dispatch($this->getEventName('createItem'), [
                 'action' => __METHOD__,
-                'id'     => array_pop($id),
+                'id'     => $id,
                 'item'   => $item
             ]);
 
             $ih->move($file, $path, $copy);
+
+            $ds = $this->container->get('orm.manager')
+                ->getDataSet('Settings', 'instance');
+
+            $config = $ds->get('photo_settings', []);
+            $sh     = $this->container->get('core.helper.setting');
+            $config = $sh->toBoolean($config, ['optimize_images']);
+
+            if ($optimize || (array_key_exists('optimize_images', $config) && $config['optimize_images'])) {
+                $this->optimizeImage($path);
+                $this->updateImage($id, $path);
+            }
 
             return $item;
         } catch (\Exception $e) {
             $ih->remove($path);
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
+    }
+
+    protected function optimizeImage($path)
+    {
+        $processor = $this->container->get('core.image.processor');
+        $processor->open($path)
+            ->apply('thumbnail', [1920, 1920, 'center', 'center'])
+            ->optimize([
+                'flatten'          => false,
+                'quality'          => 65,
+                'resolution-units' => 'ppi',
+                'resolution-x'     => 72,
+                'resolution-y'     => 72
+            ])
+            ->save($path)
+            ->close();
+    }
+
+    protected function updateImage($id, $path)
+    {
+        $ih   = $this->container->get('core.helper.image');
+        $data = $ih->getInformation($path);
+        $data = $this->assignUser($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
+
+        $data = $this->em->getConverter($this->entity)
+            ->objectify(array_merge($this->defaults, $data));
+
+        $this->updateItem($id, $data);
     }
 
     /**
