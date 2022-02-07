@@ -149,6 +149,12 @@ class NewsstandController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $params['x-tags'] .= ',kiosko-frontpage';
+
+        if (array_key_exists('year', $params)) {
+            $params['x-tags'] .= '-' . implode('-', [ $params['year'], $params['month'], $params['day'] ]);
+        }
+
         $params = array_merge($params, [
             'items'      => $response['items'],
             'pagination' => $this->get('paginator')->get([

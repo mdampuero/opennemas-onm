@@ -139,6 +139,8 @@ class EventController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
+        $params['x-tags'] .= ',event-frontpage';
+
         $params['contents']   = $response['items'];
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,

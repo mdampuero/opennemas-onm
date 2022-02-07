@@ -2,6 +2,7 @@
 
 namespace Api\Helper\Cache;
 
+use Common\Model\Entity\Content;
 use Opennemas\Task\Component\Task\ServiceTask;
 
 class ContentCacheHelper extends CacheHelper
@@ -55,5 +56,25 @@ class ContentCacheHelper extends CacheHelper
         ) ]));
 
         return $this;
+    }
+
+    /**
+     * Returns the cache ids for the specific content type.
+     *
+     * @param Content $item The content to get the x-tags for.
+     *
+     * @return String The x-tags for the specific content type.
+     */
+    public function getXTags(Content $content)
+    {
+        if ($content->content_type_name === 'article') {
+            return sprintf(
+                'article-%d-inner,category-%d',
+                $content->pk_content,
+                $content->categories[0]
+            );
+        }
+
+        return sprintf('%s-%d-inner', $content->content_type_name, $content->pk_content);
     }
 }

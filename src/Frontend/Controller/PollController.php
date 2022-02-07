@@ -214,6 +214,8 @@ class PollController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $params['x-tags'] .= ',poll-frontpage';
+
         $params = array_merge($params, [
             'polls'      => $response['items'],
             'total'      => $response['total'],

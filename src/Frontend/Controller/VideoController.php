@@ -103,6 +103,8 @@ class VideoController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $params['x-tags'] .= ',video-frontpage';
+
         $params = array_merge($params, [
             'videos'      => $response['items'],
             'total'       => $response['total'],

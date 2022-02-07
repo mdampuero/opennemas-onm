@@ -130,6 +130,8 @@ class AlbumController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $params['x-tags'] .= ',album-frontpage';
+
         $params = array_merge($params, [
             'albums'     => $response['items'],
             'total'      => $response['total'],

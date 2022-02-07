@@ -112,7 +112,7 @@ class HttpCacheHeadersListener
             $expire = $this->template->getValue('x-cache-for');
         }
 
-        if (preg_match('/[0-9]+s/', $expire)) {
+        if (preg_match('/[0-9]+[smhd]/', $expire)) {
             return $expire;
         }
 

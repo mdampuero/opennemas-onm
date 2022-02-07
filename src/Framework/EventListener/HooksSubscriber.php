@@ -473,8 +473,9 @@ class HooksSubscriber implements EventSubscriberInterface
      *
      * @param Event $event The event to handle.
      */
-    public function removeVarnishCacheCurrentInstance()
+    public function removeVarnishCacheCurrentInstance(Event $event)
     {
+        // TODO: Insert here the cache helper to remove the correspondent keys basing on the type of content.
         if (!$this->container->hasParameter('varnish')) {
             return false;
         }
