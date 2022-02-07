@@ -64,6 +64,7 @@
           starttime: null,
           endtime: null,
           title: '',
+          title_int: '',
           type: 0,
           with_comment: 0,
           categories: [],
@@ -72,11 +73,6 @@
           external_link: '',
           agency: '',
         };
-
-        /**
-         * Set inner title field blocked by default
-         */
-        $scope.flags.block.title_int = true;
 
         /**
          * @memberOf ArticleCtrl
@@ -122,6 +118,8 @@
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'article-' + $scope.data.item.pk_content + '-draft';
           }
+
+          $scope.flags.block.title_int = $scope.item.title_int === $scope.item.title;
 
           $scope.checkDraft();
           related.init($scope);
@@ -196,8 +194,60 @@
           });
         };
 
+        /**
+         * @function undo
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Shows the change to be made on the input.
+         */
+        $scope.undo = function() {
+          if ($scope.flags.block.title_int || $scope.previous) {
+            return;
+          }
+
+          $scope.undoing        = true;
+          $scope.previous       = $scope.item.title_int;
+          $scope.item.title_int = $scope.item.title;
+        };
+
+        /**
+         * @function redo
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Stops showing the change to be made to the input.
+         */
+        $scope.redo = function() {
+          $scope.undoing = false;
+
+          if ($scope.flags.block.title_int || !$scope.previous) {
+            return;
+          }
+
+          $scope.item.title_int = $scope.previous;
+          $scope.previous       = null;
+        };
+
+        // Update title int when block flag changes
+        $scope.$watch('flags.block.title_int', function(nv) {
+          $scope.previous = null;
+          $scope.undoing  = false;
+
+          if (!nv) {
+            return;
+          }
+
+          $scope.item.title_int = $scope.item.title;
+        });
+
         // Update title_int when title changes
         $scope.$watch('item.title', function(nv, ov) {
+          // Mirror only when title_int locker is 'closed'
+          if (!$scope.flags.block.title_int) {
+            return;
+          }
+
           if (!nv && !ov) {
             return;
           }
@@ -216,6 +266,16 @@
             }
           }
         }, true);
+
+        $scope.$watch('config.locale.selected', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          if ($scope.flags.block.title_int !== ($scope.item.title === $scope.item.title_int)) {
+            $scope.flags.block.title_int = !$scope.flags.block.title_int;
+          }
+        });
 
         /**
          * @inheritdoc
