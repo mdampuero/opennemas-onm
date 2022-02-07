@@ -343,7 +343,11 @@
         };
 
         // Gets the form for widget when widget class changes
-        $scope.$watch('item.class', function(nv) {
+        $scope.$watch('item.class', function(nv, ov) {
+          if (ov) {
+            $scope.item.params = [];
+          }
+
           if (!nv) {
             return;
           }
