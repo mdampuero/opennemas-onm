@@ -18,11 +18,9 @@
   <th class="text-center v-align-middle" width="80">
     {t}Social{/t}
   </th>
-  {acl isAllowed="MASTER"}
-    <th class="text-center v-align-middle" width="100">
-      {t}Enabled{/t}
-    </th>
-  {/acl}
+  <th class="text-center v-align-middle" width="100">
+    {t}Enabled{/t}
+  </th>
 {/block}
 
 {block name="commonColumnsBody"}
@@ -75,11 +73,9 @@
       </li>
     </ul>
   </td>
-  {acl isAllowed="MASTER"}
-    <td class="text-center v-align-middle">
-      <button class="btn btn-white" ng-click="confirm('activated', item.activated != 1 ? 1 : 0, item)" type="button">
-        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated == '1', 'fa-times text-error': !item.activatedLoading && item.activated == '0' }"></i>
-      </button>
-    </td>
-  {/acl}
+  <td class="text-center v-align-middle">
+    <button class="btn btn-white" ng-click="confirm('activated', item.activated != 1 ? 1 : 0, item)" type="button">
+      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated == '1', 'fa-times text-error': !item.activatedLoading && item.activated == '0' }"></i>
+    </button>
+  </td>
 {/block}

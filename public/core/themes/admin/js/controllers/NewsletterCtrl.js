@@ -157,8 +157,7 @@ angular.module('BackendApp.controllers').controller('NewsletterCtrl', [
         currentEmails.push($scope.recipients.items[i].email);
       }
 
-      // Save new valid emails (up to a maximum of 100)
-      for (var i = 0; i < emails.length && $scope.recipients.items.length < 100; i++) {
+      for (var i = 0; i < emails.length; i++) {
         if (pattern.test(emails[i]) &&
             currentEmails.indexOf(emails[i]) === -1
         ) {

@@ -163,7 +163,7 @@
                     <div class="controls m-b-10">
                       <textarea class="form-control" id="more-emails" ng-model="moreEmails" placeholder="{t}Write a list of email address writing one per line{/t}" rows=10></textarea>
                     </div>
-                    <button class="btn btn-block" ng-click="addMoreEmails()" type="button" ng-show="recipients.items.length < 100">
+                    <button class="btn btn-block" ng-click="addMoreEmails()" type="button">
                       {t}Parse list & add{/t}
                     </button>
                   </div>

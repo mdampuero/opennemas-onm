@@ -55,18 +55,16 @@
 {block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">
-      {acl isAllowed="MASTER"}
-        <div class="grid-collapse-title">
-          <div class="form-group no-margin">
-            <div class="checkbox">
-              <input id="activated" name="activated" ng-model="item.activated" ng-true-value="1" type="checkbox">
-              <label class="form-label" for="activated">
-                {t}Enabled{/t}
-              </label>
-            </div>
+      <div class="grid-collapse-title">
+        <div class="form-group no-margin">
+          <div class="checkbox">
+            <input id="activated" name="activated" ng-model="item.activated" ng-true-value="1" type="checkbox">
+            <label class="form-label" for="activated">
+              {t}Enabled{/t}
+            </label>
           </div>
         </div>
-      {/acl}
+      </div>
       <div class="grid-collapse-title pointer" ng-class="{ 'open': expanded.subscriptions }" ng-click="expanded.subscriptions = !expanded.subscriptions">
         <i class="fa fa-list m-r-10"></i>{t}Lists{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.subscriptions }"></i>
