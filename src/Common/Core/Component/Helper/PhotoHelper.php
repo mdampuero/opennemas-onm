@@ -81,6 +81,11 @@ class PhotoHelper
             return $item;
         }
 
+        // Added for external contents.
+        if (!empty($item->externalPath) && preg_match('/^https?.*/', $item->externalPath)) {
+            return $item->externalPath;
+        }
+
         $item = $this->contentHelper->getContent($item, 'Photo');
 
         if (empty($item)) {

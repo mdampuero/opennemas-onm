@@ -393,6 +393,9 @@
 <script type="text/ng-template" id="modal-publish-now">
   {include file="frontpagemanager/modals/_publish_now.tpl"}
 </script>
+<script type="text/ng-template" id="modal-remove-frontpage">
+  {include file="frontpagemanager/modals/_modal_remove_frontpage.tpl"}
+</script>
 {/block}
 
 

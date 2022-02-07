@@ -56,6 +56,10 @@
           updateItem: 'api_v1_backend_url_update_item'
         };
 
+        $scope.buildScope = function() {
+          $scope.expandFields();
+        };
+
         // Updates item target when selected content from content picker changes
         $scope.$watch('data.extra.content', function(nv, ov) {
           if (!nv || nv.length === 0 || nv === ov) {

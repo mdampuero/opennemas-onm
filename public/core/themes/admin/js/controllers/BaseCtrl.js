@@ -19,9 +19,9 @@
      *   and inners will need. All controllers should extend this.
      */
     .controller('BaseCtrl', [
-      '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'Editor',
+      '$q', '$rootScope', '$scope', '$timeout', '$uibModal', '$window', 'Editor',
       'http', 'linker', 'localizer', 'messenger', 'Renderer', '$sce',
-      function($rootScope, $scope, $timeout, $uibModal, $window, Editor, http, linker, localizer, messenger, Renderer, $sce) {
+      function($q, $rootScope, $scope, $timeout, $uibModal, $window, Editor, http, linker, localizer, messenger, Renderer, $sce) {
         /**
          * @memberOf BaseCtrl
          *
@@ -363,13 +363,21 @@
          * @param string target The target id.
          * @param array  items  The items to insert.
          */
-        $scope.insertInCKEditor = function(target, items) {
+        $scope.insertInCKEditor = function(target, items, extra) {
           if (!(items instanceof Array)) {
             items = [ items ];
           }
 
+          if (items[0].content_type_name !== 'photo') {
+            $q.when(Renderer.renderRelatedContents(items, extra), function(html) {
+              Editor.get(target).insertHtml(html);
+            });
+          }
+
           for (var i = 0; i < items.length; i++) {
-            Editor.get(target).insertHtml(Renderer.renderImage(items[i]));
+            if (items[i].content_type_name === 'photo') {
+              Editor.get(target).insertHtml(Renderer.renderImage(items[i]));
+            }
           }
 
           Editor.get(target).fire('change');
@@ -510,10 +518,12 @@
             return null;
           }
 
-          var route = { name: 'api_v1_backend_photo_save_item' };
-          var body  = {};
-
-          body['imgData.name'] = image;
+          var route  = { name: 'api_v1_backend_photo_save_item' };
+          var body   = {
+            image: image,
+            optimize: true,
+            description: imgData.description
+          };
 
           http.post(route, body).then(function() {
             if (typeof $scope.list === 'function') {
@@ -580,7 +590,7 @@
           if (/editor.*/.test(args.target)) {
             var target = args.target.replace('editor.', '');
 
-            $scope.insertInCKEditor(target, args.items);
+            $scope.insertInCKEditor(target, args.items, $scope.data.extra);
             return;
           }
 

@@ -38,6 +38,8 @@ class WidgetController extends ContentController
         'show'   => 'WIDGET_UPDATE',
     ];
 
+    protected $module = 'widget';
+
     /**
      * {@inheritdoc}
      */
@@ -74,9 +76,13 @@ class WidgetController extends ContentController
     protected function getExtraData($items = null)
     {
         return array_merge(parent::getExtraData($items), [
-            'categories' => $this->getCategories($items),
-            'tags'       => $this->getTags($items),
-            'classes'    => $this->getTypes()
+            'categories'   => $this->getCategories($items),
+            'tags'         => $this->getTags($items),
+            'classes'      => $this->getTypes(),
+            'formSettings' => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ]);
     }
 

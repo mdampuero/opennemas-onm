@@ -36,6 +36,8 @@ class SubscriberController extends ApiController
         'update' => 'SUBSCRIBER_UPDATE',
     ];
 
+    protected $module = 'subscriber';
+
     /**
      * {@inheritdoc}
      */
@@ -150,6 +152,12 @@ class SubscriberController extends ApiController
             $settings = ['fields' => []];
         }
 
+        // Convert required values to boolean
+        for ($i = 0; $i < count($settings['fields']); $i++) {
+            $settings['fields'][$i] = $this->get('core.helper.setting')
+                ->toBoolean($settings['fields'][$i], [ 'required' ]);
+        }
+
         try {
             $this->get('orm.manager')->getDataSet('Settings', 'instance')
                 ->set('user_settings', $settings);
@@ -172,7 +180,11 @@ class SubscriberController extends ApiController
             'countries'     => $this->get('core.geo')->getCountries(),
             'photos'        => $this->getPhotos($items),
             'settings'      => $this->getSettings(),
-            'subscriptions' => $this->getSubscriptions()
+            'subscriptions' => $this->getSubscriptions(),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ];
     }
 
@@ -193,18 +205,22 @@ class SubscriberController extends ApiController
             $items = [ $items ];
         }
 
-        $ids = array_filter(array_map(function ($a) {
-            return [ 'photo', $a->avatar_img_id ];
-        }, $items), function ($a) {
-            return !empty($a[1]);
+        $ids = array_filter(array_map(function ($user) {
+            return $user->avatar_img_id;
+        }, $items), function ($photo) {
+                return !empty($photo);
         });
 
-        $photos = $this->get('entity_repository')->findMulti($ids);
+        try {
+            $photos = $this->get('api.service.content')->getListByIds($ids)['items'];
+            $photos = $this->get('data.manager.filter')
+                ->set($photos)
+                ->filter('mapify', [ 'key' => 'pk_content' ])
+                ->get();
 
-        return $this->get('data.manager.filter')
-            ->set($photos)
-            ->filter('mapify', [ 'key' => 'pk_content' ])
-            ->get();
+            return $this->get('api.service.content')->responsify($photos);
+        } catch (GetItemException $e) {
+        }
     }
 
     /**

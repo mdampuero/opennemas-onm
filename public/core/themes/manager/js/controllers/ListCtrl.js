@@ -20,6 +20,15 @@
          * @memberOf ListCtrl
          *
          * @description
+         *  Always collapse the list of columns
+         */
+        $scope.app.columns = {};
+        $scope.app.columns.collapsed = true;
+
+        /**
+         * @memberOf ListCtrl
+         *
+         * @description
          *   The list of selected elements.
          *
          * @type {Array}
