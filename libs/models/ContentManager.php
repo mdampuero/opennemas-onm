@@ -779,6 +779,11 @@ class ContentManager
                 'name'            => 'letter',
                 'title'           => _('Letter to editor')
             ],
+            [
+                'pk_content_type' => 18,
+                'name'            => 'obituary',
+                'title'           => _('Obituary')
+            ],
         ];
 
         return $contentTypes;

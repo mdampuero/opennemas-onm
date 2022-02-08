@@ -93,7 +93,11 @@ class FeaturedMediaHelper
             ], 'opinion' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => [ 'featured_inner' ]
-            ], 'album' => [
+            ], 'obituary' => [
+                'frontpage' => [ 'featured_frontpage' ],
+                'inner'     => [ 'featured_inner' ]
+            ],
+            'album' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => []
             ], 'event' => [

@@ -309,6 +309,11 @@
             <a href="{url name=backend_events_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Events{/t}</a>
           </li>
           {/is_module_activated}
+          {is_module_activated name="es.openhost.module.obituaries"}
+          <li>
+            <a href="{url name=backend_obituaries_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Obituaries{/t}</a>
+          </li>
+          {/is_module_activated}
           {is_module_activated name="LETTER_MANAGER"}
           <li>
             <a href="{url name=backend_letters_content_provider category=$category_id frontpage_version_id=$version_id_pro}">{t}Letter{/t}</a>

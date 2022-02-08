@@ -637,6 +637,30 @@ jQuery(document).ready(function($) {
               </uib-tab>
               {/is_module_activated}
 
+              {is_module_activated name="es.openhost.module.obituaries"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Obituary: frontpage{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(5000, 5099) > 0">[% countPositionsSelectedbyRange(5000, 5099) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_obituary_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Obituary: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(5100, 5199) > 0">[% countPositionsSelectedbyRange(5100, 5199) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_obituary_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
               {is_module_activated name="POLL_MANAGER"}
               <uib-tab>
                 <uib-tab-heading>

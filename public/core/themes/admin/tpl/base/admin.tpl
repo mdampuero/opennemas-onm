@@ -251,6 +251,26 @@
                           </div>
                         {/acl}
                       {/is_module_activated}
+                      {is_module_activated name="es.openhost.module.obituaries"}
+                        {acl isAllowed="OBITUARY_CREATE"}
+                          <div class="quick-item">
+                            <a href="{url name=backend_obituary_create}">
+                              <i class="fa fa-shield fa-flip-vertical"></i>
+                              <span class="title">{t}Obituary{/t}</span>
+                            </a>
+                          </div>
+                        {/acl}
+                      {/is_module_activated}
+                      {is_module_activated name="es.openhost.module.events"}
+                        {acl isAllowed="EVENT_CREATE"}
+                          <div class="quick-item">
+                            <a href="{url name=backend_event_create}">
+                              <i class="fa fa-calendar"></i>
+                              <span class="title">{t}Event{/t}</span>
+                            </a>
+                          </div>
+                        {/acl}
+                      {/is_module_activated}
                     </div>
                   </li>
                 {/block}

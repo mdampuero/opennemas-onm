@@ -543,7 +543,7 @@ jQuery(function($) {
    */
   $('#content-provider').dialog({
     dialogClass: 'content-provider-dialog',
-    minWidth: 850,
+    minWidth: 900,
     autoOpen: false,
     maxHeight: 500
   });

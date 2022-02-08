@@ -130,6 +130,11 @@ services:
         arguments: [ '@core.loader.instance', '%core.paths.public%' ]
         public:    true
 
+    core.helper.obituary:
+        class:      Common\Core\Component\Helper\ObituaryHelper
+        arguments: [ '@service_container' ]
+        public:     true
+
     core.helper.oql:
         class:     Common\Core\Component\Helper\OqlHelper
         arguments: [ '@service_container' ]
