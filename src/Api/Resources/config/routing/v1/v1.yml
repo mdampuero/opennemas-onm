@@ -62,6 +62,10 @@ api_v1_backend_newsstand:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/newsstand.yml'
     prefix:   /backend
 
+api_v1_backend_obituary:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/obituary.yml'
+    prefix:   /backend
+
 api_v1_backend_opinion:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/opinion.yml'
     prefix:   /backend
