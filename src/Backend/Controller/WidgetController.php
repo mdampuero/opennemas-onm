@@ -45,45 +45,54 @@ class WidgetController extends BackendController
     {
         $this->checkSecurity($this->extension);
 
-        $categoryId         = $request->query->getDigits('category', 0);
-        $page               = $request->query->getDigits('page', 1);
-        $itemsPerPage       = 8;
-        $frontpageVersionId =
-            $request->query->getDigits('frontpage_version_id', null);
-        $frontpageVersionId = $frontpageVersionId === '' ?
-            null :
-            $frontpageVersionId;
+        $category     = $request->query->getDigits('category', 0);
+        $page         = $request->query->getDigits('page', 1);
+        $version      = $request->query->getDigits('frontpage_version_id', 1);
+        $itemsPerPage = 8;
+        $oql          = 'content_type_name = "widget" and content_status = 1 and in_litter = 0 ';
 
-        $em  = $this->get('entity_repository');
-        $ids = $this->get('api.service.frontpage_version')
-            ->getContentIds((int) $categoryId, $frontpageVersionId, 'Widget');
+        $contentsInFrontpage = $this->get('api.service.frontpage_version')
+            ->getContentIds($category, $version, 'widget');
 
-        $filters = [
-            'content_type_name' => [ [ 'value' => 'widget' ] ],
-            'content_status'    => [ [ 'value' => 1 ] ],
-            'in_litter'         => [ [ 'value' => 1, 'operator' => '!=' ] ],
-            'pk_content'        => [ [ 'value' => $ids, 'operator' => 'NOT IN' ] ]
-        ];
+        if (!empty($contentsInFrontpage)) {
+            $oql .= sprintf('and pk_content !in[%s] ', implode(',', $contentsInFrontpage));
+        }
 
-        $widgets = $em->findBy($filters, [ 'created' => 'desc' ], $itemsPerPage, $page);
-        $total   = $em->countBy($filters);
+        try {
+            $oql .= 'order by created desc limit ' . $itemsPerPage;
 
-        // Build the pagination
-        $pagination = $this->get('paginator')->get([
-            'boundary'    => true,
-            'directional' => true,
-            'epp'         => $itemsPerPage,
-            'page'        => $page,
-            'total'       => $total,
-            'route'       => [
-                'name'   => 'backend_widgets_content_provider',
-                'params' => [ 'category' => $categoryId ]
-            ],
-        ]);
+            if ($page > 1) {
+                $oql .= ' offset ' . ($page - 1) * $itemsPerPage;
+            }
 
-        return $this->render('widget/content-provider.tpl', [
-            'widgets'    => $widgets,
-            'pagination' => $pagination,
-        ]);
+            $context = $this->get('core.locale')->getContext();
+            $this->get('core.locale')->setContext('frontend');
+
+            $response = $this->get('api.service.widget')->getList($oql);
+
+            $this->get('core.locale')->setContext($context);
+
+            $pagination = $this->get('paginator')->get([
+                'boundary'    => true,
+                'directional' => true,
+                'epp'         => 8,
+                'maxLinks'    => 5,
+                'page'        => $page,
+                'total'       => $response['total'],
+                'route'       => [
+                    'name'   => 'backend_widgets_content_provider',
+                    'params' => [
+                        'category'             => $category,
+                        'frontpage_version_id' => $version
+                    ]
+                ],
+            ]);
+
+            return $this->render('widget/content-provider.tpl', [
+                'widgets'    => $response['items'],
+                'pagination' => $pagination,
+            ]);
+        } catch (GetListException $e) {
+        }
     }
 }

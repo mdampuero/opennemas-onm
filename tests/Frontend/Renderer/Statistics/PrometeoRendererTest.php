@@ -104,9 +104,12 @@ class PrometeoRendererTest extends TestCase
             ->with('isRestricted')
             ->willReturn('bar');
         $this->extractor->expects($this->at(2))->method('get')
+            ->with('categoryName')
+            ->willReturn('gorp');
+        $this->extractor->expects($this->at(3))->method('get')
             ->with('extension')
             ->willReturn('bar');
-        $this->extractor->expects($this->at(3))->method('get')
+        $this->extractor->expects($this->at(4))->method('get')
             ->with('tagSlugs')
             ->willReturn('baz');
 

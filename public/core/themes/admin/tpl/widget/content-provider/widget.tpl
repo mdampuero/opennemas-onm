@@ -1,4 +1,4 @@
-<div data-content-id="{$content->id}" data-class="{get_class($content)}"
+<div data-content-id="{$content->id}" data-class="{$content->content_type_name}"
     {getProperty item=$content category=$params['category'] property='bgcolor, title' style='true'}
     class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
     <div class="description">
@@ -7,7 +7,7 @@
           <label for="checkbox-{$content->id}"></label>
         </div>
         <div class="title">
-            <span class="type">{$content->content_type_l10n_name}</span>
+            <span class="type">{get_type($content, true, true)}</span>
             {$content->title}
         </div>
     </div>

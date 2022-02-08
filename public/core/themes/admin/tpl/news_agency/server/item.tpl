@@ -44,28 +44,28 @@
       <div class="grid-collapse-title">
         {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Enabled{/t}" field="activated"}
       </div>
-      <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.color }" ng-click="flags.expanded.color = !flags.expanded.color">
+      <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.color }" ng-click="expanded.color = !expanded.color">
         <i class="fa fa-paint-brush m-r-10"></i>{t}Color{/t}
-        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': flags.expanded.color }"></i>
-        <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-style="{ 'background-color': item.color }" ng-show="!flags.expanded.color && item.color">
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.color }"></i>
+        <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase" ng-style="{ 'background-color': item.color }" ng-show="!expanded.color && item.color">
           &nbsp;&nbsp;
         </span>
       </div>
-      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.color }">
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.color }">
         <div class="form-group no-margin">
           <div class="controls">
             {include file="ui/component/input/color.tpl" ngModel="item.color"}
           </div>
         </div>
       </div>
-      <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.sync_from }" ng-click="flags.expanded.sync_from = !flags.expanded.sync_from">
+      <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.sync_from }" ng-click="expanded.sync_from = !expanded.sync_from">
         <i class="fa fa-clock-o m-r-10"></i>{t}Synchronization{/t}
-        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': flags.expanded.sync_from }"></i>
-        <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!flags.expanded.sync_from && item.sync_from">
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.sync_from }"></i>
+        <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!expanded.sync_from && item.sync_from">
           [% data.extra.sync_from[item.sync_from] %]
         </span>
       </div>
-      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.sync_from }">
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.sync_from }">
         <div class="form-group no-margin">
           <label for="sync_from" class="form-label">
             {t}Sync elements newer than{/t}
@@ -81,15 +81,15 @@
           </div>
         </div>
       </div>
-      <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.external_link }" ng-click="flags.expanded.external_link = !flags.expanded.external_link">
+      <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.external_link }" ng-click="expanded.external_link = !expanded.external_link">
         <i class="fa fa-globe m-r-10"></i>{t}External link{/t}
-        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': flags.expanded.external_link }"></i>
-        <a class="badge badge-default m-r-10 pull-right text-bold text-uppercase" ng-click="$event.stopPropagation()" ng-href="[% item.external_link %]" ng-show="!flags.expanded.external_link && item.external_link" target="_blank">
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.external_link }"></i>
+        <a class="badge badge-default m-r-10 pull-right text-bold text-uppercase" ng-click="$event.stopPropagation()" ng-href="[% item.external_link %]" ng-show="!expanded.external_link && item.external_link" target="_blank">
           <i class="fa fa-external-link"></i>
           {t}Link{/t}
         </a>
       </div>
-      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.external_link }">
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.external_link }">
         <div class="form-group no-margin">
           <div class="controls">
             <div class="radio">
@@ -120,14 +120,14 @@
           </div>
         </div>
       </div>
-      <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.agency }" ng-click="flags.expanded.agency = !flags.expanded.agency">
+      <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.agency }" ng-click="expanded.agency = !expanded.agency">
         <i class="fa fa-pencil m-r-10"></i>{t}Agency{/t}
-        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': flags.expanded.agency }"></i>
-        <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!flags.expanded.agency && item.agency_string">
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.agency }"></i>
+        <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!expanded.agency && item.agency_string">
           [% item.agency_string %]
         </span>
       </div>
-      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.agency }">
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.agency }">
         {include file="ui/component/input/text.tpl" iClass="no-margin" iHelp="{t}When importing elements this will be the signature{/t}" iField="agency_string"}
       </div>
     </div>
@@ -142,19 +142,19 @@
         {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Automatic import{/t}" field="auto_import"}
       </div>
       <div ng-if="item.auto_import">
-        <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.import }" ng-click="flags.expanded.import = !flags.expanded.import">
+        <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.import }" ng-click="expanded.import = !expanded.import">
           <i class="fa fa-cloud-download m-r-10"></i>
           {t}Import{/t} {t}as{/t}
-          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': flags.expanded.import }"></i>
-          <span class="pull-right" ng-if="!flags.expanded.import">
+          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.import }"></i>
+          <span class="pull-right" ng-if="!expanded.import">
             {include file="common/component/icon/status.tpl" iForm="form.target" iNgModel="item.target" iRequired=true iValidation=true}
           </span>
-          <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!flags.expanded.import && item.target">
+          <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!expanded.import && item.target">
             <span ng-if="item.target === 'article'">{t}Article{/t}</span>
             <span ng-if="item.target === 'opinion'">{t}Opinion{/t}</span>
           </span>
         </div>
-        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.import }">
+        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.import }">
           <div class="form-group">
             <div class="controls controls-validation">
               <select class="block" name="target" ng-model="item.target" required>
@@ -166,17 +166,17 @@
             </div>
           </div>
         </div>
-        <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.author }" ng-click="flags.expanded.author = !flags.expanded.author">
+        <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.author }" ng-click="expanded.author = !expanded.author">
           <i class="fa fa-edit m-r-10"></i>{t}Author{/t}
-          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': flags.expanded.author }"></i>
-          <span class="pull-right" ng-if="!flags.expanded.author">
+          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.author }"></i>
+          <span class="pull-right" ng-if="!expanded.author">
             {include file="common/component/icon/status.tpl" iForm="form.author" iNgModel="item.author" iRequired=true iValidation=true}
           </span>
-          <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!flags.expanded.author && item.author">
+          <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!expanded.author && item.author">
             [% defaultAuthor.name %]
           </span>
         </div>
-        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.author }">
+        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.author }">
           <div class="form-group">
             <label class="form-label" for="author">
               {t}Default author{/t}
@@ -218,17 +218,17 @@
             </div>
           </div>
         </div>
-        <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.category }" ng-click="flags.expanded.category = !flags.expanded.category" ng-if="item.target === 'article'">
+        <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.category }" ng-click="expanded.category = !expanded.category" ng-if="item.target === 'article'">
           <i class="fa fa-bookmark m-r-10"></i>{t}Category{/t}
-          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': flags.expanded.category }"></i>
-          <span class="pull-right" ng-if="!flags.expanded.category">
+          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
+          <span class="pull-right" ng-if="!expanded.category">
             {include file="common/component/icon/status.tpl" iForm="form.category" iNgModel="item.category" iRequired=true iValidation=true}
           </span>
-          <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!flags.expanded.category && item.category">
+          <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!expanded.category && item.category">
             [% data.extra.defaultCategory.title %]
           </span>
         </div>
-        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.category }" ng-if="item.target === 'article'">
+        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category }" ng-if="item.target === 'article'">
           <div class="form-group">
             <label class="form-label" for="category">
               {t}Default category{/t}
@@ -270,14 +270,14 @@
             </div>
           </div>
         </div>
-        <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': flags.expanded.filter }" ng-click="flags.expanded.filter = !flags.expanded.filter">
+        <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.filter }" ng-click="expanded.filter = !expanded.filter">
           <i class="fa fa-filter m-r-10"></i>{t}Filter{/t}
-          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': flags.expanded.filter }"></i>
-          <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!flags.expanded.filter && item.filters && item.filters.length > 0">
+          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.filter }"></i>
+          <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!expanded.filter && item.filters && item.filters.length > 0">
             [% item.filters.length %] {t}filters{/t}
           </span>
         </div>
-        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': flags.expanded.filter }">
+        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.filter }">
           <div class="form-group">
             <div class="help m-l-3" ng-if="isHelpEnabled()">
               <i class="fa fa-info-circle m-r-5 text-info"></i>
@@ -318,6 +318,33 @@
     </div>
   </div>
 
+{/block}
+
+{block name="commonFields"}
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('color')">
+    <input id="checkbox-color" checklist-model="app.fields[contentKey].selected" checklist-value="'color'" type="checkbox">
+    <label for="checkbox-color">
+      {t}Color{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('sync_from')">
+    <input id="checkbox-sync_from" checklist-model="app.fields[contentKey].selected" checklist-value="'sync_from'" type="checkbox">
+    <label for="checkbox-sync_from">
+      {t}Synchronization{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('external_link')">
+    <input id="checkbox-external_link" checklist-model="app.fields[contentKey].selected" checklist-value="'external_link'" type="checkbox">
+    <label for="checkbox-external_link">
+      {t}External link{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('agency')">
+    <input id="checkbox-agency" checklist-model="app.fields[contentKey].selected" checklist-value="'agency'" type="checkbox">
+    <label for="checkbox-agency">
+      {t}Agency{/t}
+    </label>
+  </div>
 {/block}
 
 {block name="leftColumn"}

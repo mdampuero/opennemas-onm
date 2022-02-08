@@ -33,8 +33,8 @@
          * @type {Object}
          */
         this.defaults = {
-          plugins: 'a11yhelp,autogrow,autokeywords,autolink,autonofollow,basicstyles,blockquote,clipboard,contextmenu,elementspath' +
-            ',enterkey,entities,filebrowser,floatingspace,font,format,horizontalrule,htmlwriter,image,imageresize,' +
+          plugins: 'a11yhelp,autogrow,autokeywords,autolink,autonofollow,autotoc,basicstyles,blockquote,clipboard,contextmenu,elementspath' +
+            ',enterkey,entities,filebrowser,floatingspace,font,format,horizontalrule,htmlwriter,image2,imageresize,' +
             'indentblock,justify,link,list,magicline,maximize,pastefromword,pastespecial,pastetext,removeformat,' +
             'resize,scayt,sourcearea,stylescombo,tab,table,tabletools,toolbar,undo,wordcount,wsc,wysiwygarea',
           disableNativeSpellChecker: false,
@@ -193,6 +193,19 @@
         };
 
         /**
+         * @function overrideTimestamp
+         * @memberOf Editor
+         *
+         * @description
+         *   Overrides the default timestamp of the ckeditor.
+         *
+         * @param {String} timestamp The timestamp to use in the ckeditor.
+         */
+        this.overrideTimestamp = function(timestamp) {
+          $windowProvider.$get().CKEDITOR.timestamp = timestamp;
+        };
+
+        /**
          * @function addExternal
          * @memberOf Editor
          *
@@ -206,6 +219,39 @@
         this.addExternal = function(names, path, filename) {
           $windowProvider.$get().CKEDITOR.plugins
             .addExternal(names, path, filename);
+        };
+
+        /**
+         * @function addCustomCss
+         * @memberOf Editor
+         *
+         * @description
+         *  Adds a custom css to the editor.
+         *
+         * @param {String} path The path of the file with the custom css.
+         */
+        this.addCustomCss = function(path) {
+          var editor    = $windowProvider.$get().CKEDITOR;
+          var timestamp = $windowProvider.$get().CKEDITOR.timestamp;
+
+          editor.config.contentsCss = [ editor.config.contentsCss ].concat(path + '?' + timestamp);
+        };
+
+        /**
+         * @function addCustomImageClass
+         * @memberOf Editor
+         *
+         * @description
+         *  Adds a custom class to the images of ckeditor.
+         */
+        this.addCustomImageClass = function() {
+          var editor = $windowProvider.$get().CKEDITOR;
+
+          editor.config.image2_alignClasses = [
+            'image-inbody-left',
+            'image-inbody-center',
+            'image-inbody-right'
+          ];
         };
 
         /**

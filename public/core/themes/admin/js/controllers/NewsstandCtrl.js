@@ -80,7 +80,7 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
-
+          $scope.expandFields();
           var featured = $scope.getFeaturedMedia($scope.item, 'featured_frontpage');
 
           if (featured.path) {

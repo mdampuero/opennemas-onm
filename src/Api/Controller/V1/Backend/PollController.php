@@ -38,6 +38,8 @@ class PollController extends ContentController
         'show'   => 'POLL_UPDATE',
     ];
 
+    protected $module = 'poll';
+
     /**
      * The route name to generate URL from when creating a new item.
      *
@@ -59,6 +61,10 @@ class PollController extends ContentController
             'categories'  => $categories,
             'tags'        => $this->getTags($items),
             'total_votes' => $this->container->get('core.helper.poll')->getTotalVotes($items),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ]);
     }
 

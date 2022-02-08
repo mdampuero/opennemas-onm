@@ -68,6 +68,10 @@ services:
             - '@core.helper.video'
         public:    true
 
+    core.helper.form_field:
+        class:     Common\Core\Component\Helper\FormFieldHelper
+        public:    true
+
     core.helper.http_fetcher:
         class:     Common\Core\Component\Http\Fetcher
         public:    true

@@ -79,6 +79,7 @@
             {block name="rightColumn"}{/block}
           </div>
           <div class="col-md-8 col-md-pull-4">
+
             {block name="leftColumn"}{/block}
           </div>
         </div>

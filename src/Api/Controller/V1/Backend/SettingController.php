@@ -64,6 +64,7 @@ class SettingController extends Controller
         'logo_favico',
         'logo_embed',
         'frontpage_max_items',
+        'gfk',
         'google_analytics',
         'google_analytics_others',
         'google_custom_search_api_key',

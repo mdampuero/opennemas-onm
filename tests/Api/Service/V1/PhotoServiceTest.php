@@ -36,13 +36,15 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'objectify', 'responsify' ])
             ->getMock();
 
+        $this->dataSet = $this->getMockForAbstractClass('Opennemas\Orm\Core\DataSet');
+
         $this->dispatcher = $this->getMockBuilder('Common\Core\Component\EventDispatcher')
             ->setMethods([ 'dispatch' ])
             ->getMock();
 
         $this->em = $this->getMockBuilder('EntityManager' . uniqid())
             ->setMethods([
-                'getConverter' ,'getMetadata', 'getRepository', 'persist',
+                'getConverter', 'getDataSet', 'getMetadata', 'getRepository', 'persist',
                 'remove'
             ])->getMock();
 
@@ -60,9 +62,19 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'countBy', 'find', 'findBy', 'findBySql' ])
             ->getMock();
 
+        $this->sh = $this->getMockBuilder('Symfony\Component\DependencyInjection\Container\SettingHelper')
+            ->disableOriginalConstructor()
+            ->setMethods(['toBoolean'])
+            ->getMock();
+
         $this->ih = $this->getMockBuilder('Common\Core\Component\Helper\ImageHelper')
             ->setConstructorArgs([ $this->il, '/wibble/flob', $this->processor ])
             ->setMethods([ 'generatePath', 'exists', 'move', 'remove', 'getInformation' ])
+            ->getMock();
+
+        $this->ip = $this->getMockBuilder('Common\Core\Component\Image\Processor')
+            ->disableOriginalConstructor()
+            ->setMethods(['open', 'apply', 'save', 'close', 'optimize'])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -81,12 +93,15 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->any())->method('getRepository')
             ->willReturn($this->repository);
 
+        $this->em->expects($this->any())->method('getDataSet')
+            ->willReturn($this->dataSet);
+
         $this->il->expects($this->any())->method('getInstance')
             ->willReturn($this->instance);
 
         $this->service = $this->getMockBuilder('Api\Service\V1\PhotoService')
             ->setConstructorArgs([ $this->container, '\Common\Model\Entity\Content' ])
-            ->setMethods([ 'getItem', 'assignUser' ])
+            ->setMethods([ 'getItem', 'assignUser', 'updateItem' ])
             ->getMock();
     }
 
@@ -109,6 +124,12 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
             case 'orm.manager':
                 return $this->em;
 
+            case 'core.helper.setting':
+                return $this->sh;
+
+            case 'core.image.processor':
+                return $this->ip;
+
             default:
                 return null;
         }
@@ -122,6 +143,88 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
     public function testCreateItemWhenNoFile()
     {
         $this->service->createItem();
+    }
+
+    /**
+     * Tests createItem when optimize in data.
+     */
+    public function testCreateItemWhenOptimizeInData()
+    {
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getClientOriginalName', 'getPathname' ])
+            ->getMock();
+
+        $data = [
+            'title'       => 'plugh',
+            'description' => 'foo',
+            'optimize'    => true
+        ];
+
+        $this->ih->expects($this->once())->method('generatePath')
+            ->willReturn('/2010/01/01/plugh.mumble');
+
+        $this->ih->expects($this->once())->method('exists')
+            ->willReturn(false);
+
+        $this->ih->expects($this->any())->method('getInformation')
+            ->willReturn([]);
+
+        $file->expects($this->once())->method('getPathname')
+            ->willReturn('some/path');
+
+        $this->converter->expects($this->any())->method('objectify')
+            ->willReturn($data);
+
+        $this->em->expects($this->once())->method('persist');
+
+        $this->metadata->expects($this->once())->method('getId')
+            ->willReturn([ 'id' => 1 ]);
+
+        $this->ih->expects($this->once())->method('move');
+
+        $this->dataSet->expects($this->once())->method('get')
+            ->with('photo_settings', [])
+            ->willReturn([
+                'photo_settings' => [
+                    'optimize_images' => 'true'
+                ]
+            ]);
+
+        $this->sh->expects($this->once())->method('toBoolean')
+            ->willReturn([
+                'optimize_images' => true
+            ]);
+        $this->ip->expects($this->once())->method('open')
+            ->willReturn($this->ip);
+
+        $this->ip->expects($this->once())->method('apply')
+            ->with('thumbnail', [1920, 1920, 'center', 'center'])
+            ->willReturn($this->ip);
+
+        $this->ip->expects($this->once())->method('optimize')
+            ->with([
+                'flatten'          => false,
+                'quality'          => 65,
+                'resolution-units' => 'ppi',
+                'resolution-x'     => 72,
+                'resolution-y'     => 72
+            ])
+            ->willReturn($this->ip);
+
+        $this->ip->expects($this->once())->method('save')
+            ->willReturn($this->ip);
+
+        $this->ip->expects($this->once())->method('close')
+            ->willReturn($this->ip);
+
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn($data);
+
+        $this->service->expects($this->once())->method('updateItem')
+            ->willReturn([]);
+
+        $this->service->createItem($data, $file);
     }
 
     /**
@@ -187,12 +290,10 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getClientOriginalName' ])
+            ->setMethods([ 'getClientOriginalName', 'getPathname' ])
             ->getMock();
 
         $data = [ 'title' => 'plugh' ];
-
-        $externalPhoto = m::mock('overload:\Photo');
 
         $this->ih->expects($this->once())->method('generatePath')
             ->willReturn('/2010/01/01/plugh.mumble');
@@ -200,8 +301,11 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
         $this->ih->expects($this->once())->method('exists')
             ->willReturn(false);
 
-        $this->ih->expects($this->once())->method('getInformation')
+        $this->ih->expects($this->any())->method('getInformation')
             ->willReturn([]);
+
+        $file->expects($this->once())->method('getPathname')
+            ->willReturn('some/path');
 
         $this->converter->expects($this->any())->method('objectify')
             ->willReturn($data);
@@ -213,10 +317,46 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->ih->expects($this->once())->method('move');
 
-        $externalPhoto->shouldReceive('create')->once()->andReturn(1);
+        $this->dataSet->expects($this->once())->method('get')
+            ->with('photo_settings', [])
+            ->willReturn([
+                'photo_settings' => [
+                    'optimize_images' => 'true'
+                ]
+            ]);
 
-        $this->service->expects($this->once())->method('assignUser')
+        $this->sh->expects($this->once())->method('toBoolean')
+            ->willReturn([
+                'optimize_images' => true
+            ]);
+        $this->ip->expects($this->once())->method('open')
+            ->willReturn($this->ip);
+
+        $this->ip->expects($this->once())->method('apply')
+            ->with('thumbnail', [1920, 1920, 'center', 'center'])
+            ->willReturn($this->ip);
+
+        $this->ip->expects($this->once())->method('optimize')
+            ->with([
+                'flatten'          => false,
+                'quality'          => 65,
+                'resolution-units' => 'ppi',
+                'resolution-x'     => 72,
+                'resolution-y'     => 72
+            ])
+            ->willReturn($this->ip);
+
+        $this->ip->expects($this->once())->method('save')
+            ->willReturn($this->ip);
+
+        $this->ip->expects($this->once())->method('close')
+            ->willReturn($this->ip);
+
+        $this->service->expects($this->any())->method('assignUser')
             ->willReturn($data);
+
+        $this->service->expects($this->once())->method('updateItem')
+            ->willReturn([]);
 
         $this->service->createItem($data, $file);
     }

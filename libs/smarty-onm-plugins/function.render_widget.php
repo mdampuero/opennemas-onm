@@ -1,25 +1,30 @@
 <?php
+
+use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
+
 function smarty_function_render_widget($params, &$smarty)
 {
     // Initializing parameters
     $widgetName = isset($params['name']) ? $params['name'] : null;
     $widgetID   = isset($params['id']) ? $params['id'] : null;
 
-    $er = getService('widget_repository');
+    $sw = getService('api.service.widget');
 
-    if (!is_null($widgetName)) {
-        // Initialize widget from name
-        $criteria = [
-            'content'           => [ [ 'value' => $widgetName ] ],
-            'content_type_name' => [ [ 'value' => 'widget' ] ],
-            'content_status'    => [ [ 'value' => 1 ] ],
-            'in_litter'         => [ [ 'value' => 0 ] ],
-        ];
+    $oql = 'content_type_name="widget"'
+        . ' and content_status = 1'
+        . ' and in_litter = 0';
 
-        $widget = $er->findOneBy($criteria, null, 1, 1);
-    } else {
-        // Initialize widget from id
-        $widget = $er->find('Widget', $widgetID);
+    $oql .= !is_null($widgetName)
+        ? sprintf(' and class = "%s"', $widgetName)
+        : sprintf(' and pk_content = "%s"', $widgetID);
+
+    $oql .= ' limit 1';
+
+    try {
+        $widget = $sw->getItemBy($oql);
+    } catch (GetItemException $e) {
+        return '';
     }
 
     $output = '';

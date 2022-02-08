@@ -39,6 +39,8 @@ class SubscriptionController extends ApiController
         'update' => 'SUBSCRIPTION_UPDATE',
     ];
 
+    protected $module = 'subscription';
+
     /**
      * {@inheritdoc}
      */
@@ -50,7 +52,11 @@ class SubscriptionController extends ApiController
     protected function getExtraData($items = null)
     {
         return [
-            'modules' => $this->get('core.helper.permission')->getByModule()
+            'modules' => $this->get('core.helper.permission')->getByModule(),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ];
     }
 
