@@ -20,5 +20,5 @@ function smarty_modifier_improve_images($html)
     $html = preg_replace('@<img(.*)class="([^"]+)"?@', '<img$1 class="$2 lazyload"', $html);
 
     // Add the lazy load to the leftovers.
-    return preg_replace('@<img(.*)(?!class)>@', '<img$1 class="lazyload">', $html);
+    return preg_replace('@<img(.*)(?!class)/?>@U', '<img$1 class="lazyload">', $html);
 }
