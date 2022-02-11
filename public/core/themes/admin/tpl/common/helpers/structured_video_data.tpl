@@ -38,7 +38,7 @@
     "name": "{$content->title|escape:'html'}",
     "description": "{$content->description|default:$content->title|escape:'html'}",
     "@id": "{$url}",
-    "uploadDate": "{format_date date=$content->created format="yyyy-MM-dd HH:mm:ss" type="custom"}",
+    "uploadDate": "{format_date date=$content->starttime format="yyyy-MM-dd HH:mm:ss" type="custom"}",
     "thumbnailUrl": "{get_photo_path(get_video_thumbnail($content), '', [], true)}",
     "contentUrl": "{$url}",
     "keywords": "{$videoKeywords|escape:'html'}",
