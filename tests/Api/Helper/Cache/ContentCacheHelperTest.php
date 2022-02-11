@@ -24,7 +24,11 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'push' ])
             ->getMock();
 
-        $this->helper = new ContentCacheHelper($this->instance, $this->queue);
+        $this->cache = $this->getMockBuilder('Onm\Cache\AbstractCache')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->helper = new ContentCacheHelper($this->instance, $this->queue, $this->cache);
     }
 
     /**

@@ -3,16 +3,16 @@ services:
         class:     Api\Helper\Cache\CacheHelper
         arguments: [ '@core.instance', '@task.service.queue' ]
 
-    api.helper.cache.category:
-        class:     Api\Helper\Cache\CategoryCacheHelper
-        arguments: [ '@core.instance', '@task.service.queue' ]
-
     api.helper.cache.content:
         class:     Api\Helper\Cache\ContentCacheHelper
-        arguments: [ '@core.instance', '@task.service.queue' ]
+        arguments: [ '@core.instance', '@task.service.queue', '@cache' ]
 
-    api.helper.cache.newsstand:
-        class:     Api\Helper\Cache\NewsstandCacheHelper
+    api.helper.cache.article:
+        class:     Api\Helper\Cache\ArticleCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache' ]
+
+    api.helper.cache.category:
+        class:     Api\Helper\Cache\CategoryCacheHelper
         arguments: [ '@core.instance', '@task.service.queue' ]
 
     api.helper.cache.tag:

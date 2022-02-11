@@ -4,6 +4,7 @@ namespace Framework\EventListener;
 
 use Api\Exception\GetItemException;
 use Opennemas\Task\Component\Task\ServiceTask;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -48,7 +49,7 @@ class HooksSubscriber implements EventSubscriberInterface
             // Comments Config hooks
             'comments.config' => [
                 ['removeSmartyCacheAll', 5],
-                ['removeVarnishCacheCurrentInstance', 5]
+                ['removeVarnishCacheForContent', 5]
             ],
             // Content hooks
             'content.update-set-num-views' => [
@@ -57,13 +58,13 @@ class HooksSubscriber implements EventSubscriberInterface
             'content.create' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
+                ['removeVarnishCacheForContent', 5],
             ],
             'content.update' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheCurrentInstance', 5],
+                ['removeVarnishCacheForContent', 5],
             ],
             'content.delete' => [
                 ['logAction', 5],
@@ -71,38 +72,38 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             'content.createItem' => [
                 ['logAction', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
+                ['removeVarnishCacheForContent', 5],
             ],
             'content.updateItem' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheCurrentInstance', 5],
+                ['removeVarnishCacheForContent', 5],
             ],
             'content.deleteItem' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheCurrentInstance', 5],
+                ['removeVarnishCacheForContent', 5],
                 ['removeCacheForRelatedContents', 5],
             ],
             'content.patchItem' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheCurrentInstance', 5],
+                ['removeVarnishCacheForContent', 5],
             ],
             'content.patchList' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheCurrentInstance', 5],
+                ['removeVarnishCacheForContent', 5],
             ],
             'content.deleteList' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheCurrentInstance', 5],
+                ['removeVarnishCacheForContent', 5],
                 ['removeCacheForRelatedContents', 5],
             ],
             // Frontpage hooks
@@ -147,13 +148,6 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForContent', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
-            // Opinion hooks
-            'opinion.update' => [
-                ['removeSmartyCacheOpinion', 5],
-            ],
-            'opinion.create' => [
-                ['removeSmartyCacheAuthorOpinion', 5],
-            ]
         ];
     }
 
@@ -470,12 +464,9 @@ class HooksSubscriber implements EventSubscriberInterface
 
     /**
      * Queues a varnish ban request.
-     *
-     * @param Event $event The event to handle.
      */
-    public function removeVarnishCacheCurrentInstance(Event $event)
+    public function removeVarnishCacheCurrentInstance()
     {
-        // TODO: Insert here the cache helper to remove the correspondent keys basing on the type of content.
         if (!$this->container->hasParameter('varnish')) {
             return false;
         }
@@ -487,6 +478,21 @@ class HooksSubscriber implements EventSubscriberInterface
                 sprintf('obj.http.x-tags ~ instance-%s', $instanceName)
             ])
         );
+    }
+
+    /**
+     * Queues the necessary varnish bans for the specific contents.
+     */
+    public function removeVarnishCacheForContent(Event $event)
+    {
+        $item = $event->getArgument('item');
+
+        try {
+            $this->container
+                ->get(sprintf('api.helper.cache.%s', $item->content_type_name))->deleteItem($item);
+        } catch (ServiceNotFoundException $e) {
+            $this->container->get(sprintf('api.helper.cache.content'))->deleteItem($item);
+        }
     }
 
     /**

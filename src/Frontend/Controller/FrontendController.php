@@ -432,8 +432,7 @@ class FrontendController extends Controller
                     && empty($request->getSession()->getFlashBag()->peekAll()));
 
             if ($item instanceof Content) {
-                $params['x-tags'][] = $this->get('api.helper.cache.content')
-                    ->getXTags($item);
+                $params['x-tags'][] = $this->get('api.helper.cache.content')->getXTags($item);
             } else {
                 $params['x-tags'][] = sprintf(
                     '%s-%s',

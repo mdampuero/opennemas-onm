@@ -337,8 +337,7 @@ class ContentHelper
     public function getSuggested($contentId, $contentTypeName, $categoryId = null, $epp = 4)
     {
         $epp     = (int) $epp < 1 ? 4 : (int) $epp;
-        $cacheId = 'suggested_contents_'
-            . md5(implode(',', [ $contentTypeName, $categoryId, $epp ]));
+        $cacheId = sprintf('suggested_contents_%s_%d_%d', $contentTypeName, $categoryId, $epp);
 
         $items = $this->cache->get($cacheId);
 

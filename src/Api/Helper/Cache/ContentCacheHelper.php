@@ -3,6 +3,9 @@
 namespace Api\Helper\Cache;
 
 use Common\Model\Entity\Content;
+use Common\Model\Entity\Instance;
+use Onm\Cache\AbstractCache;
+use Opennemas\Task\Component\Queue\Queue;
 use Opennemas\Task\Component\Task\ServiceTask;
 
 class ContentCacheHelper extends CacheHelper
@@ -15,6 +18,16 @@ class ContentCacheHelper extends CacheHelper
      * @var array
      */
     protected $map = [ 'kiosko' => 'newsstand' ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(?Instance $instance, Queue $queue, AbstractCache $cache)
+    {
+        $this->instance = $instance;
+        $this->queue    = $queue;
+        $this->cache    = $cache;
+    }
 
     /**
      * Removes caches for an item which refers to a file. This is valid for
