@@ -52,6 +52,13 @@
         /**
          * @inheritdoc
          */
+        $scope.buildScope = function() {
+          $scope.expandFields();
+        };
+
+        /**
+         * @inheritdoc
+         */
         $scope.getItemId = function() {
           return $scope.item.pk_user_group;
         };

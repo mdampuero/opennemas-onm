@@ -35,6 +35,8 @@ class UrlController extends ApiController
         'update' => 'MASTER'
     ];
 
+    protected $module = 'url';
+
     /**
      * {@inheritdoc}
      */
@@ -53,7 +55,11 @@ class UrlController extends ApiController
                     ['name' => 'tag', 'title' => _('Tag')],
                     ['name' => 'user', 'title' => _('User')],
                 ]
-            )
+            ),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ];
     }
 }

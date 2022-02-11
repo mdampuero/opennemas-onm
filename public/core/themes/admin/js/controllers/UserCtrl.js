@@ -24,6 +24,11 @@
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
+         * @inheritdoc
+         */
+        $scope.contentKey = 'user';
+
+        /**
          * @memberOf UserCtrl
          *
          * @description
@@ -60,6 +65,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.expandFields();
+
           $scope.backup.activated = $scope.item.activated;
           $scope.flags.categories = { none: false, all: false };
 

@@ -39,6 +39,8 @@ class EventController extends ContentController
         'show'   => 'EVENT_UPDATE',
     ];
 
+    protected $module = 'event';
+
     /**
      * {@inheritdoc}
      */
@@ -51,7 +53,11 @@ class EventController extends ContentController
     {
         return array_merge(parent::getExtraData($items), [
             'categories' => $this->getCategories($items),
-            'tags'       => $this->getTags($items)
+            'tags'       => $this->getTags($items),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ]);
     }
 }

@@ -39,6 +39,8 @@ class AuthorController extends ApiController
         'update' => 'AUTHOR_UPDATE',
     ];
 
+    protected $module = 'author';
+
     /**
      * {@inheritdoc}
      */
@@ -49,8 +51,14 @@ class AuthorController extends ApiController
      */
     protected function getExtraData($items = null)
     {
+        $response = [
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
+        ];
         if (empty($items)) {
-            return [];
+            return $response;
         }
 
         if (!is_array($items)) {
@@ -72,10 +80,11 @@ class AuthorController extends ApiController
                 ->filter('mapify', [ 'key' => 'pk_content' ])
                 ->get();
 
-            return [ 'photos' => $this->get('api.service.content')->responsify($photos) ];
+            $photos = [ 'photos' => $this->get('api.service.content')->responsify($photos) ];
+            return array_merge($response, $photos);
         } catch (GetItemException $e) {
         }
-
-        return [ 'photos' => $photos, ];
+        $photos = [ 'photos' => $photos, ];
+        return array_merge($response, $photos);
     }
 }

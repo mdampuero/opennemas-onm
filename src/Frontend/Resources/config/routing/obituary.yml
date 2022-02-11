@@ -1,0 +1,27 @@
+# Obituaries routes
+frontend_obituaries:
+    path: /esquela
+    defaults: { _controller: FrontendBundle:Obituary:list }
+    options:
+        l10n: true
+
+frontend_obituary_show:
+    path:     /esquela/{slug}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:Obituary:show }
+    requirements:
+        slug:          '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+    options:
+        expose: true
+        l10n: true
+
+frontend_obituary_show_amp:
+    path:     /esquela/{slug}/{created}{id}.amp.html
+    defaults: { _controller: FrontendBundle:Obituary:showAmp, _format: amp }
+    requirements:
+        slug:          '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+    options:
+        l10n: true

@@ -41,6 +41,8 @@ class OpinionController extends ContentController
         'show'   => 'OPINION_UPDATE',
     ];
 
+    protected $module = 'opinion';
+
     /**
      * {@inheritdoc}
      */
@@ -189,7 +191,11 @@ class OpinionController extends ContentController
 
         return array_merge([
             'extra_fields' => $extraFields,
-            'tags'         => $this->getTags($items)
+            'tags'         => $this->getTags($items),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ], $extra);
     }
 

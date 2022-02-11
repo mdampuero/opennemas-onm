@@ -78,6 +78,7 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.expandFields();
           if (!$scope.item.user_groups) {
             $scope.item.user_groups = {};
           }

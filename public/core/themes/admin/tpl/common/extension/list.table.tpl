@@ -1,6 +1,6 @@
 {block name="columns"}
   <div class="column-filters-toggle ng-cloak" ng-click="app.columns.collapsed = !app.columns.collapsed" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
-    <span class="column-filters-ellipsis"></span>
+    <span class="column-filters-ellipsis"><i class="fa fa-lg " ng-class="{ 'fa-angle-down': app.columns.collapsed, 'fa-angle-up': !app.columns.collapsed }"></i></span>
   </div>
   <div class="column-filters collapsed ng-cloak" ng-class="{ 'collapsed': app.columns.collapsed }" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
     <h5>{t}Columns{/t}</h5>
