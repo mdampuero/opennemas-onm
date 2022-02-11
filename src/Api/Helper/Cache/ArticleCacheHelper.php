@@ -62,11 +62,11 @@ class ArticleCacheHelper extends ContentCacheHelper
      */
     public function deleteItem($item) : CacheHelper
     {
-        $varnishKeys = $this->replaceWildcards($item, $this->varnishKeys);
         $redisKeys   = $this->replaceWildcards($item, $this->redisKeys);
+        $varnishKeys = $this->replaceWildcards($item, $this->varnishKeys);
 
-        $this->removeVarnishCache($varnishKeys);
         $this->removeRedisCache($redisKeys);
+        $this->removeVarnishCache($varnishKeys);
 
         return $this;
     }
