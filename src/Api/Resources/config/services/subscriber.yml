@@ -11,12 +11,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    core.subscriber.newsstand:
-        class:     Api\EventSubscriber\NewsstandSubscriber
-        arguments: [ '@api.helper.cache.newsstand' ]
-        tags:
-            - { name: kernel.event_subscriber }
-
     core.subscriber.poll:
         class:     Api\EventSubscriber\PollSubscriber
         arguments: [ '@service_container', '@api.helper.cache.content', '@core.template.cache' ]
