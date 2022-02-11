@@ -28,11 +28,11 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('<img data-src="glorp" class="foo lazyload">', smarty_modifier_improve_images($img));
 
-        $figure = '<figure class="image image-inbody-left">' .
+        $figure = '<figure class="image image-inbody-left" data-random="foo">' .
             '<img width="340" height="340" src="baz">' .
             '</figure>';
 
-        $result = '<figure class="image image-inbody-left ckeditor-image" style="width: 340px">' .
+        $result = '<figure class="image image-inbody-left ckeditor-image" style="width: 340px" data-random="foo">' .
             '<img width="340" height="340" data-src="baz" class="lazyload">' .
             '</figure>';
 
