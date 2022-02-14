@@ -487,11 +487,15 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         $item = $event->getArgument('item');
 
-        try {
-            $this->container
-                ->get(sprintf('api.helper.cache.%s', $item->content_type_name))->deleteItem($item);
-        } catch (ServiceNotFoundException $e) {
-            $this->container->get(sprintf('api.helper.cache.content'))->deleteItem($item);
+        $items = !is_array($item) ? [ $item ] : $item;
+
+        foreach ($items as $item) {
+            try {
+                $this->container
+                    ->get(sprintf('api.helper.cache.%s', $item->content_type_name))->deleteItem($item);
+            } catch (ServiceNotFoundException $e) {
+                $this->container->get(sprintf('api.helper.cache.content'))->deleteItem($item);
+            }
         }
     }
 
