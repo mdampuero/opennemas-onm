@@ -4,7 +4,7 @@ namespace Api\Helper\Cache;
 
 use Common\Model\Entity\Content;
 use Common\Model\Entity\Instance;
-use Onm\Cache\AbstractCache;
+use Opennemas\Cache\Core\Cache;
 use Opennemas\Task\Component\Queue\Queue;
 use Opennemas\Task\Component\Task\ServiceTask;
 
@@ -22,7 +22,7 @@ class ContentCacheHelper extends CacheHelper
     /**
      * {@inheritdoc}
      */
-    public function __construct(?Instance $instance, Queue $queue, AbstractCache $cache)
+    public function __construct(?Instance $instance, Queue $queue, Cache $cache)
     {
         $this->instance = $instance;
         $this->queue    = $queue;

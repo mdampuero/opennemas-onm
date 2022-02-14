@@ -47,10 +47,10 @@ class ArticleCacheHelper extends ContentCacheHelper
      * @var array
      */
     protected $redisKeys = [
-        'WidgetLastInSectionWithPhoto-*-{{category_id}}',
-        'WidgetInfiniteScroll-*-{{pk_content}}-*-{{category_id}}',
-        'WidgetNextPrevious-*-article-*-{{category_id}}',
-        'suggested_contents_{{content_type_name}}_{{category_id}}'
+        '*WidgetLastInSectionWithPhoto-*-{{category_id}}*',
+        '*WidgetInfiniteScroll-*-{{pk_content}}-*-{{category_id}}*',
+        '*WidgetNextPrevious-*-article-*-{{category_id}}',
+        '*suggested_contents_{{content_type_name}}_{{category_id}}*'
     ];
 
     /**
@@ -92,8 +92,8 @@ class ArticleCacheHelper extends ContentCacheHelper
      */
     protected function removeRedisCache($keys)
     {
-        foreach ($keys as $key) {
-            $this->cache->delete($key);
+        foreach ($keys as $pattern) {
+            $this->cache->removeByPattern($pattern);
         }
     }
 
