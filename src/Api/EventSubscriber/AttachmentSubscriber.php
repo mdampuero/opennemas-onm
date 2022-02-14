@@ -61,7 +61,7 @@ class AttachmentSubscriber implements EventSubscriberInterface
             : $event->getArgument('items');
 
         foreach ($contents as $content) {
-            $this->helper->deleteItem($content)->deleteFile($content);
+            $this->helper->deleteItem($content);
         }
     }
 }

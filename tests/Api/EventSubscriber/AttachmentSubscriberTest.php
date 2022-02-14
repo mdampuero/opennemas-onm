@@ -22,7 +22,7 @@ class AttachmentSubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->helper = $this->getMockBuilder('Api\Helper\Cache\ContentCacheHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'deleteFile', 'deleteItem' ])
+            ->setMethods([ 'deleteItem' ])
             ->getMock();
 
         $this->subscriber = new AttachmentSubscriber($this->helper);
@@ -65,7 +65,6 @@ class AttachmentSubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->helper->expects($this->at(0))->method('deleteItem')
             ->with($item)->willReturn($this->helper);
-        $this->helper->expects($this->at(1))->method('deleteFile')->with($item);
 
         $this->subscriber->onAttachmentUpdate($this->event);
     }
