@@ -32,21 +32,6 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests deleteFile.
-     */
-    public function testDeleteFile()
-    {
-        $item = new Content([ 'path' => '/flob/norf.pdf' ]);
-
-        $this->queue->expects($this->once())->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                'req.url ~ /flob/norf.pdf'
-            ]));
-
-        $this->helper->deleteFile($item);
-    }
-
-    /**
      * Tests deleteItem.
      */
     public function testDeleteItem()
