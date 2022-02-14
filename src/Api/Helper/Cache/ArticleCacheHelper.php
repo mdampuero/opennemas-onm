@@ -47,10 +47,10 @@ class ArticleCacheHelper extends ContentCacheHelper
      * @var array
      */
     protected $redisKeys = [
-        '*WidgetLastInSectionWithPhoto-*-{{category_id}}*',
-        '*WidgetInfiniteScroll-*-{{pk_content}}-*-{{category_id}}*',
+        '*WidgetLastInSectionWithPhoto-*-{{category_id}}',
+        '*WidgetInfiniteScroll-*-*-*-{{category_id}}',
         '*WidgetNextPrevious-*-article-*-{{category_id}}',
-        '*suggested_contents_{{content_type_name}}_{{category_id}}*'
+        '*suggested_contents_{{content_type_name}}_{{category_id}}'
     ];
 
     /**
