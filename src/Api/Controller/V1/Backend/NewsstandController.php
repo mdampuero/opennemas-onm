@@ -37,6 +37,8 @@ class NewsstandController extends ContentController
         'show'   => 'KIOSKO_UPDATE',
     ];
 
+    protected $module = 'newsstand';
+
     /**
      * {@inheritdoc}
      */
@@ -124,7 +126,11 @@ class NewsstandController extends ContentController
     protected function getExtraData($items = null)
     {
         return array_merge(parent::getExtraData($items), [
-            'categories' => $this->getCategories($items)
+            'categories' => $this->getCategories($items),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ]);
     }
 

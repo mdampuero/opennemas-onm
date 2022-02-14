@@ -20,6 +20,14 @@
 {/block}
 
 {block name="primaryActions"}
+{acl isAllowed="MASTER"}
+  <li class="quicklinks">
+    <a class="btn btn-link" href="{url name=backend_photos_config}" class="admin_add" title="{t}Config photos module{/t}">
+      <span class="fa fa-cog fa-lg"></span>
+    </a>
+  </li>
+  <li class="quicklinks"><span class="h-seperate"></span></li>
+{/acl}
   {acl isAllowed="PHOTO_CREATE"}
     <li class="quicklinks">
       <a class="btn btn-primary" media-picker media-picker-mode="explore,upload" media-picker-mode-active="upload" media-picker-type="photo" id="upload-button">

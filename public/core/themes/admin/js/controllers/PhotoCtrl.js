@@ -2,8 +2,8 @@
  * Handle actions for image inner.
  */
 angular.module('BackendApp.controllers').controller('PhotoCtrl', [
-  '$controller', '$scope', '$timeout', '$uibModal', '$window', 'linker', 'localizer', 'messenger', 'routing',
-  function($controller, $scope, $timeout, $uibModal, $window, linker, localizer, messenger, routing) {
+  '$controller', '$scope',
+  function($controller, $scope) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -46,7 +46,7 @@ angular.module('BackendApp.controllers').controller('PhotoCtrl', [
      */
     $scope.buildScope = function() {
       $scope.localize($scope.data.item, 'item');
-
+      $scope.expandFields();
       if ($scope.draftKey !== null && $scope.data.item.pk_content) {
         $scope.draftKey = 'photo-' + $scope.data.item.pk_content + '-draft';
       }

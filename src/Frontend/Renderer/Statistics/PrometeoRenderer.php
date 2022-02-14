@@ -31,11 +31,13 @@ class PrometeoRenderer extends StatisticsRenderer
         $type = $extractor->get('mediaType') === 'photo' ? 'inner' : 'frontpage';
 
         return [
-            'content'   => $content,
-            'id'        => $this->config['id'],
-            'type'      => $dataLayer->customizeExtension($extractor->get('extension')),
-            'seoTags'   => $extractor->get('tagSlugs'),
-            'imagePath' => $this->container->get('core.helper.photo')->getPhotoPath(
+            'content'    => $content,
+            'accessType' => $dataLayer->customizeIsRestricted($extractor->get('isRestricted')),
+            'id'         => $this->config['id'],
+            'section'    => $extractor->get('categoryName'),
+            'type'       => $dataLayer->customizeExtension($extractor->get('extension')),
+            'seoTags'    => $extractor->get('tagSlugs'),
+            'imagePath'  => $this->container->get('core.helper.photo')->getPhotoPath(
                 $this->container->get('core.helper.featured_media')->getFeaturedMedia($content, $type),
                 null,
                 [],

@@ -6,6 +6,12 @@ frontend_comments_ajax:
     path: /comments/ajax
     defaults: { _controller: FrontendBundle:Comment:ajax }
 
+frontend_comments_count:
+    path: /comments/count/{ids}
+    defaults: { _controller: FrontendBundle:Comment:countComments }
+    requirements:
+        ids: '[0-9,]+'
+
 frontend_comments_vote:
     path: /comments/vote
     defaults: { _controller: FrontendBundle:Comment:vote }

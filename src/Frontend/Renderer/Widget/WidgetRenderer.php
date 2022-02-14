@@ -18,48 +18,13 @@ class WidgetRenderer extends Renderer
      */
     public function render($widget, $params)
     {
-        switch ($widget->renderlet) {
-            case 'html':
-                $output = $widget->content;
-                break;
-
-            case 'smarty':
-                $output = $this->renderletSmarty($widget);
-                break;
-
-            case 'intelligentwidget':
-                $output = $this->renderletIntelligentWidget($widget, $params);
-                break;
-            default:
-                $output = '';
-                break;
-        }
-
-        return "<div class=\"widget\">" . $output . "</div>";
+        return sprintf(
+            "<div class=\"widget\">%s</div>",
+            $widget->widget_type === 'intelligentwidget'
+            ? $this->renderletIntelligentWidget($widget, $params)
+            : $widget->body ?? ''
+        );
     }
-
-    /**
-     * Renders a HTML wiget
-     *
-     * @return string the generated HTML
-     *
-     * @see resource.string.php Smarty plugin
-     * @see resource.widget.php Smarty plugin
-     */
-    protected function renderletSmarty($widget)
-    {
-        $resource = 'string:' . $widget->content;
-        $wgtTpl   = $this->container->get('core.template');
-
-        // no caching
-        $wgtTpl->caching       = 0;
-        $wgtTpl->force_compile = true;
-
-        $output = $wgtTpl->fetch($resource, [ 'widget' => $widget->content ]);
-
-        return $output;
-    }
-
 
     /**
      * Renders an intelligent wiget
@@ -73,7 +38,7 @@ class WidgetRenderer extends Renderer
         $widget = $this->getWidget($content, $params);
 
         if (is_null($widget)) {
-            return sprintf(_('Widget %s not available'), $content->content);
+            return sprintf(_('Widget %s not available'), $content->class);
         }
 
         return $widget->render($params);
@@ -89,7 +54,7 @@ class WidgetRenderer extends Renderer
      */
     public function getWidget($content, $params = null)
     {
-        $widget = $content->content;
+        $widget = $content->class;
 
         if (empty($widget)) {
             return null;

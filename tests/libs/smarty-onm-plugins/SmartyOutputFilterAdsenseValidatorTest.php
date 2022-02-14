@@ -22,7 +22,7 @@ class SmartyOutputFilterAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
         include_once './libs/smarty-onm-plugins/outputfilter.adsense_validator.php';
 
         $this->smarty = $this->getMockBuilder('Smarty')
-            ->setMethods([ 'getContainer', '__get' ])
+            ->setMethods([ 'getContainer', '__get', 'getValue' ])
             ->getMock();
 
         $this->container = $this->getMockBuilder('Container')
@@ -35,6 +35,11 @@ class SmartyOutputFilterAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->em = $this->getMockBuilder('EntityManager')
             ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
+        $this->sh = $this->getMockBuilder('Common\Core\Component\Helper\SubscriptionHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getToken', 'hasAdvertisements' ])
             ->getMock();
 
         $this->requestStack = $this->getMockBuilder('RequestStack')
@@ -85,6 +90,9 @@ class SmartyOutputFilterAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
             case 'core.security':
                 return $this->security;
 
+            case 'core.helper.subscription':
+                return $this->sh;
+
             case 'orm.manager':
                 return $this->em;
 
@@ -93,112 +101,6 @@ class SmartyOutputFilterAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
         }
 
         return null;
-    }
-
-    /**
-     * Test all cases for the conditional with regex pattern matching
-     */
-    public function testInvalidRegex()
-    {
-        $this->requestStack->expects($this->any())
-            ->method('getCurrentRequest')->willReturn($this->request);
-
-        $this->request->expects($this->any())->method('getUri')
-            ->willReturn('http://manager/test.com');
-
-        $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
-            $this->output,
-            $this->smarty
-        ));
-
-        $this->request->expects($this->any())->method('getUri')
-            ->willReturn('http://managerws/test.com');
-
-        $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
-            $this->output,
-            $this->smarty
-        ));
-
-        $this->request->expects($this->any())->method('getUri')
-            ->willReturn('http://share-by-email/test.com');
-
-        $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
-            $this->output,
-            $this->smarty
-        ));
-
-        $this->request->expects($this->any())->method('getUri')
-            ->willReturn('http://sharrre/test.com');
-
-        $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
-            $this->output,
-            $this->smarty
-        ));
-
-        $this->request->expects($this->any())->method('getUri')
-            ->willReturn('http://ads/test.com');
-
-        $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
-            $this->output,
-            $this->smarty
-        ));
-
-        $this->request->expects($this->any())->method('getUri')
-            ->willReturn('http://comments/test.com');
-
-        $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
-            $this->output,
-            $this->smarty
-        ));
-
-        $this->request->expects($this->any())->method('getUri')
-            ->willReturn('http://rss/facebook-instant-articles/test.com');
-
-        $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
-            $this->output,
-            $this->smarty
-        ));
-
-        $this->request->expects($this->any())->method('getUri')
-            ->willReturn('http://test.amp.html');
-
-        $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
-            $this->output,
-            $this->smarty
-        ));
-    }
-
-    /**
-     * Test plugin when Ads module is activated
-     */
-    public function testAdsModuleActivated()
-    {
-        $this->requestStack->expects($this->any())
-            ->method('getCurrentRequest')->willReturn($this->request);
-
-        $this->ds->expects($this->once())
-            ->method('get')
-            ->with('adsense_id')
-            ->willReturn('ca-pub-999999999999999');
-
-        $this->security->expects($this->once())
-            ->method('hasExtension')
-            ->with('ADS_MANAGER')
-            ->willReturn(true);
-
-        $output = '<html><head>Hello World' . "\n"
-            . '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>' . "\n"
-            . '<script>' . "\n"
-            . '(adsbygoogle = window.adsbygoogle || []).push({' . "\n"
-            . 'google_ad_client: "ca-pub-999999999999999",' . "\n"
-            . 'enable_page_level_ads: true' . "\n"
-            . '});' . "\n"
-            . '</script></head><body></body></html>';
-
-        $this->assertEquals($output, smarty_outputfilter_adsense_validator(
-            $this->output,
-            $this->smarty
-        ));
     }
 
     /**
@@ -220,47 +122,19 @@ class SmartyOutputFilterAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $output = '<html><head>Hello World' . "\n"
-            . '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>' . "\n"
-            . '<script>' . "\n"
-            . '(adsbygoogle = window.adsbygoogle || []).push({' . "\n"
-            . 'google_ad_client: "ca-pub-7694073983816204",' . "\n"
-            . 'enable_page_level_ads: true' . "\n"
-            . '});' . "\n"
-            . '</script></head><body></body></html>';
+            . '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='
+            . 'ca-pub-7694073983816204" crossorigin="anonymous"></script></head><body></body></html>';
 
         $this->assertEquals($output, smarty_outputfilter_adsense_validator(
             $this->output,
             $this->smarty
         ));
     }
-    /**
-     * Test plugin when adSense code is invalid
-     */
-    public function testInvalidAdsenseCode()
-    {
-        $this->requestStack->expects($this->any())
-            ->method('getCurrentRequest')->willReturn($this->request);
-
-        $this->ds->expects($this->once())
-            ->method('get')
-            ->with('adsense_id')
-            ->willReturn('');
-
-        $this->security->expects($this->once())
-            ->method('hasExtension')
-            ->with('ADS_MANAGER')
-            ->willReturn(true);
-
-        $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
-            $this->output,
-            $this->smarty
-        ));
-    }
 
     /**
-     * Test plugin with valid adSense
+     * Test plugin when Ads module is activated and not a content
      */
-    public function testValidAdsenseCode()
+    public function testAdsModuleActivatedAndNotContent()
     {
         $this->requestStack->expects($this->any())
             ->method('getCurrentRequest')->willReturn($this->request);
@@ -275,16 +149,119 @@ class SmartyOutputFilterAdsenseValidatorTest extends \PHPUnit\Framework\TestCase
             ->with('ADS_MANAGER')
             ->willReturn(true);
 
+        $this->smarty->expects($this->once())->method('getValue')
+            ->with('content')
+            ->willReturn(null);
+
         $output = '<html><head>Hello World' . "\n"
-            . '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>' . "\n"
-            . '<script>' . "\n"
-            . '(adsbygoogle = window.adsbygoogle || []).push({' . "\n"
-            . 'google_ad_client: "ca-pub-999999999999999",' . "\n"
-            . 'enable_page_level_ads: true' . "\n"
-            . '});' . "\n"
-            . '</script></head><body></body></html>';
+            . '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='
+            . 'ca-pub-999999999999999" crossorigin="anonymous"></script></head><body></body></html>';
 
         $this->assertEquals($output, smarty_outputfilter_adsense_validator(
+            $this->output,
+            $this->smarty
+        ));
+    }
+
+    /**
+     * Test plugin when Ads module is activated and is a content with ads
+     */
+    public function testAdsModuleActivatedAndContentWithAds()
+    {
+        $content = new \Content();
+
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
+        $this->ds->expects($this->once())
+            ->method('get')
+            ->with('adsense_id')
+            ->willReturn('ca-pub-999999999999999');
+
+        $this->security->expects($this->once())
+            ->method('hasExtension')
+            ->with('ADS_MANAGER')
+            ->willReturn(true);
+
+        $this->smarty->expects($this->once())->method('getValue')
+            ->with('content')
+            ->willReturn($content);
+
+        $this->sh->expects($this->once())->method('getToken')
+            ->with($content)
+            ->willReturn('token');
+
+        $this->sh->expects($this->once())->method('hasAdvertisements')
+            ->with('token')
+            ->willReturn(true);
+
+        $output = '<html><head>Hello World' . "\n"
+            . '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='
+            . 'ca-pub-999999999999999" crossorigin="anonymous"></script></head><body></body></html>';
+
+        $this->assertEquals($output, smarty_outputfilter_adsense_validator(
+            $this->output,
+            $this->smarty
+        ));
+    }
+
+    /**
+     * Test plugin when Ads module is activated and is a content without ads
+     */
+    public function testAdsModuleActivatedAndContentWithoutAds()
+    {
+        $content = new \Content();
+
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
+        $this->ds->expects($this->once())
+            ->method('get')
+            ->with('adsense_id')
+            ->willReturn('ca-pub-999999999999999');
+
+        $this->security->expects($this->once())
+            ->method('hasExtension')
+            ->with('ADS_MANAGER')
+            ->willReturn(true);
+
+        $this->smarty->expects($this->once())->method('getValue')
+            ->with('content')
+            ->willReturn($content);
+
+        $this->sh->expects($this->once())->method('getToken')
+            ->with($content)
+            ->willReturn('token');
+
+        $this->sh->expects($this->once())->method('hasAdvertisements')
+            ->with('token')
+            ->willReturn(false);
+
+        $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
+            $this->output,
+            $this->smarty
+        ));
+    }
+
+    /**
+     * Test plugin when adSense code is invalid
+     */
+    public function testInvalidAdsenseCode()
+    {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
+        $this->security->expects($this->once())
+            ->method('hasExtension')
+            ->with('ADS_MANAGER')
+            ->willReturn(true);
+
+        $this->ds->expects($this->once())
+            ->method('get')
+            ->with('adsense_id')
+            ->willReturn(null);
+
+        $this->assertEquals($this->output, smarty_outputfilter_adsense_validator(
             $this->output,
             $this->smarty
         ));

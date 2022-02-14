@@ -50,8 +50,12 @@
     }).config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
       cfpLoadingBarProvider.includeSpinner = false;
     }]).config(['EditorProvider', function (EditorProvider) {
+      // Add custom timestamp
+      EditorProvider.overrideTimestamp('F61H');
+
       // Add external plugins
       EditorProvider.addExternal('imageresize', '/assets/components/imageresize/');
+      EditorProvider.addExternal('autotoc', '/assets/src/ckeditor-autotoc/');
       EditorProvider.addExternal('wordcount', '/assets/components/wordcount/wordcount/');
 
       // Add custom plugins

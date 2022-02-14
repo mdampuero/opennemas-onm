@@ -34,6 +34,7 @@
             "src/Common/Core/Functions/content.php",
             "src/Common/Core/Functions/featured.php",
             "src/Common/Core/Functions/helper.php",
+            "src/Common/Core/Functions/obituary.php",
             "src/Common/Core/Functions/pagination.php",
             "src/Common/Core/Functions/photo.php",
             "src/Common/Core/Functions/poll.php",

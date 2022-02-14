@@ -14,7 +14,7 @@ function smarty_outputfilter_meta_amphtml($output, $smarty)
     $container           = $smarty->getContainer();
     $request             = $container->get('request_stack')->getCurrentRequest();
     $content             = $smarty->getValue('o_content');
-    $allowedContentTypes = [ 'album', 'article', 'opinion', 'poll', 'video' ];
+    $allowedContentTypes = [ 'album', 'article', 'obituary', 'opinion', 'poll', 'video' ];
     $tpl                 = '<link rel="amphtml" href="%s"/>';
 
     if (empty($content)

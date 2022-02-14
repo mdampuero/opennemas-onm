@@ -44,6 +44,9 @@
               'content_status', 'created', 'status', 'tags', 'title'
             ]
           },
+          fields: {
+            collapsed: true
+          }
         };
 
         /**

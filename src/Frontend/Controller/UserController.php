@@ -257,7 +257,15 @@ class UserController extends Controller
             return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         }
 
-        $data = $request->request->all();
+        $data = array_merge(
+            $request->request->all(),
+            [
+                'name'     => $request->request->filter('name', null, FILTER_SANITIZE_SPECIAL_CHARS),
+                'email'    => $request->request->filter('email', null, FILTER_SANITIZE_EMAIL),
+                'password' => $request->request->get('password'),
+            ]
+        );
+
         unset($data['g-recaptcha-response']);
 
         if (array_key_exists('user_groups', $data)) {
@@ -326,6 +334,7 @@ class UserController extends Controller
                 ->getHtml(),
             'settings'      => $this->getSettings(),
             'subscriptions' => $this->getSubscriptions(),
+            'name'          => null
         ]);
     }
 
@@ -348,7 +357,7 @@ class UserController extends Controller
      */
     public function sendVerificationAction(Request $request)
     {
-        $email = $request->request->get('email', '');
+        $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
 
         if (empty($email)) {
             return $this->redirect($this->generatePrefixedUrl('frontend_user_verify'));
@@ -400,8 +409,12 @@ class UserController extends Controller
     public function updateAction(Request $request)
     {
         $data = array_merge(
-            [ 'user_groups' => [] ],
-            $request->request->all()
+            [
+                'name'     => $request->request->filter('name', null, FILTER_SANITIZE_SPECIAL_CHARS),
+                'email'    => $request->request->filter('email', null, FILTER_SANITIZE_EMAIL),
+                'password' => $request->request->get('password'),
+                'user_groups' => []
+            ]
         );
 
         if (array_key_exists('user_groups', $data)) {

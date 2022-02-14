@@ -32,6 +32,8 @@ class VideoController extends ContentController
         'show'   => 'VIDEO_UPDATE',
     ];
 
+    protected $module = 'video';
+
     /**
      * {@inheritdoc}
      */
@@ -46,6 +48,10 @@ class VideoController extends ContentController
             'authors'    => $this->getAuthors($items),
             'categories' => $this->getCategories($items),
             'tags'       => $this->getTags($items),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ]);
     }
 

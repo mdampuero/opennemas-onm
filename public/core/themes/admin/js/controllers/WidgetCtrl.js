@@ -22,6 +22,11 @@
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
+         * @inheritdoc
+         */
+        $scope.contentKey = 'widget';
+
+        /**
          * @memberOf WidgetCtrl
          *
          * @description
@@ -51,7 +56,8 @@
           created: null,
           starttime: null,
           endtime: null,
-          renderlet: 'html',
+          widget_type: null,
+          class: null,
           title: '',
           params: [],
           categories: [],
@@ -229,6 +235,7 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.expandFields();
           var params = [];
 
           for (var key in $scope.item.params) {
@@ -266,7 +273,7 @@
          * @param {String} uuid The widget uuid.
          */
         $scope.getForm = function(uuid) {
-          if ($scope.item.renderlet === 'html') {
+          if (!$scope.item.widget_type) {
             return;
           }
 
@@ -336,12 +343,18 @@
          */
         $scope.resetContent = function() {
           $('.widget-form').empty();
-          $scope.item.content = null;
-          $scope.widgetForm   = null;
+          $scope.item.class = null;
+          $scope.widgetForm = null;
+          $scope.item.body  = null;
         };
 
-        // Gets the form for widget when widget type changes
-        $scope.$watch('item.content', function(nv) {
+        // Gets the form for widget when widget class changes
+        $scope.$watch('item.class', function(nv, ov) {
+          if (ov) {
+            $scope.item.params  = [];
+            $scope.data.related = [];
+          }
+
           if (!nv) {
             return;
           }

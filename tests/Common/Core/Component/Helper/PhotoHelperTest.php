@@ -23,7 +23,7 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
             ->disableOriginalConstructor()
-            ->setMethods(['isReadyForPublish'])
+            ->setMethods([ 'isReadyForPublish' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -149,6 +149,24 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
             ])->willReturn('/glorp/xyzzy/foobar.jpg');
 
         $this->assertEquals('/glorp/xyzzy/foobar.jpg', $this->helper->getPhotoPath($photo, 'grault'));
+    }
+
+    /**
+     * Tests getPhotoPath when no item.
+     */
+    public function testGetPhotoPathWhenNoItem()
+    {
+        $contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getContent' ])
+            ->getMock();
+
+        $contentHelper->expects($this->any())->method('getContent')
+            ->willReturn(null);
+
+        $this->assertNull(
+            $this->helper->getPhotoPath([ 25 ], null, [], true)
+        );
     }
 
     /**
@@ -316,7 +334,7 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhotoMimeTypeWhenExternal()
     {
-        $this->content->path = 'https://glorp.com/glorp/xyzzy/foobar.jpg';
+        $this->content->externalPath = 'https://glorp.com/glorp/xyzzy/foobar.jpg';
         $this->instance->expects($this->any())->method('getBaseUrl')
             ->willReturn('http://glorp.com/ppp.jpg');
         $this->assertEquals('image/jpeg', $this->helper->getPhotoMimeType($this->content));
