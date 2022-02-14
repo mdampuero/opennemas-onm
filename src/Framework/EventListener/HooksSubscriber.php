@@ -49,7 +49,7 @@ class HooksSubscriber implements EventSubscriberInterface
             // Comments Config hooks
             'comments.config' => [
                 ['removeSmartyCacheAll', 5],
-                ['removeVarnishCacheForContent', 5]
+                ['removeVarnishCacheCurrentInstance', 5]
             ],
             // Content hooks
             'content.update-set-num-views' => [
@@ -58,13 +58,13 @@ class HooksSubscriber implements EventSubscriberInterface
             'content.create' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
-                ['removeVarnishCacheForContent', 5],
+                ['removeCacheForContent', 5],
             ],
             'content.update' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheForContent', 5],
+                ['removeCacheForContent', 5],
             ],
             'content.delete' => [
                 ['logAction', 5],
@@ -72,38 +72,38 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             'content.createItem' => [
                 ['logAction', 5],
-                ['removeVarnishCacheForContent', 5],
+                ['removeCacheForContent', 5],
             ],
             'content.updateItem' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheForContent', 5],
+                ['removeCacheForContent', 5],
             ],
             'content.deleteItem' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheForContent', 5],
+                ['removeCacheForContent', 5],
                 ['removeCacheForRelatedContents', 5],
             ],
             'content.patchItem' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheForContent', 5],
+                ['removeCacheForContent', 5],
             ],
             'content.patchList' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheForContent', 5],
+                ['removeCacheForContent', 5],
             ],
             'content.deleteList' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
                 ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheForContent', 5],
+                ['removeCacheForContent', 5],
                 ['removeCacheForRelatedContents', 5],
             ],
             // Frontpage hooks
@@ -172,6 +172,25 @@ class HooksSubscriber implements EventSubscriberInterface
             }
 
             return;
+        }
+    }
+
+    /**
+     * Queues the necessary bans for an specific content.
+     */
+    public function removeCacheForContent(Event $event)
+    {
+        $item = $event->getArgument('item');
+
+        $items = !is_array($item) ? [ $item ] : $item;
+
+        foreach ($items as $item) {
+            try {
+                $this->container
+                    ->get(sprintf('api.helper.cache.%s', $item->content_type_name))->deleteItem($item);
+            } catch (ServiceNotFoundException $e) {
+                $this->container->get(sprintf('api.helper.cache.content'))->deleteItem($item);
+            }
         }
     }
 
@@ -478,25 +497,6 @@ class HooksSubscriber implements EventSubscriberInterface
                 sprintf('obj.http.x-tags ~ instance-%s', $instanceName)
             ])
         );
-    }
-
-    /**
-     * Queues the necessary varnish bans for the specific contents.
-     */
-    public function removeVarnishCacheForContent(Event $event)
-    {
-        $item = $event->getArgument('item');
-
-        $items = !is_array($item) ? [ $item ] : $item;
-
-        foreach ($items as $item) {
-            try {
-                $this->container
-                    ->get(sprintf('api.helper.cache.%s', $item->content_type_name))->deleteItem($item);
-            } catch (ServiceNotFoundException $e) {
-                $this->container->get(sprintf('api.helper.cache.content'))->deleteItem($item);
-            }
-        }
     }
 
     /**
