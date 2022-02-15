@@ -9,12 +9,13 @@ class ArticleCacheHelper extends ContentCacheHelper
      */
     protected $varnishKeys = [
         'archive-content',
-        'article-{{pk_content}}-inner',
+        '{{content_type_name}}-{{pk_content}}-inner',
         'authors-frontpage',
         'category-{{category_id}}',
         'content-author-{{fk_author}}',
         'frontpage-page',
-        'rss-article,{{category_id}}',
+        'rss-{{content_type_name}}$',
+        'rss-{{content_type_name}},{{category_id}}',
         'rss-frontpage$',
         'rss-author-{{fk_author}}',
         'sitemap',

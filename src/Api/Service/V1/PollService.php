@@ -85,12 +85,4 @@ class PollService extends ContentService
 
         return $item;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getEventName($action)
-    {
-        return 'poll.' . $action;
-    }
 }
