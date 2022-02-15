@@ -613,7 +613,7 @@ CREATE TABLE `menu_items` (
   PRIMARY KEY (`pk_item`,`pk_menu`),
   KEY `pk_item` (`pk_item`),
   KEY `pk_menu` (`pk_menu`),
-  CONSTRAINT `menuitems_id_menu_id` FOREIGN KEY (`pk_menu`) REFERENCES `menues` (`pk_menu`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `menuitems_id_menu_id` FOREIGN KEY (`pk_menu`) REFERENCES `menus` (`pk_menu`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -628,18 +628,16 @@ INSERT INTO `menu_items` VALUES (1,1,'a:1:{s:5:\"es_ES\";s:10:\"Actualidad\";}',
 UNLOCK TABLES;
 
 --
--- Table structure for table `menues`
+-- Table structure for table `menus`
 --
 
-DROP TABLE IF EXISTS `menues`;
+DROP TABLE IF EXISTS `menus`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `menues` (
+CREATE TABLE `menus` (
   `pk_menu` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `type` varchar(255) NOT NULL,
   `position` varchar(50) DEFAULT NULL,
-  `params` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`pk_menu`),
   UNIQUE KEY `name` (`name`),
   KEY `position` (`position`)
@@ -647,13 +645,13 @@ CREATE TABLE `menues` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `menues`
+-- Dumping data for table `menus`
 --
 
-LOCK TABLES `menues` WRITE;
-/*!40000 ALTER TABLE `menues` DISABLE KEYS */;
-INSERT INTO `menues` VALUES (1,'frontpage','user','frontpage','a:1:{s:11:\"description\";s:0:\"\";}'),(9,'footer','user','footer','a:1:{s:11:\"description\";s:0:\"\";}'),(10,'utilities','user','','a:1:{s:11:\"description\";s:0:\"\";}'),(11,'headlines','user','','a:1:{s:11:\"description\";s:0:\"\";}');
-/*!40000 ALTER TABLE `menues` ENABLE KEYS */;
+LOCK TABLES `menus` WRITE;
+/*!40000 ALTER TABLE `menus` DISABLE KEYS */;
+INSERT INTO `menus` VALUES (1,'frontpage','frontpage'),(9,'footer','footer'),(10,'utilities',''),(11,'headlines','');
+/*!40000 ALTER TABLE `menus` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

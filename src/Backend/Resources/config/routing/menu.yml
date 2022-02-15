@@ -1,3 +1,9 @@
+backend_menu_create:
+    path:     /menus/create
+    defaults: { _controller: BackendBundle:Menu:create }
+    options:
+        expose: true
+
 backend_menus_list:
     path:     /menus
     defaults: { _controller: BackendBundle:Menu:list }

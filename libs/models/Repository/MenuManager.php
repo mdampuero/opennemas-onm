@@ -41,6 +41,7 @@ class MenuManager extends BaseManager
      */
     protected $menus = [];
 
+
     /**
      * Counts searched menus given a criteria.
      *
@@ -54,7 +55,7 @@ class MenuManager extends BaseManager
         $whereSQL = $this->getFilterSQL($criteria);
 
         // Executing the SQL
-        $sql = "SELECT COUNT(pk_menu) FROM `menues` WHERE $whereSQL";
+        $sql = "SELECT COUNT(pk_menu) FROM `menus` WHERE $whereSQL";
 
         $rs = $this->dbConn->fetchArray($sql);
 
@@ -114,7 +115,7 @@ class MenuManager extends BaseManager
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
-        $sql = "SELECT pk_menu FROM `menues` WHERE $whereSQL ORDER BY $orderSQL $limitSQL";
+        $sql = "SELECT pk_menu FROM `menus` WHERE $whereSQL ORDER BY $orderSQL $limitSQL";
 
         $rs = $this->dbConn->fetchAll($sql);
 

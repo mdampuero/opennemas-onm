@@ -7,10 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Model\Entity;
+namespace Api\Service\V1;
 
-use Opennemas\Orm\Core\Entity;
-
-class Menu extends Entity
+class MenuService extends OrmService
 {
 }

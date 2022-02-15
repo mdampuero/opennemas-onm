@@ -34,7 +34,7 @@
 {block name="selectedActions"}
   {acl isAllowed="MENU_DELETE"}
     <li class="quicklinks">
-      <a class="btn btn-link" href="#" ng-click="removeSelectedMenus()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+      <a class="btn btn-link" href="#" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
         <i class="fa fa-trash-o fa-lg"></i>
       </a>
     </li>
@@ -53,13 +53,6 @@
       </span>
     </div>
   </li>
-  <li class="hidden-xs quicklinks">
-    <div class="input-group input-group-animated">
-      <span class="input-group-addon tag-input-icon">
-        <i class="fa fa-tags fa-lg"></i>
-      </span>
-    </div>
-  </li>
 {/block}
 
 {block name="list"}
@@ -67,8 +60,8 @@
 {/block}
 
 {block name="modals"}
-  <script type="text/ng-template" id="modal-remove-permanently">
-    {include file="common/modals/_modalDelete.tpl"}
+  <script type="text/ng-template" id="modal-delete">
+    {include file="photo/modals/modal.delete.tpl"}
   </script>
   <script type="text/ng-template" id="modal-batch-remove-permanently">
     {include file="common/modals/_modalBatchDelete.tpl"}

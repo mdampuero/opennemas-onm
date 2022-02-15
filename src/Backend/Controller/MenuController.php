@@ -11,6 +11,7 @@ namespace Backend\Controller;
 
 use Common\Core\Annotation\Security;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 class MenuController extends BackendController
 {
@@ -26,6 +27,7 @@ class MenuController extends BackendController
         'update' => 'MENU_UPDATE',
         'list'   => 'MENU_ADMIN',
         'show'   => 'MENU_UPDATE',
+        'create' => 'MENU_CREATE',
     ];
 
     /**
@@ -33,40 +35,31 @@ class MenuController extends BackendController
      */
     protected $resource = 'menues';
 
+
     /**
-     * {@inheritdoc}
+     * Displays the form to edit an item.
+     *
+     * @param Request $request The request object.
+     * @param integer $id      The item id.
+     *
+     * @return Response The response object.
      */
-    // public function listAction(Request $request)
-    // {
-    //     $params   = [];
-    //     $template = '/list.tpl';
+    public function showAction(Request $request, $id)
+    {
+        $params = [
+            'id' => $id,
+            'menu_positions' => array_merge(
+                [ '' => _('Without position') ],
+                $this->get('core.manager.menu')->getMenus()
+            )
+        ];
 
-    //     if ($this->get('core.helper.locale')->hasMultilanguage()) {
-    //         $params['locale'] = $request->query->get('locale');
-    //     }
+        if ($this->get('core.helper.locale')->hasMultilanguage()) {
+            $params['locale'] = $request->query->get('locale');
+        }
 
-    //     $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
-
-    //     $config         = $ds->get('comment_settings', []);
-    //     $defaultConfigs = $this->get('core.helper.comment')->getDefaultConfigs();
-
-    //     $config = array_merge($defaultConfigs, $config);
-
-    //     if ($config['comment_system'] == 'facebook') {
-    //         $template = '/facebook/list.tpl';
-
-    //         $params['fb_app_id'] = $config['facebook_apikey'];
-    //     }
-
-    //     if ($config['comment_system'] == 'disqus') {
-    //         $template = '/disqus/list.tpl';
-
-    //         $params['disqus_secret_key'] = $config['disqus_shortname'];
-    //         $params['disqus_shortname']  = $config['disqus_secretkey'];
-    //     }
-
-    //     return $this->render($this->resource . $template, $params);
-    // }
+        return $this->render($this->resource . '/item.tpl', $params);
+    }
 
     /**
      * Config for article system

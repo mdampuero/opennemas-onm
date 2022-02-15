@@ -38,7 +38,7 @@
     <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_menu_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
   {/acl}
   {acl isAllowed="MENU_DELETE"}
-    <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
+    <button class="btn btn-danger btn-small" ng-click="delete(item.pk_menu)" type="button">
       <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
     </button>
   {/acl}

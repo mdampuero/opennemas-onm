@@ -1,3 +1,10 @@
+api_v1_backend_menu_create_item:
+    path:    /menus/new
+    methods: [ GET ]
+    defaults: { _controller: ApiBundle:V1/Backend/Menu:createItem }
+    options:
+        expose: true
+
 api_v1_backend_menu_get_list:
     path:     /menus
     defaults: { _controller: ApiBundle:V1/Backend/Menu:getList, format: '.json' }
@@ -52,5 +59,12 @@ api_v1_backend_menu_delete_list:
     path:     /menus
     defaults: { _controller: ApiBundle:V1/Backend/Menu:deleteList }
     methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_menu_save_item:
+    path:    /menus
+    methods: [ POST ]
+    defaults: { _controller: ApiBundle:V1/Backend/Menu:saveItem }
     options:
         expose: true

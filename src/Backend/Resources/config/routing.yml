@@ -30,9 +30,9 @@ admin_menu_show:
     options:
         expose: true
 
-admin_menu_create:
-    path:     /menus/create
-    defaults: { _controller: BackendBundle:Menus:create }
+# admin_menu_create:
+#     path:     /menus/create
+#     defaults: { _controller: BackendBundle:Menus:create }
 
 admin_menu_update:
     path:     /menu/{id}/update

@@ -34,22 +34,28 @@ function smarty_function_render_menu($params, &$smarty)
     $menu = null;
     $i    = 0;
 
-    while (!$menu && $i < count($validKeys)) {
-        $key      = array_keys($validKeys)[$i++];
-        $criteria = [ $key => [ [ 'value' => $validKeys[$key] ] ] ];
-
-        $menu = $smarty->getContainer()->get('menu_repository')
-            ->findOneBy($criteria, null, 1, 1);
+    $menuService = $smarty->getContainer()->get('api.service.menu');
+    while (empty($menu) && $i < count($validKeys)) {
+        $key = array_keys($validKeys)[$i++];
+        $oql = sprintf(
+            ' %s = "%s" ',
+            $key,
+            $validKeys[$key]
+        );
+        $menu = [];
+        try {
+            $menu = $menuService->getItemBy($oql);
+        } catch (\Api\Exception\GetItemException $e) {
+            $menu = [];
+        }
     }
 
     if (empty($menu)) {
         return '';
     }
 
-    $menu->items = $menu->localize($menu->getRawItems());
-
     $smarty->assign([
-        'menuItems'       => !empty($menu->items) ? $menu->items : [],
+        'menuItems'       => !empty($menu->menu_items) ? $menu->menu_items : [],
         'actual_category' => $params['actual_category'] ?? null
     ]);
 

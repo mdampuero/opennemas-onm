@@ -64,7 +64,7 @@ angular.module('BackendApp.controllers')
       $scope.init = function() {
         $scope.backup.criteria    = $scope.criteria;
         $scope.app.columns.hidden = [];
-
+        $scope.app.columns.selected = [ 'name', 'position' ];
         oqlEncoder.configure({
           placeholder: {
             name: 'name ~ "%[value]%"'
@@ -79,77 +79,8 @@ angular.module('BackendApp.controllers')
        */
       $scope.parseList = function(data) {
         $scope.configure(data.extra);
-
-        if (!data.items) {
-          $scope.data.items = [];
-        }
-
-        $scope.items = $scope.data.items;
-
-        $scope.extra = $scope.data.extra;
+        $scope.localize($scope.data.items, 'items');
       };
-
-      /**
-       * Updates the array of contents.
-       *
-       * @param string route Route name.
-       */
-      /*
-       * $scope.list = function(route) {
-       *   $scope.contents = [];
-       *   $scope.loading  = 1;
-       *   $scope.selected = { all: false, contents: [] };
-       */
-
-      /*
-       *   OqlEncoder.configure({
-       *     placeholder: {
-       *       name: 'name ~ "%[value]%"',
-       *     }
-       *   });
-       */
-
-      /*
-       *   Var oql   = oqlEncoder.getOql($scope.criteria);
-       *   var route = {
-       *     name: $scope.route,
-       *     params:  { oql: oql }
-       *   };
-       */
-
-      //   $location.search('oql', oql);
-
-      /*
-       *   Http.get(route).then(function(response) {
-       *     $scope.total    = parseInt(response.data.total);
-       *     $scope.contents = response.data.results;
-       */
-
-      //     $scope.getContentsLocalizeTitle();
-
-      /*
-       *     If (response.data.hasOwnProperty('extra')) {
-       *       $scope.extra = response.data.extra;
-       *     }
-       */
-
-      /*
-       *     // Disable spinner
-       *     $scope.loading = 0;
-       *   }, function() {
-       *     $scope.loading = 0;
-       *     var params = {
-       *       id: new Date().getTime(),
-       *       message: 'Error while fetching data from backend',
-       *       type: 'error'
-       *     };
-       */
-
-      /*
-       *     Messenger.post(params);
-       *   });
-       * };
-       */
 
       /**
        * Permanently removes a list of contents by using a confirmation dialog

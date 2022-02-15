@@ -125,7 +125,6 @@
 
             $scope.data.item = angular.extend($scope.item, $scope.data.item);
             $scope.item      = angular.extend({}, response.data.item);
-
             $scope.configure($scope.data.extra);
             $scope.buildScope();
             $scope.disableFlags('http');
@@ -199,6 +198,7 @@
           var route = { name: $scope.routes.saveItem };
 
           // Parses data before save
+
           data = $scope.parseData(data);
 
           /**
@@ -237,7 +237,6 @@
             route.name   = $scope.routes.updateItem;
             route.params = { id: $scope.getItemId() };
             http.put(route, data).then(successCb, $scope.errorCb);
-
             return;
           }
 

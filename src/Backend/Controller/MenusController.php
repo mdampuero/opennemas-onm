@@ -86,62 +86,6 @@ class MenusController extends Controller
     }
 
     /**
-     * Handles the creating of new menus
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("hasExtension('MENU_MANAGER')
-     *     and hasPermission('MENU_CREATE')")
-     */
-    public function createAction(Request $request)
-    {
-        if ('POST' == $request->getMethod()) {
-            $data = [
-                'name'      => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
-                'params'    => serialize([
-                    'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
-                ]),
-                'items'     => json_decode($request->request->get('items')),
-                'position'  => $request->request->filter('position', '', FILTER_SANITIZE_STRING),
-            ];
-
-            $menu = new \Menu();
-            if ($menu->create($data)) {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    sprintf(_("Menu '%s' created successfully."), $data['name'])
-                );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    _("Unable to create the menu")
-                );
-            }
-
-            return $this->redirect($this->generateUrl('admin_menu_show', [
-                'id'     => $menu->pk_menu,
-                'locale' => $request->get('locale')
-            ]));
-        }
-
-        return $this->render('menues/new.tpl', [
-            'menu'           => new \Menu(),
-            'categories'     => $this->getCategories(),
-            'language_data'  => $this->getLocaleData('frontend', $request),
-            'menu_positions' => $this->getMenuPositions(),
-            'pages'          => $this->getModulePages(),
-            'static_pages'   => $this->getStaticPages(),
-            'sync_sites'     => $this->getSyncSites(),
-            'multilanguage'  => in_array(
-                'es.openhost.module.multilanguage',
-                $this->get('core.instance')->activated_modules
-            )
-        ]);
-    }
-
-    /**
      * Updates the menu information
      *
      * @param Request $request the request object

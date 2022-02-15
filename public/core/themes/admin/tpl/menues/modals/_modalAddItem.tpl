@@ -9,22 +9,19 @@
     </label>
     <select class="form-control" id="item-type" ng-model="type">
       <option value="external">{t}External link{/t}</option>
-      {if !empty($pages)}
-        <option value="internal">{t}Module{/t}</option>
-      {/if}
-      {if !empty($categories)}
-        <option value="category">{t}Categories{/t}</option>
-      {/if}
-      {if !empty($categories)}
-        <option value="blog-category">{t}Category blog{/t}</option>
-      {/if}
-      {if !empty($static_pages)}
-        <option value="static">{t}Static Page{/t}</option>
-      {/if}
+
+        <option ng-if="template.data.pages" value="internal" ng-cloak>{t}Module{/t}</option>
+
+        <option  ng-if="template.data.categories" value="category">{t}Categories{/t}</option>
+
+        <option ng-if="template.data.categories"  value="blog-category">{t}Category blog{/t}</option>
+
+        <option ng-if="template.data.static_pages" value="static">{t}Static Page{/t}</option>
+
       {is_module_activated name="SYNC_MANAGER"}
-        {if !empty($sync_sites)}
-          <option value="syncBlogCategory">{t}Synchronized Category{/t}</option>
-        {/if}
+
+        <option value="syncBlogCategory" ng-if="template.data.sync_sites">{t}Synchronized Category{/t}</option>
+
       {/is_module_activated}
     </select>
   </div>
@@ -47,21 +44,24 @@
       </div>
     </div>
   </div>
-  {if !empty($categories)}
-    <div ng-if="type == 'category'" ng-init="categories = {json_encode($categories)|clear_json}">
-      <div class="form-group" ng-repeat="category in categories">
+
+    <div ng-if="type == 'category' && template.data.categories">
+      {* <div class="form-group" ng-repeat="category in template.data.categories">
         <div class="checkbox col-md-6">
           <input id="checkbox-frontpage-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
           <label for="checkbox-frontpage-[% $index %]">
             [% category.title %]
           </label>
         </div>
+      </div> *}
+      <div class="controls">
+        <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" export-model="selectedCategory" locale="template.data.locale.selected" name="template.data.category_id" ng-model="template.data.categories[0]" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
       </div>
     </div>
-  {/if}
-  {if !empty($pages)}
-    <div ng-if="type == 'internal'" ng-init="pages = {json_encode($pages)|clear_json}">
-      <div class="form-group" ng-repeat="page in pages">
+
+
+    <div ng-if="type == 'internal' && template.data.pages">
+      <div class="form-group" ng-repeat="page in template.data.pages">
         <div class="checkbox col-md-6">
           <input id="checkbox-module-[% $index %]" checklist-model="selected" checklist-value="page" type="checkbox">
           <label for="checkbox-module-[% $index %]">
@@ -70,10 +70,10 @@
         </div>
       </div>
     </div>
-  {/if}
-  {if !empty($static_pages)}
-    <div ng-if="type == 'static'" ng-init="staticPages = {json_encode($static_pages)|clear_json}">
-      <div class="form-group" ng-repeat="page in staticPages">
+
+
+    <div ng-if="type == 'static' && template.data.static_pages">
+      <div class="form-group" ng-repeat="page in template.data.static_pages">
         <div class="checkbox col-md-6">
           <input id="checkbox-static-pages-[% $index %]" checklist-model="selected" checklist-value="page" type="checkbox">
           <label for="checkbox-static-pages-[% $index %]">
@@ -82,10 +82,10 @@
         </div>
       </div>
     </div>
-  {/if}
-  {if !empty($categories)}
-    <div ng-if="type == 'blog-category'" ng-init="automaticCategories = {json_encode($categories)|clear_json}">
-      <div class="form-group" ng-repeat="category in automaticCategories">
+
+
+    <div ng-if="type == 'blog-category' && template.data.categories">
+      <div class="form-group" ng-repeat="category in template.data.categories">
         <div class="checkbox col-md-6">
           <input id="checkbox-poll-[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
           <label for="checkbox-poll-[% $index %]">
@@ -94,13 +94,12 @@
         </div>
       </div>
     </div>
-  {/if}
+
   {is_module_activated name="SYNC_MANAGER"}
-   {if !empty($sync_sites)}
-    <div ng-if="type == 'syncBlogCategory'" ng-init="elements = {json_encode($sync_sites)|clear_json}">
-      <div ng-repeat="(site, params) in elements" ng-init="siteIndex=$index">
+    <div ng-if="type == 'syncBlogCategory' && template.data.sync_sites">
+      <div ng-repeat="(site, params) in template.data.sync_sites" ng-init="siteIndex=$index">
         <h5>[% site %]</h5>
-        <div class="form-group" ng-repeat="category in params.categories">
+        <div class="form-group" ng-repeat="category in template.data.categories">
           <div class="checkbox col-md-6">
             <input id="checkbox-poll-[% siteIndex %]_[% $index %]" checklist-model="selected" checklist-value="category" type="checkbox">
             <label for="checkbox-poll-[% siteIndex %]_[% $index %]">
@@ -110,7 +109,6 @@
         </div>
       </div>
     </div>
-   {/if}
   {/is_module_activated}
 </div>
 <div class="modal-footer">

@@ -4,12 +4,13 @@ orm:
             name:  Menu
             class: Common\Model\Entity\Menu
             properties:
-                id:             integer
-                name:           string
-                position:       string
+                pk_menu:    integer
+                name:       string
+                position:   string
+                menu_items: array
             converters:
                 default:
-                    class:     Common\Model\Database\Data\Converter\ContentConverter
+                    class:     Common\Model\Database\Data\Converter\MenuConverter
                     arguments: [ '@orm.metadata.menu' ]
             repositories:
                 instance:
@@ -17,16 +18,36 @@ orm:
                     arguments: [ '@orm.connection.instance', '@orm.metadata.menu', '@cache.connection.instance' ]
             persisters:
                 instance:
-                    class:     Opennemas\Orm\Database\Persister\BasePersister
+                    class:     Common\Model\Database\Persister\MenuPersister
                     arguments: [ '@orm.connection.instance', '@orm.metadata.menu', '@cache.connection.instance' ]
             mapping:
                 database:
                     table: menus
                     metas:
                         table: menumetas
-                        key:   meta_name
                         ids:
-                            id: fk_content
+                            pk_menu: fk_menu
+                        key: meta_name
+                    relations:
+                        menu_items:
+                            table: menu_items
+                            source_key: pk_menu
+                            target_key: pk_menu
+                            columns:
+                                pk_item:
+                                    type: integer
+                                pk_menu:
+                                    type: integer
+                                title:
+                                    type: string
+                                link_name:
+                                    type: string
+                                type:
+                                    type: string
+                                position:
+                                    type: integer
+                                pk_father:
+                                    type: integer
                     columns:
                         pk_menu:
                             type: integer

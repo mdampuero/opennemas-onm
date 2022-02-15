@@ -115,7 +115,6 @@ class ApiController extends Controller
     {
         $ss   = $this->get($this->service);
         $item = $ss->getItem($id);
-
         return new JsonResponse([
             'item'  => $ss->responsify($item),
             'extra' => $this->getExtraData($item)
@@ -245,6 +244,8 @@ class ApiController extends Controller
      */
     public function updateItemAction(Request $request, $id)
     {
+        // var_dump($request);
+        // die();
         $this->checkSecurity($this->extension, $this->getActionPermission('update'));
         $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', [ $id ]);
 

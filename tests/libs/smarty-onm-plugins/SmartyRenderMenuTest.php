@@ -35,6 +35,10 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'findOneBy' ])
             ->getMock();
 
+        $this->ms = $this->getMockBuilder('MenuService')
+            ->setMethods([ 'getItemBy' ])
+            ->getMock();
+
         $this->smarty = $this->getMockBuilder('Smarty')
             ->setMethods([ 'assign', 'fetch', 'getContainer' ])
             ->getMock();
@@ -44,6 +48,13 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $menu = new \stdClass();
+        $menu->menu_items = [];
+        $menu->name = 'Amaterasu';
+        $menu->pk_item = 1;
+
+        $this->fakeMenu = $menu;
     }
 
     /**
@@ -58,7 +69,8 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'menu_repository':
                 return $this->mr;
-
+            case 'api.service.menu':
+                return $this->ms;
             default:
                 return null;
         }
@@ -91,15 +103,8 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
      */
     public function testRenderMenuWhenMenuFound()
     {
-        $this->mr->expects($this->at(0))->method('findOneBy')
-            ->with([ 'name' => [ [ 'value' => 'bar' ] ] ])
-            ->willReturn(null);
-        $this->mr->expects($this->at(1))->method('findOneBy')
-            ->with([ 'position' => [ [ 'value' => 'foobar' ] ] ])
-            ->willReturn($this->menu);
-
-        $this->menu->expects($this->once())->method('localize');
-        $this->menu->expects($this->once())->method('getRawItems');
+        $this->mr->expects($this->at(0))->method('getItemBy')
+            ->willReturn($this->fakeMenu);
 
         $this->smarty->expects($this->once())->method('assign');
         $this->smarty->expects($this->once())->method('fetch')
@@ -122,8 +127,7 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
      */
     public function testRenderMenuWhenMenuNotFound()
     {
-        $this->mr->expects($this->at(0))->method('findOneBy')
-            ->with([ 'pk_menu' => [ [ 'value' => 28011 ] ] ])
+        $this->mr->expects($this->any())->method('getItemBy')
             ->willReturn(null);
 
         $this->assertEmpty(smarty_function_render_menu([

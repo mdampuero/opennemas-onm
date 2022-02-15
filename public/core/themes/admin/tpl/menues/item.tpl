@@ -20,85 +20,58 @@
 {/block}
 
 {block name="rightColumn"}
-
+  <div class="grid simple">
+    <div class="grid-body no-padding">
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="category" iField="category" iIcon="fa fa-newspaper-o" iSearcModel="search_categories" iName="Automatic categories" iData="menuData.category"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="blog-category" iField="blog-category" iIcon="fa fa-bookmark" iSearcModel="search_manual_categories" iName="Manual categories" iData="menuData['blog-category']"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="static" iField="static" iIcon="fa fa-file" iSearcModel="search_pages" iName="Static pages" iData="menuData.static"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="internal" iField="internal" iIcon="fa fa-cube" iSearcModel="search_modules" iName="Modules" iData="menuData.internal"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="syncBlogCategory" iField="syncBlogCategory" iIcon="fa fa-exchange" iSearcModel="search_sites" iName="Synchronized sites" iData="menuData.syncBlogCategory"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="external" iIcon="fa fa-external-link" iName="Custom link" iData="linkData"}
+    </div>
+  </div>
 {/block}
 
 {block name="leftColumn"}
-
-          <div class="grid simple">
-            <div class="grid-body">
-              {include file="ui/component/input/text.tpl" iField="name" iTitle="{t}Name{/t}"}
-              {if !empty($menu_positions) && count($menu_positions) > 1}
-                <div class="form-group no-margin">
-                  <label for="name" class="form-label">{t}Position{/t}</label>
-                  <div class="controls">
-                    {html_options options=$menu_positions selected=$menu->position name=position}
-                    <br>
-                    <span class="help"><span class="fa fa-info-circle text-info"></span> {t}If your theme has defined positions for menus you can assign one menu to each of them{/t}</span>
-                  </div>
-                </div>
-              {/if}
-            </div>
-          </div>
-          <div class="grid simple">
-            <div class="grid-title">
-              <h4>
-                {t}Menu structure{/t}
-              </h4>
-              <button class="btn btn-white pull-right btn-small" type="button" ng-click="open('modal-add-item')">
-                <i class="fa fa-plus"></i>
-                {t}Add items{/t}
-              </button>
-            </div>
-            <div class="grid-body">
-              <p>
-                {t}Use drag and drop to sort and nest elements.{/t}
-              </p>
-              <div class="menu-items ng-cloak" ui-tree data-max-depth="2">
-                <ol ui-tree-nodes="" ng-model="menu.items">
-                  <li ng-repeat="item in menu.items" ui-tree-node ng-include="'menu-item'" ng-init="parentIndex = $index"></li>
-                </ol>
-              </div>
-            </div>
-          </div>
-  {* <div class="grid simple">
+  <div class="grid simple">
     <div class="grid-body">
-      <div class="form-group">
-        <label class="form-label" for="title"><i class="fa fa-user m-r-5"></i> {t}Author{/t}</label>
-        <div class="controls m-l-20">
-          <table>
-            <tr>
-              <th class="p-r-15">{t}Nickname{/t}</th>
-              <td>[% item.author %]</td>
-            </tr>
-            <tr>
-              <th class="p-r-15">{t}Email{/t}</th>
-              <td>[% item.author_email %]</td>
-            </tr>
-            <tr>
-              <th class="p-r-15">{t}Submitted on{/t}</th>
-              <td>[% item.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</td>
-            </tr>
-            <tr>
-              <th class="p-r-15">{t}Sender IP{/t}</th>
-              <td>[% item.author_ip %]</td>
-            </tr>
-          </table>
+      {include file="ui/component/input/text.tpl" iField="name" iTitle="{t}Name{/t}" iRequired=true iValidation=true}
+        <div class="form-group no-margin">
+          <label for="name" class="form-label">{t}Position{/t}</label>
+          <div class="controls" >
+            <select name="position" ng-model="item.position">
+              <option ng-repeat="(positionKey, positionValue) in data.extra.menu_positions" value="[% positionKey %]">[% positionValue %]</option>
+            </select>
+            <br>
+            <span class="help"><span class="fa fa-info-circle text-info"></span> {t}If your theme has defined positions for menus you can assign one menu to each of them{/t}</span>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="title"><i class="fa fa-archive"></i>  {t}Commented on{/t}</label>
-        <div class="controls m-l-20">
-          <strong>{include file="common/component/icon/content_type_icon.tpl" iField="extra.contents[item.content_id]" iFlagName=true}</strong>:
-          <a href="/content/[% item.content_id %]" target="_blank">[% localizeText(extra.contents[item.content_id].title) %]</a>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="controls">
-          <label class="form-label" for="body"><i class="fa fa-comment m-r-5"></i> {t}Body{/t}</label>
-          {include file="ui/component/content-editor/textarea.tpl" field="body" preset="simple" rows=15}
-        </div>
+    </div>
+  </div>
+  <div class="grid simple">
+    <div class="grid-title">
+      <h4>
+        {t}Menu structure{/t}
+      </h4>
+    </div>
+    <div class="grid-body">
+      <p>
+        {t}Use drag and drop to sort and nest elements.{/t}
+      </p>
+      <div class="menu-items ng-cloak angular-ui-tree" ui-tree data-max-depth="2">
+        <ol ui-tree-nodes="" ng-model="item.menu_items">
+          <li ng-repeat="item in item.menu_items track by item.uniqueID" ui-tree-node ng-include="'menu-item'" ng-init="item.position = $index + 1; parentIndex = $index" ></li>
+        </ol>
       </div>
     </div>
-  </div> *}
+  </div>
+{/block}
+
+{block name="modals"}
+  <script type="text/ng-template" id="menu-item">
+    {include file="menues/partials/_menu_item.tpl"}
+  </script>
+  <script type="text/ng-template" id="menu-sub-item">
+    {include file="menues/partials/_menu_item.tpl" subitem="true"}
+  </script>
 {/block}
