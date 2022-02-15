@@ -22,26 +22,27 @@ class MenuHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMenuItems()
     {
-        $menuItem1            = new \stdClass();
-        $menuItem1->pk_item   = 1;
-        $menuItem1->position  = 1;
-        $menuItem1->type      = 'Ganesha';
-        $menuItem1->pk_father = 0;
-        $menuItem1->submenu   = [];
-        $menuItem1->title     = 'Agni';
-        $menuItem1->link      = '/Sunwukong';
+        $menuItem = [
+            'pk_item' => 0,
+            'position' => 1,
+            'type' => 'Ganesha',
+            'pk_father' => 0,
+            'submenu' => [],
+            'title' => 'Agni',
+            'link_name' => '/Sunwukong',
+        ];
 
-        $menuItem2            = new \stdClass();
-        $menuItem2->pk_item   = 2;
-        $menuItem2->position  = 1;
-        $menuItem2->type      = 'Silvanus';
-        $menuItem2->pk_father = 1;
-        $menuItem2->submenu   = [];
-        $menuItem2->title     = 'Nuwa';
-        $menuItem2->link      = '/Tsukuyomi';
+        $expectedResult = new \stdClass();
+        $expectedResult->pk_item = 0;
+        $expectedResult->position = 1;
+        $expectedResult->type = 'Ganesha';
+        $expectedResult->pk_father = 0;
+        $expectedResult->title = 'Agni';
+        $expectedResult->link_name = '/Sunwukong';
+        $expectedResult->submenu = [];
 
         $item = new \stdClass();
-        $item->menu_items = [];
-        $this->assertEquals([], $this->helper->getMenuItems($item));
+        $item->menu_items = [$menuItem];
+        $this->assertEquals([$expectedResult], $this->helper->getMenuItems($item));
     }
 }

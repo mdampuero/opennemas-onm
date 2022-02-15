@@ -27,13 +27,13 @@ class MenuHelper
             }
 
             $menuItem            = new \stdClass();
-            $menuItem->pk_item   = (int) $element['pk_item'] ?? null;
-            $menuItem->position  = (int) $element['position'] ?? null;
-            $menuItem->type      = $element['type'] ?? null;
-            $menuItem->pk_father = (int) $element['pk_father'] ?? null;
+            $menuItem->pk_item   = (int) $element['pk_item'] ?? 0;
+            $menuItem->position  = (int) $element['position'] ?? 0;
+            $menuItem->type      = $element['type'] ?? '';
+            $menuItem->pk_father = (int) $element['pk_father'] ?? 0;
             $menuItem->submenu   = [];
-            $menuItem->title     = $element['title'] ?? null;
-            $menuItem->link      = $element['link_name'] ?? null;
+            $menuItem->title     = $element['title'] ?? '';
+            $menuItem->link_name      = $element['link_name'] ?? '';
 
             $menuItems[$element['pk_item']] = $menuItem;
         }

@@ -54,7 +54,6 @@ class MenuPersister extends BasePersister
             $this->conn->commit();
         } catch (\Throwable $e) {
             $this->conn->rollback();
-
             throw $e;
         }
 
@@ -119,7 +118,7 @@ class MenuPersister extends BasePersister
         try {
             parent::remove($entity);
 
-            $id = $this->metadata->getId($entity);
+            $id = $this->metadata->getId($entity)['pk_menu'];
 
             $this->removeMenuItems($id);
 
@@ -212,6 +211,7 @@ class MenuPersister extends BasePersister
                 \PDO::PARAM_INT,
                 \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
+
                 \PDO::PARAM_STR,
                 \PDO::PARAM_INT,
                 \PDO::PARAM_INT
