@@ -8,7 +8,6 @@ class ArticleCacheHelper extends ContentCacheHelper
      * {@inheritdoc}
      */
     protected $varnishKeys = [
-        'archive-content',
         '{{content_type_name}}-{{pk_content}}-inner',
         'authors-frontpage',
         'category-{{category_id}}',

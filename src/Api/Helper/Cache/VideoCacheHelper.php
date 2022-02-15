@@ -8,7 +8,6 @@ class VideoCacheHelper extends ContentCacheHelper
      * {@inheritdoc}
      */
     protected $varnishKeys = [
-        'archive-content',
         'authors-frontpage',
         'content-author-{{fk_author}}',
         'frontpage-page',
