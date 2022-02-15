@@ -10,9 +10,4 @@ class StaticPageCacheHelper extends ContentCacheHelper
     protected $varnishKeys = [
         '{{content_type_name}}-{{pk_content}}-inner',
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $redisKeys = [];
 }
