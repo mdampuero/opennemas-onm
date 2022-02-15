@@ -78,7 +78,7 @@
           var html  = '<figure class="image"><img[align] width="[width]" height="[height]" src="' + instanceMedia + image.path + '"[alt]><figcaption>[caption]</figcaption></figure>';
 
           if (image.description) {
-            alt = ' alt="' + image.description + '"';
+            alt = ' alt="' + image.description.replace(/"/g, '&quot;') + '"';
           }
 
           if (align) {
