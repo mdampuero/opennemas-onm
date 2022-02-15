@@ -58,12 +58,6 @@ class ContentCacheHelper extends CacheHelper
             'content', $item->pk_content
         ]));
 
-        $this->queue->push(new ServiceTask('core.varnish', 'ban', [ sprintf(
-            'obj.http.x-tags ~ %s-%s',
-            $extension,
-            $item->pk_content
-        ) ]));
-
         if (!empty($item->path)) {
             $this->queue->push(new ServiceTask('core.varnish', 'ban', [
                 sprintf('req.url ~ %s', $item->path)

@@ -47,11 +47,6 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
                 'content', 648
             ]));
 
-        $this->queue->expects($this->at(1))->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                'obj.http.x-tags ~ attachment-648'
-            ]));
-
         $this->helper->deleteItem($item);
     }
 }
