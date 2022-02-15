@@ -120,7 +120,7 @@ class BlogController extends FrontendController
             $this->hydrateListAuthor($params, $author);
         }
 
-        $params['x-tags'] = sprintf('blog-author-%d-frontpage', $author->id);
+        $params['x-tags'] = sprintf('opinion-author-%d-frontpage', $author->id);
 
         return $this->render($this->getTemplate($action), $params);
     }
