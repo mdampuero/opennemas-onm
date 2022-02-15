@@ -52,20 +52,9 @@ class ContentCacheHelper extends CacheHelper
      */
     public function deleteItem($item) : CacheHelper
     {
-        $extension = $this->map[$item->content_type_name] ?? $item->content_type_name;
-
-        $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
-            'content', $item->pk_content
-        ]));
-
-        if (!empty($item->path)) {
-            $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-                sprintf('req.url ~ %s', $item->path)
-            ]));
-        }
-
+        $this->removeSmartyCache($item);
         $this->removeRedisCache($this->replaceWildcards($item, $this->redisKeys));
-        $this->removeVarnishCache($this->replaceWildcards($item, $this->varnishKeys));
+        $this->removeVarnishCache($this->replaceWildcards($item, $this->varnishKeys), $item);
 
         return $this;
     }
@@ -103,12 +92,31 @@ class ContentCacheHelper extends CacheHelper
     }
 
     /**
+     * Removes the smarty cache for the current object.
+     *
+     * @param Content $item The object to remove the smarty cache.
+     */
+    protected function removeSmartyCache($item)
+    {
+        $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
+            'content', $item->pk_content
+        ]));
+    }
+
+    /**
      * Queues all the varnish bans based on the content.
      *
-     * @param array $item The content to delete cache for.
+     * @param array   $keys The array of keys to delete.
+     * @param Content $item The content to delete cache for.
      */
-    protected function removeVarnishCache($keys)
+    protected function removeVarnishCache($keys, $item)
     {
+        if (!empty($item->path)) {
+            $this->queue->push(new ServiceTask('core.varnish', 'ban', [
+                sprintf('req.url ~ %s', $item->path)
+            ]));
+        }
+
         foreach ($keys as $key) {
             $this->queue->push(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', $this->instance->internal_name, $key)
