@@ -245,7 +245,7 @@ class CategoryController extends FrontendController
             'category'   => $item,
             'time'       => time(),
             'o_category' => $item,
-            'x-tags'     => $this->get('core.globals')->getExtension(),
+            'x-tags'     => $this->get('core.globals')->getExtension() . '-' . $item->id
         ]);
 
         if (!array_key_exists('page', $params)) {
