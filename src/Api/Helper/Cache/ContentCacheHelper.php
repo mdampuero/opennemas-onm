@@ -125,7 +125,7 @@ class ContentCacheHelper extends CacheHelper
     }
 
     /**
-     * Replace the keys when the property of the item doesn't have a standard name.
+     * Replace the keys with the property of the item.
      *
      * @param Content $item The item to get the properties from.
      * @param array   $keys The array of keys to loop over.
