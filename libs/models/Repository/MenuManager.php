@@ -41,7 +41,6 @@ class MenuManager extends BaseManager
      */
     protected $menus = [];
 
-
     /**
      * Counts searched menus given a criteria.
      *
