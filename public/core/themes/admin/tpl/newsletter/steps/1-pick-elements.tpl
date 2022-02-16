@@ -98,7 +98,18 @@
                           <span class="angular-ui-tree-icon"></span>
                         </span>
                         <span class="newsletter-item-type">
-                          <span class="fa" ng-class="{ 'fa-camera': content.content_type_name == 'album', 'fa-file-text-o': content.content_type_name == 'article', 'fa-paperclip': content.content_type_name == 'attachment', 'fa-calendar': content.content_type_name == 'event', 'fa-envelope': content.content_type_name == 'letter', 'fa-shield fa-flip-vertical': content.content_type_name == 'obituary', 'fa-quote-right': content.content_type_name == 'opinion', 'fa-pie-chart': content.content_type_name == 'poll', 'fa-file': content.content_type_name == 'static_page', 'fa-film': content.content_type_name == 'video' }" tooltip-placement="right" uib-tooltip="[% content.content_type_l10n_name %]"></span>
+                          <span class="fa" ng-class="{
+                            'fa-camera': content.content_type_name == 'album',
+                            'fa-file-text-o': content.content_type_name == 'article',
+                            'fa-paperclip': content.content_type_name == 'attachment',
+                            'fa-calendar': content.content_type_name == 'event',
+                            'fa-envelope': content.content_type_name == 'letter',
+                            'fa-shield fa-flip-vertical': content.content_type_name == 'obituary',
+                            'fa-quote-right': content.content_type_name == 'opinion',
+                            'fa-pie-chart': content.content_type_name == 'poll',
+                            'fa-file': content.content_type_name == 'static_page',
+                            'fa-film': content.content_type_name == 'video'
+                            }" tooltip-placement="right" uib-tooltip="[% content.content_type_l10n_name %]"></span>
                         </span>
                         <span class="newsletter-item-title">
                           [% content.title %]

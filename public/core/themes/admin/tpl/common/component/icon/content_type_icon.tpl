@@ -1,5 +1,18 @@
 {if $iFlagIcon}
-  <i class="fa" ng-class="{ 'fa-camera': {$iField}.content_type_name == 'album', 'fa-file-text-o': {$iField}.content_type_name == 'article', 'fa-paperclip': {$iField}.content_type_name == 'attachment', 'fa-calendar': {$iField}.content_type_name == 'event', 'fa-envelope': {$iField}.content_type_name == 'letter', 'fa-shield fa-flip-vertical': {$iField}.content_type_name === 'obituary', 'fa-quote-right': {$iField}.content_type_name == 'opinion', 'fa-photo': {$iField}.content_type_name == 'photo', 'fa-pie-chart': {$iField}.content_type_name == 'poll', 'fa-file': {$iField}.content_type_name == 'static_page', 'fa-film': {$iField}.content_type_name == 'video', 'fa-puzzle-piece': {$iField}.content_type_name == 'widget' }"></i>
+  <i class="fa" ng-class="{
+    'fa-camera': {$iField}.content_type_name == 'album',
+    'fa-file-text-o': {$iField}.content_type_name == 'article',
+    'fa-paperclip': {$iField}.content_type_name == 'attachment',
+    'fa-calendar': {$iField}.content_type_name == 'event',
+    'fa-envelope': {$iField}.content_type_name == 'letter',
+    'fa-shield fa-flip-vertical': {$iField}.content_type_name === 'obituary',
+    'fa-quote-right': {$iField}.content_type_name == 'opinion',
+    'fa-photo': {$iField}.content_type_name == 'photo',
+    'fa-pie-chart': {$iField}.content_type_name == 'poll',
+    'fa-file': {$iField}.content_type_name == 'static_page',
+    'fa-film': {$iField}.content_type_name == 'video',
+    'fa-puzzle-piece': {$iField}.content_type_name == 'widget'
+    }"></i>
 {/if}
 {if $iFlagName}
   <span ng-if="{$iField}.content_type_name == 'album'">{t}Album{/t}</span>
