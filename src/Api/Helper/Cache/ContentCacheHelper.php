@@ -52,7 +52,6 @@ class ContentCacheHelper extends CacheHelper
      */
     public function deleteItem($item) : CacheHelper
     {
-        $this->removeSmartyCache($item);
         $this->removeRedisCache($this->replaceWildcards($item, $this->redisKeys));
         $this->removeVarnishCache($this->replaceWildcards($item, $this->varnishKeys), $item);
 
@@ -89,18 +88,6 @@ class ContentCacheHelper extends CacheHelper
         foreach ($keys as $pattern) {
             $this->cache->removeByPattern($pattern);
         }
-    }
-
-    /**
-     * Removes the smarty cache for the current object.
-     *
-     * @param Content $item The object to remove the smarty cache.
-     */
-    protected function removeSmartyCache($item)
-    {
-        $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
-            'content', $item->pk_content
-        ]));
     }
 
     /**
