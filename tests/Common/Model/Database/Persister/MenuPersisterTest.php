@@ -22,227 +22,301 @@ class MenuPersisterTest extends \PHPUnit\Framework\TestCase
     /**
      * Configures the testing environment.
      */
-    // public function setUp()
-    // {
-        // $this->cache = $this->getMockBuilder('Opennemas\Cache\Redis\Redis')
-        //     ->disableOriginalConstructor()
-        //     ->setMethods([ 'remove' ])
-        //     ->getMock();
-        // $this->converter = $this->getMockBuilder('Common\Model\Database\Data\Converter\MenuConverter')
-        //     ->disableOriginalConstructor()
-        //     ->setMethods([ 'databasifyMenuItems', 'sObjectifyStrict'])
-        //     ->getMock();
-        // $this->metadata = $this->getMockBuilder('Opennemas\Orm\Core\Metadata')
-        //     ->disableOriginalConstructor()
-        //     ->setMethods([ 'remove', 'getId', 'getPrefixedId', 'getConverter', 'hasMetas', 'getTable' ])
-        //     ->getMock();
+    public function setUp()
+    {
+        $this->cache = $this->getMockBuilder('Opennemas\Cache\Redis\Redis')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'remove' ])
+            ->getMock();
 
-        // $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
-        //     ->disableOriginalConstructor()
-        //     ->setMethods([
-        //         'delete', 'executeQuery', 'fetchAll' ,'insert', 'lastInsertId',
-        //         'update', 'beginTransaction', 'rollback', 'commit'
-        //     ])->getMock();
+        $this->converter = $this->getMockBuilder('Common\Model\Database\Data\Converter\MenuConverter')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'databasifyMenuItems', 'sObjectifyStrict'])
+            ->getMock();
 
+        $this->metadata = $this->getMockBuilder('Opennemas\Orm\Core\Metadata')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'remove', 'getId', 'getPrefixedId', 'getConverter', 'hasMetas', 'getTable' ])
+            ->getMock();
 
-        // $this->instance = new Instance([ 'internal_name' => 'plugh' ]);
+        $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'delete', 'executeQuery', 'fetchAll' ,'insert', 'lastInsertId',
+                'update', 'beginTransaction', 'rollback', 'commit'
+                ])->getMock();
 
-        // $this->metadata = new Metadata([
-        //     'name' => 'Menu',
-        //     'class' => 'Common\Model\Entity\Menu',
-        //     'properties' => [
-        //         'pk_menu' => 'integer',
-        //         'name'=> 'string',
-        //         'position'=> 'string',
-        //         'menu_items'=> 'array'
-        //     ],
-        //     'converters' => [
-        //         'default' => [
-        //             'class'=> 'Common\Model\Database\Data\Converter\MenuConverter',
-        //             'arguments' => [ '@orm.metadata.menu' ]
-        //         ]
-        //     ],
-        //     'repositories' => [
-        //         'instance' => [
-        //             'class' => 'Opennemas\Orm\Database\Repository\BaseRepository',
-        //             'arguments' => [ '@orm.connection.instance', '@orm.metadata.menu', '@cache.connection.instance' ]
-        //         ]
-        //     ],
-        //     'persisters' => [
-        //         'instance' => [
-        //             'class' => 'Common\Model\Database\Persister\MenuPersister',
-        //             'arguments' => [ '@orm.connection.instance', '@orm.metadata.menu', '@cache.connection.instance' ]
-        //         ]
-        //     ],
-        //     'mapping' => [
-        //         'database' => [
-        //             'table' => 'menus',
-        //             'metas' => [
-        //                 'table' => 'menumetas',
-        //                 'ids' => [
-        //                     'pk_menu' => 'fk_menu'
-        //                 ],
-        //                 'key' => 'meta_name'
-        //             ],
-        //             'relations' => [
-        //                 'menu_items' => [
-        //                     'table' => 'menu_items',
-        //                     'source_key' => 'pk_menu',
-        //                     'target_key' => 'pk_menu',
-        //                     'columns' => [
-        //                         'pk_item' => [
-        //                             'type' => 'integer'
-        //                         ],
-        //                         'pk_menu' => [
-        //                             'type' => 'integer'
-        //                         ],
-        //                         'title' => [
-        //                             'type' => 'string'
-        //                         ],
-        //                         'link_name' => [
-        //                             'type' => 'string'
-        //                         ],
-        //                         'type' => [
-        //                             'type' => 'string'
-        //                         ],
-        //                         'position' => [
-        //                             'type' => 'integer'
-        //                         ],
+        $this->metadata->expects($this->any())->method('getConverter')
+            ->willReturn([
+                'class' => 'Common\Model\Database\Data\Converter\MenuConverter'
+            ]);
 
-        //                         'pk_father' => [
-        //                             'type' => 'integer'
-        //                         ]
-        //                     ]
-        //                 ]
-        //             ],
-        //             'columns' => [
-        //                 'pk_menu' => [
-        //                     'type' => 'integer',
-        //                     'options' => [ 'default' => null, 'unsigned' => true, 'autoincrement' => true]
-        //                 ],
+        $this->instance  = new Instance([ 'internal_name' => 'plugh' ]);
+        $this->persister = new MenuPersister($this->conn, $this->metadata, $this->cache, $this->instance);
 
-        //                 'name' => [
-        //                     'type' => 'string',
-        //                     'options' => ['length' => 255, 'default' => null, 'notnull' => true]
-        //                 ],
+        $this->properties = [
+                'pk_menu' => 'integer',
+                'name' => 'string',
+                'position' => 'string',
+                'menu_items' => 'array'
+        ];
+        $this->mapping    = [
+                'database' => [
+                    'table' => 'menus',
+                    'metas' => [
+                        'table' => 'menumetas',
+                        'ids' => [
+                            'pk_menu' => 'fk_menu'
+                        ],
+                        'key' => 'meta_name'
+                    ],
+                    'relations' => [
+                        'menu_items' => [
+                            'table' => 'menu_items',
+                            'source_key' => 'pk_menu',
+                            'target_key' => 'pk_menu',
+                            'columns' => [
+                                'pk_item' => [
+                                    'type' => 'integer'
+                                ],
+                                'pk_menu' => [
+                                    'type' => 'integer'
+                                ],
+                                'title' => [
+                                    'type' => 'string'
+                                ],
+                                'link_name' => [
+                                    'type' => 'string'
+                                ],
+                                'type' => [
+                                    'type' => 'string'
+                                ],
+                                'position' => [
+                                    'type' => 'integer'
+                                ],
 
-        //                 'position' => [
-        //                     'type' => 'string',
-        //                     'options' => ['default' => null, 'notnull' => false, 'length' => 50]
-        //                 ]
+                                'pk_father' => [
+                                    'type' => 'integer'
+                                ]
+                            ]
+                        ]
+                    ],
+                    'columns' => [
+                        'pk_menu' => [
+                            'type' => 'integer',
+                            'options' => [ 'default' => null, 'unsigned' => true, 'autoincrement' => true]
+                        ],
 
-        //             ]
-        //         ]
+                        'name' => [
+                            'type' => 'string',
+                            'options' => ['length' => 255, 'default' => null, 'notnull' => true]
+                        ],
 
-        //     ]
+                        'position' => [
+                            'type' => 'string',
+                            'options' => ['default' => null, 'notnull' => false, 'length' => 50]
+                        ]
+                    ]
+                ]
+        ];
+        $this->menuWithItems = new Menu([
+            'pk_menu' => 1,
+            'name' => 'Houyi',
+            'position' => 'Fafnir',
+            'menu_items' => [
+                [
+                    'title' => 'Medusa',
+                    'link_name' => 'Bacchus',
+                    'pk_item' => 1,
+                    'position' => 1,
+                    'pk_father' => 0,
+                    'pk_menu' => 1,
+                    'type' => 'Arachne'
+                ],
+                [
+                    'title' => 'Apollo',
+                    'link_name' => 'Heimdalr',
+                    'pk_item' => 2,
+                    'position' => 2,
+                    'pk_father' => 0,
+                    'pk_menu' => 1,
+                    'type' => 'Odin'
+                ],
+            ]
+        ]);
 
-        // ]);
-    //     $this->menuWithItems = new Menu([
-    //         'pk_menu' => 1,
-    //         'name' => 'Houyi',
-    //         'position' => 'Fafnir',
-    //         'menu_items' => [
-    //             [
-    //                 'title' => 'Medusa',
-    //                 'link_name' => 'Bacchus',
-    //                 'pk_item' => 1,
-    //                 'position' => 1,
-    //                 'pk_father' => 0,
-    //                 'pk_menu' => 1,
-    //                 'type' => 'Arachne'
-    //             ],
-    //             [
-    //                 'title' => 'Apollo',
-    //                 'link_name' => 'Heimdalr',
-    //                 'pk_item' => 2,
-    //                 'position' => 2,
-    //                 'pk_father' => 0,
-    //                 'pk_menu' => 1,
-    //                 'type' => 'Odin'
-    //             ],
-    //         ]
-    //     ]);
-    //     $this->simpleMenu = new Menu ([
-    //         'pk_menu' => 1,
-    //         'name' => 'Houyi',
-    //         'position' => 'Fafnir',
-    //         'menu_items' => []
-    //     ]);
-    // }
+        $this->simpleMenu = new Menu([
+            'pk_menu' => 1,
+            'name' => 'Houyi',
+            'position' => 'Fafnir',
+            'menu_items' => []
+        ]);
+    }
 
     /**
      * Tests remove.
      */
-    // public function testRemove()
-    // {
-    //     $this->metadata->expects($this->any())->method('getConverter')
-    //         ->willReturn([
-    //             'class' => 'Common\Model\Database\Data\Converter\MenuConverter'
-    //         ]);
+    public function testRemoveWhenSuccessfull()
+    {
+        $this->metadata->expects($this->any())->method('getId')
+            ->with($this->simpleMenu)
+            ->willReturn([
+                'pk_menu' => 1
+            ]);
 
-    //     $this->metadata->expects($this->any())->method('hasMetas')
-    //         ->willReturn(false);
+        $this->metadata->expects($this->once())->method('hasMetas')
+            ->willReturn(false);
 
-    //     $this->metadata->expects($this->any())->method('getTable')
-    //         ->willReturn([]);
+        $this->conn->expects($this->once())->method('executeQuery')
+            ->with('delete from menu_items where pk_menu = ?', [ 1 ], [ \PDO::PARAM_INT ]);
 
-    //     $this->cache->expects($this->any())->method('remove')
-    //         ->willReturn([]);
-
-    //     $this->conn->expects($this->any())->method('beginTransaction')
-    //         ->willReturn([]);
-
-    //     $this->conn->expects($this->any())->method('delete')
-    //         ->willReturn([]);
-
-    //     $this->metadata->expects($this->any())->method('getId')
-    //         ->with($this->simpleMenu)
-    //         ->willReturn([
-    //             'pk_menu' => 1
-    //         ]);
-
-    //     $this->conn->expects($this->any())->method('executeQuery')
-    //         ->willReturn([]);
-
-    //     $persister = new MenuPersister($this->conn, $this->metadata, $this->cache, $this->instance);
-    //     $persister->remove($this->simpleMenu);
-    // }
+        $this->persister->remove($this->simpleMenu);
+    }
 
     /**
-     * Tests update.
+     * Tests remove when an exception is thrown.
+     *
+     * @expectedException \Throwable
      */
-    // public function testUpdate()
-    // {
-    //     $this->metadata->expects($this->any())->method('getConverter')
-    //         ->willReturn([
-    //             'class' => 'Common\Model\Database\Data\Converter\MenuConverter'
-    //         ]);
+    public function testRemoveWhenException()
+    {
+        $this->metadata->expects($this->any())->method('getId')
+            ->with($this->simpleMenu)
+            ->willReturn([
+                'pk_menu' => 1
+            ]);
 
-    //     $this->metadata->expects($this->any())->method('hasMetas')
-    //         ->willReturn(false);
+        $this->metadata->expects($this->once())->method('hasMetas')
+            ->willReturn(false);
 
-    //     $this->metadata->expects($this->any())->method('getTable')
-    //         ->willReturn([]);
+        $this->conn->expects($this->once())->method('executeQuery')
+            ->with('delete from menu_items where pk_menu = ?', [ 1 ], [ \PDO::PARAM_INT ])
+            ->will($this->throwException(new \Exception()));
 
-    //     $this->cache->expects($this->any())->method('remove')
-    //         ->willReturn([]);
+        $this->persister->remove($this->simpleMenu);
+    }
 
-    //     $this->conn->expects($this->any())->method('beginTransaction')
-    //         ->willReturn([]);
+    /**
+     * Tests Create.
+     * @expectedException \Throwable
+     */
+    public function testCreateMenuWhenException()
+    {
+        $this->metadata->mapping    = $this->mapping;
+        $this->metadata->properties = $this->properties;
+        $this->metadata->expects($this->any())->method('getId')
+            ->with($this->menuWithItems)
+            ->willReturn([
+                'pk_menu' => 1
+            ]);
 
-    //     $this->conn->expects($this->any())->method('delete')
-    //         ->willReturn([]);
+        $this->metadata->expects($this->once())->method('hasMetas')
+            ->willReturn(false);
 
-    //     $this->metadata->expects($this->any())->method('getId')
-    //         ->with($this->menuWithItems)
-    //         ->willReturn([
-    //             'pk_menu' => 1
-    //         ]);
+        $this->conn->expects($this->at(2))->method('executeQuery')
+            ->with('delete from menu_items where pk_menu = ?', [ 1 ], [ \PDO::PARAM_INT ]);
 
-    //     $this->conn->expects($this->any())->method('executeQuery')
-    //         ->willReturn([]);
+        $this->conn->expects($this->at(3))->method('executeQuery')
+            ->with(
+                'insert into menu_items(pk_item, pk_menu, title, link_name, type, position, pk_father) ' .
+                'values (?,?,?,?,?,?,?),(?,?,?,?,?,?,?)',
+                [ 1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, 2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0],
+                [ 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 1, 1 ]
+            )
+            ->will($this->throwException(new \Exception()));
 
-    //     $persister = new MenuPersister($this->conn, $this->metadata, $this->cache, $this->instance);
-    //     $persister->update($this->menuWithItems);
-    // }
+        $this->persister->create($this->menuWithItems);
+    }
+
+    /**
+     * Tests Create.
+     */
+    public function testCreateMenuWhenSuccessfull()
+    {
+        $this->metadata->mapping    = $this->mapping;
+        $this->metadata->properties = $this->properties;
+        $this->metadata->expects($this->any())->method('getId')
+            ->with($this->menuWithItems)
+            ->willReturn([
+                'pk_menu' => 1
+            ]);
+
+        $this->metadata->expects($this->once())->method('hasMetas')
+            ->willReturn(false);
+
+        $this->conn->expects($this->at(2))->method('executeQuery')
+            ->with('delete from menu_items where pk_menu = ?', [ 1 ], [ \PDO::PARAM_INT ]);
+
+        $this->conn->expects($this->at(3))->method('executeQuery')
+            ->with(
+                'insert into menu_items(pk_item, pk_menu, title, link_name, type, position, pk_father) ' .
+                'values (?,?,?,?,?,?,?),(?,?,?,?,?,?,?)',
+                [ 1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, 2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0],
+                [ 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 1, 1 ]
+            );
+
+        $this->persister->create($this->menuWithItems);
+    }
+
+     /**
+     * Tests Create.
+     * @expectedException \Throwable
+     */
+    public function testUpdateMenuWhenException()
+    {
+        $this->metadata->mapping = $this->mapping;
+        $this->metadata->properties = $this->properties;
+        $this->metadata->expects($this->any())->method('getId')
+            ->with($this->menuWithItems)
+            ->willReturn([
+                'pk_menu' => 1
+            ]);
+
+        $this->metadata->expects($this->once())->method('hasMetas')
+            ->willReturn(false);
+
+        $this->conn->expects($this->at(2))->method('executeQuery')
+            ->with('delete from menu_items where pk_menu = ?', [ 1 ], [ \PDO::PARAM_INT ]);
+
+        $this->conn->expects($this->at(3))->method('executeQuery')
+            ->with(
+                'insert into menu_items(pk_item, pk_menu, title, link_name, type, position, pk_father) ' .
+                'values (?,?,?,?,?,?,?),(?,?,?,?,?,?,?)',
+                [ 1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, 2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0],
+                [ 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 1, 1 ]
+            )
+            ->will($this->throwException(new \Exception()));
+
+        $this->persister->update($this->menuWithItems);
+    }
+
+    /**
+     * Tests Create.
+     */
+    public function testUpdateMenuWhenSuccessfull()
+    {
+        $this->metadata->mapping    = $this->mapping;
+        $this->metadata->properties = $this->properties;
+        $this->metadata->expects($this->any())->method('getId')
+            ->with($this->menuWithItems)
+            ->willReturn([
+                'pk_menu' => 1
+            ]);
+
+        $this->metadata->expects($this->once())->method('hasMetas')
+            ->willReturn(false);
+
+        $this->conn->expects($this->at(2))->method('executeQuery')
+            ->with('delete from menu_items where pk_menu = ?', [ 1 ], [ \PDO::PARAM_INT ]);
+
+        $this->conn->expects($this->at(3))->method('executeQuery')
+            ->with(
+                'insert into menu_items(pk_item, pk_menu, title, link_name, type, position, pk_father) ' .
+                'values (?,?,?,?,?,?,?),(?,?,?,?,?,?,?)',
+                [ 1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, 2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0],
+                [ 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 1, 1 ]
+            );
+
+        $this->persister->update($this->menuWithItems);
+    }
 }

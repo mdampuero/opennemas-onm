@@ -139,7 +139,7 @@
             //  Add unique id to elemnt
             $scope.data.item.menu_items[menuItemIndex].uniqueID = $scope.uniqueID;
 
-            //  Localize Menu Items without submenues
+            //  Localize Menu Items without submenus
             $scope.item.menu_items[menuItemIndex] = $scope.localizeItem(
               $scope.data.item.menu_items[menuItemIndex],
               $scope.data.item.menu_items[menuItemIndex].uniqueID, $scope, true, [ 'submenu' ]

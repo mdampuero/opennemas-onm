@@ -248,7 +248,6 @@ class ContentPersister extends BasePersister
                 [ \PDO::PARAM_INT, \PDO::PARAM_INT ]
             );
         }
-
         $this->conn->executeQuery($sql, $params, $types);
     }
 
