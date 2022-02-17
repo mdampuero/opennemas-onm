@@ -32,7 +32,8 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
             '<img width="340" height="340" src="baz">' .
             '</figure>';
 
-        $result = '<figure class="image image-inbody-left ckeditor-image" style="width: 340px" data-random="foo">' .
+        $result = '<figure class="image image-inbody-left ckeditor-image"' .
+            ' style="max-width: 100%; width: 340px;" data-random="foo">' .
             '<img width="340" height="340" data-src="baz" class="lazyload">' .
             '</figure>';
 
@@ -42,7 +43,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
             '<img width="340" height="340" src="baz">' .
             '</figure>';
 
-        $result = '<figure class="image ckeditor-image" style="width: 340px">' .
+        $result = '<figure class="image ckeditor-image" style="max-width: 100%; width: 340px;">' .
             '<img width="340" height="340" data-src="baz" class="lazyload">' .
             '</figure>';
 
