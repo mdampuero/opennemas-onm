@@ -23,6 +23,24 @@
   </a>
 {/block}
 
+{block name="primaryActions"}
+  <div class="all-actions pull-right">
+    <ul class="nav quick-section">
+      <li class="quicklinks">
+        <a class="btn btn-link" ng-click="expansibleSettings()" title="{t 1=_('User groups')}Config form: '%1'{/t}">
+          <span class="fa fa-cog fa-lg"></span>
+        </a>
+      </li>
+      <li class="quicklinks">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+          <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+          {t}Save{/t}
+        </button>
+      </li>
+    </ul>
+  </div>
+{/block}
+
 {block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">
@@ -57,6 +75,15 @@
         </div>
       </div>
     </div>
+  </div>
+{/block}
+
+{block name="commonFields"}
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('visibility')">
+    <input id="checkbox-visibility" checklist-model="app.fields[contentKey].selected" checklist-value="'visibility'" type="checkbox">
+    <label for="checkbox-visibility">
+      {t}Visibility{/t}
+    </label>
   </div>
 {/block}
 
@@ -109,4 +136,10 @@
       </div>
     </div>
   </div>
+{/block}
+
+{block name="modals"}
+  <script type="text/ng-template" id="modal-expansible-fields">
+    {include file="common/modals/_modalExpansibleFields.tpl"}
+  </script>
 {/block}

@@ -36,6 +36,8 @@ class SubscriberController extends ApiController
         'update' => 'SUBSCRIBER_UPDATE',
     ];
 
+    protected $module = 'subscriber';
+
     /**
      * {@inheritdoc}
      */
@@ -178,7 +180,11 @@ class SubscriberController extends ApiController
             'countries'     => $this->get('core.geo')->getCountries(),
             'photos'        => $this->getPhotos($items),
             'settings'      => $this->getSettings(),
-            'subscriptions' => $this->getSubscriptions()
+            'subscriptions' => $this->getSubscriptions(),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ];
     }
 

@@ -1,3 +1,12 @@
+.modal-header.form-settings-header{
+  height: auto !important;
+
+  .modal-subtitle{
+    padding: 15px 15px 0px 15px;
+    margin-bottom: 0;
+  }
+}
+
 .modal-body {
   background: none;
   padding-top: 15px;
@@ -5,6 +14,16 @@
 
 .modal-body-danger {
   background: @danger-color;
+}
+
+.modal-body.form-settings-body{
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px 20px 0px 20px;
+
+  .form-group{
+    flex-basis: 33.3%;
+  }
 }
 
 .modal-content {

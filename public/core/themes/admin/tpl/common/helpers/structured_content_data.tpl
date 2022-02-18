@@ -64,7 +64,7 @@
         , "url": "{$app.instance->getBaseUrl()}{get_author_url($content)}"
       {/if}
     },
-    "datePublished": "{format_date date=$content->created format="yyyy-MM-dd HH:mm:ss" type="custom"}",
+    "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd HH:mm:ss" type="custom"}",
     "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd HH:mm:ss" type="custom"}",
     {if !empty($category)}
       "articleSection": "{$category->title|escape:'html'}",

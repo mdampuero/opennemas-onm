@@ -24,32 +24,42 @@
 {/block}
 
 {block name="primaryActions"}
-  <li class="quicklinks">
-    <div class="btn-group">
-      <button class="btn btn-loading btn-success text-uppercase" ng-click="save();" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" type="button">
-        <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
-        {t}Save{/t}
-      </button>
-      <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" ng-if="item.id" type="button">
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu no-padding pull-right" ng-if="item.id">
-        <li>
-          <a href="#" ng-click="convertTo('type', 2)" ng-if="item.type !== 2">
-            <i class="fa fa-user-plus"></i>
-            {t}Convert to{/t} {t}subscriber{/t} + {t}user{/t}
-          </a>
-        </li>
-        <li class="divider" ng-if="item.type !== 2"></li>
-        <li>
-          <a href="#" ng-click="convertTo('type', 0)">
-            <i class="fa fa-user"></i>
-            {t}Convert to{/t} {t}user{/t}
-          </a>
-        </li>
-      </ul>
-    </div>
-  </li>
+  <div class="all-actions pull-right">
+    <ul class="nav quick-section">
+      <li class="quicklinks">
+        <a class="btn btn-link" ng-click="expansibleSettings()" title="{t 1=_('Subscriber')}Config form: '%1'{/t}">
+          <span class="fa fa-cog fa-lg"></span>
+        </a>
+      </li>
+      <li class="quicklinks">
+        <div class="btn-group">
+          <button class="btn btn-loading btn-success text-uppercase" ng-click="save();" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" type="button">
+            <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+            {t}Save{/t}
+          </button>
+          <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" ng-disabled="flags.http.saving || form.$invalid || (item.password && item.password !== rpassword)" ng-if="item.id" type="button">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu no-padding pull-right" ng-if="item.id">
+            <li>
+              <a href="#" ng-click="convertTo('type', 2)" ng-if="item.type !== 2">
+                <i class="fa fa-user-plus"></i>
+                {t}Convert to{/t} {t}subscriber{/t} + {t}user{/t}
+              </a>
+            </li>
+            <li class="divider" ng-if="item.type !== 2"></li>
+            <li>
+              <a href="#" ng-click="convertTo('type', 0)">
+                <i class="fa fa-user"></i>
+                {t}Convert to{/t} {t}user{/t}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+
 {/block}
 
 {block name="rightColumn"}
@@ -135,6 +145,15 @@
       </div>
     </div>
   {/acl}
+{/block}
+
+{block name="commonFields"}
+  <div class="checkbox column-filters-checkbox" ng-if="!isFieldHidden('subscriptions')">
+    <input id="checkbox-subscriptions" checklist-model="app.fields[contentKey].selected" checklist-value="'subscriptions'" type="checkbox">
+    <label for="checkbox-subscriptions">
+      {t}Lists{/t}
+    </label>
+  </div>
 {/block}
 
 {block name="leftColumn"}
@@ -256,5 +275,8 @@
 {block name="modals"}
   <script type="text/ng-template" id="modal-convert">
     {include file="subscriber/modal.convert.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-expansible-fields">
+    {include file="common/modals/_modalExpansibleFields.tpl"}
   </script>
 {/block}
