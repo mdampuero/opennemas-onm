@@ -391,4 +391,17 @@ class ApiController extends Controller
             $this->checkSecurity($this->extension, $permission, $this->get($this->service)->getItem($id));
         }
     }
+
+    /**
+     * Translate fields for extra fields
+     *
+     * @param string $moduleName module key
+     *
+     * @return array The translated and structured items
+     */
+    public function getFormSettings($moduleName = '')
+    {
+        $ffh = $this->get('core.helper.form_field');
+        return $ffh->filterFields($moduleName);
+    }
 }

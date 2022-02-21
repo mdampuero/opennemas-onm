@@ -78,6 +78,7 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.expandFields();
           if (!$scope.item.user_groups) {
             $scope.item.user_groups = {};
           }
@@ -137,16 +138,24 @@
 
                   data.type = value;
 
-                  if (value === 1) {
-                    var ids = Object.keys($scope.data.extra.subscriptions);
-
-                    // Remove all subscriptions
+                  // Remove subscriptions when the subscriber is changed to only user.
+                  if (value === 0) {
                     data.user_groups = data.user_groups.filter(function(group) {
-                      return ids.indexOf(group.user_group_id) !== -1;
+                      return !$scope.isSubscription(group);
                     });
                   }
 
-                  return http.put(route, data);
+                  return http.get(
+                    {
+                      name: 'api_v1_backend_tools_slug',
+                      params: { slug: data.name }
+                    }
+                  ).then(function(response) {
+                    data.username = response.data.slug;
+                    data.slug     = response.data.slug;
+
+                    return http.put(route, data);
+                  });
                 };
               }
             }
@@ -162,6 +171,18 @@
               }
             }
           });
+        };
+
+        /**
+         * @funcion isSubscription
+         * @memberOf SubscriptionCtrl
+         *
+         * @param {Object} userGroup The user group to filter.
+         *
+         * @returns {Boolean} True if the user group is a subscription.
+         */
+        $scope.isSubscription = function(userGroup) {
+          return Object.keys($scope.data.extra.subscriptions).includes(String(userGroup.user_group_id));
         };
 
         /**

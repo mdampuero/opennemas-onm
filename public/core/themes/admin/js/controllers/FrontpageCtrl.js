@@ -572,35 +572,65 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     };
 
     $scope.deleteVersion = function($event, versionId) {
+      $event.preventDefault();
       $event.stopPropagation();
-      http.delete({
-        name:   'admin_frontpage_delete',
-        params: {
-          categoryId: $scope.categoryId,
-          versionId:  versionId ? versionId : $scope.versionId
-        }
-      }).then(function(response) {
-        if (versionId === $scope.version.id) {
-          window.location = routing.generate('admin_frontpage_list', {
-            category: $scope.categoryId
-          });
-          return null;
-        }
-        var index = $scope.versions.length - 1;
 
-        for (index; index >= 0; index--) {
-          if ($scope.versions[index].id === versionId) {
-            break;
+      $uibModal.open({
+        backdrop:      true,
+        backdropClass: 'modal-backdrop-transparent',
+        controller:    'YesNoModalCtrl',
+        openedClass:   'modal-relative-open',
+        templateUrl:   'modal-remove-frontpage',
+        windowClass:   'modal-right modal-small modal-top',
+        resolve: {
+          template: function() {
+            return {};
+          },
+          yes: function() {
+            return function(modalWindow) {
+              http.delete({
+                name:   'admin_frontpage_delete',
+                params: {
+                  categoryId: $scope.categoryId,
+                  versionId:  versionId ? versionId : $scope.versionId
+                }
+              }).then(function(response) {
+                if (!versionId || versionId === $scope.version.id) {
+                  window.location = routing.generate('admin_frontpage_list', {
+                    category: $scope.categoryId
+                  });
+                  return null;
+                }
+                var index = $scope.versions.length - 1;
+
+                for (index; index >= 0; index--) {
+                  if ($scope.versions[index].id === versionId) {
+                    break;
+                  }
+                }
+                if (index > -1) {
+                  $scope.versions.splice(index, 1);
+                }
+                messenger.post(response.data.message);
+                modalWindow.close({ response: false, success: false });
+
+                return null;
+              }, function(response) {
+                if (response.data) {
+                  messenger.post(response.data.responseText);
+                }
+
+                modalWindow.close({ response: false, success: false });
+                return null;
+              });
+            };
+          },
+          no: function() {
+            return function(modalWindow) {
+              modalWindow.close({ response: false, success: true });
+              return null;
+            };
           }
-        }
-        if (index > -1) {
-          $scope.versions.splice(index, 1);
-        }
-        messenger.post(response.data.message);
-        return null;
-      }, function(response) {
-        if (response.data) {
-          messenger.post(response.data.responseText);
         }
       });
     };

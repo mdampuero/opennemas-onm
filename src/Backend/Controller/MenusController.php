@@ -272,6 +272,16 @@ class MenusController extends Controller
             ];
         }
 
+        if ($this->get('core.security')->hasExtension('es.openhost.module.obituaries')) {
+            $pages[] = [
+                'title' => _('Obituaries'),
+                'link'  => trim(
+                    $this->get('router')->generate('frontend_obituaries'),
+                    '/'
+                )
+            ];
+        }
+
         if ($this->get('core.security')->hasExtension('LETTER_MANAGER')) {
             $pages[] = [
                 'title' => _('Letters to the Editor'),

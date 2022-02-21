@@ -44,7 +44,7 @@ class AmpFilter extends Filter
             '@<(link|meta|input)[^>]+>@i',
 
             // Clean attributes
-            '@<(table|tbody|blockquote|th|tr|td|ul|li|ol|dl|p|strong|br|span'
+            '@<(figcaption|table|tbody|blockquote|th|tr|td|ul|li|ol|dl|p|strong|br|span'
                 . '|b|pre|hr|col|h1|h2|h3|h4|h5|h6|div(?!.*[\s]+class[\s]*=.*))[^>]*?(\/?)>@',
             '@<img\s+[^>]*src\s*=\s*"([^"]+)"[^>]*>@',
         ];

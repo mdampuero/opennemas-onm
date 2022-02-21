@@ -16,8 +16,8 @@
      *   Check billing information when saving author.
      */
     .controller('AuthorCtrl', [
-      '$controller', '$http', '$scope', '$timeout', '$uibModal', 'cleaner',
-      function($controller, $http, $scope, $timeout, $uibModal, cleaner) {
+      '$controller', '$scope', '$timeout', 'cleaner',
+      function($controller, $scope, $timeout, cleaner) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -61,6 +61,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.expandFields();
+
           if (!$scope.item.user_groups) {
             $scope.item.user_groups = {};
           }

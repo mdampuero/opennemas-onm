@@ -42,6 +42,11 @@ class ContentPersister extends BasePersister
             $entity->starttime = new \DateTime();
         }
 
+        // Don't allow changed date to be earlier than starttime
+        if ($entity->starttime > $entity->changed) {
+            $entity->changed = $entity->starttime;
+        }
+
         $categories = [];
         if (!empty($entity->categories)) {
             $categories = $entity->categories;
@@ -93,6 +98,11 @@ class ContentPersister extends BasePersister
     {
         if (empty($entity->starttime) && !empty($entity->content_status)) {
             $entity->starttime = new \DateTime();
+        }
+
+        // Don't allow changed date to be earlier than starttime
+        if ($entity->starttime > $entity->changed) {
+            $entity->changed = $entity->starttime;
         }
 
         $changes    = $entity->getChanges();

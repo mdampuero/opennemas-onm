@@ -73,6 +73,9 @@ frontend_newsstand:
 frontend_opinion:
     resource: '@FrontendBundle/Resources/config/routing/opinion.yml'
 
+frontend_obituary:
+    resource: '@FrontendBundle/Resources/config/routing/obituary.yml'
+
 frontend_password:
     resource: '@FrontendBundle/Resources/config/routing/password.yml'
 

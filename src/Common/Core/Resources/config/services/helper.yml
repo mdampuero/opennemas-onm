@@ -68,6 +68,10 @@ services:
             - '@core.helper.video'
         public:    true
 
+    core.helper.form_field:
+        class:     Common\Core\Component\Helper\FormFieldHelper
+        public:    true
+
     core.helper.http_fetcher:
         class:     Common\Core\Component\Http\Fetcher
         public:    true
@@ -130,6 +134,11 @@ services:
         class:     Common\Core\Component\Helper\NewsstandHelper
         arguments: [ '@core.loader.instance', '%core.paths.public%' ]
         public:    true
+
+    core.helper.obituary:
+        class:      Common\Core\Component\Helper\ObituaryHelper
+        arguments: [ '@service_container' ]
+        public:     true
 
     core.helper.oql:
         class:     Common\Core\Component\Helper\OqlHelper

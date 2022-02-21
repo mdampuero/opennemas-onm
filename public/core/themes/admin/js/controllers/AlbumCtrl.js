@@ -106,6 +106,7 @@
          * @type {Object}
          */
         $scope.treeOptions = {
+
           /**
            * Sorts the list of original items when the list of localized items
            * is re-ordered.
@@ -132,7 +133,7 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
-
+          $scope.expandFields();
           // Use default value for new items
           if (!$scope.data.item.pk_content) {
             $scope.data.item.with_comment =

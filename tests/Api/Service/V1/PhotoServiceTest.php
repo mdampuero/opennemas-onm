@@ -146,6 +146,88 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests createItem when optimize in data.
+     */
+    public function testCreateItemWhenOptimizeInData()
+    {
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getClientOriginalName', 'getPathname' ])
+            ->getMock();
+
+        $data = [
+            'title'       => 'plugh',
+            'description' => 'foo',
+            'optimize'    => true
+        ];
+
+        $this->ih->expects($this->once())->method('generatePath')
+            ->willReturn('/2010/01/01/plugh.mumble');
+
+        $this->ih->expects($this->once())->method('exists')
+            ->willReturn(false);
+
+        $this->ih->expects($this->any())->method('getInformation')
+            ->willReturn([]);
+
+        $file->expects($this->once())->method('getPathname')
+            ->willReturn('some/path');
+
+        $this->converter->expects($this->any())->method('objectify')
+            ->willReturn($data);
+
+        $this->em->expects($this->once())->method('persist');
+
+        $this->metadata->expects($this->once())->method('getId')
+            ->willReturn([ 'id' => 1 ]);
+
+        $this->ih->expects($this->once())->method('move');
+
+        $this->dataSet->expects($this->once())->method('get')
+            ->with('photo_settings', [])
+            ->willReturn([
+                'photo_settings' => [
+                    'optimize_images' => 'true'
+                ]
+            ]);
+
+        $this->sh->expects($this->once())->method('toBoolean')
+            ->willReturn([
+                'optimize_images' => true
+            ]);
+        $this->ip->expects($this->once())->method('open')
+            ->willReturn($this->ip);
+
+        $this->ip->expects($this->once())->method('apply')
+            ->with('thumbnail', [1920, 1920, 'center', 'center'])
+            ->willReturn($this->ip);
+
+        $this->ip->expects($this->once())->method('optimize')
+            ->with([
+                'flatten'          => false,
+                'quality'          => 65,
+                'resolution-units' => 'ppi',
+                'resolution-x'     => 72,
+                'resolution-y'     => 72
+            ])
+            ->willReturn($this->ip);
+
+        $this->ip->expects($this->once())->method('save')
+            ->willReturn($this->ip);
+
+        $this->ip->expects($this->once())->method('close')
+            ->willReturn($this->ip);
+
+        $this->service->expects($this->any())->method('assignUser')
+            ->willReturn($data);
+
+        $this->service->expects($this->once())->method('updateItem')
+            ->willReturn([]);
+
+        $this->service->createItem($data, $file);
+    }
+
+    /**
      * Tests createItem when an error while moving the file is thrown.
      *
      * @expectedException Api\Exception\CreateItemException

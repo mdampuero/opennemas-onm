@@ -39,6 +39,8 @@ class UserGroupController extends ApiController
         'update' => 'GROUP_UPDATE',
     ];
 
+    protected $module = 'userGroup';
+
     /**
      * {@inheritdoc}
      */
@@ -77,7 +79,11 @@ class UserGroupController extends ApiController
 
         return [
             'extensions' => $this->getExtensions(array_keys($permissions)),
-            'modules'    => $permissions
+            'modules'    => $permissions,
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ];
     }
 
