@@ -13,7 +13,12 @@ class PaginatorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
-        $this->paginator = new Paginator($this->router);
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
+            ->getMock();
+
+        $this->paginator = new Paginator($this->router, $this->decorator);
 
         $reflection = new \ReflectionClass(get_class($this->paginator));
 
