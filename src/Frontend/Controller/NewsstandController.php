@@ -123,6 +123,8 @@ class NewsstandController extends FrontendController
             $epp * ($params['page'] - 1)
         );
 
+        $params['x-tags'] .= ',kiosko-frontpage';
+
         if (array_key_exists('year', $params)) {
             $start = sprintf('%02d-%02d-01', $params['year'], $params['month']);
             $end   = date("Y-m-d", strtotime("+1 month", strtotime($start)));
@@ -140,6 +142,8 @@ class NewsstandController extends FrontendController
                 $epp,
                 $epp * ($params['page'] - 1)
             );
+
+            $params['x-tags'] .= '-' . implode('-', [ $params['year'], $params['month'], $params['day'] ]);
         }
 
         $response = $this->get($this->service)->getList($oql);
@@ -147,12 +151,6 @@ class NewsstandController extends FrontendController
         // No first page and no contents
         if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
-        }
-
-        $params['x-tags'] .= ',kiosko-frontpage';
-
-        if (array_key_exists('year', $params)) {
-            $params['x-tags'] .= '-' . implode('-', [ $params['year'], $params['month'], $params['day'] ]);
         }
 
         $params = array_merge($params, [
