@@ -143,6 +143,7 @@ class ArchiveController extends Controller
             'cache_id'        => $cacheID,
             'newslibraryDate' => $date,
             'x-tags'          => 'archive-page-' . $date,
+            'x-cacheable'     => true
         ]);
     }
 
