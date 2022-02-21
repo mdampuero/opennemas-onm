@@ -159,6 +159,42 @@ class PhotoHelper
         return $sizes . sprintf('%dpx', $last);
     }
 
+    public function getSrcSetFromImagePath($imagePath, $width = 999999)
+    {
+        $srcSet = '';
+        $cuts = $this->theme->getCuts();
+        $largeCut = array_filter($cuts, function ($item) use ($width) {
+            return $item['width'] >= $width;
+        });
+        $largeCut = array_shift($largeCut);
+
+        $avaliableCuts = array_filter(($cuts), function ($item) use ($largeCut) {
+            return $item['width'] < $largeCut['width'];
+        });
+        array_push($avaliableCuts, $largeCut);
+
+        foreach ($avaliableCuts as $key => $value) {
+            if ($value['width'] == $largeCut['width']) {
+                $srcSet .= $this->router->generate('asset_image', [
+                    'params' => implode(
+                        ',',
+                        array_merge([ 'thumbnail' ], [ $value['width'], $value['height'], 'center', 'center' ])
+                    ),
+                    'path'   => $imagePath
+                ], false) . ' ' . $value['width'] . 'w';
+            } else {
+                $srcSet .= $this->router->generate('asset_image', [
+                    'params' => implode(
+                        ',',
+                        array_merge([ 'thumbnail' ], [ $value['width'], $value['height'], 'center', 'center' ])
+                    ),
+                    'path'   => $imagePath
+                ], false) . ' ' . $value['width'] . 'w, ';
+            }
+        }
+        return $srcSet;
+    }
+
     /**
      * Returns the srcset of the provided photo path.
      *
