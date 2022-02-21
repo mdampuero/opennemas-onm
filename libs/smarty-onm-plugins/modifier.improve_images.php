@@ -28,8 +28,7 @@ function smarty_modifier_improve_images($html)
         $out,
         PREG_OFFSET_CAPTURE
     );
-    // var_dump($out);
-    // die();
+
     /*
      * out[0] => array of complete img tag matchs,
      * out[1] => array of widths from img match,
@@ -40,20 +39,17 @@ function smarty_modifier_improve_images($html)
     if ($out[0] && !empty($out[0])) {
         $ph = getService('core.helper.photo');
         foreach ($out[0] as $matchKey => $matchValue) {
-            if (!$out[1][$matchKey] || !(int) $out[1][$matchKey][0]) {
-                $width = 9999;
-            } else {
-                $width = (int) $out[1][$matchKey][0];
-            }
-            $srcSet = $ph->getSrcSetFromImagePath($out[2][$matchKey][0], $width);
+            $width = $out[1][$matchKey][0] ? (int) $out[1][$matchKey][0] : 9999;
+
+            $result = $ph->getSrcSetAndSizesFromImagePath($out[2][$matchKey][0], $width);
 
             $html = preg_replace(
                 '@<img(((?!srcset).)*src="'
                 . $out[2][$matchKey][0] .
                 '".*)>@U',
                 '<img$1 data-srcset="'
-                . $srcSet .
-                '" data-sizes="auto">',
+                . $result['srcset'] .
+                '" sizes="' . $result['sizes'] . '">',
                 $html
             );
         }

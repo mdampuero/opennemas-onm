@@ -19,7 +19,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->helper = $this->getMockBuilder('PhotoHelper')
-            ->setMethods([ 'getSrcSetFromImagePath' ])
+            ->setMethods([ 'getSrcSetAndSizesFromImagePath' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -41,18 +41,20 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
      */
     public function testImproveImageSrcWidth()
     {
-        $this->helper->expects($this->any())->method('getSrcSetFromImagePath')
+        $this->helper->expects($this->any())->method('getSrcSetAndSizesFromImagePath')
             ->with('mercury', 10)
-            ->willReturn(
-                '/asset/thumbnail,480,270,center,center//media/opennemas/images/2018/10/02/2018100212424091861.jpg 480w'
-            );
+            ->willReturn([
+                'srcset' => '/asset/thumbnail,480,270,center,center//' .
+                            'media/opennemas/images/2018/10/02/2018100212424091861.jpg 480w',
+                'sizes' => '480px'
+            ]);
 
         $img = '<img width="10" src="mercury" >';
 
         $this->assertEquals(
             '<img width="10" data-src="mercury"  class="lazyload" data-srcset="' .
             '/asset/thumbnail,480,270,center,center//media/opennemas/images/2018/10/02/2018100212424091861.jpg 480w" ' .
-            'data-sizes="auto">',
+            'sizes="480px">',
             smarty_modifier_improve_images($img)
         );
     }
@@ -62,15 +64,19 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
      */
     public function testImproveImageNoWidth()
     {
-        $this->helper->expects($this->any())->method('getSrcSetFromImagePath')
+        $this->helper->expects($this->any())->method('getSrcSetAndSizesFromImagePath')
             ->with('mercury', 9999)
-            ->willReturn(
-                '/asset/thumbnail,480,270,center,center//media/opennemas/images/2018/10/02/2018100216271084045.jpg ' .
-                '480w, /asset/thumbnail,768,432,center,center//media/opennemas/images/2018/10/02/' .
-                '2018100216271084045.jpg 768w, /asset/thumbnail,992,558,center,center//media/opennemas/images' .
-                '/2018/10/02/2018100216271084045.jpg 992w, /asset/thumbnail,1280,720,center,center//media/opennemas' .
-                '/images/2018/10/02/2018100216271084045.jpg 1280w'
-            );
+            ->willReturn([
+                'srcset' => '/asset/thumbnail,480,270,center,center//' .
+                            'media/opennemas/images/2018/10/02/2018100216271084045.jpg ' .
+                            '480w, /asset/thumbnail,768,432,center,center//media/opennemas/images/2018/10/02/' .
+                            '2018100216271084045.jpg 768w, ' .
+                            '/asset/thumbnail,992,558,center,center//media/opennemas/images' .
+                            '/2018/10/02/2018100216271084045.jpg 992w, ' .
+                            '/asset/thumbnail,1280,720,center,center//media/opennemas' .
+                            '/images/2018/10/02/2018100216271084045.jpg 1280w',
+                'sizes' => '(max-width: 480px) 480px,(max-width: 768px) 768px,(max-width: 992px) 992px,1280px'
+            ]);
 
         $img = '<img src="mercury" >';
 
@@ -81,7 +87,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
             '2018100216271084045.jpg 768w, /asset/thumbnail,992,558,center,center//media/opennemas/images' .
             '/2018/10/02/2018100216271084045.jpg 992w, /asset/thumbnail,1280,720,center,center//media/opennemas' .
             '/images/2018/10/02/2018100216271084045.jpg 1280w" ' .
-            'data-sizes="auto">',
+            'sizes="(max-width: 480px) 480px,(max-width: 768px) 768px,(max-width: 992px) 992px,1280px">',
             smarty_modifier_improve_images($img)
         );
     }
@@ -91,15 +97,19 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
      */
     public function testImproveImageClassNoWidth()
     {
-        $this->helper->expects($this->any())->method('getSrcSetFromImagePath')
+        $this->helper->expects($this->any())->method('getSrcSetAndSizesFromImagePath')
             ->with('mercury', 9999)
-            ->willReturn(
-                '/asset/thumbnail,480,270,center,center//media/opennemas/images/2018/10/02/2018100216271084045.jpg ' .
-                '480w, /asset/thumbnail,768,432,center,center//media/opennemas/images/2018/10/02/' .
-                '2018100216271084045.jpg 768w, /asset/thumbnail,992,558,center,center//media/opennemas/images' .
-                '/2018/10/02/2018100216271084045.jpg 992w, /asset/thumbnail,1280,720,center,center//media/opennemas' .
-                '/images/2018/10/02/2018100216271084045.jpg 1280w'
-            );
+            ->willReturn([
+                'srcset' => '/asset/thumbnail,480,270,center,center' .
+                            '//media/opennemas/images/2018/10/02/2018100216271084045.jpg ' .
+                            '480w, /asset/thumbnail,768,432,center,center//media/opennemas/images/2018/10/02/' .
+                            '2018100216271084045.jpg 768w, ' .
+                            '/asset/thumbnail,992,558,center,center//media/opennemas/images' .
+                            '/2018/10/02/2018100216271084045.jpg 992w, ' .
+                            '/asset/thumbnail,1280,720,center,center//media/opennemas' .
+                            '/images/2018/10/02/2018100216271084045.jpg 1280w',
+                'sizes' => '(max-width: 480px) 480px,(max-width: 768px) 768px,(max-width: 992px) 992px,1280px'
+            ]);
 
         $img = '<img src="mercury" class="camazot">';
 
@@ -110,7 +120,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
             '2018100216271084045.jpg 768w, /asset/thumbnail,992,558,center,center//media/opennemas/images' .
             '/2018/10/02/2018100216271084045.jpg 992w, /asset/thumbnail,1280,720,center,center//media/opennemas' .
             '/images/2018/10/02/2018100216271084045.jpg 1280w" ' .
-            'data-sizes="auto">',
+            'sizes="(max-width: 480px) 480px,(max-width: 768px) 768px,(max-width: 992px) 992px,1280px">',
             smarty_modifier_improve_images($img)
         );
     }
@@ -120,12 +130,13 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
      */
     public function testImproveImageFigure()
     {
-        $this->helper->expects($this->any())->method('getSrcSetFromImagePath')
+        $this->helper->expects($this->any())->method('getSrcSetAndSizesFromImagePath')
             ->with('baz', 340)
-            ->willReturn(
-                '/asset/thumbnail,480,270,center,center//media/opennemas/images/2018/10/02/2018100216271084045.jpg ' .
-                '480w'
-            );
+            ->willReturn([
+                'srcset' => '/asset/thumbnail,480,270,center,center//media/opennemas/images/2018/' .
+                            '10/02/2018100216271084045.jpg 480w',
+                'sizes' => '480px'
+            ]);
 
         $figure = '<figure class="image image-inbody-left" data-random="foo">' .
             '<img width="340" height="340" src="baz">' .
@@ -134,7 +145,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
         $result = '<figure class="image image-inbody-left ckeditor-image" style="width: 340px" data-random="foo">' .
             '<img width="340" height="340" data-src="baz" ' .
             'class="lazyload" data-srcset="/asset/thumbnail,480,270,center,center' .
-            '//media/opennemas/images/2018/10/02/2018100216271084045.jpg 480w" data-sizes="auto">' .
+            '//media/opennemas/images/2018/10/02/2018100216271084045.jpg 480w" sizes="480px">' .
             '</figure>';
 
         $this->assertEquals($result, smarty_modifier_improve_images($figure));

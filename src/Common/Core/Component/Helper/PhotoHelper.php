@@ -6,6 +6,7 @@ use Common\Model\Entity\Instance;
 use Framework\Component\MIME\MimeTypeTool;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * Helper class to retrieve photo data.
@@ -159,15 +160,18 @@ class PhotoHelper
         return $sizes . sprintf('%dpx', $last);
     }
 
-    public function getSrcSetFromImagePath($imagePath, $width = 999999)
+    public function getSrcSetAndSizesFromImagePath($imagePath, $width)
     {
         $srcSet = '';
+        $sizes = '';
         $cuts = $this->theme->getCuts();
         $largeCut = array_filter($cuts, function ($item) use ($width) {
             return $item['width'] >= $width;
         });
+        if (empty($largeCut) || count($largeCut) < 1) {
+            $largeCut = [$cuts[count($cuts) - 1]];
+        }
         $largeCut = array_shift($largeCut);
-
         $avaliableCuts = array_filter(($cuts), function ($item) use ($largeCut) {
             return $item['width'] < $largeCut['width'];
         });
@@ -182,6 +186,7 @@ class PhotoHelper
                     ),
                     'path'   => $imagePath
                 ], false) . ' ' . $value['width'] . 'w';
+                $sizes .= $value['width'] . 'px';
             } else {
                 $srcSet .= $this->router->generate('asset_image', [
                     'params' => implode(
@@ -190,9 +195,14 @@ class PhotoHelper
                     ),
                     'path'   => $imagePath
                 ], false) . ' ' . $value['width'] . 'w, ';
+                $sizes .= '(max-width: ' . $value['width'] . 'px) ' . $value['width'] . 'px,';
             }
         }
-        return $srcSet;
+        $result = [
+            'srcset' => $srcSet,
+            'sizes' => $sizes
+        ];
+        return $result;
     }
 
     /**
