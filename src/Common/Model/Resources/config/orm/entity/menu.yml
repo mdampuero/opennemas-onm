@@ -6,7 +6,7 @@ orm:
             properties:
                 pk_menu:    integer
                 name:       string
-                position:   string
+                position:   l10n_string
                 menu_items: array
             converters:
                 default:

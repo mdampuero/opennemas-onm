@@ -613,7 +613,7 @@ CREATE TABLE `menu_items` (
   PRIMARY KEY (`pk_item`,`pk_menu`),
   KEY `pk_item` (`pk_item`),
   KEY `pk_menu` (`pk_menu`),
-  CONSTRAINT `menuitems_id_menu_id` FOREIGN KEY (`pk_menu`) REFERENCES `menus` (`pk_menu`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `menu_items_id_menu_id` FOREIGN KEY (`pk_menu`) REFERENCES `menus` (`pk_menu`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -653,6 +653,22 @@ LOCK TABLES `menus` WRITE;
 INSERT INTO `menus` VALUES (1,'frontpage','frontpage'),(9,'footer','footer'),(10,'utilities',''),(11,'headlines','');
 /*!40000 ALTER TABLE `menus` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `menumetas`
+--
+
+DROP TABLE IF EXISTS `menumetas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menumetas` (
+  `fk_menu` int(10) unsigned NOT NULL,
+  `meta_key` varchar(255) NOT NULL,
+  `meta_value` text DEFAULT NULL,
+  PRIMARY KEY (`fk_menu`,`meta_key`),
+  FOREIGN KEY (`fk_menu`) REFERENCES `menus` (`pk_menu`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 --
 -- Table structure for table `newsletters`
