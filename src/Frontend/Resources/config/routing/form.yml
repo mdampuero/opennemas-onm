@@ -3,13 +3,17 @@ frontend_participa_frontpage:
     defaults: { _controller: FrontendBundle:Form:frontpage }
     options:
         l10n: true
+        subdirectory: true
 
 frontend_participa_form:
     path: /participa/envia
     defaults: { _controller: FrontendBundle:Form:frontpage }
     options:
         l10n: true
+        subdirectory: true
 
 frontend_participa_send:
     path: /participa/send
     defaults: { _controller: FrontendBundle:Form:send }
+    options:
+        subdirectory: true

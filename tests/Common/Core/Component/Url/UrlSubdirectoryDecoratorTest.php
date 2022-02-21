@@ -20,6 +20,16 @@ class UrlSubdirectoryDecoratorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContext' ])
             ->getMock();
 
+        $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'match', 'getRouteCollection', 'all' ])
+            ->getMock();
+
+        $this->route = $this->getMockBuilder('Symfony\Component\Routing\Route')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getOption' ])
+            ->getMock();
+
         $this->urlHelper = $this->getMockBuilder('Common\Core\Component\Helper\UrlHelper')
             ->disableOriginalConstructor()
             ->setMethods([ 'parse', 'unparse' ])
@@ -52,6 +62,9 @@ class UrlSubdirectoryDecoratorTest extends \PHPUnit\Framework\TestCase
             case 'core.instance':
                 return new Instance([ 'subdirectory' => '/sub' ]);
 
+            case 'router':
+                return $this->router;
+
             default:
                 return null;
         }
@@ -62,15 +75,25 @@ class UrlSubdirectoryDecoratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrefixUrlWhenNoInner()
     {
+        $this->router->expects($this->at(0))->method('match')
+            ->willReturn([ '_route' => 'glorp_baz' ]);
+
+        $this->router->expects($this->at(1))->method('getRouteCollection')
+            ->willReturn($this->router);
+
+        $this->router->expects($this->at(2))->method('all')
+            ->willReturn([ 'glorp_baz' => $this->route ]);
+
+        $this->route->expects($this->once())->method('getOption')
+            ->with('subdirectory')
+            ->willReturn(true);
+
         $this->urlHelper->expects($this->once())->method('parse')
             ->willReturn([ 'path' => '/foo/baz/glorp.php' ]);
 
         $this->urlHelper->expects($this->once())->method('unparse')
             ->with([ 'path' => '/sub/foo/baz/glorp.php' ])
             ->willReturn('/sub/foo/baz/glorp.php');
-
-        $this->locale->expects($this->once())->method('getContext')
-            ->willReturn('frontend');
 
         $this->assertEquals('/sub/foo/baz/glorp.php', $this->decorator->prefixUrl('/foo/baz/glorp.php'));
     }
@@ -84,6 +107,19 @@ class UrlSubdirectoryDecoratorTest extends \PHPUnit\Framework\TestCase
 
         $decorator = new UrlSubdirectoryDecorator($this->container, $this->urlHelper, $this->innerDecorator);
 
+        $this->router->expects($this->at(0))->method('match')
+            ->willReturn([ '_route' => 'glorp_baz' ]);
+
+        $this->router->expects($this->at(1))->method('getRouteCollection')
+            ->willReturn($this->router);
+
+        $this->router->expects($this->at(2))->method('all')
+            ->willReturn([ 'glorp_baz' => $this->route ]);
+
+        $this->route->expects($this->once())->method('getOption')
+            ->with('subdirectory')
+            ->willReturn(true);
+
         $this->innerDecorator->expects($this->once())->method('prefixUrl')
             ->with($url)
             ->willReturn('/en/foo/baz/glorp.php');
@@ -94,9 +130,6 @@ class UrlSubdirectoryDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->urlHelper->expects($this->once())->method('unparse')
             ->with([ 'path' => '/sub/en/foo/baz/glorp.php' ])
             ->willReturn('/sub/en/foo/baz/glorp.php');
-
-        $this->locale->expects($this->once())->method('getContext')
-            ->willReturn('frontend');
 
         $this->assertEquals('/sub/en/foo/baz/glorp.php', $decorator->prefixUrl($url));
     }
@@ -110,8 +143,14 @@ class UrlSubdirectoryDecoratorTest extends \PHPUnit\Framework\TestCase
             ->with('/admin/foo/baz')
             ->willReturn([ 'path' => '/admin/foo/baz' ]);
 
-        $this->locale->expects($this->once())->method('getContext')
-            ->willReturn('backend');
+        $this->router->expects($this->at(0))->method('match')
+            ->willReturn([ '_route' => 'foo_baz' ]);
+
+        $this->router->expects($this->at(1))->method('getRouteCollection')
+            ->willReturn($this->router);
+
+        $this->router->expects($this->at(2))->method('all')
+            ->willReturn([ 'glorp_baz' => $this->route ]);
 
         $this->assertEquals('/admin/foo/baz', $this->decorator->prefixUrl('/admin/foo/baz'));
     }

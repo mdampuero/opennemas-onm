@@ -3,6 +3,7 @@ frontend_video_frontpage:
     defaults: { _controller: FrontendBundle:Video:list }
     options:
         l10n: true
+        subdirectory: true
 
 # Route to redirect to frontend_video_frontpage and to remove in the future
 frontend_video_frontpage_category:
@@ -12,6 +13,7 @@ frontend_video_frontpage_category:
         category_slug: '[^/]+'
     options:
         l10n: true
+        subdirectory: true
 
 frontend_video_show:
     path:     /video/{category_slug}/{slug}/{created}{id}.html
@@ -24,6 +26,7 @@ frontend_video_show:
     options:
         l10n: true
         expose: true
+        subdirectory: true
 
 frontend_video_show_amp:
     path:     /video/{category_slug}/{slug}/{created}{id}.amp.html
@@ -35,3 +38,4 @@ frontend_video_show_amp:
         slug:          '[^/]+'
     options:
         l10n: true
+        subdirectory: true

@@ -3,6 +3,7 @@ frontend_album_frontpage:
     defaults: { _controller: FrontendBundle:Album:list }
     options:
         l10n: true
+        subdirectory: true
 
 frontend_album_frontpage_category:
     path:     /album/{category_slug}
@@ -11,6 +12,7 @@ frontend_album_frontpage_category:
         category_slug: '[^/]+'
     options:
         l10n: true
+        subdirectory: true
 
 frontend_album_show:
     path:     /album/{category_slug}/{slug}/{created}{id}.html
@@ -23,6 +25,7 @@ frontend_album_show:
     options:
         expose: true
         l10n: true
+        subdirectory: true
 
 frontend_album_show_amp:
     path:     /album/{category_name}/{slug}/{created}{id}.amp.html
@@ -34,3 +37,4 @@ frontend_album_show_amp:
         slug:          '[^/]+'
     options:
         l10n: true
+        subdirectory: true

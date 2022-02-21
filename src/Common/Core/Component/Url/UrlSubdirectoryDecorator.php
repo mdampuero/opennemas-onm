@@ -25,7 +25,7 @@ class UrlSubdirectoryDecorator extends UrlDecorator
 
         $parts = $this->urlHelper->parse($url);
 
-        if (!$this->isDecorable()) {
+        if (!array_key_exists('path', $parts) || empty($parts['path']) || !$this->isDecorable($parts['path'])) {
             return $url;
         }
 
@@ -40,14 +40,27 @@ class UrlSubdirectoryDecorator extends UrlDecorator
     /**
      * Returns true if the url can be decorated and false otherwise.
      *
+     * @param string $path The path to check if is decorable.
+     *
      * @return bool True if the url can be decorated, false otherwise.
      */
-    private function isDecorable()
+    private function isDecorable(string $path)
     {
-        if ($this->container->get('core.locale')->getContext() === 'backend') {
+        try {
+            $path       = preg_replace('@/$@', '', $path);
+            $parameters = $this->container->get('router')->match($path);
+            $routeName  = $parameters['_route'];
+        } catch (\Exception $e) {
             return false;
         }
 
-        return true;
+        $routes = array_filter(
+            $this->container->get('router')->getRouteCollection()->all(),
+            function ($route) {
+                return true === $route->getOption('subdirectory');
+            }
+        );
+
+        return in_array($routeName, array_keys($routes));
     }
 }

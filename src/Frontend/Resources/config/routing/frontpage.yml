@@ -3,7 +3,7 @@ frontend_frontpage:
     defaults: { _controller: FrontendBundle:Frontpages:show }
     options:
         l10n: true
-
+        subdirectory: true
 frontend_frontpage_category:
     path: /seccion/{category}
     defaults: { _controller: FrontendBundle:Frontpages:show }
@@ -11,3 +11,5 @@ frontend_frontpage_category:
         l10n: true
     requirements:
         category: '[^/]+'
+    options:
+        subdirectory: true

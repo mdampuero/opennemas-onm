@@ -1,23 +1,30 @@
 frontend_rss_facebook_instant_articles:
     path:     /rss/facebook-instant-articles
     defaults: { _controller: FrontendBundle:Rss:facebookInstantArticles }
+    options:
+        subdirectory: true
 
 frontend_rss_listing:
     path:     /rss/listado
     defaults: { _controller: FrontendBundle:Rss:index }
     options:
         l10n: true
+        subdirectory: true
 
 frontend_rss_author:
     path: /rss/author/{author_slug}
     defaults: { _controller: FrontendBundle:Rss:authorRSS }
     requirements:
         author_slug: '[^/]+'
+    options:
+        subdirectory: true
 
 # For app only
 frontend_rss_frontpage:
     path:     /rss/frontpage
     defaults: { _controller: FrontendBundle:Rss:frontpageRss }
+    options:
+        subdirectory: true
 
 # For app only
 frontend_rss_frontpage_category:
@@ -25,16 +32,22 @@ frontend_rss_frontpage_category:
     defaults: { _controller: FrontendBundle:Rss:frontpageRss }
     requirements:
         category: '[^/]+'
+    options:
+        subdirectory: true
 
 frontend_rss:
     path:     /rss
     defaults: { _controller: FrontendBundle:Rss:generalRss }
+    options:
+        subdirectory: true
 
 frontend_rss_type:
     path:     /rss/{type}
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     requirements:
         type: '(album|opinion|video)'
+    options:
+        subdirectory: true
 
 frontend_rss_type_category:
     path:     /rss/{type}/{category}
@@ -42,9 +55,13 @@ frontend_rss_type_category:
     requirements:
         type:     '(album|opinion|video)'
         category: '[^/]*'
+    options:
+        subdirectory: true
 
 frontend_rss_category:
     path: /rss/{category}
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     requirements:
         category: '[^/]+'
+    options:
+        subdirectory: true

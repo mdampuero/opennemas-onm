@@ -8,6 +8,7 @@ frontend_external_article_show:
         article_id   : '([0-9]+)'
     options:
         l10n: true
+        subdirectory: true
 
 frontend_article_show:
     path:     /articulo/{category_slug}/{slug}/{created}{id}.html
@@ -20,6 +21,7 @@ frontend_article_show:
     options:
         expose: true
         l10n: true
+        subdirectory: true
 
 frontend_article_show_amp:
     path:     /articulo/{category_slug}/{slug}/{created}{id}.amp.html
@@ -31,3 +33,4 @@ frontend_article_show_amp:
         id:            '[0-9]+'
     options:
         l10n: true
+        subdirectory: true

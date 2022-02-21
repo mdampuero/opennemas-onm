@@ -7,6 +7,7 @@ frontend_archive_content:
         day       : '[0-9]+'
     options:
         l10n: true
+        subdirectory: true
 
 frontend_digital_frontpage:
     path: /archive/digital/{year}/{month}/{day}/{category_slug}.{_format}
@@ -18,6 +19,7 @@ frontend_digital_frontpage:
         day       : '([0-9]+)'
     options:
         l10n: true
+        subdirectory: true
 
 frontend_archive:
     path: /archive/{component}
@@ -26,3 +28,4 @@ frontend_archive:
         component  : 'content|digital'
     options:
         l10n: true
+        subdirectory: true

@@ -4,6 +4,7 @@ frontend_obituaries:
     defaults: { _controller: FrontendBundle:Obituary:list }
     options:
         l10n: true
+        subdirectory: true
 
 frontend_obituary_show:
     path:     /esquela/{slug}/{created}{id}.html
@@ -15,6 +16,7 @@ frontend_obituary_show:
     options:
         expose: true
         l10n: true
+        subdirectory: true
 
 frontend_obituary_show_amp:
     path:     /esquela/{slug}/{created}{id}.amp.html
@@ -25,3 +27,4 @@ frontend_obituary_show_amp:
         id:            '[0-9]+'
     options:
         l10n: true
+        subdirectory: true

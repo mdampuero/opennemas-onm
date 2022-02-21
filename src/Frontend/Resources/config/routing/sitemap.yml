@@ -3,30 +3,40 @@ frontend_index_sitemap:
     defaults: { _controller: FrontendBundle:Sitemap:index, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
+    options:
+        subdirectory: true
 
 frontend_categories_sitemap:
     path: /sitemap.categories.{format}
     defaults: { _controller: FrontendBundle:Sitemap:categories, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
+    options:
+        subdirectory: true
 
 frontend_authors_sitemap:
     path: /sitemap.authors.{format}
     defaults: { _controller: FrontendBundle:Sitemap:authors, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
+    options:
+        subdirectory: true
 
 frontend_news_sitemap:
     path: /sitemap.news.{format}
     defaults: { _controller: FrontendBundle:Sitemap:news, format: 'xml'}
     requirements:
         format: 'xml|xml.gz'
+    options:
+        subdirectory: true
 
 frontend_contents_latest:
     path: sitemap.contents.latest.{format}
     defaults: { _controller: FrontendBundle:Sitemap:contents, format: 'xml.gz', year: null, month: null, page: null}
     requirements:
         format: 'xml.gz'
+    options:
+        subdirectory: true
 
 frontend_contents_sitemap:
     path: sitemap.contents.{year}.{month}.{page}.{format}
@@ -36,30 +46,40 @@ frontend_contents_sitemap:
         year:   '[0-9]{4}'
         month:  '[0-9]{2}'
         page:   '[1-9][0-9]*'
+    options:
+        subdirectory: true
 
 frontend_contents_sitemap_old:
     path: sitemapweb.{format}
     defaults: { _controller: FrontendBundle:Sitemap:oldContents, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
+    options:
+        subdirectory: true
 
 frontend_contents_sitemap_image_old:
     path: sitemapimage.{format}
     defaults: { _controller: FrontendBundle:Sitemap:oldContents, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
+    options:
+        subdirectory: true
 
 frontend_contents_sitemap_video_old:
     path: sitemapvideo.{format}
     defaults: { _controller: FrontendBundle:Sitemap:oldContents, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
+    options:
+        subdirectory: true
 
 frontend_old_news_sitemap:
     path: /sitemapnews.{format}
     defaults: { _controller: FrontendBundle:Sitemap:oldNews, format: 'xml'}
     requirements:
         format: 'xml|xml.gz'
+    options:
+        subdirectory: true
 
 frontend_tag_sitemap:
     path: /sitemap.tag.{letter}.{format}
@@ -68,9 +88,13 @@ frontend_tag_sitemap:
         format: 'xml|xml.gz'
         letter: '.|%[a-zA-Z0-9]{2}'
         page:   '[1-9][0-9]*'
+    options:
+        subdirectory: true
 
 frontend_tag_sitemap_old:
     path: sitemaptag.{format}
     defaults: { _controller: FrontendBundle:Sitemap:oldTag, format: 'xml' }
     requirements:
         format: 'xml|xml.gz'
+    options:
+        subdirectory: true

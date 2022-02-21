@@ -7,3 +7,4 @@ frontend_static_page:
     options:
         l10n: true
         expose: true
+        subdirectory: true

@@ -3,6 +3,7 @@ frontend_tag_index:
     defaults: { _controller: FrontendBundle:Tag:list }
     options:
         l10n: true
+        subdirectory: true
 
 frontend_tag_frontpage:
     path:     /{resource}/{slug}
@@ -12,3 +13,4 @@ frontend_tag_frontpage:
         slug: '[^\/]+'
     options:
         l10n: true
+        subdirectory: true

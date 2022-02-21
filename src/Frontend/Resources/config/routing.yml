@@ -1,14 +1,20 @@
 frontend_robots:
     path: /robots.txt
     defaults: { _controller: FrontendBundle:Robots:index }
+    options:
+        subdirectory: true
 
 utilities_sharrre:
     path: /utilities/sharrre
     defaults: { _controller: FrontendBundle:Utilities:sharrre }
+    options:
+        subdirectory: true
 
 frontend_playground:
     path: /playground/{action}
     defaults: { _controller: FrontendBundle:Playground:default }
+    options:
+        subdirectory: true
 
 frontend_advertisement:
     resource: '@FrontendBundle/Resources/config/routing/advertisement.yml'

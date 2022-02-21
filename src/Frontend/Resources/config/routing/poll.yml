@@ -4,6 +4,7 @@ frontend_poll_frontpage:
     requirements:
     options:
         l10n: true
+        subdirectory: true
 
 frontend_poll_frontpage_category:
     path:     /encuesta/{category_slug}
@@ -12,6 +13,7 @@ frontend_poll_frontpage_category:
         category_slug: '[^/]+'
     options:
         l10n: true
+        subdirectory: true
 
 frontend_poll_show:
     path: /encuesta/{category_slug}/{slug}/{created}{id}.html
@@ -24,12 +26,15 @@ frontend_poll_show:
     options:
         expose: true
         l10n: true
+        subdirectory: true
 
 frontend_poll_vote:
     path: /encuesta/{id}/vote
     defaults: { _controller: FrontendBundle:Poll:vote }
     requirements:
         id: '([0-9]+)'
+    options:
+        subdirectory: true
 
 frontend_poll_show_amp:
     path:     /encuesta/{category_name}/{slug}/{created}{id}.amp.html
@@ -41,3 +46,4 @@ frontend_poll_show_amp:
         slug:          '[^/]+'
     options:
         l10n: true
+        subdirectory: true
