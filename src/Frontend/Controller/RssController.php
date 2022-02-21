@@ -204,7 +204,7 @@ class RssController extends FrontendController
         $response = $this->render('rss/rss.tpl', [
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
-            'x-cache-for' => '1d',
+            'x-cache-for' => $expire,
             'x-tags'      => $xtags
         ]);
 
