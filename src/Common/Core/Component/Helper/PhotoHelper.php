@@ -6,7 +6,6 @@ use Common\Model\Entity\Instance;
 use Framework\Component\MIME\MimeTypeTool;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Router;
-use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * Helper class to retrieve photo data.
