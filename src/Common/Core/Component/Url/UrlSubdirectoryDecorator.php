@@ -47,7 +47,7 @@ class UrlSubdirectoryDecorator extends UrlDecorator
     private function isDecorable(string $path)
     {
         try {
-            $path       = preg_replace('@/$@', '', $path);
+            $path       = $path !== '/' ? preg_replace('@/$@', '', $path) : $path;
             $parameters = $this->container->get('router')->match($path);
             $routeName  = $parameters['_route'];
         } catch (\Exception $e) {
