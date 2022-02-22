@@ -7,6 +7,7 @@ use Api\Helper\Cache\ContentCacheHelper;
 use Api\Helper\Cache\NewsstandCacheHelper;
 use Common\Model\Entity\Content;
 use Common\Model\Entity\Instance;
+use DateTime;
 use Opennemas\Task\Component\Task\ServiceTask;
 
 /**
@@ -66,8 +67,9 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
             [
                 'content_type_name' => 'kiosko',
                 'path'              => '/glorp/baz.foo',
-                'pk_content'       => 1,
-                'tags'             => []
+                'pk_content'        => 1,
+                'tags'              => [ 128 ],
+                'starttime'         => new DateTime()
             ]
         );
 
@@ -86,13 +88,16 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteItemWhenAlbum()
     {
+        $now = new DateTime();
+
         $album = new Content(
             [
                 'categories'        => [ 2 ],
                 'content_type_name' => 'album',
                 'fk_author'         => 2,
                 'pk_content'        => 1,
-                'tags'              => [ 1, 2, 3 ]
+                'tags'              => [ 1, 2, 3 ],
+                'starttime'         => $now
             ]
         );
 
@@ -103,61 +108,66 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->queue->expects($this->at(0))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'archive-page-' . $now->format('Y-m-d'))
+            ]));
+
+        $this->queue->expects($this->at(1))->method('push')
+            ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'authors-frontpage')
             ]));
 
 
-        $this->queue->expects($this->at(1))->method('push')
+        $this->queue->expects($this->at(2))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'category-2')
             ]));
 
-        $this->queue->expects($this->at(2))->method('push')
+        $this->queue->expects($this->at(3))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'content-author-2')
             ]));
 
-        $this->queue->expects($this->at(3))->method('push')
+        $this->queue->expects($this->at(4))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'frontpage-page')
             ]));
 
-        $this->queue->expects($this->at(4))->method('push')
+        $this->queue->expects($this->at(5))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'album-*-inner')
             ]));
 
-        $this->queue->expects($this->at(5))->method('push')
+        $this->queue->expects($this->at(6))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'album-frontpage$')
             ]));
 
-        $this->queue->expects($this->at(6))->method('push')
+        $this->queue->expects($this->at(7))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'rss-author-2')
             ]));
 
-        $this->queue->expects($this->at(7))->method('push')
+        $this->queue->expects($this->at(8))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'rss-frontpage$')
             ]));
 
-        $this->queue->expects($this->at(8))->method('push')
+        $this->queue->expects($this->at(9))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'rss-album$')
             ]));
 
-        $this->queue->expects($this->at(9))->method('push')
+        $this->queue->expects($this->at(10))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'rss-album,category-2')
             ]));
 
-        $this->queue->expects($this->at(10))->method('push')
+        $this->queue->expects($this->at(11))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'sitemap')
             ]));
 
-        $this->queue->expects($this->at(11))->method('push')
+        $this->queue->expects($this->at(12))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', '(tag-1)|(tag-2)|(tag-3)')
             ]));
