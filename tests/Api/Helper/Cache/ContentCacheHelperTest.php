@@ -106,29 +106,30 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
                 sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'authors-frontpage')
             ]));
 
+
         $this->queue->expects($this->at(1))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'content-author-2')
+                sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'category-2')
             ]));
 
         $this->queue->expects($this->at(2))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'frontpage-page')
+                sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'content-author-2')
             ]));
 
         $this->queue->expects($this->at(3))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'album-*-inner')
+                sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'frontpage-page')
             ]));
 
         $this->queue->expects($this->at(4))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'album-frontpage$')
+                sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'album-*-inner')
             ]));
 
         $this->queue->expects($this->at(5))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'album-frontpage,category-2')
+                sprintf('obj.http.x-tags ~ instance-%s.*%s', 'glorp', 'album-frontpage$')
             ]));
 
         $this->queue->expects($this->at(6))->method('push')

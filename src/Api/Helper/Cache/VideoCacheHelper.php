@@ -9,11 +9,11 @@ class VideoCacheHelper extends ContentCacheHelper
      */
     protected $varnishKeys = [
         'authors-frontpage',
+        'category-{{category_id}}',
         'content-author-{{fk_author}}',
         'frontpage-page',
         '{{content_type_name}}-*-inner',
         '{{content_type_name}}-frontpage$',
-        '{{content_type_name}}-frontpage,category-{{category_id}}',
         'rss-author-{{fk_author}}',
         'rss-frontpage$',
         'rss-{{content_type_name}}$',

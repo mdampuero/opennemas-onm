@@ -105,6 +105,10 @@ class VideoController extends FrontendController
 
         $params['x-tags'] .= ',video-frontpage';
 
+        if (!empty($category)) {
+            $params['x-tags'] .= sprintf(',category-%d', $category->id);
+        }
+
         $params = array_merge($params, [
             'videos'      => $response['items'],
             'total'       => $response['total'],

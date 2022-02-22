@@ -11,6 +11,7 @@ class PollCacheHelper extends ContentCacheHelper
         'frontpage-page',
         '{{content_type_name}}-{{pk_content}}-inner',
         '{{content_type_name}}-frontpage$',
+        '{{content_type_name}}-frontpage,category-{{category_id}}',
         'rss-frontpage$',
         'sitemap',
         'tag-{{tag_id}}',
