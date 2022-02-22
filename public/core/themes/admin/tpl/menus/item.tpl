@@ -22,12 +22,12 @@
 {block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="category" iField="category" iIcon="fa fa-newspaper-o" iSearcModel="search_categories" iName="Automatic categories" iData="menuData.category"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="blog-category" iField="blog-category" iIcon="fa fa-bookmark" iSearcModel="search_manual_categories" iName="Manual categories" iData="menuData['blog-category']"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="static" iField="static" iIcon="fa fa-file" iSearcModel="search_pages" iName="Static pages" iData="menuData.static"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="internal" iField="internal" iIcon="fa fa-cube" iSearcModel="search_modules" iName="Modules" iData="menuData.internal"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="syncBlogCategory" iField="syncBlogCategory" iIcon="fa fa-exchange" iSearcModel="search_sites" iName="Synchronized sites" iData="menuData.syncBlogCategory"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="external" iIcon="fa fa-external-link" iName="Custom link" iData="linkData"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="category" iIcon="fa fa-newspaper-o" iSearchModel="search_categories" iName="{t}Automatic categories{/t}" iData="menuData.category"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="blog-category" iIcon="fa fa-bookmark" iSearchModel="search_manual_categories" iName="{t}Manual categories{/t}" iData="menuData['blog-category']"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="static" iIcon="fa fa-file" iSearchModel="search_pages" iName="{t}Static pages{/t}" iData="menuData.static"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="internal" iIcon="fa fa-cube" iSearchModel="search_modules" iName="{t}Modules{/t}" iData="menuData.internal"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="syncBlogCategory" iIcon="fa fa-exchange" iSearchModel="search_sites" iName="{t}Synchronized sites{/t}" iData="menuData.syncBlogCategory"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="external" iIcon="fa fa-external-link" iName="Custom link" iData="linkData" iSimple=true}
     </div>
   </div>
 {/block}
@@ -69,9 +69,9 @@
 
 {block name="modals"}
   <script type="text/ng-template" id="menu-item">
-    {include file="menues/partials/_menu_item.tpl"}
+    {include file="menus/partials/_menu_item.tpl"}
   </script>
   <script type="text/ng-template" id="menu-sub-item">
-    {include file="menues/partials/_menu_item.tpl" subitem="true"}
+    {include file="menus/partials/_menu_item.tpl" subitem="true"}
   </script>
 {/block}

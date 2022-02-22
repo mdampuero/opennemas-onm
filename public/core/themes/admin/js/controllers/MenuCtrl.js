@@ -49,6 +49,8 @@
           uniqueID: null
         };
 
+        $scope.search = {};
+
         // Unique ID for all elements
         $scope.uniqueID = 0;
 
@@ -184,10 +186,12 @@
           $scope.uniqueID++;
         };
 
-        // Searchbar function
-        $scope.visible = function(item, searchModel) {
-          return !($scope[searchModel] && $scope[searchModel].length > 0 &&
-            item.title.toLowerCase().indexOf($scope[searchModel]) === -1);
+        $scope.filterItems = function(item) {
+          if (!item.type || !$scope.search[item.type]) {
+            return true;
+          }
+
+          return item.title.toLowerCase().indexOf($scope.search[item.type].toLowerCase()) !== -1;
         };
 
         // Localize function

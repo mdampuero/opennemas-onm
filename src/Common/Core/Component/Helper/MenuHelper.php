@@ -1,53 +1,45 @@
 <?php
-/**
- * This file is part of the Onm package.
- *
- * (c) Openhost, S.L. <developers@opennemas.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
 namespace Common\Core\Component\Helper;
 
+/**
+ * Helper class to retrieve Menu data.
+ */
 class MenuHelper
 {
-    public function getMenuItems($item)
+    protected $keys = [
+        'link_name', 'title'
+    ];
+
+     /**
+     * Initializes the Menu service.
+     *
+     * @param Container          $container The service container.
+     */
+    public function __construct($container)
     {
-        $menuItems = $item->menu_items;
+        $this->container = $container;
+    }
 
-        foreach ($menuItems as $element) {
-            $serializedData = @unserialize($element['title']);
-            if ($serializedData !== false) {
-                $element['title'] = $serializedData;
+    /**
+     * Checks if the album has photos.
+     *
+     * @param Content $item The album.
+     *
+     * @return bool True if the album has photos. False otherwise.
+     */
+    public function localizeMenuItems(array $items) : array
+    {
+        $localizedItems = [];
+        $curentLocale   = $this->container->get('core.helper.locale')->getSelectedLocale();
+        foreach ($items as $item) {
+            foreach ($this->keys as $key) {
+                if (is_array($item[$key]) && $item[$key][$curentLocale]) {
+                    $item[$key] = $item[$key][$curentLocale];
+                }
             }
-
-            $serializedData = @unserialize($element['link_name']);
-            if ($serializedData !== false) {
-                $element['link_name'] = $serializedData;
-            }
-
-            $menuItem            = new \stdClass();
-            $menuItem->pk_item   = (int) $element['pk_item'] ?? 0;
-            $menuItem->position  = (int) $element['position'] ?? 0;
-            $menuItem->type      = $element['type'] ?? '';
-            $menuItem->pk_father = (int) $element['pk_father'] ?? 0;
-            $menuItem->submenu   = [];
-            $menuItem->title     = $element['title'] ?? '';
-            $menuItem->link_name      = $element['link_name'] ?? '';
-
-            $menuItems[$element['pk_item']] = $menuItem;
+            array_push($localizedItems, $item);
         }
-
-        foreach ($menuItems as $id => $element) {
-            if (((int) $element->pk_father > 0)
-                && isset($menuItems[$element->pk_father])
-                && isset($menuItems[$element->pk_father]->submenu)
-            ) {
-                $menuItems[$element->pk_father]->submenu[] = $element;
-                unset($menuItems[$id]);
-            }
-        }
-
-        return array_values($menuItems);
+        return $localizedItems;
     }
 }

@@ -42,9 +42,7 @@ angular.module('BackendApp.controllers')
       $scope.routes = {
         deleteItem: 'api_v1_backend_menu_delete_item',
         deleteList: 'api_v1_backend_menu_delete_list',
-        getList:    'api_v1_backend_menu_get_list',
-        patchItem:  'api_v1_backend_menu_patch_item',
-        patchList:  'api_v1_backend_menu_patch_list'
+        getList:    'api_v1_backend_menu_get_list'
       };
 
       /**

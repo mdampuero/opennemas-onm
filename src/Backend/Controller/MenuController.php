@@ -33,7 +33,7 @@ class MenuController extends BackendController
     /**
      * {@inheritdoc}
      */
-    protected $resource = 'menues';
+    protected $resource = 'menus';
 
 
     /**
@@ -47,11 +47,7 @@ class MenuController extends BackendController
     public function showAction(Request $request, $id)
     {
         $params = [
-            'id' => $id,
-            'menu_positions' => array_merge(
-                [ '' => _('Without position') ],
-                $this->get('core.manager.menu')->getMenus()
-            )
+            'id' => $id
         ];
 
         if ($this->get('core.helper.locale')->hasMultilanguage()) {
@@ -61,16 +57,38 @@ class MenuController extends BackendController
         return $this->render($this->resource . '/item.tpl', $params);
     }
 
-    /**
-     * Config for article system
+     /**
+     * Lists all the available menus
      *
-     * @return Response the response object
+     * @param Request $request the request object
      *
-     * @Security("hasExtension('COMMENT_MANAGER')
-     *     and hasPermission('COMMENT_SETTINGS')")
+     * @return Response
+     *
+     * @Security("hasExtension('MENU_MANAGER')
+     *     and hasPermission('MENU_ADMIN')")
      */
-    public function configAction()
+    public function listAction(Request $request)
     {
-        return $this->render('comment/config.tpl');
+        return $this->render('menus/list.tpl', [
+            'menu_positions' => $this->getMenuPositions(),
+            'language_data'  => $this->getLocaleData($request),
+            'multilanguage' => in_array(
+                'es.openhost.module.multilanguage',
+                $this->get('core.instance')->activated_modules
+            )
+        ]);
+    }
+
+    /**
+     * Returns the list of menu positions
+     *
+     * @return array the list of menu positions
+     */
+    private function getMenuPositions()
+    {
+        return array_merge(
+            [ '' => _('Without position') ],
+            $this->container->get('core.manager.menu')->getMenus()
+        );
     }
 }

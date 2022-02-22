@@ -12,7 +12,7 @@ namespace Api\Controller\V1\Backend;
 use Api\Controller\V1\ApiController;
 
 /**
- * Displays, saves, modifies and removes menues.
+ * Displays, saves, modifies and removes menus.
  */
 class MenuController extends ApiController
 {
@@ -98,7 +98,6 @@ class MenuController extends ApiController
         ],
     ];
 
-
     /**
      * {@inheritdoc}
      */
@@ -110,43 +109,20 @@ class MenuController extends ApiController
     protected function getExtraData()
     {
         $params = [
-            'category'     => $this->getCategories(),
-            'locale'         => $this->get('core.helper.locale')->getConfiguration(),
-            'menu_positions' => $this->getMenuPositions(),
-            'internal'          => $this->getModulePages(),
-            'static'   => $this->getStaticPages(),
-            'syncBlogCategory'     => $this->getSyncSites(),
-            'keys'           => $this->getL10nKeys(),
-            'multilanguage'  => in_array(
+            'category'         => $this->getCategories(),
+            'locale'           => $this->get('core.helper.locale')->getConfiguration(),
+            'menu_positions'   => $this->getMenuPositions(),
+            'internal'         => $this->getModulePages(),
+            'static'           => $this->getStaticPages(),
+            'syncBlogCategory' => $this->getSyncSites(),
+            'keys'             => $this->getL10nKeys(),
+            'multilanguage'    => in_array(
                 'es.openhost.module.multilanguage',
                 $this->get('core.instance')->activated_modules
             )
         ];
 
         return $params;
-    }
-
-    protected function getMenuItems($content)
-    {
-        $extra = [];
-
-        if (empty($content)) {
-            return $extra;
-        }
-
-        if (is_object($content)) {
-            $content = [ $content ];
-        }
-
-        foreach ($content as $element) {
-            if (!is_array($element->menu_items)) {
-                continue;
-            }
-
-            array_push($extra, $element->menu_items);
-        }
-
-        return $extra;
     }
 
     /**
@@ -159,7 +135,7 @@ class MenuController extends ApiController
         $context = $this->get('core.locale')->getContext();
         $this->get('core.locale')->setContext('frontend');
 
-        $oql = 'content_type_name = "static_page" and in_litter = "0"'
+        $oql = 'content_type_name = "static_page" and in_litter = 0'
            . ' order by created desc';
 
         $response = $this->get('api.service.content')->getList($oql);
@@ -197,7 +173,7 @@ class MenuController extends ApiController
         $context = $this->get('core.locale')->getContext();
         $this->get('core.locale')->setContext('frontend');
 
-        $oql = 'visible = "1" and enabled = "1"'
+        $oql = 'visible = 1 and enabled = 1'
         . ' order by title asc';
 
         $categories = $this->get('api.service.category')->getList($oql);
@@ -215,7 +191,7 @@ class MenuController extends ApiController
     private function getMenuPositions()
     {
         $avaliableMenus = $this->get('core.theme')->getMenus();
-        $menuPositions = [
+        $menuPositions  = [
             '' => _('Without position')
         ];
         foreach ($avaliableMenus as $menuKey => $menuValue) {
@@ -241,32 +217,20 @@ class MenuController extends ApiController
      */
     private function getModulePages()
     {
-        $pages = [['title' => _("Frontpage"),'link' => "/"]];
-
-        foreach ($this->modulePages as $page) {
-            if ($this->get('core.security')->hasExtension($page['module'])) {
-                if (array_key_exists('params', $page)) {
-                    $link = trim(
-                        $this->get('router')->generate(
-                            $page['route'],
-                            $page['params']
-                        ),
-                        '/'
-                    );
-                } else {
-                    $link = trim(
-                        $this->get('router')->generate($page['route']),
-                        '/'
-                    );
-                }
-                $pages[] = [
-                    'title' => _($page['title']),
-                    'link'  => $link
-                ];
+        $default = [ ['title' => _("Frontpage"),'link' => "/"] ];
+        $modules = array_filter(array_map(function ($page) {
+            if (!$this->get('core.security')->hasExtension($page['module'])) {
+                return null;
             }
-        }
 
-        return $pages;
+            $link = array_key_exists('params', $page) ?
+                trim($this->get('router')->generate($page['route'], $page['params']), '/') :
+                trim($this->get('router')->generate($page['route']), '/');
+
+            return [ 'title' => _($page['title']), 'link'  => $link ];
+        }, $this->modulePages));
+
+        return array_merge($default, $modules);
     }
 
     protected function getItemId($item)

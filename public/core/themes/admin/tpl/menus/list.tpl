@@ -56,7 +56,7 @@
 {/block}
 
 {block name="list"}
-  {include file="menues/list.table.tpl"}
+  {include file="menus/list.table.tpl"}
 {/block}
 
 {block name="modals"}

@@ -65,13 +65,8 @@ class MenuPersister extends BasePersister
      */
     public function update(Entity $entity)
     {
-        if (empty($entity->starttime) && !empty($entity->content_status)) {
-            $entity->starttime = new \DateTime();
-        }
-
-        $changes    = $entity->getChanges();
+        $changes   = $entity->getChanges();
         $menuItems = $entity->menu_items;
-
 
         // Menu items change
         if (array_key_exists('menu_items', $changes)) {
@@ -81,7 +76,6 @@ class MenuPersister extends BasePersister
         // Ignore menu_items, persist them later
         unset($entity->menu_items);
         $entity->setNotStored('menu_items');
-
 
         $this->conn->beginTransaction();
 
@@ -144,9 +138,7 @@ class MenuPersister extends BasePersister
     {
         // Ignore metas with value = null
         if (!empty($menuItems)) {
-            $menuItems = array_filter($menuItems, function ($menuItem) {
-                return !is_null($menuItem);
-            });
+            $menuItems = array_filter($menuItems);
         }
 
         // Remove old

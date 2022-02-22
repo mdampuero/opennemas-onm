@@ -30,22 +30,6 @@ api_v1_backend_menu_update_item:
     requirements:
         id: \d+
 
-api_v1_backend_menu_patch_item:
-    path:     /menus/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/Menu:patchItem }
-    methods:  [ PATCH ]
-    options:
-        expose: true
-    requirements:
-        id: \d+
-
-api_v1_backend_menu_patch_list:
-    path:     /menus
-    defaults: { _controller: ApiBundle:V1/Backend/Menu:patchList }
-    methods:  [ PATCH ]
-    options:
-        expose: true
-
 api_v1_backend_menu_delete_item:
     path:     /menus/{id}
     defaults: { _controller: ApiBundle:V1/Backend/Menu:deleteItem }

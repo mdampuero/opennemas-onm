@@ -259,7 +259,6 @@
           var route = { name: $scope.routes.saveItem };
 
           // Parses data before save
-
           data = $scope.parseData(data);
 
           /**

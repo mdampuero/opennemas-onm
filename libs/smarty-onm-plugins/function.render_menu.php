@@ -23,51 +23,34 @@ function smarty_function_render_menu($params, &$smarty)
         'position' => $params['position'] ?? null,
     ];
 
-    $validKeys = array_filter($keys, function ($a) {
-        return !empty($a);
-    });
+    $oql = implode(' and ', array_filter(array_map(function ($key) use ($keys) {
+        return !empty($keys[$key]) ? sprintf(' %s = "%s" ', $key, $keys[$key]) : null;
+    }, array_keys($keys))));
 
-    if (empty($validKeys) || empty($tpl)) {
+    if (empty($oql) || empty($tpl)) {
         return '';
     }
 
-    $menu = null;
-    $i    = 0;
+    try {
+        $menu = $smarty->getContainer()->get('api.service.menu')->getItemBy($oql);
 
-    $menuService = $smarty->getContainer()->get('api.service.menu');
-    while (empty($menu) && $i < count($validKeys)) {
-        $key = array_keys($validKeys)[$i++];
-        $oql = sprintf(
-            ' %s = "%s" ',
-            $key,
-            $validKeys[$key]
-        );
-        $menu = [];
-        try {
-            $menu = $menuService->getItemBy($oql);
-        } catch (\Api\Exception\GetItemException $e) {
-            $menu = [];
+        if (empty($menu)) {
+            return '';
         }
-    }
 
-    if (empty($menu)) {
+        $smarty->assign([
+            'menuItems'       => !empty($menu->menu_items) ? $menu->menu_items : [],
+            'actual_category' => $params['actual_category'] ?? null
+        ]);
+
+        // Don't cache this template
+        $caching         = $smarty->caching;
+        $smarty->caching = 0;
+        $output          = $smarty->fetch($tpl);
+        $smarty->caching = $caching;
+
+        return $output;
+    } catch (\Api\Exception\GetItemException $e) {
         return '';
     }
-
-    $smarty->assign([
-        'menuItems'       => !empty($menu->menu_items) ? $menu->menu_items : [],
-        'actual_category' => $params['actual_category'] ?? null
-    ]);
-
-    // Disable caching for this partial
-    $caching = $smarty->caching;
-
-    $smarty->caching = 0;
-
-    $output = $smarty->fetch($tpl);
-
-    // Restore previous caching value
-    $smarty->caching = $caching;
-
-    return $output;
 }

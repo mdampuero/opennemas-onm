@@ -20,15 +20,15 @@ admin_content_update_property:
 
 
 # Menu manager routes
-admin_menus:
-    path:     /menus
-    defaults: { _controller: BackendBundle:Menus:list }
+# admin_menus:
+#     path:     /menus
+#     defaults: { _controller: BackendBundle:Menus:list }
 
-admin_menu_show:
-    path:     /menus/{id}/show
-    defaults: { _controller: BackendBundle:Menus:show }
-    options:
-        expose: true
+# admin_menu_show:
+#     path:     /menus/{id}/show
+#     defaults: { _controller: BackendBundle:Menus:show }
+#     options:
+#         expose: true
 
 # admin_menu_create:
 #     path:     /menus/create

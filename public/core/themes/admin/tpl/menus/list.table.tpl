@@ -16,10 +16,10 @@
 {/block}
 
 {block name="commonColumnsHeader"}
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('name')" width="200">
+  <th class="v-align-middle" ng-if="isColumnEnabled('name')" width="200">
     {t}Name{/t}
   </th>
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('position')" width="200">
+  <th class="v-align-middle" ng-if="isColumnEnabled('position')" width="200">
     {t}Position{/t}
   </th>
 {/block}
@@ -51,13 +51,3 @@
   </div>
 </td>
 {/block}
-
-{* {block name="customColumns"}
-{/block}
-
-{block name="customColumnsHeader"}
-{/block}
-
-{block name="customColumnsBody"}
-{/block} *}
-

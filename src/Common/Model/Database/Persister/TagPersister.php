@@ -48,7 +48,6 @@ class TagPersister extends BasePersister
         parent::remove($entity);
     }
 
-
     /**
      * Removes all entities linked to the current entity from cache.
      *

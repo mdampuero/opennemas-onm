@@ -108,7 +108,7 @@ services:
 
     core.helper.menu:
         class:     Common\Core\Component\Helper\MenuHelper
-        arguments: [ '@orm.manager' ]
+        arguments: [ '@service_container' ]
         public:    true
 
     core.helper.newsletter:
