@@ -23,15 +23,18 @@ class ContentController extends ApiController
      */
     protected function getExtraData($items = null)
     {
+        $instance = $this->get('core.instance');
+
         return [
             'authors'          => $this->getAuthors(),
             'comments_enabled' => $this->get('core.helper.comment')->enableCommentsByDefault(),
+            'subdirectory'     => $instance->getSubdirectory(),
             'keys'             => $this->getL10nKeys(),
             'locale'           => $this->get('core.helper.locale')->getConfiguration(),
             'paths'            => [
-                'photo'      => $this->get('core.instance')->getImagesShortPath(),
-                'attachment' => $this->get('core.instance')->getFilesShortPath(),
-                'newsstand'  => $this->get('core.instance')->getNewsstandShortPath(),
+                'photo'      => $instance->getImagesShortPath(),
+                'attachment' => $instance->getFilesShortPath(),
+                'newsstand'  => $instance->getNewsstandShortPath(),
             ],
             'related_contents' => $this->getRelatedContents($items),
         ];

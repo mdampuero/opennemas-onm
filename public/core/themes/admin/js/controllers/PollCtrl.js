@@ -153,13 +153,15 @@
             return '';
           }
 
-          return $scope.getL10nUrl(
-            routing.generate($scope.routes.public, {
-              id: item.pk_content,
-              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
-              slug: item.slug,
-              category_slug: $scope.selectedCategory.name
-            })
+          return $scope.getSubdirectoryUrl(
+            $scope.getL10nUrl(
+              routing.generate($scope.routes.public, {
+                id: item.pk_content,
+                created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
+                slug: item.slug,
+                category_slug: $scope.selectedCategory.name
+              })
+            )
           );
         };
 

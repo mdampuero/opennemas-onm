@@ -72,12 +72,14 @@
             return '';
           }
 
-          return $scope.getL10nUrl(
-            routing.generate($scope.routes.public, {
-              id: item.pk_content,
-              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
-              category_slug: categories[0].name
-            })
+          return $scope.getSubdirectoryUrl(
+            $scope.getL10nUrl(
+              routing.generate($scope.routes.public, {
+                id: item.pk_content,
+                created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
+                category_slug: categories[0].name
+              })
+            )
           );
         };
 
