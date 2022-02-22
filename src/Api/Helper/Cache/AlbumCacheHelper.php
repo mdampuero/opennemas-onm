@@ -8,6 +8,7 @@ class AlbumCacheHelper extends ContentCacheHelper
      * {@inheritdoc}
      */
     protected $varnishKeys = [
+        'archive-page-{{starttime}}',
         'authors-frontpage',
         'category-{{category_id}}',
         'content-author-{{fk_author}}',

@@ -125,6 +125,13 @@ class ContentCacheHelper extends CacheHelper
             preg_match_all('@{{([A-Za-z0-9_-]+)}}@', $key, $matches);
 
             foreach ($matches[1] as $match) {
+                if (in_array($match, [ 'starttime', 'created', 'endtime' ])) {
+                    $key = !empty($item->{$match}) ?
+                        preg_replace(sprintf('@{{%s}}@', $match), $item->{$match}->format('Y-m-d'), $key) :
+                        null;
+                    continue;
+                }
+
                 if ($match === 'category_id') {
                     $key = preg_replace(sprintf('@{{%s}}@', $match), $item->categories[0], $key);
                     continue;

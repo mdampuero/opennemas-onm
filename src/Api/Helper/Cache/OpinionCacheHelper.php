@@ -8,6 +8,7 @@ class OpinionCacheHelper extends ContentCacheHelper
      * {@inheritdoc}
      */
     protected $varnishKeys = [
+        'archive-page-{{starttime}}',
         'authors-frontpage',
         'content-author-{{fk_author}}',
         'frontpage-page',
