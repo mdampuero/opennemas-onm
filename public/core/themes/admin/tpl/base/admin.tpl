@@ -381,7 +381,7 @@
                   </span>
                   <ul class="dropdown-menu dropdown-menu-auto dropdown-menu-right no-padding" role="menu">
                     <li>
-                      <a href="/" target="_blank">
+                      <a href="{url name=frontend_frontpage}" target="_blank">
                         <i class="fa fa-globe"></i>
                         {t}Go to newspaper{/t}
                       </a>
