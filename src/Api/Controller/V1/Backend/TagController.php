@@ -61,7 +61,13 @@ class TagController extends ApiController
 
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings')
-            ->get([ 'blacklist_tag', 'tags_maxItems', 'tags_maxResults' ]);
+            ->get([ 'tags_maxItems', 'tags_maxResults' ]);
+
+        $extra = [ 'blacklist_tag' => $this->get('core.validator')->getConfig(Validator::BLACKLIST_RULESET_TAGS) ];
+
+        if (!empty($extra['blacklist_tag'])) {
+            $settings = array_merge($settings, $extra);
+        }
 
         if (array_key_exists('tags_maxItems', $settings)) {
             $settings['tags_maxItems'] = (int) $settings['tags_maxItems'];
@@ -96,7 +102,7 @@ class TagController extends ApiController
         $msg = $this->get('core.messenger');
 
         try {
-            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
+            $this->get('core.validator')->setConfig(Validator::BLACKLIST_RULESET_TAGS, $settings['blacklist_tag']);
             $msg->add(_('Item saved successfully'), 'success');
         } catch (\Exception $e) {
             $msg->add(_('Unable to save settings'), 'error');

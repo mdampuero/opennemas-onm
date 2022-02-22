@@ -103,7 +103,8 @@ class TagService extends OrmService
             return [ 'items' => [], 'total' => 0 ];
         }
 
-        $tags      = $this->getListByIds($ids);
+        $tags = $this->getListByIds($ids);
+
         $returnArr = [];
 
         foreach ($tags['items'] as $tag) {
