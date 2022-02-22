@@ -132,6 +132,16 @@ class Instance extends Entity
     }
 
     /**
+     * Return the subdirectory for the instance.
+     *
+     * @return string The subdirectory for the instance.
+     */
+    public function getSubdirectory()
+    {
+        return $this->subdirectory;
+    }
+
+    /**
      * Checks if the current instance has multilanguage enabled.
      *
      * @return boolean True if the instance has multilanguage enabled. False
