@@ -97,6 +97,9 @@ frontend_sitemap:
 frontend_static_page:
     resource: '@FrontendBundle/Resources/config/routing/static_page.yml'
 
+frontend_suggested:
+    resource: '@FrontendBundle/Resources/config/routing/suggested.yml'
+
 frontend_tag:
     resource: '@FrontendBundle/Resources/config/routing/tag.yml'
 

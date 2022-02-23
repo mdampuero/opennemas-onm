@@ -53,4 +53,32 @@ class WidgetController extends Controller
 
         return $widget->{$action}($request);
     }
+
+    /**
+     * Renders a widget.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response with the widget html.
+     */
+    public function renderAction(Request $request)
+    {
+        $params        = $request->query->all();
+        $widgetService = $this->get('api.service.widget');
+
+        try {
+            $oql = 'content_type_name="widget" ' .
+                'and content_status=1 ' .
+                'and in_litter=0 ' .
+                'and class="%s" limit 1';
+
+            $widget = in_array('widget_id', $params) ?
+                $widgetService->getItem($params['widget_id']) :
+                $widgetService->getItemBy(sprintf($oql, $params['widget_name']));
+
+            return new Response($this->get('frontend.renderer.widget')->render($widget, $params), 200);
+        } catch (\Exception $e) {
+            return new Response();
+        }
+    }
 }
