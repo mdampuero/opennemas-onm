@@ -2,13 +2,13 @@
 
 {block name="commonColumns"}
     <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('name')">
-      <input id="checkbox-name" checklist-model="app.columns.selected" checklist-value="'name'" type="checkbox">
+      <input id="checkbox-name" checklist-model="app.columns.selected" checklist-value="'name'" type="checkbox" disabled>
       <label for="checkbox-name">
         {t}Name{/t}
       </label>
     </div>
     <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('position')">
-      <input id="checkbox-position" checklist-model="app.columns.selected" checklist-value="'position'" type="checkbox">
+      <input id="checkbox-position" checklist-model="app.columns.selected" checklist-value="'position'" type="checkbox" disabled>
       <label for="checkbox-position">
         {t}Position{/t}
       </label>

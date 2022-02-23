@@ -70,25 +70,11 @@ class MenuController extends BackendController
     public function listAction(Request $request)
     {
         return $this->render('menus/list.tpl', [
-            'menu_positions' => $this->getMenuPositions(),
             'language_data'  => $this->getLocaleData($request),
             'multilanguage' => in_array(
                 'es.openhost.module.multilanguage',
                 $this->get('core.instance')->activated_modules
             )
         ]);
-    }
-
-    /**
-     * Returns the list of menu positions
-     *
-     * @return array the list of menu positions
-     */
-    private function getMenuPositions()
-    {
-        return array_merge(
-            [ '' => _('Without position') ],
-            $this->container->get('core.manager.menu')->getMenus()
-        );
     }
 }

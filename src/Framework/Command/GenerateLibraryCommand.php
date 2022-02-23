@@ -136,41 +136,41 @@ EOF
      */
     public function generateMenu()
     {
-        $menu = new \Menu();
+        $menu = new \stdClass();
 
-        $menu->name  = 'archive';
-        $menu->items = [];
+        $menu->name       = 'archive';
+        $menu->menu_items = [];
 
         $item       = new \stdClass();
         $item->link = 'home';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'cronicas';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'galicia';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'galicia-exporta';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'castillaleon';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'asturias';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'canarias';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'andalucia';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'cantabria';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'paisvasco';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
 
         return $menu;
     }

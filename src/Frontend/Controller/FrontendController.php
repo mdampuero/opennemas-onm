@@ -551,11 +551,17 @@ class FrontendController extends Controller
             ->get([ 'cookies', 'cmp_amp', 'cmp_type', 'cmp_id', 'site_color' ]);
 
         // Get menu
-        $mm      = $this->container->get('menu_repository');
-        $ampMenu = $mm->findOneBy([ 'name' => [[ 'value' => 'amp' ]] ], null, 1, 1);
-        $ampMenu = !empty($ampMenu)
+        $menuService = $this->container->get('api.service.menu');
+        $oql = ' name = "amp" ';
+        $ampMenu = [];
+        try {
+            $ampMenu = $menuService->getItemBy($oql);
+            $ampMenu = !empty($ampMenu)
             ? $ampMenu
-            : $mm->findOneBy([ 'name' => [[ 'value' => 'frontpage' ]] ], null, 1, 1);
+            : $menuService->getItemBy(' name = "frontpage" ');
+        } catch (\Api\Exception\GetItemException $e) {
+            $ampMenu = [];
+        }
 
         if (!empty($ampMenu)) {
             $this->view->assign('menu', $ampMenu->name);

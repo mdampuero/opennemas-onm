@@ -17,7 +17,6 @@
           <label class="visible-xs">
             {t}Link to{/t}
           </label>
-          {* <input type="text" ng-model="item.link_name"   class="menu-item-link" {if $iSearchModel}disabled {/if} value="[% item.link_name %]"> *}
         </div>
       </div>
     </div>

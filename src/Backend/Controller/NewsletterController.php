@@ -95,7 +95,7 @@ class NewsletterController extends Controller
             ->getDataSet('Settings', 'instance')
             ->get('newsletter_maillist');
 
-        $menu = new \Menu();
+        $menu = [];
         $time = new \DateTime();
         $time = $time->format('d/m/Y');
         $name = '[' . $time . ']';
@@ -109,42 +109,58 @@ class NewsletterController extends Controller
 
         $newsletterContent = [];
 
-        $menu->getMenu('frontpage');
-        $i = 1;
-        foreach ($menu->items as $item) {
-            if ($item->type != 'category' &&
-                $item->type != 'blog-category' &&
-                $item->type != 'internal'
-            ) {
-                continue;
-            }
+        $menuService = $this->container->get('api.service.menu');
 
-            unset($item->pk_item);
-            unset($item->link);
-            unset($item->pk_father);
-            unset($item->type);
-            $item->id           = $i;
-            $item->items        = [];
-            $item->content_type = 'container';
+        $oql = ' name = "frontpage" ';
 
-            $newsletterContent[] = $item;
+        try {
+            $menu = $menuService->getItemBy($oql);
 
-            if (!empty($item->submenu)) {
-                foreach ($item->submenu as $subitem) {
-                    unset($subitem->pk_item);
-                    unset($subitem->link);
-                    unset($subitem->pk_father);
-                    unset($subitem->type);
-                    unset($subitem->submenu);
-                    $subitem->id           = $i++;
-                    $subitem->items        = [];
-                    $subitem->content_type = 'container';
-                    $newsletterContent[]   = $subitem;
+            $menuHelper = $this->container->get('core.helper.menu');
+
+            $localizedMenuItems = $menuHelper->localizeMenuItems($menu->menu_items);
+
+            $menuItems = $menuHelper->parseToSubmenus($localizedMenuItems);
+
+            $i = 1;
+
+            foreach ($menuItems as $item) {
+                if ($item['type'] != 'category' &&
+                    $item['type'] != 'blog-category' &&
+                    $item['type'] != 'internal'
+                ) {
+                    continue;
                 }
-            }
 
-            unset($item->submenu);
-            $i++;
+                unset($item['pk_item']);
+                unset($item['link_name']);
+                unset($item['pk_father']);
+                unset($item['type']);
+                $item['id']           = $i;
+                $item['items']        = [];
+                $item['content_type'] = 'container';
+
+                $newsletterContent[] = $item;
+
+                if (!empty($item['submenus'])) {
+                    foreach ($item['submenu'] as $subitem) {
+                        unset($subitem['pk_item']);
+                        unset($subitem['link_name']);
+                        unset($subitem['pk_father']);
+                        unset($subitem['type']);
+                        unset($subitem['submenus']);
+                        $subitem->id           = $i++;
+                        $subitem->items        = [];
+                        $subitem->content_type = 'container';
+                        $newsletterContent[]   = $subitem;
+                    }
+                }
+
+                unset($item['submenus']);
+                $i++;
+            }
+        } catch (\Api\Exception\GetItemException $e) {
+            $newsletterContent = [];
         }
 
         return $this->render('newsletter/steps/1-pick-elements.tpl', [

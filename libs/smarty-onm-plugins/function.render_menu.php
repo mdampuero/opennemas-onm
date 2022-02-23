@@ -32,14 +32,19 @@ function smarty_function_render_menu($params, &$smarty)
     }
 
     try {
-        $menu = $smarty->getContainer()->get('api.service.menu')->getItemBy($oql);
+        $menuHelper = $smarty->getContainer()->get('core.helper.menu');
+        $menu       = $smarty->getContainer()->get('api.service.menu')->getItemBy($oql);
 
-        if (empty($menu)) {
+        $localizedMenuItems = $menuHelper->localizeMenuItems($menu->menu_items);
+        $menuItems          = $menuHelper->parseToSubmenus($localizedMenuItems);
+        $menuItemsObject    = $menuHelper->parseMenuItemsWithSubmenusToStdClass($menuItems);
+
+        if (empty($menuItemsObject)) {
             return '';
         }
 
         $smarty->assign([
-            'menuItems'       => !empty($menu->menu_items) ? $menu->menu_items : [],
+            'menuItems'       => !empty($menuItemsObject) ? $menuItemsObject : [],
             'actual_category' => $params['actual_category'] ?? null
         ]);
 

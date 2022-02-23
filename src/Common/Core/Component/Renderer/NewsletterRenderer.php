@@ -47,8 +47,21 @@ class NewsletterRenderer
     {
         $newsletterContent = $this->hydrateContainers($newsletter);
 
-        $menu = new \Menu();
-        $menu = $menu->getMenu('frontpage');
+        $menuService = $this->container->get('api.service.menu');
+
+        $oql = ' name = "frontpage" ';
+
+        try {
+            $menu = $menuService->getItemBy($oql);
+
+            $menuHelper = $this->container->get('core.helper.menu');
+
+            $localizedMenuItems = $menuHelper->localizeMenuItems($menu->menu_items);
+        } catch (\Exception $e) {
+            $menu               = [];
+            $menu['menu_items'] = [];
+        }
+
 
         $positions      = $this->container->get('core.helper.advertisement')
             ->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
@@ -71,7 +84,7 @@ class NewsletterRenderer
         return $this->tpl->fetch('newsletter/newsletter.tpl', [
             'item'              => $newsletter,
             'newsletterContent' => $newsletterContent,
-            'menuFrontpage'     => $menu->items,
+            'menuFrontpage'     => $menuHelper->parseMenuItemsToStdClass($localizedMenuItems),
             'current_date'      => new \DateTime(),
             'URL_PUBLIC'        => 'http://' . $publicUrl,
         ]);
