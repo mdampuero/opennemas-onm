@@ -111,16 +111,7 @@ class MenuPersister extends BasePersister
 
         try {
             parent::remove($entity);
-
-            $id = $this->metadata->getId($entity)['pk_menu'];
-
-            $this->removeMenuItems($id);
-
             $this->conn->commit();
-
-            if ($this->hasCache()) {
-                $this->cache->remove($this->metadata->getPrefixedId($entity));
-            }
         } catch (\Throwable $e) {
             $this->conn->rollback();
 

@@ -3,7 +3,7 @@
     <span ui-tree-handle>
       <span class="angular-ui-tree-icon"></span>
     </span>
-    <span class="menu-item-type-icon {$iIcon}"  tooltip-placement="right" uib-tooltip="{t}{$iName}{/t}"></span>
+    <span class="menu-item-type-icon {$iIcon}"  tooltip-placement="right" uib-tooltip="{$iName}"></span>
     <div class="p-l-45">
       <div class="row">
         <div class="col-sm-6 col-lg-6">

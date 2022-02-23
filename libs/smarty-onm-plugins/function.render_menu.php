@@ -34,14 +34,12 @@ function smarty_function_render_menu($params, &$smarty)
     try {
         $menuHelper = $smarty->getContainer()->get('core.helper.menu');
         $menu       = $smarty->getContainer()->get('api.service.menu')->getItemBy($oql);
-
+        if (empty($menu) || !$menu->menu_items) {
+            return '';
+        }
         $localizedMenuItems = $menuHelper->localizeMenuItems($menu->menu_items);
         $menuItems          = $menuHelper->parseToSubmenus($localizedMenuItems);
         $menuItemsObject    = $menuHelper->parseMenuItemsWithSubmenusToStdClass($menuItems);
-
-        if (empty($menuItemsObject)) {
-            return '';
-        }
 
         $smarty->assign([
             'menuItems'       => !empty($menuItemsObject) ? $menuItemsObject : [],

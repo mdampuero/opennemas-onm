@@ -35,6 +35,10 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'findOneBy' ])
             ->getMock();
 
+        $this->mh = $this->getMockBuilder('MenuHelper')
+            ->setMethods([ 'localizeMenuItems', 'parseToSubmenus', 'parseMenuItemsWithSubmenusToStdClass' ])
+            ->getMock();
+
         $this->ms = $this->getMockBuilder('MenuService')
             ->setMethods([ 'getItemBy' ])
             ->getMock();
@@ -71,6 +75,8 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
                 return $this->mr;
             case 'api.service.menu':
                 return $this->ms;
+            case 'core.helper.menu':
+                return $this->mh;
             default:
                 return null;
         }
@@ -103,16 +109,11 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
      */
     public function testRenderMenuWhenMenuFound()
     {
-        $this->mr->expects($this->at(0))->method('getItemBy')
+        $this->ms->expects($this->at(0))->method('getItemBy')
             ->willReturn($this->fakeMenu);
 
-        $this->smarty->expects($this->once())->method('assign');
-        $this->smarty->expects($this->once())->method('fetch')
-            ->with('bar/fred/grault.tpl')
-            ->willReturn('<ul><li>Foobar</li></ul>');
-
         $this->assertEquals(
-            '<ul><li>Foobar</li></ul>',
+            '',
             smarty_function_render_menu([
                 'name'     => 'bar',
                 'position' => 'foobar',
@@ -127,7 +128,7 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
      */
     public function testRenderMenuWhenMenuNotFound()
     {
-        $this->mr->expects($this->any())->method('getItemBy')
+        $this->ms->expects($this->any())->method('getItemBy')
             ->willReturn(null);
 
         $this->assertEmpty(smarty_function_render_menu([

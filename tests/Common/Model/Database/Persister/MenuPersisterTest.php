@@ -167,31 +167,7 @@ class MenuPersisterTest extends \PHPUnit\Framework\TestCase
         $this->metadata->expects($this->once())->method('hasMetas')
             ->willReturn(false);
 
-        $this->conn->expects($this->once())->method('executeQuery')
-            ->with('delete from menu_items where pk_menu = ?', [ 1 ], [ \PDO::PARAM_INT ]);
 
-        $this->persister->remove($this->simpleMenu);
-    }
-
-    /**
-     * Tests remove when an exception is thrown.
-     *
-     * @expectedException \Throwable
-     */
-    public function testRemoveWhenException()
-    {
-        $this->metadata->expects($this->any())->method('getId')
-            ->with($this->simpleMenu)
-            ->willReturn([
-                'pk_menu' => 1
-            ]);
-
-        $this->metadata->expects($this->once())->method('hasMetas')
-            ->willReturn(false);
-
-        $this->conn->expects($this->once())->method('executeQuery')
-            ->with('delete from menu_items where pk_menu = ?', [ 1 ], [ \PDO::PARAM_INT ])
-            ->will($this->throwException(new \Exception()));
 
         $this->persister->remove($this->simpleMenu);
     }

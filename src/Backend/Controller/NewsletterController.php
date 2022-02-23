@@ -110,17 +110,14 @@ class NewsletterController extends Controller
         $newsletterContent = [];
 
         $menuService = $this->container->get('api.service.menu');
+        $menuHelper  = $this->container->get('core.helper.menu');
 
         $oql = ' name = "frontpage" ';
 
         try {
-            $menu = $menuService->getItemBy($oql);
-
-            $menuHelper = $this->container->get('core.helper.menu');
-
+            $menu               = $menuService->getItemBy($oql);
             $localizedMenuItems = $menuHelper->localizeMenuItems($menu->menu_items);
-
-            $menuItems = $menuHelper->parseToSubmenus($localizedMenuItems);
+            $menuItems          = $menuHelper->parseToSubmenus($localizedMenuItems);
 
             $i = 1;
 
@@ -142,13 +139,13 @@ class NewsletterController extends Controller
 
                 $newsletterContent[] = $item;
 
-                if (!empty($item['submenus'])) {
+                if (!empty($item['submenu'])) {
                     foreach ($item['submenu'] as $subitem) {
                         unset($subitem['pk_item']);
                         unset($subitem['link_name']);
                         unset($subitem['pk_father']);
                         unset($subitem['type']);
-                        unset($subitem['submenus']);
+                        unset($subitem['submenu']);
                         $subitem->id           = $i++;
                         $subitem->items        = [];
                         $subitem->content_type = 'container';
