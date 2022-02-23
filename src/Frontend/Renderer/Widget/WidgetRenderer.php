@@ -9,6 +9,7 @@
  */
 namespace Frontend\Renderer\Widget;
 
+use Common\Model\Entity\Content;
 use Frontend\Renderer\Renderer;
 
 class WidgetRenderer extends Renderer
@@ -24,6 +25,30 @@ class WidgetRenderer extends Renderer
             ? $this->renderletIntelligentWidget($widget, $params)
             : $widget->body ?? ''
         );
+    }
+
+    /**
+     * Renders the esi code for the widget.
+     *
+     * @param Content $widget The widget to render the esi code.
+     * @param array   $params The parameters to render the widget.
+     *
+     * @return string The esi code for the widget.
+     */
+    public function renderEsi(Content $widget, array $params)
+    {
+        $id     = [ 'widget_id' => $widget->pk_content ];
+        $params = array_merge($id, array_filter($params, function ($param) {
+            return is_string($param);
+        }));
+
+        $params = array_map(function ($param) {
+            return urlencode($param);
+        }, $params);
+
+        $url = $this->container->get('router')->generate('frontend_widget_render', $params);
+
+        return sprintf('<esi:include src="%s" />', $url);
     }
 
     /**

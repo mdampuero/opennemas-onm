@@ -42,7 +42,9 @@ function smarty_function_renderplaceholder($params, &$smarty)
             $content                  = $items[$contentPosition->pk_fk_content];
             $content->render_position = $count++;
 
-            $outputHTML .= $smarty->getContainer()->get('frontend.renderer')->render($content, $params);
+            $outputHTML .= $content->content_type_name !== 'widget' ?
+                $smarty->getContainer()->get('frontend.renderer')->render($content, $params) :
+                $smarty->getContainer()->get('frontend.renderer.widget')->renderEsi($content, $params);
         }
     }
 
