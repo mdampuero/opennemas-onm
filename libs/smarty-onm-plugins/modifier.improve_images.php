@@ -39,7 +39,7 @@ function smarty_modifier_improve_images($html)
     if ($out[0] && !empty($out[0])) {
         $ph = getService('core.helper.photo');
         foreach ($out[0] as $matchKey => $matchValue) {
-            $width = $out[1][$matchKey][0] ? (int) $out[1][$matchKey][0] : 9999;
+            $width = !empty($out[1][$matchKey][0]) ? (int) $out[1][$matchKey][0] : PHP_INT_MAX;
 
             $result = $ph->getSrcSetAndSizesFromImagePath($out[2][$matchKey][0], $width);
 

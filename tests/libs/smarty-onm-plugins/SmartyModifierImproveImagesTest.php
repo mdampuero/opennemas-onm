@@ -65,7 +65,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
     public function testImproveImageNoWidth()
     {
         $this->helper->expects($this->any())->method('getSrcSetAndSizesFromImagePath')
-            ->with('mercury', 9999)
+            ->with('mercury', PHP_INT_MAX)
             ->willReturn([
                 'srcset' => '/asset/thumbnail,480,270,center,center//' .
                             'media/opennemas/images/2018/10/02/2018100216271084045.jpg ' .
@@ -98,7 +98,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
     public function testImproveImageClassNoWidth()
     {
         $this->helper->expects($this->any())->method('getSrcSetAndSizesFromImagePath')
-            ->with('mercury', 9999)
+            ->with('mercury', PHP_INT_MAX)
             ->willReturn([
                 'srcset' => '/asset/thumbnail,480,270,center,center' .
                             '//media/opennemas/images/2018/10/02/2018100216271084045.jpg ' .
