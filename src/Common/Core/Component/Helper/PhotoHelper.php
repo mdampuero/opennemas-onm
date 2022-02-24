@@ -161,47 +161,29 @@ class PhotoHelper
 
     public function getSrcSetAndSizesFromImagePath($imagePath, $width)
     {
-        $srcSet = '';
-        $sizes = '';
-        $cuts = $this->theme->getCuts();
-        $largeCut = array_filter($cuts, function ($item) use ($width) {
-            return $item['width'] >= $width;
-        });
-        if (empty($largeCut) || count($largeCut) < 1) {
-            $largeCut = [$cuts[count($cuts) - 1]];
-        }
-        $largeCut = array_shift($largeCut);
-        $avaliableCuts = array_filter(($cuts), function ($item) use ($largeCut) {
-            return $item['width'] < $largeCut['width'];
-        });
-        array_push($avaliableCuts, $largeCut);
+        $srcSets       = [];
+        $availableCuts = [];
+        $cuts          = $this->theme->getCuts();
 
-        foreach ($avaliableCuts as $key => $value) {
-            if ($value['width'] == $largeCut['width']) {
-                $srcSet .= $this->router->generate('asset_image', [
-                    'params' => implode(
-                        ',',
-                        array_merge([ 'thumbnail' ], [ $value['width'], $value['height'], 'center', 'center' ])
-                    ),
-                    'path'   => $imagePath
-                ], false) . ' ' . $value['width'] . 'w';
-                $sizes .= $value['width'] . 'px';
-            } else {
-                $srcSet .= $this->router->generate('asset_image', [
-                    'params' => implode(
-                        ',',
-                        array_merge([ 'thumbnail' ], [ $value['width'], $value['height'], 'center', 'center' ])
-                    ),
-                    'path'   => $imagePath
-                ], false) . ' ' . $value['width'] . 'w, ';
-                $sizes .= '(max-width: ' . $value['width'] . 'px) ' . $value['width'] . 'px,';
+        foreach ($cuts as $device => $cut) {
+            $availableCuts[$device] = $cut;
+
+            $srcSets[] = $this->router->generate('asset_image', [
+                'params' => implode(
+                    ',',
+                    array_merge([ 'thumbnail' ], [ $cut['width'], $cut['height'], 'center', 'center' ])
+                ),
+                'path'   => $imagePath
+            ], false) . ' ' . $cut['width'] . 'w';
+
+            if ($cut['width'] >= $width) {
+                break;
             }
         }
-        $result = [
-            'srcset' => $srcSet,
-            'sizes' => $sizes
-        ];
-        return $result;
+
+        $last = array_slice($availableCuts, -1, 1, true);
+
+        return [ 'srcset' => implode(',', $srcSets), 'sizes' => $this->getPhotoSizes(key($last)) ];
     }
 
     /**
