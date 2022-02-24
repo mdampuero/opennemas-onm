@@ -159,6 +159,14 @@ class PhotoHelper
         return $sizes . sprintf('%dpx', $last);
     }
 
+    /**
+     * Returns the srcset and sizes from an image path.
+     *
+     * @param string $imagePath The path of the image.
+     * @param int    $width     The target width for the image.
+     *
+     * @return array An array with the srcset on the first item and the sizes on the second item.
+     */
     public function getSrcSetAndSizesFromImagePath($imagePath, $width)
     {
         $srcSets       = [];
