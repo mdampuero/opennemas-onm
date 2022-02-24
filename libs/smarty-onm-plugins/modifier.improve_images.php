@@ -23,7 +23,7 @@ function smarty_modifier_improve_images($html)
     $html = preg_replace('@<img(((?!class).)*)/?>@U', '<img$1 class="lazyload">', $html);
 
     preg_match_all(
-        '/<img[^>]*(?(?=width)width="([0-9]+")|(?!.width="))[^>]*data-src="([^"]+)"[^>]+>/mU',
+        '/<img[^>]*(?(?=width)width="([0-9]+)"|(?!.width="))[^>]*data-src="([^"]+)"[^>]+>/mU',
         $html,
         $out,
         PREG_OFFSET_CAPTURE
