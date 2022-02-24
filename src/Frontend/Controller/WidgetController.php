@@ -72,7 +72,7 @@ class WidgetController extends Controller
                 'and in_litter=0 ' .
                 'and class="%s" limit 1';
 
-            $widget = in_array('widget_id', $params) ?
+            $widget = array_key_exists('widget_id', $params) ?
                 $widgetService->getItem($params['widget_id']) :
                 $widgetService->getItemBy(sprintf($oql, $params['widget_name']));
 
