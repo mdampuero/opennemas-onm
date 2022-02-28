@@ -444,7 +444,6 @@
           }
           return finalData;
         };
-
         // Updates the menu items input value when menu items change.
         $scope.$watch('item.menu_items', function(nv, ov) {
           if (nv === ov || !nv) {

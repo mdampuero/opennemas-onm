@@ -116,8 +116,7 @@ class NewsletterController extends Controller
 
         try {
             $menu               = $menuService->getItemBy($oql);
-            $localizedMenuItems = $menuHelper->localizeMenuItems($menu->menu_items);
-            $menuItems          = $menuHelper->parseToSubmenus($localizedMenuItems);
+            $menuItems          = $menuHelper->parseToSubmenus($menu->menu_items);
 
             $i = 1;
 

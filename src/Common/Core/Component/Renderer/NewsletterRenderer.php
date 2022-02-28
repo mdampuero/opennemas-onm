@@ -55,8 +55,6 @@ class NewsletterRenderer
             $menu = $menuService->getItemBy($oql);
 
             $menuHelper = $this->container->get('core.helper.menu');
-
-            $localizedMenuItems = $menuHelper->localizeMenuItems($menu->menu_items);
         } catch (\Exception $e) {
             $menu               = [];
             $menu['menu_items'] = [];

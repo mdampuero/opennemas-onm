@@ -118,8 +118,7 @@ class Categories
             $menu       = $menuService->getItemBy($oql);
             $menuHelper = $this->container->get('core.helper.menu');
 
-            $localizedMenuItems = $menuHelper->localizeMenuItems($menu->menu_items);
-            $menuItems          = $menuHelper->parseToSubmenus($localizedMenuItems);
+            $menuItems          = $menuHelper->parseToSubmenus($menu->menu_items);
             $menuItemsObject    = $menuHelper->parseMenuItemsWithSubmenusToStdClass($menuItems);
 
             $categories = [];

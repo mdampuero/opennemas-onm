@@ -21,20 +21,20 @@ class MenuHelper
         $this->container = $container;
     }
 
-    public function localizeMenuItems(array $items) : array
-    {
-        $localizedItems = [];
-        $curentLocale   = $this->container->get('core.helper.locale')->getSelectedLocale();
-        foreach ($items as $item) {
-            foreach ($this->keys as $key) {
-                if (is_array($item[$key]) && $item[$key][$curentLocale]) {
-                    $item[$key] = $item[$key][$curentLocale];
-                }
-            }
-            array_push($localizedItems, $item);
-        }
-        return $localizedItems;
-    }
+    // public function localizeMenuItems(array $items) : array
+    // {
+    //     $localizedItems = [];
+    //     $curentLocale   = $this->container->get('core.helper.locale')->getSelectedLocale();
+    //     foreach ($items as $item) {
+    //         foreach ($this->keys as $key) {
+    //             if (is_array($item[$key]) && $item[$key][$curentLocale]) {
+    //                 $item[$key] = $item[$key][$curentLocale];
+    //             }
+    //         }
+    //         array_push($localizedItems, $item);
+    //     }
+    //     return $localizedItems;
+    // }
 
     public function parseToSubmenus(array $items) : array
     {

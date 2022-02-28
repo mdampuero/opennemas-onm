@@ -37,8 +37,8 @@ function smarty_function_render_menu($params, &$smarty)
         if (empty($menu) || !$menu->menu_items) {
             return '';
         }
-        $localizedMenuItems = $menuHelper->localizeMenuItems($menu->menu_items);
-        $menuItems          = $menuHelper->parseToSubmenus($localizedMenuItems);
+
+        $menuItems          = $menuHelper->parseToSubmenus($menu->menu_items);
         $menuItemsObject    = $menuHelper->parseMenuItemsWithSubmenusToStdClass($menuItems);
 
         $smarty->assign([
