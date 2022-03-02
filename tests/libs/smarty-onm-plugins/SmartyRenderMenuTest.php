@@ -36,7 +36,7 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->mh = $this->getMockBuilder('MenuHelper')
-            ->setMethods([ 'localizeMenuItems', 'parseToSubmenus', 'parseMenuItemsWithSubmenusToStdClass' ])
+            ->setMethods([ 'parseToSubmenus', 'parseMenuItemsWithSubmenusToStdClass' ])
             ->getMock();
 
         $this->ms = $this->getMockBuilder('MenuService')
