@@ -257,25 +257,21 @@
           return cleaner.clean(resultData);
         };
 
-        $scope.removeItem = function(index, parentIndex) {
-          var removed = [];
-
-          if (!isNaN(parentIndex)) {
-            removed = $scope.item.menu_items[parentIndex].submenu.splice(index, 1);
-          } else {
-            removed = $scope.item.menu_items.splice(index, 1);
-          }
-
-          if ($scope.menuData[removed[0].type]) {
-            if (removed[0].submenu && removed[0].submenu.length > 0) {
-              for (const item in removed[0].submenu) {
-                if ($scope.menuData[removed[0].submenu[item].type]) {
-                  $scope.menuData[removed[0].submenu[item].type].push(removed[0].submenu[item]);
+        $scope.removeItem = function(item) {
+          for (const menuItemIndex in $scope.item.menu_items) {
+            if ($scope.item.menu_items[menuItemIndex].uniqueID === item.uniqueID) {
+              $scope.item.menu_items.splice(menuItemIndex, 1);
+              break;
+            }
+            if ($scope.item.menu_items[menuItemIndex].submenu &&
+              $scope.item.menu_items[menuItemIndex].submenu.length > 0) {
+              for (const menuSubItemIndex in $scope.item.menu_items[menuItemIndex].submenu) {
+                if ($scope.item.menu_items[menuItemIndex].submenu[menuSubItemIndex].uniqueID === item.uniqueID) {
+                  $scope.item.menu_items[menuItemIndex].submenu.splice(menuSubItemIndex, 1);
+                  break;
                 }
               }
             }
-            removed[0].submenu = [];
-            $scope.menuData[removed[0].type].push(removed[0]);
           }
         };
         $scope.transformItemData = function(data) {

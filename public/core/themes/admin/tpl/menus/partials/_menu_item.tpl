@@ -23,7 +23,7 @@
     </div>
   </div>
   <div class="menu-item-button">
-    <button class="btn btn-white" ng-click="removeItem($index {if $subitem}, parentIndex{/if})" type="button">
+    <button class="btn btn-white" ng-click="removeItem(item)" type="button">
       <i class="fa fa-trash-o text-danger"></i>
     </button>
   </div>

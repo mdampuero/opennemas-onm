@@ -60,7 +60,7 @@
       </p>
       <div class="menu-items ng-cloak angular-ui-tree" ui-tree data-max-depth="2">
         <ol ui-tree-nodes="" ng-model="item.menu_items">
-          <li ng-repeat="item in item.menu_items" ui-tree-node ng-include="'menu-item'" ng-init="parentIndex = $index" ></li>
+          <li ng-repeat="item in item.menu_items" ui-tree-node ng-include="'menu-item'"></li>
         </ol>
       </div>
     </div>
