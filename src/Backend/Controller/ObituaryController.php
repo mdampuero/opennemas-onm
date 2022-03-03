@@ -29,6 +29,13 @@ class ObituaryController extends BackendController
     ];
 
     /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'preview' => 'obituary_inner'
+    ];
+
+    /**
      * The resource name.
      */
     protected $resource = 'obituary';
