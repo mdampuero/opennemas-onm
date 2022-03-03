@@ -128,4 +128,5 @@ class ObituaryController extends ContentController
         );
 
         return new Response('OK');
-    }}
+    }
+}
