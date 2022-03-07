@@ -142,6 +142,7 @@
          */
         $scope.init = function(index) {
           $scope.data.index = index;
+
           // Initialize the array of related contents
           if ($scope.item.params[$scope.data.index].value !== '') {
             var oql = 'pk_content in [' +
