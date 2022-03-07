@@ -142,7 +142,6 @@
          */
         $scope.init = function(index) {
           $scope.data.index = index;
-
           // Initialize the array of related contents
           if ($scope.item.params[$scope.data.index].value !== '') {
             var oql = 'pk_content in [' +
@@ -348,11 +347,23 @@
           $scope.item.body  = null;
         };
 
+        $scope.resetCategoryWatcher = function() {
+          $scope.$broadcast('categorySelector.destroy', {
+            onError: function() {
+              return '';
+            },
+            onSuccess: function() {
+              return '';
+            }
+          });
+        };
+
         // Gets the form for widget when widget class changes
         $scope.$watch('item.class', function(nv, ov) {
           if (ov) {
             $scope.item.params  = [];
             $scope.data.related = [];
+            $scope.resetCategoryWatcher();
           }
 
           if (!nv) {
