@@ -85,7 +85,7 @@ class AmpFilterTest extends \PHPUnit\Framework\TestCase
         // Div with class and other attributes
         $str      = '<div style="width:100%;" class="thisClassShouldBeKept">Some div content</div>';
         $expected = '<div class="thisClassShouldBeKept">Some div content</div>';
-        
+
         $this->assertEquals($expected, $this->filter->filter($str));
 
         // String with video
@@ -141,7 +141,7 @@ class AmpFilterTest extends \PHPUnit\Framework\TestCase
         $str      = '<blockquote class="instagram-media" data-instgrm-captioned '
             . 'data-instgrm-permalink="https://www.instagram.com/p/tsxp1hhQTG/?utm_source=ig_embed&amp;'
             . 'utm_medium=loading" data-instgrm-version="12" style="">whatever</blockquote>';
-        $expected = '<blockquote>whatever</blockquote>';
+        $expected = '<blockquote class="instagram-media">whatever</blockquote>';
 
         $this->assertEquals($expected, $this->filter->filter($str));
 
