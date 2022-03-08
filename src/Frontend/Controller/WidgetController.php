@@ -63,10 +63,10 @@ class WidgetController extends Controller
      */
     public function renderAction(Request $request)
     {
-        $params        = $request->query->all();
-        $widgetService = $this->get('api.service.widget');
-
         try {
+            $params        = $request->query->all();
+            $widgetService = $this->get('api.service.widget');
+
             $oql = 'content_type_name="widget" ' .
                 'and content_status=1 ' .
                 'and in_litter=0 ' .
@@ -76,7 +76,30 @@ class WidgetController extends Controller
                 $widgetService->getItem($params['widget_id']) :
                 $widgetService->getItemBy(sprintf($oql, $params['widget_name']));
 
-            return new Response($this->get('frontend.renderer.widget')->render($widget, $params), 200);
+            $type = $widget->widget_type;
+
+            $widgetRenderer = $this->get('frontend.renderer.widget');
+
+            $widget = $widgetRenderer->getWidget($widget, $params);
+
+            $html = sprintf(
+                '<div class="widget">%s</div>',
+                $type === 'intelligentwidget'
+                ? $widget->render()
+                : $widget->body ?? ''
+            );
+
+            if (!$widget->isCacheable()) {
+                return new Response($html, 200, [ 'x-cacheable' => false ]);
+            }
+
+            $headers = [
+                'x-cacheable' => true,
+                'x-tags'      => implode(',', $widget->getXTags()),
+                'x-cache-for' => $widget->getXCacheFor()
+            ];
+
+            return new Response($html, 200, $headers);
         } catch (\Exception $e) {
             return new Response();
         }
