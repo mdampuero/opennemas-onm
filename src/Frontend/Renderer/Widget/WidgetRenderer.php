@@ -15,19 +15,6 @@ use Frontend\Renderer\Renderer;
 class WidgetRenderer extends Renderer
 {
     /**
-     * {@inheritDoc}
-     */
-    public function render($widget, $params)
-    {
-        return sprintf(
-            "<div class=\"widget\">%s</div>",
-            $widget->widget_type === 'intelligentwidget'
-            ? $this->renderletIntelligentWidget($widget, $params)
-            : $widget->body ?? ''
-        );
-    }
-
-    /**
      * Renders the esi code for the widget.
      *
      * @param Content $widget The widget to render the esi code.
@@ -35,7 +22,7 @@ class WidgetRenderer extends Renderer
      *
      * @return string The esi code for the widget.
      */
-    public function renderEsi(Content $widget, array $params)
+    public function render($widget, $params)
     {
         $id     = [ 'widget_id' => $widget->pk_content ];
         $params = array_merge($id, array_filter($params, function ($param) {
@@ -50,25 +37,6 @@ class WidgetRenderer extends Renderer
 
         return sprintf('<esi:include src="%s" />', $url);
     }
-
-    /**
-     * Renders an intelligent wiget
-     *
-     * @param array $params parameters for rendering the widget
-     *
-     * @return string the generated HTML
-     */
-    protected function renderletIntelligentWidget($content, $params = null)
-    {
-        $widget = $this->getWidget($content, $params);
-
-        if (is_null($widget)) {
-            return sprintf(_('Widget %s not available'), $content->class);
-        }
-
-        return $widget->render($params);
-    }
-
 
     /**
      * Returns an instance for a widget
@@ -96,6 +64,7 @@ class WidgetRenderer extends Renderer
         $class = new $class($content);
 
         $class->parseParams($params);
+        $class->hydrateShow();
 
         return $class;
     }
