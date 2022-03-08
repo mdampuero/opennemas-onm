@@ -60,9 +60,13 @@ class FrontpagesController extends Controller
         list($contentPositions, $contents, $invalidationDt, $lastSaved) =
             $this->get('api.service.frontpage')->getCurrentVersionForCategory($categoryId);
 
+        $tageable = array_filter($contents, function ($content) {
+            return $content->content_type_name !== 'widget';
+        });
+
         $xtags = implode(',', array_map(function ($content) {
             return $content->content_type_name . '-' . $content->pk_content;
-        }, $contents));
+        }, $tageable));
 
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
