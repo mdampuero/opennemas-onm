@@ -160,6 +160,41 @@ class PhotoHelper
     }
 
     /**
+     * Returns the srcset and sizes from an image path.
+     *
+     * @param string $imagePath The path of the image.
+     * @param int    $width     The target width for the image.
+     *
+     * @return array An array with the srcset on the first item and the sizes on the second item.
+     */
+    public function getSrcSetAndSizesFromImagePath($imagePath, $width)
+    {
+        $srcSets       = [];
+        $availableCuts = [];
+        $cuts          = $this->theme->getCuts();
+
+        foreach ($cuts as $device => $cut) {
+            $availableCuts[$device] = $cut;
+
+            $srcSets[] = $this->router->generate('asset_image', [
+                'params' => implode(
+                    ',',
+                    array_merge([ 'thumbnail' ], [ $cut['width'], $cut['height'], 'center', 'center' ])
+                ),
+                'path'   => $imagePath
+            ], false) . ' ' . $cut['width'] . 'w';
+
+            if ($cut['width'] >= $width) {
+                break;
+            }
+        }
+
+        $last = array_slice($availableCuts, -1, 1, true);
+
+        return [ 'srcset' => implode(',', $srcSets), 'sizes' => $this->getPhotoSizes(key($last)) ];
+    }
+
+    /**
      * Returns the srcset of the provided photo path.
      *
      * @param string  $photo     The photo path.

@@ -20,5 +20,38 @@ function smarty_modifier_improve_images($html)
     $html = preg_replace('@<img(.*)class="([^"]+)"@U', '<img$1class="$2 lazyload"', $html);
 
     // Add the lazy load to the leftovers.
-    return preg_replace('@<img(((?!class).)*)/?>@U', '<img$1 class="lazyload">', $html);
+    $html = preg_replace('@<img(((?!class).)*)/?>@U', '<img$1 class="lazyload">', $html);
+
+    preg_match_all(
+        '@<img[^>]*(?(?=width)width="([0-9]+)"|(?!.width="))[^>]*data-src="((?!.*\://)(?!.*zoomcrop)[^"]+)"[^>]+>@mU',
+        $html,
+        $out,
+        PREG_OFFSET_CAPTURE
+    );
+    /*
+     * out[0] => array of complete img tag matchs,
+     * out[1] => array of widths from img match,
+     * out[2] => array of src from img matchs,
+     *
+     * out[1][0] and out[2][0] correspond to width and src from first img tag match (out[0][0])
+     */
+    if ($out[0] && !empty($out[0])) {
+        $ph = getService('core.helper.photo');
+        foreach ($out[0] as $matchKey => $matchValue) {
+            $width = !empty($out[1][$matchKey][0]) ? (int) $out[1][$matchKey][0] : PHP_INT_MAX;
+
+            $result = $ph->getSrcSetAndSizesFromImagePath($out[2][$matchKey][0], $width);
+
+            $html = preg_replace(
+                '@<img(((?!srcset).)*src="'
+                . $out[2][$matchKey][0] .
+                '".*)>@U',
+                '<img$1 data-srcset="'
+                . $result['srcset'] .
+                '" sizes="' . $result['sizes'] . '">',
+                $html
+            );
+        }
+    }
+    return $html;
 }
