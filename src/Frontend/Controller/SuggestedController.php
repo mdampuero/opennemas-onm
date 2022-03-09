@@ -22,9 +22,22 @@ class SuggestedController extends Controller
             $params['category_id']
         );
 
+        $xtags = [ sprintf('suggested,category-%d', $params['category_id']) ];
+
+        $contents = array_map(function ($item) {
+            return sprintf('article-%d', $item->pk_content);
+        }, $suggested);
+
+        $xtags[] = implode(',', $contents);
+
         return $this->render(
             'common/suggested_contents_images.tpl',
-            [ 'suggested' => $suggested ]
+            [
+                'suggested'   => $suggested,
+                'x-tags'      => implode(',', $xtags),
+                'x-cacheable' => true,
+                'x-cache-for' => '100d'
+            ]
         );
     }
 }
