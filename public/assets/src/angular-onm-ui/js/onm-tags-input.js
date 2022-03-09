@@ -48,13 +48,13 @@
                 '<i class="fa fa-trash-o m-r-5"></i>' +
                 $window.strings.tags.clear +
               '</button>' +
-              '<span ng-if="!filter" class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': tagsInLocale.length == maxTags, \'badge-warning text-default\': tagsInLocale.length > maxTags/2 && tagsInLocale.length < maxTags }">' +
+              '<span ng-if="!filter" class="tags-input-counter badge badge-default pull-right" ng-class="{ \'badge-danger\': tagsInLocale.length >= maxTags, \'badge-warning text-default\': tagsInLocale.length > maxTags/2 && tagsInLocale.length < maxTags }">' +
                 '[% tagsInLocale ? tagsInLocale.length : 0 %] / [% maxTags %]' +
               '</span>' +
             '</div>' +
             '<div class="tags-input-wrapper">' +
               '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="tagsInLocale" on-tag-removing="remove($tag, filter)" on-tag-adding="add($tag, filter)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
-                '<auto-complete ng-if="!filter" debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)" template="tag"></auto-complete>' +
+                '<auto-complete ng-if="!filter" debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="true" source="list($query)" template="tag"></auto-complete>' +
                 '<auto-complete ng-if="filter" debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)"></auto-complete>' +
               '</tags-input>' +
               '<i class="fa fa-circle-o-notch fa-spin tags-input-loading" ng-if="loading"></i>' +
@@ -131,7 +131,7 @@
             return;
           }
 
-          if ($scope.tags && $scope.tags.length >= $scope.maxTags) {
+          if ($scope.tags && $scope.tagsInLocale.length >= $scope.maxTags) {
             return false;
           }
 
@@ -258,55 +258,62 @@
          */
         $scope.list = function(query) {
           var criteria = {
-            name: query,
+            slug: query,
             epp: $scope.maxResults,
             orderBy: { 'length(name)': 'asc', name: 'asc' },
             page: 1
           };
 
-          if (!$scope.ignoreLocale && $scope.locale &&
-              $scope.locale.multilanguage) {
-            criteria.locale = $scope.locale.selected;
-          }
-
-          oqlEncoder.configure({
-            placeholder: {
-              name: '[key] ~ "%[value]%"',
-              locale: '([key] is null or [key] = "[value]")'
-            }
-          });
-
-          var oql = oqlEncoder.getOql(criteria);
-
           return http.get({
-            name: 'api_v1_backend_tag_get_list',
-            params: { oql: oql }
+            name: 'api_v1_backend_tools_slug',
+            params: { slug: query }
           }).then(function(response) {
-            $scope.data = response.data;
+            criteria.slug = response.data.slug;
 
-            var items = response.data.items;
-
-            if (!$scope.selectionOnly) {
-              var found = items.filter(function(e) {
-                return e.name === query;
-              });
-
-              if (found.length === 0) {
-                var item = { id: query, name: query };
-
-                if ($scope.locale && $scope.locale.multilanguage) {
-                  item.locale = $scope.locale.selected;
-                }
-
-                items.push(item);
-
-                items = items.sort(function(a, b) {
-                  return a.name.length < b.name.length ? -1 : 0;
-                });
-              }
+            if (!$scope.ignoreLocale && $scope.locale &&
+              $scope.locale.multilanguage) {
+              criteria.locale = $scope.locale.selected;
             }
 
-            return items;
+            oqlEncoder.configure({
+              placeholder: {
+                slug: '[key] ~ "%[value]%"',
+                locale: '([key] is null or [key] = "[value]")'
+              }
+            });
+
+            var oql = oqlEncoder.getOql(criteria);
+
+            return http.get({
+              name: 'api_v1_backend_tag_get_list',
+              params: { oql: oql }
+            }).then(function(response) {
+              $scope.data = response.data;
+
+              var items = response.data.items;
+
+              if (!$scope.selectionOnly) {
+                var found = items.filter(function(e) {
+                  return e.name === query || e.slug === query;
+                });
+
+                if (found.length === 0) {
+                  var item = { id: query, name: query };
+
+                  if ($scope.locale && $scope.locale.multilanguage) {
+                    item.locale = $scope.locale.selected;
+                  }
+
+                  items.push(item);
+
+                  items = items.sort(function(a, b) {
+                    return a.name.length < b.name.length ? -1 : 0;
+                  });
+                }
+              }
+
+              return items;
+            });
           });
         };
 
@@ -511,6 +518,8 @@
               return toAdd.indexOf(e.id) !== -1 &&
                 $scope.ngModel.indexOf(e.id) === -1;
             }));
+
+            $scope.$parent.data.extra.tags[$scope.locale.selected] = $scope.tagsInLocale;
           }
         }, true);
       }

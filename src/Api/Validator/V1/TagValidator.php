@@ -26,11 +26,7 @@ class TagValidator extends Validator
             ], CoreValidator::BLACKLIST_RULESET_TAGS);
 
         if (!empty($errors)) {
-            throw new InvalidArgumentException(_('Invalid tag'), 400);
-        }
-
-        if ($item->exists()) {
-            return;
+            throw new InvalidArgumentException(array_pop($errors['errors']), 400);
         }
 
         $locales = $this->container->get('core.locale')
@@ -40,30 +36,27 @@ class TagValidator extends Validator
         if (!empty($item->locale)
             && !in_array($item->locale, array_keys($locales))
         ) {
-            throw new InvalidArgumentException(_('Invalid tag'), 400);
+            throw new InvalidArgumentException(_('The selected locale is invalid'), 400);
         }
 
-        $oql = sprintf('name = "%s" and locale is null', $item->name);
+        $oql = sprintf('(name = "%s" or slug = "%s")', $item->name, $item->slug);
 
-        if (!empty($item->locale)) {
-            $oql = sprintf(
-                'name = "%s" and locale = "%s"',
-                $item->name,
-                $item->locale
-            );
+        if ($item->id && is_numeric($item->id)) {
+            $oql .= sprintf(' and id != %d', $item->id);
         }
+
+        $oql .= (!empty($item->locale))
+            ? sprintf(' and locale = "%s"', $item->locale)
+            : ' and locale is null';
 
         try {
-            $tag = $this->container->get('api.service.tag')->getItemBy($oql);
+            $tags = $this->container->get('api.service.tag')->getList($oql);
 
-            // Tags with different names are considered different
-            if ($tag->name !== $item->name) {
-                return;
+            if ($tags['total'] > 0) {
+                throw new \Exception();
             }
         } catch (\Exception $e) {
-            return;
+            throw new InvalidArgumentException(_('There is another tag with the same name or slug'), 409);
         }
-
-        throw new InvalidArgumentException(_('Invalid tag'), 400);
     }
 }
