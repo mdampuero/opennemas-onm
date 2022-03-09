@@ -68,6 +68,10 @@ class NewsletterRenderer
             $this->container->get('core.globals')->getInstance()->getMainDomain()
         );
 
+        // if ($newsletter->params && $newsletter->params->append_title) {
+            $newsletter->title = $this->updateTitle($newsletter, $newsletterContent);
+        // }
+
         return $this->tpl->fetch('newsletter/newsletter.tpl', [
             'item'              => $newsletter,
             'newsletterContent' => $newsletterContent,
@@ -75,6 +79,11 @@ class NewsletterRenderer
             'current_date'      => new \DateTime(),
             'URL_PUBLIC'        => 'http://' . $publicUrl,
         ]);
+    }
+
+    private function updateTitle($newsletter, $content)
+    {
+        return trim($newsletter->title) + " " + trim($content[0]['items'][0]['title']);
     }
 
     /**

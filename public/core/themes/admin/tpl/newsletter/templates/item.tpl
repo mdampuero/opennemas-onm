@@ -69,13 +69,29 @@ var newsletterTemplateTranslations = {
       <div class="grid-body m-b-10">
         <div class="form-group no-margin">
           <div class="checkbox">
+          [% item.params.append_title %]
+            <input id="append_title" name="append_title" ng-false-value="0" ng-model="item.params.append_title" ng-true-value="1" type="checkbox">
+            <label class="form-label" for="append_title">
+              {t}Append first content title{/t}
+            </label>
+          </div>
+          <input name="type" ng-model="item.type" type="hidden" value=1>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid simple ng-cloak" ng-if="!flags.loading">
+      <div class="grid-body m-b-10">
+        <div class="form-group no-margin">
+          <div class="checkbox">
+          [% item.status %]
             <input id="status" name="status" ng-false-value="0" ng-model="item.status" ng-true-value="1" type="checkbox">
             <label class="form-label" for="status">
               {t}Enabled{/t}
             </label>
           </div>
 
-          <input name="type" ng-model="item.type" type="hidden" value=1>
+
         </div>
       </div>
     </div>
