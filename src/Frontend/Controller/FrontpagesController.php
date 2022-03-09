@@ -123,7 +123,7 @@ class FrontpagesController extends Controller
             'time'        => $systemDate->getTimestamp(),
             'x-cache-for' => $invalidationDt->format('Y-m-d H:i:s'),
             'x-cacheable' => true,
-            'x-tags'      => $xtags . ',frontpage-page,' . $categoryName
+            'x-tags'      => $xtags . ',frontpage-page-' . $categoryId
         ]);
     }
 }

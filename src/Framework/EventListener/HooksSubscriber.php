@@ -504,21 +504,23 @@ class HooksSubscriber implements EventSubscriberInterface
      *
      * @param Event $event The event to handle.
      */
-    public function removeVarnishCacheFrontpage()
+    public function removeVarnishCacheFrontpage(Event $event)
     {
         if (!$this->container->hasParameter('varnish')) {
             return false;
         }
 
+        $category = $event->getArgument('category');
+
         $instanceName = $this->container->get('core.instance')->internal_name;
 
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page.*', $instanceName)
+                sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page-%s$', $instanceName, $category)
             ])
         )->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*rss.*', $instanceName)
+                sprintf('obj.http.x-tags ~ instance-%s.*rss-frontpage-%s.*', $instanceName, $category)
             ])
         );
     }

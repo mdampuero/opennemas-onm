@@ -116,12 +116,8 @@ class RssController extends FrontendController
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss-frontpage'
+            'x-tags'      => 'rss-frontpage-' . $categoryID
         ];
-
-        if (!empty($category)) {
-            $params['x-tags'] .= ',category-' . $category->id;
-        }
 
         $response = $this->render('rss/rss.tpl', $params);
 
