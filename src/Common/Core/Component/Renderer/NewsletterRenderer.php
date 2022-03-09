@@ -68,9 +68,11 @@ class NewsletterRenderer
             $this->container->get('core.globals')->getInstance()->getMainDomain()
         );
 
-        // if ($newsletter->params && $newsletter->params->append_title) {
-            $newsletter->title = $this->updateTitle($newsletter, $newsletterContent);
-        // }
+        $time = new \DateTime(null, $this->container->get('core.locale')->getTimeZone());
+
+        $newsletter->title = $newsletter->params && $newsletter->params['append_title'] == "1" ?
+            $this->updateTitle($newsletter, $newsletterContent) :
+            sprintf('%s [%s]', $newsletter->title, $time->format('d/m/Y'));
 
         return $this->tpl->fetch('newsletter/newsletter.tpl', [
             'item'              => $newsletter,
@@ -83,7 +85,11 @@ class NewsletterRenderer
 
     private function updateTitle($newsletter, $content)
     {
-        return trim($newsletter->title) + " " + trim($content[0]['items'][0]['title']);
+        $result = trim($newsletter->title);
+        if ($content[0] && $content[0]['items'][0]) {
+            $result .= " " . trim($content[0]['items'][0]['title']);
+        }
+        return $result;
     }
 
     /**

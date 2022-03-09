@@ -239,7 +239,8 @@ class NewsletterSchedulerCommand extends Command
 
         $data = array_merge($template->getStored(), [
             'type'        => 0,
-            'title'       => sprintf('%s [%s]', $template->title, $time->format('d/m/Y')),
+            'title'       => $template->title,
+            // 'title'       => sprintf('%s [%s]', $template->title, $time->format('d/m/Y')),
             'recipients'  => $template->recipients,
             'sent'        => new \Datetime(null, new \DateTimeZone('UTC')),
             'template_id' => $template->id,
