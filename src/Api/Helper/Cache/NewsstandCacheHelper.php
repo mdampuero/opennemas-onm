@@ -8,11 +8,10 @@ class NewsstandCacheHelper extends ContentCacheHelper
      * {@inheritdoc}
      */
     protected $varnishKeys = [
-        '{{content_type_name}}-{{pk_content}}-inner',
-        '{{content_type_name}}-frontpage$',
-        '{{content_type_name}}-frontpage-{{starttime}}',
-        'sitemap',
-        'tag-{{tag_id}}',
+        'content_type_name-widget-{{content_type_name}}' .
+        '.*category-widget-(({{category_id}})|(all))' .
+        '.*tag-widget-(({{tag_id}})|(all))',
+        '{{content_type_name}}-frontpage-{{starttime}}'
     ];
 
     /**
@@ -31,10 +30,18 @@ class NewsstandCacheHelper extends ContentCacheHelper
                     continue;
                 }
 
+                if ($match === 'category_id') {
+                    $key = preg_replace(sprintf('@{{%s}}@', $match), $item->categories[0] ?? 0, $key);
+
+                    continue;
+                }
+
                 if ($match === 'tag_id') {
-                    $key = implode('|', array_map(function ($tag) use ($match, $key) {
-                        return '(' . preg_replace(sprintf('@{{%s}}@', $match), $tag, $key) . ')';
+                    $tagIds = implode('|', array_map(function ($tag) {
+                        return sprintf('(' . $tag . ')');
                     }, $item->tags));
+
+                    $key = preg_replace(sprintf('@{{%s}}@', $match), $tagIds, $key);
                     continue;
                 }
 

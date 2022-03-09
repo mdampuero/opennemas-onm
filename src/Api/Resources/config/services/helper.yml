@@ -7,36 +7,16 @@ services:
         class:     Api\Helper\Cache\ContentCacheHelper
         arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
 
-    api.helper.cache.album:
-        class:     Api\Helper\Cache\AlbumCacheHelper
-        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
-
     api.helper.cache.article:
         class:     Api\Helper\Cache\ArticleCacheHelper
-        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
-
-    api.helper.cache.event:
-        class:     Api\Helper\Cache\EventCacheHelper
-        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
-
-    api.helper.cache.kiosko:
-        class:     Api\Helper\Cache\NewsstandCacheHelper
         arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
 
     api.helper.cache.opinion:
         class:     Api\Helper\Cache\OpinionCacheHelper
         arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
 
-    api.helper.cache.poll:
-        class:     Api\Helper\Cache\PollCacheHelper
-        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
-
-    api.helper.cache.video:
-        class:     Api\Helper\Cache\VideoCacheHelper
-        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
-
-    api.helper.cache.static_page:
-        class:     Api\Helper\Cache\StaticPageCacheHelper
+    api.helper.cache.kiosko:
+        class:     Api\Helper\Cache\NewsstandCacheHelper
         arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
 
     api.helper.cache.category:

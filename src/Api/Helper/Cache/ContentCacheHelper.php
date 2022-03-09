@@ -20,18 +20,48 @@ class ContentCacheHelper extends CacheHelper
     protected $map = [ 'kiosko' => 'newsstand' ];
 
     /**
-     * The array of keys to remove in varnish.
+     * The array of custom keys to remove in varnish.
      *
      * @var array
      */
     protected $varnishKeys = [];
 
     /**
-     * The array of keys to remove in redis.
+     * The array of custom keys to remove in redis.
      *
      * @var array
      */
     protected $redisKeys = [];
+
+    /**
+     * The array of default keys to remove in varnish.
+     *
+     * @var array
+     */
+    protected $defaultVarnishKeys = [
+        'archive-page-{{starttime}}',
+        'category-{{category_id}}',
+        'content-author-{{fk_author}}-frontpage',
+        '{{content_type_name}}-frontpage$',
+        '{{content_type_name}}-{{pk_content}}',
+        'content_type_name-widget-{{content_type_name}}' .
+        '.*category-widget-(({{category_id}})|(all))' .
+        '.*tag-widget-(({{tag_id}})|(all))' .
+        '.*author-widget-(({{fk_author}})|(all))',
+        'rss-author-{{fk_author}}',
+        'rss-{{content_type_name}}$',
+        'sitemap',
+        'tag-{{tag_id}}'
+    ];
+
+    /**
+     * The array of keys to remove in redis.
+     *
+     * @var array
+     */
+    protected $defaultRedisKeys = [
+        '*Widget*'
+    ];
 
     /**
      * {@inheritdoc}
@@ -52,8 +82,14 @@ class ContentCacheHelper extends CacheHelper
      */
     public function deleteItem($item) : CacheHelper
     {
-        $this->removeRedisCache($this->replaceWildcards($item, $this->redisKeys));
-        $this->removeVarnishCache($this->replaceWildcards($item, $this->varnishKeys), $item);
+        $this->removeRedisCache(
+            $this->replaceWildcards($item, array_merge($this->redisKeys, $this->defaultRedisKeys))
+        );
+
+        $this->removeVarnishCache(
+            $this->replaceWildcards($item, array_merge($this->varnishKeys, $this->defaultVarnishKeys)),
+            $item
+        );
 
         return $this;
     }
@@ -61,21 +97,14 @@ class ContentCacheHelper extends CacheHelper
     /**
      * Returns the cache ids for the specific content type.
      *
-     * @param Content $item The content to get the x-tags for.
+     * @param Content $item   The content to get the x-tags for.
+     * @param array   $params An array of parameters.
      *
      * @return String The x-tags for the specific content type.
      */
     public function getXTags(Content $content)
     {
-        if ($content->content_type_name === 'article') {
-            return sprintf(
-                'article-%d-inner,category-%d',
-                $content->pk_content,
-                $content->categories[0]
-            );
-        }
-
-        return sprintf('%s-%d-inner', $content->content_type_name, $content->pk_content);
+        return sprintf('%s-%d', $content->content_type_name, $content->pk_content);
     }
 
     /**
@@ -133,14 +162,17 @@ class ContentCacheHelper extends CacheHelper
                 }
 
                 if ($match === 'category_id') {
-                    $key = preg_replace(sprintf('@{{%s}}@', $match), $item->categories[0], $key);
+                    $key = preg_replace(sprintf('@{{%s}}@', $match), $item->categories[0] ?? 0, $key);
+
                     continue;
                 }
 
                 if ($match === 'tag_id') {
-                    $key = implode('|', array_map(function ($tag) use ($match, $key) {
-                        return '(' . preg_replace(sprintf('@{{%s}}@', $match), $tag, $key) . ')';
+                    $tagIds = implode('|', array_map(function ($tag) {
+                        return sprintf('(' . $tag . ')');
                     }, $item->tags));
+
+                    $key = preg_replace(sprintf('@{{%s}}@', $match), $tagIds, $key);
                     continue;
                 }
 
