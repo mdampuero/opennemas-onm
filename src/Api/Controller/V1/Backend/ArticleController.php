@@ -138,11 +138,6 @@ class ArticleController extends ContentController
 
         list($positions, $advertisements) = $this->getAdvertisements();
 
-
-        // TODO: This fix is to prevent errors in the preview action when a new tag is being created in the
-        // current article, find the source of the problem and remove this ASAP.
-        unset($article->tags);
-
         $params = [
             'ads_positions'  => $positions,
             'advertisements' => $advertisements,

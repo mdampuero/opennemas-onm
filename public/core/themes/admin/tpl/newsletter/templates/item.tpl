@@ -215,7 +215,7 @@ var newsletterTemplateTranslations = {
                     <input class="form-control" ng-model="container.title" type="text">
                   </div>
                   <div class="col-sm-6 col-lg-8 m-b-10 m-t-15 text-right">
-                    <button class="btn btn-default m-b-5" ng-click="markContainer($index)" content-picker content-picker-ignore="[% getItemIds(container.items) %]" content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="target" content-picker-type="album,article,attachment,opinion,poll,video,special" type="button">
+                    <button class="btn btn-default m-b-5" ng-click="markContainer($index)" content-picker content-picker-ignore="[% getItemIds(container.items) %]" content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="target" content-picker-type="album,article,attachment,event,opinion,poll,special,video" type="button">
                       <i class="fa fa-plus m-r-5"></i>
                       {t}Add{/t}
                     </button>
@@ -244,7 +244,17 @@ var newsletterTemplateTranslations = {
                       <span class="angular-ui-tree-icon"></span>
                     </span>
                     <span class="newsletter-item-type" ng-if="content.content_type !== 'list'">
-                      <span class="fa" ng-class="{ 'fa-file-text-o': content.content_type == 'article', 'fa-quote-right': content.content_type == 'opinion', 'fa-pie-chart': content.content_type == 'poll', 'fa-file': content.content_type == 'static_page', 'fa-envelope': content.content_type == 'letter', 'fa-paperclip': content.content_type == 'attachment', 'fa-film': content.content_type == 'video', 'fa-camera': content.content_type == 'album' }" tooltip-placement="right" uib-tooltip="[% content.content_type_l10n_name %]"></span>
+                      <span class="fa" ng-class="{
+                        'fa-camera': content.content_type == 'album',
+                        'fa-file-text-o': content.content_type == 'article',
+                        'fa-paperclip': content.content_type == 'attachment',
+                        'fa-calendar': content.content_type == 'event',
+                        'fa-envelope': content.content_type == 'letter',
+                        'fa-quote-right': content.content_type == 'opinion',
+                        'fa-pie-chart': content.content_type == 'poll',
+                        'fa-file': content.content_type == 'static_page',
+                        'fa-film': content.content_type == 'video',
+                        }" tooltip-placement="right" uib-tooltip="[% content.content_type_l10n_name %]"></span>
                     </span>
                     <span class="newsletter-item-type" ng-if="content.content_type === 'list'">
                       <span class="fa fa-search" tooltip-placement="right" uib-tooltip="{t}List of contents{/t}"></span>

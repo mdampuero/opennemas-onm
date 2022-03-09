@@ -142,7 +142,8 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
             '<img width="340" height="340" src="baz">' .
             '</figure>';
 
-        $result = '<figure class="image image-inbody-left ckeditor-image" style="width: 340px" data-random="foo">' .
+        $result = '<figure class="image image-inbody-left ckeditor-image" ' .
+            'style="max-width: 100%; width: 340px;" data-random="foo">' .
             '<img width="340" height="340" data-src="baz" ' .
             'class="lazyload" data-srcset="/asset/thumbnail,480,270,center,center' .
             '//media/opennemas/images/2018/10/02/2018100216271084045.jpg 480w" sizes="480px">' .
