@@ -32,12 +32,15 @@ class SuggestedController extends Controller
 
         return $this->render(
             $params['tpl'] ?? 'common/suggested_contents_images.tpl',
-            [
-                'suggested'   => $suggested,
-                'x-tags'      => implode(',', $xtags),
-                'x-cacheable' => true,
-                'x-cache-for' => '100d'
-            ]
+            array_merge(
+                $params,
+                [
+                    'suggested'   => $suggested,
+                    'x-tags'      => implode(',', $xtags),
+                    'x-cacheable' => true,
+                    'x-cache-for' => '100d'
+                ]
+            )
         );
     }
 }
