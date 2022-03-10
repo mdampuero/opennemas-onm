@@ -31,7 +31,7 @@ class SuggestedController extends Controller
         $xtags[] = implode(',', $contents);
 
         return $this->render(
-            'common/suggested_contents_images.tpl',
+            $params['tpl'] ?? 'common/suggested_contents_images.tpl',
             [
                 'suggested'   => $suggested,
                 'x-tags'      => implode(',', $xtags),
