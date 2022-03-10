@@ -108,10 +108,10 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          // Remove recipients that are not in data.extra
           $scope.item.params.append_title = $scope.item.params.append_title ?
             parseInt($scope.item.params.append_title) : 0;
 
+          // Remove recipients that are not in data.extra
           $scope.item.recipients = $scope.item.recipients.filter(function(e) {
             for (var i = 0; i < $scope.data.extra.recipients.length; i++) {
               if (angular.equals(e, $scope.data.extra.recipients[i])) {
