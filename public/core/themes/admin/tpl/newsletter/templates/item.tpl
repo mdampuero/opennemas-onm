@@ -46,39 +46,31 @@ var newsletterTemplateTranslations = {
     </div>
   </div>
   <div class="content newsletter-manager">
-
     <div class="listing-no-contents" ng-hide="!flags.loading">
       <div class="text-center p-b-15 p-t-15">
         <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
         <h3 class="spinner-text">{t}Loading{/t}...</h3>
       </div>
     </div>
-
     <div class="grid simple ng-cloak">
       <div class="grid-title">
         <i class="fa fa-envelope-o m-r-10"></i>
         <h4>{t}Subject{/t}</h4>
       </div>
-
       <div class="grid-body">
         <input type="text" class="form-control" name="title" id="title" ng-model="item.title"/>
-      </div>
-    </div>
-
-    <div class="grid simple ng-cloak" ng-if="!flags.loading">
-      <div class="grid-body m-b-10">
-        <div class="form-group no-margin">
+        <div class="form-group m-t-20 m-b-5">
           <div class="checkbox">
             <input id="append_title" name="append_title" ng-false-value="0" ng-model="item.params.append_title" ng-true-value="1" type="checkbox">
             <label class="form-label" for="append_title">
-              {t}Append first content title{/t}
+              <span>{t}Add the headline of the first content at the end of the subject{/t}</span>
+              <div class="help">{t}If this is checked, the headline of the first content will be append at the end of the subject, separated by a blank space{/t}</div>
             </label>
           </div>
           <input name="type" ng-model="item.type" type="hidden" value=1>
         </div>
       </div>
     </div>
-
     <div class="grid simple ng-cloak" ng-if="!flags.loading">
       <div class="grid-body m-b-10">
         <div class="form-group no-margin">
@@ -88,12 +80,9 @@ var newsletterTemplateTranslations = {
               {t}Enabled{/t}
             </label>
           </div>
-
-
         </div>
       </div>
     </div>
-
     <div class="row ng-cloak">
       <div class="col-xs-12 col-sm-6">
         <div class="grid simple">
@@ -101,11 +90,9 @@ var newsletterTemplateTranslations = {
             <i class="fa fa-calendar m-r-10"></i>
             <h4>{t}Schedule{/t}</h4>
           </div>
-
           <div class="grid-body">
             <div class="form-group days col-xs-12">
               <h5>{t}Days{/t}</h5>
-
               <div class="form-group">
                 <div class="m-t-15 m-b-10" ng-repeat="day in data.extra.days">
                   <div class="checkbox col-xs-6 p-b-10">
@@ -117,10 +104,8 @@ var newsletterTemplateTranslations = {
                 </div>
               </div>
             </div>
-
             <div class="form-group hours col-xs-12">
               <h5>{t}Hours{/t} <small class="pull-right">({t}Time zone: {/t} {date_default_timezone_get()})</small></h5>
-
               <tags-input ng-model="item.schedule.hours" minTags=1 add-on-paste="true" add-from-autocomplete-only="true" placeholder="{t}Add an hour{/t}">
                 <auto-complete source="loadHours($query)" load-on-focus=true min-length="0" debounce-delay="0"></auto-complete>
               </tags-input>
@@ -134,11 +119,9 @@ var newsletterTemplateTranslations = {
             <i class="fa fa-users m-r-10"></i>
             <h4>{t}Recipients{/t}</h4>
           </div>
-
           <div class="grid-body">
             <div class="external" ng-if="data.extra.newsletter_handler == 'submit'">
               <h5><i class="fa fa-external-link m-r-10"></i>{t}External service{/t}</h5>
-
               <div class="form-group">
                 <div class="m-t-15 m-b-10">
                   <div class="checkbox" ng-repeat="recipient in data.extra.recipients | filter: { type: 'external' }">
@@ -150,7 +133,6 @@ var newsletterTemplateTranslations = {
                 </div>
               </div>
             </div>
-
             {is_module_activated name="es.openhost.module.acton"}
             <div class="acton" ng-if="data.extra.newsletter_handler == 'acton'">
               <h5><i class="fa fa-address-book m-r-10"></i>{t}Act-On marketing lists{/t}</h5>
@@ -166,7 +148,6 @@ var newsletterTemplateTranslations = {
               </div>
             </div>
             {/is_module_activated}
-
             <div class="internal" ng-if="data.extra.newsletter_handler == 'create_subscriptor'">
               <h5><i class="fa fa-address-book m-r-10"></i>{t}Subscription lists{/t}</h5>
               <div class="form-group">
@@ -185,7 +166,6 @@ var newsletterTemplateTranslations = {
             </div>
           </div>
         </div>
-
         {is_module_activated name="es.openhost.module.acton"}
         <div class="grid simple" ng-if="data.extra.newsletter_handler == 'acton'" >
           <div class="grid-title">
@@ -209,7 +189,6 @@ var newsletterTemplateTranslations = {
         {/is_module_activated}
       </div>
     </div>
-
     <div class="grid simple ng-cloak newsletter-contents" ng-if="!flags.loading">
       <div class="grid-title">
         <h4>
