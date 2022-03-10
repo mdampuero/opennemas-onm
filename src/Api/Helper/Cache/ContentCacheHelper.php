@@ -176,9 +176,7 @@ class ContentCacheHelper extends CacheHelper
                     continue;
                 }
 
-                $key = !empty($item->{$match}) ?
-                    preg_replace(sprintf('@{{%s}}@', $match), $item->{$match}, $key) :
-                    null;
+                $key = preg_replace(sprintf('@{{%s}}@', $match), $item->{$match} ?? '0', $key);
             }
         }
 
