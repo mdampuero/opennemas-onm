@@ -40,18 +40,18 @@ class ContentCacheHelper extends CacheHelper
      */
     protected $defaultVarnishKeys = [
         'archive-page-{{starttime}}',
-        'category-{{category_id}}',
+        'category-{{categories}}',
         'content-author-{{fk_author}}-frontpage',
         '{{content_type_name}}-frontpage$',
         '{{content_type_name}}-{{pk_content}}',
         'content_type_name-widget-{{content_type_name}}' .
-        '.*category-widget-(({{category_id}})|(all))' .
-        '.*tag-widget-(({{tag_id}})|(all))' .
+        '.*category-widget-(({{categories}})|(all))' .
+        '.*tag-widget-(({{tags}})|(all))' .
         '.*author-widget-(({{fk_author}})|(all))',
         'rss-author-{{fk_author}}',
         'rss-{{content_type_name}}$',
         'sitemap',
-        'tag-{{tag_id}}'
+        'tag-{{tags}}'
     ];
 
     /**
@@ -154,32 +154,61 @@ class ContentCacheHelper extends CacheHelper
             preg_match_all('@{{([A-Za-z0-9_-]+)}}@', $key, $matches);
 
             foreach ($matches[1] as $match) {
-                if (in_array($match, [ 'starttime', 'created', 'endtime' ])) {
-                    $key = !empty($item->{$match}) ?
-                        preg_replace(sprintf('@{{%s}}@', $match), $item->{$match}->format('Y-m-d'), $key) :
-                        null;
+                $pattern = sprintf('@{{%s}}@', $match);
+
+                if (empty($item->{$match})) {
+                    $key = preg_replace($pattern, '0', $key);
                     continue;
                 }
 
-                if ($match === 'category_id') {
-                    $key = preg_replace(sprintf('@{{%s}}@', $match), $item->categories[0] ?? 0, $key);
+                $method = sprintf('replace%s', ucfirst($match));
 
-                    continue;
-                }
+                $replacement = method_exists($this, $method)
+                    ? $this->{$method}($item)
+                    : $item->{$match};
 
-                if ($match === 'tag_id') {
-                    $tagIds = implode('|', array_map(function ($tag) {
-                        return sprintf('(' . $tag . ')');
-                    }, $item->tags));
-
-                    $key = preg_replace(sprintf('@{{%s}}@', $match), $tagIds, $key);
-                    continue;
-                }
-
-                $key = preg_replace(sprintf('@{{%s}}@', $match), $item->{$match} ?? '0', $key);
+                $key = preg_replace($pattern, $replacement, $key);
             }
         }
 
-        return array_filter($keys);
+        return $keys;
+    }
+
+    /**
+     * Custom replace function for starttime.
+     *
+     * @param Content $item The item to get the starttime from.
+     *
+     * @return String The key with the starttime replaced in it.
+     */
+    protected function replaceStarttime(Content $item)
+    {
+        return $item->starttime->format('Y-m-d');
+    }
+
+    /**
+     * Custom replace function for tags.
+     *
+     * @param Content $item The item to get the tags from.
+     *
+     * @return String The key with the tags replaced in it.
+     */
+    protected function replaceTags(Content $item)
+    {
+        return implode('|', array_map(function ($tag) {
+            return sprintf('(' . $tag . ')');
+        }, $item->tags));
+    }
+
+    /**
+     * Custom replace function for categories.
+     *
+     * @param Content $item The item to get the tags from.
+     *
+     * @return String The key with the tags replaced in it.
+     */
+    protected function replaceCategories(Content $item)
+    {
+        return $item->categories[0];
     }
 }
