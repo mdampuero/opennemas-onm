@@ -82,6 +82,10 @@ class WidgetController extends Controller
 
             $widget = $widgetRenderer->getWidget($widget, $params);
 
+            if (empty($widget)) {
+                return new Response();
+            }
+
             $html = sprintf(
                 '<div class="widget">%s</div>',
                 $type === 'intelligentwidget'
