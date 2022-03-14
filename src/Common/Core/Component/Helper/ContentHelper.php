@@ -334,15 +334,24 @@ class ContentHelper
      *
      * @return array Array with the content properties of each content.
      */
-    public function getSuggested($contentId, $contentTypeName, $categoryId = null, $epp = 4)
+    public function getSuggested($contentTypeName, $categoryId = null, $contentId = null)
     {
-        $epp     = (int) $epp < 1 ? 4 : (int) $epp;
-        $cacheId = sprintf('suggested_contents_%s_%d_%d', $contentTypeName, $categoryId, $epp);
+        $epp = $this->container->get('core.theme')->getSuggestedEpp();
+
+        if (empty($epp)) {
+            return [];
+        }
+
+        $cacheId = sprintf('suggested_contents_%s_%d', $contentTypeName, $categoryId);
+
+        if (!empty($contentId)) {
+            $cacheId .= '_' . $contentId;
+        }
 
         $items = $this->cache->get($cacheId);
 
         if (!empty($items)) {
-            return $this->ignoreCurrent($contentId, $items, $epp);
+            return $items;
         }
 
         $criteria = [
@@ -361,6 +370,12 @@ class ContentHelper
             ]
         ];
 
+        if (!empty($contentId)) {
+            $criteria['pk_content'] = [
+                [ 'value' => [ $contentId ], 'operator' => 'NOT IN' ]
+            ];
+        }
+
         if (!empty($categoryId)) {
             $criteria['category_id'] = [ [ 'value' => $categoryId ] ];
         }
@@ -368,14 +383,14 @@ class ContentHelper
         try {
             $items = $this->entityManager->findBy($criteria, [
                 'starttime' => 'desc'
-            ], $epp + 1, 1);
+            ], $epp, 1);
 
             $this->cache->set($cacheId, $items, 900);
         } catch (\Exception $e) {
             return [];
         }
 
-        return $this->ignoreCurrent($contentId, $items, $epp);
+        return $items;
     }
 
     /**
@@ -610,29 +625,6 @@ class ContentHelper
     public function isSuggested($item)
     {
         return ($item->frontpage == 1);
-    }
-
-    /**
-     * Removes the current content from the list of suggested
-     * contents.
-     *
-     * @param int   $contentId The current content id.
-     * @param array $items     The list of suggested contents for a category.
-     * @param int   $epp       The maximum number of items to return.
-     *
-     * @return array The list of suggested contents.
-     */
-    protected function ignoreCurrent($contentId, $items, $epp)
-    {
-        $current = array_filter($items, function ($a) use ($contentId) {
-            return $a->pk_content == $contentId;
-        });
-
-        $items = array_slice(array_filter($items, function ($a) use ($contentId) {
-            return $a->pk_content != $contentId;
-        }), 0, $epp);
-
-        return $items;
     }
 
     /**

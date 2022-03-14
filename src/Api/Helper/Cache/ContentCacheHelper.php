@@ -48,6 +48,7 @@ class ContentCacheHelper extends CacheHelper
         '.*category-widget-(({{categories}})|(all))' .
         '.*tag-widget-(({{tags}})|(all))' .
         '.*author-widget-(({{fk_author}})|(all))',
+        'last-suggested-{{categories}}',
         'rss-author-{{fk_author}}',
         'rss-{{content_type_name}}$',
         'sitemap',

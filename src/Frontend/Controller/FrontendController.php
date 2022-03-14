@@ -31,7 +31,7 @@ class FrontendController extends Controller
      * {@inheritdoc}
      */
     protected $params = [
-        'x-cache-for' => '1d',
+        'x-cache-for' => '100d',
         'x-cacheable' => true
     ];
 

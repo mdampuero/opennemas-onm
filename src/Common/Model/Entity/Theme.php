@@ -96,6 +96,18 @@ class Theme extends Extension
     }
 
     /**
+     * Returns the number of suggested epp of the theme.
+     *
+     * @return mixed The number of suggested epp or null.
+     */
+    public function getSuggestedEpp()
+    {
+        return array_key_exists('suggested', $this->data['parameters'])
+            ? $this->data['parameters']['suggested']['epp']
+            : null;
+    }
+
+    /**
      * Returns a property for a skin.
      *
      * @param string $skin     The skin id.
