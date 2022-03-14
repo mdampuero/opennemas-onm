@@ -10,6 +10,8 @@ function smarty_function_renderplaceholder($params, &$smarty)
     $placeholder = $params['placeholder'];
     unset($params['items']);
 
+    $params['frontpage'] = $smarty->tpl_vars['category']->value->id ?? '0';
+
     if (!array_key_exists('tags', $params) || empty($params['tags'])) {
         $params['tags'] = $smarty->getTemplateVars('tags');
     }
