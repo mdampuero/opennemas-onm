@@ -140,7 +140,7 @@ class ArticleController extends FrontendController
             return $params['content']->pk_content === $suggested->pk_content;
         })) > 0;
 
-        if (!empty($params['suggested']) && end($params['suggested'])->pk_content === $params['content']->pk_content) {
+        if ($params['isSuggested']) {
             $params['x-tags'] .= sprintf(',last-suggested-%d', $params['o_category']->id);
         }
     }
