@@ -7,7 +7,7 @@ class ArticleCacheHelper extends ContentCacheHelper
     /**
      * {@inheritdoc}
      */
-    protected $redisKeys = [ 'suggested_contents_{{content_type_name}}_{{categories}}' ];
+    protected $redisKeys = [ 'suggested_contents_{{content_type_name}}_{{categories}}*' ];
 
     /**
      * {@inheritdoc}
