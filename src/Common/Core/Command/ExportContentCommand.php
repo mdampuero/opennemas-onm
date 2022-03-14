@@ -16,7 +16,10 @@ class ExportContentCommand extends Command
         'album'   => 0,
         'article' => 0,
         'opinion' => 0,
-        'video'   => 0
+        'video'   => 0,
+        'event'   => 0,
+        'poll'    => 0,
+        'letter'  => 0
     ];
 
     /**
@@ -112,11 +115,14 @@ class ExportContentCommand extends Command
         $this->writeStep('Generating report');
         $this->writeStatus('success', 'DONE');
         $this->writeStatus('info', sprintf(
-            ' (articles: %d, opinions %d, albums: %s, videos: %d)',
+            ' (articles: %d, opinions %d, albums: %d, videos: %d, events: %d, polls: %d, letters: %d)',
             $this->stats['article'],
             $this->stats['opinion'],
             $this->stats['album'],
-            $this->stats['video']
+            $this->stats['video'],
+            $this->stats['event'],
+            $this->stats['poll'],
+            $this->stats['letter']
         ), true);
     }
 
@@ -155,7 +161,7 @@ class ExportContentCommand extends Command
             $criteria['pk_content'] = [[ 'value' => $from, 'operator' => '>=' ]];
         }
 
-        foreach ([ 'video', 'album', 'opinion', 'article' ] as $type) {
+        foreach ([ 'video', 'album', 'opinion', 'article', 'event', 'poll', 'letter' ] as $type) {
             if ($this->output->isVerbose()) {
                 $this->writeStep("Processing $type contents", $this->output->isVeryVerbose(), 2);
             }
