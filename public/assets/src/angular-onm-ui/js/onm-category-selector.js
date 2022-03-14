@@ -456,7 +456,7 @@
             }, true);
 
             // Updates internal model when external model changes
-            $scope.$watch('ngModel', function(nv, ov) {
+            $scope.stopWatching = $scope.$watch('ngModel', function(nv, ov) {
               // Find missing categories on initialization only
               if (!ov && nv) {
                 $scope.findMissingCategories();
@@ -465,6 +465,8 @@
 
               $scope.updateExportModel();
             }, true);
+
+            $scope.$on('categorySelector.destroy', $scope.stopWatching);
           },
         };
       }

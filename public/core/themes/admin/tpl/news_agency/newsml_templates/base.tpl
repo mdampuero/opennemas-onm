@@ -69,6 +69,15 @@
                     <key-list>
                       <keyword key="{renderMetaKeywords content=$content onlyTags=True}"/>
                     </key-list>
+                    {if $content->content_type_name == 'event'}
+                      <identified-content>
+                        <event start-date="{format_date date=$content->event_start_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_start_hour|default:'00:00' type='custom' format="HHmmssxxx"}" end-date="{format_date date=$content->event_end_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_end_hour|default:'00:00' type='custom' format="HHmmssxxx"}"></event>
+                        <location>{$content->event_place}</location>
+                        {if $content->event_website}
+                        <virtloc value="{$content->event_website}"></virtloc>
+                        {/if}
+                      </identified-content>
+                    {/if}
                   </docdata>
                 </head>
                 <body>
@@ -91,6 +100,9 @@
                             {get_url(get_author($content), [ '_absolute' => true ])}
                           </rights.owner.url>
                         {/if}
+                      {elseif $content->content_type_name == 'letter'}
+                        <rights.owner>{$content->author}</rights.owner>
+                        <rights.owner.email>{$content->email}</rights.owner.email>
                       {else}
                         <rights.owner>{$content->agency|default:'Redacción'}</rights.owner>
                       {/if}
@@ -107,6 +119,20 @@
                   <body.content>
                     {if $content->content_type_name == 'album'}
                       <![CDATA[{$content->description}]]>
+                    {elseif $content->content_type_name == 'poll'}
+                      {foreach $content->items as $response}
+                        <div class="response {$response.pk_item}">
+                          {$response.item}
+                        </div>
+                        <div class="votes">
+                          {$response.votes}
+                        </div>
+                      {/foreach}
+                      {if $content->closetime}
+                        <div class="close-time">
+                          {format_date date=$content->closetime type='custom' format="yMMdd'T'HHmmssxxx"}
+                        </div>
+                      {/if}
                     {else}
                       <![CDATA[{$content->body}]]>
                     {/if}

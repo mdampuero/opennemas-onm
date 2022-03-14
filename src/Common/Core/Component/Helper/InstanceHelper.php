@@ -32,6 +32,13 @@ class InstanceHelper
     protected $conn;
 
     /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
+
+    /**
      * The Filesystem component.
      *
      * @var Filesystem
@@ -106,6 +113,39 @@ class InstanceHelper
             return $stats;
         } catch (\Exception $e) {
             return [];
+        }
+    }
+
+    /**
+     * Returns the number mailing sends
+     *
+     * @param Instance $instance The instance.
+     *
+     * @return array The number of emails.
+     */
+    public function countEmails(Instance $instance) : int
+    {
+        try {
+            $this->conn->selectDatabase($instance->getDatabaseName());
+
+            $sql     = 'select value from settings where name like \'last_invoice\'';
+            $setting = $this->conn->fetchAssoc($sql);
+
+            $lastInvoice = new \DateTime(substr($setting['value'], 6, 19));
+            $today       = new \DateTime();
+
+            $sql = sprintf(
+                'select sum(sent_items) as total FROM newsletters'
+                . ' where updated >= "%s" and updated <= "%s" and sent_items > 0',
+                $lastInvoice->format('Y-m-d H:i:s'),
+                $today->format('Y-m-d H:i:s')
+            );
+
+            $emails = $this->conn->fetchAssoc($sql);
+
+            return $emails['total'] ?? 0;
+        } catch (\Exception $e) {
+            return 0;
         }
     }
 

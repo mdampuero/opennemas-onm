@@ -115,9 +115,11 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       var status = { starttime: null, endtime: null, content_status: 1, with_comment: 0 };
       var item   = Object.assign({}, $scope.data.item, status);
 
-      item.tags = item.tags.filter(function(tag) {
-        return Number.isInteger(tag);
-      });
+      if (item.tags) {
+        item.tags = item.tags.filter(function(tag) {
+          return Number.isInteger(tag);
+        });
+      }
 
       var data = {
         item: JSON.stringify(cleaner.clean(item)),
