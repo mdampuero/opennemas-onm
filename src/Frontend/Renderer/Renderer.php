@@ -44,10 +44,9 @@ class Renderer
             return $this->container->get('frontend.renderer.statistics')->render($content, $params);
         }
 
-        $class = get_class($content);
-
         try {
-            return $this->container->get('frontend.renderer.' . strtolower($class))->render($content, $params);
+            return $this->container->get('frontend.renderer.'
+                . strtolower($content->content_type_name))->render($content, $params);
         } catch (ServiceNotFoundException $e) {
             return $this->container->get('frontend.renderer.content')->render($content, $params);
         }

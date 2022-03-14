@@ -1,6 +1,6 @@
 {block name="columns"}
   <div class="column-filters-toggle ng-cloak" ng-click="app.columns.collapsed = !app.columns.collapsed" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
-    <span class="column-filters-ellipsis"></span>
+    <span class="column-filters-ellipsis"><i class="fa fa-lg " ng-class="{ 'fa-angle-down': app.columns.collapsed, 'fa-angle-up': !app.columns.collapsed }"></i></span>
   </div>
   <div class="column-filters collapsed ng-cloak" ng-class="{ 'collapsed': app.columns.collapsed }" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
     <h5>{t}Columns{/t}</h5>
@@ -177,12 +177,12 @@
                 {/block}
               </td>
               <td class="v-align-middle" ng-if="isColumnEnabled('tags')">
-                <small class="text-italic" ng-if="!item.tags || item.tags.length === 0">
+                <small class="text-italic" ng-if="!item.tags || item.tags.length === 0 || (getLocalizedTags(data.extra.tags, item.tags, config.locale.selected, config.locale.multilanguage).length === 0)">
                   &lt;{t}No tags{/t}&gt;
                 </small>
-                <div class="inline m-r-5 m-t-5" ng-repeat="id in item.tags" ng-if="!(data.extra.tags | filter : { id: id })[0].locale || (data.extra.tags | filter : { id: id })[0].locale === config.locale.selected">
-                  <a class="label label-defaul label-info text-bold" href="[% routing.generate('backend_tag_show', { id: (data.extra.tags | filter : { id: id })[0].id }) %]">
-                    [% (data.extra.tags | filter : { id: id })[0].name %]
+                <div class="inline m-r-5 m-t-5" ng-repeat="item in getLocalizedTags(data.extra.tags, item.tags, config.locale.selected, config.locale.multilanguage)">
+                  <a class="label label-defaul label-info text-bold" href="[% routing.generate('backend_tag_show', { id: item.id }) %]">
+                    [% item.name %]
                   </a>
                 </div>
               </td>

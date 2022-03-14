@@ -125,6 +125,42 @@ class CommentController extends FrontendController
     }
 
     /**
+     * Returns the number of comments of the ids passed as parameters.
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     */
+    public function countCommentsAction(Request $request)
+    {
+        $ids      = $request->query->filter('ids', '', FILTER_SANITIZE_STRING);
+        $splitIds = explode(',', $ids);
+
+        if (count($splitIds) === 0) {
+            return new Response(json_encode([]));
+        }
+
+        $comments = $this->get('api.service.comment')->getList(sprintf(
+            'content_id in[%s] and status = "accepted"',
+            $ids
+        ))['items'];
+
+        if (count($comments) === 0) {
+            return new Response(json_encode([]));
+        }
+
+        $response = [];
+
+        foreach ($splitIds as $id) {
+            $response[$id] = count(array_filter($comments, function ($comment) use ($id) {
+                return $comment->content_id == $id;
+            }));
+        }
+
+        return new Response(json_encode($response), 200);
+    }
+
+    /**
      * Votes a comment given the punctuation and comment id
      *
      * @param Request $request the request object

@@ -28,7 +28,6 @@
         $scope.criteria = {
           content_type_name: 'widget',
           category_id: null,
-          renderlet: null,
           epp: 10,
           in_litter: 0,
           orderBy: { created: 'desc' },

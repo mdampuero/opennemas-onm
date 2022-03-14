@@ -1403,28 +1403,3 @@ user_user_group:
             target_table: user_groups
             target_field: [ pk_user_group ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-widgets:
-    columns:
-        pk_widget:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        content:
-            type: text
-            options: { length: 65532, default: null }
-        renderlet:
-            type: string
-            options: { length: 50, notnull: false, default: 'html' }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_widget]
-            primary: true
-            unique: true
-            flags: {  }
-    foreign_keys:
-        -
-            name: widgets_id_contents_id
-            source_field: [ pk_widget ]
-            target_table: contents
-            target_field: [ pk_content ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }

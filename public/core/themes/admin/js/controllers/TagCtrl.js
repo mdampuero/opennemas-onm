@@ -10,23 +10,33 @@
      * @requires $controller
      * @requires $scope
      * @requires $timeout
-     * @requires cleaner
      *
      * @description
      *   Handles actions for tag edit form.
      */
     .controller('TagCtrl', [
-      '$controller', '$scope', '$timeout', 'cleaner', 'http',
-      function($controller, $scope, $timeout, cleaner, http) {
+      '$controller', '$scope', '$timeout', 'http', 'messenger',
+      function($controller, $scope, $timeout, http, messenger) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+
+        /**
+         * @memberOf TagCtrl
+         *
+         * @description
+         *  An object to save the messages associated with the specific fields.
+         *
+         * @type {Object}
+         */
+        $scope.messages = {};
 
         /**
          * @inheritdoc
          */
         $scope.item = {
           description: '',
-          locale: null
+          locale: null,
+          id: null
         };
 
         /**
@@ -68,27 +78,27 @@
 
           var route = {
             name:   $scope.routes.validateItem,
-            params: { name: $scope.item.name, locale: $scope.item.locale }
+            params: { name: $scope.item.name, id: $scope.item.id, locale: $scope.item.locale }
           };
 
           $scope.tm = $timeout(function() {
             http.get(route).then(function() {
+              $scope.messages.name = null;
               $scope.disableFlags('http');
               $scope.form.name.$setValidity('exists', true);
             }, function(response) {
+              messenger.post(response.data);
+              // Save the error in a variable
+              $scope.messages.name = response.data.shift().message;
               $scope.disableFlags('http');
               $scope.form.name.$setValidity('exists', false);
-
-              $scope.error = '<ul><li>' + response.data.map(function(e) {
-                return e.message;
-              }).join('</li><li>') + '</li></ul>';
             });
           }, 500);
         };
 
         // Generates slug when flag changes
         $scope.$watch('flags.generate.slug', function(nv) {
-          if ($scope.item.slug || !nv || !$scope.item.name) {
+          if ($scope.item.slug || !nv || !$scope.item.name || $scope.messages.name) {
             $scope.flags.generate.slug = false;
 
             return;

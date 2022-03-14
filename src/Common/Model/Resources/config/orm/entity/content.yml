@@ -13,6 +13,7 @@ orm:
                     - event
                     - kiosko
                     - letter
+                    - obituary
                     - opinion
                     - photo
                     - poll

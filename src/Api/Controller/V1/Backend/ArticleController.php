@@ -28,6 +28,8 @@ class ArticleController extends ContentController
         'show'   => 'ARTICLE_UPDATE',
     ];
 
+    protected $module = 'article';
+
     /**
      * {@inheritdoc}
      */
@@ -69,7 +71,11 @@ class ArticleController extends ContentController
             'categories'    => $categories,
             'extra_fields'  => $extraFields,
             'subscriptions' => $subscriptions,
-            'tags'          => $this->getTags($items)
+            'tags'          => $this->getTags($items),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ], $extra);
     }
 
@@ -131,11 +137,6 @@ class ArticleController extends ContentController
         $this->view->setCaching(0);
 
         list($positions, $advertisements) = $this->getAdvertisements();
-
-
-        // TODO: This fix is to prevent errors in the preview action when a new tag is being created in the
-        // current article, find the source of the problem and remove this ASAP.
-        unset($article->tags);
 
         $params = [
             'ads_positions'  => $positions,

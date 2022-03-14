@@ -86,7 +86,7 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      */
     $scope.buildScope = function() {
       $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
-
+      $scope.expandFields();
       // Check if item is new (created) or existing for use default value or not
       if (!$scope.data.item.pk_content) {
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
@@ -112,8 +112,14 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       CKEDITOR.instances.body.updateElement();
       CKEDITOR.instances.description.updateElement();
 
-      var status = { starttime: null, endtime: null, content_status: 1 };
+      var status = { starttime: null, endtime: null, content_status: 1, with_comment: 0 };
       var item   = Object.assign({}, $scope.data.item, status);
+
+      if (item.tags) {
+        item.tags = item.tags.filter(function(tag) {
+          return Number.isInteger(tag);
+        });
+      }
 
       var data = {
         item: JSON.stringify(cleaner.clean(item)),

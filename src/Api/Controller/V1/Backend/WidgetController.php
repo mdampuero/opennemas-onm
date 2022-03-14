@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class WidgetController extends ContentOldController
+class WidgetController extends ContentController
 {
     /**
      * {@inheritdoc}
@@ -37,6 +37,8 @@ class WidgetController extends ContentOldController
         'save'   => 'WIDGET_CREATE',
         'show'   => 'WIDGET_UPDATE',
     ];
+
+    protected $module = 'widget';
 
     /**
      * {@inheritdoc}
@@ -74,9 +76,13 @@ class WidgetController extends ContentOldController
     protected function getExtraData($items = null)
     {
         return array_merge(parent::getExtraData($items), [
-            'categories' => $this->getCategories($items),
-            'tags'       => $this->getTags($items),
-            'types'      => $this->getTypes()
+            'categories'   => $this->getCategories($items),
+            'tags'         => $this->getTags($items),
+            'classes'      => $this->getTypes(),
+            'formSettings' => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ]);
     }
 

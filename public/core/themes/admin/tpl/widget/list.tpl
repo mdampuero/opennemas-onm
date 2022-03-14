@@ -64,22 +64,22 @@
       </span>
     </div>
   </li>
-  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="type = [ { id: null, name: '{t}Any{/t}' }, { id: 'intelligentwidget', name: '{t}IntelligentWidget{/t}' }, { id: 'html', name: '{t}HTML{/t}' }]">
-    <ui-select name="renderlet" theme="select2" ng-model="criteria.renderlet">
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="types = [ { id: null, name: '{t}Any{/t}' }, { id: 'intelligentwidget', name: '{t}IntelligentWidget{/t}' }, { id: 'html', name: '{t}HTML{/t}' }]">
+    <ui-select name="widget_type" theme="select2" ng-model="criteria.widget_type">
       <ui-select-match>
         <strong>{t}Type{/t}:</strong> [% $select.selected.name %]
       </ui-select-match>
-      <ui-select-choices repeat="item.id as item in type | filter: { name: $select.search }">
+      <ui-select-choices repeat="item.id as item in types | filter: { name: $select.search }">
         <div ng-bind-html="item.name | highlight: $select.search"></div>
       </ui-select-choices>
     </ui-select>
   </li>
   <li class="quicklinks hidden-xs ng-cloak">
-    <ui-select name="content" theme="select2" ng-model="criteria.content">
+    <ui-select name="class" theme="select2" ng-model="criteria.class">
       <ui-select-match>
         <strong>{t}Content{/t}:</strong> [% $select.selected.name %]
       </ui-select-match>
-      <ui-select-choices repeat="item.id as item in addEmptyValue(data.extra.types, 'id', 'name') | filter: { name: $select.search }">
+      <ui-select-choices repeat="item.id as item in addEmptyValue(data.extra.classes, 'id', 'name') | filter: { name: $select.search }">
         <div ng-bind-html="item.name | highlight: $select.search"></div>
       </ui-select-choices>
     </ui-select>

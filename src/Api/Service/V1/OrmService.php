@@ -100,6 +100,18 @@ class OrmService implements Service
     }
 
     /**
+     * Returns the number of items returned after perform the query.
+     *
+     * @param array $oql The oql to perform the query.
+     *
+     * @return int The number of items in the database.
+     */
+    public function countBy($oql)
+    {
+        return $this->em->getRepository($this->entity, $this->origin)->countBy($oql);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function createItem($data)
