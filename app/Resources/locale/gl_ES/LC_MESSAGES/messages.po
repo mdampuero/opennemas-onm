@@ -1,21 +1,25 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Opennemas Developers <developers@opennemas.com>, 2020-2022.
+# Opennemas Developers <developers@opennemas.com>, 2020-2021.
+# adan <adan@openhost.es>, 2021-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-18 12:18+0000\n"
-"PO-Revision-Date: 2022-02-18 13:34+0100\n"
-"Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
-"Language-Team: Galician\n"
-"Language: gl\n"
+"POT-Creation-Date: 2022-03-14 09:45+0000\n"
+"PO-Revision-Date: 2022-03-14 11:05+0100\n"
+"Last-Translator: adan <adan@openhost.es>\n"
+"Language-Team: Spanish - Spain <adan@openhost.es>\n"
+"Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Generator: Gtranslator 3.36.0\n"
+
+msgid "Y-m-d"
+msgstr "d-m-Y"
 
 msgid "All"
 msgstr "Todos"
@@ -220,9 +224,6 @@ msgstr "Arquivar"
 
 msgid "Without position"
 msgstr "Sen posición"
-
-msgid "Y-m-d"
-msgstr "d-m-Y"
 
 msgid "You have reached your maximum of emails allowed to send per month"
 msgstr "Alcanzaches o numero máximo de envios de correo-e permitidos por mes"
@@ -4514,7 +4515,7 @@ msgid "Prometeo"
 msgstr "Prometeo"
 
 msgid "Prometeo Media ID"
-msgstr "Prometeo Media ID"
+msgstr "ID de medios de Prometeo"
 
 msgid "Internal settings"
 msgstr "Preferencias internas"
@@ -5402,8 +5403,8 @@ msgstr "Optimizar imaxes"
 msgid ""
 "If set, images will be automaticaly optimized when uploaded and imported"
 msgstr ""
-"Se está activo, as imaxes serán optimizadas automaticamente cando se suban "
-"ou se importen"
+"Se se define, as imaxes optimizaranse automaticamente cando se carguen e se "
+"importen"
 
 msgid "Delete multiple images"
 msgstr "Eliminar varias imaxes"
@@ -5440,7 +5441,7 @@ msgid "Mortuary"
 msgstr "Funeraria"
 
 msgid "Google maps url"
-msgstr "Url de Google Maps"
+msgstr "Google Maps url"
 
 msgid "New obituary"
 msgstr "Nova necrolóxica"
@@ -6113,11 +6114,11 @@ msgstr "O seu periódico foi creado en %1"
 msgid "Storage size"
 msgstr "Amacenamento ocupado"
 
-msgid "Page views this month"
-msgstr "Páxinas vistas este mes"
+msgid "Users Active"
+msgstr "Usuarios activos"
 
-msgid "coming soon... work in progress..."
-msgstr "pronto terás esta información…"
+msgid "Emails sent from"
+msgstr "Correos electrónicos enviados desde"
 
 msgid "Opennemas offers many more modules and solutions"
 msgstr "Opennemas ofrece moitos máis módulos e solucións"
@@ -6772,7 +6773,7 @@ msgid "Attachments"
 msgstr "Anexos"
 
 msgid "Kioskos"
-msgstr "Kioskos"
+msgstr "Kiosko"
 
 msgid "Emails"
 msgstr "Correos-e"
@@ -7058,11 +7059,47 @@ msgstr "Nome do grupo"
 #~ msgid "Invalid tag"
 #~ msgstr "Etiqueta non válida"
 
+#~ msgid "Page views this month"
+#~ msgstr "Páxinas vistas este mes"
+
+#~ msgid "coming soon... work in progress..."
+#~ msgstr "pronto terás esta información…"
+
+#~ msgid "Keyword"
+#~ msgstr "Palabra clave"
+
+#~ msgid "Editing keyword"
+#~ msgstr "Editando palabra chave"
+
+#~ msgid "Creating keyword"
+#~ msgstr "Creando palabra chave"
+
+#~ msgid "Internal Search"
+#~ msgstr "Busca interna"
+
 #~ msgid "Keyword created successfully"
 #~ msgstr "Palabra chave creada correctamente"
 
 #~ msgid "Keyword updated successfully"
 #~ msgstr "Palabra chave actualizada correctamente"
+
+#~ msgid "Author information"
+#~ msgstr "Información do autor"
+
+#~ msgid "Unable to find any keyword that matches your search."
+#~ msgstr "Non se puideron atopar palabras clave que coincidan coa súa busca."
+
+#~ msgid "Edit this content"
+#~ msgstr "Editar este contido"
+
+#~ msgid "Are you sure that do you want remove \"%1\"?"
+#~ msgstr "Tes certeza que queres eliminar «%1»?"
+
+#~ msgid "Delete letter"
+#~ msgstr "Eliminar carta"
+
+#~ msgid "Delete letters"
+#~ msgstr "Eliminar cartas"
 
 #~ msgid "Letter successfully created."
 #~ msgstr "Carta creada correctamente"
@@ -7101,38 +7138,11 @@ msgstr "Nome do grupo"
 #~ msgid "Creating letter"
 #~ msgstr "Creando carta"
 
-#~ msgid "Author information"
-#~ msgstr "Información do autor"
-
 #~ msgid "Related url"
 #~ msgstr "Url relacionado"
 
 #~ msgid "Image assigned"
 #~ msgstr "Imaxe asignada"
-
-#~ msgid "Delete letter"
-#~ msgstr "Eliminar carta"
-
-#~ msgid "Delete letters"
-#~ msgstr "Eliminar cartas"
-
-#~ msgid "Unable to find any keyword that matches your search."
-#~ msgstr "Non se puideron atopar palabras clave que coincidan coa súa busca."
-
-#~ msgid "Keyword"
-#~ msgstr "Palabra clave"
-
-#~ msgid "Edit this content"
-#~ msgstr "Editar este contido"
-
-#~ msgid "Are you sure that do you want remove \"%1\"?"
-#~ msgstr "Tes certeza que queres eliminar «%1»?"
-
-#~ msgid "Editing keyword"
-#~ msgstr "Editando palabra chave"
-
-#~ msgid "Creating keyword"
-#~ msgstr "Creando palabra chave"
 
 #~ msgid "Manage poll comments"
 #~ msgstr "Xestionar comentarios de enquisas"
