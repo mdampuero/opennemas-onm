@@ -9,8 +9,6 @@
  */
 namespace Tests\Libs\Smarty;
 
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
-
 /**
  * Defines test cases for smarty_function_render_menu function.
  */
@@ -29,10 +27,6 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
 
         $this->menu = $this->getMockBuilder('Menu')
             ->setMethods([ 'getRawItems', 'localize' ])
-            ->getMock();
-
-        $this->mr = $this->getMockBuilder('MenuManager')
-            ->setMethods([ 'findOneBy' ])
             ->getMock();
 
         $this->mh = $this->getMockBuilder('MenuHelper')
@@ -71,8 +65,6 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
-            case 'menu_repository':
-                return $this->mr;
             case 'api.service.menu':
                 return $this->ms;
             case 'core.helper.menu':
