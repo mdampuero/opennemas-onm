@@ -796,7 +796,7 @@ menumetas:
     columns:
         fk_menu:
             type: integer
-            options: { unsigned: true, autoincrement: true }
+            options: { unsigned: true }
         meta_key:
             type: string
             options: { length: 255, notnull: true }
