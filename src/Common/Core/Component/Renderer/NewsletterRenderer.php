@@ -56,8 +56,8 @@ class NewsletterRenderer
 
             $menuHelper = $this->container->get('core.helper.menu');
         } catch (\Exception $e) {
-            $menu               = [];
-            $menu['menu_items'] = [];
+            $menu             = [];
+            $menu->menu_items = [];
         }
 
 
@@ -82,7 +82,7 @@ class NewsletterRenderer
         return $this->tpl->fetch('newsletter/newsletter.tpl', [
             'item'              => $newsletter,
             'newsletterContent' => $newsletterContent,
-            'menuFrontpage'     => $menuHelper->parseMenuItemsToStdClass($localizedMenuItems),
+            'menuFrontpage'     => $menuHelper->parseMenuItemsToStdClass($menu->menu_items),
             'current_date'      => new \DateTime(),
             'URL_PUBLIC'        => 'http://' . $publicUrl,
         ]);

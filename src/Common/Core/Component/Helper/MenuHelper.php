@@ -29,7 +29,7 @@ class MenuHelper
             if ($item['pk_father'] > 0) {
                 foreach ($parsedItems as $parsedItem) {
                     if ($parsedItem['pk_item'] == $item['pk_father']) {
-                        if (!$parsedItem['submenus']) {
+                        if (!array_key_exists('submenus', $parsedItem)) {
                             $parsedItem['submenus'] = [];
                         }
                         array_push($parsedItem['submenus'], $item);
