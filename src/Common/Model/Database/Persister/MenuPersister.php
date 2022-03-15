@@ -189,7 +189,6 @@ class MenuPersister extends BasePersister
                 \PDO::PARAM_INT,
                 \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
-
                 \PDO::PARAM_STR,
                 \PDO::PARAM_INT,
                 \PDO::PARAM_INT
