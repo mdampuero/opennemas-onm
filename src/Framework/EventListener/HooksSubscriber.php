@@ -20,12 +20,14 @@ class HooksSubscriber implements EventSubscriberInterface
      * @param AbstractCache   $cache     The cache service.
      * @param LoggerInterface $logger    The logger service.
      * @param CacheManager    $template  The CacheManager services for template.
+     * @param Cache           $redis     The cache service for redis.
      */
-    public function __construct($container, $cache, $logger, $template)
+    public function __construct($container, $cache, $logger, $template, $redis)
     {
         $this->cache     = $cache;
         $this->container = $container;
         $this->logger    = $logger;
+        $this->redis     = $redis;
         $this->template  = $template;
     }
 
@@ -110,6 +112,7 @@ class HooksSubscriber implements EventSubscriberInterface
             'frontpage.save_position' => [
                 ['removeVarnishCacheFrontpage', 5],
                 ['removeObjectCacheFrontpageMap', 5],
+                ['removeObjectCacheForContentListingInFrontpage', 5],
                 ['removeVarnishCacheFrontpageCSS', 5],
                 ['removeSmartyCacheForFrontpageOfCategory', 5],
                 ['removeDynamicCssSettingForFrontpage', 5],
@@ -244,6 +247,28 @@ class HooksSubscriber implements EventSubscriberInterface
             }
 
             $this->cache->delete(\underscore(get_class($object)) . '-' . $object->id);
+        }
+    }
+
+    /**
+     * Removes the redis cache for the content listing widgets in frontpage.
+     *
+     * @param Event $event The event to handle.
+     */
+    public function removeObjectCacheForContentListingInFrontpage(Event $event)
+    {
+        $keys = $event->hasArgument('keys') ? $event->getArgument('keys') : [];
+
+        if (empty($keys)) {
+            return;
+        }
+
+        $keys = array_filter($keys, function ($key) {
+            return explode('-', $key)[0] === 'widget';
+        });
+
+        foreach ($keys as $key) {
+            $this->redis->removeByPattern(sprintf('*WidgetContentListing-%s*', explode('-', $key)[1]));
         }
     }
 
