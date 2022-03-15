@@ -257,7 +257,8 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeObjectCacheForContentListingInFrontpage(Event $event)
     {
-        $keys = $event->hasArgument('keys') ? $event->getArgument('keys') : [];
+        $keys     = $event->hasArgument('keys') ? $event->getArgument('keys') : [];
+        $category = $event->getArgument('category');
 
         if (empty($keys)) {
             return;
@@ -268,7 +269,10 @@ class HooksSubscriber implements EventSubscriberInterface
         });
 
         foreach ($keys as $key) {
-            $this->redis->removeByPattern(sprintf('*WidgetContentListing-%s*', explode('-', $key)[1]));
+            $this->redis
+                ->removeByPattern(
+                    sprintf('*WidgetContentListing-%s*%s', explode('-', $key)[1], sprintf('frontpage-%s', $category))
+                );
         }
     }
 
