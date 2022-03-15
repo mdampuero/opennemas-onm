@@ -120,23 +120,18 @@ class MenuPersister extends BasePersister
     }
 
     /**
-     * Persits the content categories.
+     * Persits the menu items.
      *
      * @param integer $id         The entity id.
-     * @param array   $categories The list of category ids.
+     * @param array   $menuItems  The list of menu items to persist.
      */
     protected function persistMenuItems($id, $menuItems)
     {
-        // Ignore metas with value = null
-        if (!empty($menuItems)) {
-            $menuItems = array_filter($menuItems);
-        }
-
-        // Remove old
+        // Remove old menu items.
         $this->removeMenuItems($id);
 
-        // Update
-        $this->saveMenuItems($id, $menuItems);
+        // Save the new menu items.
+        $this->saveMenuItems($id, array_filter($menuItems));
     }
 
     /**
