@@ -35,7 +35,6 @@ class MenuController extends BackendController
      */
     protected $resource = 'menus';
 
-
     /**
      * Displays the form to edit an item.
      *
