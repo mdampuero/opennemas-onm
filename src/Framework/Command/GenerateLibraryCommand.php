@@ -62,7 +62,7 @@ EOF
 
         $menu = $this->generateMenu();
 
-        if (empty($menu->items)) {
+        if (empty($menu->menu_items)) {
             $input->writeln("There are no frontpages. You must define archive menu.");
 
             return;
@@ -73,7 +73,7 @@ EOF
         // multi handle
         $mh = curl_multi_init();
 
-        foreach ($menu->items as $item) {
+        foreach ($menu->menu_items as $item) {
             $category_slug = $item->link;
 
             if (!empty($category_slug)) {
@@ -101,7 +101,7 @@ EOF
         $pattern     = [];
         $replacement = [];
 
-        foreach ($menu->items as $item) {
+        foreach ($menu->menu_items as $item) {
             $category  = $item->link;
             $pattern[] = "@href=\"/seccion/{$category}\"@";
             //archive/digital/2013/02/02/home.html
