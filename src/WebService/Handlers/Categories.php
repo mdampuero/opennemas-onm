@@ -118,8 +118,7 @@ class Categories
             $menu       = $menuService->getItemBy($oql);
             $menuHelper = $this->container->get('core.helper.menu');
 
-            $menuItems          = $menuHelper->parseToSubmenus($menu->menu_items);
-            $menuItemsObject    = $menuHelper->parseMenuItemsWithSubmenusToStdClass($menuItems);
+            $menuItemsObject = $menuHelper->castToObjectNested($menu->menu_items);
 
             $categories = [];
             foreach ($menuItemsObject as $key => $value) {

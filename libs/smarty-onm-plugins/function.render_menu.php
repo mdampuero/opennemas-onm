@@ -38,8 +38,7 @@ function smarty_function_render_menu($params, &$smarty)
             return '';
         }
 
-        $menuItems          = $menuHelper->parseToSubmenus($menu->menu_items);
-        $menuItemsObject    = $menuHelper->parseMenuItemsWithSubmenusToStdClass($menuItems);
+        $menuItemsObject = $menuHelper->castToObjectNested($menu->menu_items);
 
         $smarty->assign([
             'menuItems'       => !empty($menuItemsObject) ? $menuItemsObject : [],

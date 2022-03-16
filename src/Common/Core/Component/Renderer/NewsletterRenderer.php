@@ -82,7 +82,7 @@ class NewsletterRenderer
         return $this->tpl->fetch('newsletter/newsletter.tpl', [
             'item'              => $newsletter,
             'newsletterContent' => $newsletterContent,
-            'menuFrontpage'     => $menuHelper->parseMenuItemsToStdClass($menu->menu_items),
+            'menuFrontpage'     => $menuHelper->castToObjectFlat($menu->menu_items, false),
             'current_date'      => new \DateTime(),
             'URL_PUBLIC'        => 'http://' . $publicUrl,
         ]);
