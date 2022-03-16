@@ -63,7 +63,7 @@ EOF
         $menu = $this->generateMenu();
 
         if (empty($menu->menu_items)) {
-            $input->writeln("There are no frontpages. You must define archive menu.");
+            $output->writeln("There are no frontpages. You must define archive menu.");
 
             return;
         }
