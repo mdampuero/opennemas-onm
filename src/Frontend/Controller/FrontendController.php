@@ -552,15 +552,15 @@ class FrontendController extends Controller
 
         // Get menu
         $menuService = $this->container->get('api.service.menu');
-        $oql = ' name = "amp" ';
-        $ampMenu = [];
+
         try {
-            $ampMenu = $menuService->getItemBy($oql);
-            $ampMenu = !empty($ampMenu)
-            ? $ampMenu
-            : $menuService->getItemBy(' name = "frontpage" ');
+            $ampMenu = $menuService->getItemBy(' name = "amp" ');
         } catch (\Api\Exception\GetItemException $e) {
-            $ampMenu = [];
+            try {
+                $ampMenu = $menuService->getItemBy(' name = "frontpage" ');
+            } catch (\Exception $e) {
+                $ampMenu = [];
+            }
         }
 
         if (!empty($ampMenu)) {
