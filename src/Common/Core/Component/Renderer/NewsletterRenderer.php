@@ -70,7 +70,7 @@ class NewsletterRenderer
 
         $time = new \DateTime(null, $this->container->get('core.locale')->getTimeZone());
 
-        $newsletter->title = $newsletter->params && $newsletter->params['append_title'] == "1" ?
+        $newsletter->title = !empty($newsletter->params['append_title']) ?
             $this->updateTitle($newsletter, $newsletterContent) :
             sprintf('%s [%s]', $newsletter->title, $time->format('d/m/Y'));
 
