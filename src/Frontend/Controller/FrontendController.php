@@ -71,7 +71,7 @@ class FrontendController extends Controller
         $this->checkSecurity($this->extension);
 
         $action = $this->get('core.globals')->getAction();
-        $params = $this->getQueryParameters($action, $request->query->all());
+        $params = $request->query->all();
 
         $expected = $this->getExpectedUri($action, $params);
 

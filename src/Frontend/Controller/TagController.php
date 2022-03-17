@@ -94,7 +94,7 @@ class TagController extends FrontendController
     {
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
-        $params = $this->getQueryParameters($action, $request->query->all());
+        $params = $request->query->all();
 
         // Deprecate resource parameter
         unset($params['resource']);
