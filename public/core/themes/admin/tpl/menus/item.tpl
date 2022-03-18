@@ -58,7 +58,7 @@
       <p>
         {t}Use drag and drop to sort and nest elements.{/t}
       </p>
-      <div class="menu-items ng-cloak angular-ui-tree" ui-tree data-max-depth="2">
+      <div class="menu-items ng-cloak angular-ui-tree" ui-tree="treeOptions" data-max-depth="2">
         <ol ui-tree-nodes="" ng-model="parents">
           <li ng-repeat="item in parents track by item.pk_item" ui-tree-node ng-include="'menu-item'"></li>
         </ol>

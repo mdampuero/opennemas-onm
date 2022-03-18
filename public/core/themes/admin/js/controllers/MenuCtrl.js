@@ -67,6 +67,24 @@
         $scope.search = {};
 
         /**
+         * @memberOf MenuCtrl
+         *
+         * @description
+         *  The options for ui-tree directive.
+         *
+         * @type {Object}
+         */
+        $scope.treeOptions = {
+
+          // Generate a unique pk_item for the new element dropped
+          dropped: function(e) {
+            if (e.source.cloneModel) {
+              e.source.cloneModel.pk_item = ++$scope.last;
+            }
+          }
+        };
+
+        /**
          * @inheritdoc
          */
         $scope.hasMultilanguage = function() {
@@ -116,6 +134,8 @@
 
           $scope.menuData = $scope.transformExtraData($scope.data.extra);
           $scope.linkData = [ Object.assign({}, $scope.defaultLink) ];
+
+          $scope.last = $scope.getLastIndex($scope.data.item.menu_items);
 
           $scope.parents = $scope.filterParents();
           $scope.childs  = $scope.filterChilds($scope.parents);
@@ -176,7 +196,7 @@
             });
           }
 
-          $scope.childs[item.pk_item] = [];
+          delete $scope.childs[item.pk_item];
           $scope.parents = $scope.parents.filter(function(parent) {
             return parent.pk_item !== item.pk_item;
           });
@@ -210,10 +230,6 @@
             object[key] = [];
 
             data[key].forEach(function(item) {
-              if ($scope.isAlreadyInMenu(key, item[replacements[key].link_name])) {
-                return;
-              }
-
               object[key].push({
                 pk_item: null,
                 pk_menu: null,
@@ -230,10 +246,6 @@
 
           Object.keys(data.syncBlogCategory).forEach(function(site) {
             data.syncBlogCategory[site].categories.forEach(function(category) {
-              if ($scope.isAlreadyInMenu('syncBlogCategory', category)) {
-                return;
-              }
-
               object.syncBlogCategory.push(
                 {
                   pk_item: null,
@@ -252,22 +264,58 @@
         };
 
         /**
-         * Checks if the link is already in the array of menu items.
+         * Calculates the last pk_item of the menu items.
          *
-         * @param {string} type The type of the element.
-         * @param {string} link The link to check if exists in the array.
-         * @returns True if the element already exists, false otherwise.
+         * @param {array} menuItems The array with the items of the menu.
+         * @returns The last pk_item of the given array.
          */
-        $scope.isAlreadyInMenu = function(type, link) {
-          return $scope.data.item.menu_items.some(function(item) {
-            return item.link_name === link && item.type === type;
+        $scope.getLastIndex = function(menuItems) {
+          var last = 1;
+
+          if (!menuItems || menuItems.length === 0) {
+            return last;
+          }
+
+          menuItems.forEach(function(menuItem) {
+            if (menuItem.pk_item && menuItem.pk_item > last) {
+              last = menuItem.pk_item;
+            }
           });
+
+          return last;
         };
 
-        $scope.$watch('linkData.length', function(nv, ov) {
-          if (ov && !nv) {
-            $scope.linkData = [ Object.assign({}, $scope.defaultLink) ];
+        /**
+         * Watcher to generate the array of childs for the new parents.
+         */
+        $scope.$watch(function() {
+          if (!$scope.parents) {
+            return null;
           }
+
+          return $scope.parents.map(function(parent) {
+            return parent.pk_item;
+          }).join(',');
+        }, function(nv, ov) {
+          if (!nv || !ov) {
+            return;
+          }
+
+          var oldKeys = ov.split(',');
+
+          var newKey = nv.split(',').filter(function(key) {
+            return !oldKeys.includes(key);
+          });
+
+          if (!newKey || newKey.length === 0) {
+            return;
+          }
+
+          if ($scope.childs[newKey.shift()]) {
+            return;
+          }
+
+          $scope.childs[newKey.shift()] = [];
         });
       }
     ]);
