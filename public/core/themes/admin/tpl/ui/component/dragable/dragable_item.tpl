@@ -1,4 +1,4 @@
-<li ng-repeat="item in {$iData} | filter:filterItems track by $index" ui-tree-node  ng-init="item.type = '{$iType}';filter({$iFilterData}, item)" class="ng-scope angular-ui-tree-node" >
+<li ng-repeat="item in {$iData} | filter:filterItems track by $index" ui-tree-node  ng-init="item.type = '{$iType}'" class="ng-scope angular-ui-tree-node" >
   <div class="menu-item">
     <span ui-tree-handle>
       <span class="angular-ui-tree-icon"></span>
