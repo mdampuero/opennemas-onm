@@ -311,11 +311,13 @@
             return;
           }
 
-          if ($scope.childs[newKey.shift()]) {
+          var key = newKey.shift();
+
+          if ($scope.childs[key]) {
             return;
           }
 
-          $scope.childs[newKey.shift()] = [];
+          $scope.childs[key] = [];
         });
       }
     ]);
