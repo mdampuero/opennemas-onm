@@ -16,10 +16,12 @@
         </label>
         <input class="menu-item-title" ng-model="item.title" tooltip-enable="languageData.default !== lang" type="text" uib-tooltip="{t}Original:{/t} [% item.title %]">
       </div>
+      <div ng-if="item.type === 'external'" class="col-sm-6 col-lg-6">
         <label class="visible-xs">
           {t}Link to{/t}
         </label>
         <input class="menu-item-link" ng-model="item.link_name" tooltip-enable="languageData.default !== lang" type="text" uib-tooltip="{t}Original:{/t} [% item.link_name %]">
+      </div>
     </div>
   </div>
   <div class="menu-item-button">
@@ -29,6 +31,6 @@
   </div>
   </span>
 </div>
-<ol ui-tree-nodes="" ng-model="item.submenu">
-  <li ng-repeat="item in item.submenu track by $index" ui-tree-node ng-init="item.position = $index + 1" ng-include="'menu-sub-item'" ></li>
+<ol ui-tree-nodes="" ng-model="childs[item.pk_item]">
+  <li ng-repeat="item in childs[item.pk_item] track by item.pk_item" ui-tree-node ng-include="'menu-sub-item'" ></li>
 </ol>
