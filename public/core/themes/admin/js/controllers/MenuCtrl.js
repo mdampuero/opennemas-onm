@@ -229,15 +229,11 @@
          * @param {Object} item The item to remove from the array of menu items.
          */
         $scope.removeItem = function(item) {
-          if (!$scope.childs[item.pk_item]) {
-            for (var id in $scope.childs) {
-              $scope.childs[id] = $scope.childs[id].filter(function(child) {
-                return child.pk_item !== item.pk_item;
-              });
-            }
-            return;
+          for (var id in $scope.childs) {
+            $scope.childs[id] = $scope.childs[id].filter(function(child) {
+              return child.pk_item !== item.pk_item;
+            });
           }
-
           delete $scope.childs[item.pk_item];
           $scope.parents = $scope.parents.filter(function(parent) {
             return parent.pk_item !== item.pk_item;
