@@ -231,9 +231,9 @@
           var map       = {};
 
           $scope.parents = $scope.parents.map(function(parent, index) {
-            map[index + 1]      = parent.pk_item;
-            parent.pk_menu  = $scope.item.pk_menu;
-            parent.position = index + 1;
+            map[index + 1]  = parent.pk_item;
+            parent.pk_menu  = $scope.data.item.pk_menu;
+            parent.position = index;
             parent.pk_item  = index + 1;
             menuItems.push(parent);
             return parent;
@@ -241,20 +241,20 @@
 
           var childs = {};
 
-          for (var parent in $scope.parents) {
-            childs[parent] = $scope.childs[map[parent]];
+          for (var index in map) {
+            childs[index] = $scope.childs[map[index]];
           }
 
-          $scope.childs = childs;
+          $scope.childs = Object.assign({}, childs);
 
           for (var parent in $scope.childs) {
             for (var child in $scope.childs[parent]) {
               var item = $scope.childs[parent][child];
 
-              item.pk_item   = menuItems.length + 1;
               item.pk_father = parent;
-              item.pk_menu   = $scope.item.pk_menu;
               item.position  = child;
+              item.pk_menu   = $scope.data.item.pk_menu;
+              item.pk_item   = menuItems.length + 1;
               menuItems.push(item);
             }
           }
@@ -335,7 +335,7 @@
          * @returns The last pk_item of the given array.
          */
         $scope.getLastIndex = function(menuItems) {
-          var last = 1;
+          var last = 0;
 
           if (!menuItems || menuItems.length === 0) {
             return last;
