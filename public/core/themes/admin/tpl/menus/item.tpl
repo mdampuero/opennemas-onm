@@ -26,7 +26,9 @@
       {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="blog-category" iIcon="fa fa-bookmark" iSearchModel="search_manual_categories" iName="{t}Manual categories{/t}" iData="dragables['blog-category']"}
       {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="static" iIcon="fa fa-file" iSearchModel="search_pages" iName="{t}Static pages{/t}" iData="dragables.static"}
       {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="internal" iIcon="fa fa-cube" iSearchModel="search_modules" iName="{t}Modules{/t}" iData="dragables.internal"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="syncBlogCategory" iIcon="fa fa-exchange" iSearchModel="search_sites" iName="{t}Synchronized sites{/t}" iData="dragables.syncBlogCategory"}
+      {is_module_activated name="SYNC_MANAGER"}
+        {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="syncBlogCategory" iIcon="fa fa-exchange" iSearchModel="search_sites" iName="{t}Synchronized sites{/t}" iData="dragables.syncBlogCategory"}
+      {/is_module_activated}
       {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="external" iIcon="fa fa-external-link" iName="{t}Custom link{/t}" iData="linkData" iSimple=true}
     </div>
   </div>
