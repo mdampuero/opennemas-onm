@@ -255,7 +255,6 @@
               item.pk_father = parent;
               item.pk_menu   = $scope.item.pk_menu;
               item.position  = child;
-
               menuItems.push(item);
             }
           }
