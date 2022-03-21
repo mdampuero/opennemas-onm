@@ -361,11 +361,11 @@
             return parent.pk_item;
           }).join(',');
         }, function(nv, ov) {
-          if (!nv || !ov) {
+          if (!nv && !ov) {
             return;
           }
 
-          var oldKeys = ov.split(',');
+          var oldKeys = ov ? ov.split(',') : [];
 
           var newKey = nv.split(',').filter(function(key) {
             return !oldKeys.includes(key);
