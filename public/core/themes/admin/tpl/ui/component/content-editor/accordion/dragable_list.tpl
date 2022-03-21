@@ -12,7 +12,7 @@
   </div>
 {/if}
   <div class="form-group no-margin menu-dragable-accordion">
-    <div class="menu-items ng-cloak" ui-tree="treeOptions" data-clone-enabled="true" data-nodrop-enabled="true" data-max-depth="1">
+    <div ng-if="{$iData}.length > 0" class="menu-items ng-cloak" ui-tree="treeOptions" data-clone-enabled="true" data-nodrop-enabled="true" data-max-depth="1">
       <ol ui-tree-nodes="" ng-model={$iData}>
         {include file="ui/component/dragable/dragable_item.tpl"}
       </ol>
