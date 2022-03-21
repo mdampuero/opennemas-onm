@@ -193,7 +193,8 @@
 
         /**
          * Filters the array of menu items to show only the parents.
-         * @returns
+         *
+         * @returns All the menu items that are parents.
          */
         $scope.filterParents = function() {
           return $scope.item.menu_items.filter(function(item) {
@@ -203,6 +204,7 @@
 
         /**
          * Filters the array of menu items to show only the childs of the given parent.
+         *
          * @param {array} parents The array of parents.
          */
         $scope.filterChilds = function(parents) {
@@ -311,8 +313,8 @@
         };
 
         /**
-         *
          * @param {Object} dragable A menu item object.
+         *
          * @returns true if the menu item is already in the menu, false otherwise.
          */
         $scope.isAlreadyInMenu = function(dragable) {
@@ -338,9 +340,9 @@
         };
 
         /**
-         *
          * @param {Object} original The original object.
          * @param {Object} copy     The item to check if is a copy of the original
+         *
          * @returns true if the objects are equal, false otherwise.
          */
         $scope.isEqual = function(original, copy) {
