@@ -2959,7 +2959,7 @@ msgid "Link to"
 msgstr "Enlace a"
 
 msgid "Automatic categories"
-msgstr "Categorías autmáticas"
+msgstr "Categorías automáticas"
 
 msgid "Manual categories"
 msgstr "Categorías manuales"
