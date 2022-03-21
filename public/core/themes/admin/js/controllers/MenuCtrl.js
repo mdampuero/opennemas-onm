@@ -387,23 +387,10 @@
         });
 
         /**
-         * Watcher to generate the array of childs for the new parents.
+         * Watcher to refresh the dragable items when something changes in search or childs.
          */
         $scope.$watch(function() {
-          return JSON.stringify($scope.childs);
-        }, function(nv, ov) {
-          if (nv === ov) {
-            return;
-          }
-
-          $scope.dragables = $scope.filterDragables($scope.menuData);
-        });
-
-        /**
-         * Watcher to generate the array of childs for the new parents.
-         */
-        $scope.$watch(function() {
-          return JSON.stringify($scope.search);
+          return JSON.stringify($scope.childs) + JSON.stringify($scope.search);
         }, function(nv, ov) {
           if (nv === ov) {
             return;
