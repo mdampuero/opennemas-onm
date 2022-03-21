@@ -1,4 +1,4 @@
-<li ng-repeat="item in {$iData} | filter:filterItems track by $index" ui-tree-node class="ng-scope angular-ui-tree-node" >
+<li ng-repeat="item in {$iData} track by item.link_name" ui-tree-node class="ng-scope angular-ui-tree-node" >
   <div class="menu-item">
     <span ui-tree-handle>
       <span class="angular-ui-tree-icon"></span>

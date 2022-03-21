@@ -60,6 +60,29 @@
          * @memberOf MenuCtrl
          *
          * @description
+         *  The replacements for the name of the property link_name on the dragable items.
+         *
+         * @type {Object}
+         */
+        $scope.replacements = {
+          internal: {
+            link_name: 'link',
+          },
+          static: {
+            link_name: 'slug',
+          },
+          'blog-category': {
+            link_name: 'name'
+          },
+          category: {
+            link_name: 'name'
+          }
+        };
+
+        /**
+         * @memberOf MenuCtrl
+         *
+         * @description
          *  The object to save the queries.
          *
          * @type {Object}
@@ -75,7 +98,6 @@
          * @type {Object}
          */
         $scope.treeOptions = {
-
           // Generate a unique pk_item for the new element dropped
           dropped: function(e) {
             if (e.source.cloneModel) {
@@ -132,26 +154,41 @@
 
           $scope.data.extra['blog-category'] = angular.copy($scope.data.extra.category);
 
-          $scope.menuData = $scope.transformExtraData($scope.data.extra);
-          $scope.linkData = [ Object.assign({}, $scope.defaultLink) ];
-
-          $scope.last = $scope.getLastIndex($scope.data.item.menu_items);
-
-          $scope.parents = $scope.filterParents();
-          $scope.childs  = $scope.filterChilds($scope.parents);
+          $scope.menuData  = $scope.transformExtraData($scope.data.extra);
+          $scope.parents   = $scope.filterParents();
+          $scope.childs    = $scope.filterChilds($scope.parents);
+          $scope.dragables = $scope.filterDragables($scope.menuData);
+          $scope.linkData  = [ Object.assign({}, $scope.defaultLink) ];
+          $scope.last      = $scope.getLastIndex($scope.data.item.menu_items);
         };
 
         /**
-         * @param {Object} item The menu item of the right block.
+         * @param {Object} dragables An object with the arrays of dragable items.
+         *
+         * @returns The dragable items that are not filtered and are not in the menu.
+         */
+        $scope.filterDragables = function(dragables) {
+          var object = {};
+
+          Object.keys(dragables).forEach(function(type) {
+            object[type] = $scope.filterItems($scope.menuData[type]);
+          });
+
+          return object;
+        };
+
+        /**
+         * @param {Object} dragables The menu items of the right block.
          *
          * @returns The items that match with the search string.
          */
-        $scope.filterItems = function(item) {
-          if (!item.type || !$scope.search[item.type]) {
-            return true;
-          }
+        $scope.filterItems = function(dragables) {
+          return dragables.filter(function(dragable) {
+            var valid = !$scope.search[dragable.type] ||
+              dragable.title.toLowerCase().indexOf($scope.search[dragable.type].toLowerCase()) !== -1;
 
-          return item.title.toLowerCase().indexOf($scope.search[item.type].toLowerCase()) !== -1;
+            return valid && !$scope.isAlreadyInMenu(dragable);
+          });
         };
 
         /**
@@ -190,10 +227,13 @@
          * @param {Object} item The item to remove from the array of menu items.
          */
         $scope.removeItem = function(item) {
-          if (item.pk_father) {
-            $scope.childs[item.pk_father] = $scope.childs[item.pk_father].filter(function(child) {
-              return child.pk_item !== item.pk_item;
-            });
+          if (!$scope.childs[item.pk_item]) {
+            for (var id in $scope.childs) {
+              $scope.childs[id] = $scope.childs[id].filter(function(child) {
+                return child.pk_item !== item.pk_item;
+              });
+            }
+            return;
           }
 
           delete $scope.childs[item.pk_item];
@@ -209,24 +249,9 @@
          * @returns The extra data unified with menu item.
          */
         $scope.transformExtraData = function(data) {
-          var replacements = {
-            internal: {
-              link_name: 'link',
-            },
-            static: {
-              link_name: 'slug',
-            },
-            'blog-category': {
-              link_name: 'name'
-            },
-            category: {
-              link_name: 'name'
-            }
-          };
-
           var object = {};
 
-          Object.keys(replacements).forEach(function(key) {
+          Object.keys($scope.replacements).forEach(function(key) {
             object[key] = [];
 
             data[key].forEach(function(item) {
@@ -235,7 +260,7 @@
                 pk_menu: null,
                 title: item.title,
                 type: key,
-                link_name: item[replacements[key].link_name],
+                link_name: item[$scope.replacements[key].link_name],
                 pk_father: 0,
                 position: 0,
               });
@@ -286,6 +311,43 @@
         };
 
         /**
+         *
+         * @param {Object} dragable A menu item object.
+         * @returns true if the menu item is already in the menu, false otherwise.
+         */
+        $scope.isAlreadyInMenu = function(dragable) {
+          if (dragable.type === 'external') {
+            return false;
+          }
+
+          for (var parent in $scope.parents) {
+            var item = $scope.parents[parent];
+
+            if ($scope.isEqual(item, dragable)) {
+              return true;
+            }
+
+            for (var child in $scope.childs[item.pk_item]) {
+              if ($scope.isEqual($scope.childs[item.pk_item][child], dragable)) {
+                return true;
+              }
+            }
+          }
+
+          return false;
+        };
+
+        /**
+         *
+         * @param {Object} original The original object.
+         * @param {Object} copy     The item to check if is a copy of the original
+         * @returns true if the objects are equal, false otherwise.
+         */
+        $scope.isEqual = function(original, copy) {
+          return original.type === copy.type && original.link_name === copy.link_name;
+        };
+
+        /**
          * Watcher to generate the array of childs for the new parents.
          */
         $scope.$watch(function() {
@@ -307,6 +369,8 @@
             return !oldKeys.includes(key);
           });
 
+          $scope.dragables = $scope.filterDragables($scope.menuData);
+
           if (!newKey || newKey.length === 0) {
             return;
           }
@@ -318,6 +382,32 @@
           }
 
           $scope.childs[key] = [];
+        });
+
+        /**
+         * Watcher to generate the array of childs for the new parents.
+         */
+        $scope.$watch(function() {
+          return JSON.stringify($scope.childs);
+        }, function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          $scope.dragables = $scope.filterDragables($scope.menuData);
+        });
+
+        /**
+         * Watcher to generate the array of childs for the new parents.
+         */
+        $scope.$watch(function() {
+          return JSON.stringify($scope.search);
+        }, function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          $scope.dragables = $scope.filterDragables($scope.menuData);
         });
       }
     ]);
