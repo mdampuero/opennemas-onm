@@ -149,7 +149,7 @@
         $scope.buildScope = function() {
           if ($scope.data.extra.locale) {
             $scope.languageData = angular.copy($scope.data.extra.locale);
-            $scope.lang = $scope.languageData.default;
+            $scope.lang         = $scope.languageData.default;
           }
 
           $scope.data.extra['blog-category'] = angular.copy($scope.data.extra.category);

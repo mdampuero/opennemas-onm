@@ -25,14 +25,16 @@
             <li class="hidden-xs quicklinks">
               <h4>{if empty($id)}{t}Create{/t}{else}{t}Edit{/t}{/if}</h4>
             </li>
-            <li class="hidden-xs quicklinks m-l-5 m-r-5 ng-cloak" ng-if="hasMultilanguage()">
-              <h4>
-                <i class="fa fa-angle-right"></i>
-              </h4>
-            </li>
-            <li class="hidden-xs ng-cloak quicklinks" ng-if="hasMultilanguage()">
-              <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
-            </li>
+            {block name="translator"}
+              <li class="hidden-xs quicklinks m-l-5 m-r-5 ng-cloak" ng-if="hasMultilanguage()">
+                <h4>
+                  <i class="fa fa-angle-right"></i>
+                </h4>
+              </li>
+              <li class="hidden-xs ng-cloak quicklinks" ng-if="hasMultilanguage()">
+                <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
+              </li>
+            {/block}
           </ul>
           <div class="pull-right">
             <ul class="quick-section">

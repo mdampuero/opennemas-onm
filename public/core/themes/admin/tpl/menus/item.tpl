@@ -6,7 +6,7 @@
 {/block}
 
 {block name="ngInit"}
-  ng-controller="MenuCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id});"
+  ng-controller="MenuCtrl" ng-init="getItem({$id});"
 {/block}
 
 {block name="icon"}
@@ -18,6 +18,8 @@
     {t}Menus{/t}
   </a>
 {/block}
+
+{block name="translator"}{/block}
 
 {block name="rightColumn"}
   <div class="grid simple">
