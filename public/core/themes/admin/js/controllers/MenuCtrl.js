@@ -231,10 +231,11 @@
           var map       = {};
 
           $scope.parents = $scope.parents.map(function(parent, index) {
-            map[index + 1]  = parent.pk_item;
-            parent.pk_menu  = $scope.data.item.pk_menu;
-            parent.position = index;
-            parent.pk_item  = index + 1;
+            map[index + 1]   = parent.pk_item;
+            parent.pk_menu   = $scope.data.item.pk_menu;
+            parent.position  = index;
+            parent.pk_item   = index + 1;
+            parent.pk_father = null;
             menuItems.push(parent);
             return parent;
           });
