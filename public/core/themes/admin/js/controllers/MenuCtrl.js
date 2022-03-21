@@ -224,6 +224,49 @@
         };
 
         /**
+         * @return The data prepared to be saved.
+         */
+        $scope.getData = function() {
+          var menuItems = [];
+          var map       = {};
+
+          $scope.parents = $scope.parents.map(function(parent, index) {
+            map[index + 1]      = parent.pk_item;
+            parent.pk_menu  = $scope.item.pk_menu;
+            parent.position = index + 1;
+            parent.pk_item  = index + 1;
+            menuItems.push(parent);
+            return parent;
+          });
+
+          var childs = {};
+
+          for (var parent in $scope.parents) {
+            childs[parent] = $scope.childs[map[parent]];
+          }
+
+          $scope.childs = childs;
+
+          for (var parent in $scope.childs) {
+            for (var child in $scope.childs[parent]) {
+              var item = $scope.childs[parent][child];
+
+              item.pk_item   = menuItems.length + 1;
+              item.pk_father = parent;
+              item.pk_menu   = $scope.item.pk_menu;
+              item.position  = child;
+
+              menuItems.push(item);
+            }
+          }
+
+          $scope.item.menu_items = menuItems;
+          $scope.data.item       = Object.assign({}, $scope.item);
+
+          return $scope.data.item;
+        };
+
+        /**
          * Removes an item from the array of menu items.
          *
          * @param {Object} item The item to remove from the array of menu items.
