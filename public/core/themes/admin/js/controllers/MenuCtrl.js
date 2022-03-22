@@ -327,10 +327,12 @@
 
           $scope.item.menu_items = menuItems;
 
-          $timeout(function() {
-            $scope.item         = $scope.translate($scope.item, selectedLocale, $scope.data.extra.locale.default);
-            $scope.originalsMap = originals;
-          }, 0);
+          if ($scope.hasMultilanguage()) {
+            $timeout(function() {
+              $scope.item         = $scope.translate($scope.item, selectedLocale, $scope.data.extra.locale.default);
+              $scope.originalsMap = originals;
+            }, 0);
+          }
 
           return Object.assign({}, $scope.item);
         };
