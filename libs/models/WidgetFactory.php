@@ -52,6 +52,13 @@ class WidgetFactory
     protected $isStatic = false;
 
     /**
+     * Flag to indicate if the widget have custom contents.
+     *
+     * @var boolean
+     */
+    protected $isCustom = false;
+
+    /**
      * The default content type of the widget.
      *
      * @var string
@@ -99,6 +106,18 @@ class WidgetFactory
         $this->tpl->assign('rnd_number', rand(5, 900));
 
         return $this;
+    }
+
+    /**
+     * Returns the content for the widget.
+     *
+     * @return string The widget content.
+     */
+    public function render()
+    {
+        $this->tpl->assign($this->params);
+
+        return $this->tpl->fetch($this->template);
     }
 
     /**
@@ -172,28 +191,29 @@ class WidgetFactory
         if ($this->isStatic()) {
             return $xtags;
         }
-
-        if (!array_key_exists('content_type', $this->params)) {
-            $xtags[] = sprintf('content_type_name-widget-%s', $this->defaultType);
-        } else {
-            $xtags[] = is_array($this->params['content_type'])
-                ? sprintf('content_type_name-widget-%s', $this->params['content_type']['slug'])
-                : sprintf('content_type_name-widget-%s', underscore($this->params['content_type']));
-        }
-
-        foreach ($this->propertiesMap as $key => $value) {
-            if (!array_key_exists($key, $this->params) || empty($this->params[$key])) {
-                $xtags[] = sprintf('%s-widget-all', $value);
-                continue;
+        if (!$this->isCustom) {
+            if (!array_key_exists('content_type', $this->params)) {
+                $xtags[] = sprintf('content_type_name-widget-%s', $this->defaultType);
+            } else {
+                $xtags[] = is_array($this->params['content_type'])
+                    ? sprintf('content_type_name-widget-%s', $this->params['content_type']['slug'])
+                    : sprintf('content_type_name-widget-%s', underscore($this->params['content_type']));
             }
 
-            if (!is_array($this->params[$key])) {
-                $xtags[] = sprintf('%s-widget-%s', $value, $this->params[$key]);
-                continue;
-            }
+            foreach ($this->propertiesMap as $key => $value) {
+                if (!array_key_exists($key, $this->params) || empty($this->params[$key])) {
+                    $xtags[] = sprintf('%s-widget-all', $value);
+                    continue;
+                }
 
-            foreach ($this->params[$key] as $param) {
-                $xtags[] = sprintf('%s-widget-%d', $value, $param);
+                if (!is_array($this->params[$key])) {
+                    $xtags[] = sprintf('%s-widget-%s', $value, $this->params[$key]);
+                    continue;
+                }
+
+                foreach ($this->params[$key] as $param) {
+                    $xtags[] = sprintf('%s-widget-%d', $value, $param);
+                }
             }
         }
 
