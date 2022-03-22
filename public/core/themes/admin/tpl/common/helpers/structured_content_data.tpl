@@ -64,8 +64,8 @@
         , "url": "{$app.instance->getBaseUrl()}{get_author_url($content)}"
       {/if}
     },
-    "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd HH:mm:ss" type="custom"}",
-    "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd HH:mm:ss" type="custom"}",
+    "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
+    "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     {if !empty($category)}
       "articleSection": "{$category->title|escape:'html'}",
     {/if}
@@ -96,7 +96,7 @@
           "@type": "VideoObject",
           "name": "{get_title(get_featured_media($content, 'inner'))|escape:'html'}",
           "description": "{get_description(get_featured_media($content, 'inner'))|default:get_title(get_featured_media($content, 'inner'))|escape:'html'}",
-          "uploadDate": "{format_date date=get_publication_date(get_featured_media($content, 'inner')) format="yyyy-MM-dd HH:mm:ss" type="custom"}",
+          "uploadDate": "{format_date date=get_publication_date(get_featured_media($content, 'inner')) format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
           "thumbnailUrl": "{get_photo_path(get_video_thumbnail(get_featured_media($content, 'inner')), '', [], true)}",
           "contentUrl": "{get_url item=get_featured_media($content, 'inner') absolute=true}"
         }

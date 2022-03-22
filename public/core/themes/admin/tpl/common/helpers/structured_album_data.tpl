@@ -36,8 +36,8 @@
     "@type": "ImageGallery",
     "description": "{$description|escape:'html'}",
     "keywords": "{$keywords|escape:'html'}",
-    "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd HH:mm:ss" type="custom"}",
-    "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd HH:mm:ss" type="custom"}",
+    "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
+    "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "{$url}"
