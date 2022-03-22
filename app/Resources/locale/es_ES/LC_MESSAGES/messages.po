@@ -1,21 +1,20 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Opennemas Developers <developers@opennemas.com>, 2020-2021.
-# adan <adan@openhost.es>, 2021-2022.
+# Opennemas Developers <developers@opennemas.com>, 2020-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-14 09:45+0000\n"
-"PO-Revision-Date: 2022-03-14 10:58+0100\n"
-"Last-Translator: adan <adan@openhost.es>\n"
-"Language-Team: Spanish - Spain <adan@openhost.es>\n"
-"Language: es_ES\n"
+"POT-Creation-Date: 2022-03-14 11:20+0000\n"
+"PO-Revision-Date: 2022-03-14 12:22+0100\n"
+"Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 3.36.0\n"
 
 msgid "Y-m-d"
@@ -4527,19 +4526,19 @@ msgid "GFK Region ID"
 msgstr "GFK Region ID"
 
 msgid "Default will be set with \"es\""
-msgstr "El valor predeterminado se establecerá con \"es\""
+msgstr "Por defecto será establecido a \"es\""
 
 msgid "GFK Content ID"
 msgstr "GFK Content ID"
 
 msgid "Default will be set with \"default\""
-msgstr "El valor predeterminado se establecerá con \"default\" "
+msgstr "Por defecto será establecido a \"default\""
 
 msgid "Prometeo"
 msgstr "Prometeo"
 
 msgid "Prometeo Media ID"
-msgstr "ID de medios de Prometeo"
+msgstr "Prometeo Media ID"
 
 msgid "Internal settings"
 msgstr "Preferencias internas"
@@ -4864,7 +4863,7 @@ msgid "CSS"
 msgstr "CSS"
 
 msgid "This css will be added at the end of the original"
-msgstr "Este CSS se agregará al final del original"
+msgstr "Este CSS se añadirá al final del original."
 
 msgid "<a href=\"http://www.opennemas.com\">%1</a> doesn’t exist."
 msgstr "<a href=\"http://www.opennemas.com\">%1</a> no existe."
@@ -5370,6 +5369,16 @@ msgstr "Se requiere algún contenido"
 msgid "Template"
 msgstr "Plantilla"
 
+msgid "Add the headline of the first content at the end of the subject"
+msgstr "Añadir el titular del primer contenido al final del asunto"
+
+msgid ""
+"If this is checked, the headline of the first content will be append at the "
+"end of the subject, separated by a blank space"
+msgstr ""
+"Si está marcado, el titular del primer contenido será añadido al final del "
+"asunto, separado por un espacio en blanco"
+
 msgid "Days"
 msgstr "Días"
 
@@ -5433,8 +5442,8 @@ msgstr "Optimizar imágenes"
 msgid ""
 "If set, images will be automaticaly optimized when uploaded and imported"
 msgstr ""
-"Si se establece, las imágenes se optimizarán automáticamente cuando se "
-"carguen y se importen"
+"Si está activo, las imágenes serán optimizadas automáticamente al subirlas o "
+"importarlas"
 
 msgid "Delete multiple images"
 msgstr "Eliminar múltiples imágenes"
@@ -5471,7 +5480,7 @@ msgid "Mortuary"
 msgstr "Funeraria"
 
 msgid "Google maps url"
-msgstr "Google Maps url"
+msgstr "Url de Google Maps"
 
 msgid "New obituary"
 msgstr "Nueva esquela"
@@ -6148,7 +6157,7 @@ msgid "Storage size"
 msgstr "Almacenamiento ocupado"
 
 msgid "Users Active"
-msgstr "Usuarios Activos"
+msgstr "Usuarios activos"
 
 msgid "Emails sent from"
 msgstr "Correos electrónicos enviados desde"
@@ -6816,7 +6825,7 @@ msgid "Attachments"
 msgstr "Adjuntos"
 
 msgid "Kioskos"
-msgstr "Kiosko"
+msgstr "Kioskos"
 
 msgid "Emails"
 msgstr "Emails"
@@ -7102,51 +7111,20 @@ msgstr ""
 msgid "Group name"
 msgstr "Nombre del grupo"
 
-#~ msgid "Invalid tag"
-#~ msgstr "Etiqueta no válida"
-
 #~ msgid "Page views this month"
 #~ msgstr "Páginas vistas este mes"
 
 #~ msgid "coming soon... work in progress..."
 #~ msgstr "pronto tendrás esta información..."
 
-#~ msgid "Keyword"
-#~ msgstr "Palabra clave"
-
-#~ msgid "Editing keyword"
-#~ msgstr "Editando palabra clave"
-
-#~ msgid "Creating keyword"
-#~ msgstr "Creando palabra clave"
-
-#~ msgid "Internal Search"
-#~ msgstr "Búsqueda interna"
+#~ msgid "Invalid tag"
+#~ msgstr "Etiqueta no válida"
 
 #~ msgid "Keyword created successfully"
 #~ msgstr "Palabra clave creada correctamente"
 
 #~ msgid "Keyword updated successfully"
 #~ msgstr "Palabra clave actualizada correctamente"
-
-#~ msgid "Author information"
-#~ msgstr "Información del autor"
-
-#~ msgid "Unable to find any keyword that matches your search."
-#~ msgstr ""
-#~ "No se pudieron encontrar palabras clave que coincidan con tu búsqueda."
-
-#~ msgid "Edit this content"
-#~ msgstr "Editar este contenido"
-
-#~ msgid "Are you sure that do you want remove \"%1\"?"
-#~ msgstr "¿Estás seguro de que quieres eliminar \"%1\"?"
-
-#~ msgid "Delete letter"
-#~ msgstr "Eliminar carta"
-
-#~ msgid "Delete letters"
-#~ msgstr "Eliminar cartas"
 
 #~ msgid "Letter successfully created."
 #~ msgstr "Carta creada correctamente."
@@ -7185,11 +7163,39 @@ msgstr "Nombre del grupo"
 #~ msgid "Creating letter"
 #~ msgstr "Creando carta"
 
+#~ msgid "Author information"
+#~ msgstr "Información del autor"
+
 #~ msgid "Related url"
 #~ msgstr "Url del relacionado"
 
 #~ msgid "Image assigned"
 #~ msgstr "Imagen asignada"
+
+#~ msgid "Delete letter"
+#~ msgstr "Eliminar carta"
+
+#~ msgid "Delete letters"
+#~ msgstr "Eliminar cartas"
+
+#~ msgid "Unable to find any keyword that matches your search."
+#~ msgstr ""
+#~ "No se pudieron encontrar palabras clave que coincidan con tu búsqueda."
+
+#~ msgid "Keyword"
+#~ msgstr "Palabra clave"
+
+#~ msgid "Edit this content"
+#~ msgstr "Editar este contenido"
+
+#~ msgid "Are you sure that do you want remove \"%1\"?"
+#~ msgstr "¿Estás seguro de que quieres eliminar \"%1\"?"
+
+#~ msgid "Editing keyword"
+#~ msgstr "Editando palabra clave"
+
+#~ msgid "Creating keyword"
+#~ msgstr "Creando palabra clave"
 
 #~ msgid "Manage poll comments"
 #~ msgstr "Administrar comentarios de encuestas"

@@ -1,21 +1,20 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Opennemas Developers <developers@opennemas.com>, 2020-2021.
-# adan <adan@openhost.es>, 2021-2022.
+# Opennemas Developers <developers@opennemas.com>, 2020-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-14 09:45+0000\n"
-"PO-Revision-Date: 2022-03-14 11:05+0100\n"
-"Last-Translator: adan <adan@openhost.es>\n"
-"Language-Team: Spanish - Spain <adan@openhost.es>\n"
-"Language: es_ES\n"
+"POT-Creation-Date: 2022-03-14 11:20+0000\n"
+"PO-Revision-Date: 2022-03-14 12:22+0100\n"
+"Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
+"Language-Team: Galician\n"
+"Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 3.36.0\n"
 
 msgid "Y-m-d"
@@ -4515,7 +4514,7 @@ msgid "Prometeo"
 msgstr "Prometeo"
 
 msgid "Prometeo Media ID"
-msgstr "ID de medios de Prometeo"
+msgstr "Prometeo Media ID"
 
 msgid "Internal settings"
 msgstr "Preferencias internas"
@@ -5340,6 +5339,16 @@ msgstr "Requírense algúns contidos"
 msgid "Template"
 msgstr "Plantilla"
 
+msgid "Add the headline of the first content at the end of the subject"
+msgstr "Engadir o titular do primeiro contido ao final do asunto"
+
+msgid ""
+"If this is checked, the headline of the first content will be append at the "
+"end of the subject, separated by a blank space"
+msgstr ""
+"Se esta marcado, o titular do primeiro contido será engadido ao final do "
+"asunto, separado por un espazo en branco"
+
 msgid "Days"
 msgstr "Días"
 
@@ -5403,8 +5412,8 @@ msgstr "Optimizar imaxes"
 msgid ""
 "If set, images will be automaticaly optimized when uploaded and imported"
 msgstr ""
-"Se se define, as imaxes optimizaranse automaticamente cando se carguen e se "
-"importen"
+"Se está activo, as imaxes serán optimizadas automaticamente cando se suban "
+"ou se importen"
 
 msgid "Delete multiple images"
 msgstr "Eliminar varias imaxes"
@@ -5441,7 +5450,7 @@ msgid "Mortuary"
 msgstr "Funeraria"
 
 msgid "Google maps url"
-msgstr "Google Maps url"
+msgstr "Url de Google Maps"
 
 msgid "New obituary"
 msgstr "Nova necrolóxica"
@@ -6773,7 +6782,7 @@ msgid "Attachments"
 msgstr "Anexos"
 
 msgid "Kioskos"
-msgstr "Kiosko"
+msgstr "Kioskos"
 
 msgid "Emails"
 msgstr "Correos-e"
@@ -7056,50 +7065,20 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 msgid "Group name"
 msgstr "Nome do grupo"
 
-#~ msgid "Invalid tag"
-#~ msgstr "Etiqueta non válida"
-
 #~ msgid "Page views this month"
 #~ msgstr "Páxinas vistas este mes"
 
 #~ msgid "coming soon... work in progress..."
 #~ msgstr "pronto terás esta información…"
 
-#~ msgid "Keyword"
-#~ msgstr "Palabra clave"
-
-#~ msgid "Editing keyword"
-#~ msgstr "Editando palabra chave"
-
-#~ msgid "Creating keyword"
-#~ msgstr "Creando palabra chave"
-
-#~ msgid "Internal Search"
-#~ msgstr "Busca interna"
+#~ msgid "Invalid tag"
+#~ msgstr "Etiqueta non válida"
 
 #~ msgid "Keyword created successfully"
 #~ msgstr "Palabra chave creada correctamente"
 
 #~ msgid "Keyword updated successfully"
 #~ msgstr "Palabra chave actualizada correctamente"
-
-#~ msgid "Author information"
-#~ msgstr "Información do autor"
-
-#~ msgid "Unable to find any keyword that matches your search."
-#~ msgstr "Non se puideron atopar palabras clave que coincidan coa súa busca."
-
-#~ msgid "Edit this content"
-#~ msgstr "Editar este contido"
-
-#~ msgid "Are you sure that do you want remove \"%1\"?"
-#~ msgstr "Tes certeza que queres eliminar «%1»?"
-
-#~ msgid "Delete letter"
-#~ msgstr "Eliminar carta"
-
-#~ msgid "Delete letters"
-#~ msgstr "Eliminar cartas"
 
 #~ msgid "Letter successfully created."
 #~ msgstr "Carta creada correctamente"
@@ -7138,11 +7117,38 @@ msgstr "Nome do grupo"
 #~ msgid "Creating letter"
 #~ msgstr "Creando carta"
 
+#~ msgid "Author information"
+#~ msgstr "Información do autor"
+
 #~ msgid "Related url"
 #~ msgstr "Url relacionado"
 
 #~ msgid "Image assigned"
 #~ msgstr "Imaxe asignada"
+
+#~ msgid "Delete letter"
+#~ msgstr "Eliminar carta"
+
+#~ msgid "Delete letters"
+#~ msgstr "Eliminar cartas"
+
+#~ msgid "Unable to find any keyword that matches your search."
+#~ msgstr "Non se puideron atopar palabras clave que coincidan coa súa busca."
+
+#~ msgid "Keyword"
+#~ msgstr "Palabra clave"
+
+#~ msgid "Edit this content"
+#~ msgstr "Editar este contido"
+
+#~ msgid "Are you sure that do you want remove \"%1\"?"
+#~ msgstr "Tes certeza que queres eliminar «%1»?"
+
+#~ msgid "Editing keyword"
+#~ msgstr "Editando palabra chave"
+
+#~ msgid "Creating keyword"
+#~ msgstr "Creando palabra chave"
 
 #~ msgid "Manage poll comments"
 #~ msgstr "Xestionar comentarios de enquisas"
