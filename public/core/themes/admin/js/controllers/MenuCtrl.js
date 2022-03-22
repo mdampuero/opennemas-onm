@@ -157,7 +157,9 @@
          */
         $scope.buildScope = function() {
           if ($scope.hasMultilanguage()) {
-            $scope.data.extra.locale.selected = $scope.forcedLocale;
+            $scope.data.extra.locale.selected = !$scope.forcedLocale ?
+              $scope.data.extra.locale.default :
+              $scope.forcedLocale;
 
             $scope.data.item.menu_items.forEach(function(menuItem) {
               $scope.originalsMap[menuItem.pk_item] = menuItem.title;
