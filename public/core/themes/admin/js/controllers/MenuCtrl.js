@@ -281,14 +281,13 @@
           var menuItems      = [];
           var map            = {};
           var selectedLocale = $scope.data.extra.locale.selected;
+          var originals      = {};
 
           $scope.parents = $scope.parents.map(function(parent, index) {
             if ($scope.hasMultilanguage()) {
               parent.title = $scope.getL10nTitle(parent, selectedLocale);
 
-              // Update the map of original titles with the new primary key of the item
-              delete $scope.originalsMap[parent.pk_item];
-              $scope.originalsMap[index + 1] = parent.title;
+              originals[index + 1] = parent.title;
             }
 
             map[index + 1]   = parent.pk_item;
@@ -315,9 +314,7 @@
               if ($scope.hasMultilanguage()) {
                 item.title = $scope.getL10nTitle(item, selectedLocale);
 
-                // Update the map of original titles with the new primary key of the item
-                delete $scope.originalsMap[item.pk_item];
-                $scope.originalsMap[menuItems.length + 1] = item.title;
+                originals[menuItems.length + 1] = item.title;
               }
 
               item.pk_father = parent;
@@ -331,7 +328,8 @@
           $scope.item.menu_items = menuItems;
 
           $timeout(function() {
-            $scope.item = $scope.translate($scope.item, selectedLocale, $scope.data.extra.locale.default);
+            $scope.item         = $scope.translate($scope.item, selectedLocale, $scope.data.extra.locale.default);
+            $scope.originalsMap = originals;
           }, 0);
 
           return Object.assign({}, $scope.item);
