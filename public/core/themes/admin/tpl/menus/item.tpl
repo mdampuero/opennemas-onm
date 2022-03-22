@@ -6,7 +6,7 @@
 {/block}
 
 {block name="ngInit"}
-  ng-controller="MenuCtrl" ng-init="getItem({$id});"
+  ng-controller="MenuCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id});"
 {/block}
 
 {block name="icon"}

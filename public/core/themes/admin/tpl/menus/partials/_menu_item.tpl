@@ -14,13 +14,13 @@
         <label class="visible-xs">
           {t}Title{/t}
         </label>
-        <input class="menu-item-title" ng-model="item.title" tooltip-enable="languageData.default !== lang" type="text" uib-tooltip="{t}Original:{/t} [% item.title %]">
+        <input class="menu-item-title" ng-model="item.title" type="text">
       </div>
       <div ng-if="item.type === 'external'" class="col-sm-6 col-lg-6">
         <label class="visible-xs">
           {t}Link to{/t}
         </label>
-        <input class="menu-item-link" ng-model="item.link_name" tooltip-enable="languageData.default !== lang" type="text" uib-tooltip="{t}Original:{/t} [% item.link_name %]">
+        <input class="menu-item-link" ng-model="item.link_name" type="text">
       </div>
     </div>
   </div>

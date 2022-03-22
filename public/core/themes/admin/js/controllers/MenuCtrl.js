@@ -18,8 +18,8 @@
      *   Handle actions for article inner.
      */
     .controller('MenuCtrl', [
-      '$controller', '$scope',
-      function($controller, $scope) {
+      '$controller', '$scope', '$timeout',
+      function($controller, $scope, $timeout) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
@@ -55,6 +55,16 @@
           pk_father: 0,
           position: 0,
         };
+
+        /**
+         * @memberOf MenuCtrl
+         *
+         * @description
+         *  The replacements for the name of the property link_name on the dragable items.
+         *
+         * @type {Object}
+         */
+        $scope.originalsMap = {};
 
         /**
          * @memberOf MenuCtrl
@@ -110,8 +120,7 @@
          * @inheritdoc
          */
         $scope.hasMultilanguage = function() {
-          return $scope.config && $scope.config.locale &&
-        $scope.config.locale.multilanguage;
+          return $scope.config && $scope.config.locale && $scope.config.locale.multilanguage;
         };
 
         /**
@@ -147,9 +156,18 @@
          *   response to the scope.
          */
         $scope.buildScope = function() {
-          if ($scope.data.extra.locale) {
-            $scope.languageData = angular.copy($scope.data.extra.locale);
-            $scope.lang         = $scope.languageData.default;
+          if ($scope.hasMultilanguage()) {
+            $scope.data.extra.locale.selected = $scope.forcedLocale;
+
+            $scope.data.item.menu_items.forEach(function(menuItem) {
+              $scope.originalsMap[menuItem.pk_item] = menuItem.title;
+            });
+
+            $scope.item = $scope.translate(
+              $scope.data.item,
+              $scope.data.extra.locale.selected,
+              $scope.data.extra.locale.default
+            );
           }
 
           $scope.data.extra['blog-category'] = angular.copy($scope.data.extra.category);
@@ -160,6 +178,37 @@
           $scope.dragables = $scope.filterDragables($scope.menuData);
           $scope.linkData  = [ Object.assign({}, $scope.defaultLink) ];
           $scope.last      = $scope.getLastIndex($scope.data.item.menu_items);
+        };
+
+        /**
+         *
+         * @param {Array}  item      The item to get the l10n title.
+         * @param {string} locale    The locale to save the item.
+         *
+         * @returns The title for the specific item.
+         */
+        $scope.getL10nTitle = function(item, locale) {
+          var object = {};
+
+          if (!(item.pk_item in $scope.originalsMap)) {
+            object[locale] = item.title;
+
+            return object;
+          }
+
+          var title = $scope.originalsMap[item.pk_item];
+
+          if (typeof title === 'string') {
+            object[$scope.data.extra.locale.default] = title;
+            object[locale]                           = item.title;
+
+            return object;
+          }
+
+          object         = title;
+          object[locale] = item.title;
+
+          return object;
         };
 
         /**
@@ -227,10 +276,19 @@
          * @return The data prepared to be saved.
          */
         $scope.getData = function() {
-          var menuItems = [];
-          var map       = {};
+          var menuItems      = [];
+          var map            = {};
+          var selectedLocale = $scope.data.extra.locale.selected;
 
           $scope.parents = $scope.parents.map(function(parent, index) {
+            if ($scope.hasMultilanguage()) {
+              parent.title = $scope.getL10nTitle(parent, selectedLocale);
+
+              // Update the map of original titles with the new primary key of the item
+              delete $scope.originalsMap[parent.pk_item];
+              $scope.originalsMap[index + 1] = parent.title;
+            }
+
             map[index + 1]   = parent.pk_item;
             parent.pk_menu   = $scope.data.item.pk_menu;
             parent.position  = index;
@@ -252,6 +310,14 @@
             for (var child in $scope.childs[parent]) {
               var item = $scope.childs[parent][child];
 
+              if ($scope.hasMultilanguage()) {
+                item.title = $scope.getL10nTitle(item, selectedLocale);
+
+                // Update the map of original titles with the new primary key of the item
+                delete $scope.originalsMap[item.pk_item];
+                $scope.originalsMap[menuItems.length + 1] = item.title;
+              }
+
               item.pk_father = parent;
               item.position  = child;
               item.pk_menu   = $scope.data.item.pk_menu;
@@ -261,9 +327,12 @@
           }
 
           $scope.item.menu_items = menuItems;
-          $scope.data.item       = Object.assign({}, $scope.item);
 
-          return $scope.data.item;
+          $timeout(function() {
+            $scope.item = $scope.translate($scope.item, selectedLocale, $scope.data.extra.locale.default);
+          }, 0);
+
+          return Object.assign({}, $scope.item);
         };
 
         /**
@@ -386,6 +455,46 @@
          */
         $scope.isEqual = function(original, copy) {
           return original.type === copy.type && original.link_name === copy.link_name;
+        };
+
+        /**
+         * @param {Object} data          The data item to translate.
+         * @param {string} locale        The locale to translate to.
+         * @param {string} defaultLocale The default locale.
+         *
+         * @returns The object translated to the selected locale.
+         */
+        $scope.translate = function(data, locale, defaultLocale) {
+          var item = {};
+
+          item.menu_items = data.menu_items.map(function(item) {
+            item.title = $scope.translateTitle(item, locale, defaultLocale);
+
+            return item;
+          });
+
+          return Object.assign(data, item);
+        };
+
+        /**
+         * @param {Object} item          The item to translate.
+         * @param {string} locale        The locale to translate to.
+         * @param {string} defaultLocale The default locale.
+         *
+         * @returns The title translated to the locale.
+         */
+        $scope.translateTitle = function(item, locale, defaultLocale) {
+          if (typeof item.title === 'string') {
+            return item.title;
+          }
+
+          if (!item.title || !item.title[locale] && !item.title[defaultLocale]) {
+            return '';
+          }
+
+          return item.title[locale] ?
+            item.title[locale] :
+            item.title[defaultLocale];
         };
 
         /**
