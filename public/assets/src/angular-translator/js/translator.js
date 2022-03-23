@@ -223,7 +223,7 @@
                   option.icon = 'fa-globe';
                 }
 
-                if (keys) {
+                if (keys && !angular.isObject(keys)) {
                   for (var i = 0; i < keys.length; i++) {
                     if (!item[keys[i]]) {
                       continue;
@@ -238,6 +238,18 @@
                     }
                   }
                 }
+
+                if (angular.isObject(keys)) {
+                  Object.entries(keys).forEach(function(objKey, objValue) {
+                    if (angular.isString(item[objKey[objValue]]) && value === main ||
+                    angular.isObject(item[objKey[objValue]]) && item[objKey[objValue]][value]) {
+                      option.icon       = 'fa-pencil';
+                      option.translated = true;
+
+                      return option;
+                    }
+                  });
+                }
               }
 
               return option;
@@ -249,7 +261,7 @@
                 lang,
                 $scope.options.default,
                 $scope.options.translators,
-                $scope.keys,
+                $scope.keys1,
                 $scope.item
               );
             }

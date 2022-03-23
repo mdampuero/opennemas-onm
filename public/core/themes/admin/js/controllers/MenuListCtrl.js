@@ -31,6 +31,10 @@ angular.module('BackendApp.controllers')
         page: 1
       };
 
+      $scope.keys1 = {
+        menu_items: 'title'
+      };
+
       /**
        * @memberOf MenuListCtrl
        *

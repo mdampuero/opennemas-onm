@@ -10,7 +10,7 @@
           <label class="visible-xs">
             {t}Title{/t}
           </label>
-          <input type="text" ng-model="item.title" class="menu-item-title" {if $iSearchModel}disabled {/if}value="[% item.title %]">
+          <input type="text" ng-model="item.title" class="menu-item-title" disabled value="[% item.title %]">
         </div>
         <div class="col-sm-6 col-lg-6" ng-if="item.link_name">
           <label class="visible-xs">
@@ -22,7 +22,7 @@
         <label class="visible-xs">
           {t}Title{/t}
         </label>
-        <input type="text" ng-model="item.title" class="menu-item-title" {if $iSearchModel}disabled {/if}value="[% item.title %]">
+        <input type="text" ng-model="item.title" class="menu-item-title" disabled value="[% item.title %]">
       </div>
     </div>
   </div>
