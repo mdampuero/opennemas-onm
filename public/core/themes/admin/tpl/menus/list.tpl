@@ -16,6 +16,8 @@
   {t}Menus{/t}
 {/block}
 
+{block name="translator"}{/block}
+
 {block name="primaryActions"}
   <div class="all-actions pull-right">
     <ul class="nav quick-section">

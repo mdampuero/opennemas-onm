@@ -31,7 +31,7 @@ angular.module('BackendApp.controllers')
         page: 1
       };
 
-      $scope.keys1 = {
+      $scope.keys = {
         menu_items: 'title'
       };
 
