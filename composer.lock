@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a8e7caa9e0d9aa14e0444e7eadc48287",
+    "content-hash": "de511ac59cabf5847079fe3645f148f1",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1650,6 +1650,57 @@
             ],
             "description": "Locale functions required by libphonenumber-for-php",
             "time": "2019-04-26T07:28:50+00:00"
+        },
+        {
+            "name": "globalpayments/php-sdk",
+            "version": "3.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/globalpayments/php-sdk.git",
+                "reference": "8e4567b40623300768c29d74671ef8a641522eda"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/globalpayments/php-sdk/zipball/8e4567b40623300768c29d74671ef8a641522eda",
+                "reference": "8e4567b40623300768c29d74671ef8a641522eda",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-dom": "*",
+                "ext-json": "*",
+                "ext-openssl": "*",
+                "ext-zlib": "*",
+                "php": ">= 5.5.9"
+            },
+            "require-dev": {
+                "brianium/paratest": "dev-master",
+                "phpstan/phpstan-shim": "^0.8.4",
+                "phpunit/phpunit": "~5.0",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GlobalPayments\\Api\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Heartland Payment Systems"
+                }
+            ],
+            "description": "PHP SDK for processing payments with Global Payments, including Heartland Payment Systems and Realex Payments",
+            "homepage": "https://developer.heartlandpaymentsystems.com/documentation",
+            "support": {
+                "issues": "https://github.com/globalpayments/php-sdk/issues",
+                "source": "https://github.com/globalpayments/php-sdk/tree/3.0.3"
+            },
+            "time": "2022-03-22T12:07:44+00:00"
         },
         {
             "name": "google/recaptcha",
