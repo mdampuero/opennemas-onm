@@ -33,6 +33,12 @@
     </h5>
   </li>
   <li class="quicklinks">
+    <button class="btn btn-white m-r-5" id="preview-button" ng-click="preview()" type="button" id="preview_button">
+      <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.generating_preview }" ></i>
+      {t}Preview{/t}
+    </button>
+  </li>
+  <li class="quicklinks">
     <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
       <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
       {t}Save{/t}
@@ -82,6 +88,12 @@
 
 {block name="modals"}
   <script type="text/ng-template" id="modal-preview">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
+      <h4 class="modal-title">
+        {t}Preview{/t}
+      </h4>
+    </div>
     <div class="modal-body clearfix no-padding">
       <iframe ng-src="[% template.src %]" frameborder="0"></iframe>
     </div>

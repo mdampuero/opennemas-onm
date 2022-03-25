@@ -27,6 +27,30 @@
         };
 
         /**
+         * @function getLocalizedTags
+         * @memberof ContentRestListCtrl
+         *
+         * @description
+         *  Returns localized tags for each item in list
+         *
+         * @param {array} origin The list of all localized tags
+         * @param {array} array The list of item id tags
+         *
+         * @return {array} return tags localized
+         */
+        $scope.getLocalizedTags = function(origin, array, locale, multilanguage) {
+          if (multilanguage) {
+            return origin[locale].filter(function(o) {
+              return array.includes(o.id);
+            });
+          }
+
+          return origin.filter(function(o) {
+            return array.includes(o.id);
+          });
+        };
+
+        /**
          * @function hasFeaturedMedia
          * @memberof ContentRestListCtrl
          *

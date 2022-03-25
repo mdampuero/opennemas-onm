@@ -166,6 +166,12 @@
           var status = { starttime: null, endtime: null, content_status: 1, with_comment: 0 };
           var item   = Object.assign({}, $scope.data.item, status);
 
+          if (item.tags) {
+            item.tags = item.tags.filter(function(tag) {
+              return Number.isInteger(tag);
+            });
+          }
+
           var data = {
             item: JSON.stringify(cleaner.clean(item)),
             locale: $scope.config.locale.selected

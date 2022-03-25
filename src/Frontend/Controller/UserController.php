@@ -407,11 +407,12 @@ class UserController extends Controller
     public function updateAction(Request $request)
     {
         $data = array_merge(
+            $request->request->all(),
             [
-                'name'     => $request->request->filter('name', null, FILTER_SANITIZE_SPECIAL_CHARS),
-                'email'    => $request->request->filter('email', null, FILTER_SANITIZE_EMAIL),
-                'password' => $request->request->get('password'),
-                'user_groups' => []
+                'name'        => $request->request->filter('name', null, FILTER_SANITIZE_SPECIAL_CHARS),
+                'email'       => $request->request->filter('email', null, FILTER_SANITIZE_EMAIL),
+                'password'    => $request->request->get('password'),
+                'user_groups' => $request->request->get('user_groups', []),
             ]
         );
 

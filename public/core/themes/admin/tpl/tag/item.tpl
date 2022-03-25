@@ -28,7 +28,7 @@
     <div class="grid-body">
       <div class="row">
         <div class="col-md-6 form-group">
-          {include file="ui/component/input/text.tpl" iField="name" iFlag="validating" iNgActions="ng-blur=\"generate()\" ng-change=\"isValid()\"" iRequired="true" iTitle="{t}Name{/t}" iValidation=true}
+          {include file="ui/component/input/text.tpl" iField="name" iMessageField="name" iFlag="validating" iNgActions="ng-blur=\"generate()\" ng-change=\"isValid()\"" iRequired="true" iTitle="{t}Name{/t}" iValidation=true}
         </div>
         <div class="col-md-6">
           {include file="ui/component/input/slug.tpl" iField="slug" iFlag="slug" iNgModel="item.slug" iRequired="true" iTitle="{t}Slug{/t}" iValidation=true}

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-02 09:30+0000\n"
-"PO-Revision-Date: 2022-03-02 10:37+0100\n"
+"POT-Creation-Date: 2022-03-25 08:39+0000\n"
+"PO-Revision-Date: 2022-03-25 09:55+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -16,6 +16,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 3.36.0\n"
+
+msgid "Y-m-d"
+msgstr "d-m-Y"
 
 msgid "All"
 msgstr "Todos"
@@ -154,9 +157,6 @@ msgstr "Configuración de sitio eliminada correctamente"
 
 msgid "There was an error while deleting this configuration"
 msgstr "Produciuse un erro ao eliminar esta configuración"
-
-msgid "Y-m-d"
-msgstr "d-m-Y"
 
 msgid "You have reached your maximum of emails allowed to send per month"
 msgstr "Alcanzaches o numero máximo de envios de correo-e permitidos por mes"
@@ -1201,8 +1201,11 @@ msgstr "de"
 msgid "Invalid category"
 msgstr "Categoría non válida"
 
-msgid "Invalid tag"
-msgstr "Etiqueta non válida"
+msgid "The selected locale is invalid"
+msgstr "O idioma seleccionado non é válido"
+
+msgid "There is another tag with the same name or slug"
+msgstr "Hai outra etiqueta co mesmo nome ou slug"
 
 msgid "Home"
 msgstr "Portada"
@@ -2939,9 +2942,6 @@ msgstr "Páxina estática"
 msgid "Synchronized instances"
 msgstr "Instacias sincronizadas"
 
-msgid "Original:"
-msgstr "Orixinal:"
-
 msgid "Link to"
 msgstr "Ligazón a"
 
@@ -3399,6 +3399,16 @@ msgstr "Plantilla"
 
 msgid "Subject"
 msgstr "Asunto"
+
+msgid "Add the headline of the first content at the end of the subject"
+msgstr "Engadir o titular do primeiro contido ao final do asunto"
+
+msgid ""
+"If this is checked, the headline of the first content will be append at the "
+"end of the subject, separated by a blank space"
+msgstr ""
+"Se está marcado, o titular do primeiro contido será engadido ao final do "
+"asunto, separado por un espazo en branco"
 
 msgid "Days"
 msgstr "Días"
@@ -4334,11 +4344,11 @@ msgstr "O seu periódico foi creado en %1"
 msgid "Storage size"
 msgstr "Amacenamento ocupado"
 
-msgid "Page views this month"
-msgstr "Páxinas vistas este mes"
+msgid "Users Active"
+msgstr "Usuarios activos"
 
-msgid "coming soon... work in progress..."
-msgstr "pronto terás esta información…"
+msgid "Emails sent from"
+msgstr "Correos electrónicos enviados desde"
 
 msgid "Opennemas offers many more modules and solutions"
 msgstr "Opennemas ofrece moitos máis módulos e solucións"
@@ -5976,6 +5986,13 @@ msgstr "Número máximo de etiquetas por contido"
 msgid "Number of items in the list of suggestions"
 msgstr "Número de elementos na lista de suxerencias"
 
+msgid ""
+"List of words or regular expressions that are prohibited on tags, one per "
+"line."
+msgstr ""
+"Lista de palabras ou expresións regulares que están prohibidas nas "
+"etiquetas, unha por liña."
+
 msgid "Config tag module"
 msgstr "Configuración do módulo «Etiquetas»"
 
@@ -6998,6 +7015,18 @@ msgstr "eliminar"
 
 msgid "delete them"
 msgstr "eliminalos"
+
+#~ msgid "Invalid tag"
+#~ msgstr "Etiqueta non válida"
+
+#~ msgid "Original:"
+#~ msgstr "Orixinal:"
+
+#~ msgid "Page views this month"
+#~ msgstr "Páxinas vistas este mes"
+
+#~ msgid "coming soon... work in progress..."
+#~ msgstr "pronto terás esta información…"
 
 #~ msgid "Unable to find the menu with the id \"%d\""
 #~ msgstr "Non se puido atopar o menú co identificador «%d»"
