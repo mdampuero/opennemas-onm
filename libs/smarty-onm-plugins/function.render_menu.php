@@ -32,8 +32,12 @@ function smarty_function_render_menu($params, &$smarty)
     }
 
     try {
-        $menuHelper = $smarty->getContainer()->get('core.helper.menu');
-        $menu       = $smarty->getContainer()->get('api.service.menu')->getItemBy($oql);
+        $menuHelper  = $smarty->getContainer()->get('core.helper.menu');
+        $menuService = $smarty->getContainer()->get('api.service.menu');
+
+        $menuService->setCount(0);
+
+        $menu = $menuService->getItemBy($oql);
         if (empty($menu) || !$menu->menu_items) {
             return '';
         }
