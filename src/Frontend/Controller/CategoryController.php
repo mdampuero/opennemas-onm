@@ -65,7 +65,7 @@ class CategoryController extends FrontendController
     {
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
-        $params = $this->getQueryParameters($action, $request->query->all());
+        $params = $request->query->all();
 
         // Fix category_slug from query basing on item
         $params['category_slug'] = $item->name;
