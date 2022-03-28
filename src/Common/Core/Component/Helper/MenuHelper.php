@@ -78,6 +78,40 @@ class MenuHelper
     }
 
     /**
+     * Sort menu items
+     *
+     * @param array $items The array of menu items.
+     *
+     * @return array The array of menu items as sorted objects.
+     */
+    public function sortSubmenus(array $items) : array
+    {
+        $sortedItems = [];
+        foreach ($items as $item) {
+            if ($item->pk_father > 0) {
+                $index = 0;
+                foreach ($sortedItems as $itemIndex => $itemValue) {
+                    if ($itemValue->pk_item == $item->pk_father ||
+                        $itemValue->pk_father == $item->pk_father) {
+                        $index = $itemIndex + 1;
+                    }
+                }
+                if ($index) {
+                    array_splice(
+                        $sortedItems,
+                        $index,
+                        0,
+                        [ $item ]
+                    );
+                }
+                continue;
+            }
+            array_push($sortedItems, $item);
+        }
+        return $sortedItems;
+    }
+
+    /**
      * Casts a menu item to object.
      *
      * @param array $item The menu item as an array.

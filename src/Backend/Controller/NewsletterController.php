@@ -110,44 +110,19 @@ class NewsletterController extends Controller
         $oql = ' name = "frontpage" ';
 
         try {
-            $menu               = $menuService->getItemBy($oql);
-            $menuItems          = $menuHelper->parseToSubmenus($menu->menu_items);
+            $menu            = $menuService->getItemBy($oql);
+            $menuItems       = $menuHelper->castToObjectFlat($menu->menu_items);
+            $sortedMenuItems = $menuHelper->sortSubmenus($menuItems);
 
             $i = 1;
 
-            foreach ($menuItems as $item) {
-                if ($item['type'] != 'category' &&
-                    $item['type'] != 'blog-category' &&
-                    $item['type'] != 'internal'
-                ) {
-                    continue;
-                }
-
-                unset($item['pk_item']);
-                unset($item['link_name']);
-                unset($item['pk_father']);
-                unset($item['type']);
-                $item['id']           = $i;
-                $item['items']        = [];
-                $item['content_type'] = 'container';
+            foreach ($sortedMenuItems as $item) {
+                $item->id           = $i;
+                $item->items        = [];
+                $item->content_type = 'container';
 
                 $newsletterContent[] = $item;
 
-                if (!empty($item['submenu'])) {
-                    foreach ($item['submenu'] as $subitem) {
-                        unset($subitem['pk_item']);
-                        unset($subitem['link_name']);
-                        unset($subitem['pk_father']);
-                        unset($subitem['type']);
-                        unset($subitem['submenu']);
-                        $subitem->id           = $i++;
-                        $subitem->items        = [];
-                        $subitem->content_type = 'container';
-                        $newsletterContent[]   = $subitem;
-                    }
-                }
-
-                unset($item['submenus']);
                 $i++;
             }
         } catch (\Api\Exception\GetItemException $e) {
