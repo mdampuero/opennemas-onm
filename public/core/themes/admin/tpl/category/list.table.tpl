@@ -34,7 +34,7 @@
     <div class="[% 'm-l-' + 30 * levels[getItemId(item)] %]">
       [% item.title %]
       <div class="listing-inline-actions">
-        <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_category_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+        <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_category_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
         <a class="btn btn-default btn-small" href="[% routing.generate('backend_category_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
           <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
         </a>

@@ -145,7 +145,7 @@
                   </div>
                   <div class="listing-inline-actions">
                     {if $multilanguage}
-                      <translator item="content.items.length > 0 ? content.items[0] : content.items" keys="[ 'title' ]" ng-model="lang" link="[% edit(content.id, 'admin_menu_show') %]"  ng-class="{ 'dropup': $index >= contents.length - 1 }" options="languageData" text="{t}Edit{/t}"></translator>
+                      <translator item="content.items.length > 0 ? content.items[0] : content.items" keys="[ 'title' ]" ng-model="lang" language="data.extra.locale.selected"  link="[% edit(content.id, 'admin_menu_show') %]"  ng-class="{ 'dropup': $index >= contents.length - 1 }" options="languageData" text="{t}Edit{/t}"></translator>
                     {/if}
                     {if !$multilanguage}
                     <a class="link" href="[% edit(content.id, 'admin_menu_show') %]" title="{t}Edit{/t}">
