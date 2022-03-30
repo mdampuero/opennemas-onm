@@ -1,8 +1,5 @@
 <li ng-repeat="item in {$iData} track by item.link_name" ui-tree-node class="ng-scope angular-ui-tree-node" >
-  <div class="menu-item">
-    <span ui-tree-handle>
-      <span class="angular-ui-tree-icon"></span>
-    </span>
+  <div ui-tree-handle class="menu-item angular-ui-tree-handle">
     <span class="menu-item-type-icon {$iIcon}"  tooltip-placement="right" uib-tooltip="{$iName}"></span>
     <div class="p-l-45">
       <div class="row" ng-if="item.pk_item">
@@ -18,7 +15,7 @@
           </label>
         </div>
       </div>
-      <div class="row" ng-if="!item.pk_item">
+      <div class="row rigth-menu-item-title" ng-if="!item.pk_item">
         <label class="visible-xs">
           {t}Title{/t}
         </label>
