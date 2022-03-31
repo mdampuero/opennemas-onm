@@ -105,7 +105,17 @@ class ContentCacheHelper extends CacheHelper
      */
     public function getXTags(Content $content)
     {
-        return sprintf('%s-%d', $content->content_type_name, $content->pk_content);
+        $xtags = [];
+
+        if (!empty($content->tags)) {
+            $xtags = array_map(function ($tag) {
+                return sprintf('tag-%d', $tag);
+            }, $content->tags);
+        }
+
+        $xtags[] = sprintf('%s-%d', $content->content_type_name, $content->pk_content);
+
+        return implode(',', $xtags);
     }
 
     /**
