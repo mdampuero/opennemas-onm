@@ -1,0 +1,7 @@
+frontend_payment_send_data:
+    path:     /payment/send/data
+    defaults: { _controller: FrontendBundle:GlobalPayments:sendData }
+
+frontend_payment_send_response:
+    path:     /payment/send/response
+    defaults: { _controller: FrontendBundle:GlobalPayments:sendResponse }
