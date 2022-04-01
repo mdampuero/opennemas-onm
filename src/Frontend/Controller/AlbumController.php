@@ -133,7 +133,7 @@ class AlbumController extends FrontendController
         $params['x-tags'] .= ',album-frontpage';
 
         if (!empty($category)) {
-            $params['x-tags'] .= sprintf(',category-%d', $category->id);
+            $params['x-tags'] .= sprintf(',category-album-%d', $category->id);
         }
 
         $params = array_merge($params, [

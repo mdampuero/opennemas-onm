@@ -3,6 +3,7 @@
 namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;

@@ -43,6 +43,7 @@ class ContentCacheHelper extends CacheHelper
         'category-{{categories}}',
         'content-author-{{fk_author}}-frontpage',
         '{{content_type_name}}-frontpage$',
+        '{{content_type_name}}-frontpage,category-{{content_type_name}}-{{categories}}',
         '{{content_type_name}}-{{pk_content}}',
         'content_type_name-widget-{{content_type_name}}' .
         '.*category-widget-(({{categories}})|(all))' .

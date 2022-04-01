@@ -217,7 +217,7 @@ class PollController extends FrontendController
         $params['x-tags'] .= ',poll-frontpage';
 
         if (!empty($category)) {
-            $params['x-tags'] .= sprintf(',category-%d', $category->id);
+            $params['x-tags'] .= sprintf(',category-poll-%d', $category->id);
         }
 
         $params = array_merge($params, [
