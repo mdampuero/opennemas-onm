@@ -37,9 +37,8 @@ function smarty_function_url($params, &$smarty)
     unset($params['name'], $params['absolute'], $params['sluggable'], $params['slug_key']);
 
     try {
-        // Remove empty params except 0 and '0'
         foreach ($params as $key => $value) {
-            if (empty($value) && ($value !== 0 && $value !== '0')) {
+            if (is_null($value)) {
                 throw new InvalidParameterException(
                     sprintf('Parameter "%s" for route "%s" is empty.', $key, $name)
                 );
