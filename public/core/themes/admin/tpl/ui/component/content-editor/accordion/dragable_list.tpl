@@ -4,7 +4,7 @@
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded['{$iType}'] }"></i>
   {/if}
 </div>
-<div class="collapsable-container grid-collapse-body ng-cloak {if !$iType || $iSimple} expanded {/if}" {if $iType && !$iSimple} ng-class="{ 'expanded': expanded['{$iType}'] }" {/if}>
+<div class="collapsable-container grid-collapse-body ng-cloak {if !$iType || $iSimple} expanded {else} p-b-0 b-shadow{/if}" {if $iType && !$iSimple} ng-class="{ 'expanded': expanded['{$iType}'] }" {/if}>
 {if $iSearchModel}
   <div class="list_search_bar_wrapper">
     <i class="fa fa-search m-r-10 search_icon"></i>

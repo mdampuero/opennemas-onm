@@ -77,12 +77,16 @@
           </div>
         </div>
         <div class="row ng-cloak" ng-show="!flags.http.loading && flags.visible.grid && item">
-          <div class="col-md-4 col-md-push-8">
-            {block name="rightColumn"}{/block}
+          <div class="col-md-12">
+            {block name="topColumn"}{/block}
           </div>
-          <div class="col-md-8 col-md-pull-4">
-
+        </div>
+        <div class="row ng-cloak" ng-show="!flags.http.loading && flags.visible.grid && item">
+          <div class="col-xs-12 col-sm-7 col-md-8">
             {block name="leftColumn"}{/block}
+          </div>
+          <div class="col-xs-12 col-sm-5 col-md-4">
+            {block name="rightColumn"}{/block}
           </div>
         </div>
       </div>

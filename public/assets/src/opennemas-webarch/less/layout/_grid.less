@@ -42,14 +42,15 @@
   padding-top: 0;
   transition: all .25s;
   visibility: hidden;
-}
 
-.grid .grid-collapse-body.expanded {
-  max-height: 10000px;
-  opacity: 1;
-  overflow: visible;
-  padding-bottom: 15px;
-  visibility: visible;
+  &.expanded {
+    max-height: 10000px;
+    opacity: 1;
+    overflow: visible;
+    padding-bottom: 15px;
+    position: relative;
+    visibility: visible;
+  }
 }
 
 .grid-collapse-title .fa-chevron-right {

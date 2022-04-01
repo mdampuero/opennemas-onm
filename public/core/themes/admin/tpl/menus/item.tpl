@@ -24,8 +24,8 @@
 {block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="category" iIcon="fa fa-newspaper-o" iSearchModel="search_categories" iName="{t}Automatic categories{/t}" iData="dragables.category"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="blog-category" iIcon="fa fa-bookmark" iSearchModel="search_manual_categories" iName="{t}Manual categories{/t}" iData="dragables['blog-category']"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="category" iIcon="fa fa-bookmark" iSearchModel="search_categories" iName="{t}Automatic categories{/t}" iData="dragables.category"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="blog-category" iIcon="fa fa-newspaper-o" iSearchModel="search_manual_categories" iName="{t}Manual categories{/t}" iData="dragables['blog-category']"}
       {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="static" iIcon="fa fa-file" iSearchModel="search_pages" iName="{t}Static pages{/t}" iData="dragables.static"}
       {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="internal" iIcon="fa fa-cube" iSearchModel="search_modules" iName="{t}Modules{/t}" iData="dragables.internal"}
       {is_module_activated name="SYNC_MANAGER"}
@@ -37,21 +37,6 @@
 {/block}
 
 {block name="leftColumn"}
-  <div class="grid simple">
-    <div class="grid-body">
-      {include file="ui/component/input/text.tpl" iField="name" iTitle="{t}Name{/t}" iRequired=true iValidation=true}
-        <div class="form-group no-margin">
-          <label for="name" class="form-label">{t}Position{/t}</label>
-          <div class="controls" >
-            <select name="position" ng-model="item.position">
-              <option ng-repeat="(positionKey, positionValue) in data.extra.menu_positions" value="[% positionKey %]">[% positionValue %]</option>
-            </select>
-            <br>
-            <span class="help"><span class="fa fa-info-circle text-info"></span> {t}If your theme has defined positions for menus you can assign one menu to each of them{/t}</span>
-          </div>
-        </div>
-    </div>
-  </div>
   <div class="grid simple">
     <div class="grid-title">
       <h4>
@@ -67,6 +52,30 @@
         <ol ui-tree-nodes="" ng-model="parents">
           <li ng-repeat="item in parents track by item.pk_item" ui-tree-node ng-include="'menu-item'"></li>
         </ol>
+      </div>
+    </div>
+  </div>
+{/block}
+
+{block name="topColumn"}
+  <div class="grid simple">
+    <div class="grid-body">
+      <div class="row">
+        <div class="col-lg-8 col-md-7 col-sm-12">
+          {include file="ui/component/input/text.tpl" iField="name" iTitle="{t}Name{/t}" iRequired=true iValidation=true}
+        </div>
+        <div class="col-lg-4 col-md-5 col-sm-12">
+        <div class="form-group no-margin">
+          <label for="name" class="form-label">{t}Position{/t}</label>
+          <div class="controls" >
+            <select name="position" ng-model="item.position" class="w-100">
+              <option ng-repeat="(positionKey, positionValue) in data.extra.menu_positions" value="[% positionKey %]">[% positionValue %]</option>
+            </select>
+            <br>
+            <span class="help"><span class="fa fa-info-circle text-info"></span> {t}If your theme has defined positions for menus you can assign one menu to each of them{/t}</span>
+          </div>
+        </div>
+        </div>
       </div>
     </div>
   </div>
