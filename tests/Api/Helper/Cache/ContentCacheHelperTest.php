@@ -227,15 +227,6 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
                 sprintf('req.url ~ %s', $item->path)
             ]));
 
-        $this->queue->expects($this->at(1))->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf(
-                    'obj.http.x-tags ~ instance-%s.*%s',
-                    $this->instance->internal_name,
-                    sprintf('archive-page-%s', $now->format('Y-m'))
-                )
-            ]));
-
         $helper->deleteItem($item);
     }
 }
