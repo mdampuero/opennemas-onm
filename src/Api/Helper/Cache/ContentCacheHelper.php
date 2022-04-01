@@ -40,6 +40,7 @@ class ContentCacheHelper extends CacheHelper
      */
     protected $defaultVarnishKeys = [
         'archive-page-{{starttime}}',
+        'authors-frontpage',
         'category-{{categories}}',
         'content-author-{{fk_author}}-frontpage',
         '{{content_type_name}}-frontpage$',
