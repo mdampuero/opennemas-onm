@@ -38,12 +38,13 @@ class PaymentHelper
         ];
 
         $message = $messages[$code] ?? $messages['default'];
+        $code    = $code ?? 'error';
 
         $urlHelper = $this->container->get('core.helper.url');
 
         $parts = $urlHelper->parse($url);
 
-        $parts['query'] = sprintf('message=%s&code=%d', $message, $code);
+        $parts['query'] = sprintf('message=%s&code=%s', $message, $code);
 
         $url = $urlHelper->unparse($parts);
 
