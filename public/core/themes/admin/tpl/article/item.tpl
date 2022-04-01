@@ -69,6 +69,7 @@
           {include file="ui/component/content-editor/accordion/checkbox.tpl" field="frontpage" title="{t}Suggested for frontpage{/t}"}
         </div>
       </div>
+      {include file="ui/component/content-editor/accordion/liveBlogPosting.tpl"}
       {include file="ui/component/content-editor/accordion/author.tpl"}
       {include file="ui/component/content-editor/accordion/category.tpl" field="categories[0]"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
@@ -133,6 +134,7 @@
       {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true contentPicker=true}
     </div>
   </div>
+  {include file="ui/component/content-editor/liveBlogUpdate.tpl"}
 {/block}
 
 {block name="modals"}

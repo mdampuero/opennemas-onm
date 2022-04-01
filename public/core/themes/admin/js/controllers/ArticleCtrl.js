@@ -72,7 +72,10 @@
           tags: [],
           external_link: '',
           agency: '',
+          blogUpdates: []
         };
+
+        $scope.noMoreAdd = false;
 
         /**
          * @memberOf ArticleCtrl
@@ -108,6 +111,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.item.blogUpdates = JSON.parse($scope.item.blogUpdates);
+
           $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
           $scope.expandFields();
           // Check if item is new (created) or existing for use default value or not
@@ -282,6 +287,37 @@
             $scope.flags.block.title_int = !$scope.flags.block.title_int;
           }
         });
+
+        /**
+         * @inheritdoc
+         */
+        $scope.addBlankUpdate = function() {
+          if (!$scope.noMoreAdd) {
+            $scope.item.blogUpdates.unshift({ title: '', body: '' });
+            $scope.noMoreAdd = true;
+          }
+        };
+
+        /**
+         * @function getData
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Returns the data to send when saving/updating an item.
+         */
+        $scope.getData = function() {
+          var data = angular.extend({}, $scope.item);
+
+          return cleaner.clean(data);
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseData = function(data) {
+          data.blogUpdates = JSON.stringify(data.blogUpdates);
+          return data;
+        };
 
         /**
          * @inheritdoc
