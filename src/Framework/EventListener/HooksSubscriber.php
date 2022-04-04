@@ -40,13 +40,13 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         return [
             'advertisement.create' => [
-                [ 'removeVarnishCacheForAdvertisement', 5 ],
+                [ 'removeVarnishCacheCurrentInstance', 5 ],
             ],
             'advertisement.update' => [
-                [ 'removeVarnishCacheForAdvertisement', 5 ],
+                [ 'removeVarnishCacheCurrentInstance', 5 ],
             ],
             'advertisement.delete' => [
-                [ 'removeVarnishCacheForAdvertisement', 5 ],
+                [ 'removeVarnishCacheCurrentInstance', 5 ],
             ],
             // Comments Config hooks
             'comments.config' => [
@@ -56,21 +56,6 @@ class HooksSubscriber implements EventSubscriberInterface
             // Content hooks
             'content.update-set-num-views' => [
                 ['removeObjectCacheForContent', 5]
-            ],
-            'content.create' => [
-                ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeCacheForContent', 5],
-            ],
-            'content.update' => [
-                ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
-                ['removeCacheForContent', 5],
-            ],
-            'content.delete' => [
-                ['logAction', 5],
-                ['removeObjectCacheForContent', 10],
             ],
             'content.createItem' => [
                 ['logAction', 5],
@@ -465,49 +450,6 @@ class HooksSubscriber implements EventSubscriberInterface
         // Setup cache manager from the target instance
         $this->container->get('core.template')->addInstance($instance);
         $this->template->deleteAll();
-    }
-
-    /**
-     * Removes varnish cache for advertisement when an advertisement is created,
-     * updated or deleted.
-     *
-     * @param Event $event The event to handle.
-     */
-    public function removeVarnishCacheForAdvertisement(Event $event)
-    {
-        if (!$this->container->hasParameter('varnish')
-            || !$event->hasArgument('advertisement')
-        ) {
-            return false;
-        }
-
-        $ad = $event->getArgument('advertisement');
-
-        $this->container->get('task.service.queue')->push(
-            new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ .*ad-%s.*', $ad->id)
-            ])
-        );
-
-        if (!is_array($ad->positions)) {
-            return;
-        }
-
-        foreach ($ad->positions as $position) {
-            $this->container->get('task.service.queue')->push(
-                new ServiceTask('core.varnish', 'ban', [
-                    sprintf('obj.http.x-tags ~ .*position-%s.*', $position)
-                ])
-            );
-        }
-
-        if (!empty($ad->old_position)) {
-            $this->container->get('task.service.queue')->push(
-                new ServiceTask('core.varnish', 'ban', [
-                    sprintf('obj.http.x-tags ~ .*position-%s.*', $ad->old_position)
-                ])
-            );
-        }
     }
 
     /**
