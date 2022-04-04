@@ -90,6 +90,9 @@ class HttpCacheHeadersListener
         if (!empty($expire)) {
             $response->headers->set('x-cache-for', $expire);
         }
+
+        // Add surrogate control header to use edge side includes
+        $response->headers->set('surrogate-control', 'ESI/1.0');
     }
 
     /**
