@@ -34,3 +34,7 @@ services:
     api.helper.cache.user_group:
         class:     Api\Helper\Cache\UserGroupCacheHelper
         arguments: [ '@core.instance', '@task.service.queue' ]
+
+    api.helper.cache.widget:
+        class:     Api\Helper\Cache\WidgetCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
