@@ -236,15 +236,13 @@ class WidgetFactory
             return $this->defaultTtl;
         }
 
-        $endtime = $this->params['contents'][0]->endtime;
+        $endtimes = array_filter(array_map(function ($content) {
+            return $content->endtime;
+        }, $this->params['contents']));
 
-        for ($i = 1; $i < count($this->params['contents']); $i++) {
-            if (!empty($this->params['contents'][$i]->endtime)
-                && $this->params['contents'][$i]->endtime < $endtime
-            ) {
-                $endtime = $this->params['contents'][$i]->endtime;
-            }
-        }
+        sort($endtimes);
+
+        $endtime = array_shift($endtimes) ?? null;
 
         if (empty($endtime)) {
             return $this->defaultTtl;
