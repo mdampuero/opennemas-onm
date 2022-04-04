@@ -9,6 +9,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -104,7 +105,11 @@ class WidgetController extends Controller
             ];
 
             return new Response($html, 200, $headers);
+        } catch (GetItemException $e) {
+            return new Response();
         } catch (\Exception $e) {
+            $this->get('logger')->error(sprintf('Error rendering widget: %s', $e->getMessage()));
+
             return new Response();
         }
     }
