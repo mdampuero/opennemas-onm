@@ -57,6 +57,17 @@ class HooksSubscriber implements EventSubscriberInterface
             'content.update-set-num-views' => [
                 ['removeObjectCacheForContent', 5]
             ],
+            'content.create' => [
+                ['logAction', 5],
+            ],
+            'content.update' => [
+                ['logAction', 5],
+                ['removeObjectCacheForContent', 10],
+            ],
+            'content.delete' => [
+                ['logAction', 5],
+                ['removeObjectCacheForContent', 10],
+            ],
             'content.createItem' => [
                 ['logAction', 5],
                 ['removeCacheForContent', 5],
