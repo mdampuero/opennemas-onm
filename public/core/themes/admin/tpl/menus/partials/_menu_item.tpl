@@ -10,10 +10,10 @@
   <span class="menu-item-type-icon fa fa-external-link" ng-if="item.type == 'external'" tooltip-placement="right" uib-tooltip="{t}External link{/t}"></span>
   <div class="p-l-35 p-r-35">
     <div class="row">
-      <div class="col-sm-6 col-lg-6">
+      <div class="col-sm-3 col-lg-3">
         <input data-nodrag class="menu-item-title" ng-model="item.title" type="text">
       </div>
-      <div ng-if="item.type === 'external'" class="col-sm-6 col-lg-6">
+      <div ng-if="item.type === 'external'" class="col-sm-9 col-lg-9">
         <input data-nodrag class="menu-item-link" ng-model="item.link_name" type="text">
       </div>
     </div>

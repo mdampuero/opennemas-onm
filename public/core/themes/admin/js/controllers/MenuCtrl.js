@@ -382,6 +382,9 @@
           object.syncBlogCategory = [];
 
           Object.keys(data.syncBlogCategory).forEach(function(site) {
+            if (!data.syncBlogCategory[site].categories) {
+              return;
+            }
             data.syncBlogCategory[site].categories.forEach(function(category) {
               object.syncBlogCategory.push(
                 {
