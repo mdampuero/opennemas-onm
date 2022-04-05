@@ -64,7 +64,7 @@ $menuXml = [
                 'id'          => 'menu_manager',
                 'title'       => _('Menus'),
                 'icon'        => 'fa fa-list-alt',
-                'link'        => url('admin_menus'),
+                'link'        => url('backend_menus_list'),
                 'module_name' => 'MENU_MANAGER',
                 'privilege'   => 'MENU_ADMIN',
             ],

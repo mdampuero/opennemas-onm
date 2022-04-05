@@ -18,26 +18,6 @@ admin_content_update_property:
     path:     /content/update-property
     defaults: { _controller: BackendBundle:Content:updateProperty }
 
-
-# Menu manager routes
-admin_menus:
-    path:     /menus
-    defaults: { _controller: BackendBundle:Menus:list }
-
-admin_menu_show:
-    path:     /menus/{id}/show
-    defaults: { _controller: BackendBundle:Menus:show }
-    options:
-        expose: true
-
-admin_menu_create:
-    path:     /menus/create
-    defaults: { _controller: BackendBundle:Menus:create }
-
-admin_menu_update:
-    path:     /menu/{id}/update
-    defaults: { _controller: BackendBundle:Menus:update }
-
 admin_instance_sync:
     path:     /instance-sync
     defaults: { _controller: BackendBundle:InstanceSync:list }
@@ -221,6 +201,10 @@ backend_keyword:
 backend_letter:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/letter.yml'
+
+backend_menu:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/menu.yml'
 
 backend_newsletter:
     prefix:   /

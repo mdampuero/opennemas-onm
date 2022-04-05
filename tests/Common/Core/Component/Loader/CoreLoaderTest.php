@@ -440,18 +440,4 @@ class CoreLoaderTest extends \PHPUnit\Framework\TestCase
 
         $method->invokeArgs($this->loader, [ [ 'baz', 'foobar' ] ]);
     }
-
-    /**
-     * Tests loadMenus.
-     */
-    public function testLoadMenus()
-    {
-        $method = new \ReflectionMethod($this->loader, 'loadMenus');
-        $method->setAccessible(true);
-
-        $this->mm->expects($this->once())->method('addMenus')
-            ->with([ 'baz', 'foobar' ]);
-
-        $method->invokeArgs($this->loader, [ [ 'baz', 'foobar' ] ]);
-    }
 }
