@@ -10,6 +10,7 @@ orm:
                     - article
                     - attachment
                     - book
+                    - company
                     - event
                     - kiosko
                     - letter
