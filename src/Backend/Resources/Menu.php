@@ -138,6 +138,15 @@ $menuXml = [
             ],
 
             [
+                'id'          => 'companies_manager',
+                'title'       => _('Companies'),
+                'icon'        => 'fa fa-building',
+                'link'        => url('backend_companies_list'),
+                'module_name' => 'es.openhost.module.companies',
+                'privilege'   => 'COMPANY_ADMIN',
+            ],
+
+            [
                 'id'          => 'poll_manager',
                 'title'       => _('Polls'),
                 'icon'        => 'fa fa-pie-chart',
