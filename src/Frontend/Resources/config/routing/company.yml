@@ -1,0 +1,23 @@
+# Companies routes
+frontend_company_show:
+    path:     /company/{category_slug}/{slug}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:Company:show }
+    requirements:
+        category_slug: '[^/]+'
+        slug:          '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+    options:
+        expose: true
+        l10n: true
+
+frontend_company_show_amp:
+    path:     /company/{category_slug}/{slug}/{created}{id}.amp.html
+    defaults: { _controller: FrontendBundle:Company:showAmp, _format: amp }
+    requirements:
+        category_slug: '[^/]+'
+        slug:          '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+    options:
+        l10n: true
