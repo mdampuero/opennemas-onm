@@ -51,7 +51,7 @@ DELETE FROM `content_positions` WHERE `pk_fk_content` NOT IN (SELECT `pk_content
 DELETE FROM `content_views` WHERE `pk_fk_content` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `kioskos` WHERE `pk_kiosko` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `letters` WHERE `pk_letter` NOT IN (SELECT `pk_content` FROM `contents`);
-DELETE FROM `menu_items` WHERE `menu_items`.`pk_menu` NOT IN (SELECT `pk_menu` FROM `menues`);
+DELETE FROM `menu_items` WHERE `menu_items`.`pk_menu` NOT IN (SELECT `pk_menu` FROM `menus`);
 DELETE FROM `opinions` WHERE `pk_opinion` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `photos` WHERE `pk_photo` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `related_contents` WHERE `pk_content1` NOT IN (SELECT `pk_content` FROM `contents`);
@@ -104,7 +104,7 @@ ALTER TABLE frontpages CHANGE pk_frontpage pk_frontpage BIGINT UNSIGNED AUTO_INC
 ALTER TABLE frontpages ADD PRIMARY KEY (pk_frontpage);
 ALTER TABLE letters CHANGE pk_letter pk_letter BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE menu_items CHANGE pk_item pk_item INT UNSIGNED NOT NULL, CHANGE pk_menu pk_menu INT UNSIGNED NOT NULL;
-ALTER TABLE menues CHANGE pk_menu pk_menu INT UNSIGNED AUTO_INCREMENT NOT NULL;
+ALTER TABLE menus CHANGE pk_menu pk_menu INT UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE newsletter_archive CHANGE pk_newsletter pk_newsletter INT UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE newsletter_archive CHANGE created created DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
 ALTER TABLE newsletter_archive CHANGE updated updated DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;

@@ -32,6 +32,22 @@ class Theme extends Extension
     }
 
     /**
+     * Returns the list of avaliable menus on theme.
+     *
+     * @return array Array of menu positions.
+     *
+     */
+    public function getMenus()
+    {
+        if (!array_key_exists('parameters', $this->data)
+            || !array_key_exists('menus', $this->data['parameters'])) {
+            return [];
+        }
+
+        return $this->data['parameters']['menus'];
+    }
+
+    /**
      * Returns the list of cuts for the theme.
      *
      * @param string $device The device type.
