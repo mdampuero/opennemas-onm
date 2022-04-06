@@ -261,6 +261,7 @@ class FormFieldHelper
         ];
         return $this;
     }
+
     /**
     * Filters the field to return of the specific module.
     *
