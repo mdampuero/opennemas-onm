@@ -22,6 +22,7 @@ class FormFieldHelper
                 'title' => _('Author'),
                 'available' => [
                     'article',
+                    'company',
                     'opinion',
                     'event',
                     'poll',
@@ -34,6 +35,7 @@ class FormFieldHelper
                 'title' => _('Category'),
                 'available' => [
                     'article',
+                    'company',
                     'event',
                     'poll',
                     'attachment',
@@ -47,6 +49,7 @@ class FormFieldHelper
                 'title' => _('Tags'),
                 'available' => [
                     'article',
+                    'company',
                     'opinion',
                     'event',
                     'poll',
@@ -62,6 +65,7 @@ class FormFieldHelper
                 'available' => [
                     'article',
                     'author',
+                    'company',
                     'opinion',
                     'event',
                     'poll',
@@ -86,6 +90,7 @@ class FormFieldHelper
                 'title' => _('Schedule'),
                 'available' => [
                     'article',
+                    'company',
                     'widget',
                     'opinion',
                     'event',
@@ -185,6 +190,7 @@ class FormFieldHelper
                 'title' => _('Featured in frontpage'),
                 'available' => [
                     'article',
+                    'company',
                     'opinion',
                     'event',
                     'video',
@@ -196,6 +202,7 @@ class FormFieldHelper
                 'title' => _('Featured in inner'),
                 'available' => [
                     'article',
+                    'company',
                     'opinion',
                     'event',
                     'poll'
@@ -204,17 +211,52 @@ class FormFieldHelper
             [
                 'name' => 'relatedFrontpage',
                 'title' => _('Related in frontpage'),
-                'available' => [ 'article' ]
+                'available' => [ 'article', 'company' ]
             ],
             [
                 'name' => 'relatedInner',
                 'title' => _('Related in inner'),
-                'available' => [ 'article' ]
+                'available' => [ 'article', 'company' ]
             ],
             [
                 'name' => 'agency',
                 'title' => _('Agency'),
                 'available' => [ 'album' ]
+            ],
+            [
+                'name' => 'facebook',
+                'title' => _('Facebook'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'twitter',
+                'title' => _('Twitter'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'instagram',
+                'title' => _('Instagram'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'email',
+                'title' => _('Email'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'address',
+                'title' => _('Address'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'maps',
+                'title' => _('Google Maps'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'logo',
+                'title' => _('Logo'),
+                'available' => [ 'company' ]
             ],
         ];
         return $this;
