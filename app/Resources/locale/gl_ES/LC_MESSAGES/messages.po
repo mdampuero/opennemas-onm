@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-07 07:26+0000\n"
-"PO-Revision-Date: 2022-04-07 09:36+0200\n"
+"POT-Creation-Date: 2022-04-07 13:55+0000\n"
+"PO-Revision-Date: 2022-04-07 15:57+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1247,56 +1247,23 @@ msgstr "Opcións gardadas."
 msgid "There was an error while saving the settings"
 msgstr "Produciuse un erro ao gardar as preferencias."
 
-msgid "Fishing"
-msgstr "Pesca"
-
-msgid "Breeding"
-msgstr "Gandería"
+msgid "Aerospace"
+msgstr "Aeroespacial"
 
 msgid "Agriculture"
 msgstr "Agricultura"
 
-msgid "Tobacco"
-msgstr "Tabaco"
-
-msgid "Wood"
-msgstr "Madeira"
-
-msgid "Aerospace"
-msgstr "Aeroespacial"
-
 msgid "Automobiles"
 msgstr "Automóbiles"
 
-msgid "Pharmaceutical"
-msgstr "Farmacéutica"
+msgid "Breeding"
+msgstr "Gandería"
+
+msgid "Comerce"
+msgstr "Comercio"
 
 msgid "Construction"
 msgstr "Construción"
-
-msgid "Electronic"
-msgstr "Electrónica"
-
-msgid "Energy"
-msgstr "Enerxía"
-
-msgid "Food"
-msgstr "Alimentación"
-
-msgid "Meat"
-msgstr "Carne"
-
-msgid "Mining"
-msgstr "Minería"
-
-msgid "Petroleum"
-msgstr "Petróleo"
-
-msgid "Telecommunications"
-msgstr "Telecomunicacións"
-
-msgid "Textile"
-msgstr "Téxtil"
 
 msgid "Creative"
 msgstr "Creativo"
@@ -1307,11 +1274,23 @@ msgstr "Cultura"
 msgid "Education"
 msgstr "Educación"
 
+msgid "Electronic"
+msgstr "Electrónica"
+
+msgid "Energy"
+msgstr "Enerxía"
+
 msgid "Entertainment"
 msgstr "Entretemento"
 
 msgid "Finance"
 msgstr "Financeiro"
+
+msgid "Fishing"
+msgstr "Pesca"
+
+msgid "Food"
+msgstr "Alimentación"
 
 msgid "Healthcare"
 msgstr "Saúde"
@@ -1319,11 +1298,35 @@ msgstr "Saúde"
 msgid "Information technology"
 msgstr "Tecnoloxías da información"
 
+msgid "Meat"
+msgstr "Carne"
+
+msgid "Mining"
+msgstr "Minería"
+
+msgid "Petroleum"
+msgstr "Petróleo"
+
+msgid "Pharmaceutical"
+msgstr "Farmacéutica"
+
 msgid "Real estate"
 msgstr "Inmobiliaria"
 
+msgid "Telecommunications"
+msgstr "Telecomunicacións"
+
+msgid "Tobacco"
+msgstr "Tabaco"
+
+msgid "Textile"
+msgstr "Téxtil"
+
 msgid "Transport"
 msgstr "Transporte"
+
+msgid "Wood"
+msgstr "Madeira"
 
 msgid "Other"
 msgstr "Outro"
@@ -1627,6 +1630,9 @@ msgstr "Enderezo"
 
 msgid "Google Maps"
 msgstr "Google Maps"
+
+msgid "Sector"
+msgstr "Sector"
 
 msgid "Max sents reached"
 msgstr "Alcanzouse o número máximo de envios"
@@ -2046,6 +2052,9 @@ msgstr "Cartas ao director"
 msgid "Obituary"
 msgstr "Necrolóxica"
 
+msgid "Company"
+msgstr "Empresa"
+
 msgid "Select a category..."
 msgstr "Selecciona unha categoría…"
 
@@ -2458,9 +2467,6 @@ msgstr "Elementos comprados"
 
 msgid "Billing information"
 msgstr "Información de facturación"
-
-msgid "Company"
-msgstr "Empresa"
 
 msgid "VAT number"
 msgstr "Identificador fiscal"
@@ -4636,6 +4642,9 @@ msgstr "Axencia de novas Opennemas"
 msgid "Url"
 msgstr "URL"
 
+msgid "No sector"
+msgstr "Sen sector"
+
 msgid "Planned"
 msgstr "Planificado"
 
@@ -4672,6 +4681,9 @@ msgstr "Inserir relacionado"
 
 msgid "Add a tag..."
 msgstr "Engadir unha etiqueta ..."
+
+msgid "Select a sector..."
+msgstr "Selecciona un sector…"
 
 msgid "Internal search"
 msgstr "Busca interna"
@@ -5314,6 +5326,12 @@ msgstr "Necrolóxica: portada"
 
 msgid "Obituary: inner"
 msgstr "Necrolóxica: interior"
+
+msgid "Company: frontpage"
+msgstr "Empresa: portada"
+
+msgid "Company: inner"
+msgstr "Empresa: interior"
 
 msgid "Google AMP"
 msgstr "Google AMP"
