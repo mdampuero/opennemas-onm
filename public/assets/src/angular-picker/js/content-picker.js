@@ -178,7 +178,7 @@
               types: {
                 enabled:   [ ],
                 available: [
-                  'album', 'article', 'attachment', 'event', 'letter',
+                  'album', 'article', 'attachment', 'company', 'event', 'letter',
                   'obituary', 'opinion', 'photo', 'poll', 'special', 'video'
                 ]
               },
