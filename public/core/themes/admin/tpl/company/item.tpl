@@ -75,6 +75,7 @@
       <div class="grid-collapse-title">
         <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
       </div>
+      {include file="ui/component/content-editor/accordion/sector.tpl"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="facebook" icon="fa-facebook" title="{t}Facebook{/t}"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="twitter" icon="fa-twitter" title="{t}Twitter{/t}"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="instagram" icon="fa-instagram" title="{t}Instagram{/t}"}
