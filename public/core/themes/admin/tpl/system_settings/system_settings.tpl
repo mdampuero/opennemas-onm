@@ -1152,7 +1152,7 @@
                                     </label>
                                     <div class="controls">
                                       <div class="form-group">
-                                        <input class="form-control" id="payments-amount" name="payments-amount" ng-model="settings.payments.amount" type="number">
+                                        <input class="form-control" id="payments-amount" name="payments-amount" ng-model="settings.payments.amount" type="text">
                                       </div>
                                     </div>
                                   </div>
