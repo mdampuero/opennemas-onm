@@ -139,7 +139,7 @@
                   <div ng-class="{ 'col-lg-2 col-sm-3': app.mode === 'list', 'col-xs-12': app.mode === 'grid' }">
                     <div class="dynamic-image-placeholder">
                       <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.related_contents[photo.target_id]" transform="zoomcrop,200,200">
-                        <div class="thumbnail-actions">
+                        <div class="thumbnail-actions thumbnail-actions-1x">
                           <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ photo.target_id)">
                             <i class="fa fa-trash-o fa-2x"></i>
                           </div>
