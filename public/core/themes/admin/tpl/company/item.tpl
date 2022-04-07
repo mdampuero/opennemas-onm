@@ -110,7 +110,6 @@
         <button class="btn btn-link no-padding p-t-5 m-r-10" ng-click="setMode(app.mode === 'grid' ? 'list' : 'grid')" type="button">
           <i class="fa" ng-class="{ 'fa-th': app.mode === 'grid', 'fa-list': app.mode === 'list' }"></i>
         </button>
-        {include file="common/component/icon/status.tpl" iNgModel="value.photos" iForm="form.photos" iValidation=true}
       </div>
     </div>
     <div class="grid-body">
@@ -157,7 +156,7 @@
               </div>
             </div>
           </div>
-          <input name="photos" ng-model="value.photos" required type="hidden">
+          <input name="photos" ng-model="value.photos" type="hidden">
         </div>
       </div>
       <div class="text-center">
@@ -185,6 +184,9 @@
     <div class="modal-body clearfix no-padding">
       <iframe ng-src="[% template.src %]" frameborder="0"></iframe>
     </div>
+  </script>
+  <script type="text/ng-template" id="modal-delete">
+    {include file="common/extension/modal.delete.tpl"}
   </script>
   <script type="text/ng-template" id="modal-translate">
     {include file="common/modals/_translate.tpl"}

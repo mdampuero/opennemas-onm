@@ -23,9 +23,9 @@
      *   Provides actions to edit, save and update companies.
      */
     .controller('CompanyCtrl', [
-      '$controller', '$scope', '$uibModal', '$window', 'cleaner',
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner',
       'http', 'related', 'routing', 'translator',
-      function($controller, $scope, $uibModal, $window, cleaner,
+      function($controller, $scope, $timeout, $uibModal, $window, cleaner,
           http, related, routing, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
@@ -114,6 +114,37 @@
           related.init($scope);
           related.watch();
           translator.init($scope);
+        };
+
+        /**
+         * @function empty
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *   Shows a modal window to confirm if album has to be emptied.
+         */
+        $scope.empty = function() {
+          $uibModal.open({
+            templateUrl: 'modal-delete',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return { selected: $scope.photos.length };
+              },
+              success: function() {
+                return function() {
+                  return $timeout(function() {
+                    $scope.photos      = [];
+                    $scope.data.photos = [];
+
+                    // Fake response for ModalCtrl
+                    return { response: {}, headers: [], status: 200 };
+                  });
+                };
+              }
+            }
+          });
         };
 
         /**
