@@ -53,6 +53,35 @@ class CompanyController extends ContentController
             'formSettings'  => [
                 'name'             => $this->module,
                 'expansibleFields' => $this->getFormSettings($this->module)
+            ],
+            'sectors' => [
+                _('Fishing'),
+                _('Breeding'),
+                _('Agriculture'),
+                _('Tobacco'),
+                _('Wood'),
+                _('Aerospace'),
+                _('Automobiles'),
+                _('Pharmaceutical'),
+                _('Construction'),
+                _('Electronic'),
+                _('Energy'),
+                _('Food'),
+                _('Meat'),
+                _('Mining'),
+                _('Petroleum'),
+                _('Telecommunications'),
+                _('Textile'),
+                _('Creative'),
+                _('Culture'),
+                _('Education'),
+                _('Entertainment'),
+                _('Finance'),
+                _('Healthcare'),
+                _('Information technology'),
+                _('Real estate'),
+                _('Transport'),
+                _('Other')
             ]
         ]);
     }
