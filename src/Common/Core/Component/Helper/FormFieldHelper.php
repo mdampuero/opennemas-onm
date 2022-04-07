@@ -258,6 +258,11 @@ class FormFieldHelper
                 'title' => _('Logo'),
                 'available' => [ 'company' ]
             ],
+            [
+                'name' => 'sector',
+                'title' => _('Sector'),
+                'available' => [ 'company' ]
+            ],
         ];
         return $this;
     }
