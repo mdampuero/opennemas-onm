@@ -97,11 +97,11 @@ class GlobalPaymentsController extends Controller
             $response = $service->parseResponse($responseJson, true);
             $url      = $response->responseValues['MERCHANT_RESPONSE_URL'];
 
-            return new Response($ph->getRefererUrlWithMessage($url, $response->responseCode), 301);
+            return new RedirectResponse($ph->getRefererUrlWithMessage($url, $response->responseCode), 301);
         } catch (ApiException $e) {
-            return new Response($ph->getRefererUrlWithMessage($url, $response->responseCode), 301, []);
+            return new RedirectResponse($ph->getRefererUrlWithMessage($url, $response->responseCode), 301, []);
         } catch (\Exception $e) {
-            return new Response($ph->getRefererUrlWithMessage($url, 'default'), 301, []);
+            return new RedirectResponse($ph->getRefererUrlWithMessage($url, 'default'), 301, []);
         }
     }
 }
