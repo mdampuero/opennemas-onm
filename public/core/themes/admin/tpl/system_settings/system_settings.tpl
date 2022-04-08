@@ -1125,6 +1125,16 @@
                               <div class="row">
                                 <div class="col-12">
                                   <div class="form-group">
+                                    <label class="form-label" for="payments-url">
+                                      {t}Url{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <input class="form-control" id="payments-url" name="payments-url" ng-model="settings.payments.url" type="text">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                  <div class="form-group">
                                     <label class="form-label" for="payments-merchant-id">
                                       {t}Merchant id{/t}
                                     </label>

@@ -88,18 +88,18 @@ class GlobalPaymentsController extends Controller
 
         $service = new HostedService($config);
 
-        $referer      = $request->headers->get('referer');
+        $url          = $settings['url'];
         $responseJson = $request->request->get('hppResponse');
         $ph           = $this->get('core.helper.payment');
 
         try {
             $response = $service->parseResponse($responseJson, true);
 
-            return new RedirectResponse($ph->getRefererUrlWithMessage($referer, $response->responseCode), 301);
+            return new RedirectResponse($ph->getRefererUrlWithMessage($url, $response->responseCode), 301);
         } catch (ApiException $e) {
-            return new RedirectResponse($ph->getRefererUrlWithMessage($referer, $response->responseCode), 301, []);
+            return new RedirectResponse($ph->getRefererUrlWithMessage($url, $response->responseCode), 301, []);
         } catch (\Exception $e) {
-            return new RedirectResponse($ph->getRefererUrlWithMessage($referer, 'default'), 301, []);
+            return new RedirectResponse($ph->getRefererUrlWithMessage($url, 'default'), 301, []);
         }
     }
 }
