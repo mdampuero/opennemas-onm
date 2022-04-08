@@ -14,6 +14,7 @@ use GlobalPayments\Api\Services\HostedService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class GlobalPaymentsController extends Controller
 {
@@ -88,18 +89,19 @@ class GlobalPaymentsController extends Controller
 
         $service = new HostedService($config);
 
-        $url          = $settings['url'];
         $responseJson = $request->request->get('hppResponse');
-        $ph           = $this->get('core.helper.payment');
+
+        $ph = $this->get('core.helper.payment');
 
         try {
             $response = $service->parseResponse($responseJson, true);
+            $url      = $response->responseValues['MERCHANT_RESPONSE_URL'];
 
-            return new RedirectResponse($ph->getRefererUrlWithMessage($url, $response->responseCode), 301);
+            return new Response($ph->getRefererUrlWithMessage($url, $response->responseCode), 301);
         } catch (ApiException $e) {
-            return new RedirectResponse($ph->getRefererUrlWithMessage($url, $response->responseCode), 301, []);
+            return new Response($ph->getRefererUrlWithMessage($url, $response->responseCode), 301, []);
         } catch (\Exception $e) {
-            return new RedirectResponse($ph->getRefererUrlWithMessage($url, 'default'), 301, []);
+            return new Response($ph->getRefererUrlWithMessage($url, 'default'), 301, []);
         }
     }
 }
