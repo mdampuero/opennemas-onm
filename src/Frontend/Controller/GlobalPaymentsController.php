@@ -42,6 +42,8 @@ class GlobalPaymentsController extends Controller
         $service                              = new HostedService($config);
 
         $hostedPaymentData                      = new HostedPaymentData();
+        $hostedPaymentData->customerFirstName   = $params['firstname'];
+        $hostedPaymentData->customerLastName    = $params['lastname'];
         $hostedPaymentData->customerEmail       = $params['email'];
         $hostedPaymentData->customerPhoneMobile = $params['phone'];
         $hostedPaymentData->addressesMatch      = false;
