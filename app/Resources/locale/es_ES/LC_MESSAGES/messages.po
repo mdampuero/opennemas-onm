@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-31 06:25+0000\n"
-"PO-Revision-Date: 2022-03-31 08:31+0200\n"
+"POT-Creation-Date: 2022-04-08 06:23+0000\n"
+"PO-Revision-Date: 2022-04-08 08:25+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -158,72 +158,6 @@ msgstr "Configuración del sitio eliminada correctamente"
 msgid "There was an error while deleting this configuration"
 msgstr "Se ha producido un error al eliminar la configuración"
 
-#, php-format
-msgid "Unable to find the menu with the id \"%d\""
-msgstr "No se pudo encontrar el menu con el identificador «%d»"
-
-#, php-format
-msgid "Menu '%s' created successfully."
-msgstr "Menú «%s» creado correctamente."
-
-msgid "Unable to create the menu"
-msgstr "No se pudo crear el menú"
-
-#, php-format
-msgid "Unable to find a menu with the id \"%s\""
-msgstr "No se pudo encontrar un menú con el identificador «%s»"
-
-msgid "Menu data sent not valid."
-msgstr "Los datos enviados del menú no son válidos."
-
-msgid "Menu updated successfully."
-msgstr "Menú actualizado con éxito."
-
-msgid "There was an error while updating the menu."
-msgstr "Se ha producido un error al actualizar el menú."
-
-msgid "Frontpage"
-msgstr "Portada"
-
-msgid "Opinions"
-msgstr "Opiniones"
-
-msgid "Blogs"
-msgstr "Blogs"
-
-msgid "Albums"
-msgstr "Álbumes"
-
-msgid "Videos"
-msgstr "Vídeos"
-
-msgid "Polls"
-msgstr "Encuestas"
-
-msgid "Events"
-msgstr "Eventos"
-
-msgid "Obituaries"
-msgstr "Esquelas"
-
-msgid "Letters to the Editor"
-msgstr "Cartas al editor"
-
-msgid "News Stand"
-msgstr "Portadas de papel"
-
-msgid "Form"
-msgstr "Formularios"
-
-msgid "Newsletter"
-msgstr "Boletín de noticias"
-
-msgid "Archive"
-msgstr "Archivar"
-
-msgid "Without position"
-msgstr "Sin posición"
-
 msgid "You have reached your maximum of emails allowed to send per month"
 msgstr ""
 "Has alcanzado el número máximo de correos-e permitidos para el envío por mes"
@@ -365,8 +299,20 @@ msgstr "Contenidos"
 msgid "Articles"
 msgstr "Artículos"
 
+msgid "Opinions"
+msgstr "Opiniones"
+
 msgid "Comments"
 msgstr "Comentarios"
+
+msgid "Events"
+msgstr "Eventos"
+
+msgid "Obituaries"
+msgstr "Esquelas"
+
+msgid "Polls"
+msgstr "Encuestas"
 
 msgid "Static Pages"
 msgstr "Páginas estáticas"
@@ -388,6 +334,15 @@ msgstr "Fotos"
 
 msgid "Files"
 msgstr "Ficheros"
+
+msgid "Videos"
+msgstr "Vídeos"
+
+msgid "Albums"
+msgstr "Álbumes"
+
+msgid "News Stand"
+msgstr "Portadas de papel"
 
 msgid "Books"
 msgstr "Libros"
@@ -1223,6 +1178,9 @@ msgstr "No se proporcionó ningún archivo"
 msgid "A file with the same name has already been uploaded today"
 msgstr "Ya se ha subido un fichero con el mismo nombre en el día de hoy"
 
+msgid "Frontpage"
+msgstr "Portada"
+
 msgid "You have exceeded the version limit. Delete one to create a new one"
 msgstr "Has excedido el límite de versiones. Elimina una para crear una nueva"
 
@@ -1292,6 +1250,9 @@ msgstr "Opciones guardadas"
 
 msgid "There was an error while saving the settings"
 msgstr "Se ha producido un error al guardar las preferencias"
+
+msgid "Without position"
+msgstr "Sin posición"
 
 msgid "Item imported successfully"
 msgstr "Elemento importado correctamente"
@@ -2010,9 +1971,6 @@ msgstr "Carta al director"
 
 msgid "Obituary"
 msgstr "Esquela"
-
-msgid "Menu"
-msgstr "Menú"
 
 msgid "Select a category..."
 msgstr "Selecciona una categoría…"
@@ -2926,6 +2884,9 @@ msgstr "¿Quieres esta funcionalidad?"
 msgid "Go to Store"
 msgstr "Ir a la tienda"
 
+msgid "Newsletter"
+msgstr "Boletín de noticias"
+
 msgid ""
 "If enabled, this subscription will be selectable when creating newsletters"
 msgstr ""
@@ -3105,6 +3066,9 @@ msgstr "Personalizar en portada"
 msgid "Customize content"
 msgstr "Personalizar contenido"
 
+msgid "Letters to the Editor"
+msgstr "Cartas al editor"
+
 msgid "Body"
 msgstr "Cuerpo"
 
@@ -3119,6 +3083,55 @@ msgstr "Buscar por etiqueta"
 
 msgid "No published"
 msgstr "No publicado"
+
+msgid "Position"
+msgstr "Posición"
+
+msgid "Manual categories"
+msgstr "Categorías manuales"
+
+msgid "Automatic categories"
+msgstr "Categorías automáticas"
+
+msgid "Static pages"
+msgstr "Páginas estáticas"
+
+msgid "Synchronized sites"
+msgstr "Sitios sincronizados"
+
+msgid "Custom link"
+msgstr "Enlace personalizado"
+
+msgid "Menu structure"
+msgstr "Estructura del menú"
+
+msgid "Use drag and drop to sort and nest elements."
+msgstr "Usa arrastrar y soltar para ordenar y anidar elementos"
+
+msgid ""
+"If your theme has defined positions for menus you can assign one menu to "
+"each of them"
+msgstr ""
+"Si tu tema tiene posiciones de menú definidas puedes asignar un menú a cada "
+"posición"
+
+msgid "Module"
+msgstr "Módulo"
+
+msgid "Manual category"
+msgstr "Categoría manual"
+
+msgid "Automatic category"
+msgstr "Categoría automática"
+
+msgid "Static Page"
+msgstr "Página estática"
+
+msgid "Synchronized instances"
+msgstr "Instancias sincronizadas"
+
+msgid "New menu"
+msgstr "Nuevo menú"
 
 msgid "Favorite"
 msgstr "Favorito"
@@ -4676,6 +4689,9 @@ msgstr ""
 msgid "If enabled, category will be included in RSS feeds"
 msgstr "Si está activado, la categoría se mostrará en los RSS"
 
+msgid "Menu"
+msgstr "Menú"
+
 msgid "Do you want to move contents in category?"
 msgstr "¿Quieres mover los cotenidos en la categoría?"
 
@@ -5013,9 +5029,6 @@ msgstr "Holística+ gestionada"
 msgid "Targeting"
 msgstr "Segmentación"
 
-msgid "Module"
-msgstr "Módulo"
-
 msgid "Custom code"
 msgstr "Código personalizado"
 
@@ -5087,9 +5100,6 @@ msgstr "Authorized Digital Sellers"
 
 msgid "This will be the content of the file ads.txt on your root domain"
 msgstr "Este será el contenido del archivo ads.txt en la raíz de tu dominio"
-
-msgid "Position"
-msgstr "Posición"
 
 msgid "Unable to find any advertisement that matches your search."
 msgstr "No se pudieron encontrar publicidades que coincidan con tu búsqueda."
@@ -5266,65 +5276,6 @@ msgstr "Google AMP"
 
 msgid "Facebook Instant Articles"
 msgstr "Facebook Instant Articles"
-
-msgid "Category blog"
-msgstr "Categoría tipo Blog"
-
-msgid "Static Page"
-msgstr "Página estática"
-
-msgid "Synched category"
-msgstr "Categoría sincronizada"
-
-msgid "Original:"
-msgstr "Original:"
-
-msgid "Link to"
-msgstr "Enlace a"
-
-msgid "Unable to find any menu that matches your search."
-msgstr "No se pudieron encontrar menús que coincidan con tu búsqueda."
-
-msgid "Position assigned"
-msgstr "Posición asignada"
-
-msgid "Assigned to"
-msgstr "Asignado a"
-
-msgid "No position"
-msgstr "Sin posición"
-
-msgid "Unasigned"
-msgstr "Sin asignar"
-
-msgid ""
-"If your theme has defined positions for menus you can assign one menu to "
-"each of them"
-msgstr ""
-"Si tu tema tiene posiciones de menú definidas puedes asignar un menú a cada "
-"posición"
-
-msgid "Menu structure"
-msgstr "Estructura del menú"
-
-msgid "Add items"
-msgstr "Añadir elementos"
-
-msgid "Use drag and drop to sort and nest elements."
-msgstr "Usa arrastrar y soltar para ordenar y anidar elementos"
-
-msgid "Add new item"
-msgstr "Añadir nuevo elemento"
-
-msgid "Synchronized Category"
-msgstr "Categoría sincronizada"
-
-msgid ""
-"Fill the below form with the title and the external URL you want to add to "
-"the menu."
-msgstr ""
-"Completa el formulario de debajo con el título y la URL externa que quieres "
-"añadir al menú."
 
 msgid "Site name"
 msgstr "Nombre del sitio"
@@ -6744,9 +6695,6 @@ msgstr "Contacto"
 msgid "Last activity"
 msgstr "Última actividad"
 
-msgid "Static pages"
-msgstr "Páginas estáticas"
-
 msgid "Attachments"
 msgstr "Adjuntos"
 
@@ -7134,6 +7082,79 @@ msgstr "¿Estás seguro de que quieres eliminar el cliente?"
 
 msgid "Do you want to delete the selected clients?"
 msgstr "¿Estás seguro de que quieres eliminar los clientes seleccionados?"
+
+#~ msgid "Unable to find the menu with the id \"%d\""
+#~ msgstr "No se pudo encontrar el menu con el identificador «%d»"
+
+#~ msgid "Menu '%s' created successfully."
+#~ msgstr "Menú «%s» creado correctamente."
+
+#~ msgid "Unable to create the menu"
+#~ msgstr "No se pudo crear el menú"
+
+#~ msgid "Unable to find a menu with the id \"%s\""
+#~ msgstr "No se pudo encontrar un menú con el identificador «%s»"
+
+#~ msgid "Menu data sent not valid."
+#~ msgstr "Los datos enviados del menú no son válidos."
+
+#~ msgid "Menu updated successfully."
+#~ msgstr "Menú actualizado con éxito."
+
+#~ msgid "There was an error while updating the menu."
+#~ msgstr "Se ha producido un error al actualizar el menú."
+
+#~ msgid "Blogs"
+#~ msgstr "Blogs"
+
+#~ msgid "Form"
+#~ msgstr "Formularios"
+
+#~ msgid "Archive"
+#~ msgstr "Archivar"
+
+#~ msgid "Category blog"
+#~ msgstr "Categoría tipo Blog"
+
+#~ msgid "Synched category"
+#~ msgstr "Categoría sincronizada"
+
+#~ msgid "Original:"
+#~ msgstr "Original:"
+
+#~ msgid "Link to"
+#~ msgstr "Enlace a"
+
+#~ msgid "Unable to find any menu that matches your search."
+#~ msgstr "No se pudieron encontrar menús que coincidan con tu búsqueda."
+
+#~ msgid "Position assigned"
+#~ msgstr "Posición asignada"
+
+#~ msgid "Assigned to"
+#~ msgstr "Asignado a"
+
+#~ msgid "No position"
+#~ msgstr "Sin posición"
+
+#~ msgid "Unasigned"
+#~ msgstr "Sin asignar"
+
+#~ msgid "Add items"
+#~ msgstr "Añadir elementos"
+
+#~ msgid "Add new item"
+#~ msgstr "Añadir nuevo elemento"
+
+#~ msgid "Synchronized Category"
+#~ msgstr "Categoría sincronizada"
+
+#~ msgid ""
+#~ "Fill the below form with the title and the external URL you want to add "
+#~ "to the menu."
+#~ msgstr ""
+#~ "Completa el formulario de debajo con el título y la URL externa que "
+#~ "quieres añadir al menú."
 
 #~ msgid "Page views this month"
 #~ msgstr "Páginas vistas este mes"
@@ -7553,9 +7574,6 @@ msgstr "¿Estás seguro de que quieres eliminar los clientes seleccionados?"
 #~ msgid "Click on arrow to reveal more configuration options."
 #~ msgstr "Haz clic en las flechas para revelar más opciones de configuración."
 
-#~ msgid "Album category"
-#~ msgstr "Categoría de álbum"
-
 #~ msgid "Poll category"
 #~ msgstr "Categoría de encuestas"
 
@@ -7564,9 +7582,6 @@ msgstr "¿Estás seguro de que quieres eliminar los clientes seleccionados?"
 
 #~ msgid "Synched blog category"
 #~ msgstr "Categoría sincronizada tipo blog"
-
-#~ msgid "Sync Automatic Categories"
-#~ msgstr "Sincronización automática de categorías"
 
 #~ msgid "Add Container"
 #~ msgstr "Añadir nueva sección"
