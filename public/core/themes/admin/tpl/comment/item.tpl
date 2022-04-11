@@ -6,7 +6,7 @@
 {/block}
 
 {block name="ngInit"}
-  ng-controller="CommentCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id});"
+  ng-controller="CommentCtrl" ng-init="getItem({$id});"
 {/block}
 
 {block name="icon"}
