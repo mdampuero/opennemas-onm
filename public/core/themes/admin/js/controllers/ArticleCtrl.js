@@ -69,13 +69,23 @@
           with_comment: 0,
           categories: [],
           related_contents: [],
+          live_blog_updates: [],
           tags: [],
           external_link: '',
           agency: '',
-          blogUpdates: []
+          live_blog_posting: '0'
         };
 
-        $scope.noMoreAdd = false;
+        $scope.defaultLiveBlogUpdate = {
+          content_id: null,
+          title: '',
+          body: '',
+          image_id: null,
+          caption: '',
+          created: '',
+          modified: '',
+          default: true
+        };
 
         /**
          * @memberOf ArticleCtrl
@@ -111,9 +121,10 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.item.blogUpdates = JSON.parse($scope.item.blogUpdates);
-
           $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
+          if ($scope.item.live_blog_posting) {
+            $scope.item.live_blog_updates = $scope.sortUpdates($scope.item.live_blog_updates);
+          }
           $scope.expandFields();
           // Check if item is new (created) or existing for use default value or not
           if (!$scope.data.item.pk_content) {
@@ -206,6 +217,30 @@
         };
 
         /**
+         * @function removeUpdate
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Remove selected update when LiveBlogUpdate is active.
+         */
+        $scope.removeUpdate = function($index) {
+          $scope.item.live_blog_updates.splice($index, 1);
+        };
+
+        /**
+         * @function sortUpdates
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Sort updates by created time
+         */
+        $scope.sortUpdates = function($array) {
+          return $array.sort(function(a, b) {
+            return a.created < b.created ? 1 : -1;
+          });
+        };
+
+        /**
          * @function undo
          * @memberOf ArticleCtrl
          *
@@ -292,9 +327,8 @@
          * @inheritdoc
          */
         $scope.addBlankUpdate = function() {
-          if (!$scope.noMoreAdd) {
-            $scope.item.blogUpdates.unshift({ title: '', body: '' });
-            $scope.noMoreAdd = true;
+          if ($scope.item.live_blog_updates.length === 0 || !$scope.item.live_blog_updates[0].default) {
+            $scope.item.live_blog_updates.unshift($scope.defaultLiveBlogUpdate);
           }
         };
 
@@ -315,7 +349,11 @@
          * @inheritdoc
          */
         $scope.parseData = function(data) {
-          data.blogUpdates = JSON.stringify(data.blogUpdates);
+          if (data.live_blog_updates.length > 0) {
+            for (var update of data.live_blog_updates) {
+              update.content_id = data.pk_content ? data.pk_content : '';
+            }
+          }
           return data;
         };
 
