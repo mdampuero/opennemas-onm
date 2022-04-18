@@ -23,7 +23,7 @@
           restrict: 'A',
           scope: {
             contentPickerIgnore: '@',
-            contentPickerTarget: '='
+            contentPickerTarget: '@'
           },
           link: function($scope, elm, attrs) {
             /**

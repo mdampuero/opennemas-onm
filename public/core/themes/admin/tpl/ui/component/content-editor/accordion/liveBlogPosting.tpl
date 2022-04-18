@@ -2,8 +2,8 @@
   <i class="fa fa-edit m-r-10"></i>{t}Live Blog Post{/t}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.live_blog_posting }"></i>
   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.live_blog_posting">
-    <span ng-show="!item.live_blog_posting"><strong>{t}No Live{/t}</strong></span>
-    <span ng-show="item.live_blog_posting">
+    <span ng-show="!item.params.live_blog_posting"><strong>{t}No Live{/t}</strong></span>
+    <span ng-show="item.params.live_blog_posting">
       <strong>Live</span></strong>
     </span>
   </span>
@@ -11,7 +11,12 @@
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.live_blog_posting }">
   <div class="form-group">
     <div class="m-t-5">
-      {include file="ui/component/content-editor/accordion/checkbox.tpl" field="live_blog_posting" title="{t}Live blog post{/t}"}
+      <div class="form-group no-margin">
+        <div class="checkbox">
+          <input id="live_blog_posting" ng-false-value=0 ng-model="item.params.live_blog_posting" ng-true-value=1 type="checkbox">
+          <label for="live_blog_posting">{t}Live blog post{/t}</label>
+        </div>
+      </div>
     </div>
   </div>
   <div class="form-group">

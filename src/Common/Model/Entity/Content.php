@@ -84,6 +84,18 @@ class Content extends Entity
     }
 
     /**
+     * Returns one media object to an specific position name
+     *
+     * @param string $name The position name
+     *
+     * @return array
+     */
+    public function getLiveBlogUpdates()
+    {
+        return array_pop($media);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getCacheEntity()

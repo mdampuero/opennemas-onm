@@ -23,7 +23,7 @@
           restrict: 'A',
           scope: {
             mediaPickerIgnore: '@',
-            mediaPickerTarget: '='
+            mediaPickerTarget: '@'
           },
           link: function($scope, elm, attrs) {
             /**

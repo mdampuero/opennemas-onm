@@ -73,7 +73,7 @@
           tags: [],
           external_link: '',
           agency: '',
-          live_blog_posting: '0'
+          image: []
         };
 
         $scope.defaultLiveBlogUpdate = {
@@ -86,6 +86,11 @@
           modified: '',
           default: true
         };
+        var currentDate = new Date();
+
+        $scope.defaultLiveBlogUpdate.modified =
+          currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate() + ' ' +
+          currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds();
 
         /**
          * @memberOf ArticleCtrl
@@ -121,10 +126,10 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.item.params.live_blog_posting = $scope.item.params.live_blog_posting ?
+            parseInt($scope.item.params.live_blog_posting) : 0;
           $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
-          if ($scope.item.live_blog_posting) {
-            $scope.item.live_blog_updates = $scope.sortUpdates($scope.item.live_blog_updates);
-          }
+
           $scope.expandFields();
           // Check if item is new (created) or existing for use default value or not
           if (!$scope.data.item.pk_content) {
@@ -225,19 +230,6 @@
          */
         $scope.removeUpdate = function($index) {
           $scope.item.live_blog_updates.splice($index, 1);
-        };
-
-        /**
-         * @function sortUpdates
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *   Sort updates by created time
-         */
-        $scope.sortUpdates = function($array) {
-          return $array.sort(function(a, b) {
-            return a.created < b.created ? 1 : -1;
-          });
         };
 
         /**
@@ -349,11 +341,24 @@
          * @inheritdoc
          */
         $scope.parseData = function(data) {
+          var parsedUpdates = [];
+
           if (data.live_blog_updates.length > 0) {
             for (var update of data.live_blog_updates) {
+              if (!update.title && !update.body && !update.caption) {
+                continue;
+              }
+              if (typeof update.image_id === 'object' && update.image_id !== null) {
+                update.image_id = update.image_id.pk_content;
+              }
               update.content_id = data.pk_content ? data.pk_content : '';
+              if (update.default) {
+                delete update.default;
+              }
+              parsedUpdates.push(update);
             }
           }
+          data.live_blog_updates = angular.copy(parsedUpdates);
           return data;
         };
 
