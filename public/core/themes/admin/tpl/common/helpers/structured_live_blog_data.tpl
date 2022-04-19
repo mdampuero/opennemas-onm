@@ -194,7 +194,15 @@
         },
         "url": "{$siteUrl}"
       },
-      "articleBody": "{$update['body']|escape:'html'}",
+      "articleBody": "{get_update_body($update)|escape:'html'}",
+      {if has_update_image($update)}
+      "image": {
+        "@type": "ImageObject",
+        "url": "{get_photo_path(get_update_image($update), null, [], true)}",
+        "height": {get_photo_height(get_update_image($update))},
+        "width": {get_photo_width(get_update_image($update))}
+      },
+      {/if}
       "url": "{$siteUrl}"
     }{if !$smarty.foreach.update.last},{/if}
     {/foreach}

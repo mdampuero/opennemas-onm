@@ -92,6 +92,10 @@
           currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate() + ' ' +
           currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds();
 
+        $scope.defaultLiveBlogUpdate.created =
+          currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate() + ' ' +
+          currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds();
+
         /**
          * @memberOf ArticleCtrl
          *
@@ -130,6 +134,9 @@
             parseInt($scope.item.params.live_blog_posting) : 0;
           $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
 
+          if ($scope.item.params.live_blog_posting) {
+            $scope.initializeWatchers();
+          }
           $scope.expandFields();
           // Check if item is new (created) or existing for use default value or not
           if (!$scope.data.item.pk_content) {
@@ -267,6 +274,22 @@
           $scope.previous       = null;
         };
 
+        $scope.initializeWatchers = function() {
+          $scope.$watch('item.live_blog_updates', function(nv, ov) {
+            for (var iterator = 0; iterator < nv.length; iterator++) {
+              if (nv[iterator].image_id &&
+                (!ov[iterator].image_id || ov[iterator].image_id.pk_content !== nv[iterator].image_id.pk_content)) {
+                if (nv[iterator].image_id.description) {
+                  nv[iterator].caption = nv[iterator].image_id.description;
+                }
+              }
+              if (!nv[iterator].image_id) {
+                nv[iterator].caption = '';
+              }
+            }
+          }, true);
+        };
+
         // Update title int when block flag changes
         $scope.$watch('flags.block.title_int', function(nv) {
           $scope.previous = null;
@@ -320,16 +343,31 @@
          */
         $scope.addBlankUpdate = function() {
           if ($scope.item.live_blog_updates.length === 0 || !$scope.item.live_blog_updates[0].default) {
-            $scope.item.live_blog_updates.unshift($scope.defaultLiveBlogUpdate);
+            $scope.item.live_blog_updates.unshift(angular.copy($scope.defaultLiveBlogUpdate));
+
+            $scope.defaultLiveBlogUpdate.modified = $scope.getCurrentDate();
+            $scope.defaultLiveBlogUpdate.created  = $scope.getCurrentDate();
           }
         };
 
         /**
-         * @function getData
-         * @memberOf RestInnerCtrl
+         * @function getCurrentDate
+         * @memberOf ArticleCtrl
          *
          * @description
-         *   Returns the data to send when saving/updating an item.
+         *   Returns the current date.
+         */
+        $scope.getCurrentDate = function() {
+          var currentDate = new Date();
+          var formattedDate =
+            currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate() + ' ' +
+            currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds();
+
+          return formattedDate;
+        };
+
+        /**
+         * @inheritdoc
          */
         $scope.getData = function() {
           var data = angular.extend({}, $scope.item);
