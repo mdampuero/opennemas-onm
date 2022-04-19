@@ -79,6 +79,18 @@ class WidgetController extends Controller
 
             $type = $widget->widget_type;
 
+            if (empty($type)) {
+                return new Response(
+                    sprintf('<div class="widget">%s</div>', $widget->body),
+                    200,
+                    [
+                        'x-cacheable' => true,
+                        'x-tags'      => sprintf('widget-%s', $widget->pk_content),
+                        'x-cache-for' => '100d'
+                    ]
+                );
+            }
+
             $widgetRenderer = $this->get('frontend.renderer.widget');
 
             $widget = $widgetRenderer->getWidget($widget, $params);
@@ -87,12 +99,7 @@ class WidgetController extends Controller
                 return new Response();
             }
 
-            $html = sprintf(
-                '<div class="widget">%s</div>',
-                $type === 'intelligentwidget'
-                ? $widget->render()
-                : $widget->body ?? ''
-            );
+            $html = sprintf('<div class="widget">%s</div>', $widget->render());
 
             if (!$widget->isCacheable()) {
                 return new Response($html, 200, [ 'x-cacheable' => false ]);
