@@ -882,7 +882,7 @@
                         <div class="checkbox">
                           <input class="form-control" id="disable_dga" name="disable_dga" ng-false-value="'0'" ng-model="settings.disable_default_ga" ng-true-value="'1'" type="checkbox"/>
                           <label class="form-label" for="disable_dga">
-                            {t}Disable Opennemas API key{/t}
+                            {t}Disable Opennemas Google Analytics API key{/t}
                           </label>
                         </div>
                       </div>
