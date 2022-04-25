@@ -8,10 +8,10 @@
       {include file="ui/component/content-editor/accordion/checkbox.tpl" field="showcase" title="{t}Include in Google News Showcase{/t}"}
     </div>
     <div class="m-t-5">
-      {include file="ui/component/content-editor/textarea.tpl" field="description" rows=5}
+      {include file="ui/component/content-editor/textarea.tpl" field="moment1" rows=5}
     </div>
     <div class="m-t-5">
-      {include file="ui/component/content-editor/textarea.tpl" field="description" rows=5}
+      {include file="ui/component/content-editor/textarea.tpl" field="moment2" rows=5}
     </div>
     <div class="m-t-5">
       <i class="fa fa-info-circle m-r-5 text-info"></i>
