@@ -69,6 +69,9 @@
           {include file="ui/component/content-editor/accordion/checkbox.tpl" field="frontpage" title="{t}Suggested for frontpage{/t}"}
         </div>
       </div>
+      {acl isAllowed="es.openhost.module.google_news_showcase"}
+        {include file="ui/component/content-editor/accordion/google_news_showcase.tpl"}
+      {/acl}
       {include file="ui/component/content-editor/accordion/author.tpl"}
       {include file="ui/component/content-editor/accordion/category.tpl" field="categories[0]"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
