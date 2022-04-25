@@ -5,10 +5,17 @@
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.google_news_showcase }">
   <div class="form-group">
     <div class="m-t-5">
-      {include file="ui/component/content-editor/accordion/checkbox.tpl" field="showcase" title="{t}Include as standalone Google News Showcase new{/t}"}
+      {include file="ui/component/content-editor/accordion/checkbox.tpl" field="showcase" title="{t}Include in Google News Showcase{/t}"}
     </div>
     <div class="m-t-5">
-      {include file="ui/component/content-editor/accordion/checkbox.tpl" field="showcase_summary" title="{t}Include in the Google News Showcase summary{/t}"}
+      {include file="ui/component/content-editor/textarea.tpl" field="description" rows=5}
+    </div>
+    <div class="m-t-5">
+      {include file="ui/component/content-editor/textarea.tpl" field="description" rows=5}
+    </div>
+    <div class="m-t-5">
+      <i class="fa fa-info-circle m-r-5 text-info"></i>
+      {t}To include the article in Google News Showcase you need to highlight two moments{/t}
     </div>
   </div>
 </div>
