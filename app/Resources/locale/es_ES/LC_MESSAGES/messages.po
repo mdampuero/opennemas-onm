@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-25 11:11+0000\n"
-"PO-Revision-Date: 2022-04-25 13:13+0200\n"
+"POT-Creation-Date: 2022-04-25 15:12+0000\n"
+"PO-Revision-Date: 2022-04-25 17:13+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -4574,6 +4574,12 @@ msgstr "Google News Showcase"
 
 msgid "Include in Google News Showcase"
 msgstr "Incluir en Google News Showcase"
+
+msgid "Outstanding moment 1"
+msgstr "Momento destacado 1"
+
+msgid "Outstanding moment 2"
+msgstr "Momento destacado 2"
 
 msgid ""
 "To include the article in Google News Showcase you need to highlight two "
