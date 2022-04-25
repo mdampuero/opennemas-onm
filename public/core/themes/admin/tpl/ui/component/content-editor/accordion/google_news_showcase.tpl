@@ -5,13 +5,20 @@
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.google_news_showcase }">
   <div class="form-group">
     <div class="m-t-5">
-      {include file="ui/component/content-editor/accordion/checkbox.tpl" field="showcase" title="{t}Include in Google News Showcase{/t}"}
+      <div class="form-group">
+        <div class="checkbox">
+          <input id="showcase" ng-false-value="0" ng-model="item.showcase" ng-true-value="1" type="checkbox">
+          <label for="showcase">{t}Include in Google News Showcase{/t}</label>
+        </div>
+      </div>
     </div>
     <div class="m-t-5">
-      {include file="ui/component/content-editor/textarea.tpl" field="moment1" rows=5}
+      <label class="form-label" for="moment1">{t}Outstanding moment 1{/t}</label>
+      <textarea class="showcase-moment" name="moment1" ng-model="moment1" rows="5"></textarea>
     </div>
     <div class="m-t-5">
-      {include file="ui/component/content-editor/textarea.tpl" field="moment2" rows=5}
+      <label class="form-label" for="moment2">{t}Outstanding moment 2{/t}</label>
+      <textarea class="showcase-moment" name="moment2" ng-model="moment2" rows="5"></textarea>
     </div>
     <div class="m-t-5">
       <i class="fa fa-info-circle m-r-5 text-info"></i>
