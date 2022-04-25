@@ -877,6 +877,16 @@
                       <i class="fa fa-pie-chart"></i>
                       {t}Analytic system integration{/t}
                     </h4>
+                    {if $app.security->hasPermission('MASTER')}
+                      <div class="form-group">
+                        <div class="checkbox">
+                          <input class="form-control" id="disable_dga" name="disable_dga" ng-false-value="'0'" ng-model="settings.disable_default_ga" ng-true-value="'1'" type="checkbox"/>
+                          <label class="form-label" for="disable_dga">
+                            {t}Disable Opennemas API key{/t}
+                          </label>
+                        </div>
+                      </div>
+                    {/if}
                     <div class="panel-group" id="panel-group-google-analytics" data-toggle="collapse">
                       <div class="panel panel-default">
                         <div class="panel-heading collapsed">

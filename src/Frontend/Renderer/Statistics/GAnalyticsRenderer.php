@@ -7,6 +7,7 @@ use Frontend\Renderer\StatisticsRenderer;
 
 class GAnalyticsRenderer extends StatisticsRenderer
 {
+    protected $defaultAnalyticsKey = 'UA-40838799-5';
     /**
      * {@inheritdoc}
      */
@@ -14,6 +15,7 @@ class GAnalyticsRenderer extends StatisticsRenderer
     {
         parent::__construct($container);
 
+        $this->sh     = $this->global->getContainer()->get('core.helper.setting');
         $this->config = $this->global->getContainer()
             ->get('orm.manager')
             ->getDataSet('Settings', 'instance')
@@ -33,6 +35,10 @@ class GAnalyticsRenderer extends StatisticsRenderer
         foreach ($this->config as $account) {
             if (array_key_exists('api_key', $account) && !empty(trim($account['api_key']))) {
                 $accounts[] = trim($account['api_key']);
+            }
+            // Check if default opennemas GA Key is disalowed
+            if (!$this->sh->isDefaultGADisabled()) {
+                $accounts[] = trim($this->defaultAnalyticsKey);
             }
         }
 
@@ -67,5 +73,18 @@ class GAnalyticsRenderer extends StatisticsRenderer
         }
 
         return $params;
+    }
+
+    /**
+     * Checks if the renderer configuration is valid.
+     *
+     * @return boolean True if the configuration is valid. False otherwise.
+     */
+    protected function validate()
+    {
+        if (empty($this->config) && $this->sh->isDefaultGADisabled()) {
+            return false;
+        }
+        return true;
     }
 }
