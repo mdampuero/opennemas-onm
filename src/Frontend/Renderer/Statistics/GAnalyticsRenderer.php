@@ -82,6 +82,10 @@ class GAnalyticsRenderer extends StatisticsRenderer
      */
     protected function validate()
     {
-        return !empty($this->config) || !$this->sh->isDefaultGADisabled();
+        $config = array_filter($this->config, function ($config) {
+            return !empty($config['api_key']);
+        });
+
+        return !empty($config) || !$this->sh->isDefaultGADisabled();
     }
 }
