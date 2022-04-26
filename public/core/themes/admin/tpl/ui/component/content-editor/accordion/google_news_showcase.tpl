@@ -13,26 +13,30 @@
       </div>
     </div>
     <div class="m-t-5">
-      <label class="form-label" for="moment1">{t}Outstanding moment 1{/t}</label>
-      <span class="form-status-showcase">
-        <span class="ng-cloak badge badge-default" ng-class="{ 'badge-warning': item.moment1.length >= 80 &amp;&amp; item.moment1.length < 118, 'badge-danger': item.moment1.length >= 118 }">
-          <strong>
-            [% item.moment1.length ? item.moment1.length : 0 %]
-          </strong>
+      <div class="showcase-info">
+        <label class="form-label" for="moment1">{t}Outstanding moment 1{/t}</label>
+        <span class="form-status">
+          <span class="ng-cloak badge badge-default" ng-class="{ 'badge-warning': item.moment1.length >= 80 &amp;&amp; item.moment1.length < 118, 'badge-danger': item.moment1.length >= 118 }">
+            <strong>
+              [% item.moment1.length ? item.moment1.length : 0 %]
+            </strong>
+          </span>
         </span>
-      </span>
+      </div>
       <textarea ng-if="item.showcase" class="showcase-moment" name="moment1" ng-model="item.moment1" required rows="5"></textarea>
       <textarea ng-if="!item.showcase" class="showcase-moment" name="moment1" type="text" ng-model="item.moment1" rows="5"></textarea>
     </div>
     <div class="m-t-5">
-      <label class="form-label" for="moment2">{t}Outstanding moment 2{/t}</label>
-      <span class="form-status-showcase">
-        <span class="ng-cloak badge badge-default" ng-class="{ 'badge-warning': item.moment2.length >= 80 &amp;&amp; item.moment2.length < 118, 'badge-danger': item.moment2.length >= 118 }">
-          <strong>
-            [% item.moment2.length ? item.moment2.length : 0 %]
-          </strong>
+      <div class="showcase-info">
+        <label class="form-label" for="moment2">{t}Outstanding moment 2{/t}</label>
+        <span class="form-status">
+          <span class="ng-cloak badge badge-default" ng-class="{ 'badge-warning': item.moment2.length >= 80 &amp;&amp; item.moment2.length < 118, 'badge-danger': item.moment2.length >= 118 }">
+            <strong>
+              [% item.moment2.length ? item.moment2.length : 0 %]
+            </strong>
+          </span>
         </span>
-      </span>
+      </div>
       <textarea ng-if="item.showcase" class="showcase-moment" name="moment2" ng-model="item.moment2" required rows="5"></textarea>
       <textarea ng-if="!item.showcase" class="showcase-moment" name="moment2" type="text" ng-model="item.moment2" rows="5"></textarea>
     </div>
