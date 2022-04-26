@@ -38,7 +38,7 @@ class GAnalyticsRenderer extends StatisticsRenderer
             }
             // Check if default opennemas GA Key is disalowed
             if (!$this->sh->isDefaultGADisabled()) {
-                $accounts[] = trim($this->defaultAnalyticsKey);
+                $accounts['-onm'] = trim($this->defaultAnalyticsKey);
             }
         }
 
@@ -82,9 +82,6 @@ class GAnalyticsRenderer extends StatisticsRenderer
      */
     protected function validate()
     {
-        if (empty($this->config) && $this->sh->isDefaultGADisabled()) {
-            return false;
-        }
-        return true;
+        return !empty($this->config) || !$this->sh->isDefaultGADisabled();
     }
 }
