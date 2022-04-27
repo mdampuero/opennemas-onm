@@ -5,3 +5,4 @@ frontend_payment_send_data:
 frontend_payment_send_response:
     path:     /payment/send/response
     defaults: { _controller: FrontendBundle:GlobalPayments:sendResponse }
+    methods:  [ POST ]
