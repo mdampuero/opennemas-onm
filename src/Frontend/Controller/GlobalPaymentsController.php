@@ -95,22 +95,12 @@ class GlobalPaymentsController extends Controller
 
         try {
             $response = $service->parseResponse($responseJson, true);
-            $url      = $response->responseValues['MERCHANT_RESPONSE_URL'];
 
-            var_dump($url);
-            die();
-
-            return new RedirectResponse($ph->getRefererUrlWithMessage($url, $response->responseCode), 301);
+            return new RedirectResponse($ph->getRefererUrlWithMessage('https://nuevatribuna.testing.opennemas.com/estaticas/nueva-tribuna-pago-tarjeta.html', $response->responseCode), 301);
         } catch (ApiException $e) {
-            var_dump($url);
-            die();
-
-            return new RedirectResponse($ph->getRefererUrlWithMessage($url, $response->responseCode), 301, []);
+            return new RedirectResponse($ph->getRefererUrlWithMessage('https://nuevatribuna.testing.opennemas.com/estaticas/nueva-tribuna-pago-tarjeta.html', $response->responseCode), 301, []);
         } catch (\Exception $e) {
-            var_dump($url);
-            die();
-
-            return new RedirectResponse($ph->getRefererUrlWithMessage($url, 'default'), 301, []);
+            return new RedirectResponse($ph->getRefererUrlWithMessage('https://nuevatribuna.testing.opennemas.com/estaticas/nueva-tribuna-pago-tarjeta.html', 'default'), 301, []);
         }
     }
 }
