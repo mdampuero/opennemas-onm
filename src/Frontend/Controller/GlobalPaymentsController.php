@@ -69,7 +69,7 @@ class GlobalPaymentsController extends Controller
     }
 
     /**
-     * Process the response from the payment service and return a message for the user.
+     * Process the response from the payment service and return a message to the user.
      *
      * @param Request $request the request object.
      *
