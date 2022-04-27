@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-25 08:39+0000\n"
-"PO-Revision-Date: 2022-03-25 09:55+0100\n"
+"POT-Creation-Date: 2022-04-25 09:17+0000\n"
+"PO-Revision-Date: 2022-04-25 11:50+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1226,6 +1226,9 @@ msgstr "Anterior"
 msgid "Widget %s not available"
 msgstr "Widget %s non dispoñíbel"
 
+msgid "Unable to save settings"
+msgstr "Non se puido gardar as configuración"
+
 msgid "Running cleanup in background"
 msgstr "Executando limpeza en segundo plano"
 
@@ -1322,9 +1325,6 @@ msgstr "Domingo"
 
 msgid "Settings saved successfully"
 msgstr "Configuración gardada correctamente"
-
-msgid "Unable to save settings"
-msgstr "Non se puido gardar as configuración"
 
 msgid "List of contents"
 msgstr "Lista de contidos"
@@ -2942,14 +2942,11 @@ msgstr "Páxina estática"
 msgid "Synchronized instances"
 msgstr "Instacias sincronizadas"
 
-msgid "Link to"
-msgstr "Ligazón a"
+msgid "Manual categories"
+msgstr "Categorías manuais"
 
 msgid "Automatic categories"
 msgstr "Categorías automáticas"
-
-msgid "Manual categories"
-msgstr "Categorías manuais"
 
 msgid "Static pages"
 msgstr "Páxinas estáticas"
@@ -2960,18 +2957,18 @@ msgstr "Instacias sincronizadas"
 msgid "Custom link"
 msgstr "Ligazón personalizada"
 
+msgid "Menu structure"
+msgstr "Estrutura do menu"
+
+msgid "Use drag and drop to sort and nest elements."
+msgstr "Use arrastrar e soltar para ordenar e aniñar elementos."
+
 msgid ""
 "If your theme has defined positions for menus you can assign one menu to "
 "each of them"
 msgstr ""
 "Se o tema ten posicións de menú definidas podes asignar un menú para cada "
 "unha delas"
-
-msgid "Menu structure"
-msgstr "Estrutura do menu"
-
-msgid "Use drag and drop to sort and nest elements."
-msgstr "Use arrastrar e soltar para ordenar e aniñar elementos."
 
 msgid "Start"
 msgstr "Iniciar"
@@ -2999,6 +2996,12 @@ msgstr "Lugar"
 
 msgid "Website URL"
 msgstr "URL do sitio web"
+
+msgid "Slider"
+msgstr ""
+
+msgid "Config album module"
+msgstr "Configuración do módulo «Álbum»"
 
 msgid "Unfavorite"
 msgstr "Non Favorito"
@@ -4906,6 +4909,9 @@ msgstr "Servizos externos"
 
 msgid "Analytic system integration"
 msgstr "Integración de sistemas de Analíticas"
+
+msgid "Disable Opennemas Google Analytics API key"
+msgstr "Deshabilitar a chave da API de Google Analytics de Opennemas"
 
 msgid "Google Analytics"
 msgstr "Google Analytics"
@@ -7015,6 +7021,9 @@ msgstr "eliminar"
 
 msgid "delete them"
 msgstr "eliminalos"
+
+#~ msgid "Link to"
+#~ msgstr "Ligazón a"
 
 #~ msgid "Invalid tag"
 #~ msgstr "Etiqueta non válida"

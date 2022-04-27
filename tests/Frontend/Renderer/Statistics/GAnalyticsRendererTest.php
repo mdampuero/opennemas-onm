@@ -36,6 +36,11 @@ class GAnalyticsRendererTest extends TestCase
             ->setMethods([ 'getContainer', 'getSection', 'getExtension' ])
             ->getMock();
 
+        $this->hs = $this->getMockBuilder('Common\Core\Component\Helper\SettingHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'isDefaultGADisabled' ])
+            ->getMock();
+
         $this->stack = $this->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')
             ->disableOriginalConstructor()
             ->setMethods([ 'getCurrentRequest' ])
@@ -81,6 +86,9 @@ class GAnalyticsRendererTest extends TestCase
         switch ($name) {
             case 'core.service.data_layer':
                 return $this->dl;
+
+            case 'core.helper.setting':
+                return $this->hs;
 
             case 'core.globals':
                 return $this->global;
