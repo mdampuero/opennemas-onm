@@ -107,7 +107,7 @@
           </div>
         </div>
       {/is_module_activated}
-      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Featured in frontpage{/t}" types="photo,video,album"}
+      {include file="common/component/related-contents/_featured-media.tpl" iRequired="item.showcase" iName="featuredFrontpage" iTitle="{t}Featured in frontpage{/t}" types="photo,video,album"}
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
       {include file="common/component/related-contents/_related-content.tpl" iName="relatedFrontpage" iTitle="{t}Related in frontpage{/t}"}
       {include file="common/component/related-contents/_related-content.tpl" iName="relatedInner" iTitle="{t}Related in inner{/t}"}

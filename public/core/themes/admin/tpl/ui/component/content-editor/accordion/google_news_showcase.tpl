@@ -23,8 +23,7 @@
           </span>
         </span>
       </div>
-      <textarea ng-if="item.showcase" class="showcase-moment" name="moment1" ng-model="item.moment1" required rows="5"></textarea>
-      <textarea ng-if="!item.showcase" class="showcase-moment" name="moment1" type="text" ng-model="item.moment1" rows="5"></textarea>
+      <textarea ng-required="item.showcase" class="showcase-moment" name="moment1" ng-model="item.moment1" rows="5"></textarea>
     </div>
     <div class="m-t-5">
       <div class="showcase-info">
@@ -37,8 +36,7 @@
           </span>
         </span>
       </div>
-      <textarea ng-if="item.showcase" class="showcase-moment" name="moment2" ng-model="item.moment2" required rows="5"></textarea>
-      <textarea ng-if="!item.showcase" class="showcase-moment" name="moment2" type="text" ng-model="item.moment2" rows="5"></textarea>
+      <textarea ng-required="item.showcase" class="showcase-moment" name="moment2" ng-model="item.moment2" rows="5"></textarea>
     </div>
     <div class="m-t-5">
       <i class="fa fa-info-circle m-r-5 text-info"></i>
