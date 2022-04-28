@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 11:20+0000\n"
-"PO-Revision-Date: 2022-04-28 13:22+0200\n"
+"POT-Creation-Date: 2022-04-28 11:41+0000\n"
+"PO-Revision-Date: 2022-04-28 13:44+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1528,6 +1528,9 @@ msgstr "Relacionado en interior"
 
 msgid "Agency"
 msgstr "Axencia"
+
+msgid "Google News Showcase"
+msgstr "Google News Showcase"
 
 msgid "Max sents reached"
 msgstr "Alcanzouse o número máximo de envios"
@@ -4561,6 +4564,22 @@ msgstr "Axencia de novas Opennemas"
 msgid "Url"
 msgstr "URL"
 
+msgid "Include in Google News Showcase"
+msgstr "Incluir en Google News Showcase"
+
+msgid "Outstanding moment 1"
+msgstr "Momento destacado 1"
+
+msgid "Outstanding moment 2"
+msgstr "Momento destacado 2"
+
+msgid ""
+"To include the article in Google News Showcase you need to highlight two "
+"moments"
+msgstr ""
+"Para incluir o artigo en Google News Showcase necesitas destacar dous "
+"momentos"
+
 msgid "Planned"
 msgstr "Planificado"
 
@@ -6243,6 +6262,9 @@ msgstr ""
 msgid "Logged in users"
 msgstr "Usuarios conectados"
 
+msgid "Showcase"
+msgstr "Showcase"
+
 msgid "Suggested for frontpage"
 msgstr "Suxerido a portada principal"
 
@@ -6299,7 +6321,7 @@ msgid "Config article module"
 msgstr "Configuración do módulo «Artigo»"
 
 msgid "Slider"
-msgstr ""
+msgstr "Slider"
 
 msgid "Config album module"
 msgstr "Configuración do módulo «Álbum»"
