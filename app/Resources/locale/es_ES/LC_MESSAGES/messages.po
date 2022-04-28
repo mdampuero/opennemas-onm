@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-08 06:23+0000\n"
-"PO-Revision-Date: 2022-04-08 08:25+0200\n"
+"POT-Creation-Date: 2022-04-28 11:20+0000\n"
+"PO-Revision-Date: 2022-04-28 13:23+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1233,6 +1233,9 @@ msgstr "Anterior"
 msgid "Widget %s not available"
 msgstr "Widget %s no disponible"
 
+msgid "Unable to save settings"
+msgstr "No se pudo guardar la configuración"
+
 msgid "Running cleanup in background"
 msgstr "Ejecutando limpieza en segundo plano"
 
@@ -1329,9 +1332,6 @@ msgstr "Domingo"
 
 msgid "Settings saved successfully"
 msgstr "Configuración guardadas correctamente"
-
-msgid "Unable to save settings"
-msgstr "No se pudo guardar la configuración"
 
 msgid "List of contents"
 msgstr "Lista de contenidos"
@@ -5532,6 +5532,9 @@ msgstr ""
 msgid "Analytic system integration"
 msgstr "Integración con sistemas de analíticas"
 
+msgid "Disable Opennemas Google Analytics API key"
+msgstr "Deshabilitar la clave de la API de Google Analytics de Opennemas"
+
 msgid "Google Analytics"
 msgstr "Google Analytics"
 
@@ -6329,6 +6332,12 @@ msgstr "Subtítulo"
 
 msgid "Config article module"
 msgstr "Configuración del módulo «Artículos»"
+
+msgid "Slider"
+msgstr ""
+
+msgid "Config album module"
+msgstr "Configuración del módulo «Álbum»"
 
 msgid "Where are you from?"
 msgstr "De donde eres?"

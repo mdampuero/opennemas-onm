@@ -4,6 +4,7 @@ namespace Api\Controller\V1\Backend;
 
 use Api\Exception\GetItemException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AlbumController extends ContentController
 {
@@ -38,6 +39,24 @@ class AlbumController extends ContentController
     protected $service = 'api.service.album';
 
     /**
+     * Get the albums config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getConfigAction()
+    {
+        $this->checkSecurity($this->extension, 'ALBUM_SETTINGS');
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get('album_layout');
+
+        return new JsonResponse([ 'album_layout' => $settings ]);
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function getExtraData($items = null)
@@ -58,5 +77,31 @@ class AlbumController extends ContentController
     protected function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys('album');
+    }
+
+    /**
+     * Saves configuration for albums.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveConfigAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, 'ALBUM_SETTINGS');
+
+        $settings = [ 'album_layout' => $request->request->get('album_layout') ];
+
+        $msg = $this->get('core.messenger');
+
+        try {
+            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
+            $msg->add(_('Item saved successfully'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to save settings'), 'error');
+            $this->get('error.log')->error($e->getMessage());
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 }

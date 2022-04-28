@@ -73,6 +73,13 @@
         /**
          * @inheritdoc
          */
+        $scope.hasMultilanguage = function() {
+          return false;
+        };
+
+        /**
+         * @inheritdoc
+         */
         $scope.parseData = function(data) {
           $scope.configure(data.extra);
 

@@ -2,6 +2,7 @@
 
 namespace Backend\Controller;
 
+use Common\Core\Annotation\Security;
 use Api\Exception\GetListException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -96,5 +97,21 @@ class AlbumController extends BackendController
             ]);
         } catch (GetListException $e) {
         }
+    }
+
+    /**
+     * Config for album system
+     *
+     * @return Response the response object
+     *
+     * @Security("hasExtension('MASTER')")
+     */
+    public function configAction()
+    {
+        return $this->render('album/config.tpl', [
+            'album_layout' => $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('album_layout')
+        ]);
     }
 }
