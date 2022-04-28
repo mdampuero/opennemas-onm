@@ -36,7 +36,7 @@ class GlobalPaymentsController extends Controller
         $config->merchantId   = $settings['merchant_id'];
         $config->accountId    = "internet";
         $config->sharedSecret = $settings['shared_secret'];
-        $config->serviceUrl   = "https://pay.sandbox.realexpayments.com/pay";
+        $config->serviceUrl   = "https://hpp.addonpayments.com/pay";
 
         $config->hostedPaymentConfig          = new HostedPaymentConfig();
         $config->hostedPaymentConfig->version = HppVersion::VERSION_2;
@@ -85,7 +85,7 @@ class GlobalPaymentsController extends Controller
         $config->merchantId   = $settings['merchant_id'];
         $config->accountId    = "internet";
         $config->sharedSecret = $settings['shared_secret'];
-        $config->serviceUrl   = "https://pay.sandbox.realexpayments.com/pay";
+        $config->serviceUrl   = "https://hpp.addonpayments.com/pay";
 
         $service = new HostedService($config);
 
