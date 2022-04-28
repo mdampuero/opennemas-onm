@@ -112,6 +112,7 @@ class SettingController extends Controller
         'webmastertools_google',
         'youtube_page',
         'sitemap',
+        'disable_default_ga'
     ];
 
     /**
@@ -129,7 +130,8 @@ class SettingController extends Controller
         'header_script_amp',
         'frontpage_max_items',
         'robots_txt_rules',
-        'sitemap'
+        'sitemap',
+        'disable_default_ga'
     ];
 
     /**
