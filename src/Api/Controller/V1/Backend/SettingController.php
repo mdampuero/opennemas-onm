@@ -87,6 +87,7 @@ class SettingController extends Controller
         'ojd',
         'onm_digest_pass',
         'onm_digest_user',
+        'payments',
         'paypal_mail',
         'pinterest_page',
         'prometeo',

@@ -2,6 +2,10 @@ frontend_rss_facebook_instant_articles:
     path:     /rss/facebook-instant-articles
     defaults: { _controller: FrontendBundle:Rss:facebookInstantArticles }
 
+frontend_rss_showcase:
+    path:     /rss/google-news-showcase
+    defaults: { _controller: FrontendBundle:Rss:googleNews}
+
 frontend_rss_listing:
     path:     /rss/listado
     defaults: { _controller: FrontendBundle:Rss:index }

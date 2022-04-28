@@ -1119,6 +1119,60 @@
                       <i class="fa fa-cog"></i>
                       {t}Internal settings{/t}
                     </h4>
+                    {if $app.security->hasPermission('MASTER')}
+                      <div class="panel-group" data-toggle="collapse" id="panel-group-payments">
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a class="collapsed" data-parent="#panel-group-payments" data-toggle="collapse" href="#payments">
+                                <i class="fa fa-credit-card-alt"></i>
+                                {t}Global Payments{/t}
+                              </a>
+                            </h4>
+                          </div>
+                          <div class="panel-collapse collapse" id="payments">
+                            <div class="panel-body">
+                              <div class="row">
+                                <div class="col-12">
+                                  <div class="form-group">
+                                    <label class="form-label" for="payments-merchant-id">
+                                      {t}Merchant id{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <input class="form-control" id="payments-merchant-id" name="payments-merchant-id" ng-model="settings.payments.merchant_id" type="text">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                  <div class="form-group">
+                                    <label class="form-label" for="payments-shared-secret">
+                                      {t}Shared secret{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <div class="form-group">
+                                        <input class="form-control" id="payments-shared-secret" name="payments-shared-secret" ng-model="settings.payments.shared_secret" type="text">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                  <div class="form-group">
+                                    <label class="form-label" for="payments-amount">
+                                      {t}Amount{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <div class="form-group">
+                                        <input class="form-control" id="payments-amount" name="payments-amount" ng-model="settings.payments.amount" type="text">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {/if}
                     <div class="panel-group" data-toggle="collapse" id="panel-group-recaptcha">
                       <div class="panel panel-default">
                         <div class="panel-heading">
