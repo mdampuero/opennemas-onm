@@ -2318,6 +2318,18 @@ span.iconset {
   padding: 20px;
 }
 .p-t-5 {
+  padding-top: 0!important;
+}
+.p-r-0 {
+  padding-right: 0!important;
+}
+.p-l-0 {
+  padding-left: 0!important;
+}
+.p-b-0 {
+  padding-bottom: 0!important;
+}
+.p-t-5 {
   padding-top: 5px;
 }
 .p-r-5 {
@@ -2556,6 +2568,18 @@ span.iconset {
 }
 .p-b-100 {
   padding-bottom: 100px;
+}
+.m-t-0 {
+  margin-top: 0!important;
+}
+.m-r-0 {
+  margin-right: 0!important;
+}
+.m-l-0 {
+  margin-left: 0!important;
+}
+.m-b-0 {
+  margin-bottom: 0!important;
 }
 .m-t-5 {
   margin-top: 5px;
@@ -5648,6 +5672,9 @@ form legend,
 .tiles.green {
   background-color: #0aa699;
 }
+.tiles.yellow {
+  background-color: #d6b129;
+}
 .tiles.black {
   background-color: #22262e;
 }
@@ -8087,6 +8114,33 @@ input[type="checkbox"] {
   #Parks.list .titles {
     max-width: 37%;
   }
+}
+.grid .grid-collapse-body.b-shadow.expanded:after {
+  background-image: linear-gradient(0deg, #0000001a 0, #00000000 100%);
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10px;
+  pointer-events: none;
+}
+.menu-item.angular-ui-tree-handle {
+  transition: box-shadow 100ms ease-in-out;
+}
+.menu-item.angular-ui-tree-handle:hover {
+  border-color: rgb(179 188 191);
+  box-shadow: 0 5px 10px rgb(0 0 0 / .15);
+}
+.grid-body .menu-dragable-accordion {
+  max-height: 10rem!important;
+}
+.angular-ui-tree-drag .menu-item {
+  border-color: rgb(179 188 191);
+}
+.angular-ui-tree-drag > * {
+  box-shadow: 0 5px 10px rgb(0 0 0 / .15);
+  transition: box-shadow 400ms ease-in-out;
 }
 body.rtl .breadcrumb > li + li:before {
   display: none;

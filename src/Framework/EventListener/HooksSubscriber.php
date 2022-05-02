@@ -137,12 +137,12 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
             // Menu hooks
-            'menu.update' => [
+            'menu.updateItem' => [
                 ['removeSmartyCacheAll', 5],
                 ['removeObjectCacheForContent', 5],
                 ['removeVarnishCacheCurrentInstance', 5],
             ],
-            'menu.delete' => [
+            'menu.deleteItem' => [
                 ['removeSmartyCacheAll', 5],
                 ['removeObjectCacheForContent', 5],
                 ['removeVarnishCacheCurrentInstance', 5],

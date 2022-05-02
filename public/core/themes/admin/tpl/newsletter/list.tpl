@@ -66,6 +66,7 @@
     </div>
   </div>
   <div class="content">
+    <div class="message"><div class="alert alert-info">{$message}</div></div>
     <div class="grid simple">
       <div class="grid-body no-padding">
         {is_module_activated name="es.openhost.module.newsletter_scheduling"}

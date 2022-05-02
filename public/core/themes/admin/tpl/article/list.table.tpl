@@ -13,6 +13,14 @@
       {t}Featured in inner{/t}
     </label>
   </div>
+  {is_module_activated name="es.openhost.module.google_news_showcase"}
+    <div class="checkbox column-filters-checkbox">
+      <input id="checkbox-google-news-showcase" checklist-model="app.columns.selected" checklist-value="'google_news_showcase'" type="checkbox">
+      <label for="checkbox-google-news-showcase">
+        {t}Showcase{/t}
+      </label>
+    </div>
+  {/is_module_activated}
 {/block}
 
 {block name="commonColumnsHeader" prepend}
@@ -22,6 +30,11 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('featured_inner')" width="120">
     {t}Inner{/t}
   </th>
+  {is_module_activated name="es.openhost.module.google_news_showcase"}
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('google_news_showcase')" width="120">
+      {t}Showcase{/t}
+    </th>
+  {/is_module_activated}
 {/block}
 
 {block name="commonColumnsBody" prepend}
@@ -39,6 +52,11 @@
       </div>
     </dynamic-image>
   </td>
+  {is_module_activated name="es.openhost.module.google_news_showcase"}
+    <td class="text-center v-align-middle" ng-if="isColumnEnabled('google_news_showcase')">
+      <i class="fa fa-google fa-2x" ng-if="item.showcase"></i>
+    </td>
+  {/is_module_activated}
 {/block}
 
 {block name="customColumns"}
@@ -77,7 +95,7 @@
     <a class="btn btn-default btn-small" href="[% routing.generate('backend_article_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
       <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
     </a>
-    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_article_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+    <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_article_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
   {/acl}
   {acl isAllowed="ARTICLE_DELETE"}
     <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">

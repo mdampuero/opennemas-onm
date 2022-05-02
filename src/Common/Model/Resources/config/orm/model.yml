@@ -29,6 +29,7 @@ imports:
     - { resource: entity/instance.yml }
     - { resource: entity/invoice.yml }
     - { resource: entity/keyword.yml }
+    - { resource: entity/menu.yml }
     - { resource: entity/newsletter.yml }
     - { resource: entity/notification.yml }
     - { resource: entity/payment.yml }

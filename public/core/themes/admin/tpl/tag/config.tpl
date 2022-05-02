@@ -66,8 +66,8 @@
             <div class="col-xs-12">
               <h5><i class="fa fa-fire m-r-5"></i> {t}Words and rules prohibited{/t}</h5>
               <div class="form-group">
-                <textarea name="blacklist_comment" id="blacklist_comment" class="form-control" ng-model="settings.blacklist_tag" rows=10></textarea>
-                <div class="help">{t}List of words or regular expressions that are prohibited on comments, one per line.{/t}</div>
+                <textarea name="blacklist_tag" id="blacklist_tag" class="form-control" ng-model="settings.blacklist_tag" rows=10></textarea>
+                <div class="help">{t}List of words or regular expressions that are prohibited on tags, one per line.{/t}</div>
               </div>
             </div>
           </div>

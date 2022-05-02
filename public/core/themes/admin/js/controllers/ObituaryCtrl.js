@@ -23,8 +23,10 @@
      *   Provides actions to edit, save and update obituaries.
      */
     .controller('ObituaryCtrl', [
-      '$controller', '$scope', '$timeout', '$window', 'related', 'routing', 'translator',
-      function($controller, $scope, $timeout, $window, related, routing, translator) {
+      '$controller', '$scope', '$uibModal', 'http', '$timeout', '$window',
+      'related', 'routing', 'cleaner', 'translator',
+      function($controller, $scope, $uibModal, http, $timeout, $window,
+          related, routing, cleaner, translator) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
@@ -102,6 +104,53 @@
           saveItem:    'api_v1_backend_obituary_save_item',
           savePreview: 'api_v1_backend_obituary_save_preview',
           updateItem:  'api_v1_backend_obituary_update_item'
+        };
+
+        /**
+         * Opens a modal with the preview of the article.
+         */
+        $scope.preview = function() {
+          $scope.flags.http.generating_preview = true;
+
+          // Force ckeditor
+          CKEDITOR.instances.body.updateElement();
+          CKEDITOR.instances.description.updateElement();
+
+          var status = { starttime: null, endtime: null, content_status: 1, with_comment: 0 };
+          var item   = Object.assign({}, $scope.data.item, status);
+
+          if (item.tags) {
+            item.tags = item.tags.filter(function(tag) {
+              return Number.isInteger(tag);
+            });
+          }
+
+          var data = {
+            item: JSON.stringify(cleaner.clean(item)),
+            locale: $scope.config.locale.selected
+          };
+
+          http.put($scope.routes.savePreview, data).then(function() {
+            $uibModal.open({
+              templateUrl: 'modal-preview',
+              windowClass: 'modal-fullscreen',
+              controller: 'ModalCtrl',
+              resolve: {
+                template: function() {
+                  return {
+                    src: routing.generate($scope.routes.getPreview)
+                  };
+                },
+                success: function() {
+                  return null;
+                }
+              }
+            });
+
+            $scope.flags.http.generating_preview = false;
+          }, function() {
+            $scope.flags.http.generating_preview = false;
+          });
         };
 
         /**

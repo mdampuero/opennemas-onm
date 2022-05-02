@@ -178,8 +178,8 @@
               types: {
                 enabled:   [ ],
                 available: [
-                  'album', 'article', 'attachment', 'letter', 'obituary',
-                  'opinion', 'photo', 'poll', 'video', 'special'
+                  'album', 'article', 'attachment', 'event', 'letter',
+                  'obituary', 'opinion', 'photo', 'poll', 'special', 'video'
                 ]
               },
 

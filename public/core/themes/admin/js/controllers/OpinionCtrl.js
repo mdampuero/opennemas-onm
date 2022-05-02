@@ -112,8 +112,14 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       CKEDITOR.instances.body.updateElement();
       CKEDITOR.instances.description.updateElement();
 
-      var status = { starttime: null, endtime: null, content_status: 1 };
+      var status = { starttime: null, endtime: null, content_status: 1, with_comment: 0 };
       var item   = Object.assign({}, $scope.data.item, status);
+
+      if (item.tags) {
+        item.tags = item.tags.filter(function(tag) {
+          return Number.isInteger(tag);
+        });
+      }
 
       var data = {
         item: JSON.stringify(cleaner.clean(item)),

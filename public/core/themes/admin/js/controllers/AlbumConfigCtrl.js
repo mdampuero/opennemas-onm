@@ -21,7 +21,7 @@
 
       /**
        * @function init
-       * @memberOf VideoConfigCtrl
+       * @memberOf AlbumConfigCtrl
        *
        * @description
        *   Initializes the form.
@@ -32,25 +32,16 @@
 
       /**
        * @function list
-       * @memberOf VideoConfigCtrl
+       * @memberOf AlbumConfigCtrl
        *
        * @description
-       *   Reloads the tag configuration.
+       *   Reloads the configuration.
        */
       $scope.list = function() {
         $scope.flags.http.loading = true;
 
-        http.get('api_v1_backend_album_config_show').then(function(response) {
+        http.get('api_v1_backend_album_get_config').then(function(response) {
           $scope.settings = response.data;
-
-          for (var item in $scope.settings) {
-            if (parseInt($scope.settings[item]) > 0) {
-              $scope.settings[item] = parseInt($scope.settings[item]);
-            }
-          }
-
-          $scope.settings.total_front_more = parseInt($scope.settings.total_front_more);
-
           $scope.disableFlags('http');
         }, function() {
           $scope.disableFlags('http');
@@ -59,7 +50,7 @@
 
       /**
        * @function save
-       * @memberOf VideoConfigCtrl
+       * @memberOf AlbumConfigCtrl
        *
        * @description
        *   Saves the configuration.
@@ -67,7 +58,7 @@
       $scope.save = function() {
         $scope.flags.http.saving = true;
 
-        http.put('api_v1_backend_album_config_save', $scope.settings)
+        http.put('api_v1_backend_album_save_config', $scope.settings)
           .then(function(response) {
             $scope.disableFlags('http');
             messenger.post(response.data);

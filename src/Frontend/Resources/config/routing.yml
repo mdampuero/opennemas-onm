@@ -79,6 +79,9 @@ frontend_obituary:
 frontend_password:
     resource: '@FrontendBundle/Resources/config/routing/password.yml'
 
+frontend_payment:
+    resource: '@FrontendBundle/Resources/config/routing/payment.yml'
+
 frontend_poll:
     resource: '@FrontendBundle/Resources/config/routing/poll.yml'
 

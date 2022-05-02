@@ -18,54 +18,70 @@ angular.module('BackendApp.controllers')
     '$controller', '$location', '$uibModal', '$scope', 'http', 'routing', 'messenger', 'oqlEncoder',
     function($controller, $location, $uibModal, $scope, http, routing, messenger, oqlEncoder) {
       // Initialize the super class and extend it.
-      $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
+      $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
       /**
-       * Updates the array of contents.
+       * The criteria to search.
        *
-       * @param string route Route name.
+       * @type {Object}
        */
-      $scope.list = function(route) {
-        $scope.contents = [];
-        $scope.loading  = 1;
-        $scope.selected = { all: false, contents: [] };
+      $scope.criteria = {
+        epp: 10,
+        orderBy: { name:  'desc' },
+        page: 1
+      };
 
+      $scope.keys = {
+        menu_items: 'title'
+      };
+
+      /**
+       * @memberOf MenuListCtrl
+       *
+       * @description
+       *  The list of routes for the controller.
+       *
+       * @type {Object}
+       */
+      $scope.routes = {
+        deleteItem: 'api_v1_backend_menu_delete_item',
+        deleteList: 'api_v1_backend_menu_delete_list',
+        getList:    'api_v1_backend_menu_get_list'
+      };
+
+      /**
+       * @inheritdoc
+       */
+      $scope.getItemId = function(item) {
+        return item.pk_menu;
+      };
+
+      /**
+       * @function init
+       * @memberOf MenuListCtrl
+       *
+       * @description
+       *   Configures and initializes the list.
+       */
+      $scope.init = function() {
+        $scope.backup.criteria    = $scope.criteria;
+        $scope.app.columns.hidden = [];
+        $scope.app.columns.selected = [ 'name', 'position' ];
         oqlEncoder.configure({
           placeholder: {
-            name: 'name ~ "%[value]%"',
+            name: 'name ~ "%[value]%"'
           }
         });
 
-        var oql   = oqlEncoder.getOql($scope.criteria);
-        var route = {
-          name: $scope.route,
-          params:  { oql: oql }
-        };
+        $scope.list();
+      };
 
-        $location.search('oql', oql);
-
-        http.get(route).then(function(response) {
-          $scope.total    = parseInt(response.data.total);
-          $scope.contents = response.data.results;
-
-          $scope.getContentsLocalizeTitle();
-
-          if (response.data.hasOwnProperty('extra')) {
-            $scope.extra = response.data.extra;
-          }
-
-          // Disable spinner
-          $scope.loading = 0;
-        }, function() {
-          $scope.loading = 0;
-          var params = {
-            id: new Date().getTime(),
-            message: 'Error while fetching data from backend',
-            type: 'error'
-          };
-
-          messenger.post(params);
-        });
+      /**
+       * @inheritdoc
+       */
+      $scope.parseList = function(data) {
+        $scope.configure(data.extra);
+        $scope.localize($scope.data.items, 'items');
       };
 
       /**
