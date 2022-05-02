@@ -53,8 +53,9 @@ class ContentCacheHelper extends CacheHelper
         'last-suggested-{{categories}}',
         'rss-author-{{fk_author}}',
         'rss-{{content_type_name}}$',
+        'rss-google-news-showcase',
         'sitemap',
-        'tag-{{tags}}'
+        'tag-{{tags}}',
     ];
 
     /**

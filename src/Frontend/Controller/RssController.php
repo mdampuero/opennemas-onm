@@ -391,7 +391,7 @@ class RssController extends FrontendController
             'contents'    => $this->getShowcaseContents('showcase', 1),
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss,google-news-showcase'
+            'x-tags'      => 'rss-google-news-showcase'
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');

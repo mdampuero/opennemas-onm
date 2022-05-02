@@ -184,7 +184,17 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
                 )
             ]));
 
+
         $this->queue->expects($this->at(12))->method('push')
+            ->with(new ServiceTask('core.varnish', 'ban', [
+                sprintf(
+                    'obj.http.x-tags ~ instance-%s.*%s',
+                    $this->instance->internal_name,
+                    'rss-google-news-showcase'
+                )
+            ]));
+
+        $this->queue->expects($this->at(13))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf(
                     'obj.http.x-tags ~ instance-%s.*%s',
@@ -193,7 +203,7 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
                 )
             ]));
 
-        $this->queue->expects($this->at(13))->method('push')
+        $this->queue->expects($this->at(14))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf(
                     'obj.http.x-tags ~ instance-%s.*%s',
