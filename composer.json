@@ -84,7 +84,7 @@
         "symfony/assetic-bundle": "~2.8",
 
         "drexarj/disqus-php": "dev-master",
-        "opennemas/cache": "1.1.0",
+        "opennemas/cache": "1.2.0",
         "opennemas/data": "1.1.1",
         "opennemas/orm": "1.6.0",
         "opennemas/task": "1.0.*",
