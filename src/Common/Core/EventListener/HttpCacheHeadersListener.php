@@ -64,6 +64,9 @@ class HttpCacheHeadersListener
     {
         $response = $event->getResponse();
 
+        // Add surrogate control header to use edge side includes
+        $response->headers->set('surrogate-control', 'ESI/1.0');
+
         if (empty($this->template->getValue('x-cacheable'))
             && empty($response->headers->get('x-cacheable'))
         ) {
@@ -90,9 +93,6 @@ class HttpCacheHeadersListener
         if (!empty($expire)) {
             $response->headers->set('x-cache-for', $expire);
         }
-
-        // Add surrogate control header to use edge side includes
-        $response->headers->set('surrogate-control', 'ESI/1.0');
     }
 
     /**
