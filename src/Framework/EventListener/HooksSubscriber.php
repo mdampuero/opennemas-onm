@@ -480,7 +480,6 @@ class HooksSubscriber implements EventSubscriberInterface
         }
 
         $category = $event->getArgument('category');
-        $keys     = $event->hasArgument('keys') ? $event->getArgument('keys') : [];
 
         $instanceName = $this->container->get('core.instance')->internal_name;
 
@@ -494,16 +493,13 @@ class HooksSubscriber implements EventSubscriberInterface
             ])
         );
 
-        foreach ($keys as $key) {
-            $this->container->get('task.service.queue')->push(new ServiceTask('core.varnish', 'ban', [
-                sprintf(
-                    'obj.http.x-tags ~ instance-%s.*%s.*content-listing-frontpage-%s$',
-                    $instanceName,
-                    $key,
-                    $category
-                )
-            ]));
-        }
+        $this->container->get('task.service.queue')->push(new ServiceTask('core.varnish', 'ban', [
+            sprintf(
+                'obj.http.x-tags ~ instance-%s.*.*content-listing-frontpage-%s$',
+                $instanceName,
+                $category
+            )
+        ]));
     }
 
     /**
