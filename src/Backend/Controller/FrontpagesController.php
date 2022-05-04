@@ -210,16 +210,11 @@ class FrontpagesController extends Controller
 
         $lastSaved = $fvs->getLastSaved($version->category_id, $version->id, true);
 
-        $keys = array_map(function ($content) {
-            return sprintf('%s-%s', $content['content_type'], $content['id']);
-        }, $contents);
-
         $this->get('core.dispatcher')->dispatch(
             'frontpage.save_position',
             [
                 'category'    => $category,
-                'frontpageId' => $version->id,
-                'keys'        => $keys
+                'frontpageId' => $version->id
             ]
         );
 

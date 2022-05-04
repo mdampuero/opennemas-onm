@@ -101,6 +101,8 @@ class WidgetController extends Controller
 
             $html = sprintf('<div class="widget">%s</div>', $widget->render());
 
+            $widget->saveKey();
+
             if (!$widget->isCacheable()) {
                 return new Response($html, 200, [ 'x-cacheable' => false ]);
             }

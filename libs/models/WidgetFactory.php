@@ -31,6 +31,13 @@ class WidgetFactory
     protected $defaultTtl = '100d';
 
     /**
+     * The name of the widget keys storage.
+     *
+     * @var string
+     */
+    protected $keySetName = 'widget_keys';
+
+    /**
      * The service container.
      *
      * @var ServiceContainer
@@ -269,6 +276,16 @@ class WidgetFactory
     public function isCacheable()
     {
         return $this->isCacheable;
+    }
+
+    /**
+     * Inserts the key of the widget in the set of widgets caches.
+     */
+    public function saveKey()
+    {
+        $cache = $this->container->get('cache.connection.instance');
+
+        $cache->addMemberToSet($this->keySetName, $this->cachedId);
     }
 
     /**

@@ -108,7 +108,7 @@ class HooksSubscriber implements EventSubscriberInterface
             'frontpage.save_position' => [
                 ['removeVarnishCacheFrontpage', 5],
                 ['removeObjectCacheFrontpageMap', 5],
-                ['removeObjectCacheForContentListingInFrontpage', 5],
+                ['removeObjectCacheForWidgets', 5],
                 ['removeVarnishCacheFrontpageCSS', 5],
                 ['removeSmartyCacheForFrontpageOfCategory', 5],
                 ['removeDynamicCssSettingForFrontpage', 5],
@@ -251,25 +251,12 @@ class HooksSubscriber implements EventSubscriberInterface
      *
      * @param Event $event The event to handle.
      */
-    public function removeObjectCacheForContentListingInFrontpage(Event $event)
+    public function removeObjectCacheForWidgets()
     {
-        $keys     = $event->hasArgument('keys') ? $event->getArgument('keys') : [];
-        $category = $event->getArgument('category');
+        $cache = $this->container->get('cache.connection.instance');
 
-        if (empty($keys)) {
-            return;
-        }
-
-        $keys = array_filter($keys, function ($key) {
-            return explode('-', $key)[0] === 'widget';
-        });
-
-        foreach ($keys as $key) {
-            $this->redis
-                ->removeByPattern(
-                    sprintf('*WidgetContentListing-%s*%s', explode('-', $key)[1], sprintf('frontpage-%s', $category))
-                );
-        }
+        $cache->remove($cache->getSetMembers('widget_keys'));
+        $cache->remove('widget_keys');
     }
 
     /**

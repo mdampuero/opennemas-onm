@@ -59,15 +59,6 @@ class ContentCacheHelper extends CacheHelper
     ];
 
     /**
-     * The array of keys to remove in redis.
-     *
-     * @var array
-     */
-    protected $defaultRedisKeys = [
-        '*Widget*'
-    ];
-
-    /**
      * {@inheritdoc}
      */
     public function __construct(?Instance $instance, Queue $queue, Cache $cache)
@@ -86,9 +77,13 @@ class ContentCacheHelper extends CacheHelper
      */
     public function deleteItem($item) : CacheHelper
     {
-        $this->removeRedisCache(
-            $this->replaceWildcards($item, array_merge($this->redisKeys, $this->defaultRedisKeys))
+        $keys = array_merge(
+            $this->cache->getSetMembers('widget_keys'),
+            [ 'widget_keys' ],
+            $this->replaceWildcards($item, $this->redisKeys)
         );
+
+        $this->cache->remove($keys);
 
         $this->removeVarnishCache(
             $this->replaceWildcards($item, array_merge($this->varnishKeys, $this->defaultVarnishKeys)),
@@ -119,18 +114,6 @@ class ContentCacheHelper extends CacheHelper
         $xtags[] = sprintf('%s-%d', $content->content_type_name, $content->pk_content);
 
         return implode(',', $xtags);
-    }
-
-    /**
-     * Removes the redis cache for the current object.
-     *
-     * @param array $item The object to ban redis cache.
-     */
-    protected function removeRedisCache($keys)
-    {
-        foreach ($keys as $pattern) {
-            $this->cache->removeByPattern($pattern);
-        }
     }
 
     /**

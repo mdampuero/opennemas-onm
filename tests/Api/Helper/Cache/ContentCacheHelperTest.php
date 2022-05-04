@@ -27,9 +27,13 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'push' ])
             ->getMock();
 
-        $this->cache = $this->getMockBuilder('Opennemas\Cache\Core\Cache')
+        $this->cache = $this->getMockBuilder('Opennemas\Cache\Redis\Redis')
             ->disableOriginalConstructor()
+            ->setMethods([ 'remove', 'getSetMembers' ])
             ->getMock();
+
+        $this->cache->expects($this->any())->method('getSetMembers')
+            ->willReturn([ 'widget_content_listing', 'widget_infinite_scroll' ]);
 
         $this->helper = new ArticleCacheHelper($this->instance, $this->queue, $this->cache);
     }
