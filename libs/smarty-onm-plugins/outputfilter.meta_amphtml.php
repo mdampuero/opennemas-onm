@@ -18,6 +18,7 @@ function smarty_outputfilter_meta_amphtml($output, $smarty)
     $tpl                 = '<link rel="amphtml" href="%s"/>';
 
     if (empty($content)
+        || !empty($content->hideamp)
         || !in_array($content->content_type_name, $allowedContentTypes)
         || !$container->get('core.security')->hasExtension('AMP_MODULE')
         || empty($request)
