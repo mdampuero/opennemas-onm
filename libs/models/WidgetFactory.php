@@ -35,7 +35,7 @@ class WidgetFactory
      *
      * @var string
      */
-    protected $keySetName = 'widget_keys';
+    protected $keySetName = 'Widget_Keys';
 
     /**
      * The service container.

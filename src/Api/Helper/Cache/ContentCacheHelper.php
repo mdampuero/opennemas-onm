@@ -78,8 +78,8 @@ class ContentCacheHelper extends CacheHelper
     public function deleteItem($item) : CacheHelper
     {
         $keys = array_merge(
-            $this->cache->getSetMembers('widget_keys'),
-            [ 'widget_keys' ],
+            $this->cache->getSetMembers('Widget_Keys'),
+            [ 'Widget_Keys' ],
             $this->replaceWildcards($item, $this->redisKeys)
         );
 

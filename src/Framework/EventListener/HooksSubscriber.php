@@ -255,8 +255,8 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         $cache = $this->container->get('cache.connection.instance');
 
-        $cache->remove($cache->getSetMembers('widget_keys'));
-        $cache->remove('widget_keys');
+        $cache->remove($cache->getSetMembers('Widget_Keys'));
+        $cache->remove('Widget_Keys');
     }
 
     /**
