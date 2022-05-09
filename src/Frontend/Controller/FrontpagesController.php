@@ -58,15 +58,13 @@ class FrontpagesController extends Controller
         }
 
         list($contentPositions, $contents, $invalidationDt, $lastSaved) =
-            $this->get('api.service.frontpage')->getCurrentVersionForCategory($categoryId);
-
-        $tageable = array_filter($contents, function ($content) {
-            return $content->content_type_name !== 'widget';
-        });
+            $this->get('api.service.frontpage')->getCurrentVersionForCategory($categoryId, false);
 
         $xtags = implode(',', array_map(function ($content) {
             return $content->content_type_name . '-' . $content->pk_content;
-        }, $tageable));
+        }, $contents));
+
+        $contents = $this->get('api.service.frontpage_version')->filterPublishedContents($contents);
 
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
