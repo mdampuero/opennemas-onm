@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 11:41+0000\n"
-"PO-Revision-Date: 2022-04-28 13:42+0200\n"
+"POT-Creation-Date: 2022-05-10 14:08+0000\n"
+"PO-Revision-Date: 2022-05-10 16:09+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -2001,209 +2001,110 @@ msgstr ""
 msgid "Y-m-d H:i:s"
 msgstr "H:i:s d-m-Y"
 
-msgid "Enabled"
-msgstr "Activado"
+msgid "Original"
+msgstr "Original"
 
-msgid "User Groups"
-msgstr "Grupos de usuarios"
+msgid "URL"
+msgstr "URL"
 
-msgid "Config form: '%1'"
-msgstr "Formulario de configuración: '%1'"
+msgid "Internal search"
+msgstr "Búsqueda interna"
 
-msgid "Save"
-msgstr "Guardar"
+msgid "Select an author"
+msgstr "Selecciona un autor"
 
-msgid "Private"
-msgstr "Privada"
+msgid "Published"
+msgstr "Publicado"
 
-msgid "Public"
-msgstr "Pública"
-
-msgid "If enabled, this user group will not be visible in some circunstances"
-msgstr ""
-"Si está activado, este grupo de usuarios no será visible en algunas "
-"circunstancias"
-
-msgid "Privileges"
-msgstr "Privilegios"
-
-msgid "Toggle all privileges"
-msgstr "Activar/desactivar todos los privilegios"
-
-msgid "Disable"
-msgstr "Desactivar"
-
-msgid "Enable"
-msgstr "Activar"
-
-msgid "Search"
-msgstr "Buscar"
-
-msgid "Disabled"
-msgstr "Desactivado"
+msgid "No published"
+msgstr "No publicado"
 
 msgid "Status"
 msgstr "Estado"
 
-msgid "Dear member"
-msgstr "Estimado usuario"
+msgid "Add a tag..."
+msgstr "Añadir una etiqueta..."
 
-msgid "Per your request, please follow these steps to regain access to"
-msgstr ""
-"Por tu petición, por favor, sigue estos pasos para recuperar el acceso a"
+msgid "Reset"
+msgstr "Restablecer"
 
-msgid "Click the link below to choose a new password"
-msgstr "Haz clic en el enlace de abajo para seleccionar una nueva contraseña"
+msgid "Insert image"
+msgstr "Insertar imagen"
 
-msgid ""
-"If the link is not clickable, you can copy and paste the address into your "
-"Web browser's address window"
-msgstr ""
-"Si en el enlace no se puede hacer clic, puedes copiar y pegar la dirección "
-"en la barra de dirección de tu navegador Web"
+msgid "Insert related"
+msgstr "Insertar relacionado"
 
-msgid ""
-"Follow the instructions on the screen to choose a new password.  After you "
-"have chosen a password you will automatically enter"
-msgstr ""
-"Sigue las instrucciones de la pantalla para elegir una nueva contraseña. "
-"Después de haber seleccionado una contraseña se entrará automáticamente"
+msgid "Include in Google News Showcase"
+msgstr "Incluir en Google News Showcase"
 
-msgid "In the future you can login to"
-msgstr "En el futuro se puede acceder a"
+msgid "Outstanding moment 1"
+msgstr "Momento destacado 1"
 
-msgid "by entering your e-mail address and this password"
-msgstr "escribiendo tu dirección de correo electrónico y la contraseña"
-
-msgid "If you did not request your ID and password for"
-msgstr "Si no solicitaste tu ID y contraseña para"
+msgid "Outstanding moment 2"
+msgstr "Momento destacado 2"
 
 msgid ""
-"someone has mistakenly entered your e-mail address when requesting their "
-"password"
+"To include the article in Google News Showcase you need to highlight two "
+"moments"
 msgstr ""
-"alguien ha escrito por error tu dirección de correo electrónico, al "
-"solicitar la contraseña"
-
-msgid ""
-"Please ignore this message, or, if you wish, you may go to the address above "
-"to select a new password for your account"
-msgstr ""
-"Por favor ignora este mensaje, o, si lo deseas, puedes ir a la dirección "
-"anterior para seleccionar una nueva contraseña para tu cuenta"
-
-msgid ""
-"To protect your privacy, we will only send this information to the e-mail "
-"address on file for this account"
-msgstr ""
-"Para proteger tu privacidad, sólo se enviará esta información a la dirección "
-"de correo electrónico registrada para esta cuenta"
-
-msgid "Sign into open<strong>nemas</strong>"
-msgstr "Entrar en open<strong>nemas</strong>"
-
-msgid "Use Facebook, Twitter or your email to sign in."
-msgstr "Usa Facebook, Twitter o tu correo-e para entrar."
-
-msgid "Username or email"
-msgstr "Nombre de usuario o correo-e"
-
-msgid "Password"
-msgstr "Contraseña"
-
-msgid "Forgot Password?"
-msgstr "¿Olvidaste tu contraseña?"
-
-msgid "Log in"
-msgstr "Iniciar sesión"
-
-msgid "About"
-msgstr "Sobre"
-
-msgid "Privacy Policy"
-msgstr "Política de privacidad"
-
-msgid "Legal"
-msgstr "Legal"
-
-msgid "Size"
-msgstr "Tamaño"
-
-msgid "Resolution"
-msgstr "Resolución"
-
-msgid "Link"
-msgstr "Enlace"
-
-msgid "Draft saved at "
-msgstr "Borrador guardado a las "
-
-msgid "Original"
-msgstr "Original"
-
-msgid "No item selected"
-msgstr "No se seleccionaron elementos"
-
-msgid "Click in one item to show information about it"
-msgstr "Pulsa sobre un elemento para mostrar información sobre él."
-
-msgid "Image details"
-msgstr "Detalles de la imagen"
-
-msgid "Go back to list"
-msgstr "Volver a la lista"
-
-msgid "Default settings"
-msgstr "Configuraciones por omisión"
-
-msgid "Optimize images"
-msgstr "Optimizar imágenes"
-
-msgid ""
-"If set, images will be automaticaly optimized when uploaded and imported"
-msgstr ""
-"Si está activo, las imágenes serán optimizadas automáticamente al subirlas o "
-"importarlas"
-
-msgid "Config photos module"
-msgstr "Configuración del módulo «Fotos»"
-
-msgid "Image preview"
-msgstr "Previsualización de imagen"
+"Para incluir el artículo en Google News Showcase necesitas destacar dos "
+"momentos"
 
 msgid "Are you sure?"
 msgstr "¿Estás seguro?"
 
-msgid "Do you want to delete the item?"
-msgstr "¿Quieres eliminar el elemento?"
+msgid "Pick an image"
+msgstr "Escoja una imagen"
 
-msgid "Do you want to delete the selected items?"
-msgstr "¿Quieres eliminar los elementos seleccionados?"
+msgid "Caption"
+msgstr "Pie de foto"
 
-msgid "This action can not be undone"
-msgstr "Esta acción no se puede deshacer"
+msgid "Link"
+msgstr "Enlace"
 
-msgid "Delete image"
-msgstr "Eliminar imagen"
+msgid "No author"
+msgstr "Sin autor"
 
-msgid "Are you sure that do you want delete \"<span>%title%</span>\"?"
-msgstr "¿Estás seguro de que quieres eliminar \"<span>%title%</span>\"?"
+msgid "Allow comments"
+msgstr "Permitir comentarios"
 
-msgid "Yes, delete"
-msgstr "Si, eliminar"
+msgid "Select a category"
+msgstr "Selecciona una categoría"
 
-msgid "Files uploaded successfully"
-msgstr "Ficheros subidos correctamente"
+msgid "Planned"
+msgstr "Planificado"
 
-msgid ""
-"The dropped files are uploaded but you should complete their information."
-msgstr "Los ficheros fueron subidos pero debes completar su información."
+msgid "Dued"
+msgstr "Vencido"
 
-msgid "Edit images"
-msgstr "Editar imágenes"
+msgid "In time"
+msgstr "En tiempo"
 
-msgid "Delete multiple images"
-msgstr "Eliminar múltiples imágenes"
+msgid "Publication start date"
+msgstr "Fecha de inicio de publicación"
+
+msgid "Publication end date"
+msgstr "Fecha de final de publicación"
+
+msgid "This content will only be available in the time range specified above."
+msgstr ""
+"Este contenido sólo estará disponible en el rango de tiempo especificado "
+"arriba."
+
+msgid "Server hour:"
+msgstr "Hora del sistema:"
+
+msgid "Save"
+msgstr "Guardar"
+
+msgid "Cover image"
+msgstr "Imagen de portada"
+
+msgid "Editorial"
+msgstr "Editorial"
+
+msgid "Delete books"
+msgstr "Eliminar libros"
 
 msgid "You must select some elements."
 msgstr "Debes seleccionar algún elemento."
@@ -2211,365 +2112,157 @@ msgstr "Debes seleccionar algún elemento."
 msgid "Accept"
 msgstr "Aceptar"
 
-msgid "We are improving our platform."
-msgstr "Estamos mejorando nuestra plataforma."
+msgid "Delete book"
+msgstr "Eliminar libro"
 
-msgid ""
-"We are doing some maintenance in the Opennemas platform, please wait a few "
-"minutes."
-msgstr ""
-"Estamos realizando labores de mantenimiento en la plataforma Opennemas, por "
-"favor espere unos minutos."
+msgid "Are you sure that do you want delete \"<span>%title%</span>\"?"
+msgstr "¿Estás seguro de que quieres eliminar \"<span>%title%</span>\"?"
 
-msgid "month"
-msgstr "mes"
+msgid "Yes, delete"
+msgstr "Si, eliminar"
 
-msgid "year"
-msgstr "año"
+msgid "Clear selection"
+msgstr "Limpiar selección"
 
-msgid "item"
-msgstr "elemento"
+msgid "Publish"
+msgstr "Publicar"
 
-msgid "Free"
-msgstr "Gratis"
+msgid "Unpublish"
+msgstr "Despublicar"
 
-msgid "More info"
-msgstr "Más información"
-
-msgid "Add to cart"
-msgstr "Añadir al carro"
-
-msgid "Added to cart"
-msgstr "En el carrito"
-
-msgid "Purchased"
-msgstr "Comprado"
-
-msgid "First payment"
-msgstr "Primer pago"
-
-msgid ""
-"When you want to pay you can use your paypal account or your credit card."
-msgstr "Cuando quieras usar tu cuenta de Paypal o tu tarjeta de crédito."
-
-msgid "Pay with Paypal"
-msgstr "Pagar con Paypal"
-
-msgid "To pay with your paypal account click on the Paypal button."
-msgstr "Para pagar con tu cuenta de Paypal pulsa en el botón Paypal."
-
-msgid ""
-"A popup window will be opened in order to log in with your paypal account."
-msgstr ""
-"Se abrirá una ventana emergente que te permitirá iniciar sesión con tu "
-"cuenta de Paypal."
-
-msgid ""
-"After logging in with your paypal account the popup window will "
-"automatically close and your account will appear as your selected payment "
-"method."
-msgstr ""
-"Despues de iniciar sesión la ventana de cuenta de Paypal se cerrará "
-"automáticamente y tu cuenta aparecerá como el método de pago seleccionado."
-
-msgid "Click 'Next' button to continue with your purchase."
-msgstr "Pulsa el botón \"Siguiente\" y continúa con la compra."
-
-msgid "Pay with Credit Card"
-msgstr "Pagar con tarjeta de crédito"
-
-msgid ""
-"To pay with your credit card fill the form with your credit card information."
-msgstr ""
-"Para pagar con tu tarjeta de crédito completa la información de la tarjeta "
-"de crédito."
-
-msgid ""
-"While typing your credit card information will be automatically validated."
-msgstr ""
-"Al escribir la información de tarjeta de crédito se validará automáticamente."
-
-msgid ""
-"If one or more fields are incorrect you will not be able to continue with "
-"the purchase."
-msgstr ""
-"Se uno o más campos son incorrectos no poderás continuar con el proceso de "
-"compra."
-
-msgid ""
-"Click 'Next' button to select the credit card as your payment method and "
-"continue with the purchase."
-msgstr ""
-"Pulsa el botón \"Siguiente\" para seleccionar una tarjeta de crédito como "
-"método de pago y continúa con la compra."
-
-msgid "Not your first payment"
-msgstr "Si no es tu primer pago"
-
-msgid ""
-"If this is not your first purchase, the last used payment method will be "
-"automatically selected."
-msgstr ""
-"Si no es tu primer compra, el último método de pago se seleccionará "
-"automaticamente."
-
-msgid "You can change your payment method following the steps below."
-msgstr "Puedes cambiar tu método de pago siguiente los pasos debajo."
-
-msgid ""
-"If you want to delete a payment method, please <a href=\"mailto:"
-"sales@openhost.es\">contact us</a>."
-msgstr ""
-"Si necesitas eliminar un método de pago, por favor <a href=\"mailto:"
-"sales@openhost.es\">contactanos</a>."
-
-msgid "Change your payment method"
-msgstr "Cambiar tu método de pago"
-
-msgid "Click on 'Change payment method'."
-msgstr "Pulsa en «Change payment method»."
-
-msgid "A list with all payment method used will appear."
-msgstr "Aparecerá una lista de métodos de pago usados."
-
-msgid "Select one of the listed payment methods or add a new payment method."
-msgstr ""
-"Selecciona uno de los métodos de pago mostrados o añade un nuevo método de "
-"pago."
-
-msgid "by"
-msgstr "por"
-
-msgid "Screenshots and videos"
-msgstr "Imagenes y vídeos"
-
-msgid "Last updated"
-msgstr "Última actualización"
-
-msgid "Total"
-msgstr "Total"
-
-msgid "Packs"
-msgstr "Packs"
-
-msgid "Services"
-msgstr "Servicios"
-
-msgid "Partners"
-msgstr "Socios"
-
-msgid "My selection"
-msgstr "Mi selección"
-
-msgid "My selection "
-msgstr "Mi selección"
-
-msgid "Your shopping cart is empty"
-msgstr "Tu carrito de compra está vacío"
-
-msgid "Checkout"
-msgstr "Comprar"
+msgid "Search"
+msgstr "Buscar"
 
 msgid "Loading"
 msgstr "Cargando"
 
-msgid "No items available to purchase"
-msgstr "No hay elementos disponibles para comprar"
-
-msgid "Thank you for choosing Opennemas!"
-msgstr "Gracias por elegir Opennemas"
-
-msgid "You have just purchased the following items:"
-msgstr "Acabas de comprar los siguientes productos:"
-
-msgid "You can find your invoice <a href=\"%1\">here</a>"
-msgstr "Puedes encontrar tu factura <a href=\"%1\">aquí</a>"
-
-msgid "Purchased items"
-msgstr "Elementos comprados"
-
-msgid "Billing information"
-msgstr "Información de facturación"
-
-msgid "Company"
-msgstr "Empresa"
-
-msgid "VAT number"
-msgstr "Número de identificación fiscal"
-
-msgid "Phone"
-msgstr "Teléfono"
-
-msgid "Return to <a href=\"%1\">store</a> and try again"
-msgstr "Volver a la <a href=\"%1\">tienda</a> e intentarlo de nuevo"
-
-msgid "Check"
-msgstr "Comprobar"
-
-msgid "Finish"
-msgstr "Terminar"
-
-msgid "The selected items are free"
-msgstr "Los elementos seleccionados son gratuítos"
-
-msgid "Please, continue to the next step"
-msgstr "Por favor, continua al siguiente paso"
-
-msgid "Select the payment method."
-msgstr "Seleccionar un método de pago."
-
-msgid "You'll have a chance to review your order before it's placed."
-msgstr "Poderás revisar tu compra antes de finalizarla."
-
-msgid "Any problem with payment?"
-msgstr "¿Tienes un problema con el pago?"
-
-msgid "Click here for a quick tips."
-msgstr "Pulsa aquí para ver algunos consejos."
-
-msgid "Purchase summary"
-msgstr "Resumen de la compra"
+msgid "Unable to find any book that matches your search."
+msgstr "No se pudieron encontrar libros que coincidan con tu búsqueda."
 
 msgid ""
-"I have read and accept the <a href=\"http://help.opennemas.com/knowledgebase/"
-"articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
-"\">Terms of Service</a>"
+"Maybe changing any filter could help or add one using the \"Create\" button "
+"above."
 msgstr ""
-"Leí y acepto los <a href=\"http://help.opennemas.com/knowledgebase/"
-"articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
-"\">Términos del servicio</a>"
+"Puede que cambiando los filtros ayude o tambien puede usar el botón «Crear» "
+"de arriba."
 
-msgid "Confirm"
-msgstr "Confirmar"
+msgid "Cache"
+msgstr "Caché"
 
-msgid "Thank you for your purchase!"
-msgstr "Gracias por tu compra"
+msgid "Cache group"
+msgstr "Grupo de caché"
+
+msgid "Expire time"
+msgstr "Fecha de expiración"
+
+msgid "Enabled"
+msgstr "Activado"
+
+msgid "Key or pattern"
+msgstr "Clave o patrón"
+
+msgid "Preview"
+msgstr "Previsualizar"
+
+msgid "Key or pattern will be automatically namespaced"
+msgstr "La clave o patrón se aplicará en el espacio de nombres actual"
+
+msgid "Key"
+msgstr "Llave"
+
+msgid "Key will be automatically namespaced"
+msgstr "La clave se aplicará en el espacio de nombres actual"
+
+msgid "Delete compiles"
+msgstr "Eliminar compilados"
+
+msgid "Configuration"
+msgstr "Configuración"
+
+msgid "Maximum number of tags per content"
+msgstr "Número máximo de etiquetas por contenido"
+
+msgid "Number of items in the list of suggestions"
+msgstr "Número de elementos en la lista de sugerencias"
+
+msgid "Words and rules prohibited"
+msgstr "Reglas de palabras prohibidas"
 
 msgid ""
-"Check your email, we have sent you an email with the invoice and purchase "
-"details."
+"List of words or regular expressions that are prohibited on tags, one per "
+"line."
 msgstr ""
-"Comprueba tu correo electrónico, acabamos de enviarte un correo con la "
-"factura y los detalles de compra."
+"Lista de palabras o expresiones regulares que están prohibidas en las "
+"etiquetas, una por línea."
 
-msgid ""
-"Oh!, it would be a good time to share with your friends your newspaper's "
-"improvements"
-msgstr ""
-"Oh!, sería genial que compartieras con tus amigos las mejoras en tu periódico"
+msgid "Config tag module"
+msgstr "Configuración del módulo «Etiquetas»"
 
-msgid "Have a wonderful day!"
-msgstr "¡Que tengas un buen día!"
+msgid "Locale"
+msgstr "Idioma"
 
-msgid "Something unexpected has happened!"
-msgstr "¡Ha pasado algo inesperado!"
+msgid "Where are you from?"
+msgstr "De donde eres?"
 
-msgid "There were some errors while trying to purchase."
-msgstr "Se ha producido un error durante o proceso de compra."
+msgid "Country"
+msgstr "País"
 
-msgid ""
-"To prevent non-desired charges in your account, please, do not retry the "
-"checkout process and contact our <a href=\"javascript:UserVoice."
-"showPopupWidget();\">support team</a>."
-msgstr ""
-"Para evitar cargos indeseados en tu cuenta, por favor, no reintentes el "
-"proceso de compra y contacta con nuestro <a href=\"javascript:UserVoice."
-"showPopupWidget();\">equipo de soporte</a>."
-
-msgid "Show"
-msgstr "Mostrar"
-
-msgid "Go back"
-msgstr "Atrás"
-
-msgid "Unit price"
-msgstr "Precio unitario"
-
-msgid "VAT"
-msgstr "IVA"
-
-msgid "Terms"
-msgstr "Términos"
-
-msgid "Notes"
-msgstr "Notas"
-
-msgid "Your invoice is currently unavailable."
-msgstr "Tu factura no está disponible actualmente."
-
-msgid ""
-"Please, contact our <a href=\"javascript:UserVoice.showPopupWidget();"
-"\">support team</a>."
-msgstr ""
-"Por favor, contacta con nuestro <a href=\"javascript:UserVoice."
-"showPopupWidget();\">equipo de soporte</a>."
-
-msgid "There is nothing to see here, kid."
-msgstr "Nada que ver aquí, chaval."
-
-msgid "Method"
-msgstr "Método"
-
-msgid "PayPal"
-msgstr "PayPal"
-
-msgid "Credit Card"
-msgstr "Tarjeta de crédito"
-
-msgid "Paid"
-msgstr "Pagado"
-
-msgid "View invoice"
-msgstr "Ver factura"
-
-msgid "Biography"
-msgstr "Biografía"
-
-msgid "No biography"
-msgstr "Sin biografía"
-
-msgid "Show in RSS"
-msgstr "Mostrar en el RSS"
-
-msgid "If this option is activated this author will be showed in rss"
-msgstr "Si esta opción está activada este autor se mostrará en el RSS"
-
-msgid "View as Blog"
-msgstr "Ver como Blog"
-
-msgid "If this option is activated page author will be showed as blog"
-msgstr ""
-"Si esta opción está activada la página del autor se mostrará como un blog"
-
-msgid "Change"
-msgstr "Cambiar"
-
-msgid "Connections"
-msgstr "Conexiones"
-
-msgid "Disconnect"
-msgstr "Desconectar"
+msgid "Contact information"
+msgstr "Información de contacto"
 
 msgid "This field is required"
 msgstr "Este campo es obligatorio"
 
-msgid "This field is invalid"
-msgstr "Este campo es inválido"
+msgid "First name"
+msgstr "Nombre"
 
-msgid "Username"
-msgstr "Nombre de usuario"
+msgid "Last name"
+msgstr "Apellido"
 
-msgid "Twitter user"
-msgstr "Usuario en twitter"
+msgid "Company name"
+msgstr "Nombre de la empresa"
 
-msgid "Facebook user"
-msgstr "Usuario de Facebook"
+msgid "This is not a valid email"
+msgstr "Este no es un correo electrónico válido"
 
-msgid "Blog URL"
-msgstr "URL del blog"
+msgid "Phone number"
+msgstr "Número de teléfono"
 
-msgid "Short Biography"
-msgstr "Biografía corta"
+msgid "This is not a valid vat_number identification number"
+msgstr "Este no es un número de identificación fiscal válido"
+
+msgid "Vat identification number"
+msgstr "Número de identificación fiscal"
+
+msgid "What is a VAT identification number?"
+msgstr "¿Qué es un número de identificación fiscal?"
+
+msgid "Address"
+msgstr "Dirección"
+
+msgid "This is not a valid address"
+msgstr "Este no es una dirección válida"
+
+msgid "This is not a valid postal_code"
+msgstr "Esta no es un código postal válido"
+
+msgid "Postal code"
+msgstr "Código postal"
+
+msgid "This is not a valid city"
+msgstr "Esta no es una ciudad válida"
+
+msgid "City"
+msgstr "Ciudad"
+
+msgid "This is not a valid state"
+msgstr "Este no es un estado válido"
+
+msgid "State/Province"
+msgstr "Provincia/Estado"
+
+msgid "Select a province"
+msgstr "Selecciona una provincia"
 
 msgid "You are leaving the current page."
 msgstr "Está saliendo de la página."
@@ -2688,514 +2381,20 @@ msgstr "Salir"
 msgid "Welcome"
 msgstr "Bienvenido"
 
-msgid "Welcome to Opennemas"
-msgstr "Bienvenido a Opennemas"
+msgid "Your account is connected to %1."
+msgstr "Tu cuenta está conectada a %1."
 
-msgid ""
-"Now you will be able to publish your own news, articles and take part of the "
-"information around everyone."
-msgstr ""
-"Ahora podrás publicar tus propias noticias, artículos y formar parte de la "
-"información de tu entorno."
+msgid "Disconnect from Facebook"
+msgstr "Desconectarse de Facebook"
 
-msgid ""
-"Before starting to work on it you have to perform some tasks, sush as setup "
-"your social networks and get some information about how to use Opennemas"
-msgstr ""
-"Antes de comenzar a trabajar en él debes llevar a cabo unas tareas, como por "
-"ejemplo configurar tus redes sociales y obtener alguna ayuda sobre como usar "
-"Opennemas"
+msgid "Disconnect"
+msgstr "Desconectar"
 
-msgid ""
-"In order to use Opennemas you must accept the Legal notice & Terms of use"
-msgstr "Para usar Opennemas debes aceptar el Aviso legal y Condiciones de uso"
+msgid "Allows you to login into Opennemas with %1"
+msgstr "Le permitirá iniciar sesión en Opennemas con %1"
 
-msgid "Accept the Legal notice & Terms of use"
-msgstr "Aceptar el Aviso legal y Condiciones de uso"
-
-msgid "Do you need some help?"
-msgstr "¿Necesitas ayuda?"
-
-msgid ""
-"You can read and learn how to use your Opennemas by using our online "
-"documentation and videos.\n"
-"          Take a look around and you will find it."
-msgstr ""
-"Puedes leer y aprender como usar Opennemas usando nuestra documentación y "
-"vídeos en línea.\n"
-"Echa un vistazo y los encontrarás."
-
-msgid ""
-"Our <a href=\"http://help.opennemas.com/\" target=\"_blank\">knownledge "
-"base</a> has manuals and howtos about how to create contents and improve "
-"your newspaper."
-msgstr ""
-"Nuestra <a href=\"http://help.opennemas.com/\" target=\"_blank\">base de "
-"conocimientos</a> cuenta con manuales y guías sobre como crear contenidos y "
-"mejoras en tu periódico."
-
-msgid ""
-"See our <a href=\"http://www.youtube.com/user/OpennemasPublishing\" target="
-"\"_blank\">video tutorials</a> for getting step-by-step guidance."
-msgstr ""
-"Echa un vistazo a nuestros <a href=\"http://www.youtube.com/user/"
-"OpennemasPublishing\" target=\"_blank\">tutoriales en vídeo</a> para obtener "
-"guías paso a paso."
-
-msgid ""
-"If you need further information you can always contact us by using the <span "
-"class=\"fa fa-support\"></span> Help button in the upper right corner."
-msgstr ""
-"Si necesitas más información siempre siempre puedes contactar con nosotros "
-"usando el botón de Ayuda <span class=\"fa fa-support fa-2x\"></span> de la "
-"esquina superior derecha."
-
-msgid "Opennemas Store"
-msgstr "Tienda de Opennemas"
-
-msgid "Find and try new add-ons and take your newspaper to the next level."
-msgstr ""
-"Busca y encuentra nuevos añadidos para llevar tu periódico al siguiente "
-"nivel."
-
-msgid ""
-"Do you need more? Check our packs and power your newspaper with extra "
-"features to make it the best."
-msgstr ""
-"Necesias más? Comprueba nuestros packs y mejora tu periódico con "
-"funcionalidades adicionales para hacerlo el mejor."
-
-msgid ""
-"We offer a huge list of add-ons to improve your experience. Check our store "
-"and pay only for what you really want."
-msgstr ""
-"Te ofrecemos una gran lista de añadidos con los que mejorar tu experiencia. "
-"Comprueba nuestra tienda y paga solo por lo que necesites."
-
-msgid ""
-"Make your own style. Choose a template or request a exclusive design to make "
-"your newspaper look awesome."
-msgstr ""
-"Crea tu propio estilo. Selecciona una plantilla o solicita un diseño "
-"exclusivo para hacer que tu periódigo luzca mejor."
-
-msgid "That's it!"
-msgstr "Y eso es todo!"
-
-msgid "Wait...Do you have a Facebook or a Twitter account?"
-msgstr "Espera... ¿Tienes una cuenta de Facebook o Twitter?"
-
-msgid ""
-"Then you can associate those accounts to access your opennemas. It will make "
-"easier to get into your administration panel."
-msgstr ""
-"Luego puedes asocialas para acceder a Opennemas. Esto hará mucho más fácil "
-"acceder al panel de administración."
-
-msgid "Now, you can start to use your newspaper."
-msgstr "Ya puedes empezar a usar tu periódico."
-
-msgid "Hope you will enjoy opennemas!"
-msgstr "Esperamos que disfrutes de opennemas!"
-
-msgid "Welcome!"
-msgstr "¡Bienvenido!"
-
-msgid "Terms & conditions"
-msgstr "Términos y condiciones"
-
-msgid "Ready!"
-msgstr "Listo!"
-
-msgid "IntelligentWidget"
-msgstr "IntelligentWidget"
-
-msgid "Content"
-msgstr "Contenido"
-
-msgid "Published"
-msgstr "Publicado"
-
-msgid "Not selected"
-msgstr "No seleccionado"
-
-msgid "Edit '%1'"
-msgstr "Editar '%1'"
-
-msgid "Remove from this frontpage"
-msgstr "Eliminar de esta portada"
-
-msgid "Remove from all frontpages"
-msgstr "Quitar de todas las portadas"
-
-msgid "Arquive"
-msgstr "Archivar"
-
-msgid "Send to trash"
-msgstr "Enviar a la papelera"
-
-msgid "Select a type"
-msgstr "Selecciona un tipo"
-
-msgid "Parameters"
-msgstr "Parámetros"
-
-msgid "Parameter name"
-msgstr "Nombre del parámetro"
-
-msgid "Parameter value"
-msgstr "Valor de parámetro"
-
-msgid "Add"
-msgstr "Añadir"
-
-msgid "Unpublish"
-msgstr "Despublicar"
-
-msgid "Publish"
-msgstr "Publicar"
-
-msgid "HTML"
-msgstr "HTML"
-
-msgid "Automatic"
-msgstr "Automática"
-
-msgid "Manual"
-msgstr "Manual"
-
-msgid ""
-"If enabled, subscribers will not see this subscription while registering or "
-"editing profile"
-msgstr ""
-"Si está activado, los suscriptores no podrán ver esta suscripción mientras "
-"se registran o editan su perfil"
-
-msgid "Accept requests manually"
-msgstr "Aceptar solicitudes manualmente"
-
-msgid ""
-"If enabled, an administrator will have to accept new members manually one by "
-"one"
-msgstr ""
-"Si está activado, un administrador tendrá que aceptar a nuevos miembros "
-"manualmente uno a uno"
-
-msgid "Do you want this feature?"
-msgstr "¿Quieres esta funcionalidad?"
-
-msgid "Go to Store"
-msgstr "Ir a la tienda"
-
-msgid "Newsletter"
-msgstr "Boletín de noticias"
-
-msgid ""
-"If enabled, this subscription will be selectable when creating newsletters"
-msgstr ""
-"Si está activado, esta suscripción será seleccionable cuando se creen "
-"boletines de noticias"
-
-msgid "Restrictions for members"
-msgstr "Restricciones para miembros"
-
-msgid "If enabled, button to print contents will be hidden"
-msgstr "Si está activado, se ocultará el botón de imprimir contenidos"
-
-msgid "If enabled, button to share contents in social networks will be hidden"
-msgstr ""
-"Si está activado, se ocultarán los botones para compartir en redes sociais"
-
-msgid "If enabled, some browser actions (e.g. cut, copy,...) will be blocked"
-msgstr ""
-"Si está activado, algunas acciones del navegador (e.g. cortar, copiar,...) "
-"serán bloqueadas"
-
-msgid "If enabled, advertisements will be disabled when using safeframe"
-msgstr ""
-"Si está activado, la publicidad se deshabilitará cuando se use safeframe"
-
-msgid "If enabled, this subscription will require a payment to become a member"
-msgstr ""
-"Si está activado, esta suscripción requerirá un pago para convertirse en "
-"miembro"
-
-msgid "Restrictions for non-members"
-msgstr "Restricciones para no-miembros"
-
-msgid "Indexation"
-msgstr "Indexado"
-
-msgid "If enabled, the noindex directive will be added to the HTML"
-msgstr "Si está activado, se añadirá la directiva noindex al HTML"
-
-msgid "Block actions"
-msgstr "Bloquear acciones"
-
-msgid ""
-"If enabled, non-members will not be able to access to contents in this "
-"subscription"
-msgstr ""
-"Si está activado, los no-miembros no podrán acceder al contenido de esta "
-"suscripción."
-
-msgid ""
-"The content will not be available in frontpages, widgets, RSS and sitemaps"
-msgstr ""
-"El contenido no estará disponible en las portadas, widgets, RSS y sitemaps"
-
-msgid "Hide information"
-msgstr "Ocultar información"
-
-msgid ""
-"Some information will be hidden for non-members when accessing contents in "
-"this subscription"
-msgstr ""
-"Alguna información será ocultada para no-miembros cuando accedan a "
-"contenidos en esta suscripción"
-
-msgid "Domain Mapping"
-msgstr "Redirección de dominio"
-
-msgid "Enter a domain"
-msgstr "Escribe un dominio"
-
-msgid "Requested domains"
-msgstr "Dominios solicitados"
-
-msgid "I have read and accept the Terms of creating a new domain"
-msgstr "Leí y acepto los Terminos de creación de un nuevo dominio"
-
-msgid "I have read and accept the Terms of redirection"
-msgstr "Leí y acepto los Términos de redirección"
-
-msgid "How can I change 'opennemas.com' domain on my newspaper?"
-msgstr "Como puedo cambiar el dominio «opennemas.com» en mi periódico?"
-
-msgid "Redirect your own domain"
-msgstr "Redirige tu dominio"
-
-msgid ""
-"I have an existing domain and I want to redirect it to my Opennemas digital "
-"newspaper."
-msgstr ""
-"Ya tengo un dominio existente y quiero redirigirlo a mi periódico digital "
-"Opennemas."
-
-msgid "Add new domain"
-msgstr "Añadir nuevo dominio"
-
-msgid ""
-"I DO NOT have my own domain and I want to create one and redirect it to my "
-"Opennemas digital newspaper"
-msgstr ""
-"NO tengo mi propio dominio y quiero crear uno y redirigirlo a mi periódico "
-"digital Opennemas"
-
-msgid ""
-"You have <strong><a href=\"https://en.wikipedia.org/wiki/HTTPS\" class="
-"\"text-white\" title=\"What is SSL encryption?\" target=\"_blank\">SSL "
-"encription enabled</a></strong> for your main domain."
-msgstr ""
-"Tu dominio principal tiene el <strong><a href=\"https://en.wikipedia.org/"
-"wiki/HTTPS\" class=\"text-white\" title=\"What is SSL encryption?\" target="
-"\"_blank\">cifrado SSL activado</a></strong>."
-
-msgid "Congrats, your newspaper is secure!"
-msgstr "¡Enhorabuena, tu periódico es seguro!"
-
-msgid "Your domains"
-msgstr "Tus dominios"
-
-msgid "Main"
-msgstr "Principal"
-
-msgid "Points to"
-msgstr "Apunta a"
-
-msgid "Your domain is properly configured"
-msgstr "Tu dominio está configurado correctamente"
-
-msgid "Your domain is not properly configured, check the instructions below."
-msgstr ""
-"Tu dominio no está configurado correctamente, comprueba las instrucciones "
-"debajo."
-
-msgid "Expires"
-msgstr "Expira"
-
-msgid "This is your opennemas address"
-msgstr "Esta es tu dirección opennemas"
-
-msgid "Update your DNS records"
-msgstr "Actualiza tus registros de DNS"
-
-msgid "Point the www entrace in your domain to the Opennemas service."
-msgstr "Apunta la entrada www de tu dominio al servicio Opennemas."
-
-msgid "Redirect traffic from %1 to  www.%2"
-msgstr "Redirigir tráfico desde %1 a www.%2"
-
-msgid ""
-"Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done "
-"by the hosting provider for your domain)"
-msgstr ""
-"Tráfico web -> dominio.com -> redirect -> www.dominio.com (esto debería "
-"hacerlo el proveedor de hosting de tu dominio)"
-
-msgid "NOTE"
-msgstr "NOTA"
-
-msgid "This change is NOT done in the DNS section"
-msgstr "Este cambio NO se realiza en la sección DNS"
-
-msgid "If you need more help configuring your domains contact our support team"
-msgstr ""
-"Si necesitas más información para configurar tus dominios contacta con "
-"nuestro equipo de soporte"
-
-msgid "Reject"
-msgstr "Rechazar"
-
-msgid "External"
-msgstr "Externo"
-
-msgid "Remove element from this frontpage"
-msgstr "Eliminar elemento de esta portada"
-
-msgid "Customize in frontpage"
-msgstr "Personalizar en portada"
-
-msgid "Customize content"
-msgstr "Personalizar contenido"
-
-msgid "Letters to the Editor"
-msgstr "Cartas al editor"
-
-msgid "Body"
-msgstr "Cuerpo"
-
-msgid "Letters"
-msgstr "Cartas"
-
-msgid "New letter"
-msgstr "Nueva carta al director"
-
-msgid "Search by tag"
-msgstr "Buscar por etiqueta"
-
-msgid "No published"
-msgstr "No publicado"
-
-msgid "Position"
-msgstr "Posición"
-
-msgid "Manual categories"
-msgstr "Categorías manuales"
-
-msgid "Automatic categories"
-msgstr "Categorías automáticas"
-
-msgid "Static pages"
-msgstr "Páginas estáticas"
-
-msgid "Synchronized sites"
-msgstr "Sitios sincronizados"
-
-msgid "Custom link"
-msgstr "Enlace personalizado"
-
-msgid "Menu structure"
-msgstr "Estructura del menú"
-
-msgid "Use drag and drop to sort and nest elements."
-msgstr "Usa arrastrar y soltar para ordenar y anidar elementos"
-
-msgid ""
-"If your theme has defined positions for menus you can assign one menu to "
-"each of them"
-msgstr ""
-"Si tu tema tiene posiciones de menú definidas puedes asignar un menú a cada "
-"posición"
-
-msgid "Module"
-msgstr "Módulo"
-
-msgid "Manual category"
-msgstr "Categoría manual"
-
-msgid "Automatic category"
-msgstr "Categoría automática"
-
-msgid "Static Page"
-msgstr "Página estática"
-
-msgid "Synchronized instances"
-msgstr "Instancias sincronizadas"
-
-msgid "New menu"
-msgstr "Nuevo menú"
-
-msgid "Favorite"
-msgstr "Favorito"
-
-msgid "Preview"
-msgstr "Previsualizar"
-
-msgid "Configuration"
-msgstr "Configuración"
-
-msgid "Config opinion module"
-msgstr "Configuración del módulo «Opinión»"
-
-msgid "New opinion"
-msgstr "Nueva opinión"
-
-msgid "In home"
-msgstr "En portada"
-
-msgid "Drop from home"
-msgstr "Sacar de portada"
-
-msgid "Social"
-msgstr "Social"
-
-msgid "Unknown"
-msgstr "Desconocido"
-
-msgid "User group disabled"
-msgstr "Grupos de usuario desactivado"
-
-msgid "Convert to"
-msgstr "Convertir a"
-
-msgid "subscriber"
-msgstr "suscriptor"
-
-msgid "user"
-msgstr "usuario"
-
-msgid "selected"
-msgstr "seleccionados"
-
-msgid "Used for interface, messages and units in the control panel"
-msgstr ""
-"Usado para la interfaz, los mensajes y las unidades en el panel de control"
-
-msgid "Social Networks"
-msgstr "Redes sociales"
-
-msgid "Facebook"
-msgstr "Facebook"
-
-msgid "Twitter"
-msgstr "Twitter"
-
-msgid "Confirm password"
-msgstr "Confirmar contraseña"
-
-msgid "The passwords don't match"
-msgstr "Las contraseñas no coinciden"
+msgid "Connect with"
+msgstr "Conectar con"
 
 msgid "Activate users has a cost of 12€ user/month."
 msgstr "Activar usuarios tiene un coste de 12€ usuario/mes."
@@ -3218,44 +2417,534 @@ msgstr ""
 msgid "I understand and accept the cost of the operation."
 msgstr "Entiendo y acepto los costes de la operación."
 
-msgid "Your account is connected to %1."
-msgstr "Tu cuenta está conectada a %1."
+msgid "Config form: '%1'"
+msgstr "Formulario de configuración: '%1'"
 
-msgid "Disconnect from Facebook"
-msgstr "Desconectarse de Facebook"
+msgid "Convert to"
+msgstr "Convertir a"
 
-msgid "Allows you to login into Opennemas with %1"
-msgstr "Le permitirá iniciar sesión en Opennemas con %1"
+msgid "subscriber"
+msgstr "suscriptor"
 
-msgid "Connect with"
-msgstr "Conectar con"
+msgid "user"
+msgstr "usuario"
+
+msgid "User Groups"
+msgstr "Grupos de usuarios"
+
+msgid "selected"
+msgstr "seleccionados"
+
+msgid "Used for interface, messages and units in the control panel"
+msgstr ""
+"Usado para la interfaz, los mensajes y las unidades en el panel de control"
+
+msgid "Social Networks"
+msgstr "Redes sociales"
+
+msgid "Facebook"
+msgstr "Facebook"
+
+msgid "Twitter"
+msgstr "Twitter"
+
+msgid "Change"
+msgstr "Cambiar"
+
+msgid "Connections"
+msgstr "Conexiones"
+
+msgid "This field is invalid"
+msgstr "Este campo es inválido"
+
+msgid "Username"
+msgstr "Nombre de usuario"
+
+msgid "Blog URL"
+msgstr "URL del blog"
+
+msgid "Short Biography"
+msgstr "Biografía corta"
+
+msgid "Biography"
+msgstr "Biografía"
+
+msgid "Password"
+msgstr "Contraseña"
+
+msgid "Confirm password"
+msgstr "Confirmar contraseña"
+
+msgid "The passwords don't match"
+msgstr "Las contraseñas no coinciden"
+
+msgid "Disable"
+msgstr "Desactivar"
+
+msgid "Enable"
+msgstr "Activar"
 
 msgid "User Group"
 msgstr "Grupo de usuarios"
 
-msgid "Avatar"
-msgstr "Avatar"
+msgid "Disabled"
+msgstr "Desactivado"
 
-msgid "Author:"
-msgstr "Autor:"
+msgid "Social"
+msgstr "Social"
 
-msgid "Submitted on:"
-msgstr "Enviado el:"
+msgid "Unknown"
+msgstr "Desconocido"
 
-msgid "In response to"
-msgstr "En respuesta a"
+msgid "User group disabled"
+msgstr "Grupos de usuario desactivado"
 
-msgid "Nickname"
-msgstr "Alias"
+msgid "Go back to list"
+msgstr "Volver a la lista"
 
-msgid "Submitted on"
-msgstr "Enviado el"
+msgid "Covers"
+msgstr "Portadas"
 
-msgid "Sender IP"
-msgstr "IP del emisor"
+msgid "Order newsstand frontpage by"
+msgstr "Ordenar portada de Kiosko según"
 
-msgid "Commented on"
-msgstr "Comentado en"
+msgid "Select if order newsstand's frontpage by dates or by section."
+msgstr ""
+"Elige si quieres ordenar la portada de kiosko por fechas o por secciones"
+
+msgid "Grouped by date is recommended for weekly newspapers."
+msgstr "Agrupado por fechas es recomendable a periódicos semanales."
+
+msgid "Sections"
+msgstr "Secciones"
+
+msgid "Dates"
+msgstr "Fechas"
+
+msgid "Grouped by date"
+msgstr "Agrupado por fecha"
+
+msgid "Delete newsstands"
+msgstr "Eliminar portadas"
+
+msgid "Delete kiosko"
+msgstr "Eliminar kiosko"
+
+msgid "Are you sure that do you want to delete the selected cover?"
+msgstr "¿Está seguro de que quiere eliminar las portadas seleccionadas?"
+
+msgid "Newsstand"
+msgstr "Portadas de papel"
+
+msgid "Draft saved at "
+msgstr "Borrador guardado a las "
+
+msgid "Favorite"
+msgstr "Favorito"
+
+msgid "Parameters"
+msgstr "Parámetros"
+
+msgid "Generating thumbnail"
+msgstr "Generando miniatura"
+
+msgid "No file selected"
+msgstr "Fichero no seleccionado"
+
+msgid "Add"
+msgstr "Añadir"
+
+msgid "Welcome to Opennemas"
+msgstr "Bienvenido a Opennemas"
+
+msgid "Redirect your domain"
+msgstr "Redirige tu dominio"
+
+msgid ""
+"I have an existing domain and I want to redirect it to my Opennemas digital "
+"newspaper."
+msgstr ""
+"Ya tengo un dominio existente y quiero redirigirlo a mi periódico digital "
+"Opennemas."
+
+msgid "Add new domain"
+msgstr "Añadir nuevo dominio"
+
+msgid ""
+"I DO NOT have my own domain and I want to create one and redirect it to my "
+"Opennemas digital newspaper"
+msgstr ""
+"NO tengo mi propio dominio y quiero crear uno y redirigirlo a mi periódico "
+"digital Opennemas"
+
+msgid "Add contents to your site"
+msgstr "Añadir contenidos a tu sitio"
+
+msgid "New article"
+msgstr "Nuevo artículo"
+
+msgid "New opinion"
+msgstr "Nueva opinión"
+
+msgid "Media manager"
+msgstr "Gestor multimedia"
+
+msgid "Upload images"
+msgstr "Subir imágenes"
+
+msgid "New Album"
+msgstr "Nuevo álbum"
+
+msgid "Upload video"
+msgstr "Subir vídeo"
+
+msgid "Want more features?"
+msgstr "¿Interesado en mas características?"
+
+msgid ""
+"We have two ways to add functionality to you site. Check our Opennemas Store:"
+msgstr ""
+"Tenemos dos formas de añadir funcionalidad a tu sitio. Comprueba nuestra "
+"Tienda de Opennemas:"
+
+msgid "Plans"
+msgstr "Planes"
+
+msgid "Bundles multiple functionality in a reduced price"
+msgstr "Reúnen varias funcionalidades a un precio reducido"
+
+msgid "Add a specific feature in your site"
+msgstr "Añade una funcionalidad específica en tu sitio"
+
+msgid "If you have special needs or want some advice extending your site"
+msgstr ""
+"Si tienes alguna necesidad específica o necesitas ayuda para extender tu "
+"sitio"
+
+msgid "<strong>Are you new in Opennemas?</strong>"
+msgstr "<strong>¿Eres nuevo en Opennemas?</strong>"
+
+msgid ""
+"If you need some help getting started to create awesome content, check out "
+"our online user documentation."
+msgstr ""
+"Si necesitas ayuda para comenzar a crear contenido, comprueba nuestra "
+"documentación en línea."
+
+msgid "First steps in opennemas"
+msgstr "Primeiros pasos en OpenNeMas"
+
+msgid "Detailed documentation"
+msgstr "Documentación en línea"
+
+msgid "Contact us for help"
+msgstr "Contacta con nosotros"
+
+msgid ""
+"Get more help from our videotutorials in <a href=\"%1\" class=\"text-white "
+"bold\">our YouTube channel</a> and subscribe to it."
+msgstr ""
+"Puedes ver más videotutoriales en <a href=\"%1\" class=\"text-white bold"
+"\">nuestro canal de YouTube</a> y también puedes suscribirte al mismo."
+
+msgid "Logged in users"
+msgstr "Usuarios conectados"
+
+msgid "HTTP code"
+msgstr "Código HTTP"
+
+msgid "If enabled, this rule redirects to a valid opennemas URL"
+msgstr "Si está habilitada, esta regla redirige a una URL válida de opennemas"
+
+msgid "Mode"
+msgstr "Modo"
+
+msgid "Content"
+msgstr "Contenido"
+
+msgid "Migrations only"
+msgstr "Solo migraciones"
+
+msgid "Redirects a content id to another content id"
+msgstr "Redirige un ID de contenido a otro ID de contenido"
+
+msgid "This should be used during migration only"
+msgstr "Esto se debe utilizar solamente durante la migración"
+
+msgid "Redirects an URI to a content id"
+msgstr "Redirige un URI a un ID de contenido"
+
+msgid "Redirects an URI to another URI or external URL"
+msgstr "Redirige un URI a otro URI o URL externa"
+
+msgid "Regex"
+msgstr "Regex"
+
+msgid "Redirects URIs to captured content ids basing on a regular expression"
+msgstr ""
+"Redirige los URI a los identificadores de contenido capturados basándose en "
+"una expresión regular"
+
+msgid "Redirects URIs to another URIs basing on a regular expression"
+msgstr "Redirige los URI a otros URI basándose en una expresión regular"
+
+msgid "Source"
+msgstr "Origen"
+
+msgid "Target"
+msgstr "Destino"
+
+msgid "Test"
+msgstr "Probar"
+
+msgid "Empty equals to frontpage"
+msgstr "Vacío es igual a portada"
+
+msgid "Select a content"
+msgstr "Selecciona un contenido"
+
+msgid "Content type"
+msgstr "Tipo de contenido"
+
+msgid "Examples"
+msgstr "Ejemplos"
+
+msgid "to"
+msgstr "hasta"
+
+msgid "Servers"
+msgstr "Servidores"
+
+msgid "Synchronization"
+msgstr "Sincronización"
+
+msgid "Sync elements newer than"
+msgstr "Sincronizar elementos más actuales que"
+
+msgid "Less time means faster synchronizations"
+msgstr "Menos tiempo significa sincronizaciones más rápidas"
+
+msgid "None"
+msgstr "Ninguno"
+
+msgid "Keep original URL"
+msgstr "Mantener URL original"
+
+msgid "Redirect to"
+msgstr "Redirigir a"
+
+msgid "When importing assign an external link to the elements"
+msgstr "Al importar asignar un enlace externo a los elementos"
+
+msgid "When importing elements this will be the signature"
+msgstr "Al importar elementos esta será la firma"
+
+msgid "Automatic import"
+msgstr "Importación automática"
+
+msgid "Import"
+msgstr "Importar"
+
+msgid "as"
+msgstr "como"
+
+msgid "Select a type"
+msgstr "Selecciona un tipo"
+
+msgid "Default author"
+msgstr "Autor por defecto"
+
+msgid "Author mapping"
+msgstr "Mapeo de autores"
+
+msgid "Author name from source"
+msgstr "Nombre del autor en origen"
+
+msgid "Default category"
+msgstr "Categoría por defecto"
+
+msgid "Category mapping"
+msgstr "Mapeo de categorias"
+
+msgid "Category name from source"
+msgstr "Nombre de la categoría en origen"
+
+msgid "Filter"
+msgstr "Filtro"
+
+msgid "filters"
+msgstr "Filtros"
+
+msgid "To be automatically imported, contents have to"
+msgstr "Para ser importados automáticamente, los contenidos tienen que"
+
+msgid ""
+"Include all words in a list in the title, the body and/or the list of tags"
+msgstr ""
+"Incluir todas las palabras de una lista en el título, el cuerpo y/o la lista "
+"de etiquetas"
+
+msgid "Match one or more lists of words"
+msgstr "Coincidir una o más listas de palabras"
+
+msgid "or"
+msgstr "o"
+
+msgid "Comma-separated list of words"
+msgstr "Lista de palabras separadas por comas"
+
+msgid "Source name"
+msgstr "Nome del origen"
+
+msgid "External agency"
+msgstr "Agencia externa"
+
+msgid "Opennemas News Agency"
+msgstr "Agencia de noticias Opennemas"
+
+msgid "Url"
+msgstr "Url"
+
+msgid "Connect"
+msgstr "Conectar"
+
+msgid "Synchronized"
+msgstr "Sincronizado"
+
+msgid "Automatic"
+msgstr "Automática"
+
+msgid "Synchronize"
+msgstr "Sincronizar"
+
+msgid "Delete contents"
+msgstr "Eliminar contenidos"
+
+msgid "Priority"
+msgstr "Prioridad"
+
+msgid "Related contents"
+msgstr "Contenidos relacionados"
+
+msgid "Body"
+msgstr "Cuerpo"
+
+msgid "Image preview"
+msgstr "Previsualización de imagen"
+
+msgid "Imported"
+msgstr "Importado"
+
+msgid "Do you want to import the item?"
+msgstr "¿Quieres importar el elemento?"
+
+msgid "Do you want to import the selected items?"
+msgstr "¿Quieres importar los elementos seleccionados?"
+
+msgid "by"
+msgstr "por"
+
+msgid "in"
+msgstr "en"
+
+msgid "Yes, import and publish"
+msgstr "Si, importar y publicar"
+
+msgid "Yes, import and edit"
+msgstr "Si, importar y editar"
+
+msgid "Server"
+msgstr "Servidor"
+
+msgid "View"
+msgstr "Vistas"
+
+msgid "No tags"
+msgstr "Sin etiquetas"
+
+msgid "Unable to find setting for subscribers."
+msgstr "No se han encontrado propiedades para los suscriptores."
+
+msgid "Extra fields"
+msgstr "Campos adicionales"
+
+msgid ""
+"This fields will be asked during registration and can be edited in the "
+"control panel."
+msgstr ""
+"Estos campos serán solicitados durante el registro y pueden editarse en el "
+"panel de control."
+
+msgid "Required"
+msgstr "Obligatorio"
+
+msgid "Internal name"
+msgstr "Nombre interno"
+
+msgid "Options"
+msgstr "Opciones"
+
+msgid "Comma separated list of keys and value (key1:value1, key2:value2,...)"
+msgstr ""
+"Lista de claves y valores separadas por comas (clave1:valor1, clave2:"
+"valor2,...)"
+
+msgid "Do you want to convert the <strong>%1</strong> to <strong>%2</strong>?"
+msgstr "¿Quieres convertir el <strong>%1</strong> a <strong>%2</strong>?"
+
+msgid ""
+"This means the item will not be a %1 anymore. It will only appear in the "
+"list of users and the subscriptions will be removed too."
+msgstr ""
+"Esto significa que el elemento dejará de ser %1. Sólo aparecerá en el "
+"listado de usuarios y se le eliminarán las suscripciones asociadas."
+
+msgid ""
+"This means the item will not be a  anymore. It will only appear in the list "
+"of subscribers and the user groups will be removed too."
+msgstr ""
+"Esto significa que el elemento dejará de ser %2. Sólo aparecerá en el "
+"listado de suscriptores y se le eliminarán los grupos de usuarios asociadas."
+
+msgid ""
+"This means the item will be a subscriber and a user in the system. It will "
+"appear in the list of users and the list of subscribers."
+msgstr ""
+"Esto significa que el elemento será un suscriptor y un usuario del sistema. "
+"Aparecerá en los listados de usuarios y suscriptores."
+
+msgid "You will be able to convert the item again in the future."
+msgstr "Podrá convertir el elemento de nuevo en el futuro."
+
+msgid "There are no <a href=\"%1\">subscriptions</a>"
+msgstr "No hay <a href=\"%1\">suscripciones</a> disponibles"
+
+msgid "Subscribed"
+msgstr "Suscrito"
+
+msgid "The subscriber has requested this subscription"
+msgstr "El suscriptor ha solicitado esta suscripción"
+
+msgid "Reject"
+msgstr "Rechazar"
+
+msgid "Additional data"
+msgstr "Datos adicionales"
+
+msgid "Config users module"
+msgstr "Configurar el módulo usuarios"
+
+msgid "Requests only"
+msgstr "Solo solicitudes"
+
+msgid "Subscription requested"
+msgstr "Suscripción solicitada"
+
+msgid "Subscription disabled"
+msgstr "Suscripción desactivada"
+
+msgid "Default settings"
+msgstr "Configuraciones por omisión"
 
 msgid "Disallow comments on site"
 msgstr "Deshabilitar los comentarios en el sitio"
@@ -3388,9 +3077,6 @@ msgstr ""
 "Cuando se recibe un comentario y no pasa las comprobaciones de lista negra, "
 "entonces rechazarlo sin intervención."
 
-msgid "Words and rules prohibited"
-msgstr "Reglas de palabras prohibidas"
-
 msgid ""
 "List of words or regular expressions that are prohibited on comments, one "
 "per line."
@@ -3449,9 +3135,6 @@ msgstr ""
 "Puede obtener sus llaves de aplicación de Disqus desde <a href=\"http://"
 "disqus.com/api/applications/\" target=\"_blank\">aqui</a>"
 
-msgid "Config comments module"
-msgstr "Configurar módulo de comentarios"
-
 msgid "Config facebook module"
 msgstr "Configuración módulo «Facebook»"
 
@@ -3496,6 +3179,15 @@ msgstr ""
 msgid "Disqus not configured"
 msgstr "Disqus no está configurado"
 
+msgid "Do you want to delete the item?"
+msgstr "¿Quieres eliminar el elemento?"
+
+msgid "Do you want to delete the selected items?"
+msgstr "¿Quieres eliminar los elementos seleccionados?"
+
+msgid "This action can not be undone"
+msgstr "Esta acción no se puede deshacer"
+
 msgid "Change comment manager to <span class=\"text-primary\">%1</span>"
 msgstr ""
 "Cambiar el gestor de comentarios a <span class=\"text-primary\">%1</span>"
@@ -3503,144 +3195,86 @@ msgstr ""
 msgid "Are you sure you want to change your comment system handler?"
 msgstr "¿Estás seguro de que quieres cambiar tu gestor de comentarios?"
 
-msgid "Inner"
-msgstr "Interior"
+msgid "Nickname"
+msgstr "Alias"
 
-msgid "Votes"
-msgstr "Votos"
+msgid "Submitted on"
+msgstr "Enviado el"
 
-msgid "Open"
-msgstr "Abierta"
+msgid "Sender IP"
+msgstr "IP del emisor"
 
-msgid "Closed"
-msgstr "Cerrada"
+msgid "Commented on"
+msgstr "Comentado en"
 
-msgid "Answers"
-msgstr "Respuestas"
+msgid "Config comments module"
+msgstr "Configurar módulo de comentarios"
 
-msgid "No votes"
-msgstr "Sin votos"
+msgid "Avatar"
+msgstr "Avatar"
 
-msgid "New poll"
-msgstr "Nueva encuesta"
+msgid "Author:"
+msgstr "Autor:"
 
-msgid "Newsstand"
-msgstr "Portadas de papel"
+msgid "Submitted on:"
+msgstr "Enviado el:"
 
-msgid "Generating thumbnail"
-msgstr "Generando miniatura"
-
-msgid "No file selected"
-msgstr "Fichero no seleccionado"
-
-msgid "Covers"
-msgstr "Portadas"
-
-msgid "Order newsstand frontpage by"
-msgstr "Ordenar portada de Kiosko según"
-
-msgid "Select if order newsstand's frontpage by dates or by section."
-msgstr ""
-"Elige si quieres ordenar la portada de kiosko por fechas o por secciones"
-
-msgid "Grouped by date is recommended for weekly newspapers."
-msgstr "Agrupado por fechas es recomendable a periódicos semanales."
-
-msgid "Sections"
-msgstr "Secciones"
-
-msgid "Dates"
-msgstr "Fechas"
-
-msgid "Grouped by date"
-msgstr "Agrupado por fecha"
-
-msgid "Delete kiosko"
-msgstr "Eliminar kiosko"
-
-msgid "Are you sure that do you want to delete the selected cover?"
-msgstr "¿Está seguro de que quiere eliminar las portadas seleccionadas?"
-
-msgid "Delete newsstands"
-msgstr "Eliminar portadas"
-
-msgid "Please, remember save positions after finish."
-msgstr "Por favor, recuerda guardar posiciones antes de terminar."
-
-msgid "Couldn't load this tab. We'll try to fix this as soon as possible."
-msgstr ""
-"No se pudo cargar esta pestaña. Intentaremos solucionarlo cuanto antes."
-
-msgid ""
-"You have reached the maximum number of elements (%number%). To add new "
-"contents remove the older."
-msgstr ""
-"Has alcanzado el número máximo de elementos en la portada (%number%). Para "
-"añadir nuevos contenidos elimina los mas antiguos."
-
-msgid "Views"
-msgstr "Vistas"
-
-msgid "Available from"
-msgstr "Disponible desde"
-
-msgid "Last editor"
-msgstr "Último editor"
-
-msgid "Frontpages"
-msgstr "Portadas"
-
-msgid "LIVE"
-msgstr "ACTUAL"
-
-msgid "Save this version"
-msgstr "Guardar esta versión"
-
-msgid "Live now"
-msgstr "Publicar ahora"
-
-msgid "Clear selection"
-msgstr "Limpiar selección"
-
-msgid "Go live on"
-msgstr "Publicar en"
-
-msgid "Add contents"
-msgstr "Añadir contenidos"
-
-msgid ""
-"The frontpage manager is currently <strong>unavaible for your screen size</"
-"strong>"
-msgstr ""
-"El gestor de portadas no está <strong>disponible para tu tamaño de pantalla</"
-"strong> actualmente"
-
-msgid "Available contents"
-msgstr "Contenidos disponibles"
-
-msgid "Suggested"
-msgstr "Sugeridos"
-
-msgid "Others in category"
-msgstr "Otros en la categoría"
-
-msgid "Latest articles"
-msgstr "Últimos artículos"
-
-msgid "Change the layout of this frontpage"
-msgstr "Cambiar la disposición para esta portada"
-
-msgid "Active"
-msgstr "Activo"
-
-msgid "Close"
-msgstr "Cerrar"
+msgid "In response to"
+msgstr "En respuesta a"
 
 msgid "Are you sure you want to publish this frontpage now?"
 msgstr "¿Estás seguro de que quieres publicar esta portada ahora?"
 
 msgid "Cancel"
 msgstr "Cancelar"
+
+msgid "This front page will be published in less than 1 hour. Are you sure?"
+msgstr "Esta portada se publicará en menos de 1 hora. Estás seguro?"
+
+msgid "Change the publish date"
+msgstr "Cambiar la fecha de publicación"
+
+msgid "Send to trash"
+msgstr "Enviar a la papelera"
+
+msgid "Are you sure that do you want to send to trash the next element?"
+msgstr ""
+"¿Estás seguro de que quieres enviar a la papelera el siguiente elemento?"
+
+msgid "Keep"
+msgstr "Mantener"
+
+msgid "Are you sure you want to remove this frontpage?"
+msgstr "¿Estás seguro de que quieres eliminar esta portada?"
+
+msgid "Archive this element"
+msgstr "Archivar este elemento"
+
+msgid "Are you sure that do you want to archive the next element?"
+msgstr "¿Estás seguro de que quieres archivar los siguientes elementos?"
+
+msgid ""
+"This will remove this content from <strong>ALL FRONTPAGES</strong> but it "
+"will remain available for read."
+msgstr ""
+"Esto quitará este contenido de <strong>TODAS LAS PORTADAS</strong> pero "
+"estará disponible para su lectura."
+
+msgid "Arquive"
+msgstr "Archivar"
+
+msgid "New version"
+msgstr "Nueva versión"
+
+msgid ""
+"There is a new version for this frontpage, if you try to save the current "
+"changes the new version will be overwritten."
+msgstr ""
+"Hay unha nueva versión para esta portada, si intentas guardar tus cambios la "
+"nueva versión se sobrescribirá."
+
+msgid "Reload frontpage"
+msgstr "Recargar portada"
 
 msgid "Customize font and color style"
 msgstr "Personalizar tipo de letra y color"
@@ -3650,9 +3284,6 @@ msgstr "Disposición de imagen para portada"
 
 msgid "Background Color"
 msgstr "Color de fondo"
-
-msgid "Reset"
-msgstr "Restablecer"
 
 msgid "Title font color"
 msgstr "Color de la tipografía del título"
@@ -3705,143 +3336,678 @@ msgstr "Imagen de la izquierda"
 msgid "Default"
 msgstr "Por defecto"
 
-msgid "Are you sure that do you want to send to trash the next element?"
+msgid "Please, remember save positions after finish."
+msgstr "Por favor, recuerda guardar posiciones antes de terminar."
+
+msgid "Couldn't load this tab. We'll try to fix this as soon as possible."
 msgstr ""
-"¿Estás seguro de que quieres enviar a la papelera el siguiente elemento?"
-
-msgid "Keep"
-msgstr "Mantener"
-
-msgid "Are you sure you want to remove this frontpage?"
-msgstr "¿Estás seguro de que quieres eliminar esta portada?"
-
-msgid "This front page will be published in less than 1 hour. Are you sure?"
-msgstr "Esta portada se publicará en menos de 1 hora. Estás seguro?"
-
-msgid "Change the publish date"
-msgstr "Cambiar la fecha de publicación"
-
-msgid "New version"
-msgstr "Nueva versión"
+"No se pudo cargar esta pestaña. Intentaremos solucionarlo cuanto antes."
 
 msgid ""
-"There is a new version for this frontpage, if you try to save the current "
-"changes the new version will be overwritten."
+"You have reached the maximum number of elements (%number%). To add new "
+"contents remove the older."
 msgstr ""
-"Hay unha nueva versión para esta portada, si intentas guardar tus cambios la "
-"nueva versión se sobrescribirá."
+"Has alcanzado el número máximo de elementos en la portada (%number%). Para "
+"añadir nuevos contenidos elimina los mas antiguos."
 
-msgid "Reload frontpage"
-msgstr "Recargar portada"
+msgid "Views"
+msgstr "Vistas"
 
-msgid "Archive this element"
-msgstr "Archivar este elemento"
+msgid "Available from"
+msgstr "Disponible desde"
 
-msgid "Are you sure that do you want to archive the next element?"
-msgstr "¿Estás seguro de que quieres archivar los siguientes elementos?"
+msgid "Last editor"
+msgstr "Último editor"
+
+msgid "Frontpages"
+msgstr "Portadas"
+
+msgid "LIVE"
+msgstr "ACTUAL"
+
+msgid "Save this version"
+msgstr "Guardar esta versión"
+
+msgid "Live now"
+msgstr "Publicar ahora"
+
+msgid "Remove from this frontpage"
+msgstr "Eliminar de esta portada"
+
+msgid "Go live on"
+msgstr "Publicar en"
+
+msgid "Add contents"
+msgstr "Añadir contenidos"
 
 msgid ""
-"This will remove this content from <strong>ALL FRONTPAGES</strong> but it "
-"will remain available for read."
+"The frontpage manager is currently <strong>unavaible for your screen size</"
+"strong>"
 msgstr ""
-"Esto quitará este contenido de <strong>TODAS LAS PORTADAS</strong> pero "
-"estará disponible para su lectura."
+"El gestor de portadas no está <strong>disponible para tu tamaño de pantalla</"
+"strong> actualmente"
 
-msgid "Subscription requested"
-msgstr "Suscripción solicitada"
+msgid "Available contents"
+msgstr "Contenidos disponibles"
 
-msgid "Subscription disabled"
-msgstr "Suscripción desactivada"
+msgid "Suggested"
+msgstr "Sugeridos"
 
-msgid "There are no <a href=\"%1\">subscriptions</a>"
+msgid "Others in category"
+msgstr "Otros en la categoría"
+
+msgid "Latest articles"
+msgstr "Últimos artículos"
+
+msgid "Change the layout of this frontpage"
+msgstr "Cambiar la disposición para esta portada"
+
+msgid "Active"
+msgstr "Activo"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "Domain Mapping"
+msgstr "Redirección de dominio"
+
+msgid "Billing information"
+msgstr "Información de facturación"
+
+msgid "Check"
+msgstr "Comprobar"
+
+msgid "Finish"
+msgstr "Terminar"
+
+msgid "Enter a domain"
+msgstr "Escribe un dominio"
+
+msgid "year"
+msgstr "año"
+
+msgid "Requested domains"
+msgstr "Dominios solicitados"
+
+msgid "The selected items are free"
+msgstr "Los elementos seleccionados son gratuítos"
+
+msgid "Please, continue to the next step"
+msgstr "Por favor, continua al siguiente paso"
+
+msgid "Select the payment method."
+msgstr "Seleccionar un método de pago."
+
+msgid "You'll have a chance to review your order before it's placed."
+msgstr "Poderás revisar tu compra antes de finalizarla."
+
+msgid "Any problem with payment?"
+msgstr "¿Tienes un problema con el pago?"
+
+msgid "Click here for a quick tips."
+msgstr "Pulsa aquí para ver algunos consejos."
+
+msgid "Purchase summary"
+msgstr "Resumen de la compra"
+
+msgid "I have read and accept the Terms of creating a new domain"
+msgstr "Leí y acepto los Terminos de creación de un nuevo dominio"
+
+msgid "I have read and accept the Terms of redirection"
+msgstr "Leí y acepto los Términos de redirección"
+
+msgid "Confirm"
+msgstr "Confirmar"
+
+msgid "Thank you for your purchase!"
+msgstr "Gracias por tu compra"
+
+msgid ""
+"Check your email, we have sent you an email with the invoice and purchase "
+"details."
+msgstr ""
+"Comprueba tu correo electrónico, acabamos de enviarte un correo con la "
+"factura y los detalles de compra."
+
+msgid ""
+"Oh!, it would be a good time to share with your friends your newspaper's "
+"improvements"
+msgstr ""
+"Oh!, sería genial que compartieras con tus amigos las mejoras en tu periódico"
+
+msgid "Have a wonderful day!"
+msgstr "¡Que tengas un buen día!"
+
+msgid "Something unexpected has happened!"
+msgstr "¡Ha pasado algo inesperado!"
+
+msgid "There were some errors while trying to purchase."
+msgstr "Se ha producido un error durante o proceso de compra."
+
+msgid ""
+"To prevent non-desired charges in your account, please, do not retry the "
+"checkout process and contact our <a href=\"javascript:UserVoice."
+"showPopupWidget();\">support team</a>."
+msgstr ""
+"Para evitar cargos indeseados en tu cuenta, por favor, no reintentes el "
+"proceso de compra y contacta con nuestro <a href=\"javascript:UserVoice."
+"showPopupWidget();\">equipo de soporte</a>."
+
+msgid "How can I change 'opennemas.com' domain on my newspaper?"
+msgstr "Como puedo cambiar el dominio «opennemas.com» en mi periódico?"
+
+msgid "Redirect your own domain"
+msgstr "Redirige tu dominio"
+
+msgid ""
+"You have <strong><a href=\"https://en.wikipedia.org/wiki/HTTPS\" class="
+"\"text-white\" title=\"What is SSL encryption?\" target=\"_blank\">SSL "
+"encription enabled</a></strong> for your main domain."
+msgstr ""
+"Tu dominio principal tiene el <strong><a href=\"https://en.wikipedia.org/"
+"wiki/HTTPS\" class=\"text-white\" title=\"What is SSL encryption?\" target="
+"\"_blank\">cifrado SSL activado</a></strong>."
+
+msgid "Congrats, your newspaper is secure!"
+msgstr "¡Enhorabuena, tu periódico es seguro!"
+
+msgid "Your domains"
+msgstr "Tus dominios"
+
+msgid "Main"
+msgstr "Principal"
+
+msgid "Free"
+msgstr "Gratis"
+
+msgid "Points to"
+msgstr "Apunta a"
+
+msgid "Your domain is properly configured"
+msgstr "Tu dominio está configurado correctamente"
+
+msgid "Your domain is not properly configured, check the instructions below."
+msgstr ""
+"Tu dominio no está configurado correctamente, comprueba las instrucciones "
+"debajo."
+
+msgid "Expires"
+msgstr "Expira"
+
+msgid "This is your opennemas address"
+msgstr "Esta es tu dirección opennemas"
+
+msgid "Update your DNS records"
+msgstr "Actualiza tus registros de DNS"
+
+msgid "Point the www entrace in your domain to the Opennemas service."
+msgstr "Apunta la entrada www de tu dominio al servicio Opennemas."
+
+msgid "Redirect traffic from %1 to  www.%2"
+msgstr "Redirigir tráfico desde %1 a www.%2"
+
+msgid ""
+"Web Traffic -> domain.com -> redirect -> www.domain.com (this should be done "
+"by the hosting provider for your domain)"
+msgstr ""
+"Tráfico web -> dominio.com -> redirect -> www.dominio.com (esto debería "
+"hacerlo el proveedor de hosting de tu dominio)"
+
+msgid "NOTE"
+msgstr "NOTA"
+
+msgid "This change is NOT done in the DNS section"
+msgstr "Este cambio NO se realiza en la sección DNS"
+
+msgid "If you need more help configuring your domains contact our support team"
+msgstr ""
+"Si necesitas más información para configurar tus dominios contacta con "
+"nuestro equipo de soporte"
+
+msgid "Edit '%1'"
+msgstr "Editar '%1'"
+
+msgid "Customize in frontpage"
+msgstr "Personalizar en portada"
+
+msgid "Customize content"
+msgstr "Personalizar contenido"
+
+msgid "Remove from all frontpages"
+msgstr "Quitar de todas las portadas"
+
+msgid "Start date"
+msgstr "Fecha de inicio"
+
+msgid "Start hour"
+msgstr "Hora de inicio"
+
+msgid "End date"
+msgstr "Fecha de fin"
+
+msgid "End hour"
+msgstr "Hora de fin"
+
+msgid "Place"
+msgstr "Lugar"
+
+msgid "Website URL"
+msgstr "URL del sitio web"
+
+msgid "Search by tag"
+msgstr "Buscar por etiqueta"
+
+msgid "Start"
+msgstr "Inicio"
+
+msgid "End"
+msgstr "Fin"
+
+msgid "month"
+msgstr "mes"
+
+msgid "item"
+msgstr "elemento"
+
+msgid "More info"
+msgstr "Más información"
+
+msgid "Add to cart"
+msgstr "Añadir al carro"
+
+msgid "Added to cart"
+msgstr "En el carrito"
+
+msgid "Purchased"
+msgstr "Comprado"
+
+msgid "Purchased items"
+msgstr "Elementos comprados"
+
+msgid "Company"
+msgstr "Empresa"
+
+msgid "VAT number"
+msgstr "Número de identificación fiscal"
+
+msgid "Phone"
+msgstr "Teléfono"
+
+msgid "Thank you for choosing Opennemas!"
+msgstr "Gracias por elegir Opennemas"
+
+msgid "You have just purchased the following items:"
+msgstr "Acabas de comprar los siguientes productos:"
+
+msgid "You can find your invoice <a href=\"%1\">here</a>"
+msgstr "Puedes encontrar tu factura <a href=\"%1\">aquí</a>"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Screenshots and videos"
+msgstr "Imagenes y vídeos"
+
+msgid "Last updated"
+msgstr "Última actualización"
+
+msgid "First payment"
+msgstr "Primer pago"
+
+msgid ""
+"When you want to pay you can use your paypal account or your credit card."
+msgstr "Cuando quieras usar tu cuenta de Paypal o tu tarjeta de crédito."
+
+msgid "Pay with Paypal"
+msgstr "Pagar con Paypal"
+
+msgid "To pay with your paypal account click on the Paypal button."
+msgstr "Para pagar con tu cuenta de Paypal pulsa en el botón Paypal."
+
+msgid ""
+"A popup window will be opened in order to log in with your paypal account."
+msgstr ""
+"Se abrirá una ventana emergente que te permitirá iniciar sesión con tu "
+"cuenta de Paypal."
+
+msgid ""
+"After logging in with your paypal account the popup window will "
+"automatically close and your account will appear as your selected payment "
+"method."
+msgstr ""
+"Despues de iniciar sesión la ventana de cuenta de Paypal se cerrará "
+"automáticamente y tu cuenta aparecerá como el método de pago seleccionado."
+
+msgid "Click 'Next' button to continue with your purchase."
+msgstr "Pulsa el botón \"Siguiente\" y continúa con la compra."
+
+msgid "Pay with Credit Card"
+msgstr "Pagar con tarjeta de crédito"
+
+msgid ""
+"To pay with your credit card fill the form with your credit card information."
+msgstr ""
+"Para pagar con tu tarjeta de crédito completa la información de la tarjeta "
+"de crédito."
+
+msgid ""
+"While typing your credit card information will be automatically validated."
+msgstr ""
+"Al escribir la información de tarjeta de crédito se validará automáticamente."
+
+msgid ""
+"If one or more fields are incorrect you will not be able to continue with "
+"the purchase."
+msgstr ""
+"Se uno o más campos son incorrectos no poderás continuar con el proceso de "
+"compra."
+
+msgid ""
+"Click 'Next' button to select the credit card as your payment method and "
+"continue with the purchase."
+msgstr ""
+"Pulsa el botón \"Siguiente\" para seleccionar una tarjeta de crédito como "
+"método de pago y continúa con la compra."
+
+msgid "Not your first payment"
+msgstr "Si no es tu primer pago"
+
+msgid ""
+"If this is not your first purchase, the last used payment method will be "
+"automatically selected."
+msgstr ""
+"Si no es tu primer compra, el último método de pago se seleccionará "
+"automaticamente."
+
+msgid "You can change your payment method following the steps below."
+msgstr "Puedes cambiar tu método de pago siguiente los pasos debajo."
+
+msgid ""
+"If you want to delete a payment method, please <a href=\"mailto:"
+"sales@openhost.es\">contact us</a>."
+msgstr ""
+"Si necesitas eliminar un método de pago, por favor <a href=\"mailto:"
+"sales@openhost.es\">contactanos</a>."
+
+msgid "Change your payment method"
+msgstr "Cambiar tu método de pago"
+
+msgid "Click on 'Change payment method'."
+msgstr "Pulsa en «Change payment method»."
+
+msgid "A list with all payment method used will appear."
+msgstr "Aparecerá una lista de métodos de pago usados."
+
+msgid "Select one of the listed payment methods or add a new payment method."
+msgstr ""
+"Selecciona uno de los métodos de pago mostrados o añade un nuevo método de "
+"pago."
+
+msgid "Your shopping cart is empty"
+msgstr "Tu carrito de compra está vacío"
+
+msgid "Checkout"
+msgstr "Comprar"
+
+msgid "Return to <a href=\"%1\">store</a> and try again"
+msgstr "Volver a la <a href=\"%1\">tienda</a> e intentarlo de nuevo"
+
+msgid ""
+"I have read and accept the <a href=\"http://help.opennemas.com/knowledgebase/"
+"articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
+"\">Terms of Service</a>"
+msgstr ""
+"Leí y acepto los <a href=\"http://help.opennemas.com/knowledgebase/"
+"articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
+"\">Términos del servicio</a>"
+
+msgid "Packs"
+msgstr "Packs"
+
+msgid "Services"
+msgstr "Servicios"
+
+msgid "Partners"
+msgstr "Socios"
+
+msgid "My selection"
+msgstr "Mi selección"
+
+msgid "My selection "
+msgstr "Mi selección"
+
+msgid "No items available to purchase"
+msgstr "No hay elementos disponibles para comprar"
+
+msgid "Unit price"
+msgstr "Precio unitario"
+
+msgid "VAT"
+msgstr "IVA"
+
+msgid "Terms"
+msgstr "Términos"
+
+msgid "Notes"
+msgstr "Notas"
+
+msgid "Remove element from this frontpage"
+msgstr "Eliminar elemento de esta portada"
+
+msgid "Open"
+msgstr "Abierta"
+
+msgid "Closed"
+msgstr "Cerrada"
+
+msgid "Answers"
+msgstr "Respuestas"
+
+msgid "Votes"
+msgstr "Votos"
+
+msgid "No votes"
+msgstr "Sin votos"
+
+msgid "New poll"
+msgstr "Nueva encuesta"
+
+msgid "Inner"
+msgstr "Interior"
+
+msgid "Customize"
+msgstr "Personalizar"
+
+msgid "Settings for frontpage"
+msgstr "Preferencias para la portada"
+
+msgid "Text size for title"
+msgstr "Tamaño del texto para el título"
+
+msgid "Select a size..."
+msgstr "Selecciona un tamaño…"
+
+msgid "Image position"
+msgstr "Posición de la imagen"
+
+msgid "Select a position..."
+msgstr "Selecciona una posición…"
+
+msgid "Settings home frontpage"
+msgstr "Preferencias para la portada principal"
+
+msgid "Title for home frontpage"
+msgstr "Título para la portada principal"
+
+msgid "Subtitle"
+msgstr "Subtítulo"
+
+msgid "Size"
+msgstr "Tamaño"
+
+msgid "Suggested for frontpage"
+msgstr "Sugerir en portada principal"
+
+msgid "There are no enabled <a href=\"%1\">subscriptions</a>"
 msgstr "No hay <a href=\"%1\">suscripciones</a> disponibles"
 
-msgid "Subscribed"
-msgstr "Suscrito"
+msgid ""
+"The content will be fully available only for subscribers in the selected "
+"subscriptions"
+msgstr ""
+"El contenido estará disponible por completo solo para los suscriptores de "
+"las suscripciones seleccionadas"
 
-msgid "The subscriber has requested this subscription"
-msgstr "El suscriptor ha solicitado esta suscripción"
+msgid "Inner title"
+msgstr "Título interior"
 
-msgid "Additional data"
-msgstr "Datos adicionales"
+msgid "Signature"
+msgstr "Firma"
 
-msgid "Unable to find setting for subscribers."
-msgstr "No se han encontrado propiedades para los suscriptores."
+msgid "Newsletter Signature"
+msgstr "Firma del boletín"
 
-msgid "Extra fields"
-msgstr "Campos adicionales"
+msgid "Alternative signature for newsletter"
+msgstr "Firma alternativa para boletín"
+
+msgid "Config article module"
+msgstr "Configuración del módulo «Artículos»"
+
+msgid "Showcase"
+msgstr "Showcase"
+
+msgid "External"
+msgstr "Externo"
+
+msgid "Do you want to delete contents in category?"
+msgstr "¿Quieres eliminar los contenidos en la categoría?"
+
+msgid "Do you want to delete contents in selected categories?"
+msgstr "¿Quieres eliminar los contenidos en las categorías seleccionadas?"
+
+msgid "Do you want to move contents in category?"
+msgstr "¿Quieres mover los cotenidos en la categoría?"
+
+msgid "Do you want to move contents in selected categories?"
+msgstr "¿Quieres mover los contenidos en las categorías seleccionadas?"
+
+msgid "Visible"
+msgstr "Visible"
+
+msgid "If enabled, category will be included in category selectors"
+msgstr ""
+"Si está activado, la categoría se mostrará en los selectores de categoría"
+
+msgid "If enabled, category will be included in RSS feeds"
+msgstr "Si está activado, la categoría se mostrará en los RSS"
+
+msgid "Menu"
+msgstr "Menú"
+
+msgid "Move contents"
+msgstr "Mover contenidos"
+
+msgid "Only empty categories can be deleted"
+msgstr "Solo se pueden eliminar categorías sin contenidos"
+
+msgid "Sign into open<strong>nemas</strong>"
+msgstr "Entrar en open<strong>nemas</strong>"
+
+msgid "Use Facebook, Twitter or your email to sign in."
+msgstr "Usa Facebook, Twitter o tu correo-e para entrar."
+
+msgid "Username or email"
+msgstr "Nombre de usuario o correo-e"
+
+msgid "Forgot Password?"
+msgstr "¿Olvidaste tu contraseña?"
+
+msgid "Log in"
+msgstr "Iniciar sesión"
+
+msgid "About"
+msgstr "Sobre"
+
+msgid "Privacy Policy"
+msgstr "Política de privacidad"
+
+msgid "Legal"
+msgstr "Legal"
+
+msgid "Dear member"
+msgstr "Estimado usuario"
+
+msgid "Per your request, please follow these steps to regain access to"
+msgstr ""
+"Por tu petición, por favor, sigue estos pasos para recuperar el acceso a"
+
+msgid "Click the link below to choose a new password"
+msgstr "Haz clic en el enlace de abajo para seleccionar una nueva contraseña"
 
 msgid ""
-"This fields will be asked during registration and can be edited in the "
-"control panel."
+"If the link is not clickable, you can copy and paste the address into your "
+"Web browser's address window"
 msgstr ""
-"Estos campos serán solicitados durante el registro y pueden editarse en el "
-"panel de control."
-
-msgid "Required"
-msgstr "Obligatorio"
-
-msgid "Internal name"
-msgstr "Nombre interno"
-
-msgid "Country"
-msgstr "País"
-
-msgid "Options"
-msgstr "Opciones"
-
-msgid "Comma separated list of keys and value (key1:value1, key2:value2,...)"
-msgstr ""
-"Lista de claves y valores separadas por comas (clave1:valor1, clave2:"
-"valor2,...)"
-
-msgid "Config users module"
-msgstr "Configurar el módulo usuarios"
-
-msgid "Requests only"
-msgstr "Solo solicitudes"
-
-msgid "Do you want to convert the <strong>%1</strong> to <strong>%2</strong>?"
-msgstr "¿Quieres convertir el <strong>%1</strong> a <strong>%2</strong>?"
+"Si en el enlace no se puede hacer clic, puedes copiar y pegar la dirección "
+"en la barra de dirección de tu navegador Web"
 
 msgid ""
-"This means the item will not be a %1 anymore. It will only appear in the "
-"list of users and the subscriptions will be removed too."
+"Follow the instructions on the screen to choose a new password.  After you "
+"have chosen a password you will automatically enter"
 msgstr ""
-"Esto significa que el elemento dejará de ser %1. Sólo aparecerá en el "
-"listado de usuarios y se le eliminarán las suscripciones asociadas."
+"Sigue las instrucciones de la pantalla para elegir una nueva contraseña. "
+"Después de haber seleccionado una contraseña se entrará automáticamente"
+
+msgid "In the future you can login to"
+msgstr "En el futuro se puede acceder a"
+
+msgid "by entering your e-mail address and this password"
+msgstr "escribiendo tu dirección de correo electrónico y la contraseña"
+
+msgid "If you did not request your ID and password for"
+msgstr "Si no solicitaste tu ID y contraseña para"
 
 msgid ""
-"This means the item will not be a  anymore. It will only appear in the list "
-"of subscribers and the user groups will be removed too."
+"someone has mistakenly entered your e-mail address when requesting their "
+"password"
 msgstr ""
-"Esto significa que el elemento dejará de ser %2. Sólo aparecerá en el "
-"listado de suscriptores y se le eliminarán los grupos de usuarios asociadas."
+"alguien ha escrito por error tu dirección de correo electrónico, al "
+"solicitar la contraseña"
 
 msgid ""
-"This means the item will be a subscriber and a user in the system. It will "
-"appear in the list of users and the list of subscribers."
+"Please ignore this message, or, if you wish, you may go to the address above "
+"to select a new password for your account"
 msgstr ""
-"Esto significa que el elemento será un suscriptor y un usuario del sistema. "
-"Aparecerá en los listados de usuarios y suscriptores."
-
-msgid "You will be able to convert the item again in the future."
-msgstr "Podrá convertir el elemento de nuevo en el futuro."
-
-msgid "Recover <strong>password</strong>"
-msgstr "Recuperar <strong>contraseña</strong>"
+"Por favor ignora este mensaje, o, si lo deseas, puedes ir a la dirección "
+"anterior para seleccionar una nueva contraseña para tu cuenta"
 
 msgid ""
-"Please enter your new password in both fields below, and then click Submit."
+"To protect your privacy, we will only send this information to the e-mail "
+"address on file for this account"
 msgstr ""
-"Escribe tu nueva contraseña en las dos casillas y, a continuación, haz clic "
-"en Enviar."
+"Para proteger tu privacidad, sólo se enviará esta información a la dirección "
+"de correo electrónico registrada para esta cuenta"
 
-msgid "Password confirmation"
-msgstr "Confirmación de contraseña"
+msgid "The item doesn't exists or you don't have permission to see it."
+msgstr "El contenido no existe o no tienes permiso para verlo."
 
-msgid "Submit"
-msgstr "Enviar"
+msgid "Click here to return to the list"
+msgstr "Pincha aquí para volver al listado"
+
+msgid "Value"
+msgstr "Valor"
+
+msgid "New keyword"
+msgstr "Nueva palabra clave"
+
+msgid "External link to "
+msgstr "Enlace externo a"
+
+msgid "Internal search to keyword"
+msgstr "Búsqueda interna a una palabra clave"
+
+msgid "Link to send email to"
+msgstr "Enlace para correo electrónico a"
 
 msgid "Reset <strong>password</strong>"
 msgstr "Reiniciar <strong>contraseña</strong>"
@@ -3863,6 +4029,21 @@ msgstr ""
 "Si utilizas el filtrado de correo electrónico o un software anti-spam, por "
 "favor asegúrate de que nuestro e-mail no se filtra o se bloquea."
 
+msgid "Recover <strong>password</strong>"
+msgstr "Recuperar <strong>contraseña</strong>"
+
+msgid ""
+"Please enter your new password in both fields below, and then click Submit."
+msgstr ""
+"Escribe tu nueva contraseña en las dos casillas y, a continuación, haz clic "
+"en Enviar."
+
+msgid "Password confirmation"
+msgstr "Confirmación de contraseña"
+
+msgid "Submit"
+msgstr "Enviar"
+
 msgid "Enter your e-mail address and click Submit to recover your password."
 msgstr ""
 "Escribe tu dirección de correo-e y haz clic en Enviar para recuperar tu "
@@ -3874,1427 +4055,133 @@ msgstr "ejemplo@ejemplo.es"
 msgid "Go back to login"
 msgstr "Volver al inicio de sesión"
 
-msgid "Send"
-msgstr "Enviar"
-
-msgid "Email subject"
-msgstr "Asunto del email"
-
-msgid "Newsletter sending report"
-msgstr "Informe de envío de boletín"
-
-msgid "<strong>%1 emails</strong> have being sent."
-msgstr "Se han enviado <strong>%1 correos-e</strong>."
-
-msgid "No emails were sent."
-msgstr "No se envió ningún correo-e."
-
-msgid "Please, find below the report."
-msgstr "Debajo puedes encontrar el informe."
-
-msgid "External service"
-msgstr "Servicio externos"
-
-msgid "Subscription list"
-msgstr "Lista de suscripción"
-
-msgid "Email address"
-msgstr "Dirección de correo"
-
-msgid "Go back to the list"
-msgstr "Volver a la lista"
-
-msgid "Select your recipients"
-msgstr "Selecciona tus destinatarios"
+msgid ""
+"Now you will be able to publish your own news, articles and take part of the "
+"information around everyone."
+msgstr ""
+"Ahora podrás publicar tus propias noticias, artículos y formar parte de la "
+"información de tu entorno."
 
 msgid ""
-"External email address configured on the <a href=\"%1\">newsletter "
-"configuration section</a> "
+"Before starting to work on it you have to perform some tasks, sush as setup "
+"your social networks and get some information about how to use Opennemas"
 msgstr ""
-"La dirección de correo electrónico externa se configura desde la <a href="
-"\"%1\"> sección de configuración de boletines</a> "
-
-msgid "Add to list"
-msgstr "Añadir a la lista"
-
-msgid "Subscription lists"
-msgstr "Listas de suscripción"
+"Antes de comenzar a trabajar en él debes llevar a cabo unas tareas, como por "
+"ejemplo configurar tus redes sociales y obtener alguna ayuda sobre como usar "
+"Opennemas"
 
 msgid ""
-"Subscription lists available from <a href=\"%1\">subscriptions module</a> "
-msgstr ""
-"Las listas de subscripción están disponibles desde el <a href=\"%1\">el "
-"módulo de subscripciones</a> "
+"In order to use Opennemas you must accept the Legal notice & Terms of use"
+msgstr "Para usar Opennemas debes aceptar el Aviso legal y Condiciones de uso"
 
-msgid "%1 subscribers"
-msgstr "%1 suscriptores"
+msgid "Accept the Legal notice & Terms of use"
+msgstr "Aceptar el Aviso legal y Condiciones de uso"
 
-msgid "Act-On marketing lists"
-msgstr "Listas de marketing de Act-On"
-
-msgid "Add recipients manually"
-msgstr "Añadir destinatarios manualmente"
-
-msgid "Write a list of email address writing one per line"
-msgstr ""
-"Escriba una lista de direcciones de correo escribiendo cada una en una linea"
-
-msgid "Parse list & add"
-msgstr "Analizar lista y añadir"
-
-msgid "Receivers"
-msgstr "Destinatarios"
-
-msgid "Remove selected"
-msgstr "Eliminar los seleccionados"
-
-msgid "No recipients selected"
-msgstr "No se seleccionó ningún destinatario"
-
-msgid "Subject"
-msgstr "Asunto"
-
-msgid "Empty"
-msgstr "Vaciar"
-
-msgid "Click on \"Add\" or drop contents from other containers"
-msgstr ""
-"Clique en el botón «Añadir contenidos» de arriba o arrastra contenidos de "
-"otros contenedores"
-
-msgid "Pick contents"
-msgstr "Seleccionar contenidos"
-
-msgid "Pick recipients"
-msgstr "Seleccionar destinatarios"
-
-msgid "Unable to find setting for newsletters."
-msgstr "No se han encontrado las configuraciones de boletines."
-
-msgid "Newsletter handler"
-msgstr "Gestor de boletines"
+msgid "Do you need some help?"
+msgstr "¿Necesitas ayuda?"
 
 msgid ""
-"Opennemas allows you to use different methods to send your newsletters. "
-"Choose between those available below:"
+"You can read and learn how to use your Opennemas by using our online "
+"documentation and videos.\n"
+"          Take a look around and you will find it."
 msgstr ""
-"Opennemas le permite seleccionar distintos métodos de envío de sus "
-"boletines. Selecciona entre los disponibles debajo:"
-
-msgid "Maillist"
-msgstr "Lista de correo"
-
-msgid "Internal Send"
-msgstr "Envio interno"
-
-msgid "Act-On lists"
-msgstr "Listas de Act-On"
-
-msgid "Mailing list address"
-msgstr "Dirección de la lista de correo electrónico"
+"Puedes leer y aprender como usar Opennemas usando nuestra documentación y "
+"vídeos en línea.\n"
+"Echa un vistazo y los encontrarás."
 
 msgid ""
-"If you have a mailing list service to deliver newsletters add the address "
-"here"
+"Our <a href=\"http://help.opennemas.com/\" target=\"_blank\">knownledge "
+"base</a> has manuals and howtos about how to create contents and improve "
+"your newspaper."
 msgstr ""
-"Si tienes un servicio de lista de correo para entrega de boletines agrega la "
-"dirección aquí"
-
-msgid "Mail address to receive new subscriptions"
-msgstr "Dirección de correo para recibir nuevas suscripciones"
+"Nuestra <a href=\"http://help.opennemas.com/\" target=\"_blank\">base de "
+"conocimientos</a> cuenta con manuales y guías sobre como crear contenidos y "
+"mejoras en tu periódico."
 
 msgid ""
-"You've choosen to use the <a href=\"%1\" target=\"_blank\">internal "
-"subscription list</a> to send your newsletters."
+"See our <a href=\"http://www.youtube.com/user/OpennemasPublishing\" target="
+"\"_blank\">video tutorials</a> for getting step-by-step guidance."
 msgstr ""
-"Seleccionó usar las <a href=\"%1\" target=\"_blank\">listas de suscripción "
-"internas</a> para enviar sus boletines."
-
-msgid "List name"
-msgstr "Nombre de la lista"
-
-msgid "List id"
-msgstr "ID de la lista"
-
-msgid "Add new marketing list"
-msgstr "Añadir nueva lista de marketing"
-
-msgid "Form static page url"
-msgstr "URL de la página estática del formulario"
+"Echa un vistazo a nuestros <a href=\"http://www.youtube.com/user/"
+"OpennemasPublishing\" target=\"_blank\">tutoriales en vídeo</a> para obtener "
+"guías paso a paso."
 
 msgid ""
-"The URL to the page that contains the form that allows users to subscribe to "
-"ActOn"
+"If you need further information you can always contact us by using the <span "
+"class=\"fa fa-support\"></span> Help button in the upper right corner."
 msgstr ""
-"La URL a la página que contiene el formulario que permite a los usuarios "
-"subscribirse mediante ActOn"
+"Si necesitas más información siempre siempre puedes contactar con nosotros "
+"usando el botón de Ayuda <span class=\"fa fa-support fa-2x\"></span> de la "
+"esquina superior derecha."
 
-msgid "Act-On header id"
-msgstr "ID de la cabecera de Act-On"
+msgid "Opennemas Store"
+msgstr "Tienda de Opennemas"
 
-msgid "ActOn allow to specify a custom header text. This is the id."
+msgid "Find and try new add-ons and take your newspaper to the next level."
 msgstr ""
-"ActOn le permite especificar un texto de cabecera personalizado. Este es el "
-"identificador"
-
-msgid "Act-On footer id"
-msgstr "ID del pie de Act-On"
-
-msgid "ActOn allow to specify a custom footer text. This is the id."
-msgstr ""
-"ActOn le permite especificar un texto de pie personalizado. Este es el "
-"identificador"
-
-msgid "Newsletter contents"
-msgstr "Contenidos del boletín"
-
-msgid "Newsletter subject"
-msgstr "Asunto del boletín"
-
-msgid "The subject of the emails in this newsletter"
-msgstr "El asunto de los correos en este boletín"
-
-msgid "Your newsletter subject"
-msgstr "El asunto del boletín"
-
-msgid "Email from"
-msgstr "Remitente"
-
-msgid "Email sender"
-msgstr "Emisor del correo"
-
-msgid "Config newsletter module"
-msgstr "Configuración del módulo «Boletín de noticias»"
-
-msgid "Create template"
-msgstr "Crear planificación"
-
-msgid "Sendings"
-msgstr "Envios"
-
-msgid "Unable to find any item that matches your search."
-msgstr "No se han encontrado elementos que coincidan con tu búsqueda."
+"Busca y encuentra nuevos añadidos para llevar tu periódico al siguiente "
+"nivel."
 
 msgid ""
-"Maybe changing any filter could help or add one using the \"Create\" button "
-"above."
+"Do you need more? Check our packs and power your newspaper with extra "
+"features to make it the best."
 msgstr ""
-"Puede que cambiando los filtros ayude o tambien puede usar el botón «Crear» "
-"de arriba."
-
-msgid "Sent"
-msgstr "Enviado"
-
-msgid "Created:"
-msgstr "Creado:"
-
-msgid "Updated:"
-msgstr "Actualizado:"
-
-msgid "Not sent"
-msgstr "No enviado"
-
-msgid "%1 sent items"
-msgstr "%1 elementos enviados"
-
-msgid "Schedules"
-msgstr "Planificaciones"
-
-msgid "Not set"
-msgstr "No establecido"
-
-msgid "Some content is required"
-msgstr "Se requiere algún contenido"
-
-msgid "Template"
-msgstr "Plantilla"
-
-msgid "Add the headline of the first content at the end of the subject"
-msgstr "Añadir el titular del primer contenido al final del asunto"
+"Necesias más? Comprueba nuestros packs y mejora tu periódico con "
+"funcionalidades adicionales para hacerlo el mejor."
 
 msgid ""
-"If this is checked, the headline of the first content will be append at the "
-"end of the subject, separated by a blank space"
+"We offer a huge list of add-ons to improve your experience. Check our store "
+"and pay only for what you really want."
 msgstr ""
-"Si está marcado, el titular del primer contenido será añadido al final del "
-"asunto, separado por un espacio en blanco"
-
-msgid "Days"
-msgstr "Días"
-
-msgid "Hours"
-msgstr "Horas"
-
-msgid "Time zone: "
-msgstr "Zona horaria:"
-
-msgid "Add an hour"
-msgstr "Añadir una hora"
-
-msgid "Recipients"
-msgstr "Destinatarios"
-
-msgid "Act-On header and footers"
-msgstr "Cabecera y pie de Act-On"
-
-msgid "Opinion type"
-msgstr "Tipo de opinión"
-
-msgid "None"
-msgstr "Ninguno"
-
-msgid "Filter"
-msgstr "Filtro"
-
-msgid "Amount"
-msgstr "Cantidad"
-
-msgid "Update Container label"
-msgstr "Actualizar la etiqueta del contenedor"
-
-msgid "Container Name"
-msgstr "Nombre del contenedor"
-
-msgid "There is no active container"
-msgstr "No hay ningún contenedor activado"
-
-msgid "You must select a container"
-msgstr "Debes seleccionar algún contenedor."
-
-msgid "Save changes"
-msgstr "Guardar cambios"
-
-msgid "You must save a changes or back to list"
-msgstr "Debes guardar los cambios o volver a la lista"
-
-msgid "This newsletter is going to be sent"
-msgstr "Este boletín de noticias está a punto de ser enviado."
-
-msgid "Are you sure to send %1 emails?"
-msgstr "¿Estás seguro que quieres enviar %1 correos electrónicos?"
-
-msgid "Potential lose of the actual generated HTML."
-msgstr "Es posible que pierdas el código HTML generado actualmente."
+"Te ofrecemos una gran lista de añadidos con los que mejorar tu experiencia. "
+"Comprueba nuestra tienda y paga solo por lo que necesites."
 
 msgid ""
-"This newsletter already have a generated HTML, potentially changed by you."
-"<br>If you update the newsletter contents the HTML will overwrite the actual "
-"HTML."
+"Make your own style. Choose a template or request a exclusive design to make "
+"your newspaper look awesome."
 msgstr ""
-"Este boletín ya tiene un HTML generado, potencialmente cambiado por ti."
-"<br>Si actualizas los contenidos del boletín el HTML actual se "
-"sobreescribirá."
+"Crea tu propio estilo. Selecciona una plantilla o solicita un diseño "
+"exclusivo para hacer que tu periódigo luzca mejor."
 
-msgid "Overwrite actual HTML"
-msgstr "Sobreescribir HTML actual"
+msgid "That's it!"
+msgstr "Y eso es todo!"
 
-msgid "Add Container label"
-msgstr "Añadir nombre del contenedor"
-
-msgid "Unfavorite"
-msgstr "No Favorito"
-
-msgid "Special contents"
-msgstr "Contenidos especiales"
-
-msgid "Articles in left column"
-msgstr "Artículos en la columna izquierda"
-
-msgid "Articles in right column"
-msgstr "Artículos en la columna derecha"
-
-msgid "Unable to find any special that matches your search."
-msgstr "No se pudieron encontrar especiales que coincidan con tu búsqueda."
-
-msgid "Section"
-msgstr "Sección"
-
-msgid "Select a category"
-msgstr "Selecciona una categoría"
-
-# Albums edit
-msgid "Image for Special"
-msgstr "Imagen para el especial"
-
-msgid "Pick an image"
-msgstr "Escoja una imagen"
-
-msgid "Username or password are incorrect"
-msgstr "Nombre de usuario o contraseña incorrecto."
-
-msgid "Please, check if the credentials are correct and try again."
-msgstr "Compruebe que las credenciales son las correctas y pruebe de nuevo."
-
-msgid "Available categories for sync"
-msgstr "Categorías disponibles para sincronizar"
-
-msgid "No elements to sync in this server"
-msgstr "No hay elementos para sincronizar en este servidor"
-
-msgid "The given url has no elements to sync or it is not an Opennemas server."
-msgstr ""
-"La url proporcionada no tiene elementos o no es un servidor de Opennemas."
-
-msgid "Also check if the credentials are correct."
-msgstr "Compruebe si las credenciales son las correctas."
-
-msgid "Instance Synchronization"
-msgstr "Sincronización de instancias"
-
-msgid "Ins. Sync."
-msgstr "Sinc. Inst."
-
-msgid "Add site to sync"
-msgstr "Añadir site a la sincronización"
-
-msgid "Add site"
-msgstr "Añadir sitio"
-
-msgid "Site Url"
-msgstr "URL del sitio"
-
-msgid "Categories to Sync"
-msgstr "Categorías a sincronizar"
-
-msgid "Categories to sync"
-msgstr "Categorías a sincronizar"
-
-msgid "There are no synchronize settings available"
-msgstr "No hay ninguna configuración de sincronización disponible"
-
-msgid "Try adding one site to synchronize on the config button above."
-msgstr ""
-"Intenta añadir un site para sincronizar utilizando el botón de configuración"
-
-msgid "Adding site"
-msgstr "Añadiendo sitio"
-
-msgid "Saving"
-msgstr "Guardando"
-
-msgid "Site URL"
-msgstr "URL del sitio"
-
-msgid "http://example.com"
-msgstr "http://www.ejemplo.es/"
-
-msgid "Site color"
-msgstr "Color del sitio"
-
-msgid "Connect"
-msgstr "Conectar"
-
-msgid "Source"
-msgstr "Origen"
-
-msgid "Target"
-msgstr "Destino"
-
-msgid "Test"
-msgstr "Probar"
-
-msgid "Regex"
-msgstr "Regex"
-
-msgid "to"
-msgstr "hasta"
-
-msgid "HTTP code"
-msgstr "Código HTTP"
-
-msgid "If enabled, this rule redirects to a valid opennemas URL"
-msgstr "Si está habilitada, esta regla redirige a una URL válida de opennemas"
-
-msgid "Mode"
-msgstr "Modo"
-
-msgid "Migrations only"
-msgstr "Solo migraciones"
-
-msgid "Redirects a content id to another content id"
-msgstr "Redirige un ID de contenido a otro ID de contenido"
-
-msgid "This should be used during migration only"
-msgstr "Esto se debe utilizar solamente durante la migración"
-
-msgid "Redirects an URI to a content id"
-msgstr "Redirige un URI a un ID de contenido"
-
-msgid "Redirects an URI to another URI or external URL"
-msgstr "Redirige un URI a otro URI o URL externa"
-
-msgid "Redirects URIs to captured content ids basing on a regular expression"
-msgstr ""
-"Redirige los URI a los identificadores de contenido capturados basándose en "
-"una expresión regular"
-
-msgid "Redirects URIs to another URIs basing on a regular expression"
-msgstr "Redirige los URI a otros URI basándose en una expresión regular"
-
-msgid "Empty equals to frontpage"
-msgstr "Vacío es igual a portada"
-
-msgid "Select a content"
-msgstr "Selecciona un contenido"
-
-msgid "Content type"
-msgstr "Tipo de contenido"
-
-msgid "Examples"
-msgstr "Ejemplos"
-
-msgid "Cache group"
-msgstr "Grupo de caché"
-
-msgid "Expire time"
-msgstr "Fecha de expiración"
-
-msgid "Cache"
-msgstr "Caché"
-
-msgid "Key or pattern"
-msgstr "Clave o patrón"
-
-msgid "Key or pattern will be automatically namespaced"
-msgstr "La clave o patrón se aplicará en el espacio de nombres actual"
-
-msgid "Key"
-msgstr "Llave"
-
-msgid "Key will be automatically namespaced"
-msgstr "La clave se aplicará en el espacio de nombres actual"
-
-msgid "Delete compiles"
-msgstr "Eliminar compilados"
-
-msgid "Mortuary"
-msgstr "Funeraria"
-
-msgid "Google Maps"
-msgstr "Google Maps"
-
-msgid "Google maps url"
-msgstr "Url de Google Maps"
-
-msgid "New obituary"
-msgstr "Nueva esquela"
-
-msgid "Write here the text for search..."
-msgstr "Escriba aquí el texto a buscar…"
-
-msgid "No results"
-msgstr "Sin resultados"
+msgid "Wait...Do you have a Facebook or a Twitter account?"
+msgstr "Espera... ¿Tienes una cuenta de Facebook o Twitter?"
 
 msgid ""
-"There was an error while performing the search please reload this tab by "
-"changing to another one."
+"Then you can associate those accounts to access your opennemas. It will make "
+"easier to get into your administration panel."
 msgstr ""
-"Se ha producido un error al realizar la búsqueda, intenta recargar esta "
-"pestaña cambiando a otra."
+"Luego puedes asocialas para acceder a Opennemas. Esto hará mucho más fácil "
+"acceder al panel de administración."
 
-msgid "Global search"
-msgstr "Búsqueda global"
+msgid "Now, you can start to use your newspaper."
+msgstr "Ya puedes empezar a usar tu periódico."
 
-msgid "Unable to find any content that matches your search."
-msgstr "No se pudieron encontrar contenidos que coincidan con tu búsqueda."
+msgid "Hope you will enjoy opennemas!"
+msgstr "Esperamos que disfrutes de opennemas!"
 
-msgid "Exclusive"
-msgstr "Exclusivo"
+msgid "Welcome!"
+msgstr "¡Bienvenido!"
 
-msgid "Delivery time"
-msgstr "Tiempo de entrega"
+msgid "Terms & conditions"
+msgstr "Términos y condiciones"
 
-msgid "weeks"
-msgstr "semanas"
+msgid "Ready!"
+msgstr "Listo!"
 
-msgid "months"
-msgstr "meses"
+msgid "Config opinion module"
+msgstr "Configuración del módulo «Opinión»"
 
-msgid "standard"
-msgstr "estándar"
+msgid "In home"
+msgstr "En portada"
 
-msgid "widget"
-msgstr "widget"
-
-msgid "Demo"
-msgstr "Demo"
-
-msgid "Download the style guide for this theme"
-msgstr "Descargar la guía de estilo para este tema"
-
-msgid "Download style guide"
-msgstr "Descargar guía de estilo"
-
-msgid "In cart"
-msgstr "En el carrito"
-
-msgid "Enabling"
-msgstr "Activando"
-
-msgid "Available"
-msgstr "Disponible"
-
-msgid "My themes"
-msgstr "Mis temas"
-
-msgid "Addons"
-msgstr "Añadidos"
-
-msgid "No themes available"
-msgstr "No hay temas disponibles"
-
-msgid "Immediately"
-msgstr "Inmediatamente"
-
-msgid "Standard"
-msgstr "Estándar"
-
-msgid "Custom"
-msgstr "Personalizar"
-
-msgid "Server"
-msgstr "Servidor"
-
-msgid "Priority"
-msgstr "Prioridad"
-
-msgid "Imported"
-msgstr "Importado"
-
-msgid "View"
-msgstr "Vistas"
-
-msgid "Import"
-msgstr "Importar"
-
-msgid "No tags"
-msgstr "Sin etiquetas"
-
-msgid "No author"
-msgstr "Sin autor"
-
-msgid "Related contents"
-msgstr "Contenidos relacionados"
-
-msgid "Do you want to import the item?"
-msgstr "¿Quieres importar el elemento?"
-
-msgid "Do you want to import the selected items?"
-msgstr "¿Quieres importar los elementos seleccionados?"
-
-msgid "as"
-msgstr "como"
-
-msgid "Select an author"
-msgstr "Selecciona un autor"
-
-msgid "in"
-msgstr "en"
-
-msgid "Yes, import and publish"
-msgstr "Si, importar y publicar"
-
-msgid "Yes, import and edit"
-msgstr "Si, importar y editar"
-
-msgid "URL"
-msgstr "URL"
-
-msgid "Synchronization"
-msgstr "Sincronización"
-
-msgid "Synchronized"
-msgstr "Sincronizado"
-
-msgid "Synchronize"
-msgstr "Sincronizar"
-
-msgid "Delete contents"
-msgstr "Eliminar contenidos"
-
-msgid "Servers"
-msgstr "Servidores"
-
-msgid "Sync elements newer than"
-msgstr "Sincronizar elementos más actuales que"
-
-msgid "Less time means faster synchronizations"
-msgstr "Menos tiempo significa sincronizaciones más rápidas"
-
-msgid "Keep original URL"
-msgstr "Mantener URL original"
-
-msgid "Redirect to"
-msgstr "Redirigir a"
-
-msgid "When importing assign an external link to the elements"
-msgstr "Al importar asignar un enlace externo a los elementos"
-
-msgid "When importing elements this will be the signature"
-msgstr "Al importar elementos esta será la firma"
-
-msgid "Automatic import"
-msgstr "Importación automática"
-
-msgid "Default author"
-msgstr "Autor por defecto"
-
-msgid "Author mapping"
-msgstr "Mapeo de autores"
-
-msgid "Author name from source"
-msgstr "Nombre del autor en origen"
-
-msgid "Default category"
-msgstr "Categoría por defecto"
-
-msgid "Category mapping"
-msgstr "Mapeo de categorias"
-
-msgid "Category name from source"
-msgstr "Nombre de la categoría en origen"
-
-msgid "filters"
-msgstr "Filtros"
-
-msgid "To be automatically imported, contents have to"
-msgstr "Para ser importados automáticamente, los contenidos tienen que"
-
-msgid ""
-"Include all words in a list in the title, the body and/or the list of tags"
-msgstr ""
-"Incluir todas las palabras de una lista en el título, el cuerpo y/o la lista "
-"de etiquetas"
-
-msgid "Match one or more lists of words"
-msgstr "Coincidir una o más listas de palabras"
-
-msgid "or"
-msgstr "o"
-
-msgid "Comma-separated list of words"
-msgstr "Lista de palabras separadas por comas"
-
-msgid "Source name"
-msgstr "Nome del origen"
-
-msgid "External agency"
-msgstr "Agencia externa"
-
-msgid "Opennemas News Agency"
-msgstr "Agencia de noticias Opennemas"
-
-msgid "Url"
-msgstr "Url"
-
-msgid "Include in Google News Showcase"
-msgstr "Incluir en Google News Showcase"
-
-msgid "Outstanding moment 1"
-msgstr "Momento destacado 1"
-
-msgid "Outstanding moment 2"
-msgstr "Momento destacado 2"
-
-msgid ""
-"To include the article in Google News Showcase you need to highlight two "
-"moments"
-msgstr ""
-"Para incluir el artículo en Google News Showcase necesitas destacar dos "
-"momentos"
-
-msgid "Planned"
-msgstr "Planificado"
-
-msgid "Dued"
-msgstr "Vencido"
-
-msgid "In time"
-msgstr "En tiempo"
-
-msgid "Publication start date"
-msgstr "Fecha de inicio de publicación"
-
-msgid "Publication end date"
-msgstr "Fecha de final de publicación"
-
-msgid "This content will only be available in the time range specified above."
-msgstr ""
-"Este contenido sólo estará disponible en el rango de tiempo especificado "
-"arriba."
-
-msgid "Server hour:"
-msgstr "Hora del sistema:"
-
-msgid "Caption"
-msgstr "Pie de foto"
-
-msgid "Allow comments"
-msgstr "Permitir comentarios"
-
-msgid "Insert image"
-msgstr "Insertar imagen"
-
-msgid "Insert related"
-msgstr "Insertar relacionado"
-
-msgid "Add a tag..."
-msgstr "Añadir una etiqueta..."
-
-msgid "Internal search"
-msgstr "Búsqueda interna"
-
-msgid "Value"
-msgstr "Valor"
-
-msgid "External link to "
-msgstr "Enlace externo a"
-
-msgid "Internal search to keyword"
-msgstr "Búsqueda interna a una palabra clave"
-
-msgid "Link to send email to"
-msgstr "Enlace para correo electrónico a"
-
-msgid "The item doesn't exists or you don't have permission to see it."
-msgstr "El contenido no existe o no tienes permiso para verlo."
-
-msgid "Click here to return to the list"
-msgstr "Pincha aquí para volver al listado"
-
-msgid "New keyword"
-msgstr "Nueva palabra clave"
-
-msgid "Unable to find any book that matches your search."
-msgstr "No se pudieron encontrar libros que coincidan con tu búsqueda."
-
-msgid "Cover image"
-msgstr "Imagen de portada"
-
-msgid "Editorial"
-msgstr "Editorial"
-
-msgid "Delete book"
-msgstr "Eliminar libro"
-
-msgid "Delete books"
-msgstr "Eliminar libros"
-
-msgid "%1 not activated - Opennemas"
-msgstr "'%1' no activado - Opennemas"
-
-msgid "%1 temporary deactivated."
-msgstr "%1 está temporalmente desactivado."
-
-msgid "<a href=\"http://www.opennemas.com\">%1</a> doesn’t exist."
-msgstr "<a href=\"http://www.opennemas.com\">%1</a> no existe."
-
-msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
-msgstr "Desea registrar <a href=\"http://www.opennemas.com\">%1</a>?"
-
-msgid "Visible"
-msgstr "Visible"
-
-msgid "Only empty categories can be deleted"
-msgstr "Solo se pueden eliminar categorías sin contenidos"
-
-msgid "Move contents"
-msgstr "Mover contenidos"
-
-msgid "If enabled, category will be included in category selectors"
-msgstr ""
-"Si está activado, la categoría se mostrará en los selectores de categoría"
-
-msgid "If enabled, category will be included in RSS feeds"
-msgstr "Si está activado, la categoría se mostrará en los RSS"
-
-msgid "Menu"
-msgstr "Menú"
-
-msgid "Do you want to move contents in category?"
-msgstr "¿Quieres mover los cotenidos en la categoría?"
-
-msgid "Do you want to move contents in selected categories?"
-msgstr "¿Quieres mover los contenidos en las categorías seleccionadas?"
-
-msgid "Do you want to delete contents in category?"
-msgstr "¿Quieres eliminar los contenidos en la categoría?"
-
-msgid "Do you want to delete contents in selected categories?"
-msgstr "¿Quieres eliminar los contenidos en las categorías seleccionadas?"
-
-msgid "Sidebars"
-msgstr "Barras laterales"
-
-msgid "Link video from other services"
-msgstr "Enlazar vídeo desde otros servicios"
-
-msgid "Use HTML code"
-msgstr "Usar código HTML"
-
-msgid "Use file video URLs"
-msgstr "Usar URLs a ficheros de vídeo"
-
-msgid "Video URL"
-msgstr "URL del vídeo"
-
-msgid "Get information"
-msgstr "Obtener información"
-
-msgid "MP4 format"
-msgstr "Formato MP4"
-
-msgid "http://www.example.com/path/to/file.mp4"
-msgstr "http://www.ejemplo.es/ruta/al/archivo.mp4"
-
-msgid "Ogg format"
-msgstr "Formato Ogg"
-
-msgid "http://www.example.com/path/to/file.ogg"
-msgstr "http://www.ejemplo.es/ruta/al/archivo.ogg"
-
-msgid "WebM format"
-msgstr "Formato WebM"
-
-msgid "http://www.example.com/path/to/file.webm"
-msgstr "http://www.ejemplo.es/ruta/al/archivo.webm"
-
-msgid "Write HTML code"
-msgstr "Escriba el código HTML"
-
-msgid "Loading video information"
-msgstr "Cargando información de vídeo"
-
-msgid "Video preview"
-msgstr "Previsualización de vídeo"
-
-msgid "Original Title"
-msgstr "Título original"
-
-msgid "Service"
-msgstr "Servicio"
-
-msgid "Embed Url"
-msgstr "URL de embebido"
-
-msgid "Thumbnail"
-msgstr "Miniatura"
-
-msgid "My account"
-msgstr "Mi cuenta"
-
-msgid "This is the email used to create your newspaper"
-msgstr "Este es el correo electrónico usado para crear el periódico"
-
-msgid "Your newspaper was created on %1"
-msgstr "Tu periódico fue creado el %1"
-
-msgid "Storage size"
-msgstr "Almacenamiento ocupado"
-
-msgid "Users Active"
-msgstr "Usuarios activos"
-
-msgid "Emails sent from"
-msgstr "Correos electrónicos enviados desde"
-
-msgid "Opennemas offers many more modules and solutions"
-msgstr "Opennemas ofrece muchos más módulos y soluciones"
-
-msgid "Check out our modules"
-msgstr "Comprueba nuestros módulos"
-
-msgid ""
-"If you need a custom plan or you want to purchase a plan or module please "
-"click in the next link:"
-msgstr ""
-"Si necesitas un plan personalizado o deseas adquirir un plan o un módulo por "
-"favor pulsa en el siguiente link:"
-
-msgid "Contact Us"
-msgstr "Contacta con nosotros"
-
-msgid "Address"
-msgstr "Dirección"
-
-msgid "Postal code"
-msgstr "Código postal"
-
-msgid "City"
-msgstr "Ciudad"
-
-msgid "State"
-msgstr "Provincia/Estado"
-
-msgid ""
-"Something wrong? Contact our <a href=\"javascript:UserVoice."
-"showPopupWidget();\">support team</a>."
-msgstr ""
-"¿Algo está mal? Contacta con nuestro <a href=\"javascript:UserVoice."
-"showPopupWidget();\">equipo de soporte</a>."
-
-msgid "You have no billing information"
-msgstr "No tienes información de facturación"
-
-msgid "You will be asked to add it during the checkout in our store"
-msgstr ""
-"Te solicitaremos añadirla durante el proceso de compra en nuestra tienda"
-
-msgid "Last purchases"
-msgstr "Últimas compras"
-
-msgid "There are no purchases for now."
-msgstr "No hay compras por ahora."
-
-msgid ""
-"Check our <a class=\"bold\" href=\"#\">store</a> and improve your newspaper."
-msgstr ""
-"Visita nuestra <a class=\"bold\" href=\"#\">tienda</a> y mejora tu periódico."
-
-msgid "More"
-msgstr "Más"
-
-msgid "Locale"
-msgstr "Idioma"
-
-msgid "Maximum number of tags per content"
-msgstr "Número máximo de etiquetas por contenido"
-
-msgid "Number of items in the list of suggestions"
-msgstr "Número de elementos en la lista de sugerencias"
-
-msgid ""
-"List of words or regular expressions that are prohibited on tags, one per "
-"line."
-msgstr ""
-"Lista de palabras o expresiones regulares que están prohibidas en las "
-"etiquetas, una por línea."
-
-msgid "Config tag module"
-msgstr "Configuración del módulo «Etiquetas»"
-
-msgid "Floating ads (for drop them into columns)"
-msgstr "Publicidades flotantes (para arrastrar en columnas)"
-
-msgid "Advertisement without name"
-msgstr "Publicidad sin nomber"
-
-msgid ""
-"A Google DFP advertisement has been detected in your HTML/javascript "
-"advertisement but Opennemas already supports this type of advertisements."
-msgstr ""
-"Se ha detectado una publicidad de Google DFP en tu publicidad HTML/"
-"javascript. Opennemas se puede integrar con este tipo de publicidades."
-
-msgid ""
-"Would you like to auto-correct this advertisement to use our Google DFP "
-"integration?"
-msgstr ""
-"¿Quieres que se autocorrija esta publicidad para usar la integración de "
-"Google DFP?"
-
-msgid "Google DFP unit"
-msgstr "Unidad de Google DFP"
-
-msgid "Width"
-msgstr "Ancho"
-
-msgid "Height"
-msgstr "Alto"
-
-msgid "Ads"
-msgstr "Publicidades"
+msgid "Drop from home"
+msgstr "Sacar de portada"
 
 msgid "General"
 msgstr "General"
-
-msgid "Cookie lifetime for intersticials"
-msgstr "Tiempo de vida de la cookie para intersticiales"
-
-msgid ""
-"This setting indicates how long will take to re-display the interstitial in "
-"frontpage."
-msgstr ""
-"Esta opción indica cuanto tiempo debe pasar para volver a mostrar el "
-"intersticial en portada."
-
-msgid "(in minutes)"
-msgstr "(en minutos)"
-
-msgid "Default mark shown indicating an advertisement"
-msgstr "Marca por defecto mostrada para indicar una publicidad"
-
-msgid ""
-"This is the text shown near advertisements. If you don't fill this field, "
-"the default value \"%1\" will be shown."
-msgstr ""
-"Este es el texto que se muestra al lado de las publicidades. Si no completa "
-"este campo, se mostrará el valor por defecto \"%1\"."
-
-msgid "Allow generic advertisement"
-msgstr "Permitir publicidad genérica"
-
-msgid "This settings allow printing home ads when ads in category are empty."
-msgstr ""
-"Estos ajustes permiten imprimir anuncios de portada cuando los anuncios en "
-"la categoría están vacíos."
-
-msgid "SafeFrame by default"
-msgstr "SafeFrame por defecto"
-
-msgid "Recommended"
-msgstr "Recomendado"
-
-msgid ""
-"This feature displays advertisements inside iframes. It improves the user "
-"experience and has a better performance."
-msgstr ""
-"Esta característica mustra las publicidades dentro de «iframes». Mejora la "
-"experiencia de usuario y tiene mejor rendimiento."
-
-msgid "External services"
-msgstr "Servicios externos"
-
-msgid "AdSense integration"
-msgstr "Integración con AdSense"
-
-msgid "AdSense ID"
-msgstr "ID de AdSense"
-
-msgid "The AdSense ID (i.e. ca-pub-0000000000000000)"
-msgstr "El identificador de AdSense (ej. ca-pub-0000000000000000)"
-
-msgid "OpenX/Revive Ad server integration"
-msgstr "Integración con servidor de publicidad OpenX/Revive"
-
-msgid "Ad server base url"
-msgstr "Url base del servidor de publicidad"
-
-msgid "The ad server URL (i.e. http://ad.serverexample.net/)."
-msgstr ""
-"La URL del servidor de publicidad (p.ej. http://ad.servidorejemplo.net/)."
-
-msgid "Smart Ad server integration"
-msgstr "Integración con servidor de publicidad Smart"
-
-msgid "Domain"
-msgstr "Dominio"
-
-msgid "The ad server Domain (i.e. https://www8.smartadserver.com/)."
-msgstr ""
-"El dominio del servidor de publicidad (p.ej. https://www8.smartadserver."
-"com/)."
-
-msgid "Tags format"
-msgstr "Formato de tags"
-
-msgid "Network ID"
-msgstr "Network ID"
-
-msgid "The ad server network ID"
-msgstr "El identificador de red del Ad server"
-
-msgid "Site ID"
-msgstr "Site ID"
-
-msgid "The ad server site ID"
-msgstr "El identificador de sitio del Ad server"
-
-msgid "Page ID"
-msgstr "Page ID"
-
-msgid "Article: inner"
-msgstr "Articulo: interior"
-
-msgid "Opinion: frontpage"
-msgstr "Opinión: portada"
-
-msgid "Opinion: inner"
-msgstr "Opinión: interior"
-
-msgid "Video: frontpages"
-msgstr "Vídeo: portadas"
-
-msgid "Video: inner"
-msgstr "Vídeo: interior"
-
-msgid "Album: frontpages"
-msgstr "Álbum: portadas"
-
-msgid "Album: inner"
-msgstr "Álbum: interior"
-
-msgid "Poll: frontpage"
-msgstr "Encuesta: portada"
-
-msgid "Poll: inner"
-msgstr "Encuesta: interior"
-
-msgid "Others"
-msgstr "Otros"
-
-msgid "The ad server pages ID"
-msgstr "El identificador de páginas del Ad server"
-
-msgid "Header Bidding"
-msgstr "Header Bidding"
-
-msgid "Use header bidding"
-msgstr "Usar header bidding"
-
-msgid "Managed Holistic+"
-msgstr "Holística+ gestionada"
-
-msgid "Targeting"
-msgstr "Segmentación"
-
-msgid "Custom code"
-msgstr "Código personalizado"
-
-msgid "DFP targeting"
-msgstr "Segmentación DFP"
-
-msgid "Key for category targeting"
-msgstr "Clave para segmentación DFP por categoría"
-
-msgid ""
-"Set a key for targeting your ads by category. Note that the value for "
-"targeting will always be the current category internal name"
-msgstr ""
-"Establecer una clave para la segmentación de los anuncios por categorías. "
-"Tenga en cuenta que el valor para la segmentación será siempre el nombre "
-"interno de la categoría actual"
-
-msgid "Key for module targeting"
-msgstr "Clave para segmentación DFP por módulo"
-
-msgid ""
-"Set a key for targeting your ads by module. Note that the value for "
-"targeting will always be the current module name"
-msgstr ""
-"Establecer una clave para la segmentación de los anuncios por módulos. Tenga "
-"en cuenta que el valor para la segmentación será siempre el nombre interno "
-"del módulo actual"
-
-msgid "Key for content ID targeting"
-msgstr "Clave para segmentación DFP por ID de contenido"
-
-msgid ""
-"Set a key for targeting your ads by content ID. Note that the value for "
-"targeting will always be the current content ID"
-msgstr ""
-"Establecer una clave para la segmentación de los anuncios por ID de "
-"contenido. Tenga en cuenta que el valor para la segmentación será siempre el "
-"ID delcontenido actual"
-
-msgid "DFP custom code"
-msgstr "Código DFP personalizado"
-
-msgid "Custom code at the end of DFP tags"
-msgstr "Código personalizado al final de los tags de DFP"
-
-msgid "Tradedoubler integration"
-msgstr "Integración con Tradedoubler"
-
-msgid "Tradedoubler ID"
-msgstr "Tradedoubler ID"
-
-msgid "Only the ID from Tradedoubler validation tag"
-msgstr "Sólo el ID de la etiqueta de validación de TradeDoubler"
-
-msgid "Iadbox integration"
-msgstr "Integración con Iadbox"
-
-msgid "Iadbox ID"
-msgstr "ID de iadbox"
-
-msgid "Iadbox affiliate ID"
-msgstr "ID de afiliado de Iadbox"
-
-msgid "Advanced"
-msgstr "Avanzado"
-
-msgid "Authorized Digital Sellers"
-msgstr "Authorized Digital Sellers"
-
-msgid "This will be the content of the file ads.txt on your root domain"
-msgstr "Este será el contenido del archivo ads.txt en la raíz de tu dominio"
-
-msgid "Unable to find any advertisement that matches your search."
-msgstr "No se pudieron encontrar publicidades que coincidan con tu búsqueda."
-
-msgid "Media element (jpg, png, gif)"
-msgstr "Elemento multimedia (jpg, png gif)"
-
-msgid "Media flash element (swf)"
-msgstr "Elemento multimedia Flash (swf)"
-
-msgid "%1 positions"
-msgstr "%1 posición"
-
-msgid "No positions assigned"
-msgstr "Sin posiciones asignadas"
-
-msgid "No clicks"
-msgstr "Sin clics"
-
-msgid "%1 clicks"
-msgstr "%1 clics"
-
-msgid "And %1 more…"
-msgstr "Y %1 más…"
-
-msgid "Ad block detected"
-msgstr "Bloqueador de publicidad detectado"
-
-msgid "Please, disable it to work with Opennemas"
-msgstr "Por favor, desactívelo para trabajar correctamente con Opennemas"
-
-msgid "Entering on the requested page"
-msgstr "Entrando en la página solicitada"
-
-msgid "Skip advertisement"
-msgstr "Saltar publicidad"
-
-msgid "Creating banner"
-msgstr "Creando publicidad"
-
-msgid "Editing banner"
-msgstr "Editando publicidad"
-
-msgid "HTML or Javascript code"
-msgstr "Código HTML o Javascript"
-
-msgid "OpenX zone id"
-msgstr "Id de zona de OpenX"
-
-msgid ""
-"OpenX/Revive Ad server uses an id to identify an advertisement. Please fill "
-"the zone id from your OpenX/Revive server %1"
-msgstr ""
-"El servidor de publicidad OpenX/Revive usa un identificador para distinguir "
-"una publicidad. Completa el identificador de zona desde tu servidor de OpenX/"
-"Revive %1"
-
-msgid "Google DFP unit id"
-msgstr "Id de unidad de Google DFP"
-
-msgid ""
-"Google DFP uses an unit ID to identify an advertisement. Please fill the "
-"zone id from your Google DFP panel"
-msgstr ""
-"Google DFP usa un identificador de unidad para identificar una publicidad. "
-"Completa el id de zona desde tu panel de Google DFP."
-
-msgid "Format ID"
-msgstr "Format ID"
-
-msgid "Smart Ad server uses format ID to identify the advertisement format"
-msgstr ""
-"Smart Ad server usa un identificador de formato para identificar el formato "
-"de anuncio"
-
-msgid "Mark"
-msgstr "Marca"
-
-msgid "Top"
-msgstr "Encima"
-
-msgid "Right"
-msgstr "Derecha"
-
-msgid "Bottom"
-msgstr "Debajo"
-
-msgid "Left"
-msgstr "Izquierda"
-
-msgid "Write here your custom mark. Default is \"%1\""
-msgstr "Escribe aquí tu marca personalizada. Por defecto es \"%1\""
-
-msgid ""
-"Defines the orientation for the word that marks the advertisement position"
-msgstr "Define la orientación de la palabra que marca el espacio de publicidad"
-
-msgid "Desktop"
-msgstr "Escritorio"
-
-msgid "Tablet"
-msgstr "Tablet"
-
-msgid "Display the advertisement only on the selected devices"
-msgstr "Mostrar la publicidad solo en los dispositivos seleccionados"
-
-msgid "Dimensions"
-msgstr "Dimensiones"
-
-msgid "One or more dimensions are invalid"
-msgstr "Una o más dimensiones son inválidas"
-
-msgid "Date range"
-msgstr "Rango de fechas"
-
-msgid "End"
-msgstr "Fin"
-
-msgid "Start"
-msgstr "Inicio"
-
-msgid "Display the advertisement if current date is in range"
-msgstr "Mostrar la publicidad si la fecha actual está dentro del rango"
-
-msgid "Select all"
-msgstr "Seleccionar todo"
-
-msgid ""
-"Display the advertisement if user belongs to one or more of the selected "
-"user groups"
-msgstr ""
-"Mostrar la publicidad si el usuario pertenece a uno o más grupos "
-"seleccionados"
-
-msgid "Duration"
-msgstr "Duración"
-
-msgid "seconds"
-msgstr "segundos"
-
-msgid "Display the advertisement for a limited time (intersticials only)"
-msgstr "Mostrar la publicidad durante un tiempo limitado (solo intersticiales)"
-
-msgid "Show in all categories"
-msgstr "Mostrar en todas las categorías"
-
-msgid "Display the advertisement only in the selected categories"
-msgstr "Mostrar la publicidad solo en las categorías seleccionadas"
-
-msgid "Select/deselect all"
-msgstr "Seleccionar/deseleccionar todo"
-
-msgid ""
-"We recommend you to use the \"Show in all categories\" mark to avoid "
-"unchecked future created categories"
-msgstr ""
-"Recomendamos usar la opción \"Mostrar en todas las categorías\" para evitar "
-"que categorías futuras queden sin desmarcar"
-
-msgid "No positions selected, mark those you want on the form below."
-msgstr "No se seleccionó ninguna posición, marca las que quieras justo debajo"
-
-msgid "Show less…"
-msgstr "Mostrar menos…"
-
-msgid "Obituary: frontpage"
-msgstr "Esquela: portada"
-
-msgid "Obituary: inner"
-msgstr "Esquela: interior"
-
-msgid "Google AMP"
-msgstr "Google AMP"
-
-msgid "Facebook Instant Articles"
-msgstr "Facebook Instant Articles"
 
 msgid "Site name"
 msgstr "Nombre del sitio"
@@ -5326,6 +4213,9 @@ msgstr "Descripción del sitio"
 msgid "Refresh page interval"
 msgstr "Intervalo de actualización de la página"
 
+msgid "seconds"
+msgstr "segundos"
+
 msgid ""
 "When a user visits pages and stay on it for a while, this setting allows to "
 "refresh the loaded page for updated it."
@@ -5345,6 +4235,9 @@ msgstr "Apariencia"
 
 msgid "Colors"
 msgstr "Colores"
+
+msgid "Site color"
+msgstr "Color del sitio"
 
 msgid "Color used for links, menus and some widgets."
 msgstr "Color usado para enlaces, menús y algunos widgets."
@@ -5514,6 +4407,9 @@ msgstr "Selecciona un idioma"
 msgid "Required params for Service"
 msgstr "Parámetros requeridos para el servicio"
 
+msgid "Service"
+msgstr "Servicio"
+
 msgid "Select a service..."
 msgstr "Selecciona un servicio…"
 
@@ -5547,6 +4443,9 @@ msgid ""
 msgstr ""
 "Busca ficheros usando el buscador de abajo y pulsa \"Añadir\" para "
 "integrarlos como ficheros de RTB de publicidad."
+
+msgid "External services"
+msgstr "Servicios externos"
 
 msgid "Analytic system integration"
 msgstr "Integración con sistemas de analíticas"
@@ -5654,6 +4553,9 @@ msgstr "Merchant id"
 msgid "Shared secret"
 msgstr "Shared secret"
 
+msgid "Amount"
+msgstr "Cantidad"
+
 msgid "Google Recaptcha"
 msgstr "Google Recaptcha"
 
@@ -5698,6 +4600,9 @@ msgstr "Google News"
 
 msgid "Publication name in Google News"
 msgstr "Nombre de la publicación en Google News"
+
+msgid "Google Maps"
+msgstr "Google Maps"
 
 msgid "Google Maps API key"
 msgstr "Llave de la API de Google Maps"
@@ -5912,6 +4817,9 @@ msgstr "Esta sección permite eliminar los sitemaps guardados en disco."
 msgid "Search for a sitemap by year, month and page"
 msgstr "Busca un sitemap por año, mes y página"
 
+msgid "Show"
+msgstr "Mostrar"
+
 msgid "Only masters"
 msgstr "Solo masters"
 
@@ -5970,80 +4878,62 @@ msgstr "CSS"
 msgid "This css will be added at the end of the original"
 msgstr "Este CSS se añadirá al final del original."
 
-msgid "NewsStand"
-msgstr "Portadas de papel"
+msgid "<a href=\"http://www.opennemas.com\">%1</a> doesn’t exist."
+msgstr "<a href=\"http://www.opennemas.com\">%1</a> no existe."
 
-msgid "Restore"
-msgstr "Restaurar"
+msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
+msgstr "Desea registrar <a href=\"http://www.opennemas.com\">%1</a>?"
 
-msgid "Content Type"
-msgstr "Tipo de contenido"
+msgid "%1 not activated - Opennemas"
+msgstr "'%1' no activado - Opennemas"
 
-msgid "Images"
-msgstr "Imágenes"
-
-msgid "Delete all trashed contents"
-msgstr "Eliminar todos los contenidos en la papelera"
-
-msgid ""
-"Are you sure you want to remove permanently all the contents inside the "
-"trash?"
-msgstr ""
-"¿Estás seguro de que quieres eliminar de forma permanente todos los "
-"contenidos de la papelera¿"
-
-msgid "Yes, remove all"
-msgstr "Si, eliminarlos todos"
-
-msgid "Do you want to empty the trash?"
-msgstr "¿Quieres vaciar la papelera?"
-
-msgid "Do you want to restore the item?"
-msgstr "¿Quieres recuperar el elemento?"
-
-msgid "Do you want to restore the selected items?"
-msgstr "¿Quieres recuperar los elementos seleccionados?"
+msgid "%1 temporary deactivated."
+msgstr "%1 está temporalmente desactivado."
 
 msgid "Attachment"
 msgstr "Adjuntos"
 
+msgid "Static Page"
+msgstr "Página estática"
+
 msgid "Select an element"
 msgstr "Selecciona un elemento"
 
-msgid "No available contents"
-msgstr "No hay contenidos disponibles"
+msgid "Restore item"
+msgstr "Restaurar elemento"
 
-msgid "Columns"
-msgstr "Columnas"
+msgid "Are you sure that do you want restore from trash \"%1\"?"
+msgstr "¿Estás seguro de que quieres restaurar de la papelera \"%1\"?"
 
-msgid "Updated"
-msgstr "Actualizado"
+msgid "Yes, restore"
+msgstr "Si, restaurar"
 
-msgid "Start date"
-msgstr "Fecha de inicio"
+msgid "No available translators for \"%1&rarr;%2\""
+msgstr "No hay ningún traductor disponible para «%1&rarr;%2»"
 
-msgid "End date"
-msgstr "Fecha de fin"
+msgid "Translating selected contents into \"%1\""
+msgstr "Traduciendo los contenidos seleccionados a «%1»"
 
-msgid "No category"
-msgstr "Sin categoría"
+msgid "%1 contents propertly translated into \"%2\"."
+msgstr "%1 contenidos traducidos con éxito al «%2»."
 
-msgid "Do you want to send the item to trash?"
-msgstr "¿Deseas enviar el elemento a la papelera?"
+msgid "Ok"
+msgstr "Aceptar"
 
-msgid "Do you want to send the selected items to trash?"
-msgstr "¿Quieres eliminar los elementos seleccionados a la papelera?"
+msgid "Do you want to translate to \"%1\"?"
+msgstr "¿Quieres traducir automáticamente a \"%1\"?"
 
-msgid "Mosaic"
-msgstr "Mosaico"
+msgid "Translating content into \"%1\""
+msgstr "Traduciendo contenido al «%1»"
 
-msgid "Reload"
-msgstr "Recargar"
+msgid "Content translated properly into \"%1\"."
+msgstr "Contenido traducido con éxito al «%1»."
 
-msgid "Unable to find any item or you don't have permission to see the list."
-msgstr ""
-"No se han encontrado elementos que coincidan con tu búsqueda o no tienes "
-"permisos para ver la lista."
+msgid "Delete advertisements"
+msgstr "Eliminar publicidad"
+
+msgid "Are you sure that do you want send to the trash \"%1\"?"
+msgstr "¿Estás seguro de que quieres enviar a la papelera \"%1\"?"
 
 msgid "Delete selected items"
 msgstr "Eliminar elementos seleccionados"
@@ -6057,6 +4947,23 @@ msgstr "Eliminando"
 msgid "Yes, delete all"
 msgstr "Si, eliminarlos todos"
 
+msgid "Arquive these elements"
+msgstr "Archivar estos elementos"
+
+msgid ""
+"Are you sure that do you want to arquive the selected elements from this "
+"frontpage?"
+msgstr ""
+"¿Estás seguro de que quieres archivar los elementos seleccionados de esta "
+"portada?"
+
+msgid ""
+"This will remove selected elements from <strong>ALL FRONTPAGES</strong> but "
+"they will remain available for read."
+msgstr ""
+"Esto quitará los contenidos seleccionados de <strong>TODAS LAS PORTADAS</"
+"strong> pero seguirán disponibles para su lectura."
+
 msgid "Restore selected items"
 msgstr "Restaurar elementos seleccionados"
 
@@ -6065,6 +4972,44 @@ msgstr "¿Estás seguro de que quieres restaurar %1 elemento(s)?"
 
 msgid "Yes, restore them all"
 msgstr "Si, restaurarlos todos"
+
+msgid "Default expanded fields"
+msgstr "Campos expandidos por defecto"
+
+msgid "Selected fields will be automatically expanded when the form loads"
+msgstr ""
+"Los campos seleccionados se expandirán automáticamente cuando se cargue el "
+"formulario"
+
+msgid "Drop these elements"
+msgstr "Quitar estos elementos"
+
+msgid ""
+"Are you sure that do you want to delete the selected elements from this "
+"frontpage?"
+msgstr ""
+"¿Estás seguro de que quieres eliminar los elementos seleccionados de esta "
+"portada?"
+
+msgid ""
+"This will temporary remove all the contents but after that you have to save "
+"the frontpage."
+msgstr ""
+"Esta acción quitará temporalmente los contenidos, para hacerlo permanente "
+"debes guardar la portada."
+
+msgid "Drop"
+msgstr "Eliminar"
+
+msgid "There is a new version of this content that was saved as a draft."
+msgstr ""
+"Hay una nueva versión de este contenido que fue guardado como borrador."
+
+msgid "Discard it"
+msgstr "Descartar"
+
+msgid "Resume editing"
+msgstr "Continuar edición"
 
 msgid "Update selected items"
 msgstr "Actualizar los elementos seleccionados"
@@ -6096,14 +5041,6 @@ msgstr "¿Estás seguro de que quieres añadir a la portada %1 elemento(s)?"
 msgid "Yes, update all"
 msgstr "Si, actualizar todos"
 
-msgid "Default expanded fields"
-msgstr "Campos expandidos por defecto"
-
-msgid "Selected fields will be automatically expanded when the form loads"
-msgstr ""
-"Los campos seleccionados se expandirán automáticamente cuando se cargue el "
-"formulario"
-
 msgid "Remove permanently selected items"
 msgstr "Eliminar de forma permanente los elementos seleccionados"
 
@@ -6117,89 +5054,6 @@ msgstr "No podrás restaurarlos."
 msgid "Yes, remove them all"
 msgstr "Si, eliminarlos todos"
 
-msgid "Drop these elements"
-msgstr "Quitar estos elementos"
-
-msgid ""
-"Are you sure that do you want to delete the selected elements from this "
-"frontpage?"
-msgstr ""
-"¿Estás seguro de que quieres eliminar los elementos seleccionados de esta "
-"portada?"
-
-msgid ""
-"This will temporary remove all the contents but after that you have to save "
-"the frontpage."
-msgstr ""
-"Esta acción quitará temporalmente los contenidos, para hacerlo permanente "
-"debes guardar la portada."
-
-msgid "Drop"
-msgstr "Eliminar"
-
-msgid "Are you sure that do you want send to the trash \"%1\"?"
-msgstr "¿Estás seguro de que quieres enviar a la papelera \"%1\"?"
-
-msgid "No available translators for \"%1&rarr;%2\""
-msgstr "No hay ningún traductor disponible para «%1&rarr;%2»"
-
-msgid "Do you want to translate to \"%1\"?"
-msgstr "¿Quieres traducir automáticamente a \"%1\"?"
-
-msgid "Translating content into \"%1\""
-msgstr "Traduciendo contenido al «%1»"
-
-msgid "Content translated properly into \"%1\"."
-msgstr "Contenido traducido con éxito al «%1»."
-
-msgid "Ok"
-msgstr "Aceptar"
-
-msgid "Delete advertisements"
-msgstr "Eliminar publicidad"
-
-msgid "Arquive these elements"
-msgstr "Archivar estos elementos"
-
-msgid ""
-"Are you sure that do you want to arquive the selected elements from this "
-"frontpage?"
-msgstr ""
-"¿Estás seguro de que quieres archivar los elementos seleccionados de esta "
-"portada?"
-
-msgid ""
-"This will remove selected elements from <strong>ALL FRONTPAGES</strong> but "
-"they will remain available for read."
-msgstr ""
-"Esto quitará los contenidos seleccionados de <strong>TODAS LAS PORTADAS</"
-"strong> pero seguirán disponibles para su lectura."
-
-msgid "There is a new version of this content that was saved as a draft."
-msgstr ""
-"Hay una nueva versión de este contenido que fue guardado como borrador."
-
-msgid "Discard it"
-msgstr "Descartar"
-
-msgid "Resume editing"
-msgstr "Continuar edición"
-
-msgid "Restore item"
-msgstr "Restaurar elemento"
-
-msgid "Are you sure that do you want restore from trash \"%1\"?"
-msgstr "¿Estás seguro de que quieres restaurar de la papelera \"%1\"?"
-
-msgid "Yes, restore"
-msgstr "Si, restaurar"
-
-msgid "Translating selected contents into \"%1\""
-msgstr "Traduciendo los contenidos seleccionados a «%1»"
-
-msgid "%1 contents propertly translated into \"%2\"."
-msgstr "%1 contenidos traducidos con éxito al «%2»."
-
 msgid "Permanently remove item"
 msgstr "Eliminar de forma permanente el elemento"
 
@@ -6212,233 +5066,1362 @@ msgstr "No podrás restaurarlos"
 msgid "Yes, remove"
 msgstr "Si, eliminar"
 
-msgid "Start hour"
-msgstr "Hora de inicio"
+msgid "Do you want to send the item to trash?"
+msgstr "¿Deseas enviar el elemento a la papelera?"
 
-msgid "End hour"
-msgstr "Hora de fin"
+msgid "Do you want to send the selected items to trash?"
+msgstr "¿Quieres eliminar los elementos seleccionados a la papelera?"
 
-msgid "Place"
-msgstr "Lugar"
+msgid "Mosaic"
+msgstr "Mosaico"
 
-msgid "Website URL"
-msgstr "URL del sitio web"
+msgid "Reload"
+msgstr "Recargar"
 
-msgid "Redirect your domain"
-msgstr "Redirige tu dominio"
+msgid "Unable to find any item or you don't have permission to see the list."
+msgstr ""
+"No se han encontrado elementos que coincidan con tu búsqueda o no tienes "
+"permisos para ver la lista."
 
-msgid "Add contents to your site"
-msgstr "Añadir contenidos a tu sitio"
+msgid "Columns"
+msgstr "Columnas"
 
-msgid "New article"
-msgstr "Nuevo artículo"
+msgid "Updated"
+msgstr "Actualizado"
 
-msgid "Media manager"
-msgstr "Gestor multimedia"
+msgid "No category"
+msgstr "Sin categoría"
 
-msgid "Upload images"
-msgstr "Subir imágenes"
+msgid "No available contents"
+msgstr "No hay contenidos disponibles"
 
-msgid "New Album"
-msgstr "Nuevo álbum"
+msgid "Write here the text for search..."
+msgstr "Escriba aquí el texto a buscar…"
 
-msgid "Upload video"
-msgstr "Subir vídeo"
-
-msgid "Want more features?"
-msgstr "¿Interesado en mas características?"
+msgid "No results"
+msgstr "Sin resultados"
 
 msgid ""
-"We have two ways to add functionality to you site. Check our Opennemas Store:"
+"There was an error while performing the search please reload this tab by "
+"changing to another one."
 msgstr ""
-"Tenemos dos formas de añadir funcionalidad a tu sitio. Comprueba nuestra "
-"Tienda de Opennemas:"
+"Se ha producido un error al realizar la búsqueda, intenta recargar esta "
+"pestaña cambiando a otra."
 
-msgid "Plans"
-msgstr "Planes"
+msgid "Global search"
+msgstr "Búsqueda global"
 
-msgid "Bundles multiple functionality in a reduced price"
-msgstr "Reúnen varias funcionalidades a un precio reducido"
+msgid "Unable to find any content that matches your search."
+msgstr "No se pudieron encontrar contenidos que coincidan con tu búsqueda."
 
-msgid "Add a specific feature in your site"
-msgstr "Añade una funcionalidad específica en tu sitio"
+msgid "Go back"
+msgstr "Atrás"
 
-msgid "If you have special needs or want some advice extending your site"
-msgstr ""
-"Si tienes alguna necesidad específica o necesitas ayuda para extender tu "
-"sitio"
-
-msgid "<strong>Are you new in Opennemas?</strong>"
-msgstr "<strong>¿Eres nuevo en Opennemas?</strong>"
+msgid "Your invoice is currently unavailable."
+msgstr "Tu factura no está disponible actualmente."
 
 msgid ""
-"If you need some help getting started to create awesome content, check out "
-"our online user documentation."
+"Please, contact our <a href=\"javascript:UserVoice.showPopupWidget();"
+"\">support team</a>."
 msgstr ""
-"Si necesitas ayuda para comenzar a crear contenido, comprueba nuestra "
-"documentación en línea."
+"Por favor, contacta con nuestro <a href=\"javascript:UserVoice."
+"showPopupWidget();\">equipo de soporte</a>."
 
-msgid "First steps in opennemas"
-msgstr "Primeiros pasos en OpenNeMas"
+msgid "There is nothing to see here, kid."
+msgstr "Nada que ver aquí, chaval."
 
-msgid "Detailed documentation"
-msgstr "Documentación en línea"
+msgid "Method"
+msgstr "Método"
 
-msgid "Contact us for help"
-msgstr "Contacta con nosotros"
+msgid "PayPal"
+msgstr "PayPal"
+
+msgid "Credit Card"
+msgstr "Tarjeta de crédito"
+
+msgid "Paid"
+msgstr "Pagado"
+
+msgid "View invoice"
+msgstr "Ver factura"
+
+msgid "Module"
+msgstr "Módulo"
+
+msgid "Manual category"
+msgstr "Categoría manual"
+
+msgid "Automatic category"
+msgstr "Categoría automática"
+
+msgid "Synchronized instances"
+msgstr "Instancias sincronizadas"
+
+msgid "Manual categories"
+msgstr "Categorías manuales"
+
+msgid "Automatic categories"
+msgstr "Categorías automáticas"
+
+msgid "Static pages"
+msgstr "Páginas estáticas"
+
+msgid "Synchronized sites"
+msgstr "Sitios sincronizados"
+
+msgid "Custom link"
+msgstr "Enlace personalizado"
+
+msgid "Menu structure"
+msgstr "Estructura del menú"
+
+msgid "Use drag and drop to sort and nest elements."
+msgstr "Usa arrastrar y soltar para ordenar y anidar elementos"
+
+msgid "Position"
+msgstr "Posición"
 
 msgid ""
-"Get more help from our videotutorials in <a href=\"%1\" class=\"text-white "
-"bold\">our YouTube channel</a> and subscribe to it."
+"If your theme has defined positions for menus you can assign one menu to "
+"each of them"
 msgstr ""
-"Puedes ver más videotutoriales en <a href=\"%1\" class=\"text-white bold"
-"\">nuestro canal de YouTube</a> y también puedes suscribirte al mismo."
+"Si tu tema tiene posiciones de menú definidas puedes asignar un menú a cada "
+"posición"
 
-msgid "Logged in users"
-msgstr "Usuarios conectados"
+msgid "New menu"
+msgstr "Nuevo menú"
 
-msgid "Showcase"
-msgstr "Showcase"
+msgid "Pick contents"
+msgstr "Seleccionar contenidos"
 
-msgid "Suggested for frontpage"
-msgstr "Sugerir en portada principal"
+msgid "Pick recipients"
+msgstr "Seleccionar destinatarios"
 
-msgid "There are no enabled <a href=\"%1\">subscriptions</a>"
-msgstr "No hay <a href=\"%1\">suscripciones</a> disponibles"
+msgid "Send"
+msgstr "Enviar"
+
+msgid "Unable to find setting for newsletters."
+msgstr "No se han encontrado las configuraciones de boletines."
+
+msgid "Newsletter handler"
+msgstr "Gestor de boletines"
 
 msgid ""
-"The content will be fully available only for subscribers in the selected "
-"subscriptions"
+"Opennemas allows you to use different methods to send your newsletters. "
+"Choose between those available below:"
 msgstr ""
-"El contenido estará disponible por completo solo para los suscriptores de "
-"las suscripciones seleccionadas"
+"Opennemas le permite seleccionar distintos métodos de envío de sus "
+"boletines. Selecciona entre los disponibles debajo:"
 
-msgid "Inner title"
-msgstr "Título interior"
+msgid "External service"
+msgstr "Servicio externos"
 
-msgid "Signature"
-msgstr "Firma"
+msgid "Maillist"
+msgstr "Lista de correo"
 
-msgid "Newsletter Signature"
-msgstr "Firma del boletín"
+msgid "Internal Send"
+msgstr "Envio interno"
 
-msgid "Alternative signature for newsletter"
-msgstr "Firma alternativa para boletín"
+msgid "Act-On lists"
+msgstr "Listas de Act-On"
 
-msgid "Customize"
-msgstr "Personalizar"
+msgid "Mailing list address"
+msgstr "Dirección de la lista de correo electrónico"
 
-msgid "Settings for frontpage"
-msgstr "Preferencias para la portada"
+msgid ""
+"If you have a mailing list service to deliver newsletters add the address "
+"here"
+msgstr ""
+"Si tienes un servicio de lista de correo para entrega de boletines agrega la "
+"dirección aquí"
 
-msgid "Text size for title"
-msgstr "Tamaño del texto para el título"
+msgid "Mail address to receive new subscriptions"
+msgstr "Dirección de correo para recibir nuevas suscripciones"
 
-msgid "Select a size..."
-msgstr "Selecciona un tamaño…"
+msgid ""
+"You've choosen to use the <a href=\"%1\" target=\"_blank\">internal "
+"subscription list</a> to send your newsletters."
+msgstr ""
+"Seleccionó usar las <a href=\"%1\" target=\"_blank\">listas de suscripción "
+"internas</a> para enviar sus boletines."
 
-msgid "Image position"
-msgstr "Posición de la imagen"
+msgid "Act-On marketing lists"
+msgstr "Listas de marketing de Act-On"
 
-msgid "Select a position..."
-msgstr "Selecciona una posición…"
+msgid "List name"
+msgstr "Nombre de la lista"
 
-msgid "Settings home frontpage"
-msgstr "Preferencias para la portada principal"
+msgid "List id"
+msgstr "ID de la lista"
 
-msgid "Title for home frontpage"
-msgstr "Título para la portada principal"
+msgid "Add new marketing list"
+msgstr "Añadir nueva lista de marketing"
 
-msgid "Subtitle"
-msgstr "Subtítulo"
+msgid "Form static page url"
+msgstr "URL de la página estática del formulario"
 
-msgid "Config article module"
-msgstr "Configuración del módulo «Artículos»"
+msgid ""
+"The URL to the page that contains the form that allows users to subscribe to "
+"ActOn"
+msgstr ""
+"La URL a la página que contiene el formulario que permite a los usuarios "
+"subscribirse mediante ActOn"
+
+msgid "Act-On header id"
+msgstr "ID de la cabecera de Act-On"
+
+msgid "ActOn allow to specify a custom header text. This is the id."
+msgstr ""
+"ActOn le permite especificar un texto de cabecera personalizado. Este es el "
+"identificador"
+
+msgid "Act-On footer id"
+msgstr "ID del pie de Act-On"
+
+msgid "ActOn allow to specify a custom footer text. This is the id."
+msgstr ""
+"ActOn le permite especificar un texto de pie personalizado. Este es el "
+"identificador"
+
+msgid "Newsletter contents"
+msgstr "Contenidos del boletín"
+
+msgid "Newsletter subject"
+msgstr "Asunto del boletín"
+
+msgid "The subject of the emails in this newsletter"
+msgstr "El asunto de los correos en este boletín"
+
+msgid "Your newsletter subject"
+msgstr "El asunto del boletín"
+
+msgid "Email from"
+msgstr "Remitente"
+
+msgid "Email sender"
+msgstr "Emisor del correo"
+
+msgid "Select your recipients"
+msgstr "Selecciona tus destinatarios"
+
+msgid ""
+"External email address configured on the <a href=\"%1\">newsletter "
+"configuration section</a> "
+msgstr ""
+"La dirección de correo electrónico externa se configura desde la <a href="
+"\"%1\"> sección de configuración de boletines</a> "
+
+msgid "Add to list"
+msgstr "Añadir a la lista"
+
+msgid "Subscription lists"
+msgstr "Listas de suscripción"
+
+msgid ""
+"Subscription lists available from <a href=\"%1\">subscriptions module</a> "
+msgstr ""
+"Las listas de subscripción están disponibles desde el <a href=\"%1\">el "
+"módulo de subscripciones</a> "
+
+msgid "%1 subscribers"
+msgstr "%1 suscriptores"
+
+msgid "Add recipients manually"
+msgstr "Añadir destinatarios manualmente"
+
+msgid "Write a list of email address writing one per line"
+msgstr ""
+"Escriba una lista de direcciones de correo escribiendo cada una en una linea"
+
+msgid "Parse list & add"
+msgstr "Analizar lista y añadir"
+
+msgid "Receivers"
+msgstr "Destinatarios"
+
+msgid "Remove selected"
+msgstr "Eliminar los seleccionados"
+
+msgid "No recipients selected"
+msgstr "No se seleccionó ningún destinatario"
+
+msgid "Subscription list"
+msgstr "Lista de suscripción"
+
+msgid "Email address"
+msgstr "Dirección de correo"
+
+msgid "Email subject"
+msgstr "Asunto del email"
+
+msgid "Subject"
+msgstr "Asunto"
+
+msgid "Empty"
+msgstr "Vaciar"
+
+msgid "Click on \"Add\" or drop contents from other containers"
+msgstr ""
+"Clique en el botón «Añadir contenidos» de arriba o arrastra contenidos de "
+"otros contenedores"
+
+msgid "Newsletter sending report"
+msgstr "Informe de envío de boletín"
+
+msgid "<strong>%1 emails</strong> have being sent."
+msgstr "Se han enviado <strong>%1 correos-e</strong>."
+
+msgid "No emails were sent."
+msgstr "No se envió ningún correo-e."
+
+msgid "Please, find below the report."
+msgstr "Debajo puedes encontrar el informe."
+
+msgid "Go back to the list"
+msgstr "Volver a la lista"
+
+msgid "Potential lose of the actual generated HTML."
+msgstr "Es posible que pierdas el código HTML generado actualmente."
+
+msgid ""
+"This newsletter already have a generated HTML, potentially changed by you."
+"<br>If you update the newsletter contents the HTML will overwrite the actual "
+"HTML."
+msgstr ""
+"Este boletín ya tiene un HTML generado, potencialmente cambiado por ti."
+"<br>Si actualizas los contenidos del boletín el HTML actual se "
+"sobreescribirá."
+
+msgid "Overwrite actual HTML"
+msgstr "Sobreescribir HTML actual"
+
+msgid "There is no active container"
+msgstr "No hay ningún contenedor activado"
+
+msgid "You must select a container"
+msgstr "Debes seleccionar algún contenedor."
+
+msgid "Add Container label"
+msgstr "Añadir nombre del contenedor"
+
+msgid "Container Name"
+msgstr "Nombre del contenedor"
+
+msgid "This newsletter is going to be sent"
+msgstr "Este boletín de noticias está a punto de ser enviado."
+
+msgid "Are you sure to send %1 emails?"
+msgstr "¿Estás seguro que quieres enviar %1 correos electrónicos?"
+
+msgid "Save changes"
+msgstr "Guardar cambios"
+
+msgid "You must save a changes or back to list"
+msgstr "Debes guardar los cambios o volver a la lista"
+
+msgid "Update Container label"
+msgstr "Actualizar la etiqueta del contenedor"
+
+msgid "Some content is required"
+msgstr "Se requiere algún contenido"
+
+msgid "Template"
+msgstr "Plantilla"
+
+msgid "Add the headline of the first content at the end of the subject"
+msgstr "Añadir el titular del primer contenido al final del asunto"
+
+msgid ""
+"If this is checked, the headline of the first content will be append at the "
+"end of the subject, separated by a blank space"
+msgstr ""
+"Si está marcado, el titular del primer contenido será añadido al final del "
+"asunto, separado por un espacio en blanco"
+
+msgid "Days"
+msgstr "Días"
+
+msgid "Hours"
+msgstr "Horas"
+
+msgid "Time zone: "
+msgstr "Zona horaria:"
+
+msgid "Add an hour"
+msgstr "Añadir una hora"
+
+msgid "Recipients"
+msgstr "Destinatarios"
+
+msgid "Act-On header and footers"
+msgstr "Cabecera y pie de Act-On"
+
+msgid "Opinion type"
+msgstr "Tipo de opinión"
+
+msgid "Config newsletter module"
+msgstr "Configuración del módulo «Boletín de noticias»"
+
+msgid "Create template"
+msgstr "Crear planificación"
+
+msgid "Sendings"
+msgstr "Envios"
+
+msgid "Unable to find any item that matches your search."
+msgstr "No se han encontrado elementos que coincidan con tu búsqueda."
+
+msgid "Sent"
+msgstr "Enviado"
+
+msgid "Newsletter"
+msgstr "Boletín de noticias"
+
+msgid "Created:"
+msgstr "Creado:"
+
+msgid "Updated:"
+msgstr "Actualizado:"
+
+msgid "Not sent"
+msgstr "No enviado"
+
+msgid "%1 sent items"
+msgstr "%1 elementos enviados"
+
+msgid "Schedules"
+msgstr "Planificaciones"
+
+msgid "Not set"
+msgstr "No establecido"
+
+msgid "Optimize images"
+msgstr "Optimizar imágenes"
+
+msgid ""
+"If set, images will be automaticaly optimized when uploaded and imported"
+msgstr ""
+"Si está activo, las imágenes serán optimizadas automáticamente al subirlas o "
+"importarlas"
+
+msgid "Delete multiple images"
+msgstr "Eliminar múltiples imágenes"
+
+msgid "Delete image"
+msgstr "Eliminar imagen"
+
+msgid "Files uploaded successfully"
+msgstr "Ficheros subidos correctamente"
+
+msgid ""
+"The dropped files are uploaded but you should complete their information."
+msgstr "Los ficheros fueron subidos pero debes completar su información."
+
+msgid "Edit images"
+msgstr "Editar imágenes"
+
+msgid "No item selected"
+msgstr "No se seleccionaron elementos"
+
+msgid "Click in one item to show information about it"
+msgstr "Pulsa sobre un elemento para mostrar información sobre él."
+
+msgid "Image details"
+msgstr "Detalles de la imagen"
+
+msgid "Resolution"
+msgstr "Resolución"
+
+msgid "Config photos module"
+msgstr "Configuración del módulo «Fotos»"
+
+msgid "Mortuary"
+msgstr "Funeraria"
+
+msgid "Google maps url"
+msgstr "Url de Google Maps"
+
+msgid "New obituary"
+msgstr "Nueva esquela"
+
+msgid "Do you want to empty the trash?"
+msgstr "¿Quieres vaciar la papelera?"
+
+msgid "Delete all trashed contents"
+msgstr "Eliminar todos los contenidos en la papelera"
+
+msgid ""
+"Are you sure you want to remove permanently all the contents inside the "
+"trash?"
+msgstr ""
+"¿Estás seguro de que quieres eliminar de forma permanente todos los "
+"contenidos de la papelera¿"
+
+msgid "Yes, remove all"
+msgstr "Si, eliminarlos todos"
+
+msgid "Do you want to restore the item?"
+msgstr "¿Quieres recuperar el elemento?"
+
+msgid "Do you want to restore the selected items?"
+msgstr "¿Quieres recuperar los elementos seleccionados?"
+
+msgid "Restore"
+msgstr "Restaurar"
+
+msgid "Content Type"
+msgstr "Tipo de contenido"
+
+msgid "Letters"
+msgstr "Cartas"
+
+msgid "Images"
+msgstr "Imágenes"
+
+msgid "NewsStand"
+msgstr "Portadas de papel"
+
+msgid "IntelligentWidget"
+msgstr "IntelligentWidget"
+
+msgid "Parameter name"
+msgstr "Nombre del parámetro"
+
+msgid "Parameter value"
+msgstr "Valor de parámetro"
+
+msgid "HTML"
+msgstr "HTML"
+
+msgid "Not selected"
+msgstr "No seleccionado"
+
+msgid "Special contents"
+msgstr "Contenidos especiales"
+
+msgid "Articles in left column"
+msgstr "Artículos en la columna izquierda"
+
+msgid "Articles in right column"
+msgstr "Artículos en la columna derecha"
+
+# Albums edit
+msgid "Image for Special"
+msgstr "Imagen para el especial"
+
+msgid "Unable to find any special that matches your search."
+msgstr "No se pudieron encontrar especiales que coincidan con tu búsqueda."
+
+msgid "Section"
+msgstr "Sección"
+
+msgid "Unfavorite"
+msgstr "No Favorito"
+
+msgid "Sidebars"
+msgstr "Barras laterales"
+
+msgid "Letters to the Editor"
+msgstr "Cartas al editor"
+
+msgid "New letter"
+msgstr "Nueva carta al director"
+
+msgid "We are improving our platform."
+msgstr "Estamos mejorando nuestra plataforma."
+
+msgid ""
+"We are doing some maintenance in the Opennemas platform, please wait a few "
+"minutes."
+msgstr ""
+"Estamos realizando labores de mantenimiento en la plataforma Opennemas, por "
+"favor espere unos minutos."
 
 msgid "Slider"
 msgstr "Slider"
 
+msgid ""
+"You have reached the maximum number of 100 photos. To add new photos remove "
+"the older or create a new album."
+msgstr ""
+"Has alcanzado el número máximo de 100 fotos. Para agregar nuevas fotos, "
+"elimine las antiguas o cree un nuevo álbum."
+
 msgid "Config album module"
 msgstr "Configuración del módulo «Álbum»"
 
-msgid "Where are you from?"
-msgstr "De donde eres?"
+msgid "Private"
+msgstr "Privada"
 
-msgid "Contact information"
-msgstr "Información de contacto"
+msgid "Public"
+msgstr "Pública"
 
-msgid "First name"
-msgstr "Nombre"
+msgid ""
+"If enabled, subscribers will not see this subscription while registering or "
+"editing profile"
+msgstr ""
+"Si está activado, los suscriptores no podrán ver esta suscripción mientras "
+"se registran o editan su perfil"
 
-msgid "Last name"
-msgstr "Apellido"
+msgid "Manual"
+msgstr "Manual"
 
-msgid "Company name"
-msgstr "Nombre de la empresa"
+msgid "Accept requests manually"
+msgstr "Aceptar solicitudes manualmente"
 
-msgid "This is not a valid email"
-msgstr "Este no es un correo electrónico válido"
+msgid ""
+"If enabled, an administrator will have to accept new members manually one by "
+"one"
+msgstr ""
+"Si está activado, un administrador tendrá que aceptar a nuevos miembros "
+"manualmente uno a uno"
 
-msgid "Phone number"
-msgstr "Número de teléfono"
+msgid "Do you want this feature?"
+msgstr "¿Quieres esta funcionalidad?"
 
-msgid "This is not a valid vat_number identification number"
-msgstr "Este no es un número de identificación fiscal válido"
+msgid "Go to Store"
+msgstr "Ir a la tienda"
 
-msgid "Vat identification number"
-msgstr "Número de identificación fiscal"
+msgid ""
+"If enabled, this subscription will be selectable when creating newsletters"
+msgstr ""
+"Si está activado, esta suscripción será seleccionable cuando se creen "
+"boletines de noticias"
 
-msgid "What is a VAT identification number?"
-msgstr "¿Qué es un número de identificación fiscal?"
+msgid "Restrictions for members"
+msgstr "Restricciones para miembros"
 
-msgid "This is not a valid address"
-msgstr "Este no es una dirección válida"
+msgid "If enabled, button to print contents will be hidden"
+msgstr "Si está activado, se ocultará el botón de imprimir contenidos"
 
-msgid "This is not a valid postal_code"
-msgstr "Esta no es un código postal válido"
+msgid "If enabled, button to share contents in social networks will be hidden"
+msgstr ""
+"Si está activado, se ocultarán los botones para compartir en redes sociais"
 
-msgid "This is not a valid city"
-msgstr "Esta no es una ciudad válida"
+msgid "If enabled, some browser actions (e.g. cut, copy,...) will be blocked"
+msgstr ""
+"Si está activado, algunas acciones del navegador (e.g. cortar, copiar,...) "
+"serán bloqueadas"
 
-msgid "This is not a valid state"
-msgstr "Este no es un estado válido"
+msgid "If enabled, advertisements will be disabled when using safeframe"
+msgstr ""
+"Si está activado, la publicidad se deshabilitará cuando se use safeframe"
 
-msgid "State/Province"
+msgid "If enabled, this subscription will require a payment to become a member"
+msgstr ""
+"Si está activado, esta suscripción requerirá un pago para convertirse en "
+"miembro"
+
+msgid "Restrictions for non-members"
+msgstr "Restricciones para no-miembros"
+
+msgid "Indexation"
+msgstr "Indexado"
+
+msgid "If enabled, the noindex directive will be added to the HTML"
+msgstr "Si está activado, se añadirá la directiva noindex al HTML"
+
+msgid "Block actions"
+msgstr "Bloquear acciones"
+
+msgid ""
+"If enabled, non-members will not be able to access to contents in this "
+"subscription"
+msgstr ""
+"Si está activado, los no-miembros no podrán acceder al contenido de esta "
+"suscripción."
+
+msgid ""
+"The content will not be available in frontpages, widgets, RSS and sitemaps"
+msgstr ""
+"El contenido no estará disponible en las portadas, widgets, RSS y sitemaps"
+
+msgid "Hide information"
+msgstr "Ocultar información"
+
+msgid ""
+"Some information will be hidden for non-members when accessing contents in "
+"this subscription"
+msgstr ""
+"Alguna información será ocultada para no-miembros cuando accedan a "
+"contenidos en esta suscripción"
+
+msgid "Username or password are incorrect"
+msgstr "Nombre de usuario o contraseña incorrecto."
+
+msgid "Please, check if the credentials are correct and try again."
+msgstr "Compruebe que las credenciales son las correctas y pruebe de nuevo."
+
+msgid "Available categories for sync"
+msgstr "Categorías disponibles para sincronizar"
+
+msgid "No elements to sync in this server"
+msgstr "No hay elementos para sincronizar en este servidor"
+
+msgid "The given url has no elements to sync or it is not an Opennemas server."
+msgstr ""
+"La url proporcionada no tiene elementos o no es un servidor de Opennemas."
+
+msgid "Also check if the credentials are correct."
+msgstr "Compruebe si las credenciales son las correctas."
+
+msgid "Instance Synchronization"
+msgstr "Sincronización de instancias"
+
+msgid "Ins. Sync."
+msgstr "Sinc. Inst."
+
+msgid "Adding site"
+msgstr "Añadiendo sitio"
+
+msgid "Saving"
+msgstr "Guardando"
+
+msgid "Site URL"
+msgstr "URL del sitio"
+
+msgid "http://example.com"
+msgstr "http://www.ejemplo.es/"
+
+msgid "Add site to sync"
+msgstr "Añadir site a la sincronización"
+
+msgid "Add site"
+msgstr "Añadir sitio"
+
+msgid "Site Url"
+msgstr "URL del sitio"
+
+msgid "Categories to Sync"
+msgstr "Categorías a sincronizar"
+
+msgid "Categories to sync"
+msgstr "Categorías a sincronizar"
+
+msgid "There are no synchronize settings available"
+msgstr "No hay ninguna configuración de sincronización disponible"
+
+msgid "Try adding one site to synchronize on the config button above."
+msgstr ""
+"Intenta añadir un site para sincronizar utilizando el botón de configuración"
+
+msgid "Ads"
+msgstr "Publicidades"
+
+msgid "Cookie lifetime for intersticials"
+msgstr "Tiempo de vida de la cookie para intersticiales"
+
+msgid ""
+"This setting indicates how long will take to re-display the interstitial in "
+"frontpage."
+msgstr ""
+"Esta opción indica cuanto tiempo debe pasar para volver a mostrar el "
+"intersticial en portada."
+
+msgid "(in minutes)"
+msgstr "(en minutos)"
+
+msgid "Default mark shown indicating an advertisement"
+msgstr "Marca por defecto mostrada para indicar una publicidad"
+
+msgid ""
+"This is the text shown near advertisements. If you don't fill this field, "
+"the default value \"%1\" will be shown."
+msgstr ""
+"Este es el texto que se muestra al lado de las publicidades. Si no completa "
+"este campo, se mostrará el valor por defecto \"%1\"."
+
+msgid "Allow generic advertisement"
+msgstr "Permitir publicidad genérica"
+
+msgid "This settings allow printing home ads when ads in category are empty."
+msgstr ""
+"Estos ajustes permiten imprimir anuncios de portada cuando los anuncios en "
+"la categoría están vacíos."
+
+msgid "SafeFrame by default"
+msgstr "SafeFrame por defecto"
+
+msgid "Recommended"
+msgstr "Recomendado"
+
+msgid ""
+"This feature displays advertisements inside iframes. It improves the user "
+"experience and has a better performance."
+msgstr ""
+"Esta característica mustra las publicidades dentro de «iframes». Mejora la "
+"experiencia de usuario y tiene mejor rendimiento."
+
+msgid "AdSense integration"
+msgstr "Integración con AdSense"
+
+msgid "AdSense ID"
+msgstr "ID de AdSense"
+
+msgid "The AdSense ID (i.e. ca-pub-0000000000000000)"
+msgstr "El identificador de AdSense (ej. ca-pub-0000000000000000)"
+
+msgid "OpenX/Revive Ad server integration"
+msgstr "Integración con servidor de publicidad OpenX/Revive"
+
+msgid "Ad server base url"
+msgstr "Url base del servidor de publicidad"
+
+msgid "The ad server URL (i.e. http://ad.serverexample.net/)."
+msgstr ""
+"La URL del servidor de publicidad (p.ej. http://ad.servidorejemplo.net/)."
+
+msgid "Smart Ad server integration"
+msgstr "Integración con servidor de publicidad Smart"
+
+msgid "Domain"
+msgstr "Dominio"
+
+msgid "The ad server Domain (i.e. https://www8.smartadserver.com/)."
+msgstr ""
+"El dominio del servidor de publicidad (p.ej. https://www8.smartadserver."
+"com/)."
+
+msgid "Tags format"
+msgstr "Formato de tags"
+
+msgid "Network ID"
+msgstr "Network ID"
+
+msgid "The ad server network ID"
+msgstr "El identificador de red del Ad server"
+
+msgid "Site ID"
+msgstr "Site ID"
+
+msgid "The ad server site ID"
+msgstr "El identificador de sitio del Ad server"
+
+msgid "Page ID"
+msgstr "Page ID"
+
+msgid "Article: inner"
+msgstr "Articulo: interior"
+
+msgid "Opinion: frontpage"
+msgstr "Opinión: portada"
+
+msgid "Opinion: inner"
+msgstr "Opinión: interior"
+
+msgid "Video: frontpages"
+msgstr "Vídeo: portadas"
+
+msgid "Video: inner"
+msgstr "Vídeo: interior"
+
+msgid "Album: frontpages"
+msgstr "Álbum: portadas"
+
+msgid "Album: inner"
+msgstr "Álbum: interior"
+
+msgid "Poll: frontpage"
+msgstr "Encuesta: portada"
+
+msgid "Poll: inner"
+msgstr "Encuesta: interior"
+
+msgid "Others"
+msgstr "Otros"
+
+msgid "The ad server pages ID"
+msgstr "El identificador de páginas del Ad server"
+
+msgid "Header Bidding"
+msgstr "Header Bidding"
+
+msgid "Use header bidding"
+msgstr "Usar header bidding"
+
+msgid "Managed Holistic+"
+msgstr "Holística+ gestionada"
+
+msgid "Targeting"
+msgstr "Segmentación"
+
+msgid "Custom code"
+msgstr "Código personalizado"
+
+msgid "DFP targeting"
+msgstr "Segmentación DFP"
+
+msgid "Key for category targeting"
+msgstr "Clave para segmentación DFP por categoría"
+
+msgid ""
+"Set a key for targeting your ads by category. Note that the value for "
+"targeting will always be the current category internal name"
+msgstr ""
+"Establecer una clave para la segmentación de los anuncios por categorías. "
+"Tenga en cuenta que el valor para la segmentación será siempre el nombre "
+"interno de la categoría actual"
+
+msgid "Key for module targeting"
+msgstr "Clave para segmentación DFP por módulo"
+
+msgid ""
+"Set a key for targeting your ads by module. Note that the value for "
+"targeting will always be the current module name"
+msgstr ""
+"Establecer una clave para la segmentación de los anuncios por módulos. Tenga "
+"en cuenta que el valor para la segmentación será siempre el nombre interno "
+"del módulo actual"
+
+msgid "Key for content ID targeting"
+msgstr "Clave para segmentación DFP por ID de contenido"
+
+msgid ""
+"Set a key for targeting your ads by content ID. Note that the value for "
+"targeting will always be the current content ID"
+msgstr ""
+"Establecer una clave para la segmentación de los anuncios por ID de "
+"contenido. Tenga en cuenta que el valor para la segmentación será siempre el "
+"ID delcontenido actual"
+
+msgid "DFP custom code"
+msgstr "Código DFP personalizado"
+
+msgid "Custom code at the end of DFP tags"
+msgstr "Código personalizado al final de los tags de DFP"
+
+msgid "Tradedoubler integration"
+msgstr "Integración con Tradedoubler"
+
+msgid "Tradedoubler ID"
+msgstr "Tradedoubler ID"
+
+msgid "Only the ID from Tradedoubler validation tag"
+msgstr "Sólo el ID de la etiqueta de validación de TradeDoubler"
+
+msgid "Iadbox integration"
+msgstr "Integración con Iadbox"
+
+msgid "Iadbox ID"
+msgstr "ID de iadbox"
+
+msgid "Iadbox affiliate ID"
+msgstr "ID de afiliado de Iadbox"
+
+msgid "Advanced"
+msgstr "Avanzado"
+
+msgid "Authorized Digital Sellers"
+msgstr "Authorized Digital Sellers"
+
+msgid "This will be the content of the file ads.txt on your root domain"
+msgstr "Este será el contenido del archivo ads.txt en la raíz de tu dominio"
+
+msgid "Advertisement without name"
+msgstr "Publicidad sin nomber"
+
+msgid "Floating ads (for drop them into columns)"
+msgstr "Publicidades flotantes (para arrastrar en columnas)"
+
+msgid "Creating banner"
+msgstr "Creando publicidad"
+
+msgid "Editing banner"
+msgstr "Editando publicidad"
+
+msgid "HTML or Javascript code"
+msgstr "Código HTML o Javascript"
+
+msgid "OpenX zone id"
+msgstr "Id de zona de OpenX"
+
+msgid ""
+"OpenX/Revive Ad server uses an id to identify an advertisement. Please fill "
+"the zone id from your OpenX/Revive server %1"
+msgstr ""
+"El servidor de publicidad OpenX/Revive usa un identificador para distinguir "
+"una publicidad. Completa el identificador de zona desde tu servidor de OpenX/"
+"Revive %1"
+
+msgid "Google DFP unit id"
+msgstr "Id de unidad de Google DFP"
+
+msgid ""
+"Google DFP uses an unit ID to identify an advertisement. Please fill the "
+"zone id from your Google DFP panel"
+msgstr ""
+"Google DFP usa un identificador de unidad para identificar una publicidad. "
+"Completa el id de zona desde tu panel de Google DFP."
+
+msgid "Format ID"
+msgstr "Format ID"
+
+msgid "Smart Ad server uses format ID to identify the advertisement format"
+msgstr ""
+"Smart Ad server usa un identificador de formato para identificar el formato "
+"de anuncio"
+
+msgid "Mark"
+msgstr "Marca"
+
+msgid "Top"
+msgstr "Encima"
+
+msgid "Right"
+msgstr "Derecha"
+
+msgid "Bottom"
+msgstr "Debajo"
+
+msgid "Left"
+msgstr "Izquierda"
+
+msgid "Write here your custom mark. Default is \"%1\""
+msgstr "Escribe aquí tu marca personalizada. Por defecto es \"%1\""
+
+msgid ""
+"Defines the orientation for the word that marks the advertisement position"
+msgstr "Define la orientación de la palabra que marca el espacio de publicidad"
+
+msgid "Width"
+msgstr "Ancho"
+
+msgid "Desktop"
+msgstr "Escritorio"
+
+msgid "Tablet"
+msgstr "Tablet"
+
+msgid "Display the advertisement only on the selected devices"
+msgstr "Mostrar la publicidad solo en los dispositivos seleccionados"
+
+msgid "Dimensions"
+msgstr "Dimensiones"
+
+msgid "One or more dimensions are invalid"
+msgstr "Una o más dimensiones son inválidas"
+
+msgid "Height"
+msgstr "Alto"
+
+msgid "Date range"
+msgstr "Rango de fechas"
+
+msgid "Display the advertisement if current date is in range"
+msgstr "Mostrar la publicidad si la fecha actual está dentro del rango"
+
+msgid "Select all"
+msgstr "Seleccionar todo"
+
+msgid ""
+"Display the advertisement if user belongs to one or more of the selected "
+"user groups"
+msgstr ""
+"Mostrar la publicidad si el usuario pertenece a uno o más grupos "
+"seleccionados"
+
+msgid "Duration"
+msgstr "Duración"
+
+msgid "Display the advertisement for a limited time (intersticials only)"
+msgstr "Mostrar la publicidad durante un tiempo limitado (solo intersticiales)"
+
+msgid "Show in all categories"
+msgstr "Mostrar en todas las categorías"
+
+msgid "Display the advertisement only in the selected categories"
+msgstr "Mostrar la publicidad solo en las categorías seleccionadas"
+
+msgid "Select/deselect all"
+msgstr "Seleccionar/deseleccionar todo"
+
+msgid ""
+"We recommend you to use the \"Show in all categories\" mark to avoid "
+"unchecked future created categories"
+msgstr ""
+"Recomendamos usar la opción \"Mostrar en todas las categorías\" para evitar "
+"que categorías futuras queden sin desmarcar"
+
+msgid "No positions selected, mark those you want on the form below."
+msgstr "No se seleccionó ninguna posición, marca las que quieras justo debajo"
+
+msgid "%1 positions"
+msgstr "%1 posición"
+
+msgid "And %1 more…"
+msgstr "Y %1 más…"
+
+msgid "Show less…"
+msgstr "Mostrar menos…"
+
+msgid "Obituary: frontpage"
+msgstr "Esquela: portada"
+
+msgid "Obituary: inner"
+msgstr "Esquela: interior"
+
+msgid "Google AMP"
+msgstr "Google AMP"
+
+msgid "Facebook Instant Articles"
+msgstr "Facebook Instant Articles"
+
+msgid "Ad block detected"
+msgstr "Bloqueador de publicidad detectado"
+
+msgid "Please, disable it to work with Opennemas"
+msgstr "Por favor, desactívelo para trabajar correctamente con Opennemas"
+
+msgid "Entering on the requested page"
+msgstr "Entrando en la página solicitada"
+
+msgid "Skip advertisement"
+msgstr "Saltar publicidad"
+
+msgid ""
+"A Google DFP advertisement has been detected in your HTML/javascript "
+"advertisement but Opennemas already supports this type of advertisements."
+msgstr ""
+"Se ha detectado una publicidad de Google DFP en tu publicidad HTML/"
+"javascript. Opennemas se puede integrar con este tipo de publicidades."
+
+msgid ""
+"Would you like to auto-correct this advertisement to use our Google DFP "
+"integration?"
+msgstr ""
+"¿Quieres que se autocorrija esta publicidad para usar la integración de "
+"Google DFP?"
+
+msgid "Google DFP unit"
+msgstr "Unidad de Google DFP"
+
+msgid "Unable to find any advertisement that matches your search."
+msgstr "No se pudieron encontrar publicidades que coincidan con tu búsqueda."
+
+msgid "Media element (jpg, png, gif)"
+msgstr "Elemento multimedia (jpg, png gif)"
+
+msgid "Media flash element (swf)"
+msgstr "Elemento multimedia Flash (swf)"
+
+msgid "No positions assigned"
+msgstr "Sin posiciones asignadas"
+
+msgid "No clicks"
+msgstr "Sin clics"
+
+msgid "%1 clicks"
+msgstr "%1 clics"
+
+msgid "My account"
+msgstr "Mi cuenta"
+
+msgid "This is the email used to create your newspaper"
+msgstr "Este es el correo electrónico usado para crear el periódico"
+
+msgid "Your newspaper was created on %1"
+msgstr "Tu periódico fue creado el %1"
+
+msgid "Storage size"
+msgstr "Almacenamiento ocupado"
+
+msgid "Users Active"
+msgstr "Usuarios activos"
+
+msgid "Emails sent from"
+msgstr "Correos electrónicos enviados desde"
+
+msgid "Opennemas offers many more modules and solutions"
+msgstr "Opennemas ofrece muchos más módulos y soluciones"
+
+msgid "Check out our modules"
+msgstr "Comprueba nuestros módulos"
+
+msgid ""
+"If you need a custom plan or you want to purchase a plan or module please "
+"click in the next link:"
+msgstr ""
+"Si necesitas un plan personalizado o deseas adquirir un plan o un módulo por "
+"favor pulsa en el siguiente link:"
+
+msgid "Contact Us"
+msgstr "Contacta con nosotros"
+
+msgid "State"
 msgstr "Provincia/Estado"
 
-msgid "Select a province"
-msgstr "Selecciona una provincia"
-
-msgid "Group name"
-msgstr "Nombre del grupo"
-
-msgid "Reset filters"
-msgstr "Reiniciar filtros"
-
-msgid "Do you want to delete the user group?"
-msgstr "¿Estás seguro de que quieres eliminar el grupo de usuarios?"
-
-msgid "Do you want to delete the selected user groups?"
+msgid ""
+"Something wrong? Contact our <a href=\"javascript:UserVoice."
+"showPopupWidget();\">support team</a>."
 msgstr ""
-"¿Estás seguro que quieres eliminar los grupos de usuarios seleccionados?"
+"¿Algo está mal? Contacta con nuestro <a href=\"javascript:UserVoice."
+"showPopupWidget();\">equipo de soporte</a>."
 
-msgid "Zend Opcache status"
-msgstr "Estado de Zend Opcache"
+msgid "You have no billing information"
+msgstr "No tienes información de facturación"
 
-msgid "Opcache summary"
-msgstr "Resumen de Opcache"
+msgid "You will be asked to add it during the checkout in our store"
+msgstr ""
+"Te solicitaremos añadirla durante el proceso de compra en nuestra tienda"
 
-msgid "Detailed statistics"
-msgstr "Estadísticas detalladas"
+msgid "Last purchases"
+msgstr "Últimas compras"
 
-msgid "Path"
-msgstr "Ruta"
+msgid "There are no purchases for now."
+msgstr "No hay compras por ahora."
 
-msgid "Memory"
-msgstr "Memoria"
+msgid ""
+"Check our <a class=\"bold\" href=\"#\">store</a> and improve your newspaper."
+msgstr ""
+"Visita nuestra <a class=\"bold\" href=\"#\">tienda</a> y mejora tu periódico."
 
-msgid "Hits"
-msgstr "Impactos"
+msgid "More"
+msgstr "Más"
+
+msgid "If enabled, this user group will not be visible in some circunstances"
+msgstr ""
+"Si está activado, este grupo de usuarios no será visible en algunas "
+"circunstancias"
+
+msgid "Privileges"
+msgstr "Privilegios"
+
+msgid "Toggle all privileges"
+msgstr "Activar/desactivar todos los privilegios"
+
+msgid "Exclusive"
+msgstr "Exclusivo"
+
+msgid "Delivery time"
+msgstr "Tiempo de entrega"
+
+msgid "weeks"
+msgstr "semanas"
+
+msgid "months"
+msgstr "meses"
+
+msgid "standard"
+msgstr "estándar"
+
+msgid "widget"
+msgstr "widget"
+
+msgid "Immediately"
+msgstr "Inmediatamente"
+
+msgid "Standard"
+msgstr "Estándar"
+
+msgid "Demo"
+msgstr "Demo"
+
+msgid "In cart"
+msgstr "En el carrito"
+
+msgid "Enabling"
+msgstr "Activando"
+
+msgid "Custom"
+msgstr "Personalizar"
+
+msgid "Download the style guide for this theme"
+msgstr "Descargar la guía de estilo para este tema"
+
+msgid "Download style guide"
+msgstr "Descargar guía de estilo"
+
+msgid "Available"
+msgstr "Disponible"
+
+msgid "My themes"
+msgstr "Mis temas"
+
+msgid "Addons"
+msgstr "Añadidos"
+
+msgid "No themes available"
+msgstr "No hay temas disponibles"
+
+msgid "Link video from other services"
+msgstr "Enlazar vídeo desde otros servicios"
+
+msgid "Use HTML code"
+msgstr "Usar código HTML"
+
+msgid "Use file video URLs"
+msgstr "Usar URLs a ficheros de vídeo"
+
+msgid "Video URL"
+msgstr "URL del vídeo"
+
+msgid "Get information"
+msgstr "Obtener información"
+
+msgid "MP4 format"
+msgstr "Formato MP4"
+
+msgid "http://www.example.com/path/to/file.mp4"
+msgstr "http://www.ejemplo.es/ruta/al/archivo.mp4"
+
+msgid "Ogg format"
+msgstr "Formato Ogg"
+
+msgid "http://www.example.com/path/to/file.ogg"
+msgstr "http://www.ejemplo.es/ruta/al/archivo.ogg"
+
+msgid "WebM format"
+msgstr "Formato WebM"
+
+msgid "http://www.example.com/path/to/file.webm"
+msgstr "http://www.ejemplo.es/ruta/al/archivo.webm"
+
+msgid "Write HTML code"
+msgstr "Escriba el código HTML"
+
+msgid "Loading video information"
+msgstr "Cargando información de vídeo"
+
+msgid "Video preview"
+msgstr "Previsualización de vídeo"
+
+msgid "Original Title"
+msgstr "Título original"
+
+msgid "Embed Url"
+msgstr "URL de embebido"
+
+msgid "Thumbnail"
+msgstr "Miniatura"
+
+msgid "Show in RSS"
+msgstr "Mostrar en el RSS"
+
+msgid "If this option is activated this author will be showed in rss"
+msgstr "Si esta opción está activada este autor se mostrará en el RSS"
+
+msgid "View as Blog"
+msgstr "Ver como Blog"
+
+msgid "If this option is activated page author will be showed as blog"
+msgstr ""
+"Si esta opción está activada la página del autor se mostrará como un blog"
+
+msgid "Twitter user"
+msgstr "Usuario en twitter"
+
+msgid "Facebook user"
+msgstr "Usuario de Facebook"
+
+msgid "No biography"
+msgstr "Sin biografía"
+
+msgid ""
+"Here you can mass-delete cache, compile, sessions, and other stuff<br>\n"
+"                        from one specific instance."
+msgstr ""
+"Aquí puede eliminar en lote, caches, compiles, sesiones y otras cosas. de "
+"una instancia específica."
 
 msgid "Command output"
 msgstr "Salida del comando"
@@ -6464,89 +6447,62 @@ msgstr ""
 "compile.\n"
 "<br>Si selecciona «Todas» se limpiaran todos los ficheros compile y de cache."
 
-msgid "Do you want to log out?"
-msgstr "¿Quieres cerrar la sesión?"
+msgid "Zend Opcache status"
+msgstr "Estado de Zend Opcache"
 
-msgid "Login"
-msgstr "Iniciar sesión"
+msgid "Opcache summary"
+msgstr "Resumen de Opcache"
 
-msgid "New purchase"
-msgstr "Nueva compra"
+msgid "Detailed statistics"
+msgstr "Estadísticas detalladas"
 
-msgid "Edit purchase"
-msgstr "Editar compra"
+msgid "Path"
+msgstr "Ruta"
 
-msgid "Instance"
-msgstr "Instancia"
+msgid "Memory"
+msgstr "Memoria"
 
-msgid "ID"
-msgstr "ID"
+msgid "Hits"
+msgstr "Impactos"
 
-msgid "Info"
-msgstr "Info"
+msgid "Action"
+msgstr "Acción"
 
-msgid "Client"
-msgstr "Cliente"
+msgid "Do you want to delete the client?"
+msgstr "¿Estás seguro de que quieres eliminar el cliente?"
 
-msgid "No client data available"
-msgstr "No hay datos del cliente"
+msgid "Do you want to delete the selected clients?"
+msgstr "¿Estás seguro de que quieres eliminar los clientes seleccionados?"
 
-msgid "No payment data availble"
-msgstr "No hay datos de pago disponibles"
+msgid "New client"
+msgstr "Nuevo cliente"
 
-msgid "Invoice"
-msgstr "Factura"
+msgid "Edit client"
+msgstr "Editar cliente"
 
-msgid "No invoice data availble"
-msgstr "No hay datos de facturación disponibles"
+msgid "Owner"
+msgstr "Propietario"
 
-msgid "Step"
-msgstr "Paso"
+msgid "Partner who can see this client information"
+msgstr "Partner que puede ver esta información del cliente"
 
-msgid "Quantity"
-msgstr "Cantidad"
+msgid "View on"
+msgstr "Ver en"
 
-msgid "Cost"
-msgstr "Precio"
+msgid "VAT No."
+msgstr "Nº fiscal"
 
-msgid "Subtotal"
-msgstr "Subtotal"
+msgid "Reset filters"
+msgstr "Reiniciar filtros"
 
-msgid "Completed purchases"
-msgstr "Compras completadas"
-
-msgid "Uncompleted purchases"
-msgstr "Compras no completadas"
-
-msgid "Search by client"
-msgstr "Buscar por cliente"
-
-msgid "Client ID"
-msgstr "ID de cliente"
-
-msgid "Payment ID"
-msgstr "ID de pago"
-
-msgid "Invoice ID"
-msgstr "ID de factura"
+msgid "Vat number"
+msgstr "Número fiscal"
 
 msgid "#"
 msgstr "#"
 
-msgid "No information"
-msgstr "Sin información"
-
-msgid "Do you want to delete the purchase?"
-msgstr "Quieres eliminar esta compra?"
-
-msgid "Do you want to delete the selected purchases?"
-msgstr "¿Estás seguro de que quieres eliminar las compras seleccionadas?"
-
-msgid "Do you want to modify this settings?"
-msgstr "¿Quieres modificar esta configuración?"
-
-msgid "This action can affect the performance of the platform"
-msgstr "Esta acción puede afectar al rendimiento de la plataforma"
+msgid "P.O."
+msgstr "Código postal"
 
 msgid "Initializing"
 msgstr "Iniciando"
@@ -6556,6 +6512,9 @@ msgstr "Bienvenido, Maestro"
 
 msgid "User name"
 msgstr "Nombre de usuario"
+
+msgid "Login"
+msgstr "Iniciar sesión"
 
 msgid ""
 "Your browser was unable to load all of Opennemas's resources. They may have "
@@ -6569,11 +6528,50 @@ msgstr ""
 "Pulsa Ctrl+F5 o Ctrl+Mayús+R para hacer que tu navegador recargue la "
 "aplicación."
 
+msgid "Instance"
+msgstr "Instancia"
+
 msgid "Notification"
 msgstr "Notificación"
 
+msgid "Client"
+msgstr "Cliente"
+
 msgid "Group"
 msgstr "Grupo"
+
+msgid "Do you want to delete the user?"
+msgstr "¿Estás seguro de que quieres eliminar el usuario?"
+
+msgid "Do you want to delete the selected users?"
+msgstr "¿Estás seguro de que quieres eliminar los usuarios seleccionados?"
+
+msgid "Display name"
+msgstr "Nombre en pantalla"
+
+msgid "Blog Url"
+msgstr "Url del blog"
+
+msgid "Extensions the user can activate in instance edition"
+msgstr "Extensiones que el usuario puede actiar en la edición de instancia"
+
+msgid "The maximum number of instances the user can create"
+msgstr "El número máximo de instancias que el usuario puede crear"
+
+msgid "User type"
+msgstr "Tipo de usuario"
+
+msgid "Backend"
+msgstr "Panel de control"
+
+msgid "Frontend"
+msgstr "Público"
+
+msgid "User language"
+msgstr "Idioma del usuario"
+
+msgid "Used for displayed messages, interface and measures in your page."
+msgstr "Usado para los mensajes, interfaz y medidas en tu página web."
 
 msgid "Welcome to OpenNeMas manager"
 msgstr "Bienvenido al Gestor de Opennemas"
@@ -6581,48 +6579,11 @@ msgstr "Bienvenido al Gestor de Opennemas"
 msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
 
-msgid "Our Videos"
-msgstr "Nuestros vídeos"
+msgid "Do you want to delete the module?"
+msgstr "¿Estás seguro de que quieres eliminar el módulo?"
 
-msgid "Our News"
-msgstr "Nuestras noticias"
-
-msgid "Our Twitter"
-msgstr "Nuestro twitter"
-
-msgid "Our Facebook"
-msgstr "Nuestro facebook"
-
-msgid "Our Google+"
-msgstr "Nuestro Google+"
-
-msgid "Our Company"
-msgstr "Nuestra empresa"
-
-msgid "Please do not hesitate to share feedback, questions or doubts with us"
-msgstr ""
-"Si tiene cualquier pregunta no dude en ponerse en contacto con nosotros "
-"mediante"
-
-msgid "<strong>ticketing system"
-msgstr "<strong>o mediante nuestro servicio de incidencias"
-
-msgid "(also available from Control Panel on the top right);"
-msgstr "(también disponible en la esquina superior del panel de control);"
-
-msgid "Regards,"
-msgstr "Atentamente,"
-
-msgid ""
-"<a href=\"http://www.opennemas.com/\" style=\"font-family: 'trebuchet ms', "
-"'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif; "
-"font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
-"<span style=\"color:#000000\">Team</span>"
-msgstr ""
-"<a href=\"http://www.opennemas.com/\" style=\"font-family: 'trebuchet ms', "
-"'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif; "
-"font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
-"<span style=\"color:#000000\">Equipo</span>"
+msgid "Do you want to delete the selected modules?"
+msgstr "¿Estás seguro de que quieres eliminar los módulos seleccionados?"
 
 msgid "New module"
 msgstr "Nuevo módulo"
@@ -6681,141 +6642,43 @@ msgstr "Traducciones completadas"
 msgid "translations left"
 msgstr "traducciones que faltan"
 
-msgid "Do you want to delete the module?"
-msgstr "¿Estás seguro de que quieres eliminar el módulo?"
+msgid "Do you want to log out?"
+msgstr "¿Quieres cerrar la sesión?"
 
-msgid "Do you want to delete the selected modules?"
-msgstr "¿Estás seguro de que quieres eliminar los módulos seleccionados?"
+msgid "We seem to have lost you in the clouds."
+msgstr "Parece que te perdimos en las nubes."
 
-msgid "Display name"
-msgstr "Nombre en pantalla"
+msgid "The page your looking for is not here"
+msgstr "La página que estas buscando no está aquí"
 
-msgid "Blog Url"
-msgstr "Url del blog"
+msgid "You shall not pass!"
+msgstr "No puedes pasar!"
 
-msgid "Extensions the user can activate in instance edition"
-msgstr "Extensiones que el usuario puede actiar en la edición de instancia"
+msgid "You are not allowed to access this resource."
+msgstr "No tiene permiso para acceder a este recurso."
 
-msgid "The maximum number of instances the user can create"
-msgstr "El número máximo de instancias que el usuario puede crear"
+msgid "Do you want to delete the instance?"
+msgstr "¿Estás seguro de que quieres eliminar la instancia?"
 
-msgid "User type"
-msgstr "Tipo de usuario"
+msgid "Do you want to delete the selected instances?"
+msgstr "¿Estás seguro de que quieres eliminar las instancias seleccionadas?"
 
-msgid "Backend"
-msgstr "Panel de control"
-
-msgid "Frontend"
-msgstr "Público"
-
-msgid "User language"
-msgstr "Idioma del usuario"
-
-msgid "Used for displayed messages, interface and measures in your page."
-msgstr "Usado para los mensajes, interfaz y medidas en tu página web."
-
-msgid "Do you want to delete the user?"
-msgstr "¿Estás seguro de que quieres eliminar el usuario?"
-
-msgid "Do you want to delete the selected users?"
-msgstr "¿Estás seguro de que quieres eliminar los usuarios seleccionados?"
-
-msgid "Contact"
-msgstr "Contacto"
-
-msgid "Last activity"
-msgstr "Última actividad"
-
-msgid "Attachments"
-msgstr "Adjuntos"
-
-msgid "Kioskos"
-msgstr "Kioskos"
-
-msgid "Emails"
-msgstr "Emails"
-
-msgid "Media size"
-msgstr "Tamaño del media"
-
-msgid "Page views"
-msgstr "Páginas vistas"
-
-msgid "Blocked"
-msgstr "Bloqueada"
-
-msgid "New instance"
-msgstr "Nueva instancia"
-
-msgid "Edit instance"
-msgstr "Editar instancia"
-
-msgid "Created at"
-msgstr "Creado en"
-
-msgid "Created from"
-msgstr "Creado el"
-
-msgid "(Human readable name)"
-msgstr "(Nombre legible por personas)"
-
-msgid "Contact mail"
-msgstr "Email de contacto"
-
-msgid "Owner"
-msgstr "Propietario"
-
-msgid "Backend access blocked for instance users"
+msgid "There was an error while creating an instance with the following data:"
 msgstr ""
-"Acceso al panel de administración bloqueado para usuarios de la instancia"
+"Se ha producido un error al actualizar una instancia con los siguientes "
+"datos:"
 
-msgid "No main domain"
-msgstr "Sin dominio principal"
+msgid "Instance internal_name"
+msgstr "Nombre interno de la instancia"
 
-msgid "Instance domains cannot be empty."
-msgstr "Los dominios de la instancia no pueden estar vacíos."
+msgid "Instance contact_mail"
+msgstr "Email de contacto de la instancia"
 
-msgid "Domain expire date:"
-msgstr "Tiempo de expiración de dominio:"
+msgid "Instance domains"
+msgstr "Dominios de la instancia"
 
-msgid "Search by name or street"
-msgstr "Buscar por nombre o dirección"
-
-msgid "There is no client linked to this instance"
-msgstr "No hay ningún cliente asociado a esta instancia"
-
-msgid "Try to search a client by name or street"
-msgstr "Intenta buscar un cliente por nombre o dirección"
-
-msgid "There are no purchases for now"
-msgstr "No hay compras por ahora"
-
-msgid "View purchase"
-msgstr "Ver compra"
-
-msgid "Other"
-msgstr "Otros"
-
-msgid "Alphanumeric, without spaces"
-msgstr "Alfanumérico, sin espacios"
-
-msgid "Database"
-msgstr "Base de datos"
-
-msgid "Minimum password level"
-msgstr "Nivel mínimo de contraseña"
-
-msgid "Weak"
-msgstr "Débil"
-
-msgid "Good"
-msgstr "Buena"
-
-msgid "Strong"
-msgstr "Fuerte"
-
-msgid "Maximun number of emails sent by month"
-msgstr "Número máximo de emails enviados al mes"
+msgid "Error"
+msgstr "Error"
 
 msgid "A new instance has been created"
 msgstr "Se ha creado una nueva instancia"
@@ -6883,128 +6746,111 @@ msgstr ""
 "También disponemos de un articulo de \"Primeros Pasos en Opennemas\" que "
 "podría ayudarte"
 
-msgid "There was an error while creating an instance with the following data:"
+msgid "New instance"
+msgstr "Nueva instancia"
+
+msgid "Edit instance"
+msgstr "Editar instancia"
+
+msgid "Created at"
+msgstr "Creado en"
+
+msgid "Created from"
+msgstr "Creado el"
+
+msgid "Media size"
+msgstr "Tamaño del media"
+
+msgid "(Human readable name)"
+msgstr "(Nombre legible por personas)"
+
+msgid "Contact mail"
+msgstr "Email de contacto"
+
+msgid "Blocked"
+msgstr "Bloqueada"
+
+msgid "Backend access blocked for instance users"
 msgstr ""
-"Se ha producido un error al actualizar una instancia con los siguientes "
-"datos:"
+"Acceso al panel de administración bloqueado para usuarios de la instancia"
 
-msgid "Instance internal_name"
-msgstr "Nombre interno de la instancia"
+msgid "No main domain"
+msgstr "Sin dominio principal"
 
-msgid "Instance contact_mail"
-msgstr "Email de contacto de la instancia"
+msgid "Instance domains cannot be empty."
+msgstr "Los dominios de la instancia no pueden estar vacíos."
 
-msgid "Instance domains"
-msgstr "Dominios de la instancia"
+msgid "Domain expire date:"
+msgstr "Tiempo de expiración de dominio:"
 
-msgid "Error"
-msgstr "Error"
+msgid "Search by name or street"
+msgstr "Buscar por nombre o dirección"
+
+msgid "There is no client linked to this instance"
+msgstr "No hay ningún cliente asociado a esta instancia"
+
+msgid "Try to search a client by name or street"
+msgstr "Intenta buscar un cliente por nombre o dirección"
+
+msgid "There are no purchases for now"
+msgstr "No hay compras por ahora"
+
+msgid "View purchase"
+msgstr "Ver compra"
+
+msgid "Other"
+msgstr "Otros"
+
+msgid "Alphanumeric, without spaces"
+msgstr "Alfanumérico, sin espacios"
+
+msgid "Database"
+msgstr "Base de datos"
+
+msgid "Minimum password level"
+msgstr "Nivel mínimo de contraseña"
+
+msgid "Weak"
+msgstr "Débil"
+
+msgid "Good"
+msgstr "Buena"
+
+msgid "Strong"
+msgstr "Fuerte"
+
+msgid "Maximun number of emails sent by month"
+msgstr "Número máximo de emails enviados al mes"
 
 msgid "Download CSV of selected"
 msgstr "Descargar CSV con los seleccionados"
 
-msgid "Do you want to delete the instance?"
-msgstr "¿Estás seguro de que quieres eliminar la instancia?"
+msgid "Contact"
+msgstr "Contacto"
 
-msgid "Do you want to delete the selected instances?"
-msgstr "¿Estás seguro de que quieres eliminar las instancias seleccionadas?"
+msgid "Last activity"
+msgstr "Última actividad"
 
-msgid "New notification"
-msgstr "Nueva notificación"
+msgid "Attachments"
+msgstr "Adjuntos"
 
-msgid "Edit notification"
-msgstr "Editar notificación"
+msgid "Kioskos"
+msgstr "Kioskos"
 
-msgid "Icon"
-msgstr "Icono"
+msgid "Emails"
+msgstr "Emails"
 
-msgid "Pick an icon..."
-msgstr "Selecciona un icono…"
-
-msgid "No icon"
-msgstr "Sin icono"
-
-msgid "Background"
-msgstr "Fondo"
-
-msgid "Font color"
-msgstr "Color de la fuente"
-
-msgid "Fixed"
-msgstr "Fija"
-
-msgid "Notification always visible in dropdown"
-msgstr "Notificación siempre visible en el desplegable"
-
-msgid "Forced"
-msgstr "Forzado"
-
-msgid "Notification always visible before content"
-msgstr "Notificación siempre visible antes del contenido"
-
-msgid "Starts"
-msgstr "Comienza"
-
-msgid "Click to set date"
-msgstr "Pulsa para establecer una fecha"
-
-msgid "Ends"
-msgstr "Finaliza"
-
-msgid "Show only for admins"
-msgstr "Mostrar solo a administradores"
-
-msgid "Instance, domain or theme name"
-msgstr "Instancia, dominio o nombre de tema"
-
-msgid "Unfixed"
-msgstr "No fija"
-
-msgid "Unforced"
-msgstr "No forzada"
-
-msgid "L10n"
-msgstr "L10n"
-
-msgid "Read"
-msgstr "Leídas"
-
-msgid "Clicked"
-msgstr "Clickadas"
-
-msgid "Opened"
-msgstr "Abiertas"
-
-msgid "Download report"
-msgstr "Descargar informe"
-
-msgid "Do you want to delete the notification?"
-msgstr "¿Estás seguro de que quieres eliminar la notificación?"
-
-msgid "Do you want to delete the selected notifications?"
-msgstr ""
-"¿Estás seguro de que quieres eliminar las notificaciones seleccionadas?"
-
-msgid "Action"
-msgstr "Acción"
-
-msgid "We seem to have lost you in the clouds."
-msgstr "Parece que te perdimos en las nubes."
-
-msgid "The page your looking for is not here"
-msgstr "La página que estas buscando no está aquí"
-
-msgid "You shall not pass!"
-msgstr "No puedes pasar!"
-
-msgid "You are not allowed to access this resource."
-msgstr "No tiene permiso para acceder a este recurso."
+msgid "Page views"
+msgstr "Páginas vistas"
 
 msgid "A new version of Opennemas is downloaded. Launch it?"
 msgstr "Se ha descargado una nueva versión de Opennemas. Deseas iniciarla?"
 
 msgid "Launch"
 msgstr "Iniciarla"
+
+msgid "Unable to find the item"
+msgstr "No se ha encontrado el elemento"
 
 msgid "Delete instance"
 msgstr "Eliminar instancia"
@@ -7077,42 +6923,203 @@ msgstr "eliminarlo"
 msgid "delete them"
 msgstr "eliminarlos"
 
-msgid "Unable to find the item"
-msgstr "No se ha encontrado el elemento"
+msgid "Do you want to modify this settings?"
+msgstr "¿Quieres modificar esta configuración?"
+
+msgid "This action can affect the performance of the platform"
+msgstr "Esta acción puede afectar al rendimiento de la plataforma"
+
+msgid "Do you want to delete the purchase?"
+msgstr "Quieres eliminar esta compra?"
+
+msgid "Do you want to delete the selected purchases?"
+msgstr "¿Estás seguro de que quieres eliminar las compras seleccionadas?"
+
+msgid "New purchase"
+msgstr "Nueva compra"
+
+msgid "Edit purchase"
+msgstr "Editar compra"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "No client data available"
+msgstr "No hay datos del cliente"
+
+msgid "No payment data availble"
+msgstr "No hay datos de pago disponibles"
+
+msgid "Invoice"
+msgstr "Factura"
+
+msgid "No invoice data availble"
+msgstr "No hay datos de facturación disponibles"
+
+msgid "Step"
+msgstr "Paso"
+
+msgid "Quantity"
+msgstr "Cantidad"
+
+msgid "Cost"
+msgstr "Precio"
+
+msgid "Subtotal"
+msgstr "Subtotal"
+
+msgid "Completed purchases"
+msgstr "Compras completadas"
+
+msgid "Uncompleted purchases"
+msgstr "Compras no completadas"
+
+msgid "Search by client"
+msgstr "Buscar por cliente"
+
+msgid "Client ID"
+msgstr "ID de cliente"
+
+msgid "Payment ID"
+msgstr "ID de pago"
+
+msgid "Invoice ID"
+msgstr "ID de factura"
+
+msgid "No information"
+msgstr "Sin información"
+
+msgid "Our Videos"
+msgstr "Nuestros vídeos"
+
+msgid "Our News"
+msgstr "Nuestras noticias"
+
+msgid "Our Twitter"
+msgstr "Nuestro twitter"
+
+msgid "Our Facebook"
+msgstr "Nuestro facebook"
+
+msgid "Our Google+"
+msgstr "Nuestro Google+"
+
+msgid "Our Company"
+msgstr "Nuestra empresa"
+
+msgid "Please do not hesitate to share feedback, questions or doubts with us"
+msgstr ""
+"Si tiene cualquier pregunta no dude en ponerse en contacto con nosotros "
+"mediante"
+
+msgid "<strong>ticketing system"
+msgstr "<strong>o mediante nuestro servicio de incidencias"
+
+msgid "(also available from Control Panel on the top right);"
+msgstr "(también disponible en la esquina superior del panel de control);"
+
+msgid "Regards,"
+msgstr "Atentamente,"
 
 msgid ""
-"Here you can mass-delete cache, compile, sessions, and other stuff<br>\n"
-"                        from one specific instance."
+"<a href=\"http://www.opennemas.com/\" style=\"font-family: 'trebuchet ms', "
+"'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif; "
+"font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
+"<span style=\"color:#000000\">Team</span>"
 msgstr ""
-"Aquí puede eliminar en lote, caches, compiles, sesiones y otras cosas. de "
-"una instancia específica."
+"<a href=\"http://www.opennemas.com/\" style=\"font-family: 'trebuchet ms', "
+"'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-serif; "
+"font-size: 14px; line-height: normal;\" target=\"_blank\">Opennemas</a> "
+"<span style=\"color:#000000\">Equipo</span>"
 
-msgid "New client"
-msgstr "Nuevo cliente"
+msgid "Do you want to delete the notification?"
+msgstr "¿Estás seguro de que quieres eliminar la notificación?"
 
-msgid "Edit client"
-msgstr "Editar cliente"
+msgid "Do you want to delete the selected notifications?"
+msgstr ""
+"¿Estás seguro de que quieres eliminar las notificaciones seleccionadas?"
 
-msgid "Partner who can see this client information"
-msgstr "Partner que puede ver esta información del cliente"
+msgid "New notification"
+msgstr "Nueva notificación"
 
-msgid "View on"
-msgstr "Ver en"
+msgid "Edit notification"
+msgstr "Editar notificación"
 
-msgid "VAT No."
-msgstr "Nº fiscal"
+msgid "Icon"
+msgstr "Icono"
 
-msgid "Vat number"
-msgstr "Número fiscal"
+msgid "Pick an icon..."
+msgstr "Selecciona un icono…"
 
-msgid "P.O."
-msgstr "Código postal"
+msgid "No icon"
+msgstr "Sin icono"
 
-msgid "Do you want to delete the client?"
-msgstr "¿Estás seguro de que quieres eliminar el cliente?"
+msgid "Background"
+msgstr "Fondo"
 
-msgid "Do you want to delete the selected clients?"
-msgstr "¿Estás seguro de que quieres eliminar los clientes seleccionados?"
+msgid "Font color"
+msgstr "Color de la fuente"
+
+msgid "Fixed"
+msgstr "Fija"
+
+msgid "Notification always visible in dropdown"
+msgstr "Notificación siempre visible en el desplegable"
+
+msgid "Forced"
+msgstr "Forzado"
+
+msgid "Notification always visible before content"
+msgstr "Notificación siempre visible antes del contenido"
+
+msgid "Starts"
+msgstr "Comienza"
+
+msgid "Click to set date"
+msgstr "Pulsa para establecer una fecha"
+
+msgid "Ends"
+msgstr "Finaliza"
+
+msgid "Show only for admins"
+msgstr "Mostrar solo a administradores"
+
+msgid "Instance, domain or theme name"
+msgstr "Instancia, dominio o nombre de tema"
+
+msgid "Unfixed"
+msgstr "No fija"
+
+msgid "Unforced"
+msgstr "No forzada"
+
+msgid "L10n"
+msgstr "L10n"
+
+msgid "Read"
+msgstr "Leídas"
+
+msgid "Clicked"
+msgstr "Clickadas"
+
+msgid "Opened"
+msgstr "Abiertas"
+
+msgid "Download report"
+msgstr "Descargar informe"
+
+msgid "Do you want to delete the user group?"
+msgstr "¿Estás seguro de que quieres eliminar el grupo de usuarios?"
+
+msgid "Do you want to delete the selected user groups?"
+msgstr ""
+"¿Estás seguro que quieres eliminar los grupos de usuarios seleccionados?"
+
+msgid "Group name"
+msgstr "Nombre del grupo"
 
 #~ msgid "Unable to find the menu with the id \"%d\""
 #~ msgstr "No se pudo encontrar el menu con el identificador «%d»"
