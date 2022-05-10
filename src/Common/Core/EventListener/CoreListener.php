@@ -33,6 +33,8 @@ class CoreListener
         'build\/assets',
         'manager',
         'oauth',
+        '\/suggested',
+        '\/widget\/render',
         'ws',
     ];
 
