@@ -156,6 +156,10 @@ class FrontendController extends Controller
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
 
+        if (!empty($item->hideamp)) {
+            throw new ResourceNotFoundException();
+        }
+
         $expected = $this->getExpectedUri($action, [ 'item' => $item, '_format' => 'amp' ]);
 
         if ($request->getPathInfo() !== $expected

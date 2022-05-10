@@ -1,3 +1,7 @@
+backend_albums_config:
+    path:     /albums/config
+    defaults: { _controller: BackendBundle:Album:config }
+
 backend_album_create:
     path:     /albums/new
     defaults: { _controller: BackendBundle:Album:create }

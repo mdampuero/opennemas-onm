@@ -13,6 +13,14 @@
       {t}Featured in inner{/t}
     </label>
   </div>
+  {is_module_activated name="es.openhost.module.google_news_showcase"}
+    <div class="checkbox column-filters-checkbox">
+      <input id="checkbox-google-news-showcase" checklist-model="app.columns.selected" checklist-value="'google_news_showcase'" type="checkbox">
+      <label for="checkbox-google-news-showcase">
+        {t}Showcase{/t}
+      </label>
+    </div>
+  {/is_module_activated}
 {/block}
 
 {block name="commonColumnsHeader" prepend}
@@ -22,6 +30,11 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('featured_inner')" width="120">
     {t}Inner{/t}
   </th>
+  {is_module_activated name="es.openhost.module.google_news_showcase"}
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('google_news_showcase')" width="120">
+      {t}Showcase{/t}
+    </th>
+  {/is_module_activated}
 {/block}
 
 {block name="commonColumnsBody" prepend}
@@ -39,6 +52,11 @@
       </div>
     </dynamic-image>
   </td>
+  {is_module_activated name="es.openhost.module.google_news_showcase"}
+    <td class="text-center v-align-middle" ng-if="isColumnEnabled('google_news_showcase')">
+      <i class="fa fa-google fa-2x" ng-if="item.showcase"></i>
+    </td>
+  {/is_module_activated}
 {/block}
 
 {block name="customColumns"}

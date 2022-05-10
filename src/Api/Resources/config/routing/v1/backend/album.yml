@@ -21,6 +21,13 @@ api_v1_backend_album_delete_list:
     options:
         expose: true
 
+api_v1_backend_album_get_config:
+    path:     /albums/config
+    defaults: { _controller: ApiBundle:V1/Backend/Album:getConfig }
+    methods:  [ GET ]
+    options:
+        expose: true
+
 api_v1_backend_album_get_item:
     path:     /albums/{id}
     defaults: { _controller: ApiBundle:V1/Backend/Album:getItem }
@@ -50,6 +57,13 @@ api_v1_backend_album_patch_list:
     path:     /albums
     defaults: { _controller: ApiBundle:V1/Backend/Album:patchList }
     methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_album_save_config:
+    path:     /albums/config
+    defaults: { _controller: ApiBundle:V1/Backend/Album:saveConfig }
+    methods:  [ PUT ]
     options:
         expose: true
 

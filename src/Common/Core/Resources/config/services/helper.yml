@@ -145,6 +145,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.helper.payment:
+        class:     Common\Core\Component\Helper\PaymentHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.helper.permission:
         class:     Common\Core\Component\Helper\PermissionHelper
         arguments: [ '@core.security' ]
