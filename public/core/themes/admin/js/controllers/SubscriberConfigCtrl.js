@@ -15,8 +15,10 @@
      *   Handles actions for advertisement inner.
      */
     .controller('SubscriberConfigCtrl', [
-      '$scope', 'cleaner', 'http', 'messenger',
-      function($scope, cleaner, http, messenger) {
+      '$controller', '$scope', 'cleaner', 'http', 'messenger', '$timeout',
+      function($controller, $scope, cleaner, http, messenger, $timeout) {
+        $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+
         /**
          * @memberOf SubscriberConfigCtrl
          *
@@ -38,8 +40,10 @@
           if (!$scope.settings.fields) {
             $scope.settings.fields = [];
           }
-
-          $scope.settings.fields.push({ name: '', title: '', type: 'text', required: false });
+          if ($scope.settings.fields[$scope.settings.fields.length - 1].name !== '' &&
+          $scope.settings.fields[$scope.settings.fields.length - 1].title !== '') {
+            $scope.settings.fields.push({ name: '', title: '', type: 'text', required: false });
+          }
         };
 
         /**
@@ -55,10 +59,10 @@
           http.get('api_v1_backend_subscriber_get_config')
             .then(function(response) {
               $scope.loading = false;
-
               if (response.data.settings) {
                 $scope.settings = response.data.settings;
               }
+              $scope.backup = angular.copy($scope.settings.fields);
             }, function(response) {
               $scope.loading = false;
 
@@ -77,6 +81,9 @@
          */
         $scope.removeField = function(index) {
           $scope.settings.fields.splice(index, 1);
+          if (index in $scope.backup) {
+            $scope.backup.splice(index, 1);
+          }
         };
 
         /**
@@ -103,6 +110,22 @@
             });
         };
 
+        $scope.$watch('settings.fields', function(nv, ov) {
+          if (!nv || nv === ov) {
+            return;
+          }
+          nv.forEach(function(element, index) {
+            if (index in $scope.backup &&
+              $scope.backup[index].name === element.name) {
+              return;
+            }
+            $scope.tm = $timeout(function() {
+              $scope.getSlug(element.title, function(response) {
+                element.name = response.data.slug;
+              });
+            }, 250);
+          });
+        }, true);
         $scope.list();
       }
     ]);

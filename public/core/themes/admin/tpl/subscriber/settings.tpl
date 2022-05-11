@@ -69,7 +69,7 @@
             <div class="form-group col-md-2">
               <label class="form-label" for="label-[% $index %]-name">{t}Internal name{/t}</label>
               <div class="controls">
-                <input class="form-control" ng-model="field.name" type="text">
+                <input class="form-control" ng-model="field.name" type="text" disabled>
               </div>
             </div>
             <div class="form-group col-md-2">
