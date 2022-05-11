@@ -42,7 +42,7 @@ CKEDITOR.plugins.add('autotoc', {
             return '';
           }
 
-          var header = element[0].match(/<(h([1-6]).*(id="(.*?)")?)>(.*?)(<\/h\2>)/);
+          var header = element[0].match(/<h(([1-6])[^>]*?(id="(.*?)")?)>(.*?)(<\/h\2>)/);
 
           if (!header) {
             return '';
