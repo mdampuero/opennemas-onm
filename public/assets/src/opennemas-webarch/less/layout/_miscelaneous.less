@@ -145,3 +145,42 @@ body.collapsed .messages {
     padding-left: 0 !important;
   }
 }
+
+.timetable :not(:last-child){
+  margin-bottom: 10px;
+}
+
+.timetable-day {
+  display: flex;
+  flex-flow: nowrap row;
+  justify-content: space-between;
+}
+
+.timetable-day .closed-label {
+  color: gray;
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+.timetable-schedule {
+  margin: 0 auto;
+  padding: 0 20px;
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.timetable-schedule > div {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: wrap row;
+}
+
+.timetable-schedule > div * {
+  display: block;
+}
+
+.timetable-schedule .btn {
+  align-self: center;
+  margin-top: 20px;
+  padding: 10px;
+}
