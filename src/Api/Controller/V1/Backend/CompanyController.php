@@ -83,6 +83,15 @@ class CompanyController extends ContentController
                 _('Transport'),
                 _('Wood'),
                 _('Other')
+            ],
+            'timetable' => [
+                [ 'name' => _('Monday'), 'enabled' => false, 'schedules' => [] ],
+                [ 'name' => _('Tuesday'), 'enabled' => false, 'schedules' => [] ],
+                [ 'name' => _('Wednesday'), 'enabled' => false, 'schedules' => [] ],
+                [ 'name' => _('Thursday'), 'enabled' => false, 'schedules' => [] ],
+                [ 'name' => _('Friday'), 'enabled' => false, 'schedules' => [] ],
+                [ 'name' => _('Saturday'), 'enabled' => false, 'schedules' => [] ],
+                [ 'name' => _('Sunday'), 'enabled' => false, 'schedules' => [] ],
             ]
         ]);
     }
