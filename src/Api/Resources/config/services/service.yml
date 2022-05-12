@@ -25,7 +25,7 @@ services:
         public:    true
 
     api.service.company:
-        class:     Api\Service\V1\ContentService
+        class:     Api\Service\V1\CompanyService
         arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
         public:    true
 
