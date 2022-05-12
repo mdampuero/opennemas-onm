@@ -7,7 +7,7 @@
   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.sector">
     <span ng-show="!item.sector"><strong>{t}No sector{/t}</strong></span>
     <span ng-show="item.sector">
-      <strong>[% item.sector %]</span></strong>
+      <strong>[% getSectorTitle(item.sector) %]</strong>
     </span>
   </span>
 </div>
