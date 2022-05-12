@@ -49,6 +49,16 @@
          * @memberOf CompanyCtrl
          *
          * @description
+         *  The default schedule for the day.
+         *
+         * @type {Object}
+         */
+        $scope.defaultSchedule = { start: '', end: '' };
+
+        /**
+         * @memberOf CompanyCtrl
+         *
+         * @description
          *  The company object.
          *
          * @type {Object}
@@ -100,6 +110,30 @@
         };
 
         /**
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *  Adds an schedule to one day.
+         *
+         * @type {Object}
+         */
+        $scope.addSchedule = function(day) {
+          $scope.item.timetable[day].schedules.push(Object.assign({}, $scope.defaultSchedule));
+        };
+
+        /**
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *  Removes an schedule to in one day.
+         *
+         * @type {Object}
+         */
+        $scope.removeSchedule = function(day, index) {
+          $scope.item.timetable[day].schedules.splice(index, 1);
+        };
+
+        /**
          * @inheritdoc
          */
         $scope.buildScope = function() {
@@ -109,6 +143,10 @@
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'company-' + $scope.data.item.pk_content + '-draft';
           }
+
+          $scope.item.timetable = $scope.item.timetable ?
+            $scope.item.timetable :
+            $scope.data.extra.timetable.slice();
 
           $scope.checkDraft();
           related.init($scope);
