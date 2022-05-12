@@ -189,7 +189,6 @@ class FormFieldHelper
                 'title' => _('Featured in frontpage'),
                 'available' => [
                     'article',
-                    'company',
                     'opinion',
                     'event',
                     'video',
@@ -210,7 +209,7 @@ class FormFieldHelper
             [
                 'name' => 'relatedFrontpage',
                 'title' => _('Related in frontpage'),
-                'available' => [ 'article', 'company' ]
+                'available' => [ 'article' ]
             ],
             [
                 'name' => 'relatedInner',
