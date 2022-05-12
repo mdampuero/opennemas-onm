@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-07 13:55+0000\n"
-"PO-Revision-Date: 2022-04-07 15:57+0200\n"
+"POT-Creation-Date: 2022-05-11 11:44+0000\n"
+"PO-Revision-Date: 2022-05-11 14:18+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -4641,6 +4641,18 @@ msgstr "Axencia de novas Opennemas"
 
 msgid "Url"
 msgstr "URL"
+
+msgid "Timetable"
+msgstr "Horario"
+
+msgid "Since"
+msgstr "Dende"
+
+msgid "Until"
+msgstr "Ata"
+
+msgid "Add schedule"
+msgstr "Engadir horario"
 
 msgid "No sector"
 msgstr "Sen sector"
