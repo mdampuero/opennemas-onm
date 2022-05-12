@@ -148,6 +148,14 @@
             $scope.item.timetable :
             $scope.data.extra.timetable.slice();
 
+          // Convert time data to Date in order to work with time input
+          $scope.item.timetable.forEach(function(day) {
+            day.schedules.forEach(function(schedule) {
+              schedule.start = new Date(schedule.start);
+              schedule.end   = new Date(schedule.end);
+            });
+          });
+
           $scope.checkDraft();
           related.init($scope);
           related.watch();

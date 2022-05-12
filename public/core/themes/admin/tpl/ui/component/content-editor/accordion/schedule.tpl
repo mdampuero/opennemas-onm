@@ -16,11 +16,11 @@
         <div ng-repeat="schedule in day.schedules track by $index">
           <div>
             <label class="form-label">{t}Since{/t}</label>
-            <input type="text" ng-model="schedule.start">
+            <input type="time" ng-model="schedule.start">
           </div>
           <div>
             <label class="form-label">{t}Until{/t}</label>
-            <input type="text" ng-model="schedule.end">
+            <input type="time" ng-model="schedule.end">
           </div>
           <button class="btn btn-danger" ng-click="removeSchedule($parent.$index, $index)" type="button">
             <i class="fa fa-trash-o"></i>
