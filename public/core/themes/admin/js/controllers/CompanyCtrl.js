@@ -134,6 +134,24 @@
         };
 
         /**
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *  Gets the sector title based on a name.
+         *
+         * @type {Object}
+         */
+        $scope.getSectorTitle = function(name) {
+          if (!$scope.data || !name) {
+            return '';
+          }
+
+          return $scope.data.extra.sectors.filter(function(sector) {
+            return name === sector.name;
+          }).shift().title;
+        };
+
+        /**
          * @inheritdoc
          */
         $scope.buildScope = function() {
