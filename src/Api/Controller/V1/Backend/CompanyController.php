@@ -92,6 +92,7 @@ class CompanyController extends ContentController
                 [ 'name' => _('Friday'), 'enabled' => false, 'schedules' => [] ],
                 [ 'name' => _('Saturday'), 'enabled' => false, 'schedules' => [] ],
                 [ 'name' => _('Sunday'), 'enabled' => false, 'schedules' => [] ],
+                [ 'name' => _('Holiday'), 'enabled' => false, 'schedules' => [] ],
             ]
         ]);
     }

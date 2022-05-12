@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-11 11:44+0000\n"
-"PO-Revision-Date: 2022-05-11 14:21+0200\n"
+"POT-Creation-Date: 2022-05-12 08:48+0000\n"
+"PO-Revision-Date: 2022-05-12 10:49+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1338,6 +1338,30 @@ msgstr "Madera"
 msgid "Other"
 msgstr "Otros"
 
+msgid "Monday"
+msgstr "Lunes"
+
+msgid "Tuesday"
+msgstr "Martes"
+
+msgid "Wednesday"
+msgstr "Miércoles"
+
+msgid "Thursday"
+msgstr "Jueves"
+
+msgid "Friday"
+msgstr "Viernes"
+
+msgid "Saturday"
+msgstr "Sábado"
+
+msgid "Sunday"
+msgstr "Domingo"
+
+msgid "Holiday"
+msgstr "Festivo"
+
 msgid "Without position"
 msgstr "Sin posición"
 
@@ -1392,27 +1416,6 @@ msgstr "%d semanas"
 
 msgid "No limit"
 msgstr "Sin límite"
-
-msgid "Monday"
-msgstr "Lunes"
-
-msgid "Tuesday"
-msgstr "Martes"
-
-msgid "Wednesday"
-msgstr "Miércoles"
-
-msgid "Thursday"
-msgstr "Jueves"
-
-msgid "Friday"
-msgstr "Viernes"
-
-msgid "Saturday"
-msgstr "Sábado"
-
-msgid "Sunday"
-msgstr "Domingo"
 
 msgid "Settings saved successfully"
 msgstr "Configuración guardadas correctamente"
