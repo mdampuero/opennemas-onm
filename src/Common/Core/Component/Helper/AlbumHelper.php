@@ -36,12 +36,20 @@ class AlbumHelper
      * Returns the list of photos of the album.
      *
      * @param Content $item The album.
+     * @param int     $max  The max number of photos.
      *
      * @return array The list of photos.
      */
-    public function getAlbumPhotos($item) : array
+    public function getAlbumPhotos($item, $max = null) : array
     {
-        return $this->relatedHelper->getRelated($this->contentHelper->getContent($item), 'photo');
+        $photos = $this->relatedHelper->getRelated(
+            $this->contentHelper->getContent($item),
+            'photo'
+        );
+
+        return !empty($max)
+            ? array_slice($photos, 0, $max)
+            : $photos;
     }
 
     /**
