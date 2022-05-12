@@ -35,7 +35,6 @@ class FormFieldHelper
                 'title' => _('Category'),
                 'available' => [
                     'article',
-                    'company',
                     'event',
                     'poll',
                     'attachment',
@@ -261,6 +260,11 @@ class FormFieldHelper
             [
                 'name' => 'sector',
                 'title' => _('Sector'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'timetable',
+                'title' => _('Timetable'),
                 'available' => [ 'company' ]
             ],
         ];
