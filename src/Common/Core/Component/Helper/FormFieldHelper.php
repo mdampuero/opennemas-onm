@@ -237,6 +237,16 @@ class FormFieldHelper
                 'available' => [ 'company' ]
             ],
             [
+                'name' => 'whatsapp',
+                'title' => _('Whatsapp'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'phone',
+                'title' => _('Phone'),
+                'available' => [ 'company' ]
+            ],
+            [
                 'name' => 'email',
                 'title' => _('Email'),
                 'available' => [ 'company' ]
