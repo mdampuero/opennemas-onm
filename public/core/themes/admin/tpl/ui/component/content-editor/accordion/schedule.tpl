@@ -14,11 +14,11 @@
       </div>
       <div class="timetable-schedule" ng-if="day.enabled">
         <div ng-repeat="schedule in day.schedules track by $index">
-          <div>
+          <div class="timetable-time-wrapper">
             <label class="form-label">{t}Since{/t}</label>
             <input type="time" ng-model="schedule.start">
           </div>
-          <div>
+          <div class="timetable-time-wrapper">
             <label class="form-label">{t}Until{/t}</label>
             <input type="time" ng-model="schedule.end">
           </div>

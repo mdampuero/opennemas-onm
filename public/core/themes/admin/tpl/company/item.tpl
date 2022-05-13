@@ -79,6 +79,8 @@
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="facebook" icon="fa-facebook" title="{t}Facebook{/t}"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="twitter" icon="fa-twitter" title="{t}Twitter{/t}"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="instagram" icon="fa-instagram" title="{t}Instagram{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="whatsapp" icon="fa-whatsapp" title="{t}Whatsapp{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="phone" icon="fa-phone" title="{t}Phone{/t}"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="email" icon="fa-envelope" title="{t}Email{/t}"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="address" icon="fa-map-pin" title="{t}Address{/t}"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="maps" icon="fa-map-marker" title="{t}Google Maps{/t}"}
