@@ -2,12 +2,10 @@
 
 {block name="commonColumns" prepend}
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-featured-frontpage" checklist-model="app.columns.selected" checklist-value="'featured_frontpage'" type="checkbox">
-    <label for="checkbox-featured-frontpage">
-      {t}Featured in frontpage{/t}
+    <input id="checkbox-logo" checklist-model="app.columns.selected" checklist-value="'logo'" type="checkbox">
+    <label for="checkbox-logo">
+      {t}Logo{/t}
     </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-featured-inner" checklist-model="app.columns.selected" checklist-value="'featured_inner'" type="checkbox">
     <label for="checkbox-featured-inner">
       {t}Featured in inner{/t}
@@ -16,8 +14,8 @@
 {/block}
 
 {block name="commonColumnsHeader" prepend}
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('featured_frontpage')" width="120">
-    {t}Frontpage{/t}
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('logo')" width="120">
+    {t}Logo{/t}
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('featured_inner')" width="120">
     {t}Inner{/t}
@@ -25,11 +23,8 @@
 {/block}
 
 {block name="commonColumnsBody" prepend}
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('featured_frontpage')">
-    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" type="featured_frontpage" ng-model="item" only-image="true" transform="zoomcrop,220,220">
-      <div class="badge badge-default text-bold text-uppercase">
-        {include file="common/component/icon/content_type_icon.tpl" iField="getFeaturedMedia(item, 'featured_frontpage')" iFlagName=true iFlagIcon=true}
-      </div>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('logo')">
+    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" type="logo" ng-model="item" only-image="true" transform="zoomcrop,220,220">
     </dynamic-image>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('featured_inner')">
