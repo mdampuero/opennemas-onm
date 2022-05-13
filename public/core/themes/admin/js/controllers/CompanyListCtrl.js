@@ -69,24 +69,11 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          if (!$scope.categories) {
-            return '';
-          }
-
-          var categories = $scope.categories.filter(function(e) {
-            return e.id === item.categories[0];
-          });
-
-          if (categories.length === 0) {
-            return '';
-          }
-
           return $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
               id: item.pk_content,
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
-              category_slug: categories[0].name
             })
           );
         };

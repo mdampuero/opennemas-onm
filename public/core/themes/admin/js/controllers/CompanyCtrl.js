@@ -223,16 +223,11 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          if (!$scope.selectedCategory) {
-            return '';
-          }
-
           return $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
               id: item.pk_content,
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
-              slug: item.slug,
-              category_slug: $scope.selectedCategory.name
+              slug: item.slug
             })
           );
         };
