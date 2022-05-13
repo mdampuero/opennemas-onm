@@ -13,6 +13,11 @@ class CompanyService extends ContentService
      */
     public function createItem($data)
     {
+        $data['changed'] = new \DateTime();
+        $data['created'] = new \DateTime();
+
+        $data = $this->assignUser($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
+
         try {
             $data = $this->em->getConverter($this->entity)
                 ->objectify($this->parseData($data));
