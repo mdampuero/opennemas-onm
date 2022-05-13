@@ -295,6 +295,22 @@
 
           return true;
         };
+
+        /**
+         * Watcher to format always the strings to date inside the schedules.
+         */
+        $scope.$watch('item.timetable', function(nv) {
+          if (!nv) {
+            return;
+          }
+
+          nv.forEach(function(day) {
+            day.schedules.forEach(function(schedule) {
+              schedule.start = new Date(schedule.start);
+              schedule.end   = new Date(schedule.end);
+            });
+          });
+        }, true);
       }
     ]);
 })();
