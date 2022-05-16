@@ -475,6 +475,8 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeVarnishCacheFrontpage(Event $event)
     {
+        $items = $event->hasArgument('items') ? $event->getArgument('items') : [];
+
         if (!$this->container->hasParameter('varnish')) {
             return false;
         }
@@ -493,13 +495,16 @@ class HooksSubscriber implements EventSubscriberInterface
             ])
         );
 
-        $this->container->get('task.service.queue')->push(new ServiceTask('core.varnish', 'ban', [
-            sprintf(
-                'obj.http.x-tags ~ instance-%s.*.*content-listing-frontpage-%s$',
-                $instanceName,
-                $category
-            )
-        ]));
+        foreach ($items as $item) {
+            $this->container->get('task.service.queue')->push(new ServiceTask('core.varnish', 'ban', [
+                sprintf(
+                    'obj.http.x-tags ~ instance-%s.*%s.*content-listing-frontpage-%s$',
+                    $instanceName,
+                    $item,
+                    $category
+                )
+            ]));
+        }
     }
 
     /**
