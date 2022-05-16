@@ -39,7 +39,7 @@
     });
   }]).config(['EditorProvider', function (EditorProvider) {
     // Add custom timestamp
-    EditorProvider.overrideTimestamp('F61H');
+    EditorProvider.overrideTimestamp('F61I');
 
     // Add external plugins
     EditorProvider.addExternal('imageresize', '/assets/components/imageresize/');
