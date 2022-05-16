@@ -368,6 +368,33 @@ class RssController extends FrontendController
     }
 
     /**
+     * Displays the Rss feed for standalone news of Google News Showcase.
+     *
+     * @param Request   $request The request object.
+     *
+     * @return Response The rss feed for standalone news of Google News Showcase.
+     */
+    public function googleNewsAction()
+    {
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.google_news_showcase')) {
+            throw new ResourceNotFoundException();
+        }
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        $response = $this->render('rss/google_news_showcase.tpl', [
+            'contents'    => $this->getShowcaseContents('showcase', 1),
+            'x-cacheable' => true,
+            'x-cache-for' => $expire,
+            'x-tags'      => 'rss,google-news-showcase'
+        ]);
+
+        $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
+
+        return $response;
+    }
+
+    /**
      * Get latest contents given a type of content.
      *
      * @param string  $contentType The content type name of the contents.
@@ -529,6 +556,35 @@ class RssController extends FrontendController
                && !empty($content->params['bodyLink'])) {
                 unset($contents[$key]);
             }
+        }
+    }
+
+    /**
+     * Returns the list of contents marked with showcase flags.
+     *
+     * @param string $flag The name of the flag to check.
+     * @param string $days The limit of days that the content can be in the showcase rss.
+     *
+     * @return array The array of contents checked with showcase limited by date.
+     */
+    protected function getShowcaseContents($flag, $days)
+    {
+        $date = new \DateTime();
+        $date->sub(new \DateInterval(sprintf('P%dD', $days)));
+
+        $oql = sprintf(
+            'content_type_name = "article" and content_status = 1 and in_litter = 0 ' .
+            'and %s = 1 and (starttime is null or starttime > "%s") ' .
+            'and (endtime is null or endtime < "%s") order by starttime desc',
+            $flag,
+            $date->format('Y-m-d H:i:s'),
+            date('Y-m-d H:i:s')
+        );
+
+        try {
+            return $this->get('api.service.content')->getList($oql)['items'];
+        } catch (\Exception $e) {
+            return [];
         }
     }
 }

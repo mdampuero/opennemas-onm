@@ -216,6 +216,11 @@ class FormFieldHelper
                 'title' => _('Agency'),
                 'available' => [ 'album' ]
             ],
+            [
+                'name' => 'google_news_showcase',
+                'title' => _('Google News Showcase'),
+                'available' => [ 'article' ]
+            ],
         ];
         return $this;
     }

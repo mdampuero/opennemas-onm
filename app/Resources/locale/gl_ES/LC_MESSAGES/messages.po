@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-18 12:18+0000\n"
-"PO-Revision-Date: 2022-02-18 13:34+0100\n"
+"POT-Creation-Date: 2022-05-10 14:08+0000\n"
+"PO-Revision-Date: 2022-05-10 16:09+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -16,6 +16,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 3.36.0\n"
+
+msgid "Y-m-d"
+msgstr "d-m-Y"
 
 msgid "All"
 msgstr "Todos"
@@ -155,75 +158,6 @@ msgstr "Configuración de sitio eliminada correctamente"
 msgid "There was an error while deleting this configuration"
 msgstr "Produciuse un erro ao eliminar esta configuración"
 
-#, php-format
-msgid "Unable to find the menu with the id \"%d\""
-msgstr "Non se puido atopar o menú co identificador «%d»"
-
-#, php-format
-msgid "Menu '%s' created successfully."
-msgstr "Menú «%s» creado correctamente."
-
-msgid "Unable to create the menu"
-msgstr "Non se puido crear o menú"
-
-#, php-format
-msgid "Unable to find a menu with the id \"%s\""
-msgstr "Non se puido atopar o menú co identificador «%s»"
-
-msgid "Menu data sent not valid."
-msgstr "Os datos enviados do menú non son válidos."
-
-msgid "Menu updated successfully."
-msgstr "Menú actualizado correctamente."
-
-msgid "There was an error while updating the menu."
-msgstr "Produciuse un erro ao actualizar o menú."
-
-msgid "Frontpage"
-msgstr "Portada"
-
-msgid "Opinions"
-msgstr "Opinións"
-
-msgid "Blogs"
-msgstr "Blogs"
-
-msgid "Albums"
-msgstr "Álbumes"
-
-msgid "Videos"
-msgstr "Videos"
-
-msgid "Polls"
-msgstr "Enquisas"
-
-msgid "Events"
-msgstr "Eventos"
-
-msgid "Obituaries"
-msgstr "Necrolóxicas"
-
-msgid "Letters to the Editor"
-msgstr "Cartas ao director"
-
-msgid "News Stand"
-msgstr "Portadas de papel"
-
-msgid "Form"
-msgstr "Formularios"
-
-msgid "Newsletter"
-msgstr "Boletín de novas"
-
-msgid "Archive"
-msgstr "Arquivar"
-
-msgid "Without position"
-msgstr "Sen posición"
-
-msgid "Y-m-d"
-msgstr "d-m-Y"
-
 msgid "You have reached your maximum of emails allowed to send per month"
 msgstr "Alcanzaches o numero máximo de envios de correo-e permitidos por mes"
 
@@ -362,8 +296,20 @@ msgstr "Contidos"
 msgid "Articles"
 msgstr "Artigos"
 
+msgid "Opinions"
+msgstr "Opinións"
+
 msgid "Comments"
 msgstr "Comentarios"
+
+msgid "Events"
+msgstr "Eventos"
+
+msgid "Obituaries"
+msgstr "Necrolóxicas"
+
+msgid "Polls"
+msgstr "Enquisas"
 
 msgid "Static Pages"
 msgstr "Páxinas estáticas"
@@ -385,6 +331,15 @@ msgstr "Fotos"
 
 msgid "Files"
 msgstr "Ficheiros"
+
+msgid "Videos"
+msgstr "Videos"
+
+msgid "Albums"
+msgstr "Álbumes"
+
+msgid "News Stand"
+msgstr "Portadas de papel"
 
 msgid "Books"
 msgstr "Libros"
@@ -1217,6 +1172,9 @@ msgstr "Non se forneceu ningún ficheiro"
 msgid "A file with the same name has already been uploaded today"
 msgstr "Hoxe xa se subiu un ficheiro co mesmo nome"
 
+msgid "Frontpage"
+msgstr "Portada"
+
 msgid "You have exceeded the version limit. Delete one to create a new one"
 msgstr "Excedeches o límite de versións. Elimina unha para crear unha nova"
 
@@ -1268,6 +1226,9 @@ msgstr "Anterior"
 msgid "Widget %s not available"
 msgstr "Widget %s non dispoñíbel"
 
+msgid "Unable to save settings"
+msgstr "Non se puido gardar as configuración"
+
 msgid "Running cleanup in background"
 msgstr "Executando limpeza en segundo plano"
 
@@ -1285,6 +1246,9 @@ msgstr "Opcións gardadas."
 
 msgid "There was an error while saving the settings"
 msgstr "Produciuse un erro ao gardar as preferencias."
+
+msgid "Without position"
+msgstr "Sen posición"
 
 msgid "Item imported successfully"
 msgstr "Elemento importado correctamente"
@@ -1361,9 +1325,6 @@ msgstr "Domingo"
 
 msgid "Settings saved successfully"
 msgstr "Configuración gardada correctamente"
-
-msgid "Unable to save settings"
-msgstr "Non se puido gardar as configuración"
 
 msgid "List of contents"
 msgstr "Lista de contidos"
@@ -1568,6 +1529,9 @@ msgstr "Relacionado en interior"
 msgid "Agency"
 msgstr "Axencia"
 
+msgid "Google News Showcase"
+msgstr "Google News Showcase"
+
 msgid "Max sents reached"
 msgstr "Alcanzouse o número máximo de envios"
 
@@ -1591,6 +1555,21 @@ msgid ""
 msgstr ""
 "Non puidemos completar a túa petición.\n"
 "Comproba o formulario e téntao de novo."
+
+msgid "The transaction was successful"
+msgstr "La transacción fue exitosa"
+
+msgid "The transaction was declined by the bank"
+msgstr "A transacción foi declinada polo banco"
+
+msgid "This transaction was already processed"
+msgstr "A transacción xa foi procesada"
+
+msgid "There are some errors in the form"
+msgstr "Hai errores no formulario"
+
+msgid "There was an issue with the transaction"
+msgstr "Houbo algún problema coa transacción"
 
 msgid "List"
 msgstr "Lista"
@@ -1986,9 +1965,6 @@ msgstr "Cartas ao director"
 msgid "Obituary"
 msgstr "Necrolóxica"
 
-msgid "Menu"
-msgstr "Menú"
-
 msgid "Select a category..."
 msgstr "Selecciona unha categoría…"
 
@@ -2047,6 +2023,22 @@ msgstr "Inserir imaxe"
 
 msgid "Insert related"
 msgstr "Inserir relacionado"
+
+msgid "Include in Google News Showcase"
+msgstr "Incluir en Google News Showcase"
+
+msgid "Outstanding moment 1"
+msgstr "Momento destacado 1"
+
+msgid "Outstanding moment 2"
+msgstr "Momento destacado 2"
+
+msgid ""
+"To include the article in Google News Showcase you need to highlight two "
+"moments"
+msgstr ""
+"Para incluir o artigo en Google News Showcase necesitas destacar dous "
+"momentos"
 
 msgid "Are you sure?"
 msgstr "Estas seguro?"
@@ -3862,6 +3854,9 @@ msgstr "Sinatura alternativa para o boletín"
 msgid "Config article module"
 msgstr "Configuración do módulo «Artigo»"
 
+msgid "Showcase"
+msgstr "Showcase"
+
 msgid "External"
 msgstr "Externo"
 
@@ -3885,6 +3880,9 @@ msgstr "Se está activado, a categoría mostrarase nos selectores de categoría"
 
 msgid "If enabled, category will be included in RSS feeds"
 msgstr "Se está activado, a categoría mostrarase nos rss"
+
+msgid "Menu"
+msgstr "Menú"
 
 msgid "Move contents"
 msgstr "Mover contidos"
@@ -4428,6 +4426,9 @@ msgstr "Servizos externos"
 msgid "Analytic system integration"
 msgstr "Integración de sistemas de Analíticas"
 
+msgid "Disable Opennemas Google Analytics API key"
+msgstr "Deshablitar a chave da API de Google Analytics de Opennemas"
+
 msgid "Google Analytics"
 msgstr "Google Analytics"
 
@@ -4518,6 +4519,18 @@ msgstr "Prometeo Media ID"
 
 msgid "Internal settings"
 msgstr "Preferencias internas"
+
+msgid "Global Payments"
+msgstr "Global Payments"
+
+msgid "Merchant id"
+msgstr "Merchant id"
+
+msgid "Shared secret"
+msgstr "Shared secret"
+
+msgid "Amount"
+msgstr "Cantidade"
 
 msgid "Google Recaptcha"
 msgstr "Google Recaptcha"
@@ -5103,6 +5116,52 @@ msgstr "Pagado"
 msgid "View invoice"
 msgstr "Ver factura"
 
+msgid "Module"
+msgstr "Modulo"
+
+msgid "Manual category"
+msgstr "Categoría manual"
+
+msgid "Automatic category"
+msgstr "Categoría automática"
+
+msgid "Synchronized instances"
+msgstr "Instancias sincronizadas"
+
+msgid "Manual categories"
+msgstr "Categorías manuais"
+
+msgid "Automatic categories"
+msgstr "Categorías automáticas"
+
+msgid "Static pages"
+msgstr "Páxinas estáticas"
+
+msgid "Synchronized sites"
+msgstr "Sitios sincronizados"
+
+msgid "Custom link"
+msgstr "Ligazón personalizada"
+
+msgid "Menu structure"
+msgstr "Estrutura do menu"
+
+msgid "Use drag and drop to sort and nest elements."
+msgstr "Use arrastrar e soltar para ordenar e aniñar elementos."
+
+msgid "Position"
+msgstr "Posición"
+
+msgid ""
+"If your theme has defined positions for menus you can assign one menu to "
+"each of them"
+msgstr ""
+"Se o tema ten posicións de menú definidas podes asignar un menú para cada "
+"unha delas"
+
+msgid "New menu"
+msgstr "Novo menú"
+
 msgid "Pick contents"
 msgstr "Seleccionar contidos"
 
@@ -5339,6 +5398,16 @@ msgstr "Requírense algúns contidos"
 msgid "Template"
 msgstr "Plantilla"
 
+msgid "Add the headline of the first content at the end of the subject"
+msgstr "Engadir o titular do primeiro contido ao final do asunto"
+
+msgid ""
+"If this is checked, the headline of the first content will be append at the "
+"end of the subject, separated by a blank space"
+msgstr ""
+"Se esta marcado, o titular do primeiro contido será engadido ao final do "
+"asunto, separado por un espazo en branco"
+
 msgid "Days"
 msgstr "Días"
 
@@ -5360,9 +5429,6 @@ msgstr "Cabeceira e pe de Act-On"
 msgid "Opinion type"
 msgstr "Tipo de opinión"
 
-msgid "Amount"
-msgstr "Cantidade"
-
 msgid "Config newsletter module"
 msgstr "Configuración do módulo de boletín de novas"
 
@@ -5377,6 +5443,9 @@ msgstr "Non se puideron atopar elementos que coincidan coa túa busca."
 
 msgid "Sent"
 msgstr "Enviado"
+
+msgid "Newsletter"
+msgstr "Boletín de novas"
 
 msgid "Created:"
 msgstr "Creado:"
@@ -5521,6 +5590,9 @@ msgstr "Non Favorito"
 msgid "Sidebars"
 msgstr "Barras laterais"
 
+msgid "Letters to the Editor"
+msgstr "Cartas ao director"
+
 msgid "New letter"
 msgstr "Carta nova"
 
@@ -5533,6 +5605,19 @@ msgid ""
 msgstr ""
 "Estamos realizando tarefas de mantemento na plataforma Opennemas, agarda uns "
 "minutos."
+
+msgid "Slider"
+msgstr "Slider"
+
+msgid ""
+"You have reached the maximum number of 100 photos. To add new photos remove "
+"the older or create a new album."
+msgstr ""
+"Alcanzaches o número máximo de 100 fotos. Para engadir novas fotos, elimina "
+"as máis antigas ou crea un novo álbum."
+
+msgid "Config album module"
+msgstr "Configuración do módulo «Álbum»"
 
 msgid "Private"
 msgstr "Privada"
@@ -5828,9 +5913,6 @@ msgstr "Holística+ xestionada"
 msgid "Targeting"
 msgstr "Segmentación"
 
-msgid "Module"
-msgstr "Modulo"
-
 msgid "Custom code"
 msgstr "Código personalizado"
 
@@ -6080,9 +6162,6 @@ msgstr ""
 msgid "Google DFP unit"
 msgstr "Unidade de Google DFP"
 
-msgid "Position"
-msgstr "Posición"
-
 msgid "Unable to find any advertisement that matches your search."
 msgstr "Non se puideron atopar publicidades que coincidan coa súa busca."
 
@@ -6113,11 +6192,11 @@ msgstr "O seu periódico foi creado en %1"
 msgid "Storage size"
 msgstr "Amacenamento ocupado"
 
-msgid "Page views this month"
-msgstr "Páxinas vistas este mes"
+msgid "Users Active"
+msgstr "Usuarios activos"
 
-msgid "coming soon... work in progress..."
-msgstr "pronto terás esta información…"
+msgid "Emails sent from"
+msgstr "Correos electrónicos enviados desde"
 
 msgid "Opennemas offers many more modules and solutions"
 msgstr "Opennemas ofrece moitos máis módulos e solucións"
@@ -6280,62 +6359,6 @@ msgstr "URL de ficheiro embebido"
 
 msgid "Thumbnail"
 msgstr "Miniatura"
-
-msgid "Category blog"
-msgstr "Categoria tipo Blog"
-
-msgid "Synched category"
-msgstr "Sincronizar categoría"
-
-msgid "Original:"
-msgstr "Orixinal:"
-
-msgid "Link to"
-msgstr "Ligazón a"
-
-msgid ""
-"If your theme has defined positions for menus you can assign one menu to "
-"each of them"
-msgstr ""
-"Se o tema ten posicións de menú definidas podes asignar un menú para cada "
-"unha delas"
-
-msgid "Menu structure"
-msgstr "Estrutura do menu"
-
-msgid "Add items"
-msgstr "Engadir elementos"
-
-msgid "Use drag and drop to sort and nest elements."
-msgstr "Use arrastrar e soltar para ordenar e aniñar elementos."
-
-msgid "Add new item"
-msgstr "Engadir novo elemento"
-
-msgid "Synchronized Category"
-msgstr "Categoría sincronizada"
-
-msgid ""
-"Fill the below form with the title and the external URL you want to add to "
-"the menu."
-msgstr ""
-"Completa o formulario de embaixo co titulo e a URL externa que queres "
-"engadir ao menú."
-
-msgid "Unable to find any menu that matches your search."
-msgstr "Non se puideron atopar menús que coincidan coa súa busca."
-
-msgid "Position assigned"
-msgstr "Posición asignada"
-
-msgid "Assigned to"
-msgstr "Asignar a"
-
-msgid "No position"
-msgstr "Sen posición"
-
-msgid "Unasigned"
-msgstr "Sen asignar"
 
 msgid "Show in RSS"
 msgstr "Mostrar en RSS"
@@ -6765,9 +6788,6 @@ msgstr "Contacto"
 msgid "Last activity"
 msgstr "Última actividade"
 
-msgid "Static pages"
-msgstr "Páxinas estáticas"
-
 msgid "Attachments"
 msgstr "Anexos"
 
@@ -7054,6 +7074,85 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 
 msgid "Group name"
 msgstr "Nome do grupo"
+
+#~ msgid "Unable to find the menu with the id \"%d\""
+#~ msgstr "Non se puido atopar o menú co identificador «%d»"
+
+#~ msgid "Menu '%s' created successfully."
+#~ msgstr "Menú «%s» creado correctamente."
+
+#~ msgid "Unable to create the menu"
+#~ msgstr "Non se puido crear o menú"
+
+#~ msgid "Unable to find a menu with the id \"%s\""
+#~ msgstr "Non se puido atopar o menú co identificador «%s»"
+
+#~ msgid "Menu data sent not valid."
+#~ msgstr "Os datos enviados do menú non son válidos."
+
+#~ msgid "Menu updated successfully."
+#~ msgstr "Menú actualizado correctamente."
+
+#~ msgid "There was an error while updating the menu."
+#~ msgstr "Produciuse un erro ao actualizar o menú."
+
+#~ msgid "Blogs"
+#~ msgstr "Blogs"
+
+#~ msgid "Form"
+#~ msgstr "Formularios"
+
+#~ msgid "Archive"
+#~ msgstr "Arquivar"
+
+#~ msgid "Category blog"
+#~ msgstr "Categoria tipo Blog"
+
+#~ msgid "Synched category"
+#~ msgstr "Sincronizar categoría"
+
+#~ msgid "Original:"
+#~ msgstr "Orixinal:"
+
+#~ msgid "Link to"
+#~ msgstr "Ligazón a"
+
+#~ msgid "Unable to find any menu that matches your search."
+#~ msgstr "Non se puideron atopar menús que coincidan coa súa busca."
+
+#~ msgid "Position assigned"
+#~ msgstr "Posición asignada"
+
+#~ msgid "Assigned to"
+#~ msgstr "Asignar a"
+
+#~ msgid "No position"
+#~ msgstr "Sen posición"
+
+#~ msgid "Unasigned"
+#~ msgstr "Sen asignar"
+
+#~ msgid "Add items"
+#~ msgstr "Engadir elementos"
+
+#~ msgid "Add new item"
+#~ msgstr "Engadir novo elemento"
+
+#~ msgid "Synchronized Category"
+#~ msgstr "Categoría sincronizada"
+
+#~ msgid ""
+#~ "Fill the below form with the title and the external URL you want to add "
+#~ "to the menu."
+#~ msgstr ""
+#~ "Completa o formulario de embaixo co titulo e a URL externa que queres "
+#~ "engadir ao menú."
+
+#~ msgid "Page views this month"
+#~ msgstr "Páxinas vistas este mes"
+
+#~ msgid "coming soon... work in progress..."
+#~ msgstr "pronto terás esta información…"
 
 #~ msgid "Invalid tag"
 #~ msgstr "Etiqueta non válida"
@@ -7459,9 +7558,6 @@ msgstr "Nome do grupo"
 #~ msgid "Click on arrow to reveal more configuration options."
 #~ msgstr "Prema na frecha para mostrar máis opcións de configuración."
 
-#~ msgid "Album category"
-#~ msgstr "Categoria de álbum"
-
 #~ msgid "Poll category"
 #~ msgstr "Categoria de enquisas"
 
@@ -7470,9 +7566,6 @@ msgstr "Nome do grupo"
 
 #~ msgid "Synched blog category"
 #~ msgstr "Categoria sincronizada blog"
-
-#~ msgid "Sync Automatic Categories"
-#~ msgstr "Sincronización automática de categorías"
 
 #~ msgid "Add Container"
 #~ msgstr "Engadir contenedor"

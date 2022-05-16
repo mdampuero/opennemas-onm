@@ -9,6 +9,8 @@
  */
 namespace Tests\Libs\Smarty;
 
+use Common\Model\Entity\Content;
+
 /**
  * Defines test cases for SmartyUrl class.
  */
@@ -60,9 +62,11 @@ class SmartyOutputFilterNoindexTest extends \PHPUnit\Framework\TestCase
      */
     public function testNoindexWhenIndexed()
     {
-        $this->smarty->expects($this->once())->method('hasValue')
+        $this->smarty->expects($this->at(0))->method('getValue')
+            ->with('o_content')->willReturn(null);
+        $this->smarty->expects($this->at(1))->method('hasValue')
             ->with('o_token')->willReturn(true);
-        $this->smarty->expects($this->once())->method('getValue')
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('o_token')->willReturn('0000000000000');
 
         $this->subscription->expects($this->once())->method('isIndexable')
@@ -80,9 +84,11 @@ class SmartyOutputFilterNoindexTest extends \PHPUnit\Framework\TestCase
      */
     public function testNoindexWhenNoIndexedAndMetaNotPresent()
     {
-        $this->smarty->expects($this->once())->method('hasValue')
+        $this->smarty->expects($this->at(0))->method('getValue')
+            ->with('o_content')->willReturn(null);
+        $this->smarty->expects($this->at(1))->method('hasValue')
             ->with('o_token')->willReturn(true);
-        $this->smarty->expects($this->once())->method('getValue')
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('o_token')->willReturn('0000000000000');
 
         $this->subscription->expects($this->once())->method('isIndexable')
@@ -103,9 +109,11 @@ class SmartyOutputFilterNoindexTest extends \PHPUnit\Framework\TestCase
      */
     public function testNoindexWhenNoIndexedAndMetaPresent()
     {
-        $this->smarty->expects($this->once())->method('hasValue')
+        $this->smarty->expects($this->at(0))->method('getValue')
+            ->with('o_content')->willReturn(null);
+        $this->smarty->expects($this->at(1))->method('hasValue')
             ->with('o_token')->willReturn(true);
-        $this->smarty->expects($this->once())->method('getValue')
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('o_token')->willReturn('0000000000000');
 
         $this->subscription->expects($this->once())->method('isIndexable')
@@ -116,6 +124,55 @@ class SmartyOutputFilterNoindexTest extends \PHPUnit\Framework\TestCase
                 . '<meta name="robots" content="index,follow" />'
             . '</head>'
             . '<body>Hello World!</body></html>';
+
+        $this->assertEquals(
+            '<html><head><meta name="robots" content="noindex" /></head><body>Hello World!</body></html>',
+            smarty_outputfilter_noindex($output, $this->smarty)
+        );
+    }
+
+    /**
+     * Tests smarty_outputfilter_noindex when content has custom noindex and meta
+     */
+    public function testNoindexWhenCustomNoIndexAndMetaPresent()
+    {
+        $content = new Content(
+            [
+                'pk_content'   => 1,
+                'noindex' => true
+            ]
+        );
+
+        $this->smarty->expects($this->at(0))->method('getValue')
+            ->with('o_content')->willReturn($content);
+
+        $output = '<html>'
+            . '<head>'
+                . '<meta name="robots" content="index,follow" />'
+            . '</head>'
+            . '<body>Hello World!</body></html>';
+
+        $this->assertEquals(
+            '<html><head><meta name="robots" content="noindex" /></head><body>Hello World!</body></html>',
+            smarty_outputfilter_noindex($output, $this->smarty)
+        );
+    }
+
+    /**
+     * Tests smarty_outputfilter_noindex when content has custom noindex and no meta
+     */
+    public function testNoindexWhenCustomNoIndexAndMetaNotPresent()
+    {
+        $content = new Content(
+            [
+                'pk_content'   => 1,
+                'noindex' => true
+            ]
+        );
+        $this->smarty->expects($this->at(0))->method('getValue')
+            ->with('o_content')->willReturn($content);
+
+        $output = '<html><head></head><body>Hello World!</body></html>';
 
         $this->assertEquals(
             '<html><head><meta name="robots" content="noindex" /></head><body>Hello World!</body></html>',

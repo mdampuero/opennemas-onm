@@ -26,6 +26,12 @@ function smarty_outputfilter_canonical_url($output, $smarty)
         $url = $smarty->getValue('o_canonical');
     }
 
+    // Check for content custom canonical
+    $content = $smarty->getValue('o_content');
+    if ($content && !empty($content->canonicalurl)) {
+        $url = $content->canonicalurl;
+    }
+
     $tpl = '<link rel="canonical" href="%s"/>';
 
     return str_replace('</head>', sprintf($tpl, $url) . '</head>', $output);
