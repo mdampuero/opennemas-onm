@@ -88,7 +88,7 @@ class ContentUpdateHelper
     }
 
     /**
-     * Returns the image id for the provided item.
+     * Returns the body for the provided item.
      *
      * @param mixed $item The item to get property from.
      *
@@ -103,6 +103,96 @@ class ContentUpdateHelper
         return array_key_exists('body', $item)
             ? $item['body']
             : null;
+    }
+
+    /**
+     * Returns the title for the provided item.
+     *
+     * @param mixed $item The item to get property from.
+     *
+     * @return string The title.
+     */
+    public function getTitle($item = null) : ?string
+    {
+        if (!is_array($item)) {
+            return null;
+        }
+
+        return array_key_exists('title', $item)
+            ? $item['title']
+            : null;
+    }
+
+    /**
+     * Returns the caption for the provided item.
+     *
+     * @param mixed $item The item to get property from.
+     *
+     * @return string The caption.
+     */
+    public function getCaption($item = null) : ?string
+    {
+        if (!is_array($item)) {
+            return null;
+        }
+
+        return array_key_exists('caption', $item)
+            ? $item['caption']
+            : null;
+    }
+
+    /**
+     * Returns the modified date for the provided item.
+     *
+     * @param mixed $item The item to get property from.
+     *
+     * @return string The modified date.
+     */
+    public function getModifiedDate($item = null) : ?string
+    {
+        if (!is_array($item)) {
+            return null;
+        }
+
+        return array_key_exists('modified', $item)
+            ? $item['modified']
+            : null;
+    }
+
+    /**
+     * Check if the update has a modified date.
+     *
+     * @param mixed $item The item to check modified date for.
+     *
+     * @return bool True if the content has a modified date. False otherwise.
+     */
+    public function hasModifiedDate($item = null) : bool
+    {
+        return !empty($this->getModifiedDate($item));
+    }
+
+    /**
+     * Check if the update has a caption.
+     *
+     * @param mixed $item The item to check caption for.
+     *
+     * @return bool True if the content has a caption. False otherwise.
+     */
+    public function hasCaption($item = null) : bool
+    {
+        return !empty($this->getCaption($item));
+    }
+
+    /**
+     * Check if the update has a title.
+     *
+     * @param mixed $item The item to check body for.
+     *
+     * @return bool True if the content has a title. False otherwise.
+     */
+    public function hasTitle($item = null) : bool
+    {
+        return !empty($this->getTitle($item));
     }
 
     /**

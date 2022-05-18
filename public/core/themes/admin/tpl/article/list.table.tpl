@@ -13,6 +13,14 @@
       {t}Featured in inner{/t}
     </label>
   </div>
+  {is_module_activated name="es.openhost.module.live_blog_posting"}
+    <div class="checkbox column-filters-checkbox">
+      <input id="checkbox-live-blog-posting" checklist-model="app.columns.selected" checklist-value="'live_blog_posting'" type="checkbox">
+      <label for="checkbox-live-blog-posting">
+        {t}Live post{/t}
+      </label>
+    </div>
+  {/is_module_activated}
 {/block}
 
 {block name="commonColumnsHeader" prepend}
@@ -22,6 +30,11 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('featured_inner')" width="120">
     {t}Inner{/t}
   </th>
+  {is_module_activated name="es.openhost.module.live_blog_posting"}
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('live_blog_posting')" width="80">
+        {t}Live post{/t}
+    </th>
+  {/is_module_activated}
 {/block}
 
 {block name="commonColumnsBody" prepend}
@@ -39,6 +52,11 @@
       </div>
     </dynamic-image>
   </td>
+  {is_module_activated name="es.openhost.module.live_blog_posting"}
+    <td class="text-center v-align-middle" ng-if="isColumnEnabled('live_blog_posting')">
+      <i class="fa fa-podcast fa-2x" ng-if="item.params.live_blog_posting"></i>
+    </td>
+  {/is_module_activated}
 {/block}
 
 {block name="customColumns"}

@@ -25,6 +25,78 @@ function get_update_body($item = null) : string
 }
 
 /**
+ * Get body from item
+ *
+ * @param mixed $item The item to get body from.
+ *
+ * @return string Item body.
+ */
+function get_update_title($item = null) : string
+{
+    return getService('core.helper.content_update')->getTitle($item);
+}
+
+/**
+ * Get body from item
+ *
+ * @param mixed $item The item to get body from.
+ *
+ * @return string Item body.
+ */
+function get_update_caption($item = null) : string
+{
+    return getService('core.helper.content_update')->getCaption($item);
+}
+
+/**
+ * Get body from item
+ *
+ * @param mixed $item The item to get body from.
+ *
+ * @return string Item body.
+ */
+function get_update_modified_date($item = null) : string
+{
+    return getService('core.helper.content_update')->getModifiedDate($item);
+}
+
+/**
+ * Checks if the item has a title.
+ *
+ * @param mixed $item The item to get title from.
+ *
+ * @return bool True if title exists, false otherwise
+ */
+function has_update_modified_date($item = null) : bool
+{
+    return getService('core.helper.content_update')->hasModifiedDate($item);
+}
+
+/**
+ * Checks if the item has a title.
+ *
+ * @param mixed $item The item to get title from.
+ *
+ * @return bool True if title exists, false otherwise
+ */
+function has_update_title($item = null) : bool
+{
+    return getService('core.helper.content_update')->hasTitle($item);
+}
+
+/**
+ * Checks if the item has a caption.
+ *
+ * @param mixed $item The item to get caption from.
+ *
+ * @return bool True if caption exists, false otherwise
+ */
+function has_update_caption($item = null) : bool
+{
+    return getService('core.helper.content_update')->hasCaption($item);
+}
+
+/**
  * Checks if the item has a image.
  *
  * @param mixed $item The item to get image from.

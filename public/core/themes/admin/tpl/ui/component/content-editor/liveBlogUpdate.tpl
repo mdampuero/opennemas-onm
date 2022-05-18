@@ -5,18 +5,17 @@
           <button class="btn btn-block btn-default btn-loading" ng-click="addBlankUpdate()" type="button">
             <h5 class="text-uppercase">
               <i class="fa fa-plus"></i>
-              {t}Añadir{/t}
+              {t}Add{/t}
             </h5>
           </button>
         </div>
       </div>
       <div ng-repeat="updateItem in item.live_blog_updates track by $index" ng-cloak>
         <div class="article-liveblogupdate-actions m-t-50">
-          <button class="btn btn-danger btn-small" ng-click="removeUpdate($index)" type="button"> <i class="fa fa-trash-o m-r-5"></i>{t}Eliminar elemento{/t}</button>
+          <button class="btn btn-danger btn-small" ng-click="removeUpdate($index)" type="button"> <i class="fa fa-trash-o m-r-5"></i>{t}Remove update{/t}</button>
         </div>
         <hr/>
         <div class="form-group">
-
           <div class="row">
             <div class="col-lg-5 col-md-5">
               <label for="updateItem.title" class="form-label">
@@ -92,19 +91,18 @@
               </div>
             </div>
           </div>
-
         </div>
-          <div class="form-group">
+        <div class="form-group">
           <label class="form-label clearfix" for="live_blog_updates.[% $index %].body">
             <div class="pull-left">{t}Body{/t}</div>
           </label>
-            {acl isAllowed='PHOTO_ADMIN'}
-              <div class="pull-right">
-                <div class="btn btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="editor.live_blog_updates.[% $index %].body" photo-editor-enabled="true">
-                  <i class="fa fa-plus"></i>
-                  {t}Insert image{/t}
-                </div>
+          {acl isAllowed='PHOTO_ADMIN'}
+            <div class="pull-right">
+              <div class="btn btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="editor.live_blog_updates.[% $index %].body" photo-editor-enabled="true">
+                <i class="fa fa-plus"></i>
+                {t}Insert image{/t}
               </div>
+            </div>
           {/acl}
             <div class="pull-right m-r-5">
               <div class="btn btn-mini" content-picker content-picker-target="editor.live_blog_updates.[% $index %].body" content-picker-selection="true" content-picker-type="album,article,attachment,opinion,poll,video" content-picker-max-size="10">

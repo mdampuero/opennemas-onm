@@ -708,4 +708,53 @@ class ContentHelper
 
         return true;
     }
+
+     /**
+     * Check if this content is live or, in others words, if this
+     * content is between coverage start time and end time
+     *
+     * @return bool
+     */
+    public function isLiveBlog($item)
+    {
+        return array_key_exists('live_blog_posting', $item->params) && $item->params['live_blog_posting'];
+    }
+
+     /**
+     * Return last live update date if live blog article
+     *
+     * @return string
+     */
+    public function getLastLiveUpdate($item)
+    {
+        if (!$this->isLiveBlog($item) || empty($item->live_blog_updates)) {
+            return null;
+        }
+
+        return $item->live_blog_updates[0]['modified'];
+    }
+
+    /**
+     * Check if this content is live or, in others words, if this
+     * content is between coverage start time and end time
+     *
+     * @return bool
+     */
+    public function isLive($item)
+    {
+        if (empty($item->coverage_start_time || $item->coverage_end_time)) {
+            return false;
+        }
+
+        $timezone = $this->locale->getTimeZone();
+        $start = !$item->coverage_start_time instanceof \DateTime ?
+            new \DateTime($item->coverage_start_time, $timezone) :
+            $item->coverage_start_time;
+        $end = !$item->coverage_end_time instanceof \DateTime ?
+            new \DateTime($item->coverage_end_time, $timezone) :
+            $item->coverage_end_time;
+        $now = new \DateTime(null, $timezone);
+
+        return $now->getTimeStamp() >= $start->getTimeStamp() && $now->getTimeStamp() <= $end->getTimeStamp();
+    }
 }

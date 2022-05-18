@@ -216,6 +216,11 @@ class FormFieldHelper
                 'title' => _('Agency'),
                 'available' => [ 'album' ]
             ],
+            [
+                'name' => 'live_blog_posting',
+                'title' => _('Live blog post'),
+                'available' => [ 'article' ]
+            ],
         ];
         return $this;
     }
