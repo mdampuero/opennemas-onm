@@ -11,6 +11,10 @@ services:
         class:     Api\Helper\Cache\ArticleCacheHelper
         arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
 
+    api.helper.cache.frontpage:
+        class:     Api\Helper\Cache\FrontpageCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance', '@service_container' ]
+
     api.helper.cache.opinion:
         class:     Api\Helper\Cache\OpinionCacheHelper
         arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]

@@ -112,14 +112,14 @@ class FrontpagesController extends Controller
      */
     public function savePositionsAction(Request $request)
     {
+        $widgetTypes           = [ 'article', 'opinion', 'video', 'album' ];
         $dataPositionsNotValid = false;
 
-        $cps = $this->get('api.service.content_position');
+        $category = $request->request->get('category', null, FILTER_SANITIZE_STRING);
 
         // Get application logger
         $logger = $this->get('application.log');
 
-        $category = $request->request->get('category', null, FILTER_SANITIZE_STRING);
         if ($category === null && $category === '') {
             return new JsonResponse(
                 [ 'message' => _("Unable to save content positions: Data sent from the client were not valid.") ]
@@ -127,6 +127,19 @@ class FrontpagesController extends Controller
         }
 
         $category = (int) $category;
+
+        list(,, $saved) =
+            $this->get('api.service.frontpage_version')->getContentsInCurrentVersionforCategory($category);
+
+        $saved = array_filter($saved, function ($content) use ($widgetTypes) {
+            return in_array($content->content_type_name, $widgetTypes);
+        });
+
+        $saved = array_map(function ($content) {
+            return implode('-', [ $content->content_type_name, $content->pk_content ]);
+        }, $saved);
+
+        $cps = $this->get('api.service.content_position');
 
         // Get the form-encoded places from request
         $numberOfContents  = $request->request->getDigits('contents_count');
@@ -210,12 +223,20 @@ class FrontpagesController extends Controller
 
         $lastSaved = $fvs->getLastSaved($version->category_id, $version->id, true);
 
-        $items = array_map(function ($content) {
-            return implode('-', [ $content['content_type'], $content['id'] ]);
-        }, $contents);
+        $toSave = array_filter($contents, function ($content) use ($widgetTypes) {
+            return in_array($content['content_type'], $widgetTypes);
+        });
 
-        $items = array_filter($items, function ($item) {
-            return !preg_match('@^widget@', $item);
+        $toSave = array_map(function ($item) {
+            return implode('-', [ $item['content_type'], $item['id'] ]);
+        }, $toSave);
+
+        $added = array_filter($toSave, function ($item) use ($saved) {
+            return !in_array($item, $saved);
+        });
+
+        $removed = array_filter($saved, function ($item) use ($toSave) {
+            return !in_array($item, $toSave);
         });
 
         $this->get('core.dispatcher')->dispatch(
@@ -223,7 +244,8 @@ class FrontpagesController extends Controller
             [
                 'category'    => $category,
                 'frontpageId' => $version->id,
-                'items'       => $items
+                'removed'     => array_values($removed),
+                'added'       => array_values($added)
             ]
         );
 
