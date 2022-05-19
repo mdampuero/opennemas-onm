@@ -69,7 +69,7 @@ class CompanyController extends FrontendController
     protected function hydrateList(array &$params = []) : void
     {
         $date  = date('Y-m-d H:i:s');
-        $query = [ $date, $date ];
+        $query = [ $date, $date, $params['epp'], $params['epp'] * ($params['page'] - 1) ];
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
@@ -82,16 +82,15 @@ class CompanyController extends FrontendController
             'and (starttime is null or starttime < "%s") ' .
             'and (endtime is null or endtime >= "%s") ';
 
-        foreach ([ 'sector', 'title' ] as $param) {
-            if (!empty($params[$param])) {
-                $oql .= 'and ' . $param . ' = "%s" ';
-                array_push($query, $params[$param]);
-            }
+        if (!empty($params['title'])) {
+            $oql .= 'and title ~ "%%' . $params['title'] . '%%" ';
         }
 
-        $query = array_merge($query, [ $params['epp'], $params['epp'] * ($params['page'] - 1) ]);
+        if (!empty($params['sector'])) {
+            $oql .= sprintf('and sector = "%s" ', $params['sector']);
+        }
 
-        $oql .= 'order by title desc limit %d offset %d';
+        $oql .= 'order by title asc limit %d offset %d';
 
         $response = $this->get('api.service.content')->getList(sprintf($oql, ...$query));
 
@@ -107,6 +106,37 @@ class CompanyController extends FrontendController
 
             $params['x-cache-for'] = $expire;
         }
+
+        $params['sectors'] = [
+            [ 'name' => 'automobiles', 'title' => _('Automobiles') ],
+            [ 'name' => 'aeroespace', 'title' => _('Aerospace') ],
+            [ 'name' => 'agriculture', 'title' => _('Agriculture') ],
+            [ 'name' => 'breeding', 'title' => _('Breeding') ],
+            [ 'name' => 'comerce', 'title' => _('Comerce') ],
+            [ 'name' => 'construction', 'title' => _('Construction') ],
+            [ 'name' => 'creative', 'title' => _('Creative') ],
+            [ 'name' => 'culture', 'title' => _('Culture') ],
+            [ 'name' => 'education', 'title' => _('Education') ],
+            [ 'name' => 'electronic', 'title' => _('Electronic') ],
+            [ 'name' => 'energy', 'title' => _('Energy') ],
+            [ 'name' => 'entertainment', 'title' => _('Entertainment') ],
+            [ 'name' => 'finance', 'title' => _('Finance') ],
+            [ 'name' => 'fishing', 'title' => _('Fishing') ],
+            [ 'name' => 'food', 'title' => _('Food') ],
+            [ 'name' => 'healthcare', 'title' => _('Healthcare') ],
+            [ 'name' => 'information_technology', 'title' => _('Information technology') ],
+            [ 'name' => 'meat', 'title' => _('Meat') ],
+            [ 'name' => 'mining', 'title' => _('Mining') ],
+            [ 'name' => 'petroleum', 'title' => _('Petroleum') ],
+            [ 'name' => 'pharmaceutical', 'title' => _('Pharmaceutical') ],
+            [ 'name' => 'real_estate', 'title' => _('Real estate') ],
+            [ 'name' => 'telecommunications', 'title' => _('Telecommunications') ],
+            [ 'name' => 'tobacco', 'title' => _('Tobacco') ],
+            [ 'name' => 'textile', 'title' => _('Textile') ],
+            [ 'name' => 'transport', 'title' => _('Transport') ],
+            [ 'name' => 'wood', 'title' => _('Wood') ],
+            [ 'name' => 'other', 'title' => _('Other') ]
+        ];
 
         $params['contents']   = $response['items'];
         $params['pagination'] = $this->get('paginator')->get([
