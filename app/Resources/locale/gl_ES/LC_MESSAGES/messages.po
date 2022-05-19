@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-12 08:48+0000\n"
-"PO-Revision-Date: 2022-05-12 10:48+0200\n"
+"POT-Creation-Date: 2022-05-16 07:50+0000\n"
+"PO-Revision-Date: 2022-05-16 09:50+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -786,6 +786,90 @@ msgstr "O teu comentario foi aceptado e agora deberá moderarse."
 msgid "Your comment was accepted."
 msgstr "O teu comentario foi aceptado."
 
+msgid "Automobiles"
+msgstr "Automóbiles"
+
+msgid "Aerospace"
+msgstr "Aeroespacial"
+
+msgid "Agriculture"
+msgstr "Agricultura"
+
+msgid "Breeding"
+msgstr "Gandería"
+
+msgid "Comerce"
+msgstr "Comercio"
+
+msgid "Construction"
+msgstr "Construción"
+
+msgid "Creative"
+msgstr "Creativo"
+
+msgid "Culture"
+msgstr "Cultura"
+
+msgid "Education"
+msgstr "Educación"
+
+msgid "Electronic"
+msgstr "Electrónica"
+
+msgid "Energy"
+msgstr "Enerxía"
+
+msgid "Entertainment"
+msgstr "Entretemento"
+
+msgid "Finance"
+msgstr "Financeiro"
+
+msgid "Fishing"
+msgstr "Pesca"
+
+msgid "Food"
+msgstr "Alimentación"
+
+msgid "Healthcare"
+msgstr "Saúde"
+
+msgid "Information technology"
+msgstr "Tecnoloxías da información"
+
+msgid "Meat"
+msgstr "Carne"
+
+msgid "Mining"
+msgstr "Minería"
+
+msgid "Petroleum"
+msgstr "Petróleo"
+
+msgid "Pharmaceutical"
+msgstr "Farmacéutica"
+
+msgid "Real estate"
+msgstr "Inmobiliaria"
+
+msgid "Telecommunications"
+msgstr "Telecomunicacións"
+
+msgid "Tobacco"
+msgstr "Tabaco"
+
+msgid "Textile"
+msgstr "Téxtil"
+
+msgid "Transport"
+msgstr "Transporte"
+
+msgid "Wood"
+msgstr "Madeira"
+
+msgid "Other"
+msgstr "Outro"
+
 msgid "Email is required but it will not be published"
 msgstr "O campo de correo-e é obrigatorio porén non será publicado"
 
@@ -1247,90 +1331,6 @@ msgstr "Opcións gardadas."
 msgid "There was an error while saving the settings"
 msgstr "Produciuse un erro ao gardar as preferencias."
 
-msgid "Aerospace"
-msgstr "Aeroespacial"
-
-msgid "Agriculture"
-msgstr "Agricultura"
-
-msgid "Automobiles"
-msgstr "Automóbiles"
-
-msgid "Breeding"
-msgstr "Gandería"
-
-msgid "Comerce"
-msgstr "Comercio"
-
-msgid "Construction"
-msgstr "Construción"
-
-msgid "Creative"
-msgstr "Creativo"
-
-msgid "Culture"
-msgstr "Cultura"
-
-msgid "Education"
-msgstr "Educación"
-
-msgid "Electronic"
-msgstr "Electrónica"
-
-msgid "Energy"
-msgstr "Enerxía"
-
-msgid "Entertainment"
-msgstr "Entretemento"
-
-msgid "Finance"
-msgstr "Financeiro"
-
-msgid "Fishing"
-msgstr "Pesca"
-
-msgid "Food"
-msgstr "Alimentación"
-
-msgid "Healthcare"
-msgstr "Saúde"
-
-msgid "Information technology"
-msgstr "Tecnoloxías da información"
-
-msgid "Meat"
-msgstr "Carne"
-
-msgid "Mining"
-msgstr "Minería"
-
-msgid "Petroleum"
-msgstr "Petróleo"
-
-msgid "Pharmaceutical"
-msgstr "Farmacéutica"
-
-msgid "Real estate"
-msgstr "Inmobiliaria"
-
-msgid "Telecommunications"
-msgstr "Telecomunicacións"
-
-msgid "Tobacco"
-msgstr "Tabaco"
-
-msgid "Textile"
-msgstr "Téxtil"
-
-msgid "Transport"
-msgstr "Transporte"
-
-msgid "Wood"
-msgstr "Madeira"
-
-msgid "Other"
-msgstr "Outro"
-
 msgid "Monday"
 msgstr "Luns"
 
@@ -1628,6 +1628,12 @@ msgstr "Twitter"
 msgid "Instagram"
 msgstr "Instragram"
 
+msgid "Whatsapp"
+msgstr "Whatsapp"
+
+msgid "Phone"
+msgstr "Teléfono"
+
 msgid "Address"
 msgstr "Enderezo"
 
@@ -1636,6 +1642,9 @@ msgstr "Google Maps"
 
 msgid "Sector"
 msgstr "Sector"
+
+msgid "Timetable"
+msgstr "Horario"
 
 msgid "Max sents reached"
 msgstr "Alcanzouse o número máximo de envios"
@@ -2473,9 +2482,6 @@ msgstr "Información de facturación"
 
 msgid "VAT number"
 msgstr "Identificador fiscal"
-
-msgid "Phone"
-msgstr "Teléfono"
 
 msgid "Return to <a href=\"%1\">store</a> and try again"
 msgstr "Volver á <a href=\"%1\">tenda</a> e intentalo de novo"
@@ -4644,9 +4650,6 @@ msgstr "Axencia de novas Opennemas"
 
 msgid "Url"
 msgstr "URL"
-
-msgid "Timetable"
-msgstr "Horario"
 
 msgid "Since"
 msgstr "Dende"
