@@ -84,6 +84,7 @@
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="email" icon="fa-envelope" title="{t}Email{/t}"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="address" icon="fa-map-pin" title="{t}Address{/t}"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="maps" icon="fa-map-marker" title="{t}Google Maps{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="website" icon="fa-globe" title="{t}Website{/t}"}
       {include file="common/component/related-contents/_featured-media.tpl" iName="logo" iTitle="{t}Logo{/t}" types="photo"}
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
       {include file="common/component/related-contents/_related-content.tpl" iName="relatedInner" iTitle="{t}Related in inner{/t}"}
