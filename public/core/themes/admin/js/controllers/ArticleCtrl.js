@@ -82,19 +82,9 @@
           body: '',
           image_id: null,
           caption: '',
-          created: '',
-          modified: '',
-          default: true
         };
-        var currentDate = new Date();
 
-        $scope.defaultLiveBlogUpdate.modified =
-          currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate() + ' ' +
-          currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds();
-
-        $scope.defaultLiveBlogUpdate.created =
-          currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate() + ' ' +
-          currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds();
+        $scope.canAddUpdate = true;
 
         /**
          * @memberOf ArticleCtrl
@@ -236,6 +226,9 @@
          *   Remove selected update when LiveBlogUpdate is active.
          */
         $scope.removeUpdate = function($index) {
+          if ($index === 0 && !$scope.canAddUpdate) {
+            $scope.canAddUpdate = true;
+          }
           $scope.item.live_blog_updates.splice($index, 1);
         };
 
@@ -342,28 +335,13 @@
          * @inheritdoc
          */
         $scope.addBlankUpdate = function() {
-          if ($scope.item.live_blog_updates.length === 0 || !$scope.item.live_blog_updates[0].default) {
-            $scope.item.live_blog_updates.unshift(angular.copy($scope.defaultLiveBlogUpdate));
+          if ($scope.item.live_blog_updates.length === 0 || $scope.canAddUpdate) {
+            var date = $window.moment().format('YYYY-MM-DD HH:mm:ss');
+            var currentUpdate = Object.assign({ modified: date, created: date }, $scope.defaultLiveBlogUpdate);
 
-            $scope.defaultLiveBlogUpdate.modified = $scope.getCurrentDate();
-            $scope.defaultLiveBlogUpdate.created  = $scope.getCurrentDate();
+            $scope.canAddUpdate = false;
+            $scope.item.live_blog_updates.unshift(currentUpdate);
           }
-        };
-
-        /**
-         * @function getCurrentDate
-         * @memberOf ArticleCtrl
-         *
-         * @description
-         *   Returns the current date.
-         */
-        $scope.getCurrentDate = function() {
-          var currentDate = new Date();
-          var formattedDate =
-            currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate() + ' ' +
-            currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds();
-
-          return formattedDate;
         };
 
         /**
@@ -389,10 +367,10 @@
               if (typeof update.image_id === 'object' && update.image_id !== null) {
                 update.image_id = update.image_id.pk_content;
               }
-              update.content_id = data.pk_content ? data.pk_content : '';
-              if (update.default) {
-                delete update.default;
+              if (!$scope.canAddUpdate) {
+                $scope.canAddUpdate = true;
               }
+              update.content_id = data.pk_content ? data.pk_content : '';
               parsedUpdates.push(update);
             }
           }

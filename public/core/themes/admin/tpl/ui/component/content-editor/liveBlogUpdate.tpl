@@ -2,7 +2,7 @@
     <div class="grid-body">
       <div class="row">
         <div class="col-md-4 p-b-15 p-t-15 col-md-offset-4">
-          <button class="btn btn-block btn-default btn-loading" ng-click="addBlankUpdate()" type="button">
+          <button class="btn btn-block btn-default btn-loading" ng-click="addBlankUpdate()" type="button" ng-disabled="!canAddUpdate">
             <h5 class="text-uppercase">
               <i class="fa fa-plus"></i>
               {t}Add{/t}
