@@ -48,6 +48,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     sort($slots);
 
     $html      = '<div class="ad-slot oat" data-type="%s"></div>';
+    $device    = $smarty->getContainer()->get('core.globals')->getDevice();
     $safeFrame = $smarty->getContainer()->get('core.helper.advertisement')
         ->isSafeFrameEnabled();
 
@@ -56,8 +57,11 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
         $pos = $slotId - $id;
 
         if (!$safeFrame || $contentType === 'amp') {
-            $adsForPosition = array_filter($ads, function ($a) use ($slotId) {
-                return in_array($slotId, $a->positions);
+            $adsForPosition = array_filter($ads, function ($a) use ($slotId, $device) {
+                return in_array($slotId, $a->positions)
+                    && ($a->params['devices'][$device] === 1
+                        || empty($device)
+                    );
             });
 
             $ad = $adsForPosition[array_rand($adsForPosition)];
