@@ -10,8 +10,8 @@
           <input type="checkbox" ng-model="day.enabled">
           <label class="form-label m-l-5">[% day.name %]</label>
         </div>
-        <label ng-if="day.enabled && day.schedules.length === 0" class="form-label closed-label m-r-5">{t}24 hours{/t}
-        <label ng-if="!day.enabled" class="form-label closed-label m-r-5">{t}Closed{/t}
+        <label ng-if="day.enabled && day.schedules.length === 0" class="form-label closed-label m-r-5">{t}24 hours{/t}</label>
+        <label ng-if="!day.enabled" class="form-label closed-label m-r-5">{t}Closed{/t}</label>
       </div>
       <div class="timetable-schedule" ng-if="day.enabled">
         <div ng-repeat="schedule in day.schedules track by $index">
