@@ -18,29 +18,11 @@
     <div class="col-md-6">
       {include file="advertisement/partials/ad_position_selector.tpl" position_id="6001" size="(728x90)"}
     </div>
-    <div class="col-md-6">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="6002" size="(234X90)"}
-    </div>
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-6 col-md-offset-6">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="6003" size="(300x*)"}
-    </div>
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-6 col-md-offset-6">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="6005" size="(300x*)"}
-    </div>
   </div>
   <hr>
   <div class="row">
     <div class="col-md-6">
       {include file="advertisement/partials/ad_position_selector.tpl" position_id="6009" size="(728X90)"}
-    </div>
-    <div class="col-md-6">
-      {include file="advertisement/partials/ad_position_selector.tpl" position_id="6010" size="(234X90)"}
     </div>
   </div>
 </div>
