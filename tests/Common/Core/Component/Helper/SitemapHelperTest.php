@@ -275,7 +275,7 @@ class SitemapHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetContents()
     {
-        $date = date('Y-m-d');
+        $date = gmdate('Y-m-d');
 
         $expected = [
             new Content([ 'content_type_name' => 'article' ]),
@@ -294,12 +294,12 @@ class SitemapHelperTest extends \PHPUnit\Framework\TestCase
             'endtime'           => [
                 'union' => 'OR',
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
             ],
             'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
             'changed ' => [
                 [
