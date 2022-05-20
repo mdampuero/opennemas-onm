@@ -168,7 +168,7 @@ class CompanyController extends ContentController
 
         $this->get('session')->set(
             'last_preview',
-            $this->view->fetch('company/company.tpl')
+            $this->view->fetch('company/item.tpl')
         );
 
         return new Response('OK');
