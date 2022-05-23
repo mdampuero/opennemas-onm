@@ -64,6 +64,10 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
                     );
             });
 
+            if (empty($adsForPosition)) {
+                continue;
+            }
+
             $ad = $adsForPosition[array_rand($adsForPosition)];
             $ad = $renderer->render($ad, $params);
         }
