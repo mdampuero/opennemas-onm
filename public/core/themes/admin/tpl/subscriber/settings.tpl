@@ -59,6 +59,19 @@
         <div class="grid-body">
           <h4 class="no-margin m-b-15">{t}Extra fields{/t}</h4>
           <p class="m-b-15">{t}This fields will be asked during registration and can be edited in the control panel.{/t}</p>
+          <div class="row">
+            <div class="col-md-2 col-md-offset-1 m-b-5">
+              <div class="controls">
+                <input class="form-control" type="text" ng-model="field" placeholder="{t}Extra field{/t}">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-block btn-success" ng-click="addField(field)">
+                <i class="fa fa-plus m-r-5"></i>
+                {t}Add{/t}
+              </button>
+            </div>
+          </div>
           <div class="row" ng-repeat="field in settings.fields track by $index">
             <div class="form-group col-md-1">
               <label class="form-label checkbox-label" for="label-[% $index %]-required">{t}Required{/t}</label>
@@ -105,14 +118,6 @@
                   <input class="form-control" id="options-[% index %]" ng-model="field.values" type="text">
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-2 col-md-offset-2">
-              <button class="btn btn-block btn-success" ng-click="addField()">
-                <i class="fa fa-plus m-r-5"></i>
-                {t}Add{/t}
-              </button>
             </div>
           </div>
         </div>

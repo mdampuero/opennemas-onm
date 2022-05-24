@@ -23,11 +23,26 @@
          * @memberOf SubscriberConfigCtrl
          *
          * @description
+         *  The default object.
+         *
+         * @type {Object}
+         */
+        $scope.default = {
+          required: false,
+          type: 'text'
+        };
+
+        /**
+         * @memberOf SubscriberConfigCtrl
+         *
+         * @description
          *  The settings object.
          *
          * @type {Object}
          */
-        $scope.settings = { fields: [] };
+        $scope.settings = {
+          fields: []
+        };
 
         /**
          * @function add
@@ -36,14 +51,16 @@
          * @description
          *   Adds a new field to the field list.
          */
-        $scope.addField = function() {
-          if (!$scope.settings.fields) {
-            $scope.settings.fields = [];
+        $scope.addField = function(field) {
+          if (!field) {
+            return;
           }
-          if ($scope.settings.fields[$scope.settings.fields.length - 1].name !== '' &&
-          $scope.settings.fields[$scope.settings.fields.length - 1].title !== '') {
-            $scope.settings.fields.push({ name: '', title: '', type: 'text', required: false });
-          }
+
+          $timeout(function() {
+            $scope.getSlug(field, function(response) {
+              $scope.settings.fields.push(Object.assign({ name: response.data.slug, title: field }, $scope.default));
+            });
+          }, 0);
         };
 
         /**
@@ -62,7 +79,6 @@
               if (response.data.settings) {
                 $scope.settings = response.data.settings;
               }
-              $scope.backup = angular.copy($scope.settings.fields);
             }, function(response) {
               $scope.loading = false;
 
@@ -81,9 +97,6 @@
          */
         $scope.removeField = function(index) {
           $scope.settings.fields.splice(index, 1);
-          if (index in $scope.backup) {
-            $scope.backup.splice(index, 1);
-          }
         };
 
         /**
@@ -110,22 +123,6 @@
             });
         };
 
-        $scope.$watch('settings.fields', function(nv, ov) {
-          if (!nv || nv === ov) {
-            return;
-          }
-          nv.forEach(function(element, index) {
-            if (index in $scope.backup &&
-              $scope.backup[index].name === element.name) {
-              return;
-            }
-            $scope.tm = $timeout(function() {
-              $scope.getSlug(element.title, function(response) {
-                element.name = response.data.slug;
-              });
-            }, 250);
-          });
-        }, true);
         $scope.list();
       }
     ]);
