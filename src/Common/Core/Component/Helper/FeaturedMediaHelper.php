@@ -102,7 +102,7 @@ class FeaturedMediaHelper
                 'inner'     => []
             ],
             'company' => [
-                'frontpage' => [],
+                'frontpage' => [ 'logo' ],
                 'inner'     => [ 'featured_inner' ]
             ], 'event' => [
                 'frontpage' => [ 'featured_frontpage' ],
