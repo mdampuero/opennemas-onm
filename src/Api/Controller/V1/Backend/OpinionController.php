@@ -189,10 +189,15 @@ class OpinionController extends ContentController
                 ->get('extraInfoContents.OPINION_MANAGER');
         }
 
+        $categories = $this->get('api.service.category')->responsify(
+            $this->get('api.service.category')->getList()['items']
+        );
+
         return array_merge([
+            'categories'   => $categories,
             'extra_fields' => $extraFields,
             'tags'         => $this->getTags($items),
-            'formSettings'  => [
+            'formSettings' => [
                 'name'             => $this->module,
                 'expansibleFields' => $this->getFormSettings($this->module)
             ]
