@@ -136,9 +136,9 @@
               <option value="">{t}Select a country{/t}...</option>
               <option value="[% key %]" ng-repeat="(key,value) in data.extra.countries" ng-selected="[% item[field.name] === value %]">[% value %]</option>
             </select>
-            <div class="radio" ng-if="field.type === 'options'" ng-repeat="option in field.values">
-              <input id="option-[% option.key %]" name="[% field.name %]" ng-model="item[field.name]" value="[% option.key %]" type="radio">
-              <label for="option-[% option.key %]">[% option.value %]</label>
+            <div class="radio" ng-if="field.type === 'options'" ng-repeat="option in field.values.split(',')">
+              <input id="[% field.name %]-option-[% option.split(':')[0] %]" name="[% field.name %]" ng-model="item[field.name]" value="[% option.split(':')[0] %]" type="radio">
+              <label for="[% field.name %]-option-[% option.split(':')[0] %]">[% option.split(':')[1] %]</label>
             </div>
           </div>
         </div>
