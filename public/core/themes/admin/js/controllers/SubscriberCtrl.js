@@ -36,7 +36,8 @@
           name: null,
           privileges: [],
           type: 1,
-          user_groups: []
+          user_groups: [],
+          register_date: new Date()
         };
 
         /**
