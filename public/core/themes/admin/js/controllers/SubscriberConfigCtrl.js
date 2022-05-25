@@ -56,6 +56,10 @@
             return;
           }
 
+          if (!$scope.settings.fields) {
+            $scope.settings.fields = [];
+          }
+
           $timeout(function() {
             $scope.getSlug(field, function(response) {
               $scope.settings.fields.push(Object.assign({ name: response.data.slug, title: field }, $scope.default));
