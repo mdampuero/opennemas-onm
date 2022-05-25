@@ -110,11 +110,11 @@
           <div class="row">
             <div class="col-md-2 col-md-offset-1 m-b-5">
               <div class="controls">
-                <input class="form-control" type="text" ng-model="field" placeholder="{t}Extra field{/t}">
+                <input class="form-control" type="text" ng-model="extraField.name" placeholder="{t}Extra field{/t}">
               </div>
             </div>
             <div class="col-md-2">
-              <button class="btn btn-block btn-success" ng-click="addField(field)">
+              <button class="btn btn-block btn-success" ng-click="addField()">
                 <i class="fa fa-plus m-r-5"></i>
                 {t}Add{/t}
               </button>

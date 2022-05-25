@@ -45,14 +45,24 @@
         };
 
         /**
+         * @memberOf SubscriberConfigCtrl
+         *
+         * @description
+         *  The extra field object.
+         *
+         * @type {Object}
+         */
+        $scope.extraField = {};
+
+        /**
          * @function add
          * @memberOf SubscriberConfigCtrl
          *
          * @description
          *   Adds a new field to the field list.
          */
-        $scope.addField = function(field) {
-          if (!field) {
+        $scope.addField = function() {
+          if (!$scope.extraField.name) {
             return;
           }
 
@@ -61,8 +71,12 @@
           }
 
           $timeout(function() {
-            $scope.getSlug(field, function(response) {
-              $scope.settings.fields.push(Object.assign({ name: response.data.slug, title: field }, $scope.default));
+            $scope.getSlug($scope.extraField.name, function(response) {
+              var field = Object.assign({ name: response.data.slug, title: $scope.extraField.name }, $scope.default);
+
+              $scope.settings.fields.push(field);
+
+              $scope.extraField.name = '';
             });
           }, 0);
         };
