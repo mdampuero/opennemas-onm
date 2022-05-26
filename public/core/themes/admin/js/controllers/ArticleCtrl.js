@@ -73,7 +73,6 @@
           tags: [],
           external_link: '',
           agency: '',
-          image: []
         };
 
         $scope.defaultLiveBlogUpdate = {
@@ -84,6 +83,14 @@
           caption: '',
         };
 
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  Flag to indicate if an update can be added.
+         *
+         * @type {Object}
+         */
         $scope.canAddUpdate = true;
 
         /**
@@ -120,13 +127,8 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.item.params.live_blog_posting = $scope.item.params.live_blog_posting ?
-            parseInt($scope.item.params.live_blog_posting) : 0;
           $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
 
-          if ($scope.item.params.live_blog_posting) {
-            $scope.initializeWatchers();
-          }
           $scope.expandFields();
           // Check if item is new (created) or existing for use default value or not
           if (!$scope.data.item.pk_content) {
@@ -225,11 +227,12 @@
          * @description
          *   Remove selected update when LiveBlogUpdate is active.
          */
-        $scope.removeUpdate = function($index) {
-          if ($index === 0 && !$scope.canAddUpdate) {
+        $scope.removeUpdate = function(index) {
+          if (index === 0 && !$scope.canAddUpdate) {
             $scope.canAddUpdate = true;
           }
-          $scope.item.live_blog_updates.splice($index, 1);
+
+          $scope.item.live_blog_updates.splice(index, 1);
         };
 
         /**
@@ -267,21 +270,20 @@
           $scope.previous       = null;
         };
 
-        $scope.initializeWatchers = function() {
-          $scope.$watch('item.live_blog_updates', function(nv, ov) {
-            for (var iterator = 0; iterator < nv.length; iterator++) {
-              if (nv[iterator].image_id &&
-                (!ov[iterator].image_id || ov[iterator].image_id.pk_content !== nv[iterator].image_id.pk_content)) {
-                if (nv[iterator].image_id.description) {
-                  nv[iterator].caption = nv[iterator].image_id.description;
-                }
-              }
-              if (!nv[iterator].image_id) {
-                nv[iterator].caption = '';
+        $scope.$watch('item.live_blog_updates', function(nv, ov) {
+          for (var iterator = 0; iterator < nv.length; iterator++) {
+            if (nv[iterator].image_id &&
+              (!ov[iterator].image_id || ov[iterator].image_id.pk_content !== nv[iterator].image_id.pk_content)) {
+              if (nv[iterator].image_id.description) {
+                nv[iterator].caption = nv[iterator].image_id.description;
               }
             }
-          }, true);
-        };
+
+            if (!nv[iterator].image_id) {
+              nv[iterator].caption = '';
+            }
+          }
+        }, true);
 
         // Update title int when block flag changes
         $scope.$watch('flags.block.title_int', function(nv) {
