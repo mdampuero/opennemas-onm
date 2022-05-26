@@ -113,10 +113,11 @@ class ContentPersister extends BasePersister
         if ($entity->starttime > $entity->changed) {
             $entity->changed = $entity->starttime;
         }
-        $changes         = $entity->getChanges();
-        $categories      = $entity->categories;
-        $tags            = $entity->tags;
-        $relations       = $entity->related_contents;
+
+        $changes           = $entity->getChanges();
+        $categories        = $entity->categories;
+        $tags              = $entity->tags;
+        $relations         = $entity->related_contents;
         $live_blog_updates = $entity->live_blog_updates;
 
         // Categories change
@@ -433,7 +434,7 @@ class ContentPersister extends BasePersister
         $this->conn->executeQuery($sql, $params, $types);
     }
 
-        /**
+    /**
      * Persits the content liveBlogUpdates.
      *
      * @param integer $id         The entity id.
@@ -507,6 +508,7 @@ class ContentPersister extends BasePersister
                 $value['created'],
                 $value['modified'],
             ]));
+
             $types = array_merge($types, [
                 \PDO::PARAM_INT,
                 empty($value['title']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
