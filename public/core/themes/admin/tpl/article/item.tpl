@@ -70,7 +70,7 @@
         </div>
       </div>
       {is_module_activated name="es.openhost.module.live_blog_posting"}
-        {include file="ui/component/content-editor/accordion/liveBlogPosting.tpl"}
+        {include file="ui/component/content-editor/accordion/live-blog-posting.tpl"}
       {/is_module_activated}
       {include file="ui/component/content-editor/accordion/author.tpl"}
       {include file="ui/component/content-editor/accordion/category.tpl" field="categories[0]"}
@@ -137,7 +137,7 @@
     </div>
   </div>
   {is_module_activated name="es.openhost.module.live_blog_posting"}
-    {include file="ui/component/content-editor/liveBlogUpdate.tpl"}
+    {include file="ui/component/content-editor/live-blog-update.tpl"}
   {/is_module_activated}
 {/block}
 
