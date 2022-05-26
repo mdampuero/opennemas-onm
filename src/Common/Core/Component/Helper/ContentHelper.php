@@ -717,7 +717,7 @@ class ContentHelper
      */
     public function isLiveBlog($item)
     {
-        return array_key_exists('live_blog_posting', $item->params) && $item->params['live_blog_posting'];
+        return $item->live_blog_posting;
     }
 
      /**
@@ -747,14 +747,9 @@ class ContentHelper
         }
 
         $timezone = $this->locale->getTimeZone();
-        $start = !$item->coverage_start_time instanceof \DateTime ?
-            new \DateTime($item->coverage_start_time, $timezone) :
-            $item->coverage_start_time;
-        $end = !$item->coverage_end_time instanceof \DateTime ?
-            new \DateTime($item->coverage_end_time, $timezone) :
-            $item->coverage_end_time;
-        $now = new \DateTime(null, $timezone);
+        $now      = new \DateTime(null, $timezone);
 
-        return $now->getTimeStamp() >= $start->getTimeStamp() && $now->getTimeStamp() <= $end->getTimeStamp();
+        return $now->getTimeStamp() >= $item->coverage_start_time->getTimeStamp()
+            && $now->getTimeStamp() <= $item->coverage_end_time->getTimeStamp();
     }
 }
