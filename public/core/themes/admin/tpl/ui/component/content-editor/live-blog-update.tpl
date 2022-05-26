@@ -1,4 +1,4 @@
-  <div class="grid simple" ng-show="item.params.live_blog_posting">
+  <div class="grid simple" ng-show="item.live_blog_posting">
     <div class="grid-body">
       <div class="row">
         <div class="col-md-4 p-b-15 p-t-15 col-md-offset-4">
