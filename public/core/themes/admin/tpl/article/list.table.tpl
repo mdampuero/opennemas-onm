@@ -54,7 +54,7 @@
   </td>
   {is_module_activated name="es.openhost.module.live_blog_posting"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('live_blog_posting')">
-      <i class="fa fa-podcast fa-2x" ng-if="item.params.live_blog_posting"></i>
+      <i class="fa fa-podcast fa-2x" ng-if="item.live_blog_posting"></i>
     </td>
   {/is_module_activated}
 {/block}

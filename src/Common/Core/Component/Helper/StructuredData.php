@@ -97,8 +97,7 @@ class StructuredData
                     . $params['content']->content_type_name . '_data.tpl';
             }
 
-            if (array_key_exists('live_blog_posting', $params['content']->params) &&
-                $params['content']->params['live_blog_posting'] == '1') {
+            if ($params['content']->live_blog_posting) {
                 $template = 'common/helpers/structured_live_blog_data.tpl';
             }
         }
