@@ -45,11 +45,14 @@ orm:
                 position:            integer
                 slug:                l10n_string
                 starttime:           datetime
+                coverage_start_time: datetime
+                coverage_end_time:   datetime
                 title:               l10n_string
                 urn_source:          string
                 with_comment:        boolean
                 categories:          array
-                live_blog_updates:     array
+                live_blog_posting:   boolean
+                live_blog_updates:   array
                 tags:                array
                 related_contents:    array
                 subscriptions:       array
