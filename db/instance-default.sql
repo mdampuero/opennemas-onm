@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.33, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.35, for Linux (x86_64)
 --
 -- Host: mysql    Database: 1
 -- ------------------------------------------------------
--- Server version	5.7.33-log
+-- Server version	5.7.36-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -367,6 +367,37 @@ LOCK TABLES `content_positions` WRITE;
 /*!40000 ALTER TABLE `content_positions` DISABLE KEYS */;
 INSERT INTO `content_positions` VALUES (186,0,0,'placeholder_0_9',NULL,'Widget',1),(186,25,0,'placeholder_1_6',NULL,'Widget',0),(229,0,1,'placeholder_0_4',NULL,'Widget',1),(229,25,3,'placeholder_0_0',NULL,'Widget',0),(236,25,0,'placeholder_3_1',NULL,'Widget',0),(237,24,0,'placeholder_3_2',NULL,'Widget',0),(240,24,0,'placeholder_3_1',NULL,'Widget',0),(369,0,0,'placeholder_1_4',NULL,'Widget',1),(369,24,1,'placeholder_3_1',NULL,'Widget',0),(489,0,1,'placeholder_0_13',NULL,'Widget',1),(489,25,0,'placeholder_0_1',NULL,'Widget',0),(544,0,0,'placeholder_3_3',NULL,'Widget',1),(544,25,1,'placeholder_3_1',NULL,'Widget',0),(545,0,0,'placeholder_0_5',NULL,'Widget',1),(545,25,1,'placeholder_0_0',NULL,'Widget',0),(546,0,1,'placeholder_3_3',NULL,'Widget',1),(546,25,2,'placeholder_3_1',NULL,'Widget',0),(567,0,0,'placeholder_2_4',NULL,'Widget',1),(567,25,0,'placeholder_2_6',NULL,'Widget',0),(568,0,0,'placeholder_0_13',NULL,'Widget',1),(568,25,0,'placeholder_0_8',NULL,'Widget',0),(571,0,0,'placeholder_3_4',NULL,'Widget',1),(646,0,0,'placeholder_2_1',NULL,'Widget',1),(647,0,0,'placeholder_1_1',NULL,'Widget',1),(648,0,0,'placeholder_3_1',NULL,'Widget',1),(649,0,0,'placeholder_0_4',NULL,'Widget',1),(804,0,0,'placeholder_0_0',NULL,'Widget',1),(806,0,0,'placeholder_0_11_1',NULL,'Widget',1);
 /*!40000 ALTER TABLE `content_positions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `content_updates`
+--
+
+DROP TABLE IF EXISTS `content_updates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `content_updates` (
+  `content_id` bigint(20) unsigned NOT NULL,
+  `title` text,
+  `body` longtext,
+  `caption` text,
+  `image_id` bigint(20) unsigned DEFAULT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`content_id`,`created`),
+  KEY `fk_image_id` (`image_id`),
+  CONSTRAINT `fk_content_update` FOREIGN KEY (`content_id`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE,
+  CONSTRAINT `fk_image_id` FOREIGN KEY (`image_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `content_updates`
+--
+
+LOCK TABLES `content_updates` WRITE;
+/*!40000 ALTER TABLE `content_updates` DISABLE KEYS */;
+/*!40000 ALTER TABLE `content_updates` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1105,4 +1136,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-16  8:48:07
+-- Dump completed on 2022-05-26 13:37:13
