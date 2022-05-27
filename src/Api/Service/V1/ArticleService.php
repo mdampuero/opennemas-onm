@@ -2,7 +2,7 @@
 
 namespace Api\Service\V1;
 
-class ArticleService extends OrmService
+class ArticleService extends ContentService
 {
     /**
      * {@inheritdoc}

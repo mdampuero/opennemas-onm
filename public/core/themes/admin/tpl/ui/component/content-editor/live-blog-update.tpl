@@ -44,7 +44,7 @@
               </div>
               <div class="thumbnail-placeholder">
                 <div class="img-thumbnail" ng-show="!updateItem.image_id">
-                  <div class="thumbnail-empty" ng-cloak media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="item.live_blog_updates.[% $index %].image_id" media-picker-types="photo" photo-editor-enabled="true">
+                  <div class="thumbnail-empty" ng-cloak media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-dynamic-target="item.live_blog_updates.[% $index %].image_id" media-picker-types="photo" photo-editor-enabled="true">
                     <i class="fa fa-picture-o fa-2x"></i>
                     <h5>{t}Select an element{/t}</h5>
                   </div>
@@ -55,7 +55,7 @@
                       <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ updateItem.created)">
                         <i class="fa fa-trash-o fa-2x"></i>
                       </div>
-                      <div class="thumbnail-action" ng-cloak media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="item.live_blog_updates.[% $index %].image_id" media-picker-types="photo" photo-editor-enabled="true">
+                      <div class="thumbnail-action" ng-cloak media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-dynamic-target="item.live_blog_updates.[% $index %].image_id" media-picker-types="photo" photo-editor-enabled="true">
                         <i class="fa fa-camera fa-2x"></i>
                       </div>
                     </div>
@@ -98,14 +98,14 @@
           </label>
           {acl isAllowed='PHOTO_ADMIN'}
             <div class="pull-right">
-              <div class="btn btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="editor.live_blog_updates.[% $index %].body" photo-editor-enabled="true">
+              <div class="btn btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-dynamic-target="editor.live_blog_updates.[% $index %].body" photo-editor-enabled="true">
                 <i class="fa fa-plus"></i>
                 {t}Insert image{/t}
               </div>
             </div>
           {/acl}
             <div class="pull-right m-r-5">
-              <div class="btn btn-mini" content-picker content-picker-target="editor.live_blog_updates.[% $index %].body" content-picker-selection="true" content-picker-type="album,article,attachment,opinion,poll,video" content-picker-max-size="10">
+              <div class="btn btn-mini" content-picker content-picker-dynamic-target="editor.live_blog_updates.[% $index %].body" content-picker-selection="true" content-picker-type="album,article,attachment,opinion,poll,video" content-picker-max-size="10">
                 <i class="fa fa-plus"></i>
                 {t}Insert related{/t}
               </div>

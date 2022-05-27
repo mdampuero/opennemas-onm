@@ -273,7 +273,7 @@
         $scope.$watch('item.live_blog_updates', function(nv, ov) {
           for (var iterator = 0; iterator < nv.length; iterator++) {
             if (nv[iterator].image_id &&
-              (!ov[iterator].image_id || ov[iterator].image_id.pk_content !== nv[iterator].image_id.pk_content)) {
+              (!ov[iterator] || !ov[iterator].image_id || ov[iterator].image_id.pk_content !== nv[iterator].image_id.pk_content)) {
               if (nv[iterator].image_id.description) {
                 nv[iterator].caption = nv[iterator].image_id.description;
               }
@@ -344,15 +344,6 @@
             $scope.canAddUpdate = false;
             $scope.item.live_blog_updates.unshift(currentUpdate);
           }
-        };
-
-        /**
-         * @inheritdoc
-         */
-        $scope.getData = function() {
-          var data = angular.extend({}, $scope.item);
-
-          return cleaner.clean(data);
         };
 
         /**
