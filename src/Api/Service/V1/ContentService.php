@@ -30,25 +30,6 @@ class ContentService extends OrmService
     /**
      * {@inheritdoc}
      */
-    public function getItem($id)
-    {
-        $item = parent::getItem($id);
-
-        if ($item->live_blog_updates && count($item->live_blog_updates) > 0) {
-            $arrayIntermedio = $item->live_blog_updates;
-            usort($arrayIntermedio, function ($a, $b) {
-                return (strtotime($a['created']) > strtotime($b['created'])) ? -1 : 1;
-            });
-
-            $item->live_blog_updates = $arrayIntermedio;
-        }
-
-        return $item;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function deleteItem($id)
     {
         $related = $this->getRelatedContents($id);
