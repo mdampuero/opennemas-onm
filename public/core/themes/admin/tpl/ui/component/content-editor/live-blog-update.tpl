@@ -17,21 +17,12 @@
         <hr/>
         <div class="form-group">
           <div class="row">
-            <div class="col-lg-5 col-md-5">
-              <label for="updateItem.title" class="form-label">
-                {t}Title{/t}
-              </label>
-              <div class="controls">
-              </div>
-              <input class="form-control" id="updateItem.title" name="updateItem.title" ng-class="{ 'input-faded': flags.block.updateItem.title }" ng-model="updateItem.title" type="text">
-            </div>
-            <div class="col-lg-7 col-md-7">
+            <div class="col-md-4">
               <div class="thumbnail-wrapper">
               <div class="overlay photo-overlay ng-cloak"  ng-class="{ 'open': overlay['photo_$index'+ updateItem.created]}"></div>
               <div class="confirm-dialog ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}">
                 <p>{t}Are you sure?{/t}</p>
                 <div class="confirm-actions">
-
                   <button class="btn btn-link" ng-click="toggleOverlay('photo_'+ updateItem.created)" type="button">
                     <i class="fa fa-times fa-lg"></i>
                     {t}No{/t}
@@ -61,12 +52,30 @@
                     </div>
                   </dynamic-image>
                 </div>
+                <input name="caption_$index" ng-model="data.updateItem" type="hidden">
+                <div class="form-group ng-cloak m-t-15" ng-show="updateItem.image_id">
+                  <label class="form-label" for="caption_$index">
+                    {t}Caption{/t}
+                  </label>
+                  <div class="controls">
+                    <textarea class="form-control" id="caption_$index" ng-model="updateItem.caption"></textarea>
+                  </div>
+                </div>
               </div>
             </div>
-            </div>
           </div>
+        </div>
+        <div class="form-group">
           <div class="row">
-            <div class="col-lg-5 col-md-5">
+            <div class="col-md-6">
+              <label for="updateItem.title" class="form-label">
+                {t}Title{/t}
+              </label>
+              <div class="controls">
+              </div>
+              <input class="form-control" id="updateItem.title" name="updateItem.title" ng-class="{ 'input-faded': flags.block.updateItem.title }" ng-model="updateItem.title" type="text">
+            </div>
+            <div class="col-md-6">
               <label class="form-label" for="updateItem.modified">
                 {t}Modified Date{/t}
               </label>
@@ -76,17 +85,6 @@
                   <span class="input-group-addon add-on">
                     <span class="fa fa-calendar"></span>
                   </span>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-7 col-md-7">
-              <input name="caption_$index" ng-model="data.updateItem" type="hidden">
-              <div class="form-group ng-cloak m-t-15" ng-show="updateItem.image_id">
-                <label class="form-label" for="caption_$index">
-                  {t}Caption{/t}
-                </label>
-                <div class="controls">
-                  <textarea class="form-control" id="caption_$index" ng-model="updateItem.caption"></textarea>
                 </div>
               </div>
             </div>
