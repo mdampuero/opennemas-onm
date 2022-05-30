@@ -717,7 +717,7 @@ class ContentHelper
      */
     public function isLiveBlog($item)
     {
-        return $item->live_blog_posting;
+        return !empty($item->live_blog_posting);
     }
 
      /**
