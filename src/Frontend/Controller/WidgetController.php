@@ -115,7 +115,7 @@ class WidgetController extends Controller
         } catch (\Throwable $e) {
             $this->get('logger')->error(sprintf('Error rendering widget: %s', $e->getMessage()));
 
-            return new Response();
+            return new Response('', 500);
         }
     }
 }
