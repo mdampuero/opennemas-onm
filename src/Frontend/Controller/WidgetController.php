@@ -95,10 +95,6 @@ class WidgetController extends Controller
 
             $widget = $widgetRenderer->getWidget($widget, $params);
 
-            if (empty($widget)) {
-                return new Response();
-            }
-
             $html = sprintf('<div class="widget">%s</div>', $widget->render());
 
             $widget->saveKey();
@@ -116,7 +112,7 @@ class WidgetController extends Controller
             return new Response($html, 200, $headers);
         } catch (GetItemException $e) {
             return new Response();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->get('logger')->error(sprintf('Error rendering widget: %s', $e->getMessage()));
 
             return new Response();

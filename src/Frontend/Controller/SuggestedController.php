@@ -46,7 +46,9 @@ class SuggestedController extends Controller
                     ]
                 )
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            $this->get('logger')->error(sprintf('Error rendering suggested: ', $e->getMessage()));
+
             return new Response();
         }
     }
