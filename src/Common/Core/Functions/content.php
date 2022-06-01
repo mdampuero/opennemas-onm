@@ -291,6 +291,18 @@ function is_live($item) : bool
 }
 
 /**
+ * Return true if content cointains live updates, false otherwise.
+ *
+ * @param Content $item The item to check.
+ *
+ * @return bool True if updates are present, false otherwise.
+ */
+function has_live_updates($item) : string
+{
+    return getService('core.helper.content')->hasLiveUpdates($item);
+}
+
+/**
  * Return Last update date if live blog article
  *
  * @param Content $item The item to check.

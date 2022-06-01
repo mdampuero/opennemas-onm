@@ -49,15 +49,27 @@ function get_update_caption($item = null) : string
 }
 
 /**
- * Get body from item
+ * Get modified date from item
  *
- * @param mixed $item The item to get body from.
+ * @param mixed $item The item to get modified date from.
  *
- * @return string Item body.
+ * @return string Item date.
  */
 function get_update_modified_date($item = null) : string
 {
     return getService('core.helper.content_update')->getModifiedDate($item);
+}
+
+/**
+ * Get modified date from item
+ *
+ * @param mixed $item The item to get modified date from.
+ *
+ * @return int Item date in timestamp format.
+ */
+function get_update_modified_date_timestamp($item = null) : ?int
+{
+    return getService('core.helper.content_update')->getModifiedDateTimestamp($item);
 }
 
 /**

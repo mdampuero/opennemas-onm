@@ -33,12 +33,13 @@
     </div>
   </div>
   <div class="form-group no-padding" ng-if="item.live_blog_posting">
-    <label class="form-label" for="endtime">
+    <label class="form-label" for="coverage_end_time">
       {t}Coverage end time{/t}
     </label>
     <div class="controls">
       <div class="input-group">
-        <input class="form-control" ng-required="item.live_blog_posting" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-min="item.created" id="coverage_end_time" name="coverage_end_time" ng-model="item.coverage_end_time" type="datetime">
+        <input class="form-control" ng-if="!item.coverage_start_time" ng-required="item.live_blog_posting" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-min="item.created" id="coverage_end_time" name="coverage_end_time" ng-model="item.coverage_end_time" type="datetime">
+        <input class="form-control" ng-if="item.coverage_start_time" ng-required="item.live_blog_posting" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-min="item.coverage_start_time" id="coverage_end_time" name="coverage_end_time" ng-model="item.coverage_end_time" type="datetime">
         <span class="input-group-addon add-on">
           <span class="fa fa-calendar"></span>
         </span>

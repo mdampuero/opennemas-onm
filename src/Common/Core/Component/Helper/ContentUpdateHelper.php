@@ -11,7 +11,6 @@
 
 namespace Common\Core\Component\Helper;
 
-use Api\Exception\GetItemException;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -157,6 +156,29 @@ class ContentUpdateHelper
         return array_key_exists('modified', $item)
             ? $item['modified']
             : null;
+    }
+
+    /**
+     * Returns the modified date for the provided item.
+     *
+     * @param mixed $item The item to get property from.
+     *
+     * @return string The modified date.
+     */
+    public function getModifiedDateTimestamp($item = null) : ?int
+    {
+        if (!is_array($item)) {
+            return null;
+        }
+
+        $modified = array_key_exists('modified', $item)
+            ? $item['modified']
+            : null;
+
+        if ($modified) {
+            $modified = strtotime($modified);
+        }
+        return $modified;
     }
 
     /**

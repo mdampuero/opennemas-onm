@@ -626,4 +626,61 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
         $this->content->frontpage = 0;
         $this->assertFalse($this->contentHelper->isSuggested($this->content));
     }
+
+    /**
+     * Tests isLiveBlog.
+     */
+    public function testIsLiveBlog()
+    {
+        $this->content->live_blog_posting = 1;
+        $this->assertTrue($this->contentHelper->isLiveBlog($this->content));
+    }
+
+    /**
+     * Tests getLastLiveUpdate.
+     */
+    public function testGetLastLiveUpdate()
+    {
+        $this->assertNull($this->contentHelper->getLastLiveUpdate($this->content));
+
+        $timezone = $this->locale->getTimeZone();
+        $now      = new \DateTime(null, $timezone);
+
+        $this->content->live_blog_posting = 1;
+        $this->content->live_blog_updates = [
+            [
+                'modified' => $now
+            ]
+        ];
+
+        $this->assertEquals($now, $this->contentHelper->getLastLiveUpdate($this->content));
+    }
+
+    /**
+     * Tests isLive.
+     */
+    public function testIsLive()
+    {
+        $this->assertFalse($this->contentHelper->isLive($this->content));
+
+        $timezone = $this->locale->getTimeZone();
+        $now      = new \DateTime(null, $timezone);
+
+        $this->content->coverage_start_time = $now;
+
+        $tomorrow = new \DateTime(null, $timezone);
+        $tomorrow->setTimestamp(strtotime('+1 day', $now->getTimestamp()));
+
+        $this->content->coverage_end_time = $tomorrow;
+
+        $this->assertTrue($this->contentHelper->isLive($this->content));
+    }
+
+    /**
+     * Tests hasLiveUpdates.
+     */
+    public function testHasliveUpdates()
+    {
+        $this->assertFalse($this->contentHelper->hasLiveUpdates($this->content));
+    }
 }

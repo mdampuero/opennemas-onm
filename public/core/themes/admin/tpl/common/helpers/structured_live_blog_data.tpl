@@ -118,6 +118,7 @@
   "@context": "http://schema.org/",
   "@type": "LiveBlogPosting",
   "@id": "{$siteUrl}",
+  "url":"{$url}",
   "coverageStartTime":"{format_date date=$content->coverage_start_time format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
   "coverageEndTime":"{format_date date=$content->coverage_end_time format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
   "headline":"{$title|escape:'html'}",
@@ -154,16 +155,23 @@
         "url": "{get_photo_path(get_featured_media($content, 'inner'), null, [], true)}",
         "height": {get_photo_height(get_featured_media($content, 'inner'))},
         "width": {get_photo_width(get_featured_media($content, 'inner'))}
-      }
-    },
-    {include file='./structured_image_data.tpl' image=get_featured_media($content, 'inner')}
+      },
   {/if}
   "about":{
     "@type":"Event",
+    "eventAttendanceMode":"OnlineEventAttendanceMode",
     "startDate":"{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     "name":"{$title|escape:'html'}",
     "description":"{$description|escape:'html'}",
-    "endDate":"{format_date date=$content->endtime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}"
+    "endDate":"{format_date date=$content->endtime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
+    "location": {
+      "@type":"Place",
+      "name":"{$app.instance->getName()}",
+      "address":{
+        "@type":"PostalAddress",
+        "addressCountry":"{$app.instance->getCountry()}"
+      }
+    }
   },
 
   "liveBlogUpdate":[
@@ -177,7 +185,7 @@
         "@type": "WebPage",
         "@id": "{$url}"
       },
-      "url":"{$url}",
+
       "author": {
         "@type": "Person",
         "name": "{$author|escape:'html'}"
@@ -208,4 +216,7 @@
     {/foreach}
   ]
 }
+{if get_type(get_featured_media($content, 'inner')) === 'photo'}
+  ,{include file='./structured_image_data.tpl' image=get_featured_media($content, 'inner')}
+{/if}
 </script>

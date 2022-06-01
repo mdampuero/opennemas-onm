@@ -710,14 +710,23 @@ class ContentHelper
     }
 
      /**
-     * Check if this content is live or, in others words, if this
-     * content is between coverage start time and end time
+     * Check if this content have live blog flag enabled
      *
      * @return bool
      */
     public function isLiveBlog($item)
     {
         return !empty($item->live_blog_posting);
+    }
+
+     /**
+     * Check if this content have live blog updates
+     *
+     * @return bool
+     */
+    public function hasLiveUpdates($item)
+    {
+        return !empty($item->live_blog_updates);
     }
 
      /**
