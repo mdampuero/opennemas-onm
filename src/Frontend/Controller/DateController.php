@@ -47,7 +47,7 @@ class DateController extends Controller
             $headers = [
                 'x-cacheable' => true,
                 'x-cache-for' => $expire . 's',
-                'x-tags'      => 'date'
+                'x-tags'      => 'header-date'
             ];
 
             return new Response($date, 200, $headers);

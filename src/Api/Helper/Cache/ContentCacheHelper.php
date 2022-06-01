@@ -56,6 +56,7 @@ class ContentCacheHelper extends CacheHelper
         'rss-google-news-showcase',
         'sitemap',
         'tag-{{tags}}',
+        'header-date',
     ];
 
     /**

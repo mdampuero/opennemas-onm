@@ -494,6 +494,10 @@ class HooksSubscriber implements EventSubscriberInterface
             new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*rss-frontpage-%s.*', $instanceName, $category)
             ])
+        )->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ instance-%s.*header-date', $instanceName, $category)
+            ])
         );
 
         $this->container->get('api.helper.cache.frontpage')->deleteItems($added, $removed, $category);
