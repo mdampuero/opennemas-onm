@@ -545,7 +545,7 @@ jQuery(function($) {
     autoOpen: false,
     dialogClass: 'content-provider-dialog',
     maxHeight: 500,
-    width: 1024
+    width: 800
   });
 
   $('#content-provider .content-provider-block-wrapper').tabs({
