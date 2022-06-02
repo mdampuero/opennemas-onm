@@ -31,6 +31,7 @@ class CoreListener
         'asset',
         'auth',
         'build\/assets',
+        'date',
         'manager',
         'oauth',
         'suggested',
