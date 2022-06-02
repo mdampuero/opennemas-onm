@@ -349,7 +349,14 @@ class WidgetFactory
                 continue;
             }
 
-            $oql .= sprintf('and %s = %s ', $replacements[$key], $this->params[$value]);
+            if (!is_array($this->params[$value])) {
+                $oql .= sprintf('and %s = %s ', $replacements[$key], $this->params[$value]);
+                continue;
+            }
+
+            if (is_array($this->params[$value]) && !empty($this->params[$value])) {
+                $oql .= sprintf('and %s in[%s] ', $replacements[$key], implode(',', $this->params[$value]));
+            }
         }
 
         $oql .= 'order by starttime asc limit 1';
