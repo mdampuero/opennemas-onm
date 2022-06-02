@@ -1,5 +1,7 @@
 <?php
 
+use Api\Exception\GetItemException;
+
 class WidgetFactory
 {
     /**
@@ -239,23 +241,43 @@ class WidgetFactory
     public function getXCacheFor()
     {
         // Return 100d by default if there is no contents.
-        if ($this->isStatic() || empty($this->params['contents'])) {
+        if ($this->isStatic()) {
             return $this->defaultTtl;
         }
 
-        $endtimes = array_filter(array_map(function ($content) {
-            return $content->endtime;
-        }, $this->params['contents']));
+        $endtime = null;
 
-        sort($endtimes);
+        if (!empty($this->params['contents'])) {
+            $endtimes = array_filter(array_map(function ($content) {
+                return $content->endtime;
+            }, $this->params['contents']));
 
-        $endtime = array_shift($endtimes) ?? null;
+            sort($endtimes);
 
-        if (empty($endtime)) {
-            return $this->defaultTtl;
+            $endtime = array_shift($endtimes) ?? null;
         }
 
-        return $endtime->format('Y-m-d H:i:s');
+        if (!empty($endtime)) {
+            $endtime = $endtime->format('Y-m-d H:i:s');
+        }
+
+        $starttime = $this->getStarttimeByFilters();
+
+        $dates = array_filter([ $starttime, $endtime ]);
+
+        if (!empty($dates)) {
+            $now = new \DateTime();
+            $end = new \DateTime(min($dates));
+
+            $time = $end->getTimestamp() - $now->getTimestamp() - 2;
+
+            $this->container->get('cache.connection.instance')
+                ->set($this->cachedId, $this->params['contents'], $time);
+
+            return min($dates);
+        }
+
+        return $this->defaultTtl;
     }
 
     /**
@@ -286,6 +308,59 @@ class WidgetFactory
         $cache = $this->container->get('cache.connection.instance');
 
         $cache->addMemberToSet($this->keySetName, $this->cachedId);
+    }
+
+    /**
+     * Returns the min starttime or null for the contents that match the filters of the widget.
+     *
+     * @return string The min starttime in the format Y-m-d H:i:s.
+     */
+    protected function getStarttimeByFilters()
+    {
+        if ($this->isStatic || !$this->isCacheable || $this->isCustom) {
+            return null;
+        }
+
+        $replacements = [
+            'category' => 'category_id',
+            'author'   => 'author_id'
+        ];
+
+        $oql = sprintf(
+            'content_status = 1 and in_litter != 1 and ' .
+            '(starttime !is null and starttime > "%s") and ',
+            date('Y-m-d H:i:s')
+        );
+
+        $typeOql = 'content_type_name = "%s" ';
+
+        if (array_key_exists('content_type', $this->params)) {
+            $oql .= is_array($this->params['content_type']) ?
+                sprintf($typeOql, $this->params['content_type']['slug']) :
+                sprintf($typeOql, underscore($this->params['content_type']));
+        } else {
+            $oql .= sprintf($typeOql, $this->defaultType);
+        }
+
+        $filters = array_intersect_key(array_flip($this->propertiesMap), $replacements);
+
+        foreach ($filters as $key => $value) {
+            if (empty($this->params[$value])) {
+                continue;
+            }
+
+            $oql .= sprintf('and %s = %s ', $replacements[$key], $this->params[$value]);
+        }
+
+        $oql .= 'order by starttime asc limit 1';
+
+        try {
+            $content = $this->container->get('api.service.content')->getItemBy($oql);
+
+            return $content->starttime->format('Y-m-d H:i:s');
+        } catch (GetItemException $e) {
+            return null;
+        }
     }
 
     /**
