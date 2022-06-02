@@ -36,9 +36,12 @@ function smarty_function_url($params, &$smarty)
 
     unset($params['name'], $params['absolute'], $params['sluggable'], $params['slug_key']);
 
+    // TODO: Refactor the code to don't use this array.
+    $esi = [ 'frontend_suggested_show', 'frontend_date_render', 'frontend_widget_render' ];
+
     try {
         foreach ($params as $key => $value) {
-            if (is_null($value)) {
+            if (is_null($value) && !in_array($name, $esi)) {
                 throw new InvalidParameterException(
                     sprintf('Parameter "%s" for route "%s" is empty.', $key, $name)
                 );
