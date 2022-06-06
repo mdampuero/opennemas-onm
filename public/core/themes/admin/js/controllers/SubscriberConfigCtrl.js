@@ -15,8 +15,23 @@
      *   Handles actions for advertisement inner.
      */
     .controller('SubscriberConfigCtrl', [
-      '$scope', 'cleaner', 'http', 'messenger',
-      function($scope, cleaner, http, messenger) {
+      '$controller', '$scope', 'cleaner', 'http', 'messenger', '$timeout',
+      function($controller, $scope, cleaner, http, messenger, $timeout) {
+        $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+
+        /**
+         * @memberOf SubscriberConfigCtrl
+         *
+         * @description
+         *  The default object.
+         *
+         * @type {Object}
+         */
+        $scope.default = {
+          required: false,
+          type: 'text'
+        };
+
         /**
          * @memberOf SubscriberConfigCtrl
          *
@@ -25,7 +40,19 @@
          *
          * @type {Object}
          */
-        $scope.settings = { fields: [] };
+        $scope.settings = {
+          fields: []
+        };
+
+        /**
+         * @memberOf SubscriberConfigCtrl
+         *
+         * @description
+         *  The extra field object.
+         *
+         * @type {Object}
+         */
+        $scope.extraField = {};
 
         /**
          * @function add
@@ -35,11 +62,23 @@
          *   Adds a new field to the field list.
          */
         $scope.addField = function() {
+          if (!$scope.extraField.name) {
+            return;
+          }
+
           if (!$scope.settings.fields) {
             $scope.settings.fields = [];
           }
 
-          $scope.settings.fields.push({ name: '', title: '', type: 'text', required: false });
+          $timeout(function() {
+            $scope.getSlug($scope.extraField.name, function(response) {
+              var field = Object.assign({ name: response.data.slug, title: $scope.extraField.name }, $scope.default);
+
+              $scope.settings.fields.push(field);
+
+              $scope.extraField.name = '';
+            });
+          }, 0);
         };
 
         /**
@@ -55,7 +94,6 @@
           http.get('api_v1_backend_subscriber_get_config')
             .then(function(response) {
               $scope.loading = false;
-
               if (response.data.settings) {
                 $scope.settings = response.data.settings;
               }
