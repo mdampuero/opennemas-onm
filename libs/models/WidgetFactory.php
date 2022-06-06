@@ -86,6 +86,13 @@ class WidgetFactory
     ];
 
     /**
+     * The parameter to cache.
+     *
+     * @var string
+     */
+    protected $toCache = 'contents';
+
+    /**
      * Initializes the WidgetFactory object instance
      *
      * @param ServiceContainer $container The service container.
@@ -272,7 +279,7 @@ class WidgetFactory
             $time = $end->getTimestamp() - $now->getTimestamp() - 2;
 
             $this->container->get('cache.connection.instance')
-                ->set($this->cachedId, $this->params['contents'], $time);
+                ->set($this->cachedId, $this->params[$this->toCache], $time);
 
             return min($dates);
         }
