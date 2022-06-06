@@ -81,7 +81,8 @@ class WidgetController extends Controller
 
             if (empty($type)) {
                 return new Response(
-                    sprintf('<div class="widget">%s</div>', $widget->body),
+                    $this->get('core.template')
+                        ->fetch('widgets/widget_html_base.class.tpl', [ 'body' => $widget->body ]),
                     200,
                     [
                         'x-cacheable' => true,
