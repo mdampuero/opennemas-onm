@@ -9,6 +9,7 @@
  */
 namespace Frontend\Controller;
 
+use Api\Exception\GetItemException;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,5 +53,73 @@ class WidgetController extends Controller
         }
 
         return $widget->{$action}($request);
+    }
+
+    /**
+     * Renders a widget.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response with the widget html.
+     */
+    public function renderAction(Request $request)
+    {
+        try {
+            $params        = $request->query->all();
+            $widgetService = $this->get('api.service.widget');
+
+            $oql = 'content_type_name="widget" ' .
+                'and content_status=1 ' .
+                'and in_litter=0 ' .
+                'and class="%s" limit 1';
+
+            $widget = array_key_exists('widget_id', $params) ?
+                $widgetService->getItem($params['widget_id']) :
+                $widgetService->getItemBy(sprintf($oql, $params['widget_name']));
+
+            $type = $widget->widget_type;
+
+            if (empty($type)) {
+                return new Response(
+                    sprintf('<div class="widget">%s</div>', $widget->body),
+                    200,
+                    [
+                        'x-cacheable' => true,
+                        'x-tags'      => sprintf('widget-%s', $widget->pk_content),
+                        'x-cache-for' => '100d'
+                    ]
+                );
+            }
+
+            $widgetRenderer = $this->get('frontend.renderer.widget');
+
+            $widget = $widgetRenderer->getWidget($widget, $params);
+
+            if (empty($widget)) {
+                return new Response();
+            }
+
+            $html = sprintf('<div class="widget">%s</div>', $widget->render());
+
+            $widget->saveKey();
+
+            if (!$widget->isCacheable()) {
+                return new Response($html, 200, [ 'x-cacheable' => false ]);
+            }
+
+            $headers = [
+                'x-cacheable' => true,
+                'x-tags'      => implode(',', $widget->getXTags()),
+                'x-cache-for' => $widget->getXCacheFor()
+            ];
+
+            return new Response($html, 200, $headers);
+        } catch (GetItemException $e) {
+            return new Response();
+        } catch (\Throwable $e) {
+            $this->get('logger')->error(sprintf('Error rendering widget: %s', $e->getMessage()));
+
+            return new Response('', 500);
+        }
     }
 }

@@ -132,9 +132,16 @@ class ArticleController extends FrontendController
     protected function hydrateShow(array &$params = []) : void
     {
         $params['suggested'] = $this->get('core.helper.content')->getSuggested(
-            $params['content']->pk_content,
             'article',
             $params['o_category']->id
         );
+
+        $params['isSuggested'] = count(array_filter($params['suggested'], function ($suggested) use ($params) {
+            return $params['content']->pk_content === $suggested->pk_content;
+        })) > 0;
+
+        if ($params['isSuggested']) {
+            $params['x-tags'] .= sprintf(',last-suggested-%d', $params['o_category']->id);
+        }
     }
 }

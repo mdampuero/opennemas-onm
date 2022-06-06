@@ -112,14 +112,16 @@ class HttpCacheHeadersListenerTest extends \PHPUnit\Framework\TestCase
             ->with($this->response)->willReturn('flob');
 
         $this->headers->expects($this->at(0))->method('set')
-            ->with('x-instance', 'fubar');
+            ->with('surrogate-control', 'ESI/1.0');
         $this->headers->expects($this->at(1))->method('set')
-            ->with('x-device', 'foo');
+            ->with('x-instance', 'fubar');
         $this->headers->expects($this->at(2))->method('set')
-            ->with('x-tags', 'qux,baz');
+            ->with('x-device', 'foo');
         $this->headers->expects($this->at(3))->method('set')
-            ->with('x-cache-for', '86400s');
+            ->with('x-tags', 'qux,baz');
         $this->headers->expects($this->at(4))->method('set')
+            ->with('x-cache-for', '86400s');
+        $this->headers->expects($this->at(5))->method('set')
             ->with('x-cache-for', 'flob');
 
         $listener->onKernelResponse($this->event);

@@ -112,12 +112,14 @@ class RssController extends FrontendController
             ]);
         }
 
-        $response = $this->render('rss/rss.tpl', [
+        $params = [
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss,frontpage-' . $categoryID
-        ]);
+            'x-tags'      => 'rss-frontpage-' . $categoryID
+        ];
+
+        $response = $this->render('rss/rss.tpl', $params);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
 
@@ -136,6 +138,7 @@ class RssController extends FrontendController
         $id     = null;
         $slug   = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
         $type   = $request->query->filter('type', 'article', FILTER_SANITIZE_STRING);
+        $xtags  = 'rss-' . $type;
         $titles = [
             'album'   => _('Latest Albums'),
             'article' => _('Latest News'),
@@ -161,6 +164,8 @@ class RssController extends FrontendController
 
                 $category = $this->get('api.service.category')
                     ->getItemBy($oql);
+
+                $xtags .= ',category-' . $category->id;
 
                 $id       = $category->id;
                 $slug     = $category->name;
@@ -196,7 +201,7 @@ class RssController extends FrontendController
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss,' . $type . ',' . $slug
+            'x-tags'      => $xtags
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -273,7 +278,7 @@ class RssController extends FrontendController
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss,author-' . $slug
+            'x-tags'      => 'rss-author-' . $user->id
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -359,7 +364,7 @@ class RssController extends FrontendController
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss,instant-articles'
+            'x-tags'      => 'rss-instant-articles'
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -386,7 +391,7 @@ class RssController extends FrontendController
             'contents'    => $this->getShowcaseContents('showcase', 1),
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss,google-news-showcase'
+            'x-tags'      => 'rss-google-news-showcase'
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
