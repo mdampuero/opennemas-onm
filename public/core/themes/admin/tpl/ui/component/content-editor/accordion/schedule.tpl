@@ -14,7 +14,7 @@
         <label ng-if="!day.enabled" class="form-label closed-label m-r-5">{t}Closed{/t}</label>
       </div>
       <div class="timetable-schedule" ng-if="day.enabled">
-        <div ng-repeat="schedule in day.schedules track by $index">
+        <div ng-init="formatDates()" ng-repeat="schedule in day.schedules track by $index">
           <div class="timetable-time-wrapper">
             <label class="form-label">{t}Since{/t}</label>
             <input type="time" ng-model="schedule.start">

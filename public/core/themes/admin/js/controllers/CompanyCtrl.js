@@ -53,7 +53,10 @@
          *
          * @type {Object}
          */
-        $scope.defaultSchedule = { start: '', end: '' };
+        $scope.defaultSchedule = {
+          start: new Date('1970-01-01T00:00:00'),
+          end:   new Date('1970-01-01T23:59:00')
+        };
 
         /**
          * @memberOf CompanyCtrl
@@ -74,7 +77,6 @@
           endtime: null,
           title: '',
           type: 0,
-          categories: [],
           related_contents: [],
           tags: [],
         };
@@ -152,6 +154,21 @@
         };
 
         /**
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *  Format the dates in the timetable to work with input of type time.
+         */
+        $scope.formatDates = function() {
+          $scope.item.timetable.forEach(function(schedule) {
+            schedule.schedules.forEach(function(time) {
+              time.start = new Date(time.start);
+              time.end   = new Date(time.end);
+            });
+          });
+        };
+
+        /**
          * @inheritdoc
          */
         $scope.buildScope = function() {
@@ -165,14 +182,6 @@
           $scope.item.timetable = $scope.item.timetable ?
             $scope.item.timetable :
             $scope.data.extra.timetable.slice();
-
-          // Convert time data to Date in order to work with time input
-          $scope.item.timetable.forEach(function(day) {
-            day.schedules.forEach(function(schedule) {
-              schedule.start = new Date(schedule.start);
-              schedule.end   = new Date(schedule.end);
-            });
-          });
 
           $scope.checkDraft();
           related.init($scope);
@@ -295,22 +304,6 @@
 
           return true;
         };
-
-        /**
-         * Watcher to format always the strings to date inside the schedules.
-         */
-        $scope.$watch('item.timetable', function(nv) {
-          if (!nv) {
-            return;
-          }
-
-          nv.forEach(function(day) {
-            day.schedules.forEach(function(schedule) {
-              schedule.start = new Date(schedule.start);
-              schedule.end   = new Date(schedule.end);
-            });
-          });
-        }, true);
       }
     ]);
 })();
