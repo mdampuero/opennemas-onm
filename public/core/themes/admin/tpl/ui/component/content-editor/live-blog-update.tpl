@@ -41,7 +41,7 @@
                   </div>
                 </div>
                 <div class="dynamic-image-placeholder" ng-show="updateItem.image_id">
-                  <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="updateItem.image_id" transform="zoomcrop,320,320">
+                  <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="updateItem.image_id" autoscale="true">
                     <div class="thumbnail-actions">
                       <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ updateItem.created)">
                         <i class="fa fa-trash-o fa-2x"></i>
@@ -68,12 +68,12 @@
         <div class="form-group">
           <div class="row">
             <div class="col-md-6">
-              <label for="updateItem.title" class="form-label">
+              <label for="title-[%$index%]" class="form-label">
                 {t}Title{/t}
               </label>
               <div class="controls">
               </div>
-              <input class="form-control" id="updateItem.title" name="updateItem.title" ng-class="{ 'input-faded': flags.block.updateItem.title }" ng-model="updateItem.title" type="text">
+              <input class="form-control" id="title[%$index%]" name="updateItem.title" ng-class="{ 'input-faded': flags.block.updateItem.title }" ng-model="updateItem.title" type="text">
             </div>
             <div class="col-md-6">
               <label class="form-label" for="updateItem.modified">
