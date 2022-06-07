@@ -262,6 +262,11 @@ class FormFieldHelper
                 'available' => [ 'company' ]
             ],
             [
+                'name' => 'website',
+                'title' => _('Website'),
+                'available' => [ 'company' ]
+            ],
+            [
                 'name' => 'logo',
                 'title' => _('Logo'),
                 'available' => [ 'company' ]
