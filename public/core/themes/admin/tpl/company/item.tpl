@@ -63,7 +63,6 @@
           {include file="ui/component/content-editor/accordion/published.tpl"}
         {/acl}
       </div>
-      {include file="ui/component/content-editor/accordion/author.tpl"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
