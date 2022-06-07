@@ -16,8 +16,7 @@ class ContentupdateHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->contentUpdate = new ContentUpdate([]);
-
+        $this->contentUpdate = [];
 
         $this->locale = $this->getMockBuilder('Locale' . uniqid())
             ->setMethods([ 'getTimeZone' ])->getMock();
@@ -121,14 +120,14 @@ class ContentupdateHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function getModifiedDateTimestamp()
     {
-        $this->assertNull($this->contentUpdateHelper->getModifiedDate('Ratatoskr'));
-        $this->assertNull($this->contentUpdateHelper->getModifiedDate($this->contentUpdate));
+        $this->assertNull($this->contentUpdateHelper->getModifiedDateTimestamp('Ratatoskr'));
+        $this->assertNull($this->contentUpdateHelper->getModifiedDateTimestamp($this->contentUpdate));
 
         $this->contentUpdate = [
            'modified' => 'Ymir'
         ];
 
-        $this->assertEquals('Ymir', $this->contentUpdateHelper->getModifiedDate($this->contentUpdate));
+        $this->assertEquals('Ymir', $this->contentUpdateHelper->getModifiedDateTimestamp($this->contentUpdate));
     }
 
     /**
@@ -160,7 +159,7 @@ class ContentupdateHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testHasUpdateBody()
     {
-        $this->assertFalse($this->contentUpdateHelper->hasModifiedDate($this->contentUpdate));
+        $this->assertFalse($this->contentUpdateHelper->hasBody($this->contentUpdate));
     }
 
     /**

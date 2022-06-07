@@ -309,7 +309,7 @@ function has_live_updates($item) : string
  *
  * @return string The last live update date
  */
-function get_last_live_update_date($item) : string
+function get_last_live_update_date($item) : ?string
 {
     return getService('core.helper.content')->getLastLiveUpdate($item);
 }

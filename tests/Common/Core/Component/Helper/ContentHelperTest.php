@@ -632,8 +632,7 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsLiveBlog()
     {
-        $this->content->live_blog_posting = 1;
-        $this->assertTrue($this->contentHelper->isLiveBlog($this->content));
+        $this->assertFalse($this->contentHelper->isLiveBlog($this->content));
     }
 
     /**
@@ -644,9 +643,13 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->contentHelper->getLastLiveUpdate($this->content));
 
         $timezone = $this->locale->getTimeZone();
+
         $now      = new \DateTime(null, $timezone);
 
-        $this->content->live_blog_posting = 1;
+        $this->content->coverage_start_time = $now;
+        $this->content->coverage_end_time   = $now;
+        $this->content->live_blog_posting   = 1;
+
         $this->content->live_blog_updates = [
             [
                 'modified' => $now

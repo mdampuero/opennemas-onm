@@ -19,7 +19,7 @@
           <div class="row">
             <div class="col-md-4">
               <div class="thumbnail-wrapper">
-              <div class="overlay photo-overlay ng-cloak"  ng-class="{ 'open': overlay['photo_$index'+ updateItem.created]}"></div>
+              <div class="overlay photo-overlay ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}"></div>
               <div class="confirm-dialog ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}">
                 <p>{t}Are you sure?{/t}</p>
                 <div class="confirm-actions">
@@ -41,7 +41,7 @@
                   </div>
                 </div>
                 <div class="dynamic-image-placeholder" ng-show="updateItem.image_id">
-                  <dynamic-image reescale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="updateItem.image_id">
+                  <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="updateItem.image_id" transform="zoomcrop,320,320">
                     <div class="thumbnail-actions">
                       <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ updateItem.created)">
                         <i class="fa fa-trash-o fa-2x"></i>

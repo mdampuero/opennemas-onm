@@ -716,7 +716,10 @@ class ContentHelper
      */
     public function isLiveBlog($item)
     {
-        return !empty($item->live_blog_posting);
+        return !empty($item->live_blog_posting) &&
+            !empty($item->coverage_start_time) &&
+            !empty($item->coverage_end_time) &&
+            !empty($item->live_blog_updates);
     }
 
      /**
@@ -755,10 +758,18 @@ class ContentHelper
             return false;
         }
 
-        $timezone = $this->locale->getTimeZone();
-        $now      = new \DateTime(null, $timezone);
+        $timezone  = $this->locale->getTimeZone();
 
-        return $now->getTimeStamp() >= $item->coverage_start_time->getTimeStamp()
-            && $now->getTimeStamp() <= $item->coverage_end_time->getTimeStamp();
+        $startTime = (gettype($item->coverage_start_time) == 'object') ?
+            $item->coverage_start_time :
+            new \DateTime($item->coverage_start_time);
+
+        $endTime = (gettype($item->coverage_end_time) == 'object') ?
+            $item->coverage_end_time :
+            new \DateTime($item->coverage_end_time);
+
+        $now = new \DateTime(null, $timezone);
+
+        return $now->getTimeStamp() >= $startTime->getTimeStamp() && $now->getTimeStamp() <= $endTime->getTimeStamp();
     }
 }

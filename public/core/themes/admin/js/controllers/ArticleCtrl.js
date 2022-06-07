@@ -192,6 +192,8 @@
             });
           }
 
+          item = $scope.parseData(item, true);
+
           var data = {
             item: JSON.stringify(cleaner.clean(item)),
             locale: $scope.config.locale.selected
@@ -349,7 +351,7 @@
         /**
          * @inheritdoc
          */
-        $scope.parseData = function(data) {
+        $scope.parseData = function(data, preview = false) {
           var parsedUpdates = [];
 
           if (data.live_blog_updates.length > 0) {
@@ -360,7 +362,7 @@
               if (typeof update.image_id === 'object' && update.image_id !== null) {
                 update.image_id = update.image_id.pk_content;
               }
-              if (!$scope.canAddUpdate) {
+              if (!$scope.canAddUpdate && !preview) {
                 $scope.canAddUpdate = true;
               }
               update.content_id = data.pk_content ? data.pk_content : '';
