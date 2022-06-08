@@ -91,7 +91,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label clearfix" for="body-[%$index%]">
+          <label class="form-label clearfix" for="live_blog_updates.[% $index %].body">
             <div class="pull-left">{t}Body{/t}</div>
           </label>
           {acl isAllowed='PHOTO_ADMIN'}
@@ -109,7 +109,7 @@
               </div>
             </div>
           <div class="controls">
-            <textarea name="live_blog_updates.[% $index %].body" id="body-[%$index%]" incomplete="incomplete" ng-model="updateItem.body" onm-editor onm-editor-preset="standard" class="form-control" rows="15"></textarea>
+            <textarea name="live_blog_updates.[% $index %].body" id="live_blog_updates.[% $index %].body" incomplete="incomplete" ng-model="updateItem.body" onm-editor onm-editor-preset="standard" class="form-control" rows="15"></textarea>
           </div>
         </div>
       </div>
