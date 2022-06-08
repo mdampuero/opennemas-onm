@@ -193,9 +193,7 @@ class ContentCacheHelper extends CacheHelper
      */
     protected function replaceTags(Content $item)
     {
-        return implode('|', array_map(function ($tag) {
-            return sprintf('(' . $tag . ')');
-        }, $item->tags));
+        return sprintf('(%s)', implode('|', $item->tags));
     }
 
     /**
