@@ -156,7 +156,7 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
                     $this->instance->internal_name,
                     'content_type_name-widget-article' .
                     '.*category-widget-((22)|(all))' .
-                    '.*tag-widget-(((12)|(13)|(14))|(all))' .
+                    '.*tag-widget-(((12|13|14))|(all))' .
                     '.*author-widget-((0)|(all))'
                 )
             ]));
@@ -212,7 +212,7 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
                 sprintf(
                     'obj.http.x-tags ~ instance-%s.*%s',
                     $this->instance->internal_name,
-                    'tag-(12)|(13)|(14)'
+                    'tag-(12|13|14)'
                 )
             ]));
 
