@@ -103,14 +103,17 @@ class VideoHelper
         if ($item->type === 'script') {
             $output = sprintf('<div>%s</div>', $item->body);
         } else {
-            $tpl = !empty($item->information['source'])
-                ? 'video/render/external.tpl'
-                : 'video/render/web-source.tpl';
+            $tpl  = 'video/render/web-source.tpl';
+            $info = $item->information;
+            if (!empty($item->information['source'])) {
+                $tpl            = 'video/render/external.tpl';
+                $info['source'] = array_filter($item->information['source']);
+            }
 
             $output = $this->template->fetch($tpl, [
-                'info' => $item->information,
+                'info'   => $info,
                 'height' => $height,
-                'width' => $width
+                'width'  => $width
             ]);
         }
 

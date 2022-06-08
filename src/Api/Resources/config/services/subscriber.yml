@@ -1,25 +1,7 @@
 services:
-    core.subscriber.attachment:
-        class:     Api\EventSubscriber\AttachmentSubscriber
-        arguments: [ '@api.helper.cache.content' ]
-        tags:
-            - { name: kernel.event_subscriber }
-
     core.subscriber.category:
         class:     Api\EventSubscriber\CategorySubscriber
         arguments: [ '@api.helper.cache.category' ]
-        tags:
-            - { name: kernel.event_subscriber }
-
-    core.subscriber.newsstand:
-        class:     Api\EventSubscriber\NewsstandSubscriber
-        arguments: [ '@api.helper.cache.newsstand' ]
-        tags:
-            - { name: kernel.event_subscriber }
-
-    core.subscriber.poll:
-        class:     Api\EventSubscriber\PollSubscriber
-        arguments: [ '@service_container', '@api.helper.cache.content', '@core.template.cache' ]
         tags:
             - { name: kernel.event_subscriber }
 

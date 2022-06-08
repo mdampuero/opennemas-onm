@@ -69,7 +69,7 @@
             <div class="form-group col-md-2">
               <label class="form-label" for="label-[% $index %]-name">{t}Internal name{/t}</label>
               <div class="controls">
-                <input class="form-control" ng-model="field.name" type="text">
+                <input class="form-control" ng-model="field.name" type="text" disabled>
               </div>
             </div>
             <div class="form-group col-md-2">
@@ -108,7 +108,12 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-2 col-md-offset-2">
+            <div class="col-md-2 col-md-offset-1 m-b-5">
+              <div class="controls">
+                <input class="form-control" type="text" ng-model="extraField.name" placeholder="{t}Extra field{/t}">
+              </div>
+            </div>
+            <div class="col-md-2">
               <button class="btn btn-block btn-success" ng-click="addField()">
                 <i class="fa fa-plus m-r-5"></i>
                 {t}Add{/t}

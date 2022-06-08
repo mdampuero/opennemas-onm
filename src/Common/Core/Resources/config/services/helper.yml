@@ -208,3 +208,8 @@ services:
         class:      Common\Core\Component\Helper\VideoHelper
         arguments:  [ '@core.helper.content', '@core.helper.related', '@core.template.admin', '@data.manager.filter' ]
         public:     true
+
+    core.helper.widget:
+        class:      Common\Core\Component\Helper\WidgetHelper
+        arguments: [ '@service_container' ]
+        public:     true

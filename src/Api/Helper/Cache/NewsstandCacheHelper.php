@@ -2,21 +2,28 @@
 
 namespace Api\Helper\Cache;
 
-use Opennemas\Task\Component\Task\ServiceTask;
+use Common\Model\Entity\Content;
 
 class NewsstandCacheHelper extends ContentCacheHelper
 {
     /**
-     * Removes caches for the list of newsstands.
-     *
-     * @return CacheHelper The current helper for method chaining.
+     * {@inheritdoc}
      */
-    public function deleteList() : CacheHelper
-    {
-        $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
-            'newsstand', 'list'
-        ]));
+    protected $defaultVarnishKeys = [
+        '{{content_type_name}}-frontpage',
+        '{{content_type_name}}-frontpage-{{date}}',
+        '{{content_type_name}}-{{pk_content}}',
+        'content_type_name-widget-{{content_type_name}}' .
+        '.*category-widget-(({{categories}})|(all))' .
+        '.*tag-widget-(({{tags}})|(all))' .
+        '.*author-widget-(({{fk_author}})|(all))',
+    ];
 
-        return $this;
+    /**
+     * {@inheritdoc}
+     */
+    protected function replaceDate(Content $item)
+    {
+        return substr($item->date, 0, strrpos($item->date, '-'));
     }
 }
