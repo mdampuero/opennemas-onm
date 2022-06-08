@@ -3,6 +3,7 @@
 namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -120,6 +121,8 @@ class BlogController extends FrontendController
             $this->hydrateListAuthor($params, $author);
         }
 
+        $params['x-tags'] = sprintf('opinion-author-%d-frontpage', $author->id);
+
         return $this->render($this->getTemplate($action), $params);
     }
 
@@ -185,6 +188,8 @@ class BlogController extends FrontendController
             'page'        => $params['page'],
             'route'       => 'frontend_blog_frontpage',
         ]);
+
+        $params['x-tags'] .= ',opinion-frontpage';
 
         $this->view->assign([
             'opinions'   => $response['items'],

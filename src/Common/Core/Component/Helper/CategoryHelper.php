@@ -2,6 +2,7 @@
 
 namespace Common\Core\Component\Helper;
 
+use Api\Exception\GetItemException;
 use Api\Service\V1\CategoryService;
 use Common\Core\Component\Template\Template;
 use Common\Model\Entity\Instance;
@@ -76,6 +77,14 @@ class CategoryHelper
 
         if (empty($item)) {
             return null;
+        }
+
+        if (!is_object($item) && is_numeric($item)) {
+            try {
+                return $this->service->getItem($item);
+            } catch (GetItemException $e) {
+                return null;
+            }
         }
 
         if (($item instanceof \Content && !empty($item->category_id))

@@ -119,6 +119,8 @@ class OpinionController extends FrontendController
             $this->hydrateListAuthor($params, $author);
         }
 
+        $params['x-tags'] = sprintf('opinion-author-%d-frontpage', $author->id);
+
         return $this->render($this->getTemplate($action), $params);
     }
 
@@ -187,6 +189,8 @@ class OpinionController extends FrontendController
             'pagination' => $pagination,
             'total'      => $response['total']
         ]);
+
+        $params['x-tags'] .= ',opinion-frontpage';
 
         $this->view->assign($params);
     }

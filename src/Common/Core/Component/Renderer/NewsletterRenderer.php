@@ -128,12 +128,12 @@ class NewsletterRenderer
             'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
             'endtime'           => [
                 'union' => 'OR',
                 [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
             ]
         ];
 
@@ -142,7 +142,7 @@ class NewsletterRenderer
 
             $searchCriteria = array_merge($searchCriteria, [
                 'starttime'         => [
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
                     [ 'value' => $date->format('Y-m-d H:i:s'), 'operator' => '>=' ],
                 ],
             ]);
@@ -162,7 +162,7 @@ class NewsletterRenderer
                     ]
                 ],
                 'starttime' => [
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
                     [ 'value' => $date->format('Y-m-d H:i:s'), 'operator' => '>=' ],
                 ],
             ]);
