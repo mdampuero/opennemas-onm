@@ -54,11 +54,11 @@
                 </div>
                 <input name="caption_$index" ng-model="data.updateItem" type="hidden">
                 <div class="form-group ng-cloak m-t-15" ng-show="updateItem.image_id">
-                  <label class="form-label" for="caption_$index">
+                  <label class="form-label" for="caption-[%$index%]">
                     {t}Caption{/t}
                   </label>
                   <div class="controls">
-                    <textarea class="form-control" id="caption_$index" ng-model="updateItem.caption"></textarea>
+                    <textarea class="form-control" id="caption-[%$index%]" ng-model="updateItem.caption"></textarea>
                   </div>
                 </div>
               </div>
@@ -73,15 +73,15 @@
               </label>
               <div class="controls">
               </div>
-              <input class="form-control" id="title[%$index%]" name="updateItem.title" ng-class="{ 'input-faded': flags.block.updateItem.title }" ng-model="updateItem.title" type="text">
+              <input class="form-control" id="title-[%$index%]" name="updateItem.title" ng-class="{ 'input-faded': flags.block.updateItem.title }" ng-model="updateItem.title" type="text">
             </div>
             <div class="col-md-6">
-              <label class="form-label" for="updateItem.modified">
+              <label class="form-label" for="modified-[%$index%]">
                 {t}Modified Date{/t}
               </label>
               <div class="controls">
                 <div class="input-group">
-                  <input class="form-control" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-use-current=true datetime-picker-min="updateItem.created" id="updateItem.modified" name="updateItem.modified" ng-model="updateItem.modified" type="datetime">
+                  <input class="form-control" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-use-current=true datetime-picker-min="updateItem.created" id="modified-[%$index%]" name="updateItem.modified" ng-model="updateItem.modified" type="datetime">
                   <span class="input-group-addon add-on">
                     <span class="fa fa-calendar"></span>
                   </span>
@@ -91,7 +91,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label clearfix" for="live_blog_updates.[% $index %].body">
+          <label class="form-label clearfix" for="body-[%$index%]">
             <div class="pull-left">{t}Body{/t}</div>
           </label>
           {acl isAllowed='PHOTO_ADMIN'}
@@ -109,7 +109,7 @@
               </div>
             </div>
           <div class="controls">
-            <textarea name="live_blog_updates.[% $index %].body" id="live_blog_updates.[% $index %].body" incomplete="incomplete" ng-model="updateItem.body" onm-editor onm-editor-preset="standard" class="form-control" rows="15"></textarea>
+            <textarea name="live_blog_updates.[% $index %].body" id="body-[%$index%]" incomplete="incomplete" ng-model="updateItem.body" onm-editor onm-editor-preset="standard" class="form-control" rows="15"></textarea>
           </div>
         </div>
       </div>
