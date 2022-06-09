@@ -117,7 +117,20 @@ class WidgetController extends Controller
 
             return new Response($html, 200, $headers);
         } catch (GetItemException $e) {
-            return new Response();
+            $xtags = sprintf(
+                'widget-not-found-%s',
+                array_key_exists('widget_id', $params) ? $params['widget_id'] : $params['widget_name']
+            );
+
+            return new Response(
+                '',
+                200,
+                [
+                    'x-cacheable' => true,
+                    'x-tags'      => $xtags,
+                    'x-cache-for' => '100d'
+                ]
+            );
         } catch (\Throwable $e) {
             $this->get('logger')->error(sprintf('Error rendering widget: %s', $e->getMessage()));
 
