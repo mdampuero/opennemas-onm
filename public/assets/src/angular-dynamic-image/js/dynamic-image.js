@@ -355,7 +355,7 @@
           }
 
           if (options.ngModel && options.reescale === 'auto') {
-            autoscale      = 'ng-style="{ \'height\': height, \'max-width\': width || \'100%\' }"';
+            autoscale      = 'ng-style="{ \'height\': height, \'max-width\': \'100%\' }"';
             autoscaleClass = ' autoscale';
           }
 
