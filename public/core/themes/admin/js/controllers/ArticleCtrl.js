@@ -351,7 +351,7 @@
         /**
          * @inheritdoc
          */
-        $scope.parseData = function(data, preview = false) {
+        $scope.parseData = function(data, preview) {
           var parsedUpdates = [];
 
           if (data.live_blog_updates.length > 0) {
