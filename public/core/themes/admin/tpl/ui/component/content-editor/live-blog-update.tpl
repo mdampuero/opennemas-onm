@@ -19,18 +19,19 @@
           <div class="row">
             <div class="col-sm-6 col-xl-3">
               <div class="thumbnail-wrapper">
-              <div class="overlay photo-overlay ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}"></div>
-              <div class="confirm-dialog ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}">
-                <p>{t}Are you sure?{/t}</p>
-                <div class="confirm-actions">
-                  <button class="btn btn-link" ng-click="toggleOverlay('photo_'+ updateItem.created)" type="button">
-                    <i class="fa fa-times fa-lg"></i>
-                    {t}No{/t}
-                  </button>
-                  <button class="btn btn-link" ng-click="removeItem('item.live_blog_updates.' + $index + '.image_id');toggleOverlay('photo_'+ updateItem.created)" type="button">
-                    <i class="fa fa-check fa-lg"></i>
-                    {t}Yes{/t}
-                  </button>
+                <div class="overlay photo-overlay ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}"></div>
+                  <div class="confirm-dialog ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}">
+                    <p>{t}Are you sure?{/t}</p>
+                    <div class="confirm-actions">
+                      <button class="btn btn-link" ng-click="toggleOverlay('photo_'+ updateItem.created)" type="button">
+                        <i class="fa fa-times fa-lg"></i>
+                        {t}No{/t}
+                      </button>
+                      <button class="btn btn-link" ng-click="removeItem('item.live_blog_updates.' + $index + '.image_id');toggleOverlay('photo_'+ updateItem.created)" type="button">
+                        <i class="fa fa-check fa-lg"></i>
+                        {t}Yes{/t}
+                      </button>
+                    </div>
                 </div>
               </div>
               <div class="thumbnail-placeholder">
