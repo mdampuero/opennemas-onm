@@ -17,7 +17,7 @@
         <hr/>
         <div class="form-group">
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-sm-6 col-xl-3">
               <div class="thumbnail-wrapper">
               <div class="overlay photo-overlay ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}"></div>
               <div class="confirm-dialog ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}">
@@ -41,7 +41,7 @@
                   </div>
                 </div>
                 <div class="dynamic-image-placeholder" ng-show="updateItem.image_id">
-                  <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="updateItem.image_id" autoscale="true">
+                  <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="updateItem.image_id" reescale="auto">
                     <div class="thumbnail-actions">
                       <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ updateItem.created)">
                         <i class="fa fa-trash-o fa-2x"></i>
