@@ -355,21 +355,28 @@
           var parsedUpdates = [];
 
           if (data.live_blog_updates.length > 0) {
-            for (var update of data.live_blog_updates) {
+            for (var index in data.live_blog_updates) {
+              var update = data.live_blog_updates[index];
+
               if (!update.title && !update.body && !update.caption) {
                 continue;
               }
+
               if (typeof update.image_id === 'object' && update.image_id !== null) {
                 update.image_id = update.image_id.pk_content;
               }
+
               if (!$scope.canAddUpdate && !preview) {
                 $scope.canAddUpdate = true;
               }
+
               update.content_id = data.pk_content ? data.pk_content : '';
               parsedUpdates.push(update);
             }
           }
+
           data.live_blog_updates = angular.copy(parsedUpdates);
+
           return data;
         };
 
