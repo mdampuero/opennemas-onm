@@ -111,6 +111,11 @@ services:
         arguments: [ '@orm.manager', '@core.instance', '@core.locale', '@request_stack', '@core.security' ]
         public:    true
 
+    core.helper.menu:
+        class:     Common\Core\Component\Helper\MenuHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.helper.newsletter:
         class:     Common\Core\Component\Helper\NewsletterHelper
         arguments: [ '@orm.manager', '@api.service.subscription' ]
@@ -142,6 +147,11 @@ services:
 
     core.helper.oql:
         class:     Common\Core\Component\Helper\OqlHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.payment:
+        class:     Common\Core\Component\Helper\PaymentHelper
         arguments: [ '@service_container' ]
         public:    true
 
@@ -202,4 +212,9 @@ services:
     core.helper.video:
         class:      Common\Core\Component\Helper\VideoHelper
         arguments:  [ '@core.helper.content', '@core.helper.related', '@core.template.admin', '@data.manager.filter' ]
+        public:     true
+
+    core.helper.widget:
+        class:      Common\Core\Component\Helper\WidgetHelper
+        arguments: [ '@service_container' ]
         public:     true

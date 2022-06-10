@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-26 11:34+0000\n"
-"PO-Revision-Date: 2022-05-26 13:35+0200\n"
+"POT-Creation-Date: 2022-06-10 10:23+0000\n"
+"PO-Revision-Date: 2022-06-10 12:34+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -158,72 +158,6 @@ msgstr "Configuración de sitio eliminada correctamente"
 msgid "There was an error while deleting this configuration"
 msgstr "Produciuse un erro ao eliminar esta configuración"
 
-#, php-format
-msgid "Unable to find the menu with the id \"%d\""
-msgstr "Non se puido atopar o menú co identificador «%d»"
-
-#, php-format
-msgid "Menu '%s' created successfully."
-msgstr "Menú «%s» creado correctamente."
-
-msgid "Unable to create the menu"
-msgstr "Non se puido crear o menú"
-
-#, php-format
-msgid "Unable to find a menu with the id \"%s\""
-msgstr "Non se puido atopar o menú co identificador «%s»"
-
-msgid "Menu data sent not valid."
-msgstr "Os datos enviados do menú non son válidos."
-
-msgid "Menu updated successfully."
-msgstr "Menú actualizado correctamente."
-
-msgid "There was an error while updating the menu."
-msgstr "Produciuse un erro ao actualizar o menú."
-
-msgid "Frontpage"
-msgstr "Portada"
-
-msgid "Opinions"
-msgstr "Opinións"
-
-msgid "Blogs"
-msgstr "Blogs"
-
-msgid "Albums"
-msgstr "Álbumes"
-
-msgid "Videos"
-msgstr "Videos"
-
-msgid "Polls"
-msgstr "Enquisas"
-
-msgid "Events"
-msgstr "Eventos"
-
-msgid "Obituaries"
-msgstr "Necrolóxicas"
-
-msgid "Letters to the Editor"
-msgstr "Cartas ao director"
-
-msgid "News Stand"
-msgstr "Portadas de papel"
-
-msgid "Form"
-msgstr "Formularios"
-
-msgid "Newsletter"
-msgstr "Boletín de novas"
-
-msgid "Archive"
-msgstr "Arquivar"
-
-msgid "Without position"
-msgstr "Sen posición"
-
 msgid "You have reached your maximum of emails allowed to send per month"
 msgstr "Alcanzaches o numero máximo de envios de correo-e permitidos por mes"
 
@@ -362,8 +296,20 @@ msgstr "Contidos"
 msgid "Articles"
 msgstr "Artigos"
 
+msgid "Opinions"
+msgstr "Opinións"
+
 msgid "Comments"
 msgstr "Comentarios"
+
+msgid "Events"
+msgstr "Eventos"
+
+msgid "Obituaries"
+msgstr "Necrolóxicas"
+
+msgid "Polls"
+msgstr "Enquisas"
 
 msgid "Static Pages"
 msgstr "Páxinas estáticas"
@@ -385,6 +331,15 @@ msgstr "Fotos"
 
 msgid "Files"
 msgstr "Ficheiros"
+
+msgid "Videos"
+msgstr "Videos"
+
+msgid "Albums"
+msgstr "Álbumes"
+
+msgid "News Stand"
+msgstr "Portadas de papel"
 
 msgid "Books"
 msgstr "Libros"
@@ -1217,6 +1172,9 @@ msgstr "Non se forneceu ningún ficheiro"
 msgid "A file with the same name has already been uploaded today"
 msgstr "Hoxe xa se subiu un ficheiro co mesmo nome"
 
+msgid "Frontpage"
+msgstr "Portada"
+
 msgid "You have exceeded the version limit. Delete one to create a new one"
 msgstr "Excedeches o límite de versións. Elimina unha para crear unha nova"
 
@@ -1264,9 +1222,8 @@ msgstr "Seguinte"
 msgid "Previous"
 msgstr "Anterior"
 
-#, php-format
-msgid "Widget %s not available"
-msgstr "Widget %s non dispoñíbel"
+msgid "Unable to save settings"
+msgstr "Non se puido gardar as configuración"
 
 msgid "Running cleanup in background"
 msgstr "Executando limpeza en segundo plano"
@@ -1285,6 +1242,9 @@ msgstr "Opcións gardadas."
 
 msgid "There was an error while saving the settings"
 msgstr "Produciuse un erro ao gardar as preferencias."
+
+msgid "Without position"
+msgstr "Sen posición"
 
 msgid "Item imported successfully"
 msgstr "Elemento importado correctamente"
@@ -1361,9 +1321,6 @@ msgstr "Domingo"
 
 msgid "Settings saved successfully"
 msgstr "Configuración gardada correctamente"
-
-msgid "Unable to save settings"
-msgstr "Non se puido gardar as configuración"
 
 msgid "List of contents"
 msgstr "Lista de contidos"
@@ -1568,6 +1525,9 @@ msgstr "Relacionado en interior"
 msgid "Agency"
 msgstr "Axencia"
 
+msgid "Google News Showcase"
+msgstr "Google News Showcase"
+
 msgid "Live blog post"
 msgstr "Artigo en directo"
 
@@ -1594,6 +1554,21 @@ msgid ""
 msgstr ""
 "Non puidemos completar a túa petición.\n"
 "Comproba o formulario e téntao de novo."
+
+msgid "The transaction was successful"
+msgstr "A transacción foi exitosa"
+
+msgid "The transaction was declined by the bank"
+msgstr "A transacción foi declinada polo banco"
+
+msgid "This transaction was already processed"
+msgstr "A transacción xa foi procesada"
+
+msgid "There are some errors in the form"
+msgstr "Hai algúns erros no formulario"
+
+msgid "There was an issue with the transaction"
+msgstr "Houbo algún problema coa transacción"
 
 msgid "List"
 msgstr "Lista"
@@ -1988,9 +1963,6 @@ msgstr "Cartas ao director"
 
 msgid "Obituary"
 msgstr "Necrolóxica"
-
-msgid "Menu"
-msgstr "Menú"
 
 msgid "Select a category..."
 msgstr "Selecciona unha categoría…"
@@ -2897,6 +2869,9 @@ msgstr "Queres esta funcionalidade?"
 msgid "Go to Store"
 msgstr "Ir á tenda"
 
+msgid "Newsletter"
+msgstr "Boletín de novas"
+
 msgid ""
 "If enabled, this subscription will be selectable when creating newsletters"
 msgstr ""
@@ -3074,6 +3049,9 @@ msgstr "Personalizar en portada"
 msgid "Customize content"
 msgstr "Personalizar contido"
 
+msgid "Letters to the Editor"
+msgstr "Cartas ao director"
+
 msgid "Body"
 msgstr "Corpo"
 
@@ -3088,6 +3066,55 @@ msgstr "Buscar por eqtiqueta"
 
 msgid "No published"
 msgstr "Non publicado"
+
+msgid "Position"
+msgstr "Posición"
+
+msgid "Manual categories"
+msgstr "Categorías manuais"
+
+msgid "Automatic categories"
+msgstr "Categorías automáticas"
+
+msgid "Static pages"
+msgstr "Páxinas estáticas"
+
+msgid "Synchronized sites"
+msgstr "Sitios sincronizados"
+
+msgid "Custom link"
+msgstr "Enlace personalizado"
+
+msgid "Menu structure"
+msgstr "Estrutura do menu"
+
+msgid "Use drag and drop to sort and nest elements."
+msgstr "Use arrastrar e soltar para ordenar e aniñar elementos."
+
+msgid ""
+"If your theme has defined positions for menus you can assign one menu to "
+"each of them"
+msgstr ""
+"Se o tema ten posicións de menú definidas podes asignar un menú para cada "
+"unha delas"
+
+msgid "Module"
+msgstr "Modulo"
+
+msgid "Manual category"
+msgstr "Categoría manual"
+
+msgid "Automatic category"
+msgstr "Categoría automática"
+
+msgid "Static Page"
+msgstr "Páxina estática"
+
+msgid "Synchronized instances"
+msgstr "Instancias sincronizadas"
+
+msgid "New menu"
+msgstr "Novo menú"
 
 msgid "Favorite"
 msgstr "Favorito"
@@ -3743,6 +3770,9 @@ msgid "Comma separated list of keys and value (key1:value1, key2:value2,...)"
 msgstr ""
 "Lista de chaves e valores separados por comas (chave1:valor1, chave2:"
 "valor2,...)"
+
+msgid "Extra field"
+msgstr "Campos adicionais"
 
 msgid "Config users module"
 msgstr "Configuración do módulo «usuarios»"
@@ -4536,17 +4566,20 @@ msgstr "Axencia de novas Opennemas"
 msgid "Url"
 msgstr "URL"
 
-msgid "Live blog"
-msgstr "Artigo en vivo"
+msgid "Include in Google News Showcase"
+msgstr "Incluir en Google News Showcase"
 
-msgid "Enable live blog posting"
-msgstr "Habilitar artigo en vivo"
+msgid "Outstanding moment 1"
+msgstr "Momento destacado 1"
 
-msgid "Coverage start time"
-msgstr "Data de inicio da cobertura"
+msgid "Outstanding moment 2"
+msgstr "Momento destacado 2"
 
-msgid "Coverage end time"
-msgstr "Data de fin da cobertura"
+msgid ""
+"To include the article in Google News Showcase you need to highlight two "
+"moments"
+msgstr ""
+"Para incluir o artigo en Google News Showcase precisas destacar dous momentos"
 
 msgid "Planned"
 msgstr "Planificado"
@@ -4576,11 +4609,17 @@ msgstr "Pe de foto"
 msgid "Allow comments"
 msgstr "Permitir comentarios"
 
-msgid "Insert image"
-msgstr "Inserir imaxe"
+msgid "Live blog"
+msgstr "Artigo en vivo"
 
-msgid "Insert related"
-msgstr "Inserir relacionado"
+msgid "Enable live blog posting"
+msgstr "Habilitar artigo en vivo"
+
+msgid "Coverage start time"
+msgstr "Data de inicio da cobertura"
+
+msgid "Coverage end time"
+msgstr "Data de fin da cobertura"
 
 msgid "Remove update"
 msgstr "Eliminar actualización"
@@ -4590,6 +4629,12 @@ msgstr "Selecciona un elemento"
 
 msgid "Modified Date"
 msgstr "Data de modificación"
+
+msgid "Insert image"
+msgstr "Inserir imaxe"
+
+msgid "Insert related"
+msgstr "Inserir relacionado"
 
 msgid "Add a tag..."
 msgstr "Engadir unha etiqueta ..."
@@ -4659,6 +4704,9 @@ msgstr "Se está activado, a categoría mostrarase nos selectores de categoría"
 
 msgid "If enabled, category will be included in RSS feeds"
 msgstr "Se está activado, a categoría mostrarase nos rss"
+
+msgid "Menu"
+msgstr "Menú"
 
 msgid "Do you want to move contents in category?"
 msgstr "¿Queres mover os contidos na categoría?"
@@ -4995,9 +5043,6 @@ msgstr "Holística+ xestionada"
 msgid "Targeting"
 msgstr "Segmentación"
 
-msgid "Module"
-msgstr "Modulo"
-
 msgid "Custom code"
 msgstr "Código personalizado"
 
@@ -5069,9 +5114,6 @@ msgstr "Authorized Digital Sellers"
 
 msgid "This will be the content of the file ads.txt on your root domain"
 msgstr "Este será o contido do ficheiro ads.txt na raíz do teu dominio"
-
-msgid "Position"
-msgstr "Posición"
 
 msgid "Unable to find any advertisement that matches your search."
 msgstr "Non se puideron atopar publicidades que coincidan coa súa busca."
@@ -5247,65 +5289,6 @@ msgstr "Google AMP"
 
 msgid "Facebook Instant Articles"
 msgstr "Instance Articles de Facebook"
-
-msgid "Category blog"
-msgstr "Categoria tipo Blog"
-
-msgid "Static Page"
-msgstr "Páxina estática"
-
-msgid "Synched category"
-msgstr "Sincronizar categoría"
-
-msgid "Original:"
-msgstr "Orixinal:"
-
-msgid "Link to"
-msgstr "Ligazón a"
-
-msgid "Unable to find any menu that matches your search."
-msgstr "Non se puideron atopar menús que coincidan coa súa busca."
-
-msgid "Position assigned"
-msgstr "Posición asignada"
-
-msgid "Assigned to"
-msgstr "Asignar a"
-
-msgid "No position"
-msgstr "Sen posición"
-
-msgid "Unasigned"
-msgstr "Sen asignar"
-
-msgid ""
-"If your theme has defined positions for menus you can assign one menu to "
-"each of them"
-msgstr ""
-"Se o tema ten posicións de menú definidas podes asignar un menú para cada "
-"unha delas"
-
-msgid "Menu structure"
-msgstr "Estrutura do menu"
-
-msgid "Add items"
-msgstr "Engadir elementos"
-
-msgid "Use drag and drop to sort and nest elements."
-msgstr "Use arrastrar e soltar para ordenar e aniñar elementos."
-
-msgid "Add new item"
-msgstr "Engadir novo elemento"
-
-msgid "Synchronized Category"
-msgstr "Categoría sincronizada"
-
-msgid ""
-"Fill the below form with the title and the external URL you want to add to "
-"the menu."
-msgstr ""
-"Completa o formulario de embaixo co titulo e a URL externa que queres "
-"engadir ao menú."
 
 msgid "Site name"
 msgstr "Nome do sitio"
@@ -5562,6 +5545,9 @@ msgstr ""
 msgid "Analytic system integration"
 msgstr "Integración de sistemas de Analíticas"
 
+msgid "Disable Opennemas Google Analytics API key"
+msgstr "Deshabilitar a chave da API de Google Analytics de Opennemas"
+
 msgid "Google Analytics"
 msgstr "Google Analytics"
 
@@ -5652,6 +5638,15 @@ msgstr "Prometeo Media ID"
 
 msgid "Internal settings"
 msgstr "Preferencias internas"
+
+msgid "Global Payments"
+msgstr "Global Payments"
+
+msgid "Merchant id"
+msgstr "Merchant id"
+
+msgid "Shared secret"
+msgstr "Shared secret"
 
 msgid "Google Recaptcha"
 msgstr "Google Recaptcha"
@@ -6289,6 +6284,9 @@ msgstr "Usuarios conectados"
 msgid "Live post"
 msgstr "Artigo en vivo"
 
+msgid "Showcase"
+msgstr "Showcase"
+
 msgid "Suggested for frontpage"
 msgstr "Suxerido a portada principal"
 
@@ -6343,6 +6341,19 @@ msgstr "Subtitulo"
 
 msgid "Config article module"
 msgstr "Configuración do módulo «Artigo»"
+
+msgid ""
+"You have reached the maximum number of 100 photos. To add new photos remove "
+"the older or create a new album."
+msgstr ""
+"Alcanzaches o número máximo de 100 fotos en portada. Para engadir novas "
+"fotos elimina as vellas ou crea un álbum novo"
+
+msgid "Slider"
+msgstr "Slider"
+
+msgid "Config album module"
+msgstr "Configuración do módulo «Álbum»"
 
 msgid "Where are you from?"
 msgstr "De onde es?"
@@ -6705,9 +6716,6 @@ msgstr "Contacto"
 
 msgid "Last activity"
 msgstr "Última actividade"
-
-msgid "Static pages"
-msgstr "Páxinas estáticas"
 
 msgid "Attachments"
 msgstr "Anexos"
@@ -7088,6 +7096,82 @@ msgstr "Desexas eliminar o cliente?"
 
 msgid "Do you want to delete the selected clients?"
 msgstr "Tes certeza que queres eliminar os clientes seleccionados?"
+
+#~ msgid "Unable to find the menu with the id \"%d\""
+#~ msgstr "Non se puido atopar o menú co identificador «%d»"
+
+#~ msgid "Menu '%s' created successfully."
+#~ msgstr "Menú «%s» creado correctamente."
+
+#~ msgid "Unable to create the menu"
+#~ msgstr "Non se puido crear o menú"
+
+#~ msgid "Unable to find a menu with the id \"%s\""
+#~ msgstr "Non se puido atopar o menú co identificador «%s»"
+
+#~ msgid "Menu data sent not valid."
+#~ msgstr "Os datos enviados do menú non son válidos."
+
+#~ msgid "Menu updated successfully."
+#~ msgstr "Menú actualizado correctamente."
+
+#~ msgid "There was an error while updating the menu."
+#~ msgstr "Produciuse un erro ao actualizar o menú."
+
+#~ msgid "Blogs"
+#~ msgstr "Blogs"
+
+#~ msgid "Form"
+#~ msgstr "Formularios"
+
+#~ msgid "Archive"
+#~ msgstr "Arquivar"
+
+#~ msgid "Widget %s not available"
+#~ msgstr "Widget %s non dispoñíbel"
+
+#~ msgid "Category blog"
+#~ msgstr "Categoria tipo Blog"
+
+#~ msgid "Synched category"
+#~ msgstr "Sincronizar categoría"
+
+#~ msgid "Original:"
+#~ msgstr "Orixinal:"
+
+#~ msgid "Link to"
+#~ msgstr "Ligazón a"
+
+#~ msgid "Unable to find any menu that matches your search."
+#~ msgstr "Non se puideron atopar menús que coincidan coa súa busca."
+
+#~ msgid "Position assigned"
+#~ msgstr "Posición asignada"
+
+#~ msgid "Assigned to"
+#~ msgstr "Asignar a"
+
+#~ msgid "No position"
+#~ msgstr "Sen posición"
+
+#~ msgid "Unasigned"
+#~ msgstr "Sen asignar"
+
+#~ msgid "Add items"
+#~ msgstr "Engadir elementos"
+
+#~ msgid "Add new item"
+#~ msgstr "Engadir novo elemento"
+
+#~ msgid "Synchronized Category"
+#~ msgstr "Categoría sincronizada"
+
+#~ msgid ""
+#~ "Fill the below form with the title and the external URL you want to add "
+#~ "to the menu."
+#~ msgstr ""
+#~ "Completa o formulario de embaixo co titulo e a URL externa que queres "
+#~ "engadir ao menú."
 
 #, fuzzy
 #~ msgid "Eliminar elemento"
@@ -7503,9 +7587,6 @@ msgstr "Tes certeza que queres eliminar os clientes seleccionados?"
 #~ msgid "Click on arrow to reveal more configuration options."
 #~ msgstr "Prema na frecha para mostrar máis opcións de configuración."
 
-#~ msgid "Album category"
-#~ msgstr "Categoria de álbum"
-
 #~ msgid "Poll category"
 #~ msgstr "Categoria de enquisas"
 
@@ -7514,9 +7595,6 @@ msgstr "Tes certeza que queres eliminar os clientes seleccionados?"
 
 #~ msgid "Synched blog category"
 #~ msgstr "Categoria sincronizada blog"
-
-#~ msgid "Sync Automatic Categories"
-#~ msgstr "Sincronización automática de categorías"
 
 #~ msgid "Add Container"
 #~ msgstr "Engadir contenedor"

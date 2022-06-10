@@ -58,7 +58,13 @@ class FrontpagesController extends Controller
         }
 
         list($contentPositions, $contents, $invalidationDt, $lastSaved) =
-            $this->get('api.service.frontpage')->getCurrentVersionForCategory($categoryId);
+            $this->get('api.service.frontpage')->getCurrentVersionForCategory($categoryId, false);
+
+        $xtags = implode(',', array_map(function ($content) {
+            return $content->content_type_name . '-' . $content->pk_content;
+        }, $contents));
+
+        $contents = $this->get('api.service.frontpage_version')->filterPublishedContents($contents);
 
         // Setup templating cache layer
         $this->view->setConfig('frontpages');
@@ -115,7 +121,7 @@ class FrontpagesController extends Controller
             'time'        => $systemDate->getTimestamp(),
             'x-cache-for' => $invalidationDt->format('Y-m-d H:i:s'),
             'x-cacheable' => true,
-            'x-tags'      => 'frontpage-page,' . $categoryName
+            'x-tags'      => $xtags . ',frontpage-page-' . $categoryId
         ]);
     }
 }

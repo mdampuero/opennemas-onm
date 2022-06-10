@@ -72,6 +72,9 @@
       {is_module_activated name="es.openhost.module.live_blog_posting"}
         {include file="ui/component/content-editor/accordion/live-blog-posting.tpl"}
       {/is_module_activated}
+      {is_module_activated name="es.openhost.module.google_news_showcase"}
+        {include file="ui/component/content-editor/accordion/google_news_showcase.tpl"}
+      {/is_module_activated}
       {include file="ui/component/content-editor/accordion/author.tpl"}
       {include file="ui/component/content-editor/accordion/category.tpl" field="categories[0]"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
@@ -107,7 +110,7 @@
           </div>
         </div>
       {/is_module_activated}
-      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Featured in frontpage{/t}" types="photo,video,album"}
+      {include file="common/component/related-contents/_featured-media.tpl" iRequired="item.showcase" iName="featuredFrontpage" iTitle="{t}Featured in frontpage{/t}" types="photo,video,album"}
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
       {include file="common/component/related-contents/_related-content.tpl" iName="relatedFrontpage" iTitle="{t}Related in frontpage{/t}"}
       {include file="common/component/related-contents/_related-content.tpl" iName="relatedInner" iTitle="{t}Related in inner{/t}"}

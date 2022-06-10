@@ -757,12 +757,12 @@ menu_items:
             columns: [pk_menu]
     foreign_keys:
         -
-            name: menuitems_id_menu_id
+            name: menu_items_id_menu_id
             source_field: [ pk_menu ]
-            target_table: menues
+            target_table: menus
             target_field: [ pk_menu ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-menues:
+menus:
     columns:
         pk_menu:
             type: integer
@@ -770,15 +770,9 @@ menues:
         name:
             type: string
             options: { length: 255, default: null }
-        type:
-            type: string
-            options: { length: 255, default: null }
         position:
             type: string
             options: { length: 50, default: null, notnull: false }
-        params:
-            type: string
-            options: { length: 255, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -798,6 +792,22 @@ menues:
             primary: false
             unique: false
             flags: {  }
+menumetas:
+    columns:
+        fk_menu:
+            type: integer
+            options: { unsigned: true }
+        meta_key:
+            type: string
+            options: { length: 255, notnull: true }
+        meta_value:
+            type: text
+            options: { default: null, notnull: false }
+    foreign_keys:
+        -
+            source_field: [ fk_menu ]
+            target_table: menus
+            target_field: [ pk_menu ]
 newsletters:
     columns:
         id:

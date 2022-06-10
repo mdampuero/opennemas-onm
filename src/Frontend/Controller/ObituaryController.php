@@ -116,6 +116,8 @@ class ObituaryController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $params['x-tags'] .= ',obituary-frontpage';
+
         $params = array_merge($params, [
             'obituaries'    => $response['items'],
             'total'         => $total,

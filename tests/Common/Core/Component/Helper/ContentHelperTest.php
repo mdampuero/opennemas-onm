@@ -46,6 +46,11 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getItemBy' ])
             ->getMock();
 
+        $this->theme = $this->getMockBuilder('Common\Model\Entity\Theme')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getSuggestedEpp' ])
+            ->getMock();
+
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
             ->getMock();
@@ -73,6 +78,9 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
+
+        $this->theme->expects($this->any())->method('getSuggestedEpp')
+            ->willReturn(4);
 
         $GLOBALS['kernel'] = $this->kernel;
     }
@@ -104,6 +112,9 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'core.template.frontend':
                 return $this->template;
+
+            case 'core.theme':
+                return $this->theme;
 
             case 'entity_repository':
                 return $this->em;
@@ -380,25 +391,25 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetSuggested()
     {
         $this->cache->expects($this->at(0))->method('get')
-            ->with('suggested_contents_' . md5(implode(',', ['article', 2, 4])))
+            ->with('suggested_contents_article_2_1')
             ->willReturn([ new Content([ 'pk_content' => 2 ]) ]);
 
         $this->assertEquals(
             [ new Content([ 'pk_content' => 2 ]) ],
-            $this->contentHelper->getSuggested(1, 'article', 2)
+            $this->contentHelper->getSuggested('article', 2, 1)
         );
 
         $this->em->expects($this->at(0))->method('findBy')
             ->will($this->throwException(new \Exception()));
 
-        $this->assertEquals([], $this->contentHelper->getSuggested(1, 'article', 2));
+        $this->assertEquals([], $this->contentHelper->getSuggested('article', 2, 1));
 
         $this->em->expects($this->at(0))->method('findBy')
             ->willReturn([ new Content([ 'pk_content' => 2 ]) ]);
 
         $this->assertEquals(
             [ new Content([ 'pk_content' => 2 ]) ],
-            $this->contentHelper->getSuggested(1, 'article', 2)
+            $this->contentHelper->getSuggested('article', 2, 1)
         );
     }
 

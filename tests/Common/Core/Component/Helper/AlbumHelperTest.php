@@ -113,6 +113,70 @@ class AlbumHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($related, $this->helper->getAlbumPhotos($this->content));
     }
+    /**
+     * Tests getAlbumPhotos with max parameter
+     */
+    public function testGetAlbumPhotosWithMax()
+    {
+        $photo = new Content([
+            'id'             => 704,
+            'content_status' => 1,
+            'starttime'      => new \Datetime('2020-01-01 00:00:00')
+        ]);
+
+        $this->contentHelper->expects($this->at(0))->method('getContent')
+            ->with($this->content)
+            ->willReturn($this->content);
+
+        $this->relatedHelper->expects($this->at(0))->method('getRelated')
+            ->with($this->content, 'photo')
+            ->willReturn([]);
+
+        $this->assertEmpty($this->helper->getAlbumPhotos($this->content));
+
+        $this->content->related_contents = [ [
+            'caption'           => 'Omnes possim dis mucius',
+            'content_type_name' => 'article',
+            'position'          => 0,
+            'target_id'         => 205,
+            'type'              => 'related_inner'
+        ], [
+            'caption'           => 'Ut erant arcu graeco',
+            'content_type_name' => 'photo',
+            'position'          => 0,
+            'target_id'         => 704,
+            'type'              => 'photo'
+        ], [
+            'caption'           => 'Ut arcu graeco',
+            'content_type_name' => 'photo',
+            'position'          => 1,
+            'target_id'         => 705,
+            'type'              => 'photo'
+        ], [
+            'caption'           => 'Utw marcu',
+            'content_type_name' => 'photo',
+            'position'          => 1,
+            'target_id'         => 706,
+            'type'              => 'photo'
+        ]    ];
+
+        $related = [ [
+            'item'     => $photo,
+            'caption'  => 'Ut erant arcu graeco',
+            'position' => 0
+        ] ];
+
+        $this->contentHelper->expects($this->at(0))->method('getContent')
+            ->with($this->content)
+            ->willReturn($this->content);
+
+        $this->relatedHelper->expects($this->at(0))->method('getRelated')
+            ->with($this->content, 'photo')
+            ->willReturn($related);
+
+        $max = 1;
+        $this->assertEquals($related, $this->helper->getAlbumPhotos($this->content, $max));
+    }
 
     /**
      * Tests hasAlbumPhotos.

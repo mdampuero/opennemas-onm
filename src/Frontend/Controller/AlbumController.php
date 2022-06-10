@@ -130,6 +130,12 @@ class AlbumController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $params['x-tags'] .= ',album-frontpage';
+
+        if (!empty($category)) {
+            $params['x-tags'] .= sprintf(',category-album-%d', $category->id);
+        }
+
         $params = array_merge($params, [
             'albums'     => $response['items'],
             'total'      => $response['total'],
