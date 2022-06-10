@@ -165,13 +165,33 @@
     "description":"{$description|escape:'html'}",
     "endDate":"{format_date date=$content->endtime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     "location": {
-      "@type":"Place",
-      "name":"{$app.instance->getName()}",
-      "address":{
-        "@type":"PostalAddress",
-        "addressCountry":"{$app.instance->getCountry()}"
+      "@type": "VirtualLocation",
+      "url": "{$url}"
+      },
+    "offers": {
+      "@type":"Offer",
+      "availability":"https://schema.org/OnlineOnly",
+      "price":"0.00",
+      "priceCurrency":"EUR",
+      "validFrom":"{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
+      "url":"{$url}"
       }
-    }
+    ,"organizer":
+      {
+        "@type":"Organization",
+        "name":"{$siteName}",
+        "url":"{$app.instance->getBaseUrl()}"
+      }
+    ,"performer":
+      {
+        "@type":"Organization",
+        "name":"{$siteName}",
+        "url":"{$app.instance->getBaseUrl()}"
+      }
+    {if get_type(get_featured_media($content, 'inner')) === 'photo'}
+      ,"image": {include file='./structured_image_data.tpl' image=get_featured_media($content, 'inner')}
+    {/if}
+    ,"eventStatus":"https:\/\/schema.org\/EventScheduled"
   },
 
   "liveBlogUpdate":[
