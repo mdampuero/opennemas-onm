@@ -68,14 +68,15 @@ class WidgetController extends Controller
             $params        = $request->query->all();
             $widgetService = $this->get('api.service.widget');
 
-            $oql = 'content_type_name="widget" ' .
-                'and content_status=1 ' .
-                'and in_litter=0 ' .
-                'and class="%s" limit 1';
+            $oql = array_key_exists('widget_id', $params)
+                ? sprintf('pk_content = "%s" ', $params['widget_id'])
+                : sprintf('class = "%s" ', $params['widget_name']);
 
-            $widget = array_key_exists('widget_id', $params) ?
-                $widgetService->getItem($params['widget_id']) :
-                $widgetService->getItemBy(sprintf($oql, $params['widget_name']));
+            $oql .= 'and content_type_name="widget" ' .
+                'and content_status=1 ' .
+                'and in_litter=0 limit 1';
+
+            $widget = $widgetService->getItemBy($oql);
 
             $type = $widget->widget_type;
 
