@@ -2,6 +2,7 @@
 
 namespace Api\Helper\Cache;
 
+use Api\Exception\GetItemException;
 use Common\Model\Entity\Content;
 use Common\Model\Entity\Instance;
 use Opennemas\Cache\Core\Cache;
@@ -37,36 +38,33 @@ class FrontpageCacheHelper extends CacheHelper
     /**
      * Removes the caches for the content listing in the frontpage.
      *
-     * @param array $added    The contents added to the frontpage.
-     * @param array $removed  The contents removed from the frontpage.
+     * @param array $items    The items that changes in the frontpage.
      * @param int   $category The category of the frontpage to be saved.
      */
-    public function deleteItems($added, $removed, $category)
+    public function deleteItems($items, $category)
     {
-        if (empty($added) && empty($removed)) {
+        if (empty($items)) {
             return;
         }
 
         // Remove the redis cache keys of the widgets.
         $this->cache->remove(array_merge($this->cache->getSetMembers('Widget_Keys'), [ 'Widget_Keys' ]));
 
-        $added = array_map(function ($item) use ($category) {
-            return $item . '.*content-listing-frontpage-' . $category;
-        }, $added);
+        $items = array_map(function ($item) {
+            try {
+                return $this->container->get('api.service.content')->getItem($item);
+            } catch (GetItemException $e) {
+                return null;
+            }
+        }, $items);
 
-        // Remove varnish caches for the widgets with the content recently added
-        $this->removeVarnishCache($added, $category);
+        $items = array_filter($items);
 
-        $repository = $this->container->get('entity_repository');
-
-        $removed = $repository->findMulti($this->formatItems($removed));
-
-        // Remove varnish cache for the widgets that can have the item removed from the frontpage.
         $this->keys = array_map(function ($key) use ($category) {
             return preg_replace('@{{frontpage_id}}@', $category, $key);
         }, $this->keys);
 
-        foreach ($removed as $item) {
+        foreach ($items as $item) {
             $this->removeVarnishCache($this->replaceWildcards($item, $this->keys), $category);
         }
     }

@@ -475,8 +475,7 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeVarnishCacheFrontpage(Event $event)
     {
-        $added   = $event->hasArgument('added') ? $event->getArgument('added') : [];
-        $removed = $event->hasArgument('removed') ? $event->getArgument('removed') : [];
+        $items = $event->hasArgument('items') ? $event->getArgument('items') : [];
 
         if (!$this->container->hasParameter('varnish')) {
             return false;
@@ -500,7 +499,7 @@ class HooksSubscriber implements EventSubscriberInterface
             ])
         );
 
-        $this->container->get('api.helper.cache.frontpage')->deleteItems($added, $removed, $category);
+        $this->container->get('api.helper.cache.frontpage')->deleteItems($items, $category);
     }
 
     /**

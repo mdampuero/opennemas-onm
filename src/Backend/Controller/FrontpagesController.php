@@ -135,9 +135,7 @@ class FrontpagesController extends Controller
             return in_array($content->content_type_name, $widgetTypes);
         });
 
-        $saved = array_map(function ($content) {
-            return implode('-', [ $content->content_type_name, $content->pk_content ]);
-        }, $saved);
+        $saved = array_keys($saved);
 
         $cps = $this->get('api.service.content_position');
 
@@ -228,24 +226,20 @@ class FrontpagesController extends Controller
         });
 
         $toSave = array_map(function ($item) {
-            return implode('-', [ $item['content_type'], $item['id'] ]);
+            return (int) $item['id'];
         }, $toSave);
 
-        $added = array_filter($toSave, function ($item) use ($saved) {
-            return !in_array($item, $saved);
-        });
+        $added   = array_diff($saved, $toSave);
+        $removed = array_diff($toSave, $saved);
 
-        $removed = array_filter($saved, function ($item) use ($toSave) {
-            return !in_array($item, $toSave);
-        });
+        $items = array_merge($added, $removed);
 
         $this->get('core.dispatcher')->dispatch(
             'frontpage.save_position',
             [
                 'category'    => $category,
                 'frontpageId' => $version->id,
-                'removed'     => array_values($removed),
-                'added'       => array_values($added)
+                'items'       => $items
             ]
         );
 
