@@ -154,6 +154,12 @@ class ContentCacheHelper extends CacheHelper
             foreach ($matches[1] as $match) {
                 $pattern = sprintf('@{{%s}}@', $match);
 
+                // Don't add the key if the content doesn't have the property and is a single replacement
+                if (empty($item->{$match}) && count($matches[1]) === 1) {
+                    $key = null;
+                    continue;
+                }
+
                 if (empty($item->{$match})) {
                     $key = preg_replace($pattern, '0', $key);
                     continue;
@@ -169,7 +175,7 @@ class ContentCacheHelper extends CacheHelper
             }
         }
 
-        return $keys;
+        return array_filter($keys);
     }
 
     /**
