@@ -61,6 +61,7 @@ class SettingController extends Controller
         'facebook',
         'facebook_id',
         'facebook_page',
+        'full_rss',
         'logo_favico',
         'logo_embed',
         'frontpage_max_items',
@@ -127,12 +128,13 @@ class SettingController extends Controller
         'body_start_script',
         'body_start_script_amp',
         'custom_css_amp',
+        'disable_default_ga',
+        'frontpage_max_items',
+        'full_rss',
         'header_script',
         'header_script_amp',
-        'frontpage_max_items',
         'robots_txt_rules',
-        'sitemap',
-        'disable_default_ga'
+        'sitemap'
     ];
 
     /**
