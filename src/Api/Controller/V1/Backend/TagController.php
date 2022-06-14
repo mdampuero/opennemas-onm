@@ -103,6 +103,7 @@ class TagController extends ApiController
 
         try {
             $this->get('core.validator')->setConfig(Validator::BLACKLIST_RULESET_TAGS, $settings['blacklist_tag']);
+            $this->get('orm.manager')->getDataSet('Settings', 'instance')->set($settings);
             $msg->add(_('Item saved successfully'), 'success');
         } catch (\Exception $e) {
             $msg->add(_('Unable to save settings'), 'error');
