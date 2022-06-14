@@ -137,7 +137,7 @@ class SitemapController extends Controller
         if (!$this->isCached('authors', $cacheId)) {
             try {
                 $authors = $this->get('api.service.author')->getList(
-                    'activated = 1'
+                    'inrss = 1'
                 )['items'];
             } catch (GetListException $e) {
             }
