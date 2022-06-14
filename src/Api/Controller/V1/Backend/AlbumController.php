@@ -51,9 +51,12 @@ class AlbumController extends ContentController
 
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings')
-            ->get('album_layout');
+            ->get(['album_layout', 'album_max']);
 
-        return new JsonResponse([ 'album_layout' => $settings ]);
+        return new JsonResponse([
+            'album_layout' => $settings['album_layout'],
+            'album_max'    => $settings['album_max'],
+        ]);
     }
 
     /**
@@ -64,6 +67,9 @@ class AlbumController extends ContentController
         return array_merge(parent::getExtraData($items), [
             'categories' => $this->getCategories($items),
             'tags'       => $this->getTags($items),
+            'max_photos' => (int) $this->get('orm.manager')
+                ->getDataSet('Settings')
+                ->get('album_max', 100),
             'formSettings'  => [
                 'name'             => $this->module,
                 'expansibleFields' => $this->getFormSettings($this->module)
@@ -90,7 +96,10 @@ class AlbumController extends ContentController
     {
         $this->checkSecurity($this->extension, 'ALBUM_SETTINGS');
 
-        $settings = [ 'album_layout' => $request->request->get('album_layout') ];
+        $settings = [
+            'album_layout' => $request->request->get('album_layout'),
+            'album_max'    => $request->request->get('album_max')
+        ];
 
         $msg = $this->get('core.messenger');
 

@@ -42,7 +42,7 @@
         <div class="row">
           {acl isAllowed="MASTER"}
             <div class="col-md-6">
-              <h4 class="no-margin">Layout</h4>
+              <h4>Layout</h4>
               <div class="controls">
                 <div class="radio">
                   <input class="form-control" id="layout-slider" ng-model="settings.album_layout" ng-value="'slider'" type="radio"/>
@@ -56,7 +56,13 @@
                     {t}List{/t}
                   </label>
                 </div>
+              </div>
             </div>
+            <div class="col-md-6">
+              <h4>Max photos</h4>
+              <div class="controls col-xs-4">
+                <input class="form-control" min="0" ng-model="settings.album_max" ng-value="settings.album_max" placeholder="100" type="number">
+              </div>
             </div>
           {/acl}
         </div>

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-30 09:04+0000\n"
-"PO-Revision-Date: 2022-05-30 11:10+0200\n"
+"POT-Creation-Date: 2022-06-13 10:27+0000\n"
+"PO-Revision-Date: 2022-06-13 12:28+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1228,10 +1228,6 @@ msgstr "Siguiente"
 
 msgid "Previous"
 msgstr "Anterior"
-
-#, php-format
-msgid "Widget %s not available"
-msgstr "Widget %s no disponible"
 
 msgid "Unable to save settings"
 msgstr "No se pudo guardar la configuración"
@@ -5644,11 +5640,11 @@ msgid "Slider"
 msgstr "Slider"
 
 msgid ""
-"You have reached the maximum number of 100 photos. To add new photos remove "
-"the older or create a new album."
+"You have reached the maximum number of [% data.extra.max_photos %] photos. "
+"To add new photos remove the older or create a new album."
 msgstr ""
-"Has alcanzado el número máximo de 100 fotos. Para agregar nuevas fotos, "
-"elimine las antiguas o cree un nuevo álbum."
+"Has alcanzado el número máximo de [% data.extra.max_photos %] fotos. Para "
+"agregar nuevas fotos, elimine las antiguas o cree un nuevo álbum."
 
 msgid "Config album module"
 msgstr "Configuración del módulo «Álbum»"
@@ -7123,6 +7119,9 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
+
+#~ msgid "Widget %s not available"
+#~ msgstr "Widget %s no disponible"
 
 #~ msgid "Unable to find the menu with the id \"%d\""
 #~ msgstr "No se pudo encontrar el menu con el identificador «%d»"
