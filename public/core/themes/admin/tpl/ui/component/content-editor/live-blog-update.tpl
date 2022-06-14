@@ -2,64 +2,61 @@
     <div class="grid-body">
       <div class="row">
         <div class="col-md-4 p-b-15 p-t-15 col-md-offset-4">
-          <button class="btn btn-block btn-default btn-loading" ng-click="addBlankUpdate()" type="button" ng-disabled="!canAddUpdate">
-            <h5 class="text-uppercase">
+          <button class="btn btn-block btn-success btn-loading" ng-click="addBlankUpdate()" type="button" ng-disabled="!canAddUpdate">
+            <h5 class="text-uppercase text-white">
               <i class="fa fa-plus"></i>
               {t}Add{/t}
             </h5>
           </button>
         </div>
       </div>
-      <div ng-repeat="updateItem in item.live_blog_updates track by $index" ng-cloak>
-        <div class="article-liveblogupdate-actions m-t-50">
-          <button class="btn btn-danger btn-small" ng-click="removeUpdate($index)" type="button"> <i class="fa fa-trash-o m-r-5"></i>{t}Remove update{/t}</button>
-        </div>
-        <hr/>
+    </div>
+      <div class="grid-body" ng-repeat="updateItem in item.live_blog_updates track by $index" ng-cloak>
         <div class="form-group">
           <div class="row">
             <div class="col-sm-6 col-xl-3">
               <div class="thumbnail-wrapper">
                 <div class="overlay photo-overlay ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}"></div>
-                  <div class="confirm-dialog ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}">
-                    <p>{t}Are you sure?{/t}</p>
-                    <div class="confirm-actions">
-                      <button class="btn btn-link" ng-click="toggleOverlay('photo_'+ updateItem.created)" type="button">
-                        <i class="fa fa-times fa-lg"></i>
-                        {t}No{/t}
-                      </button>
-                      <button class="btn btn-link" ng-click="removeItem('item.live_blog_updates.' + $index + '.image_id');toggleOverlay('photo_'+ updateItem.created)" type="button">
-                        <i class="fa fa-check fa-lg"></i>
-                        {t}Yes{/t}
-                      </button>
-                    </div>
-                </div>
-              </div>
-              <div class="thumbnail-placeholder">
-                <div class="img-thumbnail" ng-show="!updateItem.image_id">
-                  <div class="thumbnail-empty" ng-cloak media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-dynamic-target="item.live_blog_updates.[% $index %].image_id" media-picker-types="photo" photo-editor-enabled="true">
-                    <i class="fa fa-picture-o fa-2x"></i>
-                    <h5>{t}Select an element{/t}</h5>
+                <div class="confirm-dialog ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}">
+                  <p>{t}Are you sure?{/t}</p>
+                  <div class="confirm-actions">
+                    <button class="btn btn-link" ng-click="toggleOverlay('photo_'+ updateItem.created)" type="button">
+                      <i class="fa fa-times fa-lg"></i>
+                      {t}No{/t}
+                    </button>
+                    <button class="btn btn-link" ng-click="removeItem('item.live_blog_updates.' + $index + '.image_id');toggleOverlay('photo_'+ updateItem.created)" type="button">
+                      <i class="fa fa-check fa-lg"></i>
+                      {t}Yes{/t}
+                    </button>
                   </div>
                 </div>
-                <div class="dynamic-image-placeholder" ng-show="updateItem.image_id">
-                  <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="updateItem.image_id" reescale="auto">
-                    <div class="thumbnail-actions">
-                      <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ updateItem.created)">
-                        <i class="fa fa-trash-o fa-2x"></i>
-                      </div>
-                      <div class="thumbnail-action" ng-cloak media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-dynamic-target="item.live_blog_updates.[% $index %].image_id" media-picker-types="photo" photo-editor-enabled="true">
-                        <i class="fa fa-camera fa-2x"></i>
-                      </div>
+                <div class="thumbnail-placeholder">
+                  <div class="img-thumbnail" ng-show="!updateItem.image_id">
+                    <div class="thumbnail-empty" ng-cloak media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-dynamic-target="item.live_blog_updates.[% $index %].image_id" media-picker-types="photo" photo-editor-enabled="true">
+                      <i class="fa fa-picture-o fa-2x"></i>
+                      <h5>{t}Select an element{/t}</h5>
                     </div>
-                  </dynamic-image>
-                </div>
-                <input name="caption_$index" ng-model="data.updateItem" type="hidden">
-                <div class="form-group ng-cloak m-t-15" ng-show="updateItem.image_id">
-                  <label class="form-label" for="caption-[%$index%]">
-                    {t}Caption{/t}
-                  </label>
-                  <div class="controls">
-                    <textarea class="form-control" id="caption-[%$index%]" ng-model="updateItem.caption"></textarea>
+                  </div>
+                  <div class="dynamic-image-placeholder" ng-show="updateItem.image_id">
+                    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="updateItem.image_id" reescale="true">
+                      <div class="thumbnail-actions">
+                        <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ updateItem.created)">
+                          <i class="fa fa-trash-o fa-2x"></i>
+                        </div>
+                        <div class="thumbnail-action" ng-cloak media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-dynamic-target="item.live_blog_updates.[% $index %].image_id" media-picker-types="photo" photo-editor-enabled="true">
+                          <i class="fa fa-camera fa-2x"></i>
+                        </div>
+                      </div>
+                    </dynamic-image>
+                  </div>
+                  <input name="caption_$index" ng-model="data.updateItem" type="hidden">
+                  <div class="form-group ng-cloak m-t-15" ng-show="updateItem.image_id">
+                    <label class="form-label" for="caption-[%$index%]">
+                      {t}Caption{/t}
+                    </label>
+                    <div class="controls">
+                      <textarea class="form-control" id="caption-[%$index%]" ng-model="updateItem.caption"></textarea>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -113,6 +110,10 @@
             <textarea name="live_blog_updates.[% $index %].body" id="live_blog_updates.[% $index %].body" incomplete="incomplete" ng-model="updateItem.body" onm-editor onm-editor-preset="standard" class="form-control" rows="15"></textarea>
           </div>
         </div>
-      </div>
+        <div class="article-liveblogupdate-actions m-b-50">
+          <button class="btn btn-danger btn-small" ng-click="removeUpdate($index)" type="button"> <i class="fa fa-trash-o m-r-5"></i>
+          {t}Remove update{/t}
+          </button>
+        </div>
     </div>
   </div>
