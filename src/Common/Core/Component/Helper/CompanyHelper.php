@@ -150,6 +150,9 @@ class CompanyHelper
      */
     public function getSector($item) : ?string
     {
+        if (!$item->sector) {
+            return '';
+        }
         return _(ucfirst(implode(' ', explode('_', $item->sector))));
     }
 
