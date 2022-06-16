@@ -60,6 +60,21 @@ class ContentCacheHelper extends CacheHelper
     ];
 
     /**
+     * The array of default keys in voted items to remove in varnish.
+     *
+     * @var array
+     */
+    protected $defaultVoteVarnishKeys = [
+        'archive-page-{{starttime}}',
+        '{{content_type_name}}-frontpage$',
+        '{{content_type_name}}-frontpage',
+        '{{content_type_name}}-{{pk_content}}',
+        'content_type_name-widget-{{content_type_name}}',
+        'last-suggested-{{categories}}',
+        'header-date',
+    ];
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(?Instance $instance, Queue $queue, Cache $cache)
@@ -76,7 +91,7 @@ class ContentCacheHelper extends CacheHelper
      *
      * @return CacheHelper The current helper for method chaining.
      */
-    public function deleteItem($item) : CacheHelper
+    public function deleteItem($item, $vote = false) : CacheHelper
     {
         $keys = array_merge(
             $this->cache->getSetMembers('Widget_Keys'),
@@ -86,8 +101,10 @@ class ContentCacheHelper extends CacheHelper
 
         $this->cache->remove($keys);
 
+        $selectedVarnishKeys = ($vote) ? $this->defaultVoteVarnishKeys : $this->defaultVarnishKeys;
+
         $this->removeVarnishCache(
-            $this->replaceWildcards($item, array_merge($this->varnishKeys, $this->defaultVarnishKeys)),
+            $this->replaceWildcards($item, array_merge($this->varnishKeys, $selectedVarnishKeys)),
             $item
         );
 

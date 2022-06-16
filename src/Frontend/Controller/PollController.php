@@ -140,7 +140,7 @@ class PollController extends FrontendController
                 return $item;
             }, $poll->items);
 
-            $this->get($this->service)->updateItem($poll->pk_content, ['items' => $items]);
+            $this->get($this->service)->updateVotedItem($poll->pk_content, ['items' => $items]);
 
             return $this->getResponse('success', _('Thanks for participating.'), $poll);
         } catch (\Exception $e) {

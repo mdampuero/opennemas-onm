@@ -10,7 +10,7 @@
  */
 namespace Api\Service\V1;
 
-use Api\Exception\GetItemException;
+use Api\Exception\UpdateItemException;
 
 class PollService extends ContentService
 {
@@ -32,6 +32,32 @@ class PollService extends ContentService
         $list['items'] = $this->getPercents($list['items']);
 
         return $list;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateVotedItem($id, $data)
+    {
+        try {
+            $em = $this->container->get('orm.manager');
+            $data = $this->em->getConverter($this->entity)
+                ->objectify($data);
+
+            $item = $this->getItem($id);
+            $item->setData($data);
+
+            $this->validate($item);
+            $em->persist($item, $item->getOrigin());
+
+            $this->dispatcher->dispatch($this->getEventName('updateVotedItem'), [
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item,
+            ]);
+        } catch (\Exception $e) {
+            throw new UpdateItemException($e->getMessage());
+        }
     }
 
     /**
