@@ -25,6 +25,14 @@ class TagCacheHelper extends CacheHelper
                 $tag->id
             )
         ]));
+
+        $this->queue->push(new ServiceTask('core.varnish', 'ban', [
+            sprintf(
+                'obj.http.x-tags ~ instance-%s.*tag-%d.*',
+                $this->instance->internal_name,
+                $tag->id
+            )
+        ]));
     }
 
     /**

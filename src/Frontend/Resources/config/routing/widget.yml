@@ -4,3 +4,7 @@ frontend_widget_execute:
     requirements:
         action: '[a-z]+'
         id:     '[0-9]+'
+
+frontend_widget_render:
+    path:     /widget/render
+    defaults: { _controller: FrontendBundle:Widget:render }

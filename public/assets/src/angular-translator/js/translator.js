@@ -154,36 +154,17 @@
           // E = Element, A = Attribute, C = Class, M = Comment
           restrict: 'E',
           scope: {
-            item:    '=',
-            keys:    '=',
-            link:    '@',
-            ngModel: '=',
-            options: '=',
-            text:    '@'
+            item:     '=',
+            keys:     '=',
+            link:     '@',
+            ngModel:  '=',
+            options:  '=',
+            text:     '@',
+            language: '='
           },
           template: function(elem, attrs) {
-            if (attrs.link) {
-              return '<div class="translator btn-group btn-group-sm" ng-if="collapsed || size > max">' +
-                '<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">' +
-                  '<i class="fa fa-pencil m-r-5"></i>' +
-                  '{{text}}' +
-                  '<i class="fa fa-angle-down"></i>' +
-                '</button>' +
-                '<ul class="dropdown-menu no-padding" role="menu">' +
-                  '<li ng-repeat="language in languages">' +
-                    '<a href="{{link + \'?locale=\' + language.value}}">' +
-                      '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>' +
-                      '{{language.name}}' +
-                    '</a>' +
-                  '</li>' +
-                '</ul>' +
-              '</div>' +
-              '<div class="translator btn-group btn-group-sm" role="group" ng-if="!collapsed && size <= max">' +
-                '<a class="btn btn-{{language.class}}"' +
-                    ' href="{{link + \'?locale=\' + language.value}}" ng-repeat="language in languages">' +
-                  '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>{{language.name}}' +
-                '</a>' +
-              '</div>';
+            if (attrs.link && attrs.language) {
+              return '<a class="btn btn-default btn-small" href="{{link}}?locale={{language}}"> <i class="fa fa-pencil m-r-5"></i>{{text}}</a>';
             }
 
             return '<div class="translator btn-group">' +

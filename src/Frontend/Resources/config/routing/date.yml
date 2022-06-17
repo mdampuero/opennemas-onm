@@ -1,0 +1,3 @@
+frontend_date_render:
+    path: /date
+    defaults: { _controller: FrontendBundle:Date:render }

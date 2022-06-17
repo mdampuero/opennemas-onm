@@ -101,6 +101,8 @@ class LetterController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $params['x-tags'] .= ',letter-frontpage';
+
         $params = array_merge($params, [
             'recaptcha' => $this->get('core.recaptcha')
                 ->configureFromSettings()

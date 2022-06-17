@@ -77,12 +77,12 @@ class ArchiveController extends Controller
                 'starttime'              => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
                 ],
                 'endtime'                => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
                 ]
             ]);
 
@@ -142,8 +142,8 @@ class ArchiveController extends Controller
         return $this->render('archive/archive.tpl', [
             'cache_id'        => $cacheID,
             'newslibraryDate' => $date,
-            'x-tags'          => 'archive-page,' . $date . ',' . $page . ',' . $categorySlug,
-            'x-cacheable'     => true,
+            'x-tags'          => 'archive-page-' . $date,
+            'x-cacheable'     => true
         ]);
     }
 

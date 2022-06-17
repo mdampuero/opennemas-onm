@@ -49,6 +49,7 @@ orm:
                 title:               l10n_string
                 urn_source:          string
                 with_comment:        boolean
+                showcase:            boolean
                 categories:          array
                 tags:                array
                 related_contents:    array

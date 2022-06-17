@@ -10,6 +10,7 @@
 namespace Common\Core\Component\Varnish;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Bridge\Monolog\Logger;
 
 class Varnish
@@ -58,10 +59,16 @@ class Varnish
         foreach ($this->config['servers'] as $name => $config) {
             $url = sprintf('http://%s:%s', $config['host'], $config['port']);
 
-            $response = $this->client->request('BAN', $url, [
-                'headers' => [ $this->config['header_name'] => $request ],
-                'timeout' => 2
-            ]);
+            try {
+                $response = $this->client->request('BAN', $url, [
+                    'headers' => [ $this->config['header_name'] => $request ],
+                    'timeout' => 2
+                ]);
+            } catch (GuzzleException $e) {
+                $this->logger->error($e->getMessage());
+
+                continue;
+            }
 
             $this->logger->info(sprintf(
                 '%s (%s)',

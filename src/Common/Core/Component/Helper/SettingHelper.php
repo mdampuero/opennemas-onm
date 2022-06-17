@@ -126,4 +126,13 @@ class SettingHelper
     {
         return boolval($this->ds->get('logo_enabled'));
     }
+
+    /**
+     * Checks if the default Opennemas Google Analytics is disabled.
+     * @return bool True if disabled. False otherwise.
+     */
+    public function isDefaultGADisabled() : bool
+    {
+        return boolval($this->ds->get('disable_default_ga'));
+    }
 }

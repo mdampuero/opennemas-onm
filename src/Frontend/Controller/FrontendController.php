@@ -11,6 +11,7 @@ namespace Frontend\Controller;
 
 use Api\Exception\ApiException;
 use Common\Core\Controller\Controller;
+use Common\Model\Entity\Content;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -30,7 +31,7 @@ class FrontendController extends Controller
      * {@inheritdoc}
      */
     protected $params = [
-        'x-cache-for' => '+1 day',
+        'x-cache-for' => '100d',
         'x-cacheable' => true
     ];
 
@@ -155,6 +156,10 @@ class FrontendController extends Controller
 
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
+
+        if (!empty($item->hideamp)) {
+            throw new ResourceNotFoundException();
+        }
 
         $expected = $this->getExpectedUri($action, [ 'item' => $item, '_format' => 'amp' ]);
 
@@ -430,11 +435,15 @@ class FrontendController extends Controller
                     || $request->hasPreviousSession()
                     && empty($request->getSession()->getFlashBag()->peekAll()));
 
-            $params['x-tags'][] = sprintf(
-                '%s-%s',
-                $this->get('core.globals')->getExtension(),
-                $item->id
-            );
+            if ($item instanceof Content) {
+                $params['x-tags'][] = $this->get('api.helper.cache.content')->getXTags($item);
+            } else {
+                $params['x-tags'][] = sprintf(
+                    '%s-%s',
+                    $this->get('core.globals')->getExtension(),
+                    $item->id
+                );
+            }
 
             // Ensure that all templates are using params['content'] and
             // then remove the line below

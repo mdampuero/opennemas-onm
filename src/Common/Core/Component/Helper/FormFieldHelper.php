@@ -281,6 +281,11 @@ class FormFieldHelper
                 'title' => _('Timetable'),
                 'available' => [ 'company' ]
             ],
+            [
+                'name' => 'google_news_showcase',
+                'title' => _('Google News Showcase'),
+                'available' => [ 'article' ]
+            ],
         ];
         return $this;
     }

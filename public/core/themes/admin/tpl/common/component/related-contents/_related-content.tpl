@@ -18,7 +18,7 @@
             <span class="related-item-title">
               [% localizeText(data.extra.related_contents[related.target_id].title ) %]
             </span>
-            <span class="related-item-status" ng-if="related.content_status == 0">
+            <span class="related-item-status" ng-if="data.extra.related_contents[related.target_id].content_status == 0">
               ({t}No published{/t})
             </span>
           </div>
