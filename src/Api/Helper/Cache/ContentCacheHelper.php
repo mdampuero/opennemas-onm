@@ -53,7 +53,6 @@ class ContentCacheHelper extends CacheHelper
         'last-suggested-{{categories}}',
         'rss-author-{{fk_author}}',
         'rss-{{content_type_name}}$',
-        'rss-google-news-showcase',
         'sitemap',
         'tag-{{tags}}',
         'header-date',
@@ -65,14 +64,17 @@ class ContentCacheHelper extends CacheHelper
      * @var array
      */
     protected $defaultVoteVarnishKeys = [
-        'archive-page-{{starttime}}',
         '{{content_type_name}}-frontpage$',
         '{{content_type_name}}-frontpage',
         '{{content_type_name}}-{{pk_content}}',
         'content_type_name-widget-{{content_type_name}}',
-        'last-suggested-{{categories}}',
         'header-date',
     ];
+
+    /**
+     * Array of varnish keys who needs to be module checked before added to queue
+     */
+    protected $varnishModuleKeys = [];
 
     /**
      * {@inheritdoc}
@@ -101,14 +103,42 @@ class ContentCacheHelper extends CacheHelper
 
         $this->cache->remove($keys);
 
+        $finalVarnishKeys = $this->varnishKeys;
+
+        $finalVarnishKeys = array_merge($finalVarnishKeys, $this->getModuleKeys());
+
         $selectedVarnishKeys = ($vote) ? $this->defaultVoteVarnishKeys : $this->defaultVarnishKeys;
 
         $this->removeVarnishCache(
-            $this->replaceWildcards($item, array_merge($this->varnishKeys, $selectedVarnishKeys)),
+            $this->replaceWildcards($item, array_merge($finalVarnishKeys, $selectedVarnishKeys)),
             $item
         );
 
         return $this;
+    }
+
+    /**
+     * Returns varnish keys if respective module is activated
+     *
+     * @return Array Array of varnish keys.
+     */
+    public function getModuleKeys()
+    {
+        $finalModuleKeys = [];
+
+        if (empty($this->varnishModuleKeys)) {
+            return $finalModuleKeys;
+        }
+
+        $security = getService('core.security');
+
+        foreach ($this->varnishModuleKeys as $moduleName => $moduleKeys) {
+            if ($security->hasExtension($moduleName)) {
+                $finalModuleKeys = array_merge($finalModuleKeys, $moduleKeys);
+            }
+        }
+
+        return $finalModuleKeys;
     }
 
     /**
@@ -142,7 +172,7 @@ class ContentCacheHelper extends CacheHelper
      */
     protected function removeVarnishCache($keys, $item)
     {
-        if (!empty($item->path)) {
+        if (!empty($item->path) && $item->content_type_name != 'video') {
             $this->queue->push(new ServiceTask('core.varnish', 'ban', [
                 sprintf('req.url ~ %s', $item->path)
             ]));
