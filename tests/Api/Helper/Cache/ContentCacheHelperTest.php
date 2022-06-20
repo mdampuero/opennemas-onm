@@ -224,7 +224,7 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getModuleKeys.
      */
-    public function testgetModuleKeys()
+    public function testGetModuleKeys()
     {
         $now = new DateTime();
 
