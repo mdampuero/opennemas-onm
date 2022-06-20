@@ -103,10 +103,7 @@ class ContentCacheHelper extends CacheHelper
 
         $this->cache->remove($keys);
 
-        $finalVarnishKeys = $this->varnishKeys;
-
-        $finalVarnishKeys = array_merge($finalVarnishKeys, $this->getModuleKeys());
-
+        $finalVarnishKeys    = array_merge($this->varnishKeys, $this->getModuleKeys());
         $selectedVarnishKeys = ($vote) ? $this->defaultVoteVarnishKeys : $this->defaultVarnishKeys;
 
         $this->removeVarnishCache(
