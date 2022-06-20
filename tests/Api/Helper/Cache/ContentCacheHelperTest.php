@@ -222,6 +222,22 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getModuleKeys.
+     */
+    public function testgetModuleKeys()
+    {
+        $now = new DateTime();
+
+        $item = new Content([
+            'pk_content'        => 1,
+            'content_type_name' => 'opinion',
+            'starttime'         => $now,
+            'tags'              => [ 12, 13, 14 ]
+        ]);
+
+        $this->assertEquals([], $this->helper->getModuleKeys($item));
+    }
+    /**
      * Tests deleteItem when the content is a newsstand.
      */
     public function testDeleteItemWhenNewsstand()
