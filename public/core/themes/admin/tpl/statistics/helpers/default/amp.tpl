@@ -11,10 +11,7 @@
     }
   },
   "transport": {
-    "beacon": true,
-    "xhrpost": false,
-    "useBody": false,
-    "image": false
+    "beacon": true
   }
 }
 </script>
