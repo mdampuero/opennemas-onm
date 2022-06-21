@@ -5,7 +5,6 @@
         "custom_params": "cp_cp1={$domain}&cp_cp2={$category}"
       },
       "vars": {
-        "environment": "-preproduction",
         "regionID": "{$regionId}",
         "mediaID": "{$mediaId}Amp"
       },
