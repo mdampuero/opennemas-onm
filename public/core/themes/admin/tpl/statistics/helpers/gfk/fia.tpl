@@ -1,4 +1,3 @@
-{if empty({setting name="gfk" field="only_amp"})}
 <script>
 // Tag configuration
 var gfkS2sConf = {
@@ -76,4 +75,3 @@ var customParams = { c1: "{$domain}", c2: "{$category}" };
 
 agent.impression("{$contentId}", customParams);
 </script>
-{/if}
