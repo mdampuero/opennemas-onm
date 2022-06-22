@@ -78,6 +78,12 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForContent', 10],
                 ['removeCacheForContent', 5],
             ],
+            'content.updateVotedItem' => [
+                ['logAction', 5],
+                ['removeSmartyCacheForContent', 5],
+                ['removeObjectCacheForContent', 10],
+                ['removeCacheForVotedContent', 5],
+            ],
             'content.deleteItem' => [
                 ['logAction', 5],
                 ['removeSmartyCacheForContent', 5],
@@ -189,6 +195,25 @@ class HooksSubscriber implements EventSubscriberInterface
                     ->get(sprintf('api.helper.cache.%s', $item->content_type_name))->deleteItem($item);
             } catch (ServiceNotFoundException $e) {
                 $this->container->get(sprintf('api.helper.cache.content'))->deleteItem($item);
+            }
+        }
+    }
+
+    /**
+     * Queues the necessary bans for an specific voted content.
+     */
+    public function removeCacheForVotedContent(Event $event)
+    {
+        $item = $event->getArgument('item');
+
+        $items = !is_array($item) ? [ $item ] : $item;
+
+        foreach ($items as $item) {
+            try {
+                $this->container
+                    ->get(sprintf('api.helper.cache.%s', $item->content_type_name))->deleteItem($item, true);
+            } catch (ServiceNotFoundException $e) {
+                $this->container->get(sprintf('api.helper.cache.content'))->deleteItem($item, true);
             }
         }
     }
@@ -475,8 +500,7 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeVarnishCacheFrontpage(Event $event)
     {
-        $added   = $event->hasArgument('added') ? $event->getArgument('added') : [];
-        $removed = $event->hasArgument('removed') ? $event->getArgument('removed') : [];
+        $items = $event->hasArgument('items') ? $event->getArgument('items') : [];
 
         if (!$this->container->hasParameter('varnish')) {
             return false;
@@ -500,7 +524,7 @@ class HooksSubscriber implements EventSubscriberInterface
             ])
         );
 
-        $this->container->get('api.helper.cache.frontpage')->deleteItems($added, $removed, $category);
+        $this->container->get('api.helper.cache.frontpage')->deleteItems($items, $category);
     }
 
     /**

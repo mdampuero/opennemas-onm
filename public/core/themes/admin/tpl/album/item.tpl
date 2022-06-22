@@ -167,12 +167,12 @@
         </div>
       </div>
       <div class="text-center">
-        <button ng-if="photos && photos.length < 100" class="btn btn-default" media-picker media-picker-ignore="[% related.getIds('photos') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="[% 100 - related.getIds('photos').length %]" media-picker-target="target.photos" media-picker-types="photo" type="button">
+        <button ng-if="photos && photos.length < data.extra.max_photos" class="btn btn-default" media-picker media-picker-ignore="[% related.getIds('photos') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="[% data.extra.max_photos - related.getIds('photos').length %]" media-picker-target="target.photos" media-picker-types="photo" type="button">
           <i class="fa fa-plus m-r-5"></i>
           {t}Add{/t}
         </button>
-        <div class="alert alert-warning" ng-if="photos && photos.length > 99" role="alert">
-          {t}You have reached the maximum number of 100 photos. To add new photos remove the older or create a new album.{/t}
+        <div class="alert alert-warning" ng-if="photos && photos.length > data.extra.max_photos - 1" role="alert">
+          {t}You have reached the maximum number of [% data.extra.max_photos %] photos. To add new photos remove the older or create a new album.{/t}
         </div>
         <button class="btn btn-white" ng-click="empty()" ng-if="photos && photos.length > 0" type="button">
           <i class="fa fa-fire m-r-5"></i>

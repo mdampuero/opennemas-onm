@@ -108,10 +108,13 @@ class AlbumController extends BackendController
      */
     public function configAction()
     {
+        $albumConfig = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get(['album_layout', 'album_max']);
+
         return $this->render('album/config.tpl', [
-            'album_layout' => $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('album_layout')
+            'album_layout' => $albumConfig['album_layout'],
+            'album_max'    => $albumConfig['album_max']
         ]);
     }
 }

@@ -15,5 +15,13 @@ class ArticleCacheHelper extends ContentCacheHelper
     /**
      * {@inheritdoc}
      */
-    protected $varnishKeys = [ 'rss-instant-articles' ];
+    protected $varnishKeys = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $varnishModuleKeys = [
+        'es.openhost.module.google_news_showcase' => ['rss-google-news-showcase'],
+        'FIA_MODULE' => ['rss-instant-articles']
+    ];
 }
