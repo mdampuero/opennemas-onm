@@ -47,7 +47,7 @@
             </div>
           </div>
         </div>
-      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.live_blog_update[$index]}">
+      <div class="grid-collapse-body no-padding ng-cloak" ng-class="{ 'expanded': expanded.live_blog_update[$index]}">
         <div class="form-group">
           <div class="row">
             <div class="thumbnail-wrapper update-flex-container">
