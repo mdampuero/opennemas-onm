@@ -189,6 +189,14 @@ class BlogController extends FrontendController
             'route'       => 'frontend_blog_frontpage',
         ]);
 
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
+
         $params['x-tags'] .= ',opinion-frontpage';
 
         $this->view->assign([
@@ -208,7 +216,7 @@ class BlogController extends FrontendController
      */
     public function hydrateListAuthor(array &$params, $author) : void
     {
-        $date = date('Y-m-d H:i:s');
+        $date = gmdate('Y-m-d H:i:s');
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0

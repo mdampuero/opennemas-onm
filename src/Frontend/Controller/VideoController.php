@@ -109,6 +109,14 @@ class VideoController extends FrontendController
             $params['x-tags'] .= sprintf(',category-video-%d', $category->id);
         }
 
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
+
         $params = array_merge($params, [
             'videos'      => $response['items'],
             'total'       => $response['total'],
