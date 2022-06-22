@@ -97,6 +97,20 @@
          * @memberOf ArticleCtrl
          *
          * @description
+         *  Flags for expanded items.
+         *
+         * @type {Object}
+         */
+        $scope.expanded = {
+          live_blog_update: {
+            0: true
+          }
+        };
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
          *  The related service.
          *
          * @type {Object}
@@ -345,6 +359,11 @@
 
             $scope.canAddUpdate = false;
             $scope.item.live_blog_updates.unshift(currentUpdate);
+
+            // Expand new update
+            if (!$scope.expanded.live_blog_update[0]) {
+              $scope.expanded.live_blog_update[0] = true;
+            }
           }
         };
 

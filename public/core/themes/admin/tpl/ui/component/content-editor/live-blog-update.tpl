@@ -1,21 +1,60 @@
   <div class="grid simple" ng-show="item.live_blog_posting">
     <div class="grid-body">
       <div class="row">
-        <div class="col-md-4 p-b-15 p-t-15 col-md-offset-4">
+        <div class="col-md-8 col-sm-12">
+          <h2>
+            {t}Live Blog Posting{/t}
+          </h2>
+        </div>
+        <div class="col-md-4 col-sm-12">
           <button class="btn btn-block btn-success btn-loading" ng-click="addBlankUpdate()" type="button" ng-disabled="!canAddUpdate">
             <h5 class="text-uppercase text-white">
               <i class="fa fa-plus"></i>
-              {t}Add{/t}
+              {t}Add update{/t}
             </h5>
           </button>
         </div>
       </div>
     </div>
-      <div class="grid-body" ng-repeat="updateItem in item.live_blog_updates track by $index" ng-cloak>
+    <div class="grid-body" ng-repeat="updateItem in item.live_blog_updates track by $index" ng-cloak>
         <div class="form-group">
           <div class="row">
-            <div class="col-sm-6 col-xl-3">
-              <div class="thumbnail-wrapper">
+            <div class="col-md-8 col-sm-12">
+              <label for="title-[% $index %]" class="form-label">
+                {t}Title{/t}
+              </label>
+              <div class="controls">
+              </div>
+              <input class="form-control" id="title-[% $index %]" name="updateItem.title" ng-class="{ 'input-faded': flags.block.updateItem.title }" ng-model="updateItem.title" type="text">
+            </div>
+            <div class="col-md-3 col-sm-12">
+              <label class="form-label" for="modified-[% $index %]">
+                {t}Modified Date{/t}
+              </label>
+              <div class="controls">
+                <div class="input-group">
+                  <input class="form-control" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-use-current=true datetime-picker-min="updateItem.created" id="modified-[% $index %]" name="updateItem.modified" ng-model="updateItem.modified" type="datetime">
+                  <span class="input-group-addon add-on">
+                    <span class="fa fa-calendar"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-1 col-sm-12 update-collapse-icon-container">
+              <div class="grid-collapse pointer" ng-click="expanded.live_blog_update[$index] = !expanded.live_blog_update[$index]">
+                <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.live_blog_update[$index] }"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.live_blog_update[$index]}">
+        <div class="form-group">
+          <div class="row">
+            <div class="thumbnail-wrapper update-flex-container">
+              <div class="col-md-6 col-sm-12">
+                  <label class="form-label" for="update-image[% $index %]">
+                    {t}Featured image{/t}
+                  </label>
                 <div class="overlay photo-overlay ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}"></div>
                 <div class="confirm-dialog ng-cloak"  ng-class="{ 'open': overlay['photo_'+ updateItem.created]}">
                   <p>{t}Are you sure?{/t}</p>
@@ -30,7 +69,7 @@
                     </button>
                   </div>
                 </div>
-                <div class="thumbnail-placeholder">
+                <div class="thumbnail-placeholder" id="update-image[% $index %]">
                   <div class="img-thumbnail" ng-show="!updateItem.image_id">
                     <div class="thumbnail-empty" ng-cloak media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-dynamic-target="item.live_blog_updates.[% $index %].image_id" media-picker-types="photo" photo-editor-enabled="true">
                       <i class="fa fa-picture-o fa-2x"></i>
@@ -49,40 +88,17 @@
                       </div>
                     </dynamic-image>
                   </div>
-                  <input name="caption_$index" ng-model="data.updateItem" type="hidden">
-                  <div class="form-group ng-cloak m-t-15" ng-show="updateItem.image_id">
-                    <label class="form-label" for="caption-[%$index%]">
-                      {t}Caption{/t}
-                    </label>
-                    <div class="controls">
-                      <textarea class="form-control" id="caption-[%$index%]" ng-model="updateItem.caption"></textarea>
-                    </div>
-                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="row">
-            <div class="col-md-6">
-              <label for="title-[%$index%]" class="form-label">
-                {t}Title{/t}
-              </label>
-              <div class="controls">
-              </div>
-              <input class="form-control" id="title-[%$index%]" name="updateItem.title" ng-class="{ 'input-faded': flags.block.updateItem.title }" ng-model="updateItem.title" type="text">
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="modified-[%$index%]">
-                {t}Modified Date{/t}
-              </label>
-              <div class="controls">
-                <div class="input-group">
-                  <input class="form-control" datetime-picker datetime-picker-timezone="{$app.locale->getTimeZone()->getName()}" datetime-picker-use-current=true datetime-picker-min="updateItem.created" id="modified-[%$index%]" name="updateItem.modified" ng-model="updateItem.modified" type="datetime">
-                  <span class="input-group-addon add-on">
-                    <span class="fa fa-calendar"></span>
-                  </span>
+              <div class="col-md-6 col-sm-12 update-caption-container">
+                <input name="caption_$index" ng-model="data.updateItem" type="hidden">
+                <div class="ng-cloak m-t-15" ng-show="updateItem.image_id">
+                  <label class="form-label" for="caption-[%$index%]">
+                    {t}Caption{/t}
+                  </label>
+                  <div class="controls">
+                    <input type="text" class="form-control" id="caption-[%$index%]" ng-model="updateItem.caption"></input>
+                  </div>
                 </div>
               </div>
             </div>
@@ -110,10 +126,13 @@
             <textarea name="live_blog_updates.[% $index %].body" id="live_blog_updates.[% $index %].body" incomplete="incomplete" ng-model="updateItem.body" onm-editor onm-editor-preset="standard" class="form-control" rows="15"></textarea>
           </div>
         </div>
-        <div class="article-liveblogupdate-actions m-b-50">
-          <button class="btn btn-danger btn-small" ng-click="removeUpdate($index)" type="button"> <i class="fa fa-trash-o m-r-5"></i>
-          {t}Remove update{/t}
-          </button>
+        <div class="row article-liveblogupdate-actions">
+          <div class="col-md-2 col-md-offset-10">
+            <button class="btn btn-danger btn-small" ng-click="removeUpdate($index)" type="button"> <i class="fa fa-trash-o m-r-5"></i>
+            {t}Remove update{/t}
+            </button>
+          </div>
         </div>
+      </div>
     </div>
   </div>
