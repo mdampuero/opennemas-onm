@@ -216,7 +216,7 @@ class BlogController extends FrontendController
      */
     public function hydrateListAuthor(array &$params, $author) : void
     {
-        $date = gmdate('Y-m-d H:i:s');
+        $date = date('Y-m-d H:i:s');
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
@@ -257,6 +257,15 @@ class BlogController extends FrontendController
                 'params' => [ 'author_slug' => $author->slug ]
             ],
         ]);
+
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
 
         $this->view->assign([
             'pagination' => $pagination,

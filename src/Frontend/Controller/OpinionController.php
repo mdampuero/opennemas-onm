@@ -255,6 +255,14 @@ class OpinionController extends FrontendController
             ]
         ]);
 
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
+
         $this->view->assign([
             'pagination' => $pagination,
             'opinions'   => $response['items'],
