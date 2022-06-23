@@ -127,7 +127,7 @@
           </div>
         </div>
         <div class="row article-liveblogupdate-actions">
-          <div class="col-md-2 col-md-offset-10">
+          <div>
             <button class="btn btn-danger btn-small" ng-click="removeUpdate($index)" type="button"> <i class="fa fa-trash-o m-r-5"></i>
             {t}Remove update{/t}
             </button>
