@@ -2,7 +2,7 @@
   <script type='application/json'>
     {
       "requests": {
-        "custom_params": "cp_cp1={$domain}&cp_cp2={$category}"
+        "custom_params": "cp_c1={$domain}&cp_c2={$category}"
       },
       "vars": {
         "regionID": "{$regionId}",
