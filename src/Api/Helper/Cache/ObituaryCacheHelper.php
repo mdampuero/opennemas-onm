@@ -2,7 +2,7 @@
 
 namespace Api\Helper\Cache;
 
-class AlbumCacheHelper extends ContentCacheHelper
+class ObituaryCacheHelper extends ContentCacheHelper
 {
     /**
      * {@inheritdoc}
