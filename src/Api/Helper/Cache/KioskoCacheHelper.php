@@ -2,8 +2,6 @@
 
 namespace Api\Helper\Cache;
 
-use Common\Model\Entity\Content;
-
 class NewsstandCacheHelper extends ContentCacheHelper
 {
     /**
@@ -22,12 +20,4 @@ class NewsstandCacheHelper extends ContentCacheHelper
         'sitemap',
         'header-date',
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function replaceDate(Content $item)
-    {
-        return substr($item->date, 0, strrpos($item->date, '-'));
-    }
 }
