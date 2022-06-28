@@ -11,10 +11,9 @@ class PhotoCacheHelper extends ContentCacheHelper
         'authors-frontpage',
         'content-author-{{fk_author}}-frontpage',
         'content_type_name-widget-{{content_type_name}}' .
-        '.*tag-widget-(({{tags}})|(all))' .
-        '.*author-widget-(({{fk_author}})|(all))',
+        '.*tag-widget-({{tags}}|all)' .
+        '.*author-widget-({{fk_author}}|all)',
         'rss-author-{{fk_author}}',
-        'sitemap',
         'tag-{{tags}}',
     ];
 }

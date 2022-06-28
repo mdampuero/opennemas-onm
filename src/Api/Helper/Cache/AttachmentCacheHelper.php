@@ -11,7 +11,7 @@ class AttachmentCacheHelper extends ContentCacheHelper
         'archive-page-{{starttime}}',
         'category-{{categories}}',
         'content_type_name-widget-{{content_type_name}}' .
-        '.*category-widget-(({{categories}})|(all))' .
+        '.*category-widget-({{categories}}|all)' .
         'last-suggested-{{categories}}',
     ];
 }

@@ -123,98 +123,14 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
                 sprintf(
                     'obj.http.x-tags ~ instance-%s.*%s',
                     $this->instance->internal_name,
-                    sprintf('archive-page-%s', $now->format('Y-m-d'))
-                )
-            ]));
-
-        $this->queue->expects($this->at(1))->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf(
-                    'obj.http.x-tags ~ instance-%s.*authors-frontpage',
-                    $this->instance->internal_name
-                )
-            ]));
-
-        $this->queue->expects($this->at(2))->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf(
-                    'obj.http.x-tags ~ instance-%s.*%s',
-                    $this->instance->internal_name,
-                    'category-22'
-                )
-            ]));
-
-        $this->queue->expects($this->at(3))->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf(
-                    'obj.http.x-tags ~ instance-%s.*%s',
-                    $this->instance->internal_name,
-                    'article-frontpage$'
-                )
-            ]));
-
-        $this->queue->expects($this->at(4))->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf(
-                    'obj.http.x-tags ~ instance-%s.*article-frontpage,category-article-22',
-                    $this->instance->internal_name
-                )
-            ]));
-
-        $this->queue->expects($this->at(5))->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf(
-                    'obj.http.x-tags ~ instance-%s.*%s',
-                    $this->instance->internal_name,
-                    'article-1'
-                )
-            ]));
-
-        $this->queue->expects($this->at(6))->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf(
-                    'obj.http.x-tags ~ instance-%s.*%s',
-                    $this->instance->internal_name,
-                    'content_type_name-widget-article' .
-                    '.*category-widget-((22)|(all))' .
-                    '.*tag-widget-(((12|13|14))|(all))' .
-                    '.*author-widget-((0)|(all))'
-                )
-            ]));
-
-        $this->queue->expects($this->at(7))->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf(
-                    'obj.http.x-tags ~ instance-%s.*%s',
-                    $this->instance->internal_name,
-                    'last-suggested-22'
-                )
-            ]));
-
-        $this->queue->expects($this->at(8))->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf(
-                    'obj.http.x-tags ~ instance-%s.*%s',
-                    $this->instance->internal_name,
-                    'rss-article$'
-                )
-            ]));
-
-        $this->queue->expects($this->at(9))->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf(
-                    'obj.http.x-tags ~ instance-%s.*%s',
-                    $this->instance->internal_name,
-                    'sitemap'
-                )
-            ]));
-
-        $this->queue->expects($this->at(10))->method('push')
-            ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf(
-                    'obj.http.x-tags ~ instance-%s.*%s',
-                    $this->instance->internal_name,
-                    'tag-(12|13|14)'
+                    sprintf(
+                        '((archive-page-%s)|(authors-frontpage)|(category-22)|(article-frontpage$)|' .
+                        '(article-frontpage,category-article-22)|(article-1)|' .
+                        '(content_type_name-widget-article.*category-widget-(22|all).*tag-widget-((12|13|14)|all)' .
+                        '.*author-widget-(0|all))|(last-suggested-22)|(rss-article$)|(sitemap)|(tag-(12|13|14))|' .
+                        '(header-date))',
+                        $now->format('Y-m-d')
+                    )
                 )
             ]));
 

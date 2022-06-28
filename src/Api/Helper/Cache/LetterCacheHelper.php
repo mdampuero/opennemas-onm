@@ -14,7 +14,7 @@ class LetterCacheHelper extends ContentCacheHelper
         'newsstand-frontpage,category-newsstand-{{categories}}',
         'newsstand-{{pk_content}}',
         'content_type_name-widget-newsstand' .
-        '.*category-widget-(({{categories}})|(all))' .
+        '.*category-widget-({{categories}}|all)' .
         'last-suggested-{{categories}}',
         'rss-newsstand$',
         'sitemap',
