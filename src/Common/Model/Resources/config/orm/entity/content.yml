@@ -46,11 +46,15 @@ orm:
                 position:            integer
                 slug:                l10n_string
                 starttime:           datetime
+                coverage_start_time: datetime
+                coverage_end_time:   datetime
                 title:               l10n_string
                 urn_source:          string
                 with_comment:        boolean
                 showcase:            boolean
                 categories:          array
+                live_blog_posting:   boolean
+                live_blog_updates:   array
                 tags:                array
                 related_contents:    array
                 subscriptions:       array
@@ -115,6 +119,25 @@ orm:
                                     type: integer
                                 tag_id:
                                     type: integer
+                        live_blog_updates:
+                            table: content_updates
+                            source_key: pk_content
+                            target_key: content_id
+                            columns:
+                                content_id:
+                                    type: integer
+                                title:
+                                    type: string
+                                body:
+                                    type: string
+                                caption:
+                                    type: string
+                                image_id:
+                                    type: integer
+                                created:
+                                    type: datetime
+                                modified:
+                                    type: datetime
                     columns:
                         pk_content:
                             type: bigint

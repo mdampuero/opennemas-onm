@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 06:22+0000\n"
-"PO-Revision-Date: 2022-06-17 08:34+0200\n"
+"POT-Creation-Date: 2022-06-28 10:50+0000\n"
+"PO-Revision-Date: 2022-06-28 12:54+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1653,6 +1653,9 @@ msgstr "Horario"
 
 msgid "Google News Showcase"
 msgstr "Google News Showcase"
+
+msgid "Live blog post"
+msgstr "Artículo en directo"
 
 msgid "Max sents reached"
 msgstr "Has alcanzado el número máximo de envíos"
@@ -5061,9 +5064,6 @@ msgstr "Servicios externos"
 msgid "Analytic system integration"
 msgstr "Integración con sistemas de analíticas"
 
-msgid "Disable Opennemas Google Analytics API key"
-msgstr "Deshabilitar la clave de la API de Google Analytics de Opennemas"
-
 msgid "Google Analytics"
 msgstr "Google Analytics"
 
@@ -5439,6 +5439,12 @@ msgstr ""
 
 msgid "Redirect to frontpage non-migrated contents"
 msgstr "Redirigir a portada contenidos no migrados"
+
+msgid "Disable Opennemas Google Analytics API key"
+msgstr "Deshabilitar la clave de la API de Google Analytics de Opennemas"
+
+msgid "Only AMP"
+msgstr "Only AMP"
 
 msgid "Show full content on RSS"
 msgstr "Mostrar todo el contenido en RSS"
@@ -5975,6 +5981,9 @@ msgstr "Google AMP"
 msgid "Facebook Instant Articles"
 msgstr "Facebook Instant Articles"
 
+msgid "Live post"
+msgstr "Contenido en directo"
+
 msgid "Showcase"
 msgstr "Showcase"
 
@@ -6123,14 +6132,47 @@ msgstr ""
 "Alguna información será ocultada para no-miembros cuando accedan a "
 "contenidos en esta suscripción"
 
+msgid "Live Blog Posting"
+msgstr "Artículo en directo"
+
+msgid "Add update"
+msgstr "Añadir actualización"
+
+msgid "Modified Date"
+msgstr "Fecha de modificación"
+
+msgid "Featured image"
+msgstr "Imagen destacada"
+
+msgid "Select an element"
+msgstr "Selecciona un elemento"
+
+msgid "Caption"
+msgstr "Pie de foto"
+
 msgid "Insert image"
 msgstr "Insertar imagen"
 
 msgid "Insert related"
 msgstr "Insertar relacionado"
 
+msgid "Remove update"
+msgstr "Eliminar actualización"
+
 msgid "No sector"
 msgstr "Sin sector"
+
+msgid "Live blog"
+msgstr "Contenido en directo"
+
+msgid "Enable live blog posting"
+msgstr "Habilitar artículo en directo"
+
+msgid "Coverage start time"
+msgstr "Fecha de inicio de cobertura"
+
+msgid "Coverage end time"
+msgstr "Fecha de fin de cobertura"
 
 msgid "24 hours"
 msgstr "24 horas"
@@ -6180,9 +6222,6 @@ msgstr ""
 "Este contenido sólo estará disponible en el rango de tiempo especificado "
 "arriba."
 
-msgid "Caption"
-msgstr "Pie de foto"
-
 msgid "Allow comments"
 msgstr "Permitir comentarios"
 
@@ -6228,9 +6267,6 @@ msgstr "Nombre del parámetro"
 
 msgid "Parameter value"
 msgstr "Valor de parámetro"
-
-msgid "Select an element"
-msgstr "Selecciona un elemento"
 
 msgid "Attachment"
 msgstr "Adjuntos"
@@ -8109,9 +8145,6 @@ msgstr "eliminarlos"
 #~ "tus preferencias solo con nosotros independientemente del resto de "
 #~ "nuestros partners. Cada propósito tiene una descripción para que puedas "
 #~ "saber como nosotros y nuestros partners utilizamos tus datos"
-
-#~ msgid "Enable all purposes"
-#~ msgstr "Habilitar todo"
 
 #~ msgid "Reject All"
 #~ msgstr "Rechazar todo"

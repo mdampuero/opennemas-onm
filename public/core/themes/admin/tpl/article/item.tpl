@@ -69,6 +69,9 @@
           {include file="ui/component/content-editor/accordion/checkbox.tpl" field="frontpage" title="{t}Suggested for frontpage{/t}"}
         </div>
       </div>
+      {is_module_activated name="es.openhost.module.live_blog_posting"}
+        {include file="ui/component/content-editor/accordion/live-blog-posting.tpl"}
+      {/is_module_activated}
       {is_module_activated name="es.openhost.module.google_news_showcase"}
         {include file="ui/component/content-editor/accordion/google_news_showcase.tpl"}
       {/is_module_activated}
@@ -136,6 +139,9 @@
       {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true contentPicker=true}
     </div>
   </div>
+  {is_module_activated name="es.openhost.module.live_blog_posting"}
+    {include file="ui/component/content-editor/live-blog-update.tpl"}
+  {/is_module_activated}
 {/block}
 
 {block name="modals"}

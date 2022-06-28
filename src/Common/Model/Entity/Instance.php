@@ -138,4 +138,24 @@ class Instance extends Entity
             $this->activated_modules
         );
     }
+
+    /**
+     * Returns the country of the instance.
+     *
+     * @return string The country code of the instance.
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * Returns the name of the instance.
+     *
+     * @return string The name of the instance.
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 }

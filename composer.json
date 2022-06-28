@@ -33,6 +33,7 @@
             "src/Common/Core/Functions/category.php",
             "src/Common/Core/Functions/company.php",
             "src/Common/Core/Functions/content.php",
+            "src/Common/Core/Functions/content_update.php",
             "src/Common/Core/Functions/featured.php",
             "src/Common/Core/Functions/helper.php",
             "src/Common/Core/Functions/obituary.php",

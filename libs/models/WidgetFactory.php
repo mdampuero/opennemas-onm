@@ -330,7 +330,7 @@ class WidgetFactory
 
         $replacements = [
             'category' => 'category_id',
-            'author'   => 'author_id'
+            'author'   => 'fk_author'
         ];
 
         $oql = sprintf(

@@ -153,6 +153,14 @@ class NewsstandController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
+
         $params = array_merge($params, [
             'items'      => $response['items'],
             'pagination' => $this->get('paginator')->get([

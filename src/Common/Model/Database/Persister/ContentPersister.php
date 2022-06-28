@@ -65,6 +65,12 @@ class ContentPersister extends BasePersister
             unset($entity->related_contents);
         }
 
+        $live_blog_updates = [];
+        if (!empty($entity->live_blog_updates)) {
+            $live_blog_updates = $entity->live_blog_updates;
+            unset($entity->live_blog_updates);
+        }
+
         $this->conn->beginTransaction();
 
         try {
@@ -80,6 +86,9 @@ class ContentPersister extends BasePersister
 
             $this->persistRelations($id, $relatedContents);
             $entity->related_contents = $relatedContents;
+
+            $this->persistLiveBlogUpdates($id, $live_blog_updates);
+            $entity->live_blog_updates = $live_blog_updates;
 
             $this->conn->commit();
         } catch (\Throwable $e) {
@@ -105,10 +114,11 @@ class ContentPersister extends BasePersister
             $entity->changed = $entity->starttime;
         }
 
-        $changes    = $entity->getChanges();
-        $categories = $entity->categories;
-        $tags       = $entity->tags;
-        $relations  = $entity->related_contents;
+        $changes           = $entity->getChanges();
+        $categories        = $entity->categories;
+        $tags              = $entity->tags;
+        $relations         = $entity->related_contents;
+        $live_blog_updates = $entity->live_blog_updates;
 
         // Categories change
         if (array_key_exists('categories', $changes)) {
@@ -147,6 +157,11 @@ class ContentPersister extends BasePersister
             }
 
             $entity->relations = $relations;
+            if (array_key_exists('live_blog_updates', $changes)) {
+                $this->persistLiveBlogUpdates($id, $live_blog_updates);
+            }
+
+            $entity->live_blog_updates = $live_blog_updates;
 
             $this->conn->commit();
 
@@ -416,6 +431,94 @@ class ContentPersister extends BasePersister
             ]);
         }
 
+        $this->conn->executeQuery($sql, $params, $types);
+    }
+
+    /**
+     * Persits the content liveBlogUpdates.
+     *
+     * @param integer $id         The entity id.
+     * @param array   $liveBlogUpdates  The list of liveBlogUpdates.
+     */
+    protected function persistLiveBlogUpdates($id, $live_blog_updates)
+    {
+        // Ignore metas with value = null
+        if (!empty($live_blog_updates)) {
+            $live_blog_updates = array_filter($live_blog_updates, function ($relation) {
+                return !is_null($relation);
+            });
+        }
+
+        // Remove old relations
+        $this->removeLiveBlogUpdates($id);
+
+        // Update relations
+        $this->saveLiveBlogUpdates($id, $live_blog_updates);
+    }
+
+    /**
+     * Deletes old LiveBlogUpdates.
+     *
+     * @param array $id   The entity id.
+     */
+    protected function removeLiveBlogUpdates($id)
+    {
+        $sql      = "delete from content_updates where content_id = ?";
+        $params[] = $id['pk_content'];
+        $types[]  = is_string($id['pk_content']) ?
+            \PDO::PARAM_STR : \PDO::PARAM_INT;
+
+        $this->conn->executeQuery($sql, $params, $types);
+    }
+
+    /**
+     * Saves new LiveBlogUpdates.
+     *
+     * @param array $id         The entity id.
+     * @param array $liveBlogUpdates The list of liveBlogUpdates to save.
+     */
+    protected function saveLiveBlogUpdates($id, $live_blog_updates)
+    {
+        if (empty($live_blog_updates)) {
+            return;
+        }
+
+        $sql = "insert into content_updates"
+            . "(content_id, title, body, caption, image_id, created, modified) values "
+            . str_repeat(
+                '(?,?,?,?,?,?,?),',
+                count($live_blog_updates)
+            );
+
+        $id     = array_values($id);
+        $sql    = rtrim($sql, ',');
+        $params = [];
+        $types  = [];
+
+        foreach ($live_blog_updates as $value) {
+            $value['created']  = empty($value['created']) ? gmdate("Y-m-d H:i:s") : $value['created'];
+            $value['modified'] = empty($value['modified']) ? gmdate("Y-m-d H:i:s") : $value['modified'];
+            $value['image_id'] = empty($value['image_id']) ? null : $value['image_id'];
+
+            $params = array_merge($params, array_merge($id, [
+                $value['title'],
+                $value['body'],
+                $value['caption'],
+                $value['image_id'],
+                $value['created'],
+                $value['modified'],
+            ]));
+
+            $types = array_merge($types, [
+                \PDO::PARAM_INT,
+                empty($value['title']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['body']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['caption']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['image_id']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_STR,
+            ]);
+        }
         $this->conn->executeQuery($sql, $params, $types);
     }
 }

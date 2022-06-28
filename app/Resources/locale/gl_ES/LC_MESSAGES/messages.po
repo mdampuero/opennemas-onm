@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 06:22+0000\n"
-"PO-Revision-Date: 2022-06-17 08:42+0200\n"
+"POT-Creation-Date: 2022-06-28 10:50+0000\n"
+"PO-Revision-Date: 2022-06-28 12:57+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1644,6 +1644,9 @@ msgstr "Horario"
 
 msgid "Google News Showcase"
 msgstr "Google News Showcase"
+
+msgid "Live blog post"
+msgstr "Artigo en directo"
 
 msgid "Max sents reached"
 msgstr "Alcanzouse o número máximo de envios"
@@ -5039,9 +5042,6 @@ msgstr "Servizos externos"
 msgid "Analytic system integration"
 msgstr "Integración de sistemas de Analíticas"
 
-msgid "Disable Opennemas Google Analytics API key"
-msgstr "Deshablitar a chave da API de Google Analytics de Opennemas"
-
 msgid "Google Analytics"
 msgstr "Google Analytics"
 
@@ -5416,6 +5416,12 @@ msgstr ""
 
 msgid "Redirect to frontpage non-migrated contents"
 msgstr "Redirixir a portada contidos non migrados"
+
+msgid "Disable Opennemas Google Analytics API key"
+msgstr "Deshablitar a chave da API de Google Analytics de Opennemas"
+
+msgid "Only AMP"
+msgstr "Only AMP"
 
 msgid "Show full content on RSS"
 msgstr "Mostrar todo o contido en RSS"
@@ -5950,6 +5956,9 @@ msgstr "Google AMP"
 msgid "Facebook Instant Articles"
 msgstr "Instance Articles de Facebook"
 
+msgid "Live post"
+msgstr "Artigo en vivo"
+
 msgid "Showcase"
 msgstr "Showcase"
 
@@ -6096,14 +6105,47 @@ msgstr ""
 "Algunha información será ocultada para non-membros cando accedan a contidos  "
 "nesta subscrición"
 
+msgid "Live Blog Posting"
+msgstr "Artigo en directo"
+
+msgid "Add update"
+msgstr "Engadir actualización"
+
+msgid "Modified Date"
+msgstr "Data de modificación"
+
+msgid "Featured image"
+msgstr "Imaxe destacada"
+
+msgid "Select an element"
+msgstr "Selecciona un elemento"
+
+msgid "Caption"
+msgstr "Pe de foto"
+
 msgid "Insert image"
 msgstr "Inserir imaxe"
 
 msgid "Insert related"
 msgstr "Inserir relacionado"
 
+msgid "Remove update"
+msgstr "Eliminar actualización"
+
 msgid "No sector"
 msgstr "Sen sector"
+
+msgid "Live blog"
+msgstr "Artigo en vivo"
+
+msgid "Enable live blog posting"
+msgstr "Habilitar artigo en vivo"
+
+msgid "Coverage start time"
+msgstr "Data de inicio da cobertura"
+
+msgid "Coverage end time"
+msgstr "Data de fin da cobertura"
 
 msgid "24 hours"
 msgstr "24 horas"
@@ -6152,9 +6194,6 @@ msgid "This content will only be available in the time range specified above."
 msgstr ""
 "Este contido só estará dispoñíbel no rango de tempo especificado arriba."
 
-msgid "Caption"
-msgstr "Pe de foto"
-
 msgid "Allow comments"
 msgstr "Permitir comentarios"
 
@@ -6200,9 +6239,6 @@ msgstr "Nome do parámetro"
 
 msgid "Parameter value"
 msgstr "Valor de parámetros"
-
-msgid "Select an element"
-msgstr "Selecciona un elemento"
 
 msgid "Attachment"
 msgstr "Anexos"
@@ -8050,9 +8086,6 @@ msgstr "eliminalos"
 #~ "as túas preferencias só connosco independentemente do resto dos nosos "
 #~ "socios. Cada propósito ten unha descrición para que poidas saber como nós "
 #~ "e os nosos socios utilizamos os teus datos"
-
-#~ msgid "Enable all purposes"
-#~ msgstr "Habilitar todo"
 
 #~ msgid "Reject All"
 #~ msgstr "Rexeitar todo"

@@ -877,16 +877,6 @@
                       <i class="fa fa-pie-chart"></i>
                       {t}Analytic system integration{/t}
                     </h4>
-                    {if $app.security->hasPermission('MASTER')}
-                      <div class="form-group">
-                        <div class="checkbox">
-                          <input class="form-control" id="disable_dga" name="disable_dga" ng-false-value="'0'" ng-model="settings.disable_default_ga" ng-true-value="'1'" type="checkbox"/>
-                          <label class="form-label" for="disable_dga">
-                            {t}Disable Opennemas Google Analytics API key{/t}
-                          </label>
-                        </div>
-                      </div>
-                    {/if}
                     <div class="panel-group" id="panel-group-google-analytics" data-toggle="collapse">
                       <div class="panel panel-default">
                         <div class="panel-heading collapsed">
@@ -1943,6 +1933,30 @@
                               <input {if $configs['redirection'] eq "1"}checked{/if} id="redirection" name="redirection" ng-false-value="0" ng-model="settings.redirection" ng-true-value="'1'" type="checkbox">
                               <label for="redirection">
                                 {t}Redirect to frontpage non-migrated contents{/t}
+                              </label>
+                            </div>
+                          </div>
+                          <h4>
+                            <i class="fa fa-google"></i>
+                            {t}Google Analytics{/t}
+                          </h4>
+                          <div class="form-group">
+                            <div class="checkbox">
+                              <input id="disable_dga" name="disable_dga" ng-false-value="'0'" ng-model="settings.disable_default_ga" ng-true-value="'1'" type="checkbox"/>
+                              <label for="disable_dga">
+                                {t}Disable Opennemas Google Analytics API key{/t}
+                              </label>
+                            </div>
+                          </div>
+                          <h4>
+                            <i class="fa fa-signal"></i>
+                            {t}GFK{/t}
+                          </h4>
+                          <div class="form-group">
+                            <div class="checkbox">
+                              <input id="gfk_only_amp" name="gfk_only_amp" ng-false-value="'0'" ng-model="settings.gfk.only_amp" ng-true-value="'1'" type="checkbox"/>
+                              <label for="gfk_only_amp">
+                                {t}Only AMP{/t}
                               </label>
                             </div>
                           </div>

@@ -265,3 +265,51 @@ function has_title($item) : bool
 {
     return getService('core.helper.content')->hasTitle($item);
 }
+
+/**
+ * Checks if the content is live blog article.
+ *
+ * @param Content $item The item to check.
+ *
+ * @return bool True if the content is live blog article. False otherwise.
+ */
+function is_live_blog($item) : bool
+{
+    return getService('core.helper.content')->isLiveBlog($item);
+}
+
+/**
+ * Checks if the content is live.
+ *
+ * @param Content $item The item to check.
+ *
+ * @return bool True if the content is live. False otherwise.
+ */
+function is_live($item) : bool
+{
+    return getService('core.helper.content')->isLive($item);
+}
+
+/**
+ * Return true if content cointains live updates, false otherwise.
+ *
+ * @param Content $item The item to check.
+ *
+ * @return bool True if updates are present, false otherwise.
+ */
+function has_live_updates($item) : string
+{
+    return getService('core.helper.content')->hasLiveUpdates($item);
+}
+
+/**
+ * Return Last update date if live blog article
+ *
+ * @param Content $item The item to check.
+ *
+ * @return string The last live update date
+ */
+function get_last_live_update_date($item) : ?string
+{
+    return getService('core.helper.content')->getLastLiveUpdate($item);
+}
