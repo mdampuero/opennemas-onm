@@ -16,7 +16,6 @@ class ObituaryCacheHelper extends ContentCacheHelper
         'content_type_name-widget-{{content_type_name}}' .
         '.*tag-widget-({{tags}}|all)' .
         '.*author-widget-({{fk_author}}|all)',
-        'rss-author-{{fk_author}}',
         'tag-{{tags}}',
         'header-date',
     ];

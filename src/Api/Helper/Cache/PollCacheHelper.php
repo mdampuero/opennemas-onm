@@ -20,7 +20,6 @@ class PollCacheHelper extends ContentCacheHelper
         '.*tag-widget-({{tags}}|all)' .
         '.*author-widget-({{fk_author}}|all)',
         'last-suggested-{{categories}}',
-        'rss-author-{{fk_author}}',
         'sitemap',
         'tag-{{tags}}',
         'header-date',
