@@ -12,14 +12,13 @@ class NewsstandCacheHelper extends ContentCacheHelper
     protected $varnishKeys = [
         'archive-page-{{starttime}}',
         'category-{{categories}}',
-        'newsstand-frontpage$',
-        'newsstand-frontpage,category-newsstand-{{categories}}',
-        'newsstand-{{pk_content}}',
-        'content_type_name-widget-newsstand' .
-        '.*category-widget-({{categories}}|all)' .
         'last-suggested-{{categories}}',
-        'sitemap',
         'header-date',
+        '{{content_type_name}}-frontpage$',
+        '{{content_type_name}}-frontpage-{{date}}',
+        '{{content_type_name}}-{{pk_content}}',
+        'content_type_name-widget-{{content_type_name}}' .
+        '.*category-widget-({{categories}}|all)'
     ];
 
     /**
