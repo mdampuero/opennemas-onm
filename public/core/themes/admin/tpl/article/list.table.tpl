@@ -13,6 +13,14 @@
       {t}Featured in inner{/t}
     </label>
   </div>
+  {is_module_activated name="es.openhost.module.live_blog_posting"}
+    <div class="checkbox column-filters-checkbox">
+      <input id="checkbox-live-blog-posting" checklist-model="app.columns.selected" checklist-value="'live_blog_posting'" type="checkbox">
+      <label for="checkbox-live-blog-posting">
+        {t}Live post{/t}
+      </label>
+    </div>
+  {/is_module_activated}
   {is_module_activated name="es.openhost.module.google_news_showcase"}
     <div class="checkbox column-filters-checkbox">
       <input id="checkbox-google-news-showcase" checklist-model="app.columns.selected" checklist-value="'google_news_showcase'" type="checkbox">
@@ -30,6 +38,11 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('featured_inner')" width="120">
     {t}Inner{/t}
   </th>
+  {is_module_activated name="es.openhost.module.live_blog_posting"}
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('live_blog_posting')" width="80">
+      {t}Live post{/t}
+    </th>
+  {/is_module_activated}
   {is_module_activated name="es.openhost.module.google_news_showcase"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('google_news_showcase')" width="120">
       {t}Showcase{/t}
@@ -52,6 +65,11 @@
       </div>
     </dynamic-image>
   </td>
+  {is_module_activated name="es.openhost.module.live_blog_posting"}
+    <td class="text-center v-align-middle" ng-if="isColumnEnabled('live_blog_posting')">
+      <i class="fa fa-podcast fa-2x" ng-if="item.live_blog_posting"></i>
+    </td>
+  {/is_module_activated}
   {is_module_activated name="es.openhost.module.google_news_showcase"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('google_news_showcase')">
       <i class="fa fa-google fa-2x" ng-if="item.showcase"></i>

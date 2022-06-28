@@ -354,8 +354,13 @@
             autoscaleClass = ' autoscale';
           }
 
-          if (options.ngModel && options.reescale && options.reescale === 'true') {
-            autoscale      = 'ng-style="{ \'height\': height, \'width\': width }"';
+          if (options.ngModel && options.reescale === 'auto') {
+            autoscale      = 'ng-style="{ \'height\': height, \'max-width\': \'100%\' }"';
+            autoscaleClass = ' autoscale';
+          }
+
+          if (options.ngModel && options.reescale === 'true') {
+            autoscale      = 'ng-style="{ \'height\': height, \'width\': width, \'max-width\': \'100%\' }"';
             autoscaleClass = ' autoscale';
           }
 
@@ -472,7 +477,7 @@
             // Add watcher to update src when scope changes
             $scope.$watch('ngModel', function(nv) {
               $q.when(DynamicImage.getItem(nv, attrs.type), function(item) {
-                if (attrs.reescale === 'true') {
+                if (attrs.reescale) {
                   $scope.height = item.height;
                   $scope.width  = item.width;
 
@@ -480,7 +485,7 @@
                     var ratio = 354 / item.width;
 
                     $scope.height = item.height * ratio;
-                    $scope.width  = item.width * ratio;
+                    $scope.width  = attrs.reescale === 'auto' ? null : item.width * ratio;
                   }
                 }
 

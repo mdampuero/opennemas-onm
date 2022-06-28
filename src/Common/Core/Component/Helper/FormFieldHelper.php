@@ -221,6 +221,11 @@ class FormFieldHelper
                 'title' => _('Google News Showcase'),
                 'available' => [ 'article' ]
             ],
+            [
+                'name' => 'live_blog_posting',
+                'title' => _('Live blog post'),
+                'available' => [ 'article' ]
+            ]
         ];
         return $this;
     }

@@ -54,6 +54,11 @@ services:
         arguments: [ '@service_container', '@orm.manager', '@entity_repository' ]
         public:    true
 
+    core.helper.content_update:
+        class:     Common\Core\Component\Helper\ContentUpdateHelper
+        arguments: [ '@service_container']
+        public:    true
+
     core.helper.csv:
         class:     Common\Core\Component\Helper\CsvHelper
         public:    true
