@@ -11,7 +11,6 @@ class OpinionCacheHelper extends ContentCacheHelper
         'opinion-author-{{fk_author}}-frontpage',
         'archive-page-{{starttime}}',
         'authors-frontpage',
-        'category-{{categories}}',
         'content-author-{{fk_author}}-frontpage',
         '{{content_type_name}}-frontpage$',
         '{{content_type_name}}-{{pk_content}}',
@@ -23,6 +22,5 @@ class OpinionCacheHelper extends ContentCacheHelper
         'sitemap',
         'tag-{{tags}}',
         'header-date',
-
     ];
 }
