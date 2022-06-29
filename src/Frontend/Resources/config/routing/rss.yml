@@ -34,17 +34,21 @@ frontend_rss:
     path:     /rss
     defaults: { _controller: FrontendBundle:Rss:generalRss }
 
+frontend_rss_most_viewed:
+    path:     /rss/most-viewed
+    defaults: { _controller: FrontendBundle:Rss:mostViewedRss }
+
 frontend_rss_type:
     path:     /rss/{type}
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     requirements:
-        type: '(album|opinion|video)'
+        type: '(album|opinion|video|event|poll|obituary)'
 
 frontend_rss_type_category:
     path:     /rss/{type}/{category}
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     requirements:
-        type:     '(album|opinion|video)'
+        type:     '(album|video|event|poll)'
         category: '[^/]*'
 
 frontend_rss_category:

@@ -140,10 +140,13 @@ class RssController extends FrontendController
         $type   = $request->query->filter('type', 'article', FILTER_SANITIZE_STRING);
         $xtags  = 'rss-' . $type;
         $titles = [
-            'album'   => _('Latest Albums'),
-            'article' => _('Latest News'),
-            'opinion' => _('Latest Opinions'),
-            'video'   => _('Latest Videos'),
+            'album'    => _('Latest Albums'),
+            'article'  => _('Latest News'),
+            'opinion'  => _('Latest Opinions'),
+            'video'    => _('Latest Videos'),
+            'poll'     => _('Latest Polls'),
+            'event'    => _('Latest Events'),
+            'obituary' => _('Latest Obituaries'),
         ];
 
         // Setup templating cache layer
@@ -187,6 +190,58 @@ class RssController extends FrontendController
                 ->get('elements_in_rss', 10);
 
             $contents = $this->getLatestContents($type, $id, $total);
+            $this->getRelatedContents($contents);
+
+            $this->view->assign([
+                'contents'  => $contents,
+                'rss_title' => $rssTitle,
+                'type'      => $type
+            ]);
+        }
+
+        $response = $this->render('rss/rss.tpl', [
+            'cache_id'    => $cacheID,
+            'x-cacheable' => true,
+            'x-cache-for' => $expire,
+            'x-tags'      => $xtags
+        ]);
+
+        $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
+
+        return $response;
+    }
+
+    /**
+     * Displays the RSS feed for most viewed articles.
+     *
+     * @return Response The response object.
+     */
+    public function mostViewedRssAction()
+    {
+        $id     = null;
+        $type   = 'article';
+        $xtags  = 'rss-' . $type;
+
+        // Setup templating cache layer
+        $this->view->setConfig('rss');
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+        $this->setViewExpireDate($expire);
+
+        $rssTitle = _('Most viewed');
+
+        $cacheID = empty($id) ?
+            $this->view->getCacheId('rss', $type, '') :
+            $this->view->getCacheId('rss', $type, $id);
+
+        if (($this->view->getCaching() === 0)
+           || (!$this->view->isCached('rss/rss.tpl', $cacheID))
+        ) {
+            $total = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('elements_in_rss', 10);
+
+            $contents = $this->getMostViewedContents($type, $id, $total);
 
             $this->getRelatedContents($contents);
 
@@ -440,7 +495,7 @@ class RssController extends FrontendController
         // Fix condition for IN operator when no categories
         $ids = empty($ids) ? [ '' ] : $ids;
 
-        if ($contentType !== 'opinion') {
+        if (!in_array($contentType, ['opinion', 'obituary'])) {
             $filters['category_id'] = [
                 [ 'value' => $ids, 'operator' => 'IN' ]
             ];
@@ -448,6 +503,98 @@ class RssController extends FrontendController
             if (!empty($category)) {
                 $filters['category_id'] = [ [ 'value' => $category ] ];
             }
+        }
+
+        if ($contentType == 'event') {
+            $filters['join']  = [
+                [
+                    'table'               => 'contentmeta',
+                    'type'                => 'inner',
+                    'contents.pk_content' => [
+                        [
+                            'value' => 'contentmeta.fk_content',
+                            'field' => true
+                        ]
+                    ]
+                ]
+            ];
+            $filters['contentmeta.meta_name'] = [
+                [ 'value' => 'event_end_date', 'operator' => '=' ]
+            ];
+            $filters['contentmeta.meta_value'] = [
+                [ 'value' => gmdate('Y-m-d'), 'operator' => '>=' ]
+            ];
+        }
+
+        $contents = $em->findBy($filters, $order, $total, 1);
+        $cm       = new \ContentManager();
+        $contents = $cm->filterBlocked($contents);
+
+        return $contents;
+    }
+
+    /**
+     * Get latest contents given a type of content.
+     *
+     * @param string  $contentType The content type name of the contents.
+     * @param integer $category    The category id.
+     * @param integer $total       The total number of contents.
+     *
+     * @return Array Latest contents.
+     */
+    public function getMostViewedContents($contentType = 'article', $category = null, $total = 10)
+    {
+        $em = $this->get('entity_repository');
+
+        $startDate = gmdate('Y-m-d H:i:s', strtotime('- 3 days'));
+
+        $order   = [ 'views' => 'DESC' ];
+        $filters = [
+            'join' => [
+                [
+                    'table'               => 'content_views',
+                    'type'                => 'inner',
+                    'contents.pk_content' => [
+                        [
+                            'value' => 'content_views.pk_fk_content',
+                            'field' => true
+                        ]
+                    ]
+                ]
+            ],
+            'content_type_name' => [[ 'value' => $contentType ]],
+            'content_status'    => [[ 'value' => 1 ]],
+            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+            'created'           => [[ 'value' => $startDate, 'operator' => '>=' ]],
+            'starttime'         => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
+            ],
+            'endtime'           => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
+        ];
+
+        // Get categories with enabled = 1 and rss = 1
+        $categories = $this->get('api.service.category')
+            ->getList('enabled = 1 and rss = 1');
+
+        $ids = array_map(function ($a) {
+            return $a->id;
+        }, $categories['items']);
+
+        // Fix condition for IN operator when no categories
+        $ids = empty($ids) ? [ '' ] : $ids;
+
+        $filters['category_id'] = [
+            [ 'value' => $ids, 'operator' => 'IN' ]
+        ];
+
+        if (!empty($category)) {
+            $filters['category_id'] = [ [ 'value' => $category ] ];
         }
 
         $contents = $em->findBy($filters, $order, $total, 1);
