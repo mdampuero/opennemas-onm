@@ -57,12 +57,12 @@ class AuthorController extends Controller
                 'starttime'       => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
                 ],
                 'endtime'         => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
                 ]
             ];
 
@@ -93,7 +93,7 @@ class AuthorController extends Controller
 
         return $this->render('user/author_frontpage.tpl', [
             'cache_id'    => $cacheID,
-            'x-tags'      => 'author-user-frontpage,' . $slug . ',' . $page,
+            'x-tags'      => sprintf('content-author-%d-frontpage', $user->id),
             'x-cacheable' => true,
         ]);
     }
@@ -218,7 +218,7 @@ class AuthorController extends Controller
 
         return $this->render('user/frontpage_authors.tpl', [
             'cache_id'    => $cacheID,
-            'x-tags'      => 'authors-users-frontpage,' . $page,
+            'x-tags'      => 'authors-frontpage',
             'x-cacheable' => true,
         ]);
     }

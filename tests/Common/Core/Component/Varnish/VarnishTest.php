@@ -10,6 +10,7 @@
 namespace Tests\Common\Core\Component\Varnish;
 
 use Common\Core\Component\Varnish\Varnish;
+use GuzzleHttp\Exception\TransferException;
 
 /**
  * Defines test cases for Varnish class.
@@ -27,7 +28,7 @@ class VarnishTest extends \PHPUnit\Framework\TestCase
 
         $this->logger = $this->getMockBuilder('Symfony\Bridge\Monolog\Logger')
             ->disableOriginalConstructor()
-            ->setMethods([ 'info' ])
+            ->setMethods([ 'info', 'error' ])
             ->getMock();
 
         $this->varnish = new Varnish($this->logger, [
@@ -66,6 +67,34 @@ class VarnishTest extends \PHPUnit\Framework\TestCase
             ->willReturn($response);
 
         $this->logger->expects($this->exactly(2))->method('info');
+
+        $this->varnish->ban('obj.http.x-tags ~ garply');
+    }
+
+    /**
+     * Tests ban when the request to the server throws an exception.
+     */
+    public function testBanWhenException()
+    {
+        $response = $this->getMockBuilder('GuzzleHttp\Response')
+            ->setMethods([ 'getReasonPhrase', 'getStatusCode' ])
+            ->getMock();
+
+        $this->client->expects($this->at(0))->method('request')
+            ->with('BAN', 'http://garply:80')
+            ->will($this->throwException(new TransferException()));
+
+        $this->client->expects($this->at(1))->method('request')
+            ->with('BAN', 'http://qux:30253')
+            ->willReturn($response);
+
+        $response->expects($this->any())->method('getStatusCode')
+            ->willReturn(200);
+
+        $response->expects($this->any())->method('getReasonPhrase')
+            ->willReturn('mumble');
+
+        $this->logger->expects($this->once())->method('error');
 
         $this->varnish->ban('obj.http.x-tags ~ garply');
     }

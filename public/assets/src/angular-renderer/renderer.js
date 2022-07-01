@@ -47,7 +47,7 @@
          */
         this.template = '<li>' +
           '[figure]' +
-          '<div class="article-data"><a href="[url]">[title]</a></div>' +
+          '<div class="article-data"><a href="[url]" [target]>[title]</a></div>' +
           '</li>';
 
         /**
@@ -78,7 +78,7 @@
           var html  = '<figure class="image"><img[align] width="[width]" height="[height]" src="' + instanceMedia + image.path + '"[alt]><figcaption>[caption]</figcaption></figure>';
 
           if (image.description) {
-            alt = ' alt="' + image.description + '"';
+            alt = ' alt="' + image.description.replace(/"/g, '&quot;') + '"';
           }
 
           if (align) {
@@ -140,11 +140,15 @@
           var html = this.template.replace('[title]', item.title);
 
           if (item.content_type_name === 'attachment') {
-            html = html.replace('[url]', instanceMedia + item.path.substr(1));
+            html = html.replace('[url]', instanceMedia + 'files/' + item.path.substr(1));
+            html = html.replace('[target]', 'target="_blank"');
             html = html.replace('[figure]', '');
 
             return html;
           }
+
+          // Replace target to empty
+          html = html.replace('[target]', '');
 
           var category = !item.categories ? {} : extra.categories.filter(function(category) {
             return category.id === item.categories[0];

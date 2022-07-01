@@ -14,10 +14,6 @@ backend_ws_getting_started:
     resource: '@BackendWebServiceBundle/Resources/config/routing/getting_started.yml'
     prefix:   /
 
-backend_ws_menus:
-    resource: '@BackendWebServiceBundle/Resources/config/routing/menus.yml'
-    prefix:   /
-
 backend_ws_picker:
     resource: '@BackendWebServiceBundle/Resources/config/routing/picker.yml'
     prefix:   /

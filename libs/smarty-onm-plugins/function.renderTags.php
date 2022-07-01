@@ -15,17 +15,45 @@ function smarty_function_renderTags($params, &$smarty)
         return '';
     }
 
-    $content   = $params['content'];
-    $ids       = !empty($content->tags) ? $content->tags : [];
+    $exclude_types = [ 'letter' ];
+    $content       = $params['content'];
+
+    if (empty($content->tags)) {
+        return '';
+    }
+
+    $ids       = $content->tags;
     $separator = !array_key_exists('separator', $params) ? ', ' : $params['separator'];
     $output    = '';
 
     try {
-        $tags = $smarty->getContainer()->get('api.service.tag')->getListByIds($ids)['items'];
+        $multilanguage = $smarty->getContainer()->get('core.instance')->hasMultilanguage();
 
-        if (array_key_exists('limit', $params)) {
-            $tags = array_slice($tags, 0, $params['limit']);
+        $locale = $multilanguage
+            && !in_array($content->content_type_name, $exclude_types)
+            ? $smarty->getContainer()->get('core.locale')->getRequestLocale()
+            : null;
+
+        $oql = sprintf(
+            'id in [%s]',
+            implode(',', $ids)
+        );
+
+        if ($multilanguage) {
+            $oql .= sprintf(
+                ' and (locale is null or locale = \'%s\')',
+                $locale
+            );
         }
+
+        if (array_key_exists('limit', $params) && !empty($params['limit'])) {
+            $oql .= sprintf(
+                ' limit %s',
+                $params['limit']
+            );
+        }
+
+        $tags = $smarty->getContainer()->get('api.service.tag')->getList($oql)['items'];
     } catch (GetListException $e) {
         return '';
     }

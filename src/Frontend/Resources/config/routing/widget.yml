@@ -6,3 +6,7 @@ frontend_widget_execute:
         id:     '[0-9]+'
     options:
         subdirectory: true
+
+frontend_widget_render:
+    path:     /widget/render
+    defaults: { _controller: FrontendBundle:Widget:render }

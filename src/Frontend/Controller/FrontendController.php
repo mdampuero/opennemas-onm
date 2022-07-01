@@ -11,6 +11,7 @@ namespace Frontend\Controller;
 
 use Api\Exception\ApiException;
 use Common\Core\Controller\Controller;
+use Common\Model\Entity\Content;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -30,7 +31,7 @@ class FrontendController extends Controller
      * {@inheritdoc}
      */
     protected $params = [
-        'x-cache-for' => '+1 day',
+        'x-cache-for' => '100d',
         'x-cacheable' => true
     ];
 
@@ -71,7 +72,7 @@ class FrontendController extends Controller
         $this->checkSecurity($this->extension);
 
         $action = $this->get('core.globals')->getAction();
-        $params = $this->getQueryParameters($action, $request->query->all());
+        $params = $request->query->all();
 
         $expected = $this->getExpectedUri($action, $params);
 
@@ -155,6 +156,10 @@ class FrontendController extends Controller
 
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
+
+        if (!empty($item->hideamp)) {
+            throw new ResourceNotFoundException();
+        }
 
         $expected = $this->getExpectedUri($action, [ 'item' => $item, '_format' => 'amp' ]);
 
@@ -430,11 +435,15 @@ class FrontendController extends Controller
                     || $request->hasPreviousSession()
                     && empty($request->getSession()->getFlashBag()->peekAll()));
 
-            $params['x-tags'][] = sprintf(
-                '%s-%s',
-                $this->get('core.globals')->getExtension(),
-                $item->id
-            );
+            if ($item instanceof Content) {
+                $params['x-tags'][] = $this->get('api.helper.cache.content')->getXTags($item);
+            } else {
+                $params['x-tags'][] = sprintf(
+                    '%s-%s',
+                    $this->get('core.globals')->getExtension(),
+                    $item->id
+                );
+            }
 
             // Ensure that all templates are using params['content'] and
             // then remove the line below
@@ -460,23 +469,6 @@ class FrontendController extends Controller
             'o_canonical' => $this->getCanonicalUrl($action, $params),
             'x-tags'      => implode(',', $params['x-tags'])
         ]);
-    }
-
-    /**
-     * Returns the list of valid query parameters from the request for the
-     * provided action.
-     *
-     * @param string $action The action name.
-     * @param array  $params The list of parameters.
-     *
-     * @return array The list of valid parameters.
-     */
-    protected function getQueryParameters(string $action, array $params)
-    {
-        return array_merge(
-            $this->getKnownParameters($action, $params),
-            $this->getUnknownParameters($action, $params)
-        );
     }
 
     /**
@@ -551,11 +543,17 @@ class FrontendController extends Controller
             ->get([ 'cookies', 'cmp_amp', 'cmp_type', 'cmp_id', 'site_color' ]);
 
         // Get menu
-        $mm      = $this->container->get('menu_repository');
-        $ampMenu = $mm->findOneBy([ 'name' => [[ 'value' => 'amp' ]] ], null, 1, 1);
-        $ampMenu = !empty($ampMenu)
-            ? $ampMenu
-            : $mm->findOneBy([ 'name' => [[ 'value' => 'frontpage' ]] ], null, 1, 1);
+        $menuService = $this->container->get('api.service.menu');
+
+        try {
+            $ampMenu = $menuService->getItemBy(' name = "amp" ');
+        } catch (\Api\Exception\GetItemException $e) {
+            try {
+                $ampMenu = $menuService->getItemBy(' name = "frontpage" ');
+            } catch (\Exception $e) {
+                $ampMenu = [];
+            }
+        }
 
         if (!empty($ampMenu)) {
             $this->view->assign('menu', $ampMenu->name);
@@ -631,21 +629,6 @@ class FrontendController extends Controller
         }
 
         return $params;
-    }
-
-    /**
-     * Parses and returns the list of unknown parameters for the action.
-     *
-     * @param string $action The action to get unknown parameters for.
-     * @param array  $params The list of query parameters.
-     *
-     * @return array The list of unknown parameters for the action.
-     */
-    protected function getUnknownParameters($action, $params)
-    {
-        return array_key_exists($action, $this->queries)
-            ? array_diff_key($params, array_flip($this->queries[$action]))
-            : $params;
     }
 
     /**

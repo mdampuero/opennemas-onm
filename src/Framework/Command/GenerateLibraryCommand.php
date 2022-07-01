@@ -62,8 +62,8 @@ EOF
 
         $menu = $this->generateMenu();
 
-        if (empty($menu->items)) {
-            $input->writeln("There are no frontpages. You must define archive menu.");
+        if (empty($menu->menu_items)) {
+            $output->writeln("There are no frontpages. You must define archive menu.");
 
             return;
         }
@@ -73,7 +73,7 @@ EOF
         // multi handle
         $mh = curl_multi_init();
 
-        foreach ($menu->items as $item) {
+        foreach ($menu->menu_items as $item) {
             $category_slug = $item->link;
 
             if (!empty($category_slug)) {
@@ -101,7 +101,7 @@ EOF
         $pattern     = [];
         $replacement = [];
 
-        foreach ($menu->items as $item) {
+        foreach ($menu->menu_items as $item) {
             $category  = $item->link;
             $pattern[] = "@href=\"/seccion/{$category}\"@";
             //archive/digital/2013/02/02/home.html
@@ -136,41 +136,41 @@ EOF
      */
     public function generateMenu()
     {
-        $menu = new \Menu();
+        $menu = new \stdClass();
 
-        $menu->name  = 'archive';
-        $menu->items = [];
+        $menu->name       = 'archive';
+        $menu->menu_items = [];
 
         $item       = new \stdClass();
         $item->link = 'home';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'cronicas';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'galicia';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'galicia-exporta';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'castillaleon';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'asturias';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'canarias';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'andalucia';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'cantabria';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
         $item       = new \stdClass();
         $item->link = 'paisvasco';
-        array_push($menu->items, $item);
+        array_push($menu->menu_items, $item);
 
         return $menu;
     }

@@ -107,7 +107,7 @@ class EventController extends FrontendController
      */
     protected function hydrateList(array &$params = []) : void
     {
-        $date = date('Y-m-d H:i:s');
+        $date = gmdate('Y-m-d H:i:s');
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
@@ -151,6 +151,8 @@ class EventController extends FrontendController
 
             $params['x-cache-for'] = $expire;
         }
+
+        $params['x-tags'] .= ',event-frontpage';
 
         $params['contents']   = $response['items'];
         $params['pagination'] = $this->get('paginator')->get([

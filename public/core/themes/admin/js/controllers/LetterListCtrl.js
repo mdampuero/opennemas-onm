@@ -89,6 +89,13 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.hasMultilanguage = function() {
+          return false;
+        };
+
+        /**
          *
          * @function getFrontendUrl
          * @memberOf LetterCtrl

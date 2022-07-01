@@ -137,7 +137,7 @@ class SitemapController extends Controller
         if (!$this->isCached('authors', $cacheId)) {
             try {
                 $authors = $this->get('api.service.author')->getList(
-                    'activated = 1'
+                    'inrss = 1'
                 )['items'];
             } catch (GetListException $e) {
             }
@@ -168,12 +168,12 @@ class SitemapController extends Controller
                 'endtime'           => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
                 ],
                 'starttime'         => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
                 ],
                 'changed' => [
                     [

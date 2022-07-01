@@ -587,14 +587,16 @@
          * @param  Object args  The event arguments.
          */
         $rootScope.$on('MediaPicker.insert', function(event, args) {
-          if (/editor.*/.test(args.target)) {
-            var target = args.target.replace('editor.', '');
+          var target = args.dynamic ? args.dynamic : args.target;
+
+          if (/editor.*/.test(target)) {
+            target = target.replace('editor.', '');
 
             $scope.insertInCKEditor(target, args.items);
             return;
           }
 
-          $scope.insertInModel(args.target, args.items);
+          $scope.insertInModel(target, args.items);
         });
 
         /**
@@ -604,14 +606,16 @@
          * @param  Object args  The event arguments.
          */
         $rootScope.$on('ContentPicker.insert', function(event, args) {
-          if (/editor.*/.test(args.target)) {
-            var target = args.target.replace('editor.', '');
+          var target = args.dynamic ? args.dynamic : args.target;
+
+          if (/editor.*/.test(target)) {
+            target = target.replace('editor.', '');
 
             $scope.insertInCKEditor(target, args.items, $scope.data.extra);
             return;
           }
 
-          $scope.insertInModel(args.target, args.items);
+          $scope.insertInModel(target, args.items);
         });
 
         // Updates linkers when locale changes

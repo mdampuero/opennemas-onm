@@ -79,7 +79,7 @@ class ObituaryController extends FrontendController
      */
     protected function hydrateList(array &$params = []) : void
     {
-        $date = date('Y-m-d H:i:s');
+        $date = gmdate('Y-m-d H:i:s');
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
@@ -115,6 +115,16 @@ class ObituaryController extends FrontendController
         if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
+
+        $params['x-tags'] .= ',obituary-frontpage';
 
         $params = array_merge($params, [
             'obituaries'    => $response['items'],

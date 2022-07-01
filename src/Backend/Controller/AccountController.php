@@ -36,10 +36,21 @@ class AccountController extends Controller
                 ->find($id);
         }
 
+        $nws = $this->get('api.service.newsletter');
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get(['last_invoice']);
+
+        $lastInvoice = new \DateTime($settings['last_invoice']);
+        $total       = $nws->getSentNewslettersSinceLastInvoice($lastInvoice);
+
         return $this->render('account/account.tpl', [
-            'client'    => $client,
-            'countries' => $countries,
-            'instance'  => $instance
+            'client'      => $client,
+            'countries'   => $countries,
+            'instance'    => $instance,
+            'lastInvoice' => $lastInvoice->format(_('Y-m-d')),
+            'total'       => $total
         ]);
     }
 }

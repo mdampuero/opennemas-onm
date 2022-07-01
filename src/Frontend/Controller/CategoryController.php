@@ -65,7 +65,7 @@ class CategoryController extends FrontendController
     {
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
-        $params = $this->getQueryParameters($action, $request->query->all());
+        $params = $request->query->all();
 
         // Fix category_slug from query basing on item
         $params['category_slug'] = $item->name;
@@ -144,7 +144,7 @@ class CategoryController extends FrontendController
 
         return $this->render('blog/blog.tpl', [
             'cache_id'    => $cacheId,
-            'x-cache-for' => '+3 hour',
+            'x-cache-for' => '3h',
             'x-cacheable' => true,
             'x-tags'      => 'ext-category,' . $slug . ',' . $page
         ]);
@@ -245,8 +245,7 @@ class CategoryController extends FrontendController
             'category'   => $item,
             'time'       => time(),
             'o_category' => $item,
-            'x-tags'     => $this->get('core.globals')->getExtension()
-                . ',' . $item->id,
+            'x-tags'     => $this->get('core.globals')->getExtension() . '-' . $item->id
         ]);
 
         if (!array_key_exists('page', $params)) {

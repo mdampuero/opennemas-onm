@@ -10,6 +10,7 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
+use Doctrine\DBAL\Types\ArrayType;
 
 class ContentController extends ApiController
 {
@@ -38,6 +39,36 @@ class ContentController extends ApiController
             ],
             'related_contents' => $this->getRelatedContents($items),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTags($items = null)
+    {
+        $config = $this->get('core.helper.locale')->getConfiguration();
+        $tags   = parent::getTags($items);
+
+        if (!$config['multilanguage']) {
+            return $tags;
+        }
+
+        $locales = array_keys(
+            $this->get('core.helper.locale')->getConfiguration()['available']
+        );
+
+        $tagsByLocale = [];
+
+        foreach ($locales as $locale) {
+            $tagsByLocale[$locale] = [];
+            foreach ($tags as $tag) {
+                if (empty($tag['locale']) || $tag['locale'] === $locale) {
+                    array_push($tagsByLocale[$locale], $tag);
+                }
+            }
+        }
+
+        return $tagsByLocale;
     }
 
     /**

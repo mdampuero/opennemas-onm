@@ -110,27 +110,37 @@ class Categories
     */
     protected function lists()
     {
-        $menu           = new \Menu();
-        $menuCategories = $menu->getMenu('frontpage');
+        $menuService = $this->container->get('api.service.menu');
 
-        $categories = [];
-        foreach ($menuCategories->items as $key => $value) {
-            if ($value->type != 'category' && $value->type != 'blog-category') {
-                continue;
-            }
+        $oql = ' name = "frontpage" ';
 
-            if (empty($value->submenu)) {
-                $categories[$key] = $value;
-                continue;
-            }
+        try {
+            $menu       = $menuService->getItemBy($oql);
+            $menuHelper = $this->container->get('core.helper.menu');
 
-            foreach ($value->submenu as $subValue) {
-                if ($subValue->type == 'category' || $subValue->type == 'blog-category') {
-                    $categories[$subValue->pk_item] = $subValue;
+            $menuItemsObject = $menuHelper->castToObjectNested($menu->menu_items);
+
+            $categories = [];
+            foreach ($menuItemsObject as $key => $value) {
+                if ($value->type != 'category' && $value->type != 'blog-category') {
+                    continue;
                 }
+
+                if (empty($value->submenu)) {
+                    $categories[$key] = $value;
+                    continue;
+                }
+
+                foreach ($value->submenu as $subValue) {
+                    if ($subValue->type == 'category' || $subValue->type == 'blog-category') {
+                        $categories[$subValue->pk_item] = $subValue;
+                    }
+                }
+                unset($value->submenu);
+                $categories[$key] = $value;
             }
-            unset($value->submenu);
-            $categories[$key] = $value;
+        } catch (\Exception $e) {
+            $categories = [];
         }
 
         return $categories;

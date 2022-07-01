@@ -77,7 +77,7 @@ class AdvertisementController extends Controller
 
             return new Response($content, 200, [
                 'Content-Type' => 'text/plain',
-                'x-cache-for'  => '+100 day',
+                'x-cache-for'  => '100d',
                 'x-cacheable'  => true,
                 'x-tags'       => 'ads,txt',
             ]);
@@ -94,7 +94,7 @@ class AdvertisementController extends Controller
 
         return new Response(trim($content), 200, [
             'Content-Type' => 'text/plain',
-            'x-cache-for'  => '+100 day',
+            'x-cache-for'  => '100d',
             'x-cacheable'  => true,
             'x-tags'       => 'ads,txt',
         ]);

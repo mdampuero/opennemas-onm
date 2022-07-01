@@ -1109,6 +1109,60 @@
                       <i class="fa fa-cog"></i>
                       {t}Internal settings{/t}
                     </h4>
+                    {if $app.security->hasPermission('MASTER')}
+                      <div class="panel-group" data-toggle="collapse" id="panel-group-payments">
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a class="collapsed" data-parent="#panel-group-payments" data-toggle="collapse" href="#payments">
+                                <i class="fa fa-credit-card-alt"></i>
+                                {t}Global Payments{/t}
+                              </a>
+                            </h4>
+                          </div>
+                          <div class="panel-collapse collapse" id="payments">
+                            <div class="panel-body">
+                              <div class="row">
+                                <div class="col-12">
+                                  <div class="form-group">
+                                    <label class="form-label" for="payments-merchant-id">
+                                      {t}Merchant id{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <input class="form-control" id="payments-merchant-id" name="payments-merchant-id" ng-model="settings.payments.merchant_id" type="text">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                  <div class="form-group">
+                                    <label class="form-label" for="payments-shared-secret">
+                                      {t}Shared secret{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <div class="form-group">
+                                        <input class="form-control" id="payments-shared-secret" name="payments-shared-secret" ng-model="settings.payments.shared_secret" type="text">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                  <div class="form-group">
+                                    <label class="form-label" for="payments-amount">
+                                      {t}Amount{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <div class="form-group">
+                                        <input class="form-control" id="payments-amount" name="payments-amount" ng-model="settings.payments.amount" type="text">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {/if}
                     <div class="panel-group" data-toggle="collapse" id="panel-group-recaptcha">
                       <div class="panel panel-default">
                         <div class="panel-heading">
@@ -1847,6 +1901,13 @@
                       <div class="row">
                         <div class="col-md-6">
                           <h4>
+                            <i class="fa fa-newspaper-o"></i>
+                            {t}Maximum elements per frontpage{/t}
+                          </h4>
+                          <div class="controls">
+                            <input class="form-control" id="frontpage_max_items" name="frontpage_max_items" ng-model="settings.frontpage_max_items" type="number" min="10" placeholder="100">
+                          </div>
+                          <h4>
                             <i class="fa fa-android"></i>
                             Robots.txt
                           </h4>
@@ -1875,8 +1936,43 @@
                               </label>
                             </div>
                           </div>
-                        </div>
-                        <div class="form-group" ng-if="extra.theme_skins.length !== 0">
+                          <h4>
+                            <i class="fa fa-google"></i>
+                            {t}Google Analytics{/t}
+                          </h4>
+                          <div class="form-group">
+                            <div class="checkbox">
+                              <input id="disable_dga" name="disable_dga" ng-false-value="'0'" ng-model="settings.disable_default_ga" ng-true-value="'1'" type="checkbox"/>
+                              <label for="disable_dga">
+                                {t}Disable Opennemas Google Analytics API key{/t}
+                              </label>
+                            </div>
+                          </div>
+                          <h4>
+                            <i class="fa fa-signal"></i>
+                            {t}GFK{/t}
+                          </h4>
+                          <div class="form-group">
+                            <div class="checkbox">
+                              <input id="gfk_only_amp" name="gfk_only_amp" ng-false-value="'0'" ng-model="settings.gfk.only_amp" ng-true-value="'1'" type="checkbox"/>
+                              <label for="gfk_only_amp">
+                                {t}Only AMP{/t}
+                              </label>
+                            </div>
+                          </div>
+                          <h4>
+                            <i class="fa fa-rss-square"></i>
+                            {t}RSS{/t}
+                          </h4>
+                          <div class="form-group">
+                            <div class="checkbox">
+                              <input {if $configs['full_rss'] eq "1"}checked{/if} id="full_rss" name="full_rss" ng-false-value="0" ng-model="settings.full_rss" ng-true-value="'1'" type="checkbox">
+                              <label for="full_rss">
+                                {t}Show full content on RSS{/t}
+                              </label>
+                            </div>
+                          </div>
+                          <div ng-if="extra.theme_skins.length !== 0">
                             <label class="form-label" for="theme-style">
                               <h4>
                                 <i class="fa fa-paint-brush"></i>
@@ -1894,6 +1990,7 @@
                               </div>
                             </div>
                           </div>
+                        </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
@@ -1926,19 +2023,6 @@
                             </label>
                             <div class="controls">
                               <textarea class="form-control" id="body-end-script" name="body-end-script" ng-model="settings.body_end_script" rows="6"></textarea>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label class="form-label" for="frontpage_max_items">
-                              {t}Elements per frontpage{/t}
-                            </label>
-                            <span class="help ">
-                                (min. 10)
-                            </span>
-                            <div class="controls">
-                              <input class="form-control" id="frontpage_max_items" name="frontpage_max_items" ng-model="settings.frontpage_max_items" type="number" min="10">
                             </div>
                           </div>
                         </div>

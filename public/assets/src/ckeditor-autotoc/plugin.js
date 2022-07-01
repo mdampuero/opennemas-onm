@@ -42,7 +42,12 @@ CKEDITOR.plugins.add('autotoc', {
             return '';
           }
 
-          var header = element[0].match(/<(h([1-6])(.*id="(.*?)")?)>(.*?)(<\/h\2>)/);
+          var header = element[0].match(/<h(([1-6])[^>]*?(id="(.*?)")?)>(.*?)(<\/h\2>)/);
+
+          if (!header) {
+            return '';
+          }
+
           var title  = header[5] ? header[5] : '';
           var id     = header[4] ? header[4] : slugify(title);
 
@@ -68,11 +73,13 @@ CKEDITOR.plugins.add('autotoc', {
 
         var headers = result.match(/<h[1-6].*>/g);
 
-        for (var i = 0; i < headers.length; i++) {
-          var resultHeader = headers[i].replace(/id="[^"]"/, '')
-            .replace(/<h([0-9])/, '<h$1 id="' + ids[i] + '"');
+        if (headers) {
+          for (var i = 0; i < headers.length; i++) {
+            var resultHeader = headers[i].replace(/id="[^"]"/, '')
+              .replace(/<h([0-9])/, '<h$1 id="' + ids[i] + '"');
 
-          result = result.replace(headers[i], resultHeader);
+            result = result.replace(headers[i], resultHeader);
+          }
         }
 
         editor.setData(result.replace('[toc]', template));

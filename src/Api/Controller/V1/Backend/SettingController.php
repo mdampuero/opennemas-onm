@@ -61,6 +61,7 @@ class SettingController extends Controller
         'facebook',
         'facebook_id',
         'facebook_page',
+        'full_rss',
         'logo_favico',
         'logo_embed',
         'frontpage_max_items',
@@ -87,6 +88,7 @@ class SettingController extends Controller
         'ojd',
         'onm_digest_pass',
         'onm_digest_user',
+        'payments',
         'paypal_mail',
         'pinterest_page',
         'prometeo',
@@ -112,6 +114,7 @@ class SettingController extends Controller
         'webmastertools_google',
         'youtube_page',
         'sitemap',
+        'disable_default_ga'
     ];
 
     /**
@@ -125,9 +128,11 @@ class SettingController extends Controller
         'body_start_script',
         'body_start_script_amp',
         'custom_css_amp',
+        'disable_default_ga',
+        'frontpage_max_items',
+        'full_rss',
         'header_script',
         'header_script_amp',
-        'frontpage_max_items',
         'robots_txt_rules',
         'sitemap'
     ];

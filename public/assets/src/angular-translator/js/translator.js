@@ -154,36 +154,17 @@
           // E = Element, A = Attribute, C = Class, M = Comment
           restrict: 'E',
           scope: {
-            item:    '=',
-            keys:    '=',
-            link:    '@',
-            ngModel: '=',
-            options: '=',
-            text:    '@'
+            item:     '=',
+            keys:     '=',
+            link:     '@',
+            ngModel:  '=',
+            options:  '=',
+            text:     '@',
+            language: '='
           },
           template: function(elem, attrs) {
-            if (attrs.link) {
-              return '<div class="translator btn-group btn-group-sm" ng-if="collapsed || size > max">' +
-                '<button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button">' +
-                  '<i class="fa fa-pencil m-r-5"></i>' +
-                  '{{text}}' +
-                  '<i class="fa fa-angle-down"></i>' +
-                '</button>' +
-                '<ul class="dropdown-menu no-padding" role="menu">' +
-                  '<li ng-repeat="language in languages">' +
-                    '<a href="{{link + \'?locale=\' + language.value}}">' +
-                      '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>' +
-                      '{{language.name}}' +
-                    '</a>' +
-                  '</li>' +
-                '</ul>' +
-              '</div>' +
-              '<div class="translator btn-group btn-group-sm" role="group" ng-if="!collapsed && size <= max">' +
-                '<a class="btn btn-{{language.class}}"' +
-                    ' href="{{link + \'?locale=\' + language.value}}" ng-repeat="language in languages">' +
-                  '<i class="fa {{language.icon}} m-r-5" ng-show="language.icon"></i>{{language.name}}' +
-                '</a>' +
-              '</div>';
+            if (attrs.link && attrs.language) {
+              return '<a class="btn btn-default btn-small" href="{{link}}?locale={{language}}"> <i class="fa fa-pencil m-r-5"></i>{{text}}</a>';
             }
 
             return '<div class="translator btn-group">' +
@@ -209,6 +190,44 @@
             $scope.languages     = {};
             $scope.size          = Object.keys($scope.options.available).length;
 
+            var isTranslated = function(value, main, item) {
+              return angular.isString(item) && value === main || angular.isObject(item) && item[value];
+            };
+
+            var getOptionForArray = function(keys, value, main, item, option) {
+              for (var i = 0; i < keys.length; i++) {
+                if (!item[keys[i]]) {
+                  continue;
+                }
+
+                if (isTranslated(value, main, item[keys[i]])) {
+                  return Object.assign({}, option, { icon: 'fa-pencil', translated: true });
+                }
+              }
+
+              return option;
+            };
+
+            var getOptionForObject = function(keys, value, main, item, option) {
+              for (var key in keys) {
+                if (!item[key]) {
+                  continue;
+                }
+
+                if (!Array.isArray(item[key]) && isTranslated(value, main, item[key][keys[key]])) {
+                  return Object.assign({}, option, { icon: 'fa-pencil', translated: true });
+                }
+
+                for (var i = 0; i < item[key].length; i++) {
+                  if (isTranslated(value, main, item[key][i][keys[key]])) {
+                    return Object.assign({}, option, { icon: 'fa-pencil', translated: true });
+                  }
+                }
+              }
+
+              return option;
+            };
+
             var getOption = function(name, value, main, translators, keys, item) {
               var option = {
                 class: value === main ? 'info' : 'default',
@@ -223,21 +242,13 @@
                   option.icon = 'fa-globe';
                 }
 
-                if (keys) {
-                  for (var i = 0; i < keys.length; i++) {
-                    if (!item[keys[i]]) {
-                      continue;
-                    }
-
-                    if (angular.isString(item[keys[i]]) && value === main ||
-                        angular.isObject(item[keys[i]]) && item[keys[i]][value]) {
-                      option.icon       = 'fa-pencil';
-                      option.translated = true;
-
-                      return option;
-                    }
-                  }
+                if (!keys) {
+                  return option;
                 }
+
+                return Array.isArray(keys) ?
+                  getOptionForArray(keys, value, main, item, option) :
+                  getOptionForObject(keys, value, main, item, option);
               }
 
               return option;

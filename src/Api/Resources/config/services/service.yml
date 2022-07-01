@@ -5,7 +5,7 @@ services:
         public:    true
 
     api.service.article:
-        class:     Api\Service\V1\ContentService
+        class:     Api\Service\V1\ArticleService
         arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
         public:    true
 
@@ -72,6 +72,11 @@ services:
     api.service.letter:
         class:     Api\Service\V1\ContentService
         arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.menu:
+        class:     Api\Service\V1\MenuService
+        arguments: [ '@service_container', 'Common\Model\Entity\Menu' ]
         public:    true
 
     api.service.newsletter:

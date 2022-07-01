@@ -3,16 +3,28 @@ services:
         class:     Api\Helper\Cache\CacheHelper
         arguments: [ '@core.instance', '@task.service.queue' ]
 
-    api.helper.cache.category:
-        class:     Api\Helper\Cache\CategoryCacheHelper
-        arguments: [ '@core.instance', '@task.service.queue' ]
-
     api.helper.cache.content:
         class:     Api\Helper\Cache\ContentCacheHelper
-        arguments: [ '@core.instance', '@task.service.queue' ]
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
 
-    api.helper.cache.newsstand:
+    api.helper.cache.article:
+        class:     Api\Helper\Cache\ArticleCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
+    api.helper.cache.frontpage:
+        class:     Api\Helper\Cache\FrontpageCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance', '@service_container' ]
+
+    api.helper.cache.opinion:
+        class:     Api\Helper\Cache\OpinionCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
+    api.helper.cache.kiosko:
         class:     Api\Helper\Cache\NewsstandCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
+    api.helper.cache.category:
+        class:     Api\Helper\Cache\CategoryCacheHelper
         arguments: [ '@core.instance', '@task.service.queue' ]
 
     api.helper.cache.tag:
@@ -26,3 +38,7 @@ services:
     api.helper.cache.user_group:
         class:     Api\Helper\Cache\UserGroupCacheHelper
         arguments: [ '@core.instance', '@task.service.queue' ]
+
+    api.helper.cache.widget:
+        class:     Api\Helper\Cache\WidgetCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]

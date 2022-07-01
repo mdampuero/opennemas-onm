@@ -103,6 +103,20 @@ class VideoController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $params['x-tags'] .= ',video-frontpage';
+
+        if (!empty($category)) {
+            $params['x-tags'] .= sprintf(',category-video-%d', $category->id);
+        }
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
+
         $params = array_merge($params, [
             'videos'      => $response['items'],
             'total'       => $response['total'],

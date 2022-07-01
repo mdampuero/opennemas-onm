@@ -207,6 +207,14 @@ class UpdateInstanceCommand extends Command
             $instance->comments
         ), true);
 
+        $this->writePad('- Counting emails');
+        $instance->emails = $helper->countEmails($instance);
+        $this->writeStatus('success', 'DONE');
+        $this->writeStatus('info', sprintf(
+            ' (%s)',
+            $instance->emails
+        ), true);
+
         $this->writePad('- Counting active users');
         $instance->users = $helper->countUsers($instance);
         $this->writeStatus('success', 'DONE');
