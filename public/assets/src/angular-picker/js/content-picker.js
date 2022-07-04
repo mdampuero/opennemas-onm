@@ -23,7 +23,8 @@
           restrict: 'A',
           scope: {
             contentPickerIgnore: '@',
-            contentPickerTarget: '='
+            contentPickerTarget: '=',
+            contentPickerDynamicTarget: '@'
           },
           link: function($scope, elm, attrs) {
             /**
@@ -175,6 +176,7 @@
                 uploading: false
               },
               target: attrs.contentPickerTarget,
+              dynamic: attrs.contentPickerDynamicTarget,
               types: {
                 enabled:   [ ],
                 available: [
@@ -485,7 +487,8 @@
             'ContentPicker.insert',
             {
               items: items,
-              target: $scope.picker.target
+              target: $scope.picker.target,
+              dynamic: $scope.picker.dynamic
             }
           );
 

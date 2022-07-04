@@ -699,4 +699,68 @@ class ContentHelper
 
         return true;
     }
+
+     /**
+     * Check if this content have live blog flag enabled
+     *
+     * @return bool
+     */
+    public function isLiveBlog($item)
+    {
+        return !empty($item->live_blog_posting) &&
+            !empty($item->coverage_start_time) &&
+            !empty($item->coverage_end_time) &&
+            !empty($item->live_blog_updates);
+    }
+
+     /**
+     * Check if this content have live blog updates
+     *
+     * @return bool
+     */
+    public function hasLiveUpdates($item)
+    {
+        return !empty($item->live_blog_updates);
+    }
+
+     /**
+     * Return last live update date if live blog article
+     *
+     * @return string
+     */
+    public function getLastLiveUpdate($item)
+    {
+        if (!$this->isLiveBlog($item) || empty($item->live_blog_updates)) {
+            return null;
+        }
+
+        return $item->live_blog_updates[0]['modified'];
+    }
+
+    /**
+     * Check if this content is live or, in others words, if this
+     * content is between coverage start time and end time
+     *
+     * @return bool
+     */
+    public function isLive($item)
+    {
+        if (empty($item->coverage_start_time || $item->coverage_end_time)) {
+            return false;
+        }
+
+        $timezone  = $this->locale->getTimeZone();
+
+        $startTime = (gettype($item->coverage_start_time) == 'object') ?
+            $item->coverage_start_time :
+            new \DateTime($item->coverage_start_time);
+
+        $endTime = (gettype($item->coverage_end_time) == 'object') ?
+            $item->coverage_end_time :
+            new \DateTime($item->coverage_end_time);
+
+        $now = new \DateTime(null, $timezone);
+
+        return $now->getTimeStamp() >= $startTime->getTimeStamp() && $now->getTimeStamp() <= $endTime->getTimeStamp();
+    }
 }

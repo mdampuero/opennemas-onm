@@ -119,10 +119,10 @@ class OrmService implements Service
         try {
             $data = $this->em->getConverter($this->entity)
                 ->objectify($this->parseData($data));
-
             $item = new $this->class($data);
 
             $this->validate($item);
+
             $this->em->persist($item, $this->getOrigin());
 
             $id = $this->em->getMetadata($item)->getId($item);

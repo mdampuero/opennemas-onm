@@ -27,7 +27,6 @@ class ContentService extends OrmService
         return parent::createItem($data);
     }
 
-
     /**
      * {@inheritdoc}
      */

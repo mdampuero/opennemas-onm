@@ -1007,6 +1007,58 @@ content_content:
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+content_updates:
+    columns:
+        content_id:
+            type:    bigint
+            options: { length: 20, unsigned: true }
+        title:
+            type:    text
+            options: { length: 65532, default: null, notnull: false }
+        body:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        content_type_name:
+            type:    string
+            options: { length: 20, default: null }
+        caption:
+            type:    text
+            options: { default: null, length: 65532, notnull: false }
+        image_id:
+            type:    bigint
+            options: { length: 20, unsigned: true }
+        created:
+            type:    datetime
+            options: { default: CURRENT_TIMESTAMP }
+        modified:
+            type:    datetime
+            options: { default: CURRENT_TIMESTAMP }
+    index:
+        -
+            name:    PRIMARY
+            columns: [ content_id, created ]
+            primary: true
+            unique:  false
+            flags:   {}
+        -
+            name:    fk_image_id
+            columns: [ image_id ]
+            primary: false
+            unique:  false
+            flags:   {}
+    foreign_keys:
+        -
+            name:         fk_content_update
+            source_field: [ content_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE }
+        -
+            name:         fk_image_id
+            source_field: [ image_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onDelete: SET NULL }
 settings:
     columns:
         name:
