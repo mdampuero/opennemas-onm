@@ -39,6 +39,10 @@ services:
         class:     Api\Helper\Cache\UserGroupCacheHelper
         arguments: [ '@core.instance', '@task.service.queue' ]
 
+    api.helper.cache.event:
+        class:     Api\Helper\Cache\EventCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
     api.helper.cache.obituary:
         class:     Api\Helper\Cache\ObituaryCacheHelper
         arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
