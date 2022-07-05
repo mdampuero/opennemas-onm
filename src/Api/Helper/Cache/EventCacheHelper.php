@@ -2,16 +2,8 @@
 
 namespace Api\Helper\Cache;
 
-class ArticleCacheHelper extends ContentCacheHelper
+class EventCacheHelper extends ContentCacheHelper
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected $redisKeys = [
-        'suggested_contents_{{content_type_name}}_{{categories}}',
-        'suggested_contents_{{content_type_name}}_{{categories}}_{{pk_content}}'
-    ];
-
     /**
      * {@inheritdoc}
      */
@@ -28,18 +20,8 @@ class ArticleCacheHelper extends ContentCacheHelper
         '.*tag-widget-({{tags}}|all)' .
         '.*author-widget-({{fk_author}}|all)',
         'last-suggested-{{categories}}',
-        'rss-author-{{fk_author}}',
-        'rss-{{content_type_name}}$',
         'sitemap',
         'tag-{{tags}}',
         'header-date',
-    ];
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $varnishModuleKeys = [
-        'es.openhost.module.google_news_showcase' => ['rss-google-news-showcase'],
-        'FIA_MODULE' => ['rss-instant-articles']
     ];
 }

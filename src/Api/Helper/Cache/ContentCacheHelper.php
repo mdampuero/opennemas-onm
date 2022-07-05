@@ -38,25 +38,7 @@ class ContentCacheHelper extends CacheHelper
      *
      * @var array
      */
-    protected $defaultVarnishKeys = [
-        'archive-page-{{starttime}}',
-        'authors-frontpage',
-        'category-{{categories}}',
-        'content-author-{{fk_author}}-frontpage',
-        '{{content_type_name}}-frontpage$',
-        '{{content_type_name}}-frontpage,category-{{content_type_name}}-{{categories}}',
-        '{{content_type_name}}-{{pk_content}}',
-        'content_type_name-widget-{{content_type_name}}' .
-        '.*category-widget-(({{categories}})|(all))' .
-        '.*tag-widget-(({{tags}})|(all))' .
-        '.*author-widget-(({{fk_author}})|(all))',
-        'last-suggested-{{categories}}',
-        'rss-author-{{fk_author}}',
-        'rss-{{content_type_name}}$',
-        'sitemap',
-        'tag-{{tags}}',
-        'header-date',
-    ];
+    protected $defaultVarnishKeys = [];
 
     /**
      * The array of default keys in voted items to remove in varnish.
@@ -175,9 +157,18 @@ class ContentCacheHelper extends CacheHelper
             ]));
         }
 
+        $banRegExpr = '';
         foreach ($keys as $key) {
+            $banRegExpr .= '|(' . $key . ')';
+        }
+
+        if (!empty($banRegExpr)) {
             $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*%s', $this->instance->internal_name, $key)
+                sprintf(
+                    'obj.http.x-tags ~ instance-%s.*%s',
+                    $this->instance->internal_name,
+                    '(' . substr($banRegExpr, 1) . ')'
+                )
             ]));
         }
     }

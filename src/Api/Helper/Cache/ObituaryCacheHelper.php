@@ -2,13 +2,12 @@
 
 namespace Api\Helper\Cache;
 
-class OpinionCacheHelper extends ContentCacheHelper
+class ObituaryCacheHelper extends ContentCacheHelper
 {
     /**
      * {@inheritdoc}
      */
-    protected $varnishKeys = [
-        'opinion-author-{{fk_author}}-frontpage',
+    protected $defaultVarnishKeys = [
         'archive-page-{{starttime}}',
         'authors-frontpage',
         'content-author-{{fk_author}}-frontpage',
@@ -17,9 +16,6 @@ class OpinionCacheHelper extends ContentCacheHelper
         'content_type_name-widget-{{content_type_name}}' .
         '.*tag-widget-({{tags}}|all)' .
         '.*author-widget-({{fk_author}}|all)',
-        'rss-author-{{fk_author}}',
-        'rss-{{content_type_name}}$',
-        'sitemap',
         'tag-{{tags}}',
         'header-date',
     ];

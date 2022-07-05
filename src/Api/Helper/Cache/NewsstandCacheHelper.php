@@ -9,14 +9,16 @@ class NewsstandCacheHelper extends ContentCacheHelper
     /**
      * {@inheritdoc}
      */
-    protected $defaultVarnishKeys = [
-        '{{content_type_name}}-frontpage',
+    protected $varnishKeys = [
+        'archive-page-{{starttime}}',
+        'category-{{categories}}',
+        'last-suggested-{{categories}}',
+        'header-date',
+        '{{content_type_name}}-frontpage$',
         '{{content_type_name}}-frontpage-{{date}}',
         '{{content_type_name}}-{{pk_content}}',
         'content_type_name-widget-{{content_type_name}}' .
-        '.*category-widget-(({{categories}})|(all))' .
-        '.*tag-widget-(({{tags}})|(all))' .
-        '.*author-widget-(({{fk_author}})|(all))',
+        '.*category-widget-({{categories}}|all)'
     ];
 
     /**

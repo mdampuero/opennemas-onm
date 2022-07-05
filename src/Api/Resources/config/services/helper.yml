@@ -39,6 +39,42 @@ services:
         class:     Api\Helper\Cache\UserGroupCacheHelper
         arguments: [ '@core.instance', '@task.service.queue' ]
 
+    api.helper.cache.event:
+        class:     Api\Helper\Cache\EventCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
+    api.helper.cache.obituary:
+        class:     Api\Helper\Cache\ObituaryCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
+    api.helper.cache.photo:
+        class:     Api\Helper\Cache\PhotoCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
+    api.helper.cache.poll:
+        class:     Api\Helper\Cache\PollCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
+    api.helper.cache.static_page:
+        class:     Api\Helper\Cache\StaticPageCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
+    api.helper.cache.video:
+        class:     Api\Helper\Cache\VideoCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
+    api.helper.cache.attachment:
+        class:     Api\Helper\Cache\AttachmentCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
+    api.helper.cache.album:
+        class:     Api\Helper\Cache\AlbumCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
+    api.helper.cache.letter:
+        class:     Api\Helper\Cache\LetterCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
     api.helper.cache.widget:
         class:     Api\Helper\Cache\WidgetCacheHelper
         arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
