@@ -68,9 +68,18 @@ class InstanceLoader
         }
 
         $domain = preg_replace('/\.+$/', '', $domain);
-        $match  = preg_match('@(\/[a-zA-Z]+)\/?@', $uri, $subdirectory);
+        $match  = preg_match('@(\/[a-zA-Z0-9]+)\/?@', $uri, $subdirectory);
 
-        if ($match) {
+        $oql = sprintf(
+            'domains regexp "^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"',
+            $domain,
+            $domain,
+            $domain,
+        );
+
+        $instances = $this->em->getRepository('Instance')->findBy($oql);
+
+        if (count($instances) > 1 && $match) {
             if ($this->cache->exists($domain . $subdirectory[1])) {
                 $this->instance = $this->cache->get($domain . $subdirectory[1]);
 
@@ -81,34 +90,28 @@ class InstanceLoader
                 return $this;
             }
 
-            $oql = sprintf(
-                'domains regexp "^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$" and subdirectory = "%s"',
-                $domain,
-                $domain,
-                $domain,
-                $subdirectory[1]
-            );
+            $params = [ $domain, $subdirectory[1] ];
 
-            try {
-                $this->instance = $this->em->getRepository('Instance')->findOneBy($oql);
+            $instance = array_filter($instances, function ($a) use ($params) {
+                return $this->isValid($a, $params[0]) && $a->isSubdirectory() && $a->getSubdirectory() == $params[1];
+            });
 
-                if (!$this->isValid($this->instance, $domain)) {
-                    throw new \Exception();
-                }
-
-                $this->cache->set($domain . $subdirectory[1], $this->instance);
-
-                return $this;
-            } catch (\Exception $e) {
+            if (empty($instance)) {
+                $instance = array_filter($instances, function ($a) use ($params) {
+                    return $this->isValid($a, $params[0]) && !$a->isSubdirectory();
+                });
             }
+
+            $this->instance = array_pop($instance);
+
+            $this->cache->set($domain, $this->instance);
+
+            return $this;
         }
 
-        $oql = sprintf(
-            'domains regexp "^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"',
-            $domain,
-            $domain,
-            $domain
-        );
+        if (empty($instances)) {
+            throw new \Exception();
+        }
 
         if ($this->cache->exists($domain)) {
             $this->instance = $this->cache->get($domain);
@@ -120,11 +123,7 @@ class InstanceLoader
             return $this;
         }
 
-        $this->instance = $this->em->getRepository('Instance')->findOneBy($oql);
-
-        if (!$this->isValid($this->instance, $domain)) {
-            throw new \Exception();
-        }
+        $this->instance = array_pop($instances);
 
         $this->cache->set($domain, $this->instance);
 
