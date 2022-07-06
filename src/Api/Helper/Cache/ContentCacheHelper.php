@@ -34,13 +34,6 @@ class ContentCacheHelper extends CacheHelper
     protected $redisKeys = [];
 
     /**
-     * The array of default keys to remove in varnish.
-     *
-     * @var array
-     */
-    protected $defaultVarnishKeys = [];
-
-    /**
      * The array of default keys in voted items to remove in varnish.
      *
      * @var array
@@ -85,11 +78,11 @@ class ContentCacheHelper extends CacheHelper
 
         $this->cache->remove($keys);
 
-        $finalVarnishKeys    = array_merge($this->varnishKeys, $this->getModuleKeys());
-        $selectedVarnishKeys = ($vote) ? $this->defaultVoteVarnishKeys : $this->defaultVarnishKeys;
+        $varnishKeys = ($vote) ? $this->defaultVoteVarnishKeys : $this->varnishKeys;
+        $varnishKeys = array_merge($varnishKeys, $this->getModuleKeys());
 
         $this->removeVarnishCache(
-            $this->replaceWildcards($item, array_merge($finalVarnishKeys, $selectedVarnishKeys)),
+            $this->replaceWildcards($item, $varnishKeys),
             $item
         );
 
