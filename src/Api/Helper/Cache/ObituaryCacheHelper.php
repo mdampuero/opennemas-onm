@@ -7,7 +7,7 @@ class ObituaryCacheHelper extends ContentCacheHelper
     /**
      * {@inheritdoc}
      */
-    protected $defaultVarnishKeys = [
+    protected $varnishKeys = [
         'archive-page-{{starttime}}',
         'authors-frontpage',
         'content-author-{{fk_author}}-frontpage',
