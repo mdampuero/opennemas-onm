@@ -45,8 +45,8 @@ orm:
                 position:            integer
                 slug:                l10n_string
                 starttime:           datetime
-                coverage_start_time: datetime
-                coverage_end_time:   datetime
+                coverage_start_time: string
+                coverage_end_time:   string
                 title:               l10n_string
                 urn_source:          string
                 with_comment:        boolean
