@@ -77,7 +77,7 @@
             {t}Size{/t}
           </strong>
           <span class="badge badge-default text-bold">
-            [% item.size %] KB
+            [% item.size | number: 2 %] KB
           </span>
         </span>
         <span class="m-r-30">

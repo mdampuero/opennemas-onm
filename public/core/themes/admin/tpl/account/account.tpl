@@ -74,7 +74,11 @@
                 </div>
                 <div class="widget-stats">
                   <div class="wrapper last">
+                  {if $instance->media_size/1024 >= 1024}
+                    <span class="item-count">{($instance->media_size/1024/1024)|string_format:"%.2f"} GB</span>
+                  {else}
                     <span class="item-count">{($instance->media_size/1024)|string_format:"%.2f"} MB</span>
+                  {/if}
                   </div>
                 </div>
               </div>
