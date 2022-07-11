@@ -21,26 +21,50 @@ class CategorySubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'category.createItem' => [ [ 'onCategoryCreate', 5 ], ],
-            'category.deleteItem' => [ [ 'onCategoryDelete', 5 ], ],
-            'category.deleteList' => [ [ 'onCategoryDelete', 5 ], ],
-            'category.moveItem'   => [ [ 'onCategoryMove',   5 ], ],
-            'category.moveItems'  => [ [ 'onCategoryMove',   5 ], ],
-            'category.patchItem'  => [ [ 'onCategoryUpdate', 5 ], ],
-            'category.patchList'  => [ [ 'onCategoryUpdate', 5 ], ],
-            'category.updateItem' => [ [ 'onCategoryUpdate', 5 ], ]
+            'category.createItem' => [
+                [ 'onCategoryCreate', 5 ],
+                [ 'removeCategoryCache', 5 ],
+            ],
+            'category.deleteItem' => [
+                [ 'onCategoryDelete', 5 ],
+                [ 'removeCategoryCache', 5 ],
+            ],
+            'category.deleteList' => [
+                [ 'onCategoryDelete', 5 ],
+                [ 'removeCategoryCache', 5 ],
+            ],
+            'category.moveItem'   => [
+                [ 'onCategoryMove',   5 ],
+            ],
+            'category.moveItems'  => [
+                [ 'onCategoryMove',   5 ],
+            ],
+            'category.patchItem'  => [
+                [ 'onCategoryUpdate', 5 ],
+                [ 'removeCategoryCache', 5 ],
+            ],
+            'category.patchList'  => [
+                [ 'onCategoryUpdate', 5 ],
+                [ 'removeCategoryCache', 5 ],
+            ],
+            'category.updateItem' => [
+                [ 'onCategoryUpdate', 5 ],
+                [ 'removeCategoryCache', 5 ],
+            ],
         ];
     }
 
     /**
      * Initializes the CategorySubscriber.
      *
+     * @param Container           $container The service container.
      * @param CategoryCacheHelper $helper The helper to remove category-related
      *                                    caches.
      */
-    public function __construct(CategoryCacheHelper $helper)
+    public function __construct($container, CategoryCacheHelper $helper)
     {
-        $this->helper = $helper;
+        $this->container = $container;
+        $this->helper    = $helper;
     }
 
     /**
@@ -114,5 +138,18 @@ class CategorySubscriber implements EventSubscriberInterface
         }
 
         $this->helper->deleteDynamicCss()->deleteInstance();
+    }
+
+    /**
+     * Removes cache for category listing
+     *
+     * @param Event $event The dispatched event.
+     */
+    public function removeCategoryCache(Event $event)
+    {
+        $cache = $this->container->get('cache.connection.instance');
+
+        $cache->remove($cache->getSetMembers('Category_Widget_keys'));
+        $cache->remove('Category_Widget_keys');
     }
 }
