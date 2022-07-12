@@ -138,6 +138,8 @@ class CompanyController extends FrontendController
             [ 'name' => 'other', 'title' => _('Other') ]
         ];
 
+        $params['x-tags'] .= ',company-frontpage';
+
         $params['contents']   = $response['items'];
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
