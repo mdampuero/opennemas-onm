@@ -3,6 +3,7 @@
     'fa-camera': {$iField}.content_type_name == 'album',
     'fa-file-text-o': {$iField}.content_type_name == 'article',
     'fa-paperclip': {$iField}.content_type_name == 'attachment',
+    'fa-building': {$iField}.content_type_name == 'company',
     'fa-calendar': {$iField}.content_type_name == 'event',
     'fa-envelope': {$iField}.content_type_name == 'letter',
     'fa-shield fa-flip-vertical': {$iField}.content_type_name === 'obituary',
@@ -18,6 +19,7 @@
   <span ng-if="{$iField}.content_type_name == 'album'">{t}Album{/t}</span>
   <span ng-if="{$iField}.content_type_name == 'article'">{t}Article{/t}</span>
   <span ng-if="{$iField}.content_type_name == 'attachment'">{t}Attachment{/t}</span>
+  <span ng-if="{$iField}.content_type_name == 'company'">{t}Company{/t}</span>
   <span ng-if="{$iField}.content_type_name == 'event'">{t}Event{/t}</span>
   <span ng-if="{$iField}.content_type_name == 'letter'">{t}Letter{/t}</span>
   <span ng-if="{$iField}.content_type_name == 'obituary'">{t}Obituary{/t}</span>

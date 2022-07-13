@@ -1,7 +1,7 @@
 {extends file="common/extension/item.tpl"}
 
 {block name="metaTitle"}
-  > {t}Albums{/t} >
+  > {t}Companies{/t} >
   {if empty($id)}
     {t}Create{/t}
   {else}
@@ -10,19 +10,16 @@
 {/block}
 
 {block name="ngInit"}
-  ng-controller="AlbumCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id});"
+  ng-controller="CompanyCtrl" ng-init="forcedLocale = '{$locale}'; getItem({$id});"
 {/block}
 
 {block name="icon"}
-  <i class="fa fa-camera m-r-10"></i>
-  <a class="help-icon hidden-xs" href="http://help.opennemas.com/knowledgebase/articles/745938-opennemas-c%C3%B3mo-crear-%C3%A1lbumes-galer%C3%ADas-de-imagene" target="_blank" uib-tooltip="{t}Help{/t}" tooltip-placement="bottom">
-    <i class="fa fa-question"></i>
-  </a>
+  <i class="fa fa-building m-r-10"></i>
 {/block}
 
 {block name="title"}
-  <a class="no-padding" href="{url name=backend_albums_list}">
-    {t}Albums{/t}
+  <a class="no-padding" href="{url name=backend_companies_list}">
+    {t}Companies{/t}
   </a>
 {/block}
 
@@ -38,9 +35,15 @@
         </h5>
       </li>
       <li class="quicklinks">
-        <a class="btn btn-link" ng-click="expansibleSettings()" title="{t 1=_('Album')}Config form: '%1'{/t}">
+        <a class="btn btn-link" ng-click="expansibleSettings()" title="{t 1=_('Company')}Config form: '%1'{/t}">
           <span class="fa fa-cog fa-lg"></span>
         </a>
+      </li>
+      <li class="quicklinks">
+        <button class="btn btn-white m-r-5" id="preview-button" ng-click="preview()" type="button" id="preview_button">
+          <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.generating_preview }" ></i>
+          {t}Preview{/t}
+        </button>
       </li>
       <li class="quicklinks">
         <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
@@ -56,25 +59,10 @@
   <div class="grid simple">
     <div class="grid-body no-padding">
       <div class="grid-collapse-title">
-        {acl isAllowed="ALBUM_AVAILABLE"}
-          {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Published{/t}" field="content_status"}
+        {acl isAllowed="COMPANY_AVAILABLE"}
+          {include file="ui/component/content-editor/accordion/published.tpl"}
         {/acl}
-        <div class="m-t-5">
-          {acl isAllowed="ALBUM_FAVORITE"}
-            {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Favorite{/t}" field="favorite"}
-          {/acl}
-        </div>
-        <div class="m-t-5">
-          {acl isAllowed="ALBUM_HOME"}
-            {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Home{/t}" field="in_home"}
-          {/acl}
-        </div>
-        <div class="m-t-5">
-          {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
-        </div>
       </div>
-      {include file="ui/component/content-editor/accordion/author.tpl"}
-      {include file="ui/component/content-editor/accordion/category.tpl" field="categories[0]"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
@@ -83,18 +71,22 @@
   <div class="grid simple">
     <div class="grid-body no-padding">
       <div class="grid-collapse-title">
-        <i class="fa fa-cog m-r-10"></i>
-        {t}Parameters{/t}
+        <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
       </div>
-      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired=true iTitle="{t}Featured in frontpage{/t}" types="photo"}
-      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.agency = !expanded.agency">
-        <i class="fa fa-microphone m-r-10"></i>{t}Agency{/t}
-        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.agency }"></i>
-        </a>
-      </div>
-      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.agency }">
-        {include file="ui/component/input/text.tpl" iField="agency"}
-      </div>
+      {include file="ui/component/content-editor/accordion/sector.tpl" required=true}
+      {include file="ui/component/content-editor/accordion/schedule.tpl" field="schedule" icon="fa-calendar-o"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="facebook" icon="fa-facebook" title="{t}Facebook{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="twitter" icon="fa-twitter" title="{t}Twitter{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="instagram" icon="fa-instagram" title="{t}Instagram{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="whatsapp" icon="fa-whatsapp" title="{t}Whatsapp{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="phone" icon="fa-phone" title="{t}Phone{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="email" icon="fa-envelope" title="{t}Email{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="address" icon="fa-map-pin" title="{t}Address{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="maps" icon="fa-map-marker" title="{t}Google Maps{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="website" icon="fa-globe" title="{t}Website{/t}"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="logo" iTitle="{t}Logo{/t}" types="photo"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
+      {include file="common/component/related-contents/_related-content.tpl" iName="relatedInner" iTitle="{t}Related in inner{/t}"}
     </div>
   </div>
 {/block}
@@ -103,20 +95,21 @@
   <div class="grid simple">
     <div class="grid-body">
       {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-      {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
+      {include file="ui/component/input/text.tpl" iCounter=true iField="pretitle" iTitle="{t}Pretitle{/t}"}
+      {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
+      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true contentPicker=true}
     </div>
   </div>
   <div class="grid simple">
     <div class="grid-title">
       <h4>
-        <i class="fa fa-picture-o m-r-5"></i>
-        {t}Images{/t}
+        <i class="fa fa-cart-arrow-down m-r-5"></i>
+        {t}Products{/t}
       </h4>
       <div class="pull-right">
         <button class="btn btn-link no-padding p-t-5 m-r-10" ng-click="setMode(app.mode === 'grid' ? 'list' : 'grid')" type="button">
           <i class="fa" ng-class="{ 'fa-th': app.mode === 'grid', 'fa-list': app.mode === 'list' }"></i>
         </button>
-        {include file="common/component/icon/status.tpl" iNgModel="value.photos" iForm="form.photos" iValidation=true}
       </div>
     </div>
     <div class="grid-body">
@@ -163,17 +156,14 @@
               </div>
             </div>
           </div>
-          <input name="photos" ng-model="value.photos" required type="hidden">
+          <input name="photos" ng-model="value.photos" type="hidden">
         </div>
       </div>
       <div class="text-center">
-        <button ng-if="photos && photos.length < data.extra.max_photos" class="btn btn-default" media-picker media-picker-ignore="[% related.getIds('photos') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="[% data.extra.max_photos - related.getIds('photos').length %]" media-picker-target="target.photos" media-picker-types="photo" type="button">
+        <button class="btn btn-default" media-picker media-picker-ignore="[% related.getIds('photos') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="50" media-picker-target="target.photos" media-picker-types="photo" type="button">
           <i class="fa fa-plus m-r-5"></i>
           {t}Add{/t}
         </button>
-        <div class="alert alert-warning" ng-if="photos && photos.length > data.extra.max_photos - 1" role="alert">
-          {t}You have reached the maximum number of [% data.extra.max_photos %] photos. To add new photos remove the older or create a new album.{/t}
-        </div>
         <button class="btn btn-white" ng-click="empty()" ng-if="photos && photos.length > 0" type="button">
           <i class="fa fa-fire m-r-5"></i>
           {t}Empty{/t}
@@ -184,16 +174,28 @@
 {/block}
 
 {block name="modals"}
+  <script type="text/ng-template" id="modal-preview">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
+      <h4 class="modal-title">
+        {t}Preview{/t}
+      </h4>
+    </div>
+    <div class="modal-body clearfix no-padding">
+      <iframe ng-src="[% template.src %]" frameborder="0"></iframe>
+    </div>
+  </script>
   <script type="text/ng-template" id="modal-delete">
     {include file="common/extension/modal.delete.tpl"}
   </script>
-  <script type="text/ng-template" id="modal-draft">
-    {include file="common/modals/_draft.tpl"}
-  </script>
   <script type="text/ng-template" id="modal-translate">
     {include file="common/modals/_translate.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-draft">
+    {include file="common/modals/_draft.tpl"}
   </script>
   <script type="text/ng-template" id="modal-expansible-fields">
     {include file="common/modals/_modalExpansibleFields.tpl"}
   </script>
 {/block}
+

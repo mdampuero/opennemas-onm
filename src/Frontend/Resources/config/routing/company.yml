@@ -1,0 +1,17 @@
+# Companies routes
+frontend_companies:
+    path: /empresa
+    defaults: { _controller: FrontendBundle:Company:list }
+    options:
+        l10n: true
+
+frontend_company_show:
+    path:     /empresa/{slug}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:Company:show }
+    requirements:
+        slug:          '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+    options:
+        expose: true
+        l10n: true
