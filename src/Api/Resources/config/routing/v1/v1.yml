@@ -30,6 +30,10 @@ api_v1_backend_comment:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/comment.yml'
     prefix:   /backend
 
+api_v1_backend_company:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/company.yml'
+    prefix:   /backend
+
 api_v1_backend_content:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/content.yml'
     prefix:   /backend

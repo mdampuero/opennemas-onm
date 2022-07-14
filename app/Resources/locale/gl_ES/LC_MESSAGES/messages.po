@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-22 08:16+0000\n"
-"PO-Revision-Date: 2022-06-22 10:33+0200\n"
+"POT-Creation-Date: 2022-06-28 10:50+0000\n"
+"PO-Revision-Date: 2022-06-28 12:57+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -307,6 +307,9 @@ msgstr "Eventos"
 
 msgid "Obituaries"
 msgstr "Necrolóxicas"
+
+msgid "Companies"
+msgstr "Empresas"
 
 msgid "Polls"
 msgstr "Enquisas"
@@ -783,6 +786,90 @@ msgstr "O teu comentario foi aceptado e agora deberá moderarse."
 msgid "Your comment was accepted."
 msgstr "O teu comentario foi aceptado."
 
+msgid "Automobiles"
+msgstr "Automóbiles"
+
+msgid "Aerospace"
+msgstr "Aeroespacial"
+
+msgid "Agriculture"
+msgstr "Agricultura"
+
+msgid "Breeding"
+msgstr "Gandería"
+
+msgid "Comerce"
+msgstr "Comercio"
+
+msgid "Construction"
+msgstr "Construción"
+
+msgid "Creative"
+msgstr "Creativo"
+
+msgid "Culture"
+msgstr "Cultura"
+
+msgid "Education"
+msgstr "Educación"
+
+msgid "Electronic"
+msgstr "Electrónica"
+
+msgid "Energy"
+msgstr "Enerxía"
+
+msgid "Entertainment"
+msgstr "Entretemento"
+
+msgid "Finance"
+msgstr "Financeiro"
+
+msgid "Fishing"
+msgstr "Pesca"
+
+msgid "Food"
+msgstr "Alimentación"
+
+msgid "Healthcare"
+msgstr "Saúde"
+
+msgid "Information technology"
+msgstr "Tecnoloxías da información"
+
+msgid "Meat"
+msgstr "Carne"
+
+msgid "Mining"
+msgstr "Minería"
+
+msgid "Petroleum"
+msgstr "Petróleo"
+
+msgid "Pharmaceutical"
+msgstr "Farmacéutica"
+
+msgid "Real estate"
+msgstr "Inmobiliaria"
+
+msgid "Telecommunications"
+msgstr "Telecomunicacións"
+
+msgid "Tobacco"
+msgstr "Tabaco"
+
+msgid "Textile"
+msgstr "Téxtil"
+
+msgid "Transport"
+msgstr "Transporte"
+
+msgid "Wood"
+msgstr "Madeira"
+
+msgid "Other"
+msgstr "Outro"
+
 msgid "Email is required but it will not be published"
 msgstr "O campo de correo-e é obrigatorio porén non será publicado"
 
@@ -1243,6 +1330,30 @@ msgstr "Opcións gardadas."
 msgid "There was an error while saving the settings"
 msgstr "Produciuse un erro ao gardar as preferencias."
 
+msgid "Monday"
+msgstr "Luns"
+
+msgid "Tuesday"
+msgstr "Martes"
+
+msgid "Wednesday"
+msgstr "Mércores"
+
+msgid "Thursday"
+msgstr "Xoves"
+
+msgid "Friday"
+msgstr "Venres"
+
+msgid "Saturday"
+msgstr "Sábado"
+
+msgid "Sunday"
+msgstr "Domingo"
+
+msgid "Holiday"
+msgstr "Festivo"
+
 msgid "Without position"
 msgstr "Sen posición"
 
@@ -1297,27 +1408,6 @@ msgstr "%d semanas"
 
 msgid "No limit"
 msgstr "Sen limite"
-
-msgid "Monday"
-msgstr "Luns"
-
-msgid "Tuesday"
-msgstr "Martes"
-
-msgid "Wednesday"
-msgstr "Mércores"
-
-msgid "Thursday"
-msgstr "Xoves"
-
-msgid "Friday"
-msgstr "Venres"
-
-msgid "Saturday"
-msgstr "Sábado"
-
-msgid "Sunday"
-msgstr "Domingo"
 
 msgid "Settings saved successfully"
 msgstr "Configuración gardada correctamente"
@@ -1525,6 +1615,33 @@ msgstr "Relacionado en interior"
 msgid "Agency"
 msgstr "Axencia"
 
+msgid "Facebook"
+msgstr "Facebook"
+
+msgid "Twitter"
+msgstr "Twitter"
+
+msgid "Instagram"
+msgstr "Instragram"
+
+msgid "Whatsapp"
+msgstr "Whatsapp"
+
+msgid "Phone"
+msgstr "Teléfono"
+
+msgid "Address"
+msgstr "Enderezo"
+
+msgid "Google Maps"
+msgstr "Google Maps"
+
+msgid "Sector"
+msgstr "Sector"
+
+msgid "Timetable"
+msgstr "Horario"
+
 msgid "Google News Showcase"
 msgstr "Google News Showcase"
 
@@ -1565,7 +1682,7 @@ msgid "This transaction was already processed"
 msgstr "A transacción xa foi procesada"
 
 msgid "There are some errors in the form"
-msgstr "Hai algúns erros no formulario"
+msgstr "Hai erros no formulario"
 
 msgid "There was an issue with the transaction"
 msgstr "Houbo algún problema coa transacción"
@@ -1967,6 +2084,9 @@ msgstr "Cartas ao director"
 msgid "Obituary"
 msgstr "Necrolóxica"
 
+msgid "Company"
+msgstr "Empresa"
+
 msgid "Select a category..."
 msgstr "Selecciona unha categoría…"
 
@@ -2076,12 +2196,6 @@ msgstr ""
 
 msgid "Social Networks"
 msgstr "Redes sociais"
-
-msgid "Facebook"
-msgstr "Facebook"
-
-msgid "Twitter"
-msgstr "Twitter"
 
 msgid "Change"
 msgstr "Cambiar"
@@ -2535,9 +2649,6 @@ msgstr "Interior"
 msgid "Mortuary"
 msgstr "Funeraria"
 
-msgid "Google Maps"
-msgstr "Google Maps"
-
 msgid "New obituary"
 msgstr "Nova necrolóxica"
 
@@ -2960,7 +3071,7 @@ msgid "Static Page"
 msgstr "Páxina estática"
 
 msgid "Synchronized instances"
-msgstr "Instancias sincronizadas"
+msgstr "Instacias sincronizadas"
 
 msgid "Manual categories"
 msgstr "Categorías manuais"
@@ -2972,10 +3083,10 @@ msgid "Static pages"
 msgstr "Páxinas estáticas"
 
 msgid "Synchronized sites"
-msgstr "Sitios sincronizados"
+msgstr "Instacias sincronizadas"
 
 msgid "Custom link"
-msgstr "Enlace personalizado"
+msgstr "Ligazón personalizada"
 
 msgid "Menu structure"
 msgstr "Estrutura do menu"
@@ -3033,8 +3144,8 @@ msgid ""
 "You have reached the maximum number of [% data.extra.max_photos %] photos. "
 "To add new photos remove the older or create a new album."
 msgstr ""
-"Alcanzaches o número máximo de [% data.extra.max_photos %] fotos en portada. "
-"Para engadir novas fotos elimina as vellas ou crea un álbum novo"
+"Alcanzaches o número máximo de [% data.extra.max_photos %] fotos. Para "
+"engadir novas fotos, elimina as máis antigas ou crea un novo álbum."
 
 msgid "Empty"
 msgstr "Baleiro"
@@ -3109,7 +3220,7 @@ msgid "New article"
 msgstr "Novo artigo"
 
 msgid "Media manager"
-msgstr "Xestor multimedia"
+msgstr "Xestor multimediau"
 
 msgid "Upload images"
 msgstr "Subir imaxes"
@@ -3437,7 +3548,7 @@ msgid ""
 "If this is checked, the headline of the first content will be append at the "
 "end of the subject, separated by a blank space"
 msgstr ""
-"Se esta marcado, o titular do primeiro contido será engadido ao final do "
+"Se está marcado, o titular do primeiro contido será engadido ao final do "
 "asunto, separado por un espazo en branco"
 
 msgid "Days"
@@ -4316,9 +4427,6 @@ msgstr "Número de identificación fiscal"
 msgid "What is a VAT identification number?"
 msgstr "Que é un número de identificación fiscal?"
 
-msgid "Address"
-msgstr "Enderezo"
-
 msgid "This is not a valid address"
 msgstr "Este non é un enderezo válido"
 
@@ -4362,6 +4470,12 @@ msgstr "Busca global"
 msgid "Unable to find any content that matches your search."
 msgstr "Non se puideron atopar contidos que coincidan coa súa busca."
 
+msgid "New company"
+msgstr "Nova empresa"
+
+msgid "Products"
+msgstr "Produtos"
+
 msgid "My account"
 msgstr "A miña conta"
 
@@ -4396,14 +4510,8 @@ msgstr ""
 msgid "Contact Us"
 msgstr "Contacta connosco"
 
-msgid "Company"
-msgstr "Empresa"
-
 msgid "VAT number"
 msgstr "Identificador fiscal"
-
-msgid "Phone"
-msgstr "Teléfono"
 
 msgid "State"
 msgstr "Provincia/Estado"
@@ -5215,9 +5323,6 @@ msgstr ""
 "Se tes unha <strong>páxina en Twitter</strong>, engade o teu nome de perfil "
 "no formulario. Por defecto usarase o de OpenNeMas."
 
-msgid "Instagram"
-msgstr "Instragram"
-
 msgid "Instagram Page"
 msgstr "Páxina de Instagram"
 
@@ -5316,7 +5421,7 @@ msgid "Redirect to frontpage non-migrated contents"
 msgstr "Redirixir a portada contidos non migrados"
 
 msgid "Disable Opennemas Google Analytics API key"
-msgstr "Deshabilitar a chave da API de Google Analytics de Opennemas"
+msgstr "Deshablitar a chave da API de Google Analytics de Opennemas"
 
 msgid "Only AMP"
 msgstr "Only AMP"
@@ -5440,7 +5545,7 @@ msgstr ""
 "valor2,...)"
 
 msgid "Extra field"
-msgstr "Campos adicionais"
+msgstr "Campo adicional"
 
 msgid ""
 "A Google DFP advertisement has been detected in your HTML/javascript "
@@ -5842,6 +5947,12 @@ msgstr "Necrolóxica: portada"
 msgid "Obituary: inner"
 msgstr "Necrolóxica: interior"
 
+msgid "Company: frontpage"
+msgstr "Empresa: portada"
+
+msgid "Company: inner"
+msgstr "Empresa: interior"
+
 msgid "Google AMP"
 msgstr "Google AMP"
 
@@ -6024,6 +6135,9 @@ msgstr "Inserir relacionado"
 msgid "Remove update"
 msgstr "Eliminar actualización"
 
+msgid "No sector"
+msgstr "Sen sector"
+
 msgid "Live blog"
 msgstr "Artigo en vivo"
 
@@ -6035,6 +6149,18 @@ msgstr "Data de inicio da cobertura"
 
 msgid "Coverage end time"
 msgstr "Data de fin da cobertura"
+
+msgid "24 hours"
+msgstr "24 horas"
+
+msgid "Since"
+msgstr "Dende"
+
+msgid "Until"
+msgstr "Ata"
+
+msgid "Add schedule"
+msgstr "Engadir horario"
 
 msgid "Include in Google News Showcase"
 msgstr "Incluir en Google News Showcase"
@@ -6049,7 +6175,8 @@ msgid ""
 "To include the article in Google News Showcase you need to highlight two "
 "moments"
 msgstr ""
-"Para incluir o artigo en Google News Showcase precisas destacar dous momentos"
+"Para incluir o artigo en Google News Showcase necesitas destacar dous "
+"momentos"
 
 msgid "Planned"
 msgstr "Planificado"
@@ -6075,6 +6202,9 @@ msgstr "Permitir comentarios"
 
 msgid "Add a tag..."
 msgstr "Engadir unha etiqueta ..."
+
+msgid "Select a sector..."
+msgstr "Selecciona un sector…"
 
 msgid "Internal search"
 msgstr "Busca interna"
@@ -6846,9 +6976,6 @@ msgstr "Non hai compras por agora"
 msgid "View purchase"
 msgstr "Ver compra"
 
-msgid "Other"
-msgstr "Outro"
-
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumérico, sen espacios"
 
@@ -7118,6 +7245,24 @@ msgstr "eliminar"
 msgid "delete them"
 msgstr "eliminalos"
 
+#~ msgid "Widget %s not available"
+#~ msgstr "Widget %s non dispoñíbel"
+
+#~ msgid "Link to"
+#~ msgstr "Ligazón a"
+
+#~ msgid "Invalid tag"
+#~ msgstr "Etiqueta non válida"
+
+#~ msgid "Original:"
+#~ msgstr "Orixinal:"
+
+#~ msgid "Page views this month"
+#~ msgstr "Páxinas vistas este mes"
+
+#~ msgid "coming soon... work in progress..."
+#~ msgstr "pronto terás esta información…"
+
 #~ msgid "Unable to find the menu with the id \"%d\""
 #~ msgstr "Non se puido atopar o menú co identificador «%d»"
 
@@ -7148,35 +7293,11 @@ msgstr "eliminalos"
 #~ msgid "Archive"
 #~ msgstr "Arquivar"
 
-#~ msgid "Widget %s not available"
-#~ msgstr "Widget %s non dispoñíbel"
-
 #~ msgid "Category blog"
 #~ msgstr "Categoria tipo Blog"
 
 #~ msgid "Synched category"
 #~ msgstr "Sincronizar categoría"
-
-#~ msgid "Original:"
-#~ msgstr "Orixinal:"
-
-#~ msgid "Link to"
-#~ msgstr "Ligazón a"
-
-#~ msgid "Unable to find any menu that matches your search."
-#~ msgstr "Non se puideron atopar menús que coincidan coa súa busca."
-
-#~ msgid "Position assigned"
-#~ msgstr "Posición asignada"
-
-#~ msgid "Assigned to"
-#~ msgstr "Asignar a"
-
-#~ msgid "No position"
-#~ msgstr "Sen posición"
-
-#~ msgid "Unasigned"
-#~ msgstr "Sen asignar"
 
 #~ msgid "Add items"
 #~ msgstr "Engadir elementos"
@@ -7194,18 +7315,20 @@ msgstr "eliminalos"
 #~ "Completa o formulario de embaixo co titulo e a URL externa que queres "
 #~ "engadir ao menú."
 
-#, fuzzy
-#~ msgid "Eliminar elemento"
-#~ msgstr "Elemento multimedia"
+#~ msgid "Unable to find any menu that matches your search."
+#~ msgstr "Non se puideron atopar menús que coincidan coa súa busca."
 
-#~ msgid "Page views this month"
-#~ msgstr "Páxinas vistas este mes"
+#~ msgid "Position assigned"
+#~ msgstr "Posición asignada"
 
-#~ msgid "coming soon... work in progress..."
-#~ msgstr "pronto terás esta información…"
+#~ msgid "Assigned to"
+#~ msgstr "Asignar a"
 
-#~ msgid "Invalid tag"
-#~ msgstr "Etiqueta non válida"
+#~ msgid "No position"
+#~ msgstr "Sen posición"
+
+#~ msgid "Unasigned"
+#~ msgstr "Sen asignar"
 
 #~ msgid "Keyword created successfully"
 #~ msgstr "Palabra chave creada correctamente"

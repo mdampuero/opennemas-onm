@@ -271,6 +271,16 @@
                           </div>
                         {/acl}
                       {/is_module_activated}
+                      {is_module_activated name="es.openhost.module.companies"}
+                        {acl isAllowed="COMPANY_CREATE"}
+                          <div class="quick-item">
+                            <a href="{url name=backend_company_create}">
+                              <i class="fa fa-building"></i>
+                              <span class="title">{t}Company{/t}</span>
+                            </a>
+                          </div>
+                        {/acl}
+                      {/is_module_activated}
                     </div>
                   </li>
                 {/block}

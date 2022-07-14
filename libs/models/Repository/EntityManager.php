@@ -31,6 +31,7 @@ class EntityManager extends BaseManager
         'album',
         'article',
         'attachment',
+        'company',
         'event',
         'kiosko',
         'letter',

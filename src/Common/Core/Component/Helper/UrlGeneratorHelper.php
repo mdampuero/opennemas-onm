@@ -494,6 +494,7 @@ class UrlGeneratorHelper
     {
         return [
             'article'     => 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html',
+            'company'     => 'empresa/_SLUG_/_DATE__ID_.html',
             'obituary'    => 'esquela/_SLUG_/_DATE__ID_.html',
             'opinion'     => 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html',
             'blog'        => 'blog/_CATEGORY_/_SLUG_/_DATE__ID_.html',

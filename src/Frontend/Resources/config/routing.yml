@@ -49,6 +49,9 @@ frontend_category:
 frontend_comment:
     resource: '@FrontendBundle/Resources/config/routing/comment.yml'
 
+frontend_company:
+    resource: '@FrontendBundle/Resources/config/routing/company.yml'
+
 frontend_content:
     resource: '@FrontendBundle/Resources/config/routing/content.yml'
 

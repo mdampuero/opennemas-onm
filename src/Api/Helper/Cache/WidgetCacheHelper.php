@@ -7,9 +7,11 @@ class WidgetCacheHelper extends ContentCacheHelper
     /**
      * {@inheritdoc}
      */
-    protected $defaultVarnishKeys = [
+    protected $varnishKeys = [
         '{{content_type_name}}-{{pk_content}}',
         'widget-not-found-{{pk_content}}',
-        'widget-not-found-{{class}}'
+        'widget-not-found-{{class}}',
+        'last-suggested-{{categories}}',
+        'header-date',
     ];
 }
