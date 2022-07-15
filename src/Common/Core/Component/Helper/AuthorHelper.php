@@ -310,6 +310,10 @@ class AuthorHelper
     {
         $author = $this->getAuthor($item);
 
+        if (empty($author)) {
+            return null;
+        }
+
         if (isset($item->content_type_name) && $item->content_type_name === 'opinion') {
             $url = $this->ugh->generate($author);
 
