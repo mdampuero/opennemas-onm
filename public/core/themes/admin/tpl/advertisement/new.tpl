@@ -661,6 +661,30 @@ jQuery(document).ready(function($) {
               </uib-tab>
               {/is_module_activated}
 
+              {is_module_activated name="es.openhost.module.companies"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Company: frontpage{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(6000, 6099) > 0">[% countPositionsSelectedbyRange(6000, 6099) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_company_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Company: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(6100, 6199) > 0">[% countPositionsSelectedbyRange(6100, 6199) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_company_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
               {is_module_activated name="POLL_MANAGER"}
               <uib-tab>
                 <uib-tab-heading>

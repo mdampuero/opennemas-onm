@@ -784,6 +784,11 @@ class ContentManager
                 'name'            => 'obituary',
                 'title'           => _('Obituary')
             ],
+            [
+                'pk_content_type' => 19,
+                'name'            => 'company',
+                'title'           => _('Company')
+            ],
         ];
 
         return $contentTypes;

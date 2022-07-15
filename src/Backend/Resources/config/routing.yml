@@ -182,6 +182,10 @@ backend_comment:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/comment.yml'
 
+backend_company:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/company.yml'
+
 backend_domain:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/domain.yml'

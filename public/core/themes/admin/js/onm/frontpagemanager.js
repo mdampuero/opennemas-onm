@@ -542,6 +542,7 @@ jQuery(function($) {
    **************************************************************************
    */
   $('#content-provider').dialog({
+    minWidth: 950,
     autoOpen: false,
     dialogClass: 'content-provider-dialog',
     maxHeight: 500,

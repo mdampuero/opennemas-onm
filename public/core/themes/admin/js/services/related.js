@@ -24,6 +24,10 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
       var related = {
         bag: {},
         map: {
+          logo: {
+            name:   'logo',
+            simple: true
+          },
           featured_frontpage: {
             mirror: 'featured_inner',
             name:   'featuredFrontpage',

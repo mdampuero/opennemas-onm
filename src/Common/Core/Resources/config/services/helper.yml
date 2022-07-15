@@ -44,6 +44,11 @@ services:
         arguments: [ '@orm.manager', '%core.helper.comment.default_params%' ]
         public:    true
 
+    core.helper.company:
+        class:     Common\Core\Component\Helper\CompanyHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.helper.content:
         class:      Common\Core\Component\Helper\ContentHelper
         arguments: [ '@service_container' ]
