@@ -78,9 +78,20 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
      */
     public function testOnCategoryCreate()
     {
+        $source = new Category([ 'id' => 3750 ]);
+
+        $this->event->expects($this->any())->method('hasArgument')
+            ->with('item')->willReturn(true);
+
+        $this->event->expects($this->any())->method('getArgument')
+            ->with('item')->willReturn(new Category([ 'id' => 3750 ]));
+
         $this->helper->expects($this->once())->method('deleteDynamicCss');
 
-        $this->subscriber->onCategoryCreate();
+        $this->helper->expects($this->any())->method('deleteItem')
+            ->with($source);
+
+        $this->subscriber->onCategoryCreate($this->event);
     }
 
     /**

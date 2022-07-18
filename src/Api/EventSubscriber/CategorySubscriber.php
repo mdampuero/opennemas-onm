@@ -68,11 +68,14 @@ class CategorySubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Removes cache for dynamic CSS when a category is created.
+     * Removes caches for dynamic CSS and category list actions and varnish
+     * caches for the instance when a category is created
+     *
+     * @param Event $event The dispatched event.
      */
-    public function onCategoryCreate()
+    public function onCategoryCreate(Event $event)
     {
-        $this->helper->deleteDynamicCss();
+        $this->onCategoryUpdate($event);
     }
 
     /**
