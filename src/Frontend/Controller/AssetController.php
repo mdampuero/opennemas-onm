@@ -226,7 +226,9 @@ class AssetController extends Controller
             $favico = $sh->getLogo('favico');
         }
 
-        $path = $this->getParameter('core.paths.public') . DS . 'media/opennemas' . DS . $favico->path;
+        $path = $this->getParameter('core.paths.public')
+            . $this->get('core.instance')->getMediaShortPath() . DS
+            . $favico->path;
 
         $content = $this->get('core.image.processor')
             ->open($path)
