@@ -34,7 +34,7 @@
          */
         this.defaults = {
           plugins: 'a11yhelp,autogrow,autokeywords,autolink,autonofollow,autotoc,basicstyles,blockquote,clipboard,contextmenu,elementspath' +
-            ',enterkey,entities,filebrowser,floatingspace,font,format,horizontalrule,htmlwriter,image2,imageresize,' +
+            ',enterkey,entities,filebrowser,find,floatingspace,font,format,horizontalrule,htmlwriter,image2,imageresize,' +
             'indentblock,justify,link,list,magicline,maximize,pastefromword,pastespecial,pastetext,removeformat,' +
             'resize,scayt,sourcearea,stylescombo,tab,table,tabletools,toolbar,undo,wordcount,wsc,wysiwygarea',
           disableNativeSpellChecker: false,
@@ -67,7 +67,7 @@
          */
         this.presets = {
           simple: {
-            removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles,Cut,Copy,Paste,PasteText,Table,HorizontalRule',
+            removeButtons: 'Anchor,Strike,Subscript,Superscript,Find,Replace,Font,Format,Styles,Cut,Copy,Paste,PasteText,Table,HorizontalRule',
             toolbarGroups: [
               {
                 name: 'basicstyles',
@@ -135,7 +135,7 @@
           },
 
           standard: {
-            removeButtons: 'Strike,Subscript,Superscript,Cut,Copy,Paste,PasteText',
+            removeButtons: 'Strike,Subscript,Superscript,Cut,Copy,Replace,Paste,PasteText',
             toolbarGroups: [
               {
                 name: 'styles'
