@@ -108,21 +108,27 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
        *   Returns the list of ids from a list of related contents.
        *
        * @param {String} name The name of the list of related contents.
+       * @param {Array}  customIds Array of custom ids to exclude like the current item itself.
        *
        * @return {Array} The list of ids.
        */
-      related.getIds = function(name) {
+      related.getIds = function(name, customIds = []) {
+        var relatedIds = [];
+
         if (!related.scope || !related.scope[name]) {
-          return [];
+          return relatedIds.concat(customIds);
         }
 
         if (!angular.isArray(related.scope[name])) {
-          return [ related.scope[name].target_id ];
+          relatedIds = [ related.scope[name].target_id ];
+          return relatedIds.concat(customIds);
         }
 
-        return related.scope[name].map(function(e) {
+        relatedIds = related.scope[name].map(function(e) {
           return e.target_id;
         });
+
+        return relatedIds.concat(customIds);
       };
 
       /**
