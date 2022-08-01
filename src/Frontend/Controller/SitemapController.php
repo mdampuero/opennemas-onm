@@ -254,7 +254,17 @@ class SitemapController extends Controller
         );
 
         if (file_exists($path)) {
-            return $this->getResponse($format, $cacheId, 'contents', [], $path, $page, $year, $month);
+            return $this->getResponse(
+                $format,
+                $cacheId,
+                'contents',
+                [],
+                $path,
+                $page,
+                $year,
+                $month,
+                'max-age=300, must-revalidate'
+            );
         }
 
         $date     = $year . '-' . $month;
@@ -274,7 +284,8 @@ class SitemapController extends Controller
             $path,
             $page,
             $year,
-            $month
+            $month,
+            'max-age=300, must-revalidate'
         );
     }
 
