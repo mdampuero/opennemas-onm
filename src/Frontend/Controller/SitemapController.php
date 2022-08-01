@@ -23,13 +23,27 @@ class SitemapController extends Controller
      *
      * @const array
      */
-    const EXPIRE = [
+    const VARNISH_EXPIRE = [
         'categories' => '1d',
         'authors'    => '1d',
         'contents'   => '1h',
         'index'      => '1d',
         'news'       => '1h',
         'tag'        => '1h',
+    ];
+
+    /**
+     * The list of expire times for actions.
+     *
+     * @const array
+     */
+    const CF_EXPIRE = [
+        'categories' => '86400',
+        'authors'    => '86400',
+        'contents'   => '3600',
+        'index'      => '86400',
+        'news'       => '3600',
+        'tag'        => '3600',
     ];
 
     /**
@@ -199,8 +213,7 @@ class SitemapController extends Controller
                 null,
                 null,
                 null,
-                null,
-                'no-store'
+                null
             );
         }
 
@@ -212,8 +225,7 @@ class SitemapController extends Controller
             null,
             null,
             null,
-            null,
-            'no-store'
+            null
         );
     }
 
@@ -405,9 +417,10 @@ class SitemapController extends Controller
     ) {
         $headers = [
             'Content-Type' => 'application/xml; charset=utf-8',
-            'x-cache-for' => self::EXPIRE[$action],
+            'x-cache-for' => self::VARNISH_EXPIRE[$action],
             'x-cacheable' => true,
-            'x-tags'      => sprintf('sitemap,%s', $action)
+            'x-tags'      => sprintf('sitemap,%s', $action),
+            'Cache-Control' => 'max-age=' . self::CF_EXPIRE[$action] . ', must-revalidate',
         ];
 
         if (!empty($cacheControl)) {
