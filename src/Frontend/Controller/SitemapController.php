@@ -420,7 +420,7 @@ class SitemapController extends Controller
             'x-cache-for' => self::VARNISH_EXPIRE[$action],
             'x-cacheable' => true,
             'x-tags'      => sprintf('sitemap,%s', $action),
-            'Cache-Control' => 'max-age=' . self::CF_EXPIRE[$action] . ', must-revalidate',
+            'Cache-Control' => 'max-age=' . self::CF_EXPIRE[$action] . ', public',
         ];
 
         if (!empty($cacheControl)) {
