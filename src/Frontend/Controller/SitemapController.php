@@ -274,8 +274,7 @@ class SitemapController extends Controller
                 $path,
                 $page,
                 $year,
-                $month,
-                'max-age=300, must-revalidate'
+                $month
             );
         }
 
@@ -296,8 +295,7 @@ class SitemapController extends Controller
             $path,
             $page,
             $year,
-            $month,
-            'max-age=300, must-revalidate'
+            $month
         );
     }
 
