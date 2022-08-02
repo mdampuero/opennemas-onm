@@ -24,12 +24,13 @@ class SitemapController extends Controller
      * @const array
      */
     const VARNISH_EXPIRE = [
-        'categories' => '1d',
-        'authors'    => '1d',
-        'contents'   => '1h',
-        'index'      => '1d',
-        'news'       => '1h',
-        'tag'        => '1h',
+        'categories'      => '1d',
+        'authors'         => '1d',
+        'contents'        => '1h',
+        'index'           => '1d',
+        'news'            => '1h',
+        'tag'             => '1h',
+        'contents-latest' => '300s'
     ];
 
     /**
@@ -38,12 +39,13 @@ class SitemapController extends Controller
      * @const array
      */
     const CF_EXPIRE = [
-        'categories' => '86400',
-        'authors'    => '86400',
-        'contents'   => '3600',
-        'index'      => '86400',
-        'news'       => '3600',
-        'tag'        => '3600',
+        'categories'      => '86400',
+        'authors'         => '86400',
+        'contents'        => '3600',
+        'index'           => '86400',
+        'news'            => '3600',
+        'tag'             => '3600',
+        'contents-latest' => '300'
     ];
 
     /**
@@ -244,8 +246,10 @@ class SitemapController extends Controller
         // TODO: Remove this as soon as possible
         $helper   = $this->get('core.helper.sitemap');
         $settings = $helper->getSettings();
+        $action   = 'contents';
 
         if (empty(array_filter([$year, $month, $page]))) {
+            $action             = 'contents-latest';
             $dates              = $helper->getDates();
             $last               = array_pop($dates);
             list($year, $month) = explode('-', $last);
@@ -269,7 +273,7 @@ class SitemapController extends Controller
             return $this->getResponse(
                 $format,
                 $cacheId,
-                'contents',
+                $action,
                 [],
                 $path,
                 $page,
@@ -290,7 +294,7 @@ class SitemapController extends Controller
         return $this->getResponse(
             $format,
             $cacheId,
-            'contents',
+            $action,
             $contents,
             $path,
             $page,
@@ -420,6 +424,8 @@ class SitemapController extends Controller
             'x-tags'      => sprintf('sitemap,%s', $action),
             'Cache-Control' => 'max-age=' . self::CF_EXPIRE[$action] . ', public',
         ];
+
+        $action = $action == 'contents-latest' ? 'contents' : $action;
 
         if (!empty($cacheControl)) {
             $headers['Cache-Control'] = $cacheControl;
