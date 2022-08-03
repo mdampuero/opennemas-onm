@@ -28,7 +28,7 @@ class SitemapController extends Controller
         'authors'         => '1d',
         'contents'        => '1h',
         'index'           => '1d',
-        'news'            => '1h',
+        'news'            => '300s',
         'tag'             => '1h',
         'contents-latest' => '300s'
     ];
@@ -43,7 +43,7 @@ class SitemapController extends Controller
         'authors'         => '86400',
         'contents'        => '3600',
         'index'           => '86400',
-        'news'            => '3600',
+        'news'            => '300',
         'tag'             => '3600',
         'contents-latest' => '300'
     ];
