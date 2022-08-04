@@ -6,6 +6,7 @@ use Api\Exception\GetItemException;
 use Api\Service\V1\CategoryService;
 use Common\Core\Component\Template\Template;
 use Common\Model\Entity\Instance;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ItembaseResourceOwner;
 
 /**
  * Helper class to retrieve category data.
@@ -179,6 +180,27 @@ class CategoryHelper
     }
 
     /**
+     * Returns the layout check for the provided item.
+     *
+     * @param Content $item   The item to get logo path for. If not provided, the
+     *                        function will try to search the item in the template.
+     *
+     * @return bool $manualLayour
+     */
+    public function getManualLayout($item = null)
+    {
+        if (empty($item)) {
+            return null;
+        }
+        $category = $this->getCategory($item);
+
+        if (empty($category->params) || empty($category->params['manual'])) {
+            return null;
+        }
+        return (int) $category->params['manual'];
+    }
+
+    /**
      * Returns the category name for the provided item.
      *
      * @param Content $item The item to get category name for. If not provided, the
@@ -254,5 +276,19 @@ class CategoryHelper
     public function hasCategoryLogo($item = null) : bool
     {
         return !empty($this->getCategoryLogo($item));
+    }
+
+    /**
+     * Checks if the category has a manual layout.
+     *
+     * @param Content $item The item to check category logo for. If not provided,
+     *                      the function will try to search the item in the
+     *                      template.
+     *
+     * @return bool True if the category has a manual layout. False otherwise.
+     */
+    public function hasManualLayout($item = null) : bool
+    {
+        return !empty($this->getManualLayout($item));
     }
 }

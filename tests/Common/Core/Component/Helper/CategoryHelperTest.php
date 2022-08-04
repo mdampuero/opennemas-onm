@@ -244,6 +244,16 @@ class CategoryHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+    * Tests getManualLayout when exception.
+    */
+    public function testGetManualLayout()
+    {
+        $category = new Category([ 'id' => 436, 'logo_id' => 123, 'params' => ['manual' => '1']]);
+
+        $this->assertEquals(1, $this->helper->getManualLayout($category));
+    }
+
+    /**
     * Tests getCategoryName.
     */
     public function testGetCategoryName()
@@ -305,5 +315,16 @@ class CategoryHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertFalse($this->helper->hasCategoryLogo(131));
         $this->assertTrue($this->helper->hasCategoryLogo($category));
+    }
+
+    /**
+    * Tests hasManualLayout.
+    */
+    public function hasManualLayout()
+    {
+        $category = new Category([ 'id' => 436, 'logo_id' => 123, 'params' => ['manual' => '1']]);
+
+        $this->assertFalse($this->helper->hasManualLayout(131));
+        $this->assertTrue($this->helper->hasManualLayout($category));
     }
 }

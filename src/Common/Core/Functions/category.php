@@ -135,3 +135,17 @@ function has_category_logo($item = null) : bool
 {
     return getService('core.helper.category')->hasCategoryLogo($item);
 }
+
+/**
+ * Checks if the category has manual layout.
+ *
+ * @param Content $item The item to check category logo for. If not provided,
+ *                      the function will try to search the item in the
+ *                      template.
+ *
+ * @return bool True if the category has a manual layout. False otherwise.
+ */
+function has_manual_layout($item = null) : bool
+{
+    return getService('core.helper.category')->hasManualLayout($item);
+}
