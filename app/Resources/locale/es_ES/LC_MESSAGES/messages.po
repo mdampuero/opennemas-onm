@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-28 10:50+0000\n"
+"POT-Creation-Date: 2022-08-04 11:59+0000\n"
 "PO-Revision-Date: 2022-06-28 12:54+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
@@ -791,14 +791,15 @@ msgstr "Tu comentario fue aceptado y ahora deberá ser moderado."
 msgid "Your comment was accepted."
 msgstr "Tu comentario fue aceptado."
 
-msgid "Automobiles"
-msgstr "Automóviles"
-
 msgid "Aerospace"
 msgstr "Aeroespacial"
 
 msgid "Agriculture"
 msgstr "Agricultura"
+
+#, fuzzy
+msgid "Automotive"
+msgstr "Automóviles"
 
 msgid "Breeding"
 msgstr "Ganadería"
@@ -809,8 +810,8 @@ msgstr "Comercio"
 msgid "Construction"
 msgstr "Construcción"
 
-msgid "Creative"
-msgstr "Creativo"
+msgid "Advertising and marketing"
+msgstr ""
 
 msgid "Culture"
 msgstr "Cultura"
@@ -830,8 +831,9 @@ msgstr "Entretenimiento"
 msgid "Finance"
 msgstr "Financiero"
 
-msgid "Fishing"
-msgstr "Pesca"
+#, fuzzy
+msgid "Maritime"
+msgstr "en tiempo"
 
 msgid "Food"
 msgstr "Alimentación"
@@ -842,14 +844,11 @@ msgstr "Salud"
 msgid "Information technology"
 msgstr "Tecnologías de la información"
 
-msgid "Meat"
-msgstr "Carne"
-
 msgid "Mining"
 msgstr "Minería"
 
-msgid "Petroleum"
-msgstr "Petróleo"
+msgid "Fuels"
+msgstr ""
 
 msgid "Pharmaceutical"
 msgstr "Farmacéutico"
@@ -869,8 +868,36 @@ msgstr "Textil"
 msgid "Transport"
 msgstr "Transporte"
 
-msgid "Wood"
-msgstr "Madera"
+msgid "Industry"
+msgstr ""
+
+msgid "Beauty"
+msgstr ""
+
+msgid "Animals"
+msgstr ""
+
+#, fuzzy
+msgid "Cleaning"
+msgstr "Limpiar"
+
+#, fuzzy
+msgid "Sport"
+msgstr "Informe"
+
+#, fuzzy
+msgid "Hostelry"
+msgstr "Nombre de host"
+
+msgid "Services"
+msgstr "Servicios"
+
+msgid "Metal"
+msgstr ""
+
+#, fuzzy
+msgid "Architecture"
+msgstr "Agricultura"
 
 msgid "Other"
 msgstr "Otros"
@@ -4491,6 +4518,17 @@ msgstr "No se pudieron encontrar contenidos que coincidan con tu búsqueda."
 msgid "New company"
 msgstr "Nueva empresa"
 
+#, fuzzy
+msgid "Linkedin"
+msgstr "LinkedIn"
+
+#, fuzzy
+msgid "Youtube"
+msgstr "Canal de YouTube"
+
+msgid "TikTok"
+msgstr ""
+
 msgid "Products"
 msgstr "Productos"
 
@@ -4689,9 +4727,6 @@ msgstr ""
 
 msgid "Packs"
 msgstr "Packs"
-
-msgid "Services"
-msgstr "Servicios"
 
 msgid "Partners"
 msgstr "Socios"
@@ -7285,6 +7320,21 @@ msgstr "eliminarlo"
 msgid "delete them"
 msgstr "eliminarlos"
 
+#~ msgid "Creative"
+#~ msgstr "Creativo"
+
+#~ msgid "Fishing"
+#~ msgstr "Pesca"
+
+#~ msgid "Meat"
+#~ msgstr "Carne"
+
+#~ msgid "Petroleum"
+#~ msgstr "Petróleo"
+
+#~ msgid "Wood"
+#~ msgstr "Madera"
+
 #~ msgid "Widget %s not available"
 #~ msgstr "Widget %s no disponible"
 
@@ -7684,9 +7734,6 @@ msgstr "eliminarlos"
 
 #~ msgid "Subscription"
 #~ msgstr "Suscripción"
-
-#~ msgid "Hostname"
-#~ msgstr "Nombre de host"
 
 #~ msgid "Seo tags"
 #~ msgstr "Etiquetas SEO"
