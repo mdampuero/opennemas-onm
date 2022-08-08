@@ -74,7 +74,7 @@
         <div class="form-group no-margin">
           <div class="checkbox m-t-5">
             <input type="checkbox" id="manual" ng-model="item.params.manual" ng-true-value="'1'" ng-false-value="'0'">
-            <label for="manual" class="form-label">{t}Cahnge layout to manual{/t}</label>
+            <label for="manual" class="form-label">{t}Change layout to manual{/t}</label>
           </div>
           <span class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
             <i class="fa fa-info-circle m-r-5 text-info"></i>
