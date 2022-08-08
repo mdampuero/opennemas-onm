@@ -6,7 +6,6 @@ use Api\Exception\GetItemException;
 use Api\Service\V1\CategoryService;
 use Common\Core\Component\Template\Template;
 use Common\Model\Entity\Instance;
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ItembaseResourceOwner;
 
 /**
  * Helper class to retrieve category data.
