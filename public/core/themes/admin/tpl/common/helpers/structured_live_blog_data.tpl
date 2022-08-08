@@ -230,13 +230,17 @@
         "height": {get_photo_height(get_update_image($update))},
         "width": {get_photo_width(get_update_image($update))}
       },
+      {elseif get_type(get_featured_media($content, 'inner')) === 'photo'}
+      "image": {
+        "@type": "ImageObject",
+        "url": "{get_photo_path(get_featured_media($content, 'inner'), null, [], true)}",
+        "height": {get_photo_height(get_featured_media($content, 'inner'))},
+        "width": {get_photo_width(get_featured_media($content, 'inner'))}
+      },
       {/if}
       "url": "{$siteUrl}"
     }{if !$smarty.foreach.update.last},{/if}
     {/foreach}
   ]
 }
-{if get_type(get_featured_media($content, 'inner')) === 'photo'}
-  ,{include file='./structured_image_data.tpl' image=get_featured_media($content, 'inner')}
-{/if}
 </script>
