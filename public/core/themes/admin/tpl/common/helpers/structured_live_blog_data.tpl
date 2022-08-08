@@ -243,7 +243,4 @@
     {/foreach}
   ]
 }
-{if get_type(get_featured_media($content, 'inner')) === 'photo'}
-  ,{include file='./structured_image_data.tpl' image=get_featured_media($content, 'inner')}
-{/if}
 </script>
