@@ -48,7 +48,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $this->ah = $this->getMockBuilder('Common\Core\Component\Helper\AuthorHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getAuthor' ])
+            ->setMethods([ 'getAuthor', 'getAuthorName' ])
             ->getMock();
 
         $this->sh = $this->getMockBuilder('Common\Core\Component\Helper\SettingHelper')
@@ -322,8 +322,8 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $content = new \Content();
 
         $this->ah->expects($this->once())
-            ->method('getAuthor')
-            ->willReturn($author);
+            ->method('getAuthorName')
+            ->willReturn($author->name);
 
         $method->invokeArgs($this->object, [ $content ]);
     }
@@ -339,7 +339,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $content = new \Content();
 
         $this->ah->expects($this->once())
-            ->method('getAuthor')
+            ->method('getAuthorName')
             ->willReturn(null);
 
         $this->ds->expects($this->once())->method('get')
