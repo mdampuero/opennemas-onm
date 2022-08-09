@@ -114,7 +114,7 @@ class CompanyController extends FrontendController
             [ 'name' => 'breeding', 'title' => _('Breeding') ],
             [ 'name' => 'comerce', 'title' => _('Comerce') ],
             [ 'name' => 'construction', 'title' => _('Construction') ],
-            [ 'name' => 'advertising and marketing', 'title' => _('Advertising and marketing') ],
+            [ 'name' => 'advertising_marketing', 'title' => _('Advertising and marketing') ],
             [ 'name' => 'culture', 'title' => _('Culture') ],
             [ 'name' => 'education', 'title' => _('Education') ],
             [ 'name' => 'electronic', 'title' => _('Electronic') ],
