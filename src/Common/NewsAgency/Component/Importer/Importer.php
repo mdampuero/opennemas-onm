@@ -670,6 +670,10 @@ class Importer
             }
         }
 
+        if (empty($bans)) {
+            return;
+        }
+
         $bans = array_unique($bans);
 
         $banRegExpr = '';

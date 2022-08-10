@@ -10,8 +10,6 @@
 namespace Common\NewsAgency\Command;
 
 use Common\Core\Command\Command;
-use Opennemas\Task\Component\Queue\Queue;
-use Opennemas\Task\Component\Task\ServiceTask;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
