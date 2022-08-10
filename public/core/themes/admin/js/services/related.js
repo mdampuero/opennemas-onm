@@ -108,27 +108,37 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
        *   Returns the list of ids from a list of related contents.
        *
        * @param {String} name The name of the list of related contents.
-       * @param {Array}  customIds Array of custom ids to exclude like the current item itself.
        *
        * @return {Array} The list of ids.
        */
-      related.getIds = function(name, customIds = []) {
-        var relatedIds = [];
-
+      related.getIds = function(name) {
         if (!related.scope || !related.scope[name]) {
-          return relatedIds.concat(customIds);
+          return [];
         }
 
         if (!angular.isArray(related.scope[name])) {
-          relatedIds = [ related.scope[name].target_id ];
-          return relatedIds.concat(customIds);
+          return [ related.scope[name].target_id ];
         }
 
-        relatedIds = related.scope[name].map(function(e) {
+        return related.scope[name].map(function(e) {
           return e.target_id;
         });
+      };
 
-        return relatedIds.concat(customIds);
+      /**
+       * @function ignoreIds
+       * @memberOf related
+       *
+       * @description
+       *   Returns the list of ids to ignore in picker.
+       *
+       * @param {Array} usedIds The array of current used ids on picker.
+       * @param {Number} itemId The current item id.
+       *
+       * @return {Array} The list of ids.
+       */
+      related.ignoreIds = function(usedIds, itemId) {
+        return usedIds.concat([ itemId ]);
       };
 
       /**
