@@ -152,6 +152,11 @@ class FormFieldHelper
                 'available' => [ 'category' ]
             ],
             [
+                'name' => 'cover',
+                'title' => _('Cover'),
+                'available' => [ 'category' ]
+            ],
+            [
                 'name' => 'type',
                 'title' => _('Type'),
                 'available' => [ 'category' ]

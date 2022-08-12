@@ -192,9 +192,12 @@ CREATE TABLE `category` (
   `params` text,
   `logo_id` bigint(20) unsigned DEFAULT NULL,
   `color` varchar(10) DEFAULT NULL,
+  `cover_id` bigint(20) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `logo_id` (`logo_id`),
-  CONSTRAINT `logo_id_pk_content` FOREIGN KEY (`logo_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `logo_id_pk_content` FOREIGN KEY (`logo_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE,
+  KEY `cover_id` (`cover_id`),
+  CONSTRAINT `cover_id_pk_content` FOREIGN KEY (`cover_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -204,7 +207,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (20,'Sin categorÃ­a','sin-categoria',NULL,0,1,0,NULL,NULL,NULL,NULL),(22,'Deportes','deportes',NULL,1,1,1,NULL,NULL,NULL,NULL),(23,'EconomÃ­a','economia',NULL,1,1,1,NULL,NULL,NULL,NULL),(24,'PolÃ­tica','politica',NULL,1,1,1,NULL,NULL,NULL,NULL),(25,'Cultura','cultura',NULL,1,1,1,NULL,NULL,NULL,NULL),(26,'Sociedad','sociedad',NULL,1,1,1,NULL,NULL,NULL,NULL),(30,'Curiosidades','curiosidades',NULL,1,1,1,NULL,NULL,NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,1,1,1,NULL,NULL,NULL,NULL),(32,'Portadas','portadas',NULL,1,1,1,NULL,NULL,NULL,NULL),(33,'Ciencia','ciencia',NULL,1,1,1,NULL,NULL,NULL,NULL),(34,'Actualidad','actualidad',NULL,1,1,1,NULL,NULL,NULL,NULL),(35,'Internacional','internacional',NULL,1,1,1,NULL,NULL,NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,1,1,1,NULL,NULL,NULL,NULL);
+INSERT INTO `category` VALUES (20,'Sin categorÃ­a','sin-categoria',NULL,0,1,0,NULL,NULL,NULL,NULL,NULL),(22,'Deportes','deportes',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(23,'EconomÃ­a','economia',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(24,'PolÃ­tica','politica',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(25,'Cultura','cultura',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(26,'Sociedad','sociedad',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(30,'Curiosidades','curiosidades',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(32,'Portadas','portadas',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(33,'Ciencia','ciencia',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(34,'Actualidad','actualidad',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(35,'Internacional','internacional',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 

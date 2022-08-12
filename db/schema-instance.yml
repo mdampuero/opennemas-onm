@@ -254,6 +254,9 @@ category:
         color:
             type: string
             options: { length: 10, default: null, notnull: false }
+        cover_id:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -267,10 +270,22 @@ category:
             primary: false
             unique: false
             flags: {  }
+        -
+            name: cover_id
+            columns: [cover_id]
+            primary: false
+            unique: false
+            flags: {  }
     foreign_keys:
         -
             name: logo_id_pk_content
             source_field: [ logo_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
+        -
+            name: cover_id_pk_content
+            source_field: [ cover_id ]
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
