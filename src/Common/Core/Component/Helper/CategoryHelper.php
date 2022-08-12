@@ -186,7 +186,7 @@ class CategoryHelper
      *
      * @return bool $manualLayour
      */
-    public function getManualLayout($item = null)
+    public function isManualCategory($item = null)
     {
         if (empty($item)) {
             return null;
@@ -196,7 +196,7 @@ class CategoryHelper
         if (empty($category->params) || empty($category->params['manual'])) {
             return null;
         }
-        return (int) $category->params['manual'];
+        return (bool) $category->params['manual'];
     }
 
     /**
@@ -275,19 +275,5 @@ class CategoryHelper
     public function hasCategoryLogo($item = null) : bool
     {
         return !empty($this->getCategoryLogo($item));
-    }
-
-    /**
-     * Checks if the category has a manual layout.
-     *
-     * @param Content $item The item to check category logo for. If not provided,
-     *                      the function will try to search the item in the
-     *                      template.
-     *
-     * @return bool True if the category has a manual layout. False otherwise.
-     */
-    public function hasManualLayout($item = null) : bool
-    {
-        return !empty($this->getManualLayout($item));
     }
 }
