@@ -140,6 +140,48 @@
           </div>
         </div>
       </div>
+      <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.cover }" ng-click="expanded.cover = !expanded.cover">
+        <i class="fa fa-picture-o m-r-10"></i>{t}Cover{/t}
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.cover }"></i>
+      </div>
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.cover }">
+        <div class="thumbnail-wrapper">
+          <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.cover_id }"></div>
+          <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.cover_id }">
+            <p>Are you sure?</p>
+            <div class="confirm-actions">
+              <button class="btn btn-link" ng-click="toggleOverlay('cover_id')" type="button">
+                <i class="fa fa-times fa-lg"></i>
+                {t}No{/t}
+              </button>
+              <button class="btn btn-link" ng-click="removeItem('item.cover_id');toggleOverlay('cover_id')" type="button">
+                <i class="fa fa-check fa-lg"></i>
+                {t}Yes{/t}
+              </button>
+            </div>
+          </div>
+          <div class="thumbnail-placeholder">
+            <div class="img-thumbnail" ng-show="!item.cover_id">
+              <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="item.cover_id">
+                <i class="fa fa-picture-o fa-2x"></i>
+                <h5>Pick an image</h5>
+              </div>
+            </div>
+            <div class="dynamic-image-placeholder" ng-show="item.cover_id">
+              <dynamic-image autoscale="true" class="img-thumbnail" instance="{$app.instance->getMediaShortPath()}/" ng-model="item.cover_id">
+                <div class="thumbnail-actions">
+                  <div class="thumbnail-action remove-action" ng-click="toggleOverlay('cover_id')">
+                    <i class="fa fa-trash-o fa-2x"></i>
+                  </div>
+                  <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="item.cover_id" media-picker-types="photo">
+                    <i class="fa fa-camera fa-2x"></i>
+                  </div>
+                </div>
+              </dynamic-image>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.menu }" ng-click="expanded.menu = !expanded.menu" ng-show="data.extra.menu">
         <i class="fa fa-list-alt m-r-10"></i>{t}Menu{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.menu }"></i>
