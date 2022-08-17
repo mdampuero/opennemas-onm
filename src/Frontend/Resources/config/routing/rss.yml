@@ -42,7 +42,7 @@ frontend_rss_type:
     path:     /rss/{type}
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     requirements:
-        type: '(album|opinion|video|event|poll|obituary)'
+        type: '(album|opinion|video|event|poll|obituary|company)'
 
 frontend_rss_type_category:
     path:     /rss/{type}/{category}

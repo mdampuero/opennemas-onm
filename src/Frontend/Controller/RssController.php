@@ -147,6 +147,7 @@ class RssController extends FrontendController
             'poll'     => _('Latest Polls'),
             'event'    => _('Latest Events'),
             'obituary' => _('Latest Obituaries'),
+            'company'  => _('Latest Companies'),
         ];
 
         // Setup templating cache layer
@@ -495,7 +496,7 @@ class RssController extends FrontendController
         // Fix condition for IN operator when no categories
         $ids = empty($ids) ? [ '' ] : $ids;
 
-        if (!in_array($contentType, ['opinion', 'obituary'])) {
+        if (!in_array($contentType, ['opinion', 'obituary', 'company'])) {
             $filters['category_id'] = [
                 [ 'value' => $ids, 'operator' => 'IN' ]
             ];
