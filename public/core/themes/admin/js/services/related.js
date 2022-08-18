@@ -126,6 +126,22 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
       };
 
       /**
+       * @function ignoreIds
+       * @memberOf related
+       *
+       * @description
+       *   Returns the list of ids to ignore in picker.
+       *
+       * @param {Array} usedIds The array of current used ids on picker.
+       * @param {Number} itemId The current item id.
+       *
+       * @return {Array} The list of ids.
+       */
+      related.ignoreIds = function(usedIds, itemId) {
+        return usedIds.concat([ itemId ]);
+      };
+
+      /**
        * @function getRelated
        * @memberOf related
        *
