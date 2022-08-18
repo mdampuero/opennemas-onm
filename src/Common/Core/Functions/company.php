@@ -218,6 +218,77 @@ function has_instagram($item) : bool
 }
 
 /**
+ * Returns the instagram of the company.
+ *
+ * @param Content $item The company to get the instagram from.
+ *
+ * @return string The instagram of the company.
+ */
+function get_linkedin($item) : ?string
+{
+    return getService('core.helper.company')->getLinkedin($item);
+}
+
+/**
+ * Returns true if the company has instagram.
+ *
+ * @param Content $item The company to get the instagram from.
+ *
+ * @return bool True if the company has a instagram, false otherwise.
+ */
+function has_linkedin($item) : bool
+{
+    return getService('core.helper.company')->hasLinkedin($item);
+}
+
+/**
+ * Returns the instagram of the company.
+ *
+ * @param Content $item The company to get the instagram from.
+ *
+ * @return string The instagram of the company.
+ */
+function get_youtube($item) : ?string
+{
+    return getService('core.helper.company')->getYoutube($item);
+}
+
+/**
+ * Returns true if the company has instagram.
+ *
+ * @param Content $item The company to get the instagram from.
+ *
+ * @return bool True if the company has a instagram, false otherwise.
+ */
+function has_youtube($item) : bool
+{
+    return getService('core.helper.company')->hasYoutube($item);
+}
+
+/**
+ * Returns the instagram of the company.
+ *
+ * @param Content $item The company to get the instagram from.
+ *
+ * @return string The instagram of the company.
+ */
+function get_tiktok($item) : ?string
+{
+    return getService('core.helper.company')->getTiktok($item);
+}
+
+/**
+ * Returns true if the company has instagram.
+ *
+ * @param Content $item The company to get the instagram from.
+ *
+ * @return bool True if the company has a instagram, false otherwise.
+ */
+function has_tiktok($item) : bool
+{
+    return getService('core.helper.company')->hasTiktok($item);
+}
+/**
  * Returns the phone of the company.
  *
  * @param Content $item The company to get the phone from.

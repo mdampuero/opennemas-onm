@@ -97,6 +97,9 @@ class CompanyHelper
     {
         return array_filter([
             'whatsapp'  => $item->whatsapp,
+            'linkedin'  => $item->linkedin,
+            'youtube'   => $item->youtube,
+            'tiktok'    => $item->tiktok,
             'instagram' => $item->instagram,
             'facebook'  => $item->facebook,
             'twitter'   => $item->twitter,
@@ -190,6 +193,78 @@ class CompanyHelper
     public function hasWhatsapp($item) : bool
     {
         return !empty($this->getWhatsapp($item));
+    }
+
+    /**
+     * Returns the whatsapp of the company.
+     *
+     * @param Content $item The company to get the whatsapp from.
+     *
+     * @return string The whatsapp of the company.
+     */
+    public function getLinkedin($item) : ?string
+    {
+        return $item->linkedin;
+    }
+
+    /**
+     * Returns true if the company has whatsapp.
+     *
+     * @param Content $item The company to get the whatsapp from.
+     *
+     * @return bool True if the company has a whatsapp, false otherwise.
+     */
+    public function hasLinkedin($item) : bool
+    {
+        return !empty($this->getLinkedin($item));
+    }
+
+    /**
+     * Returns the whatsapp of the company.
+     *
+     * @param Content $item The company to get the whatsapp from.
+     *
+     * @return string The whatsapp of the company.
+     */
+    public function getYoutube($item) : ?string
+    {
+        return $item->youtube;
+    }
+
+    /**
+     * Returns true if the company has whatsapp.
+     *
+     * @param Content $item The company to get the whatsapp from.
+     *
+     * @return bool True if the company has a whatsapp, false otherwise.
+     */
+    public function hasYoutube($item) : bool
+    {
+        return !empty($this->getYoutube($item));
+    }
+
+    /**
+     * Returns the whatsapp of the company.
+     *
+     * @param Content $item The company to get the whatsapp from.
+     *
+     * @return string The whatsapp of the company.
+     */
+    public function getTiktok($item) : ?string
+    {
+        return $item->tiktok;
+    }
+
+    /**
+     * Returns true if the company has whatsapp.
+     *
+     * @param Content $item The company to get the whatsapp from.
+     *
+     * @return bool True if the company has a whatsapp, false otherwise.
+     */
+    public function hasTiktok($item) : bool
+    {
+        return !empty($this->getTiktok($item));
     }
 
     /**
