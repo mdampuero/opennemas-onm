@@ -87,7 +87,7 @@
 
         "drexarj/disqus-php": "dev-master",
         "opennemas/cache": "1.2.0",
-        "opennemas/data": "1.1.1",
+        "opennemas/data": "1.1.2",
         "opennemas/orm": "1.6.0",
         "opennemas/task": "1.0.*",
         "opennemas/panorama-php": "1.0.1",
