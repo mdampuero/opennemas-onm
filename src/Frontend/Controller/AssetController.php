@@ -219,18 +219,15 @@ class AssetController extends Controller
      */
     public function favicoAction()
     {
-        $path = '/assets/images/favicon.png';
+        $favico = '/assets/images/favicon.png';
+        $sh     = $this->get('core.helper.setting');
 
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get(['favico', 'logo_enabled']);
-
-        if ($settings['logo_enabled'] && !empty($settings['favico'])) {
-            $path = $this->get('core.instance')->getMediaShortPath()
-                . '/sections/' . $settings['favico'];
+        if ($sh->hasLogo('favico')) {
+            $favico = $this->get('core.instance')->getMediaShortPath() . DS
+                . $sh->getLogo('favico')->path;
         }
 
-        $path = $this->getParameter('core.paths.public') . $path;
+        $path = $this->getParameter('core.paths.public') . $favico;
 
         $content = $this->get('core.image.processor')
             ->open($path)

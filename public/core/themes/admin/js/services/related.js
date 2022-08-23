@@ -24,6 +24,10 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
       var related = {
         bag: {},
         map: {
+          logo: {
+            name:   'logo',
+            simple: true
+          },
           featured_frontpage: {
             mirror: 'featured_inner',
             name:   'featuredFrontpage',
@@ -119,6 +123,22 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
         return related.scope[name].map(function(e) {
           return e.target_id;
         });
+      };
+
+      /**
+       * @function ignoreIds
+       * @memberOf related
+       *
+       * @description
+       *   Returns the list of ids to ignore in picker.
+       *
+       * @param {Array} usedIds The array of current used ids on picker.
+       * @param {Number} itemId The current item id.
+       *
+       * @return {Array} The list of ids.
+       */
+      related.ignoreIds = function(usedIds, itemId) {
+        return usedIds.concat([ itemId ]);
       };
 
       /**

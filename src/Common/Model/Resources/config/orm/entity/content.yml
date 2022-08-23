@@ -10,6 +10,7 @@ orm:
                     - article
                     - attachment
                     - book
+                    - company
                     - event
                     - kiosko
                     - letter
@@ -45,8 +46,8 @@ orm:
                 position:            integer
                 slug:                l10n_string
                 starttime:           datetime
-                coverage_start_time: datetime
-                coverage_end_time:   datetime
+                coverage_start_time: string
+                coverage_end_time:   string
                 title:               l10n_string
                 urn_source:          string
                 with_comment:        boolean
@@ -57,6 +58,7 @@ orm:
                 tags:                array
                 related_contents:    array
                 subscriptions:       array
+                timetable:           array
                 title_int:           l10n_string
                 pretitle:            l10n_string
             converters:

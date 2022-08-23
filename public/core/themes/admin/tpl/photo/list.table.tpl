@@ -58,7 +58,7 @@
   {acl isAllowed="PHOTO_RESOLUTION"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('size')">
       <span class="badge badge-default text-bold">
-        [% item.size %] KB
+        [% item.size | number : 2 %] KB
       </span>
     </td>
   {/acl}

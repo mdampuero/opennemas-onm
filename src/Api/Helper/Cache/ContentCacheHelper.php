@@ -34,31 +34,6 @@ class ContentCacheHelper extends CacheHelper
     protected $redisKeys = [];
 
     /**
-     * The array of default keys to remove in varnish.
-     *
-     * @var array
-     */
-    protected $defaultVarnishKeys = [
-        'archive-page-{{starttime}}',
-        'authors-frontpage',
-        'category-{{categories}}',
-        'content-author-{{fk_author}}-frontpage',
-        '{{content_type_name}}-frontpage$',
-        '{{content_type_name}}-frontpage,category-{{content_type_name}}-{{categories}}',
-        '{{content_type_name}}-{{pk_content}}',
-        'content_type_name-widget-{{content_type_name}}' .
-        '.*category-widget-(({{categories}})|(all))' .
-        '.*tag-widget-(({{tags}})|(all))' .
-        '.*author-widget-(({{fk_author}})|(all))',
-        'last-suggested-{{categories}}',
-        'rss-author-{{fk_author}}',
-        'rss-{{content_type_name}}$',
-        'sitemap',
-        'tag-{{tags}}',
-        'header-date',
-    ];
-
-    /**
      * The array of default keys in voted items to remove in varnish.
      *
      * @var array
@@ -103,11 +78,11 @@ class ContentCacheHelper extends CacheHelper
 
         $this->cache->remove($keys);
 
-        $finalVarnishKeys    = array_merge($this->varnishKeys, $this->getModuleKeys());
-        $selectedVarnishKeys = ($vote) ? $this->defaultVoteVarnishKeys : $this->defaultVarnishKeys;
+        $varnishKeys = ($vote) ? $this->defaultVoteVarnishKeys : $this->varnishKeys;
+        $varnishKeys = array_merge($varnishKeys, $this->getModuleKeys());
 
         $this->removeVarnishCache(
-            $this->replaceWildcards($item, array_merge($finalVarnishKeys, $selectedVarnishKeys)),
+            $this->replaceWildcards($item, $varnishKeys),
             $item
         );
 
@@ -175,9 +150,18 @@ class ContentCacheHelper extends CacheHelper
             ]));
         }
 
+        $banRegExpr = '';
         foreach ($keys as $key) {
+            $banRegExpr .= '|(' . $key . ')';
+        }
+
+        if (!empty($banRegExpr)) {
             $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*%s', $this->instance->internal_name, $key)
+                sprintf(
+                    'obj.http.x-tags ~ instance-%s.*%s',
+                    $this->instance->internal_name,
+                    '(' . substr($banRegExpr, 1) . ')'
+                )
             ]));
         }
     }
