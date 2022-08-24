@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-09 07:13+0000\n"
-"PO-Revision-Date: 2022-08-09 09:32+0200\n"
+"POT-Creation-Date: 2022-08-23 06:36+0000\n"
+"PO-Revision-Date: 2022-08-23 08:39+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -956,6 +956,21 @@ msgstr "Últimas opinións"
 msgid "Latest Videos"
 msgstr "Últimos vídeos"
 
+msgid "Latest Polls"
+msgstr "Últimas enquisas"
+
+msgid "Latest Events"
+msgstr "Últimos eventos"
+
+msgid "Latest Obituaries"
+msgstr "Últimas necrolóxicas"
+
+msgid "Latest Companies"
+msgstr "Últimas empresas"
+
+msgid "Most viewed"
+msgstr "Máis vistos"
+
 msgid "Your account is now activated"
 msgstr "A túa conta agora está activada"
 
@@ -1441,9 +1456,6 @@ msgstr "Sin filtro"
 
 msgid "Last in 24 hours"
 msgstr "Nas últimas 24 horas"
-
-msgid "Most viewed"
-msgstr "Máis vistos"
 
 msgid "Opinion"
 msgstr "Opinión"
@@ -4991,6 +5003,9 @@ msgstr "Deshablitar a chave da API de Google Analytics de Opennemas"
 
 msgid "Only AMP"
 msgstr "Only AMP"
+
+msgid "Preproduction"
+msgstr "Preproducción"
 
 msgid "Show full content on RSS"
 msgstr "Mostrar todo o contido en RSS"
