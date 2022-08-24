@@ -15,6 +15,7 @@ orm:
                 params:              array
                 logo_id:             integer
                 color:               string
+                cover_id:            integer
             converters:
                 default:
                     class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
@@ -64,10 +65,25 @@ orm:
                         color:
                             type: string
                             options: { default: null, notnull: false, length: 10 }
+                        cover_id:
+                            type: bigint
+                            options: { default: null, unsigned: true }
                     index:
                         -
                             name: PRIMARY
                             columns: [ id ]
                             primary: true
                             unique: true
+                            flags: {}
+                        -
+                            name: logo_id
+                            columns: [logo_id]
+                            primary: false
+                            unique: false
+                            flags: {}
+                        -
+                            name: cover_id
+                            columns: [cover_id]
+                            primary: false
+                            unique: false
                             flags: {}
