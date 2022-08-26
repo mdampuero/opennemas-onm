@@ -402,7 +402,10 @@ class ContentHelper
      */
     public function getSummary($item = null) : ?string
     {
-        if (in_array($item->content_type_name, [ 'article', 'company', 'obituary', 'opinion', 'video' ])) {
+        if (in_array(
+            $item->content_type_name,
+            [ 'article', 'company', 'obituary', 'opinion', 'video', 'poll', 'event' ]
+        )) {
             return $this->getProperty($item, 'description');
         }
 
@@ -750,7 +753,6 @@ class ContentHelper
         }
 
         $timezone  = $this->locale->getTimeZone();
-
         $startTime = (gettype($item->coverage_start_time) == 'object') ?
             $item->coverage_start_time :
             new \DateTime($item->coverage_start_time);

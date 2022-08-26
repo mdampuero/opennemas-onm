@@ -120,27 +120,27 @@ class CategoryValidatorTest extends \PHPUnit\Framework\TestCase
      *
      * @expectedException \Api\Exception\InvalidArgumentException
      */
-    public function testValidateWhenNotValidCategoryLogo()
-    {
-        $item = new Category([
-            'name'    => 'flob',
-            'logo_id' => 123,
-            'id'      => 1
-        ]);
+    // public function testValidateWhenNotValidCategoryLogo()
+    // {
+    //     $item = new Category([
+    //         'name'    => 'flob',
+    //         'logo_id' => 123,
+    //         'id'      => 1
+    //     ]);
 
-        $photo = new Content([
-            'pk_content' => 123,
-            'height'     => 200
-        ]);
+    //     $photo = new Content([
+    //         'pk_content' => 123,
+    //         'height'     => 200
+    //     ]);
 
-        $this->categoryService->expects($this->any())->method('getItemBySlug')
-            ->with('flob')
-            ->willReturn($item);
+    //     $this->categoryService->expects($this->any())->method('getItemBySlug')
+    //         ->with('flob')
+    //         ->willReturn($item);
 
-        $this->photoService->expects($this->any())->method('getItem')
-            ->with(123)
-            ->willReturn($photo);
+    //     $this->photoService->expects($this->any())->method('getItem')
+    //         ->with(123)
+    //         ->willReturn($photo);
 
-        $this->validator->validate($item);
-    }
+    //     $this->validator->validate($item);
+    // }
 }

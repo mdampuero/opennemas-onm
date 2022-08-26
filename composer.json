@@ -87,11 +87,11 @@
 
         "drexarj/disqus-php": "dev-master",
         "opennemas/cache": "1.2.0",
-        "opennemas/data": "1.1.1",
+        "opennemas/data": "1.1.2",
         "opennemas/orm": "1.6.0",
         "opennemas/task": "1.0.*",
+        "opennemas/panorama-php": "1.0.1",
         "cometcult/braintree-bundle": "dev-master",
-        "frandieguez/panorama-php": "dev-master",
         "google/recaptcha": "1.1.3",
         "rtconner/freshbooks-api": "dev-master",
         "vdb/php-spider": "^0.4.4",
@@ -124,7 +124,7 @@
         },
         {
             "type": "git",
-            "url":  "https://github.com/openhost/panorama-php"
+            "url": "git@bitbucket.org:opennemas/panorama-php.git"
         },
         {
             "type": "git",

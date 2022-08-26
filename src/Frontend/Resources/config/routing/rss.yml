@@ -7,6 +7,8 @@ frontend_rss_facebook_instant_articles:
 frontend_rss_showcase:
     path:     /rss/google-news-showcase
     defaults: { _controller: FrontendBundle:Rss:googleNews}
+    options:
+        subdirectory: true
 
 frontend_rss_listing:
     path:     /rss/listado
@@ -45,11 +47,17 @@ frontend_rss:
     options:
         subdirectory: true
 
+frontend_rss_most_viewed:
+    path:     /rss/most-viewed
+    defaults: { _controller: FrontendBundle:Rss:mostViewedRss }
+    options:
+        subdirectory: true
+
 frontend_rss_type:
     path:     /rss/{type}
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     requirements:
-        type: '(album|opinion|video)'
+        type: '(album|opinion|video|event|poll|obituary|company)'
     options:
         subdirectory: true
 
@@ -57,7 +65,7 @@ frontend_rss_type_category:
     path:     /rss/{type}/{category}
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     requirements:
-        type:     '(album|opinion|video)'
+        type:     '(album|video|event|poll)'
         category: '[^/]*'
     options:
         subdirectory: true

@@ -115,13 +115,7 @@ class StructuredData
     protected function getAuthorData($content)
     {
         // Get author if exists or agency. Otherwise get site name.
-        $author = '';
-        try {
-            $user   = $this->container->get('core.helper.author')->getAuthor($content->fk_author);
-            $author = $user->name;
-        } catch (\Exception $e) {
-            $author = $content->agency;
-        }
+        $author = $this->container->get('core.helper.author')->getAuthorName($content->fk_author);
 
         if (empty($author)) {
             $author = $this->ds->get('site_name');
