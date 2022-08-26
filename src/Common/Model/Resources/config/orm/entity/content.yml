@@ -10,6 +10,7 @@ orm:
                     - article
                     - attachment
                     - book
+                    - company
                     - event
                     - kiosko
                     - letter
@@ -57,6 +58,7 @@ orm:
                 tags:                array
                 related_contents:    array
                 subscriptions:       array
+                timetable:           array
                 title_int:           l10n_string
                 pretitle:            l10n_string
             converters:

@@ -5,6 +5,8 @@
         "custom_params": "cp_c1={$domain}&cp_c2={$category}"
       },
       "vars": {
+        {if !empty({setting name='gfk' field='pre_mode'})}"environment": "-preproduction",{/if}
+
         "regionID": "{$regionId}",
         "mediaID": "{$mediaId}Amp"
       },

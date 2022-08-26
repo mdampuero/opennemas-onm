@@ -402,7 +402,7 @@ class ContentHelper
      */
     public function getSummary($item = null) : ?string
     {
-        if (in_array($item->content_type_name, [ 'article', 'obituary', 'opinion', 'video' ])) {
+        if (in_array($item->content_type_name, [ 'article', 'company', 'obituary', 'opinion', 'video', 'poll', 'event' ])) {
             return $this->getProperty($item, 'description');
         }
 

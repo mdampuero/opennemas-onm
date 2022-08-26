@@ -79,6 +79,15 @@
           $scope.item.logo_id = nv ? nv.pk_content : null;
         }, true);
 
+        // Updates the cover_id when an image is selected
+        $scope.$watch('item.cover_id', function(nv, ov) {
+          if (!ov && !nv || nv && !angular.isObject(nv)) {
+            return;
+          }
+
+          $scope.item.cover_id = nv ? nv.pk_content : null;
+        }, true);
+
         // Generates slug when flag changes
         $scope.$watch('flags.generate.slug', function(nv) {
           if ($scope.item.name || !nv || !$scope.item.title) {

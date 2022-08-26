@@ -22,6 +22,7 @@ class FormFieldHelper
                 'title' => _('Author'),
                 'available' => [
                     'article',
+                    'company',
                     'opinion',
                     'event',
                     'poll',
@@ -47,6 +48,7 @@ class FormFieldHelper
                 'title' => _('Tags'),
                 'available' => [
                     'article',
+                    'company',
                     'opinion',
                     'event',
                     'poll',
@@ -62,6 +64,7 @@ class FormFieldHelper
                 'available' => [
                     'article',
                     'author',
+                    'company',
                     'opinion',
                     'event',
                     'poll',
@@ -86,6 +89,7 @@ class FormFieldHelper
                 'title' => _('Schedule'),
                 'available' => [
                     'article',
+                    'company',
                     'widget',
                     'opinion',
                     'event',
@@ -148,6 +152,11 @@ class FormFieldHelper
                 'available' => [ 'category' ]
             ],
             [
+                'name' => 'cover',
+                'title' => _('Cover'),
+                'available' => [ 'category' ]
+            ],
+            [
                 'name' => 'type',
                 'title' => _('Type'),
                 'available' => [ 'category' ]
@@ -196,6 +205,7 @@ class FormFieldHelper
                 'title' => _('Featured in inner'),
                 'available' => [
                     'article',
+                    'company',
                     'opinion',
                     'event',
                     'poll'
@@ -209,12 +219,72 @@ class FormFieldHelper
             [
                 'name' => 'relatedInner',
                 'title' => _('Related in inner'),
-                'available' => [ 'article' ]
+                'available' => [ 'article', 'company' ]
             ],
             [
                 'name' => 'agency',
                 'title' => _('Agency'),
                 'available' => [ 'album' ]
+            ],
+            [
+                'name' => 'facebook',
+                'title' => _('Facebook'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'twitter',
+                'title' => _('Twitter'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'instagram',
+                'title' => _('Instagram'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'whatsapp',
+                'title' => _('Whatsapp'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'phone',
+                'title' => _('Phone'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'email',
+                'title' => _('Email'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'address',
+                'title' => _('Address'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'maps',
+                'title' => _('Google Maps'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'website',
+                'title' => _('Website'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'logo',
+                'title' => _('Logo'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'sector',
+                'title' => _('Sector'),
+                'available' => [ 'company' ]
+            ],
+            [
+                'name' => 'timetable',
+                'title' => _('Timetable'),
+                'available' => [ 'company' ]
             ],
             [
                 'name' => 'google_news_showcase',
@@ -229,6 +299,7 @@ class FormFieldHelper
         ];
         return $this;
     }
+
     /**
     * Filters the field to return of the specific module.
     *

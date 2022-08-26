@@ -7,6 +7,10 @@ services:
         class:     Api\Helper\Cache\ContentCacheHelper
         arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
 
+    api.helper.cache.company:
+        class:     Api\Helper\Cache\CompanyCacheHelper
+        arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]
+
     api.helper.cache.article:
         class:     Api\Helper\Cache\ArticleCacheHelper
         arguments: [ '@core.instance', '@task.service.queue', '@cache.connection.instance' ]

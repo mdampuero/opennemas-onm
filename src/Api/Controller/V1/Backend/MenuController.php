@@ -71,6 +71,11 @@ class MenuController extends ApiController
             'route' => 'frontend_events'
         ],
         [
+            'module' => 'es.openhost.module.companies',
+            'title' => 'Companies',
+            'route' => 'frontend_companies'
+        ],
+        [
             'module' => 'es.openhost.module.obituaries',
             'title' => 'Obituaries',
             'route' => 'frontend_obituaries'

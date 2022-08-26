@@ -1958,6 +1958,10 @@
                               <label for="gfk_only_amp">
                                 {t}Only AMP{/t}
                               </label>
+                              <input id="gfk_pre_mode" name="gfk_pre_mode" ng-false-value="'0'" ng-model="settings.gfk.pre_mode" ng-true-value="'1'" type="checkbox"/>
+                              <label for="gfk_pre_mode">
+                                {t}Preproduction{/t}
+                              </label>
                             </div>
                           </div>
                           <h4>
