@@ -3,7 +3,7 @@
 // Tag configuration
 var gfkS2sConf = {
   media: "{$mediaId}Web",
-  url:   "//{$regionId}-config.sensic.net/s2s-web.js",
+  url:   "//{$regionId}-config{if !empty({setting name='gfk' field='pre_mode'})}-preproduction{/if}.sensic.net/s2s-web.js",
   type:  "WEB"
 };
 

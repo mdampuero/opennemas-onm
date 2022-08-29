@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e25e957e35b096eb0c7772ea7d3e5f46",
+    "content-hash": "81e40fb84b92f0c4221d243b8e76fbb3",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1444,44 +1444,6 @@
             "time": "2016-10-17T18:31:11+00:00"
         },
         {
-            "name": "frandieguez/panorama-php",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/openhost/panorama-php",
-                "reference": "b9064569dd67c83360e6652ec4513190f20f4fc3"
-            },
-            "require": {
-                "php": ">=7.1"
-            },
-            "require-dev": {
-                "behat/behat": "*",
-                "phpunit/phpunit": "*"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Panorama": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fran Diéguez",
-                    "email": "fran.dieguez@mabishu.com"
-                }
-            ],
-            "description": "Wrapper class for accessing video services information in a standarized way",
-            "homepage": "http://frandieguez.github.com/panorama-php/",
-            "keywords": [
-                "library"
-            ],
-            "time": "2020-12-15T12:28:31+00:00"
-        },
-        {
             "name": "friendsofsymfony/jsrouting-bundle",
             "version": "2.2.2",
             "source": {
@@ -2917,11 +2879,11 @@
         },
         {
             "name": "opennemas/data",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:opennemas/data.git",
-                "reference": "25fe26260ac01b6acaf6fbff35ea33d926e96ab8"
+                "reference": "1a42af62af5ee640174ec58a9465f58b87863b8e"
             },
             "require": {
                 "ext-intl": "*",
@@ -2978,7 +2940,7 @@
                 "filter",
                 "symfony"
             ],
-            "time": "2021-03-18T09:47:40+00:00"
+            "time": "2022-08-19T06:21:29+00:00"
         },
         {
             "name": "opennemas/orm",
@@ -3047,6 +3009,42 @@
                 "orm"
             ],
             "time": "2021-09-08T06:38:03+00:00"
+        },
+        {
+            "name": "opennemas/panorama-php",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:opennemas/panorama-php.git",
+                "reference": "0d2c683e19be66613ba03dcb9146a451e47133b5"
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "behat/behat": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Panorama": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Opennemas Developers",
+                    "email": "developers@opennemas.com"
+                }
+            ],
+            "description": "Wrapper class for accessing video services information in a standarized way",
+            "homepage": "https://bitbucket.org/opennemas/panorama-php/",
+            "keywords": [
+                "library"
+            ],
+            "time": "2022-08-10T11:56:04+00:00"
         },
         {
             "name": "opennemas/task",
@@ -8061,7 +8059,6 @@
         "smarty-gettext/smarty-gettext": 0,
         "drexarj/disqus-php": 20,
         "cometcult/braintree-bundle": 20,
-        "frandieguez/panorama-php": 20,
         "rtconner/freshbooks-api": 20
     },
     "prefer-stable": false,

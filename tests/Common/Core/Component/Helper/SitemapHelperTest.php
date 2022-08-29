@@ -168,9 +168,10 @@ class SitemapHelperTest extends \PHPUnit\Framework\TestCase
         ];
 
         $query = 'SELECT CONCAT(CONVERT(year(changed), NCHAR),\'-\', LPAD(month(changed),2,"0")) as \'dates\''
-            . 'FROM `contents` WHERE year(changed) is not null '
-            . 'AND `content_type_name` IN ("article") '
-            . 'group by dates order by dates';
+        . 'FROM `contents` WHERE year(changed) is not null AND year(changed) <= YEAR(CURRENT_DATE()) '
+        . 'AND month(changed) <= month(CURRENT_DATE())'
+        . 'AND `content_type_name` IN ("article") '
+        . 'group by dates order by dates';
 
         $this->connection->expects($this->once())->method('fetchAll')
             ->with($query)

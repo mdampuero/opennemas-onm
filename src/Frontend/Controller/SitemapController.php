@@ -23,13 +23,29 @@ class SitemapController extends Controller
      *
      * @const array
      */
-    const EXPIRE = [
-        'categories' => '1d',
-        'authors'    => '1d',
-        'contents'   => '1h',
-        'index'      => '1d',
-        'news'       => '1h',
-        'tag'        => '1h',
+    const VARNISH_EXPIRE = [
+        'categories'      => '1d',
+        'authors'         => '1d',
+        'contents'        => '1h',
+        'index'           => '1d',
+        'news'            => '300s',
+        'tag'             => '1h',
+        'contents-latest' => '300s'
+    ];
+
+    /**
+     * The list of expire times for actions.
+     *
+     * @const array
+     */
+    const CF_EXPIRE = [
+        'categories'      => '86400',
+        'authors'         => '86400',
+        'contents'        => '3600',
+        'index'           => '86400',
+        'news'            => '300',
+        'tag'             => '3600',
+        'contents-latest' => '300'
     ];
 
     /**
@@ -199,8 +215,7 @@ class SitemapController extends Controller
                 null,
                 null,
                 null,
-                null,
-                'no-store'
+                null
             );
         }
 
@@ -212,8 +227,7 @@ class SitemapController extends Controller
             null,
             null,
             null,
-            null,
-            'no-store'
+            null
         );
     }
 
@@ -232,8 +246,10 @@ class SitemapController extends Controller
         // TODO: Remove this as soon as possible
         $helper   = $this->get('core.helper.sitemap');
         $settings = $helper->getSettings();
+        $action   = 'contents';
 
         if (empty(array_filter([$year, $month, $page]))) {
+            $action             = 'contents-latest';
             $dates              = $helper->getDates();
             $last               = array_pop($dates);
             list($year, $month) = explode('-', $last);
@@ -254,7 +270,16 @@ class SitemapController extends Controller
         );
 
         if (file_exists($path)) {
-            return $this->getResponse($format, $cacheId, 'contents', [], $path, $page, $year, $month);
+            return $this->getResponse(
+                $format,
+                $cacheId,
+                $action,
+                [],
+                $path,
+                $page,
+                $year,
+                $month
+            );
         }
 
         $date     = $year . '-' . $month;
@@ -269,7 +294,7 @@ class SitemapController extends Controller
         return $this->getResponse(
             $format,
             $cacheId,
-            'contents',
+            $action,
             $contents,
             $path,
             $page,
@@ -394,10 +419,13 @@ class SitemapController extends Controller
     ) {
         $headers = [
             'Content-Type' => 'application/xml; charset=utf-8',
-            'x-cache-for' => self::EXPIRE[$action],
+            'x-cache-for' => self::VARNISH_EXPIRE[$action],
             'x-cacheable' => true,
-            'x-tags'      => sprintf('sitemap,%s', $action)
+            'x-tags'      => sprintf('sitemap,%s', $action),
+            'Cache-Control' => 'max-age=' . self::CF_EXPIRE[$action] . ', public',
         ];
+
+        $action = $action == 'contents-latest' ? 'contents' : $action;
 
         if (!empty($cacheControl)) {
             $headers['Cache-Control'] = $cacheControl;
