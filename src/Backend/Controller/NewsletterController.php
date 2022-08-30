@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
 use Common\Model\Entity\Content;
+use Symfony\Component\Process\Process;
 
 /**
  * Handles the actions for the newsletter
@@ -382,41 +383,27 @@ class NewsletterController extends Controller
      */
     public function sendAction(Request $request)
     {
-        $id = (int) $request->query->getDigits('id');
-
+        $id         = (int) $request->query->getDigits('id');
         $recipients = $request->request->get('recipients');
-        $recipients = json_decode($recipients);
 
         $newsletterService = $this->get('api.service.newsletter');
-        $newsletterSender  = $this->get('core.helper.newsletter_sender');
-
         try {
             $newsletter = $newsletterService->getItem($id);
-            $report     = $newsletterSender->send($newsletter, $recipients);
 
-            // Duplicate newsletter if it was sent before.
-            if ($newsletter->sent_items > 0) {
-                $data = array_merge($newsletter->getStored(), [
-                    'recipients' => $recipients,
-                    'sent'       => new \Datetime(),
-                    'sent_items' => $report['total'],
-                    'updated'    => new \Datetime(),
-                ]);
+            $instanceName = $this->get('core.instance')->internal_name;
 
-                unset($data['id']);
+            $process = new Process(
+                sprintf(
+                    '/home/opennemas/current/bin/console newsletter:send \'%s\' %s \'%s\'',
+                    $instanceName,
+                    $id,
+                    $recipients
+                )
+            );
 
-                $newsletter = $this->get('api.service.newsletter')->createItem($data);
-            } else {
-                $this->get('api.service.newsletter')->patchItem($id, [
-                    'recipients' => $recipients,
-                    'sent'       => new \Datetime(),
-                    'sent_items' => $report['total'],
-                    'updated'    => new \Datetime(),
-                ]);
-            }
+            $process->start();
 
             return $this->render('newsletter/steps/4-send.tpl', [
-                'send_report' => $report,
                 'newsletter'  => $newsletter,
             ]);
         } catch (\Exception $e) {
