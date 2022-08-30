@@ -627,9 +627,7 @@ class Importer
             'sitemap',
             'category-{{categories}}',
             'content-author-{{fk_author}}-frontpage',
-            '{{content_type_name}}-frontpage$',
             '{{content_type_name}}-frontpage,category-{{content_type_name}}-{{categories}}',
-            '{{content_type_name}}-{{pk_content}}',
             'content_type_name-widget-article' .
             '.*category-widget-({{categories}}|all)' .
             '.*tag-widget-({{tags}}|all)' .
@@ -644,7 +642,6 @@ class Importer
             'opinion-author-{{fk_author}}-frontpage',
             'content-author-{{fk_author}}-frontpage',
             '{{content_type_name}}-frontpage$',
-            '{{content_type_name}}-{{pk_content}}',
             'content_type_name-widget-{{content_type_name}}' .
             '.*tag-widget-({{tags}}|all)' .
             '.*author-widget-({{fk_author}}|all)',
