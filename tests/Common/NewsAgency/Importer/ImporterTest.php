@@ -101,7 +101,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
 
         $importer = $this->getMockBuilder(get_class($this->importer))
             ->setConstructorArgs([ $this->container, $this->config ])
-            ->setMethods([ 'getResources', 'isImported', 'import' ])
+            ->setMethods([ 'getResources', 'isImported', 'import', 'sendVarnishBan' ])
             ->getMock();
 
         $importer->expects($this->once())->method('getResources')
@@ -114,6 +114,10 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
         $importer->expects($this->once())->method('import')
             ->with($resource)
             ->will($this->throwException(new \Exception()));
+
+        $importer->expects($this->once())->method('sendVarnishBan')
+            ->with([])
+            ->willReturn([]);
 
         $this->assertEquals($result, $importer->autoImport());
     }
@@ -133,7 +137,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
 
         $importer = $this->getMockBuilder(get_class($this->importer))
             ->setConstructorArgs([ $this->container, $this->config ])
-            ->setMethods([ 'getResources', 'isImported', 'import' ])
+            ->setMethods([ 'getResources', 'isImported', 'import', 'sendVarnishBan' ])
             ->getMock();
 
         $importer->expects($this->once())->method('getResources')
@@ -142,6 +146,10 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
         $importer->expects($this->once())->method('isImported')
             ->with($resource)
             ->willReturn(true);
+
+        $importer->expects($this->once())->method('sendVarnishBan')
+            ->with([])
+            ->willReturn([]);
 
         $this->assertEquals($result, $importer->autoImport());
     }
@@ -161,7 +169,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
 
         $importer = $this->getMockBuilder(get_class($this->importer))
             ->setConstructorArgs([ $this->container, $this->config ])
-            ->setMethods([ 'getResources', 'isImported', 'import' ])
+            ->setMethods([ 'getResources', 'isImported', 'import', 'sendVarnishBan' ])
             ->getMock();
 
         $importer->expects($this->once())->method('getResources')
@@ -173,6 +181,9 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
 
         $importer->expects($this->once())->method('import')
             ->with($resource);
+
+        $importer->expects($this->once())->method('sendVarnishBan')
+            ->willReturn([]);
 
         $this->assertEquals($result, $importer->autoImport());
     }

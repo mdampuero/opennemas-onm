@@ -88,6 +88,8 @@ class Importer
         $imported  = 0;
         $resources = $this->getResources();
 
+        $finalContents = [];
+
         foreach ($resources as $resource) {
             try {
                 if ($this->isImported($resource)) {
@@ -95,13 +97,14 @@ class Importer
                     continue;
                 }
 
-                $this->import($resource);
+                $finalContents [] = $this->import($resource);
                 $imported++;
             } catch (\Exception $e) {
                 $invalid++;
             }
         }
 
+        $this->sendVarnishBan($finalContents);
         return [
             'ignored'  => $ignored,
             'imported' => $imported,
@@ -606,5 +609,161 @@ class Importer
         return array_map(function ($tag) {
             return $tag->id;
         }, $tags);
+    }
+
+    /**
+     * Sends a varnish ban
+     *
+     * @return Importer The current Importer.
+     */
+    protected function sendVarnishBan($contents)
+    {
+        $articlesBans = [
+            '{{content_type_name}}-frontpage$',
+            '{{content_type_name}}-frontpage',
+            'content_type_name-widget-article',
+            'authors-frontpage',
+            'rss-article$',
+            'sitemap',
+            'category-{{categories}}',
+            'content-author-{{fk_author}}-frontpage',
+            '{{content_type_name}}-frontpage,category-{{content_type_name}}-{{categories}}',
+            'content_type_name-widget-article' .
+            '.*category-widget-({{categories}}|all)' .
+            '.*tag-widget-({{tags}}|all)' .
+            '.*author-widget-({{fk_author}}|all)',
+            'last-suggested-{{categories}}',
+            'rss-author-{{fk_author}}',
+            'tag-{{tags}}',
+        ];
+        $opinionsBans = [
+            'authors-frontpage',
+            'sitemap',
+            'opinion-author-{{fk_author}}-frontpage',
+            'content-author-{{fk_author}}-frontpage',
+            '{{content_type_name}}-frontpage$',
+            'content_type_name-widget-{{content_type_name}}' .
+            '.*tag-widget-({{tags}}|all)' .
+            '.*author-widget-({{fk_author}}|all)',
+            'rss-author-{{fk_author}}',
+            'rss-{{content_type_name}}$',
+            'sitemap',
+            'tag-{{tags}}',
+        ];
+
+        $bans = [];
+        foreach ($contents as $content) {
+            if ($content->content_type_name == 'article') {
+                $bans = array_merge(
+                    $bans,
+                    $this->replaceWildcards($content, $articlesBans)
+                );
+            }
+            if ($content->content_type_name == 'opinion') {
+                $bans = array_merge(
+                    $bans,
+                    $this->replaceWildcards($content, $opinionsBans)
+                );
+            }
+        }
+
+        if (empty($bans)) {
+            return;
+        }
+
+        $bans = array_unique($bans);
+
+        $banRegExpr = '';
+
+        foreach ($bans as $key) {
+            $banRegExpr .= '|(' . $key . ')';
+        }
+
+        $this->container->get('core.varnish')
+            ->ban(
+                sprintf(
+                    'obj.http.x-tags ~ instance-%s.*%s',
+                    $this->container->get('core.instance')->internal_name,
+                    '(' . substr($banRegExpr, 1) . ')'
+                )
+            );
+
+        return $this;
+    }
+
+    /**
+     * Replace the keys with the property of the item.
+     *
+     * @param Content $item The item to get the properties from.
+     * @param array   $keys The array of keys to loop over.
+     *
+     * @return String The key of the varnish cache.
+     */
+    protected function replaceWildcards($item, $keys)
+    {
+        foreach ($keys as &$key) {
+            preg_match_all('@{{([A-Za-z0-9_-]+)}}@', $key, $matches);
+
+            foreach ($matches[1] as $match) {
+                $pattern = sprintf('@{{%s}}@', $match);
+
+                // Don't add the key if the content doesn't have the property and is a single replacement
+                if (empty($item->{$match}) && count($matches[1]) === 1) {
+                    $key = null;
+                    continue;
+                }
+
+                if (empty($item->{$match})) {
+                    $key = preg_replace($pattern, '0', $key);
+                    continue;
+                }
+
+                $method = sprintf('replace%s', ucfirst($match));
+
+                $replacement = method_exists($this, $method)
+                    ? $this->{$method}($item)
+                    : $item->{$match};
+
+                $key = preg_replace($pattern, $replacement, $key);
+            }
+        }
+
+        return array_filter($keys);
+    }
+
+    /**
+     * Custom replace function for starttime.
+     *
+     * @param Content $item The item to get the starttime from.
+     *
+     * @return String The key with the starttime replaced in it.
+     */
+    protected function replaceStarttime(Content $item)
+    {
+        return $item->starttime->format('Y-m-d');
+    }
+
+    /**
+     * Custom replace function for tags.
+     *
+     * @param Content $item The item to get the tags from.
+     *
+     * @return String The key with the tags replaced in it.
+     */
+    protected function replaceTags(Content $item)
+    {
+        return sprintf('(%s)', implode('|', $item->tags));
+    }
+
+    /**
+     * Custom replace function for categories.
+     *
+     * @param Content $item The item to get the tags from.
+     *
+     * @return String The key with the tags replaced in it.
+     */
+    protected function replaceCategories(Content $item)
+    {
+        return $item->categories[0];
     }
 }
