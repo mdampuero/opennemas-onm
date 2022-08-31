@@ -179,6 +179,32 @@ class CategoryHelper
     }
 
     /**
+     * Returns the path to category cover for the provided item.
+     *
+     * @param Content $item   The item to get cover path for. If not provided, the
+     *                        function will try to search the item in the template.
+     *
+     * @return Content $photo The photo content for category cover. Null otherwise.
+     */
+    public function getCategoryCover($item = null)
+    {
+        $category = $this->getCategory($item);
+
+        if (empty($category->cover_id)) {
+            return null;
+        }
+
+        try {
+            $photo = $this->container->get('api.service.photo')
+                ->getItem($category->cover_id);
+
+            return $photo;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
      * Returns the category name for the provided item.
      *
      * @param Content $item The item to get category name for. If not provided, the
@@ -254,5 +280,42 @@ class CategoryHelper
     public function hasCategoryLogo($item = null) : bool
     {
         return !empty($this->getCategoryLogo($item));
+    }
+
+    /**
+     * Checks if the category has a cover.
+     *
+     * @param Content $item The item to check category cover for. If not provided,
+     *                      the function will try to search the item in the
+     *                      template.
+     *
+     * @return bool True if the category has a cover. False otherwise.
+     */
+    public function hasCategoryCover($item = null) : bool
+    {
+        return !empty($this->getCategoryCover($item));
+    }
+
+    /**
+     * Returns the layout check for the provided item.
+     *
+     * @param Content $item   The item to get logo path for. If not provided, the
+     *                        function will try to search the item in the template.
+     *
+     * @return bool  True if the category has manual layout. False otherwise.
+     */
+    public function isManualCategory($item = null)
+    {
+        if (empty($item)) {
+            return null;
+        }
+
+        $category = $this->getCategory($item);
+
+        if (empty($category->params) || empty($category->params['manual'])) {
+            return null;
+        }
+
+        return (bool) $category->params['manual'];
     }
 }

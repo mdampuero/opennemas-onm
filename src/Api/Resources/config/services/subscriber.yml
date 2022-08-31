@@ -1,7 +1,7 @@
 services:
     core.subscriber.category:
         class:     Api\EventSubscriber\CategorySubscriber
-        arguments: [ '@api.helper.cache.category' ]
+        arguments: [ '@service_container', '@api.helper.cache.category' ]
         tags:
             - { name: kernel.event_subscriber }
 
