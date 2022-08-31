@@ -276,6 +276,12 @@ category:
             primary: false
             unique: false
             flags: {  }
+        -
+            name: parent_id
+            columns: [parent_id]
+            primary: false
+            unique: false
+            flags: {  }
     foreign_keys:
         -
             name: logo_id_pk_content
@@ -288,6 +294,12 @@ category:
             source_field: [ cover_id ]
             target_table: contents
             target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
+        -
+            name: category_id_category_parent_id
+            source_field: [ parent_id ]
+            target_table: category
+            target_field: [ id ]
             restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
 content_positions:
     columns:
