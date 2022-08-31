@@ -243,6 +243,41 @@ class CategoryHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->helper->getCategoryLogo($category));
     }
 
+
+    /**
+    * Tests getCategoryCover.
+    */
+    public function testGetCategoryCover()
+    {
+        $category = new Category([ 'id' => 436, 'cover_id' => 123 ]);
+
+        $photo             = new \Content();
+        $photo->pk_content = 123;
+
+        $this->photoService->expects($this->any())->method('getItem')
+            ->willReturn($photo);
+
+        $this->assertNull($this->helper->getCategoryCover(131));
+        $this->assertEquals(
+            $photo,
+            $this->helper->getCategoryCover($category)
+        );
+    }
+
+    /**
+    * Tests getCategoryCover when exception.
+    */
+    public function testGetCategoryCoverWhenException()
+    {
+        $category = new Category([ 'id' => 436, 'cover_id' => 123 ]);
+
+        $this->photoService->expects($this->any())->method('getItem')
+            ->with(123)
+            ->will($this->throwException(new \Exception()));
+
+        $this->assertNull($this->helper->getCategoryCover($category));
+    }
+
     /**
     * Tests getCategoryName.
     */
@@ -305,6 +340,23 @@ class CategoryHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertFalse($this->helper->hasCategoryLogo(131));
         $this->assertTrue($this->helper->hasCategoryLogo($category));
+    }
+
+    /**
+    * Tests hasCategoryCover.
+    */
+    public function testHasCategoryCover()
+    {
+        $category = new Category([ 'id' => 436, 'cover_id' => 123 ]);
+
+        $photo             = new \Content();
+        $photo->pk_content = 123;
+
+        $this->photoService->expects($this->any())->method('getItem')
+            ->willReturn($photo);
+
+        $this->assertFalse($this->helper->hasCategoryCover(131));
+        $this->assertTrue($this->helper->hasCategoryCover($category));
     }
 
     /**
