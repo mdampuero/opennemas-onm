@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.35, for Linux (x86_64)
 --
 -- Host: mysql    Database: 1
 -- ------------------------------------------------------
--- Server version	5.7.26-log
+-- Server version	5.7.36-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -194,7 +194,7 @@ CREATE TABLE `category` (
   `color` varchar(10) DEFAULT NULL,
   `cover_id` bigint(20) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `logo_id` (`logo_id`),
+  KEY `logo_id` (`logo_id`),  
   KEY `cover_id` (`cover_id`),
   KEY `parent_id` (`parent_id`),
   CONSTRAINT `category_id_category_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -664,31 +664,6 @@ INSERT INTO `menu_items` VALUES (1,1,'Actualidad','actualidad','blog-category',1
 UNLOCK TABLES;
 
 --
--- Table structure for table `menumetas`
---
-
-DROP TABLE IF EXISTS `menumetas`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `menumetas` (
-  `fk_menu` int(10) unsigned NOT NULL,
-  `meta_key` varchar(255) NOT NULL,
-  `meta_value` text,
-  PRIMARY KEY (`fk_menu`,`meta_key`),
-  CONSTRAINT `menumetas_ibfk_1` FOREIGN KEY (`fk_menu`) REFERENCES `menus` (`pk_menu`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `menumetas`
---
-
-LOCK TABLES `menumetas` WRITE;
-/*!40000 ALTER TABLE `menumetas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `menumetas` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `menus`
 --
 
@@ -714,6 +689,22 @@ LOCK TABLES `menus` WRITE;
 INSERT INTO `menus` VALUES (1,'frontpage','frontpage'),(9,'footer','footer'),(10,'utilities',''),(11,'headlines','');
 /*!40000 ALTER TABLE `menus` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `menumetas`
+--
+
+DROP TABLE IF EXISTS `menumetas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menumetas` (
+  `fk_menu` int(10) unsigned NOT NULL,
+  `meta_key` varchar(255) NOT NULL,
+  `meta_value` text DEFAULT NULL,
+  PRIMARY KEY (`fk_menu`,`meta_key`),
+  FOREIGN KEY (`fk_menu`) REFERENCES `menus` (`pk_menu`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 --
 -- Table structure for table `newsletters`
@@ -1164,4 +1155,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-08-25 14:22:00
+-- Dump completed on 2022-05-26 13:37:13
