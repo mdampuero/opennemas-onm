@@ -295,4 +295,27 @@ class CategoryHelper
     {
         return !empty($this->getCategoryCover($item));
     }
+
+    /**
+     * Returns the layout check for the provided item.
+     *
+     * @param Content $item   The item to get logo path for. If not provided, the
+     *                        function will try to search the item in the template.
+     *
+     * @return bool  True if the category has manual layout. False otherwise.
+     */
+    public function isManualCategory($item = null)
+    {
+        if (empty($item)) {
+            return null;
+        }
+
+        $category = $this->getCategory($item);
+
+        if (empty($category->params) || empty($category->params['manual'])) {
+            return null;
+        }
+
+        return (bool) $category->params['manual'];
+    }
 }

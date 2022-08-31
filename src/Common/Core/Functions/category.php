@@ -162,3 +162,17 @@ function has_category_cover($item = null) : bool
 {
     return getService('core.helper.category')->hasCategoryCover($item);
 }
+
+/**
+ * Checks if the category has manual layout.
+ *
+ * @param Content $item The item to check category logo for. If not provided,
+ *                      the function will try to search the item in the
+ *                      template.
+ *
+ * @return bool True if the category has a manual layout. False otherwise.
+ */
+function is_manual_category($item = null) : bool
+{
+    return getService('core.helper.category')->isManualCategory($item);
+}
