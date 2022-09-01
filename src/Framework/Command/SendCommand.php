@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\Newsletter\Command;
+namespace Framework\Command;
 
 use Common\Core\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -63,7 +63,7 @@ class SendCommand extends Command
 
         $newsletter = $ns->getItem($id);
 
-        $this->getContainer()->get('newsletter.service.sender')
+        $this->getContainer()->get('core.helper.newsletter_sender')
             ->send($newsletter, $recipients, $id);
 
         $this->end();

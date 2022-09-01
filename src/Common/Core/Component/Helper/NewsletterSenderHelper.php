@@ -87,17 +87,18 @@ class NewsletterSenderHelper
         $this->ss             = $ss;
         $this->actOnFactory   = $actOnFactory;
         $this->ns             = $newsletterService;
+        $this->container      = $container;
     }
 
     /**
      * Sends a newsletter to a bunch of recipients
      *
      * @param Newsletter $newsletter the newsletter
-     * @param array $recipients the list of recipients to send
+     * @param mixed $recipients the list of recipients to send
      *
      * @return array the array with the report of each sent
      */
-    public function send($newsletter, $recipients)
+    public function send($newsletter, $recipients, $id)
     {
         // if no recipients we can exit directly
         if (empty($recipients)) {
@@ -108,6 +109,13 @@ class NewsletterSenderHelper
             ];
         }
 
+        //Set current newsletter pending status while sending emails
+        $prevSent = $newsletter->getStored()['sent_items'];
+        $this->container->get('api.service.newsletter')->patchItem($id, [
+            'sent_items' => -1,
+            'updated'    => new \Datetime(),
+        ]);
+
         $sentEmails      = 0;
         $maxAllowed      = (int) $this->ormManager->getDataSet('Settings', 'instance')->get('max_mailing', 0);
         $lastInvoiceDate = $this->getLastInvoiceDate();
@@ -116,7 +124,7 @@ class NewsletterSenderHelper
         // Fix encoding of the html
         $newsletter->html = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-        $recipients = json_decode(json_encode($recipients), true);
+        $recipients = json_decode($recipients, true);
         foreach ($recipients as $mailbox) {
             if ($maxAllowed > 0 && abs($remaining) >= 0) {
                 $sendResults[] = [$mailbox, false, _('Max sents reached')];
@@ -144,7 +152,6 @@ class NewsletterSenderHelper
 
                     $sendResults[] = [ $mailbox, $sentEmails > 0, '' ];
                 }
-
                 $remaining -= $sentEmails;
             } catch (\Exception $e) {
                 $sendResults[] = [ $mailbox, false,  _('Unable to deliver your email') ];
@@ -153,11 +160,32 @@ class NewsletterSenderHelper
             }
         }
 
-        return [
-            'total'      => $sentEmails,
-            'report'     => $sendResults,
-            'create_new' => !empty($newsletter->sent),
-        ];
+        $newsletter->sent_items = $prevSent;
+
+        // Duplicate newsletter if it was sent before.
+        if ($newsletter->sent_items > 0) {
+            $this->container->get('api.service.newsletter')->patchItem($id, [
+                'sent_items' => $prevSent,
+                'updated'    => new \Datetime(),
+            ]);
+            $data = array_merge($newsletter->getStored(), [
+                'recipients' => $recipients,
+                'sent'       => new \Datetime(),
+                'sent_items' => $sentEmails,
+                'updated'    => new \Datetime(),
+            ]);
+
+            unset($data['id']);
+
+            $newsletter = $this->container->get('api.service.newsletter')->createItem($data);
+        } else {
+            $this->container->get('api.service.newsletter')->patchItem($id, [
+                'recipients' => $recipients,
+                'sent'       => new \Datetime(),
+                'sent_items' => $sentEmails,
+                'updated'    => new \Datetime(),
+            ]);
+        }
     }
 
     /**
@@ -261,7 +289,7 @@ class NewsletterSenderHelper
             try {
                 $sentEmails += $this->sendEmail($newsletter, $user);
             } catch (\Swift_RfcComplianceException $e) {
-                $errors[] = sprintf(_('Email not valid: %s'), $user['email']);
+                $errors[] = sprintf(_('Email not valid: %s %s'), $user['email'], $e->getMessage());
             } catch (\Exception $e) {
                 $errors[] = _('Unable to deliver your email');
             }
