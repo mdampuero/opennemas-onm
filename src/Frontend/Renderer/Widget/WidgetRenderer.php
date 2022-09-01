@@ -34,6 +34,7 @@ class WidgetRenderer extends Renderer
         }, $params);
 
         $url = $this->container->get('router')->generate('frontend_widget_render', $params);
+        $url = $this->container->get('core.decorator.url')->prefixUrl($url);
 
         return sprintf('<esi:include src="%s" />', $url);
     }

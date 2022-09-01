@@ -4,6 +4,7 @@ frontend_companies:
     defaults: { _controller: FrontendBundle:Company:list }
     options:
         l10n: true
+        subdirectory: true
 
 frontend_company_show:
     path:     /empresa/{slug}/{created}{id}.html
@@ -15,3 +16,4 @@ frontend_company_show:
     options:
         expose: true
         l10n: true
+        subdirectory: true

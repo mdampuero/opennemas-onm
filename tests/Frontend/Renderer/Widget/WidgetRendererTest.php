@@ -30,6 +30,11 @@ class WidgetRendererTest extends TestCase
             ->setMethods([ 'loadWidget' ])
             ->getMock();
 
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
+            ->getMock();
+
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
     }
@@ -42,6 +47,9 @@ class WidgetRendererTest extends TestCase
 
             case 'core.loader.widget':
                 return $this->loader;
+
+            case 'core.decorator.url':
+                return $this->decorator;
 
             case 'router':
                 return $this->router;
@@ -57,6 +65,9 @@ class WidgetRendererTest extends TestCase
     {
         $this->router->expects($this->once())->method('generate')
             ->with('frontend_widget_render', [ 'widget_id' => 890, 'responsive' => 'mobile' ])
+            ->willReturn('render/widget?widget_id=890&responsive=mobile');
+
+        $this->decorator->expects($this->once())->method('prefixUrl')
             ->willReturn('render/widget?widget_id=890&responsive=mobile');
 
         $this->assertEquals(
