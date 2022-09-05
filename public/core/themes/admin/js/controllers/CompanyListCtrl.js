@@ -69,12 +69,14 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          return $scope.getL10nUrl(
-            routing.generate($scope.routes.public, {
-              id: item.pk_content,
-              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
-              slug: item.slug,
-            })
+          return $scope.getSubdirectoryUrl(
+            $scope.getL10nUrl(
+              routing.generate($scope.routes.public, {
+                id: item.pk_content,
+                created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
+                slug: item.slug,
+              })
+            )
           );
         };
 
