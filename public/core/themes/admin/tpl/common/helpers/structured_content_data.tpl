@@ -68,6 +68,8 @@
     "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     {if !empty($category)}
       "articleSection": "{$category->title|escape:'html'}",
+    {elseif $content->content_type_name === 'opinion'}
+      "articleSection": "{if is_blog($content)}{t}Blog{/t}{else}{t}Opinion{/t}{/if}",
     {/if}
     "keywords": "{$keywords|escape:'html'}",
     "url": "{$url}",
