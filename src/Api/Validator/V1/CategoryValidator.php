@@ -24,15 +24,15 @@ class CategoryValidator extends Validator
             $logo = $this->container->get('api.service.photo')
                 ->getItem($item->logo_id);
 
-            // if ($logo->height > 120) {
-            //     throw new InvalidArgumentException(
-            //         sprintf(
-            //             _('The maximum height for the %s is 120px. Please adjust your image size.'),
-            //             'logo ' . _('of') . ' ' . $item->title
-            //         ),
-            //         400
-            //     );
-            // }
+            if ($logo->height > 120) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        _('The maximum height for the %s is 120px. Please adjust your image size.'),
+                        'logo ' . _('of') . ' ' . $item->title
+                    ),
+                    400
+                );
+            }
         }
 
         try {
