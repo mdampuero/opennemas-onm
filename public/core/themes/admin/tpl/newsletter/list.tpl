@@ -104,14 +104,14 @@
                         <strong>{t}Updated:{/t}</strong> [% item.updated | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                       </div>
                       <div class="listing-inline-actions">
-                        <a class="btn btn-default btn-small" ng-if="item.sent_items < 1" href="[% routing.generate('backend_newsletters_show_contents', { id: item.id }) %]" title="{t}Edit{/t}" >
+                        <a class="btn btn-default btn-small" ng-if="item.sent_items == 0 && item.send_items != -1" href="[% routing.generate('backend_newsletters_show_contents', { id: item.id }) %]" title="{t}Edit{/t}" >
                           <i class="fa fa-pencil"></i> {t}Edit{/t}
                         </a>
                         <a class="btn btn-primary btn-small" href="[% routing.generate('backend_newsletters_preview', { id: item.id }) %]" title="{t}Preview{/t}">
                           <i class="fa fa-eye"></i>
                           {t}Preview{/t}
                         </a>
-                        <button class="btn btn-danger btn-small" ng-if="item.sent_items < 1" class="link link-danger" ng-click="delete(item.id)" type="button">
+                        <button class="btn btn-danger btn-small" ng-if="item.sent_items == 0 && item.send_items != -1" class="link link-danger" ng-click="delete(item.id)" type="button">
                           <i class="fa fa-trash-o"></i>
                           {t}Delete{/t}
                         </button>
