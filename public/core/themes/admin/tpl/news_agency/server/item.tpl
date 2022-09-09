@@ -218,55 +218,57 @@
             </div>
           </div>
         </div>
-        <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.category }" ng-click="expanded.category = !expanded.category" ng-if="item.target === 'article'">
-          <i class="fa fa-bookmark m-r-10"></i>{t}Category{/t}
-          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
-          <span class="pull-right" ng-if="!expanded.category">
-            {include file="common/component/icon/status.tpl" iForm="form.category" iNgModel="item.category" iRequired=true iValidation=true}
-          </span>
-          <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!expanded.category && item.category">
-            [% data.extra.defaultCategory.title %]
-          </span>
-        </div>
-        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category }" ng-if="item.target === 'article'">
-          <div class="form-group">
-            <label class="form-label" for="category">
-              {t}Default category{/t}
-            </label>
-            <div class="controls controls-validation">
-              <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" export-model="data.extra.defaultCategory" name="category" ng-model="item.category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
-              {include file="common/component/icon/status.tpl" iClass="form-status-absolute" iForm="form.category" iNgModel="item.category" iRequired=true iValidation=true}
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="category_mapping">
-              {t}Category mapping{/t}
-            </label>
-            <span class="help m-l-5">
-              {t}Source{/t} - {t}Target{/t}
+        <div ng-if="item.target === 'article'">
+          <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.category }" ng-click="expanded.category = !expanded.category">
+            <i class="fa fa-bookmark m-r-10"></i>{t}Category{/t}
+            <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
+            <span class="pull-right" ng-if="!expanded.category">
+              {include file="common/component/icon/status.tpl" iForm="form.category" iNgModel="item.category" iRequired=true iValidation=true}
             </span>
-            <div class="controls">
-              <div class="row m-t-15" ng-repeat="category in item.categories_map track by $index">
-                <div class="col-lg-5 col-md-9 col-sm-5 col-xs-6 m-b-15">
-                  <input class="form-control" ng-model="category.slug" placeholder="{t}Category name from source{/t}" type="text">
-                </div>
-                <div class="col-lg-5 col-md-9 col-sm-5 col-xs-6 m-b-15">
-                  <onm-category-selector class="block select2-border" default-value-text="{t}Select a category{/t}…" ng-model="category.id" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
-                </div>
-                <div class="col-lg-2 col-lg-offset-0 col-md-3 col-md-offset-0 col-sm-2 col-sm-offset-0 col-xs-4 col-xs-offset-4">
-                  <button class="btn btn-block btn-danger ng-cloak" ng-click="removeFromMap('categories', $index)" type="button">
-                    <i class="fa fa-trash-o"></i>
-                  </button>
+            <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!expanded.category && item.category">
+              [% data.extra.defaultCategory.title %]
+            </span>
+          </div>
+          <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.category }">
+            <div class="form-group">
+              <label class="form-label" for="category">
+                {t}Default category{/t}
+              </label>
+              <div class="controls controls-validation">
+                <onm-category-selector class="block" default-value-text="{t}Select a category{/t}…" export-model="data.extra.defaultCategory" name="category" ng-model="item.category" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
+                {include file="common/component/icon/status.tpl" iClass="form-status-absolute" iForm="form.category" iNgModel="item.category" iRequired=true iValidation=true}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="category_mapping">
+                {t}Category mapping{/t}
+              </label>
+              <span class="help m-l-5">
+                {t}Source{/t} - {t}Target{/t}
+              </span>
+              <div class="controls">
+                <div class="row m-t-15" ng-repeat="category in item.categories_map track by $index">
+                  <div class="col-lg-5 col-md-9 col-sm-5 col-xs-6 m-b-15">
+                    <input class="form-control" ng-model="category.slug" placeholder="{t}Category name from source{/t}" type="text">
+                  </div>
+                  <div class="col-lg-5 col-md-9 col-sm-5 col-xs-6 m-b-15">
+                    <onm-category-selector class="block select2-border" default-value-text="{t}Select a category{/t}…" ng-model="category.id" placeholder="{t}Select a category{/t}…" required></onm-category-selector>
+                  </div>
+                  <div class="col-lg-2 col-lg-offset-0 col-md-3 col-md-offset-0 col-sm-2 col-sm-offset-0 col-xs-4 col-xs-offset-4">
+                    <button class="btn btn-block btn-danger ng-cloak" ng-click="removeFromMap('categories', $index)" type="button">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-4 col-lg-offset-4 col-md-10 col-md-offset-1 col-sm-6 col-sm-offset-3">
-              <button class="btn btn-block btn-default" ng-click="addToMap('categories')" type="button">
-                <i class="fa fa-plus"></i>
-                {t}Add{/t}
-              </button>
+            <div class="row">
+              <div class="col-lg-4 col-lg-offset-4 col-md-10 col-md-offset-1 col-sm-6 col-sm-offset-3">
+                <button class="btn btn-block btn-default" ng-click="addToMap('categories')" type="button">
+                  <i class="fa fa-plus"></i>
+                  {t}Add{/t}
+                </button>
+              </div>
             </div>
           </div>
         </div>
