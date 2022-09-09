@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * The SendCommand class defines a command to send mails
  */
-class SendCommand extends Command
+class NewsletterSendCommand extends Command
 {
     /**
      * {@inheritdoc}
