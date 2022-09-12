@@ -17,6 +17,10 @@ dbpass = $(shell [ -f app/config/connections.yml ] && \
 		grep 'password:' app/config/connections.yml | head -n 1 | sed -e "s/.*password:\s\+//g" || \
 		grep 'password:' app/config/parameters.yml | head -n 1 | sed -e "s/.*password:\s\+//g")
 
+ifndef $(branch)
+    branch = $(shell git rev-parse --abbrev-ref HEAD)
+endif
+
 .PHONY: assets clean clean-database components database dev doc install \
 node_modules prepare prod routes translations vendor
 
@@ -121,8 +125,9 @@ themes:
 	mkdir -p public/themes
 
 	for theme in $(themes); do \
-		[ -d public/themes/$$theme ] && continue \
-			|| git clone git@bitbucket.org:opennemas/onm-theme-$$theme.git public/themes/$$theme; \
+		[ -d public/themes/$$theme ] || git clone git@bitbucket.org:opennemas/onm-theme-$$theme.git public/themes/$$theme || exit 1; \
+		git -C public/themes/$$theme checkout $(branch) || exit 1; \
+		git -C public/themes/$$theme pull || exit 1; \
 	done
 
 # Install php dependencies
