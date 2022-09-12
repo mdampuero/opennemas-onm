@@ -220,10 +220,19 @@
                                 {format_date date=get_property(get_featured_media($content, $type), 'created') type="custom" format="yMMdd'T'HHmmssxxx"}
                               </story.date>
                             </dateline>
+                            <abstract>
+                              <p>
+                                <![CDATA[{get_description(get_featured_media($content, $type))|htmlspecialchars_decode|trim}]]>
+                              </p>
+                            </abstract>
                           </body.head>
                           <body.content>
                             <p>
-                              <![CDATA[{get_description(get_featured_media($content, $type))|htmlspecialchars_decode|trim}]]>
+                              {if has_featured_media_caption($content, $type)}
+                                <![CDATA[{get_featured_media_caption($content, $type)}]]>
+                              {else}
+                                <![CDATA[{get_description(get_featured_media($content, $type))|htmlspecialchars_decode|trim}]]>
+                              {/if}
                             </p>
                           </body.content>
                         </body>
