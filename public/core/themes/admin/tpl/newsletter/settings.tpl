@@ -87,6 +87,12 @@
               <input class="form-control" id="subscription" required type="email" ng-model="settings.newsletter_maillist.subscription"/>
             </div>
           </div>
+          {if $app.security->hasPermission('MASTER')}
+          <div class="form-group" >
+            <input id="manual_send" ng-false-value="'0'" ng-model="settings.newsletter_manual" ng-true-value="'1'" type="checkbox"/>
+            <label for="subscription" class="form-label">{t}Enable manual send{/t}</label>
+          </div>
+          {/if}
         </div>
 
         <div class="ng-cloak" ng-show="settings.newsletter_subscriptionType === 'create_subscriptor'">
