@@ -311,25 +311,29 @@ class NewsletterSenderHelper
         $this->newsletterConfigs = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
         $this->siteName          = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
 
-        // Buildthe message
-        $message = \Swift_Message::newInstance();
-        $message
-            ->setSubject($newsletter->title)
-            ->setBody($newsletter->html, 'text/html')
-            ->setFrom([$this->newsletterConfigs['sender'] => $this->siteName])
-            ->setSender($this->noReplyAddress)
-            ->setTo([ $mailbox['email'] => $mailbox['name']]);
+        // Build the message
+        try {
+            $message = \Swift_Message::newInstance();
+            $message
+                ->setSubject($newsletter->title)
+                ->setBody($newsletter->html, 'text/html')
+                ->setFrom([$this->newsletterConfigs['sender'] => $this->siteName])
+                ->setSender($this->noReplyAddress)
+                ->setTo([ $mailbox['email'] => $mailbox['name']]);
 
-        $headers = $message->getHeaders();
+            $headers = $message->getHeaders();
 
-        $headers->addParameterizedHeader(
-            'ACUMBAMAIL-SMTPAPI',
-            $this->globals->getInstance()->internal_name . ' - Newsletter'
-        );
+            $headers->addParameterizedHeader(
+                'ACUMBAMAIL-SMTPAPI',
+                $this->globals->getInstance()->internal_name . ' - Newsletter'
+            );
 
-        $this->appLog->notice(
-            "Email sent. Backend newsletter sent (to: " . $mailbox['email'] . ")"
-        );
+            $this->appLog->notice(
+                "Email sent. Backend newsletter sent (to: " . $mailbox['email'] . ")"
+            );
+        } catch (\Exception $e) {
+            $this->appLog->notice('Unable to deliver your email: ' . $e->getMessage());
+        }
 
         // Send it
         return ($this->mailer->send($message)) ? 1 : 0;
