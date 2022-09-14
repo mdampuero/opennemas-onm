@@ -102,11 +102,7 @@ class NewsletterSenderHelper
     {
         // if no recipients we can exit directly
         if (empty($recipients)) {
-            return [
-                'total'      => 0,
-                'create_new' => false,
-                'report'     => [],
-            ];
+            return 0;
         }
 
         //Set current newsletter pending status while sending emails
