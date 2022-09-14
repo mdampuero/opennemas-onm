@@ -64,7 +64,7 @@ class NewsletterSendCommand extends Command
         $newsletter = $ns->getItem($id);
 
         $this->getContainer()->get('core.helper.newsletter_sender')
-            ->send($newsletter, $recipients, $id);
+            ->send($newsletter, $recipients);
 
         $this->end();
         $output->writeln(sprintf(

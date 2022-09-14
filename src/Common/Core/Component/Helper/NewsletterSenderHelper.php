@@ -93,12 +93,12 @@ class NewsletterSenderHelper
     /**
      * Sends a newsletter to a bunch of recipients
      *
-     * @param Newsletter $newsletter the newsletter
-     * @param mixed $recipients the list of recipients to send
+     * @param Newsletter $newsletter The newsletter
+     * @param mixed $recipients      The list of recipients to send
      *
-     * @return array the array with the report of each sent
+     * @return int $sentEmails       Total newsletters sents
      */
-    public function send($newsletter, $recipients, $id)
+    public function send($newsletter, $recipients)
     {
         // if no recipients we can exit directly
         if (empty($recipients)) {
@@ -111,7 +111,7 @@ class NewsletterSenderHelper
 
         //Set current newsletter pending status while sending emails
         $prevSent = $newsletter->getStored()['sent_items'];
-        $this->container->get('api.service.newsletter')->patchItem($id, [
+        $this->container->get('api.service.newsletter')->patchItem($newsletter->id, [
             'sent_items' => -1,
             'updated'    => new \Datetime(),
         ]);
@@ -124,7 +124,7 @@ class NewsletterSenderHelper
         // Fix encoding of the html
         $newsletter->html = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-        $recipients = json_decode($recipients, true);
+        $recipients = is_string($recipients) ? json_decode($recipients, true) : $recipients;
         foreach ($recipients as $mailbox) {
             if ($maxAllowed > 0 && abs($remaining) >= 0) {
                 $sendResults[] = [$mailbox, false, _('Max sents reached')];
@@ -164,7 +164,7 @@ class NewsletterSenderHelper
 
         // Duplicate newsletter if it was sent before.
         if ($newsletter->sent_items > 0) {
-            $this->container->get('api.service.newsletter')->patchItem($id, [
+            $this->container->get('api.service.newsletter')->patchItem($newsletter->id, [
                 'sent_items' => $prevSent,
                 'updated'    => new \Datetime(),
             ]);
@@ -179,13 +179,15 @@ class NewsletterSenderHelper
 
             $newsletter = $this->container->get('api.service.newsletter')->createItem($data);
         } else {
-            $this->container->get('api.service.newsletter')->patchItem($id, [
+            $this->container->get('api.service.newsletter')->patchItem($newsletter->id, [
                 'recipients' => $recipients,
                 'sent'       => new \Datetime(),
                 'sent_items' => $sentEmails,
                 'updated'    => new \Datetime(),
             ]);
         }
+
+        return $sentEmails;
     }
 
     /**
@@ -333,6 +335,8 @@ class NewsletterSenderHelper
             );
         } catch (\Exception $e) {
             $this->appLog->notice('Unable to deliver your email: ' . $e->getMessage());
+
+            return 0;
         }
 
         // Send it
