@@ -209,7 +209,7 @@ class TagController extends FrontendController
                 ]
             ],
             'fk_content_type' => [
-                [ 'value' => [ 1, 4, 5, 7, 9, 11 ], 'operator' => 'in' ],
+                [ 'value' => [ 1, 4, 5, 7, 9, 11, 18, 19 ], 'operator' => 'in' ],
             ],
             'content_status'    => [ [ 'value' => 1 ] ],
             'in_litter'         => [ [ 'value' => 0 ] ],
