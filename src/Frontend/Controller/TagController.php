@@ -190,44 +190,26 @@ class TagController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $ids = array_map(function ($a) {
-            return $a->id;
-        }, $params['items']);
+        $service = $this->get('api.service.content');
+        $now     = date('Y-m-d H:i:s');
 
-        // TODO: Use ORM getList when polls (11) are migrated
-        $criteria = [
-            'join' => [
-                [
-                    'table' => 'contents_tags',
-                    'type'  => 'inner',
-                    'content_id' => [
-                        [ 'value' => 'pk_content', 'field' => true ]
-                    ],
-                    'tag_id' => [
-                        [ 'value' => $ids, 'operator' => 'in' ]
-                    ]
-                ]
-            ],
-            'fk_content_type' => [
-                [ 'value' => [ 1, 4, 5, 7, 9, 11 ], 'operator' => 'in' ],
-            ],
-            'content_status'    => [ [ 'value' => 1 ] ],
-            'in_litter'         => [ [ 'value' => 0 ] ],
-            'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ],
-            'endtime'           => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
-            ]
-        ];
+        $response = $service->getList(
+            sprintf(
+                'content_status = 1 and in_litter = 0 and tag_id = %d ' .
+                'and fk_content_type in [1, 4, 5, 7, 9, 11, 18, 19] ' .
+                'and (starttime is null or starttime < "%s") ' .
+                'and (endtime is null or endtime > "%s") ' .
+                'order by starttime desc limit %d offset %d',
+                $params['item']->id,
+                $now,
+                $now,
+                $params['epp'],
+                $params['epp'] * ($params['page'] - 1)
+            )
+        );
 
-        $em       = $this->get('entity_repository');
-        $contents = $em->findBy($criteria, 'starttime DESC', $params['epp'], $params['page']);
-        $total    = $em->countBy($criteria);
+        $contents = $response['items'];
+        $total = $response['total'];
 
         // No first page and no contents
         if ($params['page'] > 1 && empty($contents)) {
