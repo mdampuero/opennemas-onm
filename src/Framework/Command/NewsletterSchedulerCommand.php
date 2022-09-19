@@ -137,7 +137,7 @@ class NewsletterSchedulerCommand extends Command
                     $output->write(str_pad(' - Newsletter sent and registered ', 50, '.'));
 
                     if ($this->canWeSendTemplate($template, $time)) {
-                        $this->sendScheduledTemplate($template, $output, $time);
+                        $this->sendScheduledTemplate($template, $output);
                     } else {
                         $output->writeln(sprintf(
                             '<fg=yellow;options=bold>SKIP</> <fg=blue;options=bold>(Nothing to send)</>'
@@ -222,7 +222,7 @@ class NewsletterSchedulerCommand extends Command
     }
 
     /**
-     * Sends a scheduled newsletter and stores the sending information into the database
+     * Sends a scheduled newsletter
      *
      * @param Newsletter $template the scheduled newsletter to send,
      * @param Output $output the symfony output object to interact with the cli
@@ -230,7 +230,7 @@ class NewsletterSchedulerCommand extends Command
      *
      * @return Newsletter the created newsletter
      */
-    protected function sendScheduledTemplate($template, $output, $time)
+    protected function sendScheduledTemplate($template, $output)
     {
         // Render the template
         if ($output->isVerbose()) {
@@ -241,29 +241,22 @@ class NewsletterSchedulerCommand extends Command
             'type'        => 0,
             'title'       => $template->title,
             'recipients'  => $template->recipients,
-            'sent'        => new \Datetime(null, new \DateTimeZone('UTC')),
+            'sent'        => new \Datetime(),
             'template_id' => $template->id,
         ]);
 
         unset($data['id']);
 
         try {
-            $newsletter       = $this->newsletterService->createItem($data);
+            $newsletter = $this->newsletterService->createItem($data);
             $this->getContainer()->get('core.locale')->setContext('frontend')->apply();
             $newsletter->html = $this->newsletterRenderer->render($newsletter);
             $this->getContainer()->get('core.locale')->setContext('backend')->apply();
-            $data             = $newsletter->getData();
+            $data = $newsletter->getData();
 
-            $data = array_merge($data, [
-                'html'       => $newsletter->html,
-                'sent_items' => $this->newsletterSender->send($newsletter, $newsletter->recipients)['total']
-            ]);
-
-            $this->newsletterService->updateItem($newsletter->id, $data);
+            $totalSent = $this->newsletterSender->send($newsletter, $newsletter->recipients);
         } catch (CreateItemException $e) {
             throw new \Exception(sprintf("Error creating newsletter based on template with id: %s", $template->id));
-        } catch (UpdateItemException $e) {
-            throw new \Exception(sprintf("Error updating newsletter based on template with id: %s", $template->id));
         }
 
         if ($output->isVerbose()) {
@@ -274,7 +267,7 @@ class NewsletterSchedulerCommand extends Command
         $output->writeln(sprintf(
             '<fg=green;options=bold>DONE</> <fg=blue;options=bold>(id: %s, sends: %s)</>',
             $newsletter->id,
-            $data['sent_items']
+            $totalSent
         ));
 
         return $newsletter;
@@ -282,7 +275,7 @@ class NewsletterSchedulerCommand extends Command
 
     /**
      * Returns the list of active instances.
-
+     *
      * @return array The list of instances.
      */
     protected function getInstances(?array $names = []) : array

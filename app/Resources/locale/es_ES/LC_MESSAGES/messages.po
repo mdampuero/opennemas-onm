@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-23 06:36+0000\n"
-"PO-Revision-Date: 2022-08-23 08:38+0200\n"
+"POT-Creation-Date: 2022-09-14 08:54+0000\n"
+"PO-Revision-Date: 2022-09-14 10:58+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1627,6 +1627,9 @@ msgstr "Color"
 msgid "Logo"
 msgstr "Logo"
 
+msgid "Cover"
+msgstr "Portada"
+
 msgid "Type"
 msgstr "Tipo"
 
@@ -1701,8 +1704,8 @@ msgid "Unable to deliver your email"
 msgstr "No se pudo enviar tu correo"
 
 #, php-format
-msgid "Email not valid: %s"
-msgstr "Dirección de correo no válida: %s"
+msgid "Email not valid: %s %s"
+msgstr "Dirección de correo no válida: %s %s"
 
 msgid "Subscription form"
 msgstr "Formulario de suscripción"
@@ -4092,6 +4095,14 @@ msgstr ""
 msgid "If enabled, category will be included in RSS feeds"
 msgstr "Si está activado, la categoría se mostrará en los RSS"
 
+msgid "Change layout to manual"
+msgstr "Cambiar disposición a manual"
+
+msgid "If enabled, the category main page needs to be manually updated"
+msgstr ""
+"Si está habilitado, la página principal de la categoría debe actualizarse "
+"manualmente"
+
 msgid "Menu"
 msgstr "Menú"
 
@@ -5492,6 +5503,9 @@ msgstr "Remitente"
 msgid "Email sender"
 msgstr "Emisor del correo"
 
+msgid "Enable manual send"
+msgstr "Habilitar envío manual"
+
 msgid "Select your recipients"
 msgstr "Selecciona tus destinatarios"
 
@@ -5556,17 +5570,11 @@ msgstr ""
 "Clique en el botón «Añadir contenidos» de arriba o arrastra contenidos de "
 "otros contenedores"
 
-msgid "Newsletter sending report"
-msgstr "Informe de envío de boletín"
+msgid "A Newsletter send action is being processed in background"
+msgstr "El envío de boletín de noticias está siendo procesado en segundo plano"
 
-msgid "<strong>%1 emails</strong> have being sent."
-msgstr "Se han enviado <strong>%1 correos-e</strong>."
-
-msgid "No emails were sent."
-msgstr "No se envió ningún correo-e."
-
-msgid "Please, find below the report."
-msgstr "Debajo puedes encontrar el informe."
+msgid "You can go back to the list"
+msgstr "Puedes volver al listado"
 
 msgid "Go back to the list"
 msgstr "Volver a la lista"
@@ -5679,6 +5687,9 @@ msgstr "No enviado"
 
 msgid "%1 sent items"
 msgstr "%1 elementos enviados"
+
+msgid "Sending"
+msgstr "Enviando"
 
 msgid "Schedules"
 msgstr "Planificaciones"
@@ -7326,6 +7337,21 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
+
+#~ msgid "Email not valid: %s"
+#~ msgstr "Dirección de correo no válida: %s"
+
+#~ msgid "Newsletter sending report"
+#~ msgstr "Informe de envío de boletín"
+
+#~ msgid "<strong>%1 emails</strong> have being sent."
+#~ msgstr "Se han enviado <strong>%1 correos-e</strong>."
+
+#~ msgid "No emails were sent."
+#~ msgstr "No se envió ningún correo-e."
+
+#~ msgid "Please, find below the report."
+#~ msgstr "Debajo puedes encontrar el informe."
 
 #~ msgid "Creative"
 #~ msgstr "Creativo"

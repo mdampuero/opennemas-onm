@@ -104,14 +104,14 @@
                         <strong>{t}Updated:{/t}</strong> [% item.updated | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                       </div>
                       <div class="listing-inline-actions">
-                        <a class="btn btn-default btn-small" ng-if="item.sent_items < 1" href="[% routing.generate('backend_newsletters_show_contents', { id: item.id }) %]" title="{t}Edit{/t}" >
+                        <a class="btn btn-default btn-small" ng-if="item.sent_items == 0 && item.send_items != -1" href="[% routing.generate('backend_newsletters_show_contents', { id: item.id }) %]" title="{t}Edit{/t}" >
                           <i class="fa fa-pencil"></i> {t}Edit{/t}
                         </a>
                         <a class="btn btn-primary btn-small" href="[% routing.generate('backend_newsletters_preview', { id: item.id }) %]" title="{t}Preview{/t}">
                           <i class="fa fa-eye"></i>
                           {t}Preview{/t}
                         </a>
-                        <button class="btn btn-danger btn-small" ng-if="item.sent_items < 1" class="link link-danger" ng-click="delete(item.id)" type="button">
+                        <button class="btn btn-danger btn-small" ng-if="item.sent_items == 0 && item.send_items != -1" class="link link-danger" ng-click="delete(item.id)" type="button">
                           <i class="fa fa-trash-o"></i>
                           {t}Delete{/t}
                         </button>
@@ -119,12 +119,15 @@
                     </td>
                     <td class="hidden-xs text-center">
                       <div>
-                        <i class="fa fa-check text-success" ng-show="item.sent_items != 0"></i>
+                        <i class="fa fa-check text-success" ng-show="item.sent_items != 0 && item.sent_items != -1"></i>
+                        <i class="fa fa-cogs text-info" ng-show="item.sent_items == -1"></i>
                         <i class="fa fa-inbox" ng-show="item.sent_items == 0"></i>
                         <i class="fa fa-clock text-info" ng-show="item.sent_items == 0"></i>
                       </div>
-                      [% item.sent_items != 0 ? (item.sent | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' ) : '{t}Not sent{/t}' %]
-                      <div ng-show="item.sent_items != 0">{t 1="[% item.sent_items %]"}%1 sent items{/t}</div>
+                      [% item.sent_items != 0 && item.sent_items != -1? (item.sent | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' ) : ''  %]
+                      <span ng-show="item.sent_items == 0">{t}Not sent{/t}</span>
+                      <div ng-show="item.sent_items != 0 && item.sent_items != -1">{t 1="[% item.sent_items %]"}%1 sent items{/t}</div>
+                      <div ng-show="item.sent_items == -1">{t}Sending{/t}</div>
                     </td>
                     <td class="right"></td>
                   </tr>

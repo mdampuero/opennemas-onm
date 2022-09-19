@@ -152,7 +152,7 @@
                   </div>
                 </div>
               </div>
-
+              {if !empty({setting name="newsletter_manual"})}
               <div class="accordion-option">
                 <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded == 'manual' }" ng-click="expanded = 'manual'">
                   <i class="fa fa-envelope m-r-10"></i>{t}{t}Add recipients manually{/t}{/t}
@@ -169,6 +169,7 @@
                   </div>
                 </div>
               </div>
+              {/if}
             </div>
           </div>
         </div>
