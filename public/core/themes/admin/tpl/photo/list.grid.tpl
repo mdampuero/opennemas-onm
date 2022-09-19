@@ -19,11 +19,9 @@
             <i class="fa fa-trash-o fa-2x text-danger"></i>
           </div>
         {/acl}
-        {acl isAllowed="PHOTO_ENHANCE"}
-          <a class="thumbnail-action" ng-click="launchPhotoEditor(item)" uib-tooltip="{t}Enhance{/t}" tooltip-class="tooltip-info">
-            <i class="fa fa-sliders fa-2x text-info"></i>
-          </a>
-        {/acl}
+        <a class="thumbnail-action" ng-click="launchPhotoEditor(item)" uib-tooltip="{t}Enhance{/t}" tooltip-class="tooltip-info">
+          <i class="fa fa-sliders fa-2x text-info"></i>
+        </a>
       </div>
     </dynamic-image>
   </div>
