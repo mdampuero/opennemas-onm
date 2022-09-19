@@ -202,6 +202,7 @@ services:
 
     core.helper.url:
         class:     Common\Core\Component\Helper\UrlHelper
+        arguments: [ '@service_container' ]
         public:    true
 
     core.helper.url_generator:
