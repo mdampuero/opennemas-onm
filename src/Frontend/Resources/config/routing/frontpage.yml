@@ -10,7 +10,6 @@ frontend_frontpage_category:
     defaults: { _controller: FrontendBundle:Frontpages:show }
     options:
         l10n: true
+        subdirectory: true
     requirements:
         category: '[^/]+'
-    options:
-        subdirectory: true
