@@ -80,12 +80,10 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          return $scope.getSubdirectoryUrl(
-            $scope.getL10nUrl(
-              routing.generate($scope.routes.public, {
-                slug: item.slug,
-              })
-            )
+          return $scope.getL10nUrl(
+            routing.generate($scope.routes.public, {
+              slug: item.slug,
+            })
           );
         };
 

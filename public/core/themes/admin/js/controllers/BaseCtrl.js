@@ -308,23 +308,6 @@
         };
 
         /**
-         * @function getSubdirectoryUrl
-         * @memberOf BaseCtrl
-         *
-         * @description
-         *   Returns the url prefixed with the subdirectory of the instance.
-         *
-         * @param {String} url The url to prefix the subdirectory.
-         */
-        $scope.getSubdirectoryUrl = function(url) {
-          if (!$scope.data || !$scope.data.extra || !$scope.data.extra.subdirectory) {
-            return url;
-          }
-
-          return $scope.data.extra.subdirectory + url;
-        };
-
-        /**
          * @function getSlug
          * @memberOf BaseCtrl
          *

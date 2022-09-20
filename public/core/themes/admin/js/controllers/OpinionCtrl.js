@@ -161,14 +161,12 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
 
       var formattedDate = moment(date).format('YYYYMMDDHHmmss');
 
-      return $scope.getSubdirectoryUrl(
-        $scope.getL10nUrl(
-          routing.generate('frontend_opinion_show', {
-            id: item.pk_content,
-            created: formattedDate,
-            opinion_title: item.slug
-          })
-        )
+      return $scope.getL10nUrl(
+        routing.generate('frontend_opinion_show', {
+          id: item.pk_content,
+          created: formattedDate,
+          opinion_title: item.slug
+        })
       );
     };
   }
