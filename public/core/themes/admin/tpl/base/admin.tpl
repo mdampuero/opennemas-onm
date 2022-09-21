@@ -60,6 +60,7 @@
     <script>
       var appVersion = '{$smarty.const.DEPLOYED_AT}';
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
+      var instanceFolder = '{$app.instance->getSubdirectory()}';
       var CKEDITOR_BASEPATH = '/assets/components/ckeditor4/';
       var leaveMessage = '{t}You are leaving the current page.{/t}';
       var photoEditorTranslations = {
