@@ -109,10 +109,6 @@ class InstanceLoader
             return $this;
         }
 
-        if (empty($instances)) {
-            throw new \Exception();
-        }
-
         if ($this->cache->exists($domain)) {
             $this->instance = $this->cache->get($domain);
 
@@ -121,6 +117,16 @@ class InstanceLoader
             }
 
             return $this;
+        }
+
+        if (empty($instances)) {
+            throw new \Exception();
+        }
+
+        if (count($instances) > 1) {
+            $instances = array_filter($instances, function ($instance) {
+                return !$instance->isSubdirectory();
+            });
         }
 
         $this->instance = array_pop($instances);
