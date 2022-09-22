@@ -79,9 +79,11 @@ class InstanceLoader
 
         $instances = $this->em->getRepository('Instance')->findBy($oql);
 
+        // Maindomain.es/anyroute when maindomain is shared by more than 1 instance
         if (count($instances) > 1 && $match) {
-            if ($this->cache->exists($domain . $subdirectory[1])) {
-                $this->instance = $this->cache->get($domain . $subdirectory[1]);
+            // Check first if subdomain route is cached
+            if ($this->cache->exists($domain . '_' . trim($subdirectory[1], '/'))) {
+                $this->instance = $this->cache->get($domain . '_' . trim($subdirectory[1], '/'));
 
                 if (!$this->isValid($this->instance, $domain)) {
                     throw new \Exception();
@@ -90,12 +92,25 @@ class InstanceLoader
                 return $this;
             }
 
+            // If not cached, check if routes is for subdomain
             $params = [ $domain, $subdirectory[1] ];
 
             $instance = array_filter($instances, function ($a) use ($params) {
                 return $this->isValid($a, $params[0]) && $a->isSubdirectory() && $a->getSubdirectory() == $params[1];
             });
 
+            // If not, check now if main domain is cached
+            if (empty($instance) && $this->cache->exists($domain)) {
+                $this->instance = $this->cache->get($domain);
+
+                if (!$this->isValid($this->instance, $domain)) {
+                    throw new \Exception();
+                }
+
+                return $this;
+            }
+
+            // If there is not an instance with subdirectory match, take the father instance
             if (empty($instance)) {
                 $instance = array_filter($instances, function ($a) use ($params) {
                     return $this->isValid($a, $params[0]) && !$a->isSubdirectory();
@@ -104,11 +119,16 @@ class InstanceLoader
 
             $this->instance = array_pop($instance);
 
-            $this->cache->set($domain, $this->instance);
+            // Create and set redis key based on domain + subdirectory
+            $key = $this->instance->isSubdirectory() ?
+                $domain . '_' . trim($this->instance->getSubdirectory(), '/') :
+                $domain;
 
+            $this->cache->set($key, $this->instance);
             return $this;
         }
 
+        //Maindomain.es whether or not it is shared by more than 1 instance
         if ($this->cache->exists($domain)) {
             $this->instance = $this->cache->get($domain);
 
@@ -123,6 +143,7 @@ class InstanceLoader
             throw new \Exception();
         }
 
+        // If maindomain is shared, take the father instance
         if (count($instances) > 1) {
             $instances = array_filter($instances, function ($instance) {
                 return !$instance->isSubdirectory();
@@ -131,7 +152,11 @@ class InstanceLoader
 
         $this->instance = array_pop($instances);
 
-        $this->cache->set($domain, $this->instance);
+        $key = $this->instance->isSubdirectory() ?
+            $domain . '_' . trim($this->instance->getSubdirectory, '/') :
+            $domain;
+
+        $this->cache->set($key, $this->instance);
 
         return $this;
     }
