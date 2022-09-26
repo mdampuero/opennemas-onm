@@ -340,7 +340,9 @@ class FrontpagesController extends Controller
      */
     public function previewAction(Request $request)
     {
-        $this->get('core.locale')->setContext('frontend');
+        if ($this->get('core.instance') && !$this->get('core.instance')->isSubdirectory()) {
+            $this->get('core.locale')->setContext('frontend');
+        }
 
         $id         = $request->request->get('category', 0, FILTER_SANITIZE_STRING);
         $category   = null;

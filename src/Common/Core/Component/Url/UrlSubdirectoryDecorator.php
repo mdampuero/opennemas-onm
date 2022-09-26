@@ -29,8 +29,10 @@ class UrlSubdirectoryDecorator extends UrlDecorator
             return $url;
         }
 
-        $parts['path'] = $this->container->get('core.instance')->subdirectory
-            . $parts['path'];
+        if ($this->container->get('core.locale')->getContext() !== 'backend') {
+            $parts['path'] = $this->container->get('core.instance')->subdirectory
+                . $parts['path'];
+        }
 
         $url = $this->urlHelper->unparse($parts);
 
