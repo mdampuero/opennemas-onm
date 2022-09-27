@@ -59,8 +59,9 @@ function smarty_function_url($params, &$smarty)
         $url = '#not-found';
     }
 
-    $url = $smarty->getContainer()->get('core.helper.l10n_route')
-        ->localizeUrl($url, $name);
+    $url = is_string($url) ?
+        $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url) :
+        $url;
 
     return $url;
 }

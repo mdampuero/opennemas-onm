@@ -37,6 +37,7 @@ orm:
                 photos:             integer
                 polls:              integer
                 purchased:          array
+                subdirectory:       string
                 settings:           array
                 static_pages:       integer
                 users:              integer

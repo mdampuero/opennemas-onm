@@ -33,6 +33,11 @@ class ImageRendererTest extends TestCase
             'Symfony\Component\DependencyInjection\ContainerInterface'
         );
 
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
+            ->getMock();
+
         $this->ds = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
             ->getMock();
@@ -92,6 +97,9 @@ class ImageRendererTest extends TestCase
         $this->globals->expects($this->any())->method('getInstance')
             ->willReturn($this->instance);
 
+        $this->decorator->expects($this->any())->method('prefixUrl')
+            ->will($this->returnArgument(0));
+
         $this->renderer = new ImageRenderer($this->container);
     }
 
@@ -103,6 +111,9 @@ class ImageRendererTest extends TestCase
 
             case 'error.log':
                 return $this->logger;
+
+            case 'core.decorator.url':
+                return $this->decorator;
 
             case 'core.instance':
                 return $this->instance;

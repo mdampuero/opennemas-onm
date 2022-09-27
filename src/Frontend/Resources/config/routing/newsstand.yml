@@ -3,6 +3,7 @@ frontend_newsstand_frontpage:
     defaults: { _controller: FrontendBundle:Newsstand:list }
     options:
         l10n: true
+        subdirectory: true
 
 frontend_newsstand_frontpage_date:
     path:     /portadas-papel/{year}/{month}/{day}
@@ -13,6 +14,7 @@ frontend_newsstand_frontpage_date:
         day:   '[0-3][0-9]'
     options:
         l10n: true
+        subdirectory: true
 
 frontend_newsstand_show:
     path:     /portadas-papel/{category_slug}/{created}{id}.html
@@ -25,3 +27,4 @@ frontend_newsstand_show:
     options:
         expose: true
         l10n: true
+        subdirectory: true

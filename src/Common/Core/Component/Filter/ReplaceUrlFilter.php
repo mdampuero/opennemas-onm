@@ -51,6 +51,8 @@ class ReplaceUrlFilter extends Filter
                     'absolute' => $instance !== $foundAt
                 ]);
 
+            $url = $this->container->get('core.decorator.url')->prefixUrl($url);
+
             $str = str_replace($token, $url, $str);
         }
 

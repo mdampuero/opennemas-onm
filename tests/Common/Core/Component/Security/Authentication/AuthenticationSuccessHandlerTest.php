@@ -27,6 +27,11 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit\Framework\TestCase
                 'hasError', 'success'
             ])->getMock();
 
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
+            ->getMock();
+
         $this->user = json_decode(json_encode([
             'id'            => 123,
             'username'      => 'flob',
@@ -71,9 +76,18 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit\Framework\TestCase
         $this->headers->expects($this->once())->method('get')
             ->with('referer')->willReturn('/mumble/gorp');
 
+        $this->decorator->expects($this->any())->method('prefixUrl')
+            ->will($this->returnArgument(0));
+
         $this->request->headers = $this->headers;
 
-        $this->handler = new AuthenticationSuccessHandler($this->auth, $this->logger, $this->router, $this->ts);
+        $this->handler = new AuthenticationSuccessHandler(
+            $this->auth,
+            $this->logger,
+            $this->router,
+            $this->ts,
+            $this->decorator
+        );
     }
 
     /**

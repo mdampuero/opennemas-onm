@@ -31,6 +31,12 @@ class InstancePersister extends BasePersister
 
             $domains = array_unique(array_merge($old, $entity->domains));
 
+            if (!empty($entity->subdirectory)) {
+                $domains = array_map(function ($domain) use ($entity) {
+                    return $domain . $entity->subdirectory;
+                }, $domains);
+            }
+
             $this->cache->remove($domains);
         }
     }
@@ -48,6 +54,12 @@ class InstancePersister extends BasePersister
                 $stored['domains'] : [];
 
             $domains = array_unique(array_merge($old, $entity->domains));
+
+            if (!empty($entity->subdirectory)) {
+                $domains = array_map(function ($domain) use ($entity) {
+                    return $domain . $entity->subdirectory;
+                }, $domains);
+            }
 
             $this->cache->remove($domains);
         }

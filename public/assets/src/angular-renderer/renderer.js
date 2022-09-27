@@ -176,7 +176,7 @@
           }
 
           // Generates the url for the content.
-          html = html.replace('[url]', routing.generate(route, params));
+          html = html.replace('[url]', instanceFolder + routing.generate(route, params));
 
           var related = !item.related_contents.length > 0 ? [] : item.related_contents.filter(function(related) {
             return related.type === 'featured_frontpage';

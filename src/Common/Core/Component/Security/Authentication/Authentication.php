@@ -209,7 +209,9 @@ class Authentication
                 '<li>If you have not received any message, check your spam box.</li>' .
                 '<li>If you want a new link, click <a href="%s">here</a>.</li>' .
                 '</ul>'
-            ), $this->container->get('router')->generate('frontend_user_verify'));
+            ), $this->container->get('core.decorator.url')->prefixUrl(
+                $this->container->get('router')->generate('frontend_user_verify'))
+            );
         }
 
         return $error->getMessage();

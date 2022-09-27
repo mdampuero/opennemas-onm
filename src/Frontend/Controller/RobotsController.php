@@ -22,7 +22,7 @@ class RobotsController extends Controller
     public function indexAction()
     {
         $disableRobots = $this->getParameter('disable_robots');
-        $siteUrl       = $this->get('core.instance')->getBaseUrl();
+        $siteUrl       = $this->get('core.instance')->getBaseUrl(true);
 
         $rules = $this->get('orm.manager')->getDataSet('Settings')
             ->get('robots_txt_rules', '');

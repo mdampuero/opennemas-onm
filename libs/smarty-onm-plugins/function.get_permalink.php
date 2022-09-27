@@ -23,9 +23,11 @@ function smarty_function_get_permalink($params, &$smarty)
 
     $content = $params['item'];
 
-    return getService('router') ->generate(
+    $url = getService('router') ->generate(
         'frontend_content_permalink',
         ['content_id' => $content->id ],
         $absolute
     );
+
+    return getService('core.decorator.url')->prefixUrl($url);
 }

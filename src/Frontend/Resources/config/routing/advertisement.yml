@@ -5,9 +5,5 @@ frontend_ad_redirect:
 frontend_ad_ads_txt:
     path: /ads.txt
     defaults: { _controller: FrontendBundle:Advertisement:showAdsTxt }
-
-frontend_ad_rtb_file:
-    path: /ftlocal/{filename}
-    defaults: { _controller: FrontendBundle:Advertisement:showRTBFile }
-    requirements:
-        filename: '[^/]+'
+    options:
+        subdirectory: true

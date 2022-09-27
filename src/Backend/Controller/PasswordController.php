@@ -81,8 +81,10 @@ class PasswordController extends Controller
             $request->getSession()->getFlashBag()
                 ->add('error', _('Unable to find an user with that email.'));
 
+            $url = $this->get('router')->generate('backend_password_reset');
+
             return new RedirectResponse(
-                $this->get('router')->generate('backend_password_reset')
+                $this->get('core.decorator.url')->prefixUrl($url)
             );
         }
 
@@ -100,14 +102,16 @@ class PasswordController extends Controller
             $settings['site_title']
         );
 
+        $url = $this->get('router')->generate(
+            'backend_password_change',
+            [ 'token' => $token ],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
         $mailBody = $this->get('core.template.admin')
             ->render('login/emails/recoverpassword.tpl', [
                 'user' => $user,
-                'url'  => $this->get('router')->generate(
-                    'backend_password_change',
-                    [ 'token' => $token ],
-                    UrlGeneratorInterface::ABSOLUTE_URL
-                ),
+                'url'  => $this->get('core.decorator.url')->prefixUrl($url)
             ]);
 
         //  Build the message

@@ -266,7 +266,7 @@ class PollController extends FrontendController
             ->add($type, $msg);
 
         $response = new RedirectResponse(
-            $this->get('core.helper.url_generator')->generate($poll)
+            $this->get('core.decorator.url')->prefixUrl($this->get('core.helper.url_generator')->generate($poll))
         );
 
         if ($type == 'success') {

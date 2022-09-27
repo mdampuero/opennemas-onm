@@ -48,19 +48,28 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
     protected $ts;
 
     /**
+     * The url decorator.
+     *
+     * @var UrlDecorator
+     */
+    protected $urlDecorator;
+
+    /**
      * Constructs a new handler.
      *
-     * @param Authentication $auth   The authentication service.
-     * @param Logger         $logger The logger service.
-     * @param Router         $router The router service.
-     * @param TokenStorage   $ts     The token storage.
+     * @param Authentication $auth         The authentication service.
+     * @param Logger         $logger       The logger service.
+     * @param Router         $router       The router service.
+     * @param TokenStorage   $ts           The token storage.
+     * @param UrlDecorator   $urlDecorator The url decorator to transform url to subdirectory.
      */
-    public function __construct($auth, $logger, $router, $ts)
+    public function __construct($auth, $logger, $router, $ts, $urlDecorator)
     {
-        $this->auth   = $auth;
-        $this->logger = $logger;
-        $this->router = $router;
-        $this->ts     = $ts;
+        $this->auth         = $auth;
+        $this->logger       = $logger;
+        $this->router       = $router;
+        $this->ts           = $ts;
+        $this->urlDecorator = $urlDecorator;
     }
 
     /**

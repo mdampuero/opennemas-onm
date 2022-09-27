@@ -68,6 +68,7 @@ class GAnalyticsRenderer extends StatisticsRenderer
                 'frontend_newsletter_show',
                 [ 'id' => $content->id ]
             );
+            $relativeUrl = $this->container->get('core.decorator.url')->prefixUrl($relativeUrl);
 
             $params['relurl'] = urlencode($relativeUrl);
         }

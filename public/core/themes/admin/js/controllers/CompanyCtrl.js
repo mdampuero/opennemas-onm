@@ -236,7 +236,7 @@
             routing.generate($scope.routes.public, {
               id: item.pk_content,
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
-              slug: item.slug
+              slug: item.slug,
             })
           );
         };

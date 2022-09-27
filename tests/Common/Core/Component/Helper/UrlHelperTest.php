@@ -21,7 +21,37 @@ class UrlHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->helper = new UrlHelper();
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->kernel = $this->getMockBuilder('Kernel')
+            ->setMethods([ 'getContainer' ])
+            ->getMock();
+
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'isSubdirectory', 'getSubdirectory' ])
+            ->getMock();
+
+        $this->kernel->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
+
+        $GLOBALS['kernel'] = $this->kernel;
+
+        $this->helper = new UrlHelper($this->container);
+    }
+
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.instance':
+                return $this->instance;
+        }
+
+        return null;
     }
 
     /**
@@ -29,8 +59,16 @@ class UrlHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsFrontendUri()
     {
-        $this->assertTrue($this->helper->isFrontendUri('/fubar'));
+        $this->instance->expects($this->at(0))->method('isSubdirectory')
+            ->willReturn(true);
+        $this->instance->expects($this->at(1))->method('isSubdirectory')
+            ->willReturn(false);
+        $this->instance->expects($this->any())->method('getSubdirectory')
+            ->willReturn('/aaaa');
+
         $this->assertFalse($this->helper->isFrontendUri('/admin'));
+        $this->assertTrue($this->helper->isFrontendUri('/aaaa/asdas'));
+        $this->assertTrue($this->helper->isFrontendUri('/aaasd'));
     }
 
     /**

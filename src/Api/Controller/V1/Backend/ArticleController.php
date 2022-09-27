@@ -113,8 +113,10 @@ class ArticleController extends ContentController
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
 
-        $this->get('core.locale')->setContext('frontend')
-            ->setRequestLocale($request->get('locale'));
+        if ($this->get('core.instance') && !$this->get('core.instance')->isSubdirectory()) {
+            $this->get('core.locale')->setContext('frontend')
+                ->setRequestLocale($request->get('locale'));
+        }
 
         $article = new Content([ 'pk_content' => 0 ]);
 

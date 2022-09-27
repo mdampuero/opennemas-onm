@@ -66,8 +66,7 @@ function smarty_function_renderLink($params, &$smarty)
     }
 
     if ($item->type !== 'external') {
-        $link = $smarty->getContainer()->get('core.helper.l10n_route')
-            ->localizeUrl($link, '');
+        $link = $smarty->getContainer()->get('core.decorator.url')->prefixUrl($link);
     }
 
     return $link;

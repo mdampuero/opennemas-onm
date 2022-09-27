@@ -1915,6 +1915,9 @@ msgstr "Ocultar etiquetas"
 msgid "Prevent search engine indexation"
 msgstr "Evitar el indexado de motores de búsqueda"
 
+msgid "Cannot use a language code as subdirectory"
+msgstr "No se puede usar un código de idioma como subdirectorio"
+
 msgid ""
 "Url must be longer than 4 characters and only must content characters and "
 "numbers"
@@ -7002,6 +7005,9 @@ msgstr "Los dominios de la instancia no pueden estar vacíos."
 
 msgid "Domain expire date:"
 msgstr "Tiempo de expiración de dominio:"
+
+msgid "Subdirectory path"
+msgstr "Ruta del subdirectorio"
 
 msgid "Search by name or street"
 msgstr "Buscar por nombre o dirección"

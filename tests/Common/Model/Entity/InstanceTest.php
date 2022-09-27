@@ -58,6 +58,21 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getBaseUrl when subdirectory instance is allowed.
+     */
+    public function testGetBaseUrlWhenSubdirectory()
+    {
+        $instance = new Instance([
+            'activated_modules' => [],
+            'domains'           => [ 'baz.glorp' ],
+            'main_domain'       => 0,
+            'subdirectory'      => '/subdirectory',
+        ]);
+
+        $this->assertEquals('http://baz.glorp/subdirectory', $instance->getBaseUrl(true));
+    }
+
+    /**
      * Tests getMainDomain for all combinations of main_domain and domains.
      */
     public function testGetMainDomain()

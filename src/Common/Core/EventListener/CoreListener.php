@@ -149,6 +149,11 @@ class CoreListener
             '' : ':' . $request->getPort();
         $scheme = $this->getExpectedScheme($request);
 
+        if ($instance->isSubdirectory() &&
+            $this->container->get('core.helper.url')->isFrontendUri($request->getRequestUri()) &&
+            !preg_match('@^' . $instance->getSubdirectory() . '@', $request->getRequestUri())) {
+                return $scheme . strtolower($host) . $port . $instance->getSubdirectory() . $request->getRequestUri();
+        }
         return $scheme . strtolower($host) . $port . $request->getRequestUri();
     }
 

@@ -3,21 +3,26 @@ frontend_newsletter_subscribe_show:
     defaults: { _controller: FrontendBundle:Newsletter:subscribe }
     options:
         l10n: true
+        subdirectory: true
 
 frontend_newsletter_subscribe_es:
     path: /boletin
     defaults: { _controller: FrontendBundle:Newsletter:subscribe }
     options:
         l10n: true
+        subdirectory: true
 
 frontend_newsletter_subscribe_create:
     path: /newsletter/subscription/create
     defaults: { _controller: FrontendBundle:Newsletter:createSubscription }
     options:
         l10n: true
+        subdirectory: true
 
 frontend_newsletter_show:
     path: /newsletter/{id}
     defaults: { _controller: FrontendBundle:Newsletter:show }
     requirements:
         id   : '([0-9]+)'
+    options:
+        subdirectory: true

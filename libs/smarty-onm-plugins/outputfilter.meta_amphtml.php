@@ -27,13 +27,13 @@ function smarty_outputfilter_meta_amphtml($output, $smarty)
         return $output;
     }
     try {
-        $url = $container->get('core.helper.l10n_route')->localizeUrl(
-            $container->get('core.helper.url_generator')
-                ->generate(
-                    $content,
-                    ['_format' => 'amp', 'absolute' => true ]
-                )
-        );
+        $url = $container->get('core.helper.url_generator')
+            ->generate(
+                $content,
+                ['_format' => 'amp', 'absolute' => true ]
+            );
+
+        $url = $container->get('core.decorator.url')->prefixUrl($url);
 
         return str_replace('</head>', sprintf($tpl, $url) . '</head>', $output);
     } catch (\Throwable $th) {

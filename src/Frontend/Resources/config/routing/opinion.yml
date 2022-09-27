@@ -10,6 +10,7 @@ frontend_opinion_show:
     options:
         l10n: true
         expose: true
+        subdirectory: true
 
 frontend_opinion_show_amp:
     path: /opinion/{author_name}/{opinion_title}/{created}{id}.amp.html
@@ -22,6 +23,7 @@ frontend_opinion_show_amp:
         id:            '[0-9]+'
     options:
         l10n: true
+        subdirectory: true
 
 frontend_opinion_author_frontpage:
     path: /opinion/autor/{author_id}/{author_slug}
@@ -31,9 +33,11 @@ frontend_opinion_author_frontpage:
         author_id     : '([0-9]+)'
     options:
         l10n: true
+        subdirectory: true
 
 frontend_opinion_frontpage:
     path: /opinion
     defaults: { _controller: FrontendBundle:Opinion:list }
     options:
         l10n: true
+        subdirectory: true

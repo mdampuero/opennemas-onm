@@ -610,6 +610,7 @@ class InstanceController extends Controller
         $oldDomains = $instance->domains;
 
         $instance->setData($data);
+        $this->get('core.instance.checker')->validateSubdirectory($instance);
         $owners[] = 'user-' . $instance->owner_id;
         $owners   = array_unique(array_filter($owners, function ($a) {
             return !empty($a);

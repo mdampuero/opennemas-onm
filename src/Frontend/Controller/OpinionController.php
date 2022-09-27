@@ -106,7 +106,7 @@ class OpinionController extends FrontendController
         $action = $this->get('core.globals')->getAction();
 
         $expected = $this->get('core.helper.url_generator')->generate($author);
-        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
+        $expected = $this->get('core.decorator.url')->prefixUrl($expected);
 
         if ($request->getPathInfo() !== $expected) {
             return new RedirectResponse($expected);

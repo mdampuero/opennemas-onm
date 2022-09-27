@@ -287,6 +287,7 @@ class RssController extends FrontendController
 
         $expected = $this->get('router')
             ->generate('frontend_rss_author', [ 'author_slug' => $user->slug ]);
+        $expected = $this->get('core.decorator.url')->prefixUrl($expected);
 
         if ($request->getPathInfo() !== $expected) {
             return new RedirectResponse($expected);
