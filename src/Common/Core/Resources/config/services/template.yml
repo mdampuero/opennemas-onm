@@ -16,6 +16,7 @@ parameters:
             - generate_fb_pages_tag
             - js_includes
             - statistics
+            - fix_subdirectory_url
             - lazyscripts
     core.template.admin.filters:
         output:
