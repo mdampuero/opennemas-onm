@@ -108,9 +108,6 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadInstanceByDomainWhenInstanceInDatabase()
     {
-        $this->cache->expects($this->once())->method('exists')
-            ->with('fubar.foo')->willReturn(false);
-
         $this->repository->expects($this->any())->method('findBy')
             ->willReturn([
                 new Instance([
