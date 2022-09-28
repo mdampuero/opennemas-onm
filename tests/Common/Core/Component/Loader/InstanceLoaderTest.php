@@ -128,18 +128,13 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $loader->expects($this->any())->method('loadInstanceByDomain')
-            ->willReturn(
-                new Instance([
-                    'internal_name' => 'garply',
-                    'domains'       => [ 'fubar.foo' ]
-                ])
-            );
+            ->willReturn($loader);
 
         $loader->expects($this->any())->method('getInstance')
             ->willReturn(
                 new Instance([
-                    'internal_name' => 'garply',
-                    'domains'       => [ 'fubar.foo' ]
+                'internal_name' => 'garply',
+                'domains'       => [ 'fubar.foo' ]
                 ])
             );
 
