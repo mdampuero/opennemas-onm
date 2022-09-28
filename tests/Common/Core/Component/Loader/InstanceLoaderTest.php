@@ -171,6 +171,74 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getInstanceFromCache.
+     */
+    public function testGetInstanceFromCache()
+    {
+        $method = new \ReflectionMethod($this->loader, 'getInstanceFromCache');
+        $method->setAccessible(true);
+
+        $expected = new Instance([
+            'internal_name' => 'Scylla',
+            'subdirectory' => '/charibdis',
+            'domains' => ['Ishtar']
+        ]);
+
+        $fatherInstance = new Instance([
+            'internal_name' => 'Odin',
+            'domains' => ['Jormungandr']
+        ]);
+
+        $this->cache->expects($this->at(0))->method('get')
+            ->with('Ishtar')->willReturn([
+
+                new Instance([
+                    'internal_name' => 'Tyr',
+                    'subdirectory' => ''
+                ]),
+                $expected,
+                new Instance([
+                    'internal_name' => 'Horus',
+                    'subdirectory' => '/set'
+                ])
+
+            ]);
+
+        $this->cache->expects($this->at(1))->method('get')
+            ->with('Fenrir')->willReturn([
+                $expected,
+            ]);
+
+        $this->cache->expects($this->at(2))->method('get')
+            ->with('Jormungandr')->willReturn([
+                $fatherInstance,
+                new Instance([
+                    'internal_name' => 'Horus',
+                    'subdirectory' => '/set'
+                ])
+            ]);
+
+        $this->cache->expects($this->at(3))->method('get')
+            ->with('Cabrakan')->willReturn([
+                new Instance([
+                    'internal_name' => 'Horus',
+                    'subdirectory' => '/set'
+                ]),
+                new Instance([
+                    'internal_name' => 'Horus',
+                    'subdirectory' => '/set'
+                ])
+            ]);
+
+        $this->assertEquals($expected, $method->invokeArgs($this->loader, [ 'Ishtar', '/charibdis']));
+        $this->assertEquals($expected, $method->invokeArgs($this->loader, [ 'Fenrir', '/charibdis']));
+        $this->assertEquals($fatherInstance, $method->invokeArgs($this->loader, [ 'Jormungandr', '']));
+        $this->assertEquals(null, $method->invokeArgs($this->loader, [ 'Cabrakan', '/camazot']));
+    }
+
+
+
+    /**
      * Tests loadInstanceByName when the provided instance name is found in
      * database.
      */
@@ -257,6 +325,57 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $this->loader->loadInstanceByDomain('glorp.baz', '/subdirectory');
+    }
+
+    /**
+     * Tests testLoadInstanceByDomainWhenNoCacheAndNotValid.
+     *
+     * @expectedException \Exception
+     */
+    public function testLoadInstanceByDomainWhenNoCacheAndNotValid()
+    {
+        $this->cache->expects($this->once())->method('exists')
+            ->willReturn(false);
+
+        $this->repository->expects($this->any())->method('findBy')
+            ->willReturn([
+                new Instance([
+                    'internal_name' => 'glorp',
+                    'subdirectory' => '/subdirectory'
+                ])
+            ]);
+
+        $this->loader->loadInstanceByDomain('glorp.baz', '/subdirectory');
+    }
+
+    /**
+     * Tests testLoadInstanceByDomainWhenNoCacheAndValid.
+     */
+    public function testLoadInstanceByDomainWhenNoCacheAndValid()
+    {
+        $this->cache->expects($this->once())->method('exists')
+            ->willReturn(false);
+
+        $this->cache->expects($this->once())->method('get')
+            ->willReturn([
+                new Instance([
+                    'internal_name' => 'glorp',
+                    'subdirectory' => '/subdirectory',
+                    'domains' => [ 'glorpbaz' ]
+                ])
+            ]);
+
+        $this->repository->expects($this->any())->method('findBy')
+            ->willReturn([
+                new Instance([
+                    'internal_name' => 'glorp',
+                    'subdirectory' => '/subdirectory',
+                    'domains' => [ 'glorpbaz' ]
+                ])
+            ]);
+
+        $instance = $this->loader->loadInstanceByDomain('glorpbaz', '/subdirectory')->getInstance();
+        $this->assertEquals('glorp', $instance->internal_name);
     }
 
     /**
