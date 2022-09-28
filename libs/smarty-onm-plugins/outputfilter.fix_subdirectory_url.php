@@ -1,6 +1,6 @@
 <?php
 /**
- * Adds the noindex directive when needed
+ * Adds the subdirectory on links when needed
  *
  * @param string $output
  * @param \Smarty $smarty
