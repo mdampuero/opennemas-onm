@@ -70,6 +70,18 @@ class InstanceLoader
         $domain = preg_replace('/\.+$/', '', $domain);
         $match  = preg_match('@(\/[a-zA-Z0-9]+)\/?@', $uri, $subdirectory);
 
+        $subdirectoryMatch = $match ? $subdirectory[1] : '';
+
+        if ($this->cache->exists($domain)) {
+            $this->instance = $this->getInstanceFromCache($domain, $subdirectoryMatch);
+
+            if (!$this->isValid($this->instance, $domain)) {
+                throw new \Exception();
+            }
+
+            return $this;
+        }
+
         $oql = sprintf(
             'domains regexp "^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"',
             $domain,
@@ -79,86 +91,67 @@ class InstanceLoader
 
         $instances = $this->em->getRepository('Instance')->findBy($oql);
 
-        // Maindomain.es/anyroute when maindomain is shared by more than 1 instance
-        if (count($instances) > 1 && $match) {
-            // Check first if subdomain route is cached
-            if ($this->cache->exists($domain . '_' . trim($subdirectory[1], '/'))) {
-                $this->instance = $this->cache->get($domain . '_' . trim($subdirectory[1], '/'));
-
-                if (!$this->isValid($this->instance, $domain)) {
-                    throw new \Exception();
-                }
-
-                return $this;
-            }
-
-            // If not cached, check if routes is for subdomain
-            $params = [ $domain, $subdirectory[1] ];
-
-            $instance = array_filter($instances, function ($a) use ($params) {
-                return $this->isValid($a, $params[0]) && $a->isSubdirectory() && $a->getSubdirectory() == $params[1];
-            });
-
-            // If not, check now if main domain is cached
-            if (empty($instance) && $this->cache->exists($domain)) {
-                $this->instance = $this->cache->get($domain);
-
-                if (!$this->isValid($this->instance, $domain)) {
-                    throw new \Exception();
-                }
-
-                return $this;
-            }
-
-            // If there is not an instance with subdirectory match, take the father instance
-            if (empty($instance)) {
-                $instance = array_filter($instances, function ($a) use ($params) {
-                    return $this->isValid($a, $params[0]) && !$a->isSubdirectory();
-                });
-            }
-
-            $this->instance = array_pop($instance);
-
-            // Create and set redis key based on domain + subdirectory
-            $key = $this->instance->isSubdirectory() ?
-                $domain . '_' . trim($this->instance->getSubdirectory(), '/') :
-                $domain;
-
-            $this->cache->set($key, $this->instance);
-            return $this;
-        }
-
-        //Maindomain.es whether or not it is shared by more than 1 instance
-        if ($this->cache->exists($domain)) {
-            $this->instance = $this->cache->get($domain);
-
-            if (!$this->isValid($this->instance, $domain)) {
-                throw new \Exception();
-            }
-
-            return $this;
-        }
-
         if (empty($instances)) {
             throw new \Exception();
         }
 
-        // If maindomain is shared, take the father instance
-        if (count($instances) > 1) {
-            $instances = array_filter($instances, function ($instance) {
-                return !$instance->isSubdirectory();
-            });
+        $this->cache->set($domain, $instances);
+
+        $this->instance = $this->getInstanceFromCache($domain, $subdirectoryMatch);
+
+        if (!$this->isValid($this->instance, $domain)) {
+            throw new \Exception();
         }
 
-        $this->instance = array_pop($instances);
-
-        $key = $this->instance->isSubdirectory() ?
-            $domain . '_' . trim($this->instance->getSubdirectory, '/') :
-            $domain;
-
-        $this->cache->set($key, $this->instance);
-
         return $this;
+    }
+
+    /**
+     * Loads an instance basing on the domain and the requested URI.
+     *
+     * @param string $domain               The requested domain.
+     * @param string $subdirectoryMatch    The subdirectory match
+     *
+     * @return mixed The current InstanceLoader.
+     */
+    private function getInstanceFromCache($domain, $subdirectoryMatch)
+    {
+        $instances = $this->cache->get($domain);
+        $instances = is_array($instances) ? $instances : [ $instances ];
+
+        if (count($instances) == 1) {
+            return array_pop($instances);
+        }
+
+        $subInstance = array_filter($instances, function ($instance) use ($subdirectoryMatch) {
+            return $instance->getSubdirectory() == $subdirectoryMatch;
+        });
+
+        if (!empty($subInstance)) {
+            $instance = array_pop($subInstance);
+
+            if (!$this->isValid($instance, $domain)) {
+                throw new \Exception();
+            }
+
+            return $instance;
+        }
+
+        $rootInstance = array_filter($instances, function ($instance) {
+            return !$instance->isSubdirectory();
+        });
+
+        if (!empty($rootInstance)) {
+            $instance = array_pop($subInstance);
+
+            if (!$this->isValid($instance, $domain)) {
+                throw new \Exception();
+            }
+
+            return $instance;
+        }
+
+        throw new \Exception();
     }
 
     /**

@@ -119,7 +119,31 @@ class InstanceLoaderTest extends \PHPUnit\Framework\TestCase
                 ])
             ]);
 
-        $instance = $this->loader
+        $loader = $this->getMockBuilder('Common\Core\Component\Loader')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'isValid', 'loadInstanceByDomain', 'getInstance' ])
+            ->getMock();
+
+        $loader->expects($this->any())->method('isValid')
+            ->willReturn(true);
+
+        $loader->expects($this->any())->method('loadInstanceByDomain')
+            ->willReturn(
+                new Instance([
+                    'internal_name' => 'garply',
+                    'domains'       => [ 'fubar.foo' ]
+                ])
+            );
+
+        $loader->expects($this->any())->method('getInstance')
+            ->willReturn(
+                new Instance([
+                    'internal_name' => 'garply',
+                    'domains'       => [ 'fubar.foo' ]
+                ])
+            );
+
+        $instance = $loader
             ->loadInstanceByDomain('fubar.foo', '/')
             ->getInstance();
 
