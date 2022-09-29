@@ -34,124 +34,130 @@ class HooksSubscriber implements EventSubscriberInterface
     /**
      * Returns an array of event names this subscriber wants to listen to.
      *
+     * Priority order:
+     * Redis 20
+     * Smarty 15
+     * Varnish 10
+     * Log 5
+     *
      * @return array The event names to listen to.
      */
     public static function getSubscribedEvents()
     {
         return [
             'advertisement.create' => [
-                [ 'removeVarnishCacheCurrentInstance', 5 ],
+                [ 'removeVarnishCacheCurrentInstance', 10 ],
             ],
             'advertisement.update' => [
-                [ 'removeVarnishCacheCurrentInstance', 5 ],
+                [ 'removeVarnishCacheCurrentInstance', 10 ],
             ],
             'advertisement.delete' => [
-                [ 'removeVarnishCacheCurrentInstance', 5 ],
+                [ 'removeVarnishCacheCurrentInstance', 10 ],
             ],
             // Comments Config hooks
             'comments.config' => [
-                ['removeSmartyCacheAll', 5],
-                ['removeVarnishCacheCurrentInstance', 5]
+                ['removeSmartyCacheAll', 15],
+                ['removeVarnishCacheCurrentInstance', 10]
             ],
             // Content hooks
             'content.update-set-num-views' => [
-                ['removeObjectCacheForContent', 5]
+                ['removeObjectCacheForContent', 20]
             ],
             'content.create' => [
                 ['logAction', 5],
             ],
             'content.update' => [
+                ['removeObjectCacheForContent', 20],
                 ['logAction', 5],
-                ['removeObjectCacheForContent', 10],
             ],
             'content.delete' => [
+                ['removeObjectCacheForContent', 20],
                 ['logAction', 5],
-                ['removeObjectCacheForContent', 10],
             ],
             'content.createItem' => [
+                ['removeVarnishCacheForContent', 10],
                 ['logAction', 5],
-                ['removeCacheForContent', 5],
             ],
             'content.updateItem' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeSmartyCacheForContent', 15],
+                ['removeVarnishCacheForContent', 10],
                 ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
-                ['removeCacheForContent', 5],
             ],
             'content.updateVotedItem' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeSmartyCacheForContent', 15],
+                ['removeVarnishCacheForVotedContent', 10],
                 ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
-                ['removeCacheForVotedContent', 5],
             ],
             'content.deleteItem' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeObjectCacheForRelatedContents', 20],
+                ['removeSmartyCacheForContent', 15],
+                ['removeVarnishCacheForContent', 10],
                 ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
-                ['removeCacheForContent', 5],
-                ['removeCacheForRelatedContents', 5],
             ],
             'content.patchItem' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeSmartyCacheForContent', 15],
+                ['removeVarnishCacheForContent', 10],
                 ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
-                ['removeCacheForContent', 5],
             ],
             'content.patchList' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeSmartyCacheForContent', 15],
+                ['removeVarnishCacheForContent', 10],
                 ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
-                ['removeCacheForContent', 5],
             ],
             'content.deleteList' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeObjectCacheForRelatedContents', 20],
+                ['removeSmartyCacheForContent', 15],
+                ['removeVarnishCacheForContent', 10],
                 ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
-                ['removeCacheForContent', 5],
-                ['removeCacheForRelatedContents', 5],
             ],
             // Frontpage hooks
             'frontpage.save_position' => [
-                ['removeVarnishCacheFrontpage', 5],
-                ['removeObjectCacheFrontpageMap', 5],
-                ['removeObjectCacheForWidgets', 5],
-                ['removeVarnishCacheFrontpageCSS', 5],
-                ['removeSmartyCacheForFrontpageOfCategory', 5],
-                ['removeDynamicCssSettingForFrontpage', 5],
+                ['removeObjectCacheFrontpageMap', 20],
+                ['removeObjectCacheForWidgets', 20],
+                ['removeDynamicCssSettingForFrontpage', 20],
+                ['removeSmartyCacheForFrontpageOfCategory', 15],
+                ['removeVarnishCacheFrontpage', 10],
+                ['removeVarnishCacheFrontpageCSS', 10],
             ],
             'frontpage.pick_layout' => [
-                ['removeVarnishCacheFrontpage', 5],
-                ['removeObjectCacheFrontpageMap', 5],
-                ['removeSmartyCacheForFrontpageOfCategory', 5],
+                ['removeObjectCacheFrontpageMap', 20],
+                ['removeSmartyCacheForFrontpageOfCategory', 15],
+                ['removeVarnishCacheFrontpage', 10],
             ],
             // Instance hooks
             'instance.delete' => [
-                ['removeObjectCacheForInstance', 5],
-                ['removeObjectCacheCountries', 5],
+                ['removeObjectCacheForInstance', 20],
+                ['removeObjectCacheCountries', 20],
             ],
             'instance.update' => [
-                ['removeObjectCacheForInstance', 5],
-                ['removeSmartyForInstance', 5],
-                ['removeVarnishInstanceCacheUsingInstance', 5],
-                ['removeObjectCacheCountries', 5],
+                ['removeObjectCacheForInstance', 20],
+                ['removeObjectCacheCountries', 20],
+                ['removeSmartyForInstance', 15],
+                ['removeVarnishInstanceCacheUsingInstance', 10],
             ],
             'instance.client.update' => [
-                ['removeObjectCacheForInstance', 5],
+                ['removeObjectCacheForInstance', 20],
             ],
             'theme.change' => [
-                ['removeSmartyCacheAll', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
+                ['removeSmartyCacheAll', 15],
+                ['removeVarnishCacheCurrentInstance', 10],
             ],
             // Menu hooks
             'menu.updateItem' => [
-                ['removeSmartyCacheAll', 5],
-                ['removeObjectCacheForContent', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
+                ['removeObjectCacheForContent', 20],
+                ['removeSmartyCacheAll', 15],
+                ['removeVarnishCacheCurrentInstance', 10],
             ],
             'menu.deleteItem' => [
-                ['removeSmartyCacheAll', 5],
-                ['removeObjectCacheForContent', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
+                ['removeObjectCacheForContent', 20],
+                ['removeSmartyCacheAll', 15],
+                ['removeVarnishCacheCurrentInstance', 10],
             ],
         ];
     }
@@ -183,7 +189,7 @@ class HooksSubscriber implements EventSubscriberInterface
     /**
      * Queues the necessary bans for an specific content.
      */
-    public function removeCacheForContent(Event $event)
+    public function removeVarnishCacheForContent(Event $event)
     {
         $item = $event->getArgument('item');
 
@@ -202,7 +208,7 @@ class HooksSubscriber implements EventSubscriberInterface
     /**
      * Queues the necessary bans for an specific voted content.
      */
-    public function removeCacheForVotedContent(Event $event)
+    public function removeVarnishCacheForVotedContent(Event $event)
     {
         $item = $event->getArgument('item');
 
@@ -580,7 +586,7 @@ class HooksSubscriber implements EventSubscriberInterface
      *
      * @param Event $event The event to handle.
      */
-    public function removeCacheForRelatedContents(Event $event)
+    public function removeObjectCacheForRelatedContents(Event $event)
     {
         if (!$event->hasArgument('related')) {
             return false;
