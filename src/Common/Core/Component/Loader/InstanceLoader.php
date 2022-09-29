@@ -72,30 +72,22 @@ class InstanceLoader
 
         $subdirectoryMatch = $match ? $subdirectory[1] : '';
 
-        if ($this->cache->exists($domain)) {
-            $this->instance = $this->getInstanceFromCache($domain, $subdirectoryMatch);
+        if (!$this->cache->exists($domain)) {
+            $oql = sprintf(
+                'domains regexp "^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"',
+                $domain,
+                $domain,
+                $domain,
+            );
 
-            if (!$this->isValid($this->instance, $domain)) {
+            $instances = $this->em->getRepository('Instance')->findBy($oql);
+
+            if (empty($instances)) {
                 throw new \Exception();
             }
 
-            return $this;
+            $this->cache->set($domain, $instances);
         }
-
-        $oql = sprintf(
-            'domains regexp "^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"',
-            $domain,
-            $domain,
-            $domain,
-        );
-
-        $instances = $this->em->getRepository('Instance')->findBy($oql);
-
-        if (empty($instances)) {
-            throw new \Exception();
-        }
-
-        $this->cache->set($domain, $instances);
 
         $this->instance = $this->getInstanceFromCache($domain, $subdirectoryMatch);
 
