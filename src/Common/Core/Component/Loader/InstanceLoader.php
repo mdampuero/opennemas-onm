@@ -122,6 +122,24 @@ class InstanceLoader
         if (!empty($subInstance)) {
             $instance = array_pop($subInstance);
 
+            if (!$this->isValid($instance, $domain)) {
+                throw new \Exception();
+            }
+
+            return $instance;
+        }
+
+        $rootInstance = array_filter($instances, function ($instance) {
+            return !$instance->isSubdirectory();
+        });
+
+        if (!empty($rootInstance)) {
+            $instance = array_pop($rootInstance);
+
+            if (!$this->isValid($instance, $domain)) {
+                throw new \Exception();
+            }
+
             return $instance;
         }
 
