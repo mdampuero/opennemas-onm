@@ -132,13 +132,13 @@ window.makeContentProviderAndPlaceholdersSortable = function() {
  *   Removes an element from the frontpage
  */
 window.remove_element = function(element) {
-  var speed = 0.01;
+  var opacity = 0.01;
 
   jQuery(element).each(function() {
     // Fade
-    jQuery(this).fadeTo('slow', speed, function() {
+    jQuery(this).fadeTo('fast', opacity, function() {
       // Slide up
-      jQuery(this).slideUp('slow', function() {
+      jQuery(this).slideUp('fast', function() {
         // Then remove from the DOM
         jQuery(this).remove();
       });
