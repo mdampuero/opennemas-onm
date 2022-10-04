@@ -194,9 +194,9 @@ class SitemapController extends Controller
                 'changed' => [
                     [
                         'value' => sprintf(
-                            '"%s" AND DATE_ADD("%s", INTERVAL 1 MONTH)',
-                            date('Y-m-01 00:00:00', strtotime(date('Y-m-d H:i:s'))),
-                            date('Y-m-01 00:00:00', strtotime(date('Y-m-d H:i:s')))
+                            'DATE_ADD("%s", INTERVAL -2 DAY) AND "%s"',
+                            gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s'))),
+                            gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')))
                         ),
                         'field' => true,
                         'operator' => 'BETWEEN'
