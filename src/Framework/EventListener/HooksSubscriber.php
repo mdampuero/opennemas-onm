@@ -251,16 +251,8 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         $instance = $event->getArgument('instance');
 
-        $key = $instance->domains;
-
-        if ($instance->isSubdirectory()) {
-            $key = array_map(function ($element) use ($instance) {
-                return $element . '_' . trim($instance->getSubdirectory(), '/');
-            }, $instance->domains);
-        }
-
         $this->container->get('cache.manager')->getConnection('manager')
-            ->remove($key);
+            ->remove($instance->domains);
     }
 
     /**
