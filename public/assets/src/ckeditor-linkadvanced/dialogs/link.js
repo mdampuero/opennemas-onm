@@ -633,42 +633,33 @@
 						type: 'hbox',
 						widths: [ '100%' ],
 						children: [ {
-						type: 'select',
-						id: 'advRel',
-						label: 'Rel Attribute',
-						'default': '',
-						style: 'width : 100%;',
-						'items': [
-							[ '', '' ],
-							[ 'sponsored', 'sponsored' ],
-							[ 'nofollow', 'nofollow' ],
-							[ 'noreferrer', 'noreferrer' ],
-							[ 'noopener', 'noopener' ],
-							[ 'ugc', 'ugc' ],
-							[ 'author', 'author' ],
-							[ 'bookmark', 'bookmark' ],
-							[ 'external', 'external' ],
-							[ 'help', 'help' ],
-							[ 'license', 'license' ],
-							[ 'next', 'next' ],
-							[ 'prev', 'prev' ],
-							[ 'search', 'search' ],
-							[ 'tag', 'tag' ],
-							[ 'alternate', 'alternate' ]
-						],
-						onChange: targetChanged,
-						setup: function( data ) {
-							if ( data.advanced )
-								this.setValue( data.advanced.advRel || '' );
-							targetChanged.call( this );
-						},
-						commit: function( data ) {
-							if ( !data.advanced )
-								data.advanced = {};
-
-							data.advanced.advRel = this.getValue();
-						}
-					} ]
+              type: 'select',
+              id: 'advRel',
+              label: 'Rel Attribute',
+              requiredContent: 'a[rel]',
+              'default': '',
+              style: 'width : 100%;',
+              'items': [
+                [ '', '' ],
+                [ 'sponsored', 'sponsored' ],
+                [ 'nofollow', 'nofollow' ],
+                [ 'noreferrer', 'noreferrer' ],
+                [ 'noopener', 'noopener' ],
+                [ 'ugc', 'ugc' ],
+                [ 'author', 'author' ],
+                [ 'bookmark', 'bookmark' ],
+                [ 'external', 'external' ],
+                [ 'help', 'help' ],
+                [ 'license', 'license' ],
+                [ 'next', 'next' ],
+                [ 'prev', 'prev' ],
+                [ 'search', 'search' ],
+                [ 'tag', 'tag' ],
+                [ 'alternate', 'alternate' ]
+              ],
+              setup: setupAdvParams,
+              commit: commitAdvParams
+            } ]
 					} ]
 				} ]
 			} ],
