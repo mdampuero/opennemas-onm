@@ -63,6 +63,40 @@
           {include file="ui/component/content-editor/accordion/published.tpl"}
         {/acl}
       </div>
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="cif" icon="fa-address-card" title="{t}CIF{/t}"}
+      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.province = !expanded.province">
+        <i class="fa fa-map-signs m-r-10"></i>{t}Province{/t}
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.province }"></i>
+        <span class="pull-right" ng-if="!expanded.province">
+          {include file="common/component/icon/status.tpl" iForm="form.province" iNgModel="item.province" iValidation=true}
+        </span>
+      </div>
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.province }">
+        <div class="form-group no-margin">
+          <div class="controls">
+            <select name="contactCountry" ng-model="item.province" ng-options="item.nm for item in provinces" >
+              <option value="">{t}Select a province{/t}...</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.locality = !expanded.locality" ng-if="item.province">
+        <i class="fa fa-map-signs m-r-10"></i>{t}Locality{/t}
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.locality }"></i>
+        <span class="pull-right" ng-if="!expanded.locality">
+          {include file="common/component/icon/status.tpl" iForm="form.locality" iNgModel="item.locality" iValidation=true}
+        </span>
+      </div>
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.locality }" ng-if="item.province">
+        <div class="form-group no-margin">
+          <div class="controls">
+            <select name="contactCountry" ng-model="item.locality" ng-options="item.nm for item in filteredLocalities" >
+              <option value="">{t}Select a locality{/t}...</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="postal_code" icon="fa-location-arrow" title="{t}Postal code{/t}"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
@@ -73,7 +107,58 @@
       <div class="grid-collapse-title">
         <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
       </div>
-      {include file="ui/component/content-editor/accordion/sector.tpl" required=true}
+      <div ng-if="extraFields.sectors">
+        <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.sector = !expanded.sector">
+          <i class="fa fa-pie-chart m-r-10"></i>{t}Sector{/t}
+          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.sector }"></i>
+        </div>
+        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.sector }">
+          <div class="form-group no-margin">
+            <div class="controls">
+              <div class="tags-input-wrapper">
+                <tags-input display-property="name" key-property="name" use-strings="true" min-length="1" ng-model="item.sectors"  add-from-autocomplete-only="true" placeholder="{t}Add a sector...{/t}">
+                  <auto-complete source="list($query,extraFields.sectors)" load-on-down-arrow="true" min-length="2" select-first-match="true" debounce-delay="250"></auto-complete>
+                </tags-input>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-if="extraFields.activity">
+        <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.activity = !expanded.activity">
+          <i class="fa fa-line-chart m-r-10"></i>{t}Activity{/t}
+          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.activity }"></i>
+        </div>
+        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.activity }">
+          <div class="form-group no-margin">
+            <div class="controls">
+              <div class="tags-input-wrapper">
+                <tags-input display-property="name" key-property="name" use-strings="true" min-length="1" ng-model="item.activities"  add-from-autocomplete-only="true" placeholder="{t}Add an activity...{/t}">
+                  <auto-complete source="list($query,extraFields.activity)" load-on-down-arrow="true" min-length="2" select-first-match="true" debounce-delay="250"></auto-complete>
+                </tags-input>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-if="extraFields.products">
+        <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.products = !expanded.products">
+          <i class="fa fa-shopping-basket m-r-10"></i>{t}Products{/t}
+          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.products }"></i>
+        </div>
+        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.products }">
+          <div class="form-group no-margin">
+            <div class="controls">
+              <div class="tags-input-wrapper">
+                <tags-input display-property="name" key-property="name" use-strings="true" min-length="1" ng-model="item.products"  add-from-autocomplete-only="true" placeholder="{t}Add a product...{/t}">
+                  <auto-complete source="list($query,extraFields.products)" load-on-down-arrow="true" min-length="2" select-first-match="true" debounce-delay="250"></auto-complete>
+                </tags-input>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {include file="ui/component/content-editor/accordion/schedule.tpl" field="schedule" icon="fa-calendar-o"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="facebook" icon="fa-facebook" title="{t}Facebook{/t}"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="twitter" icon="fa-twitter" title="{t}Twitter{/t}"}
@@ -97,8 +182,7 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-      {include file="ui/component/input/text.tpl" iCounter=true iField="pretitle" iTitle="{t}Pretitle{/t}"}
+      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Company Name{/t}" iValidation=true}
       {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
       {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true contentPicker=true}
     </div>

@@ -79,6 +79,9 @@
           type: 0,
           related_contents: [],
           tags: [],
+          sectors: [],
+          activities: [],
+          products: [],
         };
 
         /**
@@ -154,6 +157,43 @@
         };
 
         /**
+         * @function list
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *   Returns a sorted elements based on a query and name property.
+         *
+         * @param {String} query The query string.
+         * @param {Object} model the model
+         *
+         * @return {Object} The sorted model
+         */
+        $scope.list = function(query, model) {
+          var finalModel = model.sort(function(a, b) {
+            return $scope.orderFunction(query, b.name) - $scope.orderFunction(query, a.name);
+          });
+
+          var finalData = [];
+
+          finalModel.forEach(function(item) {
+            finalData.push(item.name);
+          });
+          return finalData;
+        };
+
+        $scope.orderFunction = function(query, compareString) {
+          var queryChars = query.split('');
+          var stringChars = compareString.split('');
+
+          for (var iterator = 0; iterator < queryChars.length; iterator++) {
+            if (!stringChars[iterator] || stringChars[iterator].toLowerCase() !== queryChars[iterator].toLowerCase()) {
+              break;
+            }
+          }
+          return iterator;
+        };
+
+        /**
          * @memberOf CompanyCtrl
          *
          * @description
@@ -179,6 +219,15 @@
             $scope.draftKey = 'company-' + $scope.data.item.pk_content + '-draft';
           }
 
+          if ($scope.item.sectors && typeof $scope.item.sectors === 'string') {
+            $scope.item.sectors = JSON.parse($scope.item.sectors);
+          }
+          if ($scope.item.activities && typeof $scope.item.activities === 'string') {
+            $scope.item.activities = JSON.parse($scope.item.activities);
+          }
+          if ($scope.item.products && typeof $scope.item.products === 'string') {
+            $scope.item.products = JSON.parse($scope.item.products);
+          }
           $scope.item.timetable = $scope.item.timetable ?
             $scope.item.timetable :
             $scope.data.extra.timetable.slice();
@@ -187,6 +236,47 @@
           related.init($scope);
           related.watch();
           translator.init($scope);
+        };
+
+        /**
+         * @function configure
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *   Configures the extra data for the current section.
+         *
+         * @param {Object} data The data to configure the section.
+         */
+        $scope.configure = function(data) {
+          if (!data) {
+            return;
+          }
+          if (data.extraFields) {
+            $scope.extraFields = data.extraFields;
+          }
+          if (data.localities) {
+            $scope.localities = data.localities;
+            if (typeof $scope.localities === 'string') {
+              $scope.localities = JSON.parse($scope.localities);
+            }
+          }
+          if (data.provinces) {
+            $scope.provinces = data.provinces;
+            if (typeof $scope.provinces === 'string') {
+              $scope.provinces = JSON.parse($scope.provinces);
+            }
+          }
+          if (data.locale) {
+            $scope.config.locale = data.locale;
+          }
+
+          if ($scope.forcedLocale && Object.keys(data.locale.available)
+            .indexOf($scope.forcedLocale) !== -1) {
+            // Force localization
+            $timeout(function() {
+              $scope.config.locale.selected = $scope.forcedLocale;
+            });
+          }
         };
 
         /**
@@ -221,6 +311,28 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.parseData = function(data) {
+          if (data.sectors && typeof data.sectors !== 'string') {
+            data.sectors = JSON.stringify(data.sectors);
+          }
+          if (data.activities && typeof data.activities !== 'string') {
+            data.activities = JSON.stringify(data.activities);
+          }
+          if (data.products && typeof data.products !== 'string') {
+            data.products = JSON.stringify(data.products);
+          }
+          if (data.province && data.province.nm && typeof data.province !== 'string') {
+            data.province = data.province.nm;
+          }
+          if (data.locality && data.locality.nm && typeof data.locality !== 'string') {
+            data.locality = data.locality.nm;
+          }
+          return data;
+        };
+
+        /**
          * @function getFrontendUrl
          * @memberOf CompanyCtrl
          *
@@ -239,6 +351,67 @@
               slug: item.slug,
             })
           );
+        };
+
+        /**
+         * @function filterLocality
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *   Filter localities array by province id
+         *
+         * @param {String} id  The province id.
+         *
+         * @return {Array} The array of localities.
+         */
+        $scope.filterLocality = function(id) {
+          console.log(id);
+          var result = $scope.localities.filter(function (element) {
+            return element.id.startsWith(id);
+          });
+
+          return result;
+        };
+
+        /**
+         * @function findProvince
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *   Find province object by its name
+         *
+         * @param {String} name  The province name.
+         *
+         * @return {Object} The province object.
+         */
+        $scope.findProvince = function(name) {
+          console.log(name);
+          var result = $scope.provinces.filter(function(element) {
+            return element.nm === name;
+          });
+
+          return result.pop();
+        };
+
+        /**
+         * @function findLocality
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *   Find province object by its name
+         *
+         * @param {String} id    The province id.
+         * @param {String} name  The locality name.
+         *
+         * @return {Object} The province object.
+         */
+        $scope.findLocality = function(id, name) {
+          console.log(name);
+          var result = $scope.localities.filter(function(element) {
+            return (element.nm === name && element.id.startsWith(id));
+          });
+
+          return result.pop();
         };
 
         /**
@@ -304,6 +477,27 @@
 
           return true;
         };
+
+        $scope.$watch('item.province', function(nv, ov) {
+          console.log(nv);
+          if (!nv) {
+            return;
+          }
+          if (ov && !nv) {
+            $scope.item.locality = '';
+            delete $scope.filteredLocalities;
+          }
+          if (nv.id && nv.nm) {
+            $scope.filteredLocalities = $scope.filterLocality(nv.id);
+            // $scope.item.province = nv.nm;
+          }
+          if (typeof nv === 'string') {
+            $scope.item.province = $scope.findProvince(nv);
+            if (typeof $scope.item.locality === 'string') {
+              $scope.item.locality = $scope.findLocality($scope.item.province.id, $scope.item.locality);
+            }
+          }
+        });
       }
     ]);
 })();

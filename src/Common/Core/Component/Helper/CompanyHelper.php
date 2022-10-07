@@ -48,6 +48,25 @@ class CompanyHelper
     }
 
     /**
+     * Returns spain provinces and localities in JSON format
+     *
+     * @return Mixed Localities and Provinces of Spain.
+     */
+    public function getLocalitiesAndProvices()
+    {
+        $result = [
+            'localities' => file_get_contents(
+                $this->container->getParameter('core.paths.public') . '/assets/utilities/municipios.json'
+            ),
+            'provinces' => file_get_contents(
+                $this->container->getParameter('core.paths.public') . '/assets/utilities/provincias.json'
+            )
+        ];
+
+        return $result;
+    }
+
+    /**
      * Checks if the company has a logo.
      *
      * @param Content $item The company.

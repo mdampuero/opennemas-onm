@@ -109,4 +109,15 @@ class CompanyController extends BackendController
         } catch (GetListException $e) {
         }
     }
+
+    /**
+     * Config for company system
+     *
+     * @return Response the response object
+     *
+     */
+    public function configAction()
+    {
+        return $this->render('company/config.tpl');
+    }
 }

@@ -1,4 +1,8 @@
 # Company controller routes
+backend_companies_config:
+    path:     /companies/config
+    defaults: { _controller: BackendBundle:Company:config }
+
 backend_companies_content_provider:
     path:     /companies/content-provider
     defaults: { _controller: BackendBundle:Company:contentProvider }

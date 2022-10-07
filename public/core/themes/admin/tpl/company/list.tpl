@@ -19,14 +19,20 @@
 {block name="primaryActions"}
   <div class="all-actions pull-right">
     <ul class="nav quick-section">
-      {acl isAllowed="COMPANY_CREATE"}
-        <li class="quicklinks">
-            <a class="btn btn-success text-uppercase" href="{url name=backend_company_create}" title="{t}New company{/t}" id="create-button">
-              <i class="fa fa-plus"></i>
-              {t}Create{/t}
-            </a>
-        </li>
-      {/acl}
+      <li class="quicklinks">
+        <a class="btn btn-link" href="{url name=backend_companies_config}" class="admin_add" title="{t}Config company module{/t}">
+          <span class="fa fa-cog fa-lg"></span>
+        </a>
+      </li>
+      <li class="quicklinks"><span class="h-seperate"></span></li>
+    {acl isAllowed="COMPANY_CREATE"}
+      <li class="quicklinks">
+          <a class="btn btn-success text-uppercase" href="{url name=backend_company_create}" title="{t}New company{/t}" id="create-button">
+            <i class="fa fa-plus"></i>
+            {t}Create{/t}
+          </a>
+      </li>
+    {/acl}
     </ul>
   </div>
 {/block}
