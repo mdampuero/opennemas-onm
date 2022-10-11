@@ -10,7 +10,6 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
-use Doctrine\DBAL\Types\ArrayType;
 
 class ContentController extends ApiController
 {
@@ -26,6 +25,14 @@ class ContentController extends ApiController
     {
         $instance = $this->get('core.instance');
 
+        if (!empty($items)) {
+            $itemsId = array_map(function ($item) {
+                return $item->id;
+            }, $items);
+
+            $views = $this->get('content_views_repository')->getViews($itemsId);
+        }
+
         return [
             'authors'          => $this->getAuthors(),
             'comments_enabled' => $this->get('core.helper.comment')->enableCommentsByDefault(),
@@ -37,6 +44,7 @@ class ContentController extends ApiController
                 'newsstand'  => $instance->getNewsstandShortPath(),
             ],
             'related_contents' => $this->getRelatedContents($items),
+            'views'            => $views ?? []
         ];
     }
 
