@@ -8,6 +8,8 @@ use Frontend\Renderer\StatisticsRenderer;
 class GAnalyticsRenderer extends StatisticsRenderer
 {
     protected $defaultAnalyticsKey = 'UA-40838799-5';
+    protected $defaultGA4Key       = 'G-DZD8C8RYLW';
+
     /**
      * {@inheritdoc}
      */
@@ -38,7 +40,8 @@ class GAnalyticsRenderer extends StatisticsRenderer
             }
             // Check if default opennemas GA Key is disalowed
             if (!$this->sh->isDefaultGADisabled()) {
-                $accounts['-onm'] = trim($this->defaultAnalyticsKey);
+                $accounts['-onm']     = trim($this->defaultAnalyticsKey);
+                $accounts['-onm-ga4'] = trim($this->defaultGA4Key);
             }
         }
 
