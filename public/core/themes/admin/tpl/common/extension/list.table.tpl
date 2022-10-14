@@ -36,7 +36,7 @@
           {t}End date{/t}
         </label>
       </div>
-      <div class="checkbox column-filters-checkbox">
+      <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('content_views')">
         <input id="checkbox-content-views" checklist-model="app.columns.selected" checklist-value="'content_views'" type="checkbox">
         <label for="checkbox-content-views">
           {t}Views{/t}
