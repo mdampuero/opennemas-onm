@@ -34,7 +34,7 @@
     "bootstrap": "3.4.1",
     "chart.js": "2.9.3",
     "checklist-model": "1.0.0",
-    "ckeditor4": "https://github.com/ckeditor/ckeditor4-releases.git#4.5.0",
+    "ckeditor4": "git+ssh://git@bitbucket.org/opennemas/ckeditor4.git#4.5.0",
     "eonasdan-bootstrap-datetimepicker": "4.17.47",
     "flag-sprites": "https://github.com/LeoColomb/flag-sprites.git#1.1.1",
     "font-awesome": "4.7.0",

@@ -35,7 +35,7 @@
         this.defaults = {
           plugins: 'a11yhelp,autogrow,autokeywords,autolink,autonofollow,autotoc,basicstyles,blockquote,clipboard,contextmenu,elementspath' +
             ',enterkey,entities,filebrowser,find,floatingspace,font,format,horizontalrule,htmlwriter,image2,imageresize,' +
-            'indentblock,justify,linkadvanced,list,magicline,maximize,pastefromword,pastespecial,pastetext,removeformat,' +
+            'indentblock,justify,link,list,magicline,maximize,pastefromword,pastespecial,pastetext,removeformat,' +
             'resize,scayt,sourcearea,stylescombo,tab,table,tabletools,toolbar,undo,wordcount,wsc,wysiwygarea',
           disableNativeSpellChecker: false,
           autoParagraph: false,
@@ -54,6 +54,7 @@
           preset: 'standard',
           width: '100%',
           format_tags: 'p;h1;h2;h3;h4;pre',
+          removeDialogTabs: 'image:advanced;',
           entities: false
         };
 
