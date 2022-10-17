@@ -36,6 +36,12 @@
           {t}End date{/t}
         </label>
       </div>
+      <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('content_views')">
+        <input id="checkbox-content-views" checklist-model="app.columns.selected" checklist-value="'content_views'" type="checkbox">
+        <label for="checkbox-content-views">
+          {t}Views{/t}
+        </label>
+      </div>
       <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('category')">
         <input id="checkbox-support" checklist-model="app.columns.selected" checklist-value="'category'" type="checkbox">
         <label for="checkbox-support">
@@ -86,6 +92,9 @@
               </th>
               <th class="text-center v-align-middle" ng-if="isColumnEnabled('endtime')" width="150">
                 {t}End date{/t}
+              </th>
+              <th class="text-center v-align-middle" ng-if="isColumnEnabled('content_views')" width="120">
+                {t}Views{/t}
               </th>
               <th class="text-center v-align-middle" ng-if="isColumnEnabled('category')" width="200">
                 {t}Category{/t}
@@ -162,6 +171,9 @@
                   <i class="fa fa-clock-o"></i>
                   [% item.endtime | moment : 'HH:mm:ss' %]
                 </small>
+              </td>
+              <td class="text-center v-align-middle" ng-if="isColumnEnabled('content_views')">
+                [% data.extra.views[item.pk_content] || 0 %]
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('category')">
                 {block name="categoryColumn"}
