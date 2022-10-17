@@ -177,7 +177,7 @@ class SitemapController extends Controller
             $settings = $this->get('core.helper.sitemap')->getSettings();
             $filters  = [
                 'content_type_name' => [
-                    [ 'value' => [ 'article', 'opinion' ], 'operator' => 'IN' ]
+                    [ 'value' => [ 'article', 'opinion', 'video', 'album' ], 'operator' => 'IN' ]
                 ],
                 'content_status'    => [[ 'value' => 1 ]],
                 'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
@@ -189,23 +189,20 @@ class SitemapController extends Controller
                 'starttime'         => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
-                ],
-                'changed' => [
                     [
                         'value' => sprintf(
-                            '"%s" AND DATE_ADD("%s", INTERVAL 1 MONTH)',
-                            date('Y-m-01 00:00:00', strtotime(date('Y-m-d H:i:s'))),
-                            date('Y-m-01 00:00:00', strtotime(date('Y-m-d H:i:s')))
+                            'DATE_ADD("%s", INTERVAL -2 DAY) AND "%s"',
+                            gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s'))),
+                            gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')))
                         ),
                         'field' => true,
                         'operator' => 'BETWEEN'
                     ]
-                ]
+                ],
             ];
 
             $contents = $this->get('entity_repository')
-                ->findBy($filters, ['changed' => 'desc'], $settings['total']);
+                ->findBy($filters, ['starttime' => 'desc'], $settings['total']);
 
             return $this->getResponse(
                 $format,
