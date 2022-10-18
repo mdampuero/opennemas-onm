@@ -39,8 +39,8 @@ function smarty_function_dynamic_image($params, &$smarty)
         try {
             $resource = $smarty->getContainer()->get('router')
                 ->generate('asset_image', [
-                    'path'   => $resource,
                     'params' => str_replace(' ', '', $params['transform']),
+                    'path'   => ltrim($resource, '/'),
                 ]);
         } catch (\Exception $e) {
             $resource = '#failed';

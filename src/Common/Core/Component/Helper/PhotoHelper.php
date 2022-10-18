@@ -109,7 +109,7 @@ class PhotoHelper
 
         return $this->router->generate('asset_image', [
             'params' => implode(',', array_merge([ $transform ], $params)),
-            'path'   => $url
+            'path'   => ltrim($url, '/')
         ], $absolute);
     }
 

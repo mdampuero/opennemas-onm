@@ -148,8 +148,9 @@
             return image;
           }
 
+          // Remove single leading slash from prefix to avoid double slash
           return decodeURIComponent(routing.generate('asset_image', {
-            path:   prefix + image,
+            path:   prefix.replace(/^\//, '') + image,
             params: transform,
           }));
         };
