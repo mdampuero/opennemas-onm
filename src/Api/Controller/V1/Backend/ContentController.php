@@ -25,7 +25,7 @@ class ContentController extends ApiController
     {
         $instance = $this->get('core.instance');
 
-        if (!empty($items)) {
+        if (is_array($items) && !empty($items)) {
             $itemsId = array_map(function ($item) {
                 return $item->id;
             }, $items);
