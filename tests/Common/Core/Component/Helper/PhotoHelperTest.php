@@ -145,10 +145,10 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
         $this->router->expects($this->once())->method('generate')
             ->with('asset_image', [
                 'params' => 'grault',
-                'path'   => '/glorp/xyzzy/foobar.jpg'
-            ])->willReturn('/glorp/xyzzy/foobar.jpg');
+                'path'   => 'glorp/xyzzy/foobar.jpg'
+            ])->willReturn('glorp/xyzzy/foobar.jpg');
 
-        $this->assertEquals('/glorp/xyzzy/foobar.jpg', $this->helper->getPhotoPath($photo, 'grault'));
+        $this->assertEquals('glorp/xyzzy/foobar.jpg', $this->helper->getPhotoPath($photo, 'grault'));
     }
 
     /**
@@ -210,12 +210,12 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
         $this->router->expects($this->once())->method('generate')
             ->with('asset_image', [
                 'params' => 'grault',
-                'path'   => '/glorp/xyzzy/foobar.jpg'
+                'path'   => 'glorp/xyzzy/foobar.jpg'
             ], UrlGeneratorInterface::ABSOLUTE_URL)->willReturn(
-                '/glorp/xyzzy/foobar.jpg'
+                'glorp/xyzzy/foobar.jpg'
             );
 
-        $this->assertEquals('/glorp/xyzzy/foobar.jpg', $this->helper->getPhotoPath($photo, 'grault', [], true));
+        $this->assertEquals('glorp/xyzzy/foobar.jpg', $this->helper->getPhotoPath($photo, 'grault', [], true));
     }
 
     /**

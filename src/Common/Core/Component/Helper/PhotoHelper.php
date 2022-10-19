@@ -109,7 +109,7 @@ class PhotoHelper
 
         return $this->router->generate('asset_image', [
             'params' => implode(',', array_merge([ $transform ], $params)),
-            'path'   => $url
+            'path'   => ltrim($url, '/')
         ], $absolute);
     }
 
@@ -181,7 +181,7 @@ class PhotoHelper
                     ',',
                     array_merge([ 'thumbnail' ], [ $cut['width'], $cut['height'], 'center', 'center' ])
                 ),
-                'path'   => $imagePath
+                'path'   => ltrim($imagePath, '/')
             ], false) . ' ' . $cut['width'] . 'w';
 
             if ($cut['width'] >= $width) {
