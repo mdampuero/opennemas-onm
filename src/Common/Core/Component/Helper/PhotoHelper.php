@@ -181,7 +181,7 @@ class PhotoHelper
                     ',',
                     array_merge([ 'thumbnail' ], [ $cut['width'], $cut['height'], 'center', 'center' ])
                 ),
-                'path'   => $imagePath
+                'path'   => ltrim($imagePath, '/')
             ], false) . ' ' . $cut['width'] . 'w';
 
             if ($cut['width'] >= $width) {
