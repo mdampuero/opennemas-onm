@@ -83,26 +83,23 @@ class CompanyController extends FrontendController
         $action = 'list';
         $params = $request->query->all();
 
-        if (!empty($params['place'])) {
-            $params['place'] =  $params['place'] . '/';
+        if ($params['q'] && empty($params['q'])) {
+            unset($params['q']);
         }
+        if (!empty($params['q']) && !empty($params['search']) && $params['q'] == $params['search']) {
+            unset($params['q']);
+        }
+        if (!empty($params['q']) && !empty($params['search']) && $params['q'] != $params['search']) {
+            $params['search'] = '';
+        }
+        if (!empty($params['search']) && empty($params['place'])) {
+            $params['place'] =  $params['search'];
+            $params['search'] = '';
+        }
+
         $expected = $this->getExpectedUri($action, $params);
 
-        $expected = $this->getExpectedUri($action, $params);
-
-        if ($request->getRequestUri() !== $expected) {
-            return new RedirectResponse($expected, 301);
-        }
-
-        $params = $this->getParameters($request);
-
-        $this->view->setConfig($this->getCacheConfiguration($action));
-
-        if (!$this->isCached($params)) {
-            $this->hydrateList($params);
-        }
-
-        return $this->render($this->getTemplate($action), $params);
+        return new RedirectResponse($expected, 302);
     }
 
     /**
@@ -116,15 +113,15 @@ class CompanyController extends FrontendController
 
         $date  = date('Y-m-d H:i:s');
         $place = '';
-        $query = [ $date, $date, $params['epp'], $params['epp'] * ($params['page'] - 1) ];
+        $search = '';
         $placeFound = false;
-        if ($params['place']) {
+        if (!empty($params['place'])) {
             $place = $this->matchPlace($params['place']);
-            if ($params['search']) {
+            if (!empty($params['search'])) {
                 $search = $this->matchCustomfields($params['search']);
             }
             $placeFound = true;
-            if (!$place) {
+            if (empty($place)) {
                 $place = $this->matchCustomfields($params['place']);
                 $placeFound = false;
             }
@@ -139,7 +136,7 @@ class CompanyController extends FrontendController
 
         $sql = 'SELECT * FROM contents ';
 
-        if ($place){
+        if (!empty($place)){
             $sql .= 'INNER JOIN contentmeta on pk_content = fk_content WHERE ';
             if ($placeFound) {
                 $sql .= sprintf('meta_name = "%s" AND meta_value = "%s" ', key($place[0]), reset($place[0]));
@@ -149,27 +146,38 @@ class CompanyController extends FrontendController
                         $sql .= 'OR ';
                     }
 
-                    $sql .= sprintf('meta_name = "%s" AND meta_value REGEXP "([|,)%s(,|])" ', key($element), reset($element));
+                    $sql .= 'meta_name = "' . key($element) . '" AND meta_value LIKE "%\"' . reset($element) . '\"%" ';
                 }
             }
             $sql .= 'AND ';
+            if (!empty($search)) {
+                $sql .= sprintf('meta_name = "%s" AND meta_value = "%s" ', key($search[0]), reset($search[0]));
+                $sql .= 'AND ';
+            }
         } else {
             $sql .= 'WHERE ';
         }
-        $sql .= 'content_type_name = "company" and in_litter = 0 and content_status = 1 ' .
+
+        $sql .= sprintf('content_type_name = "company" and in_litter = 0 and content_status = 1 ' .
             'and (starttime is null or starttime < "%s") ' .
-            'and (endtime is null or endtime >= "%s") ';
+            'and (endtime is null or endtime >= "%s") ', $date, $date );
 
         if (!empty($params['q'])) {
-            $sql .= 'and title ~ "%%' . $params['q'] . '%%" ';
+            $sql .= 'and title like "%' . $params['q'] . '%" ';
         }
 
-        $sql .= 'order by title asc limit %d offset %d';
+        $sql .= sprintf(
+            'order by title asc limit %d offset %d',
+            $params['epp'],
+            $params['epp'] * ($params['page'] - 1)
+        );
 
-        $response = $this->get('api.service.content')->getListBySql(sprintf($sql, ...$query));
-
+        $response = $this->get('api.service.content')->getListBySql($sql);
+        // dump($sql);
+        // dump($response);
+        // die();
         // No first page and no contents
-        if ($params['page'] > 1 && empty($response['items'])) {
+        if ($params['page'] > 1) {
             throw new ResourceNotFoundException();
         }
 
@@ -202,8 +210,6 @@ class CompanyController extends FrontendController
 
         $params['suggested_fields'] = $parsedSuggested;
 
-        // dump($parsedSuggested);
-        // die();
         $params['places'] = array_merge(
                 json_decode($placesArray['localities']),
                 json_decode($placesArray['provinces'])
@@ -264,16 +270,17 @@ class CompanyController extends FrontendController
     {
         $ch = $this->container->get('core.helper.company');
         $suggestedWords = $ch->getSuggestedFields();
+
         $matchedValues = [];
         foreach ($suggestedWords as $suggestedField => $sugestedValues) {
             if (is_array($sugestedValues)) {
                 $match = array_filter($sugestedValues, function ($element) use ($search) {
-                    return $element == $search;
+                    return $element['name'] == $search;
                 });
             }
             if ($match) {
                 array_push($matchedValues, [
-                    $suggestedField => array_unshift($match)
+                    $suggestedField => current($match)['name']
                 ]);
             }
         }

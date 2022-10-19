@@ -40,7 +40,7 @@
     <div class="grid simple">
       <div class="grid-body ng-cloak">
       <h4>Custom Fields</h4>
-        <div class="row">
+        <div class="row" ng-repeat="">
           <div class="col-md-6">
             <div class="form-group">
               <label for="metadata" class="form-label">
