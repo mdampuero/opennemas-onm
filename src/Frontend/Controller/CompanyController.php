@@ -2,7 +2,11 @@
 
 namespace Frontend\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CompanyController extends FrontendController
 {
@@ -41,8 +45,9 @@ class CompanyController extends FrontendController
      * {@inheritdoc}
      */
     protected $routes = [
-        'list' => 'frontend_companies',
-        'show' => 'frontend_company_show'
+        'list'   => 'frontend_companies',
+        'show'   => 'frontend_company_show',
+        'search' => 'frontend_company_search'
     ];
 
     /**
@@ -54,8 +59,9 @@ class CompanyController extends FrontendController
      * {@inheritdoc}
      */
     protected $templates = [
-        'list' => 'company/list.tpl',
-        'show' => 'company/item.tpl'
+        'list'   => 'company/list.tpl',
+        'search' => 'company/list.tpl',
+        'show'   => 'company/item.tpl'
     ];
 
     /**
@@ -64,12 +70,65 @@ class CompanyController extends FrontendController
     protected $extension = 'es.openhost.module.companies';
 
     /**
+     * Displays a frontpage basing on the parameters in the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function searchAction(Request $request)
+    {
+        $this->checkSecurity($this->extension);
+
+        $action = 'list';
+        $params = $request->query->all();
+
+        if (!empty($params['place'])) {
+            $params['place'] =  $params['place'] . '/';
+        }
+        $expected = $this->getExpectedUri($action, $params);
+
+        $expected = $this->getExpectedUri($action, $params);
+
+        if ($request->getRequestUri() !== $expected) {
+            return new RedirectResponse($expected, 301);
+        }
+
+        $params = $this->getParameters($request);
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrateList($params);
+        }
+
+        return $this->render($this->getTemplate($action), $params);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function hydrateList(array &$params = []) : void
     {
+        $ch    = $this->container->get('core.helper.company');
+
+        $placesArray = $ch->getLocalitiesAndProvices();
+
         $date  = date('Y-m-d H:i:s');
+        $place = '';
         $query = [ $date, $date, $params['epp'], $params['epp'] * ($params['page'] - 1) ];
+        $placeFound = false;
+        if ($params['place']) {
+            $place = $this->matchPlace($params['place']);
+            if ($params['search']) {
+                $search = $this->matchCustomfields($params['search']);
+            }
+            $placeFound = true;
+            if (!$place) {
+                $place = $this->matchCustomfields($params['place']);
+                $placeFound = false;
+            }
+        }
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
@@ -78,21 +137,36 @@ class CompanyController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $oql = 'content_type_name = "company" and in_litter = 0 and content_status = 1 ' .
+        $sql = 'SELECT * FROM contents ';
+
+        if ($place){
+            $sql .= 'INNER JOIN contentmeta on pk_content = fk_content WHERE ';
+            if ($placeFound) {
+                $sql .= sprintf('meta_name = "%s" AND meta_value = "%s" ', key($place[0]), reset($place[0]));
+            } else {
+                foreach ($place as $key => $element) {
+                    if ($key !== array_key_first($place)){
+                        $sql .= 'OR ';
+                    }
+
+                    $sql .= sprintf('meta_name = "%s" AND meta_value REGEXP "([|,)%s(,|])" ', key($element), reset($element));
+                }
+            }
+            $sql .= 'AND ';
+        } else {
+            $sql .= 'WHERE ';
+        }
+        $sql .= 'content_type_name = "company" and in_litter = 0 and content_status = 1 ' .
             'and (starttime is null or starttime < "%s") ' .
             'and (endtime is null or endtime >= "%s") ';
 
-        if (!empty($params['title'])) {
-            $oql .= 'and title ~ "%%' . $params['title'] . '%%" ';
+        if (!empty($params['q'])) {
+            $sql .= 'and title ~ "%%' . $params['q'] . '%%" ';
         }
 
-        if (!empty($params['sector'])) {
-            $oql .= sprintf('and sector = "%s" ', $params['sector']);
-        }
+        $sql .= 'order by title asc limit %d offset %d';
 
-        $oql .= 'order by title asc limit %d offset %d';
-
-        $response = $this->get('api.service.content')->getList(sprintf($oql, ...$query));
+        $response = $this->get('api.service.content')->getListBySql(sprintf($sql, ...$query));
 
         // No first page and no contents
         if ($params['page'] > 1 && empty($response['items'])) {
@@ -107,6 +181,33 @@ class CompanyController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
+        $suggested = $ch->getSuggestedFields();
+
+        $parsedSuggested = [];
+
+        foreach ($suggested as $key => $value) {
+            if (is_array($value)) {
+                $parsed = array_map(function ($element){
+                    return array_values($element);
+                }, $value);
+                $parsedSuggested = array_merge($parsedSuggested, array_values($parsed));
+            }
+        }
+
+        $parsedSuggested = array_map(function ($element){
+            if (!$element[0])
+                return $element;
+            return $element[0];
+        }, $parsedSuggested);
+
+        $params['suggested_fields'] = $parsedSuggested;
+
+        // dump($parsedSuggested);
+        // die();
+        $params['places'] = array_merge(
+                json_decode($placesArray['localities']),
+                json_decode($placesArray['provinces'])
+            );
         $params['sectors'] = [
             [ 'name' => 'aeroespace', 'title' => _('Aerospace') ],
             [ 'name' => 'agriculture', 'title' => _('Agriculture') ],
@@ -157,5 +258,76 @@ class CompanyController extends FrontendController
         ]);
 
         $params['tags'] = $this->getTags($response['items']);
+    }
+
+    protected function matchCustomfields ($search)
+    {
+        $ch = $this->container->get('core.helper.company');
+        $suggestedWords = $ch->getSuggestedFields();
+        $matchedValues = [];
+        foreach ($suggestedWords as $suggestedField => $sugestedValues) {
+            if (is_array($sugestedValues)) {
+                $match = array_filter($sugestedValues, function ($element) use ($search) {
+                    return $element == $search;
+                });
+            }
+            if ($match) {
+                array_push($matchedValues, [
+                    $suggestedField => array_unshift($match)
+                ]);
+            }
+        }
+        return $matchedValues;
+    }
+
+    protected function matchPlace ($search)
+    {
+        $result = [];
+        $ch = $this->container->get('core.helper.company');
+        $places = $ch->getLocalitiesAndProvices();
+        $provinceMatch = array_filter(json_decode($places['provinces'], true), function($element) use ($search) {
+            return $element['nm'] == $search;
+        });
+        if ($provinceMatch) {
+            $value = array_shift($provinceMatch);
+            array_push($result, [
+                'province' => $value['nm']
+            ]);
+        } else {
+            $localityMatch = array_filter(json_decode($places['localities'], true), function($element) use ($search) {
+                return $element['nm'] == $search;
+            });
+            if ($localityMatch) {
+                $value = array_shift($localityMatch);
+                array_push($result, [
+                    'locality' => $value['nm']
+                ]);
+            }
+        }
+        return $result;
+    }
+
+    public function getSuggestionsAction() {
+        $ch        = $this->container->get('core.helper.company');
+        $suggested = $ch->getSuggestedFields();
+
+        $parsedSuggested = [];
+
+        foreach ($suggested as $key => $value) {
+            if (is_array($value)) {
+                $parsed = array_map(function ($element){
+                    return array_values($element);
+                }, $value);
+                $parsedSuggested = array_merge($parsedSuggested, array_values($parsed));
+            }
+        }
+
+        $parsedSuggested = array_map(function ($element){
+            if (!$element[0])
+                return $element;
+            return $element[0];
+        }, $parsedSuggested);
+
+        return new JsonResponse($parsedSuggested);
     }
 }

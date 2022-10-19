@@ -152,6 +152,20 @@ class CompanyHelper
     }
 
     /**
+     * Returns suggested fieldson company settings
+     *
+     * @return Mixed SuggetedFields on company settings
+     */
+    public function getSuggestedFields()
+    {
+        $fields = $this->container->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get(['company_custom_fields']);
+
+        return $fields['company_custom_fields'];
+    }
+
+    /**
      * Returns true if the company has an address.
      *
      * @param Content $item The company to get the address from.

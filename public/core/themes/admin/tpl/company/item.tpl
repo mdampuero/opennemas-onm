@@ -67,14 +67,30 @@
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.province = !expanded.province">
         <i class="fa fa-map-signs m-r-10"></i>{t}Province{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.province }"></i>
+        <span class="pull-right" ng-if="!expanded.province && item.province">
+          <span class="form-status">
+              <span class="form-status-item">
+                <span class="ng-cloak badge badge-default">
+                  <strong>
+                    [% item.province ? item.province.nm : '' %]
+                  </strong>
+                </span>
+              </span>
+          </span>
+        </span>
         <span class="pull-right" ng-if="!expanded.province">
-          {include file="common/component/icon/status.tpl" iForm="form.province" iNgModel="item.province" iValidation=true}
+          <span class="form-status">
+            <span class="form-status-item" ng-class="{ 'has-info': !item.province }">
+              <span class="fa fa-check text-success" ng-if="item.province"></span>
+              <span class="fa fa-info-circle text-info" ng-if="!item.province" tooltip-class="tooltip-right" uib-tooltip="{t}This field is required{/t}"></span>
+            </span>
+          </span>
         </span>
       </div>
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.province }">
         <div class="form-group no-margin">
           <div class="controls">
-            <select name="contactCountry" ng-model="item.province" ng-options="item.nm for item in provinces" >
+            <select name="contactCountry" ng-model="item.province" ng-options="item.nm for item in provinces" required >
               <option value="">{t}Select a province{/t}...</option>
             </select>
           </div>
@@ -83,20 +99,38 @@
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.locality = !expanded.locality" ng-if="item.province">
         <i class="fa fa-map-signs m-r-10"></i>{t}Locality{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.locality }"></i>
+        <span class="pull-right" ng-if="!expanded.locality && item.locality">
+          <span class="form-status">
+              <span class="form-status-item">
+                <span class="ng-cloak badge badge-default">
+                  <strong>
+                    [% item.locality ? item.locality.nm : '' %]
+                  </strong>
+                </span>
+              </span>
+          </span>
+        </span>
         <span class="pull-right" ng-if="!expanded.locality">
-          {include file="common/component/icon/status.tpl" iForm="form.locality" iNgModel="item.locality" iValidation=true}
+          <span class="pull-right" ng-if="!expanded.locality && item.province">
+            <span class="form-status">
+              <span class="form-status-item" ng-class="{ 'has-info': !item.locality && item.province }">
+                <span class="fa fa-check text-success" ng-if="item.locality && item.province"></span>
+                <span class="fa fa-info-circle text-info" ng-if="!item.locality && item.province" tooltip-class="tooltip-right" uib-tooltip="{t}This field is required{/t}"></span>
+              </span>
+            </span>
+          </span>
         </span>
       </div>
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.locality }" ng-if="item.province">
         <div class="form-group no-margin">
           <div class="controls">
-            <select name="contactCountry" ng-model="item.locality" ng-options="item.nm for item in filteredLocalities" >
+            <select name="contactCountry" ng-model="item.locality" ng-options="item.nm for item in filteredLocalities" ng-required="item.province">
               <option value="">{t}Select a locality{/t}...</option>
             </select>
           </div>
         </div>
       </div>
-      {include file="ui/component/content-editor/accordion/input-text.tpl" field="postal_code" icon="fa-location-arrow" title="{t}Postal code{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" number="true" field="postal_code" icon="fa-location-arrow" title="{t}Postal code{/t}"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
