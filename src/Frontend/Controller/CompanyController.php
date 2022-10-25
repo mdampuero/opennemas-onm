@@ -83,22 +83,19 @@ class CompanyController extends FrontendController
         $action = 'list';
         $params = $request->query->all();
 
-        if ($params['q'] && empty($params['q'])) {
+        if (empty($params['q']) || !empty($params['search'])) {
             unset($params['q']);
         }
-        if (!empty($params['q']) && !empty($params['search']) && $params['q'] == $params['search']) {
-            unset($params['q']);
-        }
+
         if (!empty($params['q']) && !empty($params['search']) && $params['q'] != $params['search']) {
             $params['search'] = '';
         }
         if (!empty($params['search']) && empty($params['place'])) {
-            $params['place'] =  $params['search'];
+            $params['place']  = $params['search'];
             $params['search'] = '';
         }
 
         $expected = $this->getExpectedUri($action, $params);
-
         return new RedirectResponse($expected, 302);
     }
 
@@ -107,14 +104,14 @@ class CompanyController extends FrontendController
      */
     protected function hydrateList(array &$params = []) : void
     {
-        $ch    = $this->container->get('core.helper.company');
-
+        $ch          = $this->container->get('core.helper.company');
         $placesArray = $ch->getLocalitiesAndProvices();
 
-        $date  = date('Y-m-d H:i:s');
-        $place = '';
-        $search = '';
+        $date       = date('Y-m-d H:i:s');
+        $place      = '';
+        $search     = '';
         $placeFound = false;
+
         if (!empty($params['place'])) {
             $place = $this->matchPlace($params['place']);
             if (!empty($params['search'])) {
@@ -134,48 +131,61 @@ class CompanyController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $sql = 'SELECT * FROM contents ';
+        $select    = 'SELECT * FROM contents ';
+        $innerJoin = '';
+        $where     = 'WHERE ';
 
-        if (!empty($place)){
-            $sql .= 'INNER JOIN contentmeta on pk_content = fk_content WHERE ';
+        if (!empty($place)) {
+            $innerJoin = 'INNER JOIN contentmeta as t1 on pk_content = t1.fk_content ';
+
             if ($placeFound) {
-                $sql .= sprintf('meta_name = "%s" AND meta_value = "%s" ', key($place[0]), reset($place[0]));
+                $where .= sprintf('t1.meta_name = "%s" AND t1.meta_value = "%s" ', key($place[0]), reset($place[0]));
             } else {
                 foreach ($place as $key => $element) {
-                    if ($key !== array_key_first($place)){
-                        $sql .= 'OR ';
+                    if ($key !== array_key_first($place)) {
+                        $where .= 'OR ';
                     }
-
-                    $sql .= 'meta_name = "' . key($element) . '" AND meta_value LIKE "%\"' . reset($element) . '\"%" ';
+                    $where .= 't1.meta_name = "' .
+                        key($element) .
+                        '" AND t1.meta_value LIKE "%\"' .
+                        reset($element)['name'] .
+                        '\"%" ';
                 }
             }
-            $sql .= 'AND ';
+            $where .= 'AND ';
             if (!empty($search)) {
-                $sql .= sprintf('meta_name = "%s" AND meta_value = "%s" ', key($search[0]), reset($search[0]));
-                $sql .= 'AND ';
+                $innerJoin .= 'INNER JOIN contentmeta as t2 on pk_content = t2.fk_content ';
+                foreach ($search as $key => $element) {
+                    if ($key !== array_key_first($place)) {
+                        $where .= 'OR ';
+                    }
+                    $where .= 't2.meta_name = "' .
+                        key($element) .
+                        '" AND t2.meta_value LIKE "%\"' .
+                        reset($element)['name'] .
+                        '\"%" ';
+                }
+                $where .= 'AND ';
             }
-        } else {
-            $sql .= 'WHERE ';
         }
-
-        $sql .= sprintf('content_type_name = "company" and in_litter = 0 and content_status = 1 ' .
-            'and (starttime is null or starttime < "%s") ' .
-            'and (endtime is null or endtime >= "%s") ', $date, $date );
+        $where .= sprintf('content_type_name = "company" and in_litter = 0 and content_status = 1 ' .
+        'and (starttime is null or starttime < "%s") ' .
+        'and (endtime is null or endtime >= "%s") ', $date, $date);
 
         if (!empty($params['q'])) {
-            $sql .= 'and title like "%' . $params['q'] . '%" ';
+            $where .= 'and title like "%' . $params['q'] . '%" ';
         }
 
-        $sql .= sprintf(
+        $orderby = sprintf(
             'order by title asc limit %d offset %d',
             $params['epp'],
             $params['epp'] * ($params['page'] - 1)
         );
 
+        $sql = $select . $innerJoin . $where . $orderby;
+
         $response = $this->get('api.service.content')->getListBySql($sql);
-        // dump($sql);
-        // dump($response);
-        // die();
+
         // No first page and no contents
         if ($params['page'] > 1) {
             throw new ResourceNotFoundException();
@@ -195,61 +205,36 @@ class CompanyController extends FrontendController
 
         foreach ($suggested as $key => $value) {
             if (is_array($value)) {
-                $parsed = array_map(function ($element){
+                $parsed = array_map(function ($element) {
                     return array_values($element);
                 }, $value);
                 $parsedSuggested = array_merge($parsedSuggested, array_values($parsed));
             }
         }
 
-        $parsedSuggested = array_map(function ($element){
-            if (!$element[0])
+        $parsedSuggested = array_map(function ($element) {
+            if (!$element[0]) {
                 return $element;
+            }
             return $element[0];
         }, $parsedSuggested);
 
         $params['suggested_fields'] = $parsedSuggested;
 
         $params['places'] = array_merge(
-                json_decode($placesArray['localities']),
-                json_decode($placesArray['provinces'])
-            );
-        $params['sectors'] = [
-            [ 'name' => 'aeroespace', 'title' => _('Aerospace') ],
-            [ 'name' => 'agriculture', 'title' => _('Agriculture') ],
-            [ 'name' => 'automotive', 'title' => _('Automotive') ],
-            [ 'name' => 'breeding', 'title' => _('Breeding') ],
-            [ 'name' => 'comerce', 'title' => _('Comerce') ],
-            [ 'name' => 'construction', 'title' => _('Construction') ],
-            [ 'name' => 'advertising_marketing', 'title' => _('Advertising and marketing') ],
-            [ 'name' => 'culture', 'title' => _('Culture') ],
-            [ 'name' => 'education', 'title' => _('Education') ],
-            [ 'name' => 'electronic', 'title' => _('Electronic') ],
-            [ 'name' => 'energy', 'title' => _('Energy') ],
-            [ 'name' => 'entertainment', 'title' => _('Entertainment') ],
-            [ 'name' => 'finance', 'title' => _('Finance') ],
-            [ 'name' => 'maritime', 'title' => _('Maritime') ],
-            [ 'name' => 'food', 'title' => _('Food') ],
-            [ 'name' => 'healthcare', 'title' => _('Healthcare') ],
-            [ 'name' => 'information_technology', 'title' => _('Information technology') ],
-            [ 'name' => 'mining', 'title' => _('Mining') ],
-            [ 'name' => 'fuels', 'title' => _('Fuels') ],
-            [ 'name' => 'pharmaceutical', 'title' => _('Pharmaceutical') ],
-            [ 'name' => 'real_estate', 'title' => _('Real estate') ],
-            [ 'name' => 'telecommunications', 'title' => _('Telecommunications') ],
-            [ 'name' => 'tobacco', 'title' => _('Tobacco') ],
-            [ 'name' => 'textile', 'title' => _('Textile') ],
-            [ 'name' => 'transport', 'title' => _('Transport') ],
-            [ 'name' => 'industry', 'title' => _('Industry') ],
-            [ 'name' => 'beauty', 'title' => _('Beauty') ],
-            [ 'name' => 'animals', 'title' => _('Animals') ],
-            [ 'name' => 'cleaning', 'title' => _('Cleaning') ],
-            [ 'name' => 'sport', 'title' => _('Sport') ],
-            [ 'name' => 'hostelry', 'title' => _('Hostelry') ],
-            [ 'name' => 'services', 'title' => _('Services') ],
-            [ 'name' => 'metal', 'title' => _('Metal') ],
-            [ 'name' => 'architecture', 'title' => _('Architecture') ],
-            [ 'name' => 'other', 'title' => _('Other') ]
+            json_decode($placesArray['localities']),
+            json_decode($placesArray['provinces'])
+        );
+
+        $defaultPlace = $placeFound ? reset($place[0]) : '';
+
+        $defautSeaarch = $placeFound ?
+            $this->matchCustomfields($params['search']) :
+            $this->matchCustomfields($params['place']);
+
+        $params['search_params'] = [
+            'place' => $defaultPlace,
+            'search' => $defautSeaarch
         ];
 
         $params['x-tags'] .= ',company-frontpage';
@@ -266,33 +251,34 @@ class CompanyController extends FrontendController
         $params['tags'] = $this->getTags($response['items']);
     }
 
-    protected function matchCustomfields ($search)
+    protected function matchCustomfields($search)
     {
         $ch = $this->container->get('core.helper.company');
         $suggestedWords = $ch->getSuggestedFields();
 
         $matchedValues = [];
-        foreach ($suggestedWords as $suggestedField => $sugestedValues) {
-            if (is_array($sugestedValues)) {
-                $match = array_filter($sugestedValues, function ($element) use ($search) {
-                    return $element['name'] == $search;
+
+        foreach ($suggestedWords as $element) {
+            if (is_array($element) && array_key_exists('values', $element)) {
+                $match = array_filter($element['values'], function ($element) use ($search) {
+                    return $element['value'] == $search;
                 });
             }
             if ($match) {
                 array_push($matchedValues, [
-                    $suggestedField => current($match)['name']
+                    $element['key']['value'] => current($match)
                 ]);
             }
         }
         return $matchedValues;
     }
 
-    protected function matchPlace ($search)
+    protected function matchPlace($search)
     {
         $result = [];
         $ch = $this->container->get('core.helper.company');
         $places = $ch->getLocalitiesAndProvices();
-        $provinceMatch = array_filter(json_decode($places['provinces'], true), function($element) use ($search) {
+        $provinceMatch = array_filter(json_decode($places['provinces'], true), function ($element) use ($search) {
             return $element['nm'] == $search;
         });
         if ($provinceMatch) {
@@ -301,7 +287,7 @@ class CompanyController extends FrontendController
                 'province' => $value['nm']
             ]);
         } else {
-            $localityMatch = array_filter(json_decode($places['localities'], true), function($element) use ($search) {
+            $localityMatch = array_filter(json_decode($places['localities'], true), function ($element) use ($search) {
                 return $element['nm'] == $search;
             });
             if ($localityMatch) {
@@ -314,26 +300,18 @@ class CompanyController extends FrontendController
         return $result;
     }
 
-    public function getSuggestionsAction() {
+    public function getSuggestionsAction()
+    {
         $ch        = $this->container->get('core.helper.company');
         $suggested = $ch->getSuggestedFields();
 
         $parsedSuggested = [];
 
-        foreach ($suggested as $key => $value) {
-            if (is_array($value)) {
-                $parsed = array_map(function ($element){
-                    return array_values($element);
-                }, $value);
-                $parsedSuggested = array_merge($parsedSuggested, array_values($parsed));
+        foreach ($suggested as $element) {
+            if (is_array($element) && array_key_exists('values', $element)) {
+                $parsedSuggested = array_merge($parsedSuggested, $element['values']);
             }
         }
-
-        $parsedSuggested = array_map(function ($element){
-            if (!$element[0])
-                return $element;
-            return $element[0];
-        }, $parsedSuggested);
 
         return new JsonResponse($parsedSuggested);
     }

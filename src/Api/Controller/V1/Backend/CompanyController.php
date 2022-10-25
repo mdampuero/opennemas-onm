@@ -66,8 +66,25 @@ class CompanyController extends ContentController
      */
     public function saveConfigAction(Request $request)
     {
+        $data = $request->request->get('company_custom_fields');
+
+        if (!empty($data)) {
+            foreach ($data as $elementKey => $elementValue) {
+                if (array_key_exists('key', $elementValue)) {
+                    $slug = $this->get('data.manager.filter')
+                        ->set($elementValue['key']['name'])
+                        ->filter('slug')
+                        ->get();
+                    $data[$elementKey]['key']['value'] =
+                        $this->get('core.helper.company')
+                        ->getCompanyFieldsSufix() .
+                        $slug;
+                }
+            }
+        }
+
         $settings = [
-            'company_custom_fields' => $request->request->get('company_custom_fields')
+            'company_custom_fields' => $data
         ];
 
         $msg = $this->get('core.messenger');

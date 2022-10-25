@@ -39,47 +39,41 @@
   <div class="content">
     <div class="grid simple">
       <div class="grid-body ng-cloak">
-      <h4>Custom Fields</h4>
-        <div class="row" ng-repeat="">
+        <h4>{t}Search Fields{/t}</h4>
+        <div class="row m-t-25">
+          <div class="col-md-6">
+            <button class="btn btn-block btn-success" ng-click="addField()" type="button">
+              <i class="fa fa-plus m-r-5"></i>{t}Add Field{/t}
+            </button>
+          </div>
+        </div>
+        <div class="row m-t-50" ng-repeat="field in company_fields track by $index">
           <div class="col-md-6">
             <div class="form-group">
-              <label for="metadata" class="form-label">
-                <i class="fa fa-pie-chart m-r-10"></i>{t}Sector{/t}
+              <label for="fieldKeyName" class="form-label">
+                {t}Field Name{/t}
               </label>
               <div class="controls">
+                <input type="text" name="fieldKeyName" ng-model="field.key.name">
+              </div>
+            </div>
+            <div class="form-group">
+                <label for="fieldValues" class="form-label">
+                  {t}Field Values{/t}
+                </label>
+              <div class="controls">
                 <div class="tags-input-wrapper">
-                  <tags-input display-property="name" key-property="name" min-length="2" ng-model="compay_fields.sectors" placeholder="{t}Add a sector...{/t}">
+                  <tags-input display-property="name" on-tag-adding="checkTag($tag)" replace-spaces-with-dashes="false" name="fieldValues" key-property="name" min-length="2" ng-model="field.values" placeholder="{t}Add a value...{/t}">
                   </tags-input>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
             <div class="form-group">
-              <label for="metadata" class="form-label">
-                <i class="fa fa-line-chart m-r-10"></i>{t}Activity{/t}
-              </label>
               <div class="controls">
-                <div class="tags-input-wrapper">
-                  <tags-input display-property="name" key-property="name" min-length="2" ng-model="compay_fields.activity"  placeholder="{t}Add an activity...{/t}">
-                  </tags-input>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="metadata" class="form-label">
-                <i class="fa fa-shopping-basket m-r-10"></i>{t}Products{/t}
-              </label>
-              <div class="controls">
-                <div class="tags-input-wrapper">
-                  <tags-input display-property="name" key-property="name" min-length="2" ng-model="compay_fields.products"  placeholder="{t}Add a product...{/t}">
-                  </tags-input>
+                <div class="col-md-6">
+                  <button class="btn btn-block btn-danger" ng-click="removeField($index)" type="button">
+                    <i class="fa fa-plus m-r-5"></i>{t}Remove field{/t}
+                  </button>
                 </div>
               </div>
             </div>

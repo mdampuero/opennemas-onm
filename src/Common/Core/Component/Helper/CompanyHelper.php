@@ -67,6 +67,16 @@ class CompanyHelper
     }
 
     /**
+     * Returns sufix for company custom fields
+     *
+     * @return String Sufix for custom fields
+     */
+    public function getCompanyFieldsSufix()
+    {
+        return 'company_field_';
+    }
+
+    /**
      * Checks if the company has a logo.
      *
      * @param Content $item The company.

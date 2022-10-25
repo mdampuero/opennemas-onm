@@ -78,10 +78,7 @@
           title: '',
           type: 0,
           related_contents: [],
-          tags: [],
-          sectors: [],
-          activities: [],
-          products: [],
+          tags: []
         };
 
         /**
@@ -139,24 +136,6 @@
         };
 
         /**
-         * @memberOf CompanyCtrl
-         *
-         * @description
-         *  Gets the sector title based on a name.
-         *
-         * @type {Object}
-         */
-        $scope.getSectorTitle = function(name) {
-          if (!$scope.data || !name) {
-            return '';
-          }
-
-          return $scope.data.extra.sectors.filter(function(sector) {
-            return name === sector.name;
-          }).shift().title;
-        };
-
-        /**
          * @function list
          * @memberOf CompanyCtrl
          *
@@ -179,6 +158,13 @@
             finalData.push(item.name);
           });
           return finalData;
+        };
+
+        $scope.checkTag = function(tag) {
+          $scope.getSlug(tag.name, function(response) {
+            tag.value           = response.data.slug;
+          });
+          return tag;
         };
 
         $scope.orderFunction = function(query, compareString) {
@@ -218,16 +204,14 @@
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'company-' + $scope.data.item.pk_content + '-draft';
           }
+          if ($scope.extraFields && typeof $scope.extraFields === 'object') {
+            $scope.extraFields.forEach(function(element) {
+              if ($scope.item[element.key.value] && typeof $scope.item[element.key.value] === 'string') {
+                $scope.item[element.key.value] = JSON.parse($scope.item[element.key.value]);
+              }
+            });
+          }
 
-          if ($scope.item.sectors && typeof $scope.item.sectors === 'string') {
-            $scope.item.sectors = JSON.parse($scope.item.sectors);
-          }
-          if ($scope.item.activities && typeof $scope.item.activities === 'string') {
-            $scope.item.activities = JSON.parse($scope.item.activities);
-          }
-          if ($scope.item.products && typeof $scope.item.products === 'string') {
-            $scope.item.products = JSON.parse($scope.item.products);
-          }
           $scope.item.timetable = $scope.item.timetable ?
             $scope.item.timetable :
             $scope.data.extra.timetable.slice();
@@ -314,14 +298,12 @@
          * @inheritdoc
          */
         $scope.parseData = function(data) {
-          if (data.sectors && typeof data.sectors !== 'string') {
-            data.sectors = JSON.stringify(data.sectors);
-          }
-          if (data.activities && typeof data.activities !== 'string') {
-            data.activities = JSON.stringify(data.activities);
-          }
-          if (data.products && typeof data.products !== 'string') {
-            data.products = JSON.stringify(data.products);
+          if ($scope.extraFields) {
+            $scope.extraFields.forEach(function(element) {
+              if (data[element.key.value] && typeof data[element.key.value] !== 'string') {
+                data[element.key.value] = JSON.stringify($scope.item[element.key.value]);
+              }
+            });
           }
           if (data.province && data.province.nm && typeof data.province !== 'string') {
             data.province = data.province.nm;
@@ -365,8 +347,7 @@
          * @return {Array} The array of localities.
          */
         $scope.filterLocality = function(id) {
-          console.log(id);
-          var result = $scope.localities.filter(function (element) {
+          var result = $scope.localities.filter(function(element) {
             return element.id.startsWith(id);
           });
 
@@ -385,7 +366,6 @@
          * @return {Object} The province object.
          */
         $scope.findProvince = function(name) {
-          console.log(name);
           var result = $scope.provinces.filter(function(element) {
             return element.nm === name;
           });
@@ -406,9 +386,8 @@
          * @return {Object} The province object.
          */
         $scope.findLocality = function(id, name) {
-          console.log(name);
           var result = $scope.localities.filter(function(element) {
-            return (element.nm === name && element.id.startsWith(id));
+            return element.nm === name && element.id.startsWith(id);
           });
 
           return result.pop();
@@ -479,7 +458,6 @@
         };
 
         $scope.$watch('item.province', function(nv, ov) {
-          console.log(nv);
           if (!nv) {
             return;
           }
