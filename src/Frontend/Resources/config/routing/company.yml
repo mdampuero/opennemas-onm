@@ -6,6 +6,12 @@ frontend_company_suggestions:
         expose: true
         subdirectory: true
 
+frontend_company_places:
+    path:     /empresa/places
+    defaults: { _controller: FrontendBundle:Company:getplaces }
+    options:
+        expose: true
+        subdirectory: true
 
 frontend_company_show:
     path:     /empresa/{slug}/{created}{id}.html

@@ -139,7 +139,11 @@ class CompanyController extends FrontendController
             $innerJoin = 'INNER JOIN contentmeta as t1 on pk_content = t1.fk_content ';
 
             if ($placeFound) {
-                $where .= sprintf('t1.meta_name = "%s" AND t1.meta_value = "%s" ', key($place[0]), reset($place[0]));
+                $where .= sprintf(
+                    't1.meta_name = "%s" AND t1.meta_value = "%s" ',
+                    key($place[0]),
+                    reset($place[0])['nm']
+                );
             } else {
                 foreach ($place as $key => $element) {
                     if ($key !== array_key_first($place)) {
@@ -156,7 +160,7 @@ class CompanyController extends FrontendController
             if (!empty($search)) {
                 $innerJoin .= 'INNER JOIN contentmeta as t2 on pk_content = t2.fk_content ';
                 foreach ($search as $key => $element) {
-                    if ($key !== array_key_first($place)) {
+                    if ($key !== array_key_first($search)) {
                         $where .= 'OR ';
                     }
                     $where .= 't2.meta_name = "' .
@@ -279,21 +283,21 @@ class CompanyController extends FrontendController
         $ch = $this->container->get('core.helper.company');
         $places = $ch->getLocalitiesAndProvices();
         $provinceMatch = array_filter(json_decode($places['provinces'], true), function ($element) use ($search) {
-            return $element['nm'] == $search;
+            return $element['slug'] == $search;
         });
         if ($provinceMatch) {
             $value = array_shift($provinceMatch);
             array_push($result, [
-                'province' => $value['nm']
+                'province' => $value
             ]);
         } else {
             $localityMatch = array_filter(json_decode($places['localities'], true), function ($element) use ($search) {
-                return $element['nm'] == $search;
+                return $element['slug'] == $search;
             });
             if ($localityMatch) {
                 $value = array_shift($localityMatch);
                 array_push($result, [
-                    'locality' => $value['nm']
+                    'locality' => $value
                 ]);
             }
         }
@@ -314,5 +318,17 @@ class CompanyController extends FrontendController
         }
 
         return new JsonResponse($parsedSuggested);
+    }
+
+    public function getPlacesAction()
+    {
+        $ch     = $this->container->get('core.helper.company');
+        $places = $ch->getLocalitiesAndProvices();
+        $parsedPlaces = [];
+        foreach ($places as $place) {
+            $parsedPlaces = array_merge($parsedPlaces, json_decode($place, true));
+        }
+
+        return new JsonResponse($parsedPlaces);
     }
 }
