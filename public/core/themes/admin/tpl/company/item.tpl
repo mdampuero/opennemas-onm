@@ -66,6 +66,14 @@
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.company_info = !expanded.company_info">
         <i class="fa fa-pie-chart m-r-10"></i>{t}Company info{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.company_info }"></i>
+        <span class="pull-right" ng-if="!expanded.province">
+          <span class="form-status">
+            <span class="form-status-item" ng-class="{ 'has-info': !item.province || !item.locality}">
+              <span class="fa fa-check text-success" ng-if="item.province && item.locality"></span>
+              <span class="fa fa-info-circle text-info" ng-if="!item.province || !item.locality" tooltip-class="tooltip-right" uib-tooltip="{t}There are some required fields inside{/t}"></span>
+            </span>
+          </span>
+        </span>
       </div>
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.company_info }">
 
@@ -87,70 +95,36 @@
             <input class="form-control" id="address" name="address" ng-model="item.address" type="text"/>
           </div>
         </div>
-      </div>
-      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.province = !expanded.province">
-        <i class="fa fa-map-signs m-r-10"></i>{t}Province{/t}
-        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.province }"></i>
-        <span class="pull-right" ng-if="!expanded.province && item.province">
-          <span class="form-status">
-              <span class="form-status-item">
-                <span class="ng-cloak badge badge-default">
-                  <strong>
-                    [% item.province ? item.province.nm : '' %]
-                  </strong>
-                </span>
-              </span>
-          </span>
-        </span>
-        <span class="pull-right" ng-if="!expanded.province">
-          <span class="form-status">
-            <span class="form-status-item" ng-class="{ 'has-info': !item.province }">
-              <span class="fa fa-check text-success" ng-if="item.province"></span>
-              <span class="fa fa-info-circle text-info" ng-if="!item.province" tooltip-class="tooltip-right" uib-tooltip="{t}This field is required{/t}"></span>
-            </span>
-          </span>
-        </span>
-      </div>
-      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.province }">
-        <div class="form-group no-margin">
+        <div class="form-group ">
+          <i class="fa fa-map-signs m-r-10"></i>{t}Province{/t}
           <div class="controls">
-            <select name="contactCountry" ng-model="item.province" ng-options="item.nm for item in provinces" required >
+            <select name="province_select" ng-model="item.province" ng-options="item.nm for item in provinces" required >
               <option value="">{t}Select a province{/t}...</option>
             </select>
-          </div>
-        </div>
-      </div>
-      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.locality = !expanded.locality" ng-if="item.province">
-        <i class="fa fa-map-signs m-r-10"></i>{t}Locality{/t}
-        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.locality }"></i>
-        <span class="pull-right" ng-if="!expanded.locality && item.locality">
-          <span class="form-status">
-              <span class="form-status-item">
-                <span class="ng-cloak badge badge-default">
-                  <strong>
-                    [% item.locality ? item.locality.nm : '' %]
-                  </strong>
+            <span>
+              <span class="form-status">
+                <span class="form-status-item" ng-class="{ 'has-info': !item.province}">
+                  <span class="fa fa-check text-success" ng-if="item.province"></span>
+                  <span class="fa fa-info-circle text-info" ng-if="!item.province" tooltip-class="tooltip-right" uib-tooltip="{t}This field is required{/t}"></span>
                 </span>
               </span>
-          </span>
-        </span>
-        <span class="pull-right" ng-if="!expanded.locality">
-          <span class="pull-right" ng-if="!expanded.locality && item.province">
-            <span class="form-status">
-              <span class="form-status-item" ng-class="{ 'has-info': !item.locality && item.province }">
-                <span class="fa fa-check text-success" ng-if="item.locality && item.province"></span>
-                <span class="fa fa-info-circle text-info" ng-if="!item.locality && item.province" tooltip-class="tooltip-right" uib-tooltip="{t}This field is required{/t}"></span>
-              </span>
             </span>
-          </span>
-        </span>
-      </div>
-      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.locality }" ng-if="item.province">
-        <div class="form-group no-margin">
+          </div>
+        </div>
+        <div class="form-group" ng-if="item.province">
+          <i class="fa fa-map-signs m-r-10"></i>{t}Locality{/t}
           <div class="controls">
-            <select name="contactCountry" ng-model="item.locality" ng-options="item.nm for item in filteredLocalities" ng-required="item.province">
+            <select name="locality_select" ng-model="item.locality" ng-options="item.nm for item in filteredLocalities" ng-required="item.province">
               <option value="">{t}Select a locality{/t}...</option>
             </select>
+            <span>
+              <span class="form-status">
+                <span class="form-status-item" ng-class="{ 'has-info': item.locality && item.province}">
+                  <span class="fa fa-check text-success" ng-if="item.locality && item.province"></span>
+                  <span class="fa fa-info-circle text-info" ng-if="!item.locality && item.province" tooltip-class="tooltip-right" uib-tooltip="{t}This field is required{/t}"></span>
+                </span>
+              </span>
+            </span>
           </div>
         </div>
       </div>
@@ -162,27 +136,13 @@
   <div class="grid simple">
     <div class="grid-body no-padding">
       <div class="grid-collapse-title">
-        <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
+        <i class="fa fa-cog m-r-10"></i> {t}Company data{/t}
       </div>
-      <div ng-if="extraFields">
-        <div ng-repeat="element in extraFields track by $index">
-          <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded[element.key.value] = !expanded[element.key.value]">
-            <i class="fa fa-pie-chart m-r-10"></i>{t}[% element.key.name %]{/t}
-            <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded[element.key.value] }"></i>
-          </div>
-          <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded[element.key.value] }">
-            <div class="form-group no-margin">
-              <div class="controls">
-                <div class="tags-input-wrapper">
-                  <tags-input display-property="name" use-strings="true" replace-spaces-with-dashes="false" on-tag-adding="checkTag($tag)" key-property="name" min-length="1" ng-model="item[element.key.value]"  add-from-autocomplete-only="true" placeholder="{t}Add an element...{/t}">
-                    <auto-complete source="list($query,element.values)" load-on-down-arrow="true" min-length="2" select-first-match="true" debounce-delay="250"></auto-complete>
-                  </tags-input>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {include file="ui/component/content-editor/accordion/schedule.tpl" field="schedule" icon="fa-calendar-o"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="phone" icon="fa-phone" title="{t}Phone{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="email" icon="fa-envelope" title="{t}Email{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="maps" icon="fa-map-marker" title="{t}Google Maps{/t}"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="website" icon="fa-globe" title="{t}Website{/t}"}
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.social_media = !expanded.social_media">
         <i class="fa fa-pie-chart m-r-10"></i>{t}Social network{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.social_media }"></i>
@@ -231,11 +191,32 @@
           </div>
         </div>
       </div>
-      {include file="ui/component/content-editor/accordion/schedule.tpl" field="schedule" icon="fa-calendar-o"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" field="phone" icon="fa-phone" title="{t}Phone{/t}"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" field="email" icon="fa-envelope" title="{t}Email{/t}"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" field="maps" icon="fa-map-marker" title="{t}Google Maps{/t}"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" field="website" icon="fa-globe" title="{t}Website{/t}"}
+      <div ng-if="extraFields">
+        <div ng-repeat="element in extraFields track by $index">
+          <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded[element.key.value] = !expanded[element.key.value]">
+            <i class="fa fa-pie-chart m-r-10"></i>{t}[% element.key.name %]{/t}
+            <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded[element.key.value] }"></i>
+          </div>
+          <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded[element.key.value] }">
+            <div class="form-group no-margin">
+              <div class="controls">
+                <div class="tags-input-wrapper">
+                  <tags-input display-property="name" use-strings="true" replace-spaces-with-dashes="false" on-tag-adding="checkTag($tag)" key-property="name" min-length="1" ng-model="item[element.key.value]"  add-from-autocomplete-only="true" placeholder="{t}Add an element...{/t}">
+                    <auto-complete source="list($query,element.values)" load-on-down-arrow="true" min-length="2" select-first-match="true" debounce-delay="250"></auto-complete>
+                  </tags-input>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid simple">
+    <div class="grid-body no-padding">
+      <div class="grid-collapse-title">
+        <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
+      </div>
       {include file="common/component/related-contents/_featured-media.tpl" iName="logo" iTitle="{t}Logo{/t}" types="photo"}
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
       {include file="common/component/related-contents/_related-content.tpl" iName="relatedInner" iTitle="{t}Related in inner{/t}"}
