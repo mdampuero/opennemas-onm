@@ -50,6 +50,8 @@ class CompanyHelper
     /**
      * Returns spain provinces and localities in JSON format
      *
+     * @codeCoverageIgnore
+     *
      * @return Mixed Localities and Provinces of Spain.
      */
     public function getLocalitiesAndProvices()

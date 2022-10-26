@@ -142,22 +142,6 @@ class CompanyHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-    * Tests getLocalitiesAndProvices.
-    */
-    public function testGetLocalitiesAndProvices()
-    {
-        $this->container->expects($this->any())->method('getParameter')
-            ->willReturn('/home/opennemas/current/app/../public');
-
-        $municipios = file_get_contents("/home/opennemas/current/app/../public/assets/utilities/municipios.json");
-        $provincias = file_get_contents("/home/opennemas/current/app/../public/assets/utilities/provincias.json");
-        $this->assertEquals(
-            ['localities' => $municipios, 'provinces' => $provincias],
-            $this->helper->getLocalitiesAndProvices()
-        );
-    }
-
-    /**
     * Tests getCompanyFieldsSufix.
     */
     public function testGetCompanyFieldsSufix()
