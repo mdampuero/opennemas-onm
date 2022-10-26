@@ -42,9 +42,7 @@ jQuery(document).ready(function() {
     var onmuser = JSON.parse(decodeURIComponent(getCookie('__onm_user')));
 
     if (onmuser) {
-      $('input[name=author-name]').attr('readonly', true);
       $('input[name=author-name]').val(onmuser.name);
-      $('input[name=author-email]').attr('readonly', true);
       $('input[name=author-email]').val(onmuser.email);
     }
   }
