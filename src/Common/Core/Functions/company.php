@@ -98,18 +98,6 @@ function has_address($item) : bool
 }
 
 /**
- * Returns the sector of the company.
- *
- * @param Content $item The company to get the sector from.
- *
- * @return string The sector of the company.
- */
-function get_sector($item) : ?string
-{
-    return getService('core.helper.company')->getSector($item);
-}
-
-/**
  * Returns true if the company has a sector.
  *
  * @param Content $item The company to get the sector from.

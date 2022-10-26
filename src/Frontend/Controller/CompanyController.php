@@ -86,7 +86,6 @@ class CompanyController extends FrontendController
         if (empty($params['q']) || !empty($params['search'])) {
             unset($params['q']);
         }
-
         if (!empty($params['q']) && !empty($params['search']) && $params['q'] != $params['search']) {
             $params['search'] = '';
         }

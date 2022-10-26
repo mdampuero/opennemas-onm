@@ -188,33 +188,6 @@ class CompanyHelper
     }
 
     /**
-     * Returns the sector of the company.
-     *
-     * @param Content $item The company to get the sector from.
-     *
-     * @return string The sector of the company.
-     */
-    public function getSector($item) : ?string
-    {
-        if (!$item->sector) {
-            return '';
-        }
-        return _(ucfirst(implode(' ', explode('_', $item->sector))));
-    }
-
-    /**
-     * Returns true if the company has a sector.
-     *
-     * @param Content $item The company to get the sector from.
-     *
-     * @return bool True if the company has a sector, false otherwise.
-     */
-    public function hasSector($item) : bool
-    {
-        return !empty($this->getSector($item));
-    }
-
-    /**
      * Returns the whatsapp of the company.
      *
      * @param Content $item The company to get the whatsapp from.
