@@ -133,6 +133,7 @@ class ImageRenderer extends AdvertisementRenderer
         $isAbsolute = $format === 'newsletter' ? true : false;
 
         return $this->tpl->fetch($template, [
+            'id'     => $ad->id,
             'width'  => $img->width,
             'height' => $img->height,
             'src'    => $this->container->get('core.helper.url_generator')

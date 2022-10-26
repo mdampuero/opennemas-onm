@@ -506,6 +506,7 @@ class ImageRendererTest extends TestCase
 
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/image.tpl', [
+                'id'       => 1,
                 'width'    => $photo->width,
                 'height'   => $photo->height,
                 'src'      => '/media/opennemas/images/path/foo.png',
@@ -585,6 +586,7 @@ class ImageRendererTest extends TestCase
 
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/inline/flash.tpl', [
+                'id'       => 1,
                 'width'    => 300,
                 'height'   => 300,
                 'src'      => '/media/opennemas/images/path/foo.png',
@@ -640,6 +642,7 @@ class ImageRendererTest extends TestCase
 
         $this->templateAdmin->expects($this->any())->method('fetch')
             ->with('advertisement/helpers/amp/image.tpl', [
+                'id'       => 1,
                 'width'    => 300,
                 'height'   => 300,
                 'src'      => '/media/opennemas/images/path/foo.png',
