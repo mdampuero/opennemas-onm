@@ -317,7 +317,11 @@ class CompanyController extends FrontendController
             }
         }
 
-        return new JsonResponse($parsedSuggested);
+        //Filter suggestions with same value
+        $tempArray = array_unique(array_column($parsedSuggested, 'value'));
+        $filteredSuggestions = array_values(array_intersect_key($parsedSuggested, $tempArray));
+
+        return new JsonResponse($filteredSuggestions);
     }
 
     public function getPlacesAction()
