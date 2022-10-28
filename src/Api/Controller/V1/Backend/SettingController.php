@@ -94,6 +94,7 @@ class SettingController extends Controller
         'prometeo',
         'recaptcha',
         'redirection',
+        'refresh_enabled',
         'refresh_interval',
         'robots_txt_rules',
         'rtb_files',
@@ -193,8 +194,8 @@ class SettingController extends Controller
         }
 
         $toint = [
-            'items_in_blog', 'items_per_page', 'elements_in_rss',
-            'logo_enabled', 'refresh_interval', 'logo_default', 'logo_simple',
+            'items_in_blog', 'items_per_page', 'elements_in_rss', 'logo_enabled',
+            'refresh_enabled', 'refresh_interval', 'logo_default', 'logo_simple',
             'logo_favico', 'logo_embed', 'sitemap', 'frontpage_max_items'
         ];
 
