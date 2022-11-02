@@ -111,6 +111,7 @@ class VideoHelper
             }
 
             $output = $this->template->fetch($tpl, [
+                'title'  => $item->title,
                 'info'   => $info,
                 'height' => $height,
                 'width'  => $width

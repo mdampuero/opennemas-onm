@@ -12,7 +12,8 @@
         var iframe = $('<iframe>', {
           id: 'onmcomments-' + options.content_id,
           src: options.url + '?content_id=' + options.content_id + '&elems_per_page=' + options.elems_per_page,
-          style: 'width: 100%; border: medium none; min-height: 180px; overflow: hidden;'
+          style: 'width: 100%; border: medium none; min-height: 180px; overflow: hidden;',
+          title: options.title
         });
 
         setInterval(function() {
