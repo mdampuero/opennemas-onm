@@ -106,19 +106,25 @@ class CompanyController extends FrontendController
         $ch          = $this->container->get('core.helper.company');
         $placesArray = $ch->getLocalitiesAndProvices();
 
-        $date       = date('Y-m-d H:i:s');
-        $place      = '';
-        $search     = '';
+        $date   = date('Y-m-d H:i:s');
+        $place  = '';
+        $search = '';
+        //This variable indicates when $place is a true place (locality or province) in order to build the sql
         $placeFound = false;
 
+        //if first parameter is not empty
         if (!empty($params['place'])) {
+            //match current param with places json
             $place = $this->matchPlace($params['place']);
+            //if second parameter is not empty, find it on custom fields settings
             if (!empty($params['search'])) {
                 $search = $this->matchCustomfields($params['search']);
             }
+            //set $place as a true place
             $placeFound = true;
+            //if no match at $place, match with custom fields settings and set $placeFound to false
             if (empty($place)) {
-                $place = $this->matchCustomfields($params['place']);
+                $place      = $this->matchCustomfields($params['place']);
                 $placeFound = false;
             }
         }
@@ -130,16 +136,18 @@ class CompanyController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        //Divide SQL in order to create several inner joins when necessary
         $select    = 'SELECT * FROM contents ';
         $innerJoin = '';
         $where     = 'WHERE ';
 
         if (!empty($place)) {
             $innerJoin = 'INNER JOIN contentmeta as t1 on pk_content = t1.fk_content ';
-
+            //if $place is a real place, $place structure must be like ['province' => ['nm' => 'Viana do Bolo']]
             if ($placeFound) {
                 $where .= sprintf(
                     't1.meta_name = "%s" AND t1.meta_value = "%s" ',
+                    //Used key and reset because array key is unknown
                     key($place[0]),
                     reset($place[0])['nm']
                 );
