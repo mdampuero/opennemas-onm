@@ -121,6 +121,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.helper.meta:
+        class:     Common\Core\Component\Helper\MetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.helper.newsletter:
         class:     Common\Core\Component\Helper\NewsletterHelper
         arguments: [ '@orm.manager', '@api.service.subscription' ]
