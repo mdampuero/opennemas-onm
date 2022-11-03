@@ -128,14 +128,12 @@ class CompanyController extends FrontendController
                 $placeFound = false;
             }
         }
-
         // Invalid page provided as parameter
         if ($params['page'] <= 0
             || $params['page'] > $this->getParameter('core.max_page')
         ) {
             throw new ResourceNotFoundException();
         }
-
         //Divide SQL in order to create several inner joins when necessary
         $select    = 'SELECT * FROM contents ';
         $innerJoin = '';
@@ -143,7 +141,8 @@ class CompanyController extends FrontendController
 
         if (!empty($place)) {
             $innerJoin = 'INNER JOIN contentmeta as t1 on pk_content = t1.fk_content ';
-            //if $place is a real place, $place structure must be like ['province' => ['nm' => 'Viana do Bolo']]
+            //if $place is a real place, $place structure must be like ['province' => ['nm' => 'Viana do Bolo', ...]],
+            //with only 1 root element
             if ($placeFound) {
                 $where .= sprintf(
                     't1.meta_name = "%s" AND t1.meta_value = "%s" ',
@@ -152,6 +151,8 @@ class CompanyController extends FrontendController
                     reset($place[0])['nm']
                 );
             } else {
+                //if not placefound $place structure must be like ['field' => ['name' => 'aasd' ...]],
+                //this array can contain as root element as duplicated words were defined in custom fields
                 foreach ($place as $key => $element) {
                     if ($key !== array_key_first($place)) {
                         $where .= 'OR ';
@@ -163,6 +164,7 @@ class CompanyController extends FrontendController
                         '\"%" ';
                 }
             }
+            //if $search, add inner join and look for province or locality match
             $where .= 'AND ';
             if (!empty($search)) {
                 $innerJoin .= 'INNER JOIN contentmeta as t2 on pk_content = t2.fk_content ';
@@ -179,10 +181,11 @@ class CompanyController extends FrontendController
                 $where .= 'AND ';
             }
         }
+        //build default filter
         $where .= sprintf('content_type_name = "company" and in_litter = 0 and content_status = 1 ' .
         'and (starttime is null or starttime < "%s") ' .
         'and (endtime is null or endtime >= "%s") ', $date, $date);
-
+        //filter by title if $q was provided
         if (!empty($params['q'])) {
             $where .= 'and title like "%' . $params['q'] . '%" ';
         }
@@ -193,8 +196,7 @@ class CompanyController extends FrontendController
             $params['epp'] * ($params['page'] - 1)
         );
 
-        $sql = $select . $innerJoin . $where . $orderby;
-
+        $sql      = $select . $innerJoin . $where . $orderby;
         $response = $this->get('api.service.content')->getListBySql($sql);
 
         // No first page and no contents
@@ -210,35 +212,12 @@ class CompanyController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
-        $suggested = $ch->getSuggestedFields();
-
-        $parsedSuggested = [];
-
-        foreach ($suggested as $key => $value) {
-            if (is_array($value)) {
-                $parsed = array_map(function ($element) {
-                    return array_values($element);
-                }, $value);
-                $parsedSuggested = array_merge($parsedSuggested, array_values($parsed));
-            }
-        }
-
-        $parsedSuggested = array_map(function ($element) {
-            if (!$element[0]) {
-                return $element;
-            }
-            return $element[0];
-        }, $parsedSuggested);
-
-        $params['suggested_fields'] = $parsedSuggested;
-
         $params['places'] = array_merge(
             json_decode($placesArray['localities']),
             json_decode($placesArray['provinces'])
         );
-
-        $defaultPlace = $placeFound ? reset($place[0]) : '';
-
+        //Set place and search params for tpl
+        $defaultPlace  = $placeFound ? reset($place[0]) : '';
         $defautSeaarch = $placeFound ?
             $this->matchCustomfields($params['search']) :
             $this->matchCustomfields($params['place']);
@@ -248,8 +227,7 @@ class CompanyController extends FrontendController
             'search' => $defautSeaarch
         ];
 
-        $params['x-tags'] .= ',company-frontpage';
-
+        $params['x-tags']    .= ',company-frontpage';
         $params['contents']   = $response['items'];
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
@@ -265,16 +243,17 @@ class CompanyController extends FrontendController
     protected function matchCustomfields($search)
     {
         $ch = $this->container->get('core.helper.company');
+
         $suggestedWords = $ch->getSuggestedFields();
-
-        $matchedValues = [];
-
+        $matchedValues  = [];
+        //find $search in suggested fields by its value
         foreach ($suggestedWords as $element) {
             if (is_array($element) && array_key_exists('values', $element)) {
                 $match = array_filter($element['values'], function ($element) use ($search) {
                     return $element['value'] == $search;
                 });
             }
+            //if found, parse te value to array where the key is the custom field key property
             if ($match) {
                 array_push($matchedValues, [
                     $element['key']['value'] => current($match)
@@ -287,8 +266,10 @@ class CompanyController extends FrontendController
     protected function matchPlace($search)
     {
         $result = [];
-        $ch = $this->container->get('core.helper.company');
+        $ch     = $this->container->get('core.helper.company');
         $places = $ch->getLocalitiesAndProvices();
+        //find $search in provinces and localities JSON and parse result to an array
+        //the array key must match meta_name on db and value must match on meta_value
         $provinceMatch = array_filter(json_decode($places['provinces'], true), function ($element) use ($search) {
             return $element['slug'] == $search;
         });
@@ -323,9 +304,8 @@ class CompanyController extends FrontendController
                 $parsedSuggested = array_merge($parsedSuggested, $element['values']);
             }
         }
-
         //Filter suggestions with same value
-        $tempArray = array_unique(array_column($parsedSuggested, 'value'));
+        $tempArray           = array_unique(array_column($parsedSuggested, 'value'));
         $filteredSuggestions = array_values(array_intersect_key($parsedSuggested, $tempArray));
 
         return new JsonResponse($filteredSuggestions);
@@ -333,9 +313,10 @@ class CompanyController extends FrontendController
 
     public function getPlacesAction()
     {
-        $ch     = $this->container->get('core.helper.company');
-        $places = $ch->getLocalitiesAndProvices();
+        $ch           = $this->container->get('core.helper.company');
+        $places       = $ch->getLocalitiesAndProvices();
         $parsedPlaces = [];
+
         foreach ($places as $place) {
             $parsedPlaces = array_merge($parsedPlaces, json_decode($place, true));
         }
