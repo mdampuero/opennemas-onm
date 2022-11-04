@@ -347,3 +347,27 @@ function has_timetable($item) : bool
 {
     return getService('core.helper.company')->hasTimetable($item);
 }
+
+/**
+ * Returns true if the company has search fields.
+ *
+ * @param Content $item The company to check if has search fields or not.
+ *
+ * @return bool True if the company has search fields, false otherwise.
+ */
+function has_search_fields($item) : bool
+{
+    return getService('core.helper.company')->hasSearchFields($item);
+}
+
+/**
+ * Returns the search fields of the company.
+ *
+ * @param Content $item The company to get the search fields from.
+ *
+ * @return array The array with the search fields.
+ */
+function get_search_fields($item) : ?Array
+{
+    return getService('core.helper.company')->getSearchFields($item);
+}

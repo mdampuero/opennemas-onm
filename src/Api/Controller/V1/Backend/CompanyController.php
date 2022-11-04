@@ -75,6 +75,7 @@ class CompanyController extends ContentController
                         ->set($elementValue['key']['name'])
                         ->filter('slug')
                         ->get();
+
                     $data[$elementKey]['key']['value'] =
                         $this->get('core.helper.company')
                         ->getCompanyFieldsSufix() .
@@ -112,10 +113,12 @@ class CompanyController extends ContentController
         $categories = $this->get('api.service.category')->responsify(
             $this->get('api.service.category')->getList()['items']
         );
-        $localityAndProvince = $this->get('core.helper.company')->getLocalitiesAndProvices();
+
         $config = $this->get('orm.manager')
             ->getDataSet('Settings')
             ->get(['company_custom_fields']);
+
+        $localityAndProvince = $this->get('core.helper.company')->getLocalitiesAndProvices();
 
         $extraFields = empty($config['company_custom_fields']) ? '' : $config['company_custom_fields'];
 

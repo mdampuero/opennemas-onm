@@ -162,7 +162,7 @@
 
         $scope.checkTag = function(tag) {
           $scope.getSlug(tag.name, function(response) {
-            tag.value           = response.data.slug;
+            tag.value = response.data.slug;
           });
           return tag;
         };
@@ -467,7 +467,6 @@
           }
           if (nv.id && nv.nm) {
             $scope.filteredLocalities = $scope.filterLocality(nv.id);
-            // $scope.item.province = nv.nm;
           }
           if (typeof nv === 'string') {
             $scope.item.province = $scope.findProvince(nv);

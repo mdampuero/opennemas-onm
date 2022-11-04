@@ -178,6 +178,40 @@ class CompanyHelper
     }
 
     /**
+     * Returns Search fields for item
+     *
+     * @param Content $item The company to get search fields from.
+     *
+     * @return Array Array of search fields.
+     */
+    public function getSearchFields($item) : ?Array
+    {
+        $searchfields    = [];
+        $suggestedFields = $this->getSuggestedFields();
+        foreach ($suggestedFields as $field) {
+            $fieldname = $field['key']['value'];
+            if ($item->$fieldname && !empty($item->$fieldname)) {
+                $searchfields = array_merge($searchfields, [
+                    $field['key']['name'] => $item->$fieldname
+                ]);
+            }
+        }
+        return $searchfields;
+    }
+
+    /**
+     * Returns true if the company has search fields.
+     *
+     * @param Content $item The company to get the search fields from.
+     *
+     * @return bool True if the company has search fields, false otherwise.
+     */
+    public function hasSearchFields($item) : bool
+    {
+        return !empty($this->getSearchFields($item));
+    }
+
+    /**
      * Returns true if the company has an address.
      *
      * @param Content $item The company to get the address from.

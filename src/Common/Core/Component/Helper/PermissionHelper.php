@@ -1688,6 +1688,13 @@ class PermissionHelper
                 'module'      => 'es.openhost.module.companies',
                 'enabled'     => 1
             ],
+            261 => [
+                'id'          => 261,
+                'name'        => 'COMPANY_CONFIG',
+                'description' => _('Config'),
+                'module'      => 'es.openhost.module.companies',
+                'enabled'     => 1
+            ],
         ];
     }
 }

@@ -76,7 +76,6 @@
         </span>
       </div>
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.company_info }">
-
         <div class="form-group ">
           <i class="fa fa-address-card m-r-10"></i>{t}CIF{/t}
           <div class="controls">
@@ -194,7 +193,7 @@
       <div ng-if="extraFields">
         <div ng-repeat="element in extraFields track by $index">
           <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded[element.key.value] = !expanded[element.key.value]">
-            <i class="fa fa-pie-chart m-r-10"></i>{t}[% element.key.name %]{/t}
+            <i class="fa fa-pie-chart m-r-10"></i>[% element.key.name %]
             <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded[element.key.value] }"></i>
           </div>
           <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded[element.key.value] }">

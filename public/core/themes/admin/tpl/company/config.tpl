@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form name="form" ng-controller="CompanyConfCtrl" ng-init="init()">
+<form name="form" ng-controller="CompanyConfigCtrl" ng-init="init()">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -46,7 +46,6 @@
             <button class="btn btn-block btn-success" ng-click="addField()" type="button">
               <i class="fa fa-plus m-r-5"></i>{t}Add field{/t}
             </button>
-
           </div>
         </div>
         <div class="m-t-50" ng-repeat="field in company_fields track by $index">
@@ -56,16 +55,15 @@
                 {t}Field name{/t}
               </label>
               <div class="help">{t}Name displayed in form{/t}</div>
-
               <div class="controls">
                 <input type="text" name="fieldKeyName" ng-model="field.key.name">
               </div>
             </div>
             <div class="form-group">
-                <label for="fieldValues" class="form-label">
-                  {t}Field values{/t}
-                </label>
-                <div class="help">{t}Words suggested by the form input{/t}</div>
+              <label for="fieldValues" class="form-label">
+                {t}Field values{/t}
+              </label>
+              <div class="help">{t}Words suggested by the form input{/t}</div>
               <div class="controls">
                 <div class="tags-input-wrapper">
                   <tags-input display-property="name" on-tag-adding="checkTag($tag)" replace-spaces-with-dashes="false" name="fieldValues" key-property="name" min-length="2" ng-model="field.values" placeholder="{t}Add a value...{/t}">

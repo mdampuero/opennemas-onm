@@ -3,7 +3,7 @@
 
   /**
    * @ngdoc controller
-   * @name  CompanyConfCtrl
+   * @name  CompanyConfigCtrl
    *
    * @requires $controller
    * @requires $scope
@@ -13,7 +13,7 @@
    * @description
    *   Provides actions to list articles.
    */
-  angular.module('BackendApp.controllers').controller('CompanyConfCtrl', [
+  angular.module('BackendApp.controllers').controller('CompanyConfigCtrl', [
     '$controller', '$scope', 'http', 'messenger',
     function($controller, $scope, http, messenger) {
       // Initialize the super class and extend it.
@@ -21,7 +21,7 @@
 
       /**
        * @function init
-       * @memberOf CompanyConfCtrl
+       * @memberOf CompanyConfigCtrl
        *
        * @description
        *   Initializes the form.
@@ -32,7 +32,7 @@
 
       /**
        * @function list
-       * @memberOf CompanyConfCtrl
+       * @memberOf CompanyConfigCtrl
        *
        * @description
        *   Reloads the configuration.
@@ -50,7 +50,7 @@
 
       /**
        * @function parseDataToForm
-       * @memberOf CompanyConfCtrl
+       * @memberOf CompanyConfigCtrl
        *
        * @description
        *   Parse data after receive
@@ -69,20 +69,20 @@
 
       /**
        * @function parseFormToData
-       * @memberOf CompanyConfCtrl
+       * @memberOf CompanyConfigCtrl
        *
        * @description
        *   Parse data before send
        */
       $scope.parseFormToData = function(data) {
-        var parsedData =  Object.assign({}, data);
+        var parsedData = Object.assign({}, data);
 
         return parsedData;
       };
 
       /**
        * @function addField
-       * @memberOf CompanyConfCtrl
+       * @memberOf CompanyConfigCtrl
        *
        * @description
        *   Add custom field
@@ -109,7 +109,7 @@
 
       /**
        * @function removeField
-       * @memberOf CompanyConfCtrl
+       * @memberOf CompanyConfigCtrl
        *
        * @description
        *   Remove custom field
@@ -120,21 +120,21 @@
 
       /**
        * @function checkTag
-       * @memberOf CompanyConfCtrl
+       * @memberOf CompanyConfigCtrl
        *
        * @description
        *   Slugify tags
        */
       $scope.checkTag = function(tag) {
         $scope.getSlug(tag.name, function(response) {
-          tag.value           = response.data.slug;
+          tag.value = response.data.slug;
         });
         return tag;
       };
 
       /**
        * @function save
-       * @memberOf CompanyConfCtrl
+       * @memberOf CompanyConfigCtrl
        *
        * @description
        *   Saves the configuration.
