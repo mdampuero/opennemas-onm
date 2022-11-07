@@ -257,6 +257,8 @@ class UserController extends Controller
             return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         }
 
+        $securityInput = $request->request->get('dog');
+
         $data = array_merge(
             $request->request->all(),
             [
@@ -278,9 +280,12 @@ class UserController extends Controller
         $data['register_date'] = new \DateTime();
 
         try {
-            $this->get('api.service.subscriber')->createItem($data);
+            if (!empty($securityInput)) {
+                throw new \Exception("Bot detected");
+            }
+            $user = $this->get('api.service.subscriber')->createItem($data);
             $this->get('application.log')
-                ->info('subscriber.create.success');
+                ->info('subscriber.create.success | User ID : ' . $user->id . ' | Username : ' . $user->getUsername());
 
             $this->sendCreateEmail($data);
             $this->get('application.log')
