@@ -58,12 +58,12 @@
       $scope.parseDataToForm = function(data) {
         var formData = [];
 
-        for (var [ dataKey, dataValue ] of Object.keys(data)) {
+        Object.values(data).forEach(function(entry) {
           formData.push({
-            key: dataValue.key,
-            values: dataValue.values
+            key: entry.key,
+            values: entry.values
           });
-        }
+        });
         return formData;
       };
 
