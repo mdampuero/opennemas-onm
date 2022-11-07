@@ -1691,7 +1691,7 @@ class PermissionHelper
             261 => [
                 'id'          => 261,
                 'name'        => 'COMPANY_CONFIG',
-                'description' => _('Config'),
+                'description' => _('Configuration'),
                 'module'      => 'es.openhost.module.companies',
                 'enabled'     => 1
             ],
