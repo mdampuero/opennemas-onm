@@ -258,8 +258,7 @@ class UserController extends Controller
         }
 
         $securityInput = $request->request->get('dog');
-
-        $data = array_merge(
+        $data          = array_merge(
             $request->request->all(),
             [
                 'name'     => $request->request->filter('name', null, FILTER_SANITIZE_SPECIAL_CHARS),
@@ -268,7 +267,28 @@ class UserController extends Controller
             ]
         );
 
+        if (!empty($securityInput)) {
+            $this->get('application.log')->error(
+                'subscriber.create.failure | Bot Detected | Email:' . $data['email']
+            );
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
+        }
+
+        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $this->get('application.log')->error(
+                'subscriber.create.failure | Email not valid | Email:' . $data['email']
+            );
+
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                _('Please provide a valid email address.')
+            );
+
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
+        }
+
         unset($data['g-recaptcha-response']);
+        unset($data['dog']);
 
         if (array_key_exists('user_groups', $data)) {
             $data['user_groups'] =
@@ -280,19 +300,16 @@ class UserController extends Controller
         $data['register_date'] = new \DateTime();
 
         try {
-            if (!empty($securityInput)) {
-                throw new \Exception("Bot detected");
-            }
             $user = $this->get('api.service.subscriber')->createItem($data);
-            $this->get('application.log')
-                ->info('subscriber.create.success | User ID : ' . $user->id . ' | Username : ' . $user->getUsername());
+            $this->get('application.log')->info('subscriber.create.success | User ID: '
+                . $user->id . ' | ' . $user->getUsername());
 
             $this->sendCreateEmail($data);
-            $this->get('application.log')
-                ->info('subscriber.create.email.success');
+            $this->get('application.log')->info('subscriber.create.email.success | User ID: '
+                . $user->id . ' | ' . $user->getUsername());
         } catch (CreateExistingItemException $e) {
-            $this->get('application.log')->info(
-                'subscriber.create.failure: ' . $e->getMessage()
+            $this->get('application.log')->error(
+                'subscriber.create.failure | ' . $e->getMessage() . ' | Email: ' . $data['email']
             );
 
             $request->getSession()->getFlashBag()
@@ -309,7 +326,7 @@ class UserController extends Controller
             return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         } catch (CreateItemException $e) {
             $this->get('application.log')->error(
-                'subscriber.create.failure: ' . $e->getMessage()
+                'subscriber.create.failure | ' . $e->getMessage() . ' | Email: ' . $data['email']
             );
 
             $request->getSession()->getFlashBag()->add(
@@ -320,7 +337,7 @@ class UserController extends Controller
             return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         } catch (\Exception $e) {
             $this->get('application.log')->error(
-                'subscriber.create.email.failure: ' . $e->getMessage()
+                'subscriber.create.email.failure | ' . $e->getMessage() . ' | Email:' . $data['email']
             );
 
             $request->getSession()->getFlashBag()->add(
