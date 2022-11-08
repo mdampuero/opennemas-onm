@@ -257,7 +257,7 @@ class UserController extends Controller
             return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         }
 
-        $securityInput = $request->request->get('dog');
+        $securityInput = $request->request->get('register_control');
         $data          = array_merge(
             $request->request->all(),
             [
