@@ -519,7 +519,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->container->get('api.helper.cache.frontpage')->deleteItems($items, $category);
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page-%s$', $instanceName, $category)
+                sprintf('obj.http.x-tags ~ instance-%s.*header-date', $instanceName, $category)
             ])
         )->push(
             new ServiceTask('core.varnish', 'ban', [
@@ -527,7 +527,7 @@ class HooksSubscriber implements EventSubscriberInterface
             ])
         )->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*header-date', $instanceName, $category)
+                sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page-%s$', $instanceName, $category)
             ])
         );
     }
