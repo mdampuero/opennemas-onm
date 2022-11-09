@@ -126,7 +126,7 @@ class CompanyController extends ContentController
             'categories'  => $categories,
             'extraFields' => $extraFields,
             'localities'  => $localityAndProvince['localities'],
-            'provinces'   => $localityAndProvince['provinces'],
+            'provinces'   => $this->parseProvinces($localityAndProvince['provinces']),
             'tags'        => $this->getTags($items),
             'formSettings'  => [
                 'name'             => $this->module,
@@ -143,6 +143,22 @@ class CompanyController extends ContentController
                 [ 'name' => _('Holiday'), 'enabled' => false, 'schedules' => [] ],
             ]
         ]);
+    }
+
+    /**
+     * Parse provinces to remove the (Provincia) tag.
+     *
+     * @param String $provinces provinces on json format.
+     *
+     * @return String $provinces parsed on json format.
+     */
+    public function parseProvinces($provinces)
+    {
+        $provinces = json_decode($provinces, true);
+        $provinces = array_map(function ($element) {
+            return $element = array_merge($element, ['nm' => str_replace("(Provincia)", "", $element['nm'])]);
+        }, $provinces);
+        return json_encode($provinces);
     }
 
     /**

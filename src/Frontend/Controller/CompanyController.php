@@ -89,6 +89,13 @@ class CompanyController extends FrontendController
         if (!empty($params['q']) && !empty($params['search']) && $params['q'] != $params['search']) {
             $params['search'] = '';
         }
+        if (!empty($params['q'])) {
+            $search = $this->matchCustomfields($params['q']);
+            if (!empty($search) && is_array($search)) {
+                $params['search'] = reset($search[0])['value'];
+                unset($params['q']);
+            }
+        }
         if (!empty($params['search']) && empty($params['place'])) {
             $params['place']  = $params['search'];
             $params['search'] = '';
@@ -112,6 +119,7 @@ class CompanyController extends FrontendController
         //This variable indicates when $place is a true place (locality or province) in order to build the sql
         $placeFound = false;
 
+
         //if first parameter is not empty
         if (!empty($params['place'])) {
             //match current param with places json
@@ -127,6 +135,9 @@ class CompanyController extends FrontendController
                 $place      = $this->matchCustomfields($params['place']);
                 $placeFound = false;
             }
+        }
+        if (!$this->isValidResource($params['search'], $params['place'], $search, $place)) {
+            throw new ResourceNotFoundException();
         }
         // Invalid page provided as parameter
         if ($params['page'] <= 0
@@ -322,5 +333,16 @@ class CompanyController extends FrontendController
         }
 
         return new JsonResponse($parsedPlaces);
+    }
+
+    public function isValidResource($searchParam, $placeParam, $search, $place)
+    {
+        if (empty($search) && empty($place) && (!empty($searchParam) || !empty($placeParam))) {
+            return false;
+        }
+        if (!empty($searchParam) && !empty($placeParam) && (empty($search) || empty($place))) {
+            return false;
+        }
+        return true;
     }
 }
