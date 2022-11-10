@@ -122,8 +122,8 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForWidgets', 20],
                 ['removeDynamicCssSettingForFrontpage', 20],
                 ['removeSmartyCacheForFrontpageOfCategory', 15],
-                ['removeVarnishCacheFrontpage', 10],
                 ['removeVarnishCacheFrontpageCSS', 10],
+                ['removeVarnishCacheFrontpage', 10],
             ],
             'frontpage.pick_layout' => [
                 ['removeObjectCacheFrontpageMap', 20],
@@ -512,13 +512,13 @@ class HooksSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $category = $event->getArgument('category');
-
+        $category     = $event->getArgument('category');
         $instanceName = $this->container->get('core.instance')->internal_name;
 
+        $this->container->get('api.helper.cache.frontpage')->deleteItems($items, $category);
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page-%s$', $instanceName, $category)
+                sprintf('obj.http.x-tags ~ instance-%s.*header-date', $instanceName, $category)
             ])
         )->push(
             new ServiceTask('core.varnish', 'ban', [
@@ -526,11 +526,9 @@ class HooksSubscriber implements EventSubscriberInterface
             ])
         )->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*header-date', $instanceName, $category)
+                sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page-%s$', $instanceName, $category)
             ])
         );
-
-        $this->container->get('api.helper.cache.frontpage')->deleteItems($items, $category);
     }
 
     /**
