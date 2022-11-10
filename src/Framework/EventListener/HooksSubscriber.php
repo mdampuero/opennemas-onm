@@ -122,8 +122,8 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForWidgets', 20],
                 ['removeDynamicCssSettingForFrontpage', 20],
                 ['removeSmartyCacheForFrontpageOfCategory', 15],
-                ['removeVarnishCacheFrontpage', 10],
                 ['removeVarnishCacheFrontpageCSS', 10],
+                ['removeVarnishCacheFrontpage', 10],
             ],
             'frontpage.pick_layout' => [
                 ['removeObjectCacheFrontpageMap', 20],
@@ -512,8 +512,7 @@ class HooksSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $category = $event->getArgument('category');
-
+        $category     = $event->getArgument('category');
         $instanceName = $this->container->get('core.instance')->internal_name;
 
         $this->container->get('api.helper.cache.frontpage')->deleteItems($items, $category);
