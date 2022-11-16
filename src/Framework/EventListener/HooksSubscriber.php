@@ -303,6 +303,11 @@ class HooksSubscriber implements EventSubscriberInterface
         $category    = $event->getArgument('category');
         $frontpageId = $event->getArgument('frontpageId');
 
+        // Updates the cache for last_saved
+        $lastSavedCacheId = 'frontpage_last_saved_' . $category . '_' . $frontpageId;
+        $date             = new \Datetime("now");
+
+        $this->cache->save($lastSavedCacheId, $date->format(\DateTime::ISO8601));
         $this->cache->delete(
             empty($frontpageId) ?
                 'frontpage_elements_map_' . $category :
