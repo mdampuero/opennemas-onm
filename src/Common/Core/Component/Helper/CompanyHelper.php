@@ -212,6 +212,7 @@ class CompanyHelper
         $data = array_filter($data, function ($element) {
             return trim($element, '"');
         });
+        return $data;
     }
 
     /**
