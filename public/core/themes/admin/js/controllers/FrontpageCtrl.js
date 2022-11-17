@@ -70,7 +70,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       $scope.frontpageInfo.originalVersionName = copyVersionName;
 
       $interval($scope.getReloadVersionStatus, 60000);
-      $interval($scope.checkAvailableNewVersion, 10000);
+      $interval($scope.checkAvailableNewVersion, 5000);
 
       $($window).bind('beforeunload', function() {
         $scope.frontpageForm.$setPristine(true);
