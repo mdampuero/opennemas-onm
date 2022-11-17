@@ -192,7 +192,7 @@ class CompanyHelper
             $fieldname = $field['key']['value'];
             if ($item->$fieldname && !empty($item->$fieldname)) {
                 $searchfields = array_merge($searchfields, [
-                    $field['key']['name'] => $item->$fieldname
+                    $field['key']['name'] => explode(',', substr($item->$fieldname, 1, -1))
                 ]);
             }
         }
