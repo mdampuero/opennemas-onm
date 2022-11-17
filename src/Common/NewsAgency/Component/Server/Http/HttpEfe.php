@@ -58,7 +58,7 @@ class HttpEfe extends Http
             $content  = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-            if ($httpCode == 301 || $httpCode == 302) {
+            if ($httpCode == 301 || $httpCode == 302 || $httpCode == 307) {
                 $url = curl_getinfo($ch, CURLINFO_REDIRECT_URL);
 
                 continue;
@@ -71,7 +71,7 @@ class HttpEfe extends Http
             $body = $content;
 
             $maxRedirects++;
-        } while ($httpCode == 302 || $httpCode == 301 || $maxRedirects > $maxRedirectsAllowed);
+        } while ($httpCode == 307 || $httpCode == 302 || $httpCode == 301 || $maxRedirects > $maxRedirectsAllowed);
 
         curl_close($ch);
 
