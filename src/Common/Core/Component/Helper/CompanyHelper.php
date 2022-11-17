@@ -192,11 +192,26 @@ class CompanyHelper
             $fieldname = $field['key']['value'];
             if ($item->$fieldname && !empty($item->$fieldname)) {
                 $searchfields = array_merge($searchfields, [
-                    $field['key']['name'] => explode(',', substr($item->$fieldname, 1, -1))
+                    $field['key']['name'] => $this->parseSearchField($item->$fieldname)
                 ]);
             }
         }
         return $searchfields;
+    }
+
+    /**
+     * Parse search field from string to array
+     *
+     * @param String $data The company search field.
+     *
+     * @return Array Array parsed content.
+     */
+    public function parseSearchField($data)
+    {
+        $data = explode(',', substr($data, 1, -1));
+        $data = array_filter($data, function ($element) {
+            return trim($element, '"');
+        });
     }
 
     /**
