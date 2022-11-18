@@ -227,7 +227,7 @@ class CompanyHelperTest extends \PHPUnit\Framework\TestCase
     */
     public function testGetAddress()
     {
-        $this->content->address  = 'Scylla';
+        $this->content->address = 'Scylla';
 
         $this->assertEquals('Scylla', $this->helper->getAddress($this->content));
     }
@@ -265,6 +265,70 @@ class CompanyHelperTest extends \PHPUnit\Framework\TestCase
     public function testHasWhatsapp()
     {
         $this->assertFalse($this->helper->hasWhatsapp($this->content));
+    }
+
+    /**
+    * Tests getCif.
+    */
+    public function testGetCif()
+    {
+        $this->assertNull($this->helper->getCIF($this->content));
+    }
+
+    /**
+    * Tests hasCif.
+    */
+    public function testHasCif()
+    {
+        $this->assertFalse($this->helper->hasCIF($this->content));
+    }
+
+    /**
+    * Tests getLocality.
+    */
+    public function testGetLocality()
+    {
+        $this->assertNull($this->helper->getLocality($this->content));
+    }
+
+    /**
+    * Tests hasLocality.
+    */
+    public function testHasLocality()
+    {
+        $this->assertFalse($this->helper->hasLocality($this->content));
+    }
+
+    /**
+    * Tests getProvince.
+    */
+    public function testGetProvince()
+    {
+        $this->assertNull($this->helper->getProvince($this->content));
+    }
+
+    /**
+    * Tests hasProvince.
+    */
+    public function testHasProvince()
+    {
+        $this->assertFalse($this->helper->hasProvince($this->content));
+    }
+
+    /**
+    * Tests getPostalCode.
+    */
+    public function testGetPostalCode()
+    {
+        $this->assertNull($this->helper->getPostalCode($this->content));
+    }
+
+    /**
+    * Tests hasPostalCode.
+    */
+    public function testHasPostalCode()
+    {
+        $this->assertFalse($this->helper->hasPostalCode($this->content));
     }
 
     /**
