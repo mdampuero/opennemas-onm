@@ -118,6 +118,102 @@ class CompanyHelper
     }
 
     /**
+     * Returns the postal code of the company.
+     *
+     * @param Content $item   The item to get the products from.
+     *
+     * @return mixed The postal code of the company.
+     */
+    public function getPostalCode($item)
+    {
+        return $item->postal_code;
+    }
+
+    /**
+     * Returns true if the company has postal code.
+     *
+     * @param mixed $item The item to check if has postal code or not.
+     *
+     * @return Boolean True if the content has postal code, false otherwise.
+     */
+    public function hasPostalCode($item) : bool
+    {
+        return !empty($this->getPostalCode($item));
+    }
+
+    /**
+     * Returns the CIF of the company.
+     *
+     * @param Content $item   The item to get the cif from.
+     *
+     * @return Mixed The cif
+     */
+    public function getCIF($item)
+    {
+        return $item->cif;
+    }
+
+    /**
+     * Returns true if the company has CIF.
+     *
+     * @param mixed $item The item to check if has cif or not.
+     *
+     * @return Boolean True if the content has cif, false otherwise.
+     */
+    public function hasCIF($item) : bool
+    {
+        return !empty($this->getCIF($item));
+    }
+
+    /**
+     * Returns the locality of the company.
+     *
+     * @param Content $item   The item to get the locality from.
+     *
+     * @return Mixed The locality.
+     */
+    public function getLocality($item)
+    {
+        return $item->locality;
+    }
+
+    /**
+     * Returns true if the company has locality.
+     *
+     * @param mixed $item The item to check if has locality or not.
+     *
+     * @return Boolean True if the content has locality, false otherwise.
+     */
+    public function hasLocality($item) : bool
+    {
+        return !empty($this->getLocality($item));
+    }
+
+    /**
+     * Returns the province of the company.
+     *
+     * @param Content $item   The item to get the products from.
+     *
+     * @return Mixed Theprovince.
+     */
+    public function getProvince($item)
+    {
+        return $item->province;
+    }
+
+    /**
+     * Returns true if the company has province.
+     *
+     * @param mixed $item The item to check if has province or not.
+     *
+     * @return boolean True if the content has province, false otherwise.
+     */
+    public function hasProvince($item) : bool
+    {
+        return !empty($this->getProvince($item));
+    }
+
+    /**
      * Returns the array of social media configured for the company.
      *
      * @param Content $item The company to get the social media from.
