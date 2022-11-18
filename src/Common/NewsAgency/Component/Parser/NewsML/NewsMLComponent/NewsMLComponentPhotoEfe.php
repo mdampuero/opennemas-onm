@@ -71,4 +71,16 @@ class NewsMLComponentPhotoEfe extends NewsMLComponentPhoto
 
         return iconv(mb_detect_encoding($title), "UTF-8", $title);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parse($data)
+    {
+        $resource = parent::parse($data);
+
+        $resource->body = str_replace(['<p>', '</p>'], '', (string) $resource->body);
+
+        return $resource;
+    }
 }
