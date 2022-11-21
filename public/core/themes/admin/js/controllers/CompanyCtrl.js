@@ -204,6 +204,8 @@
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'company-' + $scope.data.item.pk_content + '-draft';
           }
+          $scope.checkDraft();
+          $scope.draftEnabled = false;
           if ($scope.extraFields && typeof $scope.extraFields === 'object') {
             $scope.extraFields.forEach(function(element) {
               if ($scope.item[element.key.value] && typeof $scope.item[element.key.value] === 'string') {
@@ -211,12 +213,12 @@
               }
             });
           }
+          $scope.draftEnabled = true;
 
           $scope.item.timetable = $scope.item.timetable ?
             $scope.item.timetable :
             $scope.data.extra.timetable.slice();
 
-          $scope.checkDraft();
           related.init($scope);
           related.watch();
           translator.init($scope);
@@ -232,6 +234,7 @@
          * @param {Object} data The data to configure the section.
          */
         $scope.configure = function(data) {
+          $scope.draftEnabled = false;
           if (!data) {
             return;
           }
@@ -261,6 +264,7 @@
               $scope.config.locale.selected = $scope.forcedLocale;
             });
           }
+          $scope.draftEnabled = true;
         };
 
         /**

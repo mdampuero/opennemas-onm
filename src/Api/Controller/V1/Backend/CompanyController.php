@@ -76,6 +76,8 @@ class CompanyController extends ContentController
                         ->filter('slug')
                         ->get();
 
+                    $slug = str_replace('-', '_', $slug);
+
                     $data[$elementKey]['key']['value'] =
                         $this->get('core.helper.company')
                         ->getCompanyFieldsSufix() .

@@ -287,28 +287,18 @@ class CompanyHelper
         foreach ($suggestedFields as $field) {
             $fieldname = $field['key']['value'];
             if ($item->$fieldname && !empty($item->$fieldname)) {
+                $key    = $field['key']['name'];
+                $string = $item->$fieldname;
+                $values = array_filter($field['values'], function ($element) use ($string) {
+                    return strpos($string, '"' . $element['name'] . '"');
+                });
+
                 $searchfields = array_merge($searchfields, [
-                    $field['key']['name'] => $this->parseSearchField($item->$fieldname)
+                    $key => $values
                 ]);
             }
         }
         return $searchfields;
-    }
-
-    /**
-     * Parse search field from string to array
-     *
-     * @param String $data The company search field.
-     *
-     * @return Array Array parsed content.
-     */
-    public function parseSearchField($data)
-    {
-        $data = explode(',', substr($data, 1, -1));
-        $data = array_filter($data, function ($element) {
-            return trim($element, '"');
-        });
-        return $data;
     }
 
     /**
