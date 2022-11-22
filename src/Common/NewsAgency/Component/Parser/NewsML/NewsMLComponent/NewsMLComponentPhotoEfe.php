@@ -71,4 +71,53 @@ class NewsMLComponentPhotoEfe extends NewsMLComponentPhoto
 
         return iconv(mb_detect_encoding($title), "UTF-8", $title);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFile($data)
+    {
+        $files = $data->xpath('/NewsComponent/NewsComponent/ContentItem');
+
+        if (empty($files)) {
+            return '';
+        }
+
+        $i     = 0;
+        $index = 0;
+
+        foreach ($files as $file) {
+            $file = simplexml_load_string($file->asXML());
+
+            // Ignore videos
+            $video = $file->xpath('/ContentItem/MediaType[@FormalName="Video"]');
+
+            if (empty($video)) {
+                $f = $file->xpath('/ContentItem/Characteristics/Property[@FormalName="EFE_Filename"]');
+
+                if (!empty($f)
+                    && strpos($f[0]->attributes()->Value, 'w.')
+                    && !strpos($f[0]->attributes()->Value, 'miniw.')
+                ) {
+                    $index = $i;
+                }
+            }
+
+            $i++;
+        }
+
+        return simplexml_load_string($files[$index]->asXML());
+    }
+
+        /**
+     * {@inheritdoc}
+     */
+    public function parse($data)
+    {
+        $resource = parent::parse($data);
+
+        $resource->body = str_replace(['<p>', '</p>'], '', (string) $resource->body);
+
+        return $resource;
+    }
 }

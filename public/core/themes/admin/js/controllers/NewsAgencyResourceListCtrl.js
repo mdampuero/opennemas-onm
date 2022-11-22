@@ -29,7 +29,7 @@
          */
         $scope.criteria = {
           type: 'text',
-          orderBy: { priority: 'desc' },
+          orderBy: { created_time: 'desc' },
           epp: 10,
           page: 1
         };
