@@ -415,7 +415,19 @@
               return Number.isInteger(tag);
             });
           }
-
+          if (item.locality && typeof item.locality !== 'string') {
+            item.locality = item.locality.nm;
+          }
+          if (item.province && typeof item.province !== 'string') {
+            item.province = item.province.nm;
+          }
+          if ($scope.extraFields) {
+            $scope.extraFields.forEach(function(element) {
+              if (item[element.key.value] && typeof item[element.key.value] === 'object') {
+                item[element.key.value] = JSON.stringify(item[element.key.value]);
+              }
+            });
+          }
           var data = {
             item: JSON.stringify(cleaner.clean(item)),
             locale: $scope.config.locale.selected

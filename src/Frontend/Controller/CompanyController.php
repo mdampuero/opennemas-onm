@@ -324,15 +324,32 @@ class CompanyController extends FrontendController
 
     public function getPlacesAction()
     {
-        $ch           = $this->container->get('core.helper.company');
-        $places       = $ch->getLocalitiesAndProvices();
-        $parsedPlaces = [];
+        $ch                  = $this->container->get('core.helper.company');
+        $places              = $ch->getLocalitiesAndProvices();
+        $places['provinces'] = $this->parseProvinces($places['provinces']);
+        $parsedPlaces        = [];
 
         foreach ($places as $place) {
             $parsedPlaces = array_merge($parsedPlaces, json_decode($place, true));
         }
 
         return new JsonResponse($parsedPlaces);
+    }
+
+    /**
+     * Parse provinces to remove the (Provincia) tag.
+     *
+     * @param String $provinces provinces on json format.
+     *
+     * @return String $provinces parsed on json format.
+     */
+    public function parseProvinces($provinces)
+    {
+        $provinces = json_decode($provinces, true);
+        $provinces = array_map(function ($element) {
+            return $element = array_merge($element, ['nm' => $element['nm'] . " (Provincia)"]);
+        }, $provinces);
+        return json_encode($provinces);
     }
 
     public function isValidResource($searchParam, $placeParam, $search, $place)
