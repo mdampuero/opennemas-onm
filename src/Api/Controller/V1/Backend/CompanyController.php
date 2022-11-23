@@ -4,6 +4,7 @@ namespace Api\Controller\V1\Backend;
 
 use Common\Model\Entity\Content;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class CompanyController extends ContentController
@@ -39,6 +40,70 @@ class CompanyController extends ContentController
     protected $service = 'api.service.company';
 
     /**
+     * Get the company config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getConfigAction()
+    {
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get(['company_custom_fields']);
+
+        return new JsonResponse([
+            'company_custom_fields' => $settings['company_custom_fields'],
+        ]);
+    }
+
+    /**
+     * Saves configuration for company.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveConfigAction(Request $request)
+    {
+        $data = $request->request->get('company_custom_fields');
+
+        if (!empty($data)) {
+            foreach ($data as $elementKey => $elementValue) {
+                if (array_key_exists('key', $elementValue)) {
+                    $slug = $this->get('data.manager.filter')
+                        ->set($elementValue['key']['name'])
+                        ->filter('slug')
+                        ->get();
+
+                    $slug = str_replace('-', '_', $slug);
+
+                    $data[$elementKey]['key']['value'] =
+                        $this->get('core.helper.company')
+                        ->getCompanyFieldsSufix() .
+                        $slug;
+                }
+            }
+        }
+
+        $settings = [
+            'company_custom_fields' => $data
+        ];
+
+        $msg = $this->get('core.messenger');
+
+        try {
+            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
+            $msg->add(_('Item saved successfully'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to save settings'), 'error');
+            $this->get('error.log')->error($e->getMessage());
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
      * Loads extra data related to the given contents.
      *
      * @param array $items The items array
@@ -51,49 +116,23 @@ class CompanyController extends ContentController
             $this->get('api.service.category')->getList()['items']
         );
 
+        $config = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get(['company_custom_fields']);
+
+        $localityAndProvince = $this->get('core.helper.company')->getLocalitiesAndProvices();
+
+        $extraFields = empty($config['company_custom_fields']) ? '' : $config['company_custom_fields'];
+
         return array_merge(parent::getExtraData($items), [
-            'categories' => $categories,
-            'tags'       => $this->getTags($items),
+            'categories'  => $categories,
+            'extraFields' => $extraFields,
+            'localities'  => $localityAndProvince['localities'],
+            'provinces'   => $localityAndProvince['provinces'],
+            'tags'        => $this->getTags($items),
             'formSettings'  => [
                 'name'             => $this->module,
                 'expansibleFields' => $this->getFormSettings($this->module)
-            ],
-            'sectors' => [
-                [ 'name' => 'aeroespace', 'title' => _('Aerospace') ],
-                [ 'name' => 'agriculture', 'title' => _('Agriculture') ],
-                [ 'name' => 'automotive', 'title' => _('Automotive') ],
-                [ 'name' => 'breeding', 'title' => _('Breeding') ],
-                [ 'name' => 'comerce', 'title' => _('Comerce') ],
-                [ 'name' => 'construction', 'title' => _('Construction') ],
-                [ 'name' => 'advertising and marketing', 'title' => _('Advertising and marketing') ],
-                [ 'name' => 'culture', 'title' => _('Culture') ],
-                [ 'name' => 'education', 'title' => _('Education') ],
-                [ 'name' => 'electronic', 'title' => _('Electronic') ],
-                [ 'name' => 'energy', 'title' => _('Energy') ],
-                [ 'name' => 'entertainment', 'title' => _('Entertainment') ],
-                [ 'name' => 'finance', 'title' => _('Finance') ],
-                [ 'name' => 'maritime', 'title' => _('Maritime') ],
-                [ 'name' => 'food', 'title' => _('Food') ],
-                [ 'name' => 'healthcare', 'title' => _('Healthcare') ],
-                [ 'name' => 'information_technology', 'title' => _('Information technology') ],
-                [ 'name' => 'mining', 'title' => _('Mining') ],
-                [ 'name' => 'fuels', 'title' => _('Fuels') ],
-                [ 'name' => 'pharmaceutical', 'title' => _('Pharmaceutical') ],
-                [ 'name' => 'real_estate', 'title' => _('Real estate') ],
-                [ 'name' => 'telecommunications', 'title' => _('Telecommunications') ],
-                [ 'name' => 'tobacco', 'title' => _('Tobacco') ],
-                [ 'name' => 'textile', 'title' => _('Textile') ],
-                [ 'name' => 'transport', 'title' => _('Transport') ],
-                [ 'name' => 'industry', 'title' => _('Industry') ],
-                [ 'name' => 'beauty', 'title' => _('Beauty') ],
-                [ 'name' => 'animals', 'title' => _('Animals') ],
-                [ 'name' => 'cleaning', 'title' => _('Cleaning') ],
-                [ 'name' => 'sport', 'title' => _('Sport') ],
-                [ 'name' => 'hostelry', 'title' => _('Hostelry') ],
-                [ 'name' => 'services', 'title' => _('Services') ],
-                [ 'name' => 'metal', 'title' => _('Metal') ],
-                [ 'name' => 'architecture', 'title' => _('Architecture') ],
-                [ 'name' => 'other', 'title' => _('Other') ]
             ],
             'timetable' => [
                 [ 'name' => _('Monday'), 'enabled' => false, 'schedules' => [] ],

@@ -1,9 +1,16 @@
 # Companies routes
-frontend_companies:
-    path: /empresa
-    defaults: { _controller: FrontendBundle:Company:list }
+frontend_company_suggestions:
+    path:     /empresa/suggestions
+    defaults: { _controller: FrontendBundle:Company:getSuggestions }
     options:
-        l10n: true
+        expose: true
+        subdirectory: true
+
+frontend_company_places:
+    path:     /empresa/places
+    defaults: { _controller: FrontendBundle:Company:getplaces }
+    options:
+        expose: true
         subdirectory: true
 
 frontend_company_show:
@@ -17,3 +24,18 @@ frontend_company_show:
         expose: true
         l10n: true
         subdirectory: true
+
+frontend_company_search:
+    path: /empresa/search
+    defaults: { _controller: FrontendBundle:Company:search }
+    options:
+        expose: true
+        subdirectory: true
+
+frontend_companies:
+    path: /empresa/{place}/{search}
+    defaults: { _controller: FrontendBundle:Company:list, place: null, search: null }
+    options:
+        l10n: true
+        subdirectory: true
+

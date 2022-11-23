@@ -20,7 +20,7 @@
      * @description
      *   Provides actions to list articles.
      */
-    .controller('ArticleConfCtrl', [
+    .controller('ArticleConfigCtrl', [
       '$controller', '$scope', 'cleaner', 'http', 'messenger',
       function($controller, $scope, cleaner, http, messenger) {
         // Initialize the super class and extend it.

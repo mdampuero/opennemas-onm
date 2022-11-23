@@ -78,7 +78,7 @@
           title: '',
           type: 0,
           related_contents: [],
-          tags: [],
+          tags: []
         };
 
         /**
@@ -136,21 +136,47 @@
         };
 
         /**
+         * @function list
          * @memberOf CompanyCtrl
          *
          * @description
-         *  Gets the sector title based on a name.
+         *   Returns a sorted elements based on a query and name property.
          *
-         * @type {Object}
+         * @param {String} query The query string.
+         * @param {Object} model the model
+         *
+         * @return {Object} The sorted model
          */
-        $scope.getSectorTitle = function(name) {
-          if (!$scope.data || !name) {
-            return '';
-          }
+        $scope.list = function(query, model) {
+          var finalModel = model.sort(function(a, b) {
+            return $scope.orderFunction(query, b.name) - $scope.orderFunction(query, a.name);
+          });
 
-          return $scope.data.extra.sectors.filter(function(sector) {
-            return name === sector.name;
-          }).shift().title;
+          var finalData = [];
+
+          finalModel.forEach(function(item) {
+            finalData.push(item.name);
+          });
+          return finalData;
+        };
+
+        $scope.checkTag = function(tag) {
+          $scope.getSlug(tag.name, function(response) {
+            tag.value = response.data.slug;
+          });
+          return tag;
+        };
+
+        $scope.orderFunction = function(query, compareString) {
+          var queryChars = query.split('');
+          var stringChars = compareString.split('');
+
+          for (var iterator = 0; iterator < queryChars.length; iterator++) {
+            if (!stringChars[iterator] || stringChars[iterator].toLowerCase() !== queryChars[iterator].toLowerCase()) {
+              break;
+            }
+          }
+          return iterator;
         };
 
         /**
@@ -178,15 +204,67 @@
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'company-' + $scope.data.item.pk_content + '-draft';
           }
+          $scope.checkDraft();
+          $scope.draftEnabled = false;
+          if ($scope.extraFields && typeof $scope.extraFields === 'object') {
+            $scope.extraFields.forEach(function(element) {
+              if ($scope.item[element.key.value] && typeof $scope.item[element.key.value] === 'string') {
+                $scope.item[element.key.value] = JSON.parse($scope.item[element.key.value]);
+              }
+            });
+          }
+          $scope.draftEnabled = true;
 
           $scope.item.timetable = $scope.item.timetable ?
             $scope.item.timetable :
             $scope.data.extra.timetable.slice();
 
-          $scope.checkDraft();
           related.init($scope);
           related.watch();
           translator.init($scope);
+        };
+
+        /**
+         * @function configure
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *   Configures the extra data for the current section.
+         *
+         * @param {Object} data The data to configure the section.
+         */
+        $scope.configure = function(data) {
+          $scope.draftEnabled = false;
+          if (!data) {
+            return;
+          }
+          if (data.extraFields) {
+            $scope.extraFields = data.extraFields;
+          }
+          if (data.localities) {
+            $scope.localities = data.localities;
+            if (typeof $scope.localities === 'string') {
+              $scope.localities = JSON.parse($scope.localities);
+            }
+          }
+          if (data.provinces) {
+            $scope.provinces = data.provinces;
+            if (typeof $scope.provinces === 'string') {
+              $scope.provinces = JSON.parse($scope.provinces);
+            }
+          }
+          if (data.locale) {
+            $scope.config.locale = data.locale;
+          }
+
+          if ($scope.forcedLocale && Object.keys(data.locale.available)
+            .indexOf($scope.forcedLocale) !== -1) {
+            // Force localization
+            $timeout(function() {
+              $scope.config.locale.selected = $scope.forcedLocale;
+            });
+          }
+          $scope.draftEnabled = true;
         };
 
         /**
@@ -221,6 +299,26 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.parseData = function(data) {
+          if ($scope.extraFields) {
+            $scope.extraFields.forEach(function(element) {
+              if (data[element.key.value] && typeof data[element.key.value] !== 'string') {
+                data[element.key.value] = JSON.stringify($scope.item[element.key.value]);
+              }
+            });
+          }
+          if (data.province && data.province.nm && typeof data.province !== 'string') {
+            data.province = data.province.nm;
+          }
+          if (data.locality && data.locality.nm && typeof data.locality !== 'string') {
+            data.locality = data.locality.nm;
+          }
+          return data;
+        };
+
+        /**
          * @function getFrontendUrl
          * @memberOf CompanyCtrl
          *
@@ -242,6 +340,64 @@
         };
 
         /**
+         * @function filterLocality
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *   Filter localities array by province id
+         *
+         * @param {String} id  The province id.
+         *
+         * @return {Array} The array of localities.
+         */
+        $scope.filterLocality = function(id) {
+          var result = $scope.localities.filter(function(element) {
+            return element.id.startsWith(id);
+          });
+
+          return result;
+        };
+
+        /**
+         * @function findProvince
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *   Find province object by its name
+         *
+         * @param {String} name  The province name.
+         *
+         * @return {Object} The province object.
+         */
+        $scope.findProvince = function(name) {
+          var result = $scope.provinces.filter(function(element) {
+            return element.nm === name;
+          });
+
+          return result.pop();
+        };
+
+        /**
+         * @function findLocality
+         * @memberOf CompanyCtrl
+         *
+         * @description
+         *   Find province object by its name
+         *
+         * @param {String} id    The province id.
+         * @param {String} name  The locality name.
+         *
+         * @return {Object} The province object.
+         */
+        $scope.findLocality = function(id, name) {
+          var result = $scope.localities.filter(function(element) {
+            return element.nm === name && element.id.startsWith(id);
+          });
+
+          return result.pop();
+        };
+
+        /**
          * Opens a modal with the preview of the company.
          */
         $scope.preview = function() {
@@ -259,7 +415,19 @@
               return Number.isInteger(tag);
             });
           }
-
+          if (item.locality && typeof item.locality !== 'string') {
+            item.locality = item.locality.nm;
+          }
+          if (item.province && typeof item.province !== 'string') {
+            item.province = item.province.nm;
+          }
+          if ($scope.extraFields) {
+            $scope.extraFields.forEach(function(element) {
+              if (item[element.key.value] && typeof item[element.key.value] === 'object') {
+                item[element.key.value] = JSON.stringify(item[element.key.value]);
+              }
+            });
+          }
           var data = {
             item: JSON.stringify(cleaner.clean(item)),
             locale: $scope.config.locale.selected
@@ -304,6 +472,25 @@
 
           return true;
         };
+
+        $scope.$watch('item.province', function(nv, ov) {
+          if (!nv) {
+            return;
+          }
+          if (ov && !nv) {
+            $scope.item.locality = '';
+            delete $scope.filteredLocalities;
+          }
+          if (nv.id && nv.nm) {
+            $scope.filteredLocalities = $scope.filterLocality(nv.id);
+          }
+          if (typeof nv === 'string') {
+            $scope.item.province = $scope.findProvince(nv);
+            if (typeof $scope.item.locality === 'string') {
+              $scope.item.locality = $scope.findLocality($scope.item.province.id, $scope.item.locality);
+            }
+          }
+        });
       }
     ]);
 })();
