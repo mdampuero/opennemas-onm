@@ -106,6 +106,10 @@ class CoreListener
         if ($this->container->get('core.helper.url')
             ->isFrontendUri($request->getRequestUri())
         ) {
+            if (!empty($instance->no_redirect_domain)) {
+                return $request->getHost();
+            }
+
             return $this->container->getParameter('opennemas.redirect_frontend')
                 ? $instance->getMainDomain() : $request->getHost();
         }
