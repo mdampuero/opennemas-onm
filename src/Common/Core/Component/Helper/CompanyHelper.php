@@ -293,9 +293,11 @@ class CompanyHelper
                     return strpos($string, '"' . $element['name'] . '"');
                 });
 
-                $searchfields = array_merge($searchfields, [
-                    $key => $values
-                ]);
+                if (!empty($values)) {
+                    $searchfields = array_merge($searchfields, [
+                        $key => $values
+                    ]);
+                }
             }
         }
         return $searchfields;
