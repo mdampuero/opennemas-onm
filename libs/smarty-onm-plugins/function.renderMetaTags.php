@@ -1,6 +1,7 @@
 <?php
 
 use Api\Exception\GetListException;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Used to generate links for tags depending on the selected method
@@ -15,10 +16,14 @@ function smarty_function_renderMetaTags($params, &$smarty)
         $smarty->getValue('tag') ??
         $smarty->getValue('category');
 
-    $page = $smarty->getValue('page') ?? null;
-
-    $mh = $smarty->getContainer()->get('core.helper.meta');
-    $output = $mh->generateMetas($content, $page);
-
+    $page      = $smarty->getValue('page') ?? null;
+    $extension = $smarty->getContainer()->get('core.globals')->getExtension();
+    $action    = $smarty->getContainer()->get('core.globals')->getAction();
+    try {
+        $output = $smarty->getContainer()
+            ->get(sprintf('core.helper.meta.%s', $extension))->generateMetas($action, $content, $page);
+    } catch (ServiceNotFoundException $e) {
+        $output = $smarty->getContainer()->get(sprintf('core.helper.meta'))->generateMetas($action, $content, $page);
+    }
     return $output;
 }

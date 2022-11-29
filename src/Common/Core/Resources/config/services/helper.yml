@@ -122,7 +122,107 @@ services:
         public:    true
 
     core.helper.meta:
-        class:     Common\Core\Component\Helper\MetaHelper
+        class:     Api\Helper\Meta\MetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.album:
+        class:     Api\Helper\Meta\AlbumMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.frontpages:
+        class:     Api\Helper\Meta\FrontpageMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.archive:
+        class:     Api\Helper\Meta\ArchiveMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.authentication:
+        class:     Api\Helper\Meta\AuthenticationMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.opinion:
+        class:     Api\Helper\Meta\OpinionMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.author:
+        class:     Api\Helper\Meta\AuthorMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.blog:
+        class:     Api\Helper\Meta\BlogMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.category:
+        class:     Api\Helper\Meta\CategoryMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.tag:
+        class:     Api\Helper\Meta\TagMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.form:
+        class:     Api\Helper\Meta\FormMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.letter:
+        class:     Api\Helper\Meta\LetterMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.company:
+        class:     Api\Helper\Meta\CompanyMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.event:
+        class:     Api\Helper\Meta\EventMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.newsstand:
+        class:     Api\Helper\Meta\NewsstandMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.newsletter:
+        class:     Api\Helper\Meta\NewsletterMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.poll:
+        class:     Api\Helper\Meta\PollMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.video:
+        class:     Api\Helper\Meta\VideoMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.user:
+        class:     Api\Helper\Meta\UserMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.obituary:
+        class:     Api\Helper\Meta\ObituaryMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.rss:
+        class:     Api\Helper\Meta\RssMetaHelper
         arguments: [ '@service_container' ]
         public:    true
 
