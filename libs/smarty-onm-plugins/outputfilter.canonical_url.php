@@ -26,6 +26,12 @@ function smarty_outputfilter_canonical_url($output, $smarty)
         $url = $smarty->getValue('o_canonical');
     }
 
+    // If no redirect allowed, force canonical with mainDomain
+    $instance = $smarty->getContainer()->get('core.instance');
+    if (!empty($instance->no_redirect_domain)) {
+        $url = preg_replace('/' . $request->getHost() . '/', $instance->getMainDomain(), $url);
+    }
+
     // Check for content custom canonical
     $content = $smarty->getValue('o_content');
     if ($content && !empty($content->canonicalurl)) {
