@@ -19,11 +19,9 @@
             <i class="fa fa-trash-o fa-2x text-danger"></i>
           </div>
         {/acl}
-        {acl isAllowed="PHOTO_ENHANCE"}
-          <a class="thumbnail-action" ng-click="launchPhotoEditor(item)" uib-tooltip="{t}Enhance{/t}" tooltip-class="tooltip-info">
-            <i class="fa fa-sliders fa-2x text-info"></i>
-          </a>
-        {/acl}
+        <a class="thumbnail-action" ng-click="launchPhotoEditor(item)" uib-tooltip="{t}Enhance{/t}" tooltip-class="tooltip-info">
+          <i class="fa fa-sliders fa-2x text-info"></i>
+        </a>
       </div>
     </dynamic-image>
   </div>
@@ -56,14 +54,12 @@
               {t}Edit{/t}
           </a>
         </li>
-        {is_module_activated name="es.openhost.module.imageEditor"}
-          <li>
-            <a class="btn btn-block btn-info" ng-click="launchPhotoEditor(selected.lastSelected)">
-                <i class="fa fa-sliders"></i>
-                {t}Enhance{/t}
-            </a>
-          </li>
-        {/is_module_activated}
+        <li>
+          <a class="btn btn-block btn-info" ng-click="launchPhotoEditor(selected.lastSelected)">
+              <i class="fa fa-sliders"></i>
+              {t}Enhance{/t}
+          </a>
+        </li>
         <li>
           <a class="btn btn-block btn-white" href="{$smarty.const.INSTANCE_MEDIA}[% selected.lastSelected.path %]" target="_blank">
             <i class="fa fa-external-link m-r-5"></i>
