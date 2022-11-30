@@ -202,7 +202,7 @@
             </div>
             <div class="form-group" ng-if="security.hasPermission('MASTER')">
               <div class="checkbox">
-                <input type="checkbox" id="no_redirect_domain" ng-model="instance.no_redirect_domain" ng-true-value="1" ng-false-value="0" ng-checked="instance.no_redirect_domain == 1"/>
+                <input type="checkbox" id="no_redirect_domain" ng-model="instance.no_redirect_domain" ng-true-value="'1'" ng-false-value="'0'" ng-checked="instance.no_redirect_domain == '1'"/>
                 <label class="form-label" for="no_redirect_domain">{t}Do not redirect to main domain{/t}</label>
               </div>
             </div>

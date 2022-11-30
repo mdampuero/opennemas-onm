@@ -38,6 +38,10 @@ class Instance extends Entity
         $protocol = (in_array('es.openhost.module.frontendSsl', $this->activated_modules))
             ? 'https://' : 'http://';
 
+        if (!empty($this->no_redirect_domain)) {
+            return $protocol . getService('request_stack')->getCurrentRequest()->getHost();
+        }
+
         if ($allowSubdirectory && !empty($this->subdirectory)) {
             return $protocol . $this->getMainDomain() . $this->subdirectory;
         }
