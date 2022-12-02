@@ -19,11 +19,20 @@ function smarty_function_renderMetaTags($params, &$smarty)
     $page      = $smarty->getValue('page') ?? null;
     $extension = $smarty->getContainer()->get('core.globals')->getExtension();
     $action    = $smarty->getContainer()->get('core.globals')->getAction();
+    $exception = '';
+    // Code with some weird errors
+    // try {
+    //     $exception = getService('request_stack')->getCurrentRequest()->attributes->get('exception') ?? '';
+    // } catch (\Exception $e) {
+    //     $exception = '';
+    // }
     try {
         $output = $smarty->getContainer()
-            ->get(sprintf('core.helper.meta.%s', $extension))->generateMetas($action, $content, $page);
+            ->get(sprintf('core.helper.meta.%s', $extension))->generateMetas($action, $content, $page, $exception);
     } catch (ServiceNotFoundException $e) {
-        $output = $smarty->getContainer()->get(sprintf('core.helper.meta'))->generateMetas($action, $content, $page);
+        $output = $smarty->getContainer()
+            ->get(sprintf('core.helper.meta'))
+            ->generateMetas($action, $content, $page, $exception);
     }
     return $output;
 }

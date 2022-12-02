@@ -226,6 +226,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.helper.meta.error:
+        class:     Api\Helper\Meta\ErrorMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.helper.newsletter:
         class:     Common\Core\Component\Helper\NewsletterHelper
         arguments: [ '@orm.manager', '@api.service.subscription' ]

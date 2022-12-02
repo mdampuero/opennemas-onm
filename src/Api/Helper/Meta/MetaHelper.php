@@ -56,9 +56,9 @@ class MetaHelper
      *
      * @return Mixed The tpl meta content.
      */
-    public function generateMetas($action, $content, $page)
+    public function generateMetas($action, $content, $page, $exception)
     {
-        $data   = $this->generateData($content, $action, $page);
+        $data   = $this->generateData($content, $action, $page, $exception);
         $result = $this->render($content, $data);
         return $result;
     }
@@ -87,7 +87,7 @@ class MetaHelper
      *
      * @return Mixed The extracted data.
      */
-    public function generateData($content, $action, $page)
+    public function generateData($content, $action, $page, $exception)
     {
         $data = [];
 
@@ -103,6 +103,8 @@ class MetaHelper
             $this->authorHelper->getAuthorBioBody($content) ??
             $this->authorHelper->getAuthorName($content) ??
             '';
+        // Code wit hsome weird errors
+        // $data['exception_code']       = !empty($exception) && $exception->getcode() ? '' : $exception->getcode();
 
         $data = array_filter($data, function ($element) {
             return !empty($element);
