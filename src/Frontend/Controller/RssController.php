@@ -11,6 +11,43 @@ use Symfony\Component\HttpFoundation\Request;
 class RssController extends FrontendController
 {
     /**
+     * Returns a list of allowed content types.
+     *
+     * @return array The list of content types.
+     */
+    protected function checkExtensions()
+    {
+        $cs = $this->container->get('core.security');
+
+        $contentTypes = [];
+        if ($cs->hasExtension('es.openhost.module.companies')) {
+            $contentTypes [] = ['slug' => 'company', 'name' => 'Companies'];
+        }
+        if ($cs->hasExtension('ARTICLE_MANAGER')) {
+            $contentTypes [] = ['slug' => 'article', 'name' => 'Articles'];
+        }
+        if ($cs->hasExtension('OPINION_MANAGER')) {
+            $contentTypes [] = ['slug' => 'opinion', 'name' => 'Opinions'];
+        }
+        if ($cs->hasExtension('VIDEO_MANAGER')) {
+            $contentTypes [] = ['slug' => 'video','name' => 'Videos'];
+        }
+        if ($cs->hasExtension('POLL_MANAGER')) {
+            $contentTypes [] = ['slug' => 'poll','name' => 'Polls'];
+        }
+        if ($cs->hasExtension('ALBUM_MANAGER')) {
+            $contentTypes [] = ['slug' => 'album', 'name' => 'Albums'];
+        }
+        if ($cs->hasExtension('es.openhost.module.obituaries')) {
+            $contentTypes [] = ['slug' => 'obituary', 'name' => 'Obituaries'];
+        }
+        if ($cs->hasExtension('es.openhost.module.events')) {
+            $contentTypes [] = ['slug' => 'event', 'name' => 'Events'];
+        }
+        return $contentTypes;
+    }
+
+    /**
      * Shows a page that shows a list of available RSS sources.
      *
      * @param Request $request The request object.
@@ -20,20 +57,60 @@ class RssController extends FrontendController
     public function indexAction()
     {
         $this->view->setConfig('rss');
-        $cacheID = $this->view->getCacheId('rss', 'index');
+        $cacheID             = $this->view->getCacheId('rss', 'index');
+        $allowedModules      = $this->checkExtensions();
+        $allowedcontentTypes = array_map(function ($element) {
+            return $element['slug'];
+        }, $allowedModules);
 
+        $data = [];
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
         ) {
-            // Get categories with enabled = 1 and rss = 1
-            $categories = $this->get('api.service.category')
-                ->getList('enabled = 1 and rss = 1');
+            $sql = sprintf(
+                'select distinct category_id, content_type_name from contents '
+                . 'inner join content_category on contents.pk_content = content_category.content_id '
+                . 'inner join category on content_category.category_id = category.id '
+                . 'where category.rss = 1 and category.enabled = 1 '
+                . 'and contents.content_type_name in ("%s") '
+                . 'and content_status = 1 and in_litter = 0 '
+                . 'and (starttime is null or starttime < "%s") '
+                . 'and (endtime is null or endtime > "%s");',
+                implode('","', $allowedcontentTypes),
+                gmdate('Y-m-d H:i:s'),
+                gmdate('Y-m-d H:i:s')
+            );
 
+            $response = $this->container->get('orm.manager')->getConnection('instance')
+                ->executeQuery($sql)
+                ->fetchAll();
+
+            foreach ($response as $element) {
+                $module = array_filter($allowedModules, function ($item) use ($element) {
+                    return $item['slug'] == $element['content_type_name'];
+                });
+
+                $key = array_pop($module)['name'];
+                if (!array_key_exists($key, $data)) {
+                    $data[$key] = [];
+                }
+                if (!array_key_exists('slug', $data[$key])) {
+                    $data[$key]['slug'] = $element['content_type_name'];
+                }
+                if (!array_key_exists('values', $data[$key])) {
+                    $data[$key]['values'] = [];
+                }
+                $data[$key]['values'] = array_merge(
+                    $data[$key]['values'],
+                    [$element['category_id']]
+                );
+            }
             $authors = $this->get('api.service.author')
                 ->getList('order by name asc');
 
             $this->view->assign([
-                'categoriesTree' => $categories['items'],
+                'categoriesTree' => $data,
+                'allowedModules' => $allowedModules,
                 'opinionAuthors' => $authors['items'],
             ]);
         }
@@ -41,7 +118,7 @@ class RssController extends FrontendController
         return $this->render('rss/index.tpl', [
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
-            'x-tags'      => 'rss,index',
+            'x-tags'      => 'rss-index',
         ]);
     }
 
@@ -219,9 +296,9 @@ class RssController extends FrontendController
      */
     public function mostViewedRssAction()
     {
-        $id     = null;
-        $type   = 'article';
-        $xtags  = 'rss-' . $type;
+        $id    = null;
+        $type  = 'article';
+        $xtags = 'rss-' . $type;
 
         // Setup templating cache layer
         $this->view->setConfig('rss');
