@@ -20,29 +20,29 @@ class RssController extends FrontendController
         $cs = $this->container->get('core.security');
 
         $contentTypes = [];
-        if ($cs->hasExtension('es.openhost.module.companies')) {
-            $contentTypes [] = ['slug' => 'company', 'name' => 'Companies'];
-        }
         if ($cs->hasExtension('ARTICLE_MANAGER')) {
-            $contentTypes [] = ['slug' => 'article', 'name' => 'Articles'];
+            $contentTypes ['Articles'] = ['slug' => 'article', 'name' => 'Articles'];
         }
         if ($cs->hasExtension('OPINION_MANAGER')) {
-            $contentTypes [] = ['slug' => 'opinion', 'name' => 'Opinions'];
+            $contentTypes ['Opinions'] = ['slug' => 'opinion', 'name' => 'Opinions'];
         }
         if ($cs->hasExtension('VIDEO_MANAGER')) {
-            $contentTypes [] = ['slug' => 'video','name' => 'Videos'];
-        }
-        if ($cs->hasExtension('POLL_MANAGER')) {
-            $contentTypes [] = ['slug' => 'poll','name' => 'Polls'];
+            $contentTypes ['Videos'] = ['slug' => 'video','name' => 'Videos'];
         }
         if ($cs->hasExtension('ALBUM_MANAGER')) {
-            $contentTypes [] = ['slug' => 'album', 'name' => 'Albums'];
+            $contentTypes ['Albums'] = ['slug' => 'album', 'name' => 'Albums'];
         }
-        if ($cs->hasExtension('es.openhost.module.obituaries')) {
-            $contentTypes [] = ['slug' => 'obituary', 'name' => 'Obituaries'];
+        if ($cs->hasExtension('POLL_MANAGER')) {
+            $contentTypes ['Polls'] = ['slug' => 'poll','name' => 'Polls'];
         }
         if ($cs->hasExtension('es.openhost.module.events')) {
-            $contentTypes [] = ['slug' => 'event', 'name' => 'Events'];
+            $contentTypes ['Events'] = ['slug' => 'event', 'name' => 'Events'];
+        }
+        if ($cs->hasExtension('es.openhost.module.companies')) {
+            $contentTypes ['Companies'] = ['slug' => 'company', 'name' => 'Companies'];
+        }
+        if ($cs->hasExtension('es.openhost.module.obituaries')) {
+            $contentTypes ['Obituaries'] = ['slug' => 'obituary', 'name' => 'Obituaries'];
         }
         return $contentTypes;
     }
@@ -105,8 +105,14 @@ class RssController extends FrontendController
                     [$element['category_id']]
                 );
             }
+
             $authors = $this->get('api.service.author')
                 ->getList('order by name asc');
+
+            // Sort array by relevance based on allowedModules array
+            $data = array_filter(array_replace($allowedModules, $data), function ($item) {
+                return array_key_exists('values', $item);
+            });
 
             $this->view->assign([
                 'categoriesTree' => $data,
@@ -585,7 +591,13 @@ class RssController extends FrontendController
         }
 
         if ($contentType == 'event') {
-            $filters['join']  = [
+            $filters['contentmeta.meta_name']  = [
+                [ 'value' => 'event_end_date', 'operator' => '=' ]
+            ];
+            $filters['contentmeta.meta_value'] = [
+                [ 'value' => gmdate('Y-m-d'), 'operator' => '>=' ]
+            ];
+            $filters['join']                   = [
                 [
                     'table'               => 'contentmeta',
                     'type'                => 'inner',
@@ -596,12 +608,6 @@ class RssController extends FrontendController
                         ]
                     ]
                 ]
-            ];
-            $filters['contentmeta.meta_name'] = [
-                [ 'value' => 'event_end_date', 'operator' => '=' ]
-            ];
-            $filters['contentmeta.meta_value'] = [
-                [ 'value' => gmdate('Y-m-d'), 'operator' => '>=' ]
             ];
         }
 
