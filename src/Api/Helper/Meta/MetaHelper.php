@@ -103,8 +103,9 @@ class MetaHelper
             $this->authorHelper->getAuthorBioBody($content) ??
             $this->authorHelper->getAuthorName($content) ??
             '';
-        // Code wit hsome weird errors
-        // $data['exception_code']       = !empty($exception) && $exception->getcode() ? '' : $exception->getcode();
+        $data['exception_code']       = !empty($exception) && $exception->getcode() ? $exception->getcode() : '';
+        $data['content_starttime']    = $content instanceof \Common\Model\Entity\Content && $content->starttime ?
+            $content->starttime : '';
 
         $data = array_filter($data, function ($element) {
             return !empty($element);

@@ -21,11 +21,11 @@ function smarty_function_renderMetaTags($params, &$smarty)
     $action    = $smarty->getContainer()->get('core.globals')->getAction();
     $exception = '';
     // Code with some weird errors
-    // try {
-    //     $exception = getService('request_stack')->getCurrentRequest()->attributes->get('exception') ?? '';
-    // } catch (\Exception $e) {
-    //     $exception = '';
-    // }
+    try {
+        $exception = getService('request_stack')->getCurrentRequest()->attributes->get('exception') ?? '';
+    } catch (\Exception $e) {
+        $exception = '';
+    }
     try {
         $output = $smarty->getContainer()
             ->get(sprintf('core.helper.meta.%s', $extension))->generateMetas($action, $content, $page, $exception);
