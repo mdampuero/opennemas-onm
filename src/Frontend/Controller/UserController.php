@@ -274,6 +274,15 @@ class UserController extends Controller
             return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         }
 
+        $cs = $this->get('core.security');
+
+        if (!$cs->hasExtension('NEWSLETTER_MANAGER') || !$cs->hasExtension('CONTENT_SUBSCRIPTIONS')) {
+            $this->get('application.log')->error(
+                'subscriber.create.failure | Module not activated | Email:' . $data['email']
+            );
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
+        }
+
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->get('application.log')->error(
                 'subscriber.create.failure | Email not valid | Email:' . $data['email']
