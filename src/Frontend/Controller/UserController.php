@@ -276,7 +276,7 @@ class UserController extends Controller
 
         $cs = $this->get('core.security');
 
-        if (!$cs->hasExtension('NEWSLETTER_MANAGER') || !$cs->hasExtension('CONTENT_SUBSCRIPTIONS')) {
+        if (!$cs->hasExtension('NEWSLETTER_MANAGER') && !$cs->hasExtension('CONTENT_SUBSCRIPTIONS')) {
             $this->get('application.log')->error(
                 'subscriber.create.failure | Module not activated | Email:' . $data['email']
             );
