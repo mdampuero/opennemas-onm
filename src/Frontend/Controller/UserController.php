@@ -15,6 +15,7 @@ use Api\Exception\GetItemException;
 use Api\Exception\UpdateItemException;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -219,6 +220,12 @@ class UserController extends Controller
      */
     public function registerAction()
     {
+        $cs = $this->get('core.security');
+
+        if (!$cs->hasExtension('NEWSLETTER_MANAGER') && !$cs->hasExtension('CONTENT_SUBSCRIPTIONS')) {
+            throw new ResourceNotFoundException();
+        }
+
         $countries = array_merge(
             [ '' => _('Select a country') . '...' ],
             $this->get('core.geo')->getCountries()
