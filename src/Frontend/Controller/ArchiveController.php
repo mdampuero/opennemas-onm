@@ -38,6 +38,11 @@ class ArchiveController extends Controller
         $itemsPerPage   = 20;
         $categoryHelper = $this->container->get('core.helper.category');
 
+        // Invalid page provided as parameter
+        if ($page <= 0 || $page > $this->getParameter('core.max_page')) {
+            throw new ResourceNotFoundException();
+        }
+
         if (!empty($categorySlug)) {
             try {
                 $category = $this->get('api.service.category')
