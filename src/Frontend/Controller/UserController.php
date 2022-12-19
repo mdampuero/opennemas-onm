@@ -15,6 +15,7 @@ use Api\Exception\GetItemException;
 use Api\Exception\UpdateItemException;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -219,6 +220,12 @@ class UserController extends Controller
      */
     public function registerAction()
     {
+        $cs = $this->get('core.security');
+
+        if (!$cs->hasExtension('NEWSLETTER_MANAGER') && !$cs->hasExtension('CONTENT_SUBSCRIPTIONS')) {
+            throw new ResourceNotFoundException();
+        }
+
         $countries = array_merge(
             [ '' => _('Select a country') . '...' ],
             $this->get('core.geo')->getCountries()
@@ -270,6 +277,15 @@ class UserController extends Controller
         if (!empty($securityInput)) {
             $this->get('application.log')->error(
                 'subscriber.create.failure | Bot Detected | Email:' . $data['email']
+            );
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
+        }
+
+        $cs = $this->get('core.security');
+
+        if (!$cs->hasExtension('NEWSLETTER_MANAGER') && !$cs->hasExtension('CONTENT_SUBSCRIPTIONS')) {
+            $this->get('application.log')->error(
+                'subscriber.create.failure | Module not activated | Email:' . $data['email']
             );
             return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         }
