@@ -154,5 +154,7 @@ class CategorySubscriber implements EventSubscriberInterface
 
         $cache->remove($cache->getSetMembers('Category_Widget_keys'));
         $cache->remove('Category_Widget_keys');
+
+        $this->helper->removeVarnishRssCache();
     }
 }

@@ -44,4 +44,21 @@ class CategoryCacheHelper extends CacheHelper
 
         return $this;
     }
+
+    /**
+     * Removes caches for a category.
+     *
+     * @return CacheHelper The current helper for method chaining.
+     */
+    public function removeVarnishRssCache() : CacheHelper
+    {
+        $keys = ['rss-index'];
+        foreach ($keys as $key) {
+            $this->queue->push(new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ instance-%s.*%s', $this->instance->internal_name, $key)
+            ]));
+        }
+
+        return $this;
+    }
 }
