@@ -107,6 +107,28 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
+     * Get x-cache-for header.
+     *
+     * @return Mixed The x-cache-for header.
+     */
+    public function getXCacheFor($ads)
+    {
+        $timezone       = $this->container->get('core.locale')->getTimeZone();
+        $now            = new \DateTime(null, $timezone);
+        $expirationDate = null;
+
+        foreach ($ads as $ad) {
+            $starttime = !$ad->starttime instanceof \DateTime ?
+                new \DateTime($ad->starttime, $timezone) :
+                $ad->starttime;
+            if ($starttime > $now && (!$expirationDate || $starttime < $expirationDate)) {
+                $expirationDate = $starttime;
+            }
+        }
+        return $expirationDate ? $expirationDate->getTimeStamp() - time() . 's' : '';
+    }
+
+    /**
      * Get available advertisements.
      *
      * @return array The available advertisements.
@@ -119,6 +141,22 @@ class AdvertisementRenderer extends Renderer
             $this->advertisements,
             function ($advertisement) use ($contentHelper) {
                 return $contentHelper->isInTime($advertisement);
+            }
+        );
+    }
+
+    /**
+     * Get postponed advertisements.
+     *
+     * @return array The available advertisements.
+     */
+    public function getPostponedAdvertisements()
+    {
+        $contentHelper = $this->container->get('core.helper.content');
+        return array_filter(
+            $this->advertisements,
+            function ($advertisement) use ($contentHelper) {
+                return $contentHelper->isPostponed($advertisement);
             }
         );
     }
@@ -278,7 +316,6 @@ class AdvertisementRenderer extends Renderer
             $method   = 'render' . $type . 'Headers';
             $headers .= $this->{$method}($advertisements, $params);
         }
-
         return $headers;
     }
 
