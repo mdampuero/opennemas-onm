@@ -13,6 +13,7 @@ use Api\Exception\CreateItemException;
 use Api\Exception\FileAlreadyExistsException;
 use Api\Exception\UpdateItemException;
 use Api\Exception\DeleteItemException;
+use Api\Exception\DeleteListException;
 
 class AttachmentService extends ContentService
 {
@@ -82,6 +83,52 @@ class AttachmentService extends ContentService
         } catch (\Exception $e) {
             throw new UpdateItemException($e->getMessage());
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteList($ids)
+    {
+        if (!is_array($ids)) {
+            throw new DeleteListException('Invalid ids', 400);
+        }
+
+        try {
+            $response = $this->getListByIds($ids);
+        } catch (\Exception $e) {
+            throw new DeleteListException($e->getMessage(), $e->getCode());
+        }
+
+        $items   = [];
+        $deleted = array_map(function ($a) {
+                return $a->pk_content;
+        }, $response['items']);
+
+        $related = $this->getRelatedContents(implode(',', $deleted));
+
+        $fh = $this->container->get('core.helper.attachment');
+
+        foreach ($response['items'] as $item) {
+            try {
+                $this->em->remove($item, $item->getOrigin());
+                if (!empty($item->path)) {
+                    $fh->remove($item->path);
+                }
+                $items[] = $item;
+            } catch (\Exception $e) {
+                throw new DeleteListException($e->getMessage(), $e->getCode());
+            }
+        }
+
+        $this->dispatcher->dispatch($this->getEventName('deleteList'), [
+            'action'  => __METHOD__,
+            'ids'     => $deleted,
+            'item'    => $items,
+            'related' => $related
+        ]);
+
+        return count($deleted);
     }
 
     /**

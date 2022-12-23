@@ -84,7 +84,7 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->service = $this->getMockBuilder('Api\Service\V1\AttachmentService')
             ->setConstructorArgs([ $this->container, 'Common\Model\Entity\Content' ])
-            ->setMethods([ 'getItem', 'assignUser', 'getListBySql' ])
+            ->setMethods([ 'getItem', 'assignUser', 'getListBySql', 'getListByIds', 'getRelatedContents' ])
             ->getMock();
     }
 
@@ -382,5 +382,71 @@ class AttachmentServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn(new DeleteItemException());
 
         $this->service->deleteItem(1);
+    }
+    public function testAttDeleteList()
+    {
+        $itemA = new Content([ 'pk_content' => 1, 'name' => 'wubble', 'path' => '/asdas']);
+        $itemB = new Content([ 'pk_content' => 2, 'name' => 'xyzzy' ]);
+
+        $this->service->expects($this->once())->method('getListByIds')
+            ->willReturn(['items' => [ $itemA, $itemB ]]);
+        $this->service->expects($this->once())->method('getRelatedContents')
+            ->willReturn([]);
+
+        $this->em->expects($this->exactly(2))->method('remove');
+
+        $this->dispatcher->expects($this->at(0))->method('dispatch')
+            ->with('content.deleteList', [
+                'action'  => 'Api\Service\V1\AttachmentService::deleteList',
+                'ids'     => [ 1, 2 ],
+                'item'    => [ $itemA, $itemB ],
+                'related' => []
+            ]);
+
+        $this->service->deleteList([ 1, 2 ]);
+    }
+
+    /**
+     * Tests deleteList when invalid list of ids provided.
+     *
+     * @expectedException \Api\Exception\DeleteListException
+     */
+    public function testDeleteListWhenInvalidIds()
+    {
+        $this->service->deleteList('xyzzy');
+    }
+
+    /**
+     * Tests deleteList when one error happens while removing.
+     *
+     * @expectedException \Api\Exception\DeleteListException
+     */
+    public function testDeleteListWhenOneErrorWhileRemoving()
+    {
+        $itemA = new Content([ 'name' => 'wubble']);
+        $itemB = new Content([ 'name' => 'xyzzy' ]);
+
+        $this->service->expects($this->once())->method('getListByIds')
+            ->willReturn(['items' => [ $itemA, $itemB ]]);
+        $this->service->expects($this->once())->method('getRelatedContents')
+            ->willReturn([]);
+
+        $this->em->expects($this->once())->method('remove')
+            ->will($this->throwException(new \Exception()));
+
+        $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
+    }
+
+    /**
+     * Tests deleteList when an error happens while searching.
+     *
+     * @expectedException \Api\Exception\DeleteListException
+     */
+    public function testDeleteListWhenErrorWhileSearching()
+    {
+        $this->service->expects($this->once())->method('getListByIds')
+            ->will($this->throwException(new \Exception()));
+
+        $this->service->deleteList([ 1, 2 ]);
     }
 }
