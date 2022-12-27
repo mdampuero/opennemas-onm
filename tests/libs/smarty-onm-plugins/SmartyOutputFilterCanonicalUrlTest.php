@@ -11,6 +11,7 @@ namespace Tests\Libs\Smarty;
 
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Common\Model\Entity\Content;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for SmartyUrl class.
@@ -24,6 +25,12 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
     {
         include_once './libs/smarty-onm-plugins/outputfilter.canonical_url.php';
 
+        $this->instance = new Instance([
+            'no_redirect_domain' => '',
+            'domains'           => [ 'onm.com', 'opennemas.com', 'example.org' ],
+            'main_domain'       => 2
+        ]);
+
         $this->container = $this->getMockBuilder('Container')
             ->setMethods([ 'get' ])
             ->getMock();
@@ -33,7 +40,7 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->request = $this->getMockBuilder('Request')
-            ->setMethods([ 'getRequestUri', 'getUri' ])
+            ->setMethods([ 'getHost', 'getRequestUri', 'getUri' ])
             ->getMock();
 
         $this->rs = $this->getMockBuilder('RequestStack')
@@ -76,6 +83,9 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.url_generator':
                 return $this->helper;
+
+            case 'core.instance':
+                return $this->instance;
         }
 
         return null;
@@ -119,7 +129,6 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
         ));
     }
 
-
     /**
      * Tests smarty_outputfilter_canonical_url when the canonical URL is already
      * generated and assigned to Smarty.
@@ -139,7 +148,7 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->at(3))->method('getValue')
             ->with('o_canonical')->willReturn('http://grault.corge');
 
-        $this->smarty->expects($this->at(4))->method('getValue')
+        $this->smarty->expects($this->at(5))->method('getValue')
             ->with('o_content')->willReturn(null);
 
         $this->assertContains(
@@ -175,7 +184,7 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
             ->with('o_content')->willReturn(null);
 
         $this->assertContains(
-            '"http://console/thud/norf"',
+            'http://console/thud/norf',
             smarty_outputfilter_canonical_url(
                 $output,
                 $this->smarty
@@ -208,11 +217,48 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->at(2))->method('hasValue')
             ->with('o_canonical')->willReturn(false);
 
-        $this->smarty->expects($this->at(3))->method('getValue')
+        $this->smarty->expects($this->at(4))->method('getValue')
             ->with('o_content')->willReturn($content);
 
         $this->assertContains(
-            '"https://opennemas.com"',
+            'https://opennemas.com',
+            smarty_outputfilter_canonical_url(
+                $output,
+                $this->smarty
+            )
+        );
+    }
+
+    /**
+     * Tests smarty_outputfilter_canonical_url when instance has no
+     * redirect domain allowed
+     */
+    public function testCanonicalUrlWhenInstanceNoRedirectDomain()
+    {
+        $output = '<html><head></head><body></body></html>';
+
+        $this->instance->no_redirect_domain = 1;
+
+        $this->request->expects($this->once())->method('getRequestUri')
+            ->willReturn('/thud/norf');
+
+        $this->rs->expects($this->any())->method('getCurrentRequest')
+            ->willReturn($this->request);
+
+        $this->request->expects($this->any())->method('getUri')
+            ->willReturn('https://console/thud/norf?page=1');
+
+        $this->smarty->expects($this->at(2))->method('hasValue')
+            ->with('o_canonical')->willReturn(false);
+
+        $this->request->expects($this->once())->method('getHost')
+            ->willReturn('console');
+
+        $this->smarty->expects($this->at(4))->method('getValue')
+            ->with('o_content')->willReturn(null);
+
+        $this->assertContains(
+            'https://opennemas.com',
             smarty_outputfilter_canonical_url(
                 $output,
                 $this->smarty

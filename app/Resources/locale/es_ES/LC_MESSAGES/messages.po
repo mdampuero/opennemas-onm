@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-14 08:54+0000\n"
-"PO-Revision-Date: 2022-09-14 10:58+0200\n"
+"POT-Creation-Date: 2022-11-24 09:52+0000\n"
+"PO-Revision-Date: 2022-11-24 10:53+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -791,111 +791,6 @@ msgstr "Tu comentario fue aceptado y ahora deberá ser moderado."
 msgid "Your comment was accepted."
 msgstr "Tu comentario fue aceptado."
 
-msgid "Aerospace"
-msgstr "Aeroespacial"
-
-msgid "Agriculture"
-msgstr "Agricultura"
-
-msgid "Automotive"
-msgstr "Automoción"
-
-msgid "Breeding"
-msgstr "Ganadería"
-
-msgid "Comerce"
-msgstr "Comercio"
-
-msgid "Construction"
-msgstr "Construcción"
-
-msgid "Advertising and marketing"
-msgstr "Publicidad y Marketing"
-
-msgid "Culture"
-msgstr "Cultura"
-
-msgid "Education"
-msgstr "Educación"
-
-msgid "Electronic"
-msgstr "Electrónica"
-
-msgid "Energy"
-msgstr "Energía"
-
-msgid "Entertainment"
-msgstr "Entretenimiento"
-
-msgid "Finance"
-msgstr "Financiero"
-
-msgid "Maritime"
-msgstr "Marítimo"
-
-msgid "Food"
-msgstr "Alimentación"
-
-msgid "Healthcare"
-msgstr "Salud"
-
-msgid "Information technology"
-msgstr "Tecnologías de la información"
-
-msgid "Mining"
-msgstr "Minería"
-
-msgid "Fuels"
-msgstr "Combustibles"
-
-msgid "Pharmaceutical"
-msgstr "Farmacéutico"
-
-msgid "Real estate"
-msgstr "Inmobiliario"
-
-msgid "Telecommunications"
-msgstr "Telecomunicaciones"
-
-msgid "Tobacco"
-msgstr "Tabaco"
-
-msgid "Textile"
-msgstr "Textil"
-
-msgid "Transport"
-msgstr "Transporte"
-
-msgid "Industry"
-msgstr "Industria"
-
-msgid "Beauty"
-msgstr "Belleza"
-
-msgid "Animals"
-msgstr "Animales"
-
-msgid "Cleaning"
-msgstr "Limpieza"
-
-msgid "Sport"
-msgstr "Deporte"
-
-msgid "Hostelry"
-msgstr "Hostelería"
-
-msgid "Services"
-msgstr "Servicios"
-
-msgid "Metal"
-msgstr "Metal"
-
-msgid "Architecture"
-msgstr "Arquitectura"
-
-msgid "Other"
-msgstr "Otros"
-
 msgid "Email is required but it will not be published"
 msgstr "El email es obligatorio aunque no se publicará"
 
@@ -1003,6 +898,9 @@ msgstr ""
 
 msgid "Password recovery email was sent."
 msgstr "El correo de recuperación de contraseña fue enviado."
+
+msgid "Please provide a valid email address."
+msgstr "Por favor, escribe una dirección de correo electrónico válida"
 
 #, php-format
 msgid ""
@@ -1915,6 +1813,9 @@ msgstr "Ocultar etiquetas"
 msgid "Prevent search engine indexation"
 msgstr "Evitar el indexado de motores de búsqueda"
 
+msgid "Configuration"
+msgstr "Configuración"
+
 msgid "Cannot use a language code as subdirectory"
 msgstr "No se puede usar un código de idioma como subdirectorio"
 
@@ -2390,9 +2291,6 @@ msgstr "La clave se aplicará en el espacio de nombres actual"
 
 msgid "Delete compiles"
 msgstr "Eliminar compilados"
-
-msgid "Configuration"
-msgstr "Configuración"
 
 msgid "Maximum number of tags per content"
 msgstr "Número máximo de etiquetas por contenido"
@@ -3963,6 +3861,9 @@ msgstr ""
 
 msgid "Packs"
 msgstr "Packs"
+
+msgid "Services"
+msgstr "Servicios"
 
 msgid "Partners"
 msgstr "Socios"
@@ -5823,6 +5724,57 @@ msgstr "Sección"
 msgid "Unfavorite"
 msgstr "No Favorito"
 
+msgid "Search Fields"
+msgstr "Campos de búsqueda"
+
+msgid "Add fields in order to filter on company list page"
+msgstr "Añade campos para filtrar en la página de listado de empresas"
+
+msgid "Add field"
+msgstr "Añadir campo"
+
+msgid "Field name"
+msgstr "Nombre del campo"
+
+msgid "Name displayed in form"
+msgstr "Nombre mostrado en el formulario"
+
+msgid "Field values"
+msgstr "Valores del campo"
+
+msgid "Words suggested by the form input"
+msgstr "Palabras sugeridas por el campo en el formulario"
+
+msgid "Add a value..."
+msgstr "Añade un valor"
+
+msgid "Remove field"
+msgstr "Eliminar campo"
+
+msgid "Company info"
+msgstr "Información de la empresa"
+
+msgid "There are some required fields inside"
+msgstr "Hay algunos campos requeridos en el interior"
+
+msgid "CIF"
+msgstr "CIF"
+
+msgid "Province"
+msgstr "Provincia"
+
+msgid "Locality"
+msgstr "Localidad"
+
+msgid "Select a locality"
+msgstr "Selecciona una localidad"
+
+msgid "Company data"
+msgstr "Datos de la empresa"
+
+msgid "Social network"
+msgstr "Redes sociales"
+
 msgid "Linkedin"
 msgstr "LinkedIn"
 
@@ -5832,8 +5784,17 @@ msgstr "YouTube"
 msgid "TikTok"
 msgstr "TikTok"
 
+msgid "Add an element..."
+msgstr "Añade un elemento"
+
+msgid "Company Name"
+msgstr "Nombre de la empresa"
+
 msgid "Products"
 msgstr "Productos"
+
+msgid "Config company module"
+msgstr "Configurar módulo de empresas"
 
 msgid "New company"
 msgstr "Nueva empresa"
@@ -7003,6 +6964,9 @@ msgstr "Sin dominio principal"
 msgid "Instance domains cannot be empty."
 msgstr "Los dominios de la instancia no pueden estar vacíos."
 
+msgid "Do not redirect to main domain"
+msgstr "No redireccionar al dominio principal"
+
 msgid "Domain expire date:"
 msgstr "Tiempo de expiración de dominio:"
 
@@ -7023,6 +6987,9 @@ msgstr "No hay compras por ahora"
 
 msgid "View purchase"
 msgstr "Ver compra"
+
+msgid "Other"
+msgstr "Otros"
 
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumérico, sin espacios"
@@ -7343,6 +7310,111 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
+
+#~ msgid "Config"
+#~ msgstr "Configurar"
+
+#~ msgid "[% element.key.name %]"
+#~ msgstr "[% element.key.name %]"
+
+#~ msgid "Aerospace"
+#~ msgstr "Aeroespacial"
+
+#~ msgid "Agriculture"
+#~ msgstr "Agricultura"
+
+#~ msgid "Automotive"
+#~ msgstr "Automoción"
+
+#~ msgid "Breeding"
+#~ msgstr "Ganadería"
+
+#~ msgid "Comerce"
+#~ msgstr "Comercio"
+
+#~ msgid "Construction"
+#~ msgstr "Construcción"
+
+#~ msgid "Advertising and marketing"
+#~ msgstr "Publicidad y Marketing"
+
+#~ msgid "Culture"
+#~ msgstr "Cultura"
+
+#~ msgid "Education"
+#~ msgstr "Educación"
+
+#~ msgid "Electronic"
+#~ msgstr "Electrónica"
+
+#~ msgid "Energy"
+#~ msgstr "Energía"
+
+#~ msgid "Entertainment"
+#~ msgstr "Entretenimiento"
+
+#~ msgid "Finance"
+#~ msgstr "Financiero"
+
+#~ msgid "Maritime"
+#~ msgstr "Marítimo"
+
+#~ msgid "Food"
+#~ msgstr "Alimentación"
+
+#~ msgid "Healthcare"
+#~ msgstr "Salud"
+
+#~ msgid "Information technology"
+#~ msgstr "Tecnologías de la información"
+
+#~ msgid "Mining"
+#~ msgstr "Minería"
+
+#~ msgid "Fuels"
+#~ msgstr "Combustibles"
+
+#~ msgid "Pharmaceutical"
+#~ msgstr "Farmacéutico"
+
+#~ msgid "Real estate"
+#~ msgstr "Inmobiliario"
+
+#~ msgid "Telecommunications"
+#~ msgstr "Telecomunicaciones"
+
+#~ msgid "Tobacco"
+#~ msgstr "Tabaco"
+
+#~ msgid "Textile"
+#~ msgstr "Textil"
+
+#~ msgid "Transport"
+#~ msgstr "Transporte"
+
+#~ msgid "Industry"
+#~ msgstr "Industria"
+
+#~ msgid "Beauty"
+#~ msgstr "Belleza"
+
+#~ msgid "Animals"
+#~ msgstr "Animales"
+
+#~ msgid "Cleaning"
+#~ msgstr "Limpieza"
+
+#~ msgid "Sport"
+#~ msgstr "Deporte"
+
+#~ msgid "Hostelry"
+#~ msgstr "Hostelería"
+
+#~ msgid "Metal"
+#~ msgstr "Metal"
+
+#~ msgid "Architecture"
+#~ msgstr "Arquitectura"
 
 #~ msgid "Email not valid: %s"
 #~ msgstr "Dirección de correo no válida: %s"
@@ -7720,9 +7792,6 @@ msgstr "Nombre del grupo"
 
 #~ msgid "Pick a video"
 #~ msgstr "Escoja un vídeo"
-
-#~ msgid "File name"
-#~ msgstr "Nombre del archivo"
 
 #~ msgid "Creation date"
 #~ msgstr "Fecha de creación"

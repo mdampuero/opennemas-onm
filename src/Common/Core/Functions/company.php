@@ -98,27 +98,99 @@ function has_address($item) : bool
 }
 
 /**
- * Returns the sector of the company.
+ * Returns the cif of the company.
  *
- * @param Content $item The company to get the sector from.
+ * @param Content $item The company to get the cif from.
  *
- * @return string The sector of the company.
+ * @return string The cif of the company.
  */
-function get_sector($item) : ?string
+function get_cif($item) : ?string
 {
-    return getService('core.helper.company')->getSector($item);
+    return getService('core.helper.company')->getCIF($item);
 }
 
 /**
- * Returns true if the company has a sector.
+ * Returns true if the company has an cif.
  *
- * @param Content $item The company to get the sector from.
+ * @param Content $item The company to get the cif from.
  *
- * @return bool True if the company has a sector, false otherwise.
+ * @return bool True if the company has an cif, false otherwise.
  */
-function has_sector($item) : bool
+function has_cif($item) : bool
 {
-    return getService('core.helper.company')->hasSector($item);
+    return getService('core.helper.company')->hasCIF($item);
+}
+
+/**
+ * Returns the postal code of the company.
+ *
+ * @param Content $item The company to get the postal code from.
+ *
+ * @return string The postal code of the company.
+ */
+function get_postal_code($item) : ?string
+{
+    return getService('core.helper.company')->getPostalCode($item);
+}
+
+/**
+ * Returns true if the company has a postal code.
+ *
+ * @param Content $item The company to get the postal code from.
+ *
+ * @return bool True if the company has an postal code, false otherwise.
+ */
+function has_postal_code($item) : bool
+{
+    return getService('core.helper.company')->hasPostalCode($item);
+}
+
+/**
+ * Returns the locality of the company.
+ *
+ * @param Content $item The company to get the locality from.
+ *
+ * @return string The locality of the company.
+ */
+function get_locality($item) : ?string
+{
+    return getService('core.helper.company')->getLocality($item);
+}
+
+/**
+ * Returns true if the company has a locality.
+ *
+ * @param Content $item The company to get the locality from.
+ *
+ * @return bool True if the company has an locality, false otherwise.
+ */
+function has_locality($item) : bool
+{
+    return getService('core.helper.company')->hasLocality($item);
+}
+
+/**
+ * Returns the province of the company.
+ *
+ * @param Content $item The company to get the province from.
+ *
+ * @return string The province of the company.
+ */
+function get_province($item) : ?string
+{
+    return getService('core.helper.company')->getProvince($item);
+}
+
+/**
+ * Returns true if the company has a province.
+ *
+ * @param Content $item The company to get the province from.
+ *
+ * @return bool True if the company has an province, false otherwise.
+ */
+function has_province($item) : bool
+{
+    return getService('core.helper.company')->hasProvince($item);
 }
 
 /**
@@ -358,4 +430,28 @@ function get_timetable($item) : array
 function has_timetable($item) : bool
 {
     return getService('core.helper.company')->hasTimetable($item);
+}
+
+/**
+ * Returns true if the company has search fields.
+ *
+ * @param Content $item The company to check if has search fields or not.
+ *
+ * @return bool True if the company has search fields, false otherwise.
+ */
+function has_search_fields($item) : bool
+{
+    return getService('core.helper.company')->hasSearchFields($item);
+}
+
+/**
+ * Returns the search fields of the company.
+ *
+ * @param Content $item The company to get the search fields from.
+ *
+ * @return array The array with the search fields.
+ */
+function get_search_fields($item) : ?Array
+{
+    return getService('core.helper.company')->getSearchFields($item);
 }

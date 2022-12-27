@@ -219,8 +219,6 @@ class FrontpagesController extends Controller
             . ', frontpage version ' . $version->id
             . ' and Ids ' . json_encode($contentsPositions));
 
-        $lastSaved = $fvs->getLastSaved($version->category_id, $version->id, true);
-
         $toSave = array_filter($contents, function ($content) use ($widgetTypes) {
             return in_array($content['content_type'], $widgetTypes);
         });
@@ -246,7 +244,7 @@ class FrontpagesController extends Controller
         return new JsonResponse([
             'message'              => _('Content positions saved properly'),
             'versionId'            => $version->id,
-            'frontpage_last_saved' => $lastSaved
+            'frontpage_last_saved' => $fvs->getLastSaved($category, $version->id, true)
         ]);
     }
 

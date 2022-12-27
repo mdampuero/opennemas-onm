@@ -122,8 +122,8 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForWidgets', 20],
                 ['removeDynamicCssSettingForFrontpage', 20],
                 ['removeSmartyCacheForFrontpageOfCategory', 15],
-                ['removeVarnishCacheFrontpage', 10],
                 ['removeVarnishCacheFrontpageCSS', 10],
+                ['removeVarnishCacheFrontpage', 10],
             ],
             'frontpage.pick_layout' => [
                 ['removeObjectCacheFrontpageMap', 20],
@@ -303,6 +303,11 @@ class HooksSubscriber implements EventSubscriberInterface
         $category    = $event->getArgument('category');
         $frontpageId = $event->getArgument('frontpageId');
 
+        // Updates the cache for last_saved
+        $lastSavedCacheId = 'frontpage_last_saved_' . $category . '_' . $frontpageId;
+        $date             = new \Datetime("now");
+
+        $this->cache->save($lastSavedCacheId, $date->format(\DateTime::ISO8601));
         $this->cache->delete(
             empty($frontpageId) ?
                 'frontpage_elements_map_' . $category :
@@ -512,13 +517,13 @@ class HooksSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $category = $event->getArgument('category');
-
+        $category     = $event->getArgument('category');
         $instanceName = $this->container->get('core.instance')->internal_name;
 
+        $this->container->get('api.helper.cache.frontpage')->deleteItems($items, $category);
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page-%s$', $instanceName, $category)
+                sprintf('obj.http.x-tags ~ instance-%s.*header-date', $instanceName, $category)
             ])
         )->push(
             new ServiceTask('core.varnish', 'ban', [
@@ -526,11 +531,9 @@ class HooksSubscriber implements EventSubscriberInterface
             ])
         )->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*header-date', $instanceName, $category)
+                sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page-%s$', $instanceName, $category)
             ])
         );
-
-        $this->container->get('api.helper.cache.frontpage')->deleteItems($items, $category);
     }
 
     /**

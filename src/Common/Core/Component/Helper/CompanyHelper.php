@@ -48,6 +48,37 @@ class CompanyHelper
     }
 
     /**
+     * Returns spain provinces and localities in JSON format
+     *
+     * @codeCoverageIgnore
+     *
+     * @return Mixed Localities and Provinces of Spain.
+     */
+    public function getLocalitiesAndProvices()
+    {
+        $result = [
+            'localities' => file_get_contents(
+                $this->container->getParameter('core.paths.public') . '/assets/utilities/municipios.json'
+            ),
+            'provinces' => file_get_contents(
+                $this->container->getParameter('core.paths.public') . '/assets/utilities/provincias.json'
+            )
+        ];
+
+        return $result;
+    }
+
+    /**
+     * Returns sufix for company custom fields
+     *
+     * @return String Sufix for custom fields
+     */
+    public function getCompanyFieldsSufix()
+    {
+        return 'company_field_';
+    }
+
+    /**
      * Checks if the company has a logo.
      *
      * @param Content $item The company.
@@ -84,6 +115,102 @@ class CompanyHelper
     public function hasProducts($item) : bool
     {
         return !empty($this->getProducts($item));
+    }
+
+    /**
+     * Returns the postal code of the company.
+     *
+     * @param Content $item   The item to get the products from.
+     *
+     * @return mixed The postal code of the company.
+     */
+    public function getPostalCode($item)
+    {
+        return $item->postal_code;
+    }
+
+    /**
+     * Returns true if the company has postal code.
+     *
+     * @param mixed $item The item to check if has postal code or not.
+     *
+     * @return Boolean True if the content has postal code, false otherwise.
+     */
+    public function hasPostalCode($item) : bool
+    {
+        return !empty($this->getPostalCode($item));
+    }
+
+    /**
+     * Returns the CIF of the company.
+     *
+     * @param Content $item   The item to get the cif from.
+     *
+     * @return Mixed The cif
+     */
+    public function getCIF($item)
+    {
+        return $item->cif;
+    }
+
+    /**
+     * Returns true if the company has CIF.
+     *
+     * @param mixed $item The item to check if has cif or not.
+     *
+     * @return Boolean True if the content has cif, false otherwise.
+     */
+    public function hasCIF($item) : bool
+    {
+        return !empty($this->getCIF($item));
+    }
+
+    /**
+     * Returns the locality of the company.
+     *
+     * @param Content $item   The item to get the locality from.
+     *
+     * @return Mixed The locality.
+     */
+    public function getLocality($item)
+    {
+        return $item->locality;
+    }
+
+    /**
+     * Returns true if the company has locality.
+     *
+     * @param mixed $item The item to check if has locality or not.
+     *
+     * @return Boolean True if the content has locality, false otherwise.
+     */
+    public function hasLocality($item) : bool
+    {
+        return !empty($this->getLocality($item));
+    }
+
+    /**
+     * Returns the province of the company.
+     *
+     * @param Content $item   The item to get the products from.
+     *
+     * @return Mixed Theprovince.
+     */
+    public function getProvince($item)
+    {
+        return $item->province;
+    }
+
+    /**
+     * Returns true if the company has province.
+     *
+     * @param mixed $item The item to check if has province or not.
+     *
+     * @return boolean True if the content has province, false otherwise.
+     */
+    public function hasProvince($item) : bool
+    {
+        return !empty($this->getProvince($item));
     }
 
     /**
@@ -133,6 +260,62 @@ class CompanyHelper
     }
 
     /**
+     * Returns suggested fieldson company settings
+     *
+     * @return Mixed SuggetedFields on company settings
+     */
+    public function getSuggestedFields()
+    {
+        $fields = $this->container->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get(['company_custom_fields']);
+
+        return $fields['company_custom_fields'];
+    }
+
+    /**
+     * Returns Search fields for item
+     *
+     * @param Content $item The company to get search fields from.
+     *
+     * @return Array Array of search fields.
+     */
+    public function getSearchFields($item) : ?Array
+    {
+        $searchfields    = [];
+        $suggestedFields = $this->getSuggestedFields();
+        foreach ($suggestedFields as $field) {
+            $fieldname = $field['key']['value'];
+            if ($item->$fieldname && !empty($item->$fieldname)) {
+                $key    = $field['key']['name'];
+                $string = $item->$fieldname;
+                $values = array_filter($field['values'], function ($element) use ($string) {
+                    return strpos($string, '"' . $element['name'] . '"');
+                });
+
+                if (!empty($values)) {
+                    $searchfields = array_merge($searchfields, [
+                        $key => $values
+                    ]);
+                }
+            }
+        }
+        return $searchfields;
+    }
+
+    /**
+     * Returns true if the company has search fields.
+     *
+     * @param Content $item The company to get the search fields from.
+     *
+     * @return bool True if the company has search fields, false otherwise.
+     */
+    public function hasSearchFields($item) : bool
+    {
+        return !empty($this->getSearchFields($item));
+    }
+
+    /**
      * Returns true if the company has an address.
      *
      * @param Content $item The company to get the address from.
@@ -142,33 +325,6 @@ class CompanyHelper
     public function hasAddress($item) : bool
     {
         return !empty($this->getAddress($item));
-    }
-
-    /**
-     * Returns the sector of the company.
-     *
-     * @param Content $item The company to get the sector from.
-     *
-     * @return string The sector of the company.
-     */
-    public function getSector($item) : ?string
-    {
-        if (!$item->sector) {
-            return '';
-        }
-        return _(ucfirst(implode(' ', explode('_', $item->sector))));
-    }
-
-    /**
-     * Returns true if the company has a sector.
-     *
-     * @param Content $item The company to get the sector from.
-     *
-     * @return bool True if the company has a sector, false otherwise.
-     */
-    public function hasSector($item) : bool
-    {
-        return !empty($this->getSector($item));
     }
 
     /**

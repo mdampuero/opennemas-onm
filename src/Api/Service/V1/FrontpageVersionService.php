@@ -384,8 +384,6 @@ class FrontpageVersionService extends OrmService
             $fvc = new FrontpageVersion($frontpageVersion);
         }
 
-        $this->purgeCacheForCategoryIdAndVersionId($fvc->category_id, $fvc->id);
-
         return $fvc;
     }
 

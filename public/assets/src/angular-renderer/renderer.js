@@ -160,7 +160,7 @@
 
           var route  = 'frontend_' + item.content_type_name + '_show';
           var params = {
-            id:      item.pk_content,
+            id:      this.parseId(item.pk_content, 6),
             created: window.moment(item.created).format('YYYYMMDDHHmmss')
           };
 
@@ -242,6 +242,27 @@
 
             return html;
           });
+        };
+
+        /**
+         * @function parseId
+         * @memberOf Renderer
+         *
+         * @description
+         *   Parse id to fill with left 0
+         *
+         * @param {Mixed} id The item id.
+         * @param {Mixed} charsNumber Id lenght to fill.
+         *
+         * @return {String} The parsed id.
+         */
+        this.parseId = function(id, charsNumber) {
+          var sId = String(id);
+
+          while (sId.length < charsNumber) {
+            sId = '0' + sId;
+          }
+          return sId;
         };
 
         /**
