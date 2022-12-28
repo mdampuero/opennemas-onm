@@ -73,6 +73,13 @@
             </div>
             <div class="help m-t-5">{t}This feature displays advertisements inside iframes. It improves the user experience and has a better performance.{/t}</div>
           </div>
+          <div class="form-group">
+            <div class="checkbox">
+              <input{if $configs['ads_settings']['limit_ads_in_body'] == "1"} checked{/if} id="ads_settings_limit_ads_in_body" name="ads_settings_limit_ads_in_body" type="checkbox" value="0">
+              <label for="ads_settings_limit_ads_in_body" class="form-label">{t}Limit ads between paragraphs{/t}</label>
+              <div class="help m-t-5">{t}This settings limits ads between paragraphs to the total number of paragraphs.{/t}</div>
+            </div>
+          </div>
         {/acl}
       </uib-tab>
       <uib-tab heading="{t}External services{/t}">
