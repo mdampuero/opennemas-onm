@@ -86,6 +86,7 @@ class AuthorController extends Controller
                 'contents'   => $contents,
                 'author'     => $user,
                 'pagination' => $pagination,
+                'page'       => $page,
             ]);
         }
 
@@ -211,6 +212,7 @@ class AuthorController extends Controller
             $this->view->assign([
                 'authors_contents' => $items,
                 'pagination'       => $pagination,
+                'page'             => $page,
             ]);
         }
 
