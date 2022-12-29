@@ -161,7 +161,7 @@ class ExportContentCommand extends Command
             $criteria['pk_content'] = [[ 'value' => $from, 'operator' => '>=' ]];
         }
 
-        foreach ([ 'video', 'album', 'opinion', 'article', 'event', 'poll', 'letter' ] as $type) {
+        foreach ([ 'letter', 'event', 'poll', 'album', 'video', 'opinion', 'article' ] as $type) {
             if ($this->output->isVerbose()) {
                 $this->writeStep("Processing $type contents", $this->output->isVeryVerbose(), 2);
             }
