@@ -90,9 +90,11 @@ class MetaHelper
     public function generateData($content, $action, $page, $exception)
     {
         $data = [];
-
+        //On static page routes, $page is Content entity
+        if ($page && !$page instanceof \Common\Model\Entity\Content) {
+            $data['page'] = (int) $page > 1 ? $page : '';
+        }
         $data['action']               = $action ?? '';
-        $data['page']                 = is_int($page) && $page > 1 ? $page : '';
         $data['category_name']        = $this->categoryHelper->getCategoryName($content) ?? '';
         $data['category_description'] = $this->categoryHelper->getCategoryDescription($content) ??
             $this->categoryHelper->getCategoryName($content) ??
@@ -104,9 +106,34 @@ class MetaHelper
             $this->authorHelper->getAuthorName($content) ??
             '';
         $data['exception_code']       = !empty($exception) && $exception->getcode() ? $exception->getcode() : '';
-        $data['content_starttime']    = $content instanceof \Common\Model\Entity\Content && $content->starttime ?
-            $content->starttime : '';
 
+        if ($content && $content instanceof \Common\Model\Entity\Content) {
+            $title       = $content->seo_title ?? $content->title_int ?? $content->title ?? '';
+            $title       = empty($title) ? $this->siteTitle : trim(strip_tags($title));
+            $description = trim(
+                strip_tags(
+                    $content->seo_description ??
+                    $this->container->get('core.helper.content')->getSummary($content)
+                )
+            );
+
+            $data['content_starttime']   = $content->starttime ? $content->starttime : '';
+            $data['content_description'] = (strlen($description) > 160) ?
+                substr($description, 0, 157) . '...' : $description;
+            $data['content_title']       = (strlen($title) > 90) ? substr($title, 0, 87) . '...' : $title;
+            if ($content->tags && !empty($content->tags)) {
+                try {
+                    $tags = $this->container->get('api.service.tag')->getListByIds($content->tags)['items'];
+                    $tags = array_map(function ($tag) {
+                        return strip_tags($tag->name);
+                    }, $tags);
+
+                    $data['content_tags'] = implode(',', $tags);
+                } catch (GetListException $e) {
+                    unset($data['content_tags']);
+                }
+            }
+        }
         $data = array_filter($data, function ($element) {
             return !empty($element);
         });
