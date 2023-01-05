@@ -661,7 +661,7 @@ class ContentHelper
      *
      * @return bool
      */
-    public function isPostponed($item)
+    protected function isPostponed($item)
     {
         if (empty($item->starttime)) {
             return false;

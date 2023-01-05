@@ -74,7 +74,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
             ->setMethods([
                 'renderInlineHeaders', 'renderInlineInterstitial', 'getAdvertisements',
-                'getInlineFormats', 'getRequested', 'getPositions', 'getPostponedAdvertisements', 'getXCacheFor'
+                'getInlineFormats', 'getRequested', 'getPositions', 'getExpiringAdvertisements', 'getXCacheFor'
             ])
             ->getMock();
 
@@ -201,7 +201,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->renderer->expects($this->once())->method('getRequested')
             ->willReturn([$ad]);
 
-        $this->renderer->expects($this->any())->method('getPostponedAdvertisements')
+        $this->renderer->expects($this->any())->method('getExpiringAdvertisements')
             ->willReturn([]);
 
         $this->smarty->expects($this->at(5))->method('getValue')

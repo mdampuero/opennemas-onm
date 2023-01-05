@@ -239,7 +239,9 @@ class AdvertisementManager extends EntityManager
         }
 
         $advertisements = $this->findMulti($result);
-        return $advertisements;
+        return array_filter($advertisements, function ($a) {
+            return $a->content_status == 1 && $a->in_litter == 0;
+        });
     }
 
     /**
