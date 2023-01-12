@@ -9,13 +9,14 @@
  */
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
+    $request     = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
     $adsRenderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
     $isSafeFrame = $smarty->getContainer()->get('core.helper.advertisement')->isSafeFrameEnabled();
     $ads         = $isSafeFrame ? $adsRenderer->getAdvertisements() : $adsRenderer->getRequested();
     $app         = $smarty->getValue('app');
-
+    $expiringAds = $adsRenderer->getExpiringAdvertisements();
     if (!is_array($ads)
-        || empty($ads)
+        || (empty($ads) && empty($expiringAds))
         || preg_match('/newsletter/', $smarty->source->resource)
     ) {
         return $output;
@@ -42,6 +43,16 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'x-tags'             => $smarty->getValue('x-tags'),
         ];
 
+        if (!empty($expiringAds)) {
+            $headers         = $request->headers->all();
+            $currentLifeTime = $adsRenderer->getXCacheFor($expiringAds);
+            if (!array_key_exists('x-cache-for', $headers)) {
+                header('x-cache-for: ' . $currentLifeTime, true);
+            } elseif (array_key_exists('x-cache-for', $headers) &&
+            (substr($currentLifeTime, 0, -1) < substr($headers['x-cache-for'], 0, -1))) {
+                header('x-cache-for: ' . $currentLifeTime, true);
+            }
+        }
         $adsOutput    = $adsRenderer->renderInlineHeaders($params);
         $interstitial = $adsRenderer->renderInlineInterstitial($params);
         $devices      = $smarty->getContainer()->get('core.template.admin')

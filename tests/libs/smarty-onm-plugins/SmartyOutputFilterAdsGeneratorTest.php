@@ -47,6 +47,9 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'fetch' ])
             ->getMock();
 
+        $this->em->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
         $this->smarty = $this->getMockBuilder('Smarty')
             ->setMethods([
                 'getContainer', 'getValue', 'hasValue', '__get', '__set'
@@ -64,10 +67,14 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getContainer' ])
             ->getMock();
 
+        $this->request_stack = $this->getMockBuilder('request_stack')
+            ->setMethods([ 'getCurrentRequest' ])
+            ->getMock();
+
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
             ->setMethods([
                 'renderInlineHeaders', 'renderInlineInterstitial', 'getAdvertisements',
-                'getInlineFormats', 'getRequested', 'getPositions'
+                'getInlineFormats', 'getRequested', 'getPositions', 'getExpiringAdvertisements', 'getXCacheFor'
             ])
             ->getMock();
 
@@ -79,8 +86,15 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getUri' ])
             ->getMock();
 
-        $this->em->expects($this->any())->method('getDataSet')
-            ->with('Settings', 'instance')->willReturn($this->ds);
+        $this->request->headers = $this->getMockBuilder('Headers')
+            ->setMethods([ 'all' ])
+            ->getMock();
+
+        $this->request_stack->expects($this->any())->method('getCurrentRequest')
+            ->willReturn($this->request);
+
+        $this->smarty->expects($this->any())->method('getContainer')
+            ->willReturn($this->container);
 
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
@@ -150,6 +164,9 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
 
             case 'router':
                 return $this->router;
+
+            case 'request_stack':
+                return $this->request_stack;
         }
 
         return null;
@@ -184,11 +201,14 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->renderer->expects($this->once())->method('getRequested')
             ->willReturn([$ad]);
 
-        $this->smarty->expects($this->at(4))->method('getValue')
+        $this->renderer->expects($this->any())->method('getExpiringAdvertisements')
+            ->willReturn([]);
+
+        $this->smarty->expects($this->at(5))->method('getValue')
             ->with('ads_format')
             ->willReturn('amp');
 
-        $this->renderer->expects($this->once())->method('getInlineFormats')
+        $this->renderer->expects($this->any())->method('getInlineFormats')
             ->willReturn([ 'amp', 'fia', 'newsletter' ]);
 
         $this->assertEquals($output, smarty_outputfilter_ads_generator(
@@ -216,21 +236,21 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             'environment'        => 'dev'
         ];
 
-        $this->smarty->expects($this->at(2))->method('getValue')
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('app')
             ->willReturn($params);
 
         $content     = new \stdClass();
         $content->id = 123;
 
-        $this->smarty->expects($this->at(4))->method('getValue')
+        $this->smarty->expects($this->at(5))->method('getValue')
             ->with('ads_format')
             ->willReturn(null);
 
-        $this->renderer->expects($this->at(1))->method('getInlineFormats')
+        $this->renderer->expects($this->at(2))->method('getInlineFormats')
             ->willReturn([ 'amp', 'fia', 'newsletter' ]);
 
-        $this->smarty->expects($this->at(5))->method('getValue')
+        $this->smarty->expects($this->at(6))->method('getValue')
             ->with('content')
             ->willReturn($content);
 
@@ -238,13 +258,13 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with('ads_settings')
             ->willReturn([ 'lifetime_cookie' => 100 ]);
 
-        $this->renderer->expects($this->at(2))->method('renderInlineHeaders')
+        $this->renderer->expects($this->at(3))->method('renderInlineHeaders')
             ->willReturn('<script>AdsHeaders</script>');
 
-        $this->renderer->expects($this->at(3))->method('renderInlineInterstitial')
+        $this->renderer->expects($this->at(4))->method('renderInlineInterstitial')
             ->willReturn('<script>Intersticial</script>');
 
-        $this->renderer->expects($this->at(4))->method('getPositions')
+        $this->renderer->expects($this->at(5))->method('getPositions')
             ->willReturn([]);
 
         $this->router->expects($this->once())->method('generate')
@@ -298,7 +318,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             'environment'        => 'dev'
         ];
 
-        $this->smarty->expects($this->at(2))->method('getValue')
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('app')
             ->willReturn($params);
 
@@ -311,11 +331,11 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->renderer->expects($this->once())->method('getPositions')
             ->willReturn([]);
 
-        $this->smarty->expects($this->at(4))->method('getValue')
+        $this->smarty->expects($this->at(5))->method('getValue')
             ->with('ads_format')
             ->willReturn(null);
 
-        $this->smarty->expects($this->at(5))->method('getValue')
+        $this->smarty->expects($this->at(6))->method('getValue')
             ->with('content')
             ->willReturn($content);
 
@@ -369,24 +389,24 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             'environment'        => 'dev'
         ];
 
-        $this->smarty->expects($this->at(2))->method('getValue')
+        $this->smarty->expects($this->at(3))->method('getValue')
             ->with('app')
             ->willReturn($params);
 
         $content     = new \stdClass();
         $content->id = 123;
 
-        $this->smarty->expects($this->at(4))->method('getValue')
+        $this->smarty->expects($this->at(5))->method('getValue')
             ->with('ads_format')
             ->willReturn(null);
 
-        $this->renderer->expects($this->at(1))->method('getInlineFormats')
+        $this->renderer->expects($this->any())->method('getInlineFormats')
             ->willReturn([ 'amp', 'fia', 'newsletter' ]);
 
         $this->renderer->expects($this->once())->method('getPositions')
             ->willReturn([]);
 
-        $this->smarty->expects($this->at(5))->method('getValue')
+        $this->smarty->expects($this->at(6))->method('getValue')
             ->with('content')
             ->willReturn($content);
 

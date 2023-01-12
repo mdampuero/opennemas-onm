@@ -107,6 +107,34 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
+     * Get x-cache-for header.
+     *
+     * @return Mixed The x-cache-for header.
+     */
+    public function getXCacheFor($ads)
+    {
+        $timezone       = $this->container->get('core.locale')->getTimeZone();
+        $now            = new \DateTime(null, $timezone);
+        $expirationDate = null;
+
+        foreach ($ads as $ad) {
+            $starttime = !$ad->starttime instanceof \DateTime ?
+                new \DateTime($ad->starttime, $timezone) :
+                $ad->starttime;
+            $endtime   = !$ad->endtime instanceof \DateTime ?
+                new \DateTime($ad->endtime, $timezone) :
+                $ad->endtime;
+            if ($starttime > $now && (!$expirationDate || $starttime < $expirationDate)) {
+                $expirationDate = $starttime;
+            }
+            if ($endtime > $now && (!$expirationDate || $endtime < $expirationDate)) {
+                $expirationDate = $endtime;
+            }
+        }
+        return $expirationDate ? $expirationDate->getTimeStamp() - time() . 's' : '';
+    }
+
+    /**
      * Get available advertisements.
      *
      * @return array The available advertisements.
@@ -119,6 +147,29 @@ class AdvertisementRenderer extends Renderer
             $this->advertisements,
             function ($advertisement) use ($contentHelper) {
                 return $contentHelper->isInTime($advertisement);
+            }
+        );
+    }
+
+    /**
+     * Get expiring advertisements.
+     *
+     * @return array The available advertisements.
+     */
+    public function getExpiringAdvertisements()
+    {
+        $timezone      = $this->container->get('core.locale')->getTimeZone();
+        $contentHelper = $this->container->get('core.helper.content');
+        return array_filter(
+            $this->advertisements,
+            function ($advertisement) use ($contentHelper, $timezone) {
+                $schedulingState = $contentHelper->getSchedulingState($advertisement);
+                $now             = new \DateTime(null, $timezone);
+                $endtime         = !$advertisement->endtime instanceof \DateTime ?
+                    new \DateTime($advertisement->endtime, $timezone) :
+                    $advertisement->endtime;
+                return $schedulingState == \Content::POSTPONED ||
+                    ($schedulingState == \Content::IN_TIME && $endtime > $now);
             }
         );
     }
@@ -278,7 +329,6 @@ class AdvertisementRenderer extends Renderer
             $method   = 'render' . $type . 'Headers';
             $headers .= $this->{$method}($advertisements, $params);
         }
-
         return $headers;
     }
 
