@@ -115,14 +115,14 @@ class ContentHelper
     public function getCacheExpireDate()
     {
         $oqlStart = sprintf(
-            'content_status = 1 and in_litter != 1 and'
+            'content_status = 1 and in_litter != 1 and content_type_name != "advertisement" and'
             . ' (starttime !is null and starttime > "%s")'
             . ' order by starttime asc limit 1',
             date('Y-m-d H:i:s')
         );
 
         $oqlEnd = sprintf(
-            'content_status = 1 and in_litter != 1 and'
+            'content_status = 1 and in_litter != 1 and content_type_name != "advertisement" and'
             . ' (endtime !is null and endtime > "%s")'
             . ' order by endtime desc limit 1',
             date('Y-m-d H:i:s')

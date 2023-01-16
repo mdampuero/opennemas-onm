@@ -82,7 +82,6 @@ class HttpCacheHeadersListener
         $tags   = $this->getTags($response);
         $expire = $this->getExpire($response);
 
-
         if ($this->hasInstance()) {
             $response->headers->set('x-instance', $this->getInstance());
         }

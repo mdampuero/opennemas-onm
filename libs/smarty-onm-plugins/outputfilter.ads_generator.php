@@ -44,10 +44,19 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'x-tags'             => $smarty->getValue('x-tags'),
         ];
 
+
         if (!empty($expiringAds)) {
             $adsExpireTime = $adsRenderer->getXCacheFor($expiringAds);
             if ($smarty->hasValue('x-cache-for')) {
                 $tplExpireTime = $smarty->tpl_vars['x-cache-for']->value;
+                if (preg_match('/[0-9]+[smhd]/', $tplExpireTime)) {
+                    $timezone = $smarty->getContainer()->get('core.locale')->getTimeZone();
+                    $now      = new \DateTime(null, $timezone);
+
+                    $tplExpireTime = new \DateInterval('P' . strtoupper($tplExpireTime));
+                    $tplExpireTime = date_add($now, $tplExpireTime);
+                    $tplExpireTime = $tplExpireTime->format('Y-m-d H:i:s');
+                }
                 if (strtotime($tplExpireTime) > strtotime($adsExpireTime)) {
                     $smarty->setValue('x-cache-for', $adsExpireTime);
                 }
