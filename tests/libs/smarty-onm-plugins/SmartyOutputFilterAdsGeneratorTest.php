@@ -52,7 +52,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $this->smarty = $this->getMockBuilder('Smarty')
             ->setMethods([
-                'getContainer', 'getValue', 'hasValue', '__get', '__set'
+                'getContainer', 'getValue', 'hasValue', 'setValue', '__get', '__set'
             ])
             ->getMock();
 
@@ -417,6 +417,72 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
         $output = '<html><head></head><body></body></html>';
         $this->assertEquals($output, smarty_outputfilter_ads_generator(
             $output,
+            $this->smarty
+        ));
+    }
+
+     /**
+     * Test ads_generator x-cache-for control
+     */
+    public function testAdsGeneratorXCacheFor()
+    {
+        $ad            = new \Advertisement();
+        $ad->starttime = '2023-01-16 09:05:57';
+
+        $this->smarty->tpl_vars = [ 'x-cache-for' => new \stdClass() ];
+
+        $this->smarty->tpl_vars[ 'x-cache-for' ]->value = '100d';
+
+        $this->helper->expects($this->any())->method('isSafeFrameEnabled')
+            ->willReturn(false);
+
+        $this->renderer->expects($this->any())->method('getRequested')
+            ->willReturn([]);
+
+        $this->renderer->expects($this->any())->method('renderInlineHeaders')
+            ->willReturn('');
+
+        $this->renderer->expects($this->any())->method('renderInlineInterstitial')
+            ->willReturn('');
+
+        $this->renderer->expects($this->any())->method('getExpiringAdvertisements')
+            ->willReturn([$ad]);
+
+        $params = [
+            'section'            => 'foo',
+            'extension'          => 'bar',
+            'advertisementGroup' => 'baz',
+            'environment'        => 'dev'
+        ];
+
+        $this->smarty->expects($this->at(3))->method('getValue')
+            ->with('app')
+            ->willReturn($params);
+
+        $this->renderer->expects($this->any())->method('getXCacheFor')
+            ->with([$ad])
+            ->willReturn('2023-01-16 09:05:57');
+
+        $this->renderer->expects($this->any())->method('getInlineFormats')
+            ->willReturn([ 'amp', 'fia', 'newsletter' ]);
+
+        $this->ds->expects($this->any())->method('get')
+            ->with('ads_settings')
+            ->willReturn([ 'lifetime_cookie' => 100 ]);
+
+        $input  = '<html><head></head><body></body></html>';
+        $output = '<html><head></head><body>' . "\n" . '</body></html>';
+        $this->assertEquals($output, smarty_outputfilter_ads_generator(
+            $input,
+            $this->smarty
+        ));
+
+        $this->smarty->expects($this->any())->method('hasValue')
+            ->with('x-cache-for')
+            ->willReturn(true);
+
+        $this->assertEquals($output, smarty_outputfilter_ads_generator(
+            $input,
             $this->smarty
         ));
     }
