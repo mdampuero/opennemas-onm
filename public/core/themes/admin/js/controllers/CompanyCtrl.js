@@ -200,7 +200,7 @@
         $scope.buildScope = function() {
           var dontLocalize = [ 'related_contents' ];
 
-          if ($scope.extraFields) {
+          if ($scope.extraFields && $scope.hasMultilanguage()) {
             $scope.extraFields.forEach(function(element) {
               if ($scope.item[element.key.value] && !(element.key.value in dontLocalize)) {
                 dontLocalize.push(element.key.value);
