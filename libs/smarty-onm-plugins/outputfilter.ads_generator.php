@@ -44,7 +44,6 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'x-tags'             => $smarty->getValue('x-tags'),
         ];
 
-
         if (!empty($expiringAds)) {
             $adsExpireTime = $adsRenderer->getXCacheFor($expiringAds);
             if ($smarty->hasValue('x-cache-for')) {
