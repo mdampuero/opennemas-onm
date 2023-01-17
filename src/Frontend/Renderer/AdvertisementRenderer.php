@@ -118,20 +118,16 @@ class AdvertisementRenderer extends Renderer
         $expirationDate = null;
 
         foreach ($ads as $ad) {
-            $starttime = !$ad->starttime instanceof \DateTime ?
-                new \DateTime($ad->starttime, $timezone) :
-                $ad->starttime;
-            $endtime   = !$ad->endtime instanceof \DateTime ?
-                new \DateTime($ad->endtime, $timezone) :
-                $ad->endtime;
-            if ($starttime > $now && (!$expirationDate || $starttime < $expirationDate)) {
-                $expirationDate = $starttime;
+            if ($ad->starttime > $now->format('Y-m-d H:i:s') &&
+                (!$expirationDate || $ad->starttime < $expirationDate)) {
+                $expirationDate = $ad->starttime;
             }
-            if ($endtime > $now && (!$expirationDate || $endtime < $expirationDate)) {
-                $expirationDate = $endtime;
+            if ($ad->endtime > $now->format('Y-m-d H:i:s') && (!$expirationDate || $ad->endtime < $expirationDate)) {
+                $expirationDate = $ad->endtime;
             }
         }
-        return $expirationDate ? $expirationDate->getTimeStamp() - time() . 's' : '';
+
+        return $expirationDate;
     }
 
     /**
@@ -160,16 +156,16 @@ class AdvertisementRenderer extends Renderer
     {
         $timezone      = $this->container->get('core.locale')->getTimeZone();
         $contentHelper = $this->container->get('core.helper.content');
+
         return array_filter(
             $this->advertisements,
             function ($advertisement) use ($contentHelper, $timezone) {
                 $schedulingState = $contentHelper->getSchedulingState($advertisement);
                 $now             = new \DateTime(null, $timezone);
-                $endtime         = !$advertisement->endtime instanceof \DateTime ?
-                    new \DateTime($advertisement->endtime, $timezone) :
-                    $advertisement->endtime;
+
                 return $schedulingState == \Content::POSTPONED ||
-                    ($schedulingState == \Content::IN_TIME && $endtime > $now);
+                    ($schedulingState == \Content::IN_TIME
+                        && $advertisement->endtime > $now->format('Y-m-d H:i:s'));
             }
         );
     }
