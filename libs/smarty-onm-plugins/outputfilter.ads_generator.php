@@ -9,13 +9,27 @@
  */
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
-    $adsRenderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
-    $isSafeFrame = $smarty->getContainer()->get('core.helper.advertisement')->isSafeFrameEnabled();
-    $ads         = $isSafeFrame ? $adsRenderer->getAdvertisements() : $adsRenderer->getRequested();
-    $app         = $smarty->getValue('app');
+    $adsRenderer  = $smarty->getContainer()->get('frontend.renderer.advertisement');
+    $isSafeFrame  = $smarty->getContainer()->get('core.helper.advertisement')->isSafeFrameEnabled();
+    $ads          = $isSafeFrame ? $adsRenderer->getAdvertisements() : $adsRenderer->getRequested();
+    $app          = $smarty->getValue('app');
+    $content      = $smarty->getValue('content');
+    $interstitial = [];
 
-    if (!is_array($ads)
+    if (!$isSafeFrame) {
+        $params = [
+            'category'           => $app['section'],
+            'extension'          => $app['extension'],
+            'advertisementGroup' => $app['advertisementGroup'],
+            'content'            => $content,
+            'x-tags'             => $smarty->getValue('x-tags'),
+        ];
+
+        $interstitial = $adsRenderer->renderInlineInterstitial($params);
+    }
+    if ((!is_array($ads)
         || empty($ads)
+        && empty($interstitial))
         || preg_match('/newsletter/', $smarty->source->resource)
     ) {
         return $output;
@@ -27,7 +41,6 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         return $output;
     }
 
-    $content  = $smarty->getValue('content');
     $settings = $smarty->getContainer()
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance')
@@ -42,9 +55,8 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'x-tags'             => $smarty->getValue('x-tags'),
         ];
 
-        $adsOutput    = $adsRenderer->renderInlineHeaders($params);
-        $interstitial = $adsRenderer->renderInlineInterstitial($params);
-        $devices      = $smarty->getContainer()->get('core.template.admin')
+        $adsOutput = $adsRenderer->renderInlineHeaders($params);
+        $devices   = $smarty->getContainer()->get('core.template.admin')
             ->fetch('advertisement/helpers/inline/js.tpl');
 
         $devices = "\n" . str_replace("\n", ' ', $devices);
