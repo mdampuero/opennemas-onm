@@ -13,6 +13,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     $isSafeFrame  = $smarty->getContainer()->get('core.helper.advertisement')->isSafeFrameEnabled();
     $ads          = $isSafeFrame ? $adsRenderer->getAdvertisements() : $adsRenderer->getRequested();
     $app          = $smarty->getValue('app');
+    $expiringAds  = $adsRenderer->getExpiringAdvertisements();
     $content      = $smarty->getValue('content');
     $interstitial = [];
 
@@ -28,7 +29,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         $interstitial = $adsRenderer->renderInlineInterstitial($params);
     }
     if ((!is_array($ads)
-        || empty($ads)
+        || (empty($ads) && empty($expiringAds))
         && empty($interstitial))
         || preg_match('/newsletter/', $smarty->source->resource)
     ) {
@@ -47,13 +48,25 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         ->get('ads_settings');
 
     if (!$isSafeFrame) {
-        $params = [
-            'category'           => $app['section'],
-            'extension'          => $app['extension'],
-            'advertisementGroup' => $app['advertisementGroup'],
-            'content'            => $content,
-            'x-tags'             => $smarty->getValue('x-tags'),
-        ];
+        if (!empty($expiringAds)) {
+            $adsExpireTime = $adsRenderer->getXCacheFor($expiringAds);
+            if ($smarty->hasValue('x-cache-for')) {
+                $tplExpireTime = $smarty->tpl_vars['x-cache-for']->value;
+                if (preg_match('/[0-9]+[smhd]/', $tplExpireTime)) {
+                    $timezone = $smarty->getContainer()->get('core.locale')->getTimeZone();
+                    $now      = new \DateTime(null, $timezone);
+
+                    $tplExpireTime = new \DateInterval('P' . strtoupper($tplExpireTime));
+                    $tplExpireTime = date_add($now, $tplExpireTime);
+                    $tplExpireTime = $tplExpireTime->format('Y-m-d H:i:s');
+                }
+                if (strtotime($tplExpireTime) > strtotime($adsExpireTime)) {
+                    $smarty->setValue('x-cache-for', $adsExpireTime);
+                }
+            } else {
+                $smarty->setValue('x-cache-for', $adsExpireTime);
+            }
+        }
 
         $adsOutput = $adsRenderer->renderInlineHeaders($params);
         $devices   = $smarty->getContainer()->get('core.template.admin')

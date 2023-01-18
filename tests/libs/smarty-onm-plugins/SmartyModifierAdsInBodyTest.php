@@ -39,6 +39,14 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getDevice' ])
             ->getMock();
 
+        $this->em = $this->getMockBuilder('EntityManager')
+            ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
+        $this->ds = $this->getMockBuilder('DataSet')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
         $this->helper = $this->getMockBuilder('AdvertisementHelper')
             ->setMethods([ 'isSafeFrameEnabled' ])
             ->getMock();
@@ -46,6 +54,9 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
             ->setMethods([ 'render', 'getAdvertisements' ])
             ->getMock();
+
+        $this->em->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
 
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
@@ -69,6 +80,9 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.advertisement':
                 return $this->helper;
+
+            case 'orm.manager':
+                return $this->em;
 
             case 'frontend.renderer.advertisement':
                 return $this->renderer;
@@ -105,7 +119,7 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
         $this->renderer->expects($this->at(0))->method('getAdvertisements')
             ->willReturn([ $ad1, $ad2 ]);
 
-        $this->smarty->expects($this->at(1))->method('getValue')
+        $this->smarty->expects($this->at(2))->method('getValue')
             ->with('app')
             ->willReturn([
                 'advertisementGroup' => 'waldo',
@@ -175,7 +189,7 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
         $this->renderer->expects($this->at(0))->method('getAdvertisements')
             ->willReturn([ $ad1, $ad2 ]);
 
-        $this->smarty->expects($this->at(1))->method('getValue')
+        $this->smarty->expects($this->at(2))->method('getValue')
             ->with('app')
             ->willReturn([
                 'advertisementGroup' => 'waldo',

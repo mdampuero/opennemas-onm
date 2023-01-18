@@ -242,7 +242,9 @@ class AdvertisementManager extends EntityManager
         $contentHelper  = getService('core.helper.content');
 
         return array_filter($advertisements, function ($a) use ($contentHelper) {
-            return $contentHelper->isReadyForPublish($a);
+            return $a->content_status == 1
+                && $a->in_litter == 0
+                && $contentHelper->getSchedulingState($a) != \Content::DUED;
         });
     }
 

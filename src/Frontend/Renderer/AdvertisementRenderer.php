@@ -107,6 +107,30 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
+     * Get x-cache-for header.
+     *
+     * @return Mixed The x-cache-for header.
+     */
+    public function getXCacheFor($ads)
+    {
+        $timezone       = $this->container->get('core.locale')->getTimeZone();
+        $now            = new \DateTime(null, $timezone);
+        $expirationDate = null;
+
+        foreach ($ads as $ad) {
+            if ($ad->starttime > $now->format('Y-m-d H:i:s') &&
+                (!$expirationDate || $ad->starttime < $expirationDate)) {
+                $expirationDate = $ad->starttime;
+            }
+            if ($ad->endtime > $now->format('Y-m-d H:i:s') && (!$expirationDate || $ad->endtime < $expirationDate)) {
+                $expirationDate = $ad->endtime;
+            }
+        }
+
+        return $expirationDate;
+    }
+
+    /**
      * Get available advertisements.
      *
      * @return array The available advertisements.
@@ -119,6 +143,29 @@ class AdvertisementRenderer extends Renderer
             $this->advertisements,
             function ($advertisement) use ($contentHelper) {
                 return $contentHelper->isInTime($advertisement);
+            }
+        );
+    }
+
+    /**
+     * Get expiring advertisements.
+     *
+     * @return array The available advertisements.
+     */
+    public function getExpiringAdvertisements()
+    {
+        $timezone      = $this->container->get('core.locale')->getTimeZone();
+        $contentHelper = $this->container->get('core.helper.content');
+
+        return array_filter(
+            $this->advertisements,
+            function ($advertisement) use ($contentHelper, $timezone) {
+                $schedulingState = $contentHelper->getSchedulingState($advertisement);
+                $now             = new \DateTime(null, $timezone);
+
+                return $schedulingState == \Content::POSTPONED ||
+                    ($schedulingState == \Content::IN_TIME
+                        && $advertisement->endtime > $now->format('Y-m-d H:i:s'));
             }
         );
     }
@@ -278,7 +325,6 @@ class AdvertisementRenderer extends Renderer
             $method   = 'render' . $type . 'Headers';
             $headers .= $this->{$method}($advertisements, $params);
         }
-
         return $headers;
     }
 
