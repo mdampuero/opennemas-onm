@@ -162,9 +162,9 @@
                 <tr ng-repeat="item in items">
                   <td>
                     <div ng-if="item.title != ''">[% item.title %]</div>
-                    <div ng-if="item.title == ''">{t}Newsletter{/t}  -  [% item.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$app.locale->getTimeZone()->getName()}' %]</div>
+                    <div ng-if="item.title == ''">{t}Newsletter{/t}  -  [% item.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</div>
                     <div class="small-text">
-                      <strong>{t}Created:{/t}</strong> [% item.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$app.locale->getTimeZone()->getName()}' %] <br>
+                      <strong>{t}Created:{/t}</strong> [% item.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %] <br>
                     </div>
                     <div class="listing-inline-actions">
                       <a class="btn btn-default btn-small" href="[% routing.generate('backend_newsletter_template_show', { id: item.id }) %]" title="{t}Edit{/t}" >
