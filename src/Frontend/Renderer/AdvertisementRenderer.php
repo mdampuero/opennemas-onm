@@ -342,12 +342,12 @@ class AdvertisementRenderer extends Renderer
             return '';
         }
 
-        $interstitials = array_filter($advertisements, function ($a) {
+        $device        = $this->container->get('core.globals')->getDevice();
+        $interstitials = array_filter($advertisements, function ($a) use ($device) {
             $hasInterstitial = array_filter($a->positions, function ($pos) {
                 return ($pos + 50) % 100 == 0;
             });
-
-            return $hasInterstitial;
+            return $hasInterstitial && ($a->params['devices'][$device] === 1 || empty($device));
         });
 
         if (empty($interstitials)) {
@@ -356,7 +356,7 @@ class AdvertisementRenderer extends Renderer
 
         $advertisement = $interstitials[array_rand($interstitials)];
 
-        $size = $this->getDeviceAdvertisementSize($advertisement, 'desktop');
+        $size = $this->getDeviceAdvertisementSize($advertisement, $device);
         if (empty($size)) {
             return '';
         }
