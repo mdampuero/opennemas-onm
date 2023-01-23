@@ -145,7 +145,7 @@ class MenuController extends ApiController
         $context = $this->get('core.locale')->getContext();
         $this->get('core.locale')->setContext('frontend');
 
-        $oql = 'content_type_name = "static_page" and in_litter = 0'
+        $oql = 'content_type_name = "static_page" and in_litter = 0 and content_status = 1 '
            . ' order by created desc';
 
         $response = $this->get('api.service.content')->getList($oql);

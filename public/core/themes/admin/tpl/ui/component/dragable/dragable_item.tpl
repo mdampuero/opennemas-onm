@@ -3,7 +3,7 @@
     <span ui-tree-handle>
     <span class="angular-ui-tree-icon"></span>
     </span>
-    <span class="menu-item-type-icon {$iIcon}"  tooltip-placement="right" uib-tooltip="{$iName}"></span>
+    <span class="menu-item-type-icon {$iIcon}"  tooltip-placement="right" {if $iShowSlug}uib-tooltip="{$iName} - [% item.link_name %]"{else}uib-tooltip="{$iName}"{/if}></span>
     <div class="p-l-30">
       <div class="row" ng-if="item.pk_item">
         <div class="col-sm-6 col-lg-6">
