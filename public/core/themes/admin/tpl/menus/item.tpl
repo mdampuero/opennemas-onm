@@ -24,9 +24,9 @@
 {block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="category" iIcon="fa fa-newspaper-o" iSearchModel="search_manual_categories" iName="{t}Manual categories{/t}" iData="dragables.category"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="blog-category" iIcon="fa fa-bookmark" iSearchModel="search_categories" iName="{t}Automatic categories{/t}" iData="dragables['blog-category']"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="static" iIcon="fa fa-file" iSearchModel="search_pages" iName="{t}Static pages{/t}" iData="dragables.static"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="category" iIcon="fa fa-newspaper-o" iSearchModel="search_manual_categories" iName="{t}Manual categories{/t}" iData="dragables.category"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="blog-category" iIcon="fa fa-bookmark" iSearchModel="search_categories" iName="{t}Automatic categories{/t}" iData="dragables['blog-category']"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="static" iIcon="fa fa-file" iSearchModel="search_pages" iName="{t}Static pages{/t}" iData="dragables.static"}
       {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="internal" iIcon="fa fa-cube" iSearchModel="search_modules" iName="{t}Modules{/t}" iData="dragables.internal"}
       {is_module_activated name="SYNC_MANAGER"}
         {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="syncBlogCategory" iIcon="fa fa-exchange" iSearchModel="search_sites" iName="{t}Synchronized sites{/t}" iData="dragables.syncBlogCategory"}
