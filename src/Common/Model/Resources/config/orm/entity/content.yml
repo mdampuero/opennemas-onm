@@ -275,3 +275,9 @@ orm:
                         -
                             name: urn_source
                             columns: [urn_source]
+                        -
+                            name: content_type_name_in_litter_content_status
+                            columns: [content_type_name, in_litter, content_status]
+                            primary: false
+                            unique: false
+                            flags: {  }

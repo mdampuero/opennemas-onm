@@ -460,6 +460,7 @@ CREATE TABLE `contents` (
   KEY `fk_author` (`fk_author`),
   KEY `fk_publisher` (`fk_publisher`),
   KEY `fk_user_last_editor` (`fk_user_last_editor`),
+  KEY `content_type_name_in_litter_content_status` (`content_type_name`,`in_litter`,`content_status`),
   CONSTRAINT `fk_author_users_id` FOREIGN KEY (`fk_author`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_publisher_users_id` FOREIGN KEY (`fk_publisher`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_user_last_editor_users_id` FOREIGN KEY (`fk_user_last_editor`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
