@@ -344,7 +344,7 @@ class AdvertisementRenderer extends Renderer
 
         $device        = $this->container->get('core.globals')->getDevice();
         $interstitials = array_filter($advertisements, function ($a) use ($device) {
-            $hasInterstitial = array_filter($a->positions, function ($pos) use ($device) {
+            $hasInterstitial = array_filter($a->positions, function ($pos) {
                 return ($pos + 50) % 100 == 0;
             });
             return $hasInterstitial && ($a->params['devices'][$device] === 1 || empty($device));

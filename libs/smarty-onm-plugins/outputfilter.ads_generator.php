@@ -28,6 +28,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 
         $interstitial = $adsRenderer->renderInlineInterstitial($params);
     }
+
     if ((!is_array($ads)
         || (empty($ads) && empty($expiringAds))
         && empty($interstitial))
@@ -60,6 +61,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
                     $tplExpireTime = date_add($now, $tplExpireTime);
                     $tplExpireTime = $tplExpireTime->format('Y-m-d H:i:s');
                 }
+
                 if (strtotime($tplExpireTime) > strtotime($adsExpireTime)) {
                     $smarty->setValue('x-cache-for', $adsExpireTime);
                 }
