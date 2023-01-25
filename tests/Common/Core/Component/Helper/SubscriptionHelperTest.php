@@ -143,10 +143,15 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
     public function testHasAdvertisements()
     {
         $this->security->expects($this->at(0))->method('hasPermission')
-            ->with('MEMBER_HIDE_ADVERTISEMENTS')->willReturn(true);
-        $this->security->expects($this->at(1))->method('hasPermission')
             ->with('MASTER')->willReturn(false);
+
+        $this->security->expects($this->at(1))->method('hasPermission')
+            ->with('MEMBER_HIDE_ADVERTISEMENTS')->willReturn(true);
+
         $this->security->expects($this->at(2))->method('hasPermission')
+            ->with('MASTER')->willReturn(false);
+
+        $this->security->expects($this->at(3))->method('hasPermission')
             ->with('MEMBER_HIDE_ADVERTISEMENTS')->willReturn(false);
 
         $this->assertFalse($this->helper->hasAdvertisements());
@@ -163,7 +168,16 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'isHidden' ])
             ->getMock();
 
-        $this->security->expects($this->any())->method('hasPermission')
+        $this->security->expects($this->at(0))->method('hasPermission')
+            ->with('MASTER')->willReturn(false);
+
+        $this->security->expects($this->at(1))->method('hasPermission')
+            ->with('MEMBER_HIDE_ADVERTISEMENTS')->willReturn(false);
+
+        $this->security->expects($this->at(2))->method('hasPermission')
+            ->with('MASTER')->willReturn(false);
+
+        $this->security->expects($this->at(3))->method('hasPermission')
             ->with('MEMBER_HIDE_ADVERTISEMENTS')->willReturn(false);
 
         $helper->expects($this->at(0))->method('isHidden')
