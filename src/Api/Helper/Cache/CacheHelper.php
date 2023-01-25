@@ -62,7 +62,7 @@ class CacheHelper
     {
         $this->queue->push(new ServiceTask('core.template.cache', 'deleteAll', []));
         $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-            sprintf('obj.http.x-tags ~ instance-%s', $this->instance->internal_name)
+            sprintf('obj.http.x-tags ~ ^instance-%s', $this->instance->internal_name)
         ]));
 
         return $this;

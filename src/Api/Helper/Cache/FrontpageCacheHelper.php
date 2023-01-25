@@ -80,7 +80,7 @@ class FrontpageCacheHelper extends CacheHelper
     {
         foreach ($keys as $key) {
             $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*%s', $this->instance->internal_name, $key, $category)
+                sprintf('obj.http.x-tags ~ ^instance-%s.*%s', $this->instance->internal_name, $key, $category)
             ]));
         }
     }

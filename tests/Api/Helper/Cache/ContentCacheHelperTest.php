@@ -121,7 +121,7 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
         $this->queue->expects($this->at(0))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
                 sprintf(
-                    'obj.http.x-tags ~ instance-%s.*%s',
+                    'obj.http.x-tags ~ ^instance-%s.*%s',
                     $this->instance->internal_name,
                     sprintf(
                         '((archive-page-%s)|(authors-frontpage)|(category-22)|(article-frontpage$)|' .

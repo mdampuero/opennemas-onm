@@ -39,7 +39,7 @@ class TagCacheHelperTest extends \PHPUnit\Framework\TestCase
             ]));
         $this->queue->expects($this->at(1))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
-                'obj.http.x-tags ~ instance-flob,.*,tag,show,tag-3750'
+                'obj.http.x-tags ~ ^instance-flob,.*,tag,show,tag-3750'
             ]));
 
         $this->helper->deleteItem($tag);
@@ -56,7 +56,7 @@ class TagCacheHelperTest extends \PHPUnit\Framework\TestCase
             ]));
         $this->queue->expects($this->at(1))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
-                'obj.http.x-tags ~ instance-flob,.*,tag,list'
+                'obj.http.x-tags ~ ^instance-flob,.*,tag,list'
             ]));
 
         $this->helper->deleteList();
