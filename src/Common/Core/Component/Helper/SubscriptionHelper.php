@@ -121,8 +121,9 @@ class SubscriptionHelper
      */
     public function hasAdvertisements($token = null)
     {
-        return !$this->security->hasPermission('MEMBER_HIDE_ADVERTISEMENTS')
-            && !$this->isHidden($token, 'ADVERTISEMENTS');
+        return !($this->security->hasPermission('MEMBER_HIDE_ADVERTISEMENTS')
+            && !$this->security->hasPermission('MASTER'))
+                && !$this->isHidden($token, 'ADVERTISEMENTS');
     }
 
     /**

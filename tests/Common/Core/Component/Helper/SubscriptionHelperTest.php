@@ -145,6 +145,8 @@ class SubscriptionHelperTest extends \PHPUnit\Framework\TestCase
         $this->security->expects($this->at(0))->method('hasPermission')
             ->with('MEMBER_HIDE_ADVERTISEMENTS')->willReturn(true);
         $this->security->expects($this->at(1))->method('hasPermission')
+            ->with('MASTER')->willReturn(false);
+        $this->security->expects($this->at(2))->method('hasPermission')
             ->with('MEMBER_HIDE_ADVERTISEMENTS')->willReturn(false);
 
         $this->assertFalse($this->helper->hasAdvertisements());
