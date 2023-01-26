@@ -82,6 +82,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForContent', 20],
                 ['removeSmartyCacheForContent', 15],
                 ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
             ],
             'content.updateVotedItem' => [
@@ -95,6 +96,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForRelatedContents', 20],
                 ['removeSmartyCacheForContent', 15],
                 ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
             ],
             'content.patchItem' => [
@@ -553,6 +555,34 @@ class HooksSubscriber implements EventSubscriberInterface
             new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ instance-%s.*frontpagecss.*', $instanceName)
             ])
+        );
+    }
+
+    /**
+     * Remove saved sitemaps.
+     *
+     * @param Event $event The event to handle.
+     */
+    public function removeSavedSitemaps(Event $event)
+    {
+        if (!$event->hasArgument('item')) {
+            return;
+        }
+
+        $excludedTypes = ['photo', 'attachment'];
+        $timezone      = $this->container->get('core.locale')->getTimeZone();
+        $now           = new \DateTime(null, $timezone);
+        $content       = $event->getArgument('item');
+
+        if (empty($content->created)
+            || in_array($content->content_type_name, $excludedTypes)
+            || $now->format('Y-m') == $content->created->format('Y-m')) {
+            return;
+        }
+
+        $this->container->get('core.helper.sitemap')->removeSitemapsByPattern(
+            $content->created->format('Y'),
+            $content->created->format('m')
         );
     }
 

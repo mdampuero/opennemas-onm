@@ -194,10 +194,11 @@ class SitemapHelper
      *
      * @return array The array with the name of the sitemaps.
      */
-    public function getSitemaps()
+    public function getSitemaps($sitemapPath = null)
     {
-        $path  = $this->publicDir . '/' . $this->instance->getSitemapShortPath() . '/';
-        $files = [];
+        $sitemapPath = $sitemapPath ?? $this->instance->getSitemapShortPath();
+        $path        = $this->publicDir . '/' . $sitemapPath . '/';
+        $files       = [];
 
         try {
             $this->finder->files()->in($path);
@@ -321,11 +322,12 @@ class SitemapHelper
      *
      * @return array An array of the removed sitemaps.
      */
-    public function deleteSitemaps($parameters = [])
+    public function deleteSitemaps($parameters = [], $sitemapPath = null)
     {
-        $removed  = [];
-        $path     = $this->publicDir . '/' . $this->instance->getSitemapShortPath() . '/';
-        $sitemaps = $this->getSitemaps();
+        $sitemapPath = $sitemapPath ?? $this->instance->getSitemapShortPath();
+        $removed     = [];
+        $path        = $this->publicDir . '/' . $sitemapPath . '/';
+        $sitemaps    = $this->getSitemaps($sitemapPath);
 
         foreach ($sitemaps as $sitemap) {
             $toRemove = true;
@@ -348,6 +350,25 @@ class SitemapHelper
         }
 
         return $removed;
+    }
+
+    /**
+     * Remove sitemaps by patterm
+     *
+     * @param string $year  The year to match.
+     * @param string $month The month to match.
+     *
+     */
+    public function removeSitemapsByPattern($year = '????', $month = '??')
+    {
+        if (empty($year) && empty($month)) {
+            return;
+        }
+
+        $path    = $this->publicDir . '/' . $this->instance->getSitemapShortPath() . '/';
+        $pattern = sprintf('sitemap.%s.%s*.xml.gz', $year, $month);
+
+        array_map('unlink', glob($path . $pattern));
     }
 
     /**
