@@ -93,7 +93,7 @@ class VarnishServiceTest extends \PHPUnit\Framework\TestCase
     public function testDeleteItemWhenError()
     {
         $this->varnish->expects($this->once())->method('ban')
-            ->with('obj.http.x-tags ~ instance-frog.*,glorp.*')
+            ->with('obj.http.x-tags ~ ^instance-frog.*,glorp.*')
             ->will($this->throwException(new \Exception()));
 
         $this->service->deleteItem('glorp');
@@ -106,12 +106,12 @@ class VarnishServiceTest extends \PHPUnit\Framework\TestCase
     public function testDeleteItemWhenNoError()
     {
         $this->varnish->expects($this->once())->method('ban')
-            ->with('obj.http.x-tags ~ instance-frog.*,glorp.*');
+            ->with('obj.http.x-tags ~ ^instance-frog.*,glorp.*');
 
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with('varnish.deleteItem', [
                 'action' => 'Api\Service\V1\VarnishService::deleteItem',
-                'id' => 'obj.http.x-tags ~ instance-frog.*,glorp.*'
+                'id' => 'obj.http.x-tags ~ ^instance-frog.*,glorp.*'
             ]);
 
         $this->service->deleteItem('glorp');

@@ -76,7 +76,7 @@ class CategoryCacheHelperTest extends \PHPUnit\Framework\TestCase
     {
         $this->queue->expects($this->at(0))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*%s', $this->instance->internal_name, 'rss-index')
+                sprintf('obj.http.x-tags ~ ^instance-%s.*%s', $this->instance->internal_name, 'rss-index')
             ]));
 
         $this->assertEquals($this->helper, $this->helper->removeVarnishRssCache());

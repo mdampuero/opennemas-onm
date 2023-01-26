@@ -52,7 +52,7 @@ class VarnishService implements Service
     {
         try {
             $id = sprintf(
-                'obj.http.x-tags ~ instance-%s.*,%s.*',
+                'obj.http.x-tags ~ ^instance-%s.*,%s.*',
                 $this->instance->internal_name,
                 $id
             );
@@ -75,7 +75,7 @@ class VarnishService implements Service
     {
         try {
             $id = sprintf(
-                'obj.http.x-tags ~ instance-%s',
+                'obj.http.x-tags ~ ^instance-%s',
                 $this->instance->internal_name
             );
 
