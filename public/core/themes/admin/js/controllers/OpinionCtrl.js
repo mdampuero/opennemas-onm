@@ -157,14 +157,22 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
      * @return {String} The frontend URL.
      */
     $scope.getFrontendUrl = function(item) {
+      if (!item.pk_content) {
+        return '';
+      }
       var date = item.created;
 
       var formattedDate = moment(date).format('YYYYMMDDHHmmss');
 
-      return $scope.getL10nUrl(
+      var author = !item.fk_author ? {} : $scope.data.extra.authors.filter(function(author) {
+        return author.id === item.fk_author;
+      })[0];
+
+      return $scope.data.extra.base_url + $scope.getL10nUrl(
         routing.generate('frontend_opinion_show', {
-          id: item.pk_content,
+          id: item.pk_content.toString().padStart(6, '0'),
           created: formattedDate,
+          author_name: author.slug,
           opinion_title: item.slug
         })
       );

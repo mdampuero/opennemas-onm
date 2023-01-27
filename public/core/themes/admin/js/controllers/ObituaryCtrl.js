@@ -186,9 +186,13 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          return $scope.getL10nUrl(
+          if (!$scope.selectedCategory || !item.pk_content) {
+            return '';
+          }
+
+          return $scope.data.extra.base_url + $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
-              id: item.pk_content,
+              id: item.pk_content.toString().padStart(6, '0'),
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug
             })
