@@ -569,20 +569,20 @@ class HooksSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $excludedTypes = ['photo', 'attachment'];
-        $timezone      = $this->container->get('core.locale')->getTimeZone();
-        $now           = new \DateTime(null, $timezone);
-        $content       = $event->getArgument('item');
+        $sh       = $this->container->get('core.helper.sitemap');
+        $timezone = $this->container->get('core.locale')->getTimeZone();
+        $now      = new \DateTime(null, $timezone);
+        $content  = $event->getArgument('item');
 
-        if (empty($content->created)
-            || in_array($content->content_type_name, $excludedTypes)
-            || $now->format('Y-m') == $content->created->format('Y-m')) {
+        if (empty($content->changed)
+            || !in_array($content->content_type_name, $sh->getTypes($sh->getSettings(), ['tag']))
+            || $now->format('Y-m') == $content->changed->format('Y-m')) {
             return;
         }
 
-        $this->container->get('core.helper.sitemap')->removeSitemapsByPattern(
-            $content->created->format('Y'),
-            $content->created->format('m')
+        $sh->removeSitemapsByPattern(
+            $content->changed->format('Y'),
+            $content->changed->format('m')
         );
     }
 
