@@ -21,15 +21,17 @@ class SitemapHelper
      * @const array
      */
     const EXTENSIONS = [
-        'album'   => 'ALBUM_MANAGER',
-        'article' => 'ARTICLE_MANAGER',
-        'event'   => 'es.openhost.module.events',
-        'kiosko'  => 'KIOSKO_MANAGER',
-        'letter'  => 'LETTER_MANAGER',
-        'opinion' => 'OPINION_MANAGER',
-        'poll'    => 'POLL_MANAGER',
-        'tag'     => '',
-        'video'   => 'VIDEO_MANAGER',
+        'album'    => 'ALBUM_MANAGER',
+        'article'  => 'ARTICLE_MANAGER',
+        'company'  => 'es.openhost.module.companies',
+        'event'    => 'es.openhost.module.events',
+        'kiosko'   => 'KIOSKO_MANAGER',
+        'letter'   => 'LETTER_MANAGER',
+        'obituary' => 'es.openhost.module.obituaries',
+        'opinion'  => 'OPINION_MANAGER',
+        'poll'     => 'POLL_MANAGER',
+        'tag'      => '',
+        'video'    => 'VIDEO_MANAGER',
     ];
 
     /**
