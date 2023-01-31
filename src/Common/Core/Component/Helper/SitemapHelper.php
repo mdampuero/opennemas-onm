@@ -141,17 +141,17 @@ class SitemapHelper
 
         $result = $this->connection->fetchAll(
             sprintf(
-                'SELECT CONCAT(CONVERT(year(changed), NCHAR),\'-\', LPAD(month(changed),2,"0")) as \'dates\''
-                . 'FROM `contents` WHERE year(changed) is not null '
-                . 'AND UNIX_TIMESTAMP(changed) <= UNIX_TIMESTAMP(CURRENT_DATE()) '
+                'SELECT DISTINCT year(changed) as "year", month(changed) as "month" '
+                . 'FROM `contents` WHERE changed is not null '
+                . 'AND changed <= CURRENT_TIMESTAMP() '
                 . 'AND `content_type_name` IN (%s) '
-                . 'group by dates order by dates',
+                . 'order by year,month',
                 $types
             )
         );
 
         return array_map(function ($a) {
-            return $a['dates'];
+            return $a['year'] . "-" . str_pad($a['month'], 2, '0', STR_PAD_LEFT);
         }, $result);
     }
 

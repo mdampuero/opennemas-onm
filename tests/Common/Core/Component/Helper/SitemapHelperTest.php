@@ -162,16 +162,16 @@ class SitemapHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetDates()
     {
         $result = [
-            [ 'dates' => '2020-02' ],
-            [ 'dates' => '2021-03' ],
-            [ 'dates' => '2021-06' ]
+            [ 'year' => '2020', 'month' => '2' ],
+            [ 'year' => '2021', 'month' => '3' ],
+            [ 'year' => '2021', 'month' => '6' ],
         ];
 
-        $query = 'SELECT CONCAT(CONVERT(year(changed), NCHAR),\'-\', LPAD(month(changed),2,"0")) as \'dates\''
-        . 'FROM `contents` WHERE year(changed) is not null '
-        . 'AND UNIX_TIMESTAMP(changed) <= UNIX_TIMESTAMP(CURRENT_DATE()) '
-        . 'AND `content_type_name` IN ("article") '
-        . 'group by dates order by dates';
+        $query = 'SELECT DISTINCT year(changed) as "year", month(changed) as "month" '
+            . 'FROM `contents` WHERE changed is not null '
+            . 'AND changed <= CURRENT_TIMESTAMP() '
+            . 'AND `content_type_name` IN ("article") '
+            . 'order by year,month';
 
         $this->connection->expects($this->once())->method('fetchAll')
             ->with($query)
