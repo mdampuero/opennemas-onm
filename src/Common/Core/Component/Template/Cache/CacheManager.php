@@ -49,92 +49,92 @@ class CacheManager
         $this->defaults = [
             'frontpages' => [
                 'cache_lifetime' => 600,
-                'caching'        => 1,
+                'caching'        => 0,
                 'name'           => _('Frontpage'),
             ],
             'frontpage-mobile'   => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 600,
                 'name'           => _('Frontpage mobile version'),
             ],
             'articles' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => _('Inner Article')
             ],
             'articles-mobile' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => _('Inner Article mobile version')
             ],
             'opinion' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => _('Inner Opinion')
             ],
             'video' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => ('Frontpage videos')
             ],
             'video-inner' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => ('Inner video')
             ],
             'gallery-frontpage' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => ('Gallery frontpage')
             ],
             'gallery-inner' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => ('Gallery Inner')
             ],
             'poll-frontpage' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => ('Polls frontpage')
             ],
             'poll-inner' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => ('Poll inner')
             ],
             'letter-frontpage' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => ('Letter frontpage')
             ],
             'letter-inner' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => ('Letter inner')
             ],
             'kiosko' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => ('Kiosko')
             ],
             'newslibrary' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => ('Newslibrary')
             ],
             'specials' => [
-                'caching'        => 1,
+                'caching'        => 0,
                 'cache_lifetime' => 86400,
                 'name'           => ('Special')
             ],
             'sitemap' => [
                 'cache_lifetime' => 300,
-                'caching'        => 1,
+                'caching'        => 0,
                 'name'           => ('Sitemap')
             ],
             'rss' => [
                 'cache_lifetime' => 600,
-                'caching'        => 1,
+                'caching'        => 0,
                 'name'           => _('RSS')
             ]
         ];
