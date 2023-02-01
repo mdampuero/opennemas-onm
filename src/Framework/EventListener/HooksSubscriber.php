@@ -103,12 +103,14 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForContent', 20],
                 ['removeSmartyCacheForContent', 15],
                 ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
             ],
             'content.patchList' => [
                 ['removeObjectCacheForContent', 20],
                 ['removeSmartyCacheForContent', 15],
                 ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
             ],
             'content.deleteList' => [
@@ -116,6 +118,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForRelatedContents', 20],
                 ['removeSmartyCacheForContent', 15],
                 ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
             ],
             // Frontpage hooks
@@ -565,25 +568,30 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeSavedSitemaps(Event $event)
     {
-        if (!$event->hasArgument('item')) {
+        if (!$event->hasArgument('item') || !$event->hasArgument('last_changed')) {
             return;
         }
 
-        $sh       = $this->container->get('core.helper.sitemap');
-        $timezone = $this->container->get('core.locale')->getTimeZone();
-        $now      = new \DateTime(null, $timezone);
-        $content  = $event->getArgument('item');
+        $sh          = $this->container->get('core.helper.sitemap');
+        $timezone    = $this->container->get('core.locale')->getTimeZone();
+        $now         = new \DateTime(null, $timezone);
+        $content     = $event->getArgument('item');
+        $lastChanged = $event->getArgument('last_changed');
 
-        if (empty($content->changed)
-            || !in_array($content->content_type_name, $sh->getTypes($sh->getSettings(), ['tag']))
-            || $now->format('Y-m') == $content->changed->format('Y-m')) {
-            return;
+        $lastChanged = !is_array($lastChanged) ? [ $lastChanged ] : $lastChanged;
+        $content     = !is_array($content) ? [ $content ] : $content;
+
+        foreach ($lastChanged as $key => $value) {
+            if (empty($value)
+            || !in_array($content[0]->content_type_name, $sh->getTypes($sh->getSettings(), ['tag']))
+            || $now->format('Y-m') == $value->format('Y-m')) {
+                continue;
+            }
+            $sh->removeSitemapsByPattern(
+                $value->format('Y'),
+                $value->format('m')
+            );
         }
-
-        $sh->removeSitemapsByPattern(
-            $content->changed->format('Y'),
-            $content->changed->format('m')
-        );
     }
 
     /**
