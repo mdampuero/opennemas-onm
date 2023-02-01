@@ -44,7 +44,7 @@ class ContentController extends ApiController
                 'newsstand'  => $instance->getNewsstandShortPath(),
             ],
             'related_contents' => $this->getRelatedContents($items),
-            'base_url'         => $instance->getBaseUrl(),
+            'base_url'         => $instance->getBaseUrl(true),
             'views'            => $views ?? []
         ];
     }
