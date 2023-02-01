@@ -403,16 +403,16 @@ class SitemapHelper
     {
         $result = $this->connection->fetchAll(
             sprintf(
-                'SELECT CONVERT(year(changed), NCHAR) as \'dates\''
-                . 'FROM `contents` WHERE year(changed) is not null '
+                'SELECT year(changed) as "year"'
+                . 'FROM `contents` WHERE changed is not null '
                 . 'AND `content_type_name` IN (%s) '
-                . 'group by dates order by dates',
+                . 'group by year order by year',
                 $types
             )
         );
 
         return array_map(function ($a) {
-            return $a['dates'];
+            return strval($a['year']);
         }, $result);
     }
 
@@ -427,16 +427,16 @@ class SitemapHelper
     {
         $result = $this->connection->fetchAll(
             sprintf(
-                'SELECT LPAD(month(changed),2,"0") as \'dates\''
-                . 'FROM `contents` WHERE month(changed) is not null '
+                'SELECT month(changed) as "month"'
+                . 'FROM `contents` WHERE changed is not null '
                 . 'AND `content_type_name` IN (%s) '
-                . 'group by dates order by dates',
+                . 'group by month order by month',
                 $types
             )
         );
 
         return array_map(function ($a) {
-            return $a['dates'];
+            return str_pad($a['month'], 2, '0', STR_PAD_LEFT);
         }, $result);
     }
 }

@@ -217,24 +217,24 @@ class SitemapHelperTest extends \PHPUnit\Framework\TestCase
         ];
 
         $years = [
-            [ 'dates' => '2020' ],
-            [ 'dates' => '2021' ]
+            [ 'year' => '2020' ],
+            [ 'year' => '2021' ]
         ];
 
         $months = [
-            [ 'dates' => '02' ],
-            [ 'dates' => '03' ],
+            [ 'month' => '02' ],
+            [ 'month' => '03' ],
         ];
 
-        $yearsQuery = 'SELECT CONVERT(year(changed), NCHAR) as \'dates\''
-            . 'FROM `contents` WHERE year(changed) is not null '
+        $yearsQuery = 'SELECT year(changed) as "year"'
+            . 'FROM `contents` WHERE changed is not null '
             . 'AND `content_type_name` IN ("article") '
-            . 'group by dates order by dates';
+            . 'group by year order by year';
 
-        $monthsQuery = 'SELECT LPAD(month(changed),2,"0") as \'dates\''
-            . 'FROM `contents` WHERE month(changed) is not null '
+        $monthsQuery = 'SELECT month(changed) as "month"'
+            . 'FROM `contents` WHERE changed is not null '
             . 'AND `content_type_name` IN ("article") '
-            . 'group by dates order by dates';
+            . 'group by month order by month';
 
         $this->connection->expects($this->at(0))->method('fetchAll')
             ->with($yearsQuery)
