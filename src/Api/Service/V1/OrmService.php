@@ -147,7 +147,7 @@ class OrmService implements Service
         try {
             $item = $this->getItem($id);
 
-            //Strore last changed date before delete to localize item on sitemaps
+            // Store last changed date before delete to localize item on sitemaps
             $lastChanged = $item->changed;
 
             $this->em->remove($item, $item->getOrigin());
@@ -182,11 +182,11 @@ class OrmService implements Service
                 return $a->pk_content;
         }, $response['items']);
 
-        //Save last changed dates before remove in order to find sitemaps
+        // Save last changed dates before remove in order to find sitemaps
         $lastChanged = [];
         foreach ($response['items'] as $item) {
             try {
-                $lastChanged[] = $item->changed ?? '';
+                $lastChanged[] = $item->changed;
                 $this->em->remove($item, $item->getOrigin());
 
                 $items[] = $item;
@@ -376,7 +376,7 @@ class OrmService implements Service
 
             $item = $this->getItem($id);
 
-            //Store last changed date before patch in order to find the item on sitemaps
+            // Store last changed date before patch in order to find the item on sitemaps
             $lastChanged = $item->changed;
             $item->merge($data);
 
@@ -415,11 +415,11 @@ class OrmService implements Service
         $updated = [];
         $items   = [];
 
-        //Save last changed dates before patch in order to find sitemaps
+        // Save last changed dates before patch in order to find sitemaps
         $lastChanged = [];
         foreach ($response['items'] as $item) {
             try {
-                $lastChanged[] = $item->changed ?? '';
+                $lastChanged[] = $item->changed;
                 $item->merge($data);
                 $this->validate($item);
                 $this->em->persist($item, $this->getOrigin());
@@ -494,7 +494,7 @@ class OrmService implements Service
 
             $item = $this->getItem($id);
 
-            //Store last changed date before update in order to find the item on sitemaps
+            // Store last changed date before update in order to find the item on sitemaps
             $lastChanged = $item->changed;
 
             $item->setData($data);
