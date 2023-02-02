@@ -71,7 +71,7 @@ class MetaHelper
             ? $this->contentTemplate
             : $this->template;
 
-        return $this->tpl->fetch($tpl, $data);
+        return $this->tpl->fetch($tpl, [ 'data' => $data ]);
     }
 
     /**
@@ -88,11 +88,6 @@ class MetaHelper
     {
         $data = [];
 
-        // On static page routes, $page is Content entity
-        if ($page && !$page instanceof \Common\Model\Entity\Content) {
-            $data['page'] = (int) $page > 1 ? $page : '';
-        }
-
         $ch = $this->container->get('core.helper.category');
         $ah = $this->container->get('core.helper.author');
 
@@ -107,24 +102,16 @@ class MetaHelper
                 $ah->getAuthorName($content) ?? '',
         ];
 
+        // On static page routes, $page is Content entity
+        if ($page && !$page instanceof \Common\Model\Entity\Content) {
+            $data['page'] = (int) $page > 1 ? $page : '';
+        }
+
         if ($content && $content instanceof \Common\Model\Entity\Content) {
             $data = array_merge($data, $this->getContentData($content));
         }
 
-        $data = array_filter($data, function ($element) {
-            return !empty($element);
-        });
-
-        $data = array_map(function ($element) {
-            if (!is_string($element)) {
-                return $element;
-            }
-            return strip_tags(trim($element));
-        }, $data);
-
-        return [
-            'data' => $data
-        ];
+        return $data;
     }
 
     /**
