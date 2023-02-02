@@ -213,7 +213,6 @@ class SitemapHelperTest extends \PHPUnit\Framework\TestCase
         $result = [
             'items'  => [ 'sitemap.2020.02.1.xml.gz', 'sitemap.2021.03.1.xml.gz' ],
             'years'  => [ '2020', '2021' ],
-            'months' => [ '02', '03' ]
         ];
 
         $years = [
@@ -221,27 +220,14 @@ class SitemapHelperTest extends \PHPUnit\Framework\TestCase
             [ 'year' => '2021' ]
         ];
 
-        $months = [
-            [ 'month' => '02' ],
-            [ 'month' => '03' ],
-        ];
-
         $yearsQuery = 'SELECT year(changed) as "year"'
             . 'FROM `contents` WHERE changed is not null '
             . 'AND `content_type_name` IN ("article") '
             . 'group by year order by year';
 
-        $monthsQuery = 'SELECT month(changed) as "month"'
-            . 'FROM `contents` WHERE changed is not null '
-            . 'AND `content_type_name` IN ("article") '
-            . 'group by month order by month';
-
         $this->connection->expects($this->at(0))->method('fetchAll')
             ->with($yearsQuery)
             ->willReturn($years);
-
-        $this->connection->expects($this->at(1))->method('fetchAll')
-            ->with($monthsQuery)->willReturn($months);
 
         $helper->expects($this->once())->method('getSitemaps')
             ->willReturn($result['items']);

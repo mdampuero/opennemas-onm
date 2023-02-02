@@ -162,14 +162,12 @@ class SitemapHelper
      */
     public function getSitemapsInfo()
     {
-        $types  = $this->getTypes($this->settings, [ 'tag' ], true);
-        $years  = $this->getYears($types);
-        $months = $this->getMonths($types);
+        $types = $this->getTypes($this->settings, [ 'tag' ], true);
+        $years = $this->getYears($types);
 
         return [
             'items'    => $this->getSitemaps(),
             'years'    => $years,
-            'months'   => $months
         ];
     }
 
@@ -413,30 +411,6 @@ class SitemapHelper
 
         return array_map(function ($a) {
             return strval($a['year']);
-        }, $result);
-    }
-
-    /**
-     * Returns the months of the sitemaps.
-     *
-     * @param string $types The allowed types for the sitemap.
-     *
-     * @return array The months of the sitemap.
-     */
-    protected function getMonths($types)
-    {
-        $result = $this->connection->fetchAll(
-            sprintf(
-                'SELECT month(changed) as "month"'
-                . 'FROM `contents` WHERE changed is not null '
-                . 'AND `content_type_name` IN (%s) '
-                . 'group by month order by month',
-                $types
-            )
-        );
-
-        return array_map(function ($a) {
-            return str_pad($a['month'], 2, '0', STR_PAD_LEFT);
         }, $result);
     }
 }
