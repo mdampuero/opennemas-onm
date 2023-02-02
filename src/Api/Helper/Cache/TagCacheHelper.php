@@ -20,7 +20,7 @@ class TagCacheHelper extends CacheHelper
 
         $this->queue->push(new ServiceTask('core.varnish', 'ban', [
             sprintf(
-                'obj.http.x-tags ~ instance-%s,.*,tag,show,tag-%s',
+                'obj.http.x-tags ~ ^instance-%s,.*,tag,show,tag-%s',
                 $this->instance->internal_name,
                 $tag->id
             )
@@ -28,7 +28,7 @@ class TagCacheHelper extends CacheHelper
 
         $this->queue->push(new ServiceTask('core.varnish', 'ban', [
             sprintf(
-                'obj.http.x-tags ~ instance-%s.*tag-%d.*',
+                'obj.http.x-tags ~ ^instance-%s.*tag-%d.*',
                 $this->instance->internal_name,
                 $tag->id
             )
@@ -46,7 +46,7 @@ class TagCacheHelper extends CacheHelper
 
         $this->queue->push(new ServiceTask('core.varnish', 'ban', [
             sprintf(
-                'obj.http.x-tags ~ instance-%s,.*,tag,list',
+                'obj.http.x-tags ~ ^instance-%s,.*,tag,list',
                 $this->instance->internal_name
             )
         ]));

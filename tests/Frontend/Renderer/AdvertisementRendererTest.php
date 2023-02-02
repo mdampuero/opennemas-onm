@@ -56,6 +56,11 @@ class AdvertisementRendererTest extends TestCase
             ->setMethods([ 'fetch' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getTimeZone' ])
+            ->getMock();
+
         $this->view = $this->getMockBuilder('Common\Core\Component\Template\TemplateFactory')
             ->disableOriginalConstructor()
             ->setMethods([ 'get' ])
@@ -102,8 +107,8 @@ class AdvertisementRendererTest extends TestCase
             case 'core.globals':
                 return $this->globals;
 
-            case 'core.globals':
-                return $this->globals;
+            case 'core.locale':
+                return $this->locale;
 
             case 'core.helper.content':
                 return $this->contentHelper;
@@ -632,7 +637,7 @@ class AdvertisementRendererTest extends TestCase
             ]
         ];
 
-        $ad->params['device'] = [
+        $ad->params['devices'] = [
             'phone' => 1,
             'desktop' => 1
         ];
@@ -669,6 +674,9 @@ class AdvertisementRendererTest extends TestCase
             ->with(3)
             ->willReturn($renderer);
 
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('desktop');
+
         $this->templateAdmin->expects($this->once())->method('fetch')
             ->with('advertisement/helpers/inline/interstitial.tpl', [
                 'size'        => $ad->params['sizes']['0'],
@@ -690,15 +698,35 @@ class AdvertisementRendererTest extends TestCase
      */
     public function testRenderInlineInterstitialWithEmptySizes()
     {
-        $ad                   = new \Advertisement();
-        $ad->positions        = [ 1, 2, 50 ];
-        $ad->params['sizes']  = [];
-        $ad->params['device'] = [ 'phone' => 1, 'desktop' => 1 ];
+        $ad                    = new \Advertisement();
+        $ad->positions         = [ 1, 2, 50 ];
+        $ad->params['sizes']   = [];
+        $ad->params['devices'] = [ 'phone' => 1, 'desktop' => 1 ];
+
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('desktop');
 
         $this->renderer->setAdvertisements([$ad]);
 
         $this->assertEmpty(
             $this->renderer->renderInlineInterstitial([])
+        );
+    }
+
+    /**
+     * Tests getXCacheFor.
+     */
+    public function testgetXCacheFor()
+    {
+        $ad1            = new \Advertisement();
+        $ad1->starttime = '9999-01-01 00:00:00';
+
+        $ad2          = new \Advertisement();
+        $ad2->endtime = '9998-01-01 00:00:00';
+
+        $this->assertEquals(
+            '9998-01-01 00:00:00',
+            $this->renderer->getXCacheFor([$ad1, $ad2])
         );
     }
 

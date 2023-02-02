@@ -55,7 +55,7 @@ class CategoryCacheHelper extends CacheHelper
         $keys = ['rss-index'];
         foreach ($keys as $key) {
             $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*%s', $this->instance->internal_name, $key)
+                sprintf('obj.http.x-tags ~ ^instance-%s.*%s', $this->instance->internal_name, $key)
             ]));
         }
 

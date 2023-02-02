@@ -158,7 +158,7 @@ class ContentCacheHelper extends CacheHelper
         if (!empty($banRegExpr)) {
             $this->queue->push(new ServiceTask('core.varnish', 'ban', [
                 sprintf(
-                    'obj.http.x-tags ~ instance-%s.*%s',
+                    'obj.http.x-tags ~ ^instance-%s.*%s',
                     $this->instance->internal_name,
                     '(' . substr($banRegExpr, 1) . ')'
                 )

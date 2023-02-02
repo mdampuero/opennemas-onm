@@ -198,7 +198,16 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
-          $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
+          var dontLocalize = [ 'related_contents' ];
+
+          if ($scope.extraFields && $scope.hasMultilanguage()) {
+            $scope.extraFields.forEach(function(element) {
+              if ($scope.item[element.key.value] && !(element.key.value in dontLocalize)) {
+                dontLocalize.push(element.key.value);
+              }
+            });
+          }
+          $scope.localize($scope.data.item, 'item', true, dontLocalize);
           $scope.expandFields();
           // Check if item is new (created) or existing for use default value or not
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {

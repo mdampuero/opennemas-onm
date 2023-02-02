@@ -499,7 +499,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s', $instanceName)
+                sprintf('obj.http.x-tags ~ ^instance-%s', $instanceName)
             ])
         );
     }
@@ -523,15 +523,15 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->container->get('api.helper.cache.frontpage')->deleteItems($items, $category);
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*header-date', $instanceName, $category)
+                sprintf('obj.http.x-tags ~ ^instance-%s.*header-date', $instanceName, $category)
             ])
         )->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*rss-frontpage-%s.*', $instanceName, $category)
+                sprintf('obj.http.x-tags ~ ^instance-%s.*rss-frontpage-%s.*', $instanceName, $category)
             ])
         )->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page-%s$', $instanceName, $category)
+                sprintf('obj.http.x-tags ~ ^instance-%s.*frontpage-page-%s$', $instanceName, $category)
             ])
         );
     }
@@ -551,7 +551,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*frontpagecss.*', $instanceName)
+                sprintf('obj.http.x-tags ~ ^instance-%s.*frontpagecss.*', $instanceName)
             ])
         );
     }
@@ -571,7 +571,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*', $instanceName)
+                sprintf('obj.http.x-tags ~ ^instance-%s.*', $instanceName)
             ])
         );
     }
