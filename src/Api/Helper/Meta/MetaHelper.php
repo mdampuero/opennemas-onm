@@ -28,6 +28,19 @@ class MetaHelper
     protected $template        = 'metas/content/content.tpl';
     protected $contentTemplate = 'metas/content/content.tpl';
 
+    /**
+     * The global variables service.
+     *
+     * @var GlobalVariables
+     */
+    protected $globals;
+
+    /**
+     * The frontend template.
+     *
+     * @var Template
+     */
+    protected $tpl;
 
     /**
      * Initializes the AdvertisementHelper.
@@ -36,15 +49,9 @@ class MetaHelper
      */
     public function __construct($container)
     {
-        $this->container       = $container;
-        $this->tpl             = $this->container->get('view')->get('frontend');
-        $this->globals         = $container->get('core.globals');
-        $this->settings        = $container->get('orm.manager')->getDataSet('Settings');
-        $this->categoryHelper  = $container->get('core.helper.category');
-        $this->authorHelper    = $container->get('core.helper.author');
-        $this->siteTitle       = $this->settings->get('site_title');
-        $this->siteKeywords    = $this->settings->get('site_keywords');
-        $this->siteDescription = $this->settings->get('site_description');
+        $this->container = $container;
+        $this->tpl       = $this->container->get('view')->get('frontend');
+        $this->globals   = $container->get('core.globals');
     }
 
     /**
@@ -53,29 +60,18 @@ class MetaHelper
      * @param String $action The action value.
      * @param Mixed  $content The Content object.
      * @param Mixed  $page the page number.
+     * @param Mixed  $exception the exception if exists.
      *
      * @return Mixed The tpl meta content.
      */
     public function generateMetas($action, $content, $page, $exception)
     {
-        $data   = $this->generateData($content, $action, $page, $exception);
-        $result = $this->render($content, $data);
-        return $result;
-    }
+        $data = $this->generateData($content, $action, $page, $exception);
+        $tpl  = $content instanceof \Common\Model\Entity\Content
+            ? $this->contentTemplate
+            : $this->template;
 
-    /**
-     * Return meta tpl content
-     *
-     * @param Mixed  $content The Content object.
-     * @param Mixed  $params The params object.
-     *
-     * @return Mixed The tpl meta content.
-     */
-    public function render($content, $params)
-    {
-        $tpl = $content instanceof \Common\Model\Entity\Content ? $this->contentTemplate : $this->template;
-
-        return $this->tpl->fetch($tpl, $params);
+        return $this->tpl->fetch($tpl, $data);
     }
 
     /**
@@ -84,56 +80,37 @@ class MetaHelper
      * @param Mixed  $content The Content object.
      * @param String $action The action value.
      * @param Mixed  $page the page number.
+     * @param Mixed  $exception the exception if exists.
      *
      * @return Mixed The extracted data.
      */
-    public function generateData($content, $action, $page, $exception)
+    protected function generateData($content, $action, $page, $exception)
     {
         $data = [];
-        //On static page routes, $page is Content entity
+
+        // On static page routes, $page is Content entity
         if ($page && !$page instanceof \Common\Model\Entity\Content) {
             $data['page'] = (int) $page > 1 ? $page : '';
         }
-        $data['action']               = $action ?? '';
-        $data['category_name']        = $this->categoryHelper->getCategoryName($content) ?? '';
-        $data['category_description'] = $this->categoryHelper->getCategoryDescription($content) ??
-            $this->categoryHelper->getCategoryName($content) ??
-            '';
-        $data['tag_name']             = $content->name ?? '';
-        $data['author_name']          = $this->authorHelper->getAuthorName($content) ?? '';
-        $data['author_description']   = $this->authorHelper->getAuthorBioSummary($content) ??
-            $this->authorHelper->getAuthorBioBody($content) ??
-            $this->authorHelper->getAuthorName($content) ??
-            '';
-        $data['exception_code']       = !empty($exception) && $exception->getcode() ? $exception->getcode() : '';
+
+        $ch = $this->container->get('core.helper.category');
+        $ah = $this->container->get('core.helper.author');
+
+        $data = [
+            'action'               => $action ?? '',
+            'exception_code'       => !empty($exception) && $exception->getcode() ? $exception->getcode() : '',
+            'category_name'        => $ch->getCategoryName($content) ?? '',
+            'category_description' => $ch->getCategoryDescription($content) ?? $ch->getCategoryName($content) ?? '',
+            'tag_name'             => $content->name ?? '',
+            'author_name'          => $ah->getAuthorName($content) ?? '',
+            'author_description'   => $ah->getAuthorBioSummary($content) ?? $ah->getAuthorBioBody($content) ??
+                $ah->getAuthorName($content) ?? '',
+        ];
 
         if ($content && $content instanceof \Common\Model\Entity\Content) {
-            $title       = $content->seo_title ?? $content->title_int ?? $content->title ?? '';
-            $title       = empty($title) ? $this->siteTitle : trim(strip_tags($title));
-            $description = trim(
-                strip_tags(
-                    $content->seo_description ??
-                    $this->container->get('core.helper.content')->getSummary($content)
-                )
-            );
-
-            $data['content_starttime']   = $content->starttime ? $content->starttime : '';
-            $data['content_description'] = (strlen($description) > 160) ?
-                substr($description, 0, 157) . '...' : $description;
-            $data['content_title']       = (strlen($title) > 90) ? substr($title, 0, 87) . '...' : $title;
-            if ($content->tags && !empty($content->tags)) {
-                try {
-                    $tags = $this->container->get('api.service.tag')->getListByIds($content->tags)['items'];
-                    $tags = array_map(function ($tag) {
-                        return strip_tags($tag->name);
-                    }, $tags);
-
-                    $data['content_tags'] = implode(',', $tags);
-                } catch (GetListException $e) {
-                    unset($data['content_tags']);
-                }
-            }
+            $data = array_merge($data, $this->getContentData($content));
         }
+
         $data = array_filter($data, function ($element) {
             return !empty($element);
         });
@@ -148,5 +125,51 @@ class MetaHelper
         return [
             'data' => $data
         ];
+    }
+
+    /**
+     * Return parsed metadata for a content
+     *
+     * @param Content  $content The Content object.
+     *
+     * @return Array The parsed metadata for a content.
+     */
+    protected function getContentData($content)
+    {
+        $settings        = $this->container->get('orm.manager')->getDataSet('Settings');
+        $siteTitle       = $settings->get('site_title');
+        $siteDescription = $settings->get('site_description');
+
+        $title = htmlspecialchars(trim(strip_tags(
+            $content->seo_title ?? $content->title_int ?? $content->title ?? $siteTitle
+        )));
+
+        $description = htmlspecialchars(trim(preg_replace('/\s+/', ' ', (strip_tags(
+            current(array_filter([
+                $content->seo_description,
+                $content->summary,
+                $content->description,
+                mb_substr($content->body, 0, 160),
+                $siteDescription
+            ]))
+        )))));
+
+        $data = [
+            'content_title'       => strlen($title) > 90 ? substr($title, 0, 87) . '...' : $title,
+            'content_description' => strlen($description) > 160 ? substr($description, 0, 157) . '...' : $description,
+            'content_starttime'   => $content->starttime,
+        ];
+
+        if (is_array($content->tags) && !empty($content->tags)) {
+            $tags = $this->container->get('api.service.tag')->getListByIds($content->tags);
+
+            $tagsName = array_map(function ($tag) {
+                return strip_tags($tag->name);
+            }, $tags['items']);
+
+            $data['content_tags'] = implode(',', $tagsName);
+        }
+
+        return $data;
     }
 }
