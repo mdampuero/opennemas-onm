@@ -167,7 +167,7 @@ class MetaHelper
                 return strip_tags($tag->name);
             }, $tags['items']);
 
-            $data['content_tags'] = implode(',', $tagsName);
+            $data['content_keywords'] = implode(',', $tagsName);
         }
 
         return $data;
