@@ -23,7 +23,7 @@ class MetaHelper
      *
      * @var String
      */
-    protected $template        = 'metas/content/content.tpl';
+    protected $template        = 'metas/default/default.tpl';
     protected $contentTemplate = 'metas/content/content.tpl';
 
     /**
@@ -166,7 +166,6 @@ class MetaHelper
             'content_starttime'   => $content->starttime,
             'content_keywords'    => $keywords ?? $this->settings->get('site_keywords')
         ];
-
 
         return $data;
     }
