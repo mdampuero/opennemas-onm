@@ -135,6 +135,11 @@
   flex-direction: column;
 }
 
+.oat-visible > * {
+  width: -webkit-fill-available;
+  width: -moz-available;
+}
+
 .oat-bottom > * {
   margin-bottom: 15px;
 }
