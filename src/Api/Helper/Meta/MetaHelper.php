@@ -9,8 +9,6 @@
  */
 namespace Api\Helper\Meta;
 
-use Api\Exception\GetListException;
-
 class MetaHelper
 {
     /**
@@ -36,6 +34,13 @@ class MetaHelper
     protected $globals;
 
     /**
+     * The instance settings array.
+     *
+     * @var Settings
+     */
+    protected $settings;
+
+    /**
      * The frontend template.
      *
      * @var Template
@@ -50,17 +55,18 @@ class MetaHelper
     public function __construct($container)
     {
         $this->container = $container;
-        $this->tpl       = $this->container->get('view')->get('frontend');
+        $this->tpl       = $container->get('view')->get('frontend');
+        $this->settings  = $container->get('orm.manager')->getDataSet('Settings');
         $this->globals   = $container->get('core.globals');
     }
 
     /**
      * Return meta tags
      *
-     * @param String $action The action value.
-     * @param Mixed  $content The Content object.
-     * @param Mixed  $page the page number.
-     * @param Mixed  $exception the exception if exists.
+     * @param String $action    The action value.
+     * @param Mixed  $content   The Content object.
+     * @param Mixed  $page      The page number.
+     * @param Mixed  $exception The exception if exists.
      *
      * @return Mixed The tpl meta content.
      */
@@ -71,35 +77,39 @@ class MetaHelper
             ? $this->contentTemplate
             : $this->template;
 
-        return $this->tpl->fetch($tpl, [ 'data' => $data ]);
+        return $this->tpl->fetch($tpl, [
+            'data'            => $data,
+            'siteName'        => $this->settings->get('site_name'),
+            'siteTitle'       => $this->settings->get('site_title'),
+            'siteDescription' => $this->settings->get('site_description'),
+            'siteKeywords'    => $this->settings->get('site_keywords'),
+        ]);
     }
 
     /**
      * Return extracted data
      *
-     * @param Mixed  $content The Content object.
-     * @param String $action The action value.
-     * @param Mixed  $page the page number.
-     * @param Mixed  $exception the exception if exists.
+     * @param Content $content   The Content object.
+     * @param String  $action    The action value.
+     * @param Mixed   $page      The page number.
+     * @param Mixed   $exception The exception if exists.
      *
-     * @return Mixed The extracted data.
+     * @return Array  $data      The extracted data.
      */
     protected function generateData($content, $action, $page, $exception)
     {
-        $data = [];
-
         $ch = $this->container->get('core.helper.category');
         $ah = $this->container->get('core.helper.author');
 
         $data = [
-            'action'               => $action ?? '',
+            'action'               => $action,
             'exception_code'       => !empty($exception) && $exception->getcode() ? $exception->getcode() : '',
-            'category_name'        => $ch->getCategoryName($content) ?? '',
-            'category_description' => $ch->getCategoryDescription($content) ?? $ch->getCategoryName($content) ?? '',
+            'category_name'        => $ch->getCategoryName($content),
+            'category_description' => $ch->getCategoryDescription($content) ?? $ch->getCategoryName($content),
             'tag_name'             => $content->name ?? '',
-            'author_name'          => $ah->getAuthorName($content) ?? '',
+            'author_name'          => $ah->getAuthorName($content),
             'author_description'   => $ah->getAuthorBioSummary($content) ?? $ah->getAuthorBioBody($content) ??
-                $ah->getAuthorName($content) ?? '',
+                $ah->getAuthorName($content),
         ];
 
         // On static page routes, $page is Content entity
@@ -119,16 +129,15 @@ class MetaHelper
      *
      * @param Content  $content The Content object.
      *
-     * @return Array The parsed metadata for a content.
+     * @return Array   $data    The parsed metadata for a content.
      */
     protected function getContentData($content)
     {
-        $settings        = $this->container->get('orm.manager')->getDataSet('Settings');
-        $siteTitle       = $settings->get('site_title');
-        $siteDescription = $settings->get('site_description');
-
         $title = htmlspecialchars(trim(strip_tags(
-            $content->seo_title ?? $content->title_int ?? $content->title ?? $siteTitle
+            $content->seo_title ??
+            $content->title_int ??
+            $content->title ??
+            $this->settings->get('site_title')
         )));
 
         $description = htmlspecialchars(trim(preg_replace('/\s+/', ' ', (strip_tags(
@@ -137,15 +146,9 @@ class MetaHelper
                 $content->summary,
                 $content->description,
                 mb_substr($content->body, 0, 160),
-                $siteDescription
+                $this->settings->get('site_description')
             ]))
         )))));
-
-        $data = [
-            'content_title'       => strlen($title) > 90 ? substr($title, 0, 87) . '...' : $title,
-            'content_description' => strlen($description) > 160 ? substr($description, 0, 157) . '...' : $description,
-            'content_starttime'   => $content->starttime,
-        ];
 
         if (is_array($content->tags) && !empty($content->tags)) {
             $tags = $this->container->get('api.service.tag')->getListByIds($content->tags);
@@ -154,8 +157,16 @@ class MetaHelper
                 return strip_tags($tag->name);
             }, $tags['items']);
 
-            $data['content_keywords'] = implode(',', $tagsName);
+            $keywords = implode(',', $tagsName);
         }
+
+        $data = [
+            'content_title'       => strlen($title) > 90 ? substr($title, 0, 87) . '...' : $title,
+            'content_description' => strlen($description) > 160 ? substr($description, 0, 157) . '...' : $description,
+            'content_starttime'   => $content->starttime,
+            'content_keywords'    => $keywords ?? $this->settings->get('site_keywords')
+        ];
+
 
         return $data;
     }
