@@ -21,15 +21,17 @@ class SitemapHelper
      * @const array
      */
     const EXTENSIONS = [
-        'album'   => 'ALBUM_MANAGER',
-        'article' => 'ARTICLE_MANAGER',
-        'event'   => 'es.openhost.module.events',
-        'kiosko'  => 'KIOSKO_MANAGER',
-        'letter'  => 'LETTER_MANAGER',
-        'opinion' => 'OPINION_MANAGER',
-        'poll'    => 'POLL_MANAGER',
-        'tag'     => '',
-        'video'   => 'VIDEO_MANAGER',
+        'album'    => 'ALBUM_MANAGER',
+        'article'  => 'ARTICLE_MANAGER',
+        'company'  => 'es.openhost.module.companies',
+        'event'    => 'es.openhost.module.events',
+        'kiosko'   => 'KIOSKO_MANAGER',
+        'letter'   => 'LETTER_MANAGER',
+        'obituary' => 'es.openhost.module.obituaries',
+        'opinion'  => 'OPINION_MANAGER',
+        'poll'     => 'POLL_MANAGER',
+        'tag'      => '',
+        'video'    => 'VIDEO_MANAGER',
     ];
 
     /**
@@ -139,17 +141,17 @@ class SitemapHelper
 
         $result = $this->connection->fetchAll(
             sprintf(
-                'SELECT CONCAT(CONVERT(year(changed), NCHAR),\'-\', LPAD(month(changed),2,"0")) as \'dates\''
-                . 'FROM `contents` WHERE year(changed) is not null AND year(changed) <= YEAR(CURRENT_DATE()) '
-                . 'AND month(changed) <= month(CURRENT_DATE())'
+                'SELECT DISTINCT year(changed) as "year", month(changed) as "month" '
+                . 'FROM `contents` WHERE changed is not null '
+                . 'AND changed <= CURRENT_TIMESTAMP() '
                 . 'AND `content_type_name` IN (%s) '
-                . 'group by dates order by dates',
+                . 'order by year,month',
                 $types
             )
         );
 
         return array_map(function ($a) {
-            return $a['dates'];
+            return $a['year'] . "-" . str_pad($a['month'], 2, '0', STR_PAD_LEFT);
         }, $result);
     }
 
@@ -160,14 +162,12 @@ class SitemapHelper
      */
     public function getSitemapsInfo()
     {
-        $types  = $this->getTypes($this->settings, [ 'tag' ], true);
-        $years  = $this->getYears($types);
-        $months = $this->getMonths($types);
+        $types = $this->getTypes($this->settings, [ 'tag' ], true);
+        $years = $this->getYears($types);
 
         return [
             'items'    => $this->getSitemaps(),
             'years'    => $years,
-            'months'   => $months
         ];
     }
 
@@ -194,10 +194,11 @@ class SitemapHelper
      *
      * @return array The array with the name of the sitemaps.
      */
-    public function getSitemaps()
+    public function getSitemaps($sitemapPath = null)
     {
-        $path  = $this->publicDir . '/' . $this->instance->getSitemapShortPath() . '/';
-        $files = [];
+        $sitemapPath = $sitemapPath ?? $this->instance->getSitemapShortPath();
+        $path        = $this->publicDir . '/' . $sitemapPath . '/';
+        $files       = [];
 
         try {
             $this->finder->files()->in($path);
@@ -321,11 +322,12 @@ class SitemapHelper
      *
      * @return array An array of the removed sitemaps.
      */
-    public function deleteSitemaps($parameters = [])
+    public function deleteSitemaps($parameters = [], $sitemapPath = null)
     {
-        $removed  = [];
-        $path     = $this->publicDir . '/' . $this->instance->getSitemapShortPath() . '/';
-        $sitemaps = $this->getSitemaps();
+        $sitemapPath = $sitemapPath ?? $this->instance->getSitemapShortPath();
+        $removed     = [];
+        $path        = $this->publicDir . '/' . $sitemapPath . '/';
+        $sitemaps    = $this->getSitemaps($sitemapPath);
 
         foreach ($sitemaps as $sitemap) {
             $toRemove = true;
@@ -348,6 +350,25 @@ class SitemapHelper
         }
 
         return $removed;
+    }
+
+    /**
+     * Remove sitemaps by patterm
+     *
+     * @param string $year  The year to match.
+     * @param string $month The month to match.
+     *
+     */
+    public function removeSitemapsByPattern($year = '????', $month = '??')
+    {
+        if (empty($year) && empty($month)) {
+            return;
+        }
+
+        $path    = $this->publicDir . '/' . $this->instance->getSitemapShortPath() . '/';
+        $pattern = sprintf('sitemap.%s.%s*.xml.gz', $year, $month);
+
+        array_map('unlink', glob($path . $pattern));
     }
 
     /**
@@ -380,40 +401,16 @@ class SitemapHelper
     {
         $result = $this->connection->fetchAll(
             sprintf(
-                'SELECT CONVERT(year(changed), NCHAR) as \'dates\''
-                . 'FROM `contents` WHERE year(changed) is not null '
+                'SELECT year(changed) as "year"'
+                . 'FROM `contents` WHERE changed is not null '
                 . 'AND `content_type_name` IN (%s) '
-                . 'group by dates order by dates',
+                . 'group by year order by year',
                 $types
             )
         );
 
         return array_map(function ($a) {
-            return $a['dates'];
-        }, $result);
-    }
-
-    /**
-     * Returns the months of the sitemaps.
-     *
-     * @param string $types The allowed types for the sitemap.
-     *
-     * @return array The months of the sitemap.
-     */
-    protected function getMonths($types)
-    {
-        $result = $this->connection->fetchAll(
-            sprintf(
-                'SELECT LPAD(month(changed),2,"0") as \'dates\''
-                . 'FROM `contents` WHERE month(changed) is not null '
-                . 'AND `content_type_name` IN (%s) '
-                . 'group by dates order by dates',
-                $types
-            )
-        );
-
-        return array_map(function ($a) {
-            return $a['dates'];
+            return strval($a['year']);
         }, $result);
     }
 }

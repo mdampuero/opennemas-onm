@@ -82,6 +82,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForContent', 20],
                 ['removeSmartyCacheForContent', 15],
                 ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
             ],
             'content.updateVotedItem' => [
@@ -95,18 +96,21 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForRelatedContents', 20],
                 ['removeSmartyCacheForContent', 15],
                 ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
             ],
             'content.patchItem' => [
                 ['removeObjectCacheForContent', 20],
                 ['removeSmartyCacheForContent', 15],
                 ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
             ],
             'content.patchList' => [
                 ['removeObjectCacheForContent', 20],
                 ['removeSmartyCacheForContent', 15],
                 ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
             ],
             'content.deleteList' => [
@@ -114,6 +118,7 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeObjectCacheForRelatedContents', 20],
                 ['removeSmartyCacheForContent', 15],
                 ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
             ],
             // Frontpage hooks
@@ -554,6 +559,39 @@ class HooksSubscriber implements EventSubscriberInterface
                 sprintf('obj.http.x-tags ~ ^instance-%s.*frontpagecss.*', $instanceName)
             ])
         );
+    }
+
+    /**
+     * Remove saved sitemaps.
+     *
+     * @param Event $event The event to handle.
+     */
+    public function removeSavedSitemaps(Event $event)
+    {
+        if (!$event->hasArgument('item') || !$event->hasArgument('last_changed')) {
+            return;
+        }
+
+        $sh          = $this->container->get('core.helper.sitemap');
+        $timezone    = $this->container->get('core.locale')->getTimeZone();
+        $now         = new \DateTime(null, $timezone);
+        $content     = $event->getArgument('item');
+        $lastChanged = $event->getArgument('last_changed');
+
+        $lastChanged = !is_array($lastChanged) ? [ $lastChanged ] : $lastChanged;
+        $content     = !is_array($content) ? [ $content ] : $content;
+
+        foreach ($lastChanged as $key => $value) {
+            if (empty($value)
+            || !in_array($content[0]->content_type_name, $sh->getTypes($sh->getSettings(), ['tag']))
+            || $now->format('Y-m') == $value->format('Y-m')) {
+                continue;
+            }
+            $sh->removeSitemapsByPattern(
+                $value->format('Y'),
+                $value->format('m')
+            );
+        }
     }
 
     /**
