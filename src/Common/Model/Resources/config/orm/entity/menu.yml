@@ -27,7 +27,7 @@ orm:
                         table: menumetas
                         ids:
                             pk_menu: fk_menu
-                        key: meta_name
+                        key: meta_key
                     relations:
                         menu_items:
                             table: menu_items
