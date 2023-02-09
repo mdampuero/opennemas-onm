@@ -107,7 +107,9 @@ class EventController extends FrontendController
      */
     protected function hydrateList(array &$params = []) : void
     {
-        $date = gmdate('Y-m-d H:i:s');
+        $date     = gmdate('Y-m-d H:i:s');
+        $timezone = $this->get('core.locale')->getTimeZone();
+        $now      = new \DateTime(null, $timezone);
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
@@ -120,27 +122,34 @@ class EventController extends FrontendController
             'select * from contents '
             . 'inner join contentmeta '
             . 'on contents.pk_content = contentmeta.fk_content '
-            . 'and contentmeta.meta_name = "event_start_date"'
+            . 'and contentmeta.meta_name = "event_start_date" '
             . 'where content_type_name="event" and content_status=1 and in_litter=0 '
             . 'and (starttime is null or starttime < "%s") '
             . 'and (endtime is null or endtime > "%s") '
-            . 'order by meta_value desc limit %d offset %d',
+            . 'order by meta_value asc limit %d offset %d',
             $date,
             $date,
             $params['epp'],
             $params['epp'] * ($params['page'] - 1)
         ));
 
+        $items = array_filter($response['items'], function ($element) use ($now) {
+            return !$element->event_start_date || $element->event_start_date >= $now->format('Y-m-d');
+        });
+
         $total = $this->get($this->service)->countBy(sprintf(
             'content_type_name="event" and content_status=1 and in_litter=0 '
             . 'and (starttime is null or starttime < "%s") '
-            . 'and (endtime is null or endtime > "%s") ',
+            . 'and (endtime is null or endtime > "%s") '
+            . 'and (event_end_hour is null or event_end_hour >= "%s")',
             $date,
-            $date
+            $date,
+            $now->format('Y-m-d')
         ));
-
+        dump($total);
+        die();
         // No first page and no contents
-        if ($params['page'] > 1 && empty($response['items'])) {
+        if ($params['page'] > 1 && empty($items)) {
             throw new ResourceNotFoundException();
         }
 
@@ -154,7 +163,7 @@ class EventController extends FrontendController
 
         $params['x-tags'] .= ',event-frontpage';
 
-        $params['contents']   = $response['items'];
+        $params['contents']   = $items;
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
             'epp'         => $params['epp'],
@@ -163,6 +172,6 @@ class EventController extends FrontendController
             'route'       => 'frontend_events'
         ]);
 
-        $params['tags'] = $this->getTags($response['items']);
+        $params['tags'] = $this->getTags($items);
     }
 }
