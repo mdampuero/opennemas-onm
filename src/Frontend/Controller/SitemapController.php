@@ -108,6 +108,7 @@ class SitemapController extends Controller
                 ];
             }
 
+            $contents = array_reverse($contents);
             return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters, 'contents' => $contents ]);
         }
 
@@ -283,7 +284,7 @@ class SitemapController extends Controller
         $types    = $helper->getTypes($settings, [ 'tag' ]);
         $contents = $helper
             ->getContents($date, $types, $settings['perpage'], $page);
-
+        $contents = array_reverse($contents);
         if ($date === date('Y-m')) {
             $path = null;
         }
@@ -366,7 +367,7 @@ class SitemapController extends Controller
             } catch (GetListException $e) {
             }
 
-            return $this->getResponse($format, $cacheId, 'tag', $tags);
+            return $this->getResponse($format, $cacheId, 'tag', $tags, null, null, null, null, '', $letter);
         }
 
         return $this->getResponse($format, $cacheId, 'tag');
@@ -412,7 +413,8 @@ class SitemapController extends Controller
         $page = null,
         $year = null,
         $month = null,
-        $cacheControl = ''
+        $cacheControl = '',
+        $letter = null
     ) {
         $headers = [
             'Content-Type' => 'application/xml; charset=utf-8',
@@ -453,7 +455,7 @@ class SitemapController extends Controller
         }
 
         if ($format === 'xml.gz') {
-            $filename = implode(".", array_filter([ $action, $year, $month, $page ]));
+            $filename = implode(".", array_filter([ $action, $year, $month, $page, $letter ]));
             $file     = $file ?? gzencode($contents, 9);
 
             $headers = array_merge($headers, [
