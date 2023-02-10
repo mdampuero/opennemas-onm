@@ -24,7 +24,11 @@ class MetaHelper
      * @var String
      */
     protected $template        = 'metas/default/default.tpl';
-    protected $contentTemplate = 'metas/content/content.tpl';
+    protected $contentTemplate = [
+        'default' => 'metas/content/content.tpl',
+        'event'   => 'metas/content/event/event_content.tpl',
+        'company' => 'metas/content/company/company_content.tpl'
+        ];
 
     /**
      * The global variables service.
@@ -73,9 +77,13 @@ class MetaHelper
     public function generateMetas($action, $content, $page, $exception)
     {
         $data = $this->generateData($content, $action, $page, $exception);
-        $tpl  = $content instanceof \Common\Model\Entity\Content
-            ? $this->contentTemplate
-            : $this->template;
+        $tpl  = $this->template;
+
+        if ($content instanceof \Common\Model\Entity\Content) {
+            $tpl = array_key_exists($content->content_type_name, $this->contentTemplate) ?
+                $this->contentTemplate[$content->content_type_name] :
+                $this->contentTemplate['default'];
+        }
 
         return $this->tpl->fetch($tpl, [
             'data'            => $data,
