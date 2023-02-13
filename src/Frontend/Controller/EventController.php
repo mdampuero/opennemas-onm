@@ -126,28 +126,23 @@ class EventController extends FrontendController
             . 'where content_type_name="event" and content_status=1 and in_litter=0 '
             . 'and (starttime is null or starttime < "%s") '
             . 'and (endtime is null or endtime > "%s") '
-            . 'order by meta_value asc limit %d offset %d',
+            . 'order by meta_value asc',
             $date,
             $date,
-            $params['epp'],
-            $params['epp'] * ($params['page'] - 1)
         ));
 
-        $items = array_filter($response['items'], function ($element) use ($now) {
-            return !$element->event_start_date || $element->event_start_date >= $now->format('Y-m-d');
-        });
+        $items = $response['items'];
+        $total = count($items);
+        $limit = ($params['epp'] * ($params['page'] - 1) + $params['epp']) > count($items)
+            ? (count($items) - ($params['epp'] * ($params['page'] - 1)))
+            : $params['epp'];
 
-        $total = $this->get($this->service)->countBy(sprintf(
-            'content_type_name="event" and content_status=1 and in_litter=0 '
-            . 'and (starttime is null or starttime < "%s") '
-            . 'and (endtime is null or endtime > "%s") '
-            . 'and (event_end_hour is null or event_end_hour >= "%s")',
-            $date,
-            $date,
-            $now->format('Y-m-d')
-        ));
-        dump($total);
-        die();
+        $items = array_slice(
+            $items,
+            $params['epp'] * ($params['page'] - 1),
+            $limit
+        );
+
         // No first page and no contents
         if ($params['page'] > 1 && empty($items)) {
             throw new ResourceNotFoundException();
