@@ -19,16 +19,23 @@ class MetaHelper
     protected $container;
 
     /**
-     * Content tpl
+     * Default meta template
      *
      * @var String
      */
-    protected $template        = 'metas/default/default.tpl';
+    protected $template = 'metas/default/default.tpl';
+
+
+    /**
+     * Content meta templates
+     *
+     * @var Array
+     */
     protected $contentTemplate = [
         'default' => 'metas/content/content.tpl',
         'event'   => 'metas/content/event/event_content.tpl',
         'company' => 'metas/content/company/company_content.tpl'
-        ];
+    ];
 
     /**
      * The global variables service.
