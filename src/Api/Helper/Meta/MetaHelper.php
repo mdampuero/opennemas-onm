@@ -119,11 +119,10 @@ class MetaHelper
             'action'               => $action,
             'exception_code'       => !empty($exception) && $exception->getcode() ? $exception->getcode() : '',
             'category_name'        => $ch->getCategoryName($content),
-            'category_description' => $ch->getCategoryDescription($content) ?? $ch->getCategoryName($content),
+            'category_description' => $ch->getCategoryDescription($content),
             'tag_name'             => $content->name ?? '',
             'author_name'          => $ah->getAuthorName($content),
-            'author_description'   => $ah->getAuthorBioSummary($content) ?? $ah->getAuthorBioBody($content) ??
-                $ah->getAuthorName($content),
+            'author_description'   => $ah->getAuthorBioSummary($content) ?? $ah->getAuthorBioBody($content),
         ];
 
         // On static page routes, $page is Content entity
