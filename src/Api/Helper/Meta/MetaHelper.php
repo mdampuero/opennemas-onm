@@ -25,7 +25,6 @@ class MetaHelper
      */
     protected $template = 'metas/default/default.tpl';
 
-
     /**
      * Content meta templates
      *
