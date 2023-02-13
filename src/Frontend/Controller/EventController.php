@@ -109,7 +109,6 @@ class EventController extends FrontendController
     {
         $date     = gmdate('Y-m-d H:i:s');
         $timezone = $this->get('core.locale')->getTimeZone();
-        $now      = new \DateTime(null, $timezone);
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
