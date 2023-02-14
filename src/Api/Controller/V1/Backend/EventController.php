@@ -51,8 +51,12 @@ class EventController extends ContentController
      */
     protected function getExtraData($items = null)
     {
+        $categories = $this->get('api.service.category')->responsify(
+            $this->get('api.service.category')->getList()['items']
+        );
+
         return array_merge(parent::getExtraData($items), [
-            'categories' => $this->getCategories($items),
+            'categories' => $categories,
             'tags'       => $this->getTags($items),
             'formSettings'  => [
                 'name'             => $this->module,
