@@ -256,12 +256,12 @@ class TagController extends FrontendController
                 ->filter('slug')
                 ->get();
 
-            if (in_array($slug[0], $letters)) {
+            if (!empty($slug) && in_array($slug[0], $letters)) {
                 $tags[$slug[0]][] = $item;
                 continue;
             }
 
-            $tags['*'][] = $tag;
+            $tags['*'][] = $item;
         }
 
         ksort($tags);

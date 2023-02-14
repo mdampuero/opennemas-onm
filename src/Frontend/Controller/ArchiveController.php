@@ -139,6 +139,7 @@ class ArchiveController extends Controller
             $this->view->assign([
                 'library'    => $library,
                 'pagination' => $pagination,
+                'page'       => $page,
             ]);
         }
 
