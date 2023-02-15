@@ -107,8 +107,7 @@ class EventController extends FrontendController
      */
     protected function hydrateList(array &$params = []) : void
     {
-        $date     = gmdate('Y-m-d H:i:s');
-        $timezone = $this->get('core.locale')->getTimeZone();
+        $date = gmdate('Y-m-d H:i:s');
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
@@ -119,13 +118,18 @@ class EventController extends FrontendController
 
         $response = $this->get('api.service.content')->getListBySql(sprintf(
             'select * from contents '
-            . 'inner join contentmeta '
-            . 'on contents.pk_content = contentmeta.fk_content '
-            . 'and contentmeta.meta_name = "event_start_date" '
+            . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
+            . 'and cm1.meta_name = "event_start_date" '
+            . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
+            . 'and cm2.meta_name = "event_end_date" '
             . 'where content_type_name="event" and content_status=1 and in_litter=0 '
+            . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))'
             . 'and (starttime is null or starttime < "%s") '
             . 'and (endtime is null or endtime > "%s") '
-            . 'order by meta_value asc',
+            . 'order by cm1.meta_value asc',
+            gmdate('Y-m-d'),
+            gmdate('Y-m-d'),
+            gmdate('Y-m-d'),
             $date,
             $date,
         ));
