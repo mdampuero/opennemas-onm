@@ -118,29 +118,36 @@ class EventController extends FrontendController
 
         $response = $this->get('api.service.content')->getListBySql(sprintf(
             'select * from contents '
-            . 'inner join contentmeta '
-            . 'on contents.pk_content = contentmeta.fk_content '
-            . 'and contentmeta.meta_name = "event_start_date"'
+            . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
+            . 'and cm1.meta_name = "event_start_date" '
+            . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
+            . 'and cm2.meta_name = "event_end_date" '
             . 'where content_type_name="event" and content_status=1 and in_litter=0 '
+            . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))'
             . 'and (starttime is null or starttime < "%s") '
             . 'and (endtime is null or endtime > "%s") '
-            . 'order by meta_value desc limit %d offset %d',
+            . 'order by cm1.meta_value asc',
+            gmdate('Y-m-d'),
+            gmdate('Y-m-d'),
+            gmdate('Y-m-d'),
             $date,
             $date,
-            $params['epp'],
-            $params['epp'] * ($params['page'] - 1)
         ));
 
-        $total = $this->get($this->service)->countBy(sprintf(
-            'content_type_name="event" and content_status=1 and in_litter=0 '
-            . 'and (starttime is null or starttime < "%s") '
-            . 'and (endtime is null or endtime > "%s") ',
-            $date,
-            $date
-        ));
+        $items = $response['items'];
+        $total = count($items);
+        $limit = ($params['epp'] * ($params['page'] - 1) + $params['epp']) > count($items)
+            ? (count($items) - ($params['epp'] * ($params['page'] - 1)))
+            : $params['epp'];
+
+        $items = array_slice(
+            $items,
+            $params['epp'] * ($params['page'] - 1),
+            $limit
+        );
 
         // No first page and no contents
-        if ($params['page'] > 1 && empty($response['items'])) {
+        if ($params['page'] > 1 && empty($items)) {
             throw new ResourceNotFoundException();
         }
 
@@ -154,7 +161,7 @@ class EventController extends FrontendController
 
         $params['x-tags'] .= ',event-frontpage';
 
-        $params['contents']   = $response['items'];
+        $params['contents']   = $items;
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
             'epp'         => $params['epp'],
@@ -163,6 +170,6 @@ class EventController extends FrontendController
             'route'       => 'frontend_events'
         ]);
 
-        $params['tags'] = $this->getTags($response['items']);
+        $params['tags'] = $this->getTags($items);
     }
 }
