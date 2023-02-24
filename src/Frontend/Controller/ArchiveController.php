@@ -71,7 +71,7 @@ class ArchiveController extends Controller
             $criteria = array_merge($criteria, [
                 'in_litter'       => [[ 'value' => 0 ]],
                 'content_status'  => [[ 'value' => 1 ]],
-                'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
+                'fk_content_type' => [[ 'value' => [1, 5, 4, 7, 9, 11, 17, 18, 19], 'operator' => 'IN' ]],
                 'starttime ' => [
                     [
                         'value' => "'$date' AND ('$date' + INTERVAL 1 DAY)",
@@ -139,6 +139,7 @@ class ArchiveController extends Controller
             $this->view->assign([
                 'library'    => $library,
                 'pagination' => $pagination,
+                'page'       => $page,
             ]);
         }
 

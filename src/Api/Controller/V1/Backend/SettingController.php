@@ -56,7 +56,6 @@ class SettingController extends Controller
         'cookies_hint_url',
         'custom_css_amp',
         'data_layer',
-        'dynamic_css',
         'elements_in_rss',
         'facebook',
         'facebook_id',
