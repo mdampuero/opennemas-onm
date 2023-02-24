@@ -107,6 +107,7 @@ class SettingController extends Controller
         'site_name',
         'site_title',
         'theme_font',
+        'theme_font_secondary',
         'theme_skin',
         'translators',
         'twitter_page',
