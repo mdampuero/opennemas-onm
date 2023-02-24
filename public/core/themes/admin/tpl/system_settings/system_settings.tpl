@@ -2019,7 +2019,7 @@
                             <div class="controls">
                               <div class="input-group">
                                 <select id="theme-font" name="theme-font" ng-model="settings.theme_font" required>
-                                  <option value="[% font_name %]" ng-repeat="(font_name,font_url) in extra.fonts" ng-selected="[% font_name === settings.theme_font %]">[% font_url %]</option>
+                                  <option value="[% font_name %]" ng-repeat="(font_name,font_url) in extra.theme_skins[settings.theme_skin].params.fonts" ng-selected="[% font_name === settings.theme_font %]">[% font_url %]</option>
                                 </select>
                               </div>
                             </div>
