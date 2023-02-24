@@ -255,6 +255,18 @@ class Template extends \Smarty
     }
 
     /**
+     * Returns the theme file name for the variant selected
+     *
+     * @return string the file name of the variant
+     */
+    public function getFonts()
+    {
+        return $this->container->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('theme_font', 'default');
+    }
+
+    /**
      * Returns a value assigned to template.
      *
      * @param string $name The value name.

@@ -107,6 +107,7 @@ class SettingController extends Controller
         'logo_default',
         'site_name',
         'site_title',
+        'theme_font',
         'theme_skin',
         'translators',
         'twitter_page',
@@ -229,6 +230,7 @@ class SettingController extends Controller
                     . '/',
                 'translation_services' =>
                     $this->get('core.factory.translator')->getTranslatorsData(),
+                'theme_fonts' => $this->get('core.theme')->getFonts(),
                 'theme_skins' => $this->get('core.theme')->getSkins(),
                 'data_types'  => $this->get('core.service.data_layer')->getTypes()
             ],
