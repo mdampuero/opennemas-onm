@@ -2007,20 +2007,22 @@
                                 </select>
                               </div>
                             </div>
-                            <label class="form-label" for="theme-font">
-                              <h4>
-                                <i class="fa fa-font"></i>
-                                {t}Theme font{/t}
-                              </h4>
-                              <span class="help">
-                                {t}Your theme offers multiple fonts to match your page style. Select which one do you want.{/t}
-                              </span>
-                            </label>
-                            <div class="controls">
-                              <div class="input-group">
-                                <select id="theme-font" name="theme-font" ng-model="settings.theme_font" required>
-                                  <option value="[% font_name %]" ng-repeat="(font_name,font_url) in extra.theme_skins[settings.theme_skin].params.fonts" ng-selected="[% font_name === settings.theme_font %]">[% font_url %]</option>
-                                </select>
+                            <div ng-if="extra.theme_skins[settings.theme_skin].params.fonts">
+                              <label class="form-label" for="theme-font">
+                                <h4>
+                                  <i class="fa fa-font"></i>
+                                  {t}Theme font{/t}
+                                </h4>
+                                <span class="help">
+                                  {t}Your theme offers multiple fonts to match your page style. Select which one do you want.{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-font" name="theme-font" ng-model="settings.theme_font" required>
+                                    <option value="[% font_name %]" ng-repeat="(font_name,font_url) in extra.theme_skins[settings.theme_skin].params.fonts" ng-selected="[% font_name === settings.theme_font %]">[% font_url %]</option>
+                                  </select>
+                                </div>
                               </div>
                             </div>
                           </div>
