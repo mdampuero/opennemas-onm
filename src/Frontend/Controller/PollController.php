@@ -140,7 +140,7 @@ class PollController extends FrontendController
                 return $item;
             }, $poll->items);
 
-            $this->get($this->service)->updateItem($poll->pk_content, ['items' => $items]);
+            $this->get($this->service)->updateVotedItem($poll->pk_content, ['items' => $items]);
 
             return $this->getResponse('success', _('Thanks for participating.'), $poll);
         } catch (\Exception $e) {
@@ -214,6 +214,20 @@ class PollController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
+
+        $params['x-tags'] .= ',poll-frontpage';
+
+        if (!empty($category)) {
+            $params['x-tags'] .= sprintf(',category-poll-%d', $category->id);
+        }
+
         $params = array_merge($params, [
             'polls'      => $response['items'],
             'total'      => $response['total'],
@@ -252,7 +266,7 @@ class PollController extends FrontendController
             ->add($type, $msg);
 
         $response = new RedirectResponse(
-            $this->get('core.helper.url_generator')->generate($poll)
+            $this->get('core.decorator.url')->prefixUrl($this->get('core.helper.url_generator')->generate($poll))
         );
 
         if ($type == 'success') {

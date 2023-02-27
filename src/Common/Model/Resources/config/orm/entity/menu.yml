@@ -1,0 +1,79 @@
+orm:
+    metadata:
+        -
+            name:  Menu
+            class: Common\Model\Entity\Menu
+            properties:
+                pk_menu:    integer
+                name:       string
+                position:   string
+                menu_items: array
+            converters:
+                default:
+                    class:     Common\Model\Database\Data\Converter\MenuConverter
+                    arguments: [ '@orm.metadata.menu' ]
+            repositories:
+                instance:
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.menu', '@cache.connection.instance' ]
+            persisters:
+                instance:
+                    class:     Common\Model\Database\Persister\MenuPersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.menu', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: menus
+                    metas:
+                        table: menumetas
+                        ids:
+                            pk_menu: fk_menu
+                        key: meta_key
+                    relations:
+                        menu_items:
+                            table: menu_items
+                            source_key: pk_menu
+                            target_key: pk_menu
+                            columns:
+                                pk_item:
+                                    type: integer
+                                pk_menu:
+                                    type: integer
+                                title:
+                                    type: string
+                                link_name:
+                                    type: string
+                                type:
+                                    type: string
+                                position:
+                                    type: integer
+                                pk_father:
+                                    type: integer
+                    columns:
+                        pk_menu:
+                            type: integer
+                            options: { default: null, unsigned: true, autoincrement: true }
+                        name:
+                            type: string
+                            options: { length: 255, default: null, notnull: true }
+                        position:
+                            type: string
+                            options: { default: null, notnull: false, length: 50 }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [pk_menu]
+                            primary: true
+                            unique: true
+                            flags: {  }
+                        -
+                            name: name
+                            columns: [name]
+                            primary: false
+                            unique: true
+                            flags: {  }
+                        -
+                            name: position
+                            columns: [position]
+                            primary: false
+                            unique: false
+                            flags: {  }

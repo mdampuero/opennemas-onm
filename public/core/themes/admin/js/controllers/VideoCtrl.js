@@ -22,12 +22,12 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     /**
      * @inheritdoc
      */
-    $scope.dtm = null;
+    $scope.contentKey = 'video';
 
     /**
      * @inheritdoc
      */
-    $scope.incomplete = true;
+    $scope.dtm = null;
 
     /**
      * @memberOf VideoCtrl
@@ -123,7 +123,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      */
     $scope.buildScope = function() {
       $scope.localize($scope.data.item, 'item', true);
-
+      $scope.expandFields();
       // Check if item is new (created) or existing for use default value or not
       if (!$scope.data.item.pk_content) {
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
@@ -213,13 +213,13 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @return {String} The URL for the content.
      */
     $scope.getFrontendUrl = function(item) {
-      if (!$scope.selectedCategory) {
+      if (!$scope.selectedCategory || !item.pk_content) {
         return '';
       }
 
-      return $scope.getL10nUrl(
+      return $scope.data.extra.base_url + $scope.getL10nUrl(
         routing.generate($scope.routes.public, {
-          id: item.pk_content,
+          id: item.pk_content.toString().padStart(6, '0'),
           created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
           slug: item.slug,
           category_slug: $scope.selectedCategory.name

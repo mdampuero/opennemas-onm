@@ -22,8 +22,9 @@
           controller: 'MediaPickerCtrl',
           restrict: 'A',
           scope: {
-            mediaPickerIgnore: '@',
-            mediaPickerTarget: '='
+            mediaPickerIgnore:        '@',
+            mediaPickerTarget:        '=',
+            mediaPickerDynamicTarget: '@'
           },
           link: function($scope, elm, attrs) {
             /**
@@ -150,7 +151,7 @@
                           '</a>' +
                         '</li>' +
                         '<li>[% selected.lastSelected.created | moment %]</li>' +
-                        '<li ng-if="selected.lastSelected.content_type_name === \'photo\'">[% selected.lastSelected.size %] KB</li>' +
+                        '<li ng-if="selected.lastSelected.content_type_name === \'photo\'">[% selected.lastSelected.size | number: 2 %] KB</li>' +
                         '<li ng-if="selected.lastSelected.content_type_name === \'photo\'">[% selected.lastSelected.width %] x [% selected.lastSelected.height %]</li>' +
                         '<li><span class="v-seperate"></span></li>' +
                         '<li>' +
@@ -306,6 +307,7 @@
                   parseInt(attrs.mediaPickerMaxSize) : 1
               },
               target: attrs.mediaPickerTarget,
+              dynamic: attrs.mediaPickerDynamicTarget,
               types: {
                 enabled:   [ 'photo' ],
                 available: [ 'photo', 'video', 'album' ]
@@ -705,7 +707,7 @@
             'MediaPicker.insert',
             {
               items: items,
-              target: $scope.picker.target
+              target: $scope.picker.dynamic ? $scope.picker.dynamic : $scope.picker.target
             }
           );
 

@@ -14,8 +14,8 @@
      *   Handles actions for category edit form.
      */
     .controller('CategoryCtrl', [
-      '$controller', '$location', '$scope', '$timeout', '$window', 'http', 'linker', 'translator',
-      function($controller, $location, $scope, $timeout, $window, http, linker, translator) {
+      '$controller', '$scope', '$timeout',
+      function($controller, $scope, $timeout) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
@@ -44,6 +44,7 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
+          $scope.expandFields();
         };
 
         /**
@@ -76,6 +77,15 @@
           }
 
           $scope.item.logo_id = nv ? nv.pk_content : null;
+        }, true);
+
+        // Updates the cover_id when an image is selected
+        $scope.$watch('item.cover_id', function(nv, ov) {
+          if (!ov && !nv || nv && !angular.isObject(nv)) {
+            return;
+          }
+
+          $scope.item.cover_id = nv ? nv.pk_content : null;
         }, true);
 
         // Generates slug when flag changes

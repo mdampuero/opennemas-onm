@@ -32,6 +32,22 @@ class Theme extends Extension
     }
 
     /**
+     * Returns the list of avaliable menus on theme.
+     *
+     * @return array Array of menu positions.
+     *
+     */
+    public function getMenus()
+    {
+        if (!array_key_exists('parameters', $this->data)
+            || !array_key_exists('menus', $this->data['parameters'])) {
+            return [];
+        }
+
+        return $this->data['parameters']['menus'];
+    }
+
+    /**
      * Returns the list of cuts for the theme.
      *
      * @param string $device The device type.
@@ -93,6 +109,18 @@ class Theme extends Extension
         }
 
         return $this->data['parameters']['skins'];
+    }
+
+    /**
+     * Returns the number of suggested epp of the theme.
+     *
+     * @return mixed The number of suggested epp or null.
+     */
+    public function getSuggestedEpp()
+    {
+        return array_key_exists('suggested', $this->data['parameters'])
+            ? $this->data['parameters']['suggested']['epp']
+            : null;
     }
 
     /**

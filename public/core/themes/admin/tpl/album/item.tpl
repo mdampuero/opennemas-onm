@@ -27,20 +27,29 @@
 {/block}
 
 {block name="primaryActions"}
-  <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
-    <h5>
-      <i class="p-r-15">
-        <i class="fa fa-check"></i>
-        {t}Draft saved at {/t}[% draftSaved %]
-      </i>
-    </h5>
-  </li>
-  <li class="quicklinks">
-    <button class="btn btn-loading btn-success text-uppercase" ng-click="submit($event)" type="button">
-      <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
-      {t}Save{/t}
-    </button>
-  </li>
+  <div class="all-actions pull-right">
+    <ul class="nav quick-section">
+      <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
+        <h5>
+          <i class="p-r-15">
+            <i class="fa fa-check"></i>
+            {t}Draft saved at {/t}[% draftSaved %]
+          </i>
+        </h5>
+      </li>
+      <li class="quicklinks">
+        <a class="btn btn-link" ng-click="expansibleSettings()" title="{t 1=_('Album')}Config form: '%1'{/t}">
+          <span class="fa fa-cog fa-lg"></span>
+        </a>
+      </li>
+      <li class="quicklinks">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+          <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+          {t}Save{/t}
+        </button>
+      </li>
+    </ul>
+  </div>
 {/block}
 
 {block name="rightColumn"}
@@ -78,7 +87,14 @@
         {t}Parameters{/t}
       </div>
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired=true iTitle="{t}Featured in frontpage{/t}" types="photo"}
-      {include file="ui/component/content-editor/accordion/input-text.tpl" field="agency" icon="fa-microphone" title="{t}Agency{/t}"}
+      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.agency = !expanded.agency">
+        <i class="fa fa-microphone m-r-10"></i>{t}Agency{/t}
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.agency }"></i>
+        </a>
+      </div>
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.agency }">
+        {include file="ui/component/input/text.tpl" iField="agency"}
+      </div>
     </div>
   </div>
 {/block}
@@ -130,7 +146,7 @@
                   <div ng-class="{ 'col-lg-2 col-sm-3': app.mode === 'list', 'col-xs-12': app.mode === 'grid' }">
                     <div class="dynamic-image-placeholder">
                       <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.related_contents[photo.target_id]" transform="zoomcrop,200,200">
-                        <div class="thumbnail-actions">
+                        <div class="thumbnail-actions thumbnail-actions-1x">
                           <div class="thumbnail-action remove-action" ng-click="toggleOverlay('photo_'+ photo.target_id)">
                             <i class="fa fa-trash-o fa-2x"></i>
                           </div>
@@ -151,10 +167,13 @@
         </div>
       </div>
       <div class="text-center">
-        <button class="btn btn-default" media-picker media-picker-ignore="[% related.getIds('photos') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="150" media-picker-target="target.photos" media-picker-types="photo" type="button">
+        <button ng-if="photos && photos.length < data.extra.max_photos" class="btn btn-default" media-picker media-picker-ignore="[% related.getIds('photos') %]" media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="[% data.extra.max_photos - related.getIds('photos').length %]" media-picker-target="target.photos" media-picker-types="photo" type="button">
           <i class="fa fa-plus m-r-5"></i>
           {t}Add{/t}
         </button>
+        <div class="alert alert-warning" ng-if="photos && photos.length > data.extra.max_photos - 1" role="alert">
+          {t}You have reached the maximum number of [% data.extra.max_photos %] photos. To add new photos remove the older or create a new album.{/t}
+        </div>
         <button class="btn btn-white" ng-click="empty()" ng-if="photos && photos.length > 0" type="button">
           <i class="fa fa-fire m-r-5"></i>
           {t}Empty{/t}
@@ -173,5 +192,8 @@
   </script>
   <script type="text/ng-template" id="modal-translate">
     {include file="common/modals/_translate.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-expansible-fields">
+    {include file="common/modals/_modalExpansibleFields.tpl"}
   </script>
 {/block}

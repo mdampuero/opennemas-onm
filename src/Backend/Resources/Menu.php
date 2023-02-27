@@ -64,7 +64,7 @@ $menuXml = [
                 'id'          => 'menu_manager',
                 'title'       => _('Menus'),
                 'icon'        => 'fa fa-list-alt',
-                'link'        => url('admin_menus'),
+                'link'        => url('backend_menus_list'),
                 'module_name' => 'MENU_MANAGER',
                 'privilege'   => 'MENU_ADMIN',
             ],
@@ -126,6 +126,24 @@ $menuXml = [
                 'link'        => url('backend_events_list'),
                 'module_name' => 'es.openhost.module.events',
                 'privilege'   => 'EVENT_ADMIN',
+            ],
+
+            [
+                'id'          => 'obituaries_manager',
+                'title'       => _('Obituaries'),
+                'icon'        => 'fa fa-shield fa-flip-vertical',
+                'link'        => url('backend_obituaries_list'),
+                'module_name' => 'es.openhost.module.obituaries',
+                'privilege'   => 'OBITUARY_ADMIN',
+            ],
+
+            [
+                'id'          => 'companies_manager',
+                'title'       => _('Companies'),
+                'icon'        => 'fa fa-building',
+                'link'        => url('backend_companies_list'),
+                'module_name' => 'es.openhost.module.companies',
+                'privilege'   => 'COMPANY_ADMIN',
             ],
 
             [
@@ -346,27 +364,35 @@ $menuXml = [
             ],
         ],
     ],
-
     [
-        'id'    => 'store',
-        'title' => _('Store'),
-        'icon'  => 'fa fa-shopping-cart',
-        'link'  => url('admin_store_list'),
-        'privilege' => 'ADMIN'
-    ],
-    [
-        'id'          => 'theme-manager',
-        'title'       => _('Themes'),
-        'icon'        => 'fa fa-magic',
-        'link'        => url('backend_theme_list'),
-        'privilege'   => 'ADMIN',
-    ],
-    [
-        'id'          => 'domain_manager',
-        'title'       => _('Domains'),
-        'icon'        => 'fa fa-at',
-        'link'        => url('backend_domains_list'),
-        'privilege'   => 'ADMIN',
+        'id'      => 'store_dropdown',
+        'link'    => '#',
+        'title'   => _('Store'),
+        'icon'    => 'fa fa-shopping-cart',
+        'privilege' => 'ADMIN',
+        'submenu' => [
+            [
+                'id'    => 'store',
+                'title' => _('Modules'),
+                'icon'  => 'fa fa-archive',
+                'link'  => url('admin_store_list'),
+                'privilege' => 'ADMIN'
+            ],
+            [
+                'id'          => 'theme-manager',
+                'title'       => _('Themes'),
+                'icon'        => 'fa fa-magic',
+                'link'        => url('backend_theme_list'),
+                'privilege'   => 'ADMIN',
+            ],
+            [
+                'id'          => 'domain_manager',
+                'title'       => _('Domains'),
+                'icon'        => 'fa fa-at',
+                'link'        => url('backend_domains_list'),
+                'privilege'   => 'ADMIN',
+            ]
+        ]
     ],
     [
         'id'      => 'faq_and_support',
@@ -405,125 +431,62 @@ $menuXml = [
         'privilege'   => 'ONM_SETTINGS',
         'submenu' => [
             [
-                'id'          => 'general_settings_manager',
-                'title'       => _('General'),
-                'icon'        => 'fa fa-cogs',
-                'link'        => '#',
-                'module_name' => 'SETTINGS_MANAGER',
-                'privilege'   => 'ONM_SETTINGS',
-                'submenu' => [
-                    [
-                        'id'          => 'urls',
-                        'title'       => _('URLs'),
-                        'link'        => url('backend_urls_list'),
-                        'icon'        => 'fa fa-globe',
-                        'privilege'   => 'MASTER'
-                    ],
-                    [
-                        'id'          => 'cache',
-                        'title'       => _('Cache manager'),
-                        'icon'        => 'fa fa-database',
-                        'link'        => url('backend_cache_list'),
-                        'privilege'   => 'MASTER'
-                    ],
-                    [
-                        'id'          => 'general_settings',
-                        'title'       => _('General & SEO'),
-                        'icon'        => 'fa fa-cog',
-                        'link'        => url('backend_settings_general'),
-                    ],
-                    [
-                        'id'          => 'appearance_settings',
-                        'title'       => _('Appearance'),
-                        'icon'        => 'fa fa-magic',
-                        'link'        => url('backend_settings_appearance'),
-                    ],
-                    [
-                        'id'          => 'language_settings',
-                        'title'       => _('Language & time'),
-                        'icon'        => 'fa fa-globe',
-                        'link'        => url('backend_settings_language'),
-                    ],
-                    [
-                        'id'          => 'internal_settings',
-                        'title'       => _('Internal'),
-                        'icon'        => 'fa fa-cube',
-                        'link'        => url('backend_settings_internal'),
-                    ],
-                    [
-                        'id'          => 'services_settings',
-                        'title'       => _('External services'),
-                        'icon'        => 'fa fa-cloud',
-                        'link'        => url('backend_settings_external'),
-                    ],
-                    [
-                        'id'          => 'sitemap_settings',
-                        'title'       => _('Sitemap'),
-                        'icon'        => 'fa fa-sitemap',
-                        'link'        => url('backend_settings_sitemap'),
-                        'privilege'   => 'MASTER'
-                    ],
-                    [
-                        'id'          => 'masters_settings',
-                        'title'       => _('Only masters'),
-                        'icon'        => 'fa fa-rebel',
-                        'link'        => url('backend_settings_master'),
-                        'privilege'   => 'MASTER'
-                    ]
-                ]
+                'id'          => 'urls',
+                'title'       => _('URLs'),
+                'link'        => url('backend_urls_list'),
+                'icon'        => 'fa fa-globe',
+                'privilege'   => 'MASTER'
             ],
             [
-                'id'          => 'content_settings_manager',
-                'title'       => _('Content'),
-                'icon'        => 'fa fa-cogs',
-                'link'        => '#',
-                'module_name' => 'SETTINGS_MANAGER',
-                'privilege'   => 'ONM_SETTINGS',
-                'submenu' => [
-                    [
-                        'id'          => 'advertising_settings',
-                        'title'       => _('Advertising'),
-                        'icon'        => 'fa fa-bullhorn',
-                        'link'        => url('backend_settings_advertisement'),
-                    ],
-                    [
-                        'id'          => 'tags_settings',
-                        'title'       => _('Tags'),
-                        'icon'        => 'fa fa-tags',
-                        'link'        => url('backend_settings_tag'),
-                    ],
-                    [
-                        'id'          => 'articles_settings',
-                        'title'       => _('Articles'),
-                        'icon'        => 'fa fa-file-text',
-                        'link'        => url('backend_settings_article'),
-                    ],
-                    [
-                        'id'          => 'opinions_settings',
-                        'title'       => _('Opinions'),
-                        'icon'        => 'fa fa-quote-right',
-                        'link'        => url('backend_settings_opinion'),
-                    ],
-                    [
-                        'id'          => 'comments_settings',
-                        'title'       => _('Comments'),
-                        'icon'        => 'fa fa-comment',
-                        'link'        => url('backend_settings_comment'),
-                    ],
-                    [
-                        'id'          => 'photos_settings',
-                        'title'       => _('Photos'),
-                        'icon'        => 'fa fa-picture-o',
-                        'link'        => url('backend_settings_photo'),
-                        'privilege'   => 'MASTER'
-                    ],
-                    [
-                        'id'          => 'suscriptions_settings',
-                        'title'       => _('Suscriptions'),
-                        'icon'        => 'fa fa-address-card',
-                        'link'        => url('backend_settings_subscriber'),
-                    ]
-                ],
+                'id'          => 'cache',
+                'title'       => _('Cache manager'),
+                'icon'        => 'fa fa-database',
+                'link'        => url('backend_cache_list'),
+                'privilege'   => 'MASTER'
+            ],
+            [
+                'id'          => 'general_settings',
+                'title'       => _('General & SEO'),
+                'icon'        => 'fa fa-cog',
+                'link'        => url('backend_settings_general'),
+            ],
+            [
+                'id'          => 'appearance_settings',
+                'title'       => _('Appearance'),
+                'icon'        => 'fa fa-magic',
+                'link'        => url('backend_settings_appearance'),
+            ],
+            [
+                'id'          => 'language_settings',
+                'title'       => _('Language & time'),
+                'icon'        => 'fa fa-globe',
+                'link'        => url('backend_settings_language'),
+            ],
+            [
+                'id'          => 'internal_settings',
+                'title'       => _('Internal'),
+                'icon'        => 'fa fa-cube',
+                'link'        => url('backend_settings_internal'),
+            ],
+            [
+                'id'          => 'services_settings',
+                'title'       => _('External services'),
+                'icon'        => 'fa fa-cloud',
+                'link'        => url('backend_settings_external'),
+            ],
+            [
+                'id'          => 'sitemap_settings',
+                'title'       => _('Sitemap'),
+                'icon'        => 'fa fa-sitemap',
+                'link'        => url('backend_settings_sitemap'),
+                'privilege'   => 'MASTER'
+            ],
+            [
+                'id'          => 'masters_settings',
+                'title'       => _('Only masters'),
+                'icon'        => 'fa fa-rebel',
+                'link'        => url('backend_settings_master'),
+                'privilege'   => 'MASTER'
             ]
         ]
     ]

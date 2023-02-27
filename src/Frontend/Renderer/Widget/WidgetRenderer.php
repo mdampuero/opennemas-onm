@@ -9,76 +9,35 @@
  */
 namespace Frontend\Renderer\Widget;
 
+use Common\Model\Entity\Content;
 use Frontend\Renderer\Renderer;
 
 class WidgetRenderer extends Renderer
 {
     /**
-     * {@inheritDoc}
+     * Renders the esi code for the widget.
+     *
+     * @param Content $widget The widget to render the esi code.
+     * @param array   $params The parameters to render the widget.
+     *
+     * @return string The esi code for the widget.
      */
     public function render($widget, $params)
     {
-        switch ($widget->renderlet) {
-            case 'html':
-                $output = $widget->content;
-                break;
+        $id     = [ 'widget_id' => $widget->pk_content ];
+        $params = array_merge($id, array_filter($params, function ($param) {
+            return is_string($param);
+        }));
 
-            case 'smarty':
-                $output = $this->renderletSmarty($widget);
-                break;
+        $params = array_map(function ($param) {
+            return urlencode($param);
+        }, $params);
 
-            case 'intelligentwidget':
-                $output = $this->renderletIntelligentWidget($widget, $params);
-                break;
-            default:
-                $output = '';
-                break;
-        }
+        $url = $this->container->get('router')->generate('frontend_widget_render', $params);
+        $url = $this->container->get('core.decorator.url')->prefixUrl($url);
 
-        return "<div class=\"widget\">" . $output . "</div>";
+        return sprintf('<esi:include src="%s" />', $url);
     }
-
-    /**
-     * Renders a HTML wiget
-     *
-     * @return string the generated HTML
-     *
-     * @see resource.string.php Smarty plugin
-     * @see resource.widget.php Smarty plugin
-     */
-    protected function renderletSmarty($widget)
-    {
-        $resource = 'string:' . $widget->content;
-        $wgtTpl   = $this->container->get('core.template');
-
-        // no caching
-        $wgtTpl->caching       = 0;
-        $wgtTpl->force_compile = true;
-
-        $output = $wgtTpl->fetch($resource, [ 'widget' => $widget->content ]);
-
-        return $output;
-    }
-
-
-    /**
-     * Renders an intelligent wiget
-     *
-     * @param array $params parameters for rendering the widget
-     *
-     * @return string the generated HTML
-     */
-    protected function renderletIntelligentWidget($content, $params = null)
-    {
-        $widget = $this->getWidget($content, $params);
-
-        if (is_null($widget)) {
-            return sprintf(_('Widget %s not available'), $content->content);
-        }
-
-        return $widget->render($params);
-    }
-
 
     /**
      * Returns an instance for a widget
@@ -89,7 +48,7 @@ class WidgetRenderer extends Renderer
      */
     public function getWidget($content, $params = null)
     {
-        $widget = $content->content;
+        $widget = $content->class;
 
         if (empty($widget)) {
             return null;
@@ -106,6 +65,7 @@ class WidgetRenderer extends Renderer
         $class = new $class($content);
 
         $class->parseParams($params);
+        $class->hydrateShow();
 
         return $class;
     }

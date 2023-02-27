@@ -38,6 +38,11 @@ class ArchiveController extends Controller
         $itemsPerPage   = 20;
         $categoryHelper = $this->container->get('core.helper.category');
 
+        // Invalid page provided as parameter
+        if ($page <= 0 || $page > $this->getParameter('core.max_page')) {
+            throw new ResourceNotFoundException();
+        }
+
         if (!empty($categorySlug)) {
             try {
                 $category = $this->get('api.service.category')
@@ -77,12 +82,12 @@ class ArchiveController extends Controller
                 'starttime'              => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
                 ],
                 'endtime'                => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
                 ]
             ]);
 
@@ -134,6 +139,7 @@ class ArchiveController extends Controller
             $this->view->assign([
                 'library'    => $library,
                 'pagination' => $pagination,
+                'page'       => $page,
             ]);
         }
 
@@ -142,8 +148,8 @@ class ArchiveController extends Controller
         return $this->render('archive/archive.tpl', [
             'cache_id'        => $cacheID,
             'newslibraryDate' => $date,
-            'x-tags'          => 'archive-page,' . $date . ',' . $page . ',' . $categorySlug,
-            'x-cacheable'     => true,
+            'x-tags'          => 'archive-page-' . $date,
+            'x-cacheable'     => true
         ]);
     }
 

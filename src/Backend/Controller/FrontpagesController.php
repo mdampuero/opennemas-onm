@@ -112,14 +112,14 @@ class FrontpagesController extends Controller
      */
     public function savePositionsAction(Request $request)
     {
+        $widgetTypes           = [ 'article', 'opinion', 'video', 'album' ];
         $dataPositionsNotValid = false;
 
-        $cps = $this->get('api.service.content_position');
+        $category = $request->request->get('category', null, FILTER_SANITIZE_STRING);
 
         // Get application logger
         $logger = $this->get('application.log');
 
-        $category = $request->request->get('category', null, FILTER_SANITIZE_STRING);
         if ($category === null && $category === '') {
             return new JsonResponse(
                 [ 'message' => _("Unable to save content positions: Data sent from the client were not valid.") ]
@@ -127,6 +127,17 @@ class FrontpagesController extends Controller
         }
 
         $category = (int) $category;
+
+        list(,, $saved) =
+            $this->get('api.service.frontpage_version')->getContentsInCurrentVersionforCategory($category);
+
+        $saved = array_filter($saved, function ($content) use ($widgetTypes) {
+            return in_array($content->content_type_name, $widgetTypes);
+        });
+
+        $saved = array_keys($saved);
+
+        $cps = $this->get('api.service.content_position');
 
         // Get the form-encoded places from request
         $numberOfContents  = $request->request->getDigits('contents_count');
@@ -208,17 +219,32 @@ class FrontpagesController extends Controller
             . ', frontpage version ' . $version->id
             . ' and Ids ' . json_encode($contentsPositions));
 
-        $lastSaved = $fvs->getLastSaved($version->category_id, $version->id, true);
+        $toSave = array_filter($contents, function ($content) use ($widgetTypes) {
+            return in_array($content['content_type'], $widgetTypes);
+        });
+
+        $toSave = array_map(function ($item) {
+            return (int) $item['id'];
+        }, $toSave);
+
+        $added   = array_diff($saved, $toSave);
+        $removed = array_diff($toSave, $saved);
+
+        $items = array_merge($added, $removed);
 
         $this->get('core.dispatcher')->dispatch(
             'frontpage.save_position',
-            [ 'category' => $category, 'frontpageId' => $version->id ]
+            [
+                'category'    => $category,
+                'frontpageId' => $version->id,
+                'items'       => $items
+            ]
         );
 
         return new JsonResponse([
             'message'              => _('Content positions saved properly'),
             'versionId'            => $version->id,
-            'frontpage_last_saved' => $lastSaved
+            'frontpage_last_saved' => $fvs->getLastSaved($category, $version->id, true)
         ]);
     }
 
@@ -312,7 +338,9 @@ class FrontpagesController extends Controller
      */
     public function previewAction(Request $request)
     {
-        $this->get('core.locale')->setContext('frontend');
+        if ($this->get('core.instance') && !$this->get('core.instance')->isSubdirectory()) {
+            $this->get('core.locale')->setContext('frontend');
+        }
 
         $id         = $request->request->get('category', 0, FILTER_SANITIZE_STRING);
         $category   = null;

@@ -34,12 +34,12 @@
         /**
          * @inheritdoc
          */
-        $scope.dtm = null;
+        $scope.contentKey = 'attachment';
 
         /**
          * @inheritdoc
          */
-        $scope.incomplete = true;
+        $scope.dtm = null;
 
         /**
          * @memberOf AttachmentCtrl
@@ -111,6 +111,7 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true, [ 'path' ]);
+          $scope.expandFields();
 
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'attachment-' + $scope.data.item.pk_content + '-draft';

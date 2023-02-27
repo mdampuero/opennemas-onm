@@ -440,7 +440,7 @@ jQuery(document).ready(function($) {
               </div>
               <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.duration }" ng-show="isInterstitial()">
                 <div class="input-group">
-                  <input type="number" class="form-control" id="timeout" name="timeout" placeholder="0" value="{$advertisement->timeout|default:"4"}" min="0"/>
+                  <input type="number" class="form-control" id="timeout" name="timeout" placeholder="0" value="{if empty($advertisement->timeout)}10{else}{$advertisement->timeout}{/if}" min="0"/>
                   <div class="input-group-addon">{t}seconds{/t}</div>
                 </div>
                 <div class="m-t-10">
@@ -632,6 +632,54 @@ jQuery(document).ready(function($) {
                 <div class="tab-wrapper">
                   <div class="row">
                     {include file="advertisement/partials/advertisement_positions_opinion_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="es.openhost.module.obituaries"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Obituary: frontpage{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(5000, 5099) > 0">[% countPositionsSelectedbyRange(5000, 5099) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_obituary_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Obituary: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(5100, 5199) > 0">[% countPositionsSelectedbyRange(5100, 5199) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_obituary_inner.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+              {/is_module_activated}
+
+              {is_module_activated name="es.openhost.module.companies"}
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Company: frontpage{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(6000, 6099) > 0">[% countPositionsSelectedbyRange(6000, 6099) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_company_frontpage.tpl"}
+                  </div>
+                </div>
+              </uib-tab>
+
+              <uib-tab>
+                <uib-tab-heading>
+                  {t}Company: inner{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(6100, 6199) > 0">[% countPositionsSelectedbyRange(6100, 6199) %]</span>
+                </uib-tab-heading>
+                <div class="tab-wrapper">
+                  <div class="row">
+                    {include file="advertisement/partials/advertisement_positions_company_inner.tpl"}
                   </div>
                 </div>
               </uib-tab>

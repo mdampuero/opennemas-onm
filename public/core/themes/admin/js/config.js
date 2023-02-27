@@ -38,13 +38,23 @@
       fallback: true
     });
   }]).config(['EditorProvider', function (EditorProvider) {
+    // Add custom timestamp
+    EditorProvider.overrideTimestamp('F61I');
+
     // Add external plugins
     EditorProvider.addExternal('imageresize', '/assets/components/imageresize/');
     EditorProvider.addExternal('wordcount', '/assets/components/wordcount/wordcount/');
 
     // Add custom plugins
     EditorProvider.addExternal('autokeywords', '/assets/src/ckeditor-autokeywords/');
+    EditorProvider.addExternal('autotoc', '/assets/src/ckeditor-autotoc/');
     EditorProvider.addExternal('pastespecial', '/assets/src/ckeditor-pastespecial/');
+
+    // Add custom css
+    EditorProvider.addCustomCss('/assets/css/ckeditor.css');
+
+    // Add custom class for image2 plugin
+    EditorProvider.addCustomImageClass();
 
     // Enable CKEditor for all environments (browsers)
     EditorProvider.setCompatible(true);

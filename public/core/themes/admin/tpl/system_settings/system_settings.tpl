@@ -105,16 +105,30 @@
                           <input class="form-control" id="site-description" name="site-description" ng-model="settings.site_description" type="text">
                         </div>
                       </div>
-                      <div class="form-group">
-                        <label class="form-label" for="refresh-interval">
-                          {t}Refresh page interval{/t}
-                          <small>({t}seconds{/t})</small>
-                        </label>
-                        <span class="help">
-                          {t}When a user visits pages and stay on it for a while, this setting allows to refresh the loaded page for updated it.{/t}
-                        </span>
-                        <div class="controls">
-                          <input class="form-control" id="refresh-interval" name="refresh-interval" ng-model="settings.refresh_interval" type="number">
+                      <div class="row">
+                        <div class="form-group">
+                          <label class="form-label" for="refresh-interval">
+                            {t}Refresh page interval{/t}
+                            <small>({t}seconds{/t})</small>
+                          </label>
+                          <span class="help">
+                            {t}When a user visits pages and stay on it for a while, this setting allows to refresh the loaded page for updated it.{/t}
+                          </span>
+                        </div>
+                        <div class="col-md-6 form-group">
+                          <div class="controls">
+                            <input class="form-control" id="refresh-interval" name="refresh-interval" ng-model="settings.refresh_interval" type="number" ng-disabled="settings.refresh_enabled">
+                          </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                          <div class="controls">
+                            <div class="checkbox">
+                              <input class="form-control" id="refresh-enabled" name="refresh-enabled" ng-false-value="0" ng-model="settings.refresh_enabled" ng-true-value="1" type="checkbox"/>
+                              <label class="form-label" for="refresh-enabled">
+                                {t}Disable{/t}
+                              </label>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div class="form-group">
@@ -1021,6 +1035,61 @@
                         </div>
                       </div>
                     </div>
+                    {if $app.security->hasPermission('MASTER')}
+                    <div class="panel-group" id="panel-group-gfk" data-toggle="collapse">
+                      <div class="panel panel-default">
+                        <div class="panel-heading collapsed">
+                          <h4 class="panel-title">
+                            <a class="collapsed" data-parent="#panel-group-gfk" data-toggle="collapse" href="#gfk">
+                              <i class="fa fa-signal"></i>{t}GFK{/t}
+                            </a>
+                          </h4>
+                        </div>
+                        <div class="panel-collapse collapse" id="gfk">
+                          <div class="panel-body">
+                            <div class="form-group">
+                              <label class="form-label" for="gfk-media-id">
+                                {t}GFK Media ID{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="gfk-media-id" name="gfk-media-id" ng-model="settings.gfk.media_id" type="text">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="form-label" for="gfk-domain">
+                                {t}GFK Domain{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="gfk-domain" name="gfk-domain" ng-model="settings.gfk.domain" type="text">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="form-label" for="gfk-region-id">
+                                {t}GFK Region ID{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="gfk-region-id" name="gfk-region-id" ng-model="settings.gfk.region_id" type="text">
+                                <div class="help">{t}Default will be set with "es"{/t}</div>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="form-label" for="gfk-content-id">
+                                {t}GFK Content ID{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="gfk-content-id" name="gfk-content-id" ng-model="settings.gfk.content_id" type="text">
+                                <div class="help">{t}Default will be set with "default"{/t}</div>
+                              </div>
+                            </div>
+                            <small class="help">
+                              <i class="fa fa-info-circle m-r-5 text-info"></i>
+                              {t}We are not responsible of the stats or of any third party services{/t}
+                            </small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/if}
                     {is_module_activated name="es.openhost.module.dataLayerHenneo"}
                     <div class="panel-group" id="panel-group-prometeo" data-toggle="collapse">
                       <div class="panel panel-default">
@@ -1054,6 +1123,60 @@
                       <i class="fa fa-cog"></i>
                       {t}Internal settings{/t}
                     </h4>
+                    {if $app.security->hasPermission('MASTER')}
+                      <div class="panel-group" data-toggle="collapse" id="panel-group-payments">
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a class="collapsed" data-parent="#panel-group-payments" data-toggle="collapse" href="#payments">
+                                <i class="fa fa-credit-card-alt"></i>
+                                {t}Global Payments{/t}
+                              </a>
+                            </h4>
+                          </div>
+                          <div class="panel-collapse collapse" id="payments">
+                            <div class="panel-body">
+                              <div class="row">
+                                <div class="col-12">
+                                  <div class="form-group">
+                                    <label class="form-label" for="payments-merchant-id">
+                                      {t}Merchant id{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <input class="form-control" id="payments-merchant-id" name="payments-merchant-id" ng-model="settings.payments.merchant_id" type="text">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                  <div class="form-group">
+                                    <label class="form-label" for="payments-shared-secret">
+                                      {t}Shared secret{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <div class="form-group">
+                                        <input class="form-control" id="payments-shared-secret" name="payments-shared-secret" ng-model="settings.payments.shared_secret" type="text">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-12">
+                                  <div class="form-group">
+                                    <label class="form-label" for="payments-amount">
+                                      {t}Amount{/t}
+                                    </label>
+                                    <div class="controls">
+                                      <div class="form-group">
+                                        <input class="form-control" id="payments-amount" name="payments-amount" ng-model="settings.payments.amount" type="text">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {/if}
                     <div class="panel-group" data-toggle="collapse" id="panel-group-recaptcha">
                       <div class="panel panel-default">
                         <div class="panel-heading">
@@ -1739,7 +1862,7 @@
                               <div class="col-md-4 controls">
                                 <select class="form-control" ng-model="criteria.month" name="month">
                                   <option value="">{t}All{/t}</option>
-                                  <option ng-repeat="month in extra.sitemaps.months" value="[% month %]">
+                                  <option ng-repeat="month in ['01','02','03','04','05','06','07','08','09',10,11,12]" value="[% month %]">
                                     [% month %]
                                   </option>
                                 </select>
@@ -1792,6 +1915,13 @@
                       <div class="row">
                         <div class="col-md-6">
                           <h4>
+                            <i class="fa fa-newspaper-o"></i>
+                            {t}Maximum elements per frontpage{/t}
+                          </h4>
+                          <div class="controls">
+                            <input class="form-control" id="frontpage_max_items" name="frontpage_max_items" ng-model="settings.frontpage_max_items" type="number" min="10" placeholder="100">
+                          </div>
+                          <h4>
                             <i class="fa fa-android"></i>
                             Robots.txt
                           </h4>
@@ -1820,8 +1950,47 @@
                               </label>
                             </div>
                           </div>
-                        </div>
-                        <div class="form-group" ng-if="extra.theme_skins.length !== 0">
+                          <h4>
+                            <i class="fa fa-google"></i>
+                            {t}Google Analytics{/t}
+                          </h4>
+                          <div class="form-group">
+                            <div class="checkbox">
+                              <input id="disable_dga" name="disable_dga" ng-false-value="'0'" ng-model="settings.disable_default_ga" ng-true-value="'1'" type="checkbox"/>
+                              <label for="disable_dga">
+                                {t}Disable Opennemas Google Analytics API key{/t}
+                              </label>
+                            </div>
+                          </div>
+                          <h4>
+                            <i class="fa fa-signal"></i>
+                            {t}GFK{/t}
+                          </h4>
+                          <div class="form-group">
+                            <div class="checkbox">
+                              <input id="gfk_only_amp" name="gfk_only_amp" ng-false-value="'0'" ng-model="settings.gfk.only_amp" ng-true-value="'1'" type="checkbox"/>
+                              <label for="gfk_only_amp">
+                                {t}Only AMP{/t}
+                              </label>
+                              <input id="gfk_pre_mode" name="gfk_pre_mode" ng-false-value="'0'" ng-model="settings.gfk.pre_mode" ng-true-value="'1'" type="checkbox"/>
+                              <label for="gfk_pre_mode">
+                                {t}Preproduction{/t}
+                              </label>
+                            </div>
+                          </div>
+                          <h4>
+                            <i class="fa fa-rss-square"></i>
+                            {t}RSS{/t}
+                          </h4>
+                          <div class="form-group">
+                            <div class="checkbox">
+                              <input {if $configs['full_rss'] eq "1"}checked{/if} id="full_rss" name="full_rss" ng-false-value="0" ng-model="settings.full_rss" ng-true-value="'1'" type="checkbox">
+                              <label for="full_rss">
+                                {t}Show full content on RSS{/t}
+                              </label>
+                            </div>
+                          </div>
+                          <div ng-if="extra.theme_skins.length !== 0">
                             <label class="form-label" for="theme-style">
                               <h4>
                                 <i class="fa fa-paint-brush"></i>
@@ -1839,6 +2008,7 @@
                               </div>
                             </div>
                           </div>
+                        </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6">
@@ -1871,19 +2041,6 @@
                             </label>
                             <div class="controls">
                               <textarea class="form-control" id="body-end-script" name="body-end-script" ng-model="settings.body_end_script" rows="6"></textarea>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label class="form-label" for="frontpage_max_items">
-                              {t}Elements per frontpage{/t}
-                            </label>
-                            <span class="help ">
-                                (min. 10)
-                            </span>
-                            <div class="controls">
-                              <input class="form-control" id="frontpage_max_items" name="frontpage_max_items" ng-model="settings.frontpage_max_items" type="number" min="10">
                             </div>
                           </div>
                         </div>

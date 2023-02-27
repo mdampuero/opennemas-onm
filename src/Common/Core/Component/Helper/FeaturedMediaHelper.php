@@ -93,9 +93,17 @@ class FeaturedMediaHelper
             ], 'opinion' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => [ 'featured_inner' ]
-            ], 'album' => [
+            ], 'obituary' => [
+                'frontpage' => [ 'featured_frontpage' ],
+                'inner'     => [ 'featured_inner' ]
+            ],
+            'album' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => []
+            ],
+            'company' => [
+                'frontpage' => [ 'logo' ],
+                'inner'     => [ 'featured_inner' ]
             ], 'event' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => [ 'featured_inner' ]
@@ -203,6 +211,9 @@ class FeaturedMediaHelper
             ], 'album' => [
                 'frontpage' => [],
                 'inner'     => []
+            ],'company' => [
+                'frontpage' => [],
+                'inner'     => [ 'featured_inner' ]
             ], 'event' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => [ 'featured_inner' ]

@@ -7,7 +7,7 @@
 <header class="header navbar navbar-inverse">
   <div class="navbar-inner">
     <div class="header-seperation">
-      <a class="header-logo pull-left" href="{url name=admin_welcome}">
+      <a class="header-logo pull-left" href="https://www.opennemas.com/">
         <h1>
           open<strong>nemas</strong>
         </h1>

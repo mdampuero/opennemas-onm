@@ -74,19 +74,23 @@ class FrontpageVersionService extends OrmService
      * Returns the contents positions, contents, invalidationtime and last saved time
      * for the current frontpage given a category id
      *
-     * @param int $categoryId the category id to
+     * @param int     $categoryId the category id to
+     * @param boolean $filter     a flag to indicate if the content must be filtered or not.
      *
      * @return void
      **/
-    public function getPublicFrontpageData($categoryId)
+    public function getPublicFrontpageData($categoryId, $filter = true)
     {
         $categoryIdAux = empty($categoryId) ? 0 : $categoryId;
 
         list($frontpageVersion, $contentPositions, $contents) =
-            $this->getContentsInCurrentVersionforCategory($categoryIdAux);
+            $this->getContentsInCurrentVersionforCategory($categoryIdAux, $filter);
+
+        if ($filter) {
+            $contents = $this->filterPublishedContents($contents);
+        }
 
         $invalidationDt = $this->getInvalidationTime($contents, $categoryIdAux);
-        $contents       = $this->filterPublishedContents($contents);
         $lastSaved      = $this->getLastSaved(
             $categoryIdAux,
             $frontpageVersion == null ? null : $frontpageVersion->id
@@ -99,11 +103,12 @@ class FrontpageVersionService extends OrmService
      * Returns the contents positions, contents, invalidationtime and last saved time
      * for the current frontpage version given a category id
      *
-     * @param int $categoryId the category id to
+     * @param int     $categoryId the category id to
+     * @param boolean $filter     a flag to indicate if the content must be filtered or not.
      *
      * @return void
      **/
-    public function getContentsInCurrentVersionforCategory($categoryId)
+    public function getContentsInCurrentVersionforCategory($categoryId, $filter = true)
     {
         $categoryIdAux      = empty($categoryId) ? 0 : $categoryId;
         $frontpageVersionId = $this->getCurrentVersionFromDB($categoryIdAux);
@@ -118,6 +123,10 @@ class FrontpageVersionService extends OrmService
                 $categoryIdAux,
                 empty($frontpageVersionId) ? null : $frontpageVersion->id
             );
+
+        if (!$filter) {
+            return [$frontpageVersion, $contentPositions, $contents];
+        }
 
         $filteredContents = [];
 
@@ -375,8 +384,6 @@ class FrontpageVersionService extends OrmService
             $fvc = new FrontpageVersion($frontpageVersion);
         }
 
-        $this->purgeCacheForCategoryIdAndVersionId($fvc->category_id, $fvc->id);
-
         return $fvc;
     }
 
@@ -427,6 +434,27 @@ class FrontpageVersionService extends OrmService
         }
 
         return $lastSaved;
+    }
+
+    /**
+     * Removes contents out of time from an array of contents
+     *
+     * @param array $contents the lit of contents to filter
+     *
+     * @return array
+     **/
+    public function filterPublishedContents($contents)
+    {
+        $contentHelper    = $this->container->get('core.helper.content');
+        $filteredContents = [];
+
+        foreach ($contents as $key => $content) {
+            if ($contentHelper->isReadyForPublish($content)) {
+                $filteredContents[$key] = $content;
+            }
+        }
+
+        return $filteredContents;
     }
 
     /**
@@ -484,27 +512,6 @@ class FrontpageVersionService extends OrmService
         $date = new \Datetime("now");
 
         return $this->cache->save($lastSavedCacheId, $date->format(\DateTime::ISO8601));
-    }
-
-    /**
-     * Removes contents out of time from an array of contents
-     *
-     * @param array $contents the lit of contents to filter
-     *
-     * @return array
-     **/
-    private function filterPublishedContents($contents)
-    {
-        $contentHelper    = $this->container->get('core.helper.content');
-        $filteredContents = [];
-
-        foreach ($contents as $key => $content) {
-            if ($contentHelper->isReadyForPublish($content)) {
-                $filteredContents[$key] = $content;
-            }
-        }
-
-        return $filteredContents;
     }
 
     /**

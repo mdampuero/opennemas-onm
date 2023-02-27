@@ -68,6 +68,19 @@ function get_category_logo($item = null) : ?\Common\Model\Entity\Content
 }
 
 /**
+ * Returns the path to category cover for the provided item.
+ *
+ * @param Content $item The item to get cover path for. If not provided, the
+ *                      function will try to search the item in the template.
+ *
+ * @return ?\Common\Model\Entity\Content The photo cover object. Null otherwise.
+ */
+function get_category_cover($item = null) : ?\Common\Model\Entity\Content
+{
+    return getService('core.helper.category')->getCategoryCover($item);
+}
+
+/**
  * Returns the category name for the provided item.
  *
  * @param Content $item The item to get category name for. If not provided, the
@@ -134,4 +147,32 @@ function has_category_description($item = null) : bool
 function has_category_logo($item = null) : bool
 {
     return getService('core.helper.category')->hasCategoryLogo($item);
+}
+
+/**
+ * Checks if the category has a cover.
+ *
+ * @param Content $item The item to check category cover for. If not provided,
+ *                      the function will try to search the item in the
+ *                      template.
+ *
+ * @return bool True if the category has a cover. False otherwise.
+ */
+function has_category_cover($item = null) : bool
+{
+    return getService('core.helper.category')->hasCategoryCover($item);
+}
+
+/**
+ * Checks if the category has manual layout.
+ *
+ * @param Content $item The item to check category logo for. If not provided,
+ *                      the function will try to search the item in the
+ *                      template.
+ *
+ * @return bool True if the category has a manual layout. False otherwise.
+ */
+function is_manual_category($item = null) : bool
+{
+    return getService('core.helper.category')->isManualCategory($item);
 }

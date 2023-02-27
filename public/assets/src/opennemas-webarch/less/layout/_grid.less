@@ -42,14 +42,15 @@
   padding-top: 0;
   transition: all .25s;
   visibility: hidden;
-}
 
-.grid .grid-collapse-body.expanded {
-  max-height: 10000px;
-  opacity: 1;
-  overflow: visible;
-  padding-bottom: 15px;
-  visibility: visible;
+  &.expanded {
+    max-height: 10000px;
+    opacity: 1;
+    overflow: visible;
+    padding-bottom: 15px;
+    position: relative;
+    visibility: visible;
+  }
 }
 
 .grid-collapse-title .fa-chevron-right {
@@ -154,7 +155,7 @@
   border: 1px solid @border-color;
   border-bottom: 0;
   cursor: pointer;
-  height: 10px;
+  height: 25px;
 }
 
 .column-filters-checkbox {
@@ -165,8 +166,7 @@
 }
 
 .column-filters-ellipsis {
-  border-top: 3px dotted @border-color;
   display: block;
   margin: 3px auto;
-  width: 15px;
+  width: 100px;
 }

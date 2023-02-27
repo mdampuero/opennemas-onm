@@ -23,13 +23,29 @@ class SitemapController extends Controller
      *
      * @const array
      */
-    const EXPIRE = [
-        'categories' => '1d',
-        'authors'    => '1d',
-        'contents'   => '1h',
-        'index'      => '1d',
-        'news'       => '1h',
-        'tag'        => '1h',
+    const VARNISH_EXPIRE = [
+        'categories'      => '1d',
+        'authors'         => '1d',
+        'contents'        => '1h',
+        'index'           => '1d',
+        'news'            => '300s',
+        'tag'             => '1h',
+        'contents-latest' => '300s'
+    ];
+
+    /**
+     * The list of expire times for actions.
+     *
+     * @const array
+     */
+    const CF_EXPIRE = [
+        'categories'      => '86400',
+        'authors'         => '86400',
+        'contents'        => '3600',
+        'index'           => '86400',
+        'news'            => '300',
+        'tag'             => '3600',
+        'contents-latest' => '300'
     ];
 
     /**
@@ -92,6 +108,7 @@ class SitemapController extends Controller
                 ];
             }
 
+            $contents = array_reverse($contents);
             return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters, 'contents' => $contents ]);
         }
 
@@ -137,7 +154,7 @@ class SitemapController extends Controller
         if (!$this->isCached('authors', $cacheId)) {
             try {
                 $authors = $this->get('api.service.author')->getList(
-                    'activated = 1'
+                    'inrss = 1'
                 )['items'];
             } catch (GetListException $e) {
             }
@@ -161,35 +178,32 @@ class SitemapController extends Controller
             $settings = $this->get('core.helper.sitemap')->getSettings();
             $filters  = [
                 'content_type_name' => [
-                    [ 'value' => [ 'article', 'opinion' ], 'operator' => 'IN' ]
+                    [ 'value' => [ 'article', 'opinion', 'video', 'album' ], 'operator' => 'IN' ]
                 ],
                 'content_status'    => [[ 'value' => 1 ]],
                 'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
                 'endtime'           => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
                 ],
                 'starttime'         => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
-                ],
-                'changed' => [
                     [
                         'value' => sprintf(
-                            '"%s" AND DATE_ADD("%s", INTERVAL 1 MONTH)',
-                            date('Y-m-01 00:00:00', strtotime(date('Y-m-d H:i:s'))),
-                            date('Y-m-01 00:00:00', strtotime(date('Y-m-d H:i:s')))
+                            'DATE_ADD("%s", INTERVAL -2 DAY) AND "%s"',
+                            gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s'))),
+                            gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')))
                         ),
                         'field' => true,
                         'operator' => 'BETWEEN'
                     ]
-                ]
+                ],
             ];
 
             $contents = $this->get('entity_repository')
-                ->findBy($filters, ['changed' => 'desc'], $settings['total']);
+                ->findBy($filters, ['starttime' => 'desc'], $settings['total']);
 
             return $this->getResponse(
                 $format,
@@ -199,8 +213,7 @@ class SitemapController extends Controller
                 null,
                 null,
                 null,
-                null,
-                'no-store'
+                null
             );
         }
 
@@ -212,8 +225,7 @@ class SitemapController extends Controller
             null,
             null,
             null,
-            null,
-            'no-store'
+            null
         );
     }
 
@@ -232,8 +244,10 @@ class SitemapController extends Controller
         // TODO: Remove this as soon as possible
         $helper   = $this->get('core.helper.sitemap');
         $settings = $helper->getSettings();
+        $action   = 'contents';
 
         if (empty(array_filter([$year, $month, $page]))) {
+            $action             = 'contents-latest';
             $dates              = $helper->getDates();
             $last               = array_pop($dates);
             list($year, $month) = explode('-', $last);
@@ -254,14 +268,23 @@ class SitemapController extends Controller
         );
 
         if (file_exists($path)) {
-            return $this->getResponse($format, $cacheId, 'contents', [], $path, $page, $year, $month);
+            return $this->getResponse(
+                $format,
+                $cacheId,
+                $action,
+                [],
+                $path,
+                $page,
+                $year,
+                $month
+            );
         }
 
         $date     = $year . '-' . $month;
         $types    = $helper->getTypes($settings, [ 'tag' ]);
         $contents = $helper
             ->getContents($date, $types, $settings['perpage'], $page);
-
+        $contents = array_reverse($contents);
         if ($date === date('Y-m')) {
             $path = null;
         }
@@ -269,7 +292,7 @@ class SitemapController extends Controller
         return $this->getResponse(
             $format,
             $cacheId,
-            'contents',
+            $action,
             $contents,
             $path,
             $page,
@@ -344,7 +367,7 @@ class SitemapController extends Controller
             } catch (GetListException $e) {
             }
 
-            return $this->getResponse($format, $cacheId, 'tag', $tags);
+            return $this->getResponse($format, $cacheId, 'tag', $tags, null, null, null, null, '', $letter);
         }
 
         return $this->getResponse($format, $cacheId, 'tag');
@@ -390,14 +413,18 @@ class SitemapController extends Controller
         $page = null,
         $year = null,
         $month = null,
-        $cacheControl = ''
+        $cacheControl = '',
+        $letter = null
     ) {
         $headers = [
             'Content-Type' => 'application/xml; charset=utf-8',
-            'x-cache-for' => self::EXPIRE[$action],
+            'x-cache-for' => self::VARNISH_EXPIRE[$action],
             'x-cacheable' => true,
-            'x-tags'      => sprintf('sitemap,%s', $action)
+            'x-tags'      => sprintf('sitemap,%s', $action),
+            'Cache-Control' => 'max-age=' . self::CF_EXPIRE[$action] . ', public',
         ];
+
+        $action = $action == 'contents-latest' ? 'contents' : $action;
 
         if (!empty($cacheControl)) {
             $headers['Cache-Control'] = $cacheControl;
@@ -428,7 +455,7 @@ class SitemapController extends Controller
         }
 
         if ($format === 'xml.gz') {
-            $filename = implode(".", array_filter([ $action, $year, $month, $page ]));
+            $filename = implode(".", array_filter([ $action, $year, $month, $page, $letter ]));
             $file     = $file ?? gzencode($contents, 9);
 
             $headers = array_merge($headers, [

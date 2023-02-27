@@ -16,7 +16,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="settingForm.$invalid" type="button">
+                <button class="btn btn-loading btn-primary" ng-click="save()" type="button">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving}"></i>
                   <span class="text">{t}Save{/t}</span>
                 </button>

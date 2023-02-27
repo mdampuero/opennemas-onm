@@ -195,7 +195,8 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->with('content.patchItem', [
                 'action' => 'Api\Service\V1\OrmService::patchItem',
                 'id'     => 1,
-                'item'   => $item
+                'item'   => $item,
+                'last_changed' => ''
             ]);
 
         $this->service->patchItem(1, $data);
@@ -231,7 +232,8 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->with('content.patchList', [
                 'action' => 'Api\Service\V1\OrmService::patchList',
                 'ids'    => [ 1 ],
-                'item'   => [ $item ]
+                'item'   => [ $item ],
+                'last_changed' => []
             ]);
 
         $this->service->patchList([ 1 ], $data);
@@ -265,7 +267,8 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->with('content.updateItem', [
                 'action' => 'Api\Service\V1\OrmService::updateItem',
                 'id'     => 1,
-                'item'   => $item
+                'item'   => $item,
+                'last_changed' => ''
             ]);
 
         $this->service->updateItem(1, $data);

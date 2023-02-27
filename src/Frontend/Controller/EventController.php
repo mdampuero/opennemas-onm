@@ -61,6 +61,11 @@ class EventController extends FrontendController
     /**
      * {@inheritdoc}
      */
+    protected $service = 'api.service.event';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $templates = [
         'list' => 'event/list.tpl',
         'show' => 'event/item.tpl'
@@ -102,7 +107,7 @@ class EventController extends FrontendController
      */
     protected function hydrateList(array &$params = []) : void
     {
-        $date = date('Y-m-d H:i:s');
+        $date = gmdate('Y-m-d H:i:s');
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
@@ -126,6 +131,14 @@ class EventController extends FrontendController
             $params['epp'] * ($params['page'] - 1)
         ));
 
+        $total = $this->get($this->service)->countBy(sprintf(
+            'content_type_name="event" and content_status=1 and in_litter=0 '
+            . 'and (starttime is null or starttime < "%s") '
+            . 'and (endtime is null or endtime > "%s") ',
+            $date,
+            $date
+        ));
+
         // No first page and no contents
         if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
@@ -139,15 +152,15 @@ class EventController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
+        $params['x-tags'] .= ',event-frontpage';
+
         $params['contents']   = $response['items'];
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
-            'boundary'    => false,
             'epp'         => $params['epp'],
-            'maxLinks'    => 5,
             'page'        => $params['page'],
-            'total'       => $response['total'],
-            'route'       => 'frontend_events',
+            'total'       => $total,
+            'route'       => 'frontend_events'
         ]);
 
         $params['tags'] = $this->getTags($response['items']);

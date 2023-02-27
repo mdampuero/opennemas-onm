@@ -10,6 +10,7 @@
 namespace Common\Core\Component\Instance;
 
 use Onm\Exception\InstanceAlreadyExistsException;
+use Onm\Exception\InvalidSubdirectoryException;
 
 class Checker
 {
@@ -21,13 +22,22 @@ class Checker
     protected $em;
 
     /**
+     * The Locale component.
+     *
+     * @var Locale
+     */
+    protected $locale;
+
+    /**
      * Initializes the InstanceChecked.
      *
-     * @param \Repository\EntityManager $em The EntityManager service.
+     * @param \Repository\EntityManager     $em     The EntityManager service.
+     * @param \Common\Core\Component\Locale $locale The locale component.
      */
-    public function __construct($em)
+    public function __construct($em, $locale)
     {
-        $this->em = $em;
+        $this->em     = $em;
+        $this->locale = $locale;
     }
 
     /**
@@ -39,6 +49,7 @@ class Checker
     {
         $this->fixInternalName($instance);
         $this->validateDomains($instance);
+        $this->validateSubdirectory($instance);
     }
 
     /**
@@ -104,7 +115,30 @@ class Checker
         }
 
         if (!empty($instance) && !empty($i) && $instance->id != $i->id) {
-            throw new InstanceAlreadyExistsException();
+            throw new InstanceAlreadyExistsException(_('The instance already exists'), 409);
+        }
+    }
+
+    /**
+     * Validates the subdirectory for the given instance.
+     *
+     * @param \Common\Model\Entity\Instance $instance The instance.
+     *
+     * @throws InvalidSubdirectoryException
+     */
+    public function validateSubdirectory($instance)
+    {
+        $locales = $this->locale->getSlugs('frontend');
+
+        $locales = array_map(function ($a) {
+            return '/' . $a;
+        }, array_values($locales));
+
+        if (in_array($instance->subdirectory, $locales)) {
+            throw new InvalidSubdirectoryException(
+                _('Cannot use a language code as subdirectory'),
+                409
+            );
         }
     }
 }

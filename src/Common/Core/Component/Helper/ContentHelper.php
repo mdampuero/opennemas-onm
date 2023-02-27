@@ -116,6 +116,7 @@ class ContentHelper
     {
         $oqlStart = sprintf(
             'content_status = 1 and in_litter != 1 and'
+            . ' content_type_name != "advertisement" and'
             . ' (starttime !is null and starttime > "%s")'
             . ' order by starttime asc limit 1',
             date('Y-m-d H:i:s')
@@ -123,6 +124,7 @@ class ContentHelper
 
         $oqlEnd = sprintf(
             'content_status = 1 and in_litter != 1 and'
+            . ' content_type_name != "advertisement" and'
             . ' (endtime !is null and endtime > "%s")'
             . ' order by endtime desc limit 1',
             date('Y-m-d H:i:s')
@@ -334,16 +336,24 @@ class ContentHelper
      *
      * @return array Array with the content properties of each content.
      */
-    public function getSuggested($contentId, $contentTypeName, $categoryId = null, $epp = 4)
+    public function getSuggested($contentTypeName, $categoryId = null, $contentId = null)
     {
-        $epp     = (int) $epp < 1 ? 4 : (int) $epp;
-        $cacheId = 'suggested_contents_'
-            . md5(implode(',', [ $contentTypeName, $categoryId, $epp ]));
+        $epp = $this->container->get('core.theme')->getSuggestedEpp();
+
+        if (empty($epp)) {
+            return [];
+        }
+
+        $cacheId = sprintf('suggested_contents_%s_%d', $contentTypeName, $categoryId);
+
+        if (!empty($contentId)) {
+            $cacheId .= '_' . $contentId;
+        }
 
         $items = $this->cache->get($cacheId);
 
         if (!empty($items)) {
-            return $this->ignoreCurrent($contentId, $items, $epp);
+            return $items;
         }
 
         $criteria = [
@@ -353,14 +363,20 @@ class ContentHelper
             'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
             'endtime'           => [
                 'union' => 'OR',
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
             ]
         ];
+
+        if (!empty($contentId)) {
+            $criteria['pk_content'] = [
+                [ 'value' => [ $contentId ], 'operator' => 'NOT IN' ]
+            ];
+        }
 
         if (!empty($categoryId)) {
             $criteria['category_id'] = [ [ 'value' => $categoryId ] ];
@@ -369,14 +385,14 @@ class ContentHelper
         try {
             $items = $this->entityManager->findBy($criteria, [
                 'starttime' => 'desc'
-            ], $epp + 1, 1);
+            ], $epp, 1);
 
             $this->cache->set($cacheId, $items, 900);
         } catch (\Exception $e) {
             return [];
         }
 
-        return $this->ignoreCurrent($contentId, $items, $epp);
+        return $items;
     }
 
     /**
@@ -388,7 +404,10 @@ class ContentHelper
      */
     public function getSummary($item = null) : ?string
     {
-        if (in_array($item->content_type_name, [ 'article', 'opinion', 'video' ])) {
+        if (in_array(
+            $item->content_type_name,
+            [ 'article', 'company', 'obituary', 'opinion', 'video', 'poll', 'event' ]
+        )) {
             return $this->getProperty($item, 'description');
         }
 
@@ -614,29 +633,6 @@ class ContentHelper
     }
 
     /**
-     * Removes the current content from the list of suggested
-     * contents.
-     *
-     * @param int   $contentId The current content id.
-     * @param array $items     The list of suggested contents for a category.
-     * @param int   $epp       The maximum number of items to return.
-     *
-     * @return array The list of suggested contents.
-     */
-    protected function ignoreCurrent($contentId, $items, $epp)
-    {
-        $current = array_filter($items, function ($a) use ($contentId) {
-            return $a->pk_content == $contentId;
-        });
-
-        $items = array_slice(array_filter($items, function ($a) use ($contentId) {
-            return $a->pk_content != $contentId;
-        }), 0, $epp);
-
-        return $items;
-    }
-
-    /**
      * Check if this content is dued
      *       End      Now
      * -------]--------|-----------
@@ -707,5 +703,68 @@ class ContentHelper
         }
 
         return true;
+    }
+
+     /**
+     * Check if this content have live blog flag enabled
+     *
+     * @return bool
+     */
+    public function isLiveBlog($item)
+    {
+        return !empty($item->live_blog_posting) &&
+            !empty($item->coverage_start_time) &&
+            !empty($item->coverage_end_time) &&
+            !empty($item->live_blog_updates);
+    }
+
+     /**
+     * Check if this content have live blog updates
+     *
+     * @return bool
+     */
+    public function hasLiveUpdates($item)
+    {
+        return !empty($item->live_blog_updates);
+    }
+
+     /**
+     * Return last live update date if live blog article
+     *
+     * @return string
+     */
+    public function getLastLiveUpdate($item)
+    {
+        if (!$this->isLiveBlog($item) || empty($item->live_blog_updates)) {
+            return null;
+        }
+
+        return $item->live_blog_updates[0]['modified'];
+    }
+
+    /**
+     * Check if this content is live or, in others words, if this
+     * content is between coverage start time and end time
+     *
+     * @return bool
+     */
+    public function isLive($item)
+    {
+        if (empty($item->coverage_start_time || $item->coverage_end_time)) {
+            return false;
+        }
+
+        $timezone  = $this->locale->getTimeZone();
+        $startTime = (gettype($item->coverage_start_time) == 'object') ?
+            $item->coverage_start_time :
+            new \DateTime($item->coverage_start_time);
+
+        $endTime = (gettype($item->coverage_end_time) == 'object') ?
+            $item->coverage_end_time :
+            new \DateTime($item->coverage_end_time);
+
+        $now = new \DateTime(null, $timezone);
+
+        return $now->getTimeStamp() >= $startTime->getTimeStamp() && $now->getTimeStamp() <= $endTime->getTimeStamp();
     }
 }

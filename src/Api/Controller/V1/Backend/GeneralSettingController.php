@@ -9,18 +9,14 @@
  */
 namespace Api\Controller\V1\Backend;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 /**
  * Displays and saves system settings.
  */
 class GeneralSettingController extends SettingController
 {
-    /**
-     * The list of settings that must be base64 encoded/decoded.
-     *
-     * @var array
-     */
-    protected $base64Encoded = [];
-
     /**
      * The list of settings that can be saved.
      *
@@ -37,13 +33,19 @@ class GeneralSettingController extends SettingController
         'webmastertools_google',
     ];
 
-    protected $toint = [
-        'refresh_interval',
-    ];
     /**
-     * The list of settings that can be saved only by MASTER users.
+     * The list of settings that must be parsed to int.
      *
      * @var array
      */
-    protected $onlyMasters = [];
+    protected $toint = [
+        'refresh_interval',
+    ];
+
+    public function listAction(Request $request)
+    {
+        return new JsonResponse(
+            parent::listAction($request)
+        );
+    }
 }

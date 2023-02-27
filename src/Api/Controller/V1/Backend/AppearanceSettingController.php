@@ -79,14 +79,8 @@ class AppearanceSettingController extends SettingController
         $settings = $request->get('settings');
 
         try {
-            $fileSettings = array_merge($settings, $this->saveFiles($settings));
-
-            // Save settings
-            $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->set($fileSettings);
-
-            return parent::saveAction($request);
+            $settings = array_merge($this->saveFiles($settings), $settings);
+            return parent::saveSettings($settings);
         } catch (\Exception $e) {
             return new JsonResponse($msg->getMessages(), $msg->getcode());
         }
@@ -128,5 +122,12 @@ class AppearanceSettingController extends SettingController
         }
 
         return $settings;
+    }
+
+    public function listAction(Request $request)
+    {
+        return new JsonResponse(
+            parent::listAction($request)
+        );
     }
 }

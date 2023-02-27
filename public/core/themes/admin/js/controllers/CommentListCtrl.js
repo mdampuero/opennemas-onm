@@ -49,6 +49,13 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.hasMultilanguage = function() {
+          return false;
+        };
+
+        /**
          * @function init
          * @memberOf CommentListCtrl
          *
@@ -90,25 +97,6 @@
           $scope.items = $scope.data.items;
 
           $scope.extra = $scope.data.extra;
-        };
-
-        /**
-         * @function localizeText
-         * @memberOf CommentListCtrl
-         *
-         * @param {any} String or Object to localize.
-         *
-         * @return {String} Localized text.
-         *
-         * @description
-         *   Localize and return text
-         */
-        $scope.localizeText = function(text) {
-          if (typeof text === 'object') {
-            return text[$scope.config.locale.selected];
-          }
-
-          return text;
         };
       }
     ]);

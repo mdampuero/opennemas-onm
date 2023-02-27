@@ -21,6 +21,10 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     $smarty   = getService('core.template');
     $renderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
     $ads      = $renderer->getAdvertisements();
+    $hasLimit = $smarty->getContainer()
+        ->get('orm.manager')
+        ->getDataSet('Settings', 'instance')
+        ->get('ads_settings')['limit_ads_in_body'];
 
     if (empty($ads)) {
         return $body;
@@ -41,13 +45,16 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
         $slots = array_merge($slots, $ad->positions);
     }
 
-    $slots = array_unique(array_filter($slots, function ($a) use ($id) {
-        return $a > $id && $a < $id + 10;
+    // Limit ads to the paragraphs number
+    $limitSlots = $hasLimit ? count($paragraphs) : 10;
+    $slots      = array_unique(array_filter($slots, function ($a) use ($id, $limitSlots) {
+        return $a > $id && $a < $id + $limitSlots;
     }));
 
     sort($slots);
 
     $html      = '<div class="ad-slot oat" data-type="%s"></div>';
+    $device    = $smarty->getContainer()->get('core.globals')->getDevice();
     $safeFrame = $smarty->getContainer()->get('core.helper.advertisement')
         ->isSafeFrameEnabled();
 
@@ -56,9 +63,16 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
         $pos = $slotId - $id;
 
         if (!$safeFrame || $contentType === 'amp') {
-            $adsForPosition = array_filter($ads, function ($a) use ($slotId) {
-                return in_array($slotId, $a->positions);
+            $adsForPosition = array_filter($ads, function ($a) use ($slotId, $device) {
+                return in_array($slotId, $a->positions)
+                    && ($a->params['devices'][$device] === 1
+                        || empty($device)
+                    );
             });
+
+            if (empty($adsForPosition)) {
+                continue;
+            }
 
             $ad = $adsForPosition[array_rand($adsForPosition)];
             $ad = $renderer->render($ad, $params);

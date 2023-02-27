@@ -74,7 +74,11 @@
                 </div>
                 <div class="widget-stats">
                   <div class="wrapper last">
+                  {if $instance->media_size/1024 >= 1024}
+                    <span class="item-count">{($instance->media_size/1024/1024)|string_format:"%.2f"} GB</span>
+                  {else}
                     <span class="item-count">{($instance->media_size/1024)|string_format:"%.2f"} MB</span>
+                  {/if}
                   </div>
                 </div>
               </div>
@@ -86,11 +90,10 @@
             <div class="tiles blue m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
-                  {t}Users{/t}
+                  {t}Users Active{/t}
                 </div>
                 <div class="widget-stats">
                   <div class="wrapper last">
-                    <span class="item-title">{t}Activated{/t}</span>
                     <span class="item-count">{$instance->users}</span>
                   </div>
                 </div>
@@ -101,13 +104,11 @@
             <div class="tiles yellow m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
-                  {t}Page views this month{/t}
+                  {t}Emails sent from{/t} {$lastInvoice}
                 </div>
                 <div class="widget-stats">
                   <div class="wrapper last">
-                    <span class="item-count">
-                      {t}coming soon... work in progress...{/t}
-                    </span>
+                    <span class="item-count">{$total}</span>
                   </div>
                 </div>
               </div>

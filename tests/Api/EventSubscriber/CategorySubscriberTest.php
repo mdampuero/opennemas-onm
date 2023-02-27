@@ -22,6 +22,15 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
+        $this->cache = $this->getMockBuilder('Cache' . uniqid())
+            ->disableOriginalConstructor()
+            ->setMethods([ 'remove' ])
+            ->getMock();
+
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
         $this->helper = $this->getMockBuilder('Api\Helper\Cache\CategoryCacheHelper')
             ->disableOriginalConstructor()
             ->setMethods([
@@ -33,7 +42,27 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getArgument', 'hasArgument' ])
             ->getMock();
 
-        $this->subscriber = new CategorySubscriber($this->helper);
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([$this, 'serviceContainerCallback']));
+
+        $this->subscriber = new CategorySubscriber($this->container, $this->helper);
+    }
+
+    /**
+     * Returns a mocked service basing on the service name.
+     *
+     * @param string $name The service name.
+     *
+     * @return mixed The mocked service.
+     */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'cache.connection.instance':
+                return $this->cache;
+        }
+
+        return null;
     }
 
     /**
@@ -49,9 +78,20 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
      */
     public function testOnCategoryCreate()
     {
+        $source = new Category([ 'id' => 3750 ]);
+
+        $this->event->expects($this->any())->method('hasArgument')
+            ->with('item')->willReturn(true);
+
+        $this->event->expects($this->any())->method('getArgument')
+            ->with('item')->willReturn(new Category([ 'id' => 3750 ]));
+
         $this->helper->expects($this->once())->method('deleteDynamicCss');
 
-        $this->subscriber->onCategoryCreate();
+        $this->helper->expects($this->any())->method('deleteItem')
+            ->with($source);
+
+        $this->subscriber->onCategoryCreate($this->event);
     }
 
     /**
@@ -187,7 +227,7 @@ class CategorySubscriberTest extends \PHPUnit\Framework\TestCase
     public function testOnCategoryDelete()
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\CategorySubscriber')
-            ->setConstructorArgs([ $this->helper ])
+            ->setConstructorArgs([ $this->container, $this->helper ])
             ->setMethods([ 'onCategoryUpdate' ])
             ->getMock();
 

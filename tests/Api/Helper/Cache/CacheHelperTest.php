@@ -55,7 +55,7 @@ class CacheHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->queue->expects($this->at(1))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
-                'obj.http.x-tags ~ instance-bar'
+                'obj.http.x-tags ~ ^instance-bar'
             ]));
 
         $this->assertEquals($this->helper, $this->helper->deleteInstance());

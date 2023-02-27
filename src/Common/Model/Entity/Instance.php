@@ -29,12 +29,22 @@ class Instance extends Entity
     /**
      * Returns the base url for the instance
      *
-     * @return string
+     * @param  string $allowSubdirectory Indicates if the url can have a subdirectory or not.
+     *
+     * @return string The base url of the instance.
      **/
-    public function getBaseUrl()
+    public function getBaseUrl(bool $allowSubdirectory = false)
     {
         $protocol = (in_array('es.openhost.module.frontendSsl', $this->activated_modules))
             ? 'https://' : 'http://';
+
+        if (!empty($this->no_redirect_domain)) {
+            return $protocol . getService('request_stack')->getCurrentRequest()->getHost();
+        }
+
+        if ($allowSubdirectory && !empty($this->subdirectory)) {
+            return $protocol . $this->getMainDomain() . $this->subdirectory;
+        }
 
         return $protocol . $this->getMainDomain();
     }
@@ -126,6 +136,16 @@ class Instance extends Entity
     }
 
     /**
+     * Return the subdirectory for the instance.
+     *
+     * @return string The subdirectory for the instance.
+     */
+    public function getSubdirectory()
+    {
+        return $this->subdirectory;
+    }
+
+    /**
      * Checks if the current instance has multilanguage enabled.
      *
      * @return boolean True if the instance has multilanguage enabled. False
@@ -137,5 +157,35 @@ class Instance extends Entity
             'es.openhost.module.multilanguage',
             $this->activated_modules
         );
+    }
+
+    /**
+     * Checks if the current instance is a subdirectory of another one.
+     *
+     * @return boolean True if the instance is a subdirectory of another. False otherwise.
+     */
+    public function isSubdirectory()
+    {
+        return !empty($this->subdirectory);
+    }
+
+    /**
+     * Returns the country of the instance.
+     *
+     * @return string The country code of the instance.
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * Returns the name of the instance.
+     *
+     * @return string The name of the instance.
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

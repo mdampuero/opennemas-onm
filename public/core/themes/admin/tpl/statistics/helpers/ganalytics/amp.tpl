@@ -17,20 +17,3 @@
     </script>
   </amp-analytics>
 {/foreach}
-<amp-analytics type="gtag" data-credentials="include" id="analytics-onm">
-  <script type="application/json">
-  {
-    "vars" : {
-      "gtag_id": "UA-40838799-5",
-      "config" : {
-        "UA-40838799-5": {
-          "groups": "default"
-          {if $dataLayer}
-            , {$dataLayer}
-          {/if}
-        }
-      }
-    }
-  }
-  </script>
-</amp-analytics>

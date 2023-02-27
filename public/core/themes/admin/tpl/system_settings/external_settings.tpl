@@ -502,33 +502,6 @@
                 <i class="fa fa-thumbs-up"></i>
                 {t}Social network integration{/t}
               </h4>
-              <div class="panel-group" id="panel-group-google-plus" data-toggle="collapse">
-                <div class="panel panel-default">
-                  <div class="panel-heading collapsed">
-                    <h4 class="panel-title">
-                      <a class="collapsed" data-toggle="collapse" data-parent="#panel-group-google-plus" href="#goggle-plus">
-                        <i class="fa fa-google-plus"></i>
-                        {t}Google+{/t}
-                      </a>
-                    </h4>
-                  </div>
-                  <div class="panel-collapse collapse" id="goggle-plus">
-                    <div class="panel-body">
-                      <div class="form-group">
-                        <label class="form-label" for="google-page">
-                          {t}Google+ Page Url{/t}
-                        </label>
-                        <div class="controls">
-                          <input class="form-control" id="google-page" name="google-page" ng-model="settings.google_page" type="text">
-                          <span class="help">
-                            {t escape=off}If you have a <strong>Google+ page</strong>, please complete this input.{/t}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div class="panel-group" id="panel-group-youtube" data-toggle="collapse">
                 <div class="panel panel-default">
                   <div class="panel-heading collapsed">

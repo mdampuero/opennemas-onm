@@ -27,6 +27,14 @@
          * @memberOf RestListCtrl
          *
          * @description
+         *  Always collapse the list of columns
+         */
+        $scope.app.columns.collapsed = true;
+
+        /**
+         * @memberOf RestListCtrl
+         *
+         * @description
          *   The criteria to search.
          *
          * @type {Object}
@@ -239,6 +247,14 @@
                 messenger.post(response.data);
               });
             });
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.hasMultilanguage = function() {
+          return $scope.config && $scope.config.locale &&
+            $scope.config.locale.multilanguage;
         };
 
         /**

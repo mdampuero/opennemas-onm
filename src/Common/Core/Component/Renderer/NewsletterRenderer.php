@@ -47,8 +47,19 @@ class NewsletterRenderer
     {
         $newsletterContent = $this->hydrateContainers($newsletter);
 
-        $menu = new \Menu();
-        $menu = $menu->getMenu('frontpage');
+        $menuService = $this->container->get('api.service.menu');
+
+        $oql = ' name = "frontpage" ';
+
+        try {
+            $menu = $menuService->getItemBy($oql);
+
+            $menuHelper = $this->container->get('core.helper.menu');
+        } catch (\Exception $e) {
+            $menu             = [];
+            $menu->menu_items = [];
+        }
+
 
         $positions      = $this->container->get('core.helper.advertisement')
             ->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
@@ -68,13 +79,28 @@ class NewsletterRenderer
             $this->container->get('core.globals')->getInstance()->getMainDomain()
         );
 
+        $time = new \DateTime(null, $this->container->get('core.locale')->getTimeZone());
+
+        $newsletter->title = !empty($newsletter->params['append_title']) ?
+            $this->updateTitle($newsletter, $newsletterContent) :
+            sprintf('%s [%s]', $newsletter->title, $time->format('d/m/Y'));
+
         return $this->tpl->fetch('newsletter/newsletter.tpl', [
             'item'              => $newsletter,
             'newsletterContent' => $newsletterContent,
-            'menuFrontpage'     => $menu->items,
+            'menuFrontpage'     => $menuHelper->castToObjectFlat($menu->menu_items, false),
             'current_date'      => new \DateTime(),
             'URL_PUBLIC'        => 'http://' . $publicUrl,
         ]);
+    }
+
+    private function updateTitle($newsletter, $content)
+    {
+        $result = trim($newsletter->title);
+        if ($content[0] && $content[0]['items'][0]) {
+            $result .= " " . trim($content[0]['items'][0]['title']);
+        }
+        return $result;
     }
 
     /**
@@ -102,12 +128,12 @@ class NewsletterRenderer
             'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
             'endtime'           => [
                 'union' => 'OR',
                 [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
             ]
         ];
 
@@ -116,7 +142,7 @@ class NewsletterRenderer
 
             $searchCriteria = array_merge($searchCriteria, [
                 'starttime'         => [
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
                     [ 'value' => $date->format('Y-m-d H:i:s'), 'operator' => '>=' ],
                 ],
             ]);
@@ -136,7 +162,7 @@ class NewsletterRenderer
                     ]
                 ],
                 'starttime' => [
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
                     [ 'value' => $date->format('Y-m-d H:i:s'), 'operator' => '>=' ],
                 ],
             ]);

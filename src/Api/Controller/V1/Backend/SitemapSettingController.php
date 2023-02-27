@@ -10,6 +10,8 @@
 namespace Api\Controller\V1\Backend;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Common\Core\Annotation\Security;
 
 /**
  * Displays and saves system settings.
@@ -17,23 +19,23 @@ use Symfony\Component\HttpFoundation\Request;
 class SitemapSettingController extends SettingController
 {
     /**
-     * The list of settings that must be base64 encoded/decoded.
-     *
-     * @var array
-     */
-    protected $base64Encoded = [];
-
-    /**
      * The list of settings that can be saved.
      *
      * @var array
      */
-    protected $keys  = [
+    protected $keys = [
         'sitemap',
     ];
+
+    /**
+     * The list of settings that must be parsed to int.
+     *
+     * @var array
+     */
     protected $toint = [
         'sitemap',
     ];
+
     /**
      * The list of settings that can be saved only by MASTER users.
      *
@@ -43,9 +45,20 @@ class SitemapSettingController extends SettingController
         'sitemap'
     ];
 
+    /**
+     * Performs the action of saving the configuration settings
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     *
+     * @Security("hasExtension('MASTER')
+     *     and hasPermission('MASTER')")
+     */
     public function saveAction(Request $request)
     {
         $settings = $request->get('settings');
+        $settings = is_array($settings) ? $settings : [ $settings ];
 
         if (array_key_exists('sitemap', $settings) && !empty($settings['sitemap'])) {
             $remove = false;
@@ -64,6 +77,30 @@ class SitemapSettingController extends SettingController
             }
         }
 
-        return parent::saveAction($request);
+        return parent::saveSettings($settings);
+    }
+
+    /**
+     * Returns the list of settings.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasExtension('MASTER')
+     *     and hasPermission('MASTER')")
+     */
+    public function listAction(Request $request)
+    {
+        return new JsonResponse(
+            array_merge_recursive(
+                parent::listAction($request),
+                [
+                    'extra' => [
+                        'sitemaps' => $this->get('core.helper.sitemap')->getSitemapsInfo(),
+                    ]
+                ]
+            )
+        );
     }
 }

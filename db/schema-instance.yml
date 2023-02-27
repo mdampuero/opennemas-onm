@@ -254,6 +254,9 @@ category:
         color:
             type: string
             options: { length: 10, default: null, notnull: false }
+        cover_id:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -267,12 +270,36 @@ category:
             primary: false
             unique: false
             flags: {  }
+        -
+            name: cover_id
+            columns: [cover_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: parent_id
+            columns: [parent_id]
+            primary: false
+            unique: false
+            flags: {  }
     foreign_keys:
         -
             name: logo_id_pk_content
             source_field: [ logo_id ]
             target_table: contents
             target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
+        -
+            name: cover_id_pk_content
+            source_field: [ cover_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
+        -
+            name: category_id_category_parent_id
+            source_field: [ parent_id ]
+            target_table: category
+            target_field: [ id ]
             restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
 content_positions:
     columns:
@@ -527,6 +554,18 @@ contents:
             name: content_type_name
             columns: [content_type_name]
             unique: false
+        -
+            name: content_type_name_changed
+            columns: [content_type_name, changed]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: content_type_name_in_litter_content_status
+            columns: [content_type_name, in_litter, content_status]
+            primary: false
+            unique: false
+            flags: {  }
     foreign_keys:
         -
             name: fk_author_users_id
@@ -757,12 +796,12 @@ menu_items:
             columns: [pk_menu]
     foreign_keys:
         -
-            name: menuitems_id_menu_id
+            name: menu_items_id_menu_id
             source_field: [ pk_menu ]
-            target_table: menues
+            target_table: menus
             target_field: [ pk_menu ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-menues:
+menus:
     columns:
         pk_menu:
             type: integer
@@ -770,15 +809,9 @@ menues:
         name:
             type: string
             options: { length: 255, default: null }
-        type:
-            type: string
-            options: { length: 255, default: null }
         position:
             type: string
             options: { length: 50, default: null, notnull: false }
-        params:
-            type: string
-            options: { length: 255, default: null, notnull: false }
     index:
         -
             name: PRIMARY
@@ -798,6 +831,22 @@ menues:
             primary: false
             unique: false
             flags: {  }
+menumetas:
+    columns:
+        fk_menu:
+            type: integer
+            options: { unsigned: true }
+        meta_key:
+            type: string
+            options: { length: 255, notnull: true }
+        meta_value:
+            type: text
+            options: { default: null, notnull: false }
+    foreign_keys:
+        -
+            source_field: [ fk_menu ]
+            target_table: menus
+            target_field: [ pk_menu ]
 newsletters:
     columns:
         id:
@@ -997,6 +1046,58 @@ content_content:
             target_table: contents
             target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+content_updates:
+    columns:
+        content_id:
+            type:    bigint
+            options: { length: 20, unsigned: true }
+        title:
+            type:    text
+            options: { length: 65532, default: null, notnull: false }
+        body:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        content_type_name:
+            type:    string
+            options: { length: 20, default: null }
+        caption:
+            type:    text
+            options: { default: null, length: 65532, notnull: false }
+        image_id:
+            type:    bigint
+            options: { length: 20, unsigned: true }
+        created:
+            type:    datetime
+            options: { default: CURRENT_TIMESTAMP }
+        modified:
+            type:    datetime
+            options: { default: CURRENT_TIMESTAMP }
+    index:
+        -
+            name:    PRIMARY
+            columns: [ content_id, created ]
+            primary: true
+            unique:  false
+            flags:   {}
+        -
+            name:    fk_image_id
+            columns: [ image_id ]
+            primary: false
+            unique:  false
+            flags:   {}
+    foreign_keys:
+        -
+            name:         fk_content_update
+            source_field: [ content_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE }
+        -
+            name:         fk_image_id
+            source_field: [ image_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onDelete: SET NULL }
 settings:
     columns:
         name:
@@ -1402,29 +1503,4 @@ user_user_group:
             source_field: [ user_group_id ]
             target_table: user_groups
             target_field: [ pk_user_group ]
-            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
-widgets:
-    columns:
-        pk_widget:
-            type: bigint
-            options: { length: 20, unsigned: true, autoincrement: true }
-        content:
-            type: text
-            options: { length: 65532, default: null }
-        renderlet:
-            type: string
-            options: { length: 50, notnull: false, default: 'html' }
-    index:
-        -
-            name: PRIMARY
-            columns: [pk_widget]
-            primary: true
-            unique: true
-            flags: {  }
-    foreign_keys:
-        -
-            name: widgets_id_contents_id
-            source_field: [ pk_widget ]
-            target_table: contents
-            target_field: [ pk_content ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }

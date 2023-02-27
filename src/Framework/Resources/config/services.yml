@@ -33,7 +33,7 @@ services:
 
     paginator:
         class: Framework\Component\Paginator\Paginator
-        arguments: [ '@router' ]
+        arguments: [ '@router', '@core.decorator.url' ]
         public: true
 
     core.messenger:

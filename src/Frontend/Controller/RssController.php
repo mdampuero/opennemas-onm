@@ -11,6 +11,43 @@ use Symfony\Component\HttpFoundation\Request;
 class RssController extends FrontendController
 {
     /**
+     * Returns a list of allowed content types.
+     *
+     * @return array The list of content types.
+     */
+    protected function checkExtensions()
+    {
+        $cs = $this->container->get('core.security');
+
+        $contentTypes = [];
+        if ($cs->hasExtension('ARTICLE_MANAGER')) {
+            $contentTypes ['Articles'] = ['slug' => 'article', 'name' => 'Articles'];
+        }
+        if ($cs->hasExtension('OPINION_MANAGER')) {
+            $contentTypes ['Opinions'] = ['slug' => 'opinion', 'name' => 'Opinions'];
+        }
+        if ($cs->hasExtension('VIDEO_MANAGER')) {
+            $contentTypes ['Videos'] = ['slug' => 'video','name' => 'Videos'];
+        }
+        if ($cs->hasExtension('ALBUM_MANAGER')) {
+            $contentTypes ['Albums'] = ['slug' => 'album', 'name' => 'Albums'];
+        }
+        if ($cs->hasExtension('POLL_MANAGER')) {
+            $contentTypes ['Polls'] = ['slug' => 'poll','name' => 'Polls'];
+        }
+        if ($cs->hasExtension('es.openhost.module.events')) {
+            $contentTypes ['Events'] = ['slug' => 'event', 'name' => 'Events'];
+        }
+        if ($cs->hasExtension('es.openhost.module.companies')) {
+            $contentTypes ['Companies'] = ['slug' => 'company', 'name' => 'Companies'];
+        }
+        if ($cs->hasExtension('es.openhost.module.obituaries')) {
+            $contentTypes ['Obituaries'] = ['slug' => 'obituary', 'name' => 'Obituaries'];
+        }
+        return $contentTypes;
+    }
+
+    /**
      * Shows a page that shows a list of available RSS sources.
      *
      * @param Request $request The request object.
@@ -20,20 +57,66 @@ class RssController extends FrontendController
     public function indexAction()
     {
         $this->view->setConfig('rss');
-        $cacheID = $this->view->getCacheId('rss', 'index');
+        $cacheID             = $this->view->getCacheId('rss', 'index');
+        $allowedModules      = $this->checkExtensions();
+        $allowedcontentTypes = array_map(function ($element) {
+            return $element['slug'];
+        }, $allowedModules);
 
+        $data = [];
         if (($this->view->getCaching() === 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
         ) {
-            // Get categories with enabled = 1 and rss = 1
-            $categories = $this->get('api.service.category')
-                ->getList('enabled = 1 and rss = 1');
+            $sql = sprintf(
+                'select distinct category_id, content_type_name from contents '
+                . 'inner join content_category on contents.pk_content = content_category.content_id '
+                . 'inner join category on content_category.category_id = category.id '
+                . 'where category.rss = 1 and category.enabled = 1 '
+                . 'and contents.content_type_name in ("%s") '
+                . 'and content_status = 1 and in_litter = 0 '
+                . 'and (starttime is null or starttime < "%s") '
+                . 'and (endtime is null or endtime > "%s");',
+                implode('","', $allowedcontentTypes),
+                gmdate('Y-m-d H:i:s'),
+                gmdate('Y-m-d H:i:s')
+            );
+
+            $response = $this->container->get('orm.manager')->getConnection('instance')
+                ->executeQuery($sql)
+                ->fetchAll();
+
+            foreach ($response as $element) {
+                $module = array_filter($allowedModules, function ($item) use ($element) {
+                    return $item['slug'] == $element['content_type_name'];
+                });
+
+                $key = array_pop($module)['name'];
+                if (!array_key_exists($key, $data)) {
+                    $data[$key] = [];
+                }
+                if (!array_key_exists('slug', $data[$key])) {
+                    $data[$key]['slug'] = $element['content_type_name'];
+                }
+                if (!array_key_exists('values', $data[$key])) {
+                    $data[$key]['values'] = [];
+                }
+                $data[$key]['values'] = array_merge(
+                    $data[$key]['values'],
+                    [$element['category_id']]
+                );
+            }
 
             $authors = $this->get('api.service.author')
                 ->getList('order by name asc');
 
+            // Sort array by relevance based on allowedModules array
+            $data = array_filter(array_replace($allowedModules, $data), function ($item) {
+                return array_key_exists('values', $item);
+            });
+
             $this->view->assign([
-                'categoriesTree' => $categories['items'],
+                'categoriesTree' => $data,
+                'allowedModules' => $allowedModules,
                 'opinionAuthors' => $authors['items'],
             ]);
         }
@@ -41,7 +124,7 @@ class RssController extends FrontendController
         return $this->render('rss/index.tpl', [
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
-            'x-tags'      => 'rss,index',
+            'x-tags'      => 'rss-index',
         ]);
     }
 
@@ -112,12 +195,14 @@ class RssController extends FrontendController
             ]);
         }
 
-        $response = $this->render('rss/rss.tpl', [
+        $params = [
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss,frontpage-' . $categoryID
-        ]);
+            'x-tags'      => 'rss-frontpage-' . $categoryID
+        ];
+
+        $response = $this->render('rss/rss.tpl', $params);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
 
@@ -136,11 +221,16 @@ class RssController extends FrontendController
         $id     = null;
         $slug   = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
         $type   = $request->query->filter('type', 'article', FILTER_SANITIZE_STRING);
+        $xtags  = 'rss-' . $type;
         $titles = [
-            'album'   => _('Latest Albums'),
-            'article' => _('Latest News'),
-            'opinion' => _('Latest Opinions'),
-            'video'   => _('Latest Videos'),
+            'album'    => _('Latest Albums'),
+            'article'  => _('Latest News'),
+            'opinion'  => _('Latest Opinions'),
+            'video'    => _('Latest Videos'),
+            'poll'     => _('Latest Polls'),
+            'event'    => _('Latest Events'),
+            'obituary' => _('Latest Obituaries'),
+            'company'  => _('Latest Companies'),
         ];
 
         // Setup templating cache layer
@@ -162,6 +252,8 @@ class RssController extends FrontendController
                 $category = $this->get('api.service.category')
                     ->getItemBy($oql);
 
+                $xtags .= ',category-' . $category->id;
+
                 $id       = $category->id;
                 $slug     = $category->name;
                 $rssTitle = $rssTitle . ' - ' . $category->title;
@@ -182,6 +274,58 @@ class RssController extends FrontendController
                 ->get('elements_in_rss', 10);
 
             $contents = $this->getLatestContents($type, $id, $total);
+            $this->getRelatedContents($contents);
+
+            $this->view->assign([
+                'contents'  => $contents,
+                'rss_title' => $rssTitle,
+                'type'      => $type
+            ]);
+        }
+
+        $response = $this->render('rss/rss.tpl', [
+            'cache_id'    => $cacheID,
+            'x-cacheable' => true,
+            'x-cache-for' => $expire,
+            'x-tags'      => $xtags
+        ]);
+
+        $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
+
+        return $response;
+    }
+
+    /**
+     * Displays the RSS feed for most viewed articles.
+     *
+     * @return Response The response object.
+     */
+    public function mostViewedRssAction()
+    {
+        $id    = null;
+        $type  = 'article';
+        $xtags = 'rss-' . $type;
+
+        // Setup templating cache layer
+        $this->view->setConfig('rss');
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+        $this->setViewExpireDate($expire);
+
+        $rssTitle = _('Most viewed');
+
+        $cacheID = empty($id) ?
+            $this->view->getCacheId('rss', $type, '') :
+            $this->view->getCacheId('rss', $type, $id);
+
+        if (($this->view->getCaching() === 0)
+           || (!$this->view->isCached('rss/rss.tpl', $cacheID))
+        ) {
+            $total = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('elements_in_rss', 10);
+
+            $contents = $this->getMostViewedContents($type, $id, $total);
 
             $this->getRelatedContents($contents);
 
@@ -196,7 +340,7 @@ class RssController extends FrontendController
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss,' . $type . ',' . $slug
+            'x-tags'      => $xtags
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -226,6 +370,7 @@ class RssController extends FrontendController
 
         $expected = $this->get('router')
             ->generate('frontend_rss_author', [ 'author_slug' => $user->slug ]);
+        $expected = $this->get('core.decorator.url')->prefixUrl($expected);
 
         if ($request->getPathInfo() !== $expected) {
             return new RedirectResponse($expected);
@@ -255,12 +400,12 @@ class RssController extends FrontendController
                 'starttime'       => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
                 ],
                 'endtime'           => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                    [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
                 ]
             ];
 
@@ -273,7 +418,7 @@ class RssController extends FrontendController
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss,author-' . $slug
+            'x-tags'      => 'rss-author-' . $user->id
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -359,7 +504,34 @@ class RssController extends FrontendController
             'cache_id'    => $cacheID,
             'x-cacheable' => true,
             'x-cache-for' => $expire,
-            'x-tags'      => 'rss,instant-articles'
+            'x-tags'      => 'rss-instant-articles'
+        ]);
+
+        $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
+
+        return $response;
+    }
+
+    /**
+     * Displays the Rss feed for standalone news of Google News Showcase.
+     *
+     * @param Request   $request The request object.
+     *
+     * @return Response The rss feed for standalone news of Google News Showcase.
+     */
+    public function googleNewsAction()
+    {
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.google_news_showcase')) {
+            throw new ResourceNotFoundException();
+        }
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        $response = $this->render('rss/google_news_showcase.tpl', [
+            'contents'    => $this->getShowcaseContents('showcase', 1),
+            'x-cacheable' => true,
+            'x-cache-for' => $expire,
+            'x-tags'      => 'rss-google-news-showcase'
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
@@ -388,12 +560,12 @@ class RssController extends FrontendController
             'starttime'         => [
                 'union' => 'OR',
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '<=' ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
             'endtime'           => [
                 'union' => 'OR',
                 [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => date('Y-m-d H:i:s'), 'operator' => '>' ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
             ]
         ];
 
@@ -408,7 +580,7 @@ class RssController extends FrontendController
         // Fix condition for IN operator when no categories
         $ids = empty($ids) ? [ '' ] : $ids;
 
-        if ($contentType !== 'opinion') {
+        if (!in_array($contentType, ['opinion', 'obituary', 'company'])) {
             $filters['category_id'] = [
                 [ 'value' => $ids, 'operator' => 'IN' ]
             ];
@@ -416,6 +588,98 @@ class RssController extends FrontendController
             if (!empty($category)) {
                 $filters['category_id'] = [ [ 'value' => $category ] ];
             }
+        }
+
+        if ($contentType == 'event') {
+            $filters['contentmeta.meta_name']  = [
+                [ 'value' => 'event_end_date', 'operator' => '=' ]
+            ];
+            $filters['contentmeta.meta_value'] = [
+                [ 'value' => gmdate('Y-m-d'), 'operator' => '>=' ]
+            ];
+            $filters['join']                   = [
+                [
+                    'table'               => 'contentmeta',
+                    'type'                => 'inner',
+                    'contents.pk_content' => [
+                        [
+                            'value' => 'contentmeta.fk_content',
+                            'field' => true
+                        ]
+                    ]
+                ]
+            ];
+        }
+
+        $contents = $em->findBy($filters, $order, $total, 1);
+        $cm       = new \ContentManager();
+        $contents = $cm->filterBlocked($contents);
+
+        return $contents;
+    }
+
+    /**
+     * Get latest contents given a type of content.
+     *
+     * @param string  $contentType The content type name of the contents.
+     * @param integer $category    The category id.
+     * @param integer $total       The total number of contents.
+     *
+     * @return Array Latest contents.
+     */
+    public function getMostViewedContents($contentType = 'article', $category = null, $total = 10)
+    {
+        $em = $this->get('entity_repository');
+
+        $startDate = gmdate('Y-m-d H:i:s', strtotime('- 3 days'));
+
+        $order   = [ 'views' => 'DESC' ];
+        $filters = [
+            'join' => [
+                [
+                    'table'               => 'content_views',
+                    'type'                => 'inner',
+                    'contents.pk_content' => [
+                        [
+                            'value' => 'content_views.pk_fk_content',
+                            'field' => true
+                        ]
+                    ]
+                ]
+            ],
+            'content_type_name' => [[ 'value' => $contentType ]],
+            'content_status'    => [[ 'value' => 1 ]],
+            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+            'created'           => [[ 'value' => $startDate, 'operator' => '>=' ]],
+            'starttime'         => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
+            ],
+            'endtime'           => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
+        ];
+
+        // Get categories with enabled = 1 and rss = 1
+        $categories = $this->get('api.service.category')
+            ->getList('enabled = 1 and rss = 1');
+
+        $ids = array_map(function ($a) {
+            return $a->id;
+        }, $categories['items']);
+
+        // Fix condition for IN operator when no categories
+        $ids = empty($ids) ? [ '' ] : $ids;
+
+        $filters['category_id'] = [
+            [ 'value' => $ids, 'operator' => 'IN' ]
+        ];
+
+        if (!empty($category)) {
+            $filters['category_id'] = [ [ 'value' => $category ] ];
         }
 
         $contents = $em->findBy($filters, $order, $total, 1);
@@ -529,6 +793,35 @@ class RssController extends FrontendController
                && !empty($content->params['bodyLink'])) {
                 unset($contents[$key]);
             }
+        }
+    }
+
+    /**
+     * Returns the list of contents marked with showcase flags.
+     *
+     * @param string $flag The name of the flag to check.
+     * @param string $days The limit of days that the content can be in the showcase rss.
+     *
+     * @return array The array of contents checked with showcase limited by date.
+     */
+    protected function getShowcaseContents($flag, $days)
+    {
+        $date = new \DateTime();
+        $date->sub(new \DateInterval(sprintf('P%dD', $days)));
+
+        $oql = sprintf(
+            'content_type_name = "article" and content_status = 1 and in_litter = 0 ' .
+            'and %s = 1 and (starttime is null or starttime > "%s") ' .
+            'and (endtime is null or endtime < "%s") order by starttime desc',
+            $flag,
+            $date->format('Y-m-d H:i:s'),
+            date('Y-m-d H:i:s')
+        );
+
+        try {
+            return $this->get('api.service.content')->getList($oql)['items'];
+        } catch (\Exception $e) {
+            return [];
         }
     }
 }

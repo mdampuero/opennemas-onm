@@ -2,6 +2,7 @@
 
 namespace Tests\Frontend\Renderer\Widget;
 
+use Common\Model\Entity\Content;
 use Frontend\Renderer\Widget\WidgetRenderer;
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +17,12 @@ class WidgetRendererTest extends TestCase
 
         $this->renderer = $this->getMockBuilder('Frontend\Renderer\Widget\WidgetRenderer')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'renderletSmarty', 'renderletIntelligentWidget', 'getWidget' ])
+            ->setMethods([ 'getWidget' ])
+            ->getMock();
+
+        $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'generate' ])
             ->getMock();
 
         $this->loader = $this->getMockBuilder('Common\Core\Component\Loader\WidgetLoader')
@@ -24,142 +30,50 @@ class WidgetRendererTest extends TestCase
             ->setMethods([ 'loadWidget' ])
             ->getMock();
 
-        $this->template = $this->getMockBuilder('Common\Core\Component\Template\Template')
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
             ->disableOriginalConstructor()
-            ->setMethods([ 'fetch' ])
+            ->setMethods([ 'prefixUrl' ])
             ->getMock();
-
-        $this->renderer->expects($this->any())->method('renderletSmarty')
-            ->willReturn('Smarty Renderlet Code');
-
-        $this->renderer->expects($this->any())->method('renderletIntelligentWidget')
-            ->willReturn('Intelligent Renderlet Code');
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
     }
-
 
     public function serviceContainerCallback($name)
     {
         switch ($name) {
             case 'core.template':
                 return $this->template;
+
             case 'core.loader.widget':
                 return $this->loader;
+
+            case 'core.decorator.url':
+                return $this->decorator;
+
+            case 'router':
+                return $this->router;
         }
 
         return null;
     }
 
     /**
-     * Tests render when widget html.
+     * Tests the render function.
      */
-    public function testRenderWhenHtml()
+    public function testRender()
     {
-        $widget            = new \Widget();
-        $widget->renderlet = 'html';
-        $widget->content   = 'Html Renderlet Code';
-        $expected          = '<div class="widget">' . $widget->content . '</div>';
+        $this->router->expects($this->once())->method('generate')
+            ->with('frontend_widget_render', [ 'widget_id' => 890, 'responsive' => 'mobile' ])
+            ->willReturn('render/widget?widget_id=890&responsive=mobile');
 
-        $this->assertEquals($expected, $this->renderer->render($widget, []));
-    }
+        $this->decorator->expects($this->once())->method('prefixUrl')
+            ->willReturn('render/widget?widget_id=890&responsive=mobile');
 
-    /**
-     * Tests render when widget smarty.
-     */
-    public function testRenderWhenSmarty()
-    {
-        $widget            = new \Widget();
-        $widget->renderlet = 'smarty';
-        $expected          = '<div class="widget">Smarty Renderlet Code</div>';
-
-        $this->assertEquals($expected, $this->renderer->render($widget, []));
-    }
-
-    /**
-     * Tests render when intelligent widget.
-     */
-    public function testRenderWhenIntelligentWidget()
-    {
-        $widget            = new \Widget();
-        $widget->renderlet = 'intelligentwidget';
-        $expected          = '<div class="widget">Intelligent Renderlet Code</div>';
-
-        $this->assertEquals($expected, $this->renderer->render($widget, []));
-    }
-
-    /**
-     * Tests render when no valid widget.
-     */
-    public function testRenderWhenNoValid()
-    {
-        $widget            = new \Widget();
-        $widget->renderlet = '';
-        $expected          = '<div class="widget"></div>';
-
-        $this->assertEquals($expected, $this->renderer->render($widget, []));
-    }
-
-    /**
-     * Tests renderletSmarty.
-     */
-    public function testRenderletSmarty()
-    {
-        $widget          = new \Widget();
-        $widget->content = "smarty/renderlet/widget.tpl";
-
-        $renderer = new WidgetRenderer($this->container);
-        $method   = new \ReflectionMethod($renderer, 'renderletSmarty');
-        $method->setAccessible(true);
-
-        $this->template->expects($this->once())->method('fetch')
-            ->with('string:' . $widget->content, [ 'widget' => $widget->content ])
-            ->willReturn('Output');
-
-        $this->assertEquals('Output', $method->invokeArgs($renderer, [ $widget ]));
-    }
-
-    /**
-     * Tests renderletIntelligentWidget when widget doesn't exists.
-     */
-    public function testRenderletIntelligentWidgetWhenNotExists()
-    {
-        $content  = new \Content();
-        $expected = sprintf(_('Widget %s not available'), $content->content);
-
-        $renderer = new WidgetRenderer($this->container);
-        $method   = new \ReflectionMethod($renderer, 'renderletIntelligentWidget');
-        $method->setAccessible(true);
-
-        $this->assertEquals($expected, $method->invokeArgs($renderer, [ $content ]));
-    }
-
-    /**
-     * Tests renderletIntelligentWidget when widget exists.
-     */
-    public function testRenderletIntelligentWidgetWhenExists()
-    {
-        $widget = $this->getMockBuilder('\Widget')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'render' ])
-            ->getMock();
-
-        $renderer = $this->getMockBuilder('Frontend\Renderer\Widget\WidgetRenderer')
-            ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'getWidget' ])
-            ->getMock();
-
-        $method = new \ReflectionMethod($renderer, 'renderletIntelligentWidget');
-        $method->setAccessible(true);
-
-        $renderer->expects($this->once())->method('getWidget')
-            ->willReturn($widget);
-
-        $widget->expects($this->once())->method('render')
-            ->with([]);
-
-        $method->invokeArgs($renderer, [ null, [] ]);
+        $this->assertEquals(
+            '<esi:include src="render/widget?widget_id=890&responsive=mobile" />',
+            $this->renderer->render(new Content([ 'pk_content' => 890 ]), [ 'responsive' => 'mobile' ])
+        );
     }
 
     /**
@@ -167,8 +81,8 @@ class WidgetRendererTest extends TestCase
      */
     public function testgetWidgetWhenEmpty()
     {
-        $widget          = new \Widget();
-        $widget->content = null;
+        $widget        = new \Content();
+        $widget->class = 'ContentListing';
 
         $renderer = new WidgetRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getWidget');
@@ -182,15 +96,15 @@ class WidgetRendererTest extends TestCase
      */
     public function testgetWidgetWhenNoClass()
     {
-        $widget          = new \Widget();
-        $widget->content = 'AllHeadlines';
+        $widget        = new \Content();
+        $widget->class = 'AllHeadlines';
 
         $renderer = new WidgetRenderer($this->container);
         $method   = new \ReflectionMethod($renderer, 'getWidget');
         $method->setAccessible(true);
 
         $this->loader->expects($this->at(0))->method('loadWidget')
-            ->with($widget->content);
+            ->with($widget->class);
 
         $this->assertEquals(null, $method->invokeArgs($renderer, [ $widget ]));
     }

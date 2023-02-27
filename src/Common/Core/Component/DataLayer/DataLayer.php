@@ -39,7 +39,7 @@ class DataLayer
         $this->container          = $container;
         $this->dataLayerMap       = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('data_layer');
+            ->get('data_layer', []);
         $this->variablesExtractor = $this->container->get('core.variables.extractor');
     }
 

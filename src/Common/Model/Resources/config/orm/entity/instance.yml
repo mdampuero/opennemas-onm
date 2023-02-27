@@ -13,6 +13,7 @@ orm:
                 attachments:        integer
                 changes_in_modules: array
                 client:             integer
+                comments:           integer
                 contact_mail:       string
                 contents:           integer
                 country:            string
@@ -20,8 +21,10 @@ orm:
                 domain_expire:      datetime
                 domains:            array
                 emails:             integer
+                events:             integer
                 id:                 integer
                 internal_name:      string
+                kioskos:            integer
                 last_login:         datetime
                 letters:            integer
                 blocked:            boolean
@@ -34,6 +37,7 @@ orm:
                 photos:             integer
                 polls:              integer
                 purchased:          array
+                subdirectory:       string
                 settings:           array
                 static_pages:       integer
                 users:              integer
@@ -150,6 +154,15 @@ orm:
                             type:    integer
                             options: { default: 0, unsigned: true, notnull: false }
                         users:
+                            type:    integer
+                            options: { default: 0, unsigned: true, notnull: false }
+                        comments:
+                            type:    integer
+                            options: { default: 0, unsigned: true, notnull: false }
+                        kioskos:
+                            type:    integer
+                            options: { default: 0, unsigned: true, notnull: false }
+                        events:
                             type:    integer
                             options: { default: 0, unsigned: true, notnull: false }
                     index:

@@ -76,17 +76,19 @@ class DataLayerHenneoTest extends \PHPUnit\Framework\TestCase
     public function testGetDataLayer()
     {
         $settings = [
-            [ 'key' => 'extension',  'value' => 'extension'],
-            [ 'key' => 'date',       'value' => 'publicationDate' ],
-            [ 'key' => 'updateDate', 'value' => 'updateDate'],
-            [ 'key' => 'format',     'value' => 'format']
+            [ 'key' => 'extension',    'value' => 'extension' ],
+            [ 'key' => 'date',         'value' => 'publicationDate' ],
+            [ 'key' => 'updateDate',   'value' => 'updateDate' ],
+            [ 'key' => 'format',       'value' => 'format' ],
+            [ 'key' => 'isRestricted', 'value' => 'isRestricted' ]
         ];
 
         $result = [
-            'extension'  => 'blogpost',
-            'date'       => '20210213',
-            'updateDate' => '2021-02-13 00:00:00',
-            'format'     => 'web'
+            'extension'    => 'blogpost',
+            'date'         => '20210213',
+            'updateDate'   => '2021-02-13 00:00:00',
+            'format'       => 'web',
+            'isRestricted' => 'abierto'
         ];
 
         $this->dataset->expects($this->once())->method('get')
@@ -110,6 +112,10 @@ class DataLayerHenneoTest extends \PHPUnit\Framework\TestCase
             ->willReturn('html');
 
         $this->extractor->expects($this->at(4))->method('get')
+            ->with('isRestricted')
+            ->willReturn(false);
+
+        $this->extractor->expects($this->at(5))->method('get')
             ->with('contentId')
             ->willReturn(1);
 

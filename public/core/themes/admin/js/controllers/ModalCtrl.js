@@ -17,8 +17,8 @@
      *   Controller for News Agency listing.
      */
     .controller('ModalCtrl', [
-      '$uibModalInstance', '$scope', 'routing', 'success', 'template',
-      function($uibModalInstance, $scope, routing, success, template) {
+      '$uibModalInstance', '$scope', '$q', 'routing', 'success', 'template',
+      function($uibModalInstance, $scope, $q, routing, success, template) {
         /**
          * @memberOf ModalCtrl
          *
@@ -66,29 +66,33 @@
         $scope.confirm = function() {
           $scope.loading = 1;
 
-          var getType = {};
-
-          if (success && getType.toString.call(success) === '[object Function]') {
-            success($uibModalInstance, $scope.template).then(function(response) {
-              $scope.loading = 0;
-              $uibModalInstance.close({
-                data: response.data,
-                headers: response.headers,
-                status: response.status,
-                success: true
-              });
-            }, function(response) {
-              $scope.loading = 0;
-              $uibModalInstance.close({
-                data: response.data,
-                headers: response.headers,
-                status: response.status,
-                success: false
-              });
-            });
-          } else {
+          if (!success || typeof success !== 'function') {
             $uibModalInstance.close(true);
+            return;
           }
+
+          $q.when(success($uibModalInstance, $scope.template))
+            .then(function(response) {
+              $scope.resolve(response, true);
+            }, function(response) {
+              $scope.resolve(response, false);
+            });
+        };
+
+        $scope.resolve = function(response, success) {
+          $scope.loading = 0;
+
+          if (!response || Object.keys(response) > 0) {
+            $uibModalInstance.close(success);
+            return;
+          }
+
+          $uibModalInstance.close({
+            data: response.data,
+            headers: response.headers,
+            status: response.status,
+            success: success
+          });
         };
 
         /**

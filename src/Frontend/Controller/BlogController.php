@@ -3,6 +3,7 @@
 namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -107,7 +108,7 @@ class BlogController extends FrontendController
         $action = $this->get('core.globals')->getAction();
 
         $expected = $this->get('core.helper.url_generator')->generate($author);
-        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
+        $expected = $this->get('core.decorator.url')->prefixUrl($expected);
 
         if ($request->getPathInfo() !== $expected) {
             return new RedirectResponse($expected);
@@ -119,6 +120,8 @@ class BlogController extends FrontendController
         if (!$this->isCached($params)) {
             $this->hydrateListAuthor($params, $author);
         }
+
+        $params['x-tags'] = sprintf('opinion-author-%d-frontpage', $author->id);
 
         return $this->render($this->getTemplate($action), $params);
     }
@@ -186,6 +189,16 @@ class BlogController extends FrontendController
             'route'       => 'frontend_blog_frontpage',
         ]);
 
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
+
+        $params['x-tags'] .= ',opinion-frontpage';
+
         $this->view->assign([
             'opinions'   => $response['items'],
             'pagination' => $pagination,
@@ -244,6 +257,15 @@ class BlogController extends FrontendController
                 'params' => [ 'author_slug' => $author->slug ]
             ],
         ]);
+
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
 
         $this->view->assign([
             'pagination' => $pagination,

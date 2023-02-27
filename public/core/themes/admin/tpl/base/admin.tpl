@@ -60,6 +60,7 @@
     <script>
       var appVersion = '{$smarty.const.DEPLOYED_AT}';
       var instanceMedia = '{$smarty.const.INSTANCE_MEDIA}';
+      var instanceFolder = '{if $app.instance}{$app.instance->getSubdirectory()}{/if}';
       var CKEDITOR_BASEPATH = '/assets/components/ckeditor4/';
       var leaveMessage = '{t}You are leaving the current page.{/t}';
       var photoEditorTranslations = {
@@ -251,6 +252,36 @@
                           </div>
                         {/acl}
                       {/is_module_activated}
+                      {is_module_activated name="es.openhost.module.obituaries"}
+                        {acl isAllowed="OBITUARY_CREATE"}
+                          <div class="quick-item">
+                            <a href="{url name=backend_obituary_create}">
+                              <i class="fa fa-shield fa-flip-vertical"></i>
+                              <span class="title">{t}Obituary{/t}</span>
+                            </a>
+                          </div>
+                        {/acl}
+                      {/is_module_activated}
+                      {is_module_activated name="es.openhost.module.events"}
+                        {acl isAllowed="EVENT_CREATE"}
+                          <div class="quick-item">
+                            <a href="{url name=backend_event_create}">
+                              <i class="fa fa-calendar"></i>
+                              <span class="title">{t}Event{/t}</span>
+                            </a>
+                          </div>
+                        {/acl}
+                      {/is_module_activated}
+                      {is_module_activated name="es.openhost.module.companies"}
+                        {acl isAllowed="COMPANY_CREATE"}
+                          <div class="quick-item">
+                            <a href="{url name=backend_company_create}">
+                              <i class="fa fa-building"></i>
+                              <span class="title">{t}Company{/t}</span>
+                            </a>
+                          </div>
+                        {/acl}
+                      {/is_module_activated}
                     </div>
                   </li>
                 {/block}
@@ -361,7 +392,7 @@
                   </span>
                   <ul class="dropdown-menu dropdown-menu-auto dropdown-menu-right no-padding" role="menu">
                     <li>
-                      <a href="/" target="_blank">
+                      <a href="{url name=frontend_frontpage}" target="_blank">
                         <i class="fa fa-globe"></i>
                         {t}Go to newspaper{/t}
                       </a>

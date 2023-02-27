@@ -206,9 +206,9 @@ checklist-model@1.0.0:
   resolved "https://registry.yarnpkg.com/checklist-model/-/checklist-model-1.0.0.tgz#13f693af393e929b082fa29681a1597449fd4dd8"
   integrity sha512-ZDaTrfKeUSleZjyNqTjD1+QKU6iK1qlXH1GwixX59xEKPiRFu4anDh0U8brNjjEef+SM6vyQb87YWhI5CU8eNg==
 
-"ckeditor4@https://github.com/ckeditor/ckeditor4-releases.git#4.5.0":
-  version "0.0.0"
-  resolved "https://github.com/ckeditor/ckeditor4-releases.git#b9fe1742a56f167307062b0807bc7f8e1bbb3311"
+"ckeditor4@git+ssh://git@bitbucket.org/opennemas/ckeditor4.git#4.5.0":
+  version "4.5.0"
+  resolved "git+ssh://git@bitbucket.org/opennemas/ckeditor4.git#f67408f73ff877c66c805722517745ea75b609ff"
 
 color-convert@^1.9.3:
   version "1.9.3"

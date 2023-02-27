@@ -15,6 +15,16 @@ namespace Common\Core\Component\Helper;
 class UrlHelper
 {
     /**
+     * Initializes the UrlGeneratorHelper.
+     *
+     * @param ServiceContainer $container The service container.
+     */
+    public function __construct($container)
+    {
+        $this->container = $container;
+        $this->instance  = $this->container->get('core.instance');
+    }
+    /**
      * Checks if the current URI is for frontend.
      *
      * @param string $uri The current URI.
@@ -34,7 +44,21 @@ class UrlHelper
             'ws',
         ];
 
-        return !preg_match('/^(' . implode('|', $ignore) . ')/', trim($uri, '/'));
+        if (preg_match('/^(' . implode('|', $ignore) . ')/', trim($uri, '/'))) {
+            return false;
+        }
+
+        if (!$this->instance->isSubdirectory()) {
+            return true;
+        }
+
+        $regex = sprintf(
+            '/^%s\/(%s)/',
+            trim($this->instance->getSubdirectory(), '/'),
+            implode('|', $ignore)
+        );
+
+        return (!preg_match($regex, trim($uri, '/')));
     }
 
     /**

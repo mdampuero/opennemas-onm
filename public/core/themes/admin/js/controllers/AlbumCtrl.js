@@ -37,11 +37,6 @@
         $scope.dtm = null;
 
         /**
-         * @inheritdoc
-         */
-        $scope.incomplete = true;
-
-        /**
          * @memberOf AlbumCtrl
          *
          * @description
@@ -111,6 +106,7 @@
          * @type {Object}
          */
         $scope.treeOptions = {
+
           /**
            * Sorts the list of original items when the list of localized items
            * is re-ordered.
@@ -137,7 +133,7 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
-
+          $scope.expandFields();
           // Use default value for new items
           if (!$scope.data.item.pk_content) {
             $scope.data.item.with_comment =
@@ -197,13 +193,13 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          if (!$scope.selectedCategory) {
+          if (!$scope.selectedCategory || !item.pk_content) {
             return '';
           }
 
-          return $scope.getL10nUrl(
+          return $scope.data.extra.base_url + $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
-              id: item.pk_content,
+              id: item.pk_content.toString().padStart(6, '0'),
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
               category_slug: $scope.selectedCategory.name

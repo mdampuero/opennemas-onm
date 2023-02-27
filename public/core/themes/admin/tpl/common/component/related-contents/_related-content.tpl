@@ -16,9 +16,9 @@
               {include file="common/component/icon/content_type_icon.tpl" iField="data.extra.related_contents[related.target_id]" iFlagIcon=true}
             </span>
             <span class="related-item-title">
-              [% data.extra.related_contents[related.target_id].title %]
+              [% localizeText(data.extra.related_contents[related.target_id].title ) %]
             </span>
-            <span class="related-item-status" ng-if="related.content_status == 0">
+            <span class="related-item-status" ng-if="data.extra.related_contents[related.target_id].content_status == 0">
               ({t}No published{/t})
             </span>
           </div>
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="text-center">
-      <button class="btn btn-default" content-picker content-picker-ignore="[% related.getIds('{$iName}') %]" content-picker-selection="true" content-picker-max-size="10" content-picker-target="target.{$iName}" content-picker-type="album,article,attachment,letter,opinion,poll,special,video" type="button">
+      <button class="btn btn-default" content-picker {if $id}content-picker-ignore="[% related.ignoreIds(related.getIds('{$iName}'), {$id}) %]" {else}content-picker-ignore="[% related.getIds('{$iName}') %]" {/if} content-picker-selection="true" content-picker-max-size="10" content-picker-target="target.{$iName}" content-picker-type="album,article,attachment,company,event,letter,obituary,opinion,poll,special,video,company" type="button">
         <i class="fa fa-plus m-r-5"></i>
         {t}Add{/t}
       </button>

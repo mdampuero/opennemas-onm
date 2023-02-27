@@ -87,26 +87,30 @@ class NewsletterSenderHelper
         $this->ss             = $ss;
         $this->actOnFactory   = $actOnFactory;
         $this->ns             = $newsletterService;
+        $this->container      = $container;
     }
 
     /**
      * Sends a newsletter to a bunch of recipients
      *
-     * @param Newsletter $newsletter the newsletter
-     * @param array $recipients the list of recipients to send
+     * @param Newsletter $newsletter The newsletter
+     * @param mixed $recipients      The list of recipients to send
      *
-     * @return array the array with the report of each sent
+     * @return int $sentEmails       Total newsletters sents
      */
     public function send($newsletter, $recipients)
     {
         // if no recipients we can exit directly
         if (empty($recipients)) {
-            return [
-                'total'      => 0,
-                'create_new' => false,
-                'report'     => [],
-            ];
+            return 0;
         }
+
+        //Set current newsletter pending status while sending emails
+        $prevSent = $newsletter->getStored()['sent_items'];
+        $this->container->get('api.service.newsletter')->patchItem($newsletter->id, [
+            'sent_items' => -1,
+            'updated'    => new \Datetime(),
+        ]);
 
         $sentEmails      = 0;
         $maxAllowed      = (int) $this->ormManager->getDataSet('Settings', 'instance')->get('max_mailing', 0);
@@ -116,7 +120,7 @@ class NewsletterSenderHelper
         // Fix encoding of the html
         $newsletter->html = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-        $recipients = json_decode(json_encode($recipients), true);
+        $recipients = is_string($recipients) ? json_decode($recipients, true) : $recipients;
         foreach ($recipients as $mailbox) {
             if ($maxAllowed > 0 && abs($remaining) >= 0) {
                 $sendResults[] = [$mailbox, false, _('Max sents reached')];
@@ -144,7 +148,6 @@ class NewsletterSenderHelper
 
                     $sendResults[] = [ $mailbox, $sentEmails > 0, '' ];
                 }
-
                 $remaining -= $sentEmails;
             } catch (\Exception $e) {
                 $sendResults[] = [ $mailbox, false,  _('Unable to deliver your email') ];
@@ -153,11 +156,34 @@ class NewsletterSenderHelper
             }
         }
 
-        return [
-            'total'      => $sentEmails,
-            'report'     => $sendResults,
-            'create_new' => !empty($newsletter->sent),
-        ];
+        $newsletter->sent_items = $prevSent;
+
+        // Duplicate newsletter if it was sent before.
+        if ($newsletter->sent_items > 0) {
+            $this->container->get('api.service.newsletter')->patchItem($newsletter->id, [
+                'sent_items' => $prevSent,
+                'updated'    => new \Datetime(),
+            ]);
+            $data = array_merge($newsletter->getStored(), [
+                'recipients' => $recipients,
+                'sent'       => new \Datetime(),
+                'sent_items' => $sentEmails,
+                'updated'    => new \Datetime(),
+            ]);
+
+            unset($data['id']);
+
+            $newsletter = $this->container->get('api.service.newsletter')->createItem($data);
+        } else {
+            $this->container->get('api.service.newsletter')->patchItem($newsletter->id, [
+                'recipients' => $recipients,
+                'sent'       => new \Datetime(),
+                'sent_items' => $sentEmails,
+                'updated'    => new \Datetime(),
+            ]);
+        }
+
+        return $sentEmails;
     }
 
     /**
@@ -261,7 +287,7 @@ class NewsletterSenderHelper
             try {
                 $sentEmails += $this->sendEmail($newsletter, $user);
             } catch (\Swift_RfcComplianceException $e) {
-                $errors[] = sprintf(_('Email not valid: %s'), $user['email']);
+                $errors[] = sprintf(_('Email not valid: %s %s'), $user['email'], $e->getMessage());
             } catch (\Exception $e) {
                 $errors[] = _('Unable to deliver your email');
             }
@@ -283,25 +309,31 @@ class NewsletterSenderHelper
         $this->newsletterConfigs = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
         $this->siteName          = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
 
-        // Buildthe message
-        $message = \Swift_Message::newInstance();
-        $message
-            ->setSubject($newsletter->title)
-            ->setBody($newsletter->html, 'text/html')
-            ->setFrom([$this->newsletterConfigs['sender'] => $this->siteName])
-            ->setSender($this->noReplyAddress)
-            ->setTo([ $mailbox['email'] => $mailbox['name']]);
+        // Build the message
+        try {
+            $message = \Swift_Message::newInstance();
+            $message
+                ->setSubject($newsletter->title)
+                ->setBody($newsletter->html, 'text/html')
+                ->setFrom([$this->newsletterConfigs['sender'] => $this->siteName])
+                ->setSender($this->noReplyAddress)
+                ->setTo([ $mailbox['email'] => $mailbox['name']]);
 
-        $headers = $message->getHeaders();
+            $headers = $message->getHeaders();
 
-        $headers->addParameterizedHeader(
-            'ACUMBAMAIL-SMTPAPI',
-            $this->globals->getInstance()->internal_name . ' - Newsletter'
-        );
+            $headers->addParameterizedHeader(
+                'ACUMBAMAIL-SMTPAPI',
+                $this->globals->getInstance()->internal_name . ' - Newsletter'
+            );
 
-        $this->appLog->notice(
-            "Email sent. Backend newsletter sent (to: " . $mailbox['email'] . ")"
-        );
+            $this->appLog->notice(
+                "Email sent. Backend newsletter sent (to: " . $mailbox['email'] . ")"
+            );
+        } catch (\Exception $e) {
+            $this->appLog->notice('Unable to deliver your email: ' . $e->getMessage());
+
+            return 0;
+        }
 
         // Send it
         return ($this->mailer->send($message)) ? 1 : 0;

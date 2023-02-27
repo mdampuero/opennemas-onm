@@ -19,10 +19,15 @@
      *   Handles all actions in user groups listing.
      */
     .controller('UserGroupCtrl', [
-      '$controller', '$scope', '$window', 'cleaner', 'http', 'messenger', 'routing',
-      function($controller, $scope, $window, cleaner, http, messenger, routing) {
+      '$controller', '$scope',
+      function($controller, $scope) {
         // Initialize the super class and extend it
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+
+        /**
+         * @inheritdoc
+         */
+        $scope.contentKey = 'usergroup';
 
         /**
          * @memberOf UserGroupCtrl
@@ -99,7 +104,7 @@
               [ 'CATEGORY_MANAGER', 'CONTENT' ],
               [ 'ARTICLE_MANAGER', 'OPINION_MANAGER', 'COMMENT_MANAGER' ],
               [ 'POLL_MANAGER', 'STATIC_PAGES_MANAGER', 'SPECIAL_MANAGER', 'LETTER_MANAGER' ],
-              [ 'es.openhost.module.events' ],
+              [ 'es.openhost.module.events', 'es.openhost.module.obituaries', 'es.openhost.module.companies' ],
             ]
           },
           {
@@ -135,6 +140,13 @@
           all: {},
           allSelected: false,
           privileges: {}
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          $scope.expandFields();
         };
 
         /**

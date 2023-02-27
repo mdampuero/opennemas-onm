@@ -9,13 +9,29 @@
  */
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
-    $adsRenderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
-    $isSafeFrame = $smarty->getContainer()->get('core.helper.advertisement')->isSafeFrameEnabled();
-    $ads         = $isSafeFrame ? $adsRenderer->getAdvertisements() : $adsRenderer->getRequested();
-    $app         = $smarty->getValue('app');
+    $adsRenderer  = $smarty->getContainer()->get('frontend.renderer.advertisement');
+    $isSafeFrame  = $smarty->getContainer()->get('core.helper.advertisement')->isSafeFrameEnabled();
+    $ads          = $isSafeFrame ? $adsRenderer->getAdvertisements() : $adsRenderer->getRequested();
+    $app          = $smarty->getValue('app');
+    $expiringAds  = $adsRenderer->getExpiringAdvertisements();
+    $content      = $smarty->getValue('content');
+    $interstitial = [];
 
-    if (!is_array($ads)
-        || empty($ads)
+    if (!$isSafeFrame) {
+        $params = [
+            'category'           => $app['section'],
+            'extension'          => $app['extension'],
+            'advertisementGroup' => $app['advertisementGroup'],
+            'content'            => $content,
+            'x-tags'             => $smarty->getValue('x-tags'),
+        ];
+
+        $interstitial = $adsRenderer->renderInlineInterstitial($params);
+    }
+
+    if ((!is_array($ads)
+        || (empty($ads) && empty($expiringAds))
+        && empty($interstitial))
         || preg_match('/newsletter/', $smarty->source->resource)
     ) {
         return $output;
@@ -27,24 +43,35 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         return $output;
     }
 
-    $content  = $smarty->getValue('content');
     $settings = $smarty->getContainer()
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance')
         ->get('ads_settings');
 
     if (!$isSafeFrame) {
-        $params = [
-            'category'           => $app['section'],
-            'extension'          => $app['extension'],
-            'advertisementGroup' => $app['advertisementGroup'],
-            'content'            => $content,
-            'x-tags'             => $smarty->getValue('x-tags'),
-        ];
+        if (!empty($expiringAds)) {
+            $adsExpireTime = $adsRenderer->getXCacheFor($expiringAds);
+            if ($smarty->hasValue('x-cache-for')) {
+                $tplExpireTime = $smarty->tpl_vars['x-cache-for']->value;
+                if (preg_match('/[0-9]+[smhd]/', $tplExpireTime)) {
+                    $timezone = $smarty->getContainer()->get('core.locale')->getTimeZone();
+                    $now      = new \DateTime(null, $timezone);
 
-        $adsOutput    = $adsRenderer->renderInlineHeaders($params);
-        $interstitial = $adsRenderer->renderInlineInterstitial($params);
-        $devices      = $smarty->getContainer()->get('core.template.admin')
+                    $tplExpireTime = new \DateInterval('P' . strtoupper($tplExpireTime));
+                    $tplExpireTime = date_add($now, $tplExpireTime);
+                    $tplExpireTime = $tplExpireTime->format('Y-m-d H:i:s');
+                }
+
+                if (strtotime($tplExpireTime) > strtotime($adsExpireTime)) {
+                    $smarty->setValue('x-cache-for', $adsExpireTime);
+                }
+            } else {
+                $smarty->setValue('x-cache-for', $adsExpireTime);
+            }
+        }
+
+        $adsOutput = $adsRenderer->renderInlineHeaders($params);
+        $devices   = $smarty->getContainer()->get('core.template.admin')
             ->fetch('advertisement/helpers/inline/js.tpl');
 
         $devices = "\n" . str_replace("\n", ' ', $devices);
@@ -56,6 +83,13 @@ function smarty_outputfilter_ads_generator($output, $smarty)
 
     $adsPositions = $adsRenderer->getPositions();
 
+    $url = $smarty->getContainer()->get('router')
+        ->generate('api_v1_advertisements_list');
+
+    $url = is_string($url)
+        ? $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url)
+        : $url;
+
     $content = $smarty->getContainer()->get('core.template.admin')
         ->fetch('advertisement/helpers/safeframe/js.tpl', [
             'debug'              => $app['environment'] === 'dev' ? 'true' : 'false',
@@ -65,8 +99,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'contentId'          => $content->id ?? null,
             'lifetime'           => $settings['lifetime_cookie'],
             'positions'          => $isSafeFrame ? implode(',', $adsPositions) : '',
-            'url'                => $smarty->getContainer()->get('router')
-                ->generate('api_v1_advertisements_list')
+            'url'                => $url
         ]);
 
     $output = str_replace('</head>', $content . '</head>', $output);

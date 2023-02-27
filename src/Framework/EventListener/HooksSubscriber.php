@@ -4,6 +4,7 @@ namespace Framework\EventListener;
 
 use Api\Exception\GetItemException;
 use Opennemas\Task\Component\Task\ServiceTask;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -19,17 +20,25 @@ class HooksSubscriber implements EventSubscriberInterface
      * @param AbstractCache   $cache     The cache service.
      * @param LoggerInterface $logger    The logger service.
      * @param CacheManager    $template  The CacheManager services for template.
+     * @param Cache           $redis     The cache service for redis.
      */
-    public function __construct($container, $cache, $logger, $template)
+    public function __construct($container, $cache, $logger, $template, $redis)
     {
         $this->cache     = $cache;
         $this->container = $container;
         $this->logger    = $logger;
+        $this->redis     = $redis;
         $this->template  = $template;
     }
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
+     *
+     * Priority order:
+     * Redis 20
+     * Smarty 15
+     * Varnish 10
+     * Log 5
      *
      * @return array The event names to listen to.
      */
@@ -37,123 +46,124 @@ class HooksSubscriber implements EventSubscriberInterface
     {
         return [
             'advertisement.create' => [
-                [ 'removeVarnishCacheForAdvertisement', 5 ],
+                [ 'removeVarnishCacheCurrentInstance', 10 ],
             ],
             'advertisement.update' => [
-                [ 'removeVarnishCacheForAdvertisement', 5 ],
+                [ 'removeVarnishCacheCurrentInstance', 10 ],
             ],
             'advertisement.delete' => [
-                [ 'removeVarnishCacheForAdvertisement', 5 ],
+                [ 'removeVarnishCacheCurrentInstance', 10 ],
             ],
             // Comments Config hooks
             'comments.config' => [
-                ['removeSmartyCacheAll', 5],
-                ['removeVarnishCacheCurrentInstance', 5]
+                ['removeSmartyCacheAll', 15],
+                ['removeVarnishCacheCurrentInstance', 10]
             ],
             // Content hooks
             'content.update-set-num-views' => [
-                ['removeObjectCacheForContent', 5]
+                ['removeObjectCacheForContent', 20]
             ],
             'content.create' => [
                 ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
             ],
             'content.update' => [
+                ['removeObjectCacheForContent', 20],
                 ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheCurrentInstance', 5],
             ],
             'content.delete' => [
+                ['removeObjectCacheForContent', 20],
                 ['logAction', 5],
-                ['removeObjectCacheForContent', 10],
             ],
             'content.createItem' => [
+                ['removeVarnishCacheForContent', 10],
                 ['logAction', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
             ],
             'content.updateItem' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeSmartyCacheForContent', 15],
+                ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheCurrentInstance', 5],
+            ],
+            'content.updateVotedItem' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeSmartyCacheForContent', 15],
+                ['removeVarnishCacheForVotedContent', 10],
+                ['logAction', 5],
             ],
             'content.deleteItem' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeObjectCacheForRelatedContents', 20],
+                ['removeSmartyCacheForContent', 15],
+                ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheCurrentInstance', 5],
-                ['removeCacheForRelatedContents', 5],
             ],
             'content.patchItem' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeSmartyCacheForContent', 15],
+                ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheCurrentInstance', 5],
             ],
             'content.patchList' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeSmartyCacheForContent', 15],
+                ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheCurrentInstance', 5],
             ],
             'content.deleteList' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeObjectCacheForRelatedContents', 20],
+                ['removeSmartyCacheForContent', 15],
+                ['removeVarnishCacheForContent', 10],
+                ['removeSavedSitemaps', 5],
                 ['logAction', 5],
-                ['removeSmartyCacheForContent', 5],
-                ['removeObjectCacheForContent', 10],
-                ['removeVarnishCacheCurrentInstance', 5],
-                ['removeCacheForRelatedContents', 5],
             ],
             // Frontpage hooks
             'frontpage.save_position' => [
-                ['removeVarnishCacheFrontpage', 5],
-                ['removeObjectCacheFrontpageMap', 5],
-                ['removeVarnishCacheFrontpageCSS', 5],
-                ['removeSmartyCacheForFrontpageOfCategory', 5],
-                ['removeDynamicCssSettingForFrontpage', 5],
+                ['removeObjectCacheFrontpageMap', 20],
+                ['removeObjectCacheForWidgets', 20],
+                ['removeDynamicCssSettingForFrontpage', 20],
+                ['removeSmartyCacheForFrontpageOfCategory', 15],
+                ['removeVarnishCacheFrontpageCSS', 10],
+                ['removeVarnishCacheFrontpage', 10],
             ],
             'frontpage.pick_layout' => [
-                ['removeVarnishCacheFrontpage', 5],
-                ['removeObjectCacheFrontpageMap', 5],
-                ['removeSmartyCacheForFrontpageOfCategory', 5],
+                ['removeObjectCacheFrontpageMap', 20],
+                ['removeSmartyCacheForFrontpageOfCategory', 15],
+                ['removeVarnishCacheFrontpage', 10],
             ],
             // Instance hooks
             'instance.delete' => [
-                ['removeObjectCacheForInstance', 5],
-                ['removeObjectCacheCountries', 5],
+                ['removeObjectCacheForInstance', 20],
+                ['removeObjectCacheCountries', 20],
             ],
             'instance.update' => [
-                ['removeObjectCacheForInstance', 5],
-                ['removeSmartyForInstance', 5],
-                ['removeVarnishInstanceCacheUsingInstance', 5],
-                ['removeObjectCacheCountries', 5],
+                ['removeObjectCacheForInstance', 20],
+                ['removeObjectCacheCountries', 20],
+                ['removeSmartyForInstance', 15],
+                ['removeVarnishInstanceCacheUsingInstance', 10],
             ],
             'instance.client.update' => [
-                ['removeObjectCacheForInstance', 5],
+                ['removeObjectCacheForInstance', 20],
             ],
             'theme.change' => [
-                ['removeSmartyCacheAll', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
+                ['removeSmartyCacheAll', 15],
+                ['removeVarnishCacheCurrentInstance', 10],
             ],
             // Menu hooks
-            'menu.update' => [
-                ['removeSmartyCacheAll', 5],
-                ['removeObjectCacheForContent', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
+            'menu.updateItem' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeSmartyCacheAll', 15],
+                ['removeVarnishCacheCurrentInstance', 10],
             ],
-            'menu.delete' => [
-                ['removeSmartyCacheAll', 5],
-                ['removeObjectCacheForContent', 5],
-                ['removeVarnishCacheCurrentInstance', 5],
+            'menu.deleteItem' => [
+                ['removeObjectCacheForContent', 20],
+                ['removeSmartyCacheAll', 15],
+                ['removeVarnishCacheCurrentInstance', 10],
             ],
-            // Opinion hooks
-            'opinion.update' => [
-                ['removeSmartyCacheOpinion', 5],
-            ],
-            'opinion.create' => [
-                ['removeSmartyCacheAuthorOpinion', 5],
-            ]
         ];
     }
 
@@ -178,6 +188,44 @@ class HooksSubscriber implements EventSubscriberInterface
             }
 
             return;
+        }
+    }
+
+    /**
+     * Queues the necessary bans for an specific content.
+     */
+    public function removeVarnishCacheForContent(Event $event)
+    {
+        $item = $event->getArgument('item');
+
+        $items = !is_array($item) ? [ $item ] : $item;
+
+        foreach ($items as $item) {
+            try {
+                $this->container
+                    ->get(sprintf('api.helper.cache.%s', $item->content_type_name))->deleteItem($item);
+            } catch (ServiceNotFoundException $e) {
+                $this->container->get(sprintf('api.helper.cache.content'))->deleteItem($item);
+            }
+        }
+    }
+
+    /**
+     * Queues the necessary bans for an specific voted content.
+     */
+    public function removeVarnishCacheForVotedContent(Event $event)
+    {
+        $item = $event->getArgument('item');
+
+        $items = !is_array($item) ? [ $item ] : $item;
+
+        foreach ($items as $item) {
+            try {
+                $this->container
+                    ->get(sprintf('api.helper.cache.%s', $item->content_type_name))->deleteItem($item, true);
+            } catch (ServiceNotFoundException $e) {
+                $this->container->get(sprintf('api.helper.cache.content'))->deleteItem($item, true);
+            }
         }
     }
 
@@ -235,6 +283,19 @@ class HooksSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * Removes the redis cache for the content listing widgets in frontpage.
+     *
+     * @param Event $event The event to handle.
+     */
+    public function removeObjectCacheForWidgets()
+    {
+        $cache = $this->container->get('cache.connection.instance');
+
+        $cache->remove($cache->getSetMembers('Widget_Keys'));
+        $cache->remove('Widget_Keys');
+    }
+
+    /**
      * Deletes the list of objects in cache for a frontpage when content
      * positions are updated.
      *
@@ -247,6 +308,11 @@ class HooksSubscriber implements EventSubscriberInterface
         $category    = $event->getArgument('category');
         $frontpageId = $event->getArgument('frontpageId');
 
+        // Updates the cache for last_saved
+        $lastSavedCacheId = 'frontpage_last_saved_' . $category . '_' . $frontpageId;
+        $date             = new \Datetime("now");
+
+        $this->cache->save($lastSavedCacheId, $date->format(\DateTime::ISO8601));
         $this->cache->delete(
             empty($frontpageId) ?
                 'frontpage_elements_map_' . $category :
@@ -426,52 +492,7 @@ class HooksSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Removes varnish cache for advertisement when an advertisement is created,
-     * updated or deleted.
-     *
-     * @param Event $event The event to handle.
-     */
-    public function removeVarnishCacheForAdvertisement(Event $event)
-    {
-        if (!$this->container->hasParameter('varnish')
-            || !$event->hasArgument('advertisement')
-        ) {
-            return false;
-        }
-
-        $ad = $event->getArgument('advertisement');
-
-        $this->container->get('task.service.queue')->push(
-            new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ .*ad-%s.*', $ad->id)
-            ])
-        );
-
-        if (!is_array($ad->positions)) {
-            return;
-        }
-
-        foreach ($ad->positions as $position) {
-            $this->container->get('task.service.queue')->push(
-                new ServiceTask('core.varnish', 'ban', [
-                    sprintf('obj.http.x-tags ~ .*position-%s.*', $position)
-                ])
-            );
-        }
-
-        if (!empty($ad->old_position)) {
-            $this->container->get('task.service.queue')->push(
-                new ServiceTask('core.varnish', 'ban', [
-                    sprintf('obj.http.x-tags ~ .*position-%s.*', $ad->old_position)
-                ])
-            );
-        }
-    }
-
-    /**
      * Queues a varnish ban request.
-     *
-     * @param Event $event The event to handle.
      */
     public function removeVarnishCacheCurrentInstance()
     {
@@ -483,7 +504,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s', $instanceName)
+                sprintf('obj.http.x-tags ~ ^instance-%s', $instanceName)
             ])
         );
     }
@@ -493,21 +514,29 @@ class HooksSubscriber implements EventSubscriberInterface
      *
      * @param Event $event The event to handle.
      */
-    public function removeVarnishCacheFrontpage()
+    public function removeVarnishCacheFrontpage(Event $event)
     {
+        $items = $event->hasArgument('items') ? $event->getArgument('items') : [];
+
         if (!$this->container->hasParameter('varnish')) {
             return false;
         }
 
+        $category     = $event->getArgument('category');
         $instanceName = $this->container->get('core.instance')->internal_name;
 
+        $this->container->get('api.helper.cache.frontpage')->deleteItems($items, $category);
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*frontpage-page.*', $instanceName)
+                sprintf('obj.http.x-tags ~ ^instance-%s.*header-date', $instanceName, $category)
             ])
         )->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*rss.*', $instanceName)
+                sprintf('obj.http.x-tags ~ ^instance-%s.*rss-frontpage-%s.*', $instanceName, $category)
+            ])
+        )->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ ^instance-%s.*frontpage-page-%s$', $instanceName, $category)
             ])
         );
     }
@@ -527,9 +556,42 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*frontpagecss.*', $instanceName)
+                sprintf('obj.http.x-tags ~ ^instance-%s.*frontpagecss.*', $instanceName)
             ])
         );
+    }
+
+    /**
+     * Remove saved sitemaps.
+     *
+     * @param Event $event The event to handle.
+     */
+    public function removeSavedSitemaps(Event $event)
+    {
+        if (!$event->hasArgument('item') || !$event->hasArgument('last_changed')) {
+            return;
+        }
+
+        $sh          = $this->container->get('core.helper.sitemap');
+        $timezone    = $this->container->get('core.locale')->getTimeZone();
+        $now         = new \DateTime(null, $timezone);
+        $content     = $event->getArgument('item');
+        $lastChanged = $event->getArgument('last_changed');
+
+        $lastChanged = !is_array($lastChanged) ? [ $lastChanged ] : $lastChanged;
+        $content     = !is_array($content) ? [ $content ] : $content;
+
+        foreach ($lastChanged as $key => $value) {
+            if (empty($value)
+            || !in_array($content[0]->content_type_name, $sh->getTypes($sh->getSettings(), ['tag']))
+            || $now->format('Y-m') == $value->format('Y-m')) {
+                continue;
+            }
+            $sh->removeSitemapsByPattern(
+                $value->format('Y'),
+                $value->format('m')
+            );
+        }
     }
 
     /**
@@ -547,7 +609,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ instance-%s.*', $instanceName)
+                sprintf('obj.http.x-tags ~ ^instance-%s.*', $instanceName)
             ])
         );
     }
@@ -557,7 +619,7 @@ class HooksSubscriber implements EventSubscriberInterface
      *
      * @param Event $event The event to handle.
      */
-    public function removeCacheForRelatedContents(Event $event)
+    public function removeObjectCacheForRelatedContents(Event $event)
     {
         if (!$event->hasArgument('related')) {
             return false;

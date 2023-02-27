@@ -6,13 +6,18 @@ frontend_content_print:
         content_id   : '([0-9]+)'
     options:
         l10n: true
+        subdirectory: true
 
 frontend_content_stats:
     path: /content/stats
     defaults: { _controller: FrontendBundle:Contents:stats }
+    options:
+        subdirectory: true
 
 frontend_content_permalink:
     path: /content/{content_id}
     defaults: { _controller: FrontendBundle:Contents:permalink }
     requirements:
         content_id   : '([0-9]+)'
+    options:
+        subdirectory: true

@@ -67,32 +67,83 @@ class InstanceLoader
             return $this;
         }
 
-        $domain   = preg_replace('/\.+$/', '', $domain);
-        $instance = $this->cache->exists($domain)
-            ? $this->cache->get($domain)
-            : null;
+        $domain = preg_replace('/\.+$/', '', $domain);
+        $match  = preg_match('@(\/[a-zA-Z0-9]+)\/?@', $uri, $subdirectory);
 
-        if ($this->isValid($instance, $domain)) {
-            $this->instance = $instance;
-            return $this;
+        $subdirectoryMatch = $match ? $subdirectory[1] : '';
+
+        if (!$this->cache->exists($domain)) {
+            $oql = sprintf(
+                'domains regexp "^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"',
+                $domain,
+                $domain,
+                $domain,
+            );
+
+            $instances = $this->em->getRepository('Instance')->findBy($oql);
+
+            if (empty($instances)) {
+                throw new \Exception();
+            }
+
+            $this->cache->set($domain, $instances);
         }
 
-        $oql = sprintf(
-            'domains regexp "^%s($|,)|,\s*%s\s*,|(^|,)\s*%s$"',
-            $domain,
-            $domain,
-            $domain
-        );
-
-        $this->instance = $this->em->getRepository('Instance')->findOneBy($oql);
+        $this->instance = $this->getInstanceFromCache($domain, $subdirectoryMatch);
 
         if (!$this->isValid($this->instance, $domain)) {
             throw new \Exception();
         }
 
-        $this->cache->set($domain, $this->instance);
-
         return $this;
+    }
+
+    /**
+     * Loads an instance basing on the domain and the requested URI.
+     *
+     * @param string $domain               The requested domain.
+     * @param string $subdirectoryMatch    The subdirectory match
+     *
+     * @return mixed The current InstanceLoader.
+     */
+    protected function getInstanceFromCache($domain, $subdirectoryMatch)
+    {
+        $instances = $this->cache->get($domain);
+        $instances = is_array($instances) ? $instances : [ $instances ];
+
+        if (count($instances) == 1) {
+            return array_pop($instances);
+        }
+
+        $subInstance = array_filter($instances, function ($instance) use ($subdirectoryMatch) {
+            return $instance->getSubdirectory() == $subdirectoryMatch;
+        });
+
+        if (!empty($subInstance)) {
+            $instance = array_pop($subInstance);
+
+            if (!$this->isValid($instance, $domain)) {
+                throw new \Exception();
+            }
+
+            return $instance;
+        }
+
+        $rootInstance = array_filter($instances, function ($instance) {
+            return !$instance->isSubdirectory();
+        });
+
+        if (!empty($rootInstance)) {
+            $instance = array_pop($rootInstance);
+
+            if (!$this->isValid($instance, $domain)) {
+                throw new \Exception();
+            }
+
+            return $instance;
+        }
+
+        return null;
     }
 
     /**

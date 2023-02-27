@@ -44,6 +44,11 @@ services:
         arguments: [ '@orm.manager', '%core.helper.comment.default_params%' ]
         public:    true
 
+    core.helper.company:
+        class:     Common\Core\Component\Helper\CompanyHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.helper.content:
         class:      Common\Core\Component\Helper\ContentHelper
         arguments: [ '@service_container' ]
@@ -52,6 +57,11 @@ services:
     core.helper.content_media:
         class:     Common\Core\Component\Helper\ContentMediaHelper
         arguments: [ '@service_container', '@orm.manager', '@entity_repository' ]
+        public:    true
+
+    core.helper.content_update:
+        class:     Common\Core\Component\Helper\ContentUpdateHelper
+        arguments: [ '@service_container']
         public:    true
 
     core.helper.csv:
@@ -66,6 +76,10 @@ services:
             - '@core.helper.subscription'
             - '@core.template.frontend'
             - '@core.helper.video'
+        public:    true
+
+    core.helper.form_field:
+        class:     Common\Core\Component\Helper\FormFieldHelper
         public:    true
 
     core.helper.http_fetcher:
@@ -102,6 +116,121 @@ services:
         arguments: [ '@orm.manager', '@core.instance', '@core.locale', '@request_stack', '@core.security' ]
         public:    true
 
+    core.helper.menu:
+        class:     Common\Core\Component\Helper\MenuHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta:
+        class:     Api\Helper\Meta\MetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.album:
+        class:     Api\Helper\Meta\AlbumMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.frontpages:
+        class:     Api\Helper\Meta\FrontpageMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.archive:
+        class:     Api\Helper\Meta\ArchiveMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.authentication:
+        class:     Api\Helper\Meta\AuthenticationMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.opinion:
+        class:     Api\Helper\Meta\OpinionMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.author:
+        class:     Api\Helper\Meta\AuthorMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.blog:
+        class:     Api\Helper\Meta\BlogMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.category:
+        class:     Api\Helper\Meta\CategoryMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.tag:
+        class:     Api\Helper\Meta\TagMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.form:
+        class:     Api\Helper\Meta\FormMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.letter:
+        class:     Api\Helper\Meta\LetterMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.company:
+        class:     Api\Helper\Meta\CompanyMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.event:
+        class:     Api\Helper\Meta\EventMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.newsstand:
+        class:     Api\Helper\Meta\NewsstandMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.newsletter:
+        class:     Api\Helper\Meta\NewsletterMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.poll:
+        class:     Api\Helper\Meta\PollMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.video:
+        class:     Api\Helper\Meta\VideoMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.user:
+        class:     Api\Helper\Meta\UserMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.obituary:
+        class:     Api\Helper\Meta\ObituaryMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.rss:
+        class:     Api\Helper\Meta\RssMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.meta.error:
+        class:     Api\Helper\Meta\ErrorMetaHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.helper.newsletter:
         class:     Common\Core\Component\Helper\NewsletterHelper
         arguments: [ '@orm.manager', '@api.service.subscription' ]
@@ -126,8 +255,18 @@ services:
         arguments: [ '@core.loader.instance', '%core.paths.public%' ]
         public:    true
 
+    core.helper.obituary:
+        class:      Common\Core\Component\Helper\ObituaryHelper
+        arguments: [ '@service_container' ]
+        public:     true
+
     core.helper.oql:
         class:     Common\Core\Component\Helper\OqlHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.payment:
+        class:     Common\Core\Component\Helper\PaymentHelper
         arguments: [ '@service_container' ]
         public:    true
 
@@ -173,6 +312,7 @@ services:
 
     core.helper.url:
         class:     Common\Core\Component\Helper\UrlHelper
+        arguments: [ '@service_container' ]
         public:    true
 
     core.helper.url_generator:
@@ -188,4 +328,9 @@ services:
     core.helper.video:
         class:      Common\Core\Component\Helper\VideoHelper
         arguments:  [ '@core.helper.content', '@core.helper.related', '@core.template.admin', '@data.manager.filter' ]
+        public:     true
+
+    core.helper.widget:
+        class:      Common\Core\Component\Helper\WidgetHelper
+        arguments: [ '@service_container' ]
         public:     true

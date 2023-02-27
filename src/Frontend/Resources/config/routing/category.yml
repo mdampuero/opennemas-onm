@@ -5,9 +5,12 @@ category_frontpage:
         category: '[^/]+'
     options:
         l10n: true
+        subdirectory: true
 
 categ_sync_frontpage:
     path:     /extseccion/blog/{category_slug}
     defaults: { _controller: FrontendBundle:Category:extCategory }
     requirements:
         category: '[^/]+'
+    options:
+        subdirectory: true

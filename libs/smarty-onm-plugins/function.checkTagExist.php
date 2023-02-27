@@ -24,6 +24,11 @@ function smarty_function_checkTagExist($params, &$smarty)
     $tag     = $params['tag'];
     $assign  = $params['assign'];
 
+    if (empty($tags)) {
+        $tags = $smarty->getContainer()
+            ->get('api.service.tag')->getListByIdsKeyMapped($content->tags)['items'];
+    }
+
     if (empty($content->tags) || !is_array($content->tags)
         || empty($tags) || !is_array($tags) || empty($tag) || empty($assign)
     ) {

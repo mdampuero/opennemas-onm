@@ -31,6 +31,13 @@ class PhotoService extends ContentService
      */
     public function createItem($data = [], $file = null, bool $copy = false)
     {
+        $optimize = false;
+
+        if (!empty($data['optimize'])) {
+            unset($data['optimize']);
+            $optimize = true;
+        }
+
         if (empty($file)) {
             throw new CreateItemException('No file provided');
         }
@@ -88,7 +95,7 @@ class PhotoService extends ContentService
             $sh     = $this->container->get('core.helper.setting');
             $config = $sh->toBoolean($config, ['optimize_images']);
 
-            if (array_key_exists('optimize_images', $config) && $config['optimize_images']) {
+            if ($optimize || (array_key_exists('optimize_images', $config) && $config['optimize_images'])) {
                 $this->optimizeImage($path);
                 $this->updateImage($id, $path);
             }

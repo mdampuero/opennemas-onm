@@ -2,9 +2,7 @@
 
 namespace Api\Controller\V1\Backend;
 
-use Api\Exception\GetItemException;
 use Common\Model\Entity\Content;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,6 +25,8 @@ class ArticleController extends ContentController
         'save'   => 'ARTICLE_CREATE',
         'show'   => 'ARTICLE_UPDATE',
     ];
+
+    protected $module = 'article';
 
     /**
      * {@inheritdoc}
@@ -69,7 +69,11 @@ class ArticleController extends ContentController
             'categories'    => $categories,
             'extra_fields'  => $extraFields,
             'subscriptions' => $subscriptions,
-            'tags'          => $this->getTags($items)
+            'tags'          => $this->getTags($items),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ], $extra);
     }
 
@@ -109,8 +113,10 @@ class ArticleController extends ContentController
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
 
-        $this->get('core.locale')->setContext('frontend')
-            ->setRequestLocale($request->get('locale'));
+        if ($this->get('core.instance') && !$this->get('core.instance')->isSubdirectory()) {
+            $this->get('core.locale')->setContext('frontend')
+                ->setRequestLocale($request->get('locale'));
+        }
 
         $article = new Content([ 'pk_content' => 0 ]);
 
@@ -131,11 +137,6 @@ class ArticleController extends ContentController
         $this->view->setCaching(0);
 
         list($positions, $advertisements) = $this->getAdvertisements();
-
-
-        // TODO: This fix is to prevent errors in the preview action when a new tag is being created in the
-        // current article, find the source of the problem and remove this ASAP.
-        unset($article->tags);
 
         $params = [
             'ads_positions'  => $positions,

@@ -48,6 +48,63 @@
         $scope.refreshOnUpdate = false;
 
         /**
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *  Expand fields on form load
+         *
+         */
+        $scope.expandFields = function() {
+          if ($scope.formSettings && $scope.formSettings.name && $scope.app.fields[$scope.formSettings.name] &&
+            $scope.app.fields[$scope.formSettings.name].expanded) {
+            $scope.expanded = Object.assign({}, $scope.app.fields[$scope.formSettings.name].expanded);
+          }
+        };
+
+        /**
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *  Call modal and set expanded fields by default in form
+         *
+         * @type {Object}
+         */
+        $scope.expansibleSettings = function() {
+          var modal = $uibModal.open({
+            backdrop:    'static',
+            templateUrl: 'modal-expansible-fields',
+            controller:  'ModalCtrl',
+            resolve: {
+              template: function() {
+                var fields = $scope.app.fields && $scope.app.fields[$scope.formSettings.name] &&
+                  $scope.app.fields[$scope.formSettings.name].expanded ?
+                  $scope.app.fields[$scope.formSettings.name].expanded : {};
+
+                return {
+                  formSettings: $scope.formSettings,
+                  defaultExpanded: Object.assign({}, fields)
+                };
+              },
+              success: function() {
+                return function(modal, template) {
+                  $scope.app.fields[$scope.formSettings.name] = {};
+                  $scope.app.fields[$scope.formSettings.name].expanded = Object.assign({}, template.defaultExpanded);
+                  return true;
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            var fields = $scope.app.fields && $scope.app.fields[$scope.formSettings.name] &&
+              $scope.app.fields[$scope.formSettings.name].expanded ?
+              $scope.app.fields[$scope.formSettings.name].expanded : {};
+
+            $scope.expanded =  Object.assign({}, fields);
+          });
+        };
+
+        /**
          * @function buildScope
          * @memberOf RestInnerCtrl
          *
@@ -86,7 +143,7 @@
 
         /**
          * @function getData
-         * @memberOf SubscriberCtrl
+         * @memberOf RestInnerCtrl
          *
          * @description
          *   Returns the data to send when saving/updating an item.
@@ -123,9 +180,12 @@
               $scope.data.item = {};
             }
 
+            if (response.data.extra && response.data.extra.formSettings) {
+              $scope.formSettings = response.data.extra.formSettings;
+            }
+
             $scope.data.item = angular.extend($scope.item, $scope.data.item);
             $scope.item      = angular.extend({}, response.data.item);
-
             $scope.configure($scope.data.extra);
             $scope.buildScope();
             $scope.disableFlags('http');
@@ -237,7 +297,6 @@
             route.name   = $scope.routes.updateItem;
             route.params = { id: $scope.getItemId() };
             http.put(route, data).then(successCb, $scope.errorCb);
-
             return;
           }
 

@@ -28,7 +28,6 @@
         $scope.criteria = {
           content_type_name: 'widget',
           category_id: null,
-          renderlet: null,
           epp: 10,
           in_litter: 0,
           orderBy: { created: 'desc' },
@@ -67,7 +66,7 @@
          */
         $scope.init = function() {
           $scope.backup.criteria    = $scope.criteria;
-          $scope.app.columns.hidden = [ 'author', 'category', 'tags' ];
+          $scope.app.columns.hidden = [ 'author', 'category', 'tags', 'content_views' ];
 
           oqlEncoder.configure({
             placeholder: {

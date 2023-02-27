@@ -100,6 +100,18 @@ class OrmService implements Service
     }
 
     /**
+     * Returns the number of items returned after perform the query.
+     *
+     * @param array $oql The oql to perform the query.
+     *
+     * @return int The number of items in the database.
+     */
+    public function countBy($oql)
+    {
+        return $this->em->getRepository($this->entity, $this->origin)->countBy($oql);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function createItem($data)
@@ -107,10 +119,10 @@ class OrmService implements Service
         try {
             $data = $this->em->getConverter($this->entity)
                 ->objectify($this->parseData($data));
-
             $item = new $this->class($data);
 
             $this->validate($item);
+
             $this->em->persist($item, $this->getOrigin());
 
             $id = $this->em->getMetadata($item)->getId($item);
@@ -135,12 +147,15 @@ class OrmService implements Service
         try {
             $item = $this->getItem($id);
 
-            $this->em->remove($item, $item->getOrigin());
+            // Store last changed date before delete to localize item on sitemaps
+            $lastChanged = $item->changed;
 
+            $this->em->remove($item, $item->getOrigin());
             $this->dispatcher->dispatch($this->getEventName('deleteItem'), [
-                'action'  => __METHOD__,
-                'id'      => $id,
-                'item'    => $item
+                'action'       => __METHOD__,
+                'id'           => $id,
+                'item'         => $item,
+                'last_changed' => $lastChanged
             ]);
         } catch (\Exception $e) {
             throw new DeleteItemException($e->getMessage(), $e->getCode());
@@ -167,8 +182,11 @@ class OrmService implements Service
                 return $a->pk_content;
         }, $response['items']);
 
+        // Save last changed dates before remove in order to find sitemaps
+        $lastChanged = [];
         foreach ($response['items'] as $item) {
             try {
+                $lastChanged[] = $item->changed;
                 $this->em->remove($item, $item->getOrigin());
 
                 $items[] = $item;
@@ -177,10 +195,15 @@ class OrmService implements Service
             }
         }
 
+        $lastChanged = array_filter($lastChanged, function ($item) {
+            return !empty($item);
+        });
+
         $this->dispatcher->dispatch($this->getEventName('deleteList'), [
-            'action'  => __METHOD__,
-            'ids'     => $deleted,
-            'item'    => $items
+            'action'       => __METHOD__,
+            'ids'          => $deleted,
+            'item'         => $items,
+            'last_changed' => $lastChanged
         ]);
 
         return count($deleted);
@@ -353,15 +376,18 @@ class OrmService implements Service
 
             $item = $this->getItem($id);
 
+            // Store last changed date before patch in order to find the item on sitemaps
+            $lastChanged = $item->changed;
             $item->merge($data);
 
             $this->validate($item);
             $this->em->persist($item, $this->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('patchItem'), [
-                'action' => __METHOD__,
-                'id'     => $id,
-                'item'   => $item
+                'action'       => __METHOD__,
+                'id'           => $id,
+                'item'         => $item,
+                'last_changed' => $lastChanged
             ]);
         } catch (\Exception $e) {
             throw new PatchItemException($e->getMessage(), $e->getCode());
@@ -388,8 +414,12 @@ class OrmService implements Service
 
         $updated = [];
         $items   = [];
+
+        // Save last changed dates before patch in order to find sitemaps
+        $lastChanged = [];
         foreach ($response['items'] as $item) {
             try {
+                $lastChanged[] = $item->changed;
                 $item->merge($data);
                 $this->validate($item);
                 $this->em->persist($item, $this->getOrigin());
@@ -403,10 +433,15 @@ class OrmService implements Service
             }
         }
 
+        $lastChanged = array_filter($lastChanged, function ($item) {
+            return !empty($item);
+        });
+
         $this->dispatcher->dispatch($this->getEventName('patchList'), [
-            'action' => __METHOD__,
-            'ids'    => $updated,
-            'item'   => $items
+            'action'       => __METHOD__,
+            'ids'          => $updated,
+            'item'         => $items,
+            'last_changed' => $lastChanged
         ]);
 
         return count($updated);
@@ -458,15 +493,19 @@ class OrmService implements Service
                 ->objectify($data);
 
             $item = $this->getItem($id);
-            $item->setData($data);
 
+            // Store last changed date before update in order to find the item on sitemaps
+            $lastChanged = $item->changed;
+
+            $item->setData($data);
             $this->validate($item);
             $this->em->persist($item, $item->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('updateItem'), [
-                'action' => __METHOD__,
-                'id'   => $id,
-                'item' => $item
+                'action'       => __METHOD__,
+                'id'           => $id,
+                'item'         => $item,
+                'last_changed' => $lastChanged
             ]);
         } catch (\Exception $e) {
             throw new UpdateItemException($e->getMessage());

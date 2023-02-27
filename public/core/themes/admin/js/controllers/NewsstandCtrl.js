@@ -80,7 +80,7 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
-
+          $scope.expandFields();
           var featured = $scope.getFeaturedMedia($scope.item, 'featured_frontpage');
 
           if (featured.path) {
@@ -203,13 +203,13 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          if (!$scope.selectedCategory) {
+          if (!$scope.selectedCategory || !item.pk_content) {
             return '';
           }
 
-          return $scope.getL10nUrl(
+          return $scope.data.extra.base_url + $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
-              id: item.pk_content,
+              id: item.pk_content.toString().padStart(6, '0'),
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               category_slug: $scope.selectedCategory.name
             })

@@ -133,11 +133,12 @@ class ImageRenderer extends AdvertisementRenderer
         $isAbsolute = $format === 'newsletter' ? true : false;
 
         return $this->tpl->fetch($template, [
+            'id'     => $ad->id,
             'width'  => $img->width,
             'height' => $img->height,
             'src'    => $this->container->get('core.helper.url_generator')
                 ->generate($img, [ 'absolute' => $isAbsolute ]),
-            'url'    => $this->instance->getBaseUrl() . $this->router->generate(
+            'url'    => $this->instance->getBaseUrl(true) . $this->router->generate(
                 'frontend_ad_redirect',
                 [ 'id' => $publicId ]
             ),
@@ -157,15 +158,17 @@ class ImageRenderer extends AdvertisementRenderer
         $publicId = date('YmdHis', strtotime($ad->created)) .
             sprintf('%06d', $ad->id);
 
+        $url = $this->router->generate(
+            'frontend_ad_redirect',
+            [ 'id' => $publicId ]
+        );
+
         $params = [
             'width'    => $img->width,
             'height'   => $img->height,
             'src'    => $this->container->get('core.helper.url_generator')
                 ->generate($img),
-            'url'      => $this->router->generate(
-                'frontend_ad_redirect',
-                [ 'id' => $publicId ]
-            ),
+            'url'      => $this->container->get('core.decorator.url')->prefixUrl($url),
         ];
 
         $template = 'advertisement/helpers/safeframe/image.tpl';

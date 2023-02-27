@@ -30,6 +30,10 @@ api_v1_backend_comment:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/comment.yml'
     prefix:   /backend
 
+api_v1_backend_company:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/company.yml'
+    prefix:   /backend
+
 api_v1_backend_content:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/content.yml'
     prefix:   /backend
@@ -40,6 +44,10 @@ api_v1_backend_keyword:
 
 api_v1_backend_letter:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/letter.yml'
+    prefix:   /backend
+
+api_v1_backend_menu:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/menu.yml'
     prefix:   /backend
 
 api_v1_backend_newsletter:
@@ -60,6 +68,10 @@ api_v1_backend_news_agency_server:
 
 api_v1_backend_newsstand:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/newsstand.yml'
+    prefix:   /backend
+
+api_v1_backend_obituary:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/obituary.yml'
     prefix:   /backend
 
 api_v1_backend_opinion:

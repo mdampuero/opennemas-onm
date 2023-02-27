@@ -31,8 +31,11 @@ class CoreListener
         'asset',
         'auth',
         'build\/assets',
+        'date',
         'manager',
         'oauth',
+        'suggested',
+        'widget\/render',
         'ws',
     ];
 
@@ -103,6 +106,10 @@ class CoreListener
         if ($this->container->get('core.helper.url')
             ->isFrontendUri($request->getRequestUri())
         ) {
+            if (!empty($instance->no_redirect_domain)) {
+                return $request->getHost();
+            }
+
             return $this->container->getParameter('opennemas.redirect_frontend')
                 ? $instance->getMainDomain() : $request->getHost();
         }
@@ -146,6 +153,11 @@ class CoreListener
             '' : ':' . $request->getPort();
         $scheme = $this->getExpectedScheme($request);
 
+        if ($instance->isSubdirectory() &&
+            $this->container->get('core.helper.url')->isFrontendUri($request->getRequestUri()) &&
+            !preg_match('@^' . $instance->getSubdirectory() . '@', $request->getRequestUri())) {
+                return $scheme . strtolower($host) . $port . $instance->getSubdirectory() . $request->getRequestUri();
+        }
         return $scheme . strtolower($host) . $port . $request->getRequestUri();
     }
 

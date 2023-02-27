@@ -27,6 +27,30 @@
         };
 
         /**
+         * @function getLocalizedTags
+         * @memberof ContentRestListCtrl
+         *
+         * @description
+         *  Returns localized tags for each item in list
+         *
+         * @param {array} origin The list of all localized tags
+         * @param {array} array The list of item id tags
+         *
+         * @return {array} return tags localized
+         */
+        $scope.getLocalizedTags = function(origin, array, locale, multilanguage) {
+          if (multilanguage) {
+            return origin[locale].filter(function(o) {
+              return array.includes(o.id);
+            });
+          }
+
+          return origin.filter(function(o) {
+            return array.includes(o.id);
+          });
+        };
+
+        /**
          * @function hasFeaturedMedia
          * @memberof ContentRestListCtrl
          *
@@ -52,7 +76,7 @@
 
         /**
          * @function sendToTrash
-         * @memberOf UserCtrl
+         * @memberOf ContentRestListCtrl
          *
          * @description
          *   Shows a modal to confirm user update.
@@ -131,6 +155,25 @@
             $scope.data  = {};
             $scope.items = [];
           });
+        };
+
+        /**
+         * @function localizeText
+         * @memberOf ContentRestListCtrl
+         *
+         * @param {any} String or Object to localize.
+         *
+         * @return {String} Localized text.
+         *
+         * @description
+         *   Localize and return text
+         */
+        $scope.localizeText = function(text) {
+          if (typeof text === 'object') {
+            return text[$scope.config.locale.selected];
+          }
+
+          return text;
         };
       }
     ]);

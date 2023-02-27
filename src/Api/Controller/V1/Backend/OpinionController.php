@@ -41,6 +41,8 @@ class OpinionController extends ContentController
         'show'   => 'OPINION_UPDATE',
     ];
 
+    protected $module = 'opinion';
+
     /**
      * {@inheritdoc}
      */
@@ -119,8 +121,10 @@ class OpinionController extends ContentController
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
 
-        $this->get('core.locale')->setContext('frontend')
-            ->setRequestLocale($request->get('locale'));
+        if ($this->get('core.instance') && !$this->get('core.instance')->isSubdirectory()) {
+            $this->get('core.locale')->setContext('frontend')
+                ->setRequestLocale($request->get('locale'));
+        }
 
         $opinion = new Content([ 'pk_content' => 0 ]);
 
@@ -187,9 +191,18 @@ class OpinionController extends ContentController
                 ->get('extraInfoContents.OPINION_MANAGER');
         }
 
+        $categories = $this->get('api.service.category')->responsify(
+            $this->get('api.service.category')->getList()['items']
+        );
+
         return array_merge([
+            'categories'   => $categories,
             'extra_fields' => $extraFields,
-            'tags'         => $this->getTags($items)
+            'tags'         => $this->getTags($items),
+            'formSettings' => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
         ], $extra);
     }
 

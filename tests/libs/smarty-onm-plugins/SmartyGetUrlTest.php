@@ -25,12 +25,13 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->generator = $this->getMockBuilder('UrlGenerator')
-            ->setMethods([ 'generate' ])
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
             ->getMock();
 
-        $this->helper = $this->getMockBuilder('L10nRouteHelper')
-            ->setMethods([ 'localizeUrl' ])
+        $this->generator = $this->getMockBuilder('UrlGenerator')
+            ->setMethods([ 'generate' ])
             ->getMock();
 
         $this->router = $this->getMockBuilder('Router')
@@ -43,6 +44,9 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
 
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
+
+        $this->decorator->expects($this->any())->method('prefixUrl')
+            ->will($this->returnArgument(0));
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
@@ -57,16 +61,15 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
      */
     public function serviceContainerCallback($name)
     {
-        if ($name === 'router') {
-            return $this->router;
-        }
+        switch ($name) {
+            case 'router':
+                return $this->router;
 
-        if ($name === 'core.helper.url_generator') {
-            return $this->generator;
-        }
+            case 'core.helper.url_generator':
+                return $this->generator;
 
-        if ($name === 'core.helper.l10n_route') {
-            return $this->helper;
+            case 'core.decorator.url':
+                return $this->decorator;
         }
 
         return null;
@@ -95,12 +98,8 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
             ->with($item, [ 'absolute' => true,'_format'  => null ])
             ->willReturn('http://grault.com/glorp/1');
 
-        $this->helper->expects($this->once())->method('localizeUrl')
-            ->with('http://grault.com/glorp/1', '')
-            ->willReturn('http://grault.com/es/glorp/1');
-
         $this->assertEquals(
-            'http://grault.com/es/glorp/1',
+            'http://grault.com/glorp/1',
             smarty_function_get_url([
                 'item'     => $item,
                 'absolute' => true,
@@ -123,12 +122,8 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
             ->with($item, [ 'absolute' => true, '_format' => 'amp' ])
             ->willReturn('http://grault.com/glorp.amp.html');
 
-        $this->helper->expects($this->once())->method('localizeUrl')
-            ->with('http://grault.com/glorp.amp.html', '')
-            ->willReturn('http://grault.com/es/glorp.amp.html');
-
         $this->assertEquals(
-            'http://grault.com/es/glorp.amp.html',
+            'http://grault.com/glorp.amp.html',
             smarty_function_get_url([
                 'item'     => $item,
                 'amp'      => true,

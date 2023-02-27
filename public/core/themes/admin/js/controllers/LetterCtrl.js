@@ -44,11 +44,6 @@
         $scope.dtm = null;
 
         /**
-         * @inheritdoc
-         */
-        $scope.incomplete = true;
-
-        /**
          * @memberOf LetterCtrl
          *
          * @description
@@ -98,7 +93,7 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true, [ ]);
-
+          $scope.expandFields();
           // Check if item is new (created) or existing for use default value or not
           if (!$scope.data.item.pk_content) {
             $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
@@ -109,6 +104,13 @@
           }
 
           $scope.checkDraft();
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.hasMultilanguage = function() {
+          return false;
         };
 
         /**
@@ -124,9 +126,13 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          return $scope.getL10nUrl(
+          if (!item.pk_content) {
+            return '';
+          }
+
+          return $scope.data.extra.base_url + $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
-              id: item.pk_content,
+              id: item.pk_content.toString().padStart(6, '0'),
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
               author: item.author

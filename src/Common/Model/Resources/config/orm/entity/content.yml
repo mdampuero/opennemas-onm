@@ -10,9 +10,11 @@ orm:
                     - article
                     - attachment
                     - book
+                    - company
                     - event
                     - kiosko
                     - letter
+                    - obituary
                     - opinion
                     - photo
                     - poll
@@ -44,13 +46,19 @@ orm:
                 position:            integer
                 slug:                l10n_string
                 starttime:           datetime
+                coverage_start_time: string
+                coverage_end_time:   string
                 title:               l10n_string
                 urn_source:          string
                 with_comment:        boolean
+                showcase:            boolean
                 categories:          array
+                live_blog_posting:   boolean
+                live_blog_updates:   array
                 tags:                array
                 related_contents:    array
                 subscriptions:       array
+                timetable:           array
                 title_int:           l10n_string
                 pretitle:            l10n_string
             converters:
@@ -111,6 +119,25 @@ orm:
                                     type: integer
                                 tag_id:
                                     type: integer
+                        live_blog_updates:
+                            table: content_updates
+                            source_key: pk_content
+                            target_key: content_id
+                            columns:
+                                content_id:
+                                    type: integer
+                                title:
+                                    type: string
+                                body:
+                                    type: string
+                                caption:
+                                    type: string
+                                image_id:
+                                    type: integer
+                                created:
+                                    type: datetime
+                                modified:
+                                    type: datetime
                     columns:
                         pk_content:
                             type: bigint
@@ -248,3 +275,9 @@ orm:
                         -
                             name: urn_source
                             columns: [urn_source]
+                        -
+                            name: content_type_name_in_litter_content_status
+                            columns: [content_type_name, in_litter, content_status]
+                            primary: false
+                            unique: false
+                            flags: {  }

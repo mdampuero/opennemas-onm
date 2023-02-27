@@ -185,9 +185,16 @@ class RouterListener implements EventSubscriberInterface
             return;
         }
 
+        $instance = $this->container->get('core.instance');
+
+        // If the instance is a subdirectory
+        if ($instance->isSubdirectory()) {
+            $newRequest = $this->removeSubdirectoryFromRequest($instance->subdirectory);
+        }
+
         // If the instance has defined language
         $locale     = '';
-        $newRequest = $request;
+        $newRequest = $newRequest ?? $request;
         $hasModule  = $this->container->get('core.security')
             ->hasExtension('es.openhost.module.multilanguage');
 
@@ -308,6 +315,30 @@ class RouterListener implements EventSubscriberInterface
         }
 
         return [ $request, $locale ];
+    }
+
+    /**
+     * Creates a new request object removing the subdirectory part if available
+     *
+     * @return array an array containing the new request
+     */
+    public function removeSubdirectoryFromRequest($subdirectory)
+    {
+        $request         = $this->requestStack->getCurrentRequest();
+        $oldServerparams = $request->server->all();
+
+        $serverParams = array_merge($request->server->all(), [
+            'DOCUMENT_URI'    => str_replace(
+                "$subdirectory",
+                '',
+                $oldServerparams['DOCUMENT_URI']
+            ),
+            'REQUEST_URI'     => preg_replace("@^$subdirectory@", '', $oldServerparams['REQUEST_URI']),
+        ]);
+
+        $request = $request->duplicate(null, null, null, null, null, $serverParams);
+
+        return $request;
     }
 
     /**

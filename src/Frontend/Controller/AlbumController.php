@@ -130,6 +130,20 @@ class AlbumController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
+
+        $params['x-tags'] .= ',album-frontpage';
+
+        if (!empty($category)) {
+            $params['x-tags'] .= sprintf(',category-album-%d', $category->id);
+        }
+
         $params = array_merge($params, [
             'albums'     => $response['items'],
             'total'      => $response['total'],

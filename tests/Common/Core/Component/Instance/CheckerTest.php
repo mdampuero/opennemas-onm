@@ -10,6 +10,7 @@
 namespace Test\Common\Core\Component\Instance;
 
 use Common\Core\Component\Instance\Checker;
+use Common\Model\Entity\Instance;
 
 /**
  * Defines test cases for Geo class.
@@ -31,9 +32,18 @@ class CheckerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRepository' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getSlugs' ])
+            ->getMock();
+
+        $this->locale->expects($this->any())->method('getSlugs')
+            ->with('frontend')
+            ->willReturn([ 'ca', 'gl', 'es' ]);
+
         $this->em->expects($this->any())->method('getRepository')->willReturn($this->repository);
 
-        $this->checker = new Checker($this->em);
+        $this->checker = new Checker($this->em, $this->locale);
     }
 
     /**
@@ -48,5 +58,17 @@ class CheckerTest extends \PHPUnit\Framework\TestCase
         $this->checker->check($instance);
 
         $this->addToAssertionCount(1);
+    }
+
+    /**
+     * Checks if the subdirectory of the instance is valid
+     *
+     * @expectedException Onm\Exception\InvalidSubdirectoryException
+     */
+    public function testValidateSubdirectory()
+    {
+        $instance = new Instance([ 'subdirectory' => '/es' ]);
+
+        $this->checker->validateSubdirectory($instance);
     }
 }

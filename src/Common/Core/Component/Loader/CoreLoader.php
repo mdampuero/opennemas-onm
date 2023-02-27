@@ -314,14 +314,4 @@ class CoreLoader
         $this->container->get('core.template.layout')
             ->addLayouts($layouts);
     }
-
-    /**
-     * Adds menu positions defined by theme to the menu manager.
-     *
-     * @param array $menus The list of menu positions.
-     */
-    protected function loadMenus($menus)
-    {
-        $this->container->get('core.manager.menu')->addMenus($menus);
-    }
 }

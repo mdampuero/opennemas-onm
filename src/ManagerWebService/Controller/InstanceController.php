@@ -606,16 +606,23 @@ class InstanceController extends Controller
             throw new AccessDeniedException();
         }
 
-        $owners     = [ 'user-' . $instance->owner_id ];
-        $oldDomains = $instance->domains;
+        $owners        = [ 'user-' . $instance->owner_id ];
+        $oldDomains    = $instance->domains;
+        $oldMainDomain = $instance->main_domain ? $instance->domains[$instance->main_domain - 1] : '';
 
         $instance->setData($data);
+        $this->get('core.instance.checker')->validateSubdirectory($instance);
         $owners[] = 'user-' . $instance->owner_id;
         $owners   = array_unique(array_filter($owners, function ($a) {
             return !empty($a);
         }));
 
         $deletedDomains = array_diff($oldDomains, $instance->domains);
+        $newMainDomain  = $instance->main_domain ? $instance->domains[$instance->main_domain - 1] : '';
+
+        if ($newMainDomain != $oldMainDomain) {
+            $this->get('core.helper.sitemap')->deleteSitemaps([], $instance->getSitemapShortPath());
+        }
 
         $cache = $this->get('cache.manager')->getConnection('manager');
         if (!empty($deletedDomains)) {

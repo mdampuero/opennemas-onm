@@ -58,7 +58,7 @@
   {acl isAllowed="PHOTO_RESOLUTION"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('size')">
       <span class="badge badge-default text-bold">
-        [% item.size %] KB
+        [% item.size | number : 2 %] KB
       </span>
     </td>
   {/acl}
@@ -77,7 +77,7 @@
       <i class="fa fa-pencil m-r-5"></i>
       {t}Edit{/t}
     </a>
-    <translator item="data.items[$index]" keys="data.extra.keys" link="[% routing.generate('backend_photo_show', { id: getItemId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" ng-class="{ 'dropup': $index >= data.items.length - 1 }" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+    <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_photo_show', { id: getItemId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" ng-class="{ 'dropup': $index >= data.items.length - 1 }" options="data.extra.locale" text="{t}Edit{/t}"></translator>
   {/acl}
   {acl isAllowed="PHOTO_DELETE"}
     <button class="btn btn-danger btn-small" ng-click="delete(item.pk_content)" type="button">

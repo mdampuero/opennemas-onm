@@ -1,6 +1,6 @@
 {extends file="base/admin.tpl"}
 {block name="content"}
-  <form ng-controller="ArticleConfCtrl" ng-init="init({json_encode($extra_fields)|clear_json})">
+  <form ng-controller="ArticleConfigCtrl" ng-init="init({json_encode($extra_fields)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">

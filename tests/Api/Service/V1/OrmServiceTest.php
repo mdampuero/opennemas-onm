@@ -168,7 +168,8 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with('entity.deleteItem', [
                 'action'  => 'Api\Service\V1\OrmService::deleteItem',
                 'id'      => 23,
-                'item'    => $item
+                'item'    => $item,
+                'last_changed' => ''
             ]);
 
         $this->service->deleteItem(23);
@@ -231,7 +232,8 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with('entity.deleteList', [
                 'action'  => 'Api\Service\V1\OrmService::deleteList',
                 'ids'     => [ 1, 2 ],
-                'item'    => [ $itemA, $itemB ]
+                'item'    => [ $itemA, $itemB ],
+                'last_changed' => []
             ]);
 
         $this->assertEquals(2, $this->service->deleteList([ 1, 2 ]));
@@ -582,8 +584,9 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with('entity.patchItem', [
                 'action' => 'Api\Service\V1\OrmService::patchItem',
                 'id'     => 1,
-                'item'   => $item
-                ]);
+                'item'   => $item,
+                'last_changed' => ''
+            ]);
 
         $this->service->patchItem(1, $data);
 
@@ -663,7 +666,8 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with('entity.patchList', [
                 'action' => 'Api\Service\V1\OrmService::patchList',
                 'ids'    => [ 1, 2 ],
-                'item'   => [ $itemA, $itemB ]
+                'item'   => [ $itemA, $itemB ],
+                'last_changed' => []
             ]);
 
         $this->assertEquals(2, $this->service->patchList([ 1, 2 ], $data));
@@ -785,7 +789,8 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             ->with('entity.updateItem', [
                 'action' => 'Api\Service\V1\OrmService::updateItem',
                 'id'     => 1,
-                'item'   => $item
+                'item'   => $item,
+                'last_changed' => ''
             ]);
 
         $this->service->updateItem(1, $data);

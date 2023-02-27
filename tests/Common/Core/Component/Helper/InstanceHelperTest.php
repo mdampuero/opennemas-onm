@@ -11,6 +11,7 @@ namespace Tests\Common\Core\Component\Helper;
 
 use Common\Core\Component\Helper\InstanceHelper;
 use Common\Model\Entity\Instance;
+use DateTime;
 
 /**
  * Defines test cases for InstanceHelper class.
@@ -102,6 +103,38 @@ class InstanceHelperTest extends \PHPUnit\Framework\TestCase
             'article' => 27529,
             'opinion' => 24102
         ], $this->helper->countContents($this->instance));
+    }
+
+    /**
+     * Tests countEmails when no error thrown.
+     */
+    public function testCountEmailsWhenNoError()
+    {
+        $this->conn->expects($this->once())->method('selectDatabase')
+            ->with(3441);
+
+        $this->conn->expects($this->at(1))->method('fetchAssoc')
+            ->willReturn(['value' => 's:19:"2021-09-28 10:00:00";']);
+
+        $this->conn->expects($this->at(2))->method('fetchAssoc')
+            ->willReturn([ 'total' => 3562 ]);
+
+        $this->assertEquals(3562, $this->helper->countEmails($this->instance));
+    }
+
+    /**
+     * Tests countEmails when error thrown.
+     */
+    public function testCountEmailsWhenError()
+    {
+        $this->conn->expects($this->once())->method('selectDatabase')
+            ->with(3441);
+        $this->conn->expects($this->at(1))->method('fetchAssoc')
+            ->willReturn(['value' => 's:19:"2021-09-28 10:00:00";']);
+        $this->conn->expects($this->at(2))->method('fetchAssoc')
+            ->will($this->throwException(new \Exception()));
+
+        $this->assertEquals(0, $this->helper->countEmails($this->instance));
     }
 
     /**

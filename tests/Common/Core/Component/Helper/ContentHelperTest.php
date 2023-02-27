@@ -46,6 +46,11 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getItemBy' ])
             ->getMock();
 
+        $this->theme = $this->getMockBuilder('Common\Model\Entity\Theme')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getSuggestedEpp' ])
+            ->getMock();
+
         $this->kernel = $this->getMockBuilder('Kernel')
             ->setMethods([ 'getContainer' ])
             ->getMock();
@@ -73,6 +78,9 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
+
+        $this->theme->expects($this->any())->method('getSuggestedEpp')
+            ->willReturn(4);
 
         $GLOBALS['kernel'] = $this->kernel;
     }
@@ -104,6 +112,9 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'core.template.frontend':
                 return $this->template;
+
+            case 'core.theme':
+                return $this->theme;
 
             case 'entity_repository':
                 return $this->em;
@@ -380,25 +391,25 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetSuggested()
     {
         $this->cache->expects($this->at(0))->method('get')
-            ->with('suggested_contents_' . md5(implode(',', ['article', 2, 4])))
+            ->with('suggested_contents_article_2_1')
             ->willReturn([ new Content([ 'pk_content' => 2 ]) ]);
 
         $this->assertEquals(
             [ new Content([ 'pk_content' => 2 ]) ],
-            $this->contentHelper->getSuggested(1, 'article', 2)
+            $this->contentHelper->getSuggested('article', 2, 1)
         );
 
         $this->em->expects($this->at(0))->method('findBy')
             ->will($this->throwException(new \Exception()));
 
-        $this->assertEquals([], $this->contentHelper->getSuggested(1, 'article', 2));
+        $this->assertEquals([], $this->contentHelper->getSuggested('article', 2, 1));
 
         $this->em->expects($this->at(0))->method('findBy')
             ->willReturn([ new Content([ 'pk_content' => 2 ]) ]);
 
         $this->assertEquals(
             [ new Content([ 'pk_content' => 2 ]) ],
-            $this->contentHelper->getSuggested(1, 'article', 2)
+            $this->contentHelper->getSuggested('article', 2, 1)
         );
     }
 
@@ -625,5 +636,65 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->content->frontpage = 0;
         $this->assertFalse($this->contentHelper->isSuggested($this->content));
+    }
+
+    /**
+     * Tests isLiveBlog.
+     */
+    public function testIsLiveBlog()
+    {
+        $this->assertFalse($this->contentHelper->isLiveBlog($this->content));
+    }
+
+    /**
+     * Tests getLastLiveUpdate.
+     */
+    public function testGetLastLiveUpdate()
+    {
+        $this->assertNull($this->contentHelper->getLastLiveUpdate($this->content));
+
+        $timezone = $this->locale->getTimeZone();
+
+        $now      = new \DateTime(null, $timezone);
+
+        $this->content->coverage_start_time = $now;
+        $this->content->coverage_end_time   = $now;
+        $this->content->live_blog_posting   = 1;
+
+        $this->content->live_blog_updates = [
+            [
+                'modified' => $now
+            ]
+        ];
+
+        $this->assertEquals($now, $this->contentHelper->getLastLiveUpdate($this->content));
+    }
+
+    /**
+     * Tests isLive.
+     */
+    public function testIsLive()
+    {
+        $this->assertFalse($this->contentHelper->isLive($this->content));
+
+        $timezone = $this->locale->getTimeZone();
+        $now      = new \DateTime(null, $timezone);
+
+        $this->content->coverage_start_time = $now;
+
+        $tomorrow = new \DateTime(null, $timezone);
+        $tomorrow->setTimestamp(strtotime('+1 day', $now->getTimestamp()));
+
+        $this->content->coverage_end_time = $tomorrow;
+
+        $this->assertTrue($this->contentHelper->isLive($this->content));
+    }
+
+    /**
+     * Tests hasLiveUpdates.
+     */
+    public function testHasliveUpdates()
+    {
+        $this->assertFalse($this->contentHelper->hasLiveUpdates($this->content));
     }
 }

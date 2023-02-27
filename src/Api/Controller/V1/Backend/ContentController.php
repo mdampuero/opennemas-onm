@@ -23,18 +23,60 @@ class ContentController extends ApiController
      */
     protected function getExtraData($items = null)
     {
+        $instance = $this->get('core.instance');
+
+        if (is_array($items) && !empty($items)) {
+            $itemsId = array_map(function ($item) {
+                return $item->id;
+            }, $items);
+
+            $views = $this->get('content_views_repository')->getViews($itemsId);
+        }
+
         return [
             'authors'          => $this->getAuthors(),
             'comments_enabled' => $this->get('core.helper.comment')->enableCommentsByDefault(),
             'keys'             => $this->getL10nKeys(),
             'locale'           => $this->get('core.helper.locale')->getConfiguration(),
             'paths'            => [
-                'photo'      => $this->get('core.instance')->getImagesShortPath(),
-                'attachment' => $this->get('core.instance')->getFilesShortPath(),
-                'newsstand'  => $this->get('core.instance')->getNewsstandShortPath(),
+                'photo'      => $instance->getImagesShortPath(),
+                'attachment' => $instance->getFilesShortPath(),
+                'newsstand'  => $instance->getNewsstandShortPath(),
             ],
             'related_contents' => $this->getRelatedContents($items),
+            'base_url'         => $instance->getBaseUrl(true),
+            'views'            => $views ?? []
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTags($items = null)
+    {
+        $config = $this->get('core.helper.locale')->getConfiguration();
+        $tags   = parent::getTags($items);
+
+        if (!$config['multilanguage']) {
+            return $tags;
+        }
+
+        $locales = array_keys(
+            $this->get('core.helper.locale')->getConfiguration()['available']
+        );
+
+        $tagsByLocale = [];
+
+        foreach ($locales as $locale) {
+            $tagsByLocale[$locale] = [];
+            foreach ($tags as $tag) {
+                if (empty($tag['locale']) || $tag['locale'] === $locale) {
+                    array_push($tagsByLocale[$locale], $tag);
+                }
+            }
+        }
+
+        return $tagsByLocale;
     }
 
     /**

@@ -1,14 +1,20 @@
 frontend_robots:
     path: /robots.txt
     defaults: { _controller: FrontendBundle:Robots:index }
+    options:
+        subdirectory: true
 
 utilities_sharrre:
     path: /utilities/sharrre
     defaults: { _controller: FrontendBundle:Utilities:sharrre }
+    options:
+        subdirectory: true
 
 frontend_playground:
     path: /playground/{action}
     defaults: { _controller: FrontendBundle:Playground:default }
+    options:
+        subdirectory: true
 
 frontend_advertisement:
     resource: '@FrontendBundle/Resources/config/routing/advertisement.yml'
@@ -43,8 +49,14 @@ frontend_category:
 frontend_comment:
     resource: '@FrontendBundle/Resources/config/routing/comment.yml'
 
+frontend_company:
+    resource: '@FrontendBundle/Resources/config/routing/company.yml'
+
 frontend_content:
     resource: '@FrontendBundle/Resources/config/routing/content.yml'
+
+frontend_date:
+    resource: '@FrontendBundle/Resources/config/routing/date.yml'
 
 frontend_event:
     resource: '@FrontendBundle/Resources/config/routing/event.yml'
@@ -73,8 +85,14 @@ frontend_newsstand:
 frontend_opinion:
     resource: '@FrontendBundle/Resources/config/routing/opinion.yml'
 
+frontend_obituary:
+    resource: '@FrontendBundle/Resources/config/routing/obituary.yml'
+
 frontend_password:
     resource: '@FrontendBundle/Resources/config/routing/password.yml'
+
+frontend_payment:
+    resource: '@FrontendBundle/Resources/config/routing/payment.yml'
 
 frontend_poll:
     resource: '@FrontendBundle/Resources/config/routing/poll.yml'
@@ -93,6 +111,9 @@ frontend_sitemap:
 
 frontend_static_page:
     resource: '@FrontendBundle/Resources/config/routing/static_page.yml'
+
+frontend_suggested:
+    resource: '@FrontendBundle/Resources/config/routing/suggested.yml'
 
 frontend_tag:
     resource: '@FrontendBundle/Resources/config/routing/tag.yml'

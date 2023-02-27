@@ -1,6 +1,6 @@
 {block name="columns"}
   <div class="column-filters-toggle ng-cloak" ng-click="app.columns.collapsed = !app.columns.collapsed" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
-    <span class="column-filters-ellipsis"></span>
+    <span class="column-filters-ellipsis"><i class="fa fa-lg " ng-class="{ 'fa-angle-down': app.columns.collapsed, 'fa-angle-up': !app.columns.collapsed }"></i></span>
   </div>
   <div class="column-filters collapsed ng-cloak" ng-class="{ 'collapsed': app.columns.collapsed }" ng-if="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
     <h5>{t}Columns{/t}</h5>
@@ -34,6 +34,12 @@
         <input id="checkbox-endtime" checklist-model="app.columns.selected" checklist-value="'endtime'" type="checkbox">
         <label for="checkbox-endtime">
           {t}End date{/t}
+        </label>
+      </div>
+      <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('content_views')">
+        <input id="checkbox-content-views" checklist-model="app.columns.selected" checklist-value="'content_views'" type="checkbox">
+        <label for="checkbox-content-views">
+          {t}Views{/t}
         </label>
       </div>
       <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('category')">
@@ -86,6 +92,9 @@
               </th>
               <th class="text-center v-align-middle" ng-if="isColumnEnabled('endtime')" width="150">
                 {t}End date{/t}
+              </th>
+              <th class="text-center v-align-middle" ng-if="isColumnEnabled('content_views')" width="120">
+                {t}Views{/t}
               </th>
               <th class="text-center v-align-middle" ng-if="isColumnEnabled('category')" width="200">
                 {t}Category{/t}
@@ -163,6 +172,9 @@
                   [% item.endtime | moment : 'HH:mm:ss' %]
                 </small>
               </td>
+              <td class="text-center v-align-middle" ng-if="isColumnEnabled('content_views')">
+                [% data.extra.views[item.pk_content] || 0 %]
+              </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('category')">
                 {block name="categoryColumn"}
                   <small class="text-italic" ng-if="!item.category_id && !item.categories">
@@ -177,12 +189,12 @@
                 {/block}
               </td>
               <td class="v-align-middle" ng-if="isColumnEnabled('tags')">
-                <small class="text-italic" ng-if="!item.tags || item.tags.length === 0">
+                <small class="text-italic" ng-if="!item.tags || item.tags.length === 0 || (getLocalizedTags(data.extra.tags, item.tags, config.locale.selected, config.locale.multilanguage).length === 0)">
                   &lt;{t}No tags{/t}&gt;
                 </small>
-                <div class="inline m-r-5 m-t-5" ng-repeat="id in item.tags" ng-if="!(data.extra.tags | filter : { id: id })[0].locale || (data.extra.tags | filter : { id: id })[0].locale === config.locale.selected">
-                  <a class="label label-defaul label-info text-bold" href="[% routing.generate('backend_tag_show', { id: (data.extra.tags | filter : { id: id })[0].id }) %]">
-                    [% (data.extra.tags | filter : { id: id })[0].name %]
+                <div class="inline m-r-5 m-t-5" ng-repeat="item in getLocalizedTags(data.extra.tags, item.tags, config.locale.selected, config.locale.multilanguage)">
+                  <a class="label label-defaul label-info text-bold" href="[% routing.generate('backend_tag_show', { id: item.id }) %]">
+                    [% item.name %]
                   </a>
                 </div>
               </td>

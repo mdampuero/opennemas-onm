@@ -2,43 +2,61 @@ frontend_user_activate:
     path: /user/activate
     defaults: { _controller: FrontendBundle:User:activate }
     methods: [ GET ]
+    options:
+        subdirectory: true
 
 frontend_user_verify:
     path: /user/verify
     defaults: { _controller: FrontendBundle:User:verify }
     methods: [ GET ]
+    options:
+        subdirectory: true
 
 frontend_user_send_verification:
     path: /user/verify
     defaults: { _controller: FrontendBundle:User:sendVerification }
     methods: [ POST ]
+    options:
+        subdirectory: true
 
 frontend_user_reset:
     path: /user/recover
     defaults: { _controller: FrontendBundle:User:reset }
     methods: [ GET ]
+    options:
+        subdirectory: true
 
 frontend_user_recover:
     path: /user/recover
     defaults: { _controller: FrontendBundle:User:recover }
     methods: [ POST ]
+    options:
+        subdirectory: true
 
 frontend_user_register:
     path: /user/register
     defaults: { _controller: FrontendBundle:User:register }
     methods: [ GET ]
+    options:
+        subdirectory: true
 
 frontend_user_save:
     path: /user/register
     defaults: { _controller: FrontendBundle:User:save }
     methods: [ POST ]
+    options:
+        subdirectory: true
 
 frontend_user_show:
     path:     /user
     defaults: { _controller: FrontendBundle:User:show }
     methods:  [ GET ]
+    options:
+        subdirectory: true
 
 frontend_user_update:
     path:     /user
     defaults: { _controller: FrontendBundle:User:update }
     methods:  [ POST ]
+    options:
+        subdirectory: true

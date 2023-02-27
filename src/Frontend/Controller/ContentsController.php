@@ -74,20 +74,14 @@ class ContentsController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        // Increment view only if the request is performed with an AJAX request
-        if ($request->isXmlHttpRequest()) {
-            $saved = $this->get('content_views_repository')->setViews($contentId);
+        $saved = $this->get('content_views_repository')->setViews($contentId);
 
-            $httpCode = 400;
-            $content  = "false";
+        $httpCode = 400;
+        $content  = "false";
 
-            if ($saved) {
-                $httpCode = 200;
-                $content  = "Ok";
-            }
-        } else {
-            $httpCode = 400;
-            $content  = "Not AJAX request";
+        if ($saved) {
+            $httpCode = 200;
+            $content  = "Ok";
         }
 
         return new Response($content, $httpCode);
@@ -119,6 +113,7 @@ class ContentsController extends Controller
         }
 
         $url = $this->get('core.helper.url_generator')->generate($content);
+        $url = $this->get('core.decorator.url')->prefixUrl($url);
 
         return new \Symfony\Component\HttpFoundation\RedirectResponse($url);
     }

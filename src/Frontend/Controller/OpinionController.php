@@ -106,7 +106,7 @@ class OpinionController extends FrontendController
         $action = $this->get('core.globals')->getAction();
 
         $expected = $this->get('core.helper.url_generator')->generate($author);
-        $expected = $this->get('core.helper.l10n_route')->localizeUrl($expected);
+        $expected = $this->get('core.decorator.url')->prefixUrl($expected);
 
         if ($request->getPathInfo() !== $expected) {
             return new RedirectResponse($expected);
@@ -118,6 +118,8 @@ class OpinionController extends FrontendController
         if (!$this->isCached($params)) {
             $this->hydrateListAuthor($params, $author);
         }
+
+        $params['x-tags'] = sprintf('opinion-author-%d-frontpage', $author->id);
 
         return $this->render($this->getTemplate($action), $params);
     }
@@ -188,6 +190,16 @@ class OpinionController extends FrontendController
             'total'      => $response['total']
         ]);
 
+        $params['x-tags'] .= ',opinion-frontpage';
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
+
         $this->view->assign($params);
     }
 
@@ -242,6 +254,14 @@ class OpinionController extends FrontendController
                 ]
             ]
         ]);
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
 
         $this->view->assign([
             'pagination' => $pagination,

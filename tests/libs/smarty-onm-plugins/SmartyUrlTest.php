@@ -27,8 +27,9 @@ class SmartyUrlTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->helper = $this->getMockBuilder('L10nRouteHelper')
-            ->setMethods([ 'localizeUrl' ])
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
             ->getMock();
 
         $this->router = $this->getMockBuilder('Router')
@@ -42,7 +43,7 @@ class SmartyUrlTest extends \PHPUnit\Framework\TestCase
         $this->smarty->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
-        $this->helper->expects($this->any())->method('localizeUrl')
+        $this->decorator->expects($this->any())->method('prefixUrl')
             ->will($this->returnArgument(0));
 
         $this->container->expects($this->any())->method('get')
@@ -58,12 +59,12 @@ class SmartyUrlTest extends \PHPUnit\Framework\TestCase
      */
     public function serviceContainerCallback($name)
     {
-        if ($name === 'router') {
-            return $this->router;
-        }
+        switch ($name) {
+            case 'router':
+                return $this->router;
 
-        if ($name === 'core.helper.l10n_route') {
-            return $this->helper;
+            case 'core.decorator.url':
+                return $this->decorator;
         }
 
         return null;

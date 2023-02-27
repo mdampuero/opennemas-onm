@@ -1,5 +1,7 @@
 <?php
 
+use Api\Exception\GetItemException;
+
 class WidgetFactory
 {
     /**
@@ -24,11 +26,71 @@ class WidgetFactory
     public $ttl = 1800;
 
     /**
+     * Default ttl for varnish cache of the widget.
+     *
+     * @var string
+     */
+    protected $defaultTtl = '100d';
+
+    /**
+     * The name of the widget keys storage.
+     *
+     * @var string
+     */
+    protected $keySetName = 'Widget_Keys';
+
+    /**
      * The service container.
      *
      * @var ServiceContainer
      */
     protected $container;
+
+    /**
+     * Flag to indicate if the widget is cacheable.
+     *
+     * @var boolean
+     */
+    protected $isCacheable = true;
+
+    /**
+     * Flag to indicate if the widget is static.
+     *
+     * @var boolean
+     */
+    protected $isStatic = false;
+
+    /**
+     * Flag to indicate if the widget have custom contents.
+     *
+     * @var boolean
+     */
+    protected $isCustom = false;
+
+    /**
+     * The default content type of the widget.
+     *
+     * @var string
+     */
+    protected $defaultType = 'article';
+
+    /**
+     * The properties of the current widget that are suitable to be in the x-tags array.
+     *
+     * @var array
+     */
+    protected $propertiesMap = [
+        'category'  => 'category',
+        'tag_name'  => 'tag',
+        'fk_author' => 'author'
+    ];
+
+    /**
+     * The parameter to cache.
+     *
+     * @var string
+     */
+    protected $toCache = 'contents';
 
     /**
      * Initializes the WidgetFactory object instance
@@ -60,6 +122,18 @@ class WidgetFactory
         $this->tpl->assign('rnd_number', rand(5, 900));
 
         return $this;
+    }
+
+    /**
+     * Returns the content for the widget.
+     *
+     * @return string The widget content.
+     */
+    public function render()
+    {
+        $this->tpl->assign($this->params);
+
+        return $this->tpl->fetch($this->template);
     }
 
     /**
@@ -111,6 +185,195 @@ class WidgetFactory
         // Merge parameters if they are a valid array
         if (is_array($params)) {
             $this->params = array_merge($this->params, $params);
+        }
+    }
+
+    /**
+     * Loads the array of parameters with all the data required to render the template.
+     */
+    public function hydrateShow()
+    {
+    }
+
+    /**
+     * Returns an array with the x-tags for the specific widget.
+     *
+     * @return array The array with the x-tags for the specific widget.
+     */
+    public function getXTags()
+    {
+        $xtags = [ sprintf('widget-%s', $this->content->pk_content) ];
+
+        if ($this->isStatic()) {
+            return $xtags;
+        }
+        if (!$this->isCustom) {
+            if (!array_key_exists('content_type', $this->params)) {
+                $xtags[] = sprintf('content_type_name-widget-%s', $this->defaultType);
+            } else {
+                $xtags[] = is_array($this->params['content_type'])
+                    ? sprintf('content_type_name-widget-%s', $this->params['content_type']['slug'])
+                    : sprintf('content_type_name-widget-%s', underscore($this->params['content_type']));
+            }
+
+            foreach ($this->propertiesMap as $key => $value) {
+                if (!array_key_exists($key, $this->params) || empty($this->params[$key])) {
+                    $xtags[] = sprintf('%s-widget-all', $value);
+                    continue;
+                }
+
+                if (!is_array($this->params[$key])) {
+                    $xtags[] = sprintf('%s-widget-%s', $value, $this->params[$key]);
+                    continue;
+                }
+
+                foreach ($this->params[$key] as $param) {
+                    $xtags[] = sprintf('%s-widget-%d', $value, $param);
+                }
+            }
+        }
+
+        foreach ($this->params['contents'] as $content) {
+            $xtags[] = sprintf('%s-%d', $content->content_type_name, $content->pk_content);
+        }
+
+        return $xtags;
+    }
+
+    /**
+     * Returns the x-cache-for header for the specific widget.
+     *
+     * @return string The x-cache-for value for the widget.
+     */
+    public function getXCacheFor()
+    {
+        // Return 100d by default if there is no contents.
+        if ($this->isStatic()) {
+            return $this->defaultTtl;
+        }
+
+        $endtime = null;
+
+        if (!empty($this->params['contents'])) {
+            $endtimes = array_filter(array_map(function ($content) {
+                return $content->endtime;
+            }, $this->params['contents']));
+
+            sort($endtimes);
+
+            $endtime = array_shift($endtimes) ?? null;
+        }
+
+        if (!empty($endtime)) {
+            $endtime = $endtime->format('Y-m-d H:i:s');
+        }
+
+        $starttime = $this->getStarttimeByFilters();
+
+        $dates = array_filter([ $starttime, $endtime ]);
+
+        if (!empty($dates)) {
+            $now = new \DateTime();
+            $end = new \DateTime(min($dates));
+
+            $time = $end->getTimestamp() - $now->getTimestamp() - 2;
+
+            $this->container->get('cache.connection.instance')
+                ->set($this->cachedId, $this->params[$this->toCache], $time);
+
+            return min($dates);
+        }
+
+        return $this->defaultTtl;
+    }
+
+    /**
+     * Returns true if the widget doesn't depend on contents and is static, false otherwise.
+     *
+     * @return boolean True if the widget is static, false otherwise.
+     */
+    public function isStatic()
+    {
+        return $this->isStatic;
+    }
+
+    /**
+     * Returns true if the widget is cacheable, false otherwise.
+     *
+     * @return boolean True if the widget is cacheable, false otherwise.
+     */
+    public function isCacheable()
+    {
+        return $this->isCacheable;
+    }
+
+    /**
+     * Inserts the key of the widget in the set of widgets caches.
+     */
+    public function saveKey()
+    {
+        $cache = $this->container->get('cache.connection.instance');
+
+        $cache->addMemberToSet($this->keySetName, $this->cachedId);
+    }
+
+    /**
+     * Returns the min starttime or null for the contents that match the filters of the widget.
+     *
+     * @return string The min starttime in the format Y-m-d H:i:s.
+     */
+    protected function getStarttimeByFilters()
+    {
+        if ($this->isStatic || !$this->isCacheable || $this->isCustom) {
+            return null;
+        }
+
+        $replacements = [
+            'category' => 'category_id',
+            'author'   => 'fk_author'
+        ];
+
+        $oql = sprintf(
+            'content_status = 1 and in_litter != 1 and ' .
+            '(starttime !is null and starttime > "%s") and ',
+            date('Y-m-d H:i:s')
+        );
+
+        $typeOql = 'content_type_name = "%s" ';
+
+        if (array_key_exists('content_type', $this->params)) {
+            $oql .= is_array($this->params['content_type']) ?
+                sprintf($typeOql, $this->params['content_type']['slug']) :
+                sprintf($typeOql, underscore($this->params['content_type']));
+        } else {
+            $oql .= sprintf($typeOql, $this->defaultType);
+        }
+
+        $filters = array_intersect_key(array_flip($this->propertiesMap), $replacements);
+
+        foreach ($filters as $key => $value) {
+            if (empty($this->params[$value])) {
+                continue;
+            }
+
+            if (!is_array($this->params[$value])) {
+                $oql .= sprintf('and %s = %s ', $replacements[$key], $this->params[$value]);
+                continue;
+            }
+
+            if (is_array($this->params[$value]) && !empty($this->params[$value])) {
+                $oql .= sprintf('and %s in[%s] ', $replacements[$key], implode(',', $this->params[$value]));
+            }
+        }
+
+        $oql .= 'order by starttime asc limit 1';
+
+        try {
+            $content = $this->container->get('api.service.content')->getItemBy($oql);
+
+            return $content->starttime->format('Y-m-d H:i:s');
+        } catch (GetItemException $e) {
+            return null;
         }
     }
 

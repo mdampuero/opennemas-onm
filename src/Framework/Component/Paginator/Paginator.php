@@ -31,11 +31,13 @@ class Paginator
     /**
      * Initializes the Paginator.
      *
-     * @param Router $router The router service.
+     * @param Router       $router The router service.
+     * @param UrlDecorator $router The url decorator service.
      */
-    public function __construct($router)
+    public function __construct($router, $urlDecorator)
     {
-        $this->router = $router;
+        $this->router       = $router;
+        $this->urlDecorator = $urlDecorator;
 
         $this->templates = [
             'first'    => _('First'),
@@ -234,6 +236,8 @@ class Paginator
             $params = array_merge($params, [ 'page' => $page ]);
         }
 
-        return $this->router->generate($route, $params);
+        $url = $this->router->generate($route, $params);
+
+        return !is_string($url) ? $url : $this->urlDecorator->prefixUrl($url);
     }
 }

@@ -24,26 +24,35 @@
 {/block}
 
 {block name="primaryActions"}
-  <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
-    <h5>
-      <i class="p-r-15">
-        <i class="fa fa-check"></i>
-        {t}Draft saved at {/t}[% draftSaved %]
-      </i>
-    </h5>
-  </li>
-  <li class="quicklinks">
-    <button class="btn btn-white m-r-5" id="preview-button" ng-click="preview()" type="button" id="preview_button">
-      <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.generating_preview }" ></i>
-      {t}Preview{/t}
-    </button>
-  </li>
-  <li class="quicklinks">
-    <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
-      <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
-      {t}Save{/t}
-    </button>
-  </li>
+  <div class="all-actions pull-right">
+    <ul class="nav quick-section">
+      <li class="quicklinks hidden-xs ng-cloak" ng-if="draftSaved">
+        <h5>
+          <i class="p-r-15">
+            <i class="fa fa-check"></i>
+            {t}Draft saved at {/t}[% draftSaved %]
+          </i>
+        </h5>
+      </li>
+      <li class="quicklinks">
+        <a class="btn btn-link" ng-click="expansibleSettings()" title="{t 1=_('Opinion')}Config form: '%1'{/t}">
+          <span class="fa fa-cog fa-lg"></span>
+        </a>
+      </li>
+      <li class="quicklinks">
+        <button class="btn btn-white m-r-5" id="preview-button" ng-click="preview()" type="button" id="preview_button">
+          <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.generating_preview }" ></i>
+          {t}Preview{/t}
+        </button>
+      </li>
+      <li class="quicklinks">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+          <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+          {t}Save{/t}
+        </button>
+      </li>
+    </ul>
+  </div>
 {/block}
 
 {block name="rightColumn"}
@@ -87,7 +96,7 @@
     <div class="grid-body">
       {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
       {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true}
+      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true contentPicker=true}
     </div>
   </div>
 {/block}
@@ -109,5 +118,8 @@
   </script>
   <script type="text/ng-template" id="modal-draft">
     {include file="common/modals/_draft.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-expansible-fields">
+    {include file="common/modals/_modalExpansibleFields.tpl"}
   </script>
 {/block}

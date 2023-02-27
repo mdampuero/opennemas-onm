@@ -36,10 +36,12 @@ function smarty_function_url($params, &$smarty)
 
     unset($params['name'], $params['absolute'], $params['sluggable'], $params['slug_key']);
 
+    // TODO: Refactor the code to don't use this array.
+    $esi = [ 'frontend_suggested_show', 'frontend_date_render', 'frontend_widget_render' ];
+
     try {
-        // Remove empty params except 0 and '0'
         foreach ($params as $key => $value) {
-            if (empty($value) && ($value !== 0 && $value !== '0')) {
+            if (is_null($value) && !in_array($name, $esi)) {
                 throw new InvalidParameterException(
                     sprintf('Parameter "%s" for route "%s" is empty.', $key, $name)
                 );
@@ -57,8 +59,9 @@ function smarty_function_url($params, &$smarty)
         $url = '#not-found';
     }
 
-    $url = $smarty->getContainer()->get('core.helper.l10n_route')
-        ->localizeUrl($url, $name);
+    $url = is_string($url) ?
+        $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url) :
+        $url;
 
     return $url;
 }

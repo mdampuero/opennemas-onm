@@ -46,11 +46,6 @@
         $scope.dtm = null;
 
         /**
-         * @inheritdoc
-         */
-        $scope.incomplete = true;
-
-        /**
          * @memberOf ArticleCtrl
          *
          * @description
@@ -69,13 +64,47 @@
           starttime: null,
           endtime: null,
           title: '',
+          title_int: '',
           type: 0,
           with_comment: 0,
           categories: [],
           related_contents: [],
+          live_blog_updates: [],
           tags: [],
           external_link: '',
           agency: '',
+        };
+
+        $scope.defaultLiveBlogUpdate = {
+          content_id: null,
+          title: '',
+          body: '',
+          image_id: null,
+          caption: '',
+        };
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  Flag to indicate if an update can be added.
+         *
+         * @type {Object}
+         */
+        $scope.canAddUpdate = true;
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  Flags for expanded items.
+         *
+         * @type {Object}
+         */
+        $scope.expanded = {
+          live_blog_update: {
+            0: true
+          }
         };
 
         /**
@@ -114,6 +143,7 @@
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
 
+          $scope.expandFields();
           // Check if item is new (created) or existing for use default value or not
           if (!$scope.data.item.pk_content) {
             $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
@@ -122,6 +152,8 @@
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'article-' + $scope.data.item.pk_content + '-draft';
           }
+
+          $scope.flags.block.title_int = $scope.item.title_int === $scope.item.title;
 
           $scope.checkDraft();
           related.init($scope);
@@ -141,13 +173,13 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          if (!$scope.selectedCategory) {
+          if (!$scope.selectedCategory || !item.pk_content) {
             return '';
           }
 
-          return $scope.getL10nUrl(
+          return $scope.data.extra.base_url + $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
-              id: item.pk_content,
+              id: item.pk_content.toString().padStart(6, '0'),
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
               category_slug: $scope.selectedCategory.name
@@ -167,6 +199,14 @@
 
           var status = { starttime: null, endtime: null, content_status: 1, with_comment: 0 };
           var item   = Object.assign({}, $scope.data.item, status);
+
+          if (item.tags) {
+            item.tags = item.tags.filter(function(tag) {
+              return Number.isInteger(tag);
+            });
+          }
+
+          item = $scope.parseData(item, true);
 
           var data = {
             item: JSON.stringify(cleaner.clean(item)),
@@ -196,8 +236,90 @@
           });
         };
 
+        /**
+         * @function removeUpdate
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Remove selected update when LiveBlogUpdate is active.
+         */
+        $scope.removeUpdate = function(index) {
+          if (index === 0 && !$scope.canAddUpdate) {
+            $scope.canAddUpdate = true;
+          }
+
+          $scope.item.live_blog_updates.splice(index, 1);
+        };
+
+        /**
+         * @function undo
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Shows the change to be made on the input.
+         */
+        $scope.undo = function() {
+          if ($scope.flags.block.title_int || $scope.previous) {
+            return;
+          }
+
+          $scope.undoing        = true;
+          $scope.previous       = $scope.item.title_int;
+          $scope.item.title_int = $scope.item.title;
+        };
+
+        /**
+         * @function redo
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Stops showing the change to be made to the input.
+         */
+        $scope.redo = function() {
+          $scope.undoing = false;
+
+          if ($scope.flags.block.title_int || !$scope.previous) {
+            return;
+          }
+
+          $scope.item.title_int = $scope.previous;
+          $scope.previous       = null;
+        };
+
+        $scope.$watch('item.live_blog_updates', function(nv, ov) {
+          for (var iterator = 0; iterator < nv.length; iterator++) {
+            if (nv[iterator].image_id &&
+              (!ov[iterator] || !ov[iterator].image_id || ov[iterator].image_id.pk_content !== nv[iterator].image_id.pk_content)) {
+              if (nv[iterator].image_id.description) {
+                nv[iterator].caption = nv[iterator].image_id.description;
+              }
+            }
+
+            if (!nv[iterator].image_id) {
+              nv[iterator].caption = '';
+            }
+          }
+        }, true);
+
+        // Update title int when block flag changes
+        $scope.$watch('flags.block.title_int', function(nv) {
+          $scope.previous = null;
+          $scope.undoing  = false;
+
+          if (!nv) {
+            return;
+          }
+
+          $scope.item.title_int = $scope.item.title;
+        });
+
         // Update title_int when title changes
         $scope.$watch('item.title', function(nv, ov) {
+          // Mirror only when title_int locker is 'closed'
+          if (!$scope.flags.block.title_int) {
+            return;
+          }
+
           if (!nv && !ov) {
             return;
           }
@@ -216,6 +338,66 @@
             }
           }
         }, true);
+
+        $scope.$watch('config.locale.selected', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          if ($scope.flags.block.title_int !== ($scope.item.title === $scope.item.title_int)) {
+            $scope.flags.block.title_int = !$scope.flags.block.title_int;
+          }
+        });
+
+        /**
+         * @inheritdoc
+         */
+        $scope.addBlankUpdate = function() {
+          if ($scope.item.live_blog_updates.length === 0 || $scope.canAddUpdate) {
+            var date = $window.moment().format('YYYY-MM-DD HH:mm:ss');
+            var currentUpdate = Object.assign({ modified: date, created: date }, $scope.defaultLiveBlogUpdate);
+
+            $scope.canAddUpdate = false;
+            $scope.item.live_blog_updates.unshift(currentUpdate);
+
+            // Expand new update
+            if (!$scope.expanded.live_blog_update[0]) {
+              $scope.expanded.live_blog_update[0] = true;
+            }
+          }
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseData = function(data, preview) {
+          var parsedUpdates = [];
+
+          if (data.live_blog_updates.length > 0) {
+            for (var index in data.live_blog_updates) {
+              var update = data.live_blog_updates[index];
+
+              if (!update.title && !update.body && !update.caption) {
+                continue;
+              }
+
+              if (typeof update.image_id === 'object' && update.image_id !== null) {
+                update.image_id = update.image_id.pk_content;
+              }
+
+              if (!$scope.canAddUpdate && !preview) {
+                $scope.canAddUpdate = true;
+              }
+
+              update.content_id = data.pk_content ? data.pk_content : '';
+              parsedUpdates.push(update);
+            }
+          }
+
+          data.live_blog_updates = angular.copy(parsedUpdates);
+
+          return data;
+        };
 
         /**
          * @inheritdoc

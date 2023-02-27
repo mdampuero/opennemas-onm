@@ -10,6 +10,7 @@
 namespace Api\Controller\V1\Backend;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Displays and saves system settings.
@@ -51,5 +52,31 @@ class LanguageSettingController extends SettingController
         $this->get('orm.manager')->persist($instance);
 
         return parent::saveAction($request);
+    }
+
+    public function listAction(Request $request)
+    {
+        $locale = $this->get('core.locale');
+
+        return new JsonResponse(
+            array_merge_recursive(
+                parent::listAction($request),
+                [
+                    'instance' => [
+                        'country' => $this->get('core.instance')->country
+                    ],
+                    'extra'    => [
+                        'countries' => $this->get('core.geo')->getCountries(),
+                        'locales'   => [
+                            'backend'  => $locale->getAvailableLocales('backend'),
+                            'frontend' => $locale->getAvailableLocales('frontend')
+                        ],
+                        'timezones' => \DateTimeZone::listIdentifiers(),
+                        'translation_services' =>
+                            $this->get('core.factory.translator')->getTranslatorsData(),
+                    ]
+                ]
+            )
+        );
     }
 }

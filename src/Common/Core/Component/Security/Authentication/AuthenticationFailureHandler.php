@@ -35,17 +35,26 @@ class AuthenticationFailureHandler implements AuthenticationFailureHandlerInterf
     protected $router;
 
     /**
+     * The url decorator.
+     *
+     * @var UrlDecorator
+     */
+    protected $urlDecorator;
+
+    /**
      * Constructs a new handler.
      *
-     * @param Authentication $auth   The authentication service.
-     * @param Logger         $logger The logger service.
-     * @param Router         $router The router service.
+     * @param Authentication $auth          The authentication service.
+     * @param Logger         $logger        The logger service.
+     * @param Router         $router        The router service.
+     * @param UrlDecorator   $urlDecorator  The url decorator.
      */
-    public function __construct($auth, $logger, $router)
+    public function __construct($auth, $logger, $router, $urlDecorator)
     {
-        $this->auth   = $auth;
-        $this->logger = $logger;
-        $this->router = $router;
+        $this->auth         = $auth;
+        $this->logger       = $logger;
+        $this->router       = $router;
+        $this->urlDecorator = $urlDecorator;
     }
 
     /**
@@ -78,8 +87,10 @@ class AuthenticationFailureHandler implements AuthenticationFailureHandlerInterf
             );
         }
 
+        $url = $this->router->generate('frontend_authentication_login');
+
         return new RedirectResponse(
-            $this->router->generate('frontend_authentication_login')
+            $this->urlDecorator->prefixUrl($url)
         );
     }
 }

@@ -60,10 +60,16 @@
           <h4 class="no-margin m-b-15">{t}Extra fields{/t}</h4>
           <p class="m-b-15">{t}This fields will be asked during registration and can be edited in the control panel.{/t}</p>
           <div class="row" ng-repeat="field in settings.fields track by $index">
+            <div class="form-group col-md-1">
+              <label class="form-label checkbox-label" for="label-[% $index %]-required">{t}Required{/t}</label>
+              <div class="checkbox check-default check-required">
+                <input ng-model="field.required" type="checkbox">
+              </div>
+            </div>
             <div class="form-group col-md-2">
               <label class="form-label" for="label-[% $index %]-name">{t}Internal name{/t}</label>
               <div class="controls">
-                <input class="form-control" ng-model="field.name" type="text">
+                <input class="form-control" ng-model="field.name" type="text" disabled>
               </div>
             </div>
             <div class="form-group col-md-2">
@@ -83,7 +89,7 @@
                 </select>
               </div>
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-5">
               <div class="pull-left">
                 <label class="form-label">&nbsp;</label>
                 <div class="controls">
@@ -102,7 +108,12 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-2 col-md-offset-2">
+            <div class="col-md-2 col-md-offset-1 m-b-5">
+              <div class="controls">
+                <input class="form-control" type="text" ng-model="extraField.name" placeholder="{t}Extra field{/t}">
+              </div>
+            </div>
+            <div class="col-md-2">
               <button class="btn btn-block btn-success" ng-click="addField()">
                 <i class="fa fa-plus m-r-5"></i>
                 {t}Add{/t}

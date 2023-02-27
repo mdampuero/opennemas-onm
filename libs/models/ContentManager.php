@@ -410,7 +410,7 @@ class ContentManager
         $date = new \DateTime();
         $date->sub(new \DateInterval('P' . $days . 'D'));
         $date = $date->format('Y-m-d H:i:s');
-        $now  = date('Y-m-d H:i:s');
+        $now  = gmdate('Y-m-d H:i:s');
 
         $criteria = [
             'join' => [
@@ -778,6 +778,16 @@ class ContentManager
                 'pk_content_type' => 17,
                 'name'            => 'letter',
                 'title'           => _('Letter to editor')
+            ],
+            [
+                'pk_content_type' => 18,
+                'name'            => 'obituary',
+                'title'           => _('Obituary')
+            ],
+            [
+                'pk_content_type' => 19,
+                'name'            => 'company',
+                'title'           => _('Company')
             ],
         ];
 

@@ -47,29 +47,6 @@
          * @memberOf SettingsCtrl
          *
          * @description
-         *  The default sitemap values
-         *
-         * @type {Object}
-         */
-        $scope.sitemap = {
-          perpage: 500,
-          total: 100,
-          album: 0,
-          article: 0,
-          event: 0,
-          photo: 0,
-          kiosko: 0,
-          letter: 0,
-          opinion: 0,
-          poll: 0,
-          tag: 0,
-          video: 0
-        };
-
-        /**
-         * @memberOf SettingsCtrl
-         *
-         * @description
          *  The default value for the sitemaps flag.
          *
          * @type {boolean}
@@ -84,35 +61,7 @@
          *
          * @type {Object}
          */
-        $scope.settings = {
-          google_analytics: [
-            {
-              api_key: '',
-              base_domain: '',
-              custom_var: ''
-            }
-          ],
-          locale: {
-            backend: {
-              language: { selected: 'en_US' },
-              timezone: 'UTC'
-            },
-            frontend: {
-              language: {
-                available: [],
-                selected: null,
-                slug: {}
-              },
-              timezone: 'UTC'
-            }
-          },
-          rtb_files: [],
-          theme_skin: 'default',
-          translators: [],
-          cookies: 'none',
-          cmp_type: 'default',
-          data_layer: []
-        };
+        $scope.settings = {};
 
         /**
          * @function list

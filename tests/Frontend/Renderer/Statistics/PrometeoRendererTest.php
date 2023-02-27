@@ -25,7 +25,7 @@ class PrometeoRendererTest extends TestCase
 
         $this->dl = $this->getMockBuilder('Common\Core\Component\DataLayer\Datalayer')
             ->disableOriginalConstructor()
-            ->setMethods(['customizeExtension'])
+            ->setMethods(['customizeExtension', 'customizeIsRestricted'])
             ->getMock();
 
         $this->extractor = $this->getMockBuilder('Common\Core\Component\Core\VariablesExtractor')
@@ -95,13 +95,21 @@ class PrometeoRendererTest extends TestCase
 
         $this->dl->expects($this->any())->method('customizeExtension')
             ->willReturn('foo');
+        $this->dl->expects($this->any())->method('customizeIsRestricted')
+            ->willReturn('gorp');
         $this->extractor->expects($this->at(0))->method('get')
             ->with('mediaType')
             ->willReturn('photo');
         $this->extractor->expects($this->at(1))->method('get')
-            ->with('extension')
+            ->with('isRestricted')
             ->willReturn('bar');
         $this->extractor->expects($this->at(2))->method('get')
+            ->with('categoryName')
+            ->willReturn('gorp');
+        $this->extractor->expects($this->at(3))->method('get')
+            ->with('extension')
+            ->willReturn('bar');
+        $this->extractor->expects($this->at(4))->method('get')
             ->with('tagSlugs')
             ->willReturn('baz');
 

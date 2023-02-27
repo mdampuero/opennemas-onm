@@ -9,6 +9,9 @@
  */
 namespace Api\Controller\V1\Backend;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Displays and saves system settings.
  */
@@ -29,13 +32,7 @@ class InternalSettingController extends SettingController
     protected $keys = [
         'onm_digest_user',
         'onm_digest_pass',
-        'contact_email',
-        'site_title',
-        'site_footer',
-        'site_keywords',
-        'webmastertools_bing',
-        'webmastertools_google',
-
+        'contact_email'
     ];
 
     /**
@@ -44,4 +41,11 @@ class InternalSettingController extends SettingController
      * @var array
      */
     protected $onlyMasters = [];
+
+    public function listAction(Request $request)
+    {
+        return new JsonResponse(
+            parent::listAction($request)
+        );
+    }
 }

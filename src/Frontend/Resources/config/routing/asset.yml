@@ -3,6 +3,8 @@ frontend_css_global:
     defaults: { _controller: FrontendBundle:Asset:globalCss }
     requirements:
         cb: '[0-9]+'
+    options:
+        subdirectory: true
 
 frontend_css_frontpage_category:
     path:     dynamic/css/frontpage/{category}.{cb}.css
@@ -10,6 +12,8 @@ frontend_css_frontpage_category:
     requirements:
         category: '[^/]+'
         cb:       '[0-9]+'
+    options:
+        subdirectory: true
 
 asset_image:
     path:     /asset/{params}/{path}

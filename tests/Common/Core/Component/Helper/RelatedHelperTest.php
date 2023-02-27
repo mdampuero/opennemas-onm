@@ -190,4 +190,59 @@ class RelatedHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertFalse($this->helper->hasRelatedContents($content, 'inner'));
     }
+
+    /**
+     * Tests HasRelatedContentsWithNoContent.
+     */
+    public function testHasRelatedContentsWithNoContent()
+    {
+        $content                    = new \Content();
+        $content->content_status    = 1;
+        $content->in_litter         = 0;
+        $content->starttime         = '2020-01-01 00:00:00';
+        $content->content_type_name = 'article';
+        $content->related_contents  = [ [
+            'content_type_name' => 'article',
+            'target_id'         => 205,
+            'type'              => 'related_inner',
+            'caption'           => null,
+            'position'          => 2
+        ] ];
+
+        $this->contentHelper->expects($this->at(0))->method('getContent')
+            ->willReturn(null);
+
+        $this->assertFalse($this->helper->hasRelatedContents($content, 'mumble'));
+        $this->assertFalse($this->helper->hasRelatedContents($content, 'inner'));
+
+        $this->contentHelper->expects($this->at(0))->method('getContent')
+            ->willReturn(null);
+
+        $this->assertFalse($this->helper->hasRelatedContents($content, 'inner'));
+    }
+
+    /**
+     * Tests hasRelatedContentswithRelatedObject.
+     */
+    public function testHasRelatedContentswithRelatedObject()
+    {
+        $photo = new \Content();
+
+        $article                 = new \Content();
+        $article->id             = 205;
+        $article->content_status = 1;
+        $article->starttime      = '2020-01-01 00:00:00';
+
+        $content                    = new \Content();
+        $content->content_status    = 1;
+        $content->in_litter         = 0;
+        $content->starttime         = '2020-01-01 00:00:00';
+        $content->content_type_name = 'article';
+        $content->externalRelated   = $photo;
+
+        $this->assertTrue($this->helper->hasRelatedContents($content, 'mumble'));
+        $this->assertTrue($this->helper->hasRelatedContents($content, 'inner'));
+
+        $this->assertTrue($this->helper->hasRelatedContents($content, 'inner'));
+    }
 }

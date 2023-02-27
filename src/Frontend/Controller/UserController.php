@@ -15,6 +15,7 @@ use Api\Exception\GetItemException;
 use Api\Exception\UpdateItemException;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -48,7 +49,7 @@ class UserController extends Controller
             $this->get('session')->getFlashBag()
                 ->add('success', _('Your account is now activated'));
 
-            return $this->redirect($this->generateUrl('frontend_user_show'));
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_show'));
         } catch (GetItemException $e) {
             $this->get('application.log')->error(
                 'subscriber.activate.failure: ' . $token
@@ -57,7 +58,7 @@ class UserController extends Controller
             $this->get('session')->getFlashBag()
                 ->add('error', _('Unable to find your account'));
 
-            return $this->redirect($this->generateUrl('core_authentication_logout'));
+            return $this->redirect($this->generatePrefixedUrl('core_authentication_logout'));
         } catch (UpdateItemException $e) {
             $this->get('application.log')->error(
                 'subscriber.activate.failure: ' . $token
@@ -66,7 +67,7 @@ class UserController extends Controller
             $this->get('session')->getFlashBag()
                 ->add('error', _('Unable to activate your account'));
 
-            return $this->redirect($this->generateUrl('core_authentication_logout'));
+            return $this->redirect($this->generatePrefixedUrl('core_authentication_logout'));
         } catch (\Exception $e) {
             $this->get('application.log')->error(
                 'subscriber.activate.email.failure: ' . $token
@@ -75,7 +76,7 @@ class UserController extends Controller
             $this->get('session')->getFlashBag()
                 ->add('error', _('Unable to activate your account'));
 
-            return $this->redirect($this->generateUrl('core_authentication_logout'));
+            return $this->redirect($this->generatePrefixedUrl('core_authentication_logout'));
         }
     }
 
@@ -127,7 +128,7 @@ class UserController extends Controller
             $request->getSession()->getFlashBag()
                 ->add('error', _('Unable to find an user with that email.'));
 
-            return $this->redirect($this->generateUrl('frontend_user_reset'));
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_reset'));
         }
 
         if (!$user->activated) {
@@ -139,8 +140,8 @@ class UserController extends Controller
                     '<li>If you have not received any message, check your spam box.</li>' .
                     '<li>If you want a new link, click <a href="%s">here</a>.</li>' .
                     '</ul>'
-                ), $this->generateUrl('frontend_user_verify')));
-            return $this->redirect($this->generateUrl('frontend_user_reset'));
+                ), $this->generatePrefixedUrl('frontend_user_verify')));
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_reset'));
         }
 
         $this->view->setCaching(0);
@@ -155,14 +156,16 @@ class UserController extends Controller
             $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('site_title')
         );
 
+        $url = $this->get('router')->generate(
+            'frontend_password_change',
+            [ 'token' => $token ],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
         $mailBody = $this->get('core.template.frontend')
             ->render('user/emails/recoverpassword.tpl', [
                 'user' => $user,
-                'url'  => $this->get('router')->generate(
-                    'frontend_password_change',
-                    [ 'token' => $token ],
-                    UrlGeneratorInterface::ABSOLUTE_URL
-                ),
+                'url'  => $this->get('core.decorator.url')->prefixUrl($url),
             ]);
 
         //  Build the message
@@ -205,7 +208,7 @@ class UserController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('frontend_authentication_login'));
+        return $this->redirect($this->generatePrefixedUrl('frontend_authentication_login'));
     }
 
     /**
@@ -217,6 +220,12 @@ class UserController extends Controller
      */
     public function registerAction()
     {
+        $cs = $this->get('core.security');
+
+        if (!$cs->hasExtension('NEWSLETTER_MANAGER') && !$cs->hasExtension('CONTENT_SUBSCRIPTIONS')) {
+            throw new ResourceNotFoundException();
+        }
+
         $countries = array_merge(
             [ '' => _('Select a country') . '...' ],
             $this->get('core.geo')->getCountries()
@@ -251,12 +260,51 @@ class UserController extends Controller
      */
     public function saveAction(Request $request)
     {
-        if (!$this->checkRecaptcha($request)) {
-            return $this->redirect($this->generateUrl('frontend_user_register'));
+        if ('POST' != $request->getMethod() || !$this->checkRecaptcha($request)) {
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         }
 
-        $data = $request->request->all();
+        $securityInput = $request->request->get('register_control');
+        $data          = array_merge(
+            $request->request->all(),
+            [
+                'name'     => $request->request->filter('name', null, FILTER_SANITIZE_SPECIAL_CHARS),
+                'email'    => $request->request->filter('email', null, FILTER_SANITIZE_EMAIL),
+                'password' => $request->request->get('password'),
+            ]
+        );
+
+        if (!empty($securityInput)) {
+            $this->get('application.log')->error(
+                'subscriber.create.failure | Bot Detected | Email:' . $data['email']
+            );
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
+        }
+
+        $cs = $this->get('core.security');
+
+        if (!$cs->hasExtension('NEWSLETTER_MANAGER') && !$cs->hasExtension('CONTENT_SUBSCRIPTIONS')) {
+            $this->get('application.log')->error(
+                'subscriber.create.failure | Module not activated | Email:' . $data['email']
+            );
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
+        }
+
+        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $this->get('application.log')->error(
+                'subscriber.create.failure | Email not valid | Email:' . $data['email']
+            );
+
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                _('Please provide a valid email address.')
+            );
+
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
+        }
+
         unset($data['g-recaptcha-response']);
+        unset($data['dog']);
 
         if (array_key_exists('user_groups', $data)) {
             $data['user_groups'] =
@@ -268,16 +316,16 @@ class UserController extends Controller
         $data['register_date'] = new \DateTime();
 
         try {
-            $this->get('api.service.subscriber')->createItem($data);
-            $this->get('application.log')
-                ->info('subscriber.create.success');
+            $user = $this->get('api.service.subscriber')->createItem($data);
+            $this->get('application.log')->info('subscriber.create.success | User ID: '
+                . $user->id . ' | ' . $user->getUsername());
 
             $this->sendCreateEmail($data);
-            $this->get('application.log')
-                ->info('subscriber.create.email.success');
+            $this->get('application.log')->info('subscriber.create.email.success | User ID: '
+                . $user->id . ' | ' . $user->getUsername());
         } catch (CreateExistingItemException $e) {
-            $this->get('application.log')->info(
-                'subscriber.create.failure: ' . $e->getMessage()
+            $this->get('application.log')->error(
+                'subscriber.create.failure | ' . $e->getMessage() . ' | Email: ' . $data['email']
             );
 
             $request->getSession()->getFlashBag()
@@ -287,14 +335,14 @@ class UserController extends Controller
                     '<li>Sign in <a href="%s">here</a>.</li>' .
                     '<li>Recover password <a href="%s">here</a>.</li>' .
                     '</ul>'),
-                    $this->generateUrl('frontend_authentication_login'),
-                    $this->generateUrl('frontend_user_recover')
+                    $this->generatePrefixedUrl('frontend_authentication_login'),
+                    $this->generatePrefixedUrl('frontend_user_recover')
                 ));
 
-            return $this->redirect($this->generateUrl('frontend_user_register'));
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         } catch (CreateItemException $e) {
             $this->get('application.log')->error(
-                'subscriber.create.failure: ' . $e->getMessage()
+                'subscriber.create.failure | ' . $e->getMessage() . ' | Email: ' . $data['email']
             );
 
             $request->getSession()->getFlashBag()->add(
@@ -302,10 +350,10 @@ class UserController extends Controller
                 _('Unable to create your user account. Please try it later.')
             );
 
-            return $this->redirect($this->generateUrl('frontend_user_register'));
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         } catch (\Exception $e) {
             $this->get('application.log')->error(
-                'subscriber.create.email.failure: ' . $e->getMessage()
+                'subscriber.create.email.failure | ' . $e->getMessage() . ' | Email:' . $data['email']
             );
 
             $request->getSession()->getFlashBag()->add(
@@ -313,7 +361,7 @@ class UserController extends Controller
                 _('Unable to send your registration email. Please try it later.')
             );
 
-            return $this->redirect($this->generateUrl('frontend_user_register'));
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         }
 
         return $this->render('user/complete.tpl', [
@@ -324,6 +372,7 @@ class UserController extends Controller
                 ->getHtml(),
             'settings'      => $this->getSettings(),
             'subscriptions' => $this->getSubscriptions(),
+            'name'          => null
         ]);
     }
 
@@ -346,10 +395,10 @@ class UserController extends Controller
      */
     public function sendVerificationAction(Request $request)
     {
-        $email = $request->request->get('email', '');
+        $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
 
         if (empty($email)) {
-            return $this->redirect($this->generateUrl('frontend_user_verify'));
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_verify'));
         }
 
         try {
@@ -361,7 +410,7 @@ class UserController extends Controller
                 $this->get('session')->getFlashBag()
                     ->add('error', _('This account is already verified'));
 
-                return $this->redirect($this->generateUrl('frontend_user_verify'));
+                return $this->redirect($this->generatePrefixedUrl('frontend_user_verify'));
             }
 
             $data = [
@@ -375,7 +424,7 @@ class UserController extends Controller
             $this->get('session')->getFlashBag()
                 ->add('success', _('The verification email was sent.'));
 
-            return $this->redirect($this->generateUrl('frontend_authentication_login'));
+            return $this->redirect($this->generatePrefixedUrl('frontend_authentication_login'));
         } catch (GetItemException $e) {
             $this->get('application.log')->error(
                 'user.verify.failure: ' . $email
@@ -384,7 +433,7 @@ class UserController extends Controller
             $this->get('session')->getFlashBag()
                 ->add('error', _('Unable to find your account'));
 
-            return $this->redirect($this->generateUrl('frontend_user_register'));
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         }
     }
 
@@ -398,8 +447,13 @@ class UserController extends Controller
     public function updateAction(Request $request)
     {
         $data = array_merge(
-            [ 'user_groups' => [] ],
-            $request->request->all()
+            $request->request->all(),
+            [
+                'name'        => $request->request->filter('name', null, FILTER_SANITIZE_SPECIAL_CHARS),
+                'email'       => $request->request->filter('email', null, FILTER_SANITIZE_EMAIL),
+                'password'    => $request->request->get('password'),
+                'user_groups' => $request->request->get('user_groups', []),
+            ]
         );
 
         if (array_key_exists('user_groups', $data)) {
@@ -430,7 +484,7 @@ class UserController extends Controller
                 ->add('error', _('Unable to update the user.'));
         }
 
-        return $this->redirect($this->generateUrl('frontend_user_show'));
+        return $this->redirect($this->generatePrefixedUrl('frontend_user_show'));
     }
 
     /**
@@ -557,14 +611,17 @@ class UserController extends Controller
         $subject = sprintf(_('New user account in %s'), $ds->get('site_name'));
 
         $this->view->setCaching(0);
+
+        $url = $this->get('router')->generate(
+            'frontend_user_activate',
+            [ 'token' => $data['token'] ],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
         $body = $this->get('core.template.frontend')
             ->render('user/emails/register.tpl', [
                 'name' => $data['name'],
-                'url'  => $this->get('router')->generate(
-                    'frontend_user_activate',
-                    [ 'token' => $data['token'] ],
-                    UrlGeneratorInterface::ABSOLUTE_URL
-                ),
+                'url'  => $this->get('core.decorator.url')->prefixUrl($url),
             ]);
 
         $message = \Swift_Message::newInstance();
@@ -598,7 +655,7 @@ class UserController extends Controller
         $body    = $this->get('core.template.frontend')
             ->render('user/emails/welcome.tpl', [
                 'name' => $user->name,
-                'url'  => $this->generateUrl('frontend_paywall_showcase', [], true),
+                'url'  => $this->generatePrefixedUrl('frontend_paywall_showcase', [], true),
             ]);
 
         $message = \Swift_Message::newInstance();
@@ -617,5 +674,22 @@ class UserController extends Controller
         );
 
         $this->get('mailer')->send($message);
+    }
+
+    /**
+     * Generates the url with the subdirectory and multilanguage prefix if needed.
+     *
+     * @param String $route The name of the route to generate the url.
+     *
+     * @return String The url with the prefix if needed.
+     */
+    private function generatePrefixedUrl(
+        string $route,
+        array $parameters = [],
+        bool $reference = UrlGeneratorInterface::ABSOLUTE_PATH
+    ) {
+        $url = $this->generateUrl($route, $parameters, $reference);
+
+        return $this->get('core.decorator.url')->prefixUrl($url);
     }
 }

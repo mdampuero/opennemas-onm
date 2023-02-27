@@ -87,6 +87,7 @@ class NewsMLComponentPhotoOpennemas extends NewsMLComponentPhoto
         $resource = parent::parse($data);
 
         $resource->agency_name = 'Opennemas';
+        $resource->body        = str_replace(['<p>', '</p>'], '', (string) $resource->body);
 
         return $resource;
     }

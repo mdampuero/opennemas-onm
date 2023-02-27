@@ -1,7 +1,7 @@
-themes = amon anemoi auris base basic bastet bragi cronicas dryads eurus \
-forseti freya hathor hermes horus kalliope kibele kronos lrinternacional mega \
-mercury mihos moura nemo nemty notus nyx odin olympus pekka rhea selket \
-skanda slido tecnofisis televisionlr verbeia xaman
+themes = aletes amon anemoi auris base basic \
+eurus forseti freya horus kalliope kibele lrinternacional \
+mihos moura nemo nemty notus nyx odin olympus pekka rhea \
+skanda slido tecnofisis televisionlr trasno verbeia
 
 www-data = $(shell id -u www-data > /dev/null 2>&1 && echo 'www-data' || echo 'http')
 
@@ -16,6 +16,10 @@ dbuser = $(shell [ -f app/config/connections.yml ] && \
 dbpass = $(shell [ -f app/config/connections.yml ] && \
 		grep 'password:' app/config/connections.yml | head -n 1 | sed -e "s/.*password:\s\+//g" || \
 		grep 'password:' app/config/parameters.yml | head -n 1 | sed -e "s/.*password:\s\+//g")
+
+ifndef $(branch)
+    branch = $(shell git rev-parse --abbrev-ref HEAD)
+endif
 
 .PHONY: assets clean clean-database components database dev doc install \
 node_modules prepare prod routes translations vendor
@@ -121,8 +125,9 @@ themes:
 	mkdir -p public/themes
 
 	for theme in $(themes); do \
-		[ -d public/themes/$$theme ] && continue \
-			|| git clone git@bitbucket.org:opennemas/onm-theme-$$theme.git public/themes/$$theme; \
+		[ -d public/themes/$$theme ] || git clone git@bitbucket.org:opennemas/onm-theme-$$theme.git public/themes/$$theme || exit 1; \
+		git -C public/themes/$$theme checkout $(branch) || exit 1; \
+		git -C public/themes/$$theme pull || exit 1; \
 	done
 
 # Install php dependencies

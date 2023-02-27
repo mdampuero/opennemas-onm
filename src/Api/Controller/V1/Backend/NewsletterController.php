@@ -134,6 +134,7 @@ class NewsletterController extends Controller
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get([
+                'newsletter_manual',
                 'newsletter_maillist',
                 'newsletter_subscriptionType',
                 'actOn.marketingLists',
