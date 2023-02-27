@@ -17,19 +17,4 @@ use Common\Core\Controller\Controller;
  */
 class SystemSettingsController extends Controller
 {
-    /**
-     * Gets all the settings and displays the form
-     *
-     * @Security("hasExtension('SETTINGS_MANAGER')
-     *     and hasPermission('ONM_SETTINGS')")
-     */
-    public function defaultAction()
-    {
-        return $this->render('system_settings/system_settings.tpl', [
-            'multilanguage'  => in_array(
-                'es.openhost.module.multilanguage',
-                getService('core.instance')->activated_modules
-            )
-        ]);
-    }
 }

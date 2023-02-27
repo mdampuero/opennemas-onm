@@ -121,10 +121,6 @@ admin_trash:
     path:     /trash
     defaults: { _controller: BackendBundle:Trash:default }
 
-admin_system_settings:
-    path:     /system/settings
-    defaults: { _controller: BackendBundle:SystemSettings:default }
-
 admin_system_settings_save:
     path:     /system/settings/save
     defaults: { _controller: BackendBundle:SystemSettings:save }
