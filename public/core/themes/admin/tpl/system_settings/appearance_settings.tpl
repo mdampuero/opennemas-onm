@@ -10,7 +10,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-magic fa-lg"></i>
-                {t}Settings{/t} > {t}General{/t} > {t}Appearance{/t}
+                {t}Settings{/t} > {t}Appearance{/t}
               </h4>
             </li>
           </ul>
@@ -101,7 +101,6 @@
                     </div>
                   </div>
                   <div class="form-group col-md-12" ng-show="settings.logo_enabled">
-
                   <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_default }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_default }">
                       <p>{t}Are you sure?{/t}</p>
@@ -116,9 +115,7 @@
                         </button>
                       </div>
                     </div>
-
                     <label class="form-label" for="site-logo">{t}Large logo{/t}</label>
-
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!settings.logo_default">
                         <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_default">
@@ -140,11 +137,8 @@
                         </dynamic-image>
                       </div>
                     </div>
-
                   </div>
-
                   <div class="form-group col-md-12" ng-if="settings.logo_enabled">
-
                   <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_simple }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_simple }">
                       <p>{t}Are you sure?{/t}</p>
@@ -159,9 +153,7 @@
                         </button>
                       </div>
                     </div>
-
                     <label class="form-label" for="logo_simple">{t}Small logo{/t}</label>
-
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!settings.logo_simple">
                         <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_simple">
@@ -183,11 +175,8 @@
                         </dynamic-image>
                       </div>
                     </div>
-
                   </div>
-
                   <div class="form-group col-md-12" ng-if="settings.logo_enabled">
-
                   <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_favico }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_favico }">
                       <p>{t}Are you sure?{/t}</p>
@@ -202,9 +191,7 @@
                         </button>
                       </div>
                     </div>
-
                     <label class="form-label" for="logo_favico">{t}Favico{/t}</label>
-
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!settings.logo_favico">
                         <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_favico">
@@ -228,9 +215,7 @@
                     </div>
 
                   </div>
-
                   <div class="form-group col-md-12" ng-if="settings.logo_enabled">
-
                   <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_embed }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_embed }">
                       <p>{t}Are you sure?{/t}</p>
@@ -245,9 +230,7 @@
                         </button>
                       </div>
                     </div>
-
                     <label class="form-label" for="logo_embed">{t}Social network default image{/t}</label>
-
                     <div class="thumbnail-placeholder">
                       <div class="img-thumbnail" ng-if="!settings.logo_embed">
                         <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_embed">
@@ -269,7 +252,6 @@
                         </dynamic-image>
                       </div>
                     </div>
-
                   </div>
                 </div>
               </div>

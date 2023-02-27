@@ -8,7 +8,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-cog fa-lg"></i>
-                {t}Settings{/t} > {t}General{/t} > {t}General{/t} & SEO
+                {t}Settings{/t} > {t}General{/t} & SEO
               </h4>
             </li>
           </ul>
@@ -41,7 +41,6 @@
                   <i class="fa fa-cog m-r-5"></i>
                   {t}General{/t}
                 </h4>
-
                 <div class="form-group">
                   <label class="form-label" for="site-name">
                     {t}Site name{/t}

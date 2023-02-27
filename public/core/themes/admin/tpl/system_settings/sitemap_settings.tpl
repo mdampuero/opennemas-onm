@@ -9,7 +9,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-sitemap fa-lg"></i>
-                {t}Settings{/t} > {t}General{/t} > {t}Sitemap{/t}
+                {t}Settings{/t} > {t}Sitemap{/t}
               </h4>
             </li>
           </ul>

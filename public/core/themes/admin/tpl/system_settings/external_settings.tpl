@@ -9,7 +9,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-cloud fa-lg"></i>
-                {t}Settings{/t} > {t}General{/t} > {t}External services{/t}
+                {t}Settings{/t} > {t}External services{/t}
               </h4>
             </li>
           </ul>
@@ -461,7 +461,6 @@
                           </div>
                         </div>
                       </div>
-
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group">
@@ -484,8 +483,6 @@
                           </div>
                         </div>
                       </div>
-
-
                       <small class="help">
                         <i class="fa fa-info-circle m-r-5 text-info"></i>
                         {t escape=off}You can get your <strong>Act-On</strong> auth codes from your <a class="external-link" href="http://act-on.com" target="_blank" ng-click="$event.stopPropagation();">the Act-On account</a>.{/t}

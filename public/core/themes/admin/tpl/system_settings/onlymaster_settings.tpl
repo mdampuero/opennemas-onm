@@ -9,7 +9,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-rebel fa-lg"></i>
-                {t}Settings{/t} > {t}General{/t} > {t}Only masters{/t}
+                {t}Settings{/t} > {t}Only masters{/t}
               </h4>
             </li>
           </ul>

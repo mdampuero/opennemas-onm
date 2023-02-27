@@ -9,7 +9,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-globe fa-lg"></i>
-                {t}Settings{/t} > {t}General{/t} > {t}Language & time{/t}
+                {t}Settings{/t} > {t}Language & time{/t}
               </h4>
             </li>
           </ul>
