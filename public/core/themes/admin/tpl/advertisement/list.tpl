@@ -23,7 +23,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
           <ul class="nav quick-section">
             {acl isAllowed="ADVERTISEMENT_SETTINGS"}
             <li class="quicklinks">
-              <a class="btn btn-link" href="{url name=backend_settings_advertisement}">
+              <a class="btn btn-link" href="{url name=admin_ads_config}">
                 <i class="fa fa-cog fa-lg"></i>
               </a>
             </li>

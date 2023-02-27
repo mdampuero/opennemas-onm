@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=backend_settings_advertisement}" method="POST" ng-controller="AdvertisementConfigCtrl" ng-init="init({json_encode($configs['smart_ad_server']['domain'])|clear_json}, {json_encode($configs['smart_ad_server']['tags_format'])|clear_json});">
+<form action="{url name=admin_ads_config}" method="POST" ng-controller="AdvertisementConfigCtrl" ng-init="init({json_encode($configs['smart_ad_server']['domain'])|clear_json}, {json_encode($configs['smart_ad_server']['tags_format'])|clear_json});">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">

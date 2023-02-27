@@ -21,7 +21,7 @@
     <ul class="nav quick-section">
       {acl isAllowed="MASTER"}
         <li class="quicklinks">
-          <a class="btn btn-link" href="{url name=backend_settings_article}" class="admin_add" title="{t}Config article module{/t}">
+          <a class="btn btn-link" href="{url name=backend_articles_config}" class="admin_add" title="{t}Config article module{/t}">
             <span class="fa fa-cog fa-lg"></span>
           </a>
         </li>
