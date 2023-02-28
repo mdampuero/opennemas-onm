@@ -192,7 +192,7 @@
           $scope.criteria.epp     = null;
 
           oqlEncoder.configure({ placeholder: {
-            name: '[key] ~ "%[value]%"',
+            name: 'name ~ "%[value]%" or title ~ "%[value]%"',
           } });
 
           $scope.list();
