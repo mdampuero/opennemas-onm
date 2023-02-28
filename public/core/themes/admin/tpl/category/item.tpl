@@ -273,7 +273,7 @@
           {t}Description{/t}
         </label>
         <div class="controls">
-          <textarea onm-editor onm-editor-preset="simple" ng-model="item.description" name="description" cols="30" rows="10"></textarea>
+          <textarea class="form-control" name="description" ng-model="item.description" rows="10"></textarea>
         </div>
       </div>
     </div>
