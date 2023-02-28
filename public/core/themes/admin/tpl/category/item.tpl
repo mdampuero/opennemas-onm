@@ -273,7 +273,7 @@
           {t}Description{/t}
         </label>
         <div class="controls">
-          <textarea class="form-control" name="description" ng-model="item.description" rows="10"></textarea>
+          <textarea class="form-control" name="description" ng-model="item.description" rows="5"></textarea>
         </div>
       </div>
     </div>
