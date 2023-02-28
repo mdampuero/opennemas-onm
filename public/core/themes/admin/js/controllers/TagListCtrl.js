@@ -45,7 +45,10 @@
         $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
 
-          oqlEncoder.configure({ placeholder: { name: '[key] ~ "[value]"' } });
+          oqlEncoder.configure({ placeholder: {
+            name: 'name ~ "%[value]%" or slug ~ "%[value]%"',
+          } });
+
           $scope.list();
         };
 
