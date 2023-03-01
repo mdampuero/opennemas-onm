@@ -223,7 +223,7 @@ class CommentController extends FrontendController
         $authorEmail = $request->request->filter('author-email', null, FILTER_SANITIZE_STRING);
         $contentId   = $request->request->getDigits('content-id');
         $content     = $this->getContent($contentId);
-        $response    = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
+        $response    = $request->request->filter('g-recaptcha-response');
         $ip          = getUserRealIP();
         $cm          = $this->get('core.helper.comment');
         $xmlRequest  = $request->isXmlHttpRequest();

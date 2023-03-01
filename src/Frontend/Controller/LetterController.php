@@ -163,7 +163,7 @@ class LetterController extends FrontendController
      */
     public function saveAction(Request $request)
     {
-        $response = $request->request->filter('g-recaptcha-response', '', FILTER_SANITIZE_STRING);
+        $response = $request->request->filter('g-recaptcha-response');
 
         $isValid = $this->get('core.recaptcha')
             ->configureFromSettings()

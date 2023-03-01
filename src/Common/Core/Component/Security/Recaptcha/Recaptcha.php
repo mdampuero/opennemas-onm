@@ -39,6 +39,13 @@ class Recaptcha
     protected $container;
 
     /**
+     * Array that handle the last response.
+     *
+     * @var Mixed
+     */
+    protected $lastResponse;
+
+    /**
      * Initializes the Recaptcha service.
      *
      * @param ServiceContainer $container The service container.
@@ -90,6 +97,7 @@ class Recaptcha
         }
 
         $this->recaptcha = new BaseRecaptcha($this->recaptchaKeys['secretKey']);
+        $this->setMinimumScore(0.5);
 
         return $this;
     }
@@ -105,14 +113,21 @@ class Recaptcha
             return _('ReCaptcha service is not configured');
         }
 
-        $html = '<div class="recaptcha">'
-            . '<script src="https://www.google.com/recaptcha/api.js?hl=%s"></script>'
-            . '<div class="g-recaptcha" data-sitekey="%s"></div>'
-            . '</div>';
+        $html = '<script src="https://www.google.com/recaptcha/api.js?render=%s"></script>'
+            . '<input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">'
+            . '<input type="hidden" name="action" value="validate_captcha">'
+            . '<script>'
+                . 'grecaptcha.ready(function() {'
+                    . 'grecaptcha.execute("%s", {action:"validate_captcha"})'
+                            . '.then(function(token) {'
+                        . 'document.getElementById("g-recaptcha-response").value = token;'
+                    . '});'
+                . '});'
+            . '</script>';
 
         return sprintf(
             $html,
-            $this->container->get('core.locale')->getLocaleShort(),
+            $this->recaptchaKeys['siteKey'],
             $this->recaptchaKeys['siteKey']
         );
     }
@@ -135,10 +150,31 @@ class Recaptcha
         $response        = $this->recaptcha->verify($responseCode, $ip);
         $requestHostName = $this->container->get('request_stack')->getCurrentRequest()->getHost();
 
+        $this->lastResponse = $response;
+
         if ($response->getHostName() !== $requestHostName) {
             return false;
         }
-
         return $response->isSuccess();
+    }
+
+    /**
+     * Get the last response object
+     *
+     * @return Mixed Last response object.
+     */
+    public function getLastResponse()
+    {
+        return $this->lastResponse;
+    }
+
+    /**
+     * Change the minimum score to pass google recaptcha
+     *
+     * @param string $score The recaptcha score.
+     */
+    public function setMinimumScore($score)
+    {
+        $this->recaptcha->setScoreThreshold($score);
     }
 }
