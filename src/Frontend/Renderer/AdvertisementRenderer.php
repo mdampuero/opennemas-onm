@@ -289,6 +289,10 @@ class AdvertisementRenderer extends Renderer
      */
     public function render($advertisement, $params)
     {
+        if ($this->isRestrictedUrl()) {
+            return '';
+        }
+
         // Get renderer class and advertisement format
         $renderer  = $this->getRendererClass($advertisement->with_script);
         $adsFormat = $params['ads_format'] ?? null;
@@ -315,6 +319,10 @@ class AdvertisementRenderer extends Renderer
      */
     public function renderInlineHeaders($params)
     {
+        if ($this->isRestrictedUrl()) {
+            return '';
+        }
+
         $advertisements = $this->getAdvertisements();
         if (empty($advertisements)) {
             return '';
@@ -337,6 +345,10 @@ class AdvertisementRenderer extends Renderer
      */
     public function renderInlineInterstitial($params)
     {
+        if ($this->isRestrictedUrl()) {
+            return '';
+        }
+
         $advertisements = $this->getAdvertisements();
         if (empty($advertisements)) {
             return '';
@@ -396,6 +408,29 @@ class AdvertisementRenderer extends Renderer
         $this->positions = $positions;
 
         return $this;
+    }
+
+    /**
+     * Check if current url is restricted from settings
+     */
+    protected function isRestrictedUrl()
+    {
+        $restrictedUrls = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('restricted_urls');
+
+        if (empty($restrictedUrls)) {
+            return false;
+        }
+
+        $escapedChars = ['.', '&', '?'];
+        $replaceChars = array_map(function ($e) {
+            return "\\" . $e;
+        }, $escapedChars);
+
+        $search = str_replace($escapedChars, $replaceChars, $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+
+        return preg_match('@' . $search . '/?($|\r?\n)@', $restrictedUrls);
     }
 
     /**
