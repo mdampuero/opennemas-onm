@@ -42,8 +42,23 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getTimeZone' ])
             ->getMock();
 
+        $this->request_stack = $this->getMockBuilder('request_stack')
+            ->setMethods([ 'getCurrentRequest' ])
+            ->getMock();
+
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
             ->setMethods([ 'render', 'getInlineFormats', 'getAdvertisement', 'getPositions', 'getSlotSizeStyle' ])
+            ->getMock();
+
+        $this->request = $this->getMockBuilder('Request')
+            ->setMethods([ 'getUri' ])
+            ->getMock();
+
+        $this->request_stack->expects($this->any())->method('getCurrentRequest')
+            ->willReturn($this->request);
+
+        $this->helper = $this->getMockBuilder('AdvertisementHelper')
+            ->setMethods([ 'isSafeFrameEnabled', 'isRestricted'])
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
@@ -75,8 +90,14 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
     public function serviceContainerCallback($name)
     {
         switch ($name) {
+            case 'core.helper.advertisement':
+                return $this->helper;
+
             case 'frontend.renderer.advertisement':
                 return $this->renderer;
+
+            case 'request_stack':
+                return $this->request_stack;
 
             case 'orm.manager':
                 return $this->em;
@@ -95,6 +116,19 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
 
         $this->renderer->expects($this->at(0))->method('getPositions')
             ->willReturn([ 111, 222, 333 ]);
+
+        $this->assertEmpty(
+            smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
+        );
+    }
+
+    /**
+     * Tests smarty_function_render_ad_slot when restricted.
+     */
+    public function testRenderAdSlotWhenRestricted()
+    {
+        $this->helper->expects($this->any())
+            ->method('isRestricted')->willReturn(true);
 
         $this->assertEmpty(
             smarty_function_render_ad_slot([ 'position' => 123 ], $this->smarty)
@@ -137,7 +171,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $this->renderer->expects($this->at(1))->method('getAdvertisement')
             ->willReturn($ad);
 
-        $this->smarty->expects($this->at(2))->method('getValue')
+        $this->smarty->expects($this->at(4))->method('getValue')
             ->with('ads_format')
             ->willReturn('baz');
 
@@ -172,7 +206,7 @@ class SmartyRenderAdSlotTest extends \PHPUnit\Framework\TestCase
         $this->renderer->expects($this->at(1))->method('getAdvertisement')
             ->willReturn($ad);
 
-        $this->smarty->expects($this->at(3))->method('getValue')
+        $this->smarty->expects($this->at(5))->method('getValue')
             ->with('app')
             ->willReturn([
                 'section'            => 'baz',

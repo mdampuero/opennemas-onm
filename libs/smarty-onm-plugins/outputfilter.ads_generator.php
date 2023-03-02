@@ -1,6 +1,6 @@
 <?php
 /**
- * Generates all the script tags for OpenX based ads.
+ * Generates all the script tags for ads.
  *
  * @param array $params the list of parameters
  * @param \Smarty $smarty the smarty instance
@@ -9,13 +9,20 @@
  */
 function smarty_outputfilter_ads_generator($output, $smarty)
 {
+    $request      = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+    $adsHelper    = $smarty->getContainer()->get('core.helper.advertisement');
     $adsRenderer  = $smarty->getContainer()->get('frontend.renderer.advertisement');
-    $isSafeFrame  = $smarty->getContainer()->get('core.helper.advertisement')->isSafeFrameEnabled();
+    $isSafeFrame  = $adsHelper->isSafeFrameEnabled();
+    $isRestricted = $adsHelper->isRestricted($request->getUri());
     $ads          = $isSafeFrame ? $adsRenderer->getAdvertisements() : $adsRenderer->getRequested();
     $app          = $smarty->getValue('app');
     $expiringAds  = $adsRenderer->getExpiringAdvertisements();
     $content      = $smarty->getValue('content');
     $interstitial = [];
+
+    if ($isRestricted) {
+        return $output;
+    }
 
     if (!$isSafeFrame) {
         $params = [
