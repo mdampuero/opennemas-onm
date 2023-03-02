@@ -41,6 +41,10 @@
       "name": "{$category->title}",
       "description": "{$category->description|default:$category->title|escape:'html'}",
       "url": "{$url}",
+    {else if !empty($tag)}
+      "name": "{$tag->name}",
+      "description": "{$tag->description|default:$tag->name|escape:'html'}",
+      "url": "{$url}",
     {else}
       "name": "{$siteName}",
       "description": "{$siteDescription}",
