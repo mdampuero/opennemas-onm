@@ -114,7 +114,6 @@ class MetaHelper
     {
         $cah = $this->container->get('core.helper.category');
         $ah  = $this->container->get('core.helper.author');
-        $ch  = $this->container->get('core.helper.content');
 
         $data = [
             'action'               => $action,
@@ -122,7 +121,7 @@ class MetaHelper
             'category_name'        => $cah->getCategoryName($content),
             'category_description' => $cah->getCategoryDescription($content),
             'tag_name'             => $content->name ?? '',
-            'content_description'  => $ch->getDescription($content) ?? $content->description,
+            'tag_description'      => $content->description ?? '',
             'author_name'          => $ah->getAuthorName($content),
             'author_description'   => $ah->getAuthorBioSummary($content) ?? $ah->getAuthorBioBody($content),
         ];
