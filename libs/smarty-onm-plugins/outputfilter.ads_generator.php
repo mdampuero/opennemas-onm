@@ -13,7 +13,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
     $adsHelper    = $smarty->getContainer()->get('core.helper.advertisement');
     $adsRenderer  = $smarty->getContainer()->get('frontend.renderer.advertisement');
     $isSafeFrame  = $adsHelper->isSafeFrameEnabled();
-    $isRestricted = $adsHelper->isRestricted($request->getUri());
+    $isRestricted = !empty($request) ? $adsHelper->isRestricted($request->getUri()) : false;
     $ads          = $isSafeFrame ? $adsRenderer->getAdvertisements() : $adsRenderer->getRequested();
     $app          = $smarty->getValue('app');
     $expiringAds  = $adsRenderer->getExpiringAdvertisements();
