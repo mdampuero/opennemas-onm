@@ -360,7 +360,7 @@ class AdvertisementsController extends Controller
 
         if ('POST' !== $request->getMethod()) {
             $keys = [
-                'adsense_id', 'ads_settings', 'ads_txt','dfp_custom_code',
+                'adsense_id', 'ads_settings', 'ads_txt', 'restricted_urls', 'dfp_custom_code',
                 'dfp_options', 'iadbox_id', 'revive_ad_server',
                 'smart_ad_server', 'smart_custom_code', 'tradedoubler_id',
             ];
@@ -423,6 +423,7 @@ class AdvertisementsController extends Controller
         ];
 
         if ($this->get('core.security')->hasPermission('MASTER')) {
+            $settings['restricted_urls']            = $formValues->filter('restricted_urls', '');
             $settings['ads_settings']['safe_frame'] = empty($formValues->get('safe_frame')) ? 0 : 1;
             $settings['dfp_custom_code']            = base64_encode($formValues->get('dfp_custom_code'));
             $settings['smart_custom_code']          = base64_encode($formValues->get('smart_custom_code'));

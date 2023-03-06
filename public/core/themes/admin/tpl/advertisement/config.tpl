@@ -335,7 +335,7 @@
         </div>
       </uib-tab>
       {is_module_activated name="es.openhost.module.advancedAdvertisement"}
-      <uib-tab heading="{t}Advanced{/t}">
+      <uib-tab heading="{t}Ads.txt{/t}">
         <div class="form-group">
           <label for="ads_txt" class="form-label">
             {t}Authorized Digital Sellers{/t}
@@ -347,6 +347,19 @@
         </div>
       </uib-tab>
       {/is_module_activated}
+      {if $app.security->hasPermission('MASTER')}
+      <uib-tab heading="{t}Restricted URLs{/t}">
+        <div class="form-group">
+          <label for="ads_txt" class="form-label">
+            {t}Restricted URLs{/t}
+          </label>
+          <div class="controls">
+            <textarea class="form-control" name="restricted_urls" rows="20">{$configs['restricted_urls']|default:''}</textarea>
+            <span class="help">{t}List of advertisement free URLs{/t}</span>
+          </div>
+        </div>
+      </uib-tab>
+      {/if}
     </uib-tabset>
   </div>
 </form>
