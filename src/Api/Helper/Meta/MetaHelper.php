@@ -112,15 +112,16 @@ class MetaHelper
      */
     protected function generateData($content, $action, $page, $exception)
     {
-        $ch = $this->container->get('core.helper.category');
-        $ah = $this->container->get('core.helper.author');
+        $cah = $this->container->get('core.helper.category');
+        $ah  = $this->container->get('core.helper.author');
 
         $data = [
             'action'               => $action,
             'exception_code'       => !empty($exception) && $exception->getcode() ? $exception->getcode() : '',
-            'category_name'        => $ch->getCategoryName($content),
-            'category_description' => $ch->getCategoryDescription($content),
+            'category_name'        => $cah->getCategoryName($content),
+            'category_description' => $cah->getCategoryDescription($content),
             'tag_name'             => $content->name ?? '',
+            'tag_description'      => $content->description ?? '',
             'author_name'          => $ah->getAuthorName($content),
             'author_description'   => $ah->getAuthorBioSummary($content) ?? $ah->getAuthorBioBody($content),
         ];
