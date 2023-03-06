@@ -268,6 +268,13 @@ class UrlGeneratorHelper
      */
     protected function getUriForCategory($category)
     {
+        if (is_array($category->name)) {
+            $locale         = $this->container->get('core.locale')->getLocale();
+            $category->name = array_key_exists($locale, $category->name) ?
+                $category->name[$locale] :
+                array_shift(array_values($category->name));
+        }
+
         $uri = $this->container->get('router')->generate('category_frontpage', [
             'category_slug' => $category->name
         ]);
