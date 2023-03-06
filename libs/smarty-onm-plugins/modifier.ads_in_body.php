@@ -9,6 +9,16 @@
  */
 function smarty_modifier_ads_in_body($body, $contentType = 'article')
 {
+    $smarty       = getService('core.template');
+    $request      = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+    $isRestricted = !empty($request)
+        ? $smarty->getContainer()->get('core.helper.advertisement')->isRestricted($request->getUri())
+        : false;
+
+    if ($isRestricted) {
+        return $body;
+    }
+
     // Split body into paragraphs and avoid losing data at body end
     preg_match_all('/(.*?)<\/p>(\s<\/blockquote>)?/s', $body . '<p></p>', $matches);
 
@@ -18,7 +28,6 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     });
 
     $id       = $contentType === 'amp' ? 1060 : ($contentType === 'opinion' ? 3200 : 2200);
-    $smarty   = getService('core.template');
     $renderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
     $ads      = $renderer->getAdvertisements();
     $hasLimit = $smarty->getContainer()

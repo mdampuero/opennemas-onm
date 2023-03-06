@@ -48,12 +48,23 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->helper = $this->getMockBuilder('AdvertisementHelper')
-            ->setMethods([ 'isSafeFrameEnabled' ])
+            ->setMethods([ 'isSafeFrameEnabled', 'isRestricted' ])
             ->getMock();
 
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
             ->setMethods([ 'render', 'getAdvertisements' ])
             ->getMock();
+
+        $this->request_stack = $this->getMockBuilder('request_stack')
+            ->setMethods([ 'getCurrentRequest' ])
+            ->getMock();
+
+        $this->request = $this->getMockBuilder('Request')
+            ->setMethods([ 'getUri' ])
+            ->getMock();
+
+        $this->request_stack->expects($this->any())->method('getCurrentRequest')
+            ->willReturn($this->request);
 
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
@@ -81,6 +92,9 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
             case 'core.helper.advertisement':
                 return $this->helper;
 
+            case 'request_stack':
+                return $this->request_stack;
+
             case 'orm.manager':
                 return $this->em;
 
@@ -89,6 +103,21 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
         }
 
         return null;
+    }
+
+    /**
+     * Tests smarty_modifier_ads_in_body when restricted url
+     */
+    public function testAdsInBodyWhenRestricted()
+    {
+        $this->helper->expects($this->any())
+            ->method('isRestricted')->willReturn(true);
+
+        $body = '<p>foo bar baz</p><p>thud qwer asdf</p>';
+        $this->assertEquals(
+            $body,
+            smarty_modifier_ads_in_body($body)
+        );
     }
 
     /**
@@ -119,7 +148,7 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
         $this->renderer->expects($this->at(0))->method('getAdvertisements')
             ->willReturn([ $ad1, $ad2 ]);
 
-        $this->smarty->expects($this->at(2))->method('getValue')
+        $this->smarty->expects($this->at(4))->method('getValue')
             ->with('app')
             ->willReturn([
                 'advertisementGroup' => 'waldo',
@@ -189,7 +218,7 @@ class SmartyModifierAdsInBodyTest extends \PHPUnit\Framework\TestCase
         $this->renderer->expects($this->at(0))->method('getAdvertisements')
             ->willReturn([ $ad1, $ad2 ]);
 
-        $this->smarty->expects($this->at(2))->method('getValue')
+        $this->smarty->expects($this->at(4))->method('getValue')
             ->with('app')
             ->willReturn([
                 'advertisementGroup' => 'waldo',
