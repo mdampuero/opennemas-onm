@@ -48,8 +48,11 @@
         </div>
       </div>
       <div class="form-group no-margin">
+        <label class="form-label" for="description">
+          {t}Description{/t}
+        </label>
         <div class="controls">
-          {include cols=30 file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=10 imagepicker=true}
+          <textarea name="description" id="description" ng-model="item.description" class="form-control" rows="5"></textarea>
         </div>
       </div>
     </div>

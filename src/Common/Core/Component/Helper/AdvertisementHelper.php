@@ -183,4 +183,29 @@ class AdvertisementHelper
 
         return false;
     }
+
+    /**
+     * Checks if request url is ads restricted.
+     *
+     * @return boolean True if url is restricted. False otherwise.
+     */
+    public function isRestricted($url)
+    {
+        $restrictedUrls = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('restricted_urls');
+
+        if (empty($restrictedUrls)) {
+            return false;
+        }
+
+        $escapedChars = ['.', '&', '?'];
+        $replaceChars = array_map(function ($e) {
+            return "\\" . $e;
+        }, $escapedChars);
+
+        $search = str_replace($escapedChars, $replaceChars, $url);
+
+        return preg_match('@' . $search . '/?($|\r?\n)@', $restrictedUrls);
+    }
 }

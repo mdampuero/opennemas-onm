@@ -41,6 +41,14 @@
       "name": "{$category->title}",
       "description": "{$category->description|default:$category->title|escape:'html'}",
       "url": "{$url}",
+    {else if !empty($tag)}
+      "name": "{$tag->name}",
+      {if $tag->description}
+      "description": "{$tag->description|escape:'html'}",
+      {else}
+      "description": "{t domain=base 1=$tag->name 2=$siteName}All the latest information about %1 in %2. News, events, reports and opinion articles.{/t}",
+      {/if}
+      "url": "{$url}",
     {else}
       "name": "{$siteName}",
       "description": "{$siteDescription}",

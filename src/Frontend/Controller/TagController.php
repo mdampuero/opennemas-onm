@@ -168,6 +168,9 @@ class TagController extends FrontendController
         // Remove o_content to generate o_canonical_url properly
         unset($params['o_content']);
 
+        // Remove content to avoid problems with structured data tpls
+        unset($params['content']);
+
         return array_merge($params, [
             'item'        => $item[0],
             'items'       => $item,
