@@ -21,6 +21,11 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getItem' ])
             ->getMock();
 
+        $this->contentservice = $this->getMockBuilder('Api\Service\V1\ContentService')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getL10nKeys' ])
+            ->getMock();
+
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get', 'hasParameter' ])
             ->getMock();
@@ -92,6 +97,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             case 'api.service.category':
                 return $this->cs;
 
+            case 'api.service.content':
+                return $this->contentservice;
+
             case 'data.manager.filter':
                 return $this->fm;
 
@@ -132,6 +140,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $category = new Category([ 'name' => 'garply' ]);
 
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($category);
+
         $this->router->expects($this->once())->method('generate')
             ->with('category_frontpage', [ 'category_slug' => 'garply' ])
             ->willReturn('blog/section/garply');
@@ -156,6 +167,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $content->content_type_name = 'article';
         $content->slug              = 'alerta-aeropuerto-roma-amenaza-bomba-vuelo-viena';
 
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($content);
+
         $this->cs->expects($this->once())->method('getItem')
             ->with(28618)->willReturn(new Category([ 'name' => 'actualidad' ]));
 
@@ -177,6 +191,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
         $content->externalUri = 'http://baz.wobble/waldo/fred';
 
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($content);
+
         $this->assertEquals(
             $content->externalUri,
             $this->urlGenerator->generate($content)
@@ -190,6 +207,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     public function testGenerateForInstance()
     {
         $content = new \Content();
+
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($content);
 
         $helper = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
             ->setMethods([ 'getUriForContent' ])
@@ -233,6 +253,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     public function testGenerateForRequest()
     {
         $content = new \Content();
+
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($content);
 
         $helper = $this->getMockBuilder('Common\Core\Component\Helper\UrlGeneratorHelper')
             ->setMethods([ 'getUriForContent' ])
@@ -295,6 +318,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $content = new \Content();
 
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($content);
+
         $content->content_type_name = 'attachment';
         $content->id                = 252;
         $content->path              = 'route/to/file.name';
@@ -314,6 +340,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetUriForArticle()
     {
         $content = new Content();
+
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($content);
 
         $content->pk_content        = 252;
         $content->category_slug     = 'actualidad';
@@ -387,6 +416,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForContent');
         $method->setAccessible(true);
 
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($content);
+
         $this->cs->expects($this->once())->method('getItem')
             ->with(6458)->willReturn(new Category([ 'name' => 'actualidad' ]));
 
@@ -403,6 +435,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetUriForContentWhithValidCustomContentTypeName()
     {
         $content = new \Content();
+
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($content);
 
         $content->content_type_name = 'glorp';
 
@@ -431,6 +466,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $content = new \Content();
 
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($content);
+
         $content->id                = 252;
         $content->author            = 'My author';
         $content->created           = '2015-01-14 23:49:40';
@@ -453,6 +491,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     {
         $content = new \Content();
         $date    = new \DateTime();
+
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($content);
 
         $content->id                = 252;
         $content->author            = 'My author';
@@ -485,6 +526,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
         $method = new \ReflectionMethod($this->urlGenerator, 'getUriForOpinion');
         $method->setAccessible(true);
+
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($content);
 
         $this->authorService->expects($this->once())->method('getItem')
             ->with(1)->will($this->throwException(new \Exception()));

@@ -120,6 +120,10 @@ class UrlGeneratorHelper
         }
 
         if (method_exists($this, $method)) {
+            $content = $this->container->get('data.manager.filter')->set($content)
+                ->filter('localize', [ 'keys'   => $this->container->get('api.service.content')->getL10nKeys() ])
+                ->get();
+
             $uri .= '/' . $this->{$method}($content);
         }
 
@@ -268,13 +272,6 @@ class UrlGeneratorHelper
      */
     protected function getUriForCategory($category)
     {
-        if (is_array($category->name)) {
-            $locale         = $this->container->get('core.locale')->getLocale();
-            $category->name = array_key_exists($locale, $category->name) ?
-                $category->name[$locale] :
-                array_shift(array_values($category->name));
-        }
-
         $uri = $this->container->get('router')->generate('category_frontpage', [
             'category_slug' => $category->name
         ]);
