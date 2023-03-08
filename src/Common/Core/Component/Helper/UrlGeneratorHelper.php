@@ -120,6 +120,10 @@ class UrlGeneratorHelper
         }
 
         if (method_exists($this, $method)) {
+            $content = $this->container->get('data.manager.filter')->set($content)
+                ->filter('localize', [ 'keys'   => $this->container->get('api.service.content')->getL10nKeys() ])
+                ->get();
+
             $uri .= '/' . $this->{$method}($content);
         }
 
