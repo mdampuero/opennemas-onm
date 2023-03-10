@@ -35,6 +35,19 @@
           getConfig:  'api_v1_backend_settings_appearance_list'
         };
 
+        /**
+         * @function removeFile
+         * @memberOf SettingsCtrl
+         *
+         * @description
+         *   Removes a file from settings.
+         *
+         * @param {String} name The file name.
+         */
+        $scope.removeFile = function(name) {
+          $scope.settings[name] = null;
+        };
+
         // Updates data to send to server when related contents change
         $scope.$watch('[ settings.logo_default, settings.logo_simple, settings.logo_favico, settings.logo_embed ]', function(nv) {
           if (nv[0] && isNaN(nv[0])) {
