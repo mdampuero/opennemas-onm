@@ -11,8 +11,8 @@
      * @requires $scope
      */
     .controller('AppearanceSettingsCtrl', [
-      '$controller', '$scope', 'cleaner',
-      function($controller, $scope, cleaner) {
+      '$controller', '$scope',
+      function($controller, $scope) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('SettingsCtrl', { $scope: $scope }));
         $scope.settings = {
@@ -53,33 +53,6 @@
             $scope.settings.logo_embed =  parseInt(nv[3].pk_content);
           }
         });
-
-        /**
-         * @function pre
-         * @memberOf SettingsCtrl
-         *
-         * @description
-         *   Executes actions to adapt data from webservice to the template.
-         */
-        $scope.pre = function() {
-          $scope.backup = {
-            logo_favico:          $scope.settings.logo_favico,
-            logo_simple:          $scope.settings.logo_simple,
-            site_color:           $scope.settings.site_color,
-            site_color_secondary: $scope.settings.site_color_secondary,
-            logo_default:         $scope.settings.logo_default,
-            logo_embed:           $scope.settings.logo_embed
-          };
-        };
-        $scope.post = function() {
-          var data = {
-            instance: angular.copy($scope.instance),
-            settings: angular.copy($scope.settings)
-          };
-
-          data = cleaner.clean(data, true);
-          return data;
-        };
       }
     ]);
 })();

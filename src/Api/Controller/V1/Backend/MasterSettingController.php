@@ -44,9 +44,13 @@ class MasterSettingController extends SettingController
         'body_start_script',
         'body_start_script_amp',
         'custom_css_amp',
+        'disable_default_ga',
         'frontpage_max_items',
+        'full_rss',
+        'gfk',
         'header_script',
         'header_script_amp',
+        'redirection',
         'robots_txt_rules',
     ];
 
@@ -70,9 +74,13 @@ class MasterSettingController extends SettingController
         'body_start_script',
         'body_start_script_amp',
         'custom_css_amp',
+        'disable_default_ga',
         'frontpage_max_items',
+        'full_rss',
+        'gfk',
         'header_script',
         'header_script_amp',
+        'redirection',
         'robots_txt_rules',
     ];
 

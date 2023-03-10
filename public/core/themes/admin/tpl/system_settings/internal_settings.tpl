@@ -9,7 +9,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-cube fa-lg"></i>
-                {t}Settings{/t} > {t}Internal{/t}
+                {t}Internal{/t}
               </h4>
             </li>
           </ul>

@@ -23,6 +23,7 @@ class GeneralSettingController extends SettingController
      * @var array
      */
     protected $keys = [
+        'refresh_enabled',
         'refresh_interval',
         'site_name',
         'site_description',
@@ -39,6 +40,7 @@ class GeneralSettingController extends SettingController
      * @var array
      */
     protected $toint = [
+        'refresh_enabled',
         'refresh_interval',
     ];
 

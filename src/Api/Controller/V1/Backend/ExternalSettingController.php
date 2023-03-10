@@ -37,6 +37,7 @@ class ExternalSettingController extends SettingController
         'facebook',
         'facebook_id',
         'facebook_page',
+        'gfk',
         'google_analytics',
         'google_analytics_others',
         'google_custom_search_api_key',
@@ -47,6 +48,7 @@ class ExternalSettingController extends SettingController
         'instagram_page',
         'linkedin_page',
         'ojd',
+        'payments',
         'pinterest_page',
         'prometeo',
         'recaptcha',
@@ -60,7 +62,10 @@ class ExternalSettingController extends SettingController
      *
      * @var array
      */
-    protected $onlyMasters = [];
+    protected $onlyMasters = [
+        'gfk',
+        'payments',
+    ];
 
     public function listAction(Request $request)
     {

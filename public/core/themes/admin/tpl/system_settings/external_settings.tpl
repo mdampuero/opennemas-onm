@@ -9,7 +9,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-cloud fa-lg"></i>
-                {t}Settings{/t} > {t}External services{/t}
+                {t}External services{/t}
               </h4>
             </li>
           </ul>
@@ -185,6 +185,61 @@
                   </div>
                 </div>
               </div>
+              {if $app.security->hasPermission('MASTER')}
+              <div class="panel-group" id="panel-group-gfk" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-gfk" data-toggle="collapse" href="#gfk">
+                        <i class="fa fa-signal"></i>{t}GFK{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="gfk">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="gfk-media-id">
+                          {t}GFK Media ID{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="gfk-media-id" name="gfk-media-id" ng-model="settings.gfk.media_id" type="text">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label" for="gfk-domain">
+                          {t}GFK Domain{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="gfk-domain" name="gfk-domain" ng-model="settings.gfk.domain" type="text">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label" for="gfk-region-id">
+                          {t}GFK Region ID{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="gfk-region-id" name="gfk-region-id" ng-model="settings.gfk.region_id" type="text">
+                          <div class="help">{t}Default will be set with "es"{/t}</div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label" for="gfk-content-id">
+                          {t}GFK Content ID{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="gfk-content-id" name="gfk-content-id" ng-model="settings.gfk.content_id" type="text">
+                          <div class="help">{t}Default will be set with "default"{/t}</div>
+                        </div>
+                      </div>
+                      <small class="help">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}We are not responsible of the stats or of any third party services{/t}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/if}
               {is_module_activated name="es.openhost.module.dataLayerHenneo"}
               <div class="panel-group" id="panel-group-prometeo" data-toggle="collapse">
                 <div class="panel panel-default">
@@ -218,6 +273,60 @@
                 <i class="fa fa-cog"></i>
                 {t}Internal settings{/t}
               </h4>
+              {if $app.security->hasPermission('MASTER')}
+                <div class="panel-group" data-toggle="collapse" id="panel-group-payments">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a class="collapsed" data-parent="#panel-group-payments" data-toggle="collapse" href="#payments">
+                          <i class="fa fa-credit-card-alt"></i>
+                          {t}Global Payments{/t}
+                        </a>
+                      </h4>
+                    </div>
+                    <div class="panel-collapse collapse" id="payments">
+                      <div class="panel-body">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="form-group">
+                              <label class="form-label" for="payments-merchant-id">
+                                {t}Merchant id{/t}
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="payments-merchant-id" name="payments-merchant-id" ng-model="settings.payments.merchant_id" type="text">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12">
+                            <div class="form-group">
+                              <label class="form-label" for="payments-shared-secret">
+                                {t}Shared secret{/t}
+                              </label>
+                              <div class="controls">
+                                <div class="form-group">
+                                  <input class="form-control" id="payments-shared-secret" name="payments-shared-secret" ng-model="settings.payments.shared_secret" type="text">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12">
+                            <div class="form-group">
+                              <label class="form-label" for="payments-amount">
+                                {t}Amount{/t}
+                              </label>
+                              <div class="controls">
+                                <div class="form-group">
+                                  <input class="form-control" id="payments-amount" name="payments-amount" ng-model="settings.payments.amount" type="text">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {/if}
               <div class="panel-group" data-toggle="collapse" id="panel-group-recaptcha">
                 <div class="panel panel-default">
                   <div class="panel-heading">

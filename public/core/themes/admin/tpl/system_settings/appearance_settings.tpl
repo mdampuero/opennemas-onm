@@ -10,7 +10,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-magic fa-lg"></i>
-                {t}Settings{/t} > {t}Appearance{/t}
+                {t}Appearance{/t}
               </h4>
             </li>
           </ul>

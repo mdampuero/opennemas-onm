@@ -8,7 +8,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-cog fa-lg"></i>
-                {t}Settings{/t} > {t}General{/t} & SEO
+                {t}General{/t} & SEO
               </h4>
             </li>
           </ul>
@@ -95,16 +95,30 @@
                     <input class="form-control" id="site-description" name="site-description" ng-model="settings.site_description" type="text">
                   </div>
                 </div>
-                <div class="form-group">
-                  <label class="form-label" for="refresh-interval">
-                    {t}Refresh page interval{/t}
-                    <small>({t}seconds{/t})</small>
-                  </label>
-                  <span class="help">
-                    {t}When a user visits pages and stay on it for a while, this setting allows to refresh the loaded page for updated it.{/t}
-                  </span>
-                  <div class="controls">
-                    <input class="form-control" id="refresh-interval" name="refresh-interval" ng-model="settings.refresh_interval" type="number">
+                <div class="row">
+                  <div class="form-group">
+                    <label class="form-label" for="refresh-interval">
+                      {t}Refresh page interval{/t}
+                      <small>({t}seconds{/t})</small>
+                    </label>
+                    <span class="help">
+                      {t}When a user visits pages and stay on it for a while, this setting allows to refresh the loaded page for updated it.{/t}
+                    </span>
+                  </div>
+                  <div class="col-md-6 form-group">
+                    <div class="controls">
+                      <input class="form-control" id="refresh-interval" name="refresh-interval" ng-model="settings.refresh_interval" type="number" ng-disabled="settings.refresh_enabled">
+                    </div>
+                  </div>
+                  <div class="col-md-6 form-group">
+                    <div class="controls">
+                      <div class="checkbox">
+                        <input class="form-control" id="refresh-enabled" name="refresh-enabled" ng-false-value="0" ng-model="settings.refresh_enabled" ng-true-value="1" type="checkbox"/>
+                        <label class="form-label" for="refresh-enabled">
+                          {t}Disable{/t}
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="form-group">

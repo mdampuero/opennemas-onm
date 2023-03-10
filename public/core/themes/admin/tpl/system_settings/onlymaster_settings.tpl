@@ -9,7 +9,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-rebel fa-lg"></i>
-                {t}Settings{/t} > {t}Only masters{/t}
+                {t}Only masters{/t}
               </h4>
             </li>
           </ul>
@@ -41,6 +41,13 @@
                 <div class="row">
                   <div class="col-md-6">
                     <h4>
+                      <i class="fa fa-newspaper-o"></i>
+                      {t}Maximum elements per frontpage{/t}
+                    </h4>
+                    <div class="controls">
+                      <input class="form-control" id="frontpage_max_items" name="frontpage_max_items" ng-model="settings.frontpage_max_items" type="number" min="10" placeholder="100">
+                    </div>
+                    <h4>
                       <i class="fa fa-android"></i>
                       Robots.txt
                     </h4>
@@ -69,8 +76,47 @@
                         </label>
                       </div>
                     </div>
-                  </div>
-                  <div class="form-group" ng-if="extra.theme_skins.length !== 0">
+                    <h4>
+                      <i class="fa fa-google"></i>
+                      {t}Google Analytics{/t}
+                    </h4>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <input id="disable_dga" name="disable_dga" ng-false-value="'0'" ng-model="settings.disable_default_ga" ng-true-value="'1'" type="checkbox"/>
+                        <label for="disable_dga">
+                          {t}Disable Opennemas Google Analytics API key{/t}
+                        </label>
+                      </div>
+                    </div>
+                    <h4>
+                      <i class="fa fa-signal"></i>
+                      {t}GFK{/t}
+                    </h4>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <input id="gfk_only_amp" name="gfk_only_amp" ng-false-value="'0'" ng-model="settings.gfk.only_amp" ng-true-value="'1'" type="checkbox"/>
+                        <label for="gfk_only_amp">
+                          {t}Only AMP{/t}
+                        </label>
+                        <input id="gfk_pre_mode" name="gfk_pre_mode" ng-false-value="'0'" ng-model="settings.gfk.pre_mode" ng-true-value="'1'" type="checkbox"/>
+                        <label for="gfk_pre_mode">
+                          {t}Preproduction{/t}
+                        </label>
+                      </div>
+                    </div>
+                    <h4>
+                      <i class="fa fa-rss-square"></i>
+                      {t}RSS{/t}
+                    </h4>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <input {if $configs['full_rss'] eq "1"}checked{/if} id="full_rss" name="full_rss" ng-false-value="0" ng-model="settings.full_rss" ng-true-value="'1'" type="checkbox">
+                        <label for="full_rss">
+                          {t}Show full content on RSS{/t}
+                        </label>
+                      </div>
+                    </div>
+                    <div ng-if="extra.theme_skins.length !== 0">
                       <label class="form-label" for="theme-style">
                         <h4>
                           <i class="fa fa-paint-brush"></i>
@@ -88,6 +134,7 @@
                         </div>
                       </div>
                     </div>
+                  </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6">
@@ -120,19 +167,6 @@
                       </label>
                       <div class="controls">
                         <textarea class="form-control" id="body-end-script" name="body-end-script" ng-model="settings.body_end_script" rows="6"></textarea>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="form-label" for="frontpage_max_items">
-                        {t}Elements per frontpage{/t}
-                      </label>
-                      <span class="help ">
-                          (min. 10)
-                      </span>
-                      <div class="controls">
-                        <input class="form-control" id="frontpage_max_items" name="frontpage_max_items" ng-model="settings.frontpage_max_items" type="number" min="10">
                       </div>
                     </div>
                   </div>

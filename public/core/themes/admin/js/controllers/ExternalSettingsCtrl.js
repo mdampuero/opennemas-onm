@@ -19,11 +19,10 @@
           google_analytics: [
             {
               api_key: '',
-              base_domain: '',
-              custom_var: ''
             }
           ],
-          data_layer: []
+          data_layer: [],
+          gfk: {}
         };
         $scope.routes = {
           saveConfig: 'api_v1_backend_settings_external_save',
