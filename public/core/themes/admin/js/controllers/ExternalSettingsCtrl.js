@@ -16,11 +16,7 @@
         // Initialize the super class and extend it.
         $.extend(this, $controller('SettingsCtrl', { $scope: $scope }));
         $scope.settings = {
-          google_analytics: [
-            {
-              api_key: '',
-            }
-          ],
+          google_analytics: [ { api_key: '' } ],
           data_layer: [],
           gfk: {}
         };
@@ -38,11 +34,7 @@
          */
         $scope.addGanalytics = function() {
           $scope.settings.google_analytics
-            .push({
-              api_key: '',
-              base_domain: '',
-              custom_var: ''
-            });
+            .push({ api_key: '' });
         };
 
         /**
