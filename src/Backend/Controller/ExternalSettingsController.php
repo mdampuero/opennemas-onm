@@ -25,11 +25,6 @@ class ExternalSettingsController extends Controller
      */
     public function configAction()
     {
-        return $this->render('system_settings/external_settings.tpl', [
-            'multilanguage'  => in_array(
-                'es.openhost.module.multilanguage',
-                getService('core.instance')->activated_modules
-            )
-        ]);
+        return $this->render('system_settings/external_settings.tpl');
     }
 }

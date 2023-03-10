@@ -426,7 +426,7 @@ class AdvertisementRendererTest extends TestCase
 
         $returnValue = '<div class="ad-slot oat" data-id="123" data-type="37"></div>';
 
-        $this->ds->expects($this->any())->method('get')
+        $this->ds->expects($this->at(0))->method('get')
             ->with('ads_settings')
             ->willReturn([ 'safe_frame' => '1' ]);
 
@@ -447,7 +447,7 @@ class AdvertisementRendererTest extends TestCase
         $ad->params      = [ 'width' => 300, 'floating' => true ];
         $ad->with_script = 3;
 
-        $this->ds->expects($this->any())->method('get')
+        $this->ds->expects($this->at(0))->method('get')
             ->with('ads_settings')
             ->willReturn([ 'safe_frame' => 0 ]);
 

@@ -7,6 +7,15 @@
  */
 function smarty_function_render_ad_slot($params, &$smarty)
 {
+    $request      = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+    $isRestricted = !empty($request)
+        ? $smarty->getContainer()->get('core.helper.advertisement')->isRestricted($request->getUri())
+        : false;
+
+    if ($isRestricted) {
+        return '';
+    }
+
     $position         = $params['position'];
     $safeframeEnabled = $smarty->getContainer()
         ->get('orm.manager')

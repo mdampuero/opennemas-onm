@@ -59,9 +59,13 @@
       </NewsComponent>
       <NewsComponent Duid="video_{$video->id}.video.text">
         <Role FormalName="Caption" />
-        <ContentItem>
-          <ContentItem Href="{get_url($video, [ '_absolute' => true ])}" Url="{$video->path|escape:'html'}" />
+        <ContentItem Href="{get_url($video, [ '_absolute' => true ])}" {if $video->path}Url="{$video->path|escape:'html'}"{elseif $video->type == 'external'}Url="{$video->information['source']['mp4']|escape:'html'}"{/if}>
           <MediaType FormalName="Text" />
+          <Catalog>
+            <Resource>
+              <Url>{if $video->path}{$video->path|escape:'html'}{elseif $video->type == 'external'}{$video->information['source']['mp4']|escape:'html'}{/if}</Url>
+            </Resource>
+          </Catalog>
           <Format FormalName="NITF" />
           <MimeType FormalName="text/vnd.IPTC.NITF" />
           <DataContent>
@@ -97,7 +101,11 @@
                   </dateline>
                 </body.head>
                 <body.content>
-                  <![CDATA[{$video->description}]]>
+                  {if $video->type == 'script'}
+                    <![CDATA[{$video->body}]]>
+                  {else}
+                    <![CDATA[{$video->description}]]>
+                  {/if}
                 </body.content>
               </body>
             </nitf>

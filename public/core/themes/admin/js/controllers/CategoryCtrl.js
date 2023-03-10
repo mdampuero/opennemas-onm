@@ -62,6 +62,20 @@
             $scope.config.locale.multilanguage;
         };
 
+        $scope.getData = function() {
+          if (!$scope.hasMultilanguage()) {
+            return angular.extend({}, $scope.item);
+          }
+
+          var data = angular.extend({}, $scope.data.item);
+
+          if ($scope.item.params && Object.keys($scope.item.params).length > 0) {
+            data.params = angular.extend(data.params, $scope.item.params);
+          }
+
+          return data;
+        };
+
         /**
          * @inheritdoc
          */

@@ -217,7 +217,7 @@ class CategoryController extends FrontendController
         $response = $service->getList(
             sprintf(
                 'content_status = 1 and in_litter = 0 and category_id = %d ' .
-                'and fk_content_type in [1,7,9] ' .
+                'and fk_content_type in [1,5,7,9] ' .
                 'and (starttime is null or starttime < "%s") ' .
                 'and (endtime is null or endtime > "%s") ' .
                 'order by starttime desc limit %d offset %d',
