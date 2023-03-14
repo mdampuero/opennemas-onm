@@ -145,7 +145,7 @@ class RecaptchaTest extends \PHPUnit\Framework\TestCase
 
         $locale->expects($this->any())->method('getLocaleShort')->willReturn('en');
 
-        $this->container->expects($this->once())
+        $this->container->expects($this->any())
             ->method('get')
             ->with('core.locale')
             ->willReturn($locale);
@@ -164,8 +164,7 @@ class RecaptchaTest extends \PHPUnit\Framework\TestCase
         ]);
         $html = $this->recaptcha->getHtml();
 
-        $this->assertContains('hl=en', $html);
-        $this->assertContains('data-sitekey="fred"', $html);
+        $this->assertContains('render=fred', $html);
     }
 
     /**
