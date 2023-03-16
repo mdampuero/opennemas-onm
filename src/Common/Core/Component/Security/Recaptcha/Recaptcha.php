@@ -39,6 +39,13 @@ class Recaptcha
     protected $container;
 
     /**
+     * The service version.
+     *
+     * @var Version
+     */
+    protected $version;
+
+    /**
      * Array that handle the last response.
      *
      * @var Mixed
@@ -53,13 +60,25 @@ class Recaptcha
     public function __construct($container)
     {
         $this->container = $container;
-
+        $this->version   = 3;
         // By default we will use the platform recaptcha keys configured via
         // paramters.yml
         $this->recaptchaKeys = [
-            'siteKey'   => $container->getParameter('api.recaptcha.site_key'),
-            'secretKey' => $container->getParameter('api.recaptcha.secret_key'),
+            'siteKey'   => $container->getParameter(sprintf('api.recaptcha.%d.site_key', $this->version)),
+            'secretKey'   => $container->getParameter(sprintf('api.recaptcha.%d.secret_key', $this->version)),
         ];
+    }
+
+    /**
+     * Checks if the recaptcha code was solved successfully.
+     *
+     * @param integer $version The recaptcha version.
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
     }
 
     /**
@@ -77,27 +96,35 @@ class Recaptcha
      */
     public function configureFromSettings()
     {
-        $instanceKeys = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('recaptcha');
+        $this->recaptchaKeys = [
+            'siteKey'   => $this->container->getParameter(sprintf('api.recaptcha.%d.site_key', $this->version)),
+            'secretKey'   => $this->container->getParameter(sprintf('api.recaptcha.%d.secret_key', $this->version)),
+        ];
 
-        $keys = array_merge([
-            'public_key' => '',
-            'private_key' => '',
-        ], is_array($instanceKeys) ? $instanceKeys : []);
+        if ($this->version == 3) {
+            $instanceKeys = $this->container->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('recaptcha');
 
-        // Use the instance keys only if they are "valid" aka not empty
-        if (!empty($keys['private_key'])
-            && !empty($keys['public_key'])
-        ) {
-            $this->recaptchaKeys = [
-                'siteKey'   => $keys['public_key'],
-                'secretKey' => $keys['private_key'],
-            ];
+            $keys = array_merge([
+                'public_key' => '',
+                'private_key' => '',
+            ], is_array($instanceKeys) ? $instanceKeys : []);
+            // Use the instance keys only if they are "valid" aka not empty
+            if (!empty($keys['private_key'])
+                && !empty($keys['public_key'])
+            ) {
+                $this->recaptchaKeys = [
+                    'siteKey'   => $keys['public_key'],
+                    'secretKey' => $keys['private_key'],
+                ];
+            }
         }
 
         $this->recaptcha = new BaseRecaptcha($this->recaptchaKeys['secretKey']);
-        $this->setMinimumScore(0.5);
+        if ($this->version == 3) {
+            $this->setMinimumScore(0.5);
+        }
 
         return $this;
     }
@@ -111,6 +138,19 @@ class Recaptcha
     {
         if (empty($this->recaptcha)) {
             return _('ReCaptcha service is not configured');
+        }
+
+        if ($this->version == 2) {
+            $html = '<div class="recaptcha">'
+            . '<script src="https://www.google.com/recaptcha/api.js?hl=%s"></script>'
+            . '<div class="g-recaptcha" data-sitekey="%s"></div>'
+            . '</div>';
+
+            return sprintf(
+                $html,
+                $this->container->get('core.locale')->getLocaleShort(),
+                $this->recaptchaKeys['siteKey']
+            );
         }
 
         $html = '<script src="https://www.google.com/recaptcha/api.js?render=%s"></script>'

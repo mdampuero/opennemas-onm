@@ -77,6 +77,7 @@ class CommentController extends FrontendController
             'offset'         => $offset,
             'more'           => $comments['total'] > ($epp * $offset),
             'recaptcha'      => $this->get('core.recaptcha')
+                ->setVersion(2)
                 ->configureFromSettings()
                 ->getHtml(),
         ]);
@@ -230,6 +231,7 @@ class CommentController extends FrontendController
 
         // Check current recaptcha
         $isValid = $this->get('core.recaptcha')
+            ->setVersion(2)
             ->configureFromSettings()
             ->isValid($response, $request->getClientIp());
 
