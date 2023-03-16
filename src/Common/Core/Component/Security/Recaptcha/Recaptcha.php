@@ -65,7 +65,7 @@ class Recaptcha
         // paramters.yml
         $this->recaptchaKeys = [
             'siteKey'   => $container->getParameter(sprintf('api.recaptcha.%d.site_key', $this->version)),
-            'secretKey'   => $container->getParameter(sprintf('api.recaptcha.%d.secret_key', $this->version)),
+            'secretKey' => $container->getParameter(sprintf('api.recaptcha.%d.secret_key', $this->version)),
         ];
     }
 
