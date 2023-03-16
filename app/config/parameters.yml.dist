@@ -127,22 +127,22 @@ parameters:
                 port: 80
 
     # External services
-    api.facebook.client_id:     numeric_id
-    api.facebook.client_secret: alphanum_token
-    api.recaptcha.3.site_key:   long_alphanum_token
-    api.recaptcha.3.secret_key: long_alphanum_token
-    api.recaptcha.2.site_key:   long_alphanum_token
-    api.recaptcha.2.secret_key: long_alphanum_token
-    api.twitter.client_id:      short_alphanum_token
-    api.twitter.client_secret:  long_alphanum_token
-    braintree.environment:      sandbox
-    braintree.merchant_id:      numeric_id
-    braintree.private_key:      long_alphanum_token
-    braintree.public_key:       short_alphanum_token
-    braintree.url:              https://sandbox.braintreegateway.com
-    freshbooks.domain:          company_name
-    freshbooks.token:           long_alphanum_token
-    freshbooks.url:             https://%freshbooks.domain%.freshbooks.com
+    api.facebook.client_id:      numeric_id
+    api.facebook.client_secret:  alphanum_token
+    api.recaptcha.v3.site_key:   long_alphanum_token
+    api.recaptcha.v3.secret_key: long_alphanum_token
+    api.recaptcha.v2.site_key:   long_alphanum_token
+    api.recaptcha.v2.secret_key: long_alphanum_token
+    api.twitter.client_id:       short_alphanum_token
+    api.twitter.client_secret:   long_alphanum_token
+    braintree.environment:       sandbox
+    braintree.merchant_id:       numeric_id
+    braintree.private_key:       long_alphanum_token
+    braintree.public_key:        short_alphanum_token
+    braintree.url:               https://sandbox.braintreegateway.com
+    freshbooks.domain:           company_name
+    freshbooks.token:            long_alphanum_token
+    freshbooks.url:              https://%freshbooks.domain%.freshbooks.com
     panorama:
         youtube:
             api_key: your api_key here

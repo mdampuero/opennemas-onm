@@ -64,8 +64,8 @@ class Recaptcha
         // By default we will use the platform recaptcha keys configured via
         // paramters.yml
         $this->recaptchaKeys = [
-            'siteKey'   => $container->getParameter(sprintf('api.recaptcha.%d.site_key', $this->version)),
-            'secretKey' => $container->getParameter(sprintf('api.recaptcha.%d.secret_key', $this->version)),
+            'siteKey'   => $container->getParameter(sprintf('api.recaptcha.v%d.site_key', $this->version)),
+            'secretKey' => $container->getParameter(sprintf('api.recaptcha.v%d.secret_key', $this->version)),
         ];
     }
 
@@ -97,8 +97,8 @@ class Recaptcha
     public function configureFromSettings()
     {
         $this->recaptchaKeys = [
-            'siteKey'   => $this->container->getParameter(sprintf('api.recaptcha.%d.site_key', $this->version)),
-            'secretKey'   => $this->container->getParameter(sprintf('api.recaptcha.%d.secret_key', $this->version)),
+            'siteKey'   => $this->container->getParameter(sprintf('api.recaptcha.v%d.site_key', $this->version)),
+            'secretKey'   => $this->container->getParameter(sprintf('api.recaptcha.v%d.secret_key', $this->version)),
         ];
 
         if ($this->version == 3) {
