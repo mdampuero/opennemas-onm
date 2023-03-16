@@ -48,9 +48,9 @@ class RecaptchaTest extends \PHPUnit\Framework\TestCase
     public function testConfigureForBackend()
     {
         $this->container->expects($this->at(0))->method('getParameter')
-            ->with('api.recaptcha.site_key')->willReturn('fred');
+            ->with('api.recaptcha.v3.site_key')->willReturn('fred');
         $this->container->expects($this->at(1))->method('getParameter')
-            ->with('api.recaptcha.secret_key')->willReturn('fres');
+            ->with('api.recaptcha.v3.secret_key')->willReturn('fres');
 
         $keys = [
             'siteKey'   => 'fred',
