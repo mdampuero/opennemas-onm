@@ -48,9 +48,9 @@ class RecaptchaTest extends \PHPUnit\Framework\TestCase
     public function testConfigureForBackend()
     {
         $this->container->expects($this->at(0))->method('getParameter')
-            ->with('api.recaptcha.site_key')->willReturn('fred');
+            ->with('api.recaptcha.v3.site_key')->willReturn('fred');
         $this->container->expects($this->at(1))->method('getParameter')
-            ->with('api.recaptcha.secret_key')->willReturn('fres');
+            ->with('api.recaptcha.v3.secret_key')->willReturn('fres');
 
         $keys = [
             'siteKey'   => 'fred',
@@ -145,7 +145,7 @@ class RecaptchaTest extends \PHPUnit\Framework\TestCase
 
         $locale->expects($this->any())->method('getLocaleShort')->willReturn('en');
 
-        $this->container->expects($this->once())
+        $this->container->expects($this->any())
             ->method('get')
             ->with('core.locale')
             ->willReturn($locale);
@@ -164,8 +164,7 @@ class RecaptchaTest extends \PHPUnit\Framework\TestCase
         ]);
         $html = $this->recaptcha->getHtml();
 
-        $this->assertContains('hl=en', $html);
-        $this->assertContains('data-sitekey="fred"', $html);
+        $this->assertContains('render=fred', $html);
     }
 
     /**

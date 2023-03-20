@@ -77,6 +77,7 @@ class CommentController extends FrontendController
             'offset'         => $offset,
             'more'           => $comments['total'] > ($epp * $offset),
             'recaptcha'      => $this->get('core.recaptcha')
+                ->setVersion(2)
                 ->configureFromSettings()
                 ->getHtml(),
         ]);
@@ -223,13 +224,14 @@ class CommentController extends FrontendController
         $authorEmail = $request->request->filter('author-email', null, FILTER_SANITIZE_STRING);
         $contentId   = $request->request->getDigits('content-id');
         $content     = $this->getContent($contentId);
-        $response    = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
+        $response    = $request->request->filter('g-recaptcha-response');
         $ip          = getUserRealIP();
         $cm          = $this->get('core.helper.comment');
         $xmlRequest  = $request->isXmlHttpRequest();
 
         // Check current recaptcha
         $isValid = $this->get('core.recaptcha')
+            ->setVersion(2)
             ->configureFromSettings()
             ->isValid($response, $request->getClientIp());
 
