@@ -221,6 +221,7 @@
   .page-sidebar.opened {
     background-color: #1b1e24 !important;
     height: auto;
+    font-family: 'Open Sans';
     width: 250px;
     margin-top: 60px;
   }

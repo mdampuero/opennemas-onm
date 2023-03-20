@@ -1,5 +1,6 @@
 .sidebar {
   background-color: lighten(@sidebar-background, 3%);
+  font-family: 'Open Sans';
   font-size: 14px;
   height: 100%;
   margin-top: @sidebar-margin;
@@ -46,7 +47,7 @@
           font-weight: 600;
 
           & > a {
-            color: @selected-color;
+            color: #fff;
           }
         }
 
@@ -90,15 +91,16 @@
 
           i {
             float: left;
+            height: @sidebar-height;
             margin: 0;
-            padding: 13px 0;
+            padding: 18px 0;
             text-align: center;
             transition: all .25s;
             width: @sidebar-width-collapsed;
           }
 
           .arrow {
-            margin: 10px 20px 0 0;
+            margin: 16px 20px 0 0;
             float: right;
 
             &:before {
@@ -119,9 +121,10 @@
           .title {
             display: inline-block;
             float: left;
+            height: @sidebar-height;
             overflow: hidden;
             max-width: 120px;
-            padding: 10px 0;
+            padding: 15px 0;
             transition: all .25s;
             white-space: nowrap;
           }
@@ -165,7 +168,7 @@
     }
 
     .sub-menu {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: @sidebar-background;
       clear: both;
       display: none;
       font-weight: 300;
@@ -321,7 +324,7 @@
           height: 50px;
           margin-left: 0;
           width: 50px;
-          padding: 13px 0;
+          padding: 18px 0;
         }
       }
     }
@@ -391,7 +394,7 @@
 
         .arrow {
           float: left;
-          margin: 10px 0 0 20px;
+          margin: 16px 0 0 20px;
 
           &:before {
             content: "\f104";
