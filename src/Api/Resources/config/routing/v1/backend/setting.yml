@@ -12,13 +12,110 @@ api_v1_backend_settings_list:
     options:
         expose: true
 
+api_v1_backend_settings_general_list:
+    path:     /settings/general
+    defaults: { _controller: ApiBundle:V1/Backend/GeneralSetting:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_settings_general_save:
+    path:     /settings/general
+    defaults: { _controller: ApiBundle:V1/Backend/GeneralSetting:save }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_settings_appearance_list:
+    path:     /settings/appearance
+    defaults: { _controller: ApiBundle:V1/Backend/AppearanceSetting:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_settings_appearance_save:
+    path:     /settings/appearance
+    defaults: { _controller: ApiBundle:V1/Backend/AppearanceSetting:save }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_settings_language_list:
+    path:     /settings/language
+    defaults: { _controller: ApiBundle:V1/Backend/LanguageSetting:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_settings_language_save:
+    path:     /settings/language
+    defaults: { _controller: ApiBundle:V1/Backend/LanguageSetting:save }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_settings_internal_list:
+    path:     /settings/internal
+    defaults: { _controller: ApiBundle:V1/Backend/InternalSetting:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_settings_internal_save:
+    path:     /settings/internal
+    defaults: { _controller: ApiBundle:V1/Backend/InternalSetting:save }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_settings_external_list:
+    path:     /settings/external
+    defaults: { _controller: ApiBundle:V1/Backend/ExternalSetting:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_settings_external_save:
+    path:     /settings/external
+    defaults: { _controller: ApiBundle:V1/Backend/ExternalSetting:save }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_settings_sitemap_list:
+    path:     /settings/sitemap
+    defaults: { _controller: ApiBundle:V1/Backend/SitemapSetting:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_settings_sitemap_save:
+    path:     /settings/sitemap
+    defaults: { _controller: ApiBundle:V1/Backend/SitemapSetting:save }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_settings_master_list:
+    path:     /settings/master
+    defaults: { _controller: ApiBundle:V1/Backend/MasterSetting:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_settings_master_save:
+    path:     /settings/master
+    defaults: { _controller: ApiBundle:V1/Backend/MasterSetting:save }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
 api_v1_backend_settings_save:
     path:     /settings
     defaults: { _controller: ApiBundle:V1/Backend/Setting:save }
     methods:  [ PUT ]
     options:
         expose: true
-
 
 api_v1_backend_extra_fields_article_save:
     path:     /extrafield/article

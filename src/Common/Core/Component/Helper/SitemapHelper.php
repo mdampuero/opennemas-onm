@@ -163,7 +163,7 @@ class SitemapHelper
     public function getSitemapsInfo()
     {
         $types = $this->getTypes($this->settings, [ 'tag' ], true);
-        $years = $this->getYears($types);
+        $years = !empty($types) ? $this->getYears($types) : [];
 
         return [
             'items'    => $this->getSitemaps(),

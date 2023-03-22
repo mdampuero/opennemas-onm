@@ -410,8 +410,8 @@ msgstr "Preguntas frecuentes"
 msgid "Contact support"
 msgstr "Contactar con soporte"
 
-msgid "System"
-msgstr "Sistema"
+msgid "Settings"
+msgstr "Ajustes"
 
 msgid "URLs"
 msgstr "URLs"
@@ -419,8 +419,17 @@ msgstr "URLs"
 msgid "Cache manager"
 msgstr "Gestor de caché"
 
-msgid "Settings"
-msgstr "Opciones"
+#, fuzzy
+msgid "Homepage manager"
+msgstr "Gestor de portadas"
+
+#, fuzzy
+msgid "Advertising"
+msgstr "Publicidad"
+
+#, fuzzy
+msgid "Suscriptions"
+msgstr "Suscripciones"
 
 msgid "You don't have enough privileges for modify this content."
 msgstr "No tienes permisos suficientes para modificar este contenido."
@@ -1127,6 +1136,9 @@ msgstr "Ordenes"
 
 msgid "OpCache Status"
 msgstr "Estado de Opcache"
+
+msgid "System"
+msgstr "Sistema"
 
 msgid "Sitemaps"
 msgstr "Sitemaps"

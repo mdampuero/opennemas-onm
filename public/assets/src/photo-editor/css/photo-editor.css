@@ -130,7 +130,7 @@
 .photoEditor .menu ul li.noicon a {
   min-width: 48px;
   font: 16px/48px Helvetica;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .photoEditor .menu ul ul {
@@ -217,8 +217,8 @@
   height: 50px;
   background-color: #ffffff;
   color: #282323;
-  font: 16px Helvetica, "Open Sans", Arial, sans-serif;
-  font-weight: 300;
+  font-size: 16px;
+  font-weight: 400;
   text-transform: capitalize;
 }
 
@@ -230,7 +230,9 @@
   padding-left: 15px;
   color: #282323;
   text-transform: capitalize;
-  font: lighter 18px/50px "Open Sans", Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 50px;
   pointer-events: none;
 }
 
@@ -308,7 +310,8 @@
   background-color: white;
   box-shadow: 0 6px 12px rgba(0,0,0,0.175);
   color: #505458;
-  font: 300 14px Helvetica, "Open Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
   -webkit-transform: translateX(-50%) translateY(-50%);
      -moz-transform: translateX(-50%) translateY(-50%);
       -ms-transform: translateX(-50%) translateY(-50%);
