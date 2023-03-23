@@ -284,6 +284,10 @@ class CompanyHelper
     {
         $searchfields    = [];
         $suggestedFields = $this->getSuggestedFields();
+        if (empty($suggestedFields)) {
+            return [];
+        }
+
         foreach ($suggestedFields as $field) {
             $fieldname = $field['key']['value'];
             if ($item->$fieldname && !empty($item->$fieldname)) {
