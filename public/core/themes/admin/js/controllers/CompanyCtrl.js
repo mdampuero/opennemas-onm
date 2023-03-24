@@ -209,10 +209,11 @@
           }
           $scope.localize($scope.data.item, 'item', true, dontLocalize);
           $scope.expandFields();
-          // Check if item is new (created) or existing for use default value or not
+
           if (!$scope.data.item.pk_content) {
             $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
           }
+
           // Check if item is new (created) or existing for use default value or not
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'company-' + $scope.data.item.pk_content + '-draft';
