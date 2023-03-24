@@ -41,5 +41,6 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
     }
 
     $result .= sprintf($linkTpl, 'x-default', $instance->getBaseUrl() . $uri);
+    $locale->setContext($context);
     return $result;
 }
