@@ -107,6 +107,10 @@
                         <rights.owner>{$content->agency|default:'Redacción'}</rights.owner>
                       {/if}
                     </rights>
+                    <byline>
+                      <person>{$content->agency}</person>
+                      <author>{if has_author($content)}{get_author_name($content)}{/if}</author>
+                    </byline>
                     <dateline>
                       <story.date norm="{format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}">
                         {format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}
