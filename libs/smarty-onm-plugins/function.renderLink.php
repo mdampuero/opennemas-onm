@@ -38,7 +38,7 @@ function smarty_function_renderLink($params, &$smarty)
             $link = "/encuesta/$item->link/";
             break;
         case 'static':
-            $link = "/" . STATIC_PAGE_PATH . "/$item->link/";
+            $link = "/" . STATIC_PAGE_PATH . "/$item->link.html";
             break;
         case 'internal':
             if ($item->link == '/') {
