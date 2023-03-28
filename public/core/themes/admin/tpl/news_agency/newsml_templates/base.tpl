@@ -97,7 +97,7 @@
                         {/if}
                         {if has_author_url($content)}
                           <rights.owner.url>
-                            {get_url(get_author($content), [ '_absolute' => true ])}
+                            {$app.instance->getBaseUrl()}{get_author_url($content)}
                           </rights.owner.url>
                         {/if}
                       {elseif $content->content_type_name == 'letter'}
@@ -109,7 +109,7 @@
                     </rights>
                     <byline>
                       <person>{$content->agency}</person>
-                      <author>{if has_author($content)}{get_author_name($content)}{/if}</author>
+                      <author>{if get_author_id($content)}{get_author_name($content)}{/if}</author>
                     </byline>
                     <dateline>
                       <story.date norm="{format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}">
