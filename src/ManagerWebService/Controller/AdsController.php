@@ -18,6 +18,8 @@ use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Opennemas\Task\Component\Queue\Queue;
+use Opennemas\Task\Component\Task\ServiceTask;
 
 class AdsController extends Controller
 {
@@ -73,6 +75,7 @@ class AdsController extends Controller
         $em->persist($adContainer);
         $msg->add(_('Ads.txt container saved successfully'), 'success', 201);
 
+        $this->banAdsTxtOnInstances($adContainer->instances);
 
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
         $response->headers->set(
@@ -93,7 +96,7 @@ class AdsController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("hasPermission('NOTIFICATION_UPDATE')")
+     * @Security("hasPermission('ADS_UPDATE')")
      */
     public function showAction($id)
     {
@@ -129,17 +132,30 @@ class AdsController extends Controller
         $em->remove($adContainer);
         $msg->add(_('Ads.txt container deleted successfully.'), 'success');
 
+        $this->banAdsTxtOnInstances($adContainer->instances);
+
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
+    public function banAdsTxtOnInstances($instances = [])
+    {
+        foreach ($instances as $instanceName) {
+            $this->get('task.service.queue')->push(
+                new ServiceTask('core.varnish', 'ban', [
+                    sprintf('obj.http.x-tags ~ ^instance-%s.*ads,txt.*', $instanceName)
+                ])
+            );
+        }
+    }
+
     /**
-     * Deletes the selected notifications.
+     * Deletes the selected ads.
      *
      * @param Request $request The request object.
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('NOTIFICATION_DELETE')")
+     * @Security("hasPermission('ADS_DELETE')")
      */
     public function deleteSelectedAction(Request $request)
     {
@@ -156,6 +172,8 @@ class AdsController extends Controller
 
         $adsContainers = $em->getRepository('Ads')->findBy($oql);
 
+        $instancesToBan = [];
+
         $deleted = 0;
         foreach ($adsContainers as $container) {
             try {
@@ -164,11 +182,15 @@ class AdsController extends Controller
             } catch (\Exception $e) {
                 $msg->add($e->getMessage(), 'error');
             }
+            foreach ($container->instances as $instanceName) {
+                $instancesToBan[] = $instanceName;
+            }
         }
 
+        $this->banAdsTxtOnInstances(array_unique($instancesToBan));
         if ($deleted > 0) {
             $msg->add(
-                sprintf(_('%s notifications deleted successfully'), $deleted),
+                sprintf(_('%s ads containers deleted successfully'), $deleted),
                 'success'
             );
         }
@@ -198,6 +220,8 @@ class AdsController extends Controller
 
         $em->persist($adContainer);
         $msg->add(_('Ads.txt container saved successfully'), 'success');
+
+        $this->banAdsTxtOnInstances($adContainer->instances);
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }

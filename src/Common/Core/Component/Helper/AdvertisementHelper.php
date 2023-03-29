@@ -184,9 +184,9 @@ class AdvertisementHelper
         return false;
     }
 
-    public function getAdsTxtFromManager()
+    public function getAdsTxtFromManager($skipMaster = false)
     {
-        if (!$this->container->get('core.security')->hasPermission('MASTER')) {
+        if (!$this->container->get('core.security')->hasPermission('MASTER') && !$skipMaster) {
             return [];
         }
 
@@ -203,7 +203,7 @@ class AdvertisementHelper
             ->getDataSet('Settings', 'instance')
             ->get('ads_txt');
 
-        $adsContainers = $this->getAdsTxtFromManager();
+        $adsContainers = $this->getAdsTxtFromManager(true);
         $adsLines      = [];
 
         if (!empty($adsContainers) && is_array($adsContainers)) {
