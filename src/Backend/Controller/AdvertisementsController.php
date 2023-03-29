@@ -366,7 +366,8 @@ class AdvertisementsController extends Controller
             ];
 
             return $this->render('advertisement/config.tpl', [
-                'configs' => $ds->get($keys)
+                'configs' => $ds->get($keys),
+                'extra_ads_txt' => $this->get('core.helper.advertisement')->getAdsTxtFromManager()
             ]);
         }
 

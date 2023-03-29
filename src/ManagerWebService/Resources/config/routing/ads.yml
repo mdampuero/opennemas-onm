@@ -1,0 +1,61 @@
+manager_ws_ads_list:
+    path:     /ads
+    defaults: { _controller: ManagerWebServiceBundle:Ads:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_ads_new:
+    path:     /ads/new
+    defaults: { _controller: ManagerWebServiceBundle:Ads:new }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_ads_show:
+    path:     /ads/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Ads:show }
+    methods:  [ GET ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ws_ads_save:
+    path:     /ads/save
+    defaults: { _controller: ManagerWebServiceBundle:Ads:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+manager_ws_ads_update:
+    path:     /ads/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Ads:update }
+    methods:  [ PUT ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ws_ads_autocomplete:
+    path:     /ads/autocomplete
+    defaults: { _controller: ManagerWebServiceBundle:Ads:autocomplete }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_ads_delete:
+    path:     /ads/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Ads:delete }
+    methods:  [ DELETE ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ws_ads_batch_delete:
+    path:     /ads
+    defaults: { _controller: ManagerWebServiceBundle:Ads:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true

@@ -336,6 +336,23 @@
       </uib-tab>
       {is_module_activated name="es.openhost.module.advancedAdvertisement"}
       <uib-tab heading="{t}Ads.txt{/t}">
+        {acl isAllowed="MASTER"}
+          {if !empty($extra_ads_txt)}
+          <div class="form-group">
+            <label class="form-label">
+              {t}Authorized Digital Sellers from inheritance{/t}
+            </label>
+            {foreach from=$extra_ads_txt item=ads_container}
+            <div class="controls">
+              <label class="form-label">
+                {$ads_container->name}
+              </label>
+              <textarea class="form-control" disabled rows="10">{$ads_container->ads_lines}</textarea>
+            </div>
+            {/foreach}
+          </div>
+          {/if}
+        {/acl}
         <div class="form-group">
           <label for="ads_txt" class="form-label">
             {t}Authorized Digital Sellers{/t}
