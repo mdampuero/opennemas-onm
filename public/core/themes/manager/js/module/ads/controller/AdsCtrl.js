@@ -133,21 +133,6 @@
           $scope.extra  = response.data.extra;
           if (response.data.item) {
             $scope.item = response.data.item;
-            // var instances = [];
-
-            // for (var i = 0; i < $scope.item.instances.length; i++) {
-            //   var name = $scope.item.instances[i];
-
-            //   if (name === 'all') {
-            //     name = $scope.extra.instances.filter(function (e) {
-            //       return e.id === id;
-            //     })[0].name;
-            //   }
-
-            //   instances[i] = name;
-            // }
-
-            // $scope.item.instances = instances;
           }
         });
       }
