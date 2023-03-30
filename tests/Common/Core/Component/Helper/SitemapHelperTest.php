@@ -277,6 +277,7 @@ class SitemapHelperTest extends \PHPUnit\Framework\TestCase
                 ]
             ],
             'content_status'    => [[ 'value' => 1 ]],
+            'params'            => [[ 'value' => '%bodyLink%', 'operator' => 'NOT LIKE' ]],
             'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
             'endtime'           => [
                 'union' => 'OR',
