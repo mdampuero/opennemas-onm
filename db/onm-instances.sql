@@ -16,6 +16,28 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `adstxt`
+--
+
+DROP TABLE IF EXISTS `adstxt`;
+CREATE TABLE `adstxt` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `instances` longtext COLLATE utf8_unicode_ci NOT NULL,
+  `ads_lines` longtext COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `adstxt`
+--
+
+LOCK TABLES `adstxt` WRITE;
+/*!40000 ALTER TABLE `adstxt` DISABLE KEYS */;
+/*!40000 ALTER TABLE `adstxt` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `client`
 --
 
