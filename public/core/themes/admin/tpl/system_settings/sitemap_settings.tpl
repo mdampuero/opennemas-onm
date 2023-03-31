@@ -177,7 +177,7 @@
                         <div class="col-md-4 controls">
                           <select class="form-control" ng-model="criteria.month" name="month">
                             <option value="">{t}All{/t}</option>
-                            <option ng-repeat="month in extra.sitemaps.months" value="[% month %]">
+                            <option ng-repeat="month in ['01','02','03','04','05','06','07','08','09',10,11,12]" value="[% month %]">
                               [% month %]
                             </option>
                           </select>
