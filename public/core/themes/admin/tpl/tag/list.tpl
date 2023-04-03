@@ -18,7 +18,7 @@
 
 {block name="primaryActions"}
   <li class="quicklinks">
-    <a class="btn btn-link" href="{url name=backend_settings_tag}" title="{t}Config tag module{/t}">
+    <a class="btn btn-link" href="{url name=backend_tags_config}" title="{t}Config tag module{/t}">
       <span class="fa fa-cog fa-lg"></span>
     </a>
   </li>
