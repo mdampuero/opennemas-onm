@@ -53,6 +53,11 @@ class UrlGeneratorHelper
      */
     protected $router;
 
+    protected $l10nUrlParams = [
+        'category_slug' => 'category',
+        'slug' => 'content'
+    ];
+
     /**
      * Initializes the UrlGeneratorHelper.
      *
@@ -198,6 +203,61 @@ class UrlGeneratorHelper
     public function isValid($item, $uri)
     {
         return $uri === $this->generate($item);
+    }
+
+    public function translateUrlParams($params)
+    {
+        $context = $this->container->get('core.locale')->getContext();
+        $this->container->get('core.locale')->setContext('frontend');
+        $locale      = $this->container->get('core.locale');
+        $firstLocale = $locale->getLocale();
+
+        $slugs = $locale->getSlugs();
+        if (empty($slugs)) {
+            return $params;
+        }
+
+        $finalParms = [];
+        foreach ($params as $paramKey => $paramValue) {
+            $translation           = false;
+            $finalParms[$paramKey] = [];
+            if (array_key_exists($paramKey, $this->l10nUrlParams)) {
+                $translation = true;
+                $service     = $this->container->get(sprintf('api.service.%s', $this->l10nUrlParams[$paramKey]));
+            }
+
+            foreach ($slugs as $longSlug => $shortSlug) {
+                $translatedParam = $paramValue;
+                $locale->setRequestLocale($longSlug);
+                $locale->setLocale($longSlug);
+                $locale->apply();
+                if ($translation) {
+                    $item            = $service->getItemBySlug($paramValue);
+                    $method          = sprintf('get%sSlug', ucfirst($this->l10nUrlParams[$paramKey]));
+                    $translatedParam = $this->$method($item, $longSlug);
+                }
+
+                $finalParms[$paramKey][$longSlug] = $translatedParam;
+            }
+        }
+
+        $locale->setLocale($firstLocale);
+        $this->container->get('core.locale')->setContext($context);
+        return $finalParms;
+    }
+
+    protected function getCategorySlug($item, $locale)
+    {
+        return is_array($item->getStored()['name']) ?
+            $item->getStored()['name'][$locale] :
+            $item->getStored()['name'];
+    }
+
+    protected function getContentSlug($item, $locale)
+    {
+        return is_array($item->getStored()['slug']) ?
+            $item->getStored()['slug'][$locale] :
+            $item->getStored()['slug'];
     }
 
     /**
