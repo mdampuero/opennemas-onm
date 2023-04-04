@@ -307,6 +307,41 @@ class AdvertisementRenderer extends Renderer
     }
 
     /**
+     * Returns the inline advertisement code for the pixel.
+     *
+     * @param array $params Array of parameters to render the advertisement pixel code.
+     *
+     * @return string The HTML content for the pixel advertisement.
+     */
+    public function renderInlinePixel($params)
+    {
+        $advertisements = $this->getAdvertisements();
+        if (empty($advertisements)) {
+            return '';
+        }
+
+        $device   = $this->container->get('core.globals')->getDevice();
+        $pixelAds = array_filter($advertisements, function ($a) use ($device) {
+            $hasPixelAds = array_filter($a->positions, function ($pos) {
+                return $pos == 10;
+            });
+            return $hasPixelAds && ($a->params['devices'][$device] === 1 || empty($device));
+        });
+
+        if (empty($pixelAds)) {
+            return '';
+        }
+
+        $content = '';
+        foreach ($pixelAds as $advertisement) {
+            $renderer = $this->getRendererClass($advertisement->with_script);
+            $content .= $renderer->renderInline($advertisement, $params);
+        }
+
+        return $content;
+    }
+
+    /**
      * Returns the generic headers HTML for inline Adservers advertisements.
      *
      * @param array $params Array of parameters to render the advertisement header.
@@ -457,14 +492,17 @@ class AdvertisementRenderer extends Renderer
      */
     protected function getSlot($advertisement, $content, $size = true)
     {
-        $mark  = $this->getMark($advertisement);
-        $style = $size ? $this->getSlotSizeStyle($advertisement) : '';
-        $tpl   = '<div class="ad-slot oat oat-visible oat-%s %s" data-mark="%s"%s>%s</div>';
+        $mark     = $this->getMark($advertisement);
+        $style    = $size ? $this->getSlotSizeStyle($advertisement) : '';
+        $tpl      = '<div class="ad-slot oat oat-visible oat-%s %s" data-mark="%s"%s>%s</div>';
+        $pixelTpl = '<div class="pixel-ad %s">%s</div>';
 
         $deviceClasses = $this->getDeviceCSSClasses($advertisement);
         $orientation   = $this->getMarkOrientation($advertisement);
 
-        return sprintf($tpl, $orientation, $deviceClasses, $mark, $style, $content);
+        return $this->isPixel($advertisement)
+            ? sprintf($pixelTpl, $advertisement->id, $content)
+            : sprintf($tpl, $orientation, $deviceClasses, $mark, $style, $content);
     }
 
     /**
@@ -477,6 +515,18 @@ class AdvertisementRenderer extends Renderer
     protected function isFloating($params)
     {
         return array_key_exists('placeholder', $params);
+    }
+
+    /**
+     * Returns if advertisement is pixel or not.
+     *
+     * @param Array $params The array of parameters.
+     *
+     * @return boolean      True if it is pixel, False if it isn't.
+     */
+    protected function isPixel($advertisement)
+    {
+        return in_array(10, $advertisement->positions);
     }
 
     /**
