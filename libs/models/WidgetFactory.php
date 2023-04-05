@@ -115,6 +115,12 @@ class WidgetFactory
             $this->cachedId .= '-' . $this->content->pk_content;
         }
 
+        // Append request language if hasMultilanguage
+        if ($this->container->get('core.instance')->hasMultilanguage()) {
+            $this->cachedId .= '-' . $this->container->get('core.locale')
+                ->getRequestLocaleShort('frontend') . '-';
+        }
+
         $this->tpl->caching       = 0;
         $this->tpl->force_compile = true;
 
