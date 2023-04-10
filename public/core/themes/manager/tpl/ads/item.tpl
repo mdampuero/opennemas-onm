@@ -5,7 +5,7 @@
         <li class="quicklinks">
           <h4>
             <a class="no-padding" ng-href="[% routing.ngGenerate('manager_ads_list') %]">
-              <i class="fa fa-user"></i>
+              <i class="fa fa-file-o"></i>
               {t}Ads.txt{/t}
             </a>
           </h4>
@@ -15,7 +15,7 @@
         </li>
         <li class="quicklinks">
           <h5>
-            <span ng-if="!item.id">{t}New Ads.txt Container{/t}</span>
+            <span ng-if="!item.id">{t}New Ads.txt container{/t}</span>
             <span ng-if="item.id">{t}Edit Ads.txt container{/t}</span>
           </h5>
         </li>
@@ -52,12 +52,11 @@
             </div>
           </div>
           <div class="form-group col-md-6">
-            <label for="template" class="form-label">{t}Apply to instaces{/t}</label>
+            <label for="template" class="form-label">{t}Target{/t}</label>
             <div class="controls">
               <tags-input add-from-autocomplete-only="true" ng-model="item.instances" display-property="name">
                 <auto-complete debounce-delay="500" source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true" template="instance"></auto-complete>
               </tags-input>
-              <div class="help">{t}Instance internal or display name{/t}</div>
             </div>
           </div>
         </div>

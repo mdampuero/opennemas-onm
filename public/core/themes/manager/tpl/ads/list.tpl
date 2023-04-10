@@ -5,7 +5,7 @@
         <li class="quicklinks">
           <h4>
             <a class="no-padding" ng-href="[% routing.ngGenerate('manager_ads_list') %]">
-              <i class="fa fa-user"></i>
+              <i class="fa fa-file-o"></i>
               {t}Ads.txt{/t}
             </a>
           </h4>
