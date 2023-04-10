@@ -18,7 +18,7 @@
      * @requires webStorage
      *
      * @description
-     *   Handles all actions in clients listing.
+     *   Handles all actions in ads.txt listing.
      */
     .controller('AdsListCtrl', [
       '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
@@ -63,7 +63,7 @@
          */
         $scope.delete = function(item) {
           var modal = $uibModal.open({
-            templateUrl: '/managerws/template/client:modal.' + appVersion + '.tpl',
+            templateUrl: '/managerws/template/ads:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
@@ -105,7 +105,7 @@
          */
         $scope.deleteSelected = function() {
           var modal = $uibModal.open({
-            templateUrl: '/managerws/template/client:modal.' + appVersion + '.tpl',
+            templateUrl: '/managerws/template/ads:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
