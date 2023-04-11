@@ -190,7 +190,10 @@ class AdvertisementHelper
             return [];
         }
 
-        $oql = sprintf('instances ~ "%s"', $this->container->get('core.instance')->internal_name);
+        $oql = sprintf(
+            'instances ~ "%s" or instances ~ "Todos"',
+            $this->container->get('core.instance')->internal_name
+        );
         $ads = $this->container->get('orm.manager')->getRepository('Ads')
             ->findBy($oql);
 

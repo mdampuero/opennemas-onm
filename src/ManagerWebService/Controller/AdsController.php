@@ -139,6 +139,15 @@ class AdsController extends Controller
 
     public function banAdsTxtOnInstances($instances = [])
     {
+        if (in_array('Todos', $instances)) {
+            $this->get('task.service.queue')->push(
+                new ServiceTask('core.varnish', 'ban', [
+                    sprintf('obj.http.x-tags ~ ads,txt')
+                ])
+            );
+            return;
+        }
+
         foreach ($instances as $instanceName) {
             $this->get('task.service.queue')->push(
                 new ServiceTask('core.varnish', 'ban', [
