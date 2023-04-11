@@ -11,4 +11,5 @@ frontend_widget_render:
     path:     /widget/render
     defaults: { _controller: FrontendBundle:Widget:render }
     options:
+        l10n: true
         subdirectory: true
