@@ -224,13 +224,20 @@ class AdsController extends Controller
         $data = $em->getConverter('Ads')
             ->objectify($request->request->all());
 
-        $adContainer = $em->getRepository('Ads')->find($id);
+        $adContainer     = $em->getRepository('Ads')->find($id);
+        $mergedInstances = array_unique(
+            array_merge(
+                array_values($data['instances']),
+                array_values($adContainer->instances)
+            )
+        );
+
         $adContainer->merge($data);
 
         $em->persist($adContainer);
         $msg->add(_('Ads.txt container saved successfully'), 'success');
 
-        $this->banAdsTxtOnInstances($adContainer->instances);
+        $this->banAdsTxtOnInstances($mergedInstances);
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
