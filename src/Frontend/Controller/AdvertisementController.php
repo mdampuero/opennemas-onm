@@ -88,9 +88,7 @@ class AdvertisementController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        $content = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('ads_txt');
+        $content = $this->get('core.helper.advertisement')->getAdsTxtContent();
 
         return new Response(trim($content), 200, [
             'Content-Type' => 'text/plain',

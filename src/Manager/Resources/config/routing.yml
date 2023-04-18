@@ -4,6 +4,10 @@ manager_welcome:
     options:
         expose: true
 
+manager_ads:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/ads.yml'
+
 manager_client:
     prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/client.yml'
