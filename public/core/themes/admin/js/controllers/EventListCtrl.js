@@ -62,7 +62,9 @@
           $scope.app.columns.hidden = [];
 
           oqlEncoder.configure({ placeholder: {
-            title: '[key] ~ "%[value]%"'
+            title: '[key] ~ "%[value]%"',
+            starttime: '[key] > "[value]"',
+            created: '[key] ~ "%[value]%"'
           } });
 
           $scope.list();

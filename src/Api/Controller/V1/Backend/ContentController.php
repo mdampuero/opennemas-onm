@@ -34,6 +34,7 @@ class ContentController extends ApiController
         }
 
         return [
+            'years'            => $this->getContentYears(),
             'authors'          => $this->getAuthors(),
             'comments_enabled' => $this->get('core.helper.comment')->enableCommentsByDefault(),
             'keys'             => $this->getL10nKeys(),
@@ -95,6 +96,42 @@ class ContentController extends ApiController
     protected function getL10nKeys()
     {
         return $this->get($this->service)->getL10nKeys();
+    }
+
+    public function getContentYears()
+    {
+        $years = [];
+        if (empty($this->module)) {
+            return $years;
+        }
+
+        $fmt = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
+
+        $firstContentDate = $this->get('core.helper.content')->getFirstContentCreatedDate($this->module);
+        if (empty($firstContentDate)) {
+            return $years;
+        }
+
+        $currentDate   = new \DateTime('now');
+        $finalDate     = $currentDate->format('Y-m');
+        $iterationDate = $firstContentDate;
+
+        while ($iterationDate->format('Y-m') < $finalDate) {
+            $year = $iterationDate->format('Y');
+            if (!array_key_exists($year, $years)) {
+                $years[$year] = [
+                    'name' => $year,
+                    'months' => []
+                ];
+            }
+            $years[$year]['months'] [] = [
+                'name' => !is_null($fmt) ? $fmt->format($iterationDate) : $iterationDate->format('F'),
+                'value' => $iterationDate->format('Y-m')
+            ];
+
+            $iterationDate = $iterationDate->modify('+1 month');
+        }
+        return array_reverse(array_values($years));
     }
 
     /**
