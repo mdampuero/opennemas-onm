@@ -37,10 +37,10 @@ frontend_poll_vote:
         subdirectory: true
 
 frontend_poll_show_amp:
-    path:     /encuesta/{category_name}/{slug}/{created}{id}.amp.html
+    path:     /encuesta/{category_slug}/{slug}/{created}{id}.amp.html
     defaults: { _controller: FrontendBundle:Poll:showAmp, _format: amp }
     requirements:
-        category_name: '[^/]+'
+        category_slug: '[^/]+'
         created:       '[0-9]{14}'
         id:            '[0-9]+'
         slug:          '[^/]+'
