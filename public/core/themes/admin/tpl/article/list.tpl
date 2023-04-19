@@ -96,9 +96,6 @@
     {include file="ui/component/select/author.tpl" blog="true" label="true" ngModel="criteria.fk_author"}
   </li>
   <li class="hidden-xs hidden-sm ng-cloak m-r-10 quicklinks">
-    {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
-  </li>
-  <li class="hidden-xs hidden-sm ng-cloak m-r-10 quicklinks">
     {include file="ui/component/button/postponed.tpl"}
   </li>
   <li class="hidden-xs hidden-sm ng-cloak quicklinks">
