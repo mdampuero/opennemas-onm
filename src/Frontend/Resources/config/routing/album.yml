@@ -28,10 +28,10 @@ frontend_album_show:
         subdirectory: true
 
 frontend_album_show_amp:
-    path:     /album/{category_name}/{slug}/{created}{id}.amp.html
+    path:     /album/{category_slug}/{slug}/{created}{id}.amp.html
     defaults: { _controller: FrontendBundle:Album:showAmp, _format: amp }
     requirements:
-        category_name: '[^/]+'
+        category_slug: '[^/]+'
         created:       '[0-9]{14}'
         id:            '[0-9]+'
         slug:          '[^/]+'
