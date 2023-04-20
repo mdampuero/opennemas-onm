@@ -116,7 +116,7 @@ class ContentController extends ApiController
         $finalDate     = $currentDate->format('Y-m');
         $iterationDate = $firstContentDate;
 
-        while ($iterationDate->format('Y-m') < $finalDate) {
+        while ($iterationDate->format('Y-m') <= $finalDate) {
             $year = $iterationDate->format('Y');
             if (!array_key_exists($year, $years)) {
                 $years[$year] = [
