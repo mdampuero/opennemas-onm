@@ -36,7 +36,6 @@ class ExternalSettingController extends SettingController
         'data_layer',
         'facebook',
         'facebook_id',
-        'facebook_page',
         'gfk',
         'google_analytics',
         'google_analytics_others',
