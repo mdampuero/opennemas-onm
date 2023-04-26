@@ -11,6 +11,7 @@
 namespace Framework\EventListener;
 
 use Psr\Log\LoggerInterface;
+use Api\Exception\ApiException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -255,8 +256,12 @@ class RouterListener implements EventSubscriberInterface
                 $message .= sprintf(' (from "%s")', $referer);
             }
 
-            $url = $this->container->get('core.redirector')
-                ->getUrl(preg_replace('/^\//', '', $request->getRequestUri()));
+            try {
+                $url = $this->container->get('core.redirector')
+                    ->getUrl(preg_replace('/^\//', '', $request->getRequestUri()));
+            } catch (ApiException $e) {
+                throw new NotFoundHttpException($message, $e);
+            }
 
             if (!empty($url)) {
                 $response = $this->container->get('core.redirector')
