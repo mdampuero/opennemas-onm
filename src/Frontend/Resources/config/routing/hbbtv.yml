@@ -1,0 +1,5 @@
+frontend_hbbtv:
+    path: /hbbtv
+    defaults: { _controller: FrontendBundle:Hbbtv:show }
+    options:
+        subdirectory: true
