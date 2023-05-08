@@ -30,7 +30,14 @@ class HbbtvController extends Controller
      */
     public function showAction(Request $request)
     {
-        $catService  = $this->container->get('api.service.category');
+        $catService       = $this->container->get('api.service.category');
+        $defaultThumbnail = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('logo_default');
+
+        $defaultThumbnail = $this->container->get('core.helper.photo')
+            ->getPhotoPath(intval($defaultThumbnail));
+
         $finalResult = [];
 
         $oql   = "params ~ '%\"type\";s:10:\"multimedia%' and cover_id !is null";
@@ -38,36 +45,42 @@ class HbbtvController extends Controller
             ->setCount(false)
             ->getList($oql)['items'];
 
-        dump($items);
-
         $sql = "SELECT * FROM `contents`"
             . " INNER JOIN content_category ON content_category.content_id = contents.pk_content"
-            . " WHERE content_type_name = 'video' AND category_id = %s"
+            . " WHERE content_type_name = 'video' AND category_id = %s AND in_litter = 0"
+            . " AND content_status = 1"
             . " ORDER BY created DESC"
             . " LIMIT 15;";
 
         foreach ($items as $item) {
+            if ($item->name == 'a-la-carta') {
+                continue;
+            }
+
             $videos = $this->container->get('api.service.content')->getListBySql(sprintf($sql, $item->id))['items'];
 
             if (!empty($videos)) {
-                $videos = array_map(function ($element) {
+                $videos = array_map(function ($element) use ($defaultThumbnail) {
                     if ($element->type && $element->type == 'Globalmest') {
                         $lastPart = explode('/', $element->path);
                         $id = str_replace('.html', '', end($lastPart));
                         $element->src = sprintf('https://vod-dd.globalmest.com/8RK9QO/%s/%s_vR5voJ.mp4', $id, $id);
                     }
+
+                    $element->thumbnail = $element->information['thumbnail'] ?? $defaultThumbnail;
                     return $element;
                 }, $videos);
+
                 $finalResult[] = [
                     'categoryItem' => $item,
                     'videos' => $videos
                 ];
             }
         }
-        dump($finalResult);
 
         return $this->render('hbbtv/hbbtv.tpl', [
             'categoryTree' => $finalResult,
+            'logo'         => $defaultThumbnail
         ]);
     }
 }
