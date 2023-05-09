@@ -270,7 +270,7 @@ class PollController extends FrontendController
         );
 
         if ($type == 'success') {
-            $cookie = new Cookie('poll-' . $poll->pk_content, 'voted', time() + (60 * 60 * 24 * 30 * 12));
+            $cookie = new Cookie('poll-' . $poll->pk_content, '1', time() + (60 * 60 * 24 * 30 * 12));
             $response->headers->setCookie($cookie);
         }
 
