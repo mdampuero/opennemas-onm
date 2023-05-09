@@ -1,8 +1,8 @@
-<select class="ui-select-container select2 select2-container" name="month" ng-model="{$ngModel}">
-  <option value="">{t}All months{/t}</option>
-  <optgroup label="[% year.name %]" ng-repeat="year in {$data}">
-    <option value="[% month.value %]" ng-repeat="month in year.months">
-    [% month.name %] ([% year.name %])
-    </option>
-  </optgroup>
-</select>
+<ui-select class="{$class}" name="dates" ng-model="{$ngModel}" theme="select2" search-enabled="false" >
+  <ui-select-match>
+    <strong>{t}Date{/t}:</strong> [% $select.selected.name %] [% $select.selected.group %]
+  </ui-select-match>
+  <ui-select-choices group-by="'group'" repeat="item.value as item in toArray(addEmptyValue({$data}, 'value', 'name', '{t}All months{/t}'))">
+    <div ng-bind-html="(item.name)"></div>
+  </ui-select-choices>
+</ui-select>

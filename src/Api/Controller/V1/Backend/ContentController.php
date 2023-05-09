@@ -118,15 +118,10 @@ class ContentController extends ApiController
 
         while ($iterationDate->format('Y-m') <= $finalDate) {
             $year = $iterationDate->format('Y');
-            if (!array_key_exists($year, $years)) {
-                $years[$year] = [
-                    'name' => $year,
-                    'months' => []
-                ];
-            }
-            $years[$year]['months'] [] = [
-                'name' => !is_null($fmt) ? $fmt->format($iterationDate) : $iterationDate->format('F'),
-                'value' => $iterationDate->format('Y-m')
+            $years[] = [
+                'name' => (!is_null($fmt) ? $fmt->format($iterationDate) : $iterationDate->format('F')),
+                'value' => $iterationDate->format('Y-m'),
+                'group' => $iterationDate->format('Y')
             ];
 
             $iterationDate = $iterationDate->modify('+1 month');

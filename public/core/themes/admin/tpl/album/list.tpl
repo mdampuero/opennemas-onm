@@ -115,7 +115,7 @@
     {include file="ui/component/button/postponed.tpl"}
   </li>
   <li class="hidden-xs ng-cloak quicklinks">
-    {include file="ui/component/select/month.tpl" ngModel="criteria.created" data="data.extra.years"}
+    {include file="ui/component/select/month_alt.tpl" ngModel="criteria.created" data="data.extra.years"}
   </li>
 {/block}
 
