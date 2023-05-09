@@ -119,7 +119,10 @@ class ContentController extends ApiController
         while ($iterationDate->format('Y-m') <= $finalDate) {
             $year = $iterationDate->format('Y');
             $years[] = [
-                'name' => (!is_null($fmt) ? $fmt->format($iterationDate) : $iterationDate->format('F')),
+                'name' => (!is_null($fmt) ?
+                    ucfirst($fmt->format($iterationDate)) :
+                    ucfirst($iterationDate->format('F'))
+                ),
                 'value' => $iterationDate->format('Y-m'),
                 'group' => $iterationDate->format('Y')
             ];
