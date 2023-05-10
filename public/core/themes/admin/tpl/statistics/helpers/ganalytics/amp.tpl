@@ -16,7 +16,7 @@
     }
     </script>
   </amp-analytics>
-  {if strpos($account, 'G') == 0}
+  {if strpos($account, 'G') === 0}
     <amp-analytics type="googleanalytics" config="https://amp.analytics-debugger.com/ga4.json" data-credentials="include">
     <script type="application/json">
     {
