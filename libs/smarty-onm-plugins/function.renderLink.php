@@ -54,7 +54,7 @@ function smarty_function_renderLink($params, &$smarty)
             $link = "/ext$nameUrl/blog/$item->link/";
             break;
         case 'blog-category':
-            $link = "/blog/section/$item->link";
+            $link = "/blog/section/$item->link/";
             break;
         default:
             $link = "/$item->link/";

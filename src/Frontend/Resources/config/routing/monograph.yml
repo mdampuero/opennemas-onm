@@ -1,5 +1,5 @@
 frontend_monograph_frontpage:
-    path: /especiales/{page}
+    path: /especiales/{page}/
     defaults: { _controller: FrontendBundle:Monographs:frontpage, page: 1 }
     requirements:
         page: '([0-9]+)?'
@@ -7,7 +7,7 @@ frontend_monograph_frontpage:
         l10n: true
 
 frontend_monograph_frontpage_category:
-    path: /especiales/{category_slug}/{page}
+    path: /especiales/{category_slug}/{page}/
     defaults: { _controller: FrontendBundle:Monographs:frontpage, page: 1 }
     requirements:
         category_slug: '[^/]+'

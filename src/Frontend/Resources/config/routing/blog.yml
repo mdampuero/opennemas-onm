@@ -1,12 +1,12 @@
 frontend_blog_frontpage:
-    path: /blog
+    path: /blog/
     defaults: { _controller: FrontendBundle:Blog:list }
     options:
         l10n: true
         subdirectory: true
 
 frontend_blog_author_frontpage:
-    path: /blog/author/{author_slug}
+    path: /blog/author/{author_slug}/
     defaults: { _controller: FrontendBundle:Blog:listAuthor }
     requirements:
         author_slug: '[a-z0-9\-\.]+'

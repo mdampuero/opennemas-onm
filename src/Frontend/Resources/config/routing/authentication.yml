@@ -1,5 +1,5 @@
 frontend_authentication_login:
-    path:     /login
+    path:     /login/
     defaults: { _controller: FrontendBundle:Authentication:login }
     options:
         subdirectory: true

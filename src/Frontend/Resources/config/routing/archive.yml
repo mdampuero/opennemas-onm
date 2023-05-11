@@ -1,5 +1,5 @@
 frontend_archive_content:
-    path: /archive/content/{year}/{month}/{day}/{category_slug}
+    path: /archive/content/{year}/{month}/{day}/{category_slug}/
     defaults: { _controller: FrontendBundle:Archive:archive, category_slug: null }
     requirements:
         year      : '[0-9]+'
@@ -22,7 +22,7 @@ frontend_digital_frontpage:
         subdirectory: true
 
 frontend_archive:
-    path: /archive/{component}
+    path: /archive/{component}/
     defaults: { _controller: FrontendBundle:Archive:archive }
     requirements:
         component  : 'content|digital'

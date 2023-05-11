@@ -276,7 +276,7 @@ class UrlGeneratorHelper
             'category_slug' => $category->name
         ]);
 
-        return trim($uri, '/');
+        return ltrim($uri, '/');
     }
 
     /**
@@ -411,7 +411,7 @@ class UrlGeneratorHelper
         $uri = $this->container->get('router')
             ->generate('frontend_tag_frontpage', [ 'slug' => $tag->slug ]);
 
-        return trim($uri, '/');
+        return ltrim($uri, '/');
     }
 
     /**
@@ -436,7 +436,7 @@ class UrlGeneratorHelper
 
         $uri = $this->container->get('router')->generate($routeName, $routeParams);
 
-        return trim($uri, '/');
+        return ltrim($uri, '/');
     }
 
     /**

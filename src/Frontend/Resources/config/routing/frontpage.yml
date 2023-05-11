@@ -6,7 +6,7 @@ frontend_frontpage:
         subdirectory: true
 
 frontend_frontpage_category:
-    path: /seccion/{category}
+    path: /seccion/{category}/
     defaults: { _controller: FrontendBundle:Frontpages:show }
     options:
         l10n: true

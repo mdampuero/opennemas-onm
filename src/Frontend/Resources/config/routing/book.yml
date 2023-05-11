@@ -1,5 +1,5 @@
 frontend_books:
-    path: /libros
+    path: /libros/
     defaults: { _controller: FrontendBundle:Books:frontpage }
     options:
         l10n: true
