@@ -1,6 +1,6 @@
 frontend_archive_content:
     path: /archive/content/{year}/{month}/{day}/
-    defaults: { _controller: FrontendBundle:Archive:archive}
+    defaults: { _controller: FrontendBundle:Archive:archive }
     requirements:
         year      : '[0-9]+'
         month     : '[0-9]+'
@@ -9,7 +9,7 @@ frontend_archive_content:
         l10n: true
         subdirectory: true
 
-frontend_archive_content_slug:
+frontend_archive_content_category:
     path: /archive/content/{year}/{month}/{day}/{category_slug}/
     defaults: { _controller: FrontendBundle:Archive:archive, category_slug: null }
     requirements:
