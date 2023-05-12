@@ -158,7 +158,7 @@ class ContentHelper
     public function getFirstContentCreatedDate($contentTypeName = 'article')
     {
         $oql = sprintf(
-            'content_type_name = "%s" and created !is null and created >="2000-01" and in_litter = 0'
+            'content_type_name = "%s" and created !is null and created >="2000-01-01" and in_litter = 0'
             . ' order by created asc limit 1',
             $contentTypeName
         );
