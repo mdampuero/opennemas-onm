@@ -22,6 +22,7 @@ function smarty_outputfilter_google_tag_manager($output, $smarty)
         && !preg_match('/\/managerws/', $uri)
         && !preg_match('/\/sharrre/', $uri)
         && !preg_match('/\/ads\//', $uri)
+        && !preg_match('/\/hbbtv/', $uri)
         && !preg_match('/\/comments\//', $uri)
         && !preg_match('/\/rss\/(?!listado$)/', $uri)
     ) {
