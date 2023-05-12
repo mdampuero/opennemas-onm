@@ -167,6 +167,8 @@ class ContentHelper
             $item = $this->service->getItemBy($oql);
             return $item->created;
         } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            die();
             return null;
         }
     }
