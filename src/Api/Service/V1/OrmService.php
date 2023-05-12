@@ -253,16 +253,11 @@ class OrmService implements Service
     {
         try {
             $response = $this->getList($oql);
-        } catch (GetListException $e) {
-            var_dump('ERROR GET LIST EXCEPTION');
-            throw new GetListException($e->getMessage(), $e->getCode());
         } catch (\Exception $e) {
-            var_dump('ERROR NOT LIST EXCEPTION');
             throw new GetItemException($e->getMessage(), $e->getCode());
         }
 
         if (count($response['items']) !== 1) {
-            var_dump('MAS DE 1 ITEM?');
             throw new GetItemException();
         }
 
