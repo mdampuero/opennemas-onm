@@ -167,7 +167,7 @@ class ContentHelper
             $item = $this->service->getItemBy($oql);
             return $item->created;
         } catch (\Exception $e) {
-            $logger = $this->container->getService('application.log');
+            $logger = $this->container->get('application.log');
             $logger->info('ERROR getFirstContentCreatedDate() ' . $e->getMessage());
             var_dump($e);
             var_dump($e->getMessage());
