@@ -30,6 +30,13 @@ class HbbtvController extends Controller
      */
     public function showAction(Request $request)
     {
+        $module = $this->container->get('core.security')
+            ->hasExtension('es.openhost.module.hbbtv');
+
+        if (!$module) {
+            return new ResourceNotFoundException();
+        }
+
         $catService       = $this->container->get('api.service.category');
         $defaultThumbnail = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
