@@ -105,14 +105,14 @@
          *
          * @param {Array}    items  The array of related contents selected.
          * @param {Array}    extra  The array of extra data.
-         * @param {String}   target The target of the picker.
+         * @param {String}   locale The selected locale.
          *
          * @returns {String} The html code for a group of related contents.
          */
-        this.renderRelatedContents = function(items, extra, target) {
+        this.renderRelatedContents = function(items, extra, locale) {
           var html     = '';
           var promises = items.map(function(item) {
-            return this.renderContent(item, extra, target);
+            return this.renderContent(item, extra, locale);
           }.bind(this));
 
           return $q.all(promises).then(function(result) {
@@ -133,10 +133,11 @@
          *
          * @param {Object} item   The related content.
          * @param {Array}  extra  The array of extra data.
+         * @param {String} locale The selected locale.
          *
          * @return {String} The html code for a related content.
          */
-        this.renderContent = function(item, extra) {
+        this.renderContent = function(item, extra, locale) {
           var html = this.template.replace('[title]', item.title);
 
           if (item.content_type_name === 'attachment') {
@@ -173,10 +174,22 @@
 
           if (item.categories && item.categories.length > 0) {
             params.category_slug = category.name;
+            if (locale && typeof category.name == 'object') {
+              params.category_slug = category.name[0];
+              if (locale in category.name) {
+                params.category_slug = category.name[locale];
+              }
+            }
+          }
+
+          if (locale && locale !== extra.locale.default) {
+            locale = '/' + locale;
+          } else {
+            locale = '';
           }
 
           // Generates the url for the content.
-          html = html.replace('[url]', instanceFolder + routing.generate(route, params));
+          html = html.replace('[url]', instanceFolder + locale + routing.generate(route, params));
 
           var related = !item.related_contents.length > 0 ? [] : item.related_contents.filter(function(related) {
             return related.type === 'featured_frontpage';
