@@ -561,8 +561,8 @@ class RssController extends FrontendController
         $where   = 'content_type_name = "' . $contentType . '"'
             . ' AND content_status = 1'
             . ' AND in_litter != 1'
-            . ' AND starttime IS NULL OR starttime <= "' . gmdate('Y-m-d H:i:s') . '"'
-            . ' AND endtime IS NULL OR endtime > "' . gmdate('Y-m-d H:i:s') . '"';
+            . ' AND (starttime IS NULL OR starttime <= "' . gmdate('Y-m-d H:i:s') . '")'
+            . ' AND (endtime IS NULL OR endtime > "' . gmdate('Y-m-d H:i:s') . '")';
 
         // Get categories with enabled = 1 and rss = 1
         $categories = $this->get('api.service.category')
@@ -585,7 +585,12 @@ class RssController extends FrontendController
         }
 
         if ($contentType == 'event') {
-            $where .= 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))';
+            $where .= sprintf(
+                'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))',
+                gmdate('Y-m-d H:i:s'),
+                gmdate('Y-m-d H:i:s'),
+                gmdate('Y-m-d H:i:s')
+            );
             $join  .= 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
             . 'and cm1.meta_name = "event_start_date" '
             . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
