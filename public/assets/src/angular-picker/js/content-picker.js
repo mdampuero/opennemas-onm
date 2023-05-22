@@ -26,7 +26,6 @@
             contentPickerTarget: '=',
             contentPickerDynamicTarget: '@',
             contentPickerLocale: '=',
-
           },
           link: function($scope, elm, attrs) {
             /**

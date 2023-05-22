@@ -183,7 +183,8 @@
           }
 
           if (locale && locale !== extra.locale.default) {
-            locale = '/' + locale;
+            // Get locale slug
+            locale = '/' + extra.locale.slugs[locale];
           } else {
             locale = '';
           }
