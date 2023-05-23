@@ -392,6 +392,15 @@ class Redirector
             return $this->getRedirectContentParams($target);
         }
 
+        // Force multilanguage redirect adding locale to target url
+        if ($this->container->get('core.helper.locale')->hasMultilanguage()) {
+            $requestLocale = strtok($request->getPathInfo(), '/');
+            $target        = in_array(
+                $requestLocale,
+                $this->container->get('core.locale')->getSlugs('frontend')
+            ) ? '/' . $requestLocale . $target : $target;
+        }
+
         return new RedirectResponse(empty($target) ? '/' : $target, 301);
     }
 
