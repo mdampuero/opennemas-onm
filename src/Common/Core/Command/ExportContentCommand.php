@@ -98,6 +98,9 @@ class ExportContentCommand extends Command
             ->onlyEnabled()
             ->init();
 
+        // Apply frontend context to generate url with timezone
+        $this->getContainer()->get('core.locale')->setContext('frontend')->apply();
+
         $this->writeStep("Exporting contents from instance $instance");
 
         if ($this->output->isVerbose()) {
