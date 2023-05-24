@@ -63,7 +63,8 @@
 
           oqlEncoder.configure({
             placeholder: {
-              title: '[key] ~ "%[value]%"'
+              title: '[key] ~ "%[value]%"',
+              created: '[key] ~ "%[value]%"'
             }
           });
 

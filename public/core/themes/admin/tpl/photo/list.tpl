@@ -63,14 +63,7 @@
     </div>
   </li>
   <li class="hidden-xs ng-cloak quicklinks">
-    <select name="month" ng-model="criteria.created">
-      <option value="">{t}All months{/t}</option>
-      <optgroup label="[% year.name %]" ng-repeat="year in data.extra.years">
-        <option value="[% month.value %]" ng-repeat="month in year.months">
-          [% month.name %] ([% year.name %])
-        </option>
-      </optgroup>
-    </select>
+    {include file="ui/component/select/month.tpl" ngModel="criteria.created" data="data.extra.years"}
   </li>
 {/block}
 

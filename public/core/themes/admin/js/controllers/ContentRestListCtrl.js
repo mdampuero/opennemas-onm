@@ -15,8 +15,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('ContentRestListCtrl', [
-      '$controller', '$scope', '$uibModal', 'oqlEncoder', '$location', 'http', 'messenger', '$timeout',
-      function($controller, $scope, $uibModal, oqlEncoder, $location, http, messenger, $timeout) {
+      '$controller', '$scope', '$uibModal', 'oqlEncoder', '$location', 'http', 'messenger', '$window',
+      function($controller, $scope, $uibModal, oqlEncoder, $location, http, messenger, $window) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -117,6 +117,17 @@
             }
           });
         };
+
+        $scope.$watch('postponed', function(nv) {
+          if (nv && nv === true) {
+            var date = $window.moment().format('YYYY-MM-DD HH:mm:ss');
+
+            $scope.criteria.content_status = 1;
+            $scope.criteria.starttime = date;
+          } else if (nv === false) {
+            $scope.criteria.starttime = null;
+          }
+        });
 
         /**
          * Reloads the image list on media picker close event.
