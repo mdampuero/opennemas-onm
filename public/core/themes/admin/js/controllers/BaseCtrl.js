@@ -368,8 +368,10 @@
             items = [ items ];
           }
 
+          var locale = $scope.hasMultilanguage() ? $scope.config.locale.selected : null;
+
           if (items[0].content_type_name !== 'photo') {
-            $q.when(Renderer.renderRelatedContents(items, extra), function(html) {
+            $q.when(Renderer.renderRelatedContents(items, extra, locale), function(html) {
               Editor.get(target).insertHtml(html);
             });
           }

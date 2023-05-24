@@ -80,7 +80,8 @@ class LocalizeFilter extends Filter
 
         foreach ($this->getParameter('keys') as $key) {
             if (isset($item->{$key})) {
-                $item->{$key} = $this->filterValue($item->{$key});
+                $original     = $item->getStored()[$key] ?? $item->{$key};
+                $item->{$key} = $this->filterValue($original);
             }
         }
     }

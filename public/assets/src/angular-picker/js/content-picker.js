@@ -24,7 +24,8 @@
           scope: {
             contentPickerIgnore: '@',
             contentPickerTarget: '=',
-            contentPickerDynamicTarget: '@'
+            contentPickerDynamicTarget: '@',
+            contentPickerLocale: '=',
           },
           link: function($scope, elm, attrs) {
             /**
@@ -562,6 +563,8 @@
           }
 
           var data = {
+            locale: $scope.contentPickerLocale ?
+              $scope.contentPickerLocale : null,
             category: $scope.criteria.category ?
               $scope.criteria.category : null,
             content_type_name: $scope.criteria.contentType ?
