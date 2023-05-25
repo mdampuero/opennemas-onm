@@ -572,10 +572,11 @@ class RssController extends FrontendController
             return $a->id;
         }, $categories['items']);
 
-        // Fix condition for IN operator when no categories
-        $ids = empty($ids) ? [ '' ] : $ids;
-
         if (!in_array($contentType, ['opinion', 'obituary', 'company'])) {
+            if (empty($ids)) {
+                return [];
+            }
+
             $join  .= 'inner join content_category on pk_content = content_id ';
             $where .= sprintf(' AND category_id IN (%s)', implode(',', $ids));
 
