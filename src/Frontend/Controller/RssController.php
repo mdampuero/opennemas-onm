@@ -550,24 +550,19 @@ class RssController extends FrontendController
      */
     public function getLatestContents($contentType = 'article', $category = null, $total = 10)
     {
-        $em = $this->get('entity_repository');
+        $sqlBase = 'SELECT * FROM contents '
+            . '%s'
+            . ' WHERE %s'
+            . ' ORDER BY %s'
+            . ' LIMIT ' . $total;
 
-        $order   = [ 'starttime' => 'DESC' ];
-        $filters = [
-            'content_type_name' => [[ 'value' => $contentType ]],
-            'content_status'    => [[ 'value' => 1 ]],
-            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
-            'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
-            ],
-            'endtime'           => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
-                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
-            ]
-        ];
+        $orderBy = 'starttime desc';
+        $join    = '';
+        $where   = 'content_type_name = "' . $contentType . '"'
+            . ' AND content_status = 1'
+            . ' AND in_litter != 1'
+            . ' AND (starttime IS NULL OR starttime <= "' . gmdate('Y-m-d H:i:s') . '")'
+            . ' AND (endtime IS NULL OR endtime > "' . gmdate('Y-m-d H:i:s') . '")';
 
         // Get categories with enabled = 1 and rss = 1
         $categories = $this->get('api.service.category')
@@ -581,37 +576,29 @@ class RssController extends FrontendController
         $ids = empty($ids) ? [ '' ] : $ids;
 
         if (!in_array($contentType, ['opinion', 'obituary', 'company'])) {
-            $filters['category_id'] = [
-                [ 'value' => $ids, 'operator' => 'IN' ]
-            ];
+            $join  .= 'inner join content_category on pk_content = content_id ';
+            $where .= sprintf(' AND category_id IN (%s)', implode(',', $ids));
 
             if (!empty($category)) {
-                $filters['category_id'] = [ [ 'value' => $category ] ];
+                $where .= ' AND category_id = ' . $category;
             }
         }
 
         if ($contentType == 'event') {
-            $filters['contentmeta.meta_name']  = [
-                [ 'value' => 'event_end_date', 'operator' => '=' ]
-            ];
-            $filters['contentmeta.meta_value'] = [
-                [ 'value' => gmdate('Y-m-d'), 'operator' => '>=' ]
-            ];
-            $filters['join']                   = [
-                [
-                    'table'               => 'contentmeta',
-                    'type'                => 'inner',
-                    'contents.pk_content' => [
-                        [
-                            'value' => 'contentmeta.fk_content',
-                            'field' => true
-                        ]
-                    ]
-                ]
-            ];
+            $where .= sprintf(
+                'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))',
+                gmdate('Y-m-d H:i:s'),
+                gmdate('Y-m-d H:i:s'),
+                gmdate('Y-m-d H:i:s')
+            );
+            $join  .= 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
+            . 'and cm1.meta_name = "event_start_date" '
+            . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
+            . 'and cm2.meta_name = "event_end_date" ';
         }
 
-        $contents = $em->findBy($filters, $order, $total, 1);
+        $sql      = sprintf($sqlBase, $join, $where, $orderBy);
+        $contents = $this->get('api.service.content')->getListBySql($sql)['items'];
         $cm       = new \ContentManager();
         $contents = $cm->filterBlocked($contents);
 
