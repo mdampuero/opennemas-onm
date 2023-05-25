@@ -36,7 +36,7 @@ class DefaultRenderer extends StatisticsRenderer
             || preg_match('@^/admin@', $request->getUri())
             || preg_match('@/preview$@', $request->getUri())
             || preg_match('@^/ext@', $request->getUri())
-            || !$this->frontend->hasValue('item')
+            || !$this->frontend->getValue('item')->pk_content
         ) {
             return false;
         }
