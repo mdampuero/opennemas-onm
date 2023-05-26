@@ -587,7 +587,7 @@ class RssController extends FrontendController
 
         if ($contentType == 'event') {
             $where .= sprintf(
-                'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))',
+                ' and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))',
                 gmdate('Y-m-d H:i:s'),
                 gmdate('Y-m-d H:i:s'),
                 gmdate('Y-m-d H:i:s')
