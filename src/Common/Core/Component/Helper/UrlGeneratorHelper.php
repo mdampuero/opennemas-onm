@@ -2,6 +2,8 @@
 
 namespace Common\Core\Component\Helper;
 
+use Common\Model\Entity\Category;
+
 class UrlGeneratorHelper
 {
     /**
@@ -224,17 +226,12 @@ class UrlGeneratorHelper
             if (array_key_exists($paramKey, $this->l10nUrlParams)) {
                 $translation = true;
                 $service     = $this->container->get(sprintf('api.service.%s', $this->l10nUrlParams[$paramKey]));
+                $item        = $service->getItemBySlug($paramValue);
             }
-
             foreach ($slugs as $longSlug => $shortSlug) {
                 $translatedParam = $paramValue;
-                $locale->setRequestLocale($longSlug);
-                $locale->setLocale($longSlug);
-                $locale->apply();
                 if ($translation) {
-                    $item            = $service->getItemBySlug($paramValue);
-                    $method          = sprintf('get%sSlug', ucfirst($this->l10nUrlParams[$paramKey]));
-                    $translatedParam = $this->$method($item, $longSlug);
+                    $translatedParam = $this->getTranlatedSlug($item, $shortSlug);
                 }
 
                 $finalParms[$paramKey][$longSlug] = $translatedParam;
@@ -246,18 +243,17 @@ class UrlGeneratorHelper
         return $finalParms;
     }
 
-    protected function getCategorySlug($item, $locale)
+    protected function getTranlatedSlug($item, $shortSlug)
     {
-        return is_array($item->getStored()['name']) ?
-            $item->getStored()['name'][$locale] :
-            $item->getStored()['name'];
-    }
+        $propertyName = $item->slug ? 'slug' : 'name';
 
-    protected function getContentSlug($item, $locale)
-    {
-        return is_array($item->getStored()['slug']) ?
-            $item->getStored()['slug'][$locale] :
-            $item->getStored()['slug'];
+        $value = $this->container->get('data.manager.filter')->set($item)
+            ->filter('localize', [
+                'keys'   => [ $propertyName ],
+                'locale' => $shortSlug
+            ])->get();
+
+        return $value->$propertyName;
     }
 
     /**
