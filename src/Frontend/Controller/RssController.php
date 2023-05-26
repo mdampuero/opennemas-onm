@@ -564,9 +564,9 @@ class RssController extends FrontendController
             . ' AND (starttime IS NULL OR starttime <= "' . gmdate('Y-m-d H:i:s') . '")'
             . ' AND (endtime IS NULL OR endtime > "' . gmdate('Y-m-d H:i:s') . '")';
 
-        // Get categories with enabled = 1 and rss = 1
+        // Get categories excluded from RSS
         $categories = $this->get('api.service.category')
-            ->getList('enabled = 1 and rss = 1');
+            ->getList('enabled != 1 or rss != 1');
 
         $ids = array_map(function ($a) {
             return $a->id;
@@ -578,7 +578,7 @@ class RssController extends FrontendController
             }
 
             $join  .= 'inner join content_category on pk_content = content_id ';
-            $where .= sprintf(' AND category_id IN (%s)', implode(',', $ids));
+            $where .= sprintf(' AND category_id NOT IN (%s)', implode(',', $ids));
 
             if (!empty($category)) {
                 $where .= ' AND category_id = ' . $category;
@@ -593,9 +593,9 @@ class RssController extends FrontendController
                 gmdate('Y-m-d H:i:s')
             );
             $join  .= 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
-            . 'and cm1.meta_name = "event_start_date" '
-            . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
-            . 'and cm2.meta_name = "event_end_date" ';
+                . 'and cm1.meta_name = "event_start_date" '
+                . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
+                . 'and cm2.meta_name = "event_end_date" ';
         }
 
         $sql      = sprintf($sqlBase, $join, $where, $orderBy);
