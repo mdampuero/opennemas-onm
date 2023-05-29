@@ -550,56 +550,47 @@ class RssController extends FrontendController
      */
     public function getLatestContents($contentType = 'article', $category = null, $total = 10)
     {
-        $sqlBase = 'SELECT * FROM contents '
-            . '%s'
-            . ' WHERE %s'
-            . ' ORDER BY %s'
-            . ' LIMIT ' . $total;
+        $em = $this->get('entity_repository');
 
-        $orderBy = 'starttime desc';
-        $join    = '';
-        $where   = 'content_type_name = "' . $contentType . '"'
-            . ' AND content_status = 1'
-            . ' AND in_litter != 1'
-            . ' AND (starttime IS NULL OR starttime <= "' . gmdate('Y-m-d H:i:s') . '")'
-            . ' AND (endtime IS NULL OR endtime > "' . gmdate('Y-m-d H:i:s') . '")';
+        $order   = [ 'starttime' => 'DESC' ];
+        $filters = [
+            'content_type_name' => [[ 'value' => $contentType ]],
+            'content_status'    => [[ 'value' => 1 ]],
+            'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+            'starttime'         => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
+            ],
+            'endtime'           => [
+                'union' => 'OR',
+                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
+            ]
+        ];
 
-        // Get categories excluded from RSS
+        // Get categories with enabled = 1 and rss = 1
         $categories = $this->get('api.service.category')
-            ->getList('enabled != 1 or rss != 1');
+            ->getList('enabled = 1 and rss = 1');
 
         $ids = array_map(function ($a) {
             return $a->id;
         }, $categories['items']);
 
-        if (!in_array($contentType, ['opinion', 'obituary', 'company'])) {
-            if (empty($ids)) {
-                return [];
-            }
+        // Fix condition for IN operator when no categories
+        $ids = empty($ids) ? [ '' ] : $ids;
 
-            $join  .= 'inner join content_category on pk_content = content_id ';
-            $where .= sprintf(' AND category_id NOT IN (%s)', implode(',', $ids));
+        if (!in_array($contentType, ['opinion', 'obituary', 'company'])) {
+            $filters['category_id'] = [
+                [ 'value' => $ids, 'operator' => 'IN' ]
+            ];
 
             if (!empty($category)) {
-                $where .= ' AND category_id = ' . $category;
+                $filters['category_id'] = [ [ 'value' => $category ] ];
             }
         }
 
-        if ($contentType == 'event') {
-            $where .= sprintf(
-                ' and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))',
-                gmdate('Y-m-d H:i:s'),
-                gmdate('Y-m-d H:i:s'),
-                gmdate('Y-m-d H:i:s')
-            );
-            $join  .= 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
-                . 'and cm1.meta_name = "event_start_date" '
-                . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
-                . 'and cm2.meta_name = "event_end_date" ';
-        }
-
-        $sql      = sprintf($sqlBase, $join, $where, $orderBy);
-        $contents = $this->get('api.service.content')->getListBySql($sql)['items'];
+        $contents = $em->findBy($filters, $order, $total, 1);
         $cm       = new \ContentManager();
         $contents = $cm->filterBlocked($contents);
 
