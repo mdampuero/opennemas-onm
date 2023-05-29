@@ -26,6 +26,7 @@ class PickerController extends Controller
     public function listAction(Request $request)
     {
         $epp          = $request->query->getDigits('epp', 1);
+        $locale       = $request->query->filter('locale', null);
         $date         = $request->query->filter('date', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $title        = $request->query->filter('title', '', FILTER_SANITIZE_STRING);
@@ -105,8 +106,8 @@ class PickerController extends Controller
         $languageData = $this->getLocaleData('frontend');
         $fm           = $this->get('data.manager.filter');
         $results      = $fm->set($results)->filter('localize', [
-            'keys'      => ['title', 'name', 'description'],
-            'locale'    => $languageData['default']
+            'keys'      => ['title', 'name', 'description', 'slug'],
+            'locale'    => $locale
         ])->get();
 
         $results = $this->responsify($results);

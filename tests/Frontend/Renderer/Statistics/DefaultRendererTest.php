@@ -53,7 +53,7 @@ class DefaultRendererTest extends TestCase
 
         $this->smarty->expects($this->any())->method('getValue')
             ->with('item')
-            ->willReturn(new Content());
+            ->willReturn(new Content([ 'pk_content' => 123 ]));
 
         $this->renderer = new DefaultRenderer($this->container);
     }

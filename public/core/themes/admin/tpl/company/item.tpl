@@ -62,6 +62,9 @@
         {acl isAllowed="COMPANY_AVAILABLE"}
           {include file="ui/component/content-editor/accordion/published.tpl"}
         {/acl}
+        <div class="m-t-5">
+          {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
+        </div>
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.company_info = !expanded.company_info">
         <i class="fa fa-pie-chart m-r-10"></i>{t}Company info{/t}

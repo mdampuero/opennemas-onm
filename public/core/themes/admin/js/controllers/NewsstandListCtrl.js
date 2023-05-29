@@ -92,7 +92,13 @@
           $scope.backup.criteria    = $scope.criteria;
           $scope.app.columns.hidden = [ 'author', 'tags' ];
 
-          oqlEncoder.configure({ placeholder: { title: '[key] ~ "%[value]%"' } });
+          oqlEncoder.configure({
+            placeholder: {
+              title: '[key] ~ "%[value]%"',
+              created: '[key] ~ "%[value]%"'
+            }
+          });
+
           $scope.list();
         };
 

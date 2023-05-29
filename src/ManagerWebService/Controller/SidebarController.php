@@ -150,6 +150,15 @@ class SidebarController extends Controller
                     ]
                 ],
                 [
+                    'name'     => _('Ads.txt'),
+                    'icon'     => 'fa-file-o',
+                    'route'    => 'manager_ads_list',
+                    'click'    => true,
+                    'security' => [
+                        'permission' => [ 'ADS_LIST' ],
+                    ],
+                ],
+                [
                     'name'     => _('System'),
                     'icon'     => 'fa-gears',
                     'items' => [

@@ -85,8 +85,9 @@ class AppearanceSettingController extends SettingController
         }
     }
 
-    protected function saveFiles($logos)
+    protected function saveFiles($settings)
     {
+        $logos    = array_intersect_key($settings, array_keys($this->references));
         $msg      = $this->get('core.messenger');
         $settings = [];
         foreach ($logos as $key => $id) {
@@ -117,7 +118,7 @@ class AppearanceSettingController extends SettingController
                 throw new \Exception("The maximum height for the %s is 120px. Please adjust your image size.");
             }
 
-            $settings[$key] = get_logo($key)->pk_content ?? null;
+            $settings[$key] = $this->container->get('core.helper.setting')->getLogo($key)->pk_content ?? null;
         }
 
         return $settings;

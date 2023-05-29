@@ -14,3 +14,8 @@
 <hr>
 {/if}
 {/foreach}
+<div class="row">
+  <div class="col-md-12">
+    {include file="advertisement/partials/ad_position_selector.tpl" position_id="10"}
+  </div>
+</div>

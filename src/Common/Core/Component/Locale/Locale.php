@@ -46,7 +46,7 @@ class Locale
      *
      * @var array
      */
-    protected $fixes = [ 'en' => 'en_US', 'gl' => 'gl_ES', 'es' => 'es_ES' ];
+    protected $fixes = [ 'en' => 'en_US', 'gl' => 'gl_ES', 'es' => 'es_ES', 'fr' => 'fr_FR' ];
 
     /**
      * The locale for the current request.
@@ -308,7 +308,11 @@ class Locale
      */
     public function getTimeZone($context = null)
     {
-        return new \DateTimeZone($this->config[$this->getContext($context)]['timezone']);
+        try {
+            return new \DateTimeZone($this->config[$this->getContext($context)]['timezone']);
+        } catch (\Exception $e) {
+            return new \DateTimeZone('UTC');
+        }
     }
 
     /**

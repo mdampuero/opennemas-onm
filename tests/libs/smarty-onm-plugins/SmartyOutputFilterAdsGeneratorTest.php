@@ -73,7 +73,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $this->renderer = $this->getMockBuilder('AdvertisementRenderer')
             ->setMethods([
-                'renderInlineHeaders', 'renderInlineInterstitial', 'getAdvertisements',
+                'renderInlineHeaders', 'renderInlineInterstitial', 'renderInlinePixel', 'getAdvertisements',
                 'getInlineFormats', 'getRequested', 'getPositions', 'getExpiringAdvertisements', 'getXCacheFor'
             ])
             ->getMock();
@@ -266,7 +266,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with('ads_format')
             ->willReturn(null);
 
-        $this->renderer->expects($this->at(3))->method('getInlineFormats')
+        $this->renderer->expects($this->at(4))->method('getInlineFormats')
             ->willReturn([ 'amp', 'fia', 'newsletter' ]);
 
         $this->smarty->expects($this->at(4))->method('getValue')
@@ -277,13 +277,16 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with('ads_settings')
             ->willReturn([ 'lifetime_cookie' => 100 ]);
 
-        $this->renderer->expects($this->at(4))->method('renderInlineHeaders')
+        $this->renderer->expects($this->at(5))->method('renderInlineHeaders')
             ->willReturn('<script>AdsHeaders</script>');
 
-        $this->renderer->expects($this->at(2))->method('renderInlineInterstitial')
+        $this->renderer->expects($this->at(2))->method('renderInlinePixel')
+            ->willReturn('<script>Pixel</script>');
+
+        $this->renderer->expects($this->at(3))->method('renderInlineInterstitial')
             ->willReturn('<script>Intersticial</script>');
 
-        $this->renderer->expects($this->at(5))->method('getPositions')
+        $this->renderer->expects($this->at(6))->method('getPositions')
             ->willReturn([]);
 
         $this->router->expects($this->once())->method('generate')
@@ -310,7 +313,7 @@ class SmartyOutputFilterAdsGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $output      = '<html><head></head><body></body></html>';
         $returnValue = "<html><head><script>AdsHeaders</script>_onmaq_template</head>"
-        . "<body><script>Intersticial</script>\ndevices_template</body></html>";
+        . "<body><script>Pixel</script><script>Intersticial</script>\ndevices_template</body></html>";
 
         $this->assertEquals($returnValue, smarty_outputfilter_ads_generator(
             $output,

@@ -694,6 +694,83 @@ class AdvertisementRendererTest extends TestCase
     }
 
     /**
+     * Tests renderInlinePixel.
+     */
+    public function testRenderInlinePixel()
+    {
+        $ad                  = new \Advertisement();
+        $ad->positions       = [ 10 ];
+        $ad->with_script     = 1;
+        $ad->params['sizes'] = [
+            '0' => [
+                'width' => 1,
+                'height' => 1,
+                'device' => 'desktop'
+            ],
+            '1' => [
+                'width' => 1,
+                'height' => 1,
+                'device' => 'tablet'
+            ],
+            '2' => [
+                'width' => 1,
+                'height' => 1,
+                'device' => 'phone'
+            ]
+        ];
+
+        $ad->params['devices'] = [
+            'phone' => 1,
+            'desktop' => 1
+        ];
+
+        $this->renderer->setAdvertisements([$ad]);
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\DfpRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderInline' ])
+            ->getMock();
+
+        $renderer->expects($this->any())->method('renderInline')
+            ->willReturn('Pixel');
+
+        $this->renderer->expects($this->once())->method('getRendererClass')
+            ->with(1)
+            ->willReturn($renderer);
+
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('desktop');
+
+        $this->assertEquals(
+            'Pixel',
+            $this->renderer->renderInlinePixel([])
+        );
+    }
+
+    /**
+     * Tests renderInlinePixel when no ad.
+     */
+    public function testRenderInlinePixelWithNoPixel()
+    {
+        $returnValue = '';
+        $this->assertEquals(
+            $returnValue,
+            $this->renderer->renderInlinePixel([])
+        );
+
+        $ad1            = new \Advertisement();
+        $ad1->positions = [ 1, 2 ];
+
+        $this->renderer->setAdvertisements([$ad1]);
+
+        $returnValue = '';
+        $this->assertEquals(
+            $returnValue,
+            $this->renderer->renderInlinePixel([])
+        );
+    }
+
+    /**
      * Tests renderInlineInterstitial with empty sizes.
      */
     public function testRenderInlineInterstitialWithEmptySizes()

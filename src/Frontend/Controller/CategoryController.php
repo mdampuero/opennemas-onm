@@ -162,6 +162,7 @@ class CategoryController extends FrontendController
         $group      = $this->getAdvertisementGroup($action);
 
         $positions = array_merge(
+            $this->get('core.helper.advertisement')->getPositionsForGroup('all'),
             $this->get('core.helper.advertisement')->getPositionsForGroup($group),
             $this->get('core.helper.advertisement')->getPositionsForGroup('article_inner'),
             $this->getAdvertisementPositions($group)
