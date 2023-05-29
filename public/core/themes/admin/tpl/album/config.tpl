@@ -41,7 +41,7 @@
       <div class="grid-body ng-cloak">
         <div class="row">
           {acl isAllowed="MASTER"}
-            <div class="col-md-6">
+            <div class="col-md-4">
               <h4>Layout</h4>
               <div class="controls">
                 <div class="radio">
@@ -58,7 +58,18 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+              <h4>Page view per photo</h4>
+              <div class="controls">
+                <div class="checkbox">
+                  <input class="form-control" id="stats-per-photo" name="stats-per-photo" ng-false-value="'0'" ng-model="settings.album_stats_photo" ng-true-value="'1'" type="checkbox"/>
+                  <label class="form-label" for="stats-per-photo">
+                    {t}Disable{/t}
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
               <h4>Max photos</h4>
               <div class="controls col-xs-4">
                 <input class="form-control" min="0" ng-model="settings.album_max" ng-value="settings.album_max" placeholder="100" type="number">

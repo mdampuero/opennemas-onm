@@ -277,7 +277,6 @@
   <script type="text/ng-template" id="404">
     {include file="error/404.tpl"}
   </script>
-  <script src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
   {javascripts src="
     @Common/components/jquery/dist/jquery.min.js,
     @Common/components/bootstrap/dist/js/bootstrap.min.js,

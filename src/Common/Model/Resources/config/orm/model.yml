@@ -18,6 +18,7 @@ parameters:
 imports:
     - { resource: connection/instance.yml }
     - { resource: connection/manager.yml }
+    - { resource: entity/ads.yml }
     - { resource: entity/category.yml }
     - { resource: entity/client.yml }
     - { resource: entity/comment.yml }

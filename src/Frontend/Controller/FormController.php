@@ -66,7 +66,7 @@ class FormController extends Controller
         }
 
         $email    = trim($request->request->filter('email', null, FILTER_SANITIZE_STRING));
-        $response = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
+        $response = $request->request->filter('g-recaptcha-response');
         $formType = $request->request->filter('form_type', '', FILTER_SANITIZE_STRING);
         $message  = '';
         $class    = 'error';

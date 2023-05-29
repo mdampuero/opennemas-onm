@@ -1,6 +1,5 @@
 .sidebar {
   background-color: lighten(@sidebar-background, 3%);
-  font-family: 'Open Sans';
   font-size: 14px;
   height: 100%;
   margin-top: @sidebar-margin;
@@ -47,7 +46,7 @@
           font-weight: 600;
 
           & > a {
-            color: #fff;
+            color: @selected-color;
           }
         }
 
@@ -91,16 +90,15 @@
 
           i {
             float: left;
-            height: @sidebar-height;
             margin: 0;
-            padding: 18px 0;
+            padding: 13px 0;
             text-align: center;
             transition: all .25s;
             width: @sidebar-width-collapsed;
           }
 
           .arrow {
-            margin: 16px 20px 0 0;
+            margin: 10px 20px 0 0;
             float: right;
 
             &:before {
@@ -121,10 +119,9 @@
           .title {
             display: inline-block;
             float: left;
-            height: @sidebar-height;
             overflow: hidden;
             max-width: 120px;
-            padding: 15px 0;
+            padding: 10px 0;
             transition: all .25s;
             white-space: nowrap;
           }
@@ -168,11 +165,12 @@
     }
 
     .sub-menu {
-      background-color: @sidebar-background;
+      background-color: rgba(255, 255, 255, 0.1);
       clear: both;
       display: none;
       font-weight: 300;
       font-size: 13px;
+      padding: 4px 0;
       position: relative;
 
       li {
@@ -182,21 +180,21 @@
           i {
             height: @sidebar-height - 10px;
             margin-left: @sidebar-indentation;
-            padding: 13px 0;
+            padding: 9px 0;
             width: @sidebar-width-collapsed - 10px;
           }
 
           .title {
-            height: 40px;
+            height: 32px;
             overflow: hidden;
-            padding: 10px 0;
+            padding: 6px 0;
             text-overflow: ellipsis;
             transition: all .3s;
             width: 115px;
           }
 
           .arrow {
-            margin: 10px 20px 0 0;
+            margin: 6px 20px 0 0;
           }
         }
 
@@ -321,10 +319,10 @@
       a {
         i {
           font-size: 14px;
-          height: 50px;
+          height: 32px;
           margin-left: 0;
           width: 50px;
-          padding: 18px 0;
+          padding: 13px 0;
         }
       }
     }
@@ -394,7 +392,7 @@
 
         .arrow {
           float: left;
-          margin: 16px 0 0 20px;
+          margin: 10px 0 0 20px;
 
           &:before {
             content: "\f104";

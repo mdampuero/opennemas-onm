@@ -14,9 +14,9 @@ parameters:
             timezone: UTC
         frontend:
             language:
-                available: [ 'en_US', 'es_ES', 'eu_ES', 'ca_ES', 'gl_ES', 'pt_PT' ]
+                available: [ 'en_US', 'es_ES', 'eu_ES', 'ca_ES', 'gl_ES', 'pt_PT', 'fr_FR']
                 selected: 'en_US'
-                slug: { 'en_US': 'en', 'es_ES': 'es', 'eu_ES': 'eu', 'ca_ES': 'ca', 'gl_ES': 'gl', 'pt_PT': 'pt' }
+                slug: { 'en_US': 'en', 'es_ES': 'es', 'eu_ES': 'eu', 'ca_ES': 'ca', 'gl_ES': 'gl', 'pt_PT': 'pt', 'fr_FR': 'fr'}
             timezone: UTC
     core.locale.path:      '%kernel.root_dir%/Resources/locale'
     core.maintenance.file: '%kernel.root_dir%/../.maintenance'

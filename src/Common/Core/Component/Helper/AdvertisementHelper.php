@@ -184,6 +184,48 @@ class AdvertisementHelper
         return false;
     }
 
+    public function getAdsTxtFromManager($skipMaster = false)
+    {
+        if (!$this->container->get('core.security')->hasPermission('MASTER') && !$skipMaster) {
+            return [];
+        }
+
+        $oql = sprintf(
+            'instances ~ "%s" or instances ~ "Todos"',
+            $this->container->get('core.instance')->internal_name
+        );
+        $ads = $this->container->get('orm.manager')->getRepository('Ads')
+            ->findBy($oql);
+
+        return $ads;
+    }
+
+    public function getAdsTxtContent()
+    {
+        $adsTxt = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('ads_txt');
+
+        $adsContainers = $this->getAdsTxtFromManager(true);
+        $adsLines      = [];
+
+        if (!empty($adsContainers) && is_array($adsContainers)) {
+            foreach ($adsContainers as $container) {
+                $containerLines = explode("\n", $container->ads_lines);
+                foreach ($containerLines as $line) {
+                    $adsLines[] = trim($line);
+                }
+            }
+        }
+
+        $containerLines = explode("\n", $adsTxt);
+        foreach ($containerLines as $line) {
+            $adsLines[] = trim($line);
+        }
+
+        return implode("\n", array_unique($adsLines));
+    }
+
     /**
      * Checks if request url is ads restricted.
      *

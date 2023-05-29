@@ -33,12 +33,14 @@ function smarty_outputfilter_ads_generator($output, $smarty)
             'x-tags'             => $smarty->getValue('x-tags'),
         ];
 
+        $pixel        = $adsRenderer->renderInlinePixel($params);
         $interstitial = $adsRenderer->renderInlineInterstitial($params);
     }
 
     if ((!is_array($ads)
         || (empty($ads) && empty($expiringAds))
-        && empty($interstitial))
+        && empty($interstitial)
+        && empty($pixel))
         || preg_match('/newsletter/', $smarty->source->resource)
     ) {
         return $output;
@@ -84,6 +86,7 @@ function smarty_outputfilter_ads_generator($output, $smarty)
         $devices = "\n" . str_replace("\n", ' ', $devices);
 
         $output = str_replace('</head>', $adsOutput . '</head>', $output);
+        $output = str_replace('</body>', $pixel . '</body>', $output);
         $output = str_replace('</body>', $interstitial . '</body>', $output);
         $output = str_replace('</body>', $devices . '</body>', $output);
     }

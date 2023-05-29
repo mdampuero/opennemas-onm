@@ -207,6 +207,7 @@ class Controller extends SymfonyController
         $group      = $this->getAdvertisementGroup($action);
 
         $positions = array_merge(
+            $this->get('core.helper.advertisement')->getPositionsForGroup('all'),
             $this->get('core.helper.advertisement')->getPositionsForGroup($group),
             $this->getAdvertisementPositions($group)
         );

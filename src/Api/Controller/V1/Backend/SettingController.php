@@ -24,120 +24,28 @@ class SettingController extends Controller
      *
      * @var array
      */
-    protected $base64Encoded = [
-        'body_end_script',
-        'body_end_script_amp',
-        'body_start_script',
-        'body_start_script_amp',
-        'custom_css_amp',
-        'header_script',
-        'header_script_amp',
-    ];
+    protected $base64Encoded = [];
+
+    /**
+     * The list of settings that must be parsed to int.
+     *
+     * @var array
+     */
+    protected $toint = [];
 
     /**
      * The list of settings that can be saved.
      *
      * @var array
      */
-    protected $keys = [
-        'actOn.authentication',
-        'body_end_script',
-        'body_end_script_amp',
-        'body_start_script',
-        'body_start_script_amp',
-        'browser_update',
-        'chartbeat',
-        'cmp_amp',
-        'cmp_id',
-        'cmp_type',
-        'comscore',
-        'contact_email',
-        'cookies',
-        'cookies_hint_url',
-        'custom_css_amp',
-        'data_layer',
-        'elements_in_rss',
-        'facebook',
-        'facebook_id',
-        'facebook_page',
-        'full_rss',
-        'logo_favico',
-        'logo_embed',
-        'frontpage_max_items',
-        'gfk',
-        'google_analytics',
-        'google_analytics_others',
-        'google_custom_search_api_key',
-        'google_maps_api_key',
-        'google_news_name',
-        'google_page',
-        'google_tags_id',
-        'google_tags_id_amp',
-        'googleplus_page',
-        'header_script',
-        'header_script_amp',
-        'instagram_page',
-        'items_in_blog',
-        'items_per_page',
-        'linkedin_page',
-        'locale',
-        'logo_enabled',
-        'max_session_lifetime',
-        'logo_simple',
-        'ojd',
-        'onm_digest_pass',
-        'onm_digest_user',
-        'payments',
-        'paypal_mail',
-        'pinterest_page',
-        'prometeo',
-        'recaptcha',
-        'redirection',
-        'refresh_enabled',
-        'refresh_interval',
-        'robots_txt_rules',
-        'rtb_files',
-        'section_settings',
-        'site_color',
-        'site_color_secondary',
-        'site_description',
-        'site_footer',
-        'site_keywords',
-        'logo_default',
-        'site_name',
-        'site_title',
-        'theme_font',
-        'theme_font_secondary',
-        'theme_skin',
-        'translators',
-        'twitter_page',
-        'vimeo_page',
-        'webmastertools_bing',
-        'webmastertools_google',
-        'youtube_page',
-        'sitemap',
-        'disable_default_ga'
-    ];
+    protected $keys = [];
 
     /**
      * The list of settings that can be saved only by MASTER users.
      *
      * @var array
      */
-    protected $onlyMasters = [
-        'body_end_script',
-        'body_end_script_amp',
-        'body_start_script',
-        'body_start_script_amp',
-        'custom_css_amp',
-        'disable_default_ga',
-        'frontpage_max_items',
-        'full_rss',
-        'header_script',
-        'header_script_amp',
-        'robots_txt_rules',
-        'sitemap'
-    ];
+    protected $onlyMasters = [];
 
     /**
      * Returns a list of available locales by name.
@@ -175,17 +83,22 @@ class SettingController extends Controller
     /**
      * Returns the list of settings.
      *
+     * @param Request $request The request object.
+     *
      * @return JsonResponse The response object.
      *
      * @Security("hasExtension('SETTINGS_MANAGER')
      *     and hasPermission('ONM_SETTINGS')")
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
+        $locale = $this->get('core.locale');
+        $params = $request->get('params');
+        $keys   = is_array($params) && !empty($params) ? array_keys($params) : $this->keys;
+
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get($this->keys);
-        $locale   = $this->get('core.locale');
+            ->get($keys);
 
         // Decode scripts
         foreach ($this->base64Encoded as $key) {
@@ -194,19 +107,17 @@ class SettingController extends Controller
             }
         }
 
-        $toint = [
-            'items_in_blog', 'items_per_page', 'elements_in_rss', 'logo_enabled',
-            'refresh_enabled', 'refresh_interval', 'logo_default', 'logo_simple',
-            'logo_favico', 'logo_embed', 'sitemap', 'frontpage_max_items'
-        ];
-
-        foreach ($toint as $key) {
-            if (!empty($settings[$key]) && is_array($settings[$key])) {
-                foreach ($settings[$key] as $element => $value) {
-                    $settings[$key][$element] = (int) $value;
+        // Parse to int keys
+        if ($this->toint && !empty($this->toint)) {
+            foreach ($this->toint as $key) {
+                if (array_key_exists($key, $settings) && !empty($settings[$key]) &&
+                    is_array($settings[$key])) {
+                    foreach ($settings[$key] as $element => $value) {
+                        $settings[$key][$element] = (int) $value;
+                    }
+                } elseif (array_key_exists($key, $settings)) {
+                    $settings[$key] = (int) $settings[$key];
                 }
-            } else {
-                $settings[$key] = (int) $settings[$key];
             }
         }
 
@@ -214,27 +125,9 @@ class SettingController extends Controller
             return !empty($a);
         });
 
-        return new JsonResponse([
-            'instance' => [
-                'country' => $this->get('core.instance')->country
-            ],
-            'extra'    => [
-                'countries' => $this->get('core.geo')->getCountries(),
-                'locales'   => [
-                    'backend'  => $locale->getAvailableLocales('backend'),
-                    'frontend' => $locale->getAvailableLocales('frontend')
-                ],
-                'sitemaps' => $this->get('core.helper.sitemap')->getSitemapsInfo(),
-                'timezones' => \DateTimeZone::listIdentifiers(),
-                'prefix'    => $this->get('core.instance')->getMediaShortPath()
-                    . '/',
-                'translation_services' =>
-                    $this->get('core.factory.translator')->getTranslatorsData(),
-                'theme_skins' => $this->get('core.theme')->getSkins(),
-                'data_types'  => $this->get('core.service.data_layer')->getTypes()
-            ],
+        return [
             'settings' => $settings,
-        ]);
+        ];
     }
 
     /**
@@ -249,30 +142,25 @@ class SettingController extends Controller
      */
     public function saveAction(Request $request)
     {
-        $defaults = array_fill_keys($this->keys, null);
-        $country  = $request->get('instance');
-        $settings = $request->get('settings');
-        $msg      = $this->get('core.messenger');
+        return $this->saveSettings($request->get('settings'));
+    }
 
-        // Save country for instance
-        $instance = $this->get('core.instance');
-        $instance->merge($country);
-        $this->get('orm.manager')->persist($instance);
-
-        $settings = array_merge($settings, $this->saveFiles($settings));
-        $settings = array_merge($defaults, $settings);
+    /**
+     * Performs the action of saving the configuration settings
+     *
+     * @param Mixed $settings the settings object
+     *
+     * @return Response the response object
+     *
+     */
+    protected function saveSettings($settings)
+    {
+        $msg = $this->get('core.messenger');
 
         // Remove settings for only masters
         if (!$this->get('core.security')->hasPermission('MASTER')) {
             foreach ($this->onlyMasters as $key) {
                 unset($settings[$key]);
-            }
-        }
-
-        // Strip tags
-        foreach ([ 'site_description', 'site_title', 'site_keywords' ] as $key) {
-            if (array_key_exists($key, $settings) && !empty($settings[$key])) {
-                $settings[$key] = trim(strip_tags($settings[$key]));
             }
         }
 
@@ -283,40 +171,22 @@ class SettingController extends Controller
             }
         }
 
-        // TODO: Remove this hack when frontend settings name are updated
-        $settings = $this->updateOldSettingsName($settings);
+        if (!empty($settings)) {
+            // Save settings
+            $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->set($settings);
 
-        // TODO: Remove this when the sitemap is separated from settings.
-        if (array_key_exists('sitemap', $settings) && !empty($settings['sitemap'])) {
-            $remove = false;
-            $config = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('sitemap');
+            // Delete caches for custom_css and frontpages
+            $this->get('core.dispatcher')->dispatch('setting.update');
 
-            foreach ($settings['sitemap'] as $key => $value) {
-                if ($key === 'total' || $value === $config[$key]) {
-                    continue;
-                }
-
-                $remove = true;
-            }
-
-            if ($remove) {
-                $this->get('core.helper.sitemap')->deleteSitemaps();
+            // TODO: Remove when using new ORM features
+            $cache = $this->get('cache');
+            foreach ($this->keys as $key) {
+                $cache->delete($key);
             }
         }
 
-        // Save settings
-        $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->set($settings);
-
-        // Delete caches for custom_css and frontpages
-        $this->get('core.dispatcher')->dispatch('setting.update');
-
-        // TODO: Remove when using new ORM features
-        $cache = $this->get('cache');
-        foreach ($this->keys as $key) {
-            $cache->delete($key);
-        }
 
         $msg->add(_('Settings saved.'), 'success');
 
@@ -344,81 +214,5 @@ class SettingController extends Controller
         $msg->add(_('Settings saved.'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getcode());
-    }
-
-    /**
-     * Saves a list of files and returns the list of filenames.
-     *
-     * @param array $files The list of files to save.
-     *
-     * @return array The list of filenames.
-     */
-    protected function saveFiles($logos)
-    {
-        $msg      = $this->get('core.messenger');
-        $settings = [];
-
-        foreach ($logos as $key => $id) {
-            if ($key == 'logo_favico' || $key == 'logo_default' || $key == 'logo_simple') {
-                $logo   = $this->container->get('core.helper.content')->getContent($id, 'photo');
-                $height = $this->container->get('core.helper.photo')->getPhotoHeight($logo);
-
-                if ($height > 120) {
-                    $msg->add(
-                        sprintf(
-                            _('The maximum height for the %s is 120px. Please adjust your image size.'),
-                            $key
-                        ),
-                        'error',
-                        400
-                    );
-                    $settings[$key] = get_logo($key)->pk_content ?? null;
-                    continue;
-                }
-            } elseif ($key == 'logo_embed') {
-                $logo   = $this->container->get('core.helper.content')->getContent($id, 'photo');
-                $width  = $this->container->get('core.helper.photo')->getPhotoWidth($logo);
-                $height = $this->container->get('core.helper.photo')->getPhotoHeight($logo);
-
-                if ($width < 200 || $height < 200) {
-                    $msg->add(
-                        sprintf(
-                            _('The minimun size for the %s is 200x200. Please adjust your image size.'),
-                            $key
-                        ),
-                        'error',
-                        400
-                    );
-                    $settings[$key] = get_logo($key)->pk_content ?? null;
-                    continue;
-                }
-            }
-        }
-
-        return $settings;
-    }
-
-    /**
-     * Update old settings name with new values
-     *
-     * @param array $settings The list of settings.
-     *
-     * @return array $settings The list of settings with old name updated.
-     */
-    protected function updateOldSettingsName($settings)
-    {
-        if (array_key_exists('facebook', $settings)
-            && is_array($settings['facebook'])
-        ) {
-            if (array_key_exists('page', $settings['facebook'])) {
-                $settings['facebook_page'] = $settings['facebook']['page'];
-            }
-
-            if (array_key_exists('id', $settings['facebook'])) {
-                $settings['facebook_id'] = $settings['facebook']['id'];
-            }
-        }
-
-        return $settings;
     }
 }

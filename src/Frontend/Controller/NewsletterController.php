@@ -113,7 +113,7 @@ class NewsletterController extends Controller
         }
 
         // Get request params
-        $captchaResponse = $request->request->filter('g-recaptcha-response', null, FILTER_SANITIZE_STRING);
+        $captchaResponse = $request->request->filter('g-recaptcha-response');
         $data            = [
             'email'               => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
             'name'                => $request->request->filter('name', '', FILTER_SANITIZE_STRING),

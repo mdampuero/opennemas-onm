@@ -86,6 +86,9 @@
   <li class="hidden-xs m-r-10 ng-cloak quicklinks">
     {include file="ui/component/select/status.tpl" label="true" ngModel="criteria.content_status"}
   </li>
+  <li class="hidden-xs hidden-sm ng-cloak quicklinks">
+    {include file="ui/component/select/month.tpl" ngModel="criteria.created" data="data.extra.years"}
+  </li>
 {/block}
 
 {block name="list"}

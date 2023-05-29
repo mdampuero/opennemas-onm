@@ -1,0 +1,16 @@
+manager_ads_list:
+    path: /ads
+    options:
+        expose: true
+
+manager_ads_show:
+    path: /ads/{id}
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ads_create:
+    path: /ads/create
+    options:
+        expose: true

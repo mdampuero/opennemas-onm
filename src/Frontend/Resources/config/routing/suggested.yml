@@ -3,3 +3,4 @@ frontend_suggested_show:
   defaults: { _controller: FrontendBundle:Suggested:show }
   options:
       subdirectory: true
+      l10n: true

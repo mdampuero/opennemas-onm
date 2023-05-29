@@ -155,6 +155,22 @@ class ContentHelper
         return min(array_filter([ $starttime, $endtime ]));
     }
 
+    public function getFirstContentCreatedDate($contentTypeName = 'article')
+    {
+        $oql = sprintf(
+            'content_type_name = "%s" and created !is null and created >="2000-01-01" and in_litter = 0'
+            . ' order by created asc limit 1',
+            $contentTypeName
+        );
+
+        try {
+            $item = $this->service->getItemBy($oql);
+            return $item->created;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     /**
      * Returns the caption for an item.
      *

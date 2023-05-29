@@ -182,6 +182,11 @@ class SitemapController extends Controller
                 ],
                 'content_status'    => [[ 'value' => 1 ]],
                 'in_litter'         => [[ 'value' => 1, 'operator' => '!=' ]],
+                'params'            => [
+                    'union' => 'OR',
+                    [ 'value' => '%bodyLink%', 'operator' => 'NOT LIKE' ],
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                ],
                 'endtime'           => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
