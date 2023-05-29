@@ -213,8 +213,7 @@ class UrlGeneratorHelper
         $this->container->get('core.locale')->setContext('frontend');
         $locale      = $this->container->get('core.locale');
         $firstLocale = $locale->getLocale();
-
-        $slugs = $locale->getSlugs();
+        $slugs       = $locale->getSlugs();
         if (empty($slugs)) {
             return $params;
         }
@@ -231,7 +230,7 @@ class UrlGeneratorHelper
             foreach ($slugs as $longSlug => $shortSlug) {
                 $translatedParam = $paramValue;
                 if ($translation) {
-                    $translatedParam = $this->getTranlatedSlug($item, $shortSlug);
+                    $translatedParam = $this->getTranlatedSlug($item, $longSlug);
                 }
 
                 $finalParms[$paramKey][$longSlug] = $translatedParam;
@@ -243,14 +242,14 @@ class UrlGeneratorHelper
         return $finalParms;
     }
 
-    protected function getTranlatedSlug($item, $shortSlug)
+    protected function getTranlatedSlug($item, $longSlug)
     {
         $propertyName = $item->slug ? 'slug' : 'name';
 
         $value = $this->container->get('data.manager.filter')->set($item)
             ->filter('localize', [
                 'keys'   => [ $propertyName ],
-                'locale' => $shortSlug
+                'locale' => $longSlug
             ])->get();
 
         return $value->$propertyName;
