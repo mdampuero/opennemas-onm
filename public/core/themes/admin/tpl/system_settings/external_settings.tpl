@@ -830,6 +830,110 @@
                   </div>
                 </div>
               </div>
+              <div class="panel-group" id="panel-group-telegram" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-telegram" data-toggle="collapse" href="#telegram">
+                        <i class="fa fa-telegram"></i>{t}Telegram{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="telegram">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="telegram-page">
+                          {t}Telegram Page{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="telegram-page" name="telegram-page" ng-model="settings.telegram_page" type="text">
+                          <span class="help">
+                            {t escape=off}If you also have a <strong>Telegram page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-group" id="panel-group-whatsapp" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-whatsapp" data-toggle="collapse" href="#whatsapp">
+                        <i class="fa fa-whatsapp"></i>{t}Whatsapp{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="whatsapp">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="whatsapp-page">
+                          {t}Whatsapp Page{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="whatsapp-page" name="whatsapp-page" ng-model="settings.whatsapp_page" type="text">
+                          <span class="help">
+                            {t escape=off}If you also have a <strong>Whatsapp page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-group" id="panel-group-dailymotion" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-tiktok" data-toggle="collapse" href="#tiktok">
+                        <i class="fa fa-tiktok"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="12" height="12" fill="var(--second-color)"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"></path></svg></i>{t}TikTok{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="tiktok">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="tiktok-page">
+                          {t}TikTok Page{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="tiktok-page" name="tiktok-page" ng-model="settings.tiktok_page" type="text">
+                          <span class="help">
+                            {t escape=off}If you also have a <strong>TikTok page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+               <div class="panel-group" id="panel-group-dailymotion" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-dailymotion" data-toggle="collapse" href="#dailymotion">
+                        <i class="fa fa-dailymotion"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="12" height="12" fill="var(--second-color)"><path d="M298.93,267a48.4,48.4,0,0,0-24.36-6.21q-19.83,0-33.44,13.27t-13.61,33.42q0,21.16,13.28,34.6t33.43,13.44q20.5,0,34.11-13.78T322,307.47A47.13,47.13,0,0,0,315.9,284,44.13,44.13,0,0,0,298.93,267ZM0,32V480H448V32ZM374.71,405.26h-53.1V381.37h-.67q-15.79,26.2-55.78,26.2-27.56,0-48.89-13.1a88.29,88.29,0,0,1-32.94-35.77q-11.6-22.68-11.59-50.89,0-27.56,11.76-50.22a89.9,89.9,0,0,1,32.93-35.78q21.18-13.09,47.72-13.1a80.87,80.87,0,0,1,29.74,5.21q13.28,5.21,25,17V153l55.79-12.09Z"></path></svg></i>{t}Dailymotion{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="dailymotion">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="dailymotion-page">
+                          {t}Dailymotion Page{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="dailymotion-page" name="dailymotion-page" ng-model="settings.dailymotion_page" type="text">
+                          <span class="help">
+                            {t escape=off}If you also have a <strong>Dailymotion page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
