@@ -55,9 +55,14 @@ class UrlGeneratorHelper
      */
     protected $router;
 
+    /**
+     * The L10n url parameters.
+     *
+     * @var Array
+     */
     protected $l10nUrlParams = [
         'category_slug' => 'category',
-        'slug' => 'content'
+        'slug'          => 'content'
     ];
 
     /**
@@ -207,43 +212,47 @@ class UrlGeneratorHelper
         return $uri === $this->generate($item);
     }
 
-    public function translateUrlParams($params)
+    /**
+     * Returns the translated url parameters.
+     *
+     * @param Array   $params The url/route parameters.
+     *
+     * @return Array  $finalParams The translated url parameters.
+     */
+    public function getTranslatedUrlParams($params)
     {
-        $context = $this->container->get('core.locale')->getContext();
-        $this->container->get('core.locale')->setContext('frontend');
-        $locale      = $this->container->get('core.locale');
-        $firstLocale = $locale->getLocale();
-        $slugs       = $locale->getSlugs();
-        if (empty($slugs)) {
-            return $params;
-        }
+        $slugs     = $this->locale->getSlugs();
+        $extension = $this->container->get('core.globals')->getExtension();
+        $extension = $extension === 'staticpage' ? 'static_page' : $extension;
 
-        $finalParms = [];
-        foreach ($params as $paramKey => $paramValue) {
-            $translation           = false;
-            $finalParms[$paramKey] = [];
-            if (array_key_exists($paramKey, $this->l10nUrlParams)) {
-                $translation = true;
-                $service     = $this->container->get(sprintf('api.service.%s', $this->l10nUrlParams[$paramKey]));
-                $item        = $service->getItemBySlug($paramValue);
+        $finalParams = [];
+        foreach ($params as $key => $value) {
+            // Get localizable route params as objects
+            if ($key === 'category_slug' || $key === 'category') {
+                $item = $this->container->get('api.service.category')->getItemBySlug($value);
+            } elseif ($key === 'slug') {
+                $item = $this->container->get('api.service.content')->getItemBySlugAndContentType(
+                    $value,
+                    \ContentManager::getContentTypeIdFromName($extension)
+                );
+            } else {
+                $item = $value;
             }
-            foreach ($slugs as $longSlug => $shortSlug) {
-                $translatedParam = $paramValue;
-                if ($translation) {
-                    $translatedParam = $this->getTranlatedSlug($item, $longSlug);
-                }
 
-                $finalParms[$paramKey][$longSlug] = $translatedParam;
+            foreach (array_keys($slugs) as $longSlug) {
+                $finalParams[$key][$longSlug] = $this->getTranlatedSlug($item, $longSlug);
             }
         }
 
-        $locale->setLocale($firstLocale);
-        $this->container->get('core.locale')->setContext($context);
-        return $finalParms;
+        return $finalParams;
     }
 
     protected function getTranlatedSlug($item, $longSlug)
     {
+        if (!is_object($item)) {
+            return $item;
+        }
+
         $propertyName = $item->slug ? 'slug' : 'name';
 
         $value = $this->container->get('data.manager.filter')->set($item)

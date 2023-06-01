@@ -9,24 +9,21 @@
 function smarty_function_render_hreflang_tags($params, &$smarty)
 {
     $instance = $smarty->getContainer()->get('core.instance');
-    if (!$instance->hasMultilanguage()) {
+    $request  = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+
+    if (!$instance->hasMultilanguage() || empty($request)) {
         return;
     }
-
-    $request = $smarty->getValue('app')->getRequest()->attributes;
-    $context = $smarty->getContainer()->get('core.locale')->getContext();
-    $uri     = $smarty->getContainer()->get('request_stack')->getCurrentRequest()->getRequestUri();
 
     $localeSettings = $smarty->getContainer()->get('orm.manager')
         ->getDataSet('Settings', 'instance')
         ->get('locale');
 
     $mainLanguage = $localeSettings['frontend']['language']['selected'] ?? '';
-
-    $smarty->getContainer()->get('core.locale')->setContext('frontend');
-    $locale      = $smarty->getContainer()->get('core.locale');
-    $currentSlug = $locale->getRequestSlug();
-    $slugs       = $locale->getSlugs();
+    $locale       = $smarty->getContainer()->get('core.locale');
+    $currentSlug  = $locale->getRequestSlug();
+    $slugs        = $locale->getSlugs();
+    $uri          = $request->getRequestUri();
 
     if (empty($slugs)) {
         return;
@@ -40,7 +37,7 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
     $linkTpl = '<link rel="alternate" hreflang="%s" href="%s"/>' . "\n";
 
     $translatedParams = $smarty->getContainer()->get('core.helper.url_generator')
-        ->translateUrlParams($request->get('_route_params'));
+        ->getTranslatedUrlParams($request->get('_route_params'));
 
     foreach ($slugs as $longSlug => $shortSlug) {
         $filteredParams = array_map(function ($e) use ($longSlug) {
@@ -77,6 +74,6 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
     }
 
     $result .= sprintf($linkTpl, 'x-default', $instance->getBaseUrl() . $uri);
-    $locale->setContext($context);
+
     return $result;
 }
