@@ -848,7 +848,7 @@
                         <div class="controls">
                           <input class="form-control" id="telegram-page" name="telegram-page" ng-model="settings.telegram_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>Telegram page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                            {t escape=off}If you also have a <strong>Telegram page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -874,7 +874,7 @@
                         <div class="controls">
                           <input class="form-control" id="whatsapp-page" name="whatsapp-page" ng-model="settings.whatsapp_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>Whatsapp page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                            {t escape=off}If you also have a <strong>Whatsapp page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -900,7 +900,7 @@
                         <div class="controls">
                           <input class="form-control" id="tiktok-page" name="tiktok-page" ng-model="settings.tiktok_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>TikTok page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                            {t escape=off}If you also have a <strong>TikTok page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -926,7 +926,7 @@
                         <div class="controls">
                           <input class="form-control" id="dailymotion-page" name="dailymotion-page" ng-model="settings.dailymotion_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>Dailymotion page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                            {t escape=off}If you also have a <strong>Dailymotion page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
