@@ -2,6 +2,8 @@
 
 namespace Common\Core\Component\Helper;
 
+use Common\Model\Entity\Category;
+
 class UrlGeneratorHelper
 {
     /**
@@ -52,6 +54,16 @@ class UrlGeneratorHelper
      * @var Router
      */
     protected $router;
+
+    /**
+     * The L10n url parameters.
+     *
+     * @var Array
+     */
+    protected $l10nUrlParams = [
+        'category_slug' => 'category',
+        'slug'          => 'content'
+    ];
 
     /**
      * Initializes the UrlGeneratorHelper.
@@ -198,6 +210,58 @@ class UrlGeneratorHelper
     public function isValid($item, $uri)
     {
         return $uri === $this->generate($item);
+    }
+
+    /**
+     * Returns the translated url parameters.
+     *
+     * @param Array   $params The url/route parameters.
+     *
+     * @return Array  $finalParams The translated url parameters.
+     */
+    public function getTranslatedUrlParams($params)
+    {
+        $slugs     = $this->locale->getSlugs();
+        $extension = $this->container->get('core.globals')->getExtension();
+        $extension = $extension === 'staticpage' ? 'static_page' : $extension;
+
+        $finalParams = [];
+        foreach ($params as $key => $value) {
+            // Get localizable route params as objects
+            if ($key === 'category_slug' || $key === 'category') {
+                $item = $this->container->get('api.service.category')->getItemBySlug($value);
+            } elseif ($key === 'slug') {
+                $item = $this->container->get('api.service.content')->getItemBySlugAndContentType(
+                    $value,
+                    \ContentManager::getContentTypeIdFromName($extension)
+                );
+            } else {
+                $item = $value;
+            }
+
+            foreach (array_keys($slugs) as $longSlug) {
+                $finalParams[$key][$longSlug] = $this->getTranlatedSlug($item, $longSlug);
+            }
+        }
+
+        return $finalParams;
+    }
+
+    protected function getTranlatedSlug($item, $longSlug)
+    {
+        if (!is_object($item)) {
+            return $item;
+        }
+
+        $propertyName = $item->slug ? 'slug' : 'name';
+
+        $value = $this->container->get('data.manager.filter')->set($item)
+            ->filter('localize', [
+                'keys'   => [ $propertyName ],
+                'locale' => $longSlug
+            ])->get();
+
+        return $value->$propertyName;
     }
 
     /**
