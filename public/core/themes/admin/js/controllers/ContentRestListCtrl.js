@@ -51,6 +51,46 @@
         };
 
         /**
+         * @function createCopy
+         * @memberof ContentRestListCtrl
+         *
+         * @description
+         *  Returns localized tags for each item in list
+         *
+         * @param {array} data Data to create a copy
+         *
+         */
+        $scope.createCopy = function(item) {
+          var route = $scope.routes.saveItem;
+          var data  = $scope.parseDataForCopy(item);
+
+          http.post(route, data)
+            .then(function() {
+              $scope.list();
+            }, $scope.errorCb);
+        };
+
+        /**
+         * @function parseDataForCopy
+         * @memberOf ArticleListCtrl
+         *
+         * @description
+         *   Parse data before copy
+         */
+        $scope.parseDataForCopy = function(data) {
+          delete data.pk_content;
+          delete data.urn_source;
+          delete data.starttime;
+          delete data.endtime;
+          data.content_status = 0;
+          if (data.title) {
+            data.title = 'Copy of ' + data.title;
+          }
+
+          return data;
+        };
+
+        /**
          * @function hasFeaturedMedia
          * @memberof ContentRestListCtrl
          *

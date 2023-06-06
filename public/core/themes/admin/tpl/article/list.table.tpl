@@ -120,6 +120,11 @@
       <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
     </button>
   {/acl}
+  {acl isAllowed="ARTICLE_ADMIN"}
+    <button class="btn btn-default btn-small" ng-click="createCopy(item)" type="button" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
+      <i class="fa fa-copy m-r-5"></i>{t}Create a copy{/t}
+    </button>
+  {/acl}
   <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
     <button class="btn btn-small btn-white dropdown-toggle" data-toggle="dropdown" type="button">
       <i class="fa fa-ellipsis-h"></i>

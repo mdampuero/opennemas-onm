@@ -126,6 +126,45 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     };
 
     /**
+     * @function parseCopyData
+     * @memberOf RestInnerCtrl
+     *
+     * @description
+     *   description
+     *
+     * @param {Object} data The data to parse.
+     *
+     * @return {Object} Parses data before copy.
+     */
+    $scope.parseCopyData = function(data) {
+      data = $scope.unsetItemId(data);
+      delete data.urn_source;
+      delete data.starttime;
+      delete data.endtime;
+      data.content_status = 0;
+      if (data.title) {
+        data.title = 'Copy of ' + data.title;
+      }
+
+      return data;
+    };
+
+    /**
+     * @function unsetItemId
+     * @memberOf RestInnerCtrl
+     *
+     * @description
+     *   Unsets the item id.
+     *
+     * @return {Integer} The item id.
+     */
+    $scope.unsetItemId = function(data) {
+      delete data.pk_content;
+      delete data.urn_source;
+      return data;
+    };
+
+    /**
      * @inheritdoc
      */
     $scope.hasMultilanguage = function() {
@@ -170,7 +209,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
     /**
      * @function submit
-     * @memberOf StaticPageCtrl
+     * @memberOf ContentRestInnerCtrl
      *
      * @description
      *   Saves tags and, then, saves the item.
@@ -192,6 +231,34 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           $scope.draftEnabled = false;
 
           $scope.save();
+        }
+      });
+    };
+
+    /**
+     * @function duplicate
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *   Saves tags and, then, duplicates the item.
+     */
+    $scope.duplicate = function() {
+      if (!$scope.validate()) {
+        messenger.post(window.strings.forms.not_valid, 'error');
+        return;
+      }
+
+      $scope.flags.http.saving = true;
+
+      $scope.$broadcast('onmTagsInput.save', {
+        onError: $scope.errorCb,
+        onSuccess: function(ids) {
+          $scope.item.tags      = ids;
+          $scope.data.item.tags = ids;
+
+          $scope.draftEnabled = false;
+
+          $scope.copy();
         }
       });
     };
