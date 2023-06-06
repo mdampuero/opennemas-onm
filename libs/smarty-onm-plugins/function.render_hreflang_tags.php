@@ -75,5 +75,8 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
 
     $result .= sprintf($linkTpl, 'x-default', $instance->getBaseUrl() . $uri);
 
+    // dump($result);
+    // die();
+
     return $result;
 }

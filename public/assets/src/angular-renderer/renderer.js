@@ -166,7 +166,7 @@
           };
 
           if (item.content_type_name === 'opinion') {
-            params.author_name   = author.slug;
+            params.author_slug   = author.slug;
             params.opinion_title = item.slug;
           } else {
             params.slug = item.slug;

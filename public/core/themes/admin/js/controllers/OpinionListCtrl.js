@@ -96,7 +96,7 @@
             routing.generate('frontend_opinion_show', {
               id: item.pk_content.toString().padStart(6, '0'),
               created: formattedDate,
-              author_name: author.slug,
+              author_slug: author.slug,
               opinion_title: item.slug
             })
           );

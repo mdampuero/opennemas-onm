@@ -219,11 +219,10 @@ class UrlGeneratorHelper
      *
      * @return Array  $finalParams The translated url parameters.
      */
-    public function getTranslatedUrlParams($params)
+    public function getTranslatedUrlParams($request)
     {
-        $slugs     = $this->locale->getSlugs();
-        $extension = $this->container->get('core.globals')->getExtension();
-        $extension = $extension === 'staticpage' ? 'static_page' : $extension;
+        $params = $request;
+        $slugs  = $this->locale->getSlugs();
 
         $finalParams = [];
         foreach ($params as $key => $value) {
@@ -231,10 +230,9 @@ class UrlGeneratorHelper
             if ($key === 'category_slug' || $key === 'category') {
                 $item = $this->container->get('api.service.category')->getItemBySlug($value);
             } elseif ($key === 'slug') {
-                $item = $this->container->get('api.service.content')->getItemBySlugAndContentType(
-                    $value,
-                    \ContentManager::getContentTypeIdFromName($extension)
-                );
+                $item = $params['id']
+                    ? $this->container->get('api.service.content')->getItem($params['id'])
+                    : $this->container->get('api.service.content')->getItemBySlug($value);
             } else {
                 $item = $value;
             }
