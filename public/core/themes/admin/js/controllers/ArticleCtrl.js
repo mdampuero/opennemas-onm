@@ -372,6 +372,9 @@
          */
         $scope.parseData = function(data, preview) {
           var parsedUpdates = [];
+          var bodyComplexity = $scope.getTextComplexity(data.body);
+
+          data.text_complexity = bodyComplexity;
 
           if (data.live_blog_updates.length > 0) {
             for (var index in data.live_blog_updates) {

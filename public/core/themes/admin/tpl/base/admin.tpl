@@ -507,6 +507,7 @@
       @Common/components/ng-tags-input/build/ng-tags-input.min.js,
       @Common/components/select2/select2.js,
       @Common/components/swfobject/swfobject/swfobject.js,
+      @Common/js/silabajs.js,
       @Common/components/angular-animate/angular-animate.min.js,
       @Common/components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js,
       @Common/components/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js,
