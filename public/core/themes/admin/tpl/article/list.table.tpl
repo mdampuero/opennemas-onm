@@ -85,7 +85,7 @@
         {t}Published{/t}
       </label>
     </div>
-    {if {setting name=seo_information} eq "1"}
+    {if {setting name=seo_information} === "1"}
      <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('seo_information')">
         <input id="seo_information" checklist-model="app.columns.selected" checklist-value="'seo_information'" type="checkbox">
         <label for="seo_information">
@@ -103,7 +103,7 @@
         {t}Published{/t}
       </span>
     </th>
-    {if {setting name=seo_information} eq "1"}
+    {if {setting name=seo_information} === "1"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('seo_information')" width="200">
       {t}SEO Score{/t}
     </th>
@@ -118,7 +118,7 @@
         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.content_statusLoading == 1, 'fa-check text-success': !item.content_statusLoading == 1 && item.content_status == 1, 'fa-times text-danger': !item.content_statusLoading == 1 && item.content_status == 0 }"></i>
       </button>
     </td>
-    {if {setting name=seo_information} eq "1"}
+    {if {setting name=seo_information} === "1"}
       <td class="text-center v-align-middle" ng-if="isColumnEnabled('seo_information')">
         <span ng-if="item.text_complexity" class="ng-cloak badge badge-default" ng-class="{ 'badge-danger': item.text_complexity <= 40, 'badge-warning': item.text_complexity > 40 &amp;&amp; item.text_complexity <=60, 'badge-success' : item.text_complexity >60 }">
           <strong>

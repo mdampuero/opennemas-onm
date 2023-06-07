@@ -411,7 +411,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         // Remove any empty words that might result from the split.
         words = words
           .filter(function(word) {
-            return word.trim().length > 0 && word.trim()[0].match(/[a-zA-Z]/);
+            return word.trim().length > 0 && word.trim()[0].match(/[a-zA-Z#0-9(]/);
           });
 
         // Calculate the averages.
@@ -421,7 +421,10 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         // Apply the Fernández-Huerta formula to get text complexity (rounded)
         var textComplexity =  Math.round(206.84 - 1.02 * avgWordsPerSentence - 60 * avgSyllablesPerWord);
 
-        return textComplexity;
+        return {
+          textComplexity: textComplexity,
+          wordsCount: words.length
+        };
       }
 
       return text;
