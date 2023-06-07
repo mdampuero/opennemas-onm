@@ -85,16 +85,29 @@
         {t}Published{/t}
       </label>
     </div>
+    {if {setting name=seo_information} eq "1"}
+     <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('seo_information')">
+        <input id="seo_information" checklist-model="app.columns.selected" checklist-value="'seo_information'" type="checkbox">
+        <label for="seo_information">
+          {t}SEO Information{/t}
+        </label>
+      </div>
+    {/if}
   {/acl}
 {/block}
 
 {block name="customColumnsHeader"}
   {acl isAllowed="ARTICLE_AVAILABLE"}
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('content_status')" width="150">
+    <th class="text-center v-align-middle" width="150">
       <span class="m-l-5">
         {t}Published{/t}
       </span>
     </th>
+    {if {setting name=seo_information} eq "1"}
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('seo_information')" width="200">
+      {t}SEO Score{/t}
+    </th>
+    {/if}
   {/acl}
 {/block}
 
@@ -105,6 +118,18 @@
         <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.content_statusLoading == 1, 'fa-check text-success': !item.content_statusLoading == 1 && item.content_status == 1, 'fa-times text-danger': !item.content_statusLoading == 1 && item.content_status == 0 }"></i>
       </button>
     </td>
+    {if {setting name=seo_information} eq "1"}
+      <td class="text-center v-align-middle" ng-if="isColumnEnabled('seo_information')">
+        <span ng-if="item.text_complexity" class="ng-cloak badge badge-default" ng-class="{ 'badge-danger': item.text_complexity <= 40, 'badge-warning': item.text_complexity > 40 &amp;&amp; item.text_complexity <=60, 'badge-success' : item.text_complexity >60 }">
+          <strong>
+            [% item.text_complexity %]/100
+          </strong>
+        </span>
+        <small class="text-italic" ng-if="!item.text_complexity">
+          &lt;{t}No SEO information{/t}&gt;
+        </small>
+      </td>
+    {/if}
   {/acl}
 {/block}
 

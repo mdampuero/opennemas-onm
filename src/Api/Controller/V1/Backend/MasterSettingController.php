@@ -53,6 +53,7 @@ class MasterSettingController extends SettingController
         'redirection',
         'robots_txt_rules',
         'theme_skin',
+        'seo_information',
     ];
 
     /**
@@ -83,6 +84,7 @@ class MasterSettingController extends SettingController
         'header_script_amp',
         'redirection',
         'robots_txt_rules',
+        'seo_information',
     ];
 
     /**
