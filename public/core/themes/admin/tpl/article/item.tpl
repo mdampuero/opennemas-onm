@@ -81,7 +81,6 @@
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="params.bodyLink" icon="fa-external-link" title="{t}External link{/t}" iRoute="item.params.bodyLink"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
-      {include file="ui/component/content-editor/accordion/seo_info.tpl"}
     </div>
   </div>
   <div class="grid simple">
@@ -118,6 +117,15 @@
       {include file="ui/component/content-editor/accordion/additional-data.tpl"}
     </div>
   </div>
+  {if {setting name=seo_information} eq "1"}
+    <div class="grid simple">
+      <div class="grid-body no-padding">
+        <div class="grid-collapse-title">
+          <i class="fa fa-search m-r-10"></i> {t}SEO Information{/t}
+        </div>
+        {include file="ui/component/content-editor/accordion/seo_info.tpl"}
+    </div>
+  {/if}
 {/block}
 
 {block name="leftColumn"}

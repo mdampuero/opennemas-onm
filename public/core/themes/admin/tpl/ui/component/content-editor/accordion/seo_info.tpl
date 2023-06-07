@@ -1,6 +1,5 @@
-{if {setting name=seo_information} eq "1"}
 <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.seo_info = !expanded.seo_info" >
-  <i class="fa fa-search m-r-10"></i>{t}SEO Information{/t}
+  <i class="fa fa-pencil m-r-10"></i>{t}Text complexity{/t}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.seo_info }"></i>
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.seo_info }">
@@ -23,4 +22,4 @@
     </div>
   </div>
 </div>
-{/if}
+
