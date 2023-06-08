@@ -160,7 +160,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      */
     $scope.unsetItemId = function(data) {
       delete data.pk_content;
-      delete data.urn_source;
       return data;
     };
 

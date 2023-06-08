@@ -252,27 +252,6 @@
         };
 
         /**
-         * @function parseCopyData
-         * @memberOf RestInnerCtrl
-         *
-         * @description
-         *   description
-         *
-         * @param {Object} data The data to parse.
-         *
-         * @return {Object} Parses data before copy.
-         */
-        $scope.parseCopyData = function(data) {
-          data = $scope.unsetItemId(data);
-          delete data.urn_source;
-          if (data.title) {
-            data.title = 'Copy of ' + data.title;
-          }
-
-          return data;
-        };
-
-        /**
          * @function save
          * @memberOf RestInnerCtrl
          *
