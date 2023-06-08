@@ -56,16 +56,6 @@ class UrlGeneratorHelper
     protected $router;
 
     /**
-     * The L10n url parameters.
-     *
-     * @var Array
-     */
-    protected $l10nUrlParams = [
-        'category_slug' => 'category',
-        'slug'          => 'content'
-    ];
-
-    /**
      * Initializes the UrlGeneratorHelper.
      *
      * @param ServiceContainer $container The service container.
