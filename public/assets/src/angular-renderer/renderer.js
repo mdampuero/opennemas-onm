@@ -167,7 +167,7 @@
 
           if (item.content_type_name === 'opinion') {
             params.author_slug   = author.slug;
-            params.opinion_title = item.slug;
+            params.slug = item.slug;
           } else {
             params.slug = item.slug;
           }
