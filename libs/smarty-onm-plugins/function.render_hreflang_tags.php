@@ -24,6 +24,8 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
     $currentSlug  = $locale->getRequestSlug();
     $slugs        = $locale->getSlugs();
     $uri          = $request->getRequestUri();
+    $content      = $smarty->getValue('o_content');
+    $category     = $smarty->getValue('o_category');
 
     if (empty($slugs)) {
         return;
@@ -37,7 +39,7 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
     $linkTpl = '<link rel="alternate" hreflang="%s" href="%s"/>' . "\n";
 
     $translatedParams = $smarty->getContainer()->get('core.helper.url_generator')
-        ->getTranslatedUrlParams($request->get('_route_params'));
+        ->getTranslatedUrlParams($request->get('_route_params'), $content, $category);
 
     foreach ($slugs as $longSlug => $shortSlug) {
         $filteredParams = array_map(function ($e) use ($longSlug) {

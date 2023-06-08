@@ -215,24 +215,22 @@ class UrlGeneratorHelper
     /**
      * Returns the translated url parameters.
      *
-     * @param Array   $params The url/route parameters.
+     * @param Array    $params The url/route parameters.
+     * @param Content  $content  The content object.
+     * @param Category $category The category object.
      *
      * @return Array  $finalParams The translated url parameters.
      */
-    public function getTranslatedUrlParams($request)
+    public function getTranslatedUrlParams($params, $content, $category)
     {
-        $params = $request;
-        $slugs  = $this->locale->getSlugs();
-
+        $slugs       = $this->locale->getSlugs();
         $finalParams = [];
+
         foreach ($params as $key => $value) {
-            // Get localizable route params as objects
-            if ($key === 'category_slug' || $key === 'category') {
-                $item = $this->container->get('api.service.category')->getItemBySlug($value);
+            if (in_array($key, [ 'category_slug', 'category' ])) {
+                $item = $category;
             } elseif ($key === 'slug') {
-                $item = $params['id']
-                    ? $this->container->get('api.service.content')->getItem($params['id'])
-                    : $this->container->get('api.service.content')->getItemBySlug($value);
+                $item = $content;
             } else {
                 $item = $value;
             }
