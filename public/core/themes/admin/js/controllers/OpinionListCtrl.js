@@ -97,7 +97,7 @@
               id: item.pk_content.toString().padStart(6, '0'),
               created: formattedDate,
               author_slug: author.slug,
-              opinion_title: item.slug
+              slug: item.slug
             })
           );
         };
