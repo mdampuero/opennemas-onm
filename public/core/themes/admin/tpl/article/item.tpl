@@ -117,8 +117,8 @@
       {include file="ui/component/content-editor/accordion/additional-data.tpl"}
     </div>
   </div>
-  {if {setting name=seo_information} eq "1"}
-    <div class="grid simple">
+  {if {setting name=seo_information} === "1"}
+    <div class="grid simple" ng-if="hasMultilanguage()">
       <div class="grid-body no-padding">
         <div class="grid-collapse-title">
           <i class="fa fa-search m-r-10"></i> {t}SEO Information{/t}
