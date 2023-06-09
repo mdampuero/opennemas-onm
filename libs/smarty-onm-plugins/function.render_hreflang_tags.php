@@ -10,8 +10,12 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
 {
     $instance = $smarty->getContainer()->get('core.instance');
     $request  = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+    $l10nrh   = $smarty->getContainer()->get('core.helper.l10n_route');
 
-    if (!$instance->hasMultilanguage() || empty($request)) {
+    if (!$instance->hasMultilanguage()
+        || empty($request)
+        || !in_array($request->get('_route'), $l10nrh->getLocalizableRoutes())
+    ) {
         return;
     }
 
@@ -26,6 +30,7 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
     $uri          = $request->getRequestUri();
     $content      = $smarty->getValue('o_content') ?? $smarty->getValue('tag');
     $category     = $smarty->getValue('o_category');
+    $router       = $smarty->getContainer()->get('router');
 
     if (empty($slugs)) {
         return;
@@ -52,10 +57,7 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
         }
 
         try {
-            $url = $smarty->getContainer()->get('router')->generate(
-                $request->get('_route'),
-                $filteredParams
-            );
+            $url = $router->generate($request->get('_route'), $filteredParams);
         } catch (\Exception $e) {
             return;
         }
@@ -69,10 +71,7 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
     }, $translatedParams);
 
     if (!empty($translatedParams)) {
-        $uri = $smarty->getContainer()->get('router')->generate(
-            $request->get('_route'),
-            $filteredParams
-        );
+        $uri = $router->generate($request->get('_route'), $filteredParams);
     }
 
     $result .= sprintf($linkTpl, 'x-default', $instance->getBaseUrl() . $uri);
