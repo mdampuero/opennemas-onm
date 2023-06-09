@@ -24,7 +24,7 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
     $currentSlug  = $locale->getRequestSlug();
     $slugs        = $locale->getSlugs();
     $uri          = $request->getRequestUri();
-    $content      = $smarty->getValue('o_content');
+    $content      = $smarty->getValue('o_content') ?? $smarty->getValue('tag');
     $category     = $smarty->getValue('o_category');
 
     if (empty($slugs)) {
