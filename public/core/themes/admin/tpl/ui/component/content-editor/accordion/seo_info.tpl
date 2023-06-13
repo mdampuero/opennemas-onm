@@ -6,12 +6,19 @@
   <div class="form-group">
     <div class="m-t-5" ng-if="item.text_complexity">
       <div class="showcase-info">
-        <label class="form-label" for="moment1">{t}Text complexity{/t}</label>
+        <label class="form-label">{t}Text complexity{/t}</label>
         <span class="form-status">
           <span class="ng-cloak badge badge-default" ng-class="{ 'badge-danger': item.text_complexity <= 40, 'badge-warning': item.text_complexity > 40 &amp;&amp; item.text_complexity <=60, 'badge-success' : item.text_complexity >60 }">
-            <strong>
-              [% item.text_complexity <= 40 ? 'Difficult to read' : (item.text_complexity > 40 && item.text_complexity <= 60 ? 'Easily understood' : 'Very easy to read') %] ([% item.text_complexity %]/100)
+             <strong ng-if='item.text_complexity <= 40'>
+              {t}Difficult to read{/t}
             </strong>
+            <strong ng-if='item.text_complexity > 40 && item.text_complexity <= 60'>
+              {t}Easily understood{/t}
+            </strong>
+            <strong ng-if='item.text_complexity > 60'>
+              {t}Very easy to read{/t}
+            </strong>
+            ([% item.text_complexity %]/100)
           </span>
         </span>
       </div>
@@ -19,7 +26,7 @@
     <hr>
     <div class="m-t-5" ng-if="item.text_complexity">
       <div class="showcase-info">
-        <label class="form-label" for="moment1">{t}Word count{/t}</label>
+        <label class="form-label">{t}Word count{/t}</label>
         <span class="form-status">
           <span class="ng-cloak badge badge-default">
             <strong>

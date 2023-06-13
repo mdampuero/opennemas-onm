@@ -122,7 +122,7 @@
                     </h4>
                     <div class="form-group">
                       <div class="checkbox">
-                        <input {if $configs['seo_information'] eq "1"}checked{/if} id="seo_information" name="seo_information" ng-false-value="0" ng-model="settings.seo_information" ng-true-value="'1'" type="checkbox">
+                        <input id="seo_information" name="seo_information" ng-false-value="0" ng-model="settings.seo_information" ng-true-value="1" type="checkbox">
                         <label for="seo_information">
                           {t}Show SEO information on contents{/t}
                         </label>

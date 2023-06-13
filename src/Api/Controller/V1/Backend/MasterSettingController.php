@@ -63,6 +63,7 @@ class MasterSettingController extends SettingController
      */
     protected $toint = [
         'frontpage_max_items',
+        'seo_information',
     ];
 
     /**
