@@ -210,8 +210,8 @@ class Authentication
                 '<li>If you want a new link, click <a href="%s">here</a>.</li>' .
                 '</ul>'
             ), $this->container->get('core.decorator.url')->prefixUrl(
-                $this->container->get('router')->generate('frontend_user_verify'))
-            );
+                $this->container->get('router')->generate('frontend_user_verify')
+            ));
         }
 
         return $error->getMessage();
@@ -301,7 +301,7 @@ class Authentication
      */
     public function isRecaptchaRequired()
     {
-        return $this->session->get('failed_login_attempts') >= 3;
+        return $this->session->get('failed_login_attempts') >= 0;
     }
 
     /**
