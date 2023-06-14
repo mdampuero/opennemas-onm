@@ -294,17 +294,6 @@ class Authentication
     }
 
     /**
-     * Checks if recaptcha is required basing on failed login attemps stored in
-     * session.
-     *
-     * @return boolean True if recaptcha is required. False otherwise.
-     */
-    public function isRecaptchaRequired()
-    {
-        return $this->session->get('failed_login_attempts') >= 0;
-    }
-
-    /**
      * Executes actions when authentication results is a success.
      */
     public function success()

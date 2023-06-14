@@ -32,8 +32,7 @@ class AuthenticationController extends Controller
             $request->query->filter('referer', '', FILTER_SANITIZE_STRING),
             '/'
         );
-        $session   = $request->getSession();
-        $recaptcha = '';
+        $session = $request->getSession();
 
         if (empty($referer)) {
             $referer = $this->generateUrl('frontend_frontpage');
@@ -44,12 +43,8 @@ class AuthenticationController extends Controller
             $auth->clearError();
         }
 
-        if ($auth->isRecaptchaRequired()) {
-            $recaptcha = $auth->getRecaptchaFromSettings();
-        }
-
         return $this->render('authentication/login.tpl', [
-            'recaptcha' => $recaptcha,
+            'recaptcha' => $auth->getRecaptchaFromSettings(),
             'token'     => $auth->getCsrfToken(),
             'referer'   => $referer
         ]);
