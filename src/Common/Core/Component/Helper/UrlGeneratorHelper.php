@@ -2,6 +2,8 @@
 
 namespace Common\Core\Component\Helper;
 
+use Common\Model\Entity\Category;
+
 class UrlGeneratorHelper
 {
     /**
@@ -198,6 +200,54 @@ class UrlGeneratorHelper
     public function isValid($item, $uri)
     {
         return $uri === $this->generate($item);
+    }
+
+    /**
+     * Returns the translated url parameters.
+     *
+     * @param Array    $params The url/route parameters.
+     * @param Content  $content  The content object.
+     * @param Category $category The category object.
+     *
+     * @return Array  $finalParams The translated url parameters.
+     */
+    public function getTranslatedUrlParams($params, $content, $category)
+    {
+        $slugs       = $this->locale->getSlugs();
+        $finalParams = [];
+
+        foreach ($params as $key => $value) {
+            if (in_array($key, [ 'category_slug', 'category' ])) {
+                $item = $category;
+            } elseif ($key === 'slug') {
+                $item = $content;
+            } else {
+                $item = $value;
+            }
+
+            foreach (array_keys($slugs) as $longSlug) {
+                $finalParams[$key][$longSlug] = $this->getTranlatedSlug($item, $longSlug);
+            }
+        }
+
+        return $finalParams;
+    }
+
+    protected function getTranlatedSlug($item, $longSlug)
+    {
+        if (!is_object($item)) {
+            return $item;
+        }
+
+        $propertyName = $item->slug ? 'slug' : 'name';
+
+        $value = $this->container->get('data.manager.filter')->set($item)
+            ->filter('localize', [
+                'keys'   => [ $propertyName ],
+                'locale' => $longSlug
+            ])->get();
+
+        return $value->$propertyName;
     }
 
     /**
