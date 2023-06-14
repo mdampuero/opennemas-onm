@@ -108,6 +108,26 @@ class ContentHelper
     }
 
     /**
+     * Returns the body for the provided item.
+     *
+     * @param Content $item The item to get property from.
+     *
+     * @return string The content body.
+     */
+    public function getFullBody($item = null) : ?string
+    {
+        $contentBody = $this->getBody($item);
+        $contentBody = $contentBody ?? '';
+
+        if ($this->isLiveBlog($item)) {
+            foreach ($item->live_blog_updates as $update) {
+                $contentBody .= ' ' . $update['body'];
+            }
+        }
+
+        return $contentBody;
+    }
+    /**
      * Get the proper cache expire date for scheduled contents.
      *
      * @return mixed The expire cache datetime in "Y-m-d H:i:s" format or null.

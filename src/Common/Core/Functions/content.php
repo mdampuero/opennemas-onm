@@ -13,6 +13,18 @@ function get_body($item = null) : ?string
 }
 
 /**
+ * Returns the body for the provided item.
+ *
+ * @param Content $item The item to get property from.
+ *
+ * @return string The content body plus live blog body.
+ */
+function get_full_body($item = null) : ?string
+{
+    return getService('core.helper.content')->getFullBody($item);
+}
+
+/**
  * Returns the caption for an item.
  *
  * @param mixed $item The item to get caption from.
