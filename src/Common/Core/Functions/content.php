@@ -19,9 +19,9 @@ function get_body($item = null) : ?string
  *
  * @return string The content body plus live blog body.
  */
-function get_full_body($item = null) : ?string
+function get_body_with_live_updates($item = null) : ?string
 {
-    return getService('core.helper.content')->getFullBody($item);
+    return getService('core.helper.content')->getBodyWithLiveUpdates($item);
 }
 
 /**

@@ -114,10 +114,9 @@ class ContentHelper
      *
      * @return string The content body.
      */
-    public function getFullBody($item = null) : ?string
+    public function getBodyWithLiveUpdates($item = null) : ?string
     {
-        $contentBody = $this->getBody($item);
-        $contentBody = $contentBody ?? '';
+        $contentBody = $this->getBody($item) ?? '';
 
         if ($this->isLiveBlog($item)) {
             foreach ($item->live_blog_updates as $update) {
