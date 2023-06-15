@@ -108,11 +108,11 @@ class ContentHelper
     }
 
     /**
-     * Returns the body for the provided item.
+     * Returns the body with live updates for the provided item.
      *
      * @param Content $item The item to get property from.
      *
-     * @return string The content body.
+     * @return string The content body with live updates.
      */
     public function getBodyWithLiveUpdates($item = null) : ?string
     {
@@ -124,7 +124,7 @@ class ContentHelper
             }
         }
 
-        return $contentBody;
+        return !empty($contentBody) ? $contentBody : null;
     }
     /**
      * Get the proper cache expire date for scheduled contents.
