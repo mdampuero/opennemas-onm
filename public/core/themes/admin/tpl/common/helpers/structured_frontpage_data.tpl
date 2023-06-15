@@ -15,7 +15,7 @@
         "@type": "ListItem",
         "item": {
           "@id": "{$url}",
-          "name": "{if !empty($title)}{$title}{elseif !empty($category)}{$category->title}{elseif $app['extension'] === 'video'}{t}Videos{/t}{elseif $app['extension'] === 'album'}{t}Albums{/t}{elseif $app['extension'] === 'opinion'}{t}Opinions{/t}{elseif $app['extension'] === 'poll'}{t}Polls{/t}{elseif $app['extension'] === 'staticpage'}{$title|escape:'html'}{else}{$app['extension']}{/if}"
+          "name": "{if !empty($title)}{$title|replace:'\\':''|escape:'htmlall'}{elseif !empty($category)}{$category->title|replace:'\\':''|escape:'htmlall'}{elseif $app['extension'] === 'video'}{t}Videos{/t}{elseif $app['extension'] === 'album'}{t}Albums{/t}{elseif $app['extension'] === 'opinion'}{t}Opinions{/t}{elseif $app['extension'] === 'poll'}{t}Polls{/t}{elseif $app['extension'] === 'staticpage'}{$title|replace:'\\':''|escape:'htmlall'}{else}{$app['extension']|replace:'\\':''|escape:'htmlall'}{/if}"
         },
         "position": 2
       }
@@ -39,14 +39,14 @@
     "@type": "WebPage",
     {if !empty($category)}
       "name": "{$category->title}",
-      "description": "{$category->description|default:$category->title|escape:'html'}",
+      "description": "{$category->description|default:$category->title|replace:'\\':''|escape:'htmlall'}",
       "url": "{$url}",
     {else if !empty($tag)}
-      "name": "{$tag->name}",
+      "name": "{$tag->name|replace:'\\':''|escape:'htmlall'}",
       {if $tag->description}
-      "description": "{$tag->description|escape:'html'}",
+      "description": "{$tag->description|replace:'\\':''|escape:'htmlall'}",
       {else}
-      "description": "{t domain=base 1=$tag->name 2=$siteName}All the latest information about %1 in %2. News, events, reports and opinion articles.{/t}",
+      "description": "{t domain=base 1=$tag->name|replace:'\\':''|escape:'htmlall' 2=$siteName}All the latest information about %1 in %2. News, events, reports and opinion articles.{/t}",
       {/if}
       "url": "{$url}",
     {else}
