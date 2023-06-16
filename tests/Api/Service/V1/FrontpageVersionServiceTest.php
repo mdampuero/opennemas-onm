@@ -49,6 +49,10 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getItem', 'getList' ])
             ->getMock();
 
+        $this->ds = $this->getMockBuilder('DataSet')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
         $this->fs = $this->getMockBuilder('Api\Service\V1\FrontpageService')
             ->disableOriginalConstructor()
             ->setMethods([ 'createItem' ])
@@ -62,7 +66,7 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
         $this->ormManager = $this->getMockBuilder('EntityManager' . uniqid())
             ->setMethods([
                 'getConverter' ,'getMetadata', 'getRepository', 'persist',
-                'remove', 'getConnection'
+                'remove', 'getConnection', 'getDataSet'
             ])->getMock();
 
         $this->locale = $this->getMockBuilder('Locale' . uniqid())
@@ -572,6 +576,9 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
             ->method('getList')
             ->willReturn([ 'items' => [ $category ] ]);
 
+        $this->ormManager->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
         $this->frontpageVersionsRepository->expects($this->once())
             ->method('getCatFrontpageRel')
             ->willReturn([ 1 => $category ]);
@@ -603,6 +610,9 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
         $this->cs->expects($this->once())
             ->method('getList')
             ->willReturn([ 'items' => [ $category ] ]);
+
+        $this->ormManager->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
 
         $this->frontpageVersionsRepository->expects($this->once())
             ->method('getCatFrontpageRel')

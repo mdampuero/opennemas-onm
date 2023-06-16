@@ -246,11 +246,17 @@ class FrontpageVersionService extends OrmService
             'name'      => _('Frontpage'),
             'manual'    => $existMainFrontPage
         ];
-
-        $frontpages    = $existMainFrontPage ? [$mainFrontpage] : [];
-        $frontpagesAut = !$existMainFrontPage ? [$mainFrontpage] : [];
+        $frontpages         = $existMainFrontPage ? [$mainFrontpage] : [];
+        $frontpagesAut      = !$existMainFrontPage ? [$mainFrontpage] : [];
+        $localeSettings     = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('locale');
+        $mainLanguage       = $localeSettings['frontend']['language']['selected'] ?? '';
 
         foreach ($categories['items'] as $category) {
+            if (is_array($category->name) && array_key_exists($mainLanguage, $category->name)) {
+                $category->name = $category->name[$mainLanguage];
+            }
             if (array_key_exists($category->id, $catFrontpagesRel)) {
                 $frontpages[$category->id] = [
                     'id'           => $category->id,
