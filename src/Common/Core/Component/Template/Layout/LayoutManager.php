@@ -304,9 +304,15 @@ class LayoutManager
     {
         $last        = $isLast ? ' last' : '';
         $description = '';
+        $collapse = '';
 
         if (!empty($xml['description'])) {
-            $description = '<div class="title">' . $xml['description'] . '</div>';
+            if (!empty($xml['collapse'])) {
+                $collapse = '<a role="button" class="wrapper-collapse text-white" data-toggle="collapse" href="#' . $xml['collapse'] . '" aria-expanded="true" aria-controls="' . $xml['collapse'] . '">' . $xml['description'] . '</a>';
+                $description = '<div class="title">' . $collapse . '</div>';
+            } else {
+                $description = '<div class="title">' . $xml['description'] . '</div>';
+            }
         }
 
         return '<div class="static clearfix ' . $xml['class']
@@ -329,8 +335,13 @@ class LayoutManager
         $output = [];
         $last   = $isLast ? ' last' : '';
 
-        $output[] = '<div class="wrapper clearfix span-' .
-            $xml['width'] . $last . '">';
+        if ($xml['type'] == 'wrapper-collapsable') {
+            $output[] = '<div id="' . $xml['id'] . '" class="wrapper ' . $xml['type'] .' clearfix collapse in span-' .
+                $xml['width'] . $last . '">';
+        } else {
+            $output[] = '<div class="wrapper clearfix span-' .
+                $xml['width'] . $last . '">';
+        }
 
         $total    = count($xml->children());
         $position = 0;
