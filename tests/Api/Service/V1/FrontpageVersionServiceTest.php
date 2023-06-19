@@ -70,7 +70,7 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
             ])->getMock();
 
         $this->locale = $this->getMockBuilder('Locale' . uniqid())
-            ->setMethods([ 'getContext', 'setContext', 'getTimeZone' ])
+            ->setMethods([ 'getContext', 'setContext', 'getTimeZone', 'getSlug' ])
             ->getMock();
 
         $this->locale->expects($this->any())->method('getTimeZone')
@@ -578,6 +578,10 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->ormManager->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
+
+        $this->locale->expects($this->once())->method('getSlugs')
+            ->with('frontend')
+            ->willReturn('es');
 
         $this->frontpageVersionsRepository->expects($this->once())
             ->method('getCatFrontpageRel')

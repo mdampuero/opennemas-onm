@@ -234,28 +234,31 @@ class FrontpageVersionService extends OrmService
 
     public function getFrontpageWithCategory($categoryId)
     {
-        $categoryIdAux      = empty($categoryId) ? 0 : $categoryId;
-        $categories         = $this->container->get('api.service.category')
+        $categoryIdAux           = empty($categoryId) ? 0 : $categoryId;
+        $categories              = $this->container->get('api.service.category')
             ->getList();
-        $catFrontpagesRel   = $this->getCatFrontpagesRel();
-        $catWithFrontpage   = $this->contentPositionService->getCategoriesWithManualFrontpage();
-        $frontpages         = null;
-        $existMainFrontPage = array_key_exists(0, $catFrontpagesRel);
-        $mainFrontpage      = [
+        $catFrontpagesRel        = $this->getCatFrontpagesRel();
+        $catWithFrontpage        = $this->contentPositionService->getCategoriesWithManualFrontpage();
+        $frontpages              = null;
+        $existMainFrontPage      = array_key_exists(0, $catFrontpagesRel);
+        $mainFrontpage           = [
             'id'        => 0,
             'name'      => _('Frontpage'),
             'manual'    => $existMainFrontPage
         ];
-        $frontpages         = $existMainFrontPage ? [$mainFrontpage] : [];
-        $frontpagesAut      = !$existMainFrontPage ? [$mainFrontpage] : [];
-        $localeSettings     = $this->container->get('orm.manager')
+        $frontpages              = $existMainFrontPage ? [$mainFrontpage] : [];
+        $frontpagesAut           = !$existMainFrontPage ? [$mainFrontpage] : [];
+        $localeSettings          = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('locale');
-        $mainLanguage       = $localeSettings['frontend']['language']['selected'] ?? '';
+        $mainLanguageSlug        = $localeSettings['frontend']['language']['selected'] ?? '';
+        $mainLanguageSlugShort   = $this->locale->getSlug('frontend');
 
         foreach ($categories['items'] as $category) {
-            if (is_array($category->name) && array_key_exists($mainLanguage, $category->name)) {
-                $category->name = $category->name[$mainLanguage];
+            if (is_array($category->name) && array_key_exists($mainLanguageSlug, $category->name)) {
+                $category->name = $category->name[$mainLanguageSlug];
+            } elseif (is_array($category->name) && array_key_exists($mainLanguageSlugShort, $category->name)) {
+                $category->name = $category->name[$mainLanguageSlugShort];
             }
             if (array_key_exists($category->id, $catFrontpagesRel)) {
                 $frontpages[$category->id] = [
