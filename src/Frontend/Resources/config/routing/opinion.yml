@@ -1,8 +1,8 @@
 frontend_opinion_show:
-    path: /opinion/{author_name}/{slug}/{created}{id}.html
-    defaults: { _controller: FrontendBundle:Opinion:show, author_name: author, }
+    path: /opinion/{author_slug}/{slug}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:Opinion:show, author_slug: author, }
     requirements:
-        author_name   : '[^/]+'
+        author_slug   : '[^/]+'
         slug : '[^/]+'
         opinion_id    : '[^/]+'
         created:       '[0-9]{14}'
@@ -13,10 +13,10 @@ frontend_opinion_show:
         subdirectory: true
 
 frontend_opinion_show_amp:
-    path: /opinion/{author_name}/{slug}/{created}{id}.amp.html
+    path: /opinion/{author_slug}/{slug}/{created}{id}.amp.html
     defaults: { _controller: FrontendBundle:Opinion:showAmp, _format: amp }
     requirements:
-        author_name   : '[^/]+'
+        author_slug   : '[^/]+'
         slug : '[^/]+'
         opinion_id    : '[^/]+'
         created:       '[0-9]{14}'

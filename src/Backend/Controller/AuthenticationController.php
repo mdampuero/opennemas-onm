@@ -73,12 +73,7 @@ class AuthenticationController extends Controller
             return $this->redirect($this->generateUrl('admin_welcome'));
         }
 
-        $auth      = $this->get('core.security.authentication');
-        $recaptcha = '';
-
-        if ($auth->isRecaptchaRequired()) {
-            $recaptcha = $auth->getRecaptchaFromParameters();
-        }
+        $auth = $this->get('core.security.authentication');
 
         if ($auth->hasError()) {
             $session->getFlashBag()->add('error', $auth->getErrorMessage());
@@ -87,7 +82,7 @@ class AuthenticationController extends Controller
         return $this->render('login/login.tpl', [
             'locale'    => $this->get('core.locale')->getLocale(),
             'locales'   => $this->get('core.locale')->getAvailableLocales(),
-            'recaptcha' => $recaptcha,
+            'recaptcha' => $auth->getRecaptchaFromParameters(),
             'target'    => $target,
             'token'     => $auth->getCsrfToken()
         ]);

@@ -17,7 +17,7 @@
             "article": "{get_id($content)}",
             "publish_time": "{if !empty($content)}{format_date date=get_publication_date($content) format='yyyy-MM-dd HH:mm:ss' type='custom'}{/if}",
             "author": "{get_author_name($content)}",
-            "media_id": {$id},
+            "media_id": "{$id}",
             "title": "{$content->title|escape}",
             "keywords": "{$seoTags}",
             "image": "{$imagePath}",

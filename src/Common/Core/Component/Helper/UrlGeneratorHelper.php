@@ -56,16 +56,6 @@ class UrlGeneratorHelper
     protected $router;
 
     /**
-     * The L10n url parameters.
-     *
-     * @var Array
-     */
-    protected $l10nUrlParams = [
-        'category_slug' => 'category',
-        'slug'          => 'content'
-    ];
-
-    /**
      * Initializes the UrlGeneratorHelper.
      *
      * @param ServiceContainer $container The service container.
@@ -215,26 +205,22 @@ class UrlGeneratorHelper
     /**
      * Returns the translated url parameters.
      *
-     * @param Array   $params The url/route parameters.
+     * @param Array    $params The url/route parameters.
+     * @param Content  $content  The content object.
+     * @param Category $category The category object.
      *
      * @return Array  $finalParams The translated url parameters.
      */
-    public function getTranslatedUrlParams($params)
+    public function getTranslatedUrlParams($params, $content, $category)
     {
-        $slugs     = $this->locale->getSlugs();
-        $extension = $this->container->get('core.globals')->getExtension();
-        $extension = $extension === 'staticpage' ? 'static_page' : $extension;
-
+        $slugs       = $this->locale->getSlugs();
         $finalParams = [];
+
         foreach ($params as $key => $value) {
-            // Get localizable route params as objects
-            if ($key === 'category_slug' || $key === 'category') {
-                $item = $this->container->get('api.service.category')->getItemBySlug($value);
+            if (in_array($key, [ 'category_slug', 'category' ])) {
+                $item = $category;
             } elseif ($key === 'slug') {
-                $item = $this->container->get('api.service.content')->getItemBySlugAndContentType(
-                    $value,
-                    \ContentManager::getContentTypeIdFromName($extension)
-                );
+                $item = $content;
             } else {
                 $item = $value;
             }

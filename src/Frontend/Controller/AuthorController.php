@@ -19,7 +19,7 @@ class AuthorController extends Controller
      */
     public function authorFrontpageAction(Request $request)
     {
-        $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
         $page         = (int) $request->get('page', 1);
         $itemsPerPage = 12;
 
@@ -31,7 +31,7 @@ class AuthorController extends Controller
         }
 
         $expected = $this->get('router')
-            ->generate('frontend_author_frontpage', [ 'slug' => $user->slug ]);
+            ->generate('frontend_author_frontpage', [ 'author_slug' => $user->slug ]);
         $expected = $this->get('core.decorator.url')->prefixUrl($expected);
 
         if ($request->getPathInfo() !== $expected) {
@@ -78,7 +78,7 @@ class AuthorController extends Controller
                 'total'       => $contentsCount,
                 'route'       => [
                     'name'   => 'frontend_author_frontpage',
-                    'params' => [ 'slug' => $slug, ]
+                    'params' => [ 'author_slug' => $slug, ]
                 ],
             ]);
 
@@ -109,7 +109,7 @@ class AuthorController extends Controller
     public function extAuthorFrontpageAction(Request $request)
     {
         $categoryName = $request->query->filter('category_slug', '', FILTER_SANITIZE_STRING);
-        $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
 
         // Get sync params
         $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);

@@ -96,9 +96,7 @@ class Content extends Entity
      */
     public function getEntityFromCache()
     {
-        if (!$this->exists()) {
-            $this->refresh();
-        }
+        $this->refresh();
     }
 
     /**
