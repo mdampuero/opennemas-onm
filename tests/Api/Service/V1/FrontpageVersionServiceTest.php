@@ -579,10 +579,6 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
         $this->ormManager->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
 
-        $this->locale->expects($this->once())->method('getSlugs')
-            ->with('frontend')
-            ->willReturn('es');
-
         $this->frontpageVersionsRepository->expects($this->once())
             ->method('getCatFrontpageRel')
             ->willReturn([ 1 => $category ]);
