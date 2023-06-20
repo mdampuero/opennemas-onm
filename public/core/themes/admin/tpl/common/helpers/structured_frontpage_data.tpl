@@ -38,7 +38,7 @@
     "@context": "http://schema.org",
     "@type": "WebPage",
     {if !empty($category)}
-      "name": "{$category->title}",
+      "name": "{$category->title|replace:'\\':''|escape:'htmlall'}",
       "description": "{$category->description|default:$category->title|replace:'\\':''|escape:'htmlall'}",
       "url": "{$url}",
     {else if !empty($tag)}
