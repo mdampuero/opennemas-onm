@@ -234,47 +234,44 @@ class FrontpageVersionService extends OrmService
 
     public function getFrontpageWithCategory($categoryId)
     {
-        $categoryIdAux           = empty($categoryId) ? 0 : $categoryId;
-        $categories              = $this->container->get('api.service.category')
-            ->getList();
-        $catFrontpagesRel        = $this->getCatFrontpagesRel();
-        $catWithFrontpage        = $this->contentPositionService->getCategoriesWithManualFrontpage();
-        $frontpages              = null;
-        $existMainFrontPage      = array_key_exists(0, $catFrontpagesRel);
-        $mainFrontpage           = [
+        $categoryIdAux      = empty($categoryId) ? 0 : $categoryId;
+        $categories         = $this->container->get('api.service.category')->getList();
+        $catFrontpagesRel   = $this->getCatFrontpagesRel();
+        $catWithFrontpage   = $this->contentPositionService->getCategoriesWithManualFrontpage();
+        $frontpages         = null;
+        $existMainFrontPage = array_key_exists(0, $catFrontpagesRel);
+        $mainFrontpage      = [
             'id'        => 0,
             'name'      => _('Frontpage'),
             'manual'    => $existMainFrontPage
         ];
-        $frontpages              = $existMainFrontPage ? [$mainFrontpage] : [];
-        $frontpagesAut           = !$existMainFrontPage ? [$mainFrontpage] : [];
-        $localeSettings          = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('locale');
-        $mainLanguageSlug        = $localeSettings['frontend']['language']['selected'] ?? '';
-        $mainLanguageSlugShort   = $this->locale->getSlug('frontend');
+
+        $frontpages    = $existMainFrontPage ? [$mainFrontpage] : [];
+        $frontpagesAut = !$existMainFrontPage ? [$mainFrontpage] : [];
+
+        $context = $this->locale->getContext();
+        $this->locale->setContext('frontend');
+
+        $categories['items'] = $this->container->get('data.manager.filter')
+            ->set($categories['items'])
+            ->filter('localize', [
+                'keys'   => ['name', 'title'],
+            ])->get();
+
+        $this->locale->setContext($context);
 
         foreach ($categories['items'] as $category) {
-            if (is_array($category->name) && array_key_exists($mainLanguageSlug, $category->name)) {
-                $category->name = $category->name[$mainLanguageSlug];
-            } elseif (is_array($category->name) && array_key_exists($mainLanguageSlugShort, $category->name)) {
-                $category->name = $category->name[$mainLanguageSlugShort];
-            }
             if (array_key_exists($category->id, $catFrontpagesRel)) {
                 $frontpages[$category->id] = [
                     'id'           => $category->id,
-                    'name'         => $category->name,
+                    'name'         => $category->title,
                     'frontpage_id' => $catFrontpagesRel[$category->id],
                     'manual'       => true
                 ];
             } else {
-                $name = $this->filterManager
-                    ->set($category->title)
-                    ->filter('localize')->get();
-
                 $frontpagesAut[$category->id] = [
                     'id'     => $category->id,
-                    'name'   => $name,
+                    'name'   => $category->title,
                     'manual' => in_array($category->id, $catWithFrontpage)
                 ];
             }
