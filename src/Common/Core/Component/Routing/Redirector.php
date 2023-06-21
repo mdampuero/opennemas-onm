@@ -73,9 +73,13 @@ class Redirector
      */
     public function getResponse(Request $request, Url $url)
     {
-        $response = $url->redirection
+        if ($url->type !== 5) {
+            $response = $url->redirection
             ? $this->getRedirectResponse($request, $url)
             : $this->getForwardResponse($request, $url);
+        } else {
+            $response = $this->getResourceGoneResponse();
+        }
 
         $xTags = $response->headers->get('x-tags') . ",url-" . $url->id;
 
@@ -95,6 +99,21 @@ class Redirector
     public function getResponseContent(Request $request)
     {
         return $this->getRedirectContentParams($request->getRequestUri());
+    }
+
+    /**
+     * Returns a 410 GONE response
+     *
+     * @param Request $request The current request.
+
+     * @return mixed The redirect response
+     */
+    public function getResourceGoneResponse()
+    {
+        $content = $this->container->get('core.template.frontend')
+            ->render('static_pages/410.tpl', []);
+
+        return new Response($content, 410);
     }
 
     /**
@@ -534,7 +553,7 @@ class Redirector
      */
     protected function getRegExpUrl($uri, $contentType = null)
     {
-        $oql = sprintf('type in [%s] and enabled = 1', implode(',', [ 3, 4 ]));
+        $oql = sprintf('type in [%s] and enabled = 1', implode(',', [ 3, 4, 5 ]));
 
         if (!empty($contentType)) {
             $oql = sprintf('content_type in ["%s"]', implode('","', $contentType))
