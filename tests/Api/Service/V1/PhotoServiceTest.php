@@ -191,7 +191,6 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
                 ]
             ]);
 
-
         $this->sh->expects($this->once())->method('toBoolean')
             ->willReturn([
                 'optimize_images' => true

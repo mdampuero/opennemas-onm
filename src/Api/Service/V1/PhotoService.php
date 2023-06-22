@@ -26,7 +26,6 @@ class PhotoService extends ContentService
         'fk_content_type'   => 8
     ];
 
-
     /**
      *{@inheritdoc}
      */
