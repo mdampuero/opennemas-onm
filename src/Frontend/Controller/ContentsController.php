@@ -37,7 +37,7 @@ class ContentsController extends Controller
      */
     public function printAction(Request $request)
     {
-        $dirtyID = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
+        $dirtyID = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
 
         // Resolve content ID, we dont know which type the content is so we have to
         // perform some calculations
@@ -96,7 +96,7 @@ class ContentsController extends Controller
      */
     public function permalinkAction(Request $request)
     {
-        $id = (int) $request->query->getDigits('content_id');
+        $id = (int) $request->query->getDigits('id');
 
         if ($id <= 0) {
             throw new ResourceNotFoundException();

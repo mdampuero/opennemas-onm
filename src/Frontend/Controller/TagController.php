@@ -137,13 +137,11 @@ class TagController extends FrontendController
      */
     protected function getItem(Request $request)
     {
-        $locale = $this->get('core.locale')->getRequestLocale();
-        $slug   = $request->get('slug', null);
+        $slug = $request->get('slug', null);
 
         try {
             $item = $this->get('api.service.tag')->getList(sprintf(
-                '(locale = "%s" or locale is null) and slug = "%s"',
-                $locale,
+                'slug = "%s"',
                 $slug
             ))['items'];
         } catch (\Exception $e) {

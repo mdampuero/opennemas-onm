@@ -218,6 +218,25 @@
         $scope.removeAnswer = function(index) {
           $scope.item.items.splice(index, 1);
           $scope.data.item.items.splice(index, 1);
+          $scope.refreshAnswersIndex();
+        };
+
+        /**
+         * @function refreshAnswersIndex
+         * @memberOf PollCtrl
+         *
+         * @description
+         *   Updates pk intem based on current array index
+         */
+        $scope.refreshAnswersIndex = function() {
+          $scope.data.item.items = $scope.data.item.items.map(function(element, index) {
+            element.pk_item = index;
+            return element;
+          });
+          $scope.item.items = $scope.item.items.map(function(element, index) {
+            element.pk_item = index;
+            return element;
+          });
         };
       }
     ]);

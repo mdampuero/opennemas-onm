@@ -221,7 +221,7 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->router->expects($this->once())->method('generate')
-            ->with('frontend_author_frontpage', [ 'slug' => 'gorp' ])
+            ->with('frontend_author_frontpage', [ 'author_slug' => 'gorp' ])
             ->willReturn('/author/gorp');
 
         $this->assertNull($this->helper->getAuthorUrl(131));
@@ -396,7 +396,7 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->router->expects($this->once())->method('generate')
-            ->with('frontend_author_frontpage', [ 'slug' => 'michelle-price' ])
+            ->with('frontend_author_frontpage', [ 'author_slug' => 'michelle-price' ])
             ->willReturn('/author/michelle-price');
 
         $this->assertFalse($this->helper->hasAuthorUrl(131));

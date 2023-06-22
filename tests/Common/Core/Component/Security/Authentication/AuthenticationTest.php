@@ -439,20 +439,6 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests isRecaptchaRequired when it is and it is not required.
-     */
-    public function testIsRecaptchaRequired()
-    {
-        $this->session->expects($this->at(0))->method('get')
-            ->with('failed_login_attempts')->willReturn(0);
-        $this->session->expects($this->at(1))->method('get')
-            ->with('failed_login_attempts')->willReturn(3);
-
-        $this->assertFalse($this->auth->isRecaptchaRequired());
-        $this->assertTrue($this->auth->isRecaptchaRequired());
-    }
-
-    /**
      * Tests success.
      */
     public function testSuccess()

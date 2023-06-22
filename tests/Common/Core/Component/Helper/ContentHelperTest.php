@@ -142,6 +142,31 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getBodyWithLiveUpdates.
+     */
+    public function testGetBodyWithLiveUpdates()
+    {
+        $this->assertNull($this->contentHelper->getBodyWithLiveUpdates($this->content));
+
+        $this->content->body = 'His ridens eu sed quod ignota.';
+
+        $timezone = $this->locale->getTimeZone();
+        $now      = new \DateTime(null, $timezone);
+
+        $this->content->coverage_start_time = $now;
+        $this->content->coverage_end_time   = $now;
+        $this->content->live_blog_posting   = 1;
+        $this->content->live_blog_updates   = [[
+            'body' => 'Percipit "mollis" at scriptorem usu.'
+        ]];
+
+        $this->assertEquals(
+            'His ridens eu sed quod ignota. Percipit "mollis" at scriptorem usu.',
+            $this->contentHelper->getBodyWithLiveUpdates($this->content)
+        );
+    }
+
+    /**
      * Tests getBody when the content has a custom body.
      */
     public function testGetBodyWhenCustom()
@@ -654,7 +679,6 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->contentHelper->getLastLiveUpdate($this->content));
 
         $timezone = $this->locale->getTimeZone();
-
         $now      = new \DateTime(null, $timezone);
 
         $this->content->coverage_start_time = $now;
