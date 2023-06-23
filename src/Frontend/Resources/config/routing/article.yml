@@ -1,11 +1,11 @@
 # Articles routes
 frontend_external_article_show:
-    path:     /extarticulo/{category_slug}/{slug}/{article_id}.html
+    path:     /extarticulo/{category_slug}/{slug}/{id}.html
     defaults: { _controller: FrontendBundle:Article:extShow }
     requirements:
         category_slug: '[^/]+'
         slug         : '[^/]+'
-        article_id   : '([0-9]+)'
+        id           : '([0-9]+)'
     options:
         l10n: true
         subdirectory: true

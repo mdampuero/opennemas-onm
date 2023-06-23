@@ -1,5 +1,5 @@
 frontend_author_frontpage:
-    path: /author/{slug}/
+    path: /author/{author_slug}/
     defaults: { _controller: FrontendBundle:Author:authorFrontpage }
     requirements:
         slug: '[^/]+'
@@ -15,7 +15,7 @@ frontend_frontpage_authors:
         subdirectory: true
 
 frontend_external_author_frontpage:
-    path: /extauthor/{slug}/
+    path: /extauthor/{author_slug}/
     defaults: { _controller: FrontendBundle:Author:extAuthorFrontpage }
     requirements:
         slug: '[^/]+'

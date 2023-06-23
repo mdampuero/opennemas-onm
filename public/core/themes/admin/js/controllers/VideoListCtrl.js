@@ -77,12 +77,18 @@
             return '';
           }
 
+          var categoryName = categories[0].name;
+
+          if ($scope.hasMultilanguage() && typeof categoryName === 'object') {
+            categoryName = categoryName[$scope.config.locale.selected];
+          }
+
           return $scope.data.extra.base_url + $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
               id: item.pk_content.toString().padStart(6, '0'),
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
-              category_slug: categories[0].name
+              category_slug: categoryName
             })
           );
         };
@@ -100,7 +106,9 @@
 
           oqlEncoder.configure({
             placeholder: {
-              title: '[key] ~ "%[value]%"'
+              title: '[key] ~ "%[value]%"',
+              starttime: '[key] > "[value]"',
+              created: '[key] ~ "%[value]%"'
             }
           });
 

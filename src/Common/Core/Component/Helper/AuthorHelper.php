@@ -325,7 +325,7 @@ class AuthorHelper
         if ($this->getAuthorSlug($author)) {
             $routeName   = 'frontend_author_frontpage';
             $routeParams = [
-                'slug' => $this->getAuthorSlug($author),
+                'author_slug' => $this->getAuthorSlug($author),
             ];
 
             $url = $this->router->generate($routeName, $routeParams);

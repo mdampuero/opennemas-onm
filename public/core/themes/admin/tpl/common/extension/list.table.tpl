@@ -181,10 +181,10 @@
                     &lt;{t}No category{/t}&gt;
                   </small>
                   <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.category_id }) %]" ng-if="item.category_id">
-                    [% (categories | filter: { id: item.category_id })[0].title %]
+                    [% (categories | filter: { id: item.category_id } : true)[0].title %]
                   </a>
                   <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: id }) %]" ng-if="item.categories" ng-repeat="id in item.categories">
-                    [% (categories | filter: { id: id })[0].title %]
+                    [% (categories | filter: { id: id } : true)[0].title %]
                   </a>
                 {/block}
               </td>

@@ -2,6 +2,7 @@ frontend_letter_frontpage:
     path: /cartas-al-director
     defaults: { _controller: FrontendBundle:Letter:list }
     options:
+        l10n: true
         subdirectory: true
 
 frontend_letter_form:
@@ -12,10 +13,10 @@ frontend_letter_form:
         subdirectory: true
 
 frontend_letter_show:
-    path: /cartas-al-director/{author}/{slug}/{created}{id}.html
+    path: /cartas-al-director/{author_slug}/{slug}/{created}{id}.html
     defaults: { _controller: FrontendBundle:Letter:show, _format: html }
     requirements:
-        author: '([^/]+)'
+        author_slug:   '([^/]+)'
         slug:          '[^/]+'
         created:       '[0-9]{14}'
         id:            '[0-9]+'

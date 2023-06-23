@@ -235,8 +235,7 @@ class FrontpageVersionService extends OrmService
     public function getFrontpageWithCategory($categoryId)
     {
         $categoryIdAux      = empty($categoryId) ? 0 : $categoryId;
-        $categories         = $this->container->get('api.service.category')
-            ->getList();
+        $categories         = $this->container->get('api.service.category')->getList();
         $catFrontpagesRel   = $this->getCatFrontpagesRel();
         $catWithFrontpage   = $this->contentPositionService->getCategoriesWithManualFrontpage();
         $frontpages         = null;
@@ -250,22 +249,29 @@ class FrontpageVersionService extends OrmService
         $frontpages    = $existMainFrontPage ? [$mainFrontpage] : [];
         $frontpagesAut = !$existMainFrontPage ? [$mainFrontpage] : [];
 
+        $context = $this->locale->getContext();
+        $this->locale->setContext('frontend');
+
+        $categories['items'] = $this->container->get('data.manager.filter')
+            ->set($categories['items'])
+            ->filter('localize', [
+                'keys'   => ['name', 'title'],
+            ])->get();
+
+        $this->locale->setContext($context);
+
         foreach ($categories['items'] as $category) {
             if (array_key_exists($category->id, $catFrontpagesRel)) {
                 $frontpages[$category->id] = [
                     'id'           => $category->id,
-                    'name'         => $category->name,
+                    'name'         => $category->title,
                     'frontpage_id' => $catFrontpagesRel[$category->id],
                     'manual'       => true
                 ];
             } else {
-                $name = $this->filterManager
-                    ->set($category->title)
-                    ->filter('localize')->get();
-
                 $frontpagesAut[$category->id] = [
                     'id'     => $category->id,
-                    'name'   => $name,
+                    'name'   => $category->title,
                     'manual' => in_array($category->id, $catWithFrontpage)
                 ];
             }

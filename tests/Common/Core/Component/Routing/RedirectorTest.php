@@ -66,6 +66,16 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'isReadyForPublish' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getSlugs' ])
+            ->getMock();
+
+        $this->localeHelper = $this->getMockBuilder('Common\Core\Component\Helper\LocaleHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'hasMultilanguage' ])
+            ->getMock();
+
         $this->instance = $this->getMockBuilder('Instance')->getMock();
 
         $this->em = $this->getMockBuilder('EntityManager')
@@ -91,7 +101,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->setMethods([ 'duplicate', 'getRequestUri' ])
+            ->setMethods([ 'duplicate', 'getRequestUri', 'getPathInfo' ])
             ->getMock();
 
         $this->response = $this->getMockBuilder('Response')->getMock();
@@ -163,11 +173,17 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             case 'core.helper.content':
                 return $this->contentHelper;
 
+            case 'core.helper.locale':
+                return $this->localeHelper;
+
             case 'core.instance':
                 return $this->instance;
 
             case 'core.theme':
                 return $this->theme;
+
+            case 'core.locale':
+                return $this->locale;
 
             case 'data.manager.filter':
                 return $this->fm;
@@ -944,10 +960,24 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRedirectResponseWhenValidContentTarget()
     {
-        $content = new \Content([ 'content_type_name' => 'article' ]);
+        $content = new Content([ 'content_type_name' => 'article' ]);
 
         $this->contentHelper->expects($this->once())->method('isReadyForPublish')
             ->willReturn(true);
+
+        $this->localeHelper->expects($this->once())->method('hasMultilanguage')
+            ->willReturn(true);
+
+
+        $this->locale->expects($this->once())->method('getSlugs')
+            ->with('frontend')
+            ->willReturn([
+                'es' => 'es',
+                'en' => 'en'
+            ]);
+
+        $this->request->expects($this->once())->method('getPathInfo')
+            ->willReturn('/es/asda/asdasd/dasdasd');
 
         $url = new Url([
             'content_type' => 'article',
@@ -974,7 +1004,7 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
 
         $response = $method->invokeArgs($redirector, [ $this->request, $url ]);
 
-        $this->assertEquals('/grault', $response->getTargetUrl());
+        $this->assertEquals('/es/grault', $response->getTargetUrl());
     }
 
     /**
@@ -987,9 +1017,23 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             'enabled'      => true,
             'redirection'  => false,
             'source'       => 4796,
-            'target'       => 'mumble',
+            'target'       => '/mumble',
             'type'         => 0
         ]);
+
+        $this->localeHelper->expects($this->once())->method('hasMultilanguage')
+            ->willReturn(true);
+
+
+        $this->locale->expects($this->once())->method('getSlugs')
+            ->with('frontend')
+            ->willReturn([
+                'es' => 'es',
+                'en' => 'en'
+            ]);
+
+        $this->request->expects($this->once())->method('getPathInfo')
+            ->willReturn('/es/asda/asdasd/dasdasd');
 
         $redirector = $this->getMockBuilder('Common\Core\Component\Routing\Redirector')
             ->setConstructorArgs([ $this->container, $this->service, $this->cache ])
@@ -997,14 +1041,14 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $redirector->expects($this->once())->method('getTarget')
-            ->willReturn('mumble');
+            ->willReturn('/mumble');
 
         $method = new \ReflectionMethod($redirector, 'getRedirectResponse');
         $method->setAccessible(true);
 
         $response = $method->invokeArgs($redirector, [ $this->request, $url ]);
 
-        $this->assertEquals('mumble', $response->getTargetUrl());
+        $this->assertEquals('/es/mumble', $response->getTargetUrl());
     }
 
     /**

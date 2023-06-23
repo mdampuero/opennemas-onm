@@ -590,27 +590,6 @@ class RssController extends FrontendController
             }
         }
 
-        if ($contentType == 'event') {
-            $filters['contentmeta.meta_name']  = [
-                [ 'value' => 'event_end_date', 'operator' => '=' ]
-            ];
-            $filters['contentmeta.meta_value'] = [
-                [ 'value' => gmdate('Y-m-d'), 'operator' => '>=' ]
-            ];
-            $filters['join']                   = [
-                [
-                    'table'               => 'contentmeta',
-                    'type'                => 'inner',
-                    'contents.pk_content' => [
-                        [
-                            'value' => 'contentmeta.fk_content',
-                            'field' => true
-                        ]
-                    ]
-                ]
-            ];
-        }
-
         $contents = $em->findBy($filters, $order, $total, 1);
         $cm       = new \ContentManager();
         $contents = $cm->filterBlocked($contents);
