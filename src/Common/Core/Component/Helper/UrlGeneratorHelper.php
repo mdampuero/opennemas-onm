@@ -246,7 +246,7 @@ class UrlGeneratorHelper
         return $finalParams;
     }
 
-    public function getTranlatedSlug($item, $longSlug)
+    protected function getTranlatedSlug($item, $longSlug)
     {
         if (!is_object($item)) {
             return $item;
