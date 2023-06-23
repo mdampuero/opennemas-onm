@@ -115,12 +115,12 @@ class UrlGeneratorHelper
         $this->locale->setContext('frontend');
 
         $localize = $this->locale->getRequestLocale('frontend');
-        if (array_key_exists('localize', $params) && !empty($params['localize'])) {
-            $localize = $params['localize'];
-
-            $uri .= $this->locale->getSlugs()[$params['localize']] ?
-                '/' . $this->locale->getSlugs()[$params['localize']] :
-                '';
+        if (array_key_exists('locale', $params) && !empty($params['locale'])) {
+            $localize = $params['locale'];
+            $uri .= $this->locale->getSlugs()[$params['locale']] &&
+                $this->locale->getSlugs()[$params['locale']] !== $this->locale->getSlug() ?
+            '/' . $this->locale->getSlugs()[$params['locale']] :
+            '';
         }
 
         $method = 'getUriForContent';
