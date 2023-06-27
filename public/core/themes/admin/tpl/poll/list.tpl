@@ -23,6 +23,13 @@
       {t}Download{/t}
     </a>
   </li>
+  {acl isAllowed="MASTER"}
+    <li class="quicklinks">
+      <a class="btn btn-link" href="{url name=backend_poll_config}" class="admin_add" title="{t}Config article module{/t}">
+        <span class="fa fa-cog fa-lg"></span>
+      </a>
+    </li>
+  {/acl}
   {acl isAllowed="POLL_CREATE"}
     <li class="hidden-xs quicklinks">
       <span class="h-seperate"></span>

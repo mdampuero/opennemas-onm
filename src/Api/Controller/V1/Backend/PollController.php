@@ -55,10 +55,17 @@ class PollController extends ContentController
         $categories = $this->get('api.service.category')->responsify(
             $this->get('api.service.category')->getList()['items']
         );
+        $extraFields = null;
 
+        if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            $extraFields = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('extraInfoContents.POLL_MANAGER');
+        }
         return array_merge(parent::getExtraData($items), [
             'authors'     => $this->getAuthors($items),
             'categories'  => $categories,
+            'extra_fields'  => $extraFields,
             'tags'        => $this->getTags($items),
             'total_votes' => $this->container->get('core.helper.poll')->getTotalVotes($items),
             'formSettings'  => [

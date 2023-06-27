@@ -1,3 +1,7 @@
+backend_poll_config:
+    path:     /polls/config
+    defaults: { _controller: BackendBundle:Poll:config }
+
 backend_poll_create:
     path:     /polls/new
     defaults: { _controller: BackendBundle:Poll:create }

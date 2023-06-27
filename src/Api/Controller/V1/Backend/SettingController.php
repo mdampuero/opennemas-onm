@@ -215,4 +215,27 @@ class SettingController extends Controller
 
         return new JsonResponse($msg->getMessages(), $msg->getcode());
     }
+
+      /**
+     * Saves the extrafields setting for poll
+     *
+     * @param array $files The list of files to save.
+     *
+     * @return array The list of filenames.
+     *
+     * @Security("hasPermission('MASTER')")
+     */
+    public function extraFieldPollSaveAction(Request $request)
+    {
+        $msg      = $this->get('core.messenger');
+        $settings = $request->get('extraFields');
+        $settings = json_decode($settings, true);
+
+        $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->set('extraInfoContents.POLL_MANAGER', $settings);
+
+        $msg->add(_('Settings saved.'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getcode());
+    }
 }
