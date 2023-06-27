@@ -439,6 +439,16 @@ class ContentManager
             ],
         ];
 
+        if (strpos($contentType, '&&')) {
+            $contentTypes = explode('&&', $contentType);
+            $values       = [ 'union' => 'OR' ];
+            foreach ($contentTypes as $type) {
+                $values[] = [ 'value' => $type ];
+            }
+
+            $criteria['content_type_name'] = $values;
+        }
+
         $order = ['content_views.views' => 'desc'];
         if (!empty($category)) {
             if (!is_array($category)) {
