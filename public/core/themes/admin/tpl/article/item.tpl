@@ -118,7 +118,7 @@
     </div>
   </div>
   {if !empty({setting name=seo_information})}
-    <div class="grid simple" ng-if="hasMultilanguage()">
+    <div class="grid simple" ng-if="!hasMultilanguage()">
       <div class="grid-body no-padding">
         <div class="grid-collapse-title">
           <i class="fa fa-search m-r-10"></i> {t}SEO Information{/t}
