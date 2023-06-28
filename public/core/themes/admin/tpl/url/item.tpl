@@ -52,7 +52,7 @@
           </label>
         </div>
       </div>
-      <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.redirection }" ng-click="expanded.redirection = !expanded.redirection">
+      <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.redirection }" ng-click="expanded.redirection = !expanded.redirection" ng-show="item.type != 5">
         <i class="fa fa-retweet m-r-10"></i>{t}Redirection{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.redirection }"></i>
         <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.redirection">
