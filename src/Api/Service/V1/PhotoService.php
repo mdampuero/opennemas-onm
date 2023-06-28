@@ -91,19 +91,21 @@ class PhotoService extends ContentService
             $ds = $this->container->get('orm.manager')
                 ->getDataSet('Settings', 'instance');
 
-            $config                = $ds->get('photo_settings', []);
-            $sh                    = $this->container->get('core.helper.setting');
-            $config                = $sh->toBoolean($config, ['optimize_images']);
-            $imageSize             = $this->getTheImageSize($path);
-            $resolution            = (!empty($config['image_resolution']))
-                ? explode('x', $config['image_resolution'])
-                : explode('x', $imageSize[0] . 'x' . $imageSize[1]);
-            $imageResolutionWidth  = $resolution[0];
-            $imageResolutionHeight = $resolution[1];
-            $imageQuality          = $config['image_quality'] ?? 70;
+            $config     = $ds->get('photo_settings', []);
+            $sh         = $this->container->get('core.helper.setting');
+            $config     = $sh->toBoolean($config, ['optimize_images']);
+            $imageSize  = $this->getTheImageSize($path);
+            $resolution = ['1920', '1920'];
+            if (!empty($config['image_resolution'])) {
+                $resolution = ($config['image_resolution'] == 'keep')
+                ? [ $imageSize[0], $imageSize[1] ]
+                : explode('x', $config['image_resolution']);
+            }
+
+            $imageQuality = $config['image_quality'] ?? 65;
 
             if ($optimize || (array_key_exists('optimize_images', $config) && $config['optimize_images'])) {
-                $this->optimizeImage($path, $imageQuality, $imageResolutionWidth, $imageResolutionHeight);
+                $this->optimizeImage($path, $imageQuality, $resolution[0], $resolution[1]);
                 $this->updateImage($id, $path);
             }
 

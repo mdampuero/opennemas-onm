@@ -70,10 +70,15 @@
               <div class="input-group">
                 <select id="image_quality" name="image_quality" ng-model="config.image_quality">
                   <option value="50">50%</option>
+                  <option value="55">55%</option>
                   <option value="60">60%</option>
+                  <option value="65">65%</option>
                   <option value="70">70%</option>
+                  <option value="75">75%</option>
                   <option value="80">80%</option>
+                  <option value="85">85%</option>
                   <option value="90">90%</option>
+                  <option value="95">95%</option>
                   <option value="100">100%</option>
                 </select>
               </div>
@@ -92,7 +97,7 @@
             <div class="controls">
               <div class="input-group">
                 <select id="image_resolution" name="image_resolution" ng-model="config.image_resolution">
-                  <option value="">{t}Keep original resolution{/t}</option>
+                  <option value="keep">{t}Keep original resolution{/t}</option>
                   <option value="1920x1080">1920x1080px (16:9)</option>
                   <option value="1600x900">1600x900px (16:9)</option>
                   <option value="1366x768">1366x768px (16:9)</option>
