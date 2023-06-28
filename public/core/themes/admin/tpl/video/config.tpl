@@ -7,13 +7,13 @@
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-home fa-lg"></i>
-                {t}Articles{/t}
+                <i class="fa fa-film"></i>
+                {t}Videos{/t}
               </h4>
             </li>
             <li class="quicklinks"><span class="h-seperate"></span></li>
             <li class="quicklinks">
-              <h5>{t}Settings{/t}</h5>
+              <h4>{t}Configuration{/t}</h4>
             </li>
           </ul>
           <div class="all-actions pull-right">

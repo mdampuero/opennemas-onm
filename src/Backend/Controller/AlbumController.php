@@ -116,6 +116,9 @@ class AlbumController extends BackendController
             'album_layout'      => $albumConfig['album_layout'],
             'album_max'         => $albumConfig['album_max'],
             'album_stats_photo' => $albumConfig['album_stats_photo'],
+            'extra_fields'      => $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('extraInfoContents.ALBUM_MANAGER')
         ]);
     }
 }

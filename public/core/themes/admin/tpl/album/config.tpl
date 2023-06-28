@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form name="form" ng-controller="AlbumConfigCtrl" ng-init="init()">
+<form ng-controller="AlbumConfigCtrl" ng-init="init({json_encode($extra_fields)|clear_json}); initList();">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -74,6 +74,14 @@
               <div class="controls col-xs-4">
                 <input class="form-control" min="0" ng-model="settings.album_max" ng-value="settings.album_max" placeholder="100" type="number">
               </div>
+            </div>
+          {/acl}
+        </div>
+        <div class="row m-t-30">
+          {acl isAllowed="MASTER"}
+            <div class="col-md-6">
+              <h4 class="no-margin">Extra fields</h4>
+              <autoform-editor ng-model="extraFields"/>
             </div>
           {/acl}
         </div>
