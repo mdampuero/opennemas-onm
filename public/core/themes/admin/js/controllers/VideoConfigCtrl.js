@@ -5,70 +5,68 @@
 
     /**
      * @ngdoc controller
-     * @name  videoListCtrl
+     * @name  VideoListCtrl
      *
      * @requires $controller
+     * @requires $location
      * @requires $scope
+     * @requires $timeout
      * @requires http
      * @requires messenger
+     * @requires linker
+     * @requires localizer
+     * @requires oqlEncoder
      *
      * @description
      *   Provides actions to list articles.
      */
     .controller('VideoConfigCtrl', [
-      '$controller', '$scope', 'http', 'messenger',
-      function($controller, $scope, http, messenger) {
+      '$controller', '$scope', 'cleaner', 'http', 'messenger',
+      function($controller, $scope, cleaner, http, messenger) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
         /**
-         * @function init
-         * @memberOf VideoConfigCtrl
+         * @memberOf UserSettingsCtrl
          *
          * @description
-         *   Initializes the form.
+         *  The extraFields object.
+         *
+         * @type {Object}
          */
-        $scope.init = function() {
-          $scope.list();
+        $scope.extraFields = {};
+        $scope.saving = false;
+
+        $scope.init = function(extraFields) {
+          if (extraFields !== null) {
+            $scope.extraFields = extraFields;
+          }
         };
 
         /**
-         * @function list
-         * @memberOf VideoConfigCtrl
+         * Updates an item.
          *
-         * @description
-         *   Reloads the tag configuration.
+         * @param int    index   Index of the item to update in contents.
+         * @param int    id      Id of the item to update.
+         * @param string route   Route name.
+         * @param string name    Name of the property to update.
+         * @param mixed  value   New value.
+         * @param string loading Name of the property used to show work-in-progress.
          */
-        $scope.list = function() {
-          $scope.flags.http.loading = true;
+        $scope.saveConf = function($event) {
+          $event.preventDefault();
 
-          http.get('api_v1_backend_video_config_show').then(function(response) {
-            $scope.settings = response.data;
+          var data = { extraFields: JSON.stringify(cleaner.clean($scope.extraFields)) };
 
-            $scope.settings.total_front_more = parseInt($scope.settings.total_front_more);
-
-            $scope.disableFlags('http');
-          }, function() {
-            $scope.disableFlags('http');
-          });
-        };
-
-        /**
-         * @function save
-         * @memberOf VideoConfigCtrl
-         *
-         * @description
-         *   Saves the configuration.
-         */
-        $scope.save = function() {
-          $scope.flags.http.saving = true;
-
-          http.put('api_v1_backend_video_config_save', $scope.settings)
+          $scope.saving = false;
+          http.put('api_v1_backend_extra_fields_video_save', data)
             .then(function(response) {
-              $scope.disableFlags('http');
+              $scope.saving = false;
+
               messenger.post(response.data);
             }, function(response) {
-              $scope.disableFlags('http');
+              $scope.saving = false;
+
               messenger.post(response.data);
             });
         };

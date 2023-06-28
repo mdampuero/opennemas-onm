@@ -1,6 +1,6 @@
 {extends file="base/admin.tpl"}
 {block name="content"}
-  <form ng-controller="PollConfigCtrl" ng-init="init({json_encode($extra_fields)|clear_json})">
+  <form ng-controller="VideoConfigCtrl" ng-init="init({json_encode($extra_fields)|clear_json})">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -8,7 +8,7 @@
             <li class="quicklinks">
               <h4>
                 <i class="fa fa-home fa-lg"></i>
-                {t}Polls{/t}
+                {t}Articles{/t}
               </h4>
             </li>
             <li class="quicklinks"><span class="h-seperate"></span></li>
@@ -19,7 +19,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=backend_polls_list}" title="{t}Go back to list{/t}">
+                <a class="btn btn-link" href="{url name=backend_video_list}" title="{t}Go back to list{/t}">
                   <i class="fa fa-reply"></i>
                 </a>
               </li>

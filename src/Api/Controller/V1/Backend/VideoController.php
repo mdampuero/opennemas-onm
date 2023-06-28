@@ -44,9 +44,18 @@ class VideoController extends ContentController
      */
     protected function getExtraData($items = null)
     {
+        $extraFields = null;
+
+        if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
+            $extraFields = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('extraInfoContents.VIDEO_MANAGER');
+        }
+
         return array_merge(parent::getExtraData($items), [
             'authors'    => $this->getAuthors($items),
             'categories' => $this->getCategories($items),
+            'extra_fields'  => $extraFields,
             'tags'       => $this->getTags($items),
             'formSettings'  => [
                 'name'             => $this->module,

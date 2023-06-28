@@ -238,4 +238,27 @@ class SettingController extends Controller
 
         return new JsonResponse($msg->getMessages(), $msg->getcode());
     }
+
+      /**
+     * Saves the extrafields setting for video
+     *
+     * @param array $files The list of files to save.
+     *
+     * @return array The list of filenames.
+     *
+     * @Security("hasPermission('MASTER')")
+     */
+    public function extraFieldVideoSaveAction(Request $request)
+    {
+        $msg      = $this->get('core.messenger');
+        $settings = $request->get('extraFields');
+        $settings = json_decode($settings, true);
+
+        $this->get('orm.manager')->getDataSet('Settings', 'instance')
+            ->set('extraInfoContents.VIDEO_MANAGER', $settings);
+
+        $msg->add(_('Settings saved.'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getcode());
+    }
 }

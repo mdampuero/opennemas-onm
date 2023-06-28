@@ -1,4 +1,4 @@
-backend_poll_config:
+backend_polls_config:
     path:     /polls/config
     defaults: { _controller: BackendBundle:Poll:config }
 

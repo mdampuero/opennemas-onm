@@ -25,7 +25,7 @@
   </li>
   {acl isAllowed="MASTER"}
     <li class="quicklinks">
-      <a class="btn btn-link" href="{url name=backend_poll_config}" class="admin_add" title="{t}Config article module{/t}">
+      <a class="btn btn-link" href="{url name=backend_polls_config}" class="admin_add" title="{t}Config article module{/t}">
         <span class="fa fa-cog fa-lg"></span>
       </a>
     </li>

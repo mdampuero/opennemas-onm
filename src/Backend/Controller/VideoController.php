@@ -4,6 +4,7 @@ namespace Backend\Controller;
 
 use Api\Exception\GetListException;
 use Symfony\Component\HttpFoundation\Request;
+use Common\Core\Annotation\Security;
 
 class VideoController extends BackendController
 {
@@ -96,5 +97,21 @@ class VideoController extends BackendController
             ]);
         } catch (GetListException $e) {
         }
+    }
+
+     /**
+     * Config for video system
+     *
+     * @return Response the response object
+     *
+     * @Security("hasExtension('MASTER')")
+     */
+    public function configAction()
+    {
+        return $this->render('video/config.tpl', [
+            'extra_fields' => $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('extraInfoContents.VIDEO_MANAGER')
+        ]);
     }
 }

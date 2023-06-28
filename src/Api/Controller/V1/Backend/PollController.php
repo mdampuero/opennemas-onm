@@ -52,7 +52,7 @@ class PollController extends ContentController
      */
     protected function getExtraData($items = null)
     {
-        $categories = $this->get('api.service.category')->responsify(
+        $categories  = $this->get('api.service.category')->responsify(
             $this->get('api.service.category')->getList()['items']
         );
         $extraFields = null;
