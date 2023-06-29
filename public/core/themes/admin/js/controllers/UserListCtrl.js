@@ -44,44 +44,11 @@
          *   Shows a modal to confirm user update.
          */
         $scope.confirm = function(property, value, item) {
-          if (!value || $scope.backup.master) {
-            if (item) {
-              $scope.patch(item, property, value);
-              return;
-            }
-
-            $scope.patchSelected(property, value);
+          if (item) {
+            $scope.patch(item, property, value);
             return;
           }
-
-          var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
-            backdrop: 'static',
-            controller: 'ModalCtrl',
-            resolve: {
-              template: function() {
-                return {
-                  name:  $scope.id ? 'update' : 'create',
-                  value: 1,
-                  extra: $scope.data.extra,
-                };
-              },
-              success: function() {
-                return null;
-              }
-            }
-          });
-
-          modal.result.then(function(response) {
-            if (response) {
-              if (item) {
-                $scope.patch(item, property, value);
-                return;
-              }
-
-              $scope.patchSelected(property, value);
-            }
-          });
+          $scope.patchSelected(property, value);
         };
 
         /**
