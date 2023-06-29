@@ -43,13 +43,13 @@
   </td>
   <td class="v-align-middle">
     <div class="table-text">
-      <a href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && ['advertisement', 'article', 'book', 'comment', 'keyword', 'letter', 'menu', 'photo', 'special', 'widget'].indexOf(item.content_type) !== -1">
+      <a href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && ['advertisement', 'article', 'comment', 'keyword', 'letter', 'menu', 'photo', 'special', 'widget'].indexOf(item.content_type) !== -1">
         [% item.target %] ([% item.content_type %])
       </a>
       <a href="/[% item.target %]" ng-if="item.type == 2 || item.type == 4">
         [% item.target %]
       </a>
-      <a href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && ['advertisement', 'article', 'book', 'comment', 'keyword', 'letter', 'menu', 'photo', 'special', 'widget'].indexOf(item.content_type) === -1">
+      <a href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && ['advertisement', 'article', 'comment', 'keyword', 'letter', 'menu', 'photo', 'special', 'widget'].indexOf(item.content_type) === -1">
         [% item.target %] ([% item.content_type %])
       </a>
     </div>

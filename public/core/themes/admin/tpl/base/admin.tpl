@@ -232,16 +232,6 @@
                           </div>
                         {/acl}
                       {/is_module_activated}
-                      {is_module_activated name="BOOK_MANAGER"}
-                        {acl isAllowed="BOOK_CREATE"}
-                          <div class="quick-item">
-                            <a href="{url name=admin_books_create}">
-                              <i class="fa fa-book"></i>
-                              <span class="title">{t}Book{/t}</span>
-                            </a>
-                          </div>
-                        {/acl}
-                      {/is_module_activated}
                       {is_module_activated name="OPINION_MANAGER"}
                         {acl isAllowed="AUTHOR_ADMIN"}
                           <div class="quick-item">

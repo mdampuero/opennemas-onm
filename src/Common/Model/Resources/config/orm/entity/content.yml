@@ -9,7 +9,6 @@ orm:
                     - album
                     - article
                     - attachment
-                    - book
                     - company
                     - event
                     - kiosko
