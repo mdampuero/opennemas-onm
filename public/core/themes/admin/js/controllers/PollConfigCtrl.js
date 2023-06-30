@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  PollListCtrl
+     * @name  PollConfigCtrl
      *
      * @requires $controller
      * @requires $location
@@ -44,14 +44,11 @@
         };
 
         /**
-         * Updates an item.
+         * @function saveConf
+         * @memberOf PollConfigCtrl
          *
-         * @param int    index   Index of the item to update in contents.
-         * @param int    id      Id of the item to update.
-         * @param string route   Route name.
-         * @param string name    Name of the property to update.
-         * @param mixed  value   New value.
-         * @param string loading Name of the property used to show work-in-progress.
+         * @description
+         *   Saves the configuration.
          */
         $scope.saveConf = function($event) {
           $event.preventDefault();

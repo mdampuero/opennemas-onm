@@ -3,7 +3,7 @@
 
   /**
    * @ngdoc controller
-   * @name  AlbumListCtrl
+   * @name  AlbumConfigCtrl
    *
    * @requires $controller
    * @requires $scope
@@ -20,7 +20,7 @@
       $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
       /**
-       * @memberOf UserSettingsCtrl
+       * @memberOf AlbumConfigCtrl
        *
        * @description
        *  The extraFields object.
@@ -37,7 +37,7 @@
       };
 
       /**
-       * @function init
+       * @function initList
        * @memberOf AlbumConfigCtrl
        *
        * @description
