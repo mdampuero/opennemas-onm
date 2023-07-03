@@ -91,18 +91,13 @@ class PhotoService extends ContentService
             $ds = $this->container->get('orm.manager')
                 ->getDataSet('Settings', 'instance');
 
-            $config     = $ds->get('photo_settings', []);
-            $sh         = $this->container->get('core.helper.setting');
-            $config     = $sh->toBoolean($config, ['optimize_images']);
-            $imageSize  = $this->getTheImageSize($path);
-            $resolution = ['1920', '1920'];
-            if (!empty($config['image_resolution'])) {
-                $resolution = ($config['image_resolution'] == 'keep')
-                ? [ $imageSize[0], $imageSize[1] ]
-                : explode('x', $config['image_resolution']);
-            }
-
+            $config       = $ds->get('photo_settings', []);
+            $sh           = $this->container->get('core.helper.setting');
+            $config       = $sh->toBoolean($config, ['optimize_images']);
             $imageQuality = $config['image_quality'] ?? 65;
+            $resolution   = !empty($config['image_resolution'])
+                ? explode('x', $config['image_resolution'])
+                : ['1920', '1920'];
 
             if ($optimize || (array_key_exists('optimize_images', $config) && $config['optimize_images'])) {
                 $this->optimizeImage($path, $imageQuality, $resolution[0], $resolution[1]);
@@ -116,16 +111,11 @@ class PhotoService extends ContentService
         }
     }
 
-    protected function getTheImageSize($path)
-    {
-        return getimagesize($path);
-    }
-
-    protected function optimizeImage($path, $quality, $imageResolutionWidth, $imageResolutionHeight)
+    protected function optimizeImage($path, $quality, $imageWidth, $imageHeight)
     {
         $processor = $this->container->get('core.image.processor');
         $processor->open($path)
-            ->apply('thumbnail', [$imageResolutionWidth, $imageResolutionHeight, 'center', 'center'])
+            ->apply('thumbnail', [$imageWidth, $imageHeight, 'center', 'center'])
             ->optimize([
                 'flatten'          => false,
                 'quality'          => $quality,
