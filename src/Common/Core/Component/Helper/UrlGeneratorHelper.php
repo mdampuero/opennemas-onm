@@ -169,10 +169,9 @@ class UrlGeneratorHelper
         if (!empty($item->externalUri)) {
             return $item->externalUri;
         }
-        $absolute    = array_key_exists('_absolute', $params) && $params['_absolute'];
-        $escape      = array_key_exists('_escape', $params) && $params['_escape'];
-        $isAmp       = array_key_exists('_amp', $params) && $params['_amp'];
-        $translation = array_key_exists('slug', $params) && $params['slug'];
+        $absolute = array_key_exists('_absolute', $params) && $params['_absolute'];
+        $escape   = array_key_exists('_escape', $params) && $params['_escape'];
+        $isAmp    = array_key_exists('_amp', $params) && $params['_amp'];
 
         // Remove special parameters
         $params = array_filter($params, function ($a) {
@@ -190,7 +189,6 @@ class UrlGeneratorHelper
                 ) : $this->generate($item, [
                     'absolute' => $absolute,
                     '_format'  => $isAmp ? 'amp' : null,
-                    'localize' => $translation ? $params['slug'] : null
                 ]);
 
             $url = $this->container->get('core.decorator.url')->prefixUrl($url);
