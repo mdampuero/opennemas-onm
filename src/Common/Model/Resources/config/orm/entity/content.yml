@@ -18,7 +18,6 @@ orm:
                     - opinion
                     - photo
                     - poll
-                    - special
                     - static_page
                     - video
                     - widget

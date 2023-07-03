@@ -30,7 +30,6 @@
     <i class="fa fa-lg fa-shield fa-flip-vertical" uib-tooltip="{t}Obituary{/t}" ng-if="item.content_type_name === 'obituary'"></i>
     <i class="fa fa-lg fa-quote" uib-tooltip="{t}Opinion{/t}" ng-if="item.content_type_name === 'opinion'"></i>
     <i class="fa fa-lg fa-camera" uib-tooltip="{t}Album{/t}" ng-if="item.content_type_name === 'album'"></i>
-    <i class="fa fa-lg fa-star" uib-tooltip="{t}Special{/t}" ng-if="item.content_type_name === 'special'"></i>
   </td>
 {/block}
 

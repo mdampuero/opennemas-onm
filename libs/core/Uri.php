@@ -35,7 +35,6 @@ class Uri
        'articleNewsletter'        => [ 'seccion/_CATEGORY_/#_ID_' ],
        'kiosko'                   => [ 'portadas-papel/_CATEGORY_/_DATE__ID_.html' ],
        'letter'                   => [ 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
-       'special'                  => [ 'especiales/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
        'book'                     => [ 'libro/_CATEGORY_/_SLUG_/_DATE__ID_.html' ],
     );
 

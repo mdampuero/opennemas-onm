@@ -165,15 +165,6 @@ $menuXml = [
             ],
 
             [
-                'id'          => 'specials_manager',
-                'title'       => _('Specials'),
-                'icon'        => 'fa fa-star',
-                'link'        => url('admin_specials'),
-                'module_name' => 'SPECIAL_MANAGER',
-                'privilege'   => 'SPECIAL_ADMIN',
-            ],
-
-            [
                 'id'          => 'letter_manager',
                 'title'       => _('Letter to the editor'),
                 'icon'        => 'fa fa-envelope',
