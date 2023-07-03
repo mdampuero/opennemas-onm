@@ -31,6 +31,7 @@ class ExternalSettingController extends SettingController
      */
     protected $keys = [
         'actOn.authentication',
+        'adobe_base',
         'chartbeat',
         'comscore',
         'data_layer',
@@ -66,6 +67,7 @@ class ExternalSettingController extends SettingController
      * @var array
      */
     protected $onlyMasters = [
+        'adobe_base',
         'gfk',
         'payments',
     ];
