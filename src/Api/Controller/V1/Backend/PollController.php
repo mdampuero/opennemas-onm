@@ -48,27 +48,45 @@ class PollController extends ContentController
     protected $getItemRoute = 'api_v1_backend_poll_get_item';
 
     /**
+     * Get the polls config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getConfigAction()
+    {
+        $this->checkSecurity($this->extension, 'POLL_SETTINGS');
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get('extraInfoContents.POLL_MANAGER');
+
+        return new JsonResponse([ 'extra_fields' => $settings ]);
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function getExtraData($items = null)
     {
-        $categories  = $this->get('api.service.category')->responsify(
+        $categories = $this->get('api.service.category')->responsify(
             $this->get('api.service.category')->getList()['items']
         );
-        $extraFields = null;
 
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             $extraFields = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
                 ->get('extraInfoContents.POLL_MANAGER');
         }
+
         return array_merge(parent::getExtraData($items), [
-            'authors'     => $this->getAuthors($items),
-            'categories'  => $categories,
-            'extra_fields'  => $extraFields,
-            'tags'        => $this->getTags($items),
-            'total_votes' => $this->container->get('core.helper.poll')->getTotalVotes($items),
-            'formSettings'  => [
+            'authors'      => $this->getAuthors($items),
+            'categories'   => $categories,
+            'extra_fields' => $extraFields ?? null,
+            'tags'         => $this->getTags($items),
+            'total_votes'  => $this->container->get('core.helper.poll')->getTotalVotes($items),
+            'formSettings' => [
                 'name'             => $this->module,
                 'expansibleFields' => $this->getFormSettings($this->module)
             ]
@@ -99,6 +117,37 @@ class PollController extends ContentController
             'extra'      => $this->getExtraData($response['items']),
             'o-filename' => $this->filename,
         ];
+    }
+
+    /**
+     * Saves configuration for poll.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveConfigAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, 'POLL_SETTINGS');
+
+        $settings = [
+            'extraInfoContents.POLL_MANAGER' => json_decode(
+                $request->request->get('extraFields'),
+                true
+            ),
+        ];
+
+        $msg = $this->get('core.messenger');
+
+        try {
+            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
+            $msg->add(_('Item saved successfully'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to save settings'), 'error');
+            $this->get('error.log')->error($e->getMessage());
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**

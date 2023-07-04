@@ -40,12 +40,28 @@ class VideoController extends ContentController
     protected $service = 'api.service.content';
 
     /**
+     * Get the videos config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getConfigAction()
+    {
+        $this->checkSecurity($this->extension, 'VIDEO_SETTINGS');
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get('extraInfoContents.VIDEO_MANAGER');
+
+        return new JsonResponse([ 'extra_fields' => $settings ]);
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function getExtraData($items = null)
     {
-        $extraFields = null;
-
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             $extraFields = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
@@ -53,11 +69,11 @@ class VideoController extends ContentController
         }
 
         return array_merge(parent::getExtraData($items), [
-            'authors'    => $this->getAuthors($items),
-            'categories' => $this->getCategories($items),
-            'extra_fields'  => $extraFields,
-            'tags'       => $this->getTags($items),
-            'formSettings'  => [
+            'authors'      => $this->getAuthors($items),
+            'categories'   => $this->getCategories($items),
+            'extra_fields' => $extraFields ?? null,
+            'tags'         => $this->getTags($items),
+            'formSettings' => [
                 'name'             => $this->module,
                 'expansibleFields' => $this->getFormSettings($this->module)
             ]
@@ -95,5 +111,36 @@ class VideoController extends ContentController
 
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
+    }
+
+    /**
+     * Saves configuration for video.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveConfigAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, 'VIDEO_SETTINGS');
+
+        $settings = [
+            'extraInfoContents.VIDEO_MANAGER' => json_decode(
+                $request->request->get('extraFields'),
+                true
+            ),
+        ];
+
+        $msg = $this->get('core.messenger');
+
+        try {
+            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
+            $msg->add(_('Item saved successfully'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to save settings'), 'error');
+            $this->get('error.log')->error($e->getMessage());
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 }

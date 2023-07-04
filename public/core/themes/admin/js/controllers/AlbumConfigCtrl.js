@@ -28,37 +28,18 @@
        * @type {Object}
        */
       $scope.extraFields = {};
-      $scope.saving = false;
-
-      $scope.init = function(extraFields) {
-        if (extraFields !== null) {
-          $scope.extraFields = extraFields;
-        }
-      };
 
       /**
-       * @function initList
+       * @function init
        * @memberOf AlbumConfigCtrl
        *
        * @description
        *   Initializes the form.
        */
-      $scope.initList = function() {
-        $scope.list();
-      };
-
-      /**
-       * @function list
-       * @memberOf AlbumConfigCtrl
-       *
-       * @description
-       *   Reloads the configuration.
-       */
-      $scope.list = function() {
-        $scope.flags.http.loading = true;
-
+      $scope.init = function() {
         http.get('api_v1_backend_album_get_config').then(function(response) {
           $scope.settings = response.data;
+          $scope.extraFields = response.data.extra_fields;
           $scope.disableFlags('http');
         }, function() {
           $scope.disableFlags('http');

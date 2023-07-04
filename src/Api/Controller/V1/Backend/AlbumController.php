@@ -2,7 +2,6 @@
 
 namespace Api\Controller\V1\Backend;
 
-use Api\Exception\GetItemException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -51,17 +50,14 @@ class AlbumController extends ContentController
 
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings')
-            ->get(['album_layout', 'album_max', 'album_stats_photo']);
-
-        $extraFieldsSettings = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('extraInfoContents.ALBUM_MANAGER');
+            ->get(['album_layout', 'album_max', 'album_stats_photo',
+                'extraInfoContents.ALBUM_MANAGER']);
 
         return new JsonResponse([
             'album_layout'      => $settings['album_layout'],
             'album_max'         => $settings['album_max'],
             'album_stats_photo' => $settings['album_stats_photo'],
-            'extra_fields' => $extraFieldsSettings,
+            'extra_fields'      => $settings['extraInfoContents.ALBUM_MANAGER'],
         ]);
     }
 
@@ -70,18 +66,20 @@ class AlbumController extends ContentController
      */
     protected function getExtraData($items = null)
     {
-        $extraFieldsSettings = $this->get('orm.manager')
+        $keys = $this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')
+            ? ['album_max', 'extraInfoContents.ALBUM_MANAGER']
+            : ['album_max'];
+
+        $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('extraInfoContents.ALBUM_MANAGER');
+            ->get($keys);
 
         return array_merge(parent::getExtraData($items), [
-            'categories' => $this->getCategories($items),
-            'tags'       => $this->getTags($items),
-            'max_photos' => (int) $this->get('orm.manager')
-                ->getDataSet('Settings')
-                ->get('album_max', 100),
-            'extra_fields' => $extraFieldsSettings,
-            'formSettings'  => [
+            'categories'   => $this->getCategories($items),
+            'tags'         => $this->getTags($items),
+            'max_photos'   => $settings['album_max'] ?? 100,
+            'extra_fields' => $settings['extraInfoContents.ALBUM_MANAGER'] ?? null,
+            'formSettings' => [
                 'name'             => $this->module,
                 'expansibleFields' => $this->getFormSettings($this->module)
             ]
@@ -107,22 +105,19 @@ class AlbumController extends ContentController
     {
         $this->checkSecurity($this->extension, 'ALBUM_SETTINGS');
 
-        $settings            = [
+        $msg      = $this->get('core.messenger');
+        $settings = [
             'album_layout'      => $request->request->get('album_layout'),
             'album_max'         => $request->request->get('album_max'),
             'album_stats_photo' => $request->request->get('album_stats_photo'),
+            'extraInfoContents.ALBUM_MANAGER' => json_decode(
+                $request->request->get('extraFields'),
+                true
+            ),
         ];
-        $msg                 = $this->get('core.messenger');
-        $extraFieldsSettings = $request->get('extraFields');
-        $extraFieldsSettings = json_decode($extraFieldsSettings, true);
 
         try {
-            $this->get('orm.manager')
-                ->getDataSet('Settings')
-                ->set($settings);
-            $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->set('extraInfoContents.ALBUM_MANAGER', $extraFieldsSettings);
+            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
             $msg->add(_('Item saved successfully'), 'success');
         } catch (\Exception $e) {
             $msg->add(_('Unable to save settings'), 'error');

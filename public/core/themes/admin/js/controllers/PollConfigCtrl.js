@@ -27,7 +27,7 @@
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf UserSettingsCtrl
+         * @memberOf PollConfigCtrl
          *
          * @description
          *  The extraFields object.
@@ -35,35 +35,41 @@
          * @type {Object}
          */
         $scope.extraFields = {};
-        $scope.saving = false;
 
-        $scope.init = function(extraFields) {
-          if (extraFields !== null) {
-            $scope.extraFields = extraFields;
-          }
+        /**
+         * @function init
+         * @memberOf PollConfigCtrl
+         *
+         * @description
+         *   Initializes the form.
+         */
+        $scope.init = function() {
+          http.get('api_v1_backend_poll_get_config').then(function(response) {
+            $scope.extraFields = response.data.extra_fields;
+            $scope.disableFlags('http');
+          }, function() {
+            $scope.disableFlags('http');
+          });
         };
 
         /**
-         * @function saveConf
+         * @function save
          * @memberOf PollConfigCtrl
          *
          * @description
          *   Saves the configuration.
          */
-        $scope.saveConf = function($event) {
-          $event.preventDefault();
+        $scope.save = function() {
+          $scope.flags.http.saving = true;
 
           var data = { extraFields: JSON.stringify(cleaner.clean($scope.extraFields)) };
 
-          $scope.saving = false;
-          http.put('api_v1_backend_extra_fields_poll_save', data)
+          http.put('api_v1_backend_poll_save_config', data)
             .then(function(response) {
-              $scope.saving = false;
-
+              $scope.disableFlags('http');
               messenger.post(response.data);
             }, function(response) {
-              $scope.saving = false;
-
+              $scope.disableFlags('http');
               messenger.post(response.data);
             });
         };

@@ -1,19 +1,26 @@
 {extends file="base/admin.tpl"}
+
 {block name="content"}
-  <form ng-controller="PollConfigCtrl" ng-init="init({json_encode($extra_fields)|clear_json})">
+  <form ng-controller="PollConfigCtrl" ng-init="init()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <i class="fa fa-home fa-lg"></i>
-                {t}Polls{/t}
+                <a class="no-padding" href="[% routing.generate('backend_polls_list') %]">
+                  <i class="fa fa-pie-chart"></i>
+                  {t}Polls{/t}
+                </a>
               </h4>
             </li>
-            <li class="quicklinks"><span class="h-seperate"></span></li>
+            <li class="quicklinks hidden-xs m-l-5 m-r-5">
+              <h4>
+                <i class="fa fa-angle-right"></i>
+              </h4>
+            </li>
             <li class="quicklinks">
-              <h5>{t}Settings{/t}</h5>
+              <h4>{t}Configuration{/t}</h4>
             </li>
           </ul>
           <div class="all-actions pull-right">
@@ -27,8 +34,9 @@
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-primary" type="button" ng-click="saveConf($event)">
-                  <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+                <button class="btn btn-loading btn-success ng-cloak text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+                  <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
+                  {t}Save{/t}
                 </button>
               </li>
             </ul>
@@ -38,7 +46,7 @@
     </div>
     <div class="content">
       <div class="grid simple">
-        <div class="grid-body">
+        <div class="grid-body ng-cloak">
           <div class="row">
             {acl isAllowed="MASTER"}
               <div class="col-md-6">

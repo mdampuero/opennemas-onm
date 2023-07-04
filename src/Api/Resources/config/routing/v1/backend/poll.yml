@@ -21,6 +21,13 @@ api_v1_backend_poll_delete_list:
     options:
         expose: true
 
+api_v1_backend_poll_get_config:
+    path:     /polls/config
+    defaults: { _controller: ApiBundle:V1/Backend/Poll:getConfig }
+    methods:  [ GET ]
+    options:
+        expose: true
+
 api_v1_backend_poll_get_item:
     path:     /polls/{id}
     defaults: { _controller: ApiBundle:V1/Backend/Poll:getItem }
@@ -50,6 +57,13 @@ api_v1_backend_poll_patch_list:
     path:     /polls
     defaults: { _controller: ApiBundle:V1/Backend/Poll:patchList }
     methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_poll_save_config:
+    path:     /polls/config
+    defaults: { _controller: ApiBundle:V1/Backend/Poll:saveConfig }
+    methods:  [ PUT ]
     options:
         expose: true
 
