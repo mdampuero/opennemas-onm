@@ -43,13 +43,16 @@
   </td>
   <td class="v-align-middle">
     <div class="table-text">
-      <a href="[% routing.generate('admin_' + item.content_type + '_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && ['advertisement', 'article', 'comment', 'keyword', 'letter', 'menu', 'photo', 'special', 'widget'].indexOf(item.content_type) !== -1">
-        [% item.target %] ([% item.content_type %])
+      <a href="" ng-if="item.type == 5">
+        410 GONE
       </a>
       <a href="/[% item.target %]" ng-if="item.type == 2 || item.type == 4">
         [% item.target %]
       </a>
-      <a href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && ['advertisement', 'article', 'comment', 'keyword', 'letter', 'menu', 'photo', 'special', 'widget'].indexOf(item.content_type) === -1">
+      <a href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && item.content_type !== 'kiosko'">
+        [% item.target %] ([% item.content_type %])
+      </a>
+      <a href="[% routing.generate('backend_newsstand_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && item.content_type === 'kiosko'">
         [% item.target %] ([% item.content_type %])
       </a>
     </div>
@@ -64,10 +67,11 @@
       <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0 || item.type == 1 || item.type == 3, 'fa-code': item.type == 2 || item.type == 4 }"></i>
       <strong ng-if="isHelpEnabled() && (item.type == 0 || item.type == 1 || item.type == 3)">{t}Content{/t}</strong>
       <strong ng-if="isHelpEnabled() && (item.type == 2 || item.type == 4)">URI</strong>
+      <strong ng-if="isHelpEnabled() && (item.type == 5)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 410 GONE</strong>
     </small>
   </td>
   <td class="text-center v-align-middle">
-    <button class="btn btn-white" ng-click="patch(item, 'redirection', item.redirection != 1 ? 1 : 0)" type="button">
+    <button class="btn btn-white" ng-click="patch(item, 'redirection', item.redirection != 1 ? 1 : 0)" type="button" ng-if="item.type != 5">
       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.redirectionLoading, 'fa-exchange-alt text-error' : !item.redirectionLoading && item.redirection == 0, 'fa-retweet text-success': !item.redirectionLoading && item.redirection == 1 }"></i>
       <span class="badge text-uppercase text-bold" ng-class="{ 'badge-success': !item.redirection, 'badge-warning text-black': item.redirection }">
         [% item.redirection ? '301' : '200' %]
