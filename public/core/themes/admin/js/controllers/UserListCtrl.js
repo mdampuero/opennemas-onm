@@ -9,15 +9,14 @@
      *
      * @requires $controller
      * @requires $scope
-     * @requires $uibModal
      * @requires oqlEncoder
      *
      * @description
      *   Handles all actions in users list.
      */
     .controller('UserListCtrl', [
-      '$controller', '$scope', '$uibModal', 'oqlEncoder',
-      function($controller, $scope, $uibModal, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder',
+      function($controller, $scope, oqlEncoder) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -41,7 +40,7 @@
          * @memberOf UserCtrl
          *
          * @description
-         *   Shows a modal to confirm user update.
+         *   Confirm user update.
          */
         $scope.confirm = function(property, value, item) {
           if (item) {

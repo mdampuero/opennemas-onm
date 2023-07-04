@@ -67,7 +67,6 @@
         $scope.buildScope = function() {
           $scope.expandFields();
 
-          $scope.backup.activated = $scope.item.activated;
           $scope.flags.categories = { none: false, all: false };
 
           if (!$scope.item.user_groups) {
@@ -103,15 +102,14 @@
         };
 
         /**
-         * @function confirmUser
+         * @function confirm
          * @memberOf UserCtrl
          *
          * @description
-         *   Shows a modal to confirm user update.
+         *   Confirm user update.
          */
         $scope.confirm = function() {
           $scope.save();
-          $scope.backup.activated = $scope.item.activated;
         };
 
         /**

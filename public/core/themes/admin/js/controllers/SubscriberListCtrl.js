@@ -15,8 +15,8 @@
      *   Handles all actions in subscribers list.
      */
     .controller('SubscriberListCtrl', [
-      '$controller', '$scope', '$uibModal', 'oqlEncoder',
-      function($controller, $scope, $uibModal, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder',
+      function($controller, $scope, oqlEncoder) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -37,10 +37,10 @@
 
         /**
          * @function confirm
-         * @memberOf SubscriberCtrl
+         * @memberOf SubscriberListCtrl
          *
          * @description
-         *   Shows a modal to confirm subscriber update.
+         *   Confirm subscriber update.
          */
         $scope.confirm = function(property, value, item) {
           if (item) {
