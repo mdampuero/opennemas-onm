@@ -1,8 +1,7 @@
 frontend_static_page:
-    path: /estaticas/{slug}.{format}
-    defaults: { _controller: FrontendBundle:StaticPage:show, format: html }
+    path: /estaticas/{slug}.html
+    defaults: { _controller: FrontendBundle:StaticPage:show }
     requirements:
-        format : html|htm
         slug    : '[^/.]+'
     options:
         l10n: true

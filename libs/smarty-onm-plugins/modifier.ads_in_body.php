@@ -67,6 +67,8 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     $safeFrame = $smarty->getContainer()->get('core.helper.advertisement')
         ->isSafeFrameEnabled();
 
+    // Use skip to avoid advertisements that are not selected for the current device
+    $skip = 0;
     foreach ($slots as $key => $slotId) {
         $ad  = sprintf($html, $slotId);
         $pos = $slotId - $id;
@@ -80,6 +82,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
             });
 
             if (empty($adsForPosition)) {
+                $skip = $skip + 1;
                 continue;
             }
 
@@ -87,7 +90,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
             $ad = $renderer->render($ad, $params);
         }
 
-        array_splice($paragraphs, $pos + $key, 0, $ad);
+        array_splice($paragraphs, $pos + $key - $skip, 0, $ad);
     }
 
     return implode('', $paragraphs);
