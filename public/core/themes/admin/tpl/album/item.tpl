@@ -95,6 +95,8 @@
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.agency }">
         {include file="ui/component/input/text.tpl" iField="agency"}
       </div>
+      {include file="ui/component/content-editor/accordion/additional-data.tpl"}
+    </div>
     </div>
   </div>
 {/block}

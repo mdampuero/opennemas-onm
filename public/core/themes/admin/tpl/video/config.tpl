@@ -1,16 +1,16 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form ng-controller="ArticleConfigCtrl" ng-init="init()">
+  <form ng-controller="VideoConfigCtrl" ng-init="init()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <a class="no-padding" href="[% routing.generate('backend_articles_list') %]">
-                  <i class="fa fa-file-text"></i>
-                  {t}Articles{/t}
+                <a class="no-padding" href="[% routing.generate('backend_videos_list') %]">
+                  <i class="fa fa-film"></i>
+                  {t}Videos{/t}
                 </a>
               </h4>
             </li>
@@ -26,7 +26,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <a class="btn btn-link" href="{url name=backend_articles_list}" title="{t}Go back to list{/t}">
+                <a class="btn btn-link" href="{url name=backend_video_list}" title="{t}Go back to list{/t}">
                   <i class="fa fa-reply"></i>
                 </a>
               </li>

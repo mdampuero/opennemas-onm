@@ -3,6 +3,7 @@
 namespace Api\Controller\V1\Backend;
 
 use Common\Model\Entity\Content;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -39,6 +40,24 @@ class ArticleController extends ContentController
     protected $service = 'api.service.article';
 
     /**
+     * Get the articles config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getConfigAction()
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get('extraInfoContents.ARTICLE_MANAGER');
+
+        return new JsonResponse([ 'extra_fields' => $settings ]);
+    }
+
+    /**
      * Loads extra data related to the given contents.
      *
      * @param array $items The items array
@@ -48,8 +67,6 @@ class ArticleController extends ContentController
     protected function getExtraData($items = null)
     {
         $extra = parent::getExtraData($items);
-
-        $extraFields = null;
 
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             $extraFields = $this->get('orm.manager')
@@ -67,7 +84,7 @@ class ArticleController extends ContentController
 
         return array_merge([
             'categories'    => $categories,
-            'extra_fields'  => $extraFields,
+            'extra_fields'  => $extraFields ?? null,
             'subscriptions' => $subscriptions,
             'tags'          => $this->getTags($items),
             'formSettings'  => [
@@ -100,6 +117,37 @@ class ArticleController extends ContentController
         $session->remove('last_preview');
 
         return new Response($content);
+    }
+
+    /**
+     * Saves configuration for article
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveConfigAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, 'ARTICLE_ADMIN');
+
+        $settings = [
+            'extraInfoContents.ARTICLE_MANAGER' => json_decode(
+                $request->request->get('extraFields'),
+                true
+            ),
+        ];
+
+        $msg = $this->get('core.messenger');
+
+        try {
+            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
+            $msg->add(_('Item saved successfully'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to save settings'), 'error');
+            $this->get('error.log')->error($e->getMessage());
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getcode());
     }
 
     /**
