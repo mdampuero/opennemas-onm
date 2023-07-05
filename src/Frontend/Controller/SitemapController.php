@@ -435,12 +435,14 @@ class SitemapController extends Controller
             $headers['Cache-Control'] = $cacheControl;
         }
 
+        $slugs    = $this->get('core.instance')->hasMultilanguage() ? $this->get('core.locale')->getSlugs() : null;
         $contents = $this->get('core.template.frontend')
             ->render(self::TEMPLATES[$action], [
                 'action'     => $action,
                 'cache_id'   => $cacheId,
                 'counters'   => $contentsCount,
                 'page'       => $page,
+                'slugs'      => $slugs,
                 'year'       => $year,
                 'month'      => $month,
                 'googleNews' => $this->get('orm.manager')

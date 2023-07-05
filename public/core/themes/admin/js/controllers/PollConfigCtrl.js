@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  ArticleListCtrl
+     * @name  PollConfigCtrl
      *
      * @requires $controller
      * @requires $location
@@ -20,14 +20,14 @@
      * @description
      *   Provides actions to list articles.
      */
-    .controller('ArticleConfigCtrl', [
+    .controller('PollConfigCtrl', [
       '$controller', '$scope', 'cleaner', 'http', 'messenger',
       function($controller, $scope, cleaner, http, messenger) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf ArticleConfigCtrl
+         * @memberOf PollConfigCtrl
          *
          * @description
          *  The extraFields object.
@@ -38,13 +38,13 @@
 
         /**
          * @function init
-         * @memberOf ArticleConfigCtrl
+         * @memberOf PollConfigCtrl
          *
          * @description
          *   Initializes the form.
          */
         $scope.init = function() {
-          http.get('api_v1_backend_article_get_config').then(function(response) {
+          http.get('api_v1_backend_poll_get_config').then(function(response) {
             $scope.extraFields = response.data.extra_fields;
             $scope.disableFlags('http');
           }, function() {
@@ -54,7 +54,7 @@
 
         /**
          * @function save
-         * @memberOf ArticleConfigCtrl
+         * @memberOf PollConfigCtrl
          *
          * @description
          *   Saves the configuration.
@@ -64,7 +64,7 @@
 
           var data = { extraFields: JSON.stringify(cleaner.clean($scope.extraFields)) };
 
-          http.put('api_v1_backend_article_save_config', data)
+          http.put('api_v1_backend_poll_save_config', data)
             .then(function(response) {
               $scope.disableFlags('http');
               messenger.post(response.data);
