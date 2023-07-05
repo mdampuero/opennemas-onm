@@ -9,15 +9,14 @@
      *
      * @requires $controller
      * @requires $scope
-     * @requires $uibModal
      * @requires oqlEncoder
      *
      * @description
      *   Handles all actions in users list.
      */
     .controller('UserListCtrl', [
-      '$controller', '$scope', '$uibModal', 'oqlEncoder',
-      function($controller, $scope, $uibModal, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder',
+      function($controller, $scope, oqlEncoder) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -41,47 +40,14 @@
          * @memberOf UserCtrl
          *
          * @description
-         *   Shows a modal to confirm user update.
+         *   Confirm user update.
          */
         $scope.confirm = function(property, value, item) {
-          if (!value || $scope.backup.master) {
-            if (item) {
-              $scope.patch(item, property, value);
-              return;
-            }
-
-            $scope.patchSelected(property, value);
+          if (item) {
+            $scope.patch(item, property, value);
             return;
           }
-
-          var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
-            backdrop: 'static',
-            controller: 'ModalCtrl',
-            resolve: {
-              template: function() {
-                return {
-                  name:  $scope.id ? 'update' : 'create',
-                  value: 1,
-                  extra: $scope.data.extra,
-                };
-              },
-              success: function() {
-                return null;
-              }
-            }
-          });
-
-          modal.result.then(function(response) {
-            if (response) {
-              if (item) {
-                $scope.patch(item, property, value);
-                return;
-              }
-
-              $scope.patchSelected(property, value);
-            }
-          });
+          $scope.patchSelected(property, value);
         };
 
         /**
