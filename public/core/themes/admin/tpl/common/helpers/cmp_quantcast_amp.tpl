@@ -10,7 +10,6 @@
         "coreConfig": {
           "quantcastAccountId": "{$id}",
           "privacyMode": [ "GDPR" ],
-          "googleEnabled": true,
           "displayUi": "always",
           "googleEnabled": true,
           "publisherCountryCode": "ES",
