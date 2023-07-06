@@ -425,7 +425,7 @@ class ContentManager
                     ]
                 ]
             ],
-            'content_type_name' => [['value' => $contentType]],
+            'content_type_name' => [['value' => $contentType, 'operator' => 'IN']],
             'in_litter'         => [['value' => 0]],
             'starttime'         => [
                 'union' => 'AND',
@@ -438,16 +438,6 @@ class ContentManager
                 [ 'value' => $now, 'operator' => '>' ]
             ],
         ];
-
-        if (strpos($contentType, '&&')) {
-            $contentTypes = explode('&&', $contentType);
-            $values       = [ 'union' => 'OR' ];
-            foreach ($contentTypes as $type) {
-                $values[] = [ 'value' => $type ];
-            }
-
-            $criteria['content_type_name'] = $values;
-        }
 
         $order = ['content_views.views' => 'desc'];
         if (!empty($category)) {
