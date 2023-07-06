@@ -84,7 +84,7 @@ class AdvertisementController extends Controller
         }
 
         // Check for the module existence and if it is enabled
-        if (!$this->get('core.security')->hasExtension('es.openhost.module.advancedAdvertisement')) {
+        if (!$this->get('core.security')->hasExtension('ADS_MANAGER')) {
             throw new ResourceNotFoundException();
         }
 
