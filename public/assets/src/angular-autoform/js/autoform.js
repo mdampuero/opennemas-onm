@@ -18,6 +18,8 @@
           scope: {
             fieldsByModule: '=',
             ngModel:        '=',
+            extra:          '=',
+            text:           '@',
           },
           template: function() {
             return '<div ng-repeat="moduleFields in fieldsByModule">' +
@@ -27,8 +29,8 @@
                   '<input class="form-control" id="{{ field.key }}" name="{{ field.key }}" ng-if="field.type === \'text\'" ng-model="ngModel[field.key]" type="text">' +
                   '<input class="form-control" datetime-picker id="{{ field.key }}" name="{{ field.key }}" ng-if="field.type === \'date\'" ng-model="ngModel[field.key]" type="text">' +
                   '<select class="form-control" id="{{ field.key }}" name="{{ field.key }}" ng-if="field.type === \'country\'" ng-model="ngModel[field.key]">' +
-                    '<option value="">{t}Select a country{/t}...</option>' +
-                    '<option value="{{ key }}" ng-repeat="(key,value) in extra.countries" ng-selected="{{ ngModel[field.key] === value }}">{{ value }}</option>' +
+                    '<option value="">{{ text }}</option>' +
+                    '<option value="{{ key }}" ng-repeat="(key,value) in extra.extra.countries" ng-selected="{{ ngModel[field.key] === value }}">{{ value }}</option>' +
                   '</select>' +
                   '<select class="form-control" id="{{ field.key }}" name="{{ field.key }}" ng-if="field.type === \'select\'" ng-init="ngModel[field.key] = ngModel[field.key].toString()" ng-model="ngModel[field.key]">' +
                     '<option ng-repeat="option in field.values.split(\',\')" value="{{ option.split(\':\')[0] }}">' +

@@ -84,6 +84,7 @@ class ArticleController extends ContentController
 
         return array_merge([
             'categories'    => $categories,
+            'countries'     => $this->get('core.geo')->getCountries(),
             'extra_fields'  => $extraFields ?? null,
             'subscriptions' => $subscriptions,
             'tags'          => $this->getTags($items),
