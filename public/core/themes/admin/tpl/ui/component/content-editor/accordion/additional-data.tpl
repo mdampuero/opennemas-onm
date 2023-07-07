@@ -4,6 +4,6 @@
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded[group.title] }"></i>
     </div>
     <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded[group.title] }">
-        <autoform ng-model="item" fields-by-module="[ group ]" extra="data" text="{t}Select a country{/t}..."></autoform>
+        <autoform ng-model="item" fields-by-module="[ group ]" countries="data.extra.countries" text="{t}Select a country{/t}..."></autoform>
     </div>
 </div>
