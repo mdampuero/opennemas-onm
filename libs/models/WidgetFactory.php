@@ -226,7 +226,7 @@ class WidgetFactory
             }
 
             foreach ($this->propertiesMap as $key => $value) {
-                $xtags = array_merge($xtags, getXTagFor($key, $value));
+                $xtags = array_merge($xtags, $this->getXTagFor($key, $value));
             }
         }
 
