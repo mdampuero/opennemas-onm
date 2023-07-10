@@ -269,6 +269,35 @@
                 </div>
               </div>
               {/is_module_activated}
+              {if $app.security->hasPermission('MASTER')}
+              <div class="panel-group" id="panel-group-gfk" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-adobe_analitics" data-toggle="collapse" href="#adobe_analitics">
+                        <i class="fa fa-signal"></i>{t}Adobe Analitics{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="adobe_analitics">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="adobe-analitics-base">
+                          {t}Adobe Analitics Base File{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="adobe-analitics-base" name="adobe-analitics-base" ng-model="settings.adobe_base" type="text">
+                        </div>
+                      </div>
+                      <small class="help">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}We are not responsible of the stats or of any third party services{/t}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/if}
               <h4>
                 <i class="fa fa-cog"></i>
                 {t}Internal settings{/t}
