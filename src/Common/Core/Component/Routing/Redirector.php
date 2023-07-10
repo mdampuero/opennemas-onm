@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Common\Core\Component\Exception\ContentNotMigratedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpKernel\Exception\GoneHttpException;
 
 class Redirector
 {
@@ -73,13 +74,13 @@ class Redirector
      */
     public function getResponse(Request $request, Url $url)
     {
-        if ($url->type !== 5) {
-            $response = $url->redirection
+        if ($url->type == 5) {
+            throw new GoneHttpException();
+        }
+
+        $response = $url->redirection
             ? $this->getRedirectResponse($request, $url)
             : $this->getForwardResponse($request, $url);
-        } else {
-            $response = $this->getResourceGoneResponse();
-        }
 
         $xTags = $response->headers->get('x-tags') . ",url-" . $url->id;
 
@@ -99,21 +100,6 @@ class Redirector
     public function getResponseContent(Request $request)
     {
         return $this->getRedirectContentParams($request->getRequestUri());
-    }
-
-    /**
-     * Returns a 410 GONE response
-     *
-     * @param Request $request The current request.
-
-     * @return mixed The redirect response
-     */
-    public function getResourceGoneResponse()
-    {
-        $content = $this->container->get('core.template.frontend')
-            ->render('static_pages/410.tpl', []);
-
-        return new Response($content, 410);
     }
 
     /**
