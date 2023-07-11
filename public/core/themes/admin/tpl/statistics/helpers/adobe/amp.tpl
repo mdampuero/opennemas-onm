@@ -9,7 +9,7 @@
                 "sponsored": "0",
                 "ads_enabled": "1",
                 "layout": "{$layout}",
-                "categoria": "{get_category_name($content)}",
+                "categoria": "{get_category_slug($content)}",
                 "subcategoria": "sinsc",
                 "terciariacategoria": "sinct",
                 "createdby": "{get_author_id($content)}",
