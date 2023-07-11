@@ -39,6 +39,7 @@ class ContentController extends ApiController
             'comments_enabled' => $this->get('core.helper.comment')->enableCommentsByDefault(),
             'keys'             => $this->getL10nKeys(),
             'locale'           => $this->get('core.helper.locale')->getConfiguration(),
+            'countries'        => $this->get('core.geo')->getCountries(),
             'paths'            => [
                 'photo'      => $instance->getImagesShortPath(),
                 'attachment' => $instance->getFilesShortPath(),

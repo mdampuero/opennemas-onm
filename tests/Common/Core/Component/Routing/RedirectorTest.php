@@ -1066,15 +1066,15 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->service->expects($this->at(0))->method('getList')
-            ->with('type in [3,4] and enabled = 1')
+            ->with('type in [3,4,5] and enabled = 1')
             ->willReturn([ 'items' => [], 'total' => 0 ]);
 
         $this->service->expects($this->at(1))->method('getList')
-            ->with('content_type in ["qux"] and type in [3,4] and enabled = 1')
+            ->with('content_type in ["qux"] and type in [3,4,5] and enabled = 1')
             ->willReturn([ 'items' => [ $url ], 'total' => 1 ]);
 
         $this->service->expects($this->at(2))->method('getList')
-            ->with('content_type in ["qux"] and type in [3,4] and enabled = 1')
+            ->with('content_type in ["qux"] and type in [3,4,5] and enabled = 1')
             ->willReturn([ 'items' => [ $url ], 'total' => 1 ]);
 
         $method = new \ReflectionMethod($this->redirector, 'getRegExpUrl');
@@ -1100,15 +1100,15 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->service->expects($this->at(0))->method('getList')
-            ->with('type in [3,4] and enabled = 1')
+            ->with('type in [3,4,5] and enabled = 1')
             ->willReturn([ 'items' => [], 'total' => 0 ]);
 
         $this->service->expects($this->at(1))->method('getList')
-            ->with('content_type in ["qux","norf"] and type in [3,4] and enabled = 1')
+            ->with('content_type in ["qux","norf"] and type in [3,4,5] and enabled = 1')
             ->willReturn([ 'items' => [ $url ], 'total' => 1 ]);
 
         $this->service->expects($this->at(2))->method('getList')
-            ->with('content_type in ["qux","norf"] and type in [3,4] and enabled = 1')
+            ->with('content_type in ["qux","norf"] and type in [3,4,5] and enabled = 1')
             ->willReturn([ 'items' => [ $url ], 'total' => 1 ]);
 
         $method = new \ReflectionMethod($this->redirector, 'getRegExpUrl');
