@@ -274,19 +274,19 @@
                 <div class="panel panel-default">
                   <div class="panel-heading collapsed">
                     <h4 class="panel-title">
-                      <a class="collapsed" data-parent="#panel-group-adobe_analitics" data-toggle="collapse" href="#adobe_analitics">
-                        <i class="fa fa-signal"></i>{t}Adobe Analitics{/t}
+                      <a class="collapsed" data-parent="#panel-group-adobe_analytics" data-toggle="collapse" href="#adobe_analytics">
+                        <i class="fa fa-signal"></i>{t}Adobe analytics{/t}
                       </a>
                     </h4>
                   </div>
-                  <div class="panel-collapse collapse" id="adobe_analitics">
+                  <div class="panel-collapse collapse" id="adobe_analytics">
                     <div class="panel-body">
                       <div class="form-group">
-                        <label class="form-label" for="adobe-analitics-base">
-                          {t}Adobe Analitics Base File{/t}
+                        <label class="form-label" for="adobe-analytics-base">
+                          {t}Adobe analytics Base File{/t}
                         </label>
                         <div class="controls">
-                          <input class="form-control" id="adobe-analitics-base" name="adobe-analitics-base" ng-model="settings.adobe_base" type="text">
+                          <input class="form-control" id="adobe-analytics-base" name="adobe-analitics-base" ng-model="settings.adobe_base" type="text">
                         </div>
                       </div>
                       <small class="help">
