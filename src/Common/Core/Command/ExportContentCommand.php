@@ -74,10 +74,17 @@ class ExportContentCommand extends Command
                 ]);
         }
 
+        $fmHelper        = $this->getContainer()->get('core.helper.featured_media');
+        $featureContents = [];
+        foreach ([ 'frontpage', 'inner' ] as $type) {
+            $featureContents[$type] = $fmHelper->getFeaturedMedia($content, $type);
+        }
+
         return $this->getContainer()->get('view')->get('backend')
             ->fetch('news_agency/newsml_templates/base.tpl', [
-                'content'    => $content,
-                'tags'       => $this->getContainer()->get('api.service.tag')
+                'content'       => $content,
+                'featuredMedia' => $featureContents,
+                'tags'          => $this->getContainer()->get('api.service.tag')
                     ->getListByIdsKeyMapped($content->tags)['items']
             ]);
     }
