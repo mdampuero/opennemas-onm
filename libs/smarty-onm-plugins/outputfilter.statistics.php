@@ -32,8 +32,18 @@ function smarty_outputfilter_statistics($output, $smarty)
         $output = $smarty->getContainer()->get('frontend.renderer')->render(
             $content,
             [
-                'types'  => [ 'Default', 'Chartbeat', 'Comscore', 'Ojd', 'GAnalytics', 'Gfk', 'Prometeo', 'Adobe' ],
-                'output' => $output
+                'output' => $output,
+                'types'  => [
+                    'Adobe',
+                    'Chartbeat',
+                    'Comscore',
+                    'Default',
+                    'GAnalytics',
+                    'Gfk',
+                    'MCompass',
+                    'Ojd',
+                    'Prometeo',
+                ]
             ]
         );
     }
