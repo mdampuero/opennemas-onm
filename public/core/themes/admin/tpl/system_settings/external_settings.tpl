@@ -185,6 +185,33 @@
                   </div>
                 </div>
               </div>
+              <div class="panel-group" id="panel-group-marfeel-compass" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#accordion-marfeel-compass" data-toggle="collapse" href="#marfeel-compass">
+                        <i class="fa fa-compass"></i>{t}Marfeel Compass{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="marfeel-compass">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="marfeel-compass-id">
+                          {t}Marfeel Compass ID{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="marfeel-compass-id" name="marfeel-compass-id" ng-model="settings.marfeel_compass.id" type="text">
+                        </div>
+                      </div>
+                      <small class="help">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}We are not responsible of the stats or of any third party services{/t}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
               {if $app.security->hasPermission('MASTER')}
               <div class="panel-group" id="panel-group-gfk" data-toggle="collapse">
                 <div class="panel panel-default">

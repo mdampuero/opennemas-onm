@@ -47,6 +47,7 @@ class ExternalSettingController extends SettingController
         'google_tags_id_amp',
         'instagram_page',
         'linkedin_page',
+        'marfeel_compass',
         'telegram_page',
         'whatsapp_page',
         'tiktok_page',
