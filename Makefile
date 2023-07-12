@@ -1,4 +1,4 @@
-themes = aletes amon anemoi auris base basic \
+themes = aletes amon anemoi apolo auris base basic \
 eurus forseti freya horus kalliope kibele lrinternacional \
 mihos moura nemo nemty notus nyx odin olympus pekka rhea \
 skanda slido tecnofisis televisionlr trasno verbeia
