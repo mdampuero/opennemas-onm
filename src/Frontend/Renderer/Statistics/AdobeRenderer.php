@@ -24,6 +24,8 @@ class AdobeRenderer extends StatisticsRenderer
             ->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('adobe_base');
+
+        $this->variablesExtractor = $this->container->get('core.variables.extractor');
     }
 
     /**
@@ -31,16 +33,15 @@ class AdobeRenderer extends StatisticsRenderer
      */
     protected function getParameters($content = null)
     {
-        $extractor = $this->container->get('core.variables.extractor');
         return [
-            'lastAuthorId' => $extractor->get('lastAuthorId'),
-            'canonical'    => $extractor->get('canonicalUrl'),
-            'mediaType'    => $extractor->get('mediaType'),
+            'lastAuthorId' => $this->variablesExtractor->get('lastAuthorId'),
+            'canonical'    => $this->variablesExtractor->get('canonicalUrl'),
+            'mediaType'    => $this->variablesExtractor->get('mediaType'),
             'baseFile'     => $this->config,
-            'tagNames'     => $extractor->get('tagNames'),
-            'tagSlugs'     => $extractor->get('tagSlugs'),
+            'tagNames'     => $this->variablesExtractor->get('tagNames'),
+            'tagSlugs'     => $this->variablesExtractor->get('tagSlugs'),
             'content'      => $content,
-            'layout'       => $this->customizeExtension($extractor->get('extension')),
+            'layout'       => $this->customizeExtension($this->variablesExtractor->get('extension')),
         ];
     }
 
