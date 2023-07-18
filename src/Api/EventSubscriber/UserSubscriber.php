@@ -23,26 +23,36 @@ class UserSubscriber implements EventSubscriberInterface
         return [
             'user.createItem' => [
                 ['logAction', 5],
+                ['removeAuthorCache', 5],
             ],
             'user.deleteItem' => [
                 ['logAction', 5],
                 [ 'onUserDelete', 5 ],
+                ['removeAuthorCache', 5],
+
             ],
             'user.deleteList' => [
                 ['logAction', 5],
                 [ 'onUserDelete', 5 ],
+                ['removeAuthorCache', 5],
+
             ],
             'user.patchItem'  => [
                 ['logAction', 5],
                 [ 'onUserUpdate', 5 ],
+                ['removeAuthorCache', 5],
+
             ],
             'user.patchList'  => [
                 ['logAction', 5],
                 [ 'onUserUpdate', 5 ],
+                ['removeAuthorCache', 5],
+
             ],
             'user.updateItem' => [
                 ['logAction', 5],
                 [ 'onUserUpdate', 5 ],
+                ['removeAuthorCache', 5],
             ]
         ];
     }
@@ -50,11 +60,13 @@ class UserSubscriber implements EventSubscriberInterface
     /**
      * Initializes the UserSubscriber.
      *
+     * @param Container       $container The service container.
      * @param UserCacheHelper $helper The helper to remove user caches.
      */
-    public function __construct(UserCacheHelper $helper)
+    public function __construct($container, UserCacheHelper $helper)
     {
-        $this->helper = $helper;
+        $this->container = $container;
+        $this->helper    = $helper;
     }
 
     /**
@@ -111,5 +123,18 @@ class UserSubscriber implements EventSubscriberInterface
         }
 
         $this->helper->deleteInstance();
+    }
+
+    /**
+     * Removes cache for author widgets
+     *
+     * @param Event $event The dispatched event.
+     */
+    public function removeAuthorCache(Event $event)
+    {
+        $cache = $this->container->get('cache.connection.instance');
+
+        $cache->remove($cache->getSetMembers('Authors_Widget_keys'));
+        $cache->remove('Authors_Widget_keys');
     }
 }
