@@ -23,36 +23,26 @@ class UserSubscriber implements EventSubscriberInterface
         return [
             'user.createItem' => [
                 ['logAction', 5],
-                ['removeAuthorCache', 5],
             ],
             'user.deleteItem' => [
                 ['logAction', 5],
                 [ 'onUserDelete', 5 ],
-                ['removeAuthorCache', 5],
-
             ],
             'user.deleteList' => [
                 ['logAction', 5],
                 [ 'onUserDelete', 5 ],
-                ['removeAuthorCache', 5],
-
             ],
             'user.patchItem'  => [
                 ['logAction', 5],
                 [ 'onUserUpdate', 5 ],
-                ['removeAuthorCache', 5],
-
             ],
             'user.patchList'  => [
                 ['logAction', 5],
                 [ 'onUserUpdate', 5 ],
-                ['removeAuthorCache', 5],
-
             ],
             'user.updateItem' => [
                 ['logAction', 5],
                 [ 'onUserUpdate', 5 ],
-                ['removeAuthorCache', 5],
             ]
         ];
     }
@@ -123,18 +113,5 @@ class UserSubscriber implements EventSubscriberInterface
         }
 
         $this->helper->deleteInstance();
-    }
-
-    /**
-     * Removes cache for author widgets
-     *
-     * @param Event $event The dispatched event.
-     */
-    public function removeAuthorCache(Event $event)
-    {
-        $cache = $this->container->get('cache.connection.instance');
-
-        $cache->remove($cache->getSetMembers('Authors_Widget_keys'));
-        $cache->remove('Authors_Widget_keys');
     }
 }
