@@ -122,7 +122,7 @@
                 <div class="table-text">
                   [% item.title %]
                 </div>
-                <div class="listing-inline-actions m-t-10">
+                <div class="listing-inline-actions m-t-10 btn-group">
                   {block name="itemActions"}{/block}
                 </div>
               </td>
