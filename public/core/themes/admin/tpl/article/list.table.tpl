@@ -122,15 +122,10 @@
   {/acl}
   <a class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="bottom">
     <i class="fa fa-external-link"></i>
-    <span class="m-l-5" ng-if="item.params.bodyLink.length > 0">
-      <small>
-        {t}External{/t}
-      </small>
-    </span>
   </a>
   {acl isAllowed="ARTICLE_DELETE"}
-    <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
-      <i class="fa fa-trash-o text-danger_"></i>
+    <button class="btn btn-white btn-small" ng-click="sendToTrash(item)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom">
+      <i class="fa fa-trash-o text-danger"></i>
     </button>
   {/acl}
 {/block}
