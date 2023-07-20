@@ -120,7 +120,7 @@
             {block name="commonColumnsBody"}
               <td class="v-align-middle" ng-if="isColumnEnabled('title')">
                 <div class="table-text">
-                  [% item.title %]
+                  <a class="text-black" href="[% routing.generate('backend_article_show', { id: getItemId(item) }) %]">[% item.title %]</a>
                 </div>
                 <div class="listing-inline-actions m-t-10 btn-group">
                   {block name="itemActions"}{/block}
