@@ -421,6 +421,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         // Apply the Fernández-Huerta formula to get text complexity (rounded)
         var textComplexity =  Math.round(206.84 - 1.02 * avgWordsPerSentence - 60 * avgSyllablesPerWord);
 
+        textComplexity = Math.min(Math.max(textComplexity, 1), 100);
         return {
           textComplexity: textComplexity,
           wordsCount: words.length
