@@ -544,7 +544,11 @@ class ContentHelper
      */
     public function hasCommentsEnabled($item = null) : bool
     {
-        return !empty($this->getProperty($item, 'with_comment'));
+        $disableComments = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('comment_settings')['disable_comments'];
+
+        return !empty($this->getProperty($item, 'with_comment')) && !(is_null($disableComments) ? true : $disableComments);
     }
 
     /**
