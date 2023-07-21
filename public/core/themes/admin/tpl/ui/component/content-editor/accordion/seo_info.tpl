@@ -1,45 +1,48 @@
-<div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.seo_info = !expanded.seo_info" >
-  <i class="fa fa-pencil m-r-10"></i>{t}Body complexity{/t}
-  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.seo_info }"></i>
-</div>
-<div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.seo_info }">
-  <div class="form-group">
-    <div class="m-t-5" ng-if="item.text_complexity">
-      <div class="showcase-info">
-        <label class="form-label">{t}Text complexity{/t}</label>
-        <span class="form-status">
-          <span class="ng-cloak badge badge-default" ng-class="{ 'badge-danger': item.text_complexity <= 40, 'badge-warning': item.text_complexity > 40 &amp;&amp; item.text_complexity <=60, 'badge-success' : item.text_complexity >60 }">
-             <strong ng-if='item.text_complexity <= 40'>
+<div class="grid-collapse-body expanded ng-cloak" ng-class="{ 'expanded': expanded.seo_info }">
+  <div class="form-group m-b-0">
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="m-t-5" ng-if="item.text_complexity">
+        <div class="showcase-info showcase-info-score panel m-b-0">
+          <div class="form-status text-center">
+            <p class="onm-score text-center lead m-b-5" ng-class="{ 'text-danger': item.text_complexity <= 40, 'text-warning': item.text_complexity > 40 &amp;&amp; item.text_complexity <=60, 'text-success' : item.text_complexity >60 }">
+              [% item.text_complexity %]
+            </p>
+          </div>
+          <label class="form-label text-center m-t-10">
+            {t}Body complexity{/t}
+            <div class="small text-danger" ng-if='item.text_complexity <= 40'>
               {t}Difficult to read{/t}
-            </strong>
-            <strong ng-if='item.text_complexity > 40 && item.text_complexity <= 60'>
+            </div>
+            <div class="small text-warning" ng-if='item.text_complexity > 40 && item.text_complexity <= 60'>
               {t}Easily understood{/t}
-            </strong>
-            <strong ng-if='item.text_complexity > 60'>
+            </div>
+            <div class="small text-success" ng-if='item.text_complexity > 60'>
               {t}Very easy to read{/t}
-            </strong>
-            ([% item.text_complexity %]/100)
-          </span>
-        </span>
+            </div>
+          </label>
+        </div>
       </div>
     </div>
-    <hr>
-    <div class="m-t-5" ng-if="item.text_complexity">
-      <div class="showcase-info">
-        <label class="form-label">{t}Word count{/t}</label>
-        <span class="form-status">
-          <span class="ng-cloak badge badge-default">
-            <strong>
+    <div class="col-xs-6">
+      <div class="m-t-5" ng-if="item.text_complexity">
+        <div class="showcase-info showcase-info-score panel m-b-0">
+          <div class="form-status text-center">
+            <p class="onm-score text-center lead m-b-5">
               [% item.word_count %]
-            </strong>
-          </span>
-        </span>
+            </p>
+          </div>
+          <label class="form-label text-center m-t-10">{t}Words{/t}</label>
+        </div>
       </div>
     </div>
-    <div class="m-t-5" ng-if="!item.text_complexity">
-      <i class="fa fa-info-circle m-r-5 text-info"></i>
-      {t}In order to dislay the text complexity, you need to save the article first.{/t}
+    <div class="col-xs-12">
+      <div class="m-t-5" ng-if="!item.text_complexity">
+        <i class="fa fa-info-circle m-r-5 text-info"></i>
+        {t}In order to dislay the text complexity, you need to save the article first.{/t}
+      </div>
     </div>
+  </div>
   </div>
 </div>
 
