@@ -30,37 +30,22 @@
          * @memberOf OpinionConfigCtrl
          *
          * @description
-         *  The default settings.
+         *  The extraFields object.
          *
          * @type {Object}
          */
-        $scope.settings = {
-          extrafields: {}
-        };
+        $scope.extraFields = {};
 
         /**
          * @function init
-         * @memberOf OpinionConfiCtrl
+         * @memberOf OpinionConfigCtrl
          *
          * @description
          *   Initializes the form.
          */
         $scope.init = function() {
-          $scope.list();
-        };
-
-        /**
-         * @function list
-         * @memberOf OpinionConfigCtrl
-         *
-         * @description
-         *   Reloads the tag configuration.
-         */
-        $scope.list = function() {
-          $scope.flags.http.loading = true;
-
           http.get('api_v1_backend_opinion_get_config').then(function(response) {
-            $scope.settings = response.data;
+            $scope.extraFields = response.data.extra_fields;
             $scope.disableFlags('http');
           }, function() {
             $scope.disableFlags('http');
@@ -77,7 +62,9 @@
         $scope.save = function() {
           $scope.flags.http.saving = true;
 
-          http.put('api_v1_backend_opinion_save_config', $scope.settings)
+          var data = { extraFields: JSON.stringify(cleaner.clean($scope.extraFields)) };
+
+          http.put('api_v1_backend_opinion_save_config', data)
             .then(function(response) {
               $scope.disableFlags('http');
               messenger.post(response.data);

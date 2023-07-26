@@ -6,7 +6,7 @@
       "@type": "ListItem",
       "item": {
         "@id": "{$siteUrl}",
-        "name": "{$siteName}",
+        "name": "{$siteName|replace:'\\':''|escape:'htmlall'}",
         "@type": "CollectionPage"
       },
       "position": 1
@@ -16,7 +16,7 @@
         "@type": "ListItem",
         "item": {
           "@id": "{get_url item=$category absolute=true}",
-          "name": "{$category->title}",
+          "name": "{$category->title|replace:'\\':''|escape:'htmlall'}",
           "@type": "CollectionPage"
         },
         "position": 2
@@ -24,7 +24,7 @@
         "@type": "ListItem",
         "item": {
           "@id": "{$url}",
-          "name": "{$title|escape:'html'}",
+          "name": "{$title|replace:'\\':''|escape:'htmlall'}",
           "@type": "ItemPage"
         },
         "position": 3
@@ -34,7 +34,7 @@
         "@type": "ListItem",
         "item": {
           "@id": "{url name=frontend_opinion_frontpage absolute=true}",
-          "name": "{t}Opinion{/t}",
+          "name": "{$title|replace:'\\':''|escape:'htmlall'}",
           "@type": "CollectionPage"
         },
         "position": 2
@@ -42,7 +42,7 @@
         "@type": "ListItem",
         "item": {
           "@id": "{$url}",
-          "name": "{$title|escape:'html'}",
+           "name": "{$title|replace:'\\':''|escape:'htmlall'}",
           "@type": "ItemPage"
         },
         "position": 3
@@ -56,10 +56,10 @@
       "@type": "WebPage",
       "@id": "{$url}"
     },
-    "headline": "{$title|escape:'html'}",
+    "headline": "{$title|replace:'\\':''|escape:'htmlall'}",
     "author": {
       "@type": "Person",
-      "name": "{$author|escape:'html'}"
+      "name": "{$author|replace:'\\':''|escape:'htmlall'}"
       {if has_author_url($content)}
         , "url": "{$app.instance->getBaseUrl()}{get_author_url($content)}"
       {/if}
@@ -67,15 +67,15 @@
     "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     {if !empty($category)}
-      "articleSection": "{$category->title|escape:'html'}",
+      "articleSection": "{$category->title|replace:'\\':''|escape:'htmlall'}",
     {/if}
-    "keywords": "{$keywords|escape:'html'}",
+    "keywords": "{$keywords|replace:'\\':''|escape:'htmlall'}",
     "url": "{$url}",
     "wordCount": {$wordCount},
-    "description": "{$description|escape:'html'}",
+    "description": "{$description|replace:'\\':''|escape:'htmlall'}",
     "publisher": {
       "@type": "Organization",
-      "name": "{$siteName}",
+      "name": "{$siteName|replace:'\\':''|escape:'htmlall'}",
       "logo": {
           "@type": "ImageObject",
           "url": "{$logo}"
@@ -94,8 +94,8 @@
     {elseif get_type(get_featured_media($content, 'inner')) === 'video'}
       , "video": {
           "@type": "VideoObject",
-          "name": "{get_title(get_featured_media($content, 'inner'))|escape:'html'}",
-          "description": "{get_description(get_featured_media($content, 'inner'))|default:get_title(get_featured_media($content, 'inner'))|escape:'html'}",
+          "name": "{get_title(get_featured_media($content, 'inner'))|replace:'\\':''|escape:'htmlall'}",
+          "description": "{get_description(get_featured_media($content, 'inner'))|default:get_title(get_featured_media($content, 'inner'))|replace:'\\':''|escape:'htmlall'}",
           "uploadDate": "{format_date date=get_publication_date(get_featured_media($content, 'inner')) format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
           "thumbnailUrl": "{get_photo_path(get_video_thumbnail(get_featured_media($content, 'inner')), '', [], true)}",
           "contentUrl": "{get_url item=get_featured_media($content, 'inner') absolute=true}"
@@ -121,15 +121,15 @@
   "url":"{$url}",
   "coverageStartTime":"{format_date date=$content->coverage_start_time format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
   "coverageEndTime":"{format_date date=$content->coverage_end_time format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
-  "headline":"{$title|escape:'html'}",
-  "description":"{$description|escape:'html'}",
-  "articleBody":"{$description|escape:'html'}",
+  "headline":"{$title|replace:'\\':''|escape:'htmlall'}",
+  "description":"{$description|replace:'\\':''|escape:'htmlall'}",
+  "articleBody":"{$description|replace:'\\':''|escape:'htmlall'}",
   "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "{$url}"
   },
   {if !empty($category)}
-  "articleSection": "{$category->title|escape:'html'}",
+  "articleSection": "{$category->title|replace:'\\':''|escape:'htmlall'}",
   {/if}
   "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
   "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
@@ -144,7 +144,7 @@
   },
   "author": {
     "@type": "Person",
-    "name": "{$author|escape:'html'}"
+    "name": "{$author|replace:'\\':''|escape:'htmlall'}"
     {if has_author_url($content)}
       , "url": "{$app.instance->getBaseUrl()}{get_author_url($content)}"
     {/if}
@@ -161,8 +161,8 @@
     "@type":"Event",
     "eventAttendanceMode":"OnlineEventAttendanceMode",
     "startDate":"{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
-    "name":"{$title|escape:'html'}",
-    "description":"{$description|escape:'html'}",
+    "name":"{$title|replace:'\\':''|escape:'htmlall'}",
+    "description":"{$description|replace:'\\':''|escape:'htmlall'}",
     "endDate":"{format_date date=$content->endtime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     "location": {
       "@type": "VirtualLocation",
@@ -198,7 +198,7 @@
     {foreach from=$content->live_blog_updates item=update name=update}
     {
       "@type":"BlogPosting",
-      "headline":"{$update['title']|escape:'html'}",
+      "headline":"{$update['title']|replace:'\\':''|escape:'htmlall'}",
       "datePublished":"{format_date date=$update['created'] format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
       "dateModified":"{format_date date=$update['modified'] format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
       "mainEntityOfPage": {
@@ -208,7 +208,7 @@
 
       "author": {
         "@type": "Person",
-        "name": "{$author|escape:'html'}"
+        "name": "{$author|replace:'\\':''|escape:'htmlall'}"
         {if has_author_url($content)}
           , "url": "{$app.instance->getBaseUrl()}{get_author_url($content)}"
         {/if}
@@ -222,7 +222,7 @@
         },
         "url": "{$siteUrl}"
       },
-      "articleBody": "{get_update_body($update)|escape:'html'}",
+      "articleBody": "{get_update_body($update)|replace:'\\':''|escape:'htmlall'}",
       {if has_update_image($update)}
       "image": {
         "@type": "ImageObject",

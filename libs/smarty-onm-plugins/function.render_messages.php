@@ -27,8 +27,8 @@ function smarty_function_render_messages($params, &$smarty)
         foreach ($messages as $msg) {
             if (!empty($msg)) {
                 $messagesHTML .= sprintf(
-                    "<div class=\"alert alert-{$style}\" data-created=\"$created\">"
-                    . "<button class=\"close\" data-dismiss=\"alert\" type=\"button\">×</button>"
+                    "<div class=\"alert alert-{$style} alert-dismissible\" data-created=\"$created\">"
+                    . "<button class=\"close\" data-bs-dismiss=\"alert\" data-dismiss=\"alert\" type=\"button\">×</button>"
                     . "%s"
                     . "</div>\n",
                     $msg

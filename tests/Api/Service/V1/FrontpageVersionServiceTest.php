@@ -49,6 +49,10 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getItem', 'getList' ])
             ->getMock();
 
+        $this->ds = $this->getMockBuilder('DataSet')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
         $this->fs = $this->getMockBuilder('Api\Service\V1\FrontpageService')
             ->disableOriginalConstructor()
             ->setMethods([ 'createItem' ])
@@ -62,11 +66,11 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
         $this->ormManager = $this->getMockBuilder('EntityManager' . uniqid())
             ->setMethods([
                 'getConverter' ,'getMetadata', 'getRepository', 'persist',
-                'remove', 'getConnection'
+                'remove', 'getConnection', 'getDataSet'
             ])->getMock();
 
         $this->locale = $this->getMockBuilder('Locale' . uniqid())
-            ->setMethods([ 'getContext', 'setContext', 'getTimeZone' ])
+            ->setMethods([ 'getContext', 'setContext', 'getTimeZone', 'getSlug' ])
             ->getMock();
 
         $this->locale->expects($this->any())->method('getTimeZone')
@@ -572,6 +576,19 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
             ->method('getList')
             ->willReturn([ 'items' => [ $category ] ]);
 
+        $this->filterManager->expects($this->any())->method('set')
+            ->willReturn($this->filterManager);
+
+        $this->filterManager->expects($this->any())->method('filter')
+            ->with('localize')
+            ->willReturn($this->filterManager);
+
+        $this->filterManager->expects($this->any())->method('get')
+            ->willReturn([ $category ]);
+
+        $this->ormManager->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
         $this->frontpageVersionsRepository->expects($this->once())
             ->method('getCatFrontpageRel')
             ->willReturn([ 1 => $category ]);
@@ -585,7 +602,7 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
 
         list($frontpages, $versions) = $this->service->getFrontpageWithCategory(null);
 
-        $category = new Category([ 'id' => 1, 'name' => null ]);
+        $category = new Category([ 'id' => 1, 'title' => null ]);
         $this->assertEquals([
             [ 'id' => 1, 'name' => null, 'frontpage_id' => $category, 'manual' => true ],
             [ 'id' => 0, 'name' => 'Frontpage', 'manual' => false ]
@@ -604,6 +621,9 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
             ->method('getList')
             ->willReturn([ 'items' => [ $category ] ]);
 
+        $this->ormManager->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
         $this->frontpageVersionsRepository->expects($this->once())
             ->method('getCatFrontpageRel')
             ->willReturn([ 0 => $category ]);
@@ -611,16 +631,15 @@ class FrontpageVersionServiceTest extends \PHPUnit\Framework\TestCase
         $this->contentPositionService->expects($this->any())->method('getCategoriesWithManualFrontpage')
             ->willReturn([]);
 
-        $this->filterManager->expects($this->at(0))->method('set')
-            ->with('category')
+        $this->filterManager->expects($this->any())->method('set')
             ->willReturn($this->filterManager);
 
-        $this->filterManager->expects($this->at(1))->method('filter')
+        $this->filterManager->expects($this->any())->method('filter')
             ->with('localize')
             ->willReturn($this->filterManager);
 
-        $this->filterManager->expects($this->at(2))->method('get')
-            ->willReturn('category');
+        $this->filterManager->expects($this->any())->method('get')
+            ->willReturn([ $category ]);
 
         $this->frontpageVersionsRepository->expects($this->once())->method('findBy')
             ->with("category_id = 1 order by publish_date desc")
