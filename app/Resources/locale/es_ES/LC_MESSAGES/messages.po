@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-22 09:06+0000\n"
-"PO-Revision-Date: 2023-06-22 11:06+0200\n"
+"POT-Creation-Date: 2023-07-26 06:35+0000\n"
+"PO-Revision-Date: 2023-07-26 08:47+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -423,7 +423,7 @@ msgid "Cache manager"
 msgstr "Gestor de caché"
 
 msgid "General & SEO"
-msgstr "General & SEO"
+msgstr "General y SEO"
 
 msgid "Appearance"
 msgstr "Apariencia"
@@ -980,17 +980,17 @@ msgid "Reinventing Gutenberg machine..."
 msgstr "Reinventando la máquina de Gutenberg…"
 
 msgid "Ads.txt container saved successfully"
-msgstr "Contenedor de Ads.txt guardado exitosamente"
+msgstr "Contenedor de Ads.txt guardado correctamente"
 
 msgid "Ads.txt container deleted successfully."
-msgstr "contenedors de Ads.txt eliminado exitosamente"
+msgstr "Contenedor de Ads.txt eliminado completamente"
 
 msgid "Bad request"
 msgstr "Petición incorrecta"
 
 #, php-format
 msgid "%s ads containers deleted successfully"
-msgstr "%s contenedores de ads.txt eliminados correctamente"
+msgstr "%s contenedores de ads eliminados correctamente"
 
 msgid "Username or password incorrect."
 msgstr "Nombre de usuario o contraseña incorrecto."
@@ -2409,7 +2409,7 @@ msgid ""
 "trash?"
 msgstr ""
 "¿Estás seguro de que quieres eliminar de forma permanente todos los "
-"contenidos de la papelera¿"
+"contenidos de la papelera?"
 
 msgid "Yes, remove all"
 msgstr "Si, eliminarlos todos"
@@ -2479,27 +2479,6 @@ msgstr "Activado"
 
 msgid "Disabled"
 msgstr "Desactivado"
-
-msgid "Activate users has a cost of 12€ user/month."
-msgstr "Activar usuarios tiene un coste de 12€ usuario/mes."
-
-msgid ""
-"If you have questions please have a look to our help article and/or contact "
-"us at <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>"
-msgstr ""
-"Si tienes cualquier pregunta puedes consulta el artículo de ayuda y/o "
-"contactar con nosotros en <a href=\"mailto:sales@openhost."
-"es\">sales@openhost.es</a>."
-
-msgid ""
-"Please, fill billing information below, we will send you an invoice for all "
-"activated users at the end of the month."
-msgstr ""
-"Por favor, completa la información e facturación de debajo, te enviaremos "
-"una factura de todos tus usuarios activos al final del mes."
-
-msgid "I understand and accept the cost of the operation."
-msgstr "Entiendo y acepto los costes de la operación."
 
 msgid "Config form: '%1'"
 msgstr "Formulario de configuración: '%1'"
@@ -2818,6 +2797,12 @@ msgstr ""
 msgid "Redirects URIs to another URIs basing on a regular expression"
 msgstr "Redirige los URI a otros URI basándose en una expresión regular"
 
+msgid "410 GONE"
+msgstr "410 GONE"
+
+msgid "Redirects URIs to error 410 GONE"
+msgstr "Redireccionar URIs a error 410 GONE"
+
 msgid "Source"
 msgstr "Origen"
 
@@ -2937,6 +2922,27 @@ msgstr ""
 
 msgid "Server hour:"
 msgstr "Hora del sistema:"
+
+msgid "Body complexity"
+msgstr "Complejidad del cuerpo"
+
+msgid "Difficult to read"
+msgstr "Dificil de leer"
+
+msgid "Easily understood"
+msgstr "Fácil de entender"
+
+msgid "Very easy to read"
+msgstr "Muy fácil de leer"
+
+msgid "Words"
+msgstr "Palabras"
+
+msgid ""
+"In order to dislay the text complexity, you need to save the article first."
+msgstr ""
+"Para mostrar la complejidad del texto, se necesita guardar el contenido "
+"primero"
 
 msgid "Live blog"
 msgstr "Contenido en directo"
@@ -3102,13 +3108,13 @@ msgstr ""
 "experiencia de usuario y tiene mejor rendimiento."
 
 msgid "Limit ads between paragraphs"
-msgstr "Limitar ads entre párrafos"
+msgstr "Limitar publicidad entre párrafos"
 
 msgid ""
 "This settings limits ads between paragraphs to the total number of "
 "paragraphs."
 msgstr ""
-"Esta configuracion limita ads entre parrafos al numero total de parrafos"
+"Este ajuste limita la publicidad entre párrafos al número total de párrafos"
 
 msgid "AdSense integration"
 msgstr "Integración con AdSense"
@@ -3288,7 +3294,7 @@ msgid "Restricted URLs"
 msgstr "URLs restringidas"
 
 msgid "List of advertisement free URLs"
-msgstr "Lista de URLs libres de publicidad"
+msgstr "Listado de urls libres de publicidad"
 
 msgid "Advertisement without name"
 msgstr "Publicidad sin nomber"
@@ -3515,7 +3521,7 @@ msgstr "Ordenar portada de Kiosko según"
 
 msgid "Select if order newsstand's frontpage by dates or by section."
 msgstr ""
-"Elige si quieres ordenar la portada de kiosko por fechas o por secciones"
+"Elige si quieres ordenar la portada de kiosko por fechas o por secciones."
 
 msgid "Grouped by date is recommended for weekly newspapers."
 msgstr "Agrupado por fechas es recomendable a periódicos semanales."
@@ -4076,8 +4082,8 @@ msgid ""
 "All the latest information about %1 in %2. News, events, reports and opinion "
 "articles."
 msgstr ""
-"All the latest information about %1 in %2. News, events, reports and opinion "
-"articles."
+"Toda la información de %1 en %2 Noticias, eventos, reportajes y artículos de "
+"opinión"
 
 msgid "Attachment"
 msgstr "Adjuntos"
@@ -4568,7 +4574,7 @@ msgid "Value"
 msgstr "Valor"
 
 msgid "External link to "
-msgstr "Enlace externo a"
+msgstr "Enlace externo a "
 
 msgid "Internal search to keyword"
 msgstr "Búsqueda interna a una palabra clave"
@@ -5111,6 +5117,12 @@ msgstr ""
 msgid "Chartbeat Domain"
 msgstr "Dominio de Chartbeat"
 
+msgid "Marfeel Compass"
+msgstr "Marfeel Compass"
+
+msgid "Marfeel Compass ID"
+msgstr "Marfeel Compass ID"
+
 msgid "GFK"
 msgstr "GFK"
 
@@ -5137,6 +5149,12 @@ msgstr "Prometeo"
 
 msgid "Prometeo Media ID"
 msgstr "Prometeo Media ID"
+
+msgid "Adobe analytics"
+msgstr "Adobe Analytics"
+
+msgid "Adobe analytics Base File"
+msgstr "Archivo base para Adobe Analytics"
 
 msgid "Internal settings"
 msgstr "Preferencias internas"
@@ -5251,7 +5269,7 @@ msgid "Act-On password"
 msgstr "Contraseña de Act-On"
 
 msgid "Act-On client_id"
-msgstr "client_id de Act-On"
+msgstr "Client_id de Act-On"
 
 msgid "Act-On secret"
 msgstr "Secreto de Act-On"
@@ -5639,6 +5657,12 @@ msgstr "Preproducción"
 msgid "Show full content on RSS"
 msgstr "Mostrar todo el contenido en RSS"
 
+msgid "SEO Information"
+msgstr "Información SEO"
+
+msgid "Show SEO information on contents"
+msgstr "Mostrar información SEO en contenidos"
+
 msgid "Default skin"
 msgstr "Skin por defecto"
 
@@ -5648,6 +5672,19 @@ msgid ""
 msgstr ""
 "Tu tema ofrece varios skins que lo cambian ligeramente. Selecciona cual "
 "quiere."
+
+msgid "Theme fonts"
+msgstr "Fuentes temáticas"
+
+msgid ""
+"Your theme offers multiple fonts to match your page style. Select yout main "
+"font (titles, headings…)."
+msgstr ""
+"Tu tema ofrece multiples fuentes que combinan con el estilo de tu página. "
+"Selecciona tu fuente principal (títulos, cabeceras...)."
+
+msgid "Secondary font (body, summary…)"
+msgstr "Fuente secundaria (cuerpo, sumario...)"
 
 msgid "Scripts"
 msgstr "Scripts"
@@ -5674,7 +5711,7 @@ msgid "CSS"
 msgstr "CSS"
 
 msgid "This css will be added at the end of the original"
-msgstr "Este CSS se añadirá al final del original."
+msgstr "Este CSS se añadirá al final del original"
 
 msgid "Site name"
 msgstr "Nombre del sitio"
@@ -5787,7 +5824,7 @@ msgid "Words suggested by the form input"
 msgstr "Palabras sugeridas por el campo en el formulario"
 
 msgid "Add a value..."
-msgstr "Añade un valor"
+msgstr "Añade un valor..."
 
 msgid "Remove field"
 msgstr "Eliminar campo"
@@ -5826,7 +5863,7 @@ msgid "Youtube"
 msgstr "YouTube"
 
 msgid "Add an element..."
-msgstr "Añade un elemento"
+msgstr "Añade un elemento..."
 
 msgid "Company Name"
 msgstr "Nombre de la empresa"
@@ -5959,21 +5996,20 @@ msgstr ""
 "importarlas"
 
 msgid "Image quality"
-msgstr "Calidad de la imagen"
+msgstr "Calidad de imagen"
 
 msgid "Only images with .jpeg, .jpg or .pjpeg format"
-msgstr "Solo imágenes con formato .jpeg, .jpg o .pjpeg"
+msgstr "Solo imagenes con .jpeg, .jpg o .pjpeg format"
 
 msgid "Image resolution"
-msgstr "Resolución de la imagen"
+msgstr "Resolución de imagen"
 
 msgid "Regardless of resolution, images will keep its original aspect ratio"
 msgstr ""
-"Sin importar la resolución, la imagen mantendrá su relación de aspecto "
-"original"
+"Sin importar la resolución, las imagenes conservarán su aspecto original"
 
-msgid "Keep original resolution"
-msgstr "Mantener resolución original"
+msgid "Config article module"
+msgstr "Configuración del módulo «Artículos»"
 
 msgid "New poll"
 msgstr "Nueva encuesta"
@@ -6268,9 +6304,6 @@ msgstr ""
 "Por favor, contacta con nuestro <a href=\"javascript:UserVoice."
 "showPopupWidget();\">equipo de soporte</a>."
 
-msgid "Config article module"
-msgstr "Configuración del módulo «Artículos»"
-
 msgid "Suggested for frontpage"
 msgstr "Sugerir en portada principal"
 
@@ -6328,6 +6361,12 @@ msgstr "Contenido en directo"
 
 msgid "Showcase"
 msgstr "Showcase"
+
+msgid "SEO Score"
+msgstr "Puntuación SEO"
+
+msgid "No SEO information"
+msgstr "Sin información SEO"
 
 msgid "If enabled, this user group will not be visible in some circunstances"
 msgstr ""
@@ -6478,7 +6517,7 @@ msgid "Update Container label"
 msgstr "Actualizar la etiqueta del contenedor"
 
 msgid "This newsletter is going to be sent"
-msgstr "Este boletín de noticias está a punto de ser enviado."
+msgstr "Este boletín de noticias está a punto de ser enviado"
 
 msgid "Are you sure to send %1 emails?"
 msgstr "¿Estás seguro que quieres enviar %1 correos electrónicos?"
@@ -6610,12 +6649,12 @@ msgstr ""
 msgid "ActOn allow to specify a custom header text. This is the id."
 msgstr ""
 "ActOn le permite especificar un texto de cabecera personalizado. Este es el "
-"identificador"
+"identificador."
 
 msgid "ActOn allow to specify a custom footer text. This is the id."
 msgstr ""
 "ActOn le permite especificar un texto de pie personalizado. Este es el "
-"identificador"
+"identificador."
 
 msgid "Newsletter contents"
 msgstr "Contenidos del boletín"
@@ -6897,7 +6936,7 @@ msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
 
 msgid "New Ads.txt container"
-msgstr "Añadir contenedor de Ads.txt"
+msgstr "Nuevo contenedor de Ads.txt"
 
 msgid "Edit Ads.txt container"
 msgstr "Editar contenedor de Ads.txt"
@@ -7167,7 +7206,7 @@ msgid ""
 "Welcome to Opennemas! Learn how to publish your news in just few seconds!"
 msgstr ""
 "¡Bienvenido a Opennemas! Aprende a como publicar tus propias noticias en "
-"solo unos segundos"
+"solo unos segundos!"
 
 msgid "Hi"
 msgstr "Hola"
@@ -7399,6 +7438,33 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
+
+#~ msgid "Activate users has a cost of 12€ user/month."
+#~ msgstr "Activar usuarios tiene un coste de 12€ usuario/mes."
+
+#~ msgid ""
+#~ "If you have questions please have a look to our help article and/or "
+#~ "contact us at <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>"
+#~ msgstr ""
+#~ "Si tienes cualquier pregunta puedes consulta el artículo de ayuda y/o "
+#~ "contactar con nosotros en <a href=\"mailto:sales@openhost."
+#~ "es\">sales@openhost.es</a>."
+
+#~ msgid ""
+#~ "Please, fill billing information below, we will send you an invoice for "
+#~ "all activated users at the end of the month."
+#~ msgstr ""
+#~ "Por favor, completa la información e facturación de debajo, te enviaremos "
+#~ "una factura de todos tus usuarios activos al final del mes."
+
+#~ msgid "I understand and accept the cost of the operation."
+#~ msgstr "Entiendo y acepto los costes de la operación."
+
+#~ msgid "Text complexity"
+#~ msgstr "Complejidad del texto"
+
+#~ msgid "Word count"
+#~ msgstr "Número de palabras"
 
 #, fuzzy
 #~ msgid "Homepage manager"
@@ -7998,9 +8064,6 @@ msgstr "Nombre del grupo"
 
 #~ msgid "Add contents to groups by using the \"Add contents\" button"
 #~ msgstr "Añade contenidos a los grupos usando el botón «Añadir contenidos»"
-
-#~ msgid "Google Analytics Base domain"
-#~ msgstr "Dominio base para Google Analytics"
 
 #~ msgid "Category targeting"
 #~ msgstr "Segmentación por categoría"

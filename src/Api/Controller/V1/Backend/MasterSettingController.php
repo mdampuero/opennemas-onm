@@ -55,6 +55,7 @@ class MasterSettingController extends SettingController
         'theme_font',
         'theme_font_secondary',
         'theme_skin',
+        'seo_information',
     ];
 
     /**
@@ -64,6 +65,7 @@ class MasterSettingController extends SettingController
      */
     protected $toint = [
         'frontpage_max_items',
+        'seo_information',
     ];
 
     /**
@@ -85,6 +87,7 @@ class MasterSettingController extends SettingController
         'header_script_amp',
         'redirection',
         'robots_txt_rules',
+        'seo_information',
     ];
 
     /**
