@@ -1,9 +1,9 @@
 backend_attachment_create:
-    path:     /attachments/new
+    path:     /attachments/new/
     defaults: { _controller: BackendBundle:Attachment:create }
 
 backend_attachment_show:
-    path:     /attachments/{id}
+    path:     /attachments/{id}/
     defaults: { _controller: BackendBundle:Attachment:show }
     requirements:
         id: \d+
@@ -11,7 +11,7 @@ backend_attachment_show:
         expose: true
 
 backend_attachments_list:
-    path:     /attachments
+    path:     /attachments/
     defaults: { _controller: BackendBundle:Attachment:list }
     options:
         expose: true

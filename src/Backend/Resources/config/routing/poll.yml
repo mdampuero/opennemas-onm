@@ -1,9 +1,9 @@
 backend_poll_create:
-    path:     /polls/new
+    path:     /polls/new/
     defaults: { _controller: BackendBundle:Poll:create }
 
 backend_poll_show:
-    path:     /polls/{id}
+    path:     /polls/{id}/
     defaults: { _controller: BackendBundle:Poll:show }
     requirements:
         id: \d+
@@ -11,11 +11,11 @@ backend_poll_show:
         expose: true
 
 backend_polls_content_provider:
-    path:     /polls/content-provider
+    path:     /polls/content-provider/
     defaults: { _controller: BackendBundle:Poll:contentProvider }
 
 backend_polls_list:
-    path:     /polls
+    path:     /polls/
     defaults: { _controller: BackendBundle:Poll:list }
     options:
         expose: true

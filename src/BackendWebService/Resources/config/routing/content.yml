@@ -71,25 +71,25 @@ backend_ws_contents_batch_set_content_status:
         expose: true
 
 backend_ws_content_toggle_in_home:
-    path:     /{contentType}s/{id}/toggle-in-home
+    path:     /{contentType}s/{id}/toggle-in-home/
     defaults: { _controller: BackendWebServiceBundle:Content:toggleInHome }
     options:
         expose: true
 
 backend_ws_contents_batch_toggle_in_home:
-    path:     /{contentType}s/toggle-in-home
+    path:     /{contentType}s/toggle-in-home/
     defaults: { _controller: BackendWebServiceBundle:Content:batchToggleInHome }
     options:
         expose: true
 
 backend_ws_content_toggle_favorite:
-    path:     /{contentType}s/{id}/toggle-favorite
+    path:     /{contentType}s/{id}/toggle-favorite/
     defaults: { _controller: BackendWebServiceBundle:Content:toggleFavorite }
     options:
         expose: true
 
 backend_ws_contents_list:
-    path:     /{contentType}s{format}
+    path:     /{contentType}s{format}/
     defaults: { _controller: BackendWebServiceBundle:Content:list, format: '.json' }
     methods:  [ GET ]
     requirements:
@@ -98,13 +98,13 @@ backend_ws_contents_list:
         expose: true
 
 backend_ws_contents_list_home:
-    path:     /{contentType}s/home
+    path:     /{contentType}s/home/
     defaults: { _controller: BackendWebServiceBundle:Content:listHome }
     options:
         expose: true
 
 backend_ws_contents_save_positions:
-    path:     /{contentType}s/save-positions
+    path:     /{contentType}s/save-positions/
     defaults: { _controller: BackendWebServiceBundle:Content:savePositions }
     options:
         expose: true

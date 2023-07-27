@@ -1,12 +1,12 @@
 backend_ws_theme_enable:
-    path:     /theme/{uuid}
+    path:     /theme/{uuid}/
     defaults: { _controller: BackendWebServiceBundle:Theme:enable }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_ws_theme_list:
-    path:     /theme
+    path:     /theme/
     defaults: { _controller: BackendWebServiceBundle:Theme:list }
     methods:  [ GET ]
     options:

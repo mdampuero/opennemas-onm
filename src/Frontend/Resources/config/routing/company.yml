@@ -33,7 +33,7 @@ frontend_company_search:
         subdirectory: true
 
 frontend_companies:
-    path: /empresa/{place}/{search}/
+    path: /empresa/{place}/{search}
     defaults: { _controller: FrontendBundle:Company:list, place: null, search: null }
     options:
         l10n: true

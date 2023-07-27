@@ -1,3 +1,3 @@
 backend_theme_list:
-    path: /themes
+    path: /themes/
     defaults: { _controller: BackendBundle:Theme:list }

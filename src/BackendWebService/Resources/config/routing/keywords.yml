@@ -1,17 +1,17 @@
 backend_ws_keywords_list:
-    path:     /keywords
+    path:     /keywords/
     defaults: { _controller: BackendWebServiceBundle:Keywords:list }
     options:
         expose: true
 
 backend_ws_keywords_batch_delete:
-    path:     /pclaves/batch-delete
+    path:     /pclaves/batch-delete/
     defaults: { _controller: BackendWebServiceBundle:Keywords:batchDelete }
     options:
         expose: true
 
 backend_ws_keyword_delete:
-    path:     /pclaves/{id}/delete
+    path:     /pclaves/{id}/delete/
     defaults: { _controller: BackendWebServiceBundle:Keywords:delete }
     options:
         expose: true
