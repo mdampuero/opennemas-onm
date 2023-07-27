@@ -82,36 +82,21 @@
     <div class="table-text">
       [% item.name %]
     </div>
-    <div class="listing-inline-actions m-t-10">
-      <a class="btn btn-default btn-small" href="[% routing.generate(routes.redirect, { id: getItemId(item) }) %]">
+    <div class="listing-inline-actions m-t-10 btn-group">
+      <a class="btn btn-white btn-small" href="[% routing.generate(routes.redirect, { id: getItemId(item) }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
         <i class="fa fa-pencil"></i>
-        {t}Edit{/t}
       </a>
-      <button class="btn btn-danger btn-small" ng-click="delete(getItemId(item))" type="button">
-        <i class="fa fa-trash-o"></i>
-        {t}Remove{/t}
-      </button>
       {acl isAllowed="MASTER"}
-        <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
-          <button class="btn btn-small btn-white dropdown-toggle" data-toggle="dropdown" type="button">
-            <i class="fa fa-ellipsis-h"></i>
-          </button>
-          <ul class="dropdown-menu no-padding">
-            <li ng-if="item.activated == 1">
-              <a href="#" ng-click="synchronizeItem(getItemId(item))">
-                <i class="fa fa-retweet m-r-5"></i>
-                {t}Synchronize{/t}
-              </a>
-            </li>
-            <li>
-              <a href="#" ng-click="emptyItem(getItemId(item))">
-                <i class="fa fa-fire m-r-5"></i>
-                {t}Delete contents{/t}
-              </a>
-            </li>
-          </ul>
-        </div>
+      <a class="btn btn-white btn-small" ng-if="item.activated == 1" href="#" ng-click="synchronizeItem(getItemId(item))" uib-tooltip="{t}Synchronize{/t}" tooltip-placement="top">
+        <i class="fa fa-retweet m-r-5"></i>
+      </a>
+      <a class="btn btn-white btn-small" href="#" ng-click="emptyItem(getItemId(item))" uib-tooltip="{t}Delete contents{/t}" tooltip-placement="top">
+        <i class="fa fa-fire m-r-5"></i>
+      </a>
       {/acl}
+      <button class="btn btn-white btn-small" ng-click="delete(getItemId(item))" type="button" uib-tooltip="{t}Remove{/t}" tooltip-placement="top">
+        <i class="fa fa-trash-o text-danger"></i>
+      </button>
     </div>
   </td>
   <td class="v-align-middle" ng-if="isColumnEnabled('url')">

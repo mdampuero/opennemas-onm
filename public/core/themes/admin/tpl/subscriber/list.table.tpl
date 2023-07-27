@@ -35,12 +35,12 @@
       {t}Unknown{/t}
     </small>
     {block name="itemActions"}
-      <div class="listing-inline-actions m-t-10">
-        <a class="btn btn-default btn-small" href="[% routing.generate('backend_subscriber_show', { id: item.id }) %]">
-          <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+      <div class="listing-inline-actions m-t-10 btn-group">
+        <a class="btn btn-white btn-small" href="[% routing.generate('backend_subscriber_show', { id: item.id }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
+          <i class="fa fa-pencil m-r-5"></i>
         </a>
-        <button class="btn btn-danger btn-small" ng-click="delete(item.id)" ng-if="backup.master || item.id != backup.id" type="button">
-          <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+        <button class="btn btn-white btn-small" ng-click="delete(item.id)" ng-if="backup.master || item.id != backup.id" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
+          <i class="fa fa-trash-o m-r-5 text-danger"></i>
         </button>
       </div>
     {/block}

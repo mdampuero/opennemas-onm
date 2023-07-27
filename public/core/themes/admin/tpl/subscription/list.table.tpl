@@ -22,14 +22,16 @@
 
 {block name="commonColumnsBody"}
   <td class="v-align-middle">
-    [% item.name %]
+    <div class="table-text ng-binding">
+      [% item.name %]
+    </div>
     {block name="itemActions"}
-      <div class="listing-inline-actions m-t-10">
-        <a class="btn btn-default btn-small" href="[% routing.generate('backend_subscription_show', { id: item.pk_user_group }) %]">
-          <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+      <div class="listing-inline-actions m-t-10 btn-group">
+        <a class="btn btn-white btn-small" href="[% routing.generate('backend_subscription_show', { id: item.pk_user_group }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
+          <i class="fa fa-pencil m-r-5"></i>
         </a>
-        <button class="btn btn-danger btn-small" ng-click="delete(item.pk_user_group)" type="button">
-          <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+        <button class="btn btn-white btn-small" ng-click="delete(item.pk_user_group)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
+          <i class="fa fa-trash-o m-r-5 text-danger"></i>
         </button>
       </div>
     {/block}

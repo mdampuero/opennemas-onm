@@ -1,17 +1,16 @@
 {extends file="common/extension/list.table.tpl"}
 
 {block name="itemActions"}
-  <div class="listing-inline-actions">
+  <div class="listing-inline-actions btn-group">
     {acl isAllowed="WIDGET_UPDATE"}
-      <a class="btn btn-default btn-small" href="[% routing.generate('backend_widget_show', { id: getItemId(item) }) %]">
+      <a class="btn btn-white btn-small" href="[% routing.generate('backend_widget_show', { id: getItemId(item) }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
         <i class="fa fa-pencil m-r-5"></i>
-        {t}Edit{/t}
       </a>
     {/acl}
     {acl isAllowed="WIDGET_DELETE"}
-      <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
-        <i class="fa fa-trash-o m-r-5">
-        </i>{t}Delete{/t}
+      <button class="btn btn-white btn-small" ng-click="sendToTrash(item)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
+        <i class="fa fa-trash-o m-r-5 text-danger">
+        </i>
       </button>
     {/acl}
   </div>

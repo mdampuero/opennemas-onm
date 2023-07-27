@@ -113,27 +113,23 @@
           </label>
         </div>
         <div class="m-l-15" ng-show="data.extra.related[id].type === 'text'">
-          <div class="listing-inline-actions">
-            <a class="btn btn-default btn-small" ng-click="open('modal-view-item', data.extra.related[id])" title="{t}View{/t}">
+          <div class="listing-inline-actions btn-group">
+            <a class="btn btn-white btn-small" ng-click="open('modal-view-item', data.extra.related[id])" title="{t}View{/t}" uib-tooltip="{t}Preview{/t}" tooltip-placement="top">
               <i class="fa fa-eye m-r-5"></i>
-              {t}Preview{/t}
             </a>
           </div>
         </div>
       </div>
     </div>
-    <div class="listing-inline-actions">
-      <a class="btn btn-default btn-small" ng-click="preview(item)">
+    <div class="listing-inline-actions btn-group">
+      <a class="btn btn-white btn-small" ng-click="preview(item)" uib-tooltip="{t}Preview{/t}" tooltip-placement="top">
         <i class="fa fa-eye m-r-5"></i>
-        {t}Preview{/t}
       </a>
-      <span class="btn btn-success btn-small" ng-if="isImported(item)">
-        <i class="fa fa-check m-r-5"></i>
-        {t}Imported{/t}
+      <span class="btn btn-white btn-small" ng-if="isImported(item)" uib-tooltip="{t}Imported{/t}" tooltip-placement="top">
+        <i class="fa fa-check m-r-5 text-success"></i>
       </span>
-      <button class="btn btn-info btn-small" ng-click="importItem(item)" ng-if="!isImported(item)">
-        <span class="fa fa-cloud-download m-r-5"></span>
-        {t}Import{/t}
+      <button class="btn btn-white btn-small" ng-click="importItem(item)" ng-if="!isImported(item)" uib-tooltip="{t}Import{/t}" tooltip-placement="top">
+        <span class="fa fa-cloud-download m-r-5 text-info"></span>
       </button>
     </div>
   </td>
