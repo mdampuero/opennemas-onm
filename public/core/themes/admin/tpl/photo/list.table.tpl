@@ -74,19 +74,19 @@
 {block name="itemActions"}
   {acl isAllowed="PHOTO_UPDATE"}
     <a class="btn btn-white btn-small" href="[% routing.generate('backend_photo_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
-      <i class="fa fa-pencil m-r-5"></i>
+      <i class="fa fa-pencil"></i>
     </a>
     <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_photo_show', { id: getItemId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" ng-class="{ 'dropup': $index >= data.items.length - 1 }" options="data.extra.locale" text="{t}Edit{/t}"></translator>
   {/acl}
   <a class="btn btn-white btn-small" href="{$smarty.const.INSTANCE_MEDIA}[% extra.paths.photo + item.path %]" type="button" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
-    <i class="fa fa-external-link m-r-5"></i>
+    <i class="fa fa-external-link"></i>
   </a>
   <a class="btn btn-white btn-small" ng-click="launchPhotoEditor(item)" type="button" uib-tooltip="{t}Transform the image{/t}" tooltip-placement="top">
-    <i class="fa fa-sliders m-r-5"></i>
+    <i class="fa fa-sliders"></i>
   </a>
   {acl isAllowed="PHOTO_DELETE"}
     <button class="btn btn-white btn-small" ng-click="delete(item.pk_content)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
-      <i class="fa fa-trash-o m-r-5 text-danger"></i>
+      <i class="fa fa-trash-o text-danger"></i>
     </button>
   {/acl}
 {/block}

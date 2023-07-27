@@ -88,7 +88,7 @@
 {block name="itemActions"}
   {acl isAllowed="EVENT_UPDATE"}
     <a class="btn btn-white btn-small" href="[% routing.generate('backend_event_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
-      <i class="fa fa-pencil m-r-5"></i>
+      <i class="fa fa-pencil"></i>
     </a>
     <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_event_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
   {/acl}
@@ -97,7 +97,7 @@
   </a>
   {acl isAllowed="EVENT_DELETE"}
     <button class="btn btn-white btn-small" ng-click="sendToTrash(item)" type="button" uib-tooltip="{t}Remove{/t}" tooltip-placement="top">
-      <i class="fa fa-trash-o m-r-5 text-danger"></i>
+      <i class="fa fa-trash-o text-danger"></i>
     </button>
   {/acl}
 {/block}

@@ -123,13 +123,13 @@
     </div>
     <div class="listing-inline-actions btn-group">
       <a class="btn btn-white btn-small" ng-click="preview(item)" uib-tooltip="{t}Preview{/t}" tooltip-placement="top">
-        <i class="fa fa-eye m-r-5"></i>
+        <i class="fa fa-eye"></i>
       </a>
       <span class="btn btn-white btn-small" ng-if="isImported(item)" uib-tooltip="{t}Imported{/t}" tooltip-placement="top">
-        <i class="fa fa-check m-r-5 text-success"></i>
+        <i class="fa fa-check text-success"></i>
       </span>
       <button class="btn btn-white btn-small" ng-click="importItem(item)" ng-if="!isImported(item)" uib-tooltip="{t}Import{/t}" tooltip-placement="top">
-        <span class="fa fa-cloud-download m-r-5 text-info"></span>
+        <span class="fa fa-cloud-download text-info"></span>
       </button>
     </div>
   </td>

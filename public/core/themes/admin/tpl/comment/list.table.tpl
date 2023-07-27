@@ -58,12 +58,12 @@
     <div class="listing-inline-actions btn-group">
       {acl isAllowed="COMMENT_UPDATE"}
         <a class="btn btn-white btn-small" href="[% routing.generate('backend_comment_show', { id: getItemId(item) }) %]" title="{t}Edit{/t}" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
-          <i class="fa fa-pencil m-r-5"></i>
+          <i class="fa fa-pencil"></i>
         </a>
       {/acl}
       {acl isAllowed="COMMENT_DELETE"}
         <button class="btn btn-white btn-small" ng-click="delete(item.id)" title="{t}Delete{/t}" type="button" uib-tooltip="{t}Remove{/t}" tooltip-placement="top">
-          <i class="fa fa-trash-o m-r-5 text-danger"></i>
+          <i class="fa fa-trash-o text-danger"></i>
         </button>
       {/acl}
     </div>

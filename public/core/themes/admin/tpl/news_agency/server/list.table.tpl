@@ -88,10 +88,10 @@
       </a>
       {acl isAllowed="MASTER"}
       <a class="btn btn-white btn-small" ng-if="item.activated == 1" href="#" ng-click="synchronizeItem(getItemId(item))" uib-tooltip="{t}Synchronize{/t}" tooltip-placement="top">
-        <i class="fa fa-retweet m-r-5"></i>
+        <i class="fa fa-retweet"></i>
       </a>
       <a class="btn btn-white btn-small" href="#" ng-click="emptyItem(getItemId(item))" uib-tooltip="{t}Delete contents{/t}" tooltip-placement="top">
-        <i class="fa fa-fire m-r-5"></i>
+        <i class="fa fa-fire"></i>
       </a>
       {/acl}
       <button class="btn btn-white btn-small" ng-click="delete(getItemId(item))" type="button" uib-tooltip="{t}Remove{/t}" tooltip-placement="top">

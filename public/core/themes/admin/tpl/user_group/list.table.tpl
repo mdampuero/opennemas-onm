@@ -24,10 +24,10 @@
     {block name="itemAction"}
       <div class="listing-inline-actions m-t-10 btn-group">
         <a class="btn btn-white btn-small" href="[% routing.generate('backend_user_group_show', { id: item.pk_user_group }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
-          <i class="fa fa-pencil m-r-5"></i>
+          <i class="fa fa-pencil"></i>
         </a>
         <button class="btn btn-white btn-small" ng-click="delete(item.pk_user_group)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
-          <i class="fa fa-trash-o m-r-5 text-danger"></i>
+          <i class="fa fa-trash-o text-danger"></i>
         </button>
       </div>
     {/block}

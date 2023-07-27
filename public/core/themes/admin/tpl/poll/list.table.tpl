@@ -170,11 +170,6 @@
   {/acl}
   <a class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
     <i class="fa fa-external-link"></i>
-    <span class="m-l-5" ng-if="item.params.bodyLink.length > 0">
-      <small>
-        {t}External{/t}
-      </small>
-    </span>
   </a>
   {acl isAllowed="POLL_DELETE"}
     <button class="btn btn-white btn-small" ng-click="sendToTrash(item)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">

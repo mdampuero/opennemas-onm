@@ -63,15 +63,15 @@
 {block name="itemActions"}
   {acl isAllowed="LETTER_UPDATE"}
     <a class="btn btn-white btn-small" href="[% routing.generate('backend_letter_show', { id: getItemId(item) }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
-      <i class="fa fa-pencil m-r-5"></i>
+      <i class="fa fa-pencil"></i>
     </a>
   {/acl}
   <a class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
-    <i class="fa fa-external-link m-r-5"></i>
+    <i class="fa fa-external-link"></i>
   </a>
   {acl isAllowed="LETTER_DELETE"}
     <button class="btn btn-white btn-small" ng-click="sendToTrash(item)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
-      <i class="fa fa-trash-o m-r-5 text-danger"></i>
+      <i class="fa fa-trash-o text-danger"></i>
     </button>
   {/acl}
 {/block}

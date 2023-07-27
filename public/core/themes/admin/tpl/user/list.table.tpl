@@ -43,7 +43,7 @@
           <i class="fa fa-pencil text-success_"></i>
         </a>
         <button class="btn btn-white btn-small" ng-click="delete(item.id)" ng-if="backup.master || item.id != backup.id" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
-          <i class="fa fa-trash-o m-r-5 text-danger"></i>
+          <i class="fa fa-trash-o text-danger"></i>
         </button>
       </div>
     {/block}

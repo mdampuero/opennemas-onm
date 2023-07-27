@@ -4,12 +4,12 @@
   <div class="listing-inline-actions btn-group">
     {acl isAllowed="WIDGET_UPDATE"}
       <a class="btn btn-white btn-small" href="[% routing.generate('backend_widget_show', { id: getItemId(item) }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
-        <i class="fa fa-pencil m-r-5"></i>
+        <i class="fa fa-pencil"></i>
       </a>
     {/acl}
     {acl isAllowed="WIDGET_DELETE"}
       <button class="btn btn-white btn-small" ng-click="sendToTrash(item)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
-        <i class="fa fa-trash-o m-r-5 text-danger">
+        <i class="fa fa-trash-o text-danger">
         </i>
       </button>
     {/acl}
