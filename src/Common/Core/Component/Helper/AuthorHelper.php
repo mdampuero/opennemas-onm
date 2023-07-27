@@ -136,20 +136,22 @@ class AuthorHelper
         $author = $this->getAuthor($author);
 
         try {
-            $opinions = $this->container->get('api.service.opinion')->getList(
-                sprintf(
-                    'content_type_name = "opinion" and content_status = 1 ' .
-                    'and in_litter = 0 ' .
-                    'and fk_author = %d ' .
-                    'and (starttime is null or starttime < "%s") ' .
-                    'and (endtime is null or endtime > "%s") ' .
-                    'order by starttime desc limit %d',
-                    $author->id,
-                    date('Y-m-d H:i:s'),
-                    date('Y-m-d H:i:s'),
-                    1
-                )
-            )['items'];
+            $opinions = $this->container->get('api.service.opinion')
+                ->setCount(false)
+                ->getList(
+                    sprintf(
+                        'content_type_name = "opinion" and content_status = 1 ' .
+                        'and in_litter = 0 ' .
+                        'and fk_author = %d ' .
+                        'and (starttime is null or starttime < "%s") ' .
+                        'and (endtime is null or endtime > "%s") ' .
+                        'order by starttime desc limit %d',
+                        $author->id,
+                        date('Y-m-d H:i:s'),
+                        date('Y-m-d H:i:s'),
+                        1
+                    )
+                )['items'];
         } catch (\Exception $e) {
             $opinions = [];
         }
