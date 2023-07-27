@@ -141,6 +141,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       delete data.urn_source;
       delete data.starttime;
       delete data.endtime;
+      delete data.slug;
       data.content_status = 0;
       if (data.title) {
         data.title = 'Copy of ' + data.title;
