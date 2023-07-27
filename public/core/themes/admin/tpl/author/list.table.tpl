@@ -29,15 +29,15 @@
       [% item.name %]
     </div>
     {block name="itemActions"}
-      <div class="listing-inline-actions m-t-10">
+      <div class="listing-inline-actions m-t-10 btn-group">
         {acl isAllowed="AUTHOR_UPDATE"}
-          <a class="btn btn-default btn-small" href="[% routing.generate('backend_author_show', { id:  item.id }) %]" title="{t}Edit{/t}">
-            <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+          <a class="btn btn-white btn-small" href="[% routing.generate('backend_author_show', { id:  item.id }) %]" title="{t}Edit{/t}" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
+            <i class="fa fa-pencil m-r-5"></i>
           </a>
         {/acl}
         {acl isAllowed="AUTHOR_DELETE"}
-          <button class="btn btn-danger btn-small" ng-click="delete(item.id)" ng-if="backup.master || item.id != backup.id" type="button">
-            <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+          <button class="btn btn-white btn-small" ng-click="delete(item.id)" ng-if="backup.master || item.id != backup.id" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
+            <i class="fa fa-trash-o m-r-5 text-danger"></i>
           </button>
         {/acl}
       </div>

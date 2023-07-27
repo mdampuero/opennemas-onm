@@ -28,16 +28,16 @@
       [% item.source %]
     </div>
     {block name="itemActions"}
-      <div class="listing-inline-actions m-t-10">
-        <a class="btn btn-default btn-small" href="[% routing.generate('backend_url_show', { id: item.id }) %]">
-          <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+      <div class="listing-inline-actions m-t-10 btn-group">
+        <a class="btn btn-white btn-small" href="[% routing.generate('backend_url_show', { id: item.id }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
+          <i class="fa fa-pencil text-success_"></i>
         </a>
-        <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
-          <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+        <a class="btn btn-white btn-small" href="/[% item.source %]" ng-if="item.type == 1 || item.type == 2" target="_blank" uib-tooltip="{t}Test{/t}" tooltip-placement="top">
+          <i class="fa fa-external-link text-success_"></i>
+        </a>
+        <button class="btn btn-white btn-small" ng-click="delete(item.id)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
+          <i class="fa fa-trash-o text-danger"></i>
         </button>
-        <a class="btn btn-white btn-small" href="/[% item.source %]" ng-if="item.type == 1 || item.type == 2" target="_blank">
-          <i class="fa fa-external-link m-r-5"></i>{t}Test{/t}
-        </a>
       </div>
     {/block}
   </td>
