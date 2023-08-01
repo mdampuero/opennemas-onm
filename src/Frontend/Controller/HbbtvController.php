@@ -66,8 +66,8 @@ class HbbtvController extends Controller
             if (!empty($videos)) {
                 $videos = array_map(function ($element) use ($defaultThumbnail) {
                     if ($element->type && $element->type == 'Globalmest') {
-                        $lastPart = explode('/', $element->path);
-                        $id = str_replace('.html', '', end($lastPart));
+                        $lastPart     = explode('/', $element->path);
+                        $id           = str_replace('.html', '', end($lastPart));
                         $element->src = sprintf('https://vod-dd.globalmest.com/8RK9QO/%s/%s_vR5voJ.mp4', $id, $id);
                     }
 
@@ -82,9 +82,12 @@ class HbbtvController extends Controller
             }
         }
 
-        return $this->render('hbbtv/hbbtv.tpl', [
+        $response = $this->render('hbbtv/hbbtv.tpl', [
             'categoryTree' => $finalResult,
             'logo'         => $defaultThumbnail
         ]);
+
+        $response->headers->set('Content-Type', 'application/vnd.hbbtv.xhtml+xml; charset=utf-8');
+        return $response;
     }
 }
