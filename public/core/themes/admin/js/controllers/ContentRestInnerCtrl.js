@@ -3,9 +3,9 @@
  */
 angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
   '$controller', '$uibModal', '$scope', 'cleaner',
-  'messenger', 'routing', '$timeout', 'webStorage', '$window', 'translator',
+  'messenger', 'routing', '$timeout', 'webStorage', '$window', 'translator', 'http',
   function($controller, $uibModal, $scope, cleaner,
-      messenger, routing, $timeout, webStorage, $window, translator) {
+      messenger, routing, $timeout, webStorage, $window, translator, http) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -173,9 +173,24 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      * @memberOf StaticPageCtrl
      *
      * @description
+     *   Saves tags, send notifications if  needed and, then, saves the item.
+     */
+    $scope.submit = function(item) {
+      if (item && !item.is_notified_check && item.is_notified) {
+        $scope.sendWPNotification(item);
+      } else {
+        $scope.saveItem();
+      }
+    };
+
+    /**
+     * @function saveItem
+     * @memberOf StaticPageCtrl
+     *
+     * @description
      *   Saves tags and, then, saves the item.
      */
-    $scope.submit = function() {
+    $scope.saveItem = function() {
       if (!$scope.validate()) {
         messenger.post(window.strings.forms.not_valid, 'error');
         return;
@@ -192,6 +207,62 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           $scope.draftEnabled = false;
 
           $scope.save();
+        }
+      });
+    };
+
+    /**
+     * @function sendWPNotification
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *   Send webpush notification to all subscribers
+     */
+    $scope.sendWPNotification = function(item) {
+      var modal = $uibModal.open({
+        templateUrl: 'modal-webpush',
+        backdrop: 'static',
+        controller: 'ModalCtrl',
+        resolve: {
+          template: function() {
+            return null;
+          },
+          success: function() {
+            return null;
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          if (item) {
+            var image = $scope.data.featuredFrontpage ? $scope.data.featuredFrontpage.target_id : null;
+
+            if ($scope.item.starttime > $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
+              $scope.data.item.webpush_notifications.push(
+                {
+                  status: 0,
+                  body: null,
+                  title: null,
+                  send_date: $scope.item.starttime,
+                  image: null,
+                }
+              );
+            } else {
+              console.log('inmediato');
+              $scope.sendNotification = true;
+              $scope.data.item.webpush_notifications.push(
+                {
+                  status: 1,
+                  body: $scope.item.description,
+                  title: $scope.item.title,
+                  send_date: $scope.item.starttime,
+                  image: image,
+                }
+              );
+            }
+            $scope.saveItem();
+          }
         }
       });
     };

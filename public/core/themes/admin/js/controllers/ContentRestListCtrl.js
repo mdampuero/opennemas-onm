@@ -75,6 +75,37 @@
         };
 
         /**
+         * @function sendWPNotification
+         * @memberOf ContentRestInnerCtrl
+         *
+         * @description
+         *   Send webpush notification to all subscribers
+         */
+        $scope.sendWPNotification = function(item) {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-webpush',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return null;
+              },
+              success: function() {
+                return null;
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response) {
+              if (item) {
+                http.post('send_notification', [ item.pk_content ]);
+              }
+            }
+          });
+        };
+
+        /**
          * @function sendToTrash
          * @memberOf ContentRestListCtrl
          *

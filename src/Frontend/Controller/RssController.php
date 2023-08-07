@@ -274,6 +274,7 @@ class RssController extends FrontendController
                 ->get('elements_in_rss', 10);
 
             $contents = $this->getLatestContents($type, $id, $total);
+
             $this->getRelatedContents($contents);
 
             $this->view->assign([

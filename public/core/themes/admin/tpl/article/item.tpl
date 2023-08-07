@@ -46,7 +46,7 @@
         </button>
       </li>
       <li class="quicklinks">
-        <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="submit(item)" ng-disabled="flags.http.loading || flags.http.saving" type="button">
           <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
           {t}Save{/t}
         </button>
@@ -81,6 +81,9 @@
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="params.bodyLink" icon="fa-external-link" title="{t}External link{/t}" iRoute="item.params.bodyLink"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
+      {if !empty({setting name=webpushr field=webpushrKey})}
+        {include file="ui/component/content-editor/accordion/webpush.tpl"}
+      {/if}
     </div>
   </div>
   <div class="grid simple">
@@ -164,6 +167,9 @@
   </script>
   <script type="text/ng-template" id="modal-expansible-fields">
     {include file="common/modals/_modalExpansibleFields.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-webpush">
+    {include file="common/modals/_modalWebpush.tpl"}
   </script>
 {/block}
 

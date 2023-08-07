@@ -258,9 +258,6 @@
           var data  = $scope.getData();
           var route = { name: $scope.routes.saveItem };
 
-          // Parses data before save
-          data = $scope.parseData(data);
-
           /**
            * Callback executed when subscriber is saved/updated successfully.
            *
@@ -279,6 +276,10 @@
                 routing.generate($scope.routes.redirect, { id: id });
             }
 
+            if ($scope.sendNotification) {
+              http.post('send_notification', [ $scope.getItemId() ]);
+            }
+
             if (response.status === 200 && $scope.refreshOnUpdate) {
               $timeout(function() {
                 $scope.getItem($scope.getItemId());
@@ -289,13 +290,13 @@
               $scope.draftSaved = null;
               webStorage.session.remove($scope.draftKey);
             }
-
             messenger.post(response.data);
           };
 
           if ($scope.itemHasId()) {
             route.name   = $scope.routes.updateItem;
             route.params = { id: $scope.getItemId() };
+
             http.put(route, data).then(successCb, $scope.errorCb);
             return;
           }

@@ -120,6 +120,14 @@
       <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
     </button>
   {/acl}
+  {if !empty({setting name=webpushr field=webpushrKey})}
+    <button ng-if="item.content_status && (item.endtime > item.starttime || !(item.endtime))" class="btn btn-warning btn-small" ng-click="sendWPNotification(item)" type="button">
+      <i class="fa fa-bell m-r-5"></i>
+    </button>
+    <button ng-if="!item.content_status" class="btn btn-warning btn-small" ng-click="sendWPNotification(item)" type="button" disabled>
+      <i class="fa fa-bell m-r-5"></i>
+    </button>
+  {/if}
   <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
     <button class="btn btn-small btn-white dropdown-toggle" data-toggle="dropdown" type="button">
       <i class="fa fa-ellipsis-h"></i>
