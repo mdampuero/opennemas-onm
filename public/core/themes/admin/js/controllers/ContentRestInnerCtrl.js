@@ -249,7 +249,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
                 }
               );
             } else {
-              console.log('inmediato');
               $scope.sendNotification = true;
               $scope.data.item.webpush_notifications.push(
                 {

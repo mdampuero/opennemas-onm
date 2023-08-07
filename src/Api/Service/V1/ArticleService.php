@@ -9,7 +9,7 @@ class ArticleService extends ContentService
      */
     public function getItem($id)
     {
-        $item                    = parent::getItem($id);
+        $item = parent::getItem($id);
         // Aux var to set webpush notifications checkbox
         $item->is_notified_check = $item->is_notified;
 
