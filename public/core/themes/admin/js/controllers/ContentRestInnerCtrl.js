@@ -255,7 +255,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
                   status: 1,
                   body: $scope.item.description,
                   title: $scope.item.title,
-                  send_date: $scope.item.starttime,
+                  send_date: $window.moment().format('YYYY-MM-DD HH:mm:ss'),
                   image: image,
                 }
               );

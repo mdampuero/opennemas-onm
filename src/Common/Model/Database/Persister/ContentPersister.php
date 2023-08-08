@@ -190,7 +190,7 @@ done
 
             $entity->live_blog_updates = $live_blog_updates;
             if (array_key_exists('webpush_notifications', $changes)) {
-                $this->persistWebpushNotifications($id, $webpush_notifications);
+                $this->persistWebpushNotifications($id, $webpush_notifications, $entity->starttime);
             }
             $entity->webpush_notifications = $webpush_notifications;
 
@@ -494,7 +494,7 @@ done
      * @param integer $id         The entity id.
      * @param array   $liveBlogUpdates  The list of liveBlogUpdates.
      */
-    protected function persistWebpushNotifications($id, $webpush_notifications)
+    protected function persistWebpushNotifications($id, $webpush_notifications, $starttime = null)
     {
         // Ignore metas with value = null
         if (!empty($webpush_notifications)) {
@@ -502,6 +502,13 @@ done
                 return !is_null($relation);
             });
         }
+        $starttime = !empty($starttime) ? $starttime->format("Y-m-d H:i:s") : null;
+        $starttime = max($starttime, gmdate("Y-m-d H:i:s"));
+
+        $webpush_notifications = array_map(function ($item) use ($starttime) {
+            $item['send_date'] = $item['status'] == 0 ? $starttime : $item['send_date'];
+            return $item;
+        }, $webpush_notifications);
 
         // Remove old relations
         $this->removeContentNotifications($id);
