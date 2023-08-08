@@ -10,7 +10,18 @@
       <br>
       </div>
       <div class="checkbox m-t-5" ng-repeat="notification in item.webpush_notifications">
-        <small><i class="fa fa-info-circle text-info"></i> {t}Notification sent on: [% notification.send_date %]{/t}</small>
+        <small ng-if="notification.status === 0">
+          <i class="fa fa-info-circle text-info"></i>
+          {t}Notification will be sent on: [% notification.send_date %]{/t} ({t}Pending{/t})
+        </small>
+        <small ng-if="notification.status === 1">
+          <i class="fa fa-info-circle text-info"></i>
+          {t}Notification sent on: [% notification.send_date %]{/t} ({t}Sent{/t})
+        </small>
+        <small ng-if="notification.status === 2">
+          <i class="fa fa-info-circle text-info"></i>
+          {t}Notification error on: [% notification.send_date %]{/t} ({t}Not sent{/t})
+        </small>
       </div>
     </div>
     <div ng-if="!item.is_notified_check && item.content_status" class="checkbox">

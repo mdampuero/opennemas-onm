@@ -81,7 +81,7 @@
          * @description
          *   Send webpush notification to all subscribers
          */
-        $scope.sendWPNotification = function(item) {
+        $scope.sendWPNotification = function(content) {
           var modal = $uibModal.open({
             templateUrl: 'modal-webpush',
             backdrop: 'static',
@@ -98,8 +98,24 @@
 
           modal.result.then(function(response) {
             if (response) {
-              if (item) {
-                http.post('send_notification', [ item.pk_content ]);
+              if (content) {
+                var contentNotifications = content.webpush_notifications;
+                var image = content.featuredFrontpage ? content.featuredFrontpage.target_id : null;
+
+                contentNotifications.push(
+                  {
+                    status: 1,
+                    body: content.description,
+                    title: content.title,
+                    send_date: $window.moment().format('YYYY-MM-DD HH:mm:ss'),
+                    image: image,
+                  }
+                );
+                $scope.patch(content, 'webpush_notifications', contentNotifications)
+                  .then(function() {
+                    http.post('send_notification', [ content.pk_content ]);
+                    $scope.list();
+                  });
               }
             }
           });

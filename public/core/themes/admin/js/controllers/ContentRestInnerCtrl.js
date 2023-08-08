@@ -239,15 +239,21 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
             var image = $scope.data.featuredFrontpage ? $scope.data.featuredFrontpage.target_id : null;
 
             if ($scope.item.starttime > $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
-              $scope.data.item.webpush_notifications.push(
-                {
-                  status: 0,
-                  body: null,
-                  title: null,
-                  send_date: $scope.item.starttime,
-                  image: null,
-                }
-              );
+              var hasStatusZero = $scope.item.webpush_notifications.some(function(notification) {
+                return notification.status === 0;
+              });
+
+              if (!hasStatusZero) {
+                $scope.data.item.webpush_notifications.push(
+                  {
+                    status: 0,
+                    body: null,
+                    title: null,
+                    send_date: $scope.item.starttime,
+                    image: null,
+                  }
+                );
+              }
             } else {
               $scope.sendNotification = true;
               $scope.data.item.webpush_notifications.push(
