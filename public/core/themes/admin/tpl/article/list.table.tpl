@@ -120,14 +120,16 @@
       <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
     </button>
   {/acl}
-  {if !empty({setting name=webpushr field=webpushrKey})}
-    <button ng-if="item.content_status && item.starttime <= currentDateTime" class="btn btn-warning btn-small" ng-click="sendWPNotification(item)" type="button">
-      <i class="fa fa-bell m-r-5"></i>
-    </button>
-    <button ng-if="!item.content_status || (item.content_status && item.starttime > currentDateTime)" class="btn btn-warning btn-small" ng-click="sendWPNotification(item)" type="button" disabled>
-      <i class="fa fa-bell m-r-5"></i>
-    </button>
-  {/if}
+  {is_module_activated name="es.openhost.module.webpush_notifications"}
+    {if !empty({setting name=webpushr field=webpushrKey})}
+      <button ng-if="item.content_status && item.starttime <= currentDateTime" class="btn btn-warning btn-small" ng-click="sendWPNotification(item)" type="button">
+        <i class="fa fa-bell m-r-5"></i>
+      </button>
+      <button ng-if="!item.content_status || (item.content_status && item.starttime > currentDateTime)" class="btn btn-warning btn-small" ng-click="sendWPNotification(item)" type="button" disabled>
+        <i class="fa fa-bell m-r-5"></i>
+      </button>
+    {/if}
+  {/is_module_activated}
   <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
     <button class="btn btn-small btn-white dropdown-toggle" data-toggle="dropdown" type="button">
       <i class="fa fa-ellipsis-h"></i>

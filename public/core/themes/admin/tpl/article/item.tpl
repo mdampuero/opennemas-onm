@@ -81,9 +81,11 @@
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="params.bodyLink" icon="fa-external-link" title="{t}External link{/t}" iRoute="item.params.bodyLink"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
-      {if !empty({setting name=webpushr field=webpushrKey})}
-        {include file="ui/component/content-editor/accordion/webpush.tpl"}
-      {/if}
+      {is_module_activated name="es.openhost.module.webpush_notifications"}
+        {if !empty({setting name=webpushr field=webpushrKey})}
+          {include file="ui/component/content-editor/accordion/webpush.tpl"}
+        {/if}
+      {/is_module_activated}
     </div>
   </div>
   <div class="grid simple">
