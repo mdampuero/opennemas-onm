@@ -235,41 +235,63 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
       modal.result.then(function(response) {
         if (response) {
-          if (item) {
-            var image = $scope.data.featuredFrontpage ? $scope.data.featuredFrontpage.target_id : null;
+          if (!item) {
+            return;
+          }
 
-            if ($scope.item.starttime > $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
-              var hasStatusZero = $scope.item.webpush_notifications.some(function(notification) {
-                return notification.status === 0;
-              });
+          var image = $scope.data.featuredFrontpage ? $scope.data.featuredFrontpage.target_id : null;
+          var pendingNotification = $scope.item.webpush_notifications.some(function(notification) {
+            return notification.status === 0;
+          });
 
-              if (!hasStatusZero) {
-                $scope.data.item.webpush_notifications.push(
-                  {
-                    status: 0,
-                    body: null,
-                    title: null,
-                    send_date: $scope.item.starttime,
-                    image: null,
-                  }
-                );
-              }
-            } else {
-              $scope.sendNotification = true;
+          if ($scope.item.starttime > $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
+            if (!pendingNotification) {
               $scope.data.item.webpush_notifications.push(
                 {
-                  status: 1,
-                  body: $scope.item.description,
-                  title: $scope.item.title,
-                  send_date: $window.moment().format('YYYY-MM-DD HH:mm:ss'),
-                  image: image,
+                  status: 0,
+                  body: null,
+                  title: null,
+                  send_date: $scope.item.starttime,
+                  image: null,
                 }
               );
             }
-            $scope.saveItem();
+          } else {
+            $scope.sendNotification = true;
+            if (pendingNotification) {
+              $scope.removePendingNotification();
+            }
+            $scope.data.item.webpush_notifications.push(
+              {
+                status: 1,
+                body: $scope.item.description,
+                title: $scope.item.title,
+                send_date: $window.moment().format('YYYY-MM-DD HH:mm:ss'),
+                image: image,
+              }
+            );
           }
+          $scope.saveItem();
         }
       });
+    };
+
+    /**
+     * @function removePendingNotification
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *  Generates the backend url of the featured media associated to the article.
+     */
+    $scope.removePendingNotification = function() {
+      var notifications = $scope.data.item.webpush_notifications;
+
+      for (var i = 0; i < notifications.length; i++) {
+        if (notifications[i].status === 0) {
+          notifications.splice(i, 1);
+        }
+      }
+      $scope.data.item.webpush_notifications = notifications;
     };
 
     /**

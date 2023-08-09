@@ -4,35 +4,34 @@
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.webpush }">
   <div class="form-group no-margin">
-    <div ng-if="item.is_notified_check && item.content_status">
-      <div class="text-center">
+    <div ng-if="item.is_notified_check">
+      <div class="text-center" ng-if="item.content_status">
       <button class="btn btn-default ng-scope m-b-5" ng-click="sendWPNotification(item)" type="button"><i class="fa fa-bell m-r-5"></i>{t}Resend notification{/t}</button>
-      <br>
       </div>
-      <div class="checkbox m-t-5" ng-repeat="notification in item.webpush_notifications">
-        <small ng-if="notification.status === 0">
+      <div class="text-center m-b-5 m-t-5" ng-if="!item.content_status">
+        <small><i class="fa fa-info-circle text-info"></i> {t}Check it as "Published" to send webpush notifications.{/t}</small>
+      </div>
+      <div class="grid-collapse-title m-t-5" ng-repeat="notification in item.webpush_notifications.slice().reverse()">
+        <span ng-if="notification.status === 0">
           <i class="fa fa-info-circle text-info"></i>
           {t}Notification will be sent on: [% notification.send_date %]{/t} ({t}Pending{/t})
-        </small>
-        <small ng-if="notification.status === 1">
+        </span>
+        <span ng-if="notification.status === 1">
           <i class="fa fa-info-circle text-info"></i>
           {t}Notification sent on: [% notification.send_date %]{/t} ({t}Sent{/t})
-        </small>
-        <small ng-if="notification.status === 2">
+        </span>
+        <span ng-if="notification.status === 2">
           <i class="fa fa-info-circle text-info"></i>
           {t}Notification error on: [% notification.send_date %]{/t} ({t}Not sent{/t})
-        </small>
+        </span>
       </div>
     </div>
     <div ng-if="!item.is_notified_check && item.content_status" class="checkbox">
       <input name="is_notified" id="is_notified" ng-false-value="'0'" ng-model="item.is_notified" ng-true-value="'1'" type="checkbox">
       <label for="is_notified">{t}Send notification to subscribers{/t}</label>
-      <br>
       <small><i class="fa fa-info-circle text-info"></i> {t}Will be sent when it is published.{/t}</small>
     </div>
-    <div ng-if="!item.content_status">
-      <small><i class="fa fa-info-circle text-info"></i> {t}Check it as "Published" to send webpush notifications.{/t}</small>
-    </div>
+
   </div>
 </div>
 
