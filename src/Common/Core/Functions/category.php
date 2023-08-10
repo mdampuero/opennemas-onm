@@ -172,7 +172,7 @@ function has_category_cover($item = null) : bool
  *
  * @return bool True if the category has a manual layout. False otherwise.
  */
-function is_manual_category($item = null) : ?bool
+function is_manual_category($item = null) : bool
 {
     return getService('core.helper.category')->isManualCategory($item);
 }
