@@ -268,6 +268,20 @@ class ContentService extends OrmService
         return true;
     }
 
+      /**
+     * {@inheritdoc}
+     */
+    public function getPendingNotifications()
+    {
+        $sql = 'SELECT pk_content FROM content_notifications'
+        . ' LEFT JOIN contents ON fk_content = pk_content'
+        . ' WHERE status = 0';
+
+        $this->getListBySql($sql)['items'];
+
+        return $this->getListBySql($sql)['items'];
+    }
+
     /**
      * {@inheritdoc}
      */

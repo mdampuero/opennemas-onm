@@ -4,13 +4,14 @@
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.webpush }">
   <div class="form-group no-margin">
+    <div class="text-center m-b-5 m-t-5" ng-if="!item.content_status">
+        <small><i class="fa fa-info-circle text-info"></i> {t}Check it as "Published" to send webpush notifications.{/t}</small>
+      </div>
     <div ng-if="item.is_notified_check">
       <div class="text-center" ng-if="item.content_status">
       <button class="btn btn-default ng-scope m-b-5" ng-click="sendWPNotification(item)" type="button"><i class="fa fa-bell m-r-5"></i>{t}Resend notification{/t}</button>
       </div>
-      <div class="text-center m-b-5 m-t-5" ng-if="!item.content_status">
-        <small><i class="fa fa-info-circle text-info"></i> {t}Check it as "Published" to send webpush notifications.{/t}</small>
-      </div>
+
       <div class="grid-collapse-title m-t-5" ng-repeat="notification in item.webpush_notifications.slice().reverse()">
         <span ng-if="notification.status === 0">
           <i class="fa fa-info-circle text-info"></i>

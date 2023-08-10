@@ -625,6 +625,11 @@ done
         foreach ($webpush_notifications as $value) {
             $value['send_date'] = empty($value['send_date']) ? gmdate("Y-m-d H:i:s") : $value['send_date'];
             $value['image']     = empty($value['image']) ? null : $value['image'];
+            $value['body']      = empty($value['body']) ? null : $value['body'];
+            $value['title']     = empty($value['title']) ? null : $value['title'];
+            $value['status']    = empty($value['status']) && $value['status'] != 0 ? 2 : $value['status'];
+
+
 
             $params = array_merge($params, array_merge($id, [
                 $value['status'],
@@ -635,6 +640,8 @@ done
             ]));
 
             $types = array_merge($types, [
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
                 empty($value['body']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
                 empty($value['title']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
                 empty($value['send_date']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,

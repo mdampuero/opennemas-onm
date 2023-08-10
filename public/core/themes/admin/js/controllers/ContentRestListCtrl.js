@@ -100,7 +100,7 @@
             if (response) {
               if (content) {
                 var contentNotifications = content.webpush_notifications;
-                var image = content.related_contents ? content.related_contents[0].target_id : null;
+                var image = content.related_contents[0] ? content.related_contents[0].target_id : null;
 
                 contentNotifications.push(
                   {

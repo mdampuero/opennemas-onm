@@ -117,7 +117,7 @@ class UrlGeneratorHelper
         $localize = $this->locale->getRequestLocale('frontend');
         if (array_key_exists('locale', $params) && !empty($params['locale'])) {
             $localize = $params['locale'];
-            $uri .= $this->locale->getSlugs()[$params['locale']] &&
+            $uri     .= $this->locale->getSlugs()[$params['locale']] &&
                 $this->locale->getSlugs()[$params['locale']] !== $this->locale->getSlug() ?
             '/' . $this->locale->getSlugs()[$params['locale']] :
             '';
@@ -177,7 +177,6 @@ class UrlGeneratorHelper
         $params = array_filter($params, function ($a) {
             return strpos($a, '_') !== 0;
         }, ARRAY_FILTER_USE_KEY);
-
         try {
             $url = is_string($item)
                 ? $this->router->generate(
@@ -192,7 +191,6 @@ class UrlGeneratorHelper
                 ]);
 
             $url = $this->container->get('core.decorator.url')->prefixUrl($url);
-
             return $escape ? rawurlencode($url) : $url;
         } catch (\Exception $e) {
             return null;
