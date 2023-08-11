@@ -9,21 +9,34 @@
       </div>
     <div ng-if="item.is_notified_check">
       <div class="text-center" ng-if="item.content_status">
-      <button class="btn btn-default ng-scope m-b-5" ng-click="sendWPNotification(item)" type="button"><i class="fa fa-bell m-r-5"></i>{t}Send notification{/t}</button>
+      <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="sendWPNotification(item)" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND NOW{/t}</button>
       </div>
-      <div class="grid-collapse-title m-t-5" ng-repeat="notification in item.webpush_notifications.slice().reverse()">
-        <span ng-if="notification.status === 0">
-          <i class="fa fa-hourglass text-warning"></i>
-          {t}Notification will be sent on: [% notification.send_date %]{/t} ({t}Pending{/t})
-        </span>
-        <span ng-if="notification.status === 1">
-          <i class="fa fa-paper-plane text-success"></i>
-          {t}Notification sent on: [% notification.send_date %]{/t} ({t}Sent{/t})
-        </span>
-        <span ng-if="notification.status === 2">
-          <i class="fa fa-exclamation-triangle text-danger"></i>
-          {t}Notification error on: [% notification.send_date %]{/t} ({t}Not sent{/t})
-        </span>
+      <div class="notifications-container">
+        <div class=" m-t-5" ng-repeat="notification in item.webpush_notifications.slice().reverse()">
+          <div ng-if="notification.status === 0" class="alert alert-warning">
+          <i class="fa fa-check"></i>
+            {t}Notification scheduled{/t}
+            <br>
+            <small>
+              [% notification.send_date %]
+            </small>
+          </div>
+          <div ng-if="notification.status === 1" class="alert alert-success" id="alerteo">
+            <i class="fa fa-check"></i>
+            {t}Notification sent{/t}
+            <br>
+            <small>
+              [% notification.send_date %]
+            </small>
+          </div>
+          <div ng-if="notification.status === 2" class="alert alert-danger">
+            <i class="fa fa-check"></i>
+            {t}Notification failed{/t}
+            <br>
+            <small>
+              [% notification.send_date %]
+            </small>
+        </div>
       </div>
     </div>
     <div ng-if="!item.is_notified_check && item.content_status" class="checkbox">
@@ -31,7 +44,6 @@
       <label for="is_notified">{t}Activate send notifications to subscribers/Activate notifications{/t}</label>
       <small><i class="fa fa-info-circle text-info"></i> {t}Will be sent when it is published.{/t}</small>
     </div>
-
   </div>
 </div>
 
