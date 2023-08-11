@@ -14,16 +14,16 @@
 
       <div class="grid-collapse-title m-t-5" ng-repeat="notification in item.webpush_notifications.slice().reverse()">
         <span ng-if="notification.status === 0">
-          <i class="fa fa-info-circle text-info"></i>
-          {t}Notification will be sent on: [% notification.send_date %]{/t} ({t}Pending{/t})
+          <i class="fa fa-clock text-warning"></i>
+          {t}Notification will be sent on: [% item.starttime %]{/t} ({t}Pending{/t})
         </span>
         <span ng-if="notification.status === 1">
-          <i class="fa fa-info-circle text-info"></i>
-          {t}Notification sent on: [% notification.send_date %]{/t} ({t}Sent{/t})
+          <i class="fa fa-paper-plane text-success"></i>
+          {t}Notification sent on: [% item.starttime %]{/t} ({t}Sent{/t})
         </span>
         <span ng-if="notification.status === 2">
-          <i class="fa fa-info-circle text-info"></i>
-          {t}Notification error on: [% notification.send_date %]{/t} ({t}Not sent{/t})
+          <i class="fa fa-exclamation-triangle text-danger"></i>
+          {t}Notification error on: [% item.starttime %]{/t} ({t}Not sent{/t})
         </span>
       </div>
     </div>
