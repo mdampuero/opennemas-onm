@@ -39,6 +39,33 @@ class ArticleController extends ContentController
      */
     protected $service = 'api.service.article';
 
+     /**
+     * Returns an item.
+     *
+     * @param integer $id The item id.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getItemAction($id)
+    {
+        $ss       = $this->get($this->service);
+        $item     = $ss->getItem($id);
+        $timeZone = $this->get('core.locale')->getTimeZone();
+        $utc      = new \DateTimeZone('UTC');
+
+        $item->webpush_notifications = array_map(function ($notification) use ($timeZone, $utc) {
+            $date = new \DateTime($notification['send_date'], $utc);
+            $date->setTimezone($timeZone);
+            $notification['send_date'] = $date->format('Y-m-d H:i:s');
+            return $notification;
+        }, $item->webpush_notifications);
+
+        return new JsonResponse([
+            'item'  => $ss->responsify($item),
+            'extra' => $this->getExtraData($item)
+        ]);
+    }
+
     /**
      * Get the articles config.
      *

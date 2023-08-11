@@ -13,22 +13,22 @@
       </div>
       <div class="grid-collapse-title m-t-5" ng-repeat="notification in item.webpush_notifications.slice().reverse()">
         <span ng-if="notification.status === 0">
-          <i class="fa fa-clock text-warning"></i>
-          {t}Notification will be sent on: [% item.starttime %]{/t} ({t}Pending{/t})
+          <i class="fa fa-hourglass text-warning"></i>
+          {t}Notification will be sent on: [% notification.send_date %]{/t} ({t}Pending{/t})
         </span>
         <span ng-if="notification.status === 1">
           <i class="fa fa-paper-plane text-success"></i>
-          {t}Notification sent on: [% item.starttime %]{/t} ({t}Sent{/t})
+          {t}Notification sent on: [% notification.send_date %]{/t} ({t}Sent{/t})
         </span>
         <span ng-if="notification.status === 2">
           <i class="fa fa-exclamation-triangle text-danger"></i>
-          {t}Notification error on: [% item.starttime %]{/t} ({t}Not sent{/t})
+          {t}Notification error on: [% notification.send_date %]{/t} ({t}Not sent{/t})
         </span>
       </div>
     </div>
     <div ng-if="!item.is_notified_check && item.content_status" class="checkbox">
       <input name="is_notified" id="is_notified" ng-false-value="'0'" ng-model="item.is_notified" ng-true-value="'1'" type="checkbox">
-      <label for="is_notified">{t}Send notification to subscribers{/t}</label>
+      <label for="is_notified">{t}Activate send notifications to subscribers/Activate notifications{/t}</label>
       <small><i class="fa fa-info-circle text-info"></i> {t}Will be sent when it is published.{/t}</small>
     </div>
 

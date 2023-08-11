@@ -196,6 +196,12 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         return;
       }
 
+      if (!$scope.item.content_status) {
+        $scope.data.item.webpush_notifications = $scope.item.webpush_notifications.filter(function(notification) {
+          return notification.status !== 0;
+        });
+        $scope.item.webpush_notifications = $scope.data.item.webpush_notifications;
+      }
       $scope.flags.http.saving = true;
 
       $scope.$broadcast('onmTagsInput.save', {
