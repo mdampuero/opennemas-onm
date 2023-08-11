@@ -14,7 +14,7 @@
       <div class="notifications-container">
         <div class=" m-t-5" ng-repeat="notification in item.webpush_notifications.slice().reverse()">
           <div ng-if="notification.status === 0" class="alert alert-warning">
-          <i class="fa fa-check"></i>
+          <i class="fa fa-clock-o"></i>
             {t}Notification scheduled{/t}
             <br>
             <small>
@@ -30,7 +30,7 @@
             </small>
           </div>
           <div ng-if="notification.status === 2" class="alert alert-danger">
-            <i class="fa fa-check"></i>
+            <i class="fa fa-exclamation-triangle"></i>
             {t}Notification failed{/t}
             <br>
             <small>
