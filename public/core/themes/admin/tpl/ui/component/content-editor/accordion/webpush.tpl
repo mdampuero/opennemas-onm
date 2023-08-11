@@ -11,7 +11,7 @@
       <div class="text-center" ng-if="item.content_status">
       <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="sendWPNotification(item)" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND NOW{/t}</button>
       </div>
-      <div class="notifications-container">
+      <div class="menu-dragable-accordion" id="webpush-container">
         <div class=" m-t-5" ng-repeat="notification in item.webpush_notifications.slice().reverse()">
           <div ng-if="notification.status === 0" class="alert alert-warning">
           <i class="fa fa-clock-o"></i>
