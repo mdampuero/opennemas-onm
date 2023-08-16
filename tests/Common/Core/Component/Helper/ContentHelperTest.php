@@ -416,7 +416,7 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetSuggested()
     {
         $this->cache->expects($this->at(0))->method('get')
-            ->with('suggested_contents_article_2_1')
+            ->with('suggested_contents_article_2')
             ->willReturn([ new Content([ 'pk_content' => 2 ]) ]);
 
         $this->assertEquals(
