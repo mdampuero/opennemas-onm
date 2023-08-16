@@ -120,7 +120,10 @@
       <i class="fa fa-copy"></i>
     </button>
   {/acl}
-  <a class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
+  <a ng-if="item.slug" class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
+    <i class="fa fa-external-link"></i>
+  </a>
+    <a ng-if="!item.slug" class="btn btn-white btn-small" disabled>
     <i class="fa fa-external-link"></i>
   </a>
   {acl isAllowed="ARTICLE_DELETE"}

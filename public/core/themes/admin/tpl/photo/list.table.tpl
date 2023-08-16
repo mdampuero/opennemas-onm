@@ -81,7 +81,7 @@
   <a class="btn btn-white btn-small" href="{$smarty.const.INSTANCE_MEDIA}[% extra.paths.photo + item.path %]" type="button" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
     <i class="fa fa-external-link"></i>
   </a>
-  <a class="btn btn-white btn-small" ng-click="launchPhotoEditor(item)" type="button" uib-tooltip="{t}Transform the image{/t}" tooltip-placement="top">
+  <a class="btn btn-white btn-small" ng-click="launchPhotoEditor(item)" type="button" uib-tooltip="{t}Enhance{/t}" tooltip-placement="top">
     <i class="fa fa-sliders"></i>
   </a>
   {acl isAllowed="PHOTO_DELETE"}
