@@ -176,7 +176,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      *   Saves tags, send notifications if  needed and, then, saves the item.
      */
     $scope.submit = function(item) {
-      if (item && !item.is_notified_check && item.is_notified) {
+      if (item && !item.is_notified_check && item.is_notified == 1) {
         $scope.sendWPNotification(item);
       } else {
         $scope.saveItem();

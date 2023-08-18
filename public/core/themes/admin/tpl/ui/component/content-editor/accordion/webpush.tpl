@@ -1,6 +1,7 @@
 <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.webpush = !expanded.webpush">
   <i class="fa fa-bell m-r-10"></i>{t}Webpush Notifications{/t}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.webpush }"></i>
+  <i ng-if="item.is_notified == 1" class="fa fa-check fa-lg m-r-10 text-success pull-right"></i>
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.webpush }">
   <div class="form-group no-margin">
@@ -41,7 +42,7 @@
     </div>
   </div>
   <div ng-if="!item.is_notified_check && item.content_status" class="checkbox">
-    <input name="is_notified" id="is_notified" ng-false-value="'0'" ng-model="item.is_notified" ng-true-value="'1'" type="checkbox">
+    <input name="is_notified" id="is_notified" ng-model="item.is_notified" ng-true-value="'1'" ng-false-value="'0'" type="checkbox" >
     <label for="is_notified">{t}Activate notifications{/t}</label>
     <br>
     <small><i class="fa fa-info-circle text-info"></i> {t}Will be sent when it is published.{/t}</small>
