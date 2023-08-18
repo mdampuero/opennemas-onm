@@ -111,6 +111,7 @@
                     image: image,
                   }
                 );
+                $scope.patch(content, 'is_notified', 1);
                 $scope.patch(content, 'webpush_notifications', contentNotifications)
                   .then(function() {
                     http.post('send_notification', [ content.pk_content ]);
