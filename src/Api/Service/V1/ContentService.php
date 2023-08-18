@@ -101,7 +101,10 @@ class ContentService extends OrmService
      */
     public function getItemBySlug($slug)
     {
-        $oql = sprintf('slug regexp "(.+\"|^)%s(\".+|$)"', $slug);
+        $oql = sprintf(
+            'slug regexp "(.+\"|^)%s(\".+|$)" and in_litter=0 and content_status=1',
+            $slug
+        );
 
         return $this->getItemBy($oql);
     }
@@ -116,7 +119,11 @@ class ContentService extends OrmService
      */
     public function getItemBySlugAndContentType($slug, $contentType)
     {
-        $oql = sprintf('slug regexp "(.+\"|^)%s(\".+|$)" and fk_content_type=%d', $slug, $contentType);
+        $oql = sprintf(
+            'slug regexp "(.+\"|^)%s(\".+|$)" and fk_content_type=%d and in_litter=0 and content_status=1',
+            $slug,
+            $contentType
+        );
 
         return $this->getItemBy($oql);
     }

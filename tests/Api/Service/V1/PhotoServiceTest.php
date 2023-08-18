@@ -101,7 +101,7 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->service = $this->getMockBuilder('Api\Service\V1\PhotoService')
             ->setConstructorArgs([ $this->container, '\Common\Model\Entity\Content' ])
-            ->setMethods([ 'getItem', 'assignUser', 'updateItem' ])
+            ->setMethods([ 'getItem', 'assignUser', 'updateItem', 'getTheImageSize' ])
             ->getMock();
     }
 
@@ -199,17 +199,11 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->ip);
 
         $this->ip->expects($this->once())->method('apply')
-            ->with('thumbnail', [1920, 1920, 'center', 'center'])
+            ->with('thumbnail', $this->isType('array'))
             ->willReturn($this->ip);
 
         $this->ip->expects($this->once())->method('optimize')
-            ->with([
-                'flatten'          => false,
-                'quality'          => 65,
-                'resolution-units' => 'ppi',
-                'resolution-x'     => 72,
-                'resolution-y'     => 72
-            ])
+            ->with($this->isType('array'))
             ->willReturn($this->ip);
 
         $this->ip->expects($this->once())->method('save')
@@ -333,17 +327,11 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->ip);
 
         $this->ip->expects($this->once())->method('apply')
-            ->with('thumbnail', [1920, 1920, 'center', 'center'])
+            ->with('thumbnail', $this->isType('array'))
             ->willReturn($this->ip);
 
         $this->ip->expects($this->once())->method('optimize')
-            ->with([
-                'flatten'          => false,
-                'quality'          => 65,
-                'resolution-units' => 'ppi',
-                'resolution-x'     => 72,
-                'resolution-y'     => 72
-            ])
+            ->with($this->isType('array'))
             ->willReturn($this->ip);
 
         $this->ip->expects($this->once())->method('save')

@@ -6,7 +6,7 @@
       "@type": "ListItem",
       "item": {
         "@id": "{$siteUrl}",
-        "name": "{$siteName}",
+        "name": "{$siteName|replace:'\\':''|escape:'htmlall'}",
         "@type": "CollectionPage"
       },
       "position": 1
@@ -16,7 +16,7 @@
         "@type": "ListItem",
         "item": {
           "@id": "{get_url item=$category absolute=true}",
-          "name": "{$category->title}",
+          "name": "{$category->title|replace:'\\':''|escape:'htmlall'}",
           "@type": "CollectionPage"
         },
         "position": 2
@@ -24,7 +24,7 @@
         "@type": "ListItem",
         "item": {
           "@id": "{$url}",
-          "name": "{$title|escape:'html'}",
+          "name": "{$title|replace:'\\':''|escape:'htmlall'}",
           "@type": "ItemPage"
         },
         "position": 3
@@ -34,19 +34,19 @@
   {
     "@context": "http://schema.org",
     "@type": "ImageGallery",
-    "description": "{$description|escape:'html'}",
-    "keywords": "{$keywords|escape:'html'}",
+    "description": "{$description|replace:'\\':''|escape:'htmlall'}",
+    "keywords": "{$keywords|replace:'\\':''|escape:'htmlall'}",
     "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "{$url}"
     },
-    "headline": "{$title|escape:'html'}",
+    "headline": "{$title|replace:'\\':''|escape:'htmlall'}",
     "url": "{$url}",
     "author": {
         "@type": "Person",
-        "name": "{$author|escape:'html'}"
+        "name": "{$author|replace:'\\':''|escape:'htmlall'}"
     }
     {if has_featured_media($content, 'frontpage')}
       , "primaryImageOfPage":

@@ -6,7 +6,7 @@
       "@type": "ListItem",
       "item": {
         "@id": "{$siteUrl}",
-        "name": "{$siteName}",
+        "name": "{$siteName|replace:'\\':''|escape:'htmlall'}",
         "@type": "CollectionPage"
       },
       "position": 1
@@ -16,7 +16,7 @@
         "@type": "ListItem",
         "item": {
           "@id": "{get_url item=$category absolute=true}",
-          "name": "{$category->title}",
+          "name": "{$category->title|replace:'\\':''|escape:'htmlall'}",
           "@type": "CollectionPage"
         },
         "position": 2
@@ -24,7 +24,7 @@
         "@type": "ListItem",
         "item": {
           "@id": "{$url}",
-          "name": "{$title|escape:'html'}",
+          "name": "{$title|replace:'\\':''|escape:'htmlall'}",
           "@type": "ItemPage"
         },
         "position": 3
@@ -38,10 +38,10 @@
       "@type": "WebPage",
       "@id": "{$url}"
     },
-    "headline": "{$title|escape:'html'}",
+    "headline": "{$title|replace:'\\':''|escape:'htmlall'}",
     "author": {
       "@type": "Person",
-      "name": "{$author|escape:'html'}"
+      "name": "{$author|replace:'\\':''|escape:'htmlall'}"
       {if has_author_url($content)}
         , "url": "{$app.instance->getBaseUrl()}{get_author_url($content)}"
       {/if}
@@ -49,12 +49,12 @@
     "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     {if !empty($category)}
-      "articleSection": "{$category->title|escape:'html'}",
+      "articleSection": "{$category->title|replace:'\\':''|escape:'htmlall'}",
     {/if}
-    "keywords": "{$keywords|escape:'html'}",
+    "keywords": "{$keywords|replace:'\\':''|escape:'htmlall'}",
     "url": "{$url}",
     "wordCount": {$wordCount},
-    "description": "{$description|escape:'html'}",
+    "description": "{$description|replace:'\\':''|escape:'htmlall'}",
     "image": {
       "@type": "ImageObject",
       "url": "{get_photo_path(get_video_thumbnail(get_featured_media($content, 'inner')), '', [], true)}",
@@ -63,7 +63,7 @@
     },
     "publisher": {
       "@type": "Organization",
-      "name": "{$siteName}",
+      "name": "{$siteName|replace:'\\':''|escape:'htmlall'}",
       "logo": {
           "@type": "ImageObject",
           "url": "{$logo}"
@@ -74,17 +74,17 @@
   {
     "@context": "http://schema.org/",
     "@type": "VideoObject",
-    "author": "{$author|escape:'html'}",
-    "name": "{$content->title|escape:'html'}",
-    "description": "{$content->description|default:$content->title|escape:'html'}",
+    "author": "{$author|replace:'\\':''|escape:'htmlall'}",
+    "name": "{$content->title|replace:'\\':''|escape:'htmlall'}",
+    "description": "{$content->description|default:$content->title|replace:'\\':''|escape:'htmlall'}",
     "@id": "{$url}",
     "uploadDate": "{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     "thumbnailUrl": "{get_photo_path(get_video_thumbnail($content), '', [], true)}",
     "contentUrl": "{$url}",
-    "keywords": "{$videoKeywords|escape:'html'}",
+    "keywords": "{$videoKeywords|replace:'\\':''|escape:'htmlall'}",
     "publisher": {
       "@type": "Organization",
-      "name": "{$siteName|escape:'html'}",
+      "name": "{$siteName|replace:'\\':''|escape:'htmlall'}",
       "logo": {
         "@type": "ImageObject",
         "url": "{$logo}"

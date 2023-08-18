@@ -185,6 +185,33 @@
                   </div>
                 </div>
               </div>
+              <div class="panel-group" id="panel-group-marfeel-compass" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#accordion-marfeel-compass" data-toggle="collapse" href="#marfeel-compass">
+                        <i class="fa fa-compass"></i>{t}Marfeel Compass{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="marfeel-compass">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="marfeel-compass-id">
+                          {t}Marfeel Compass ID{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="marfeel-compass-id" name="marfeel-compass-id" ng-model="settings.marfeel_compass.id" type="text">
+                        </div>
+                      </div>
+                      <small class="help">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}We are not responsible of the stats or of any third party services{/t}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
               {if $app.security->hasPermission('MASTER')}
               <div class="panel-group" id="panel-group-gfk" data-toggle="collapse">
                 <div class="panel panel-default">
@@ -269,6 +296,35 @@
                 </div>
               </div>
               {/is_module_activated}
+              {if $app.security->hasPermission('MASTER')}
+              <div class="panel-group" id="panel-group-gfk" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-adobe_analytics" data-toggle="collapse" href="#adobe_analytics">
+                        <i class="fa fa-signal"></i>{t}Adobe analytics{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="adobe_analytics">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="adobe-analytics-base">
+                          {t}Adobe analytics Base File{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="adobe-analytics-base" name="adobe-analitics-base" ng-model="settings.adobe_base" type="text">
+                        </div>
+                      </div>
+                      <small class="help">
+                        <i class="fa fa-info-circle m-r-5 text-info"></i>
+                        {t}We are not responsible of the stats or of any third party services{/t}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/if}
               <h4>
                 <i class="fa fa-cog"></i>
                 {t}Internal settings{/t}

@@ -203,8 +203,5 @@
   <script type="text/ng-template" id="modal-delete">
     {include file="common/extension/modal.delete.tpl"}
   </script>
-  <script type="text/ng-template" id="modal-confirm">
-    {include file="user/modal.confirm.tpl"}
-  </script>
 </div>
 {/block}

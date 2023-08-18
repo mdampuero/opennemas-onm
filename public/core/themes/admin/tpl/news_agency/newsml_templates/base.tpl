@@ -160,12 +160,12 @@
           </ContentItem>
         </NewsComponent>
       </NewsComponent>
-      {if (has_featured_media($content, 'frontpage') && get_type(get_featured_media($content, 'frontpage')) === 'photo') || (has_featured_media($content, 'inner') && get_type(get_featured_media($content, 'inner')) === 'photo')}
+      {if !empty($featuredMedia['frontpage']) && $featuredMedia['frontpage']->content_type_name === 'photo'|| !empty($featuredMedia['inner']) && $featuredMedia['inner']->content_type_name === 'photo'}
         <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos">
           <Role FormalName="Content list" />
-          {foreach [ 'frontpage', 'inner' ] as $type}
-            {if has_featured_media($content, $type) && get_type(get_featured_media($content, $type)) === 'photo'}
-              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{get_property(get_featured_media($content, $type), 'pk_content')}" Euid="{get_property(get_featured_media($content, $type), 'pk_content')}">
+          {foreach $featuredMedia as $type => $featuredMediaContent}
+            {if !empty($featuredMediaContent) && $featuredMediaContent->content_type_name === 'photo'}
+              <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$featuredMediaContent->pk_content}" Euid="{$featuredMediaContent->pk_content}">
                 <NewsLines>
                   <HeadLine>
                     <![CDATA[{$content->title}]]>
@@ -178,25 +178,27 @@
                 </AdministrativeMetadata>
                 <DescriptiveMetadata>
                   <Language FormalName="es" />
-                  <DateLineDate>{format_date date=get_property(get_featured_media($content, $type), 'created') type="custom" format="yMMdd'T'HHmmssxxx"}</DateLineDate>
-                  <Property FormalName="Onm_IdRefObject" Value="{get_property(get_featured_media($content, $type), 'pk_content')}" />
+                  <DateLineDate>{format_date date=$featuredMediaContent->created type="custom" format="yMMdd'T'HHmmssxxx"}</DateLineDate>
+                  <Property FormalName="Onm_IdRefObject" Value="{$featuredMediaContent->pk_content}" />
                 </DescriptiveMetadata>
-                <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{get_property(get_featured_media($content, $type), 'pk_content')}.file">
+                <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$featuredMediaContent->pk_content}.file">
                   <Role FormalName="Main" />
                   <!-- The link to download image -->
-                  <ContentItem Href="{$app.instance->getBaseUrl()}{get_photo_path(get_featured_media($content, $type))}">
+                  <ContentItem Href="{if !empty($featuredMediaContent->external_uri)}{$featuredMediaContent->external_uri}{else}{$app.instance->getBaseUrl()}{get_photo_path($featuredMediaContent)}{/if}">
                     <MediaType FormalName="PhotoFront" />
-                    <MimeType FormalName="{get_photo_mime_type(get_featured_media($content, $type))}" />
+                    <MimeType FormalName="{get_photo_mime_type($featuredMediaContent)}" />
+                    {if empty($featuredMediaContent->external_uri)}
                     <Characteristics>
-                      <SizeInBytes>{get_photo_size(get_featured_media($content, $type)) * 1024}</SizeInBytes>
-                      <Property FormalName="Onm_Filename" Value="{basename(get_property(get_featured_media($content, $type), 'path'))}" />
-                      <Property FormalName="Height" Value="{get_photo_height(get_featured_media($content, $type))}" />
+                      <SizeInBytes>{get_photo_size($featuredMediaContent) * 1024}</SizeInBytes>
+                      <Property FormalName="Onm_Filename" Value="{basename(get_property($featuredMediaContent, 'path'))}" />
+                      <Property FormalName="Height" Value="{get_photo_height($featuredMediaContent)}" />
                       <Property FormalName="PixelDepth" Value="24" />
-                      <Property FormalName="Width" Value="{get_photo_width(get_featured_media($content, $type))}" />
+                      <Property FormalName="Width" Value="{get_photo_width($featuredMediaContent)}" />
                     </Characteristics>
+                    {/if}
                   </ContentItem>
                 </NewsComponent>
-                <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{get_property(get_featured_media($content, $type), 'pk_content')}.text">
+                <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$featuredMediaContent->pk_content}.text">
                   <Role FormalName="Caption" />
                   <ContentItem>
                     <MediaType FormalName="Text" />
@@ -206,27 +208,27 @@
                       <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
                         <head>
                           <title>
-                            <![CDATA[{get_title(get_featured_media($content, $type))}]]>
+                            <![CDATA[{if !empty(get_title($featuredMediaContent))}{get_title($featuredMediaContent)}{else}{get_description($featuredMediaContent)|htmlspecialchars_decode|trim}{/if}]]>
                           </title>
                           <docdata management-status="usable">
-                            <doc-id id-string="{get_property(get_featured_media($content, $type), 'pk_content')}" />
+                            <doc-id id-string="{$featuredMediaContent->pk_content}" />
                           </docdata>
                         </head>
                         <body>
                           <body.head>
                             <hedline>
                               <hl1>
-                                <![CDATA[{get_title(get_featured_media($content, $type))}]]>
+                                <![CDATA[{if !empty(get_title($featuredMediaContent))}{get_title($featuredMediaContent)}{else}{get_description($featuredMediaContent)|htmlspecialchars_decode|trim}{/if}]]>
                               </hl1>
                             </hedline>
                             <dateline>
                               <story.date norm="{format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}">
-                                {format_date date=get_property(get_featured_media($content, $type), 'created') type="custom" format="yMMdd'T'HHmmssxxx"}
+                                {format_date date=get_property($featuredMediaContent, 'created') type="custom" format="yMMdd'T'HHmmssxxx"}
                               </story.date>
                             </dateline>
                             <abstract>
                               <p>
-                                <![CDATA[{get_description(get_featured_media($content, $type))|htmlspecialchars_decode|trim}]]>
+                                <![CDATA[{get_description($featuredMediaContent)|htmlspecialchars_decode|trim}]]>
                               </p>
                             </abstract>
                           </body.head>
@@ -235,9 +237,104 @@
                               {if has_featured_media_caption($content, $type)}
                                 <![CDATA[{get_featured_media_caption($content, $type)}]]>
                               {else}
-                                <![CDATA[{get_description(get_featured_media($content, $type))|htmlspecialchars_decode|trim}]]>
+                                <![CDATA[{get_description($featuredMediaContent)|htmlspecialchars_decode|trim}]]>
                               {/if}
                             </p>
+                          </body.content>
+                        </body>
+                      </nitf>
+                    </DataContent>
+                  </ContentItem>
+                </NewsComponent>
+              </NewsComponent>
+            {/if}
+          {/foreach}
+        </NewsComponent>
+      {/if}
+      {if !empty($featuredMedia['frontpage']) && $featuredMedia['frontpage']->content_type_name === 'video'|| !empty($featuredMedia['inner']) && $featuredMedia['inner']->content_type_name === 'video'}
+        <NewsComponent Duid="multimedia_{$content->id}.multimedia.videos">
+          <Role FormalName="Content list" />
+          {foreach $featuredMedia as $type => $featuredMediaContent}
+            {if !empty($featuredMediaContent) && get_type($featuredMediaContent) === 'video'}
+              <NewsComponent Duid="video_{$content->id}.video">
+                <NewsLines>
+                  <HeadLine>
+                    <![CDATA[{$featuredMediaContent->title}]]>
+                  </HeadLine>
+                  <SubHeadLine>
+                    <![CDATA[{$featuredMediaContent->description}]]>
+                  </SubHeadLine>
+                </NewsLines>
+                <AdministrativeMetadata>
+                  <Provider>
+                    <Party FormalName="{setting name=site_name}" />
+                  </Provider>
+                  <Creator>
+                    <Party FormalName="{setting name=site_name}" />
+                  </Creator>
+                </AdministrativeMetadata>
+                <DescriptiveMetadata>
+                  <Language FormalName="es" />
+                  <Property FormalName="Tesauro" Value="{get_category_slug($featuredMediaContent)}" />
+                </DescriptiveMetadata>
+                <NewsComponent Duid="video_{$content->id}.video.file" EquivalentsList="yes">
+                  <Role FormalName="Main" />
+                  <MediaType FormalName="Video" />
+                  <Characteristics>
+                    {if !empty($featuredMediaContent->information) && array_key_exists('duration', $featuredMediaContent->information)}
+                      <Property FormalName="TotalDuration" Value="{$featuredMediaContent->information['duration']}" />
+                    {/if}
+                  </Characteristics>
+                </NewsComponent>
+                <NewsComponent Duid="video_{$content->id}.video.text">
+                  <Role FormalName="Caption" />
+                  <ContentItem Href="{get_url($featuredMediaContent, [ '_absolute' => true ])}" {if $featuredMediaContent->path}Url="{$featuredMediaContent->path|escape:'html'}"{elseif $featuredMediaContent->type == 'external'}Url="{$featuredMediaContent->information['source']['mp4']|escape:'html'}"{/if}>
+                    <MediaType FormalName="Text" />
+                    <Catalog>
+                      <Resource>
+                        <Url>{if $featuredMediaContent->path}{$featuredMediaContent->path|escape:'html'}{elseif $featuredMediaContent->type == 'external'}{$featuredMediaContent->information['source']['mp4']|escape:'html'}{/if}</Url>
+                      </Resource>
+                    </Catalog>
+                    <Format FormalName="NITF" />
+                    <MimeType FormalName="text/vnd.IPTC.NITF" />
+                    <DataContent>
+                      <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+                        <head>
+                          <title>
+                            <![CDATA[{$featuredMediaContent->title}]]>
+                          </title>
+                          <docdata management-status="usable">
+                            <doc-id id-string="{$content->id}" />
+                          </docdata>
+                        </head>
+                        <body>
+                          <body.head>
+                            <hedline>
+                              <hl1>
+                                <![CDATA[{$featuredMediaContent->title}]]>
+                              </hl1>
+                              <hl2>
+                                <![CDATA[{$featuredMediaContent->description}]]>
+                              </hl2>
+                            </hedline>
+                            {if !empty($featuredMediaContent->author)}
+                              <rights>
+                                <rights.owner>{$featuredMediaContent->author->name}</rights.owner>
+                              </rights>
+                            {/if}
+                            <distributor>{setting name=site_name}</distributor>
+                            <dateline>
+                              <story.date norm="{format_date date=$featuredMediaContent->created type="custom" format="yMMdd'T'HHmmssxxx"}">
+                                {format_date date=$featuredMediaContent->created type="custom" format="yMMdd'T'HHmmssxxx"}
+                              </story.date>
+                            </dateline>
+                          </body.head>
+                          <body.content>
+                            {if $featuredMediaContent->type == 'script'}
+                              <![CDATA[{$featuredMediaContent->body}]]>
+                            {else}
+                              <![CDATA[{$featuredMediaContent->description}]]>
+                            {/if}
                           </body.content>
                         </body>
                       </nitf>

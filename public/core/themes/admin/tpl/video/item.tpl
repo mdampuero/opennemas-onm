@@ -83,6 +83,7 @@
         <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
       </div>
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired="item.type == 'script' || item.type == 'external'" iTitle="{t}Featured in frontpage{/t}" types="photo"}
+      {include file="ui/component/content-editor/accordion/additional-data.tpl"}
     </div>
   </div>
 {/block}
