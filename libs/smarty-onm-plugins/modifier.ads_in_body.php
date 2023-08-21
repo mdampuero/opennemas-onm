@@ -55,7 +55,7 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
     }
 
     // Limit ads to the paragraphs number
-    $limitSlots = $hasLimit ? count($paragraphs) : 10;
+    $limitSlots = $hasLimit ? count($paragraphs) : 20;
     $slots      = array_unique(array_filter($slots, function ($a) use ($id, $limitSlots) {
         return $a > $id && $a < $id + $limitSlots;
     }));

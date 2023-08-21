@@ -15,19 +15,26 @@
       function($controller, $scope) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('SettingsCtrl', { $scope: $scope }));
+
+        /**
+         * The settings object.
+         *
+         * @type {Object}
+         */
         $scope.settings = {
           google_analytics: [ { api_key: '' } ],
           data_layer: [],
           gfk: {}
         };
+
         $scope.routes = {
           saveConfig: 'api_v1_backend_settings_external_save',
           getConfig: 'api_v1_backend_settings_external_list'
         };
 
         /**
-         * @function addInput
-         * @memberOf SettingsCtrl
+         * @function addGanalytics
+         * @memberOf ExternalSettingsCtrl
          *
          * @description
          *   Add new input for ga tracking code.
@@ -39,10 +46,10 @@
 
         /**
          * @function addDatalayerVariable
-         * @memberOf SettingsCtrl
+         * @memberOf ExternalSettingsCtrl
          *
          * @description
-         *   Adds new pair key:value to Datalayer.
+         *   Add new pair key:value to Datalayer.
          */
         $scope.addDatalayerVariable = function() {
           $scope.settings.data_layer.push({ key: null, value: null });
@@ -50,7 +57,7 @@
 
         /**
          * @function removeGanalytics
-         * @memberOf SettingsCtrl
+         * @memberOf ExternalSettingsCtrl
          *
          * @description
          *   Removes a ga tracking code input.
@@ -63,7 +70,7 @@
 
         /**
          * @function removeDatalayerVariable
-         * @memberOf SettingsCtrl
+         * @memberOf ExternalSettingsCtrl
          *
          * @description
          *   Removes a data layer variable input.

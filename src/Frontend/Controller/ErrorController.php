@@ -13,6 +13,7 @@ use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\GoneHttpException;
 
 class ErrorController extends Controller
 {
@@ -41,7 +42,6 @@ class ErrorController extends Controller
     {
         $exception = $request->attributes->get('exception');
         $class     = new \ReflectionClass($exception->getClass());
-
         switch ($class->getShortName()) {
             case 'AccessDeniedException':
                 return $this->getAccessDeniedResponse();
@@ -60,8 +60,8 @@ class ErrorController extends Controller
                     ->getUrl(preg_replace('/^\//', '', $request->getRequestUri()));
 
                 if (!empty($url)) {
-                    return $this->container->get('core.redirector')
-                        ->getResponse($request, $url);
+                        return $this->container->get('core.redirector')
+                            ->getResponse($request, $url);
                 }
 
                 // no break
@@ -69,7 +69,8 @@ class ErrorController extends Controller
             case 'ContentNotMigratedException':
             case 'NotFoundHttpException':
                 return $this->getNotFoundResponse($class->getShortName());
-
+            case 'GoneHttpException':
+                return $this->getGoneResponse($class->getShortName());
             default:
                 return $this->getErrorResponse(
                     $class->getShortName(),
@@ -158,6 +159,31 @@ class ErrorController extends Controller
             ]);
 
         return new Response($content, 404, [
+            'x-cacheable' => true,
+            'x-tags'      => 'not-found',
+        ]);
+    }
+
+    /**
+     * Generates a response when the error is caused by a resource that could
+     * not be found.
+     *
+     * @param string $class The short class name.
+     *
+     * @return Response The response object.
+     */
+    protected function getGoneResponse($class)
+    {
+        $this->get('application.log')->info($class);
+
+        $this->view->setConfig('articles');
+
+        $content = $this->get('core.template.frontend')
+            ->render('static_pages/410.tpl', [
+                'cache_id' => $this->view->getCacheId('error', 410),
+            ]);
+
+        return new Response($content, 410, [
             'x-cacheable' => true,
             'x-tags'      => 'not-found',
         ]);

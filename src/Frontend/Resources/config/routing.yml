@@ -40,9 +40,6 @@ frontend_author:
 frontend_blog:
     resource: '@FrontendBundle/Resources/config/routing/blog.yml'
 
-frontend_book:
-    resource: '@FrontendBundle/Resources/config/routing/book.yml'
-
 frontend_category:
     resource: '@FrontendBundle/Resources/config/routing/category.yml'
 

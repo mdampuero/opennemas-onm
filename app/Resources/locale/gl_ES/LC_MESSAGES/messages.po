@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-22 09:06+0000\n"
-"PO-Revision-Date: 2023-06-22 11:07+0200\n"
+"POT-Creation-Date: 2023-07-26 06:35+0000\n"
+"PO-Revision-Date: 2023-07-26 08:50+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -420,7 +420,7 @@ msgid "Cache manager"
 msgstr "Xestor de caché"
 
 msgid "General & SEO"
-msgstr "General & SEO"
+msgstr "Xeral e SEO"
 
 msgid "Appearance"
 msgstr "Aparencia"
@@ -975,17 +975,17 @@ msgid "Reinventing Gutenberg machine..."
 msgstr "Reinventando a máquina de Gutenberg…"
 
 msgid "Ads.txt container saved successfully"
-msgstr "Ads.txt gardado correctamente"
+msgstr "contenedor de ads gardado correctamente"
 
 msgid "Ads.txt container deleted successfully."
-msgstr "Ads.txt eliminado correctamente"
+msgstr "contenedor de ads eliminado correctamente"
 
 msgid "Bad request"
 msgstr "Solicitude incorrecta"
 
 #, php-format
 msgid "%s ads containers deleted successfully"
-msgstr "%s ads containers deleted successfully"
+msgstr "%s contenedores de Ads eliminadas correctamente"
 
 msgid "Username or password incorrect."
 msgstr "O usuario ou o contrasinal son incorrectos."
@@ -2469,26 +2469,6 @@ msgstr "Activado"
 msgid "Disabled"
 msgstr "Desactivado"
 
-msgid "Activate users has a cost of 12€ user/month."
-msgstr "Activar usuarios tiene un coste de 12€ usuario/mes."
-
-msgid ""
-"If you have questions please have a look to our help article and/or contact "
-"us at <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>"
-msgstr ""
-"Se tes calquera pregunta podes ollar o noso artigo de axuda e/ou contactar "
-"connosco en <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>."
-
-msgid ""
-"Please, fill billing information below, we will send you an invoice for all "
-"activated users at the end of the month."
-msgstr ""
-"Por favor, completa a información de facturación de embaixo, enviarémosche "
-"unha factura con todos os usuarios activos ao final do mes."
-
-msgid "I understand and accept the cost of the operation."
-msgstr "Entendo e acepto os custos da operación."
-
 msgid "Config form: '%1'"
 msgstr "Formulario de configuración: '%1'"
 
@@ -2803,6 +2783,12 @@ msgstr ""
 msgid "Redirects URIs to another URIs basing on a regular expression"
 msgstr "Redirecciona URI a outros URI baseándose nunha expresión regular"
 
+msgid "410 GONE"
+msgstr "410 GONE"
+
+msgid "Redirects URIs to error 410 GONE"
+msgstr "Redirixe os URI ao erro 410 GONE"
+
 msgid "Source"
 msgstr "Orixe"
 
@@ -2920,6 +2906,26 @@ msgstr ""
 
 msgid "Server hour:"
 msgstr "Hora do servidor:"
+
+msgid "Body complexity"
+msgstr "Complexidade do corpo"
+
+msgid "Difficult to read"
+msgstr "Dificil de leer"
+
+msgid "Easily understood"
+msgstr "Fácil de entender"
+
+msgid "Very easy to read"
+msgstr "Moy facil de leer"
+
+msgid "Words"
+msgstr "Palabras"
+
+msgid ""
+"In order to dislay the text complexity, you need to save the article first."
+msgstr ""
+"Para mostrar a complexidade do texto, e requerido gardar o contido primeiro"
 
 msgid "Live blog"
 msgstr "Artigo en vivo"
@@ -3085,13 +3091,14 @@ msgstr ""
 "experiencia de usuario e ten mellor rendemento."
 
 msgid "Limit ads between paragraphs"
-msgstr "Limitar Ads entre parágrafos"
+msgstr "Limitar publicidade entre parágrafos"
 
 msgid ""
 "This settings limits ads between paragraphs to the total number of "
 "paragraphs."
 msgstr ""
-"Esta configuración limita ads entre parágrafos ao número total de parágrafos"
+"Este axuste limita a publicidade entre parágrafos ó numero total de "
+"parágrafos"
 
 msgid "AdSense integration"
 msgstr "Integración con AdSense"
@@ -3267,10 +3274,10 @@ msgid "This will be the content of the file ads.txt on your root domain"
 msgstr "Este será o contido do ficheiro ads.txt na raíz do teu dominio"
 
 msgid "Restricted URLs"
-msgstr "URLs restrinxidas"
+msgstr "URLs restrixidas"
 
 msgid "List of advertisement free URLs"
-msgstr "Listado de URLs libres de publicidade"
+msgstr "Listado de URLs sin publicidade"
 
 msgid "Advertisement without name"
 msgstr "Publicidade sen nome"
@@ -4049,8 +4056,8 @@ msgid ""
 "All the latest information about %1 in %2. News, events, reports and opinion "
 "articles."
 msgstr ""
-"All the latest information about %1 in %2. News, events, reports and opinion "
-"articles."
+"Toda a última información sobre %1 en %2 Novas, eventos reportaxes e artigos "
+"de opinión"
 
 msgid "Attachment"
 msgstr "Anexos"
@@ -5082,6 +5089,12 @@ msgstr ""
 msgid "Chartbeat Domain"
 msgstr "Dominio de Chartbeat"
 
+msgid "Marfeel Compass"
+msgstr "Marfeel Compass"
+
+msgid "Marfeel Compass ID"
+msgstr "Marfeel Compass ID"
+
 msgid "GFK"
 msgstr "GFK"
 
@@ -5108,6 +5121,12 @@ msgstr "Prometeo"
 
 msgid "Prometeo Media ID"
 msgstr "Prometeo Media ID"
+
+msgid "Adobe analytics"
+msgstr "Adobe analytics"
+
+msgid "Adobe analytics Base File"
+msgstr "Ficheiro base de Adobe Analytics"
 
 msgid "Internal settings"
 msgstr "Preferencias internas"
@@ -5345,14 +5364,14 @@ msgid "Telegram"
 msgstr "Telegram"
 
 msgid "Telegram Page"
-msgstr "Páxina de telegram"
+msgstr "Páxina de Telegram"
 
 msgid ""
 "If you also have a <strong>Telegram page</strong>, add your page url on the "
 "form."
 msgstr ""
 "Se xa tes unha <strong>páxina de Telegram</strong>, engade o teu "
-"identificador de páxina ao formulario."
+"identificador de páxina."
 
 msgid "Whatsapp Page"
 msgstr "Páxina de Whatsapp"
@@ -5361,8 +5380,8 @@ msgid ""
 "If you also have a <strong>Whatsapp page</strong>, add your page url on the "
 "form."
 msgstr ""
-"Se xa tes unha <strong>páxina de Whatsapp</strong>, engade o teu "
-"identificador de páxina ao formulario."
+"Se xa tes unha <strong>páxina de whatsapp</strong>, engade o teu "
+"identificador de páxina."
 
 msgid "TikTok"
 msgstr "TikTok"
@@ -5375,7 +5394,7 @@ msgid ""
 "form."
 msgstr ""
 "Se xa tes unha <strong>páxina de TikTok</strong>, engade o teu identificador "
-"de páxina ao formulario."
+"de páxina."
 
 msgid "Dailymotion"
 msgstr "Dailymotion"
@@ -5388,7 +5407,7 @@ msgid ""
 "the form."
 msgstr ""
 "Se xa tes unha <strong>páxina de Dailymotion</strong>, engade o teu "
-"identificador de páxina ao formulario."
+"identificador de páxina no formulario."
 
 msgid "Colors"
 msgstr "Cores"
@@ -5610,6 +5629,12 @@ msgstr "Preproducción"
 msgid "Show full content on RSS"
 msgstr "Mostrar todo o contido en RSS"
 
+msgid "SEO Information"
+msgstr "Información SEO"
+
+msgid "Show SEO information on contents"
+msgstr "Mostrar información de SEO sobre contidos"
+
 msgid "Default skin"
 msgstr "Skin por defecto"
 
@@ -5619,6 +5644,19 @@ msgid ""
 msgstr ""
 "O teu tema ofrece varias skins que o cambian lixeiramente. Selecciona o que "
 "quere."
+
+msgid "Theme fonts"
+msgstr "Fontes temáticas"
+
+msgid ""
+"Your theme offers multiple fonts to match your page style. Select yout main "
+"font (titles, headings…)."
+msgstr ""
+"O teu tema ofrece varias fontes para combinar co estilo da túa páxina. "
+"Seleccione o tipo de letra principal (títulos, títulos...)."
+
+msgid "Secondary font (body, summary…)"
+msgstr "Tipo de letra secundario (corpo, resumo...)"
 
 msgid "Scripts"
 msgstr "Scripts"
@@ -5941,8 +5979,8 @@ msgstr ""
 "Independentemente da resolución, as imaxes manterán a súa relación de "
 "aspecto orixinal"
 
-msgid "Keep original resolution"
-msgstr "Mantén a resolución orixinal"
+msgid "Config article module"
+msgstr "Configuración do módulo «Artigo»"
 
 msgid "New poll"
 msgstr "Nova enquisa"
@@ -6234,9 +6272,6 @@ msgstr ""
 "Por favor, contacta co noso <a href=\"javascript:UserVoice.showPopupWidget();"
 "\">equipo de soporte</a>."
 
-msgid "Config article module"
-msgstr "Configuración do módulo «Artigo»"
-
 msgid "Suggested for frontpage"
 msgstr "Suxerido a portada principal"
 
@@ -6294,6 +6329,12 @@ msgstr "Artigo en vivo"
 
 msgid "Showcase"
 msgstr "Showcase"
+
+msgid "SEO Score"
+msgstr "Puntuación SEO"
+
+msgid "No SEO information"
+msgstr "Sen información SEO"
 
 msgid "If enabled, this user group will not be visible in some circunstances"
 msgstr ""
@@ -6859,13 +6900,13 @@ msgid "Use the right sidebar to explore the available information."
 msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 
 msgid "New Ads.txt container"
-msgstr "Novo contenedor de Ads.txt"
+msgstr "Novo contido Ads.txt"
 
 msgid "Edit Ads.txt container"
-msgstr "Editar contenedor de Ads.txt"
+msgstr "Editar contido Ads.txt"
 
 msgid "Ads.txt lines"
-msgstr "lineas de Ads.txt"
+msgstr "Lineas de Ads.txt"
 
 msgid "We seem to have lost you in the clouds."
 msgstr "Semella que te perdemos nas nubes."
@@ -7353,6 +7394,33 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 
 msgid "Group name"
 msgstr "Nome do grupo"
+
+#~ msgid "Activate users has a cost of 12€ user/month."
+#~ msgstr "Activar usuarios tiene un coste de 12€ usuario/mes."
+
+#~ msgid ""
+#~ "If you have questions please have a look to our help article and/or "
+#~ "contact us at <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>"
+#~ msgstr ""
+#~ "Se tes calquera pregunta podes ollar o noso artigo de axuda e/ou "
+#~ "contactar connosco en <a href=\"mailto:sales@openhost.es\">sales@openhost."
+#~ "es</a>."
+
+#~ msgid ""
+#~ "Please, fill billing information below, we will send you an invoice for "
+#~ "all activated users at the end of the month."
+#~ msgstr ""
+#~ "Por favor, completa a información de facturación de embaixo, "
+#~ "enviarémosche unha factura con todos os usuarios activos ao final do mes."
+
+#~ msgid "I understand and accept the cost of the operation."
+#~ msgstr "Entendo e acepto os custos da operación."
+
+#~ msgid "Text complexity"
+#~ msgstr "Complexidade do texto"
+
+#~ msgid "Word count"
+#~ msgstr "Número de palabras"
 
 #, fuzzy
 #~ msgid "Homepage manager"
@@ -7944,9 +8012,6 @@ msgstr "Nome do grupo"
 
 #~ msgid "Add contents to groups by using the \"Add contents\" button"
 #~ msgstr "Engadir contidos a grupos usando o botón «Engadir contidos»"
-
-#~ msgid "Google Analytics Base domain"
-#~ msgstr "Dominio base para Google Analytics"
 
 #~ msgid "Category targeting"
 #~ msgstr "Segmentación por categoría"

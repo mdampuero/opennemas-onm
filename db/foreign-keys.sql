@@ -42,7 +42,6 @@ DELETE FROM `albums_photos` WHERE `pk_album` NOT IN (SELECT `pk_album` FROM `alb
 DELETE FROM `albums_photos` WHERE `pk_photo` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `articles` WHERE `pk_article` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `attachments` WHERE `pk_attachment` NOT IN (SELECT `pk_content` FROM `contents`);
-DELETE FROM `books` WHERE `pk_book` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `comments` WHERE `content_id` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `commentsmeta` WHERE `fk_content` NOT IN (SELECT `id` FROM `comments`);
 DELETE FROM `contentmeta` WHERE `fk_content` NOT IN (SELECT `pk_content` FROM `contents`);
@@ -71,7 +70,6 @@ ALTER TABLE albums_photos CHANGE description description TEXT DEFAULT NULL;
 CREATE INDEX pk_album ON albums_photos (pk_album);
 CREATE INDEX pk_photo ON albums_photos (pk_photo);
 ALTER TABLE albums_photos RENAME INDEX pk_album_2 TO index_album_photo;
-ALTER TABLE books CHANGE pk_book pk_book BIGINT UNSIGNED AUTO_INCREMENT NOT NULL, ADD PRIMARY KEY (pk_book);
 ALTER TABLE `comments` CHANGE `date` `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 DROP INDEX comment_status_date ON comments;
 DROP INDEX comment_date ON comments;

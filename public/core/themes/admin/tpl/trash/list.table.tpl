@@ -16,7 +16,6 @@
 
 {block name="commonColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <i class="fa fa-lg fa-book" uib-tooltip="{t}Book{/t}" ng-if="item.content_type_name === 'book'"></i>
     <i class="fa fa-lg fa-calendar" uib-tooltip="{t}Event{/t}" ng-if="item.content_type_name === 'event'"></i>
     <i class="fa fa-lg fa-envelope" uib-tooltip="{t}Letter{/t}" ng-if="item.content_type_name === 'letter'"></i>
     <i class="fa fa-lg fa-file" uib-tooltip="{t}Static Page{/t}" ng-if="item.content_type_name === 'static_page'"></i>
