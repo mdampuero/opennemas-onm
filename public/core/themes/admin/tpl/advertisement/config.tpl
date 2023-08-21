@@ -334,7 +334,7 @@
           </div>
         </div>
       </uib-tab>
-      {is_module_activated name="es.openhost.module.advancedAdvertisement"}
+      {is_module_activated name="ADS_MANAGER"}
       <uib-tab heading="{t}Ads.txt{/t}">
         {acl isAllowed="MASTER"}
           {if !empty($extra_ads_txt)}
