@@ -49,7 +49,7 @@ class NewsletterHelper
         $types        = [];
         $contentTypes = \ContentManager::getContentTypesFiltered();
         $ignored      = [
-            'advertisement', 'book', 'comment', 'event', 'special', 'photo',
+            'advertisement', 'comment', 'event', 'special', 'photo',
             'widget'
         ];
 
