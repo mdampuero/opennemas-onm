@@ -104,32 +104,6 @@ INSERT INTO `advertisements_positions` VALUES (128,2),(128,202),(128,402),(128,6
 UNLOCK TABLES;
 
 --
--- Table structure for table `books`
---
-
-DROP TABLE IF EXISTS `books`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `books` (
-  `pk_book` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `author` varchar(250) DEFAULT NULL,
-  `cover_id` bigint(255) DEFAULT NULL,
-  `editorial` varchar(250) DEFAULT NULL,
-  PRIMARY KEY (`pk_book`),
-  CONSTRAINT `book_id_contents_id` FOREIGN KEY (`pk_book`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `books`
---
-
-LOCK TABLES `books` WRITE;
-/*!40000 ALTER TABLE `books` DISABLE KEYS */;
-/*!40000 ALTER TABLE `books` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `category`
 --
 

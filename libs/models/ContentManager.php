@@ -765,11 +765,6 @@ class ContentManager
                 'title'           => _('Kiosko')
             ],
             [
-                'pk_content_type' => 15,
-                'name'            => 'book',
-                'title'           => _('Book')
-            ],
-            [
                 'pk_content_type' => 17,
                 'name'            => 'letter',
                 'title'           => _('Letter to editor')

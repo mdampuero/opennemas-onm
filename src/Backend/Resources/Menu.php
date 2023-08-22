@@ -232,14 +232,6 @@ $menuXml = [
                 'module_name' => 'KIOSKO_MANAGER',
                 'privilege'   => 'KIOSKO_ADMIN',
             ],
-            [
-                'id'          => 'book_manager',
-                'title'       => _('Books'),
-                'icon'        => 'fa fa-book',
-                'link'        => url('admin_books'),
-                'module_name' => 'BOOK_MANAGER',
-                'privilege'   => 'BOOK_ADMIN',
-            ],
         ],
     ],
 

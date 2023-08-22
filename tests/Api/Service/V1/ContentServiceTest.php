@@ -147,7 +147,7 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->service->expects($this->once())->method('getItemBy')
-            ->with('slug regexp "(.+\"|^)content_slug(\".+|$)"')
+            ->with('slug regexp "(.+\"|^)content_slug(\".+|$)" and in_litter=0 and content_status=1')
             ->willReturn($content);
 
         $this->assertEquals($this->service->getItemBySlug('content_slug'), $content);
@@ -164,7 +164,9 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->service->expects($this->once())->method('getItemBy')
-            ->with('slug regexp "(.+\"|^)content_slug(\".+|$)" and fk_content_type=2')
+            ->with(
+                'slug regexp "(.+\"|^)content_slug(\".+|$)" and fk_content_type=2 and in_litter=0 and content_status=1'
+            )
             ->willReturn($content);
 
         $this->assertEquals($this->service->getItemBySlugAndContentType('content_slug', 2), $content);

@@ -25,6 +25,15 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
     {
         $this->instance = new Instance([ 'internal_name' => 'flob' ]);
 
+        $this->cache = $this->getMockBuilder('Cache' . uniqid())
+            ->disableOriginalConstructor()
+            ->setMethods([ 'remove' ])
+            ->getMock();
+
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
         $this->event = $this->getMockBuilder('Symfony\Component\EventDispatcher\Event')
             ->setMethods([ 'getArgument', 'hasArgument' ])
             ->getMock();
@@ -34,7 +43,27 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'deleteInstance', 'deleteItem' ])
             ->getMock();
 
-        $this->subscriber = new UserSubscriber($this->helper);
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([$this, 'serviceContainerCallback']));
+
+        $this->subscriber = new UserSubscriber($this->container, $this->helper);
+    }
+
+    /**
+     * Returns a mocked service basing on the service name.
+     *
+     * @param string $name The service name.
+     *
+     * @return mixed The mocked service.
+     */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'cache.connection.instance':
+                return $this->cache;
+        }
+
+        return null;
     }
 
     /**
@@ -83,7 +112,7 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
     public function testOnUserDelete()
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\UserSubscriber')
-            ->setConstructorArgs([ $this->helper ])
+            ->setConstructorArgs([ $this->container, $this->helper ])
             ->setMethods([ 'onUserUpdate' ])
             ->getMock();
 

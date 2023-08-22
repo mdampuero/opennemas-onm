@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Common\Core\Component\Exception\ContentNotMigratedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpKernel\Exception\GoneHttpException;
 
 class Redirector
 {
@@ -73,6 +74,10 @@ class Redirector
      */
     public function getResponse(Request $request, Url $url)
     {
+        if ($url->type == 5) {
+            throw new GoneHttpException();
+        }
+
         $response = $url->redirection
             ? $this->getRedirectResponse($request, $url)
             : $this->getForwardResponse($request, $url);
@@ -534,7 +539,7 @@ class Redirector
      */
     protected function getRegExpUrl($uri, $contentType = null)
     {
-        $oql = sprintf('type in [%s] and enabled = 1', implode(',', [ 3, 4 ]));
+        $oql = sprintf('type in [%s] and enabled = 1', implode(',', [ 3, 4, 5 ]));
 
         if (!empty($contentType)) {
             $oql = sprintf('content_type in ["%s"]', implode('","', $contentType))

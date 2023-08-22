@@ -62,6 +62,33 @@
 .showcase-info {
   display: flex;
   justify-content: space-between;
+
+  &.showcase-info-score {
+    align-items: flex-start;
+    border: 1px solid #eaeaea;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-height: 130px;
+    padding: 0.5rem;
+
+    > * {
+      flex-basis: 100%;
+    }
+
+    .onm-score {
+      align-items: center;
+      border-radius: 50%;
+      display: inline-flex;
+      font-size: 2rem;
+      justify-content: center;
+    }
+    .form-label {
+      .small {
+        width: auto!important;
+      }
+    }
+  }
+
 }
 .showcase-moment {
   width: 100%;

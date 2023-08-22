@@ -5,21 +5,36 @@
 
     /**
      * @ngdoc controller
-     * @name  videoListCtrl
+     * @name  VideoListCtrl
      *
      * @requires $controller
+     * @requires $location
      * @requires $scope
+     * @requires $timeout
      * @requires http
      * @requires messenger
+     * @requires linker
+     * @requires localizer
+     * @requires oqlEncoder
      *
      * @description
      *   Provides actions to list articles.
      */
     .controller('VideoConfigCtrl', [
-      '$controller', '$scope', 'http', 'messenger',
-      function($controller, $scope, http, messenger) {
+      '$controller', '$scope', 'cleaner', 'http', 'messenger',
+      function($controller, $scope, cleaner, http, messenger) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+
+        /**
+         * @memberOf UserSettingsCtrl
+         *
+         * @description
+         *  The extraFields object.
+         *
+         * @type {Object}
+         */
+        $scope.extraFields = {};
 
         /**
          * @function init
@@ -29,24 +44,8 @@
          *   Initializes the form.
          */
         $scope.init = function() {
-          $scope.list();
-        };
-
-        /**
-         * @function list
-         * @memberOf VideoConfigCtrl
-         *
-         * @description
-         *   Reloads the tag configuration.
-         */
-        $scope.list = function() {
-          $scope.flags.http.loading = true;
-
-          http.get('api_v1_backend_video_config_show').then(function(response) {
-            $scope.settings = response.data;
-
-            $scope.settings.total_front_more = parseInt($scope.settings.total_front_more);
-
+          http.get('api_v1_backend_video_get_config').then(function(response) {
+            $scope.extraFields = response.data.extra_fields;
             $scope.disableFlags('http');
           }, function() {
             $scope.disableFlags('http');
@@ -63,7 +62,9 @@
         $scope.save = function() {
           $scope.flags.http.saving = true;
 
-          http.put('api_v1_backend_video_config_save', $scope.settings)
+          var data = { extraFields: JSON.stringify(cleaner.clean($scope.extraFields)) };
+
+          http.put('api_v1_backend_video_save_config', data)
             .then(function(response) {
               $scope.disableFlags('http');
               messenger.post(response.data);

@@ -111,7 +111,7 @@
             title: 'Multimedia',
             rows: [
               [ 'IMAGE_MANAGER', 'FILE_MANAGER', 'VIDEO_MANAGER', 'ALBUM_MANAGER' ],
-              [ 'KIOSKO_MANAGER', 'BOOK_MANAGER' ],
+              [ 'KIOSKO_MANAGER' ],
             ]
           },
           {
