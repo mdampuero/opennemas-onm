@@ -745,11 +745,6 @@ class ContentManager
                 'title'           => _('Video')
             ],
             [
-                'pk_content_type' => 10,
-                'name'            => 'special',
-                'title'           => _('Special')
-            ],
-            [
                 'pk_content_type' => 11,
                 'name'            => 'poll',
                 'title'           => _('Poll')

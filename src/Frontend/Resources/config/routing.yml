@@ -70,9 +70,6 @@ frontend_frontpage:
 frontend_letter:
     resource: '@FrontendBundle/Resources/config/routing/letter.yml'
 
-frontend_monograph:
-    resource: '@FrontendBundle/Resources/config/routing/monograph.yml'
-
 frontend_newsletter:
     resource: '@FrontendBundle/Resources/config/routing/newsletter.yml'
 

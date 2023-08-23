@@ -56,9 +56,6 @@ DELETE FROM `photos` WHERE `pk_photo` NOT IN (SELECT `pk_content` FROM `contents
 DELETE FROM `related_contents` WHERE `pk_content1` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `related_contents` WHERE `pk_content2` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `static_pages` WHERE `pk_static_page` NOT IN (SELECT `pk_content` FROM `contents`);
-DELETE FROM `specials` WHERE `pk_special` NOT IN (SELECT `pk_content` FROM `contents`);
-DELETE FROM `special_contents` WHERE `fk_special` NOT IN (SELECT `pk_special` FROM `specials`);
-DELETE FROM `special_contents` WHERE `fk_content` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `translation_ids` WHERE `pk_content` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `usermeta` WHERE `user_id` NOT IN (SELECT id FROM users);
 DELETE FROM `user_groups_privileges` WHERE `pk_fk_user_group` NOT IN (SELECT `pk_user_group` FROM `user_groups`);
@@ -108,12 +105,6 @@ ALTER TABLE newsletter_archive CHANGE created created DATETIME DEFAULT CURRENT_T
 ALTER TABLE newsletter_archive CHANGE updated updated DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
 ALTER TABLE orders CHANGE created created DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
 CREATE INDEX pk_content2 ON related_contents (pk_content2);
-ALTER TABLE special_contents CHANGE fk_content fk_content BIGINT UNSIGNED NOT NULL;
-ALTER TABLE newsletter_archive CHANGE fk_special fk_special BIGINT UNSIGNED NOT NULL
-ALTER TABLE newsletter_archive ADD PRIMARY KEY (fk_content, fk_special);
-CREATE INDEX fk_content ON special_contents (fk_content);
-CREATE INDEX fk_special ON special_contents (fk_special);
-ALTER TABLE specials CHANGE pk_special pk_special BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE static_pages CHANGE pk_static_page pk_static_page BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE translation_ids CHANGE pk_content pk_content BIGINT UNSIGNED NOT NULL;
 CREATE INDEX pk_content ON translation_ids (pk_content);

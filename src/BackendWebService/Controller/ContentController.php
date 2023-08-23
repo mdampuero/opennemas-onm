@@ -871,7 +871,7 @@ class ContentController extends Controller
         // Add all admin permissions for generic list (trash,)
         if ($contentType == 'content') {
             $types = [ 'advertisement', 'album', 'article', 'cover',
-                'file', 'letter', 'opinion', 'photo', 'poll', 'special',
+                'file', 'letter', 'opinion', 'photo', 'poll',
                 'static', 'trash', 'video', 'widget',
             ];
         }

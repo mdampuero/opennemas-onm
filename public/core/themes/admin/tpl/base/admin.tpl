@@ -172,16 +172,6 @@
                           </div>
                         {/acl}
                       {/is_module_activated}
-                      {is_module_activated name="SPECIAL_MANAGER"}
-                        {acl isAllowed="SPECIAL_CREATE"}
-                          <div class="quick-item">
-                            <a href="{url name=admin_special_create}">
-                              <i class="fa fa-star"></i>
-                              <span class="title">{t}Special{/t}</span>
-                            </a>
-                          </div>
-                        {/acl}
-                      {/is_module_activated}
                       {is_module_activated name="LETTER_MANAGER"}
                         {acl isAllowed="LETTER_CREATE"}
                           <div class="quick-item">
