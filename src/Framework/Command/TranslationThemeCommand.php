@@ -21,7 +21,7 @@ class TranslationThemeCommand extends ContainerAwareCommand
      *
      * @var array
      */
-    public $supportedLanguages = [ 'es_ES', 'eu_ES', 'ca_ES', 'gl_ES', 'pt_PT' ];
+    public $supportedLanguages = [ 'es_ES', 'eu_ES', 'ca_ES', 'gl_ES', 'pt_PT', 'fr_FR'];
 
     /**
      * {@inheritdoc}

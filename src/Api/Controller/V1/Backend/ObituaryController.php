@@ -36,6 +36,11 @@ class ObituaryController extends ContentController
     /**
      * {@inheritdoc}
      */
+    protected $module = 'obituaries';
+
+    /**
+     * {@inheritdoc}
+     */
     protected $service = 'api.service.obituary';
 
     /**

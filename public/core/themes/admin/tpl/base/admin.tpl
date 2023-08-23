@@ -172,16 +172,6 @@
                           </div>
                         {/acl}
                       {/is_module_activated}
-                      {is_module_activated name="SPECIAL_MANAGER"}
-                        {acl isAllowed="SPECIAL_CREATE"}
-                          <div class="quick-item">
-                            <a href="{url name=admin_special_create}">
-                              <i class="fa fa-star"></i>
-                              <span class="title">{t}Special{/t}</span>
-                            </a>
-                          </div>
-                        {/acl}
-                      {/is_module_activated}
                       {is_module_activated name="LETTER_MANAGER"}
                         {acl isAllowed="LETTER_CREATE"}
                           <div class="quick-item">
@@ -228,16 +218,6 @@
                             <a href="{url name=backend_newsstand_create}">
                               <i class="fa fa-newspaper-o"></i>
                               <span class="title">{t}News Stand{/t}</span>
-                            </a>
-                          </div>
-                        {/acl}
-                      {/is_module_activated}
-                      {is_module_activated name="BOOK_MANAGER"}
-                        {acl isAllowed="BOOK_CREATE"}
-                          <div class="quick-item">
-                            <a href="{url name=admin_books_create}">
-                              <i class="fa fa-book"></i>
-                              <span class="title">{t}Book{/t}</span>
                             </a>
                           </div>
                         {/acl}
@@ -507,6 +487,7 @@
       @Common/components/ng-tags-input/build/ng-tags-input.min.js,
       @Common/components/select2/select2.js,
       @Common/components/swfobject/swfobject/swfobject.js,
+      @Common/js/silabajs.js,
       @Common/components/angular-animate/angular-animate.min.js,
       @Common/components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js,
       @Common/components/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js,

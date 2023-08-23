@@ -68,6 +68,18 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getListByIds' ])
             ->getMock();
 
+        $this->ds = $this->getMockBuilder('DataSet')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->orm = $this->getMockBuilder('OrmEntityManager')
+            ->setMethods([ 'getDataSet' ])
+            ->getMock();
+
+        $this->orm->expects($this->any())->method('getDataSet')
+            ->with('Settings', 'instance')->willReturn($this->ds);
+
         $this->locale->expects($this->any())->method('getTimeZone')
             ->willReturn(new \DateTimeZone('UTC'));
 
@@ -122,6 +134,9 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
             case 'core.locale':
                 return $this->locale;
 
+            case 'orm.manager':
+                return $this->orm;
+
             default:
                 return null;
         }
@@ -139,6 +154,31 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->content->body = 'Percipit "mollis" at scriptorem usu.';
         $this->assertEquals('Percipit "mollis" at scriptorem usu.', $this->contentHelper->getBody($this->content));
+    }
+
+    /**
+     * Tests getBodyWithLiveUpdates.
+     */
+    public function testGetBodyWithLiveUpdates()
+    {
+        $this->assertNull($this->contentHelper->getBodyWithLiveUpdates($this->content));
+
+        $this->content->body = 'His ridens eu sed quod ignota.';
+
+        $timezone = $this->locale->getTimeZone();
+        $now      = new \DateTime(null, $timezone);
+
+        $this->content->coverage_start_time = $now;
+        $this->content->coverage_end_time   = $now;
+        $this->content->live_blog_posting   = 1;
+        $this->content->live_blog_updates   = [[
+            'body' => 'Percipit "mollis" at scriptorem usu.'
+        ]];
+
+        $this->assertEquals(
+            'His ridens eu sed quod ignota. Percipit "mollis" at scriptorem usu.',
+            $this->contentHelper->getBodyWithLiveUpdates($this->content)
+        );
     }
 
     /**
@@ -391,7 +431,7 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetSuggested()
     {
         $this->cache->expects($this->at(0))->method('get')
-            ->with('suggested_contents_article_2_1')
+            ->with('suggested_contents_article_2')
             ->willReturn([ new Content([ 'pk_content' => 2 ]) ]);
 
         $this->assertEquals(
@@ -547,6 +587,10 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
             'starttime'      => new \Datetime('2000-01-01 00:00:00')
             ]);
 
+        $this->ds->expects($this->any())->method('get')
+            ->with('comment_settings')
+            ->willReturn(['disable_comments' => false]);
+
         $this->assertTrue($this->contentHelper->hasCommentsEnabled($item));
     }
 
@@ -654,7 +698,6 @@ class ContentHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->contentHelper->getLastLiveUpdate($this->content));
 
         $timezone = $this->locale->getTimeZone();
-
         $now      = new \DateTime(null, $timezone);
 
         $this->content->coverage_start_time = $now;

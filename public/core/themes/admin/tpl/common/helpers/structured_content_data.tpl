@@ -6,7 +6,7 @@
       "@type": "ListItem",
       "item": {
         "@id": "{$siteUrl}",
-        "name": "{$siteName}",
+        "name": "{$siteName|replace:'\\':''|escape:'htmlall'}",
         "@type": "CollectionPage"
       },
       "position": 1
@@ -16,7 +16,7 @@
         "@type": "ListItem",
         "item": {
           "@id": "{get_url item=$category absolute=true}",
-          "name": "{$category->title}",
+          "name": "{$category->title|replace:'\\':''|escape:'htmlall'}",
           "@type": "CollectionPage"
         },
         "position": 2
@@ -24,7 +24,7 @@
         "@type": "ListItem",
         "item": {
           "@id": "{$url}",
-          "name": "{$title|escape:'html'}",
+          "name": "{$title|replace:'\\':''|escape:'htmlall'}",
           "@type": "ItemPage"
         },
         "position": 3
@@ -42,7 +42,7 @@
         "@type": "ListItem",
         "item": {
           "@id": "{$url}",
-          "name": "{$title|escape:'html'}",
+          "name": "{$title|replace:'\\':''|escape:'htmlall'}",
           "@type": "ItemPage"
         },
         "position": 3
@@ -56,10 +56,10 @@
       "@type": "WebPage",
       "@id": "{$url}"
     },
-    "headline": "{$title|escape:'html'}",
+    "headline": "{$title|replace:'\\':''|escape:'htmlall'}",
     "author": {
       "@type": "Person",
-      "name": "{$author|escape:'html'}"
+      "name": "{$author|replace:'\\':''|escape:'htmlall'}"
       {if has_author_url($content)}
         , "url": "{$app.instance->getBaseUrl()}{get_author_url($content)}"
       {/if}
@@ -67,17 +67,17 @@
     "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     {if !empty($category)}
-      "articleSection": "{$category->title|escape:'html'}",
+      "articleSection": "{$category->title|replace:'\\':''|escape:'htmlall'}",
     {elseif $content->content_type_name === 'opinion'}
       "articleSection": "{if is_blog($content)}{t}Blog{/t}{else}{t}Opinion{/t}{/if}",
     {/if}
-    "keywords": "{$keywords|escape:'html'}",
+    "keywords": "{$keywords|replace:'\\':''|escape:'htmlall'}",
     "url": "{$url}",
     "wordCount": {$wordCount},
-    "description": "{$description|escape:'html'}",
+    "description": "{$description|replace:'\\':''|escape:'htmlall'}",
     "publisher": {
       "@type": "Organization",
-      "name": "{$siteName}",
+      "name": "{$siteName|replace:'\\':''|escape:'htmlall'}",
       "logo": {
           "@type": "ImageObject",
           "url": "{$logo}"
@@ -96,8 +96,8 @@
     {elseif get_type(get_featured_media($content, 'inner')) === 'video'}
       , "video": {
           "@type": "VideoObject",
-          "name": "{get_title(get_featured_media($content, 'inner'))|escape:'html'}",
-          "description": "{get_description(get_featured_media($content, 'inner'))|default:get_title(get_featured_media($content, 'inner'))|escape:'html'}",
+          "name": "{get_title(get_featured_media($content, 'inner'))|replace:'\\':''|escape:'htmlall'}",
+          "description": "{get_description(get_featured_media($content, 'inner'))|default:get_title(get_featured_media($content, 'inner'))|replace:'\\':''|escape:'htmlall'}",
           "uploadDate": "{format_date date=get_publication_date(get_featured_media($content, 'inner')) format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
           "thumbnailUrl": "{get_photo_path(get_video_thumbnail(get_featured_media($content, 'inner')), '', [], true)}",
           "contentUrl": "{get_url item=get_featured_media($content, 'inner') absolute=true}"

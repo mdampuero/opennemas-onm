@@ -19,7 +19,7 @@
 {block name="primaryActions"}
   <div class="all-actions pull-right">
     <ul class="nav quick-section">
-      {acl isAllowed="OPINION_SETTINGS"}
+      {acl isAllowed="MASTER"}
         <li class="quicklinks">
           <a class="btn btn-link" href="{url name=backend_opinions_config}" title="{t}Config opinion module{/t}">
             <i class="fa fa-cog fa-lg"></i>
@@ -114,6 +114,12 @@
     </li>
     <li class="hidden-xs hidden-sm ng-cloak m-r-10 quicklinks">
       {include file="ui/component/select/author.tpl" blog="true" label="true" ngModel="criteria.fk_author"}
+    </li>
+    <li class="hidden-xs hidden-sm ng-cloak quicklinks">
+      {include file="ui/component/select/month.tpl" ngModel="criteria.created" data="data.extra.years"}
+    </li>
+    <li class="hidden-xs hidden-sm ng-cloak m-r-10 quicklinks">
+      {include file="ui/component/button/postponed.tpl"}
     </li>
 {/block}
 

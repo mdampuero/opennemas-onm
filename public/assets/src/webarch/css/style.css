@@ -6764,6 +6764,7 @@ code:hover {
 }
 .panel-group .panel-heading .panel-title > a.collapsed {
   color: #8E9AA2;
+  fill: #8E9AA2;
 }
 .panel-group .panel-heading .panel-title > a.collapsed:after {
   content: "\f055";

@@ -77,28 +77,7 @@ class PhotoController extends ContentController
      */
     protected function getExtraData($items = null)
     {
-        $years = [];
-        $fmt   = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
-
-        $results = $this->get('orm.manager')->getConnection('instance')
-            ->fetchAll(
-                'SELECT DISTINCT(DATE_FORMAT(created, "%Y-%m")) as date FROM contents'
-                . ' WHERE fk_content_type = 8 AND created IS NOT NULL'
-                . ' ORDER BY date DESC'
-            );
-
-        foreach ($results as $value) {
-            $date = \DateTime::createFromFormat('!Y-m', $value['date']);
-
-            $years[$date->format('Y')]['name']     = $date->format('Y');
-            $years[$date->format('Y')]['months'][] = [
-                'name'  => !is_null($fmt) ? $fmt->format($date) : $date->format('F'),
-                'value' => $value['date']
-            ];
-        }
-
         return array_merge(parent::getExtraData($items), [
-            'years' => array_values($years),
             'formSettings'  => [
                 'name'             => $this->module,
                 'expansibleFields' => $this->getFormSettings($this->module)
@@ -120,6 +99,8 @@ class PhotoController extends ContentController
         $config = $ds->get('photo_settings', []);
         $config = $sh->toBoolean($config, ['optimize_images']);
 
+        $config['image_quality']    = $config['image_quality'] ?? '65';
+        $config['image_resolution'] = $config['image_resolution'] ?? '1920x1080';
         return new JsonResponse([
             'config' => $config
         ]);

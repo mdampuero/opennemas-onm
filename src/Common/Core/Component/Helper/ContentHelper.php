@@ -108,6 +108,25 @@ class ContentHelper
     }
 
     /**
+     * Returns the body with live updates for the provided item.
+     *
+     * @param Content $item The item to get property from.
+     *
+     * @return string The content body with live updates.
+     */
+    public function getBodyWithLiveUpdates($item = null) : ?string
+    {
+        $contentBody = $this->getBody($item) ?? '';
+
+        if ($this->isLiveBlog($item)) {
+            foreach ($item->live_blog_updates as $update) {
+                $contentBody .= ' ' . $update['body'];
+            }
+        }
+
+        return !empty($contentBody) ? $contentBody : null;
+    }
+    /**
      * Get the proper cache expire date for scheduled contents.
      *
      * @return mixed The expire cache datetime in "Y-m-d H:i:s" format or null.
@@ -153,6 +172,22 @@ class ContentHelper
             ? $end->endtime->format('Y-m-d H:i:s') : null;
 
         return min(array_filter([ $starttime, $endtime ]));
+    }
+
+    public function getFirstContentCreatedDate($contentTypeName = 'article')
+    {
+        $oql = sprintf(
+            'content_type_name = "%s" and created !is null and created >="2000-01-01" and in_litter = 0'
+            . ' order by created asc limit 1',
+            $contentTypeName
+        );
+
+        try {
+            $item = $this->service->getItemBy($oql);
+            return $item->created;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
@@ -345,15 +380,16 @@ class ContentHelper
         }
 
         $cacheId = sprintf('suggested_contents_%s_%d', $contentTypeName, $categoryId);
-
-        if (!empty($contentId)) {
-            $cacheId .= '_' . $contentId;
-        }
-
-        $items = $this->cache->get($cacheId);
+        $items   = $this->cache->get($cacheId);
 
         if (!empty($items)) {
-            return $items;
+            if ($contentId) {
+                $items = array_values(array_filter($items, function ($item) use ($contentId) {
+                    return $item->pk_content !== $contentId;
+                }));
+            }
+
+            return array_slice($items, 0, $epp);
         }
 
         $criteria = [
@@ -372,12 +408,6 @@ class ContentHelper
             ]
         ];
 
-        if (!empty($contentId)) {
-            $criteria['pk_content'] = [
-                [ 'value' => [ $contentId ], 'operator' => 'NOT IN' ]
-            ];
-        }
-
         if (!empty($categoryId)) {
             $criteria['category_id'] = [ [ 'value' => $categoryId ] ];
         }
@@ -385,14 +415,20 @@ class ContentHelper
         try {
             $items = $this->entityManager->findBy($criteria, [
                 'starttime' => 'desc'
-            ], $epp, 1);
+            ], $epp + 1, 1);
 
             $this->cache->set($cacheId, $items, 900);
+
+            if ($contentId) {
+                $items = array_values(array_filter($items, function ($item) use ($contentId) {
+                    return $item->pk_content !== $contentId;
+                }));
+            }
         } catch (\Exception $e) {
             return [];
         }
 
-        return $items;
+        return array_slice($items, 0, $epp);
     }
 
     /**
@@ -509,7 +545,11 @@ class ContentHelper
      */
     public function hasCommentsEnabled($item = null) : bool
     {
-        return !empty($this->getProperty($item, 'with_comment'));
+        $disableComments = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('comment_settings')['disable_comments'];
+
+        return !empty($this->getProperty($item, 'with_comment')) && !(is_null($disableComments) ? true : $disableComments);
     }
 
     /**

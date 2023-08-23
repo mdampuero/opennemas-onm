@@ -40,9 +40,6 @@ frontend_author:
 frontend_blog:
     resource: '@FrontendBundle/Resources/config/routing/blog.yml'
 
-frontend_book:
-    resource: '@FrontendBundle/Resources/config/routing/book.yml'
-
 frontend_category:
     resource: '@FrontendBundle/Resources/config/routing/category.yml'
 
@@ -75,9 +72,6 @@ frontend_hbbtv:
 
 frontend_letter:
     resource: '@FrontendBundle/Resources/config/routing/letter.yml'
-
-frontend_monograph:
-    resource: '@FrontendBundle/Resources/config/routing/monograph.yml'
 
 frontend_newsletter:
     resource: '@FrontendBundle/Resources/config/routing/newsletter.yml'

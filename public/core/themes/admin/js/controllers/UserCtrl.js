@@ -67,7 +67,6 @@
         $scope.buildScope = function() {
           $scope.expandFields();
 
-          $scope.backup.activated = $scope.item.activated;
           $scope.flags.categories = { none: false, all: false };
 
           if (!$scope.item.user_groups) {
@@ -103,45 +102,14 @@
         };
 
         /**
-         * @function confirmUser
+         * @function confirm
          * @memberOf UserCtrl
          *
          * @description
-         *   Shows a modal to confirm user update.
+         *   Confirm user update.
          */
         $scope.confirm = function() {
-          if ($scope.backup.master || !$scope.item.activated ||
-              $scope.item.activated === $scope.backup.activated) {
-            $scope.save();
-            $scope.backup.activated = $scope.item.activated;
-            return;
-          }
-
-          var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
-            backdrop: 'static',
-            controller: 'ModalCtrl',
-            resolve: {
-              template: function() {
-                return {
-                  name: $scope.id ? 'update' : 'create',
-                  backend_access: true,
-                  value: 1,
-                  extra: $scope.data.extra,
-                };
-              },
-              success: function() {
-                return null;
-              }
-            }
-          });
-
-          modal.result.then(function(response) {
-            if (response) {
-              $scope.save();
-              $scope.backup.activated = $scope.item.activated;
-            }
-          });
+          $scope.save();
         };
 
         /**

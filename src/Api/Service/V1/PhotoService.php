@@ -91,12 +91,16 @@ class PhotoService extends ContentService
             $ds = $this->container->get('orm.manager')
                 ->getDataSet('Settings', 'instance');
 
-            $config = $ds->get('photo_settings', []);
-            $sh     = $this->container->get('core.helper.setting');
-            $config = $sh->toBoolean($config, ['optimize_images']);
+            $config       = $ds->get('photo_settings', []);
+            $sh           = $this->container->get('core.helper.setting');
+            $config       = $sh->toBoolean($config, ['optimize_images']);
+            $imageQuality = $config['image_quality'] ?? 65;
+            $resolution   = !empty($config['image_resolution'])
+                ? explode('x', $config['image_resolution'])
+                : ['1920', '1920'];
 
             if ($optimize || (array_key_exists('optimize_images', $config) && $config['optimize_images'])) {
-                $this->optimizeImage($path);
+                $this->optimizeImage($path, $imageQuality, $resolution[0], $resolution[1]);
                 $this->updateImage($id, $path);
             }
 
@@ -107,14 +111,14 @@ class PhotoService extends ContentService
         }
     }
 
-    protected function optimizeImage($path)
+    protected function optimizeImage($path, $quality, $imageWidth, $imageHeight)
     {
         $processor = $this->container->get('core.image.processor');
         $processor->open($path)
-            ->apply('thumbnail', [1920, 1920, 'center', 'center'])
+            ->apply('thumbnail', [$imageWidth, $imageHeight, 'center', 'center'])
             ->optimize([
                 'flatten'          => false,
-                'quality'          => 65,
+                'quality'          => $quality,
                 'resolution-units' => 'ppi',
                 'resolution-x'     => 72,
                 'resolution-y'     => 72

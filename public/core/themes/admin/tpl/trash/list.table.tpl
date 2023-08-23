@@ -16,7 +16,6 @@
 
 {block name="commonColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('media')">
-    <i class="fa fa-lg fa-book" uib-tooltip="{t}Book{/t}" ng-if="item.content_type_name === 'book'"></i>
     <i class="fa fa-lg fa-calendar" uib-tooltip="{t}Event{/t}" ng-if="item.content_type_name === 'event'"></i>
     <i class="fa fa-lg fa-envelope" uib-tooltip="{t}Letter{/t}" ng-if="item.content_type_name === 'letter'"></i>
     <i class="fa fa-lg fa-file" uib-tooltip="{t}Static Page{/t}" ng-if="item.content_type_name === 'static_page'"></i>
@@ -30,13 +29,12 @@
     <i class="fa fa-lg fa-shield fa-flip-vertical" uib-tooltip="{t}Obituary{/t}" ng-if="item.content_type_name === 'obituary'"></i>
     <i class="fa fa-lg fa-quote" uib-tooltip="{t}Opinion{/t}" ng-if="item.content_type_name === 'opinion'"></i>
     <i class="fa fa-lg fa-camera" uib-tooltip="{t}Album{/t}" ng-if="item.content_type_name === 'album'"></i>
-    <i class="fa fa-lg fa-star" uib-tooltip="{t}Special{/t}" ng-if="item.content_type_name === 'special'"></i>
   </td>
 {/block}
 
 {block name="categoryColumn"}
   <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: category }) %]" ng-repeat="category in item.categories">
-    [% (categories | filter: { id: category })[0].title %]
+    [% (categories | filter: { id: category } : true)[0].title %]
   </a>
 {/block}
 

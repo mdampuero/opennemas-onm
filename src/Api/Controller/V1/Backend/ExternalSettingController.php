@@ -31,12 +31,12 @@ class ExternalSettingController extends SettingController
      */
     protected $keys = [
         'actOn.authentication',
+        'adobe_base',
         'chartbeat',
         'comscore',
         'data_layer',
         'facebook',
         'facebook_id',
-        'facebook_page',
         'gfk',
         'google_analytics',
         'google_analytics_others',
@@ -47,6 +47,11 @@ class ExternalSettingController extends SettingController
         'google_tags_id_amp',
         'instagram_page',
         'linkedin_page',
+        'marfeel_compass',
+        'telegram_page',
+        'whatsapp_page',
+        'tiktok_page',
+        'dailymotion_page',
         'ojd',
         'payments',
         'pinterest_page',
@@ -63,6 +68,7 @@ class ExternalSettingController extends SettingController
      * @var array
      */
     protected $onlyMasters = [
+        'adobe_base',
         'gfk',
         'payments',
     ];

@@ -113,7 +113,7 @@
               id: item.pk_content.toString().padStart(6, '0'),
               created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
-              author: item.author
+              author_slug: item.author
             })
           );
         };

@@ -858,118 +858,6 @@ class PermissionHelper
                 'module'      => 'USER_GROUP_MANAGER',
                 'enabled'     => 1
             ],
-            137 => [
-                'id'          => 137,
-                'name'        => 'BOOK_ADMIN',
-                'description' => _('List'),
-                'module'      => 'BOOK_MANAGER',
-                'enabled'     => 1
-            ],
-            138 => [
-                'id'          => 138,
-                'name'        => 'BOOK_CREATE',
-                'description' => _('Create'),
-                'module'      => 'BOOK_MANAGER',
-                'enabled'     => 1
-            ],
-            139 => [
-                'id'          => 139,
-                'name'        => 'BOOK_HOME',
-                'description' => _('Manage widget'),
-                'module'      => 'BOOK_MANAGER',
-                'enabled'     => 1
-            ],
-            140 => [
-                'id'          => 140,
-                'name'        => 'BOOK_AVAILABLE',
-                'description' => _('Publish/unpublish'),
-                'module'      => 'BOOK_MANAGER',
-                'enabled'     => 1
-            ],
-            141 => [
-                'id'          => 141,
-                'name'        => 'BOOK_SETTINGS',
-                'description' => _('Administrate settings'),
-                'module'      => 'BOOK_MANAGER',
-                'enabled'     => 1
-            ],
-            142 => [
-                'id'          => 142,
-                'name'        => 'BOOK_UPDATE',
-                'description' => _('Edit'),
-                'module'      => 'BOOK_MANAGER',
-                'enabled'     => 1
-            ],
-            143 => [
-                'id'          => 143,
-                'name'        => 'BOOK_DELETE',
-                'description' => _('Delete'),
-                'module'      => 'BOOK_MANAGER',
-                'enabled'     => 1
-            ],
-            144 => [
-                'id'          => 144,
-                'name'        => 'BOOK_TRASH',
-                'description' => _('Send to trash and restore'),
-                'module'      => 'BOOK_MANAGER',
-                'enabled'     => 1
-            ],
-            145 => [
-                'id'          => 145,
-                'name'        => 'SPECIAL_ADMIN',
-                'description' => _('List'),
-                'module'      => 'SPECIAL_MANAGER',
-                'enabled'     => 1
-            ],
-            146 => [
-                'id'          => 146,
-                'name'        => 'SPECIAL_CREATE',
-                'description' => _('Create'),
-                'module'      => 'SPECIAL_MANAGER',
-                'enabled'     => 1
-            ],
-            147 => [
-                'id'          => 147,
-                'name'        => 'SPECIAL_FAVORITE',
-                'description' => _('Manage widget'),
-                'module'      => 'SPECIAL_MANAGER',
-                'enabled'     => 1
-            ],
-            148 => [
-                'id'          => 148,
-                'name'        => 'SPECIAL_AVAILABLE',
-                'description' => _('Publish/unpublish'),
-                'module'      => 'SPECIAL_MANAGER',
-                'enabled'     => 1
-            ],
-            149 => [
-                'id'          => 149,
-                'name'        => 'SPECIAL_SETTINGS',
-                'description' => _('Manage module settings'),
-                'module'      => 'SPECIAL_MANAGER',
-                'enabled'     => 1
-            ],
-            150 => [
-                'id'          => 150,
-                'name'        => 'SPECIAL_UPDATE',
-                'description' => _('Edit'),
-                'module'      => 'SPECIAL_MANAGER',
-                'enabled'     => 1
-            ],
-            151 => [
-                'id'          => 151,
-                'name'        => 'SPECIAL_DELETE',
-                'description' => _('Delete'),
-                'module'      => 'SPECIAL_MANAGER',
-                'enabled'     => 1
-            ],
-            152 => [
-                'id'          => 152,
-                'name'        => 'SPECIAL_TRASH',
-                'description' => _('Send to trash and restore'),
-                'module'      => 'SPECIAL_MANAGER',
-                'enabled'     => 1
-            ],
             155 => [
                 'id'          => 155,
                 'name'        => 'VIDEO_HOME',
@@ -1129,13 +1017,6 @@ class PermissionHelper
                 'name'        => 'INSTANCE_SYNC_ADMIN',
                 'description' => _('Administer synchronization between Opennemas'),
                 'module'      => 'SYNC_MANAGER',
-                'enabled'     => 1
-            ],
-            181 => [
-                'id'          => 181,
-                'name'        => 'SPECIAL_HOME',
-                'description' => _('Manage frontpage'),
-                'module'      => 'SPECIAL_MANAGER',
                 'enabled'     => 1
             ],
             182 => [
