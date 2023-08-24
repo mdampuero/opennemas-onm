@@ -224,38 +224,49 @@ class StructuredData
         $externalServices = array();
 
         // Get the information of the External Services
-        if (!empty($this->ds->get('youtube_page'))) {
-            array_push($externalServices, '"' . $this->ds->get('youtube_page') . '"');
+        $externalService = $this->ds->get('youtube_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
         }
-        if (!empty($this->ds->get('facebook')['page'])) {
-            array_push($externalServices, '"' . $this->ds->get('facebook')['page'] . '"');
+        $externalService = $this->ds->get('facebook')['page'];
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
         }
-        if (!empty($this->ds->get('twitter_page'))) {
-            array_push($externalServices, '"' . $this->ds->get('twitter_page') . '"');
+        $externalService = $this->ds->get('twitter_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
         }
-        if (!empty($this->ds->get('instagram_page'))) {
-            array_push($externalServices, '"' . $this->ds->get('instagram_page') . '"');
+        $externalService = $this->ds->get('instagram_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
         }
-        if (!empty($this->ds->get('pinterest_page'))) {
-            array_push($externalServices, '"' . $this->ds->get('pinterest_page') . '"');
+        $externalService = $this->ds->get('pinterest_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
         }
-        if (!empty($this->ds->get('vimeo_page'))) {
-            array_push($externalServices, '"' . $this->ds->get('vimeo_page') . '"');
+        $externalService = $this->ds->get('vimeo_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
         }
-        if (!empty($this->ds->get('linkedin_page'))) {
-            array_push($externalServices, '"' . $this->ds->get('linkedin_page') . '"');
+        $externalService = $this->ds->get('linkedin_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
         }
-        if (!empty($this->ds->get('telegram_page'))) {
-            array_push($externalServices, '"' . $this->ds->get('telegram_page') . '"');
+        $externalService = $this->ds->get('telegram_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
         }
-        if (!empty($this->ds->get('whatsapp_page'))) {
-            array_push($externalServices, '"' . $this->ds->get('whatsapp_page') . '"');
+        $externalService = $this->ds->get('whatsapp_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
         }
-        if (!empty($this->ds->get('tiktok_page'))) {
-            array_push($externalServices, '"' . $this->ds->get('tiktok_page') . '"');
+        $externalService = $this->ds->get('tiktok_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
         }
-        if (!empty($this->ds->get('dailymotion_page'))) {
-            array_push($externalServices, '"' . $this->ds->get('dailymotion_page') . '"');
+        $externalService = $this->ds->get('dailymotion_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
         }
 
         if (!empty($externalServices)) {
