@@ -114,6 +114,15 @@ class UrlGeneratorHelper
         $context = $this->locale->getContext();
         $this->locale->setContext('frontend');
 
+        $localize = $this->locale->getRequestLocale('frontend');
+        if (array_key_exists('locale', $params) && !empty($params['locale'])) {
+            $localize = $params['locale'];
+            $uri .= $this->locale->getSlugs()[$params['locale']] &&
+                $this->locale->getSlugs()[$params['locale']] !== $this->locale->getSlug() ?
+            '/' . $this->locale->getSlugs()[$params['locale']] :
+            '';
+        }
+
         $method = 'getUriForContent';
 
         if (!$content instanceof \Content) {
@@ -123,10 +132,13 @@ class UrlGeneratorHelper
 
         if (method_exists($this, $method)) {
             $content = $this->container->get('data.manager.filter')->set($content)
-                ->filter('localize', [ 'keys'   => $this->container->get('api.service.content')->getL10nKeys() ])
+                ->filter('localize', [
+                    'keys'   => $this->container->get('api.service.content')->getL10nKeys(),
+                    'locale' => $localize
+                ])
                 ->get();
 
-            $uri .= '/' . $this->{$method}($content);
+            $uri .= '/' . $this->{$method}($content, $localize);
         }
 
         $this->locale->setContext($context);
@@ -134,6 +146,7 @@ class UrlGeneratorHelper
         if (array_key_exists('_format', $params) && $params['_format'] == 'amp') {
             $uri = preg_replace('@\.html$@', '.amp.html', $uri);
         }
+
 
         return $uri;
     }
@@ -151,13 +164,11 @@ class UrlGeneratorHelper
         if (empty($item)) {
             return null;
         }
-
         $item = is_string($item) ? $item : $this->contentHelper->getContent($item);
 
         if (!empty($item->externalUri)) {
             return $item->externalUri;
         }
-
         $absolute = array_key_exists('_absolute', $params) && $params['_absolute'];
         $escape   = array_key_exists('_escape', $params) && $params['_escape'];
         $isAmp    = array_key_exists('_amp', $params) && $params['_amp'];
@@ -271,7 +282,7 @@ class UrlGeneratorHelper
      *
      * @return string The attachment URI.
      */
-    protected function getUriForAttachment($content)
+    protected function getUriForAttachment($content, $locale = null)
     {
         $pathFile = trim(rtrim($content->path, DS), DS);
 
@@ -290,7 +301,7 @@ class UrlGeneratorHelper
      *
      * @return string The article URI.
      */
-    protected function getUriForArticle($content)
+    protected function getUriForArticle($content, $locale = null)
     {
         $created = is_object($content->created)
             ? $content->created->format('Y-m-d H:i:s')
@@ -299,6 +310,12 @@ class UrlGeneratorHelper
         try {
             $category = $this->container->get('api.service.category')
                 ->getItem($content->categories[0]);
+            $category = $this->container->get('data.manager.filter')->set($category)
+                ->filter('localize', [
+                    'keys'   => [ 'name' ],
+                    'locale' => $locale
+                ])
+                ->get();
 
             $categorySlug = $category->name;
         } catch (\Exception $e) {
@@ -320,8 +337,15 @@ class UrlGeneratorHelper
      *
      * @return string The category URI.
      */
-    protected function getUriForCategory($category)
+    protected function getUriForCategory($category, $locale = null)
     {
+        $category = $this->container->get('data.manager.filter')->set($category)
+            ->filter('localize', [
+                'keys'   => [ 'name' ],
+                'locale' => $locale
+            ])
+            ->get();
+
         $uri = $this->container->get('router')->generate('category_frontpage', [
             'category_slug' => $category->name
         ]);
@@ -336,12 +360,12 @@ class UrlGeneratorHelper
      *
      * @return string The generated URI.
      */
-    protected function getUriForContent($content)
+    protected function getUriForContent($content, $locale = null)
     {
         $methodName = 'getUriFor' . ucfirst($content->content_type_name);
 
         if (method_exists($this, $methodName)) {
-            return $this->{$methodName}($content);
+            return $this->{$methodName}($content, $locale);
         }
 
         try {
@@ -351,6 +375,12 @@ class UrlGeneratorHelper
 
             $category = $this->container->get('api.service.category')
                 ->getItem($categoryId);
+            $category = $this->container->get('data.manager.filter')->set($category)
+                ->filter('localize', [
+                    'keys'   => [ 'name' ],
+                    'locale' => $locale
+                ])
+                ->get();
 
             $categorySlug = $category->name;
         } catch (\Exception $e) {
@@ -376,11 +406,18 @@ class UrlGeneratorHelper
      *
      * @return string The letter URI.
      */
-    protected function getUriForLetter($content)
+    protected function getUriForLetter($content, $locale = null)
     {
         $created = is_object($content->created)
             ? $content->created->format('Y-m-d H:i:s')
             : $content->created;
+
+            $content = $this->container->get('data.manager.filter')->set($content)
+                ->filter('localize', [
+                    'keys'   => $this->container->get('api.service.content')->getL10nKeys(),
+                    'locale' => $locale
+                ])
+                ->get();
 
         return $this->generateUriFromConfig('letter', [
             'id'       => sprintf('%06d', $content->id),
@@ -397,9 +434,16 @@ class UrlGeneratorHelper
      *
      * @return string The opinion URI.
      */
-    protected function getUriForOpinion($content)
+    protected function getUriForOpinion($content, $locale = null)
     {
         $type = 'opinion';
+
+        $content = $this->container->get('data.manager.filter')->set($content)
+            ->filter('localize', [
+                'keys'   => $this->container->get('api.service.content')->getL10nKeys(),
+                'locale' => $locale
+            ])
+            ->get();
 
         $created = is_object($content->created)
             ? $content->created->format('Y-m-d H:i:s')
@@ -438,7 +482,7 @@ class UrlGeneratorHelper
      *
      * @return string The photo URI.
      */
-    protected function getUriForPhoto($content)
+    protected function getUriForPhoto($content, $locale = null)
     {
         $pathFile = trim(rtrim($content->path, DS), DS);
 
@@ -456,7 +500,7 @@ class UrlGeneratorHelper
      *
      * @return string The tag URI.
      */
-    protected function getUriForTag($tag)
+    protected function getUriForTag($tag, $locale = null)
     {
         $uri = $this->container->get('router')
             ->generate('frontend_tag_frontpage', [ 'slug' => $tag->slug ]);
@@ -471,7 +515,7 @@ class UrlGeneratorHelper
      *
      * @return string The user URI.
      */
-    protected function getUriForUser($user)
+    protected function getUriForUser($user, $locale = null)
     {
         $routeName   = 'frontend_opinion_author_frontpage';
         $routeParams = [
@@ -559,8 +603,6 @@ class UrlGeneratorHelper
             'ad'          => 'publicidad/_ID_.html',
             'kiosko'      => 'portadas-papel/_CATEGORY_/_DATE__ID_.html',
             'letter'      => 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'special'     => 'especiales/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'book'        => 'libro/_CATEGORY_/_SLUG_/_DATE__ID_.html',
             'event'       => 'event/_SLUG_',
         ];
     }

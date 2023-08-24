@@ -50,11 +50,13 @@ class UserSubscriber implements EventSubscriberInterface
     /**
      * Initializes the UserSubscriber.
      *
+     * @param Container       $container The service container.
      * @param UserCacheHelper $helper The helper to remove user caches.
      */
-    public function __construct(UserCacheHelper $helper)
+    public function __construct($container, UserCacheHelper $helper)
     {
-        $this->helper = $helper;
+        $this->container = $container;
+        $this->helper    = $helper;
     }
 
     /**

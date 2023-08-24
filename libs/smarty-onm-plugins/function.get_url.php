@@ -11,15 +11,17 @@ function smarty_function_get_url($params, &$smarty)
         return '';
     }
 
-    $absolute  = array_key_exists('absolute', $params) && $params['absolute'];
-    $escape    = array_key_exists('escape', $params) && $params['escape'];
-    $isAmp     = array_key_exists('amp', $params) && $params['amp'];
-    $container = $smarty->getContainer();
+    $absolute    = array_key_exists('absolute', $params) && $params['absolute'];
+    $escape      = array_key_exists('escape', $params) && $params['escape'];
+    $isAmp       = array_key_exists('amp', $params) && $params['amp'];
+    $translation = array_key_exists('locale', $params) && $params['locale'];
+    $container   = $smarty->getContainer();
 
     $url = $container->get('core.helper.url_generator')
         ->generate($params['item'], [
             'absolute' => $absolute,
             '_format'  => $isAmp ? 'amp' : null,
+            'locale'   => $translation ? $params['locale'] : null,
         ]);
 
     $url = $container->get('core.decorator.url')->prefixUrl($url);

@@ -2,12 +2,14 @@ frontend_rss_facebook_instant_articles:
     path:     /rss/facebook-instant-articles/
     defaults: { _controller: FrontendBundle:Rss:facebookInstantArticles }
     options:
+        l10n: true
         subdirectory: true
 
 frontend_rss_showcase:
     path:     /rss/google-news-showcase/
     defaults: { _controller: FrontendBundle:Rss:googleNews}
     options:
+        l10n: true
         subdirectory: true
 
 frontend_rss_listing:
@@ -23,6 +25,7 @@ frontend_rss_author:
     requirements:
         author_slug: '[^/]+'
     options:
+        l10n: true
         subdirectory: true
 
 # For app only
@@ -30,6 +33,7 @@ frontend_rss_frontpage:
     path:     /rss/frontpage/
     defaults: { _controller: FrontendBundle:Rss:frontpageRss }
     options:
+        l10n: true
         subdirectory: true
 
 # For app only
@@ -39,18 +43,21 @@ frontend_rss_frontpage_category:
     requirements:
         category: '[^/]+'
     options:
+        l10n: true
         subdirectory: true
 
 frontend_rss:
     path:     /rss/
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     options:
+        l10n: true
         subdirectory: true
 
 frontend_rss_most_viewed:
     path:     /rss/most-viewed/
     defaults: { _controller: FrontendBundle:Rss:mostViewedRss }
     options:
+        l10n: true
         subdirectory: true
 
 frontend_rss_type:
@@ -59,6 +66,7 @@ frontend_rss_type:
     requirements:
         type: '(album|opinion|video|event|poll|obituary|company)'
     options:
+        l10n: true
         subdirectory: true
 
 frontend_rss_type_category:
@@ -68,6 +76,7 @@ frontend_rss_type_category:
         type:     '(album|video|event|poll)'
         category: '[^/]*'
     options:
+        l10n: true
         subdirectory: true
 
 frontend_rss_category:
@@ -76,4 +85,5 @@ frontend_rss_category:
     requirements:
         category: '[^/]+'
     options:
+        l10n: true
         subdirectory: true

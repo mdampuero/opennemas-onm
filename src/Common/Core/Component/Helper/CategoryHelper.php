@@ -304,16 +304,16 @@ class CategoryHelper
      *
      * @return bool  True if the category has manual layout. False otherwise.
      */
-    public function isManualCategory($item = null)
+    public function isManualCategory($item = null) :bool
     {
         if (empty($item)) {
-            return null;
+            return false;
         }
 
         $category = $this->getCategory($item);
 
         if (empty($category->params) || empty($category->params['manual'])) {
-            return null;
+            return false;
         }
 
         return (bool) $category->params['manual'];

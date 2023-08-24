@@ -7,7 +7,7 @@
  *
  * @return int Image id.
  */
-function get_update_image($item = null) : int
+function get_update_image($item = null) : ?int
 {
     return getService('core.helper.content_update')->getImage($item);
 }
@@ -19,7 +19,7 @@ function get_update_image($item = null) : int
  *
  * @return string Item body.
  */
-function get_update_body($item = null) : string
+function get_update_body($item = null) : ?string
 {
     return getService('core.helper.content_update')->getBody($item);
 }
@@ -31,7 +31,7 @@ function get_update_body($item = null) : string
  *
  * @return string Item body.
  */
-function get_update_title($item = null) : string
+function get_update_title($item = null) : ?string
 {
     return getService('core.helper.content_update')->getTitle($item);
 }
@@ -43,7 +43,7 @@ function get_update_title($item = null) : string
  *
  * @return string Item body.
  */
-function get_update_caption($item = null) : string
+function get_update_caption($item = null) : ?string
 {
     return getService('core.helper.content_update')->getCaption($item);
 }
@@ -55,7 +55,7 @@ function get_update_caption($item = null) : string
  *
  * @return string Item date.
  */
-function get_update_modified_date($item = null) : string
+function get_update_modified_date($item = null) : ?string
 {
     return getService('core.helper.content_update')->getModifiedDate($item);
 }

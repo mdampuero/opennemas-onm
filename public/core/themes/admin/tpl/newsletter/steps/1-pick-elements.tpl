@@ -73,7 +73,7 @@
                         <input class="form-control" ng-model="container.title" type="text">
                       </div>
                       <div class="col-sm-6 col-lg-8 m-b-10 m-t-15 text-right">
-                        <button class="btn btn-default m-b-5" ng-click="markContainer($index)" content-picker content-picker-ignore="[% getItemIds(container.items) %]" content-picker-intime="true" content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="target" content-picker-type="album,article,attachment,event,obituary,opinion,poll,special,video" type="button">
+                        <button class="btn btn-default m-b-5" ng-click="markContainer($index)" content-picker content-picker-ignore="[% getItemIds(container.items) %]" content-picker-intime="true" content-picker-section="newsletter" content-picker-selection="true" content-picker-max-size="50" content-picker-target="target" content-picker-type="album,article,attachment,event,obituary,opinion,poll,video" type="button">
                           <i class="fa fa-plus m-r-5"></i>
                           {t}Add{/t}
                         </button>

@@ -122,11 +122,6 @@ class CacheManager
                 'cache_lifetime' => 86400,
                 'name'           => ('Newslibrary')
             ],
-            'specials' => [
-                'caching'        => 0,
-                'cache_lifetime' => 86400,
-                'name'           => ('Special')
-            ],
             'sitemap' => [
                 'cache_lifetime' => 300,
                 'caching'        => 0,

@@ -9,12 +9,10 @@
  */
 namespace Api\Controller\V1\Backend;
 
-use Api\Exception\GetItemException;
 use Common\Model\Entity\Content;
-use Common\Model\Entity\Opinion;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class OpinionController extends ContentController
 {
@@ -49,7 +47,7 @@ class OpinionController extends ContentController
     protected $service = 'api.service.opinion';
 
     /**
-     * Get the tag config.
+     * Get the opinions config.
      *
      * @param Request $request The request object.
      *
@@ -63,7 +61,7 @@ class OpinionController extends ContentController
             ->getDataSet('Settings')
             ->get('extraInfoContents.OPINION_MANAGER');
 
-        return new JsonResponse([ 'extrafields' => $settings ]);
+        return new JsonResponse([ 'extra_fields' => $settings ]);
     }
 
     /**
@@ -84,7 +82,7 @@ class OpinionController extends ContentController
     }
 
     /**
-     * Saves configuration for tags.
+     * Saves configuration for opinion.
      *
      * @param Request $request The request object.
      *
@@ -94,8 +92,12 @@ class OpinionController extends ContentController
     {
         $this->checkSecurity($this->extension, 'OPINION_SETTINGS');
 
-        $extra    = $request->request->get('extrafields');
-        $settings = [ 'extraInfoContents.OPINION_MANAGER' => $extra ];
+        $settings = [
+            'extraInfoContents.OPINION_MANAGER' => json_decode(
+                $request->request->get('extraFields'),
+                true
+            ),
+        ];
 
         $msg = $this->get('core.messenger');
 
@@ -183,8 +185,6 @@ class OpinionController extends ContentController
     {
         $extra = parent::getExtraData($items);
 
-        $extraFields = null;
-
         if ($this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')) {
             $extraFields = $this->get('orm.manager')
                 ->getDataSet('Settings', 'instance')
@@ -197,7 +197,7 @@ class OpinionController extends ContentController
 
         return array_merge([
             'categories'   => $categories,
-            'extra_fields' => $extraFields,
+            'extra_fields' => $extraFields ?? null,
             'tags'         => $this->getTags($items),
             'formSettings' => [
                 'name'             => $this->module,

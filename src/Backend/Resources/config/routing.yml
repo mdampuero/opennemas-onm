@@ -69,44 +69,6 @@ admin_ads_config:
     path:     /ads/config/
     defaults: { _controller: BackendBundle:Advertisements:config }
 
-# Special manager routes
-admin_specials:
-    path:     /specials/
-    defaults: { _controller: BackendBundle:Specials:list }
-
-admin_special_create:
-    path:     /specials/create/
-    defaults: { _controller: BackendBundle:Specials:create }
-
-admin_special_show:
-    path:     /specials/{id}/show/
-    defaults: { _controller: BackendBundle:Specials:show }
-    options:
-        expose: true
-
-admin_special_update:
-    path:     /specials/{id}/update/
-    defaults: { _controller: BackendBundle:Specials:update }
-
-# Books controller routes
-admin_books:
-    path:     /books/
-    defaults: { _controller: BackendBundle:Books:list }
-
-admin_books_create:
-    path:     /books/create/
-    defaults: { _controller: BackendBundle:Books:create }
-
-admin_book_show:
-    path:     /books/{id}/show/
-    defaults: { _controller: BackendBundle:Books:show }
-    options:
-        expose: true
-
-admin_books_update:
-    path:     /books/{id}/update/
-    defaults: { _controller: BackendBundle:Books:update }
-
 # Search controller routes
 admin_search:
     path:     /search/

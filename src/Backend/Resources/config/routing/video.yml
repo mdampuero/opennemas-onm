@@ -1,3 +1,7 @@
+backend_videos_config:
+    path:     /videos/config
+    defaults: { _controller: BackendBundle:Video:config }
+
 backend_videos_create:
     path:     /videos/new/
     defaults: { _controller: BackendBundle:Video:create }
