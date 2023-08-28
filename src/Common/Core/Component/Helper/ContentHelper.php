@@ -380,15 +380,16 @@ class ContentHelper
         }
 
         $cacheId = sprintf('suggested_contents_%s_%d', $contentTypeName, $categoryId);
-
-        if (!empty($contentId)) {
-            $cacheId .= '_' . $contentId;
-        }
-
-        $items = $this->cache->get($cacheId);
+        $items   = $this->cache->get($cacheId);
 
         if (!empty($items)) {
-            return $items;
+            if ($contentId) {
+                $items = array_values(array_filter($items, function ($item) use ($contentId) {
+                    return $item->pk_content !== $contentId;
+                }));
+            }
+
+            return array_slice($items, 0, $epp);
         }
 
         $criteria = [
@@ -407,12 +408,6 @@ class ContentHelper
             ]
         ];
 
-        if (!empty($contentId)) {
-            $criteria['pk_content'] = [
-                [ 'value' => [ $contentId ], 'operator' => 'NOT IN' ]
-            ];
-        }
-
         if (!empty($categoryId)) {
             $criteria['category_id'] = [ [ 'value' => $categoryId ] ];
         }
@@ -420,14 +415,20 @@ class ContentHelper
         try {
             $items = $this->entityManager->findBy($criteria, [
                 'starttime' => 'desc'
-            ], $epp, 1);
+            ], $epp + 1, 1);
 
             $this->cache->set($cacheId, $items, 900);
+
+            if ($contentId) {
+                $items = array_values(array_filter($items, function ($item) use ($contentId) {
+                    return $item->pk_content !== $contentId;
+                }));
+            }
         } catch (\Exception $e) {
             return [];
         }
 
-        return $items;
+        return array_slice($items, 0, $epp);
     }
 
     /**
@@ -544,7 +545,11 @@ class ContentHelper
      */
     public function hasCommentsEnabled($item = null) : bool
     {
-        return !empty($this->getProperty($item, 'with_comment'));
+        $disableComments = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('comment_settings')['disable_comments'];
+
+        return !empty($this->getProperty($item, 'with_comment')) && !(is_null($disableComments) ? true : $disableComments);
     }
 
     /**

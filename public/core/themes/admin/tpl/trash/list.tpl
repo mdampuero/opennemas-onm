@@ -112,11 +112,6 @@
           <option value="poll">{t}Polls{/t}</option>
         {/acl}
       {/is_module_activated}
-      {is_module_activated name="SPECIAL_MANAGER"}
-        {acl isAllowed="SPECIAL_DELETE"}
-          <option value="special">{t}Specials{/t}</option>
-        {/acl}
-      {/is_module_activated}
       {is_module_activated name="STATIC_PAGES_MANAGER"}
         {acl isAllowed="STATIC_PAGE_DELETE"}
           <option value="static_page">{t}Static Pages{/t}</option>

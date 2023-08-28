@@ -42,7 +42,6 @@ DELETE FROM `albums_photos` WHERE `pk_album` NOT IN (SELECT `pk_album` FROM `alb
 DELETE FROM `albums_photos` WHERE `pk_photo` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `articles` WHERE `pk_article` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `attachments` WHERE `pk_attachment` NOT IN (SELECT `pk_content` FROM `contents`);
-DELETE FROM `books` WHERE `pk_book` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `comments` WHERE `content_id` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `commentsmeta` WHERE `fk_content` NOT IN (SELECT `id` FROM `comments`);
 DELETE FROM `contentmeta` WHERE `fk_content` NOT IN (SELECT `pk_content` FROM `contents`);
@@ -57,9 +56,6 @@ DELETE FROM `photos` WHERE `pk_photo` NOT IN (SELECT `pk_content` FROM `contents
 DELETE FROM `related_contents` WHERE `pk_content1` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `related_contents` WHERE `pk_content2` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `static_pages` WHERE `pk_static_page` NOT IN (SELECT `pk_content` FROM `contents`);
-DELETE FROM `specials` WHERE `pk_special` NOT IN (SELECT `pk_content` FROM `contents`);
-DELETE FROM `special_contents` WHERE `fk_special` NOT IN (SELECT `pk_special` FROM `specials`);
-DELETE FROM `special_contents` WHERE `fk_content` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `translation_ids` WHERE `pk_content` NOT IN (SELECT `pk_content` FROM `contents`);
 DELETE FROM `usermeta` WHERE `user_id` NOT IN (SELECT id FROM users);
 DELETE FROM `user_groups_privileges` WHERE `pk_fk_user_group` NOT IN (SELECT `pk_user_group` FROM `user_groups`);
@@ -71,7 +67,6 @@ ALTER TABLE albums_photos CHANGE description description TEXT DEFAULT NULL;
 CREATE INDEX pk_album ON albums_photos (pk_album);
 CREATE INDEX pk_photo ON albums_photos (pk_photo);
 ALTER TABLE albums_photos RENAME INDEX pk_album_2 TO index_album_photo;
-ALTER TABLE books CHANGE pk_book pk_book BIGINT UNSIGNED AUTO_INCREMENT NOT NULL, ADD PRIMARY KEY (pk_book);
 ALTER TABLE `comments` CHANGE `date` `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 DROP INDEX comment_status_date ON comments;
 DROP INDEX comment_date ON comments;
@@ -110,12 +105,6 @@ ALTER TABLE newsletter_archive CHANGE created created DATETIME DEFAULT CURRENT_T
 ALTER TABLE newsletter_archive CHANGE updated updated DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
 ALTER TABLE orders CHANGE created created DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL;
 CREATE INDEX pk_content2 ON related_contents (pk_content2);
-ALTER TABLE special_contents CHANGE fk_content fk_content BIGINT UNSIGNED NOT NULL;
-ALTER TABLE newsletter_archive CHANGE fk_special fk_special BIGINT UNSIGNED NOT NULL
-ALTER TABLE newsletter_archive ADD PRIMARY KEY (fk_content, fk_special);
-CREATE INDEX fk_content ON special_contents (fk_content);
-CREATE INDEX fk_special ON special_contents (fk_special);
-ALTER TABLE specials CHANGE pk_special pk_special BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE static_pages CHANGE pk_static_page pk_static_page BIGINT UNSIGNED AUTO_INCREMENT NOT NULL;
 ALTER TABLE translation_ids CHANGE pk_content pk_content BIGINT UNSIGNED NOT NULL;
 CREATE INDEX pk_content ON translation_ids (pk_content);

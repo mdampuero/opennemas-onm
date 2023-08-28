@@ -165,15 +165,6 @@ $menuXml = [
             ],
 
             [
-                'id'          => 'specials_manager',
-                'title'       => _('Specials'),
-                'icon'        => 'fa fa-star',
-                'link'        => url('admin_specials'),
-                'module_name' => 'SPECIAL_MANAGER',
-                'privilege'   => 'SPECIAL_ADMIN',
-            ],
-
-            [
                 'id'          => 'letter_manager',
                 'title'       => _('Letter to the editor'),
                 'icon'        => 'fa fa-envelope',
@@ -240,14 +231,6 @@ $menuXml = [
                 'link'        => url('backend_newsstands_list'),
                 'module_name' => 'KIOSKO_MANAGER',
                 'privilege'   => 'KIOSKO_ADMIN',
-            ],
-            [
-                'id'          => 'book_manager',
-                'title'       => _('Books'),
-                'icon'        => 'fa fa-book',
-                'link'        => url('admin_books'),
-                'module_name' => 'BOOK_MANAGER',
-                'privilege'   => 'BOOK_ADMIN',
             ],
         ],
     ],

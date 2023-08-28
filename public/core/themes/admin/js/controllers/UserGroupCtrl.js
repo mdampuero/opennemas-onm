@@ -103,7 +103,7 @@
             rows: [
               [ 'CATEGORY_MANAGER', 'CONTENT' ],
               [ 'ARTICLE_MANAGER', 'OPINION_MANAGER', 'COMMENT_MANAGER' ],
-              [ 'POLL_MANAGER', 'STATIC_PAGES_MANAGER', 'SPECIAL_MANAGER', 'LETTER_MANAGER' ],
+              [ 'POLL_MANAGER', 'STATIC_PAGES_MANAGER', 'LETTER_MANAGER' ],
               [ 'es.openhost.module.events', 'es.openhost.module.obituaries', 'es.openhost.module.companies' ],
             ]
           },
@@ -111,7 +111,7 @@
             title: 'Multimedia',
             rows: [
               [ 'IMAGE_MANAGER', 'FILE_MANAGER', 'VIDEO_MANAGER', 'ALBUM_MANAGER' ],
-              [ 'KIOSKO_MANAGER', 'BOOK_MANAGER' ],
+              [ 'KIOSKO_MANAGER' ],
             ]
           },
           {

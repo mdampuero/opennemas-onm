@@ -9,7 +9,6 @@ orm:
                     - album
                     - article
                     - attachment
-                    - book
                     - company
                     - event
                     - kiosko
@@ -18,7 +17,6 @@ orm:
                     - opinion
                     - photo
                     - poll
-                    - special
                     - static_page
                     - video
                     - widget

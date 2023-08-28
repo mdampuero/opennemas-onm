@@ -116,6 +116,18 @@
                         </label>
                       </div>
                     </div>
+                    <h4>
+                      <i class="fa fa-search"></i>
+                      {t}SEO Information{/t}
+                    </h4>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <input id="seo_information" name="seo_information" ng-false-value="0" ng-model="settings.seo_information" ng-true-value="1" type="checkbox">
+                        <label for="seo_information">
+                          {t}Show SEO information on contents{/t}
+                        </label>
+                      </div>
+                    </div>
                     <div ng-if="extra.theme_skins.length !== 0">
                       <label class="form-label" for="theme-style">
                         <h4>
