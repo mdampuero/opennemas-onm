@@ -745,11 +745,6 @@ class ContentManager
                 'title'           => _('Video')
             ],
             [
-                'pk_content_type' => 10,
-                'name'            => 'special',
-                'title'           => _('Special')
-            ],
-            [
                 'pk_content_type' => 11,
                 'name'            => 'poll',
                 'title'           => _('Poll')
@@ -768,11 +763,6 @@ class ContentManager
                 'pk_content_type' => 14,
                 'name'            => 'kiosko',
                 'title'           => _('Kiosko')
-            ],
-            [
-                'pk_content_type' => 15,
-                'name'            => 'book',
-                'title'           => _('Book')
             ],
             [
                 'pk_content_type' => 17,

@@ -27,7 +27,7 @@
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf UserSettingsCtrl
+         * @memberOf ArticleConfigCtrl
          *
          * @description
          *  The extraFields object.
@@ -35,38 +35,41 @@
          * @type {Object}
          */
         $scope.extraFields = {};
-        $scope.saving = false;
 
-        $scope.init = function(extraFields) {
-          if (extraFields !== null) {
-            $scope.extraFields = extraFields;
-          }
+        /**
+         * @function init
+         * @memberOf ArticleConfigCtrl
+         *
+         * @description
+         *   Initializes the form.
+         */
+        $scope.init = function() {
+          http.get('api_v1_backend_article_get_config').then(function(response) {
+            $scope.extraFields = response.data.extra_fields;
+            $scope.disableFlags('http');
+          }, function() {
+            $scope.disableFlags('http');
+          });
         };
 
         /**
-         * Updates an item.
+         * @function save
+         * @memberOf ArticleConfigCtrl
          *
-         * @param int    index   Index of the item to update in contents.
-         * @param int    id      Id of the item to update.
-         * @param string route   Route name.
-         * @param string name    Name of the property to update.
-         * @param mixed  value   New value.
-         * @param string loading Name of the property used to show work-in-progress.
+         * @description
+         *   Saves the configuration.
          */
-        $scope.saveConf = function($event) {
-          $event.preventDefault();
+        $scope.save = function() {
+          $scope.flags.http.saving = true;
 
           var data = { extraFields: JSON.stringify(cleaner.clean($scope.extraFields)) };
 
-          $scope.saving = false;
-          http.put('api_v1_backend_extra_fields_article_save', data)
+          http.put('api_v1_backend_article_save_config', data)
             .then(function(response) {
-              $scope.saving = false;
-
+              $scope.disableFlags('http');
               messenger.post(response.data);
             }, function(response) {
-              $scope.saving = false;
-
+              $scope.disableFlags('http');
               messenger.post(response.data);
             });
         };

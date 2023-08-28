@@ -103,4 +103,20 @@ class PollController extends BackendController
         } catch (GetListException $e) {
         }
     }
+
+      /**
+     * Config for poll system
+     *
+     * @return Response the response object
+     *
+     * @Security("hasExtension('MASTER')")
+     */
+    public function configAction()
+    {
+        return $this->render('poll/config.tpl', [
+            'extra_fields' => $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('extraInfoContents.POLL_MANAGER')
+        ]);
+    }
 }

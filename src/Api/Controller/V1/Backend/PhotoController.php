@@ -99,6 +99,8 @@ class PhotoController extends ContentController
         $config = $ds->get('photo_settings', []);
         $config = $sh->toBoolean($config, ['optimize_images']);
 
+        $config['image_quality']    = $config['image_quality'] ?? '65';
+        $config['image_resolution'] = $config['image_resolution'] ?? '1920x1080';
         return new JsonResponse([
             'config' => $config
         ]);

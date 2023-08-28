@@ -370,5 +370,65 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
       return text;
     };
+
+    /**
+     * @function getTextComplexity
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @param {any} String or Object to localize.
+     *
+     * @return {String} Localized text.
+     *
+     * @description
+     *   Get text and return its complexity by Fernández Huerta formula
+     */
+    $scope.getTextComplexity = function(text) {
+      if (typeof text !== 'string') {
+        text = '';
+      }
+      // Regex to replace url in sentences
+      var regex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[A-Z0-9+&@#/%=~_|$])/igm;
+
+      // Replace url in sentences
+      var text = text.replace(regex, 'enlace');
+
+      // Remove HTML tags and add one space after every ".", "!" or "?".
+      var text = text.replace(/(<([^>]+)>)/ig, ' ').replace(/&nbsp;/ig, ' ').replace(/\.+|!+|\?+/g, '. ');
+
+      // Split the text into sentences and remove any empty sentences that might result from the split.
+      var sentences = text.split(/[.!?\n]/)
+        .filter(function(sentence) {
+          return sentence.trim().length > 0;
+        });
+
+      // Replace several spaces for only one space
+      text = text.replace(/\s\s+/g, ' ');
+
+      // Calculate number of syllables (by using silabajs library)
+      var syllables = silabaJS.getSilabas(text).numeroSilaba;
+
+      // Split the text into words.
+      var words = text.split(/\s+/);
+
+      // Remove any empty words that might result from the split.
+      words = words
+        .filter(function(word) {
+          return word.trim().length > 0 && word.trim()[0].match(/[a-zA-Z#0-9(]/);
+        });
+
+      // Calculate the averages.
+      var avgSyllablesPerWord = syllables / words.length;
+      var avgWordsPerSentence = words.length / sentences.length;
+
+      // Apply the Fernández-Huerta formula to get text complexity (rounded)
+      var textComplexity =  Math.round(206.84 - 1.02 * avgWordsPerSentence - 60 * avgSyllablesPerWord);
+
+      textComplexity = Math.min(Math.max(textComplexity, 1), 100);
+
+      return {
+        textComplexity: textComplexity,
+        wordsCount: words.length
+      };
+    };
   }
 ]);

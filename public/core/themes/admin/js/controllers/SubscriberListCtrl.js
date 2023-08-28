@@ -15,8 +15,8 @@
      *   Handles all actions in subscribers list.
      */
     .controller('SubscriberListCtrl', [
-      '$controller', '$scope', '$uibModal', 'oqlEncoder',
-      function($controller, $scope, $uibModal, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder',
+      function($controller, $scope, oqlEncoder) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -37,55 +37,17 @@
 
         /**
          * @function confirm
-         * @memberOf SubscriberCtrl
+         * @memberOf SubscriberListCtrl
          *
          * @description
-         *   Shows a modal to confirm subscriber update.
+         *   Confirm subscriber update.
          */
         $scope.confirm = function(property, value, item) {
-          var hasUsers = item ? item.type !== 1 : $scope.items
-            .filter(function(e) {
-              return $scope.selected.items.indexOf(e.id) !== -1 && e.type !== 1;
-            }).length > 0;
-
-          if (!value || !hasUsers || $scope.backup.master) {
-            if (item) {
-              $scope.patch(item, property, value);
-              return;
-            }
-
-            $scope.patchSelected(property, value);
+          if (item) {
+            $scope.patch(item, property, value);
             return;
           }
-
-          var modal = $uibModal.open({
-            templateUrl: 'modal-confirm',
-            backdrop: 'static',
-            controller: 'ModalCtrl',
-            resolve: {
-              template: function() {
-                return {
-                  name:  $scope.id ? 'update' : 'create',
-                  value: 1,
-                  extra: $scope.data.extra,
-                };
-              },
-              success: function() {
-                return null;
-              }
-            }
-          });
-
-          modal.result.then(function(response) {
-            if (response) {
-              if (item) {
-                $scope.patch(item, property, value);
-                return;
-              }
-
-              $scope.patchSelected(property, value);
-            }
-          });
+          $scope.patchSelected(property, value);
         };
 
         /**
