@@ -199,10 +199,10 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
      */
     public function testExtractParamsFromDataWithoutContent()
     {
-        $output['logo']            = 'logo';
-        $output['siteName']        = 'site name';
-        $output['siteUrl']         = 'http://opennemas.com';
-        $output['siteDescription'] = 'site description';
+        $output['logo']             = 'logo';
+        $output['siteName']         = 'site name';
+        $output['siteUrl']          = 'http://opennemas.com';
+        $output['siteDescription']  = 'site description';
         $output['languages']        = null;
         $output['externalServices'] = '[]';
 
