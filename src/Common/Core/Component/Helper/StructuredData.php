@@ -268,11 +268,6 @@ class StructuredData
         if (!empty($externalService)) {
             array_push($externalServices, '"' . $externalService . '"');
         }
-
-        if (!empty($externalServices)) {
-            return "[" . implode(',', $externalServices) . "]";
-        } else {
-            return '';
-        }
+        return "[" . implode(',', $externalServices) . "]";
     }
 }
