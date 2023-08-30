@@ -278,7 +278,7 @@
                   <Property FormalName="Tesauro" Value="{get_category_slug($featuredMediaContent)}" />
                 </DescriptiveMetadata>
                 <NewsComponent Duid="video_{$content->id}.video.file" EquivalentsList="yes">
-                  <Role FormalName="Main" />
+                  <Role FormalName="Video Main" />
                   <MediaType FormalName="Video" />
                   <Characteristics>
                     {if !empty($featuredMediaContent->information) && array_key_exists('duration', $featuredMediaContent->information)}
@@ -287,7 +287,7 @@
                   </Characteristics>
                 </NewsComponent>
                 <NewsComponent Duid="video_{$content->id}.video.text">
-                  <Role FormalName="Caption" />
+                  <Role FormalName="Video Caption" />
                   <ContentItem Href="{get_url($featuredMediaContent, [ '_absolute' => true ])}" {if $featuredMediaContent->path}Url="{$featuredMediaContent->path|escape:'html'}"{elseif $featuredMediaContent->type == 'external'}Url="{$featuredMediaContent->information['source']['mp4']|escape:'html'}"{/if}>
                     <MediaType FormalName="Text" />
                     <Catalog>
