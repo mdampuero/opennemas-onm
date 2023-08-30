@@ -147,10 +147,10 @@
   {/acl}
   {is_module_activated name="es.openhost.module.webpush_notifications"}
     {if !empty({setting name=webpushr field=webpushrKey})}
-      <button ng-if="item.content_status && item.starttime <= currentDateTime" class="btn btn-warning btn-small" ng-click="sendWPNotification(item)" type="button">
+      <button ng-if="!hasMultilanguage() && item.content_status && item.starttime <= currentDateTime" class="btn btn-warning btn-small" ng-click="sendWPNotification(item)" type="button">
         <i class="fa fa-bell m-r-5"></i>
       </button>
-      <button ng-if="!item.content_status || (item.content_status && item.starttime > currentDateTime)" class="btn btn-warning btn-small" ng-click="sendWPNotification(item)" type="button" disabled>
+      <button ng-if="!hasMultilanguage() && (!item.content_status || (item.content_status && item.starttime > currentDateTime))" class="btn btn-warning btn-small" ng-click="sendWPNotification(item)" type="button" disabled>
         <i class="fa fa-bell m-r-5"></i>
       </button>
     {/if}

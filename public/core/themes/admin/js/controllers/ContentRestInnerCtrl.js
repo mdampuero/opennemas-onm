@@ -176,7 +176,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      *   Saves tags, send notifications if  needed and, then, saves the item.
      */
     $scope.submit = function(item) {
-      if (item && !item.is_notified_check && item.is_notified == 1) {
+      if (item && !item.is_notified_check && item.is_notified === 1) {
         $scope.sendWPNotification(item);
       } else {
         $scope.saveItem();
@@ -251,17 +251,16 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           });
 
           if ($scope.item.starttime > $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
-            if (!pendingNotification) {
-              $scope.data.item.webpush_notifications.push(
-                {
-                  status: 0,
-                  body: null,
-                  title: null,
-                  send_date: $scope.item.starttime,
-                  image: null,
-                }
-              );
-            }
+            $scope.removePendingNotification();
+            $scope.data.item.webpush_notifications.push(
+              {
+                status: 0,
+                body: null,
+                title: null,
+                send_date: $window.moment.utc($scope.item.starttime).format('YYYY-MM-DD HH:mm:ss'),
+                image: null,
+              }
+            );
           } else {
             $scope.sendNotification = true;
             if (pendingNotification) {
