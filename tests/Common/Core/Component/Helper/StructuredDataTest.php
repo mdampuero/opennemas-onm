@@ -40,7 +40,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getAvailableLocales', 'getLocale' ])
+            ->setMethods([ 'getSlugs', 'getLocale' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -493,7 +493,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($languageAvailable);
 
         $this->assertEquals(
-            'es_ES',
+            'es-ES',
             $method->invokeArgs($this->object, [])
         );
     }
@@ -506,16 +506,16 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->object, 'getLanguagesData');
         $method->setAccessible(true);
 
-        $languagesAvailables = ['es_ES', 'en_EN'];
+        $languagesAvailables = ['es_ES' => 'es', 'en_EN' => 'en'];
 
         $this->instance->expects($this->any())->method('hasMultilanguage')
             ->willReturn(true);
-        $this->locale->expects($this->any())->method('getAvailableLocales')
+        $this->locale->expects($this->any())->method('getSlugs')
             ->with('frontend')
             ->willReturn($languagesAvailables);
 
         $this->assertEquals(
-            'es_ES,en_EN',
+            'es-ES, en-EN',
             $method->invokeArgs($this->object, [])
         );
     }

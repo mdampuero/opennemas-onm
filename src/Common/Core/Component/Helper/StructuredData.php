@@ -205,13 +205,13 @@ class StructuredData
      */
     protected function getLanguagesData()
     {
+        $languages = $this->container->get('core.locale')->getLocale('frontend');
         if ($this->container->get('core.instance')->hasMultilanguage()) {
-            return implode(',', $this->container->get('core.locale')
-                ->getAvailableLocales('frontend'));
-        } else {
-            return $this->container->get('core.locale')
-                ->getLocale('frontend');
+            $languages = implode(', ', array_keys($this->container->get('core.locale')
+                ->getSlugs('frontend')));
         }
+
+        return str_replace('_', '-', $languages);
     }
 
     /**
