@@ -176,7 +176,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      *   Saves tags, send notifications if  needed and, then, saves the item.
      */
     $scope.submit = function(item) {
-      if (item && !item.is_notified_check && item.is_notified === 1) {
+      if (item && $scope.hasPendingNotifications()) {
         $scope.sendWPNotification(item);
       } else {
         $scope.saveItem();
@@ -224,7 +224,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      * @description
      *   Send webpush notification to all subscribers
      */
-    $scope.sendWPNotification = function(item) {
+    $scope.sendWPNotification = function(item, createNotification = false) {
       var modal = $uibModal.open({
         templateUrl: 'modal-webpush',
         backdrop: 'static',
@@ -246,9 +246,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           }
 
           var image = $scope.data.featuredFrontpage ? $scope.data.featuredFrontpage.target_id : null;
-          var pendingNotification = $scope.item.webpush_notifications.some(function(notification) {
-            return notification.status === 0;
-          });
 
           if ($scope.item.starttime > $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
             $scope.removePendingNotification();
@@ -257,27 +254,53 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
                 status: 0,
                 body: null,
                 title: null,
-                send_date: $window.moment.utc($scope.item.starttime).format('YYYY-MM-DD HH:mm:ss'),
+                send_date: $window.moment.utc($window.moment($scope.item.starttime)).format('YYYY-MM-DD HH:mm:ss'),
                 image: null,
               }
             );
           } else {
             $scope.sendNotification = true;
-            if (pendingNotification) {
+            if ($scope.hasPendingNotifications()) {
               $scope.removePendingNotification();
+              $scope.data.item.webpush_notifications.push(
+                {
+                  status: 1,
+                  body: $scope.item.description,
+                  title: $scope.item.title,
+                  send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
+                  image: image,
+                }
+              );
+              createNotification = false;
             }
-            $scope.data.item.webpush_notifications.push(
-              {
-                status: 1,
-                body: $scope.item.description,
-                title: $scope.item.title,
-                send_date: $window.moment().utc().format('YYYY-MM-DD HH:mm:ss'),
-                image: image,
-              }
-            );
+            if (createNotification) {
+              $scope.data.item.webpush_notifications.push(
+                {
+                  status: 1,
+                  body: $scope.item.description,
+                  title: $scope.item.title,
+                  send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
+                  image: image,
+                }
+              );
+            }
           }
           $scope.saveItem();
         }
+      });
+    };
+
+    /**
+     * @function hasPendingNotifications
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *  Check if items has pending notifications
+     */
+
+    $scope.hasPendingNotifications = function() {
+      return $scope.item.webpush_notifications.some(function(notification) {
+        return notification.status === 0;
       });
     };
 
@@ -288,7 +311,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      * @description
      *  Generates the backend url of the featured media associated to the article.
      */
-    $scope.removePendingNotification = function() {
+    $scope.removePendingNotification = function(saveItem = false) {
       var notifications = $scope.data.item.webpush_notifications;
 
       for (var i = 0; i < notifications.length; i++) {
@@ -296,7 +319,11 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           notifications.splice(i, 1);
         }
       }
+
       $scope.data.item.webpush_notifications = notifications;
+      if (saveItem) {
+        $scope.saveItem();
+      }
     };
 
     /**

@@ -73,7 +73,6 @@
           tags: [],
           external_link: '',
           agency: '',
-          is_notified: 0,
           webpush_notifications: []
         };
 

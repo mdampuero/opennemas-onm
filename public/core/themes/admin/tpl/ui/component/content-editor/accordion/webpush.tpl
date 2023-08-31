@@ -8,9 +8,12 @@
     <div class="text-center m-b-5 m-t-5" ng-if="!item.content_status">
       <small><i class="fa fa-info-circle text-info"></i> {t}Check it as "Published" to send webpush notifications.{/t}</small>
     </div>
-    <div ng-if="item.is_notified_check">
+    <div>
       <div class="text-center" ng-if="item.content_status">
-        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="sendWPNotification(item)" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND NOW{/t}</button>
+        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="sendWPNotification(item, true)" ng-if="!hasPendingNotifications() && getContentScheduling(item) == 0 || getContentScheduling(item) == -1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND NOTIFICATION{/t}</button>
+        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="sendWPNotification(item, true)" ng-if="!hasPendingNotifications() && getContentScheduling(item) == 1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}ADD SCHEDULED NOTIFICATION{/t}</button>
+        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="sendWPNotification(item, true)" ng-if="hasPendingNotifications() && getContentScheduling(item) == 0 || getContentScheduling(item) == -1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND SCHEDULED NOTIFICATION{/t}</button>
+        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="sendWPNotification(item, true)" ng-if="hasPendingNotifications() && getContentScheduling(item) == 1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}CHANGE SCHEDULED NOTIFICATION{/t}</button>
       </div>
       <div class="menu-dragable-accordion" id="webpush-container">
         <div class=" m-t-5" ng-repeat="notification in item.webpush_notifications.slice().reverse()">
@@ -20,6 +23,8 @@
             <small>
               [% notification.send_date | moment : 'YYYY-MM-DD HH:mm:ss': null : '{$app.locale->getTimeZone()->getName()}' %]
             </small>
+            <button type="button" class="close" data-dismiss="alert" ng-click="removePendingNotification(true)" >
+            </button>
           </div>
           <div ng-if="notification.status === 1" class="alert alert-success" id="alerteo">
             <i class="fa fa-check"></i>
@@ -37,12 +42,6 @@
         </div>
       </div>
     </div>
-  </div>
-  <div ng-if="!item.is_notified_check && item.content_status" class="checkbox">
-    <input name="is_notified" id="is_notified" ng-model="item.is_notified" ng-true-value="'1'" ng-false-value="'0'" type="checkbox" >
-    <label for="is_notified">{t}Activate notifications{/t}</label>
-    <br>
-    <small><i class="fa fa-info-circle text-info"></i> {t}Will be sent when it is published.{/t}</small>
   </div>
 </div>
 

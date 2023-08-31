@@ -107,13 +107,10 @@
                     status: 1,
                     body: content.description,
                     title: content.title,
-                    send_date: $window.moment().format('YYYY-MM-DD HH:mm:ss'),
+                    send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
                     image: image,
                   }
                 );
-                if (!content.is_notified) {
-                  $scope.patch(content, 'is_notified', 1);
-                }
                 $scope.patch(content, 'webpush_notifications', contentNotifications)
                   .then(function() {
                     http.post('send_notification', [ content.pk_content ]);
