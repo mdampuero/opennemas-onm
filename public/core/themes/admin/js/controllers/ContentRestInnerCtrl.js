@@ -177,7 +177,11 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      */
     $scope.submit = function(item) {
       if (item && $scope.hasPendingNotifications()) {
-        $scope.sendWPNotification(item);
+        if (item.starttime <= $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
+          $scope.sendWPNotification(item);
+        } else {
+          $scope.updateWPNotifications(item);
+        }
       } else {
         $scope.saveItem();
       }
@@ -241,53 +245,57 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
       modal.result.then(function(response) {
         if (response) {
-          if (!item) {
-            return;
-          }
-
-          var image = $scope.data.featuredFrontpage ? $scope.data.featuredFrontpage.target_id : null;
-
-          if ($scope.item.starttime > $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
-            $scope.removePendingNotification();
-            $scope.data.item.webpush_notifications.push(
-              {
-                status: 0,
-                body: null,
-                title: null,
-                send_date: $window.moment.utc($window.moment($scope.item.starttime)).format('YYYY-MM-DD HH:mm:ss'),
-                image: null,
-              }
-            );
-          } else {
-            $scope.sendNotification = true;
-            if ($scope.hasPendingNotifications()) {
-              $scope.removePendingNotification();
-              $scope.data.item.webpush_notifications.push(
-                {
-                  status: 1,
-                  body: $scope.item.description,
-                  title: $scope.item.title,
-                  send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
-                  image: image,
-                }
-              );
-              createNotification = false;
-            }
-            if (createNotification) {
-              $scope.data.item.webpush_notifications.push(
-                {
-                  status: 1,
-                  body: $scope.item.description,
-                  title: $scope.item.title,
-                  send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
-                  image: image,
-                }
-              );
-            }
-          }
-          $scope.saveItem();
+          $scope.updateWPNotifications(item, createNotification);
         }
       });
+    };
+
+    $scope.updateWPNotifications = function(item, createNotification = false) {
+      if (!item) {
+        return;
+      }
+
+      var image = $scope.data.featuredFrontpage ? $scope.data.featuredFrontpage.target_id : null;
+
+      if ($scope.item.starttime > $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
+        $scope.removePendingNotification();
+        $scope.data.item.webpush_notifications.push(
+          {
+            status: 0,
+            body: null,
+            title: null,
+            send_date: $window.moment.utc($window.moment($scope.item.starttime)).format('YYYY-MM-DD HH:mm:ss'),
+            image: null,
+          }
+        );
+      } else {
+        $scope.sendNotification = true;
+        if ($scope.hasPendingNotifications()) {
+          $scope.removePendingNotification();
+          $scope.data.item.webpush_notifications.push(
+            {
+              status: 1,
+              body: $scope.item.description,
+              title: $scope.item.title,
+              send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
+              image: image,
+            }
+          );
+          createNotification = false;
+        }
+        if (createNotification) {
+          $scope.data.item.webpush_notifications.push(
+            {
+              status: 1,
+              body: $scope.item.description,
+              title: $scope.item.title,
+              send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
+              image: image,
+            }
+          );
+        }
+      }
+      $scope.saveItem();
     };
 
     /**
