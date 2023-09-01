@@ -277,7 +277,9 @@
             }
 
             if ($scope.sendNotification) {
-              http.post('send_notification', [ $scope.getItemId() ]);
+              var itemId = $scope.itemHasId() ? $scope.getItemId() : id;
+              console.log(itemId);
+              http.post('send_notification', [ itemId ]);
             }
 
             if (response.status === 200 && $scope.refreshOnUpdate) {
