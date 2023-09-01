@@ -412,6 +412,8 @@ class ContentManager
         $date = $date->format('Y-m-d H:i:s');
         $now  = gmdate('Y-m-d H:i:s');
 
+        $contentType = is_array($contentType) ? $contentType : [ $contentType ];
+
         $criteria = [
             'join' => [
                 [
