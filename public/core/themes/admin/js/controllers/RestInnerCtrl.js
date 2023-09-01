@@ -278,7 +278,7 @@
 
             if ($scope.sendNotification) {
               var itemId = $scope.itemHasId() ? $scope.getItemId() : id;
-              console.log(itemId);
+
               http.post('send_notification', [ itemId ]);
             }
 
