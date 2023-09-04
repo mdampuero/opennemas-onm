@@ -3,8 +3,8 @@
     <i class="fa fa-times"></i>
   </button>
   <h3 class="p-b-30 p-t-30 text-center">{t}Are you sure?{/t}</h3>
-  <h4 class="p-b-30 text-center" ng-if="!template.selected || template.selected == 1">{t}Do you want to send the webpush notification?{/t}</h4>
-  <h4 class="p-b-30 text-center" ng-if="template.selected > 1">{t}Do you want to delete the selected items?{/t}</h4>
+  <h4 class="p-b-30 text-center" ng-if="!template.status || template.status == 1">{t}You are going to send a push notification to all your subscribers{/t}</h4>
+  <h4 class="p-b-30 text-center" ng-if="template.status > 1">{t}You are going to create or update a scheduled push notification{/t}</h4>
 </div>
 <div class="modal-footer row">
   <div class="col-xs-6">

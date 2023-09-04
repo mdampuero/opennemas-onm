@@ -178,9 +178,9 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     $scope.submit = function(item) {
       if (item && $scope.hasPendingNotifications()) {
         if (item.starttime <= $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
-          $scope.sendWPNotification(item);
+          $scope.openNotificationModal(item);
         } else {
-          $scope.updateWPNotifications(item);
+          $scope.sendWPNotification(item);
         }
       } else {
         $scope.saveItem();
@@ -200,12 +200,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         return;
       }
 
-      if (!$scope.item.content_status) {
-        $scope.data.item.webpush_notifications = $scope.item.webpush_notifications.filter(function(notification) {
-          return notification.status !== 0;
-        });
-        $scope.item.webpush_notifications = $scope.data.item.webpush_notifications;
-      }
       $scope.flags.http.saving = true;
 
       $scope.$broadcast('onmTagsInput.save', {
@@ -222,20 +216,21 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     };
 
     /**
-     * @function sendWPNotification
+     * @function openNotificationModal
      * @memberOf ContentRestInnerCtrl
      *
      * @description
      *   Send webpush notification to all subscribers
      */
-    $scope.sendWPNotification = function(item, createNotification = false) {
+    $scope.openNotificationModal = function(item, createNotification = false) {
+      var status = createNotification ? 1 : 2;
       var modal = $uibModal.open({
         templateUrl: 'modal-webpush',
         backdrop: 'static',
         controller: 'ModalCtrl',
         resolve: {
           template: function() {
-            return null;
+            return { status: status };
           },
           success: function() {
             return null;
@@ -245,12 +240,24 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
       modal.result.then(function(response) {
         if (response) {
-          $scope.updateWPNotifications(item, createNotification);
+          $scope.sendWPNotification(item, createNotification);
         }
       });
     };
 
-    $scope.updateWPNotifications = function(item, createNotification = false) {
+    /**
+     * @function sendWPNotification
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *   Send webpush notification to all subscribers
+     */
+    $scope.sendWPNotification = function(item, createNotification = false) {
+      if (!$scope.validate()) {
+        messenger.post(window.strings.forms.not_valid, 'error');
+        return;
+      }
+
       if (!item) {
         return;
       }
@@ -295,6 +302,11 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           );
         }
       }
+
+      if (!$scope.item.content_status) {
+        $scope.removePendingNotification();
+      }
+
       $scope.saveItem();
     };
 

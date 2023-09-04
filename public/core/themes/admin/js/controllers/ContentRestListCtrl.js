@@ -88,7 +88,7 @@
             controller: 'ModalCtrl',
             resolve: {
               template: function() {
-                return null;
+                return { status: 1 };
               },
               success: function() {
                 return null;
@@ -97,26 +97,24 @@
           });
 
           modal.result.then(function(response) {
-            if (response) {
-              if (content) {
-                var contentNotifications = content.webpush_notifications;
-                var image = content.related_contents[0] ? content.related_contents[0].target_id : null;
+            if (response && content) {
+              var contentNotifications = content.webpush_notifications;
+              var image = content.related_contents[0] ? content.related_contents[0].target_id : null;
 
-                contentNotifications.push(
-                  {
-                    status: 1,
-                    body: content.description,
-                    title: content.title,
-                    send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
-                    image: image,
-                  }
-                );
-                $scope.patch(content, 'webpush_notifications', contentNotifications)
-                  .then(function() {
-                    http.post('send_notification', [ content.pk_content ]);
-                    $scope.list();
-                  });
-              }
+              contentNotifications.push(
+                {
+                  status: 1,
+                  body: content.description,
+                  title: content.title,
+                  send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
+                  image: image,
+                }
+              );
+              $scope.patch(content, 'webpush_notifications', contentNotifications)
+                .then(function() {
+                  http.post('send_notification', [ content.pk_content ]);
+                  $scope.list();
+                });
             }
           });
         };
