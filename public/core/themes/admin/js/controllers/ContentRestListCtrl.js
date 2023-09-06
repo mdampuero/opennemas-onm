@@ -61,13 +61,31 @@
          *
          */
         $scope.createCopy = function(item) {
-          var route = $scope.routes.saveItem;
-          var data  = $scope.parseDataForCopy(item);
+          var modal = $uibModal.open({
+            templateUrl: 'modal-duplicate',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return { };
+              },
+              success: function() {
+                return null;
+              }
+            }
+          });
 
-          http.post(route, data)
-            .then(function() {
-              $scope.list();
-            }, $scope.errorCb);
+          modal.result.then(function(response) {
+            if (response) {
+              var route = $scope.routes.saveItem;
+              var data  = $scope.parseDataForCopy(item);
+
+              http.post(route, data)
+                .then(function() {
+                  $scope.list();
+                }, $scope.errorCb);
+            }
+          });
         };
 
         /**
