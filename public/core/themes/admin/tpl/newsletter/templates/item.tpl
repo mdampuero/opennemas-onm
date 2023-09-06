@@ -289,6 +289,7 @@ var newsletterTemplateTranslations = {
                           <div ng-bind-html="item | highlight: $select.search"></div>
                         </ui-select-choices>
                       </ui-select>
+                      <onm-tags-input filter="true" ng-if="!['static_page'].includes(content.criteria.content_type)" ng-model="content.criteria.tag" hide-generate="true" selection-only="true" generate-from="false" ignoreLocale="true" max-results="4" placeholder="{t}Search by tag{/t}"></onm-tags-input>
                     </div>
                     <button class="btn btn-danger" ng-click="removeContent(container, $index)" type="button">
                       <i class="fa fa-trash-o"></i>
