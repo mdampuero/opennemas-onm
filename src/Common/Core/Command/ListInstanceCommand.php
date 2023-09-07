@@ -46,6 +46,12 @@ EOF
                 'Elements per page. On large datasets this is used as the ' .
                 'number of elements to load at batch.',
                 20
+            )
+            ->addOption(
+                'target',
+                't',
+                InputOption::VALUE_OPTIONAL,
+                'Filter by instance ID or name'
             );
     }
 
@@ -59,6 +65,7 @@ EOF
 
         $epp         = $input->getOption('epp');
         $this->field = $this->input->getOption('field');
+        $target      = $input->getOption('target');
 
         $instance = $this->getContainer()->get('core.loader.instance')
             ->loadInstanceByName('manager')
@@ -86,6 +93,12 @@ EOF
             $instances = $this->getContainer()->get('orm.manager')
                 ->getRepository('Instance')->findBy($oql);
 
+            // If target instace parameter exits, use specific instance
+            if ($target) {
+                $instances = array_filter($instances, function ($instance) use ($target) {
+                    return $instance->id == $target || $instance->internal_name == $target;
+                });
+            }
             $this->printInstanceInfo($instances);
             $page++;
         }
@@ -102,10 +115,13 @@ EOF
         if (empty($instances)) {
             return;
         }
-
         foreach ($instances as $instance) {
+            $subdirectory = $instance->subdirectory ?? '';
+
             $str = 'Name: ' . $instance->internal_name
                 . ', database: ' . $instance->getDatabaseName()
+                . ', main domain: ' . $instance->domains[$instance->main_domain - 1]
+                . $subdirectory
                 . ', domains: [ ' . implode(', ', $instance->domains) . ' ]'
                 . ', activated: ' . $instance->activated;
 
