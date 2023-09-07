@@ -146,7 +146,7 @@ class ContentCacheHelper extends CacheHelper
     {
         if (!empty($item->path) && $item->content_type_name != 'video') {
             $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-                sprintf('req.url ~ %s', $item->path)
+                sprintf('obj.http.x-url ~ %s', $item->path)
             ]));
         }
 
