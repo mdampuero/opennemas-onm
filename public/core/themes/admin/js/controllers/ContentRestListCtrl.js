@@ -98,7 +98,7 @@
 
           modal.result.then(function(response) {
             if (response && content) {
-              var contentNotifications = content.webpush_notifications;
+              var contentNotifications = content.webpush_notifications || [];
               var image = content.related_contents[0] ? content.related_contents[0].target_id : null;
 
               contentNotifications.push(

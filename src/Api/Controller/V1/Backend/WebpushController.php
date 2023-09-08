@@ -21,11 +21,23 @@ class WebpushController extends AbstractController
         $image       = $this->get('core.helper.featured_media')->getFeaturedMedia($content, 'inner');
         $imagePath   = $this->get('core.helper.photo')->getPhotoPath($image, null, [], true);
 
+        $favicoId = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('logo_favico');
+
+        $favico = $this->get('core.helper.photo')->getPhotoPath(
+            $this->get('api.service.content')->getItem($favicoId),
+            null,
+            [ 192, 192 ],
+            true
+        );
+
         $notification = $endpoint->sendNotification([
             'title'      => $content->title,
             'message'    => $content->description,
             'target_url' => $contentPath,
-            'image'      => $imagePath
+            'image'      => $imagePath,
+            'icon'      => $favico,
         ]);
         return new JsonResponse($notification);
     }

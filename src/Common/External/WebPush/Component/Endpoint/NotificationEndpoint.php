@@ -38,7 +38,9 @@ class NotificationEndpoint extends Endpoint
             'json' => [
                 'title'          => $params['title'],
                 'message'        => $params['message'],
-                'target_url'     => $params['target_url']
+                'target_url'     => $params['target_url'],
+                'icon'           => $params['icon'] ?? '',
+                'image'          => $params['image'] ?? ''
             ]
         ];
 
