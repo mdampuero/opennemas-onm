@@ -77,7 +77,6 @@ EOF
         // the pages required to iterate over them
         $instanceCount = $this->getContainer()->get('orm.manager')
             ->getRepository('Instance')->countBy();
-        $pages         = $instanceCount % $epp;
 
         $output->writeln('<info>Total instances:</info> ' . $instanceCount, OutputInterface::VERBOSITY_VERBOSE);
         $output->writeln('<info>Elements per page:</info> ' . $epp, OutputInterface::VERBOSITY_DEBUG);
@@ -113,15 +112,16 @@ EOF
     private function printInstanceInfo($instances = [])
     {
         if (empty($instances)) {
+            $this->output->writeln('No instances found!');
             return;
         }
         foreach ($instances as $instance) {
-            $subdirectory = $instance->subdirectory ?? '';
+            $subdirectory     = $instance->subdirectory ?? '';
+            $instance->domain = $instance->domains[$instance->main_domain - 1] . $subdirectory;
 
             $str = 'Name: ' . $instance->internal_name
                 . ', database: ' . $instance->getDatabaseName()
-                . ', main domain: ' . $instance->domains[$instance->main_domain - 1]
-                . $subdirectory
+                . ', main domain: ' . $instance->domain
                 . ', domains: [ ' . implode(', ', $instance->domains) . ' ]'
                 . ', activated: ' . $instance->activated;
 
@@ -132,12 +132,8 @@ EOF
 
                 // Check if the field is a property of the object
                 if (!empty($instance->{$field})) {
-                    $value = $instance->{$field};
-                    if (is_array($instance->{$field})) {
-                        $value = implode('|', $instance->{$field});
-                    }
-
-                    $str .= ", $field: $value";
+                    $value = is_array($instance->{$field}) ? implode('|', $instance->{$field}) : $instance->{$field};
+                    $str  .= ", $field: $value";
                 }
 
                 // Check if the field is a key in the settings array
