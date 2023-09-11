@@ -117,7 +117,9 @@ EOF
         }
         foreach ($instances as $instance) {
             $subdirectory     = $instance->subdirectory ?? '';
-            $instance->domain = $instance->domains[$instance->main_domain - 1] . $subdirectory;
+            $instance->domain = $instance->main_domain ?
+                $instance->domains[$instance->main_domain - 1] . $subdirectory :
+                $instance->domains[0] . $subdirectory;
 
             $str = 'Name: ' . $instance->internal_name
                 . ', database: ' . $instance->getDatabaseName()
