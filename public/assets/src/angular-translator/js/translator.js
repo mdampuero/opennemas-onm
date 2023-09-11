@@ -164,9 +164,8 @@
           },
           template: function(elem, attrs) {
             if (attrs.link && attrs.language) {
-              return '<a class="btn btn-default btn-small" href="{{link}}?locale={{language}}"> <i class="fa fa-pencil m-r-5"></i>{{text}}</a>';
+              return '<a class="btn btn-white btn-small" href="{{link}}?locale={{language}}" uib-tooltip="{{text}}" tooltip-placement="top"> <i class="fa fa-pencil"></i></a>';
             }
-
             return '<div class="translator btn-group">' +
               '<button class="btn btn-white dropdown-toggle" data-toggle="dropdown" type="button">' +
                 '<i class="fa {{languages[ngModel].icon}} m-r-5" ng-show="languages[ngModel].icon"></i>' +
