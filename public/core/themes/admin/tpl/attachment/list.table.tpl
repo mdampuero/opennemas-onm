@@ -56,7 +56,7 @@
     <a class="btn btn-white btn-small" href="[% routing.generate('backend_attachment_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
       <i class="fa fa-pencil"></i>
     </a>
-    <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_attachment_show', { id: getItemId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" ng-class="{ 'dropup': $index >= data.items.length - 1 }" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+    <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_attachment_show', { id: getItemId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" ng-class="{ 'dropup': $index >= data.items.length - 1 }" class="btn-group" options="data.extra.locale" text="{t}Edit{/t}"></translator>
   {/acl}
   <a class="btn btn-white btn-small" href="[% data.extra.paths.attachment + item.path %]" target="_blank" uib-tooltip="{t}Download{/t}" tooltip-placement="top">
     <i class="fa fa-download"></i>
