@@ -37,6 +37,8 @@ class ExternalSettingController extends SettingController
         'data_layer',
         'facebook',
         'facebook_id',
+        'ga4_native_config',
+        'ga4_native_id',
         'gfk',
         'google_analytics',
         'google_analytics_others',
@@ -71,6 +73,8 @@ class ExternalSettingController extends SettingController
         'adobe_base',
         'gfk',
         'payments',
+        'ga4_native_config',
+        'ga4_native_id',
     ];
 
     public function listAction(Request $request)
