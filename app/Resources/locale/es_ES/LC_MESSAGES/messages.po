@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-26 06:35+0000\n"
-"PO-Revision-Date: 2023-07-26 08:47+0200\n"
+"POT-Creation-Date: 2023-09-06 10:21+0000\n"
+"PO-Revision-Date: 2023-09-06 12:22+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -423,7 +423,7 @@ msgid "Cache manager"
 msgstr "Gestor de caché"
 
 msgid "General & SEO"
-msgstr "General y SEO"
+msgstr "General & SEO"
 
 msgid "Appearance"
 msgstr "Apariencia"
@@ -980,17 +980,17 @@ msgid "Reinventing Gutenberg machine..."
 msgstr "Reinventando la máquina de Gutenberg…"
 
 msgid "Ads.txt container saved successfully"
-msgstr "Contenedor de Ads.txt guardado correctamente"
+msgstr "Contenedor de Ads.txt guardado exitosamente"
 
 msgid "Ads.txt container deleted successfully."
-msgstr "Contenedor de Ads.txt eliminado completamente"
+msgstr "contenedors de Ads.txt eliminado exitosamente"
 
 msgid "Bad request"
 msgstr "Petición incorrecta"
 
 #, php-format
 msgid "%s ads containers deleted successfully"
-msgstr "%s contenedores de ads eliminados correctamente"
+msgstr "%s contenedores de ads.txt eliminados correctamente"
 
 msgid "Username or password incorrect."
 msgstr "Nombre de usuario o contraseña incorrecto."
@@ -2409,7 +2409,7 @@ msgid ""
 "trash?"
 msgstr ""
 "¿Estás seguro de que quieres eliminar de forma permanente todos los "
-"contenidos de la papelera?"
+"contenidos de la papelera¿"
 
 msgid "Yes, remove all"
 msgstr "Si, eliminarlos todos"
@@ -2801,7 +2801,7 @@ msgid "410 GONE"
 msgstr "410 GONE"
 
 msgid "Redirects URIs to error 410 GONE"
-msgstr "Redireccionar URIs a error 410 GONE"
+msgstr "Redirige los URI al error 410 GONE"
 
 msgid "Source"
 msgstr "Origen"
@@ -2927,7 +2927,7 @@ msgid "Body complexity"
 msgstr "Complejidad del cuerpo"
 
 msgid "Difficult to read"
-msgstr "Dificil de leer"
+msgstr "Dificultad para leer"
 
 msgid "Easily understood"
 msgstr "Fácil de entender"
@@ -2941,8 +2941,7 @@ msgstr "Palabras"
 msgid ""
 "In order to dislay the text complexity, you need to save the article first."
 msgstr ""
-"Para mostrar la complejidad del texto, se necesita guardar el contenido "
-"primero"
+"Para mostrar la complejidad del texto, primero debe guardar el artículo."
 
 msgid "Live blog"
 msgstr "Contenido en directo"
@@ -3108,13 +3107,13 @@ msgstr ""
 "experiencia de usuario y tiene mejor rendimiento."
 
 msgid "Limit ads between paragraphs"
-msgstr "Limitar publicidad entre párrafos"
+msgstr "Limitar ads entre párrafos"
 
 msgid ""
 "This settings limits ads between paragraphs to the total number of "
 "paragraphs."
 msgstr ""
-"Este ajuste limita la publicidad entre párrafos al número total de párrafos"
+"Esta configuracion limita ads entre parrafos al numero total de parrafos"
 
 msgid "AdSense integration"
 msgstr "Integración con AdSense"
@@ -3294,7 +3293,7 @@ msgid "Restricted URLs"
 msgstr "URLs restringidas"
 
 msgid "List of advertisement free URLs"
-msgstr "Listado de urls libres de publicidad"
+msgstr "Lista de URLs libres de publicidad"
 
 msgid "Advertisement without name"
 msgstr "Publicidad sin nomber"
@@ -3521,7 +3520,7 @@ msgstr "Ordenar portada de Kiosko según"
 
 msgid "Select if order newsstand's frontpage by dates or by section."
 msgstr ""
-"Elige si quieres ordenar la portada de kiosko por fechas o por secciones."
+"Elige si quieres ordenar la portada de kiosko por fechas o por secciones"
 
 msgid "Grouped by date is recommended for weekly newspapers."
 msgstr "Agrupado por fechas es recomendable a periódicos semanales."
@@ -4031,6 +4030,9 @@ msgstr "Cancelar"
 msgid "Confirm"
 msgstr "Confirmar"
 
+msgid "Do you want to duplicate the item?"
+msgstr "¿Quieres duplicar el elemento?"
+
 msgid "Mosaic"
 msgstr "Mosaico"
 
@@ -4082,8 +4084,8 @@ msgid ""
 "All the latest information about %1 in %2. News, events, reports and opinion "
 "articles."
 msgstr ""
-"Toda la información de %1 en %2 Noticias, eventos, reportajes y artículos de "
-"opinión"
+"All the latest information about %1 in %2. News, events, reports and opinion "
+"articles."
 
 msgid "Attachment"
 msgstr "Adjuntos"
@@ -4574,7 +4576,7 @@ msgid "Value"
 msgstr "Valor"
 
 msgid "External link to "
-msgstr "Enlace externo a "
+msgstr "Enlace externo a"
 
 msgid "Internal search to keyword"
 msgstr "Búsqueda interna a una palabra clave"
@@ -4611,9 +4613,6 @@ msgstr "En portada"
 
 msgid "Drop from home"
 msgstr "Sacar de portada"
-
-msgid "External"
-msgstr "Externo"
 
 msgid "%1 not activated - Opennemas"
 msgstr "'%1' no activado - Opennemas"
@@ -5151,10 +5150,10 @@ msgid "Prometeo Media ID"
 msgstr "Prometeo Media ID"
 
 msgid "Adobe analytics"
-msgstr "Adobe Analytics"
+msgstr "Adobe analytics"
 
 msgid "Adobe analytics Base File"
-msgstr "Archivo base para Adobe Analytics"
+msgstr "Archivo base para Google Analytics"
 
 msgid "Internal settings"
 msgstr "Preferencias internas"
@@ -5269,7 +5268,7 @@ msgid "Act-On password"
 msgstr "Contraseña de Act-On"
 
 msgid "Act-On client_id"
-msgstr "Client_id de Act-On"
+msgstr "client_id de Act-On"
 
 msgid "Act-On secret"
 msgstr "Secreto de Act-On"
@@ -5661,7 +5660,7 @@ msgid "SEO Information"
 msgstr "Información SEO"
 
 msgid "Show SEO information on contents"
-msgstr "Mostrar información SEO en contenidos"
+msgstr "Mostrar información SEO sobre contenidos"
 
 msgid "Default skin"
 msgstr "Skin por defecto"
@@ -5674,17 +5673,17 @@ msgstr ""
 "quiere."
 
 msgid "Theme fonts"
-msgstr "Fuentes temáticas"
+msgstr "Fuentes del tema"
 
 msgid ""
 "Your theme offers multiple fonts to match your page style. Select yout main "
 "font (titles, headings…)."
 msgstr ""
-"Tu tema ofrece multiples fuentes que combinan con el estilo de tu página. "
-"Selecciona tu fuente principal (títulos, cabeceras...)."
+"Su tema ofrece múltiples fuentes para que coincidan con el estilo de su "
+"página. Seleccione su fuente principal (títulos, encabezados...)."
 
 msgid "Secondary font (body, summary…)"
-msgstr "Fuente secundaria (cuerpo, sumario...)"
+msgstr "Fuente secundaria (cuerpo, resumen…)"
 
 msgid "Scripts"
 msgstr "Scripts"
@@ -5711,7 +5710,7 @@ msgid "CSS"
 msgstr "CSS"
 
 msgid "This css will be added at the end of the original"
-msgstr "Este CSS se añadirá al final del original"
+msgstr "Este CSS se añadirá al final del original."
 
 msgid "Site name"
 msgstr "Nombre del sitio"
@@ -5824,7 +5823,7 @@ msgid "Words suggested by the form input"
 msgstr "Palabras sugeridas por el campo en el formulario"
 
 msgid "Add a value..."
-msgstr "Añade un valor..."
+msgstr "Añade un valor"
 
 msgid "Remove field"
 msgstr "Eliminar campo"
@@ -5863,7 +5862,7 @@ msgid "Youtube"
 msgstr "YouTube"
 
 msgid "Add an element..."
-msgstr "Añade un elemento..."
+msgstr "Añade un elemento"
 
 msgid "Company Name"
 msgstr "Nombre de la empresa"
@@ -5996,17 +5995,18 @@ msgstr ""
 "importarlas"
 
 msgid "Image quality"
-msgstr "Calidad de imagen"
+msgstr "Calidad de la imagen"
 
 msgid "Only images with .jpeg, .jpg or .pjpeg format"
-msgstr "Solo imagenes con .jpeg, .jpg o .pjpeg format"
+msgstr "Solo imágenes con formato .jpeg, .jpg o .pjpeg"
 
 msgid "Image resolution"
 msgstr "Resolución de imagen"
 
 msgid "Regardless of resolution, images will keep its original aspect ratio"
 msgstr ""
-"Sin importar la resolución, las imagenes conservarán su aspecto original"
+"Independientemente de la resolución, las imágenes mantendrán su relación de "
+"aspecto original"
 
 msgid "Config article module"
 msgstr "Configuración del módulo «Artículos»"
@@ -6368,6 +6368,9 @@ msgstr "Puntuación SEO"
 msgid "No SEO information"
 msgstr "Sin información SEO"
 
+msgid "Duplicate"
+msgstr "Duplicar"
+
 msgid "If enabled, this user group will not be visible in some circunstances"
 msgstr ""
 "Si está activado, este grupo de usuarios no será visible en algunas "
@@ -6517,7 +6520,7 @@ msgid "Update Container label"
 msgstr "Actualizar la etiqueta del contenedor"
 
 msgid "This newsletter is going to be sent"
-msgstr "Este boletín de noticias está a punto de ser enviado"
+msgstr "Este boletín de noticias está a punto de ser enviado."
 
 msgid "Are you sure to send %1 emails?"
 msgstr "¿Estás seguro que quieres enviar %1 correos electrónicos?"
@@ -6649,12 +6652,12 @@ msgstr ""
 msgid "ActOn allow to specify a custom header text. This is the id."
 msgstr ""
 "ActOn le permite especificar un texto de cabecera personalizado. Este es el "
-"identificador."
+"identificador"
 
 msgid "ActOn allow to specify a custom footer text. This is the id."
 msgstr ""
 "ActOn le permite especificar un texto de pie personalizado. Este es el "
-"identificador."
+"identificador"
 
 msgid "Newsletter contents"
 msgstr "Contenidos del boletín"
@@ -6936,7 +6939,7 @@ msgid "Use the right sidebar to explore the available information."
 msgstr "Usa la barra lateral derecha para explorar la información disponible."
 
 msgid "New Ads.txt container"
-msgstr "Nuevo contenedor de Ads.txt"
+msgstr "Añadir contenedor de Ads.txt"
 
 msgid "Edit Ads.txt container"
 msgstr "Editar contenedor de Ads.txt"
@@ -7206,7 +7209,7 @@ msgid ""
 "Welcome to Opennemas! Learn how to publish your news in just few seconds!"
 msgstr ""
 "¡Bienvenido a Opennemas! Aprende a como publicar tus propias noticias en "
-"solo unos segundos!"
+"solo unos segundos"
 
 msgid "Hi"
 msgstr "Hola"
@@ -7460,11 +7463,11 @@ msgstr "Nombre del grupo"
 #~ msgid "I understand and accept the cost of the operation."
 #~ msgstr "Entiendo y acepto los costes de la operación."
 
-#~ msgid "Text complexity"
-#~ msgstr "Complejidad del texto"
+#~ msgid "External"
+#~ msgstr "Externo"
 
-#~ msgid "Word count"
-#~ msgstr "Número de palabras"
+#~ msgid "Create a copy"
+#~ msgstr "Crear una copia"
 
 #, fuzzy
 #~ msgid "Homepage manager"
