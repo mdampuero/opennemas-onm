@@ -110,7 +110,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr data-id="[% getItemId(item) %]" ng-class="{ row_selected: isSelected(getItemId(item)) }" ng-repeat="item in items">
+          <tr data-id="[% getItemId(item) %]" ng-class="{ row_selected: isSelected(getItemId(item)) }" ng-repeat="item in items track by $index">
             <td class="text-center v-align-middle">
               <div class="checkbox check-default" ng-if="isSelectable(item)">
                 <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="getItemId(item)" type="checkbox">
@@ -120,9 +120,9 @@
             {block name="commonColumnsBody"}
               <td class="v-align-middle" ng-if="isColumnEnabled('title')">
                 <div class="table-text">
-                  [% item.title %]
+                  <a class="text-black" href="[% routing.generate('backend_article_show', { id: getItemId(item) }) %]">[% item.title %]</a>
                 </div>
-                <div class="listing-inline-actions m-t-10">
+                <div class="listing-inline-actions m-t-10 btn-group">
                   {block name="itemActions"}{/block}
                 </div>
               </td>
