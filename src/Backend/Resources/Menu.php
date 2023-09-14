@@ -273,7 +273,7 @@ $menuXml = [
 
     [
         'id'          => 'webpush_notifications_mananger',
-        'title'       => _('WebPushNotifications'),
+        'title'       => _('Web Push'),
         'icon'        => 'fa fa-bell',
         'link'        => url('backend_webpush_notifications_list'),
         'module_name' => 'es.openhost.module.webpush_notifications',
