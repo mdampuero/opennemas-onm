@@ -603,7 +603,7 @@ class UrlGeneratorHelper
             'ad'          => 'publicidad/_ID_.html',
             'kiosko'      => 'portadas-papel/_CATEGORY_/_DATE__ID_.html',
             'letter'      => 'cartas-al-director/_CATEGORY_/_SLUG_/_DATE__ID_.html',
-            'event'       => 'event/_SLUG_',
+            'event'       => 'event/_SLUG_/',
         ];
     }
 }
