@@ -212,15 +212,15 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
                       <span ng-show="content.num_clic_count > 0">{t 1="[% content.num_clic_count %]"}%1 clicks{/t}</span>
                     </span>
                   </div>
-                  <div class="listing-inline-actions" >
+                  <div class="listing-inline-actions btn-group" >
                     {acl isAllowed="ADVERTISEMENT_UPDATE"}
-                    <a class="btn btn-default btn-small" href="[% edit(content.id, 'admin_advertisement_show') %]" title="{t}Edit{/t}">
-                      <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+                    <a class="btn btn-white btn-small" href="[% edit(content.id, 'admin_advertisement_show') %]" title="{t}Edit{/t}" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
+                      <i class="fa fa-pencil m-r-5"></i>
                     </a>
                     {/acl}
                     {acl isAllowed="ADVERTISEMENT_DELETE"}
-                    <button class="btn btn-danger btn-small" ng-click="sendToTrash(content)" type="button">
-                      <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+                    <button class="btn btn-white btn-small" ng-click="sendToTrash(content)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
+                      <i class="fa fa-trash-o text-danger"></i>
                     </button>
                     {/acl}
                   </div>

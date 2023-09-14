@@ -120,4 +120,7 @@
   <script type="text/ng-template" id="modal-translate-selected">
     {include file="common/modals/_translate_selected.tpl"}
   </script>
+  <script type="text/ng-template" id="modal-duplicate">
+    {include file="common/extension/modal.duplicate.tpl"}
+  </script>
 {/block}

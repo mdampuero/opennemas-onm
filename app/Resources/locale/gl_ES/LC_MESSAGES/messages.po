@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-26 06:35+0000\n"
-"PO-Revision-Date: 2023-07-26 08:50+0200\n"
+"POT-Creation-Date: 2023-09-06 10:21+0000\n"
+"PO-Revision-Date: 2023-09-06 12:23+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -420,7 +420,7 @@ msgid "Cache manager"
 msgstr "Xestor de caché"
 
 msgid "General & SEO"
-msgstr "Xeral e SEO"
+msgstr "General & SEO"
 
 msgid "Appearance"
 msgstr "Aparencia"
@@ -975,17 +975,17 @@ msgid "Reinventing Gutenberg machine..."
 msgstr "Reinventando a máquina de Gutenberg…"
 
 msgid "Ads.txt container saved successfully"
-msgstr "contenedor de ads gardado correctamente"
+msgstr "Ads.txt gardado correctamente"
 
 msgid "Ads.txt container deleted successfully."
-msgstr "contenedor de ads eliminado correctamente"
+msgstr "Ads.txt eliminado correctamente"
 
 msgid "Bad request"
 msgstr "Solicitude incorrecta"
 
 #, php-format
 msgid "%s ads containers deleted successfully"
-msgstr "%s contenedores de Ads eliminadas correctamente"
+msgstr "%s ads containers deleted successfully"
 
 msgid "Username or password incorrect."
 msgstr "O usuario ou o contrasinal son incorrectos."
@@ -2911,21 +2911,20 @@ msgid "Body complexity"
 msgstr "Complexidade do corpo"
 
 msgid "Difficult to read"
-msgstr "Dificil de leer"
+msgstr "Difícil de ler"
 
 msgid "Easily understood"
 msgstr "Fácil de entender"
 
 msgid "Very easy to read"
-msgstr "Moy facil de leer"
+msgstr "Moi fácil de ler"
 
 msgid "Words"
 msgstr "Palabras"
 
 msgid ""
 "In order to dislay the text complexity, you need to save the article first."
-msgstr ""
-"Para mostrar a complexidade do texto, e requerido gardar o contido primeiro"
+msgstr "Para mostrar a complexidade do texto, primeiro cómpre gardar o artigo."
 
 msgid "Live blog"
 msgstr "Artigo en vivo"
@@ -3091,14 +3090,13 @@ msgstr ""
 "experiencia de usuario e ten mellor rendemento."
 
 msgid "Limit ads between paragraphs"
-msgstr "Limitar publicidade entre parágrafos"
+msgstr "Limitar Ads entre parágrafos"
 
 msgid ""
 "This settings limits ads between paragraphs to the total number of "
 "paragraphs."
 msgstr ""
-"Este axuste limita a publicidade entre parágrafos ó numero total de "
-"parágrafos"
+"Esta configuración limita ads entre parágrafos ao número total de parágrafos"
 
 msgid "AdSense integration"
 msgstr "Integración con AdSense"
@@ -3274,10 +3272,10 @@ msgid "This will be the content of the file ads.txt on your root domain"
 msgstr "Este será o contido do ficheiro ads.txt na raíz do teu dominio"
 
 msgid "Restricted URLs"
-msgstr "URLs restrixidas"
+msgstr "URLs restrinxidas"
 
 msgid "List of advertisement free URLs"
-msgstr "Listado de URLs sin publicidade"
+msgstr "Listado de URLs libres de publicidade"
 
 msgid "Advertisement without name"
 msgstr "Publicidade sen nome"
@@ -4005,6 +4003,9 @@ msgstr "Cancelar"
 msgid "Confirm"
 msgstr "Confirmar"
 
+msgid "Do you want to duplicate the item?"
+msgstr "¿Queres duplicar o elemento?"
+
 msgid "Mosaic"
 msgstr "Mosaico"
 
@@ -4056,8 +4057,8 @@ msgid ""
 "All the latest information about %1 in %2. News, events, reports and opinion "
 "articles."
 msgstr ""
-"Toda a última información sobre %1 en %2 Novas, eventos reportaxes e artigos "
-"de opinión"
+"All the latest information about %1 in %2. News, events, reports and opinion "
+"articles."
 
 msgid "Attachment"
 msgstr "Anexos"
@@ -4584,9 +4585,6 @@ msgstr "En portada"
 
 msgid "Drop from home"
 msgstr "Sacar de portada"
-
-msgid "External"
-msgstr "Externo"
 
 msgid "%1 not activated - Opennemas"
 msgstr "'%1' non activado - Opennemas"
@@ -5123,7 +5121,7 @@ msgid "Prometeo Media ID"
 msgstr "Prometeo Media ID"
 
 msgid "Adobe analytics"
-msgstr "Adobe analytics"
+msgstr "Adobe Analytics"
 
 msgid "Adobe analytics Base File"
 msgstr "Ficheiro base de Adobe Analytics"
@@ -5364,14 +5362,14 @@ msgid "Telegram"
 msgstr "Telegram"
 
 msgid "Telegram Page"
-msgstr "Páxina de Telegram"
+msgstr "Páxina de telegram"
 
 msgid ""
 "If you also have a <strong>Telegram page</strong>, add your page url on the "
 "form."
 msgstr ""
 "Se xa tes unha <strong>páxina de Telegram</strong>, engade o teu "
-"identificador de páxina."
+"identificador de páxina ao formulario."
 
 msgid "Whatsapp Page"
 msgstr "Páxina de Whatsapp"
@@ -5380,8 +5378,8 @@ msgid ""
 "If you also have a <strong>Whatsapp page</strong>, add your page url on the "
 "form."
 msgstr ""
-"Se xa tes unha <strong>páxina de whatsapp</strong>, engade o teu "
-"identificador de páxina."
+"Se xa tes unha <strong>páxina de Whatsapp</strong>, engade o teu "
+"identificador de páxina ao formulario."
 
 msgid "TikTok"
 msgstr "TikTok"
@@ -5394,7 +5392,7 @@ msgid ""
 "form."
 msgstr ""
 "Se xa tes unha <strong>páxina de TikTok</strong>, engade o teu identificador "
-"de páxina."
+"de páxina ao formulario."
 
 msgid "Dailymotion"
 msgstr "Dailymotion"
@@ -5407,7 +5405,7 @@ msgid ""
 "the form."
 msgstr ""
 "Se xa tes unha <strong>páxina de Dailymotion</strong>, engade o teu "
-"identificador de páxina no formulario."
+"identificador de páxina ao formulario."
 
 msgid "Colors"
 msgstr "Cores"
@@ -5646,7 +5644,7 @@ msgstr ""
 "quere."
 
 msgid "Theme fonts"
-msgstr "Fontes temáticas"
+msgstr "Tipos de letra tema"
 
 msgid ""
 "Your theme offers multiple fonts to match your page style. Select yout main "
@@ -6336,6 +6334,9 @@ msgstr "Puntuación SEO"
 msgid "No SEO information"
 msgstr "Sen información SEO"
 
+msgid "Duplicate"
+msgstr "Duplicar"
+
 msgid "If enabled, this user group will not be visible in some circunstances"
 msgstr ""
 "Se está activado, este grupo de usuarios non será visible nalgunhas "
@@ -6900,13 +6901,13 @@ msgid "Use the right sidebar to explore the available information."
 msgstr "Use a barra lateral dereita para explorar a información dispoñíbel."
 
 msgid "New Ads.txt container"
-msgstr "Novo contido Ads.txt"
+msgstr "Novo contenedor de Ads.txt"
 
 msgid "Edit Ads.txt container"
-msgstr "Editar contido Ads.txt"
+msgstr "Editar contenedor de Ads.txt"
 
 msgid "Ads.txt lines"
-msgstr "Lineas de Ads.txt"
+msgstr "lineas de Ads.txt"
 
 msgid "We seem to have lost you in the clouds."
 msgstr "Semella que te perdemos nas nubes."
@@ -7416,11 +7417,11 @@ msgstr "Nome do grupo"
 #~ msgid "I understand and accept the cost of the operation."
 #~ msgstr "Entendo e acepto os custos da operación."
 
-#~ msgid "Text complexity"
-#~ msgstr "Complexidade do texto"
+#~ msgid "External"
+#~ msgstr "Externo"
 
-#~ msgid "Word count"
-#~ msgstr "Número de palabras"
+#~ msgid "Create a copy"
+#~ msgstr "Crear unha copia"
 
 #, fuzzy
 #~ msgid "Homepage manager"

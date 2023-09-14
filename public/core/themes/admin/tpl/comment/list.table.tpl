@@ -55,15 +55,15 @@
       <span ng-if="extra.contents[item.content_id].title.length > 100">...</span></a></div>
     </small>
     <div ng-bind-html="item.body"></div>
-    <div class="listing-inline-actions">
+    <div class="listing-inline-actions btn-group">
       {acl isAllowed="COMMENT_UPDATE"}
-        <a class="btn btn-defauilt btn-small" href="[% routing.generate('backend_comment_show', { id: getItemId(item) }) %]" title="{t}Edit{/t}">
-          <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+        <a class="btn btn-white btn-small" href="[% routing.generate('backend_comment_show', { id: getItemId(item) }) %]" title="{t}Edit{/t}" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
+          <i class="fa fa-pencil"></i>
         </a>
       {/acl}
       {acl isAllowed="COMMENT_DELETE"}
-        <button class="btn btn-danger btn-small" ng-click="delete(item.id)" title="{t}Delete{/t}" type="button">
-          <i class="fa fa-trash-o m-r-5"></i>{t}Remove{/t}
+        <button class="btn btn-white btn-small" ng-click="delete(item.id)" title="{t}Delete{/t}" type="button" uib-tooltip="{t}Remove{/t}" tooltip-placement="top">
+          <i class="fa fa-trash-o text-danger"></i>
         </button>
       {/acl}
     </div>

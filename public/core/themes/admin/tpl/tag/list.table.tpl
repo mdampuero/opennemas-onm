@@ -22,12 +22,12 @@
     <div class="table-text">
       [% item.name %]
     </div>
-    <div class="listing-inline-actions">
-      <a class="btn btn-default btn-small" href="[% routing.generate('backend_tag_show', { id: getItemId(item) }) %]">
-        <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+    <div class="listing-inline-actions btn-group">
+      <a class="btn btn-white btn-small" href="[% routing.generate('backend_tag_show', { id: getItemId(item) }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
+        <i class="fa fa-pencil text-success_"></i>
       </a>
-      <button class="btn btn-danger btn-small" ng-click="delete(item.id)" type="button">
-        <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+      <button class="btn btn-white btn-small" ng-click="delete(item.id)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
+        <i class="fa fa-trash-o text-danger"></i>
       </button>
     </div>
   </td>
