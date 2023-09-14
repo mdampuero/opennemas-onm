@@ -746,6 +746,13 @@ class PermissionHelper
                 'module'      => 'NEWSLETTER_MANAGER',
                 'enabled'     => 1
             ],
+            113 => [
+                'id'          => 113,
+                'name'        => 'WEBPUSH_ADMIN',
+                'description' => _('Manage Web Push notifications'),
+                'module'      => 'es.openhost.module.webpush_notifications',
+                'enabled'     => 1
+            ],
             114 => [
                 'id'          => 114,
                 'name'        => 'CACHE_TPL_ADMIN',

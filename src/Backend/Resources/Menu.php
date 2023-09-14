@@ -271,6 +271,15 @@ $menuXml = [
         'privilege'   => 'NEWSLETTER_ADMIN',
     ],
 
+    [
+        'id'          => 'webpush_notifications_mananger',
+        'title'       => _('WebPushNotifications'),
+        'icon'        => 'fa fa-bell',
+        'link'        => url('backend_webpush_notifications_list'),
+        'module_name' => 'es.openhost.module.webpush_notifications',
+        'privilege'   => 'WEBPUSH_ADMIN',
+    ],
+
     // Utils menu
     [
         'id'      => 'util',
