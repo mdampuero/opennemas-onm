@@ -1,0 +1,114 @@
+orm:
+    metadata:
+        -
+            name:  WebPushNotifications
+            class: Common\Model\Entity\WebPushNotifications
+            properties:
+                id:              integer
+                fk_content:      integer
+                status:          integer
+                body:            string
+                title:           string
+                send_date:       datetime
+                image:           string
+            converters:
+                default:
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.WebPushNotifications' ]
+            repositories:
+                instance:
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.WebPushNotifications', '@cache.connection.instance' ]
+            persisters:
+                instance:
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.WebPushNotifications', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: content_notifications
+                    relations:
+                        fk_content:
+                            table: contents
+                            source_key: fk_content
+                            target_key: pk_content
+                            columns:
+                                pk_content:
+                                    type: bigint
+                                fk_content_type:
+                                    type: int
+                                content_type_name:
+                                    type: string
+                                title:
+                                    type: string
+                                description:
+                                    type: text
+                                body:
+                                    type: text
+                                starttime:
+                                    type: datetimetz
+                                endtime:
+                                    type: datetimetz
+                                created:
+                                    type: datetimetz
+                                changed:
+                                    type: datetimetz
+                                content_status:
+                                    type: integer
+                                fk_author:
+                                    type: string
+                                fk_publisher:
+                                    type: string
+                                fk_user_last_editor:
+                                    type: string
+                                position:
+                                    type: integer
+                                frontpage:
+                                    type: integer
+                                in_litter:
+                                    type: boolean
+                                in_home:
+                                    type: boolean
+                                slug:
+                                    type: string
+                                available:
+                                    type: boolean
+                                with_comment:
+                                    type: boolean
+                                params:
+                                    type: text
+                                favorite:
+                                    type: boolean
+                                urn_source:
+                                    type: string
+                                with_comment:
+                                    type: int
+                    columns:
+                        id:
+                            type: bigint
+                            options: { lenght: 20, default: null, unsigned: true, autoincrement: true }
+                        fk_content:
+                            type: integer
+                            options: { length: 10, default: 0, notnull: true }
+                        status:
+                            type: integer
+                            options: { length: 10, default: 0, notnull: true }
+                        body:
+                            type: string
+                            options: { default: null, length: 512 }
+                        title:
+                            type: string
+                            options: { default: null, length: 512 }
+                        send_date:
+                            type: datetimetz
+                            options: { default: null, notnull: false }
+                        image:
+                            type: string
+                            options: { default: null, length: 512 }
+                    index:
+                        -
+                            name:    PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique:  true
+                            flags:   {}
+

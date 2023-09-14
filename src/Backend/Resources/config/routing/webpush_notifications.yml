@@ -1,0 +1,5 @@
+backend_webpush_notifications_list:
+    path:     /webpush_notifications
+    defaults: { _controller: BackendBundle:WebPushNotifications:list }
+    options:
+        expose: true

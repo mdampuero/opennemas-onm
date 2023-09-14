@@ -174,7 +174,7 @@ class ContentHelper
         return min(array_filter([ $starttime, $endtime ]));
     }
 
-    public function getFirstContentCreatedDate($contentTypeName = 'article')
+    public function getFirstItemDate($contentTypeName = 'article')
     {
         $oql = sprintf(
             'content_type_name = "%s" and created !is null and created >="2000-01-01" and in_litter = 0'
@@ -549,7 +549,9 @@ class ContentHelper
             ->getDataSet('Settings', 'instance')
             ->get('comment_settings')['disable_comments'];
 
-        return !empty($this->getProperty($item, 'with_comment')) && !(is_null($disableComments) ? true : $disableComments);
+        return !empty($this->getProperty($item, 'with_comment')) && !(is_null($disableComments)
+            ? true
+            : $disableComments);
     }
 
     /**

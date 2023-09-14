@@ -37,6 +37,11 @@ class ApiController extends Controller
     protected $service = null;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $helper = null;
+
+    /**
      * Returns the list of paramters needed to create a new item.
      *
      * @return JsonResponse The response object.
@@ -256,6 +261,44 @@ class ApiController extends Controller
         $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    public function getItemYears()
+    {
+        $years = [];
+
+        if (empty($this->module)) {
+            return $years;
+        }
+
+        $fmt              = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
+        $helper           = $this->container->get($this->helper);
+        $firstContentDate = $helper->getFirstItemDate($this->module);
+
+        if (empty($firstContentDate)) {
+            return $years;
+        }
+
+        $currentDate   = new \DateTime('now');
+        $finalDate     = $currentDate->format('Y-m');
+        $iterationDate = $firstContentDate;
+
+
+        while ($iterationDate->format('Y-m') <= $finalDate) {
+            $year = $iterationDate->format('Y');
+            $years[] = [
+                'name' => (!is_null($fmt) ?
+                    ucfirst($fmt->format($iterationDate)) :
+                    ucfirst($iterationDate->format('F'))
+                ),
+                'value' => $iterationDate->format('Y-m'),
+                'group' => $iterationDate->format('Y')
+            ];
+
+            $iterationDate = $iterationDate->modify('first day of this month')->modify('+1 month');
+        }
+
+        return array_reverse(array_values($years));
     }
 
     /**
