@@ -40,17 +40,11 @@ class GANativeRenderer extends StatisticsRenderer
     {
         return [
             'configfile'    => $this->ga4config,
+            'content'       => $content,
             'ga4Id'         => $this->ga4Id,
             'tagNames'      => $this->variablesExtractor->get('tagNames'),
             'layout'        => $this->customizeExtension($this->variablesExtractor->get('extension')),
-            'category'      => $this->variablesExtractor->get('categoryName'),
-            'publisherId'   => $this->variablesExtractor->get('publisherId'),
-            'publisherName' => $this->variablesExtractor->get('publisherName'),
-            'pubDate'       => $this->variablesExtractor->get('publicationDate'),
-            'updated'       => $this->variablesExtractor->get('updateDate'),
-            'mainDomain'    => $this->variablesExtractor->get('mainDomain'),
             'lastAuthorId'  => $this->variablesExtractor->get('lastAuthorId'),
-            'contentId'     => $this->variablesExtractor->get('contentId'),
             'mediaType'     => $this->variablesExtractor->get('mediaType'),
             'tagSlugs'      => $this->variablesExtractor->get('tagSlugs'),
         ];
@@ -67,51 +61,5 @@ class GANativeRenderer extends StatisticsRenderer
         }
 
         return false;
-    }
-
-    /**
-     * Returns the customization for the extension.
-     *
-     * @param string $extension The extension to customize.
-     *
-     * @return string The customized extension.
-     */
-    protected function customizeExtension(string $extension)
-    {
-        $contentTypes = [
-            'album',
-            'blog',
-            'event',
-            'letter',
-            'opinion',
-            'poll',
-            'video',
-        ];
-
-        $replacements = [
-            'article'    => 'articulo',
-            'frontpages' => 'home',
-            'category'   => 'subhome',
-            'album'      => 'galeria',
-            'opinion'    => 'articulo_opinion',
-            'blog'       => 'blogpost',
-            'poll'       => 'encuesta'
-        ];
-
-        if (in_array($extension, $contentTypes)) {
-            if (empty($this->variablesExtractor->get('contentId'))) {
-                return 'subhome';
-            }
-        }
-
-        if ($extension === 'frontpages') {
-            $category = $this->variablesExtractor->get('categoryId');
-
-            if (!empty($category)) {
-                return 'subhome';
-            }
-        }
-
-        return !empty($replacements[$extension]) ? $replacements[$extension] : $extension;
     }
 }
