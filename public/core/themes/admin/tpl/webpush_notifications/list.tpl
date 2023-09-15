@@ -16,12 +16,12 @@
   {t}Web Push notifications{/t}
 {/block}
 
-{* {block name="primaryActions"}
+{block name="primaryActions"}
   <div class="all-actions pull-right">
     <ul class="nav quick-section">
       {acl isAllowed="MASTER"}
         <li class="quicklinks">
-          <a class="btn btn-link" href="{url name=backend_articles_config}" class="admin_add" title="{t}Config article module{/t}">
+          <a class="btn btn-link" href="{url name=backend_webpush_notifications_config}" class="admin_add" title="{t}Config Web Push notifications module{/t}">
             <span class="fa fa-cog fa-lg"></span>
           </a>
         </li>
@@ -29,7 +29,7 @@
       {/acl}
     </ul>
   </div>
-{/block} *}
+{/block}
 
 {block name="leftFilters"}
   <li class="m-r-10 quicklinks">

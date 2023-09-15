@@ -34,29 +34,6 @@ class WebPushNotificationsController extends ApiController
      */
     protected $helper = 'core.helper.webpush_notifications';
 
-        /**
-     * Returns a list of contents in JSON format.
-     *
-     * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
-     *
-     * @Security("hasExtension('es.openhost.module.webpush_notifications')
-     *     and hasPermission('WEBPUSH_ADMIN')")
-     */
-    // public function getListAction(Request $request)
-    // {
-    //     $wps = $this->get('api.service.webpush_notifications');
-    //     $oql = $request->query->get('oql', '');
-
-    //     $response = $wps->getList($oql);
-
-    //     return new JsonResponse([
-    //         'items' => $wps->responsify($response['items']),
-    //         'total' => $response['total'],
-    //     ]);
-    // }
-
     /**
      * {@inheritdoc}
      */
@@ -67,60 +44,66 @@ class WebPushNotificationsController extends ApiController
         ];
     }
 
-    /**
-     * Returns the list of settings for CONTENT_SUBSCRIPTIONS extension.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function listSettingsAction()
-    {
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get([
-                'newsletter_manual',
-                'newsletter_maillist',
-                'newsletter_subscriptionType',
-                'actOn.marketingLists',
-                'actOn.formPage',
-                'actOn.headerId',
-                'actOn.footerId',
-            ]);
-
-        return new JsonResponse([ 'settings' => $settings ]);
-    }
-
-    /**
-     * Saves settings for CONTENT_SUBSCRIPTIONS extension.
+        /**
+     * Get the Web Push notifications configuration
      *
      * @param Request $request The request object.
      *
-     * @return JsonResposne The response object.
+     * @return JsonResponse The response object.
      */
-    public function saveSettingsAction(Request $request)
+    public function getConfigAction()
     {
-        $msg      = $this->get('core.messenger');
-        $settings = $request->request->all();
+        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
 
-        // Damned PHP with its weird behaviour
-        // http://php.net/manual/en/language.variables.external.php
-        // Dots and spaces in variable names are converted to underscores.
-        // For example <input name="a.b" /> becomes $_REQUEST["a_b"].
-        $settings['actOn.marketingLists'] = $settings['actOn_marketingLists'];
-        unset($settings['actOn_marketingLists']);
-        $settings['actOn.headerId'] = $settings['actOn_headerId'];
-        unset($settings['actOn_headerId']);
-        $settings['actOn.footerId'] = $settings['actOn_footerId'];
-        unset($settings['actOn_footerId']);
-        $settings['actOn.formPage'] = $settings['actOn_formPage'];
-        unset($settings['actOn_formPage']);
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get(['webpush_service', 'webpush_apikey', 'webpush_token', 'webpush_automatic', 'webpush_delay']);
+
+        $webpush_service = [
+            'service' => $settings['webpush_service'],
+            'apikey'  => $settings['webpush_apikey'],
+            'token'   => $settings['webpush_token']
+        ];
+
+        return new JsonResponse([
+            'webpush_service'   => $webpush_service,
+            'webpush_automatic' => $settings['webpush_automatic'],
+            'webpush_delay'     => $settings['webpush_delay'],
+        ]);
+    }
+
+    /**
+     * Saves configuration for Web Push notifications.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveConfigAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, 'WEBPUSH_ADMIN');
+
+        $msg = $this->get('core.messenger');
+
+        $webpush_service = $request->request->get('webpush_service');
+        $service         = $webpush_service['service'] ?? null;
+        $apikey          = $webpush_service['apikey'] ?? null;
+        $token           = $webpush_service['token'] ?? null;
+
+        $settings = [
+            'webpush_service'   => $service,
+            'webpush_apikey'    => $apikey,
+            'webpush_token'     => $token,
+            'webpush_automatic' => $request->request->get('webpush_automatic'),
+            'webpush_delay'     => $request->request->get('webpush_delay'),
+        ];
 
         try {
-            $this->get('orm.manager')->getDataSet('Settings', 'instance')
-                ->set($settings);
-
-            $msg->add(_('Settings saved successfully'), 'success');
+            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
+            $msg->add(_('Item saved successfully'), 'success');
         } catch (\Exception $e) {
-            $msg->add(_('Unable to save settings'), 'error', 400);
+            $msg->add(_('Unable to save settings'), 'error');
+            $this->get('error.log')->error($e->getMessage());
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());

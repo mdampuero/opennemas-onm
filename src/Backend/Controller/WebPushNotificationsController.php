@@ -52,6 +52,20 @@ class WebPushNotificationsController extends BackendController
      */
     public function configAction()
     {
-        return $this->render('webpush_notifications/config.tpl');
+        $webPushNotificationsConfig = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get(['webpush_service', 'webpush_apikey', 'webpush_token', 'webpush_automatic', 'webpush_delay']);
+
+        $webPushNotificationsService = [
+            'service' => $webPushNotificationsConfig['webpush_service'],
+            'apikey'  => $webPushNotificationsConfig['webpush_apikey'],
+            'token'   => $webPushNotificationsConfig['webpush_token']
+        ];
+
+        return $this->render('webpush_notifications/config.tpl', [
+            'webpush_service'      => $webPushNotificationsService,
+            'webpush_automatic'    => $webPushNotificationsConfig['webpush_automatic'],
+            'webpush_delay'        => $webPushNotificationsConfig['webpush_delay']
+        ]);
     }
 }
