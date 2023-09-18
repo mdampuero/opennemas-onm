@@ -1014,7 +1014,7 @@
                             {t}Webpushr Api Key{/t}
                           </label>
                           <div class="controls">
-                            <input class="form-control" id="webpushr-webpushrKey" name="webpushr-webpushrKey" ng-model="settings.webpushr.webpushrKey" type="text">
+                            <input class="form-control" id="webpushr-webpushrKey" name="webpushr-webpushrKey" ng-model="settings.webpush_apikey" type="text">
                           </div>
                         </div>
                         <div class="form-group">
@@ -1022,7 +1022,7 @@
                             {t}Webpushr Auth Key{/t}
                           </label>
                           <div class="controls">
-                            <input class="form-control" id="webpushr-webpushrAuthToken" name="webpushr-webpushrAuthToken" ng-model="settings.webpushr.webpushrAuthToken" type="text">
+                            <input class="form-control" id="webpushr-webpushrAuthToken" name="webpushr-webpushrAuthToken" ng-model="settings.webpush_token" type="text">
                           </div>
                         </div>
                       </div>
