@@ -162,7 +162,7 @@ EOF
 
                     // Check if the field is a key in the settings array
                     if (array_key_exists($field, $instance->settings)) {
-                        $filteredStr .= "settings.$field: {$instance->settings[$field]}";
+                        $filteredStr .= "settings.$field:{$instance->settings[$field]};";
                     }
                 }
                 $str = $filteredStr;
