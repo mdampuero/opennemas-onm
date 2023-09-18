@@ -48,11 +48,10 @@
       <div class="grid simple">
         <div class="grid-body ng-cloak">
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <h4>{t}Web Push service{/t}</h4>
                 <div class="controls col-xs-4">
                   <select class="form-control-lg" ng-model="settings.webpush_service.service">
-                    <option value="">{t}Seleccione una opción{/t}</option>
                     <option value="webpushr">{t}Webpushr{/t}</option>
                   </select>
                 </div>
@@ -67,41 +66,24 @@
                     </label>
                   </div>
                 </div>
+                <i class="fa fa-info-circle text-info"></i>
+                <small class="text-muted">{t}Will be sent when content is published{/t}</small>
               </div>
-              <div class="col-md-5">
-                <h4>{t}Delay{/t}</h4>
+              <div class="col-md-3">
+                <h4>{t}Notifications delay time{/t}</h4>
                 <div class="controls">
-                  <div class="radio">
-                    <input class="form-control" id="delay-1" ng-model="settings.webpush_delay" ng-value="'1'" type="radio"/>
-                    <label for="delay-1">
-                      {t}1 min{/t}
-                    </label>
-                  </div>
-                  <div class="radio">
-                    <input class="form-control" id="delay-5" ng-model="settings.webpush_delay" ng-value="'5'" type="radio"/>
-                    <label for="delay-5">
-                      {t}5 mins{/t}
-                    </label>
-                  </div>
-                  <div class="radio">
-                    <input class="form-control" id="delay-10" ng-model="settings.webpush_delay" ng-value="'10'" type="radio"/>
-                    <label for="delay-10">
-                      {t}10 mins{/t}
-                    </label>
-                  </div>
-                  <div class="radio">
-                    <input class="form-control" id="delay-30" ng-model="settings.webpush_delay" ng-value="'30'" type="radio"/>
-                    <label for="delay-30">
-                      {t}30 mins{/t}
-                    </label>
-                  </div>
-                  <div class="radio">
-                    <input class="form-control" id="delay-60" ng-model="settings.webpush_delay" ng-value="'60'" type="radio"/>
-                    <label for="delay-60">
-                      {t}60 mins{/t}
-                    </label>
+                  <select class="form-control-lg" ng-model="settings.webpush_delay" ng-options="option.value as option.label for option in options"></select>
+                  <div>
+                    <i class="fa fa-info-circle text-info"></i>
+                  <small class="text-muted">{t}Won't take effect on manual sending{/t}</small>
                   </div>
                 </div>
+              </div>
+              <div class="col-md-3">
+                <h4>{t}Restricted hours{/t} <small class="pull-right">({t}Time zone: {/t} {date_default_timezone_get()})</small></h4>
+                <tags-input ng-model="settings.webpush_restricted_hours" add-on-paste="true" add-from-autocomplete-only="true" placeholder="{t}Add an hour{/t}">
+                  <auto-complete source="loadHours($query)" load-on-focus=true min-length="0" debounce-delay="0"></auto-complete>
+                </tags-input>
               </div>
             </div>
             <div class="row m-t-30" ng-if="settings.webpush_service.service == 'webpushr'">

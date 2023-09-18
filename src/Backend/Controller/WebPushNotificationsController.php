@@ -54,7 +54,12 @@ class WebPushNotificationsController extends BackendController
     {
         $webPushNotificationsConfig = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get(['webpush_service', 'webpush_apikey', 'webpush_token', 'webpush_automatic', 'webpush_delay']);
+            ->get(['webpush_service',
+                'webpush_apikey',
+                'webpush_token',
+                'webpush_automatic',
+                'webpush_delay',
+                'webpush_restricted_hours']);
 
         $webPushNotificationsService = [
             'service' => $webPushNotificationsConfig['webpush_service'],
@@ -63,9 +68,10 @@ class WebPushNotificationsController extends BackendController
         ];
 
         return $this->render('webpush_notifications/config.tpl', [
-            'webpush_service'      => $webPushNotificationsService,
-            'webpush_automatic'    => $webPushNotificationsConfig['webpush_automatic'],
-            'webpush_delay'        => $webPushNotificationsConfig['webpush_delay']
+            'webpush_service'          => $webPushNotificationsService,
+            'webpush_automatic'        => $webPushNotificationsConfig['webpush_automatic'],
+            'webpush_delay'            => $webPushNotificationsConfig['webpush_delay'],
+            'webpush_restricted_hours' => $webPushNotificationsConfig['webpush_restricted_hours']
         ]);
     }
 }

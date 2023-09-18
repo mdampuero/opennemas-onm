@@ -26,15 +26,9 @@
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
-        /**
-         * @memberOf WebPushNotificationsConfigCtrl
-         *
-         * @description
-         *  The extraFields object.
-         *
-         * @type {Object}
-         */
-        $scope.extraFields = {};
+        $scope.settings = {
+          webpush_restricted_hours: []
+        };
 
         /**
          * @function init
@@ -74,6 +68,29 @@
               messenger.post(response.data);
             });
         };
+
+        /**
+         * @function loadHours
+         * @memberOf NewsletterTemplateCtrl
+         *
+         * @description
+         *   Returns the filtered list of hours given a search query.
+         *
+         * @param {String} $query The text to filter the hours.
+         */
+        $scope.loadHours = function($query) {
+          return $scope.settings.hours.filter(function(el) {
+            return el.indexOf($query) >= 0;
+          });
+        };
+
+        $scope.options = [
+          { value: '1', label: '1 min' },
+          { value: '5', label: '5 mins' },
+          { value: '10', label: '10 mins' },
+          { value: '30', label: '30 mins' },
+          { value: '60', label: '60 mins' }
+        ];
       }
     ]);
 })();

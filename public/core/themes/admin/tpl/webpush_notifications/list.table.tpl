@@ -63,5 +63,10 @@
       </span>
     </td>
 {/block}
+{block name="itemActions"}
+ <a class="btn btn-white btn-small" href="[% routing.generate('backend_article_show', { id: item.fk_content }) %]" target="_blank" uib-tooltip="{t}Edit content{/t}" tooltip-placement="top">
+ <i class="fa fa-external-link"></i>
+ </a>
+{/block}
 
 

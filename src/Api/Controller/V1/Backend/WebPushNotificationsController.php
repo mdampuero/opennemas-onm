@@ -40,7 +40,8 @@ class WebPushNotificationsController extends ApiController
     protected function getExtraData($items = null)
     {
         return [
-            'years'            => $this->getItemYears()
+            'years' => $this->getItemYears(),
+            'hours' => $hours
         ];
     }
 
@@ -57,7 +58,12 @@ class WebPushNotificationsController extends ApiController
 
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get(['webpush_service', 'webpush_apikey', 'webpush_token', 'webpush_automatic', 'webpush_delay']);
+            ->get(['webpush_service',
+                'webpush_apikey',
+                'webpush_token',
+                'webpush_automatic',
+                'webpush_delay',
+                'webpush_restricted_hours']);
 
         $webpush_service = [
             'service' => $settings['webpush_service'],
@@ -65,10 +71,16 @@ class WebPushNotificationsController extends ApiController
             'token'   => $settings['webpush_token']
         ];
 
+        for ($i = 0; $i < 24; $i++) {
+            $hours[] = sprintf("%02d:00", $i);
+        }
+
         return new JsonResponse([
-            'webpush_service'   => $webpush_service,
-            'webpush_automatic' => $settings['webpush_automatic'],
-            'webpush_delay'     => $settings['webpush_delay'],
+            'webpush_service'          => $webpush_service,
+            'webpush_automatic'        => $settings['webpush_automatic'],
+            'webpush_delay'            => $settings['webpush_delay'],
+            'webpush_restricted_hours' => $settings['webpush_restricted_hours'],
+            'hours'                    => $hours
         ]);
     }
 
@@ -85,17 +97,30 @@ class WebPushNotificationsController extends ApiController
 
         $msg = $this->get('core.messenger');
 
+        $webpush_restricted_hours = $request->request->get('webpush_restricted_hours');
+
+        if (!is_array($webpush_restricted_hours)) {
+            $webpush_restricted_hours = [];
+        }
+
+        foreach ($webpush_restricted_hours as &$hour) {
+            $hour = $hour['text'];
+        }
+        $webpush_restricted_hours = array_unique($webpush_restricted_hours);
+        sort($webpush_restricted_hours);
+
         $webpush_service = $request->request->get('webpush_service');
         $service         = $webpush_service['service'] ?? null;
         $apikey          = $webpush_service['apikey'] ?? null;
         $token           = $webpush_service['token'] ?? null;
 
         $settings = [
-            'webpush_service'   => $service,
-            'webpush_apikey'    => $apikey,
-            'webpush_token'     => $token,
-            'webpush_automatic' => $request->request->get('webpush_automatic'),
-            'webpush_delay'     => $request->request->get('webpush_delay'),
+            'webpush_service'          => $service,
+            'webpush_apikey'           => $apikey,
+            'webpush_token'            => $token,
+            'webpush_automatic'        => $request->request->get('webpush_automatic'),
+            'webpush_delay'            => $request->request->get('webpush_delay'),
+            'webpush_restricted_hours' => $webpush_restricted_hours,
         ];
 
         try {
