@@ -209,38 +209,52 @@ class WidgetFactory
     public function getXTags()
     {
         $xtags = [ sprintf('widget-%s', $this->content->pk_content) ];
-
         if ($this->isStatic()) {
             return $xtags;
         }
+
         if (!$this->isCustom) {
-            if (!array_key_exists('content_type', $this->params)) {
-                $xtags[] = sprintf('content_type_name-widget-%s', $this->defaultType);
-            } else {
-                $xtags[] = is_array($this->params['content_type'])
-                    ? sprintf('content_type_name-widget-%s', $this->params['content_type']['slug'])
-                    : sprintf('content_type_name-widget-%s', underscore($this->params['content_type']));
+            $contentTypes = [ $this->defaultType ];
+            if (array_key_exists('content_type', $this->params)) {
+                $contentTypes = is_array($this->params['content_type'])
+                    ? $this->params['content_type']
+                    : [ $this->params['content_type'] ];
+            }
+
+            foreach ($contentTypes as $type) {
+                $xtags[] = sprintf('content_type_name-widget-%s', underscore($type));
             }
 
             foreach ($this->propertiesMap as $key => $value) {
-                if (!array_key_exists($key, $this->params) || empty($this->params[$key])) {
-                    $xtags[] = sprintf('%s-widget-all', $value);
-                    continue;
-                }
-
-                if (!is_array($this->params[$key])) {
-                    $xtags[] = sprintf('%s-widget-%s', $value, $this->params[$key]);
-                    continue;
-                }
-
-                foreach ($this->params[$key] as $param) {
-                    $xtags[] = sprintf('%s-widget-%d', $value, $param);
-                }
+                $xtags = array_merge($xtags, $this->getXTagFor($key, $value));
             }
         }
 
         foreach ($this->params['contents'] as $content) {
             $xtags[] = sprintf('%s-%d', $content->content_type_name, $content->pk_content);
+        }
+
+        return $xtags;
+    }
+
+    /**
+     * Returns an array with the x-tags for the specific property to map.
+     *
+     * @return array The array with the x-tags for the specific property.
+     */
+    protected function getXTagFor($key, $value)
+    {
+        if (!array_key_exists($key, $this->params) || empty($this->params[$key])) {
+            return [ sprintf('%s-widget-all', $value) ];
+        }
+
+        if (!is_array($this->params[$key])) {
+            return [ sprintf('%s-widget-%s', $value, $this->params[$key]) ];
+        }
+
+        $xtags = [];
+        foreach ($this->params[$key] as $param) {
+            $xtags[] = sprintf('%s-widget-%d', $value, $param);
         }
 
         return $xtags;
@@ -275,13 +289,10 @@ class WidgetFactory
         }
 
         $starttime = $this->getStarttimeByFilters();
-
-        $dates = array_filter([ $starttime, $endtime ]);
-
+        $dates     = array_filter([ $starttime, $endtime ]);
         if (!empty($dates)) {
-            $now = new \DateTime();
-            $end = new \DateTime(min($dates));
-
+            $now  = new \DateTime();
+            $end  = new \DateTime(min($dates));
             $time = $end->getTimestamp() - $now->getTimestamp() - 2;
 
             $this->container->get('cache.connection.instance')
@@ -345,18 +356,41 @@ class WidgetFactory
             date('Y-m-d H:i:s')
         );
 
-        $typeOql = 'content_type_name = "%s" ';
-
+        $contentTypes = [ $this->defaultType ];
         if (array_key_exists('content_type', $this->params)) {
-            $oql .= is_array($this->params['content_type']) ?
-                sprintf($typeOql, $this->params['content_type']['slug']) :
-                sprintf($typeOql, underscore($this->params['content_type']));
-        } else {
-            $oql .= sprintf($typeOql, $this->defaultType);
+            $contentTypes = is_array($this->params['content_type']) ?
+                $this->params['content_type'] :
+                [ $this->params['content_type'] ];
+        }
+
+        for ($iterator = 1; $iterator <= count($contentTypes); $iterator++) {
+            $oqlPartial = 'content_type_name = "%s" ';
+            $oqlPartial = $iterator >= 2 ? 'or ' . $oqlPartial : $oqlPartial;
+
+            $oql .= sprintf($oqlPartial, $contentTypes[$iterator - 1]);
         }
 
         $filters = array_intersect_key(array_flip($this->propertiesMap), $replacements);
 
+        $oql .= $this->getOqlForFilters($filters, $replacements);
+        $oql .= 'order by starttime asc limit 1';
+
+        try {
+            $content = $this->container->get('api.service.content')->getItemBy($oql);
+            return $content->starttime->format('Y-m-d H:i:s');
+        } catch (GetItemException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the oql snippet for filters
+     *
+     * @return string The oql snippet.
+     */
+    protected function getOqlForFilters($filters, $replacements)
+    {
+        $oql = '';
         foreach ($filters as $key => $value) {
             if (empty($this->params[$value])) {
                 continue;
@@ -372,15 +406,7 @@ class WidgetFactory
             }
         }
 
-        $oql .= 'order by starttime asc limit 1';
-
-        try {
-            $content = $this->container->get('api.service.content')->getItemBy($oql);
-
-            return $content->starttime->format('Y-m-d H:i:s');
-        } catch (GetItemException $e) {
-            return null;
-        }
+        return $oql;
     }
 
     /**

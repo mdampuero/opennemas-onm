@@ -412,6 +412,8 @@ class ContentManager
         $date = $date->format('Y-m-d H:i:s');
         $now  = gmdate('Y-m-d H:i:s');
 
+        $contentType = is_array($contentType) ? $contentType : [ $contentType ];
+
         $criteria = [
             'join' => [
                 [
@@ -425,7 +427,7 @@ class ContentManager
                     ]
                 ]
             ],
-            'content_type_name' => [['value' => $contentType]],
+            'content_type_name' => [['value' => $contentType, 'operator' => 'IN']],
             'in_litter'         => [['value' => 0]],
             'starttime'         => [
                 'union' => 'AND',
