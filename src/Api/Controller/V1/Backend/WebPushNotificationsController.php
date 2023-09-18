@@ -41,7 +41,6 @@ class WebPushNotificationsController extends ApiController
     {
         return [
             'years' => $this->getItemYears(),
-            'hours' => $hours
         ];
     }
 
