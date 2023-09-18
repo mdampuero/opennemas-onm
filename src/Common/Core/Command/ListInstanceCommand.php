@@ -33,10 +33,10 @@ The <info>instances:list</info> command shows a list with all the available inst
 EOF
             )
             ->addOption(
-                'field',
+                'fields',
                 'f',
                 InputOption::VALUE_OPTIONAL,
-                'Field to print (id, internal_name, name, domains, settings, ' .
+                'Fields to print (id, internal_name, name, domains, settings, ' .
                 'activated, contact_mail, BD_DATABASE)'
             )
             ->addOption(
@@ -48,10 +48,22 @@ EOF
                 20
             )
             ->addOption(
-                'target',
-                't',
+                'instance-id',
+                'i',
                 InputOption::VALUE_OPTIONAL,
-                'Filter by instance ID or name'
+                'Filter by instance ID'
+            )
+            ->addOption(
+                'instance-name',
+                'm',
+                InputOption::VALUE_OPTIONAL,
+                'Filter by instance name'
+            )
+            ->addOption(
+                'only-values',
+                'o',
+                InputOption::VALUE_NONE,
+                'Only display the values of the fields printed, not keys'
             );
     }
 
@@ -63,9 +75,11 @@ EOF
         $this->input  = $input;
         $this->output = $output;
 
-        $epp         = $input->getOption('epp');
-        $this->field = $this->input->getOption('field');
-        $target      = $input->getOption('target');
+        $epp              = $input->getOption('epp');
+        $this->fields     = $this->input->getOption('fields');
+        $id               = $input->getOption('instance-id');
+        $name             = $input->getOption('instance-name');
+        $this->onlyValues = $this->input->getOption('only-values');
 
         $instance = $this->getContainer()->get('core.loader.instance')
             ->loadInstanceByName('manager')
@@ -92,10 +106,16 @@ EOF
             $instances = $this->getContainer()->get('orm.manager')
                 ->getRepository('Instance')->findBy($oql);
 
-            // If target instace parameter exits, use specific instance
-            if ($target) {
-                $instances = array_filter($instances, function ($instance) use ($target) {
-                    return $instance->id == $target || $instance->internal_name == $target;
+            // If id instace parameter exits, use specific instance
+            if ($id) {
+                $instances = array_filter($instances, function ($instance) use ($id) {
+                    return $instance->id == $id;
+                });
+            }
+
+            if ($name) {
+                $instances = array_filter($instances, function ($instance) use ($name) {
+                    return $instance->internal_name == $name;
                 });
             }
             $this->printInstanceInfo($instances);
@@ -121,29 +141,40 @@ EOF
                 $instance->domains[$instance->main_domain - 1] . $subdirectory :
                 $instance->domains[0] . $subdirectory;
 
-            $str = 'Name: ' . $instance->internal_name
-                . ', database: ' . $instance->getDatabaseName()
-                . ', main domain: ' . $instance->domain
-                . ', domains: [ ' . implode(', ', $instance->domains) . ' ]'
-                . ', activated: ' . $instance->activated;
+            $str = 'name:' . $instance->internal_name
+                . ';database:' . $instance->getDatabaseName()
+                . ';main_domain:' . $instance->domain
+                . ';domains:[' . implode(',', $instance->domains) . ']'
+                . ';activated:' . $instance->activated;
 
-            $field = $this->field;
+            $fields = $this->fields ? explode(',', $this->fields) : [];
 
-            if (!empty($field)) {
-                $str = 'Name: ' . $instance->internal_name;
+            if (!empty($fields)) {
+                $filteredStr = '';
+                foreach ($fields as $field) {
+                    // Check if the field is a property of the object
+                    if (isset($instance->{$field})) {
+                        $value        = is_array($instance->{$field})
+                                      ? implode('|', $instance->{$field})
+                                      : $instance->{$field};
+                        $filteredStr .= "$field:$value;";
+                    }
 
-                // Check if the field is a property of the object
-                if (!empty($instance->{$field})) {
-                    $value = is_array($instance->{$field}) ? implode('|', $instance->{$field}) : $instance->{$field};
-                    $str  .= ", $field: $value";
+                    // Check if the field is a key in the settings array
+                    if (array_key_exists($field, $instance->settings)) {
+                        $filteredStr .= "; settings.$field: {$instance->settings[$field]}";
+                    }
                 }
-
-                // Check if the field is a key in the settings array
-                if (array_key_exists($field, $instance->settings)) {
-                    $str .= ", settings.$field: {$instance->settings[$field]}";
-                }
+                $str = $filteredStr;
             }
 
+            $onlyValues = $this->onlyValues;
+
+            if ($onlyValues) {
+                $str = implode(';', array_map(function ($part) {
+                    return explode(':', $part)[1] ?? $part;
+                }, explode(';', $str)));
+            }
             $this->output->writeln($str);
         }
     }
