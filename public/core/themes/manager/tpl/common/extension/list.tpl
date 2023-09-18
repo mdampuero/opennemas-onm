@@ -19,7 +19,7 @@
           </h4>
         </li>
         <li class="hidden-xs ng-cloak quicklinks" ng-if="hasMultilanguage()">
-          <translator keys="data.extra.keys" ng-model="config.locale.selected" options="data.extra.locale"></translator>
+          <translator keys="data.extra.keys" ng-model="config.locale.selected" class="btn-group" options="data.extra.locale"></translator>
         </li>
       </ul>
       <div class="all-actions pull-right">

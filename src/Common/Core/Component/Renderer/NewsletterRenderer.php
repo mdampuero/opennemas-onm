@@ -192,6 +192,14 @@ class NewsletterRenderer
             ];
         }
 
+        if (!empty($criteria['tag'])
+            && !in_array($criteria['content_type'], [ 'static_page' ])
+        ) {
+            $searchCriteria['tag_id'] = [
+                [ 'value' => $criteria['tag'], 'operator' => 'IN' ]
+            ];
+        }
+
         if ($criteria['content_type'] === 'opinion' && !empty($criteria['opinion_type'])) {
             $bloggers   = $this->container->get('api.service.author')->getList('is_blog=1')['items'];
             $bloggersId = array_map(function ($item) {

@@ -27,28 +27,17 @@
 
 {block name="itemActions"}
   {acl isAllowed="STATIC_PAGE_UPDATE"}
-    <a class="btn btn-default btn-small" href="[% routing.generate('backend_static_page_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
-      <i class="fa fa-pencil m-r-5"></i>
-      {t}Edit{/t}
+    <a class="btn btn-white btn-small" href="[% routing.generate('backend_static_page_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
+      <i class="fa fa-pencil"></i>
     </a>
-    <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_static_page_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+    <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_static_page_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" class="btn-group" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
   {/acl}
+  <a class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
+    <i class="fa fa-external-link"></i>
+  </a>
   {acl isAllowed="STATIC_PAGE_DELETE"}
-    <button class="btn btn-danger btn-small" ng-click="sendToTrash(item)" type="button">
-      <i class="fa m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': item.in_litterLoading, 'fa-trash-o': !item.in_litterLoading }"></i>{t}Delete{/t}
+    <button class="btn btn-white btn-small" ng-click="sendToTrash(item)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
+      <i class="fa text-danger" ng-class="{ 'fa-circle-o-notch fa-spin': item.in_litterLoading, 'fa-trash-o': !item.in_litterLoading }"></i>
     </button>
   {/acl}
-  <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
-    <button class="btn btn-small btn-white dropdown-toggle" data-toggle="dropdown" type="button">
-      <i class="fa fa-ellipsis-h"></i>
-    </button>
-    <ul class="dropdown-menu no-padding">
-      <li>
-        <a href="[% getFrontendUrl(item) %]" target="_blank">
-          <i class="fa fa-external-link m-r-5"></i>
-          {t}Link{/t}
-        </a>
-      </li>
-    </ul>
-  </div>
 {/block}

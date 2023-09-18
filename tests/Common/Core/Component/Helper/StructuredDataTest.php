@@ -35,7 +35,12 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
-            ->setMethods([ 'getMediaShortPath', 'getBaseUrl' ])
+            ->setMethods([ 'getMediaShortPath', 'getBaseUrl', 'hasMultilanguage' ])
+            ->getMock();
+
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getSlugs', 'getLocale' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -108,6 +113,9 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
             case 'core.helper.photo':
                 return $this->ph;
+
+            case 'core.locale':
+                return $this->locale;
         }
 
         return null;
@@ -135,22 +143,25 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $data['video']          = new Content();
         $data['video']->tags    = [1,2,3,4,5];
 
-        $output                    = [];
-        $output['content']         = new Content();
-        $output['video']           = new Content();
-        $output['content']->tags   = [1,2,3,4];
-        $output['video']->tags     = [1,2,3,4,5];
-        $output['videoKeywords']   = 'keywords,object,json,linking,data';
-        $output['keywords']        = 'keywords,object,json,linking';
-        $output['siteName']        = 'site name';
-        $output['siteUrl']         = 'http://opennemas.com';
-        $output['siteDescription'] = 'site description';
-        $output['content']->title  = 'This is the title';
-        $output['title']           = 'This is the title';
-        $output['description']     = 'This is the description';
-        $output['wordCount']       = 4;
-        $output['logo']            = 'logo';
-        $output['author']          = 'author';
+        $output                     = [];
+        $output['content']          = new Content();
+        $output['video']            = new Content();
+        $output['content']->tags    = [1,2,3,4];
+        $output['video']->tags      = [1,2,3,4,5];
+        $output['videoKeywords']    = 'keywords,object,json,linking,data';
+        $output['keywords']         = 'keywords,object,json,linking';
+        $output['siteName']         = 'site name';
+        $output['siteUrl']          = 'http://opennemas.com';
+        $output['siteDescription']  = 'site description';
+        $output['content']->title   = 'This is the title';
+        $output['title']            = 'This is the title';
+        $output['description']      = 'This is the description';
+        $output['wordCount']        = 4;
+        $output['logo']             = 'logo';
+        $output['author']           = 'author';
+        $output['languages']        = null;
+        $output['externalServices'] = '[]';
+
 
 
         $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
@@ -188,10 +199,12 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
      */
     public function testExtractParamsFromDataWithoutContent()
     {
-        $output['logo']            = 'logo';
-        $output['siteName']        = 'site name';
-        $output['siteUrl']         = 'http://opennemas.com';
-        $output['siteDescription'] = 'site description';
+        $output['logo']             = 'logo';
+        $output['siteName']         = 'site name';
+        $output['siteUrl']          = 'http://opennemas.com';
+        $output['siteDescription']  = 'site description';
+        $output['languages']        = null;
+        $output['externalServices'] = '[]';
 
 
         $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
@@ -461,5 +474,88 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn([ 'items' => [ $tag ]]);
 
         $method->invokeArgs($this->object, [ $ids ]);
+    }
+
+    /**
+     * Tests getLanguagesData without multilanguage
+     */
+    public function testGetLanguagesDataWithoutMultilanguage()
+    {
+        $method = new \ReflectionMethod($this->object, 'getLanguagesData');
+        $method->setAccessible(true);
+
+        $languageAvailable = 'es_ES';
+
+        $this->instance->expects($this->any())->method('hasMultilanguage')
+            ->willReturn(false);
+        $this->locale->expects($this->at(0))->method('getLocale')
+            ->with('frontend')
+            ->willReturn($languageAvailable);
+
+        $this->assertEquals(
+            'es-ES',
+            $method->invokeArgs($this->object, [])
+        );
+    }
+
+    /**
+     * Tests getLanguagesData with multilanguage
+     */
+    public function testGetLanguagesDataWithMultilanguage()
+    {
+        $method = new \ReflectionMethod($this->object, 'getLanguagesData');
+        $method->setAccessible(true);
+
+        $languagesAvailables = ['es_ES' => 'es', 'en_EN' => 'en'];
+
+        $this->instance->expects($this->any())->method('hasMultilanguage')
+            ->willReturn(true);
+        $this->locale->expects($this->any())->method('getSlugs')
+            ->with('frontend')
+            ->willReturn($languagesAvailables);
+
+        $this->assertEquals(
+            'es-ES, en-EN',
+            $method->invokeArgs($this->object, [])
+        );
+    }
+
+    /**
+     * Tests getExternalServicesData
+     */
+    public function testGetExternalServicesData()
+    {
+        $method = new \ReflectionMethod($this->object, 'getExternalServicesData');
+        $method->setAccessible(true);
+
+        $externalServices = 'url';
+
+        $this->ds->expects($this->at(0))->method('get')
+            ->willReturn($externalServices);
+        $this->ds->expects($this->at(1))->method('get')
+            ->willReturn(['page' => $externalServices]);
+        $this->ds->expects($this->at(2))->method('get')
+            ->willReturn($externalServices);
+        $this->ds->expects($this->at(3))->method('get')
+            ->willReturn($externalServices);
+        $this->ds->expects($this->at(4))->method('get')
+            ->willReturn($externalServices);
+        $this->ds->expects($this->at(5))->method('get')
+            ->willReturn($externalServices);
+        $this->ds->expects($this->at(6))->method('get')
+            ->willReturn($externalServices);
+        $this->ds->expects($this->at(7))->method('get')
+            ->willReturn($externalServices);
+        $this->ds->expects($this->at(8))->method('get')
+            ->willReturn($externalServices);
+        $this->ds->expects($this->at(9))->method('get')
+            ->willReturn($externalServices);
+        $this->ds->expects($this->at(10))->method('get')
+            ->willReturn($externalServices);
+
+        $this->assertEquals(
+            '["url","url","url","url","url","url","url","url","url","url","url"]',
+            $method->invokeArgs($this->object, [])
+        );
     }
 }

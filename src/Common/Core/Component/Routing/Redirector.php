@@ -124,7 +124,7 @@ class Redirector
             ->get();
 
         if (!is_array($contentType) && !empty($contentType)) {
-            $contentType = [ $contentType ];
+            $contentType = explode(',', $contentType);
         }
 
         $cacheId = $this->getCacheId($source, $contentType);
@@ -474,9 +474,10 @@ class Redirector
             $fragment = '#comentarios';
         }
 
-        $url = $this->container->get('core.helper.url_generator')->generate($content);
-
-        $url = $this->container->get('core.decorator.url')->prefixUrl($url);
+        // Use $params['locale'] on helper to generate localized urls
+        $url = $this->container->get('core.decorator.url')->prefixUrl(
+            $this->container->get('core.helper.url_generator')->generate($content, $params)
+        );
 
         if ($format === 'amp' && in_array(
             $content->content_type_name,

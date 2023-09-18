@@ -1,3 +1,4 @@
+{include file="common/helpers/structured_organization_data.tpl"}
 <@script type="application/ld+json">
   [{
     "@context": "http://schema.org/",

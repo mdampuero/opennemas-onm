@@ -178,6 +178,7 @@ class MetaHelper
             'content_title'       => strlen($title) > 90 ? substr($title, 0, 87) . '...' : $title,
             'content_description' => strlen($description) > 160 ? substr($description, 0, 157) . '...' : $description,
             'content_starttime'   => $content->starttime,
+            'content_modified'    => $content->changed,
             'content_keywords'    => $keywords ?? $this->settings->get('site_keywords')
         ];
 

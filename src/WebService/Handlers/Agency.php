@@ -94,9 +94,16 @@ class Agency
 
         $locale = getService('core.locale')->getRequestLocale();
 
+        $fmHelper        = getService('core.helper.featured_media');
+        $featureContents = [];
+        foreach ([ 'frontpage', 'inner' ] as $type) {
+            $featureContents[$type] = $fmHelper->getFeaturedMedia($article, $type);
+        }
+
         $output = $tpl->fetch('news_agency/newsml_templates/base.tpl', [
-            'content'     => $article,
-            'tags'        => getService('api.service.tag')
+            'content'       => $article,
+            'featuredMedia' => $featureContents,
+            'tags'          => getService('api.service.tag')
                 ->getListByIdsKeyMapped($article->tags, $locale)['items']
         ]);
 

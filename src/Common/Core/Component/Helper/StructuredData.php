@@ -53,6 +53,12 @@ class StructuredData
         $data['siteUrl']         = $this->instance->getBaseUrl();
         $data['siteDescription'] = $this->ds->get('site_description');
 
+        // Languages
+        $data['languages'] = $this->getLanguagesData();
+
+        // External Services
+        $data['externalServices'] = $this->getExternalServicesData();
+
         if (!array_key_exists('content', $data)) {
             return $data;
         }
@@ -190,5 +196,78 @@ class StructuredData
         }, $tags['items']);
 
         return implode(',', $names);
+    }
+
+    /**
+     * Method to retrieve the Languages.
+     *
+     * @return string    Languages.
+     */
+    protected function getLanguagesData()
+    {
+        $languages = $this->container->get('core.locale')->getLocale('frontend');
+        if ($this->container->get('core.instance')->hasMultilanguage()) {
+            $languages = implode(', ', array_keys($this->container->get('core.locale')
+                ->getSlugs('frontend')));
+        }
+
+        return str_replace('_', '-', $languages);
+    }
+
+    /**
+     * Method to retrieve the External Services information.
+     *
+     * @return string The External Services information.
+     */
+    protected function getExternalServicesData()
+    {
+        $externalServices = array();
+
+        // Get the information of the External Services
+        $externalService = $this->ds->get('youtube_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
+        }
+        $externalService = $this->ds->get('facebook')['page'];
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
+        }
+        $externalService = $this->ds->get('twitter_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
+        }
+        $externalService = $this->ds->get('instagram_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
+        }
+        $externalService = $this->ds->get('pinterest_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
+        }
+        $externalService = $this->ds->get('vimeo_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
+        }
+        $externalService = $this->ds->get('linkedin_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
+        }
+        $externalService = $this->ds->get('telegram_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
+        }
+        $externalService = $this->ds->get('whatsapp_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
+        }
+        $externalService = $this->ds->get('tiktok_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
+        }
+        $externalService = $this->ds->get('dailymotion_page');
+        if (!empty($externalService)) {
+            array_push($externalServices, '"' . $externalService . '"');
+        }
+        return "[" . implode(',', $externalServices) . "]";
     }
 }

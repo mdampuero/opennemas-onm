@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-04 08:39+0000\n"
-"PO-Revision-Date: 2023-09-04 11:19+0200\n"
+"POT-Creation-Date: 2023-09-18 08:32+0000\n"
+"PO-Revision-Date: 2023-09-18 10:32+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -2214,9 +2214,6 @@ msgstr "Publicado"
 msgid "Link"
 msgstr "Ligazón"
 
-msgid "External"
-msgstr "Externo"
-
 msgid "Go back to list"
 msgstr "Volver á lista"
 
@@ -4242,11 +4239,11 @@ msgstr "¿Queres mover os contidos nas categorías seleccionadas?"
 msgid "Visible"
 msgstr "Visible"
 
-msgid "Only empty categories can be deleted"
-msgstr "Só se poden eliminar categorías sen contidos"
-
 msgid "Move contents"
 msgstr "Mover contidos"
+
+msgid "Only empty categories can be deleted"
+msgstr "Só se poden eliminar categorías sen contidos"
 
 msgid "Do you want to delete contents in category?"
 msgstr "¿Queres eliminar os contenidos na categoría?"
@@ -5990,6 +5987,9 @@ msgstr "Puntuación SEO"
 msgid "No SEO information"
 msgstr "Sen información SEO"
 
+msgid "Duplicate"
+msgstr "Duplicar"
+
 msgid "Customize"
 msgstr "Personalizar"
 
@@ -6510,6 +6510,9 @@ msgid "Unable to find any item or you don't have permission to see the list."
 msgstr ""
 "Non se puideron atopar elementos que coincidan coa túa busca ou non tes "
 "permiso para ver a lista."
+
+msgid "Do you want to duplicate the item?"
+msgstr "Queres duplicar o elemento?"
 
 msgid "Do you want to send the item to trash?"
 msgstr "Tes certeza que queres enviar o elemento ao lixo?"
@@ -7341,6 +7344,9 @@ msgstr "eliminar"
 
 msgid "delete them"
 msgstr "eliminalos"
+
+#~ msgid "External"
+#~ msgstr "Externo"
 
 #~ msgid "Book created successfully."
 #~ msgstr "Libro creado correctamente."
