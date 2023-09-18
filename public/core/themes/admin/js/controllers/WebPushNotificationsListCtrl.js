@@ -71,6 +71,21 @@
         };
 
         /**
+         * @function parseList
+         * @memberOf RestListCtrl
+         *
+         * @description
+         *   Parses the response and adds information to the scope.
+         *
+         * @param {Object} data The data in the response.
+         */
+        $scope.parseList = function(data) {
+          data.items.forEach(function(item) {
+            item.image = Number(item.image);
+          });
+        };
+
+        /**
          * @inheritdoc
          */
         $scope.isSelectable = function() {

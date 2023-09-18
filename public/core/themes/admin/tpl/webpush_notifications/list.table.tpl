@@ -35,11 +35,8 @@
 
 {block name="customColumnsBody"}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('image')">
- <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.image" transform="zoomcrop,220,220">
-      {* <div class="badge badge-default text-bold text-uppercase">
-        {include file="common/component/icon/content_type_icon.tpl" iField="getFeaturedMedia(item, 'featured_frontpage')" iFlagName=true iFlagIcon=true}
-      </div> *}
-    </dynamic-image>
+  <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.image" transform="zoomcrop,220,220">
+  </dynamic-image>
     [% item.image %]
   </td>
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('status')">
