@@ -154,9 +154,14 @@ EOF
                 foreach ($fields as $field) {
                     // Check if the field is a property of the object
                     if (isset($instance->{$field})) {
-                        $value        = is_array($instance->{$field})
-                                      ? implode('|', $instance->{$field})
-                                      : $instance->{$field};
+                        $value = is_array($instance->{$field})
+                               ? implode('|', $instance->{$field})
+                               : $instance->{$field};
+
+                        if ($field == 'main_domain') {
+                            $value = $instance->domains[$value];
+                        }
+
                         $filteredStr .= "$field:$value;";
                     }
 
@@ -175,6 +180,9 @@ EOF
                     return explode(':', $part)[1] ?? $part;
                 }, explode(';', $str)));
             }
+
+            $str = rtrim($str, ';');
+
             $this->output->writeln($str);
         }
     }
