@@ -20,10 +20,11 @@ class WebpushSendCommand extends Command
         $this
             ->setName('webpush:send')
             ->setDescription('Sends pending webpush notifications')
-            ->addArgument(
-                'instance',
-                InputArgument::REQUIRED,
-                'The instance internal name'
+            ->addOption(
+                'instances',
+                'i',
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'The list of instances to send newsletter from (e.g. norf quux)'
             );
     }
 
@@ -32,23 +33,50 @@ class WebpushSendCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->output = $output;
         $this->start();
         $output->writeln(sprintf(
-            '(1/2) Starting command...<options=bold></><fg=green;options=bold>DONE</> <fg=blue;options=bold>(%s)</>',
+            str_pad('<options=bold>(1/3) Starting command', 50, '.')
+                . '<fg=green;options=bold>DONE</>'
+                . ' <fg=blue;options=bold>(%s)</></>',
             date('Y-m-d H:i:s', $this->started)
         ));
-        $instance = $input->getArgument('instance');
-        $this->getContainer()->get('core.loader')->load($instance);
-        if ($this->getContainer()->get('core.security')->hasExtension('es.openhost.module.webpush_notifications') &&
-            !$instance->hasMultilanguage()) {
-            $this->getContainer()->get('core.locale')->setContext('backend');
-            $as           = $this->getContainer()->get('api.service.content');
-            $pendingItems = $as->getPendingNotifications();
-            $date         = new \DateTime(null, new \DateTimeZone('UTC'));
-            $utcDate      = $date->format('Y-m-d H:i:s');
 
-            foreach ($pendingItems as $item) {
-                if ($item->starttime->format("Y-m-d H:i:s") <= $utcDate) {
+        $instances = $this->getInstances($input->getOption('instances'));
+        $output->writeln(sprintf(
+            str_pad('<options=bold>(2/3) Processing instances', 43, '.')
+                . '<fg=yellow;options=bold>IN PROGRESS</> '
+                . '<fg=blue;options=bold>(%s instances)</></>',
+            count($instances)
+        ));
+
+        $iteration = 1;
+        foreach ($instances as $instance) {
+            if ($instance->hasMultilanguage()) {
+                continue;
+            }
+
+            $this->getContainer()->get('cache.connection.instance')->init();
+            $output->write(sprintf(
+                '<fg=blue;options=bold>==></><options=bold> (%s/%s) Processing instance %s </>',
+                $iteration++,
+                count($instances),
+                $instance->internal_name
+            ));
+            try {
+                $this->getContainer()->get('core.loader')
+                    ->load($instance->internal_name);
+
+                $this->getContainer()->get('core.security')->setInstance($instance);
+                $this->getContainer()->get('core.locale')->setContext('backend');
+                $as           = $this->getContainer()->get('api.service.content');
+                $pendingItems = $as->getPendingNotifications();
+                $date         = new \DateTime(null, new \DateTimeZone('UTC'));
+                $utcDate      = $date->format('Y-m-d H:i:s');
+                foreach ($pendingItems as $item) {
+                    if ($item->starttime->format("Y-m-d H:i:s") > $utcDate) {
+                        continue;
+                    }
                     $webpushr    = $this->getContainer()->get('external.web_push.factory');
                     $endpoint    = $webpushr->getEndpoint('notification');
                     $contentPath = $this->getContainer()
@@ -58,18 +86,28 @@ class WebpushSendCommand extends Command
                     $imagePath   = $this->getContainer()
                         ->get('core.helper.photo')->getPhotoPath($image, null, [], true);
 
-                    $notification = $endpoint->sendNotification([
-                        'title'      => $item->title,
-                        'message'    => $item->description,
-                        'target_url' => $contentPath,
-                        'image'      => $imagePath
-                    ]);
+                    $notificationStatus = 1;
+                    try {
+                        $endpoint->sendNotification([
+                            'title'      => $item->title,
+                            'message'    => $item->description,
+                            'target_url' => $contentPath,
+                            'image'      => $imagePath
+                        ]);
+                    } catch (\Exception $e) {
+                        $notificationStatus = 2;
+                    }
 
                     $title                = $item->title;
                     $description          = $item->description;
-                    $changedNotifications = array_map(function ($element) use ($title, $description, $image) {
+                    $changedNotifications = array_map(function ($element) use (
+                        $title,
+                        $description,
+                        $image,
+                        $notificationStatus
+                    ) {
                         if ($element['status'] == 0) {
-                            $element['status']    = 1;
+                            $element['status']    = $notificationStatus;
                             $element['body']      = $description;
                             $element['title']     = $title;
                             $element['send_date'] = gmdate("Y-m-d H:i:s");
@@ -77,9 +115,14 @@ class WebpushSendCommand extends Command
                         }
                         return $element;
                     }, $item->webpush_notifications);
-
                     $as->patchItem($item->pk_content, ['webpush_notifications' => $changedNotifications]);
                 }
+            } catch (\Exception $e) {
+                $output->writeln(sprintf(
+                    '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
+                    $e->getMessage()
+                ));
+                continue;
             }
         }
 
@@ -92,5 +135,27 @@ class WebpushSendCommand extends Command
             date('Y-m-d H:i:s', $this->ended),
             $this->getDuration()
         ));
+    }
+
+    /**
+     * Returns the list of active instances.
+     *
+     * @return array The list of instances.
+     */
+    protected function getInstances(?array $names = []) : array
+    {
+        $oql = sprintf(
+            'activated = 1 and activated_modules ~ "%s"',
+            'es.openhost.module.webpush_notifications'
+        );
+        if (!empty($names)) {
+            $oql .= sprintf(
+                ' and internal_name in ["%s"]',
+                implode('","', $names)
+            );
+        }
+
+        return $this->getContainer()->get('orm.manager')
+            ->getRepository('Instance')->findBy($oql);
     }
 }
