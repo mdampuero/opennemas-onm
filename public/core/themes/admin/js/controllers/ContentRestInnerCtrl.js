@@ -3,9 +3,9 @@
  */
 angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
   '$controller', '$uibModal', '$scope', 'cleaner',
-  'messenger', 'routing', '$timeout', 'webStorage', '$window', 'translator', 'http',
+  'messenger', 'routing', '$timeout', 'webStorage', '$window', 'translator',
   function($controller, $uibModal, $scope, cleaner,
-      messenger, routing, $timeout, webStorage, $window, translator, http) {
+      messenger, routing, $timeout, webStorage, $window, translator) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -217,9 +217,9 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     $scope.submit = function(item) {
       if (item && $scope.hasPendingNotifications()) {
         if (item.starttime <= $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
-          $scope.openNotificationModal(item);
+          $scope.openNotificationModal(item, false);
         } else {
-          $scope.sendWPNotification(item);
+          $scope.sendWPNotification(item, false);
         }
       } else {
         $scope.saveItem();
@@ -261,8 +261,12 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      * @description
      *   Send webpush notification to all subscribers
      */
-    $scope.openNotificationModal = function(item, createNotification = false) {
-      var status = createNotification ? 1 : 2;
+    $scope.openNotificationModal = function(item, createNotification) {
+      var status = 2;
+
+      if (createNotification) {
+        status = 1;
+      }
       var modal = $uibModal.open({
         templateUrl: 'modal-webpush',
         backdrop: 'static',
@@ -291,7 +295,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      * @description
      *   Send webpush notification to all subscribers
      */
-    $scope.sendWPNotification = function(item, createNotification = false) {
+    $scope.sendWPNotification = function(item, createNotification) {
       if (!$scope.validate()) {
         messenger.post(window.strings.forms.not_valid, 'error');
         return;

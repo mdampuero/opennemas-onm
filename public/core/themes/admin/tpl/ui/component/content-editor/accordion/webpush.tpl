@@ -11,9 +11,9 @@
     <div>
       <div class="text-center" ng-if="item.content_status">
         <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="openNotificationModal(item, true)" ng-if="!hasPendingNotifications() && getContentScheduling(item) == 0 || getContentScheduling(item) == -1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND NOTIFICATION{/t}</button>
-        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="openNotificationModal(item)" ng-if="!hasPendingNotifications() && getContentScheduling(item) == 1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}ADD SCHEDULED NOTIFICATION{/t}</button>
+        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="openNotificationModal(item, false)" ng-if="!hasPendingNotifications() && getContentScheduling(item) == 1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}ADD SCHEDULED NOTIFICATION{/t}</button>
         <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="openNotificationModal(item, true)" ng-if="hasPendingNotifications() && getContentScheduling(item) == 0 || getContentScheduling(item) == -1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND SCHEDULED NOTIFICATION{/t}</button>
-        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="openNotificationModal(item)" ng-if="hasPendingNotifications() && getContentScheduling(item) == 1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}CHANGE SCHEDULED NOTIFICATION{/t}</button>
+        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="openNotificationModal(item, false)" ng-if="hasPendingNotifications() && getContentScheduling(item) == 1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}CHANGE SCHEDULED NOTIFICATION{/t}</button>
       </div>
       <div class="menu-dragable-accordion" id="webpush-container">
         <div class=" m-t-5" ng-repeat="notification in item.webpush_notifications.slice().reverse()">
