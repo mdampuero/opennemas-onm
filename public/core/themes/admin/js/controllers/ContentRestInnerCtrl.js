@@ -361,9 +361,12 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      */
 
     $scope.hasPendingNotifications = function() {
-      return $scope.item.webpush_notifications.some(function(notification) {
-        return notification.status === 0;
-      });
+      for (var i = 0; i < $scope.item.webpush_notifications.length; i++) {
+        if ($scope.item.webpush_notifications[i].satatus === 0) {
+          return true;
+        }
+      }
+      return false;
     };
 
     /**
