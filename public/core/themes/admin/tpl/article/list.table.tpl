@@ -155,11 +155,6 @@
       </button>
     {/if}
   {/is_module_activated}
-  <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
-    <button class="btn btn-small btn-white dropdown-toggle" data-toggle="dropdown" type="button">
-      <i class="fa fa-ellipsis-h"></i>
-    </button>
-  </div>
   <a ng-if="item.slug" class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
     <i class="fa fa-external-link"></i>
   </a>
