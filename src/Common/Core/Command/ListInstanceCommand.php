@@ -155,7 +155,7 @@ EOF
                     // Check if the field is a property of the object
                     if (isset($instance->{$field})) {
                         $value = is_array($instance->{$field})
-                               ? implode('|', $instance->{$field})
+                               ? implode(',', $instance->{$field})
                                : $instance->{$field};
 
                         if ($field == 'main_domain') {
