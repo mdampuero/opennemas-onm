@@ -25,7 +25,6 @@
             <span class="fa fa-cog fa-lg"></span>
           </a>
         </li>
-        <li class="quicklinks"><span class="h-seperate"></span></li>
       {/acl}
     </ul>
   </div>

@@ -37,7 +37,6 @@
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('image')">
   <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.image" transform="zoomcrop,220,220">
   </dynamic-image>
-    [% item.image %]
   </td>
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('status')">
       <span class="ng-cloak badge badge-default" ng-class="{ 'badge-danger': item.status == 2, 'badge-warning': item.status == 0, 'badge-success' : item.status == 1 }">
