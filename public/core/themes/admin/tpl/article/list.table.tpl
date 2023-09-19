@@ -146,7 +146,7 @@
     </button>
   {/acl}
   {is_module_activated name="es.openhost.module.webpush_notifications"}
-    {if !empty({setting name=webpushr field=webpushrKey})}
+    {if !empty({setting name=webpush_apikey})}
       <button ng-if="!hasMultilanguage() && item.content_status && item.starttime <= currentDateTime" class="btn btn-warning btn-small" ng-click="sendWPNotification(item)" type="button">
         <i class="fa fa-bell m-r-5"></i>
       </button>

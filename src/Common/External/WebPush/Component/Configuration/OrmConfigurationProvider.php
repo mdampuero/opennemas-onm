@@ -26,7 +26,10 @@ class OrmConfigurationProvider implements ConfigurationProvider
      */
     public function getConfiguration()
     {
-        return $this->dataset->get('webpushr', []);
+        return [
+            'webpushrKey' => $this->dataset->get('webpush_apikey', ''),
+            'webpushrAuthToken' => $this->dataset->get('webpush_token', ''),
+        ];
     }
 
     /**
@@ -35,10 +38,12 @@ class OrmConfigurationProvider implements ConfigurationProvider
     public function setConfiguration($config)
     {
         if (empty($config)) {
-            $this->dataset->delete('webpushr');
+            $this->dataset->delete('webpush_apikey');
+            $this->dataset->delete('webpush_token');
             return;
         }
 
-        $this->dataset->set('webpushr', $config);
+        $this->dataset->set('webpush_apikey', $config['webpush_apikey']);
+        $this->dataset->set('webpush_token', $config['webpush_token']);
     }
 }
