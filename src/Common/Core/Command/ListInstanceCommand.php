@@ -159,7 +159,7 @@ EOF
                                : $instance->{$field};
 
                         if ($field == 'main_domain') {
-                            $value = $instance->domains[$value];
+                            $value = $instance->domain;
                         }
 
                         $filteredStr .= "$field:$value;";
