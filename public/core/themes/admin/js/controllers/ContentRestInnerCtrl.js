@@ -307,7 +307,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       var image = $scope.data.featuredFrontpage ? $scope.data.featuredFrontpage.target_id : null;
 
       if ($scope.item.starttime > $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
-        $scope.removePendingNotification();
+        $scope.removePendingNotification(false);
         $scope.data.item.webpush_notifications.push(
           {
             status: 0,
@@ -320,7 +320,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       } else {
         $scope.sendNotification = true;
         if ($scope.hasPendingNotifications()) {
-          $scope.removePendingNotification();
+          $scope.removePendingNotification(false);
           $scope.data.item.webpush_notifications.push(
             {
               status: 1,
@@ -346,7 +346,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       }
 
       if (!$scope.item.content_status) {
-        $scope.removePendingNotification();
+        $scope.removePendingNotification(false);
       }
 
       $scope.saveItem();
@@ -362,7 +362,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
     $scope.hasPendingNotifications = function() {
       for (var i = 0; i < $scope.item.webpush_notifications.length; i++) {
-        if ($scope.item.webpush_notifications[i].satatus === 0) {
+        if ($scope.item.webpush_notifications[i].status === 0) {
           return true;
         }
       }
@@ -376,7 +376,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      * @description
      *  Generates the backend url of the featured media associated to the article.
      */
-    $scope.removePendingNotification = function(saveItem = false) {
+    $scope.removePendingNotification = function(saveItem) {
       var notifications = $scope.data.item.webpush_notifications;
 
       for (var i = 0; i < notifications.length; i++) {
