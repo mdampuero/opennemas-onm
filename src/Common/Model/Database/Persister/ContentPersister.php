@@ -502,8 +502,8 @@ done
                 return !is_null($relation);
             });
         }
+
         $starttime = !empty($starttime) ? $starttime->format("Y-m-d H:i:s") : null;
-        $starttime = max($starttime, date("Y-m-d H:i:s"));
 
         $webpush_notifications = array_map(function ($item) use ($starttime) {
             $item['send_date'] = $item['status'] == 0 ? $starttime : $item['send_date'];
