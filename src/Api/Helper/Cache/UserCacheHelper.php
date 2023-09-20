@@ -39,7 +39,7 @@ class UserCacheHelper extends CacheHelper
      *
      * @return CacheHelper The current helper for method chaining.
      */
-    public function deleteItem(User $item) : CacheHelper
+    public function deleteItem(User $item, $vote = false, $action = false) : CacheHelper
     {
         $this->queue->push(new ServiceTask('cache', 'delete', [
             sprintf('user-%s', $item->id)

@@ -32,7 +32,7 @@ class CategoryCacheHelper extends CacheHelper
      *
      * @return CacheHelper The current helper for method chaining.
      */
-    public function deleteItem(Category $category) : CacheHelper
+    public function deleteItem(Category $category, $vote = false, $action = false) : CacheHelper
     {
         $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
             [ 'category', 'list', $category->id ]
