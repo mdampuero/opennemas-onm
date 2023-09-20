@@ -272,6 +272,9 @@
           var data  = $scope.getData();
           var route = { name: $scope.routes.saveItem };
 
+          // Parses data before save
+          data = $scope.parseData(data);
+
           /**
            * Callback executed when subscriber is saved/updated successfully.
            *
