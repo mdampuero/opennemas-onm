@@ -112,7 +112,7 @@ class WebpushSendCommand extends Command
                             $element['body']      = $description;
                             $element['title']     = $title;
                             $element['send_date'] = gmdate("Y-m-d H:i:s");
-                            $element['image']     = $image->pk_content;
+                            $element['image']     = $image->pk_content ?? '';
                         }
                         return $element;
                     }, $item->webpush_notifications);
