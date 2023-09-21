@@ -69,6 +69,7 @@ class WebpushSendCommand extends Command
                     ->load($instance->internal_name);
 
                 $this->getContainer()->get('core.security')->setInstance($instance);
+                $context = $this->getContainer()->get('core.locale')->getContext();
                 $this->getContainer()->get('core.locale')->setContext('backend');
                 $as           = $this->getContainer()->get('api.service.content');
                 $pendingItems = $as->getPendingNotifications();
@@ -118,6 +119,7 @@ class WebpushSendCommand extends Command
                     }, $item->webpush_notifications);
                     $as->patchItem($item->pk_content, ['webpush_notifications' => $changedNotifications]);
                 }
+                $this->getContainer()->get('core.locale')->setContext($context);
             } catch (\Exception $e) {
                 $output->writeln(sprintf(
                     '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
