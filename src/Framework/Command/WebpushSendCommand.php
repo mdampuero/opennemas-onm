@@ -73,10 +73,11 @@ class WebpushSendCommand extends Command
                 $this->getContainer()->get('core.locale')->setContext('backend');
                 $as           = $this->getContainer()->get('api.service.content');
                 $pendingItems = $as->getPendingNotifications();
-                $date         = new \DateTime(null, new \DateTimeZone('UTC'));
-                $utcDate      = $date->format('Y-m-d H:i:s');
+                $timeZone     = $this->getContainer()->get('core.locale')->getTimeZone();
+                $date         = new \DateTime(null, $timeZone);
+                $localDate      = $date->format('Y-m-d H:i:s');
                 foreach ($pendingItems as $item) {
-                    if ($item->starttime->format("Y-m-d H:i:s") > $utcDate) {
+                    if ($item->starttime->format("Y-m-d H:i:s") > $localDate) {
                         continue;
                     }
                     $webpushr    = $this->getContainer()->get('external.web_push.factory');
