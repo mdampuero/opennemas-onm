@@ -217,7 +217,8 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
                     'info'   => $video1->information,
                     'height' => 320,
                     'width'  => 560,
-                    'title'  => $video1->title
+                    'title'  => $video1->title,
+                    'type' => ''
                 ])
             ->willReturn($externalOutput);
 
@@ -226,7 +227,8 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
                     'info'   => $video2->information,
                     'height' => 320,
                     'width'  => 560,
-                    'title'  => $video2->title
+                    'title'  => $video2->title,
+                    'type'   => 'youtube'
                 ])
             ->willReturn($webSourceOutput);
 
