@@ -69,10 +69,22 @@ class WebpushSendCommand extends Command
                 $this->getContainer()->get('core.loader')
                     ->load($instance->internal_name);
 
+                $as = $this->getContainer()->get('api.service.content');
+
+                $favicoId = $this->getContainer()->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
+                    ->get('logo_favico');
+
+                $favico = $this->getContainer()->get('core.helper.photo')->getPhotoPath(
+                    $as->getItem($favicoId),
+                    null,
+                    [ 192, 192 ],
+                    true
+                );
+
                 $this->getContainer()->get('core.security')->setInstance($instance);
                 $context = $this->getContainer()->get('core.locale')->getContext();
                 $this->getContainer()->get('core.locale')->setContext('backend');
-                $as           = $this->getContainer()->get('api.service.content');
                 $pendingItems = $as->getPendingNotifications();
                 $timeZone     = $this->getContainer()->get('core.locale')->getTimeZone();
                 $date         = new \DateTime(null, new \DateTimeZone('UTC'));
@@ -100,7 +112,8 @@ class WebpushSendCommand extends Command
                             'title'      => $item->title,
                             'message'    => $item->description,
                             'target_url' => $contentPath,
-                            'image'      => $imagePath
+                            'image'      => $imagePath,
+                            'icon'      => $favico,
                         ]);
                     } catch (\Exception $e) {
                         $notificationStatus = 2;
