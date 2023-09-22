@@ -113,7 +113,7 @@ done
             $this->persistLiveBlogUpdates($id, $live_blog_updates);
             $entity->live_blog_updates = $live_blog_updates;
 
-            $this->persistWebpushNotifications($id, $webpush_notifications);
+            $this->persistWebpushNotifications($id, $webpush_notifications, $entity->starttime);
             $entity->webpush_notifications = $webpush_notifications;
 
             $this->conn->commit();

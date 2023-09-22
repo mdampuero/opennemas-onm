@@ -3,6 +3,7 @@
 namespace Framework\Command;
 
 use Common\Core\Command\Command;
+use DateTimeZone;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -74,10 +75,14 @@ class WebpushSendCommand extends Command
                 $as           = $this->getContainer()->get('api.service.content');
                 $pendingItems = $as->getPendingNotifications();
                 $timeZone     = $this->getContainer()->get('core.locale')->getTimeZone();
-                $date         = new \DateTime(null, $timeZone);
-                $localDate      = $date->format('Y-m-d H:i:s');
+                $date         = new \DateTime(null, new \DateTimeZone('UTC'));
+                $utcDate      = $date->format('Y-m-d H:i:s');
+
                 foreach ($pendingItems as $item) {
-                    if ($item->starttime->format("Y-m-d H:i:s") > $localDate) {
+                    $itemDate          = new \DateTime($item->starttime->format('Y-m-d H:i:s'), $timeZone);
+                    $utcItemDate       = $itemDate->setTimezone(new \DateTimeZone('UTC'));
+                    $utcItemDateFormat = $utcItemDate->format('Y-m-d H:i:s');
+                    if ($utcItemDateFormat > $utcDate) {
                         continue;
                     }
                     $webpushr    = $this->getContainer()->get('external.web_push.factory');
