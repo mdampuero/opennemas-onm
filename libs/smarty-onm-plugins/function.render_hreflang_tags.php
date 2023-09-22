@@ -11,10 +11,11 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
     $instance = $smarty->getContainer()->get('core.instance');
     $request  = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
     $router   = $smarty->getContainer()->get('router');
+    $l10nrh   = $smarty->getContainer()->get('core.helper.l10n_route');
 
     if (!$instance->hasMultilanguage()
         || empty($request)
-        || empty($router->getRouteCollection()->get($request->get('_route'))->getOption('l10n'))
+        || !$l10nrh->isRouteLocalizable($request->get('_route'))
     ) {
         return;
     }
