@@ -12,7 +12,7 @@ class TagCacheHelper extends CacheHelper
      *
      * @param Tag $tag The tag.
      */
-    public function deleteItem(Tag $tag, $vote = false, $action = false) : void
+    public function deleteItem(Tag $tag) : void
     {
         $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
             [ 'tag', 'show', $tag->id ]

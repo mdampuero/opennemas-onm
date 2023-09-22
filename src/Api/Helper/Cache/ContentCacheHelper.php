@@ -68,7 +68,7 @@ class ContentCacheHelper extends CacheHelper
      *
      * @return CacheHelper The current helper for method chaining.
      */
-    public function deleteItem($item, $vote = false, $action = false) : CacheHelper
+    public function deleteItem($item, $params = []) : CacheHelper
     {
         $keys = array_merge(
             $this->cache->getSetMembers('Widget_Keys'),
@@ -78,13 +78,16 @@ class ContentCacheHelper extends CacheHelper
 
         $this->cache->remove($keys);
 
-        $varnishKeys = ($vote) ? $this->defaultVoteVarnishKeys : $this->varnishKeys;
+        $varnishKeys = array_key_exists('vote', $params) && $params['vote'] ?
+            $this->defaultVoteVarnishKeys :
+            $this->varnishKeys;
+
         $varnishKeys = array_merge($varnishKeys, $this->getModuleKeys());
 
         $this->removeVarnishCache(
             $this->replaceWildcards($item, $varnishKeys),
             $item,
-            $action
+            array_key_exists('action', $params) ? $params['action'] : null
         );
 
         return $this;
@@ -143,14 +146,15 @@ class ContentCacheHelper extends CacheHelper
      * @param array   $keys The array of keys to delete.
      * @param Content $item The content to delete cache for.
      */
-    protected function removeVarnishCache($keys, $item, $action = false)
+    protected function removeVarnishCache($keys, $item, $action = null)
     {
-        if ($action != 'Api\Service\V1\PhotoService::createItem') {
-            if (!empty($item->path) && $item->content_type_name != 'video') {
-                $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-                    sprintf('obj.http.x-url ~ %s', $item->path)
-                ]));
-            }
+        if (!empty($item->path)
+            && $item->content_type_name != 'video'
+            && $action != 'Api\Service\V1\PhotoService::createItem'
+        ) {
+            $this->queue->push(new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-url ~ %s', $item->path)
+            ]));
         }
 
         $banRegExpr = '';
