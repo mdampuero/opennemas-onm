@@ -385,7 +385,7 @@ class ContentHelper
         if (!empty($items)) {
             if ($contentId) {
                 $items = array_values(array_filter($items, function ($item) use ($contentId) {
-                    return $item->pk_content !== $contentId;
+                    return $item->pk_content != $contentId;
                 }));
             }
 
@@ -421,7 +421,7 @@ class ContentHelper
 
             if ($contentId) {
                 $items = array_values(array_filter($items, function ($item) use ($contentId) {
-                    return $item->pk_content !== $contentId;
+                    return $item->pk_content != $contentId;
                 }));
             }
         } catch (\Exception $e) {
@@ -549,9 +549,10 @@ class ContentHelper
             ->getDataSet('Settings', 'instance')
             ->get('comment_settings')['disable_comments'];
 
-        return !empty($this->getProperty($item, 'with_comment')) && !(is_null($disableComments)
-            ? true
-            : $disableComments);
+        return !empty($this->getProperty($item, 'with_comment')) && !(is_null($disableComments) ?
+            true :
+            $disableComments
+        );
     }
 
     /**

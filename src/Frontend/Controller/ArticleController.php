@@ -137,7 +137,7 @@ class ArticleController extends FrontendController
         );
 
         $params['isSuggested'] = count(array_filter($params['suggested'], function ($suggested) use ($params) {
-            return $params['content']->pk_content === $suggested->pk_content;
+            return $params['content']->pk_content == $suggested->pk_content;
         })) > 0;
 
         if ($params['isSuggested']) {

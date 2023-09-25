@@ -145,3 +145,7 @@ api_v1_backend_widget:
 api_v1_frontend_advertisement:
     resource: '@ApiBundle/Resources/config/routing/v1/frontend/advertisement.yml'
     prefix:   /
+
+api_v1_backend_webpush:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/webpush.yml'
+    prefix:   /backend

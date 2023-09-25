@@ -210,6 +210,20 @@
         };
 
         /**
+         * @function unsetItemId
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Unsets the item id.
+         *
+         * @return {Integer} The item id.
+         */
+        $scope.unsetItemId = function(data) {
+          delete data.id;
+          return data;
+        };
+
+        /**
          * @function itemHasId
          * @memberOf RestInnerCtrl
          *
@@ -279,6 +293,81 @@
                 routing.generate($scope.routes.redirect, { id: id });
             }
 
+            if ($scope.sendNotification) {
+              var itemId = $scope.itemHasId() ? $scope.getItemId() : id;
+
+              http.post('send_notification', [ itemId ]);
+            }
+
+            if (response.status === 200 && $scope.refreshOnUpdate) {
+              $timeout(function() {
+                $scope.getItem($scope.getItemId());
+              }, 500);
+            }
+
+            if ($scope.draftKey !== null) {
+              $scope.draftSaved = null;
+              webStorage.session.remove($scope.draftKey);
+            }
+            messenger.post(response.data);
+          };
+
+          if ($scope.itemHasId()) {
+            route.name   = $scope.routes.updateItem;
+            route.params = { id: $scope.getItemId() };
+
+            http.put(route, data).then(successCb, $scope.errorCb);
+            return;
+          }
+
+          http.post(route, data).then(successCb, $scope.errorCb);
+        };
+
+        /**
+         * @function copy
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Copy a new item.
+         */
+        $scope.copy = function() {
+          if ($scope.form.$invalid) {
+            messenger.post($window.strings.forms.not_valid, 'error');
+            $scope.disableFlags('http');
+
+            return false;
+          }
+
+          $scope.form.$setPristine(true);
+          $scope.flags.http.saving = true;
+
+          var data  = $scope.getData();
+
+          var route = { name: $scope.routes.saveItem };
+
+          // Parses data before save
+          data = $scope.parseData(data);
+
+          data = $scope.parseCopyData(data);
+
+          /**
+           * Callback executed when subscriber is saved/updated successfully.
+           *
+           * @param {Object} response The response object.
+           */
+          var successCb = function(response) {
+            $scope.disableFlags('http');
+
+            if ($scope.routes.redirect && response.status === 201) {
+              $scope.flags.http.saving = true;
+
+              var id = response.headers().location
+                .substring(response.headers().location.lastIndexOf('/') + 1);
+
+              $window.location.href =
+                routing.generate($scope.routes.redirect, { id: id });
+            }
+
             if (response.status === 200 && $scope.refreshOnUpdate) {
               $timeout(function() {
                 $scope.getItem($scope.getItemId());
@@ -292,13 +381,6 @@
 
             messenger.post(response.data);
           };
-
-          if ($scope.itemHasId()) {
-            route.name   = $scope.routes.updateItem;
-            route.params = { id: $scope.getItemId() };
-            http.put(route, data).then(successCb, $scope.errorCb);
-            return;
-          }
 
           http.post(route, data).then(successCb, $scope.errorCb);
         };

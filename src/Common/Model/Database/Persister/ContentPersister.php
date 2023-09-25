@@ -17,7 +17,24 @@ class ContentPersister extends BasePersister
 {
     /**
      * Initializes a new DatabasePersister.
-     *
+     *PATH=$PATH:/home/opennemas/current/bin
+dir="$(dirname $0)/.."
+output_path="$dir/output"
+
+[ -d $output_path ] && rm -rf $output_path/* || mkdir -p $output_path
+
+for database in $(console core:instance:list -f BD_DATABASE | cut -d' ' -f 4); do
+    echo "Updating database $database..."
+    echo "$(echo 'SET @database='$database';' | cat - $dir/src/check.sql)" > $dir/src/checkDatabase.sql
+    console database:execute-script $dir/src/changes.sql -d $database
+    console database:execute-script $dir/src/checkDatabase.sql   -d $database > $output_path/out
+
+    echo -e "\nChecking database $database..." >> $output_path/result
+    grep -q "TRUE" $output_path/out \
+        && { rm $output_path/out; echo "OK" >> $output_path/result; } \
+        || { mv $output_path/out $output_path/$database.out; \
+            echo "FAIL" >> $output_path/result; }
+done
      * @param Connection $conn     The database connection.
      * @param Metadata   $metadata The entity metadata.
      * @param Cache      $cache    The cache service.
@@ -71,6 +88,12 @@ class ContentPersister extends BasePersister
             unset($entity->live_blog_updates);
         }
 
+        $webpush_notifications = [];
+        if (!empty($entity->webpush_notifications)) {
+            $webpush_notifications = $entity->webpush_notifications;
+            unset($entity->webpush_notifications);
+        }
+
         $this->conn->beginTransaction();
 
         try {
@@ -89,6 +112,9 @@ class ContentPersister extends BasePersister
 
             $this->persistLiveBlogUpdates($id, $live_blog_updates);
             $entity->live_blog_updates = $live_blog_updates;
+
+            $this->persistWebpushNotifications($id, $webpush_notifications, $entity->starttime);
+            $entity->webpush_notifications = $webpush_notifications;
 
             $this->conn->commit();
         } catch (\Throwable $e) {
@@ -114,11 +140,12 @@ class ContentPersister extends BasePersister
             $entity->changed = $entity->starttime;
         }
 
-        $changes           = $entity->getChanges();
-        $categories        = $entity->categories;
-        $tags              = $entity->tags;
-        $relations         = $entity->related_contents;
-        $live_blog_updates = $entity->live_blog_updates;
+        $changes               = $entity->getChanges();
+        $categories            = $entity->categories;
+        $tags                  = $entity->tags;
+        $relations             = $entity->related_contents;
+        $live_blog_updates     = $entity->live_blog_updates;
+        $webpush_notifications = $entity->webpush_notifications;
 
         // Categories change
         if (array_key_exists('categories', $changes)) {
@@ -162,6 +189,11 @@ class ContentPersister extends BasePersister
             }
 
             $entity->live_blog_updates = $live_blog_updates;
+            if (array_key_exists('webpush_notifications', $changes)) {
+                $this->persistWebpushNotifications($id, $webpush_notifications, $entity->starttime);
+            }
+            $entity->webpush_notifications = $webpush_notifications;
+
 
             $this->conn->commit();
 
@@ -457,6 +489,35 @@ class ContentPersister extends BasePersister
     }
 
     /**
+     * Persits the content webpush.
+     *
+     * @param integer $id         The entity id.
+     * @param array   $liveBlogUpdates  The list of liveBlogUpdates.
+     */
+    protected function persistWebpushNotifications($id, $webpush_notifications, $starttime = null)
+    {
+        // Ignore metas with value = null
+        if (!empty($webpush_notifications)) {
+            $webpush_notifications = array_filter($webpush_notifications, function ($relation) {
+                return !is_null($relation);
+            });
+        }
+
+        $starttime = !empty($starttime) ? $starttime->format("Y-m-d H:i:s") : null;
+
+        $webpush_notifications = array_map(function ($item) use ($starttime) {
+            $item['send_date'] = $item['status'] == 0 ? $starttime : $item['send_date'];
+            return $item;
+        }, $webpush_notifications);
+
+        // Remove old relations
+        $this->removeContentNotifications($id);
+
+        // Update relations
+        $this->saveContentNotifications($id, $webpush_notifications);
+    }
+
+    /**
      * Deletes old LiveBlogUpdates.
      *
      * @param array $id   The entity id.
@@ -464,6 +525,21 @@ class ContentPersister extends BasePersister
     protected function removeLiveBlogUpdates($id)
     {
         $sql      = "delete from content_updates where content_id = ?";
+        $params[] = $id['pk_content'];
+        $types[]  = is_string($id['pk_content']) ?
+            \PDO::PARAM_STR : \PDO::PARAM_INT;
+
+        $this->conn->executeQuery($sql, $params, $types);
+    }
+
+        /**
+     * Deletes old LiveBlogUpdates.
+     *
+     * @param array $id   The entity id.
+     */
+    protected function removeContentNotifications($id)
+    {
+        $sql      = "delete from content_notifications where fk_content = ?";
         $params[] = $id['pk_content'];
         $types[]  = is_string($id['pk_content']) ?
             \PDO::PARAM_STR : \PDO::PARAM_INT;
@@ -517,6 +593,59 @@ class ContentPersister extends BasePersister
                 empty($value['image_id']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
+            ]);
+        }
+        $this->conn->executeQuery($sql, $params, $types);
+    }
+
+      /**
+     * Saves new LiveBlogUpdates.
+     *
+     * @param array $id         The entity id.
+     * @param array $liveBlogUpdates The list of liveBlogUpdates to save.
+     */
+    protected function saveContentNotifications($id, $webpush_notifications)
+    {
+        if (empty($webpush_notifications)) {
+            return;
+        }
+
+        $sql = "insert into content_notifications"
+            . "(fk_content, status, body, title, send_date, image) values "
+            . str_repeat(
+                '(?,?,?,?,?,?),',
+                count($webpush_notifications)
+            );
+
+        $id     = array_values($id);
+        $sql    = rtrim($sql, ',');
+        $params = [];
+        $types  = [];
+
+        foreach ($webpush_notifications as $value) {
+            $value['send_date'] = empty($value['send_date']) ? gmdate("Y-m-d H:i:s") : $value['send_date'];
+            $value['image']     = empty($value['image']) ? null : $value['image'];
+            $value['body']      = empty($value['body']) ? null : $value['body'];
+            $value['title']     = empty($value['title']) ? null : $value['title'];
+            $value['status']    = empty($value['status']) && $value['status'] != 0 ? 2 : $value['status'];
+
+
+
+            $params = array_merge($params, array_merge($id, [
+                $value['status'],
+                $value['body'],
+                $value['title'],
+                $value['send_date'],
+                $value['image'],
+            ]));
+
+            $types = array_merge($types, [
+                \PDO::PARAM_INT,
+                \PDO::PARAM_INT,
+                empty($value['body']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['title']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['send_date']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['image']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
             ]);
         }
         $this->conn->executeQuery($sql, $params, $types);

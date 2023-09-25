@@ -43,6 +43,7 @@ function smarty_outputfilter_statistics($output, $smarty)
                     'MCompass',
                     'Ojd',
                     'Prometeo',
+                    'GANative',
                 ]
             ]
         );
