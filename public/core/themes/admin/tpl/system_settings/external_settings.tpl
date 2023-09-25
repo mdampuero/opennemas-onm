@@ -1028,6 +1028,45 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-6">
+              <h4>
+                <i class="fa fa-bell"></i>
+                {t}WebPush service integration{/t}
+              </h4>
+              <div class="panel-group" id="panel-group-webpushr" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-webpushr" data-toggle="collapse" href="#webpushr">
+                        <i class="fa fa-envelope"></i>
+                        {t}Webpushr{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="webpushr">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <div class="form-group">
+                          <label class="form-label" for="webpushr-webpushrKey">
+                            {t}Webpushr Api Key{/t}
+                          </label>
+                          <div class="controls">
+                            <input class="form-control" id="webpushr-webpushrKey" name="webpushr-webpushrKey" ng-model="settings.webpush_apikey" type="text">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label" for="webpushr-webpushrAuthToken">
+                            {t}Webpushr Auth Key{/t}
+                          </label>
+                          <div class="controls">
+                            <input class="form-control" id="webpushr-webpushrAuthToken" name="webpushr-webpushrAuthToken" ng-model="settings.webpush_token" type="text">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
           </div>
         </div>
       </div>

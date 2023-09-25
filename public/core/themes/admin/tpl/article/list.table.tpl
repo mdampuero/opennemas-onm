@@ -145,6 +145,16 @@
       <i class="fa fa-copy"></i>
     </button>
   {/acl}
+  {is_module_activated name="es.openhost.module.webpush_notifications"}
+    {if !empty({setting name=webpush_apikey})}
+      <button ng-if="!hasMultilanguage() && item.content_status && item.starttime <= currentDateTime" class="btn btn-white btn-small" ng-click="sendWPNotification(item)" type="button" uib-tooltip="{t}Send notification{/t}" tooltip-placement="top">
+        <i class="fa fa-bell"></i>
+      </button>
+      <button ng-if="!hasMultilanguage() && (!item.content_status || (item.content_status && item.starttime > currentDateTime))" class="btn btn-white btn-small" ng-click="sendWPNotification(item)" type="button" uib-tooltip="{t}Send notification{/t}" tooltip-placement="top" disabled>
+        <i class="fa fa-bell"></i>
+      </button>
+    {/if}
+  {/is_module_activated}
   <a ng-if="item.slug" class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
     <i class="fa fa-external-link"></i>
   </a>

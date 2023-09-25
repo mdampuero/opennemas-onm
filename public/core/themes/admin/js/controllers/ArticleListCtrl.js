@@ -59,6 +59,16 @@
         };
 
         /**
+         * @memberOf ArticleListCtrl
+         *
+         * @description
+         *  The current date and time formatted as 'YYYY-MM-DD HH:mm:ss' using the moment library.
+         *
+         * @type {String}
+         */
+        $scope.currentDateTime = $window.moment().format('YYYY-MM-DD HH:mm:ss');
+
+        /**
          * @function getFrontendUrl
          * @memberOf ArticleListCtrl
          *

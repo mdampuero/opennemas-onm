@@ -453,6 +453,27 @@ INSERT INTO `contents` VALUES (128,2,'advertisement','Portadas - top left - Open
 UNLOCK TABLES;
 
 --
+-- Table structure for table `content_notifications`
+--
+
+DROP TABLE IF EXISTS `content_notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `content_notifications` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `fk_content` bigint(20) unsigned NOT NULL,
+  `status` int DEFAULT 0,
+  `body` text DEFAULT NULL,
+  `title` text DEFAULT NULL,
+  `send_date` datetime DEFAULT NULL,
+  `image` bigint(20) unsigned,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `content_notifications_fk_content` FOREIGN KEY (`fk_content`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE,
+  CONSTRAINT `content_notifications_image` FOREIGN KEY (`image`) REFERENCES `contents` (`pk_content`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `contents_tags`
 --
 

@@ -39,6 +39,24 @@ class ArticleController extends ContentController
      */
     protected $service = 'api.service.article';
 
+     /**
+     * Returns an item.
+     *
+     * @param integer $id The item id.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getItemAction($id)
+    {
+        $ss   = $this->get($this->service);
+        $item = $ss->getItem($id);
+
+        return new JsonResponse([
+            'item'  => $ss->responsify($item),
+            'extra' => $this->getExtraData($item)
+        ]);
+    }
+
     /**
      * Get the articles config.
      *
