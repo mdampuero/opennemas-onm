@@ -363,7 +363,7 @@ class WidgetFactory
                 [ $this->params['content_type'] ];
         }
 
-        $oql    .= sprintf('content_type_name IN ("%s") ', implode('","', $contentTypes));
+        $oql    .= sprintf('content_type_name in ("%s") ', implode('","', $contentTypes));
         $filters = array_intersect_key(array_flip($this->propertiesMap), $replacements);
 
         $oql .= $this->getOqlForFilters($filters, $replacements);
