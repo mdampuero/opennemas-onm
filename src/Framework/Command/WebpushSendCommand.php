@@ -89,12 +89,12 @@ class WebpushSendCommand extends Command
                 $timeZone     = $this->getContainer()->get('core.locale')->getTimeZone();
                 $date         = new \DateTime(null, new \DateTimeZone('UTC'));
                 $utcDate      = $date->format('Y-m-d H:i:s');
-
                 foreach ($pendingItems as $item) {
                     $itemDate          = new \DateTime($item->starttime->format('Y-m-d H:i:s'), $timeZone);
                     $utcItemDate       = $itemDate->setTimezone(new \DateTimeZone('UTC'));
                     $utcItemDateFormat = $utcItemDate->format('Y-m-d H:i:s');
-                    if ($utcItemDateFormat > $utcDate) {
+                    if ($utcItemDateFormat > $utcDate
+                        || !$this->getContainer()->get('core.helper.content')->isReadyForPublish($item)) {
                         continue;
                     }
                     $webpushr    = $this->getContainer()->get('external.web_push.factory');
