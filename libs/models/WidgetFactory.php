@@ -363,13 +363,7 @@ class WidgetFactory
                 [ $this->params['content_type'] ];
         }
 
-        for ($iterator = 1; $iterator <= count($contentTypes); $iterator++) {
-            $oqlPartial = 'content_type_name = "%s" ';
-            $oqlPartial = $iterator >= 2 ? 'or ' . $oqlPartial : $oqlPartial;
-
-            $oql .= sprintf($oqlPartial, $contentTypes[$iterator - 1]);
-        }
-
+        $oql    .= sprintf('content_type_name in ("%s") ', implode('","', $contentTypes));
         $filters = array_intersect_key(array_flip($this->propertiesMap), $replacements);
 
         $oql .= $this->getOqlForFilters($filters, $replacements);
