@@ -37,7 +37,7 @@ function smarty_outputfilter_cmp_script($output, $smarty)
             // Do nothing if CMP not configured
             if ($config['cmp_type'] === 'default'
                 || empty($config['cmp_id'])
-                || ($config['cmp_id'] === 'didomi' && empty($config['cmp_apikey']))
+                || ($config['cmp_type'] === 'didomi' && empty($config['cmp_apikey']))
             ) {
                 return $output;
             }

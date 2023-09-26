@@ -563,7 +563,7 @@ class FrontendController extends Controller
         $cmp = $config['cookies'] === 'cmp'
             && $config['cmp_type'] !== 'default'
             && !empty($config['cmp_id'])
-            && !($config['cmp_id'] === 'didomi' && empty($config['cmp_apikey']));
+            && !($config['cmp_type'] === 'didomi' && empty($config['cmp_apikey']));
 
         // Get suggested contents
         $suggestedContents = $this->get('core.helper.content')->getSuggested(
