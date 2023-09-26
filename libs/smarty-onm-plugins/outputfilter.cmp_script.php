@@ -16,7 +16,7 @@ function smarty_outputfilter_cmp_script($output, $smarty)
     $config = $smarty->getContainer()
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance')
-        ->get([ 'cookies', 'cmp_type', 'cmp_id', 'cmp_amp' ]);
+        ->get([ 'cookies', 'cmp_type', 'cmp_id', 'cmp_amp', 'cmp_apikey' ]);
 
     if (is_null($request) || $config['cookies'] !== 'cmp') {
         return $output;
@@ -38,13 +38,16 @@ function smarty_outputfilter_cmp_script($output, $smarty)
             if ($config['cmp_type'] === 'default'
                 || empty($config['cmp_id'])
                 || empty($config['cmp_amp'])
+                || ($config['cmp_id'] === 'didomi' && empty($config['cmp_apikey']))
             ) {
                 return $output;
             }
 
             $code = $smarty->getContainer()->get('core.template.admin')->fetch(
                 'common/helpers/cmp_' . $config['cmp_type'] . '_amp.tpl',
-                [ 'id' => $config['cmp_id'] ]
+                [ 'id' => $config['cmp_id'],
+                  'apikey' => $config['cmp_apikey'] ?? ''
+                ]
             );
 
             return preg_replace('@(<body.*?>)@', '${1}' . "\n" . $code, $output);
@@ -52,7 +55,8 @@ function smarty_outputfilter_cmp_script($output, $smarty)
 
         $code = $smarty->getContainer()->get('core.template.admin')->fetch(
             'common/helpers/cmp_' . $config['cmp_type'] . '.tpl',
-            [ 'id' => $config['cmp_id'] ]
+            [ 'id' => $config['cmp_id'],
+              'apikey' => $config['cmp_apikey'] ?? '' ]
         );
 
         $output = preg_replace('@(</head>)@', "\n" . $code . '${1}', $output);

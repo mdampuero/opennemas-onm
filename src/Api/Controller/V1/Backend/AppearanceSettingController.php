@@ -47,6 +47,7 @@ class AppearanceSettingController extends SettingController
         'cookies_hint_url',
         'cmp_type',
         'cmp_id',
+        'cmp_apikey',
         'cmp_amp',
         'browser_update',
         'items_per_page',

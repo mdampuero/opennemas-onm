@@ -118,12 +118,13 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp', 'cmp_apikey'])
             ->willReturn([
-                'cookies'  => null,
-                'cmp_type' => null,
-                'cmp_id'   => null,
-                'cmp_amp'  => null,
+                'cookies'    => null,
+                'cmp_type'   => null,
+                'cmp_id'     => null,
+                'cmp_amp'    => null,
+                'cpm_apikey' => null
             ]);
 
         $this->assertEquals($this->output, smarty_outputfilter_cmp_script(
@@ -145,18 +146,19 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp', 'cmp_apikey'])
             ->willReturn([
-                'cookies'  => 'cmp',
-                'cmp_type' => 'default',
-                'cmp_id'   => null,
-                'cmp_amp'  => null,
+                'cookies'    => 'cmp',
+                'cmp_type'   => 'default',
+                'cmp_id'     => null,
+                'cmp_amp'    => null,
+                'cpm_apikey' => null
             ]);
 
         $returnvalue = "foo-bar-baz";
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('common/helpers/cmp_default.tpl', [ 'id' => null ])
+            ->with('common/helpers/cmp_default.tpl', [ 'id' => null, 'apikey' => null ])
             ->willReturn($returnvalue);
 
         $output = "<html><head>Hello World\n" . $returnvalue . "</head><body></body></html>";
@@ -180,18 +182,19 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp', 'cmp_apikey'])
             ->willReturn([
-                'cookies'  => 'cmp',
-                'cmp_type' => 'quantcast',
-                'cmp_id'   => 'qwert',
-                'cmp_amp'  => null,
+                'cookies'    => 'cmp',
+                'cmp_type'   => 'quantcast',
+                'cmp_id'     => 'qwert',
+                'cmp_amp'    => null,
+                'cpm_apikey' => ''
             ]);
 
         $returnvalue = "foo-bar-baz";
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('common/helpers/cmp_quantcast.tpl', [ 'id' => 'qwert' ])
+            ->with('common/helpers/cmp_quantcast.tpl', [ 'id' => 'qwert', 'apikey' => '' ])
             ->willReturn($returnvalue);
 
         $output = "<html><head>Hello World\n" . $returnvalue . "</head><body></body></html>";
@@ -215,18 +218,55 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp', 'cmp_apikey'])
             ->willReturn([
-                'cookies'  => 'cmp',
-                'cmp_type' => 'onetrust',
-                'cmp_id'   => 'qwert',
-                'cmp_amp'  => null,
+                'cookies'    => 'cmp',
+                'cmp_type'   => 'onetrust',
+                'cmp_id'     => 'qwert',
+                'cmp_amp'    => null,
+                'cpm_apikey' => ''
             ]);
 
         $returnvalue = "foo-bar-baz";
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('common/helpers/cmp_onetrust.tpl', [ 'id' => 'qwert' ])
+            ->with('common/helpers/cmp_onetrust.tpl', [ 'id' => 'qwert', 'apikey' => '' ])
+            ->willReturn($returnvalue);
+
+        $output = "<html><head>Hello World\n" . $returnvalue . "</head><body></body></html>";
+
+        $this->assertEquals($output, smarty_outputfilter_cmp_script(
+            $this->output,
+            $this->smarty
+        ));
+    }
+
+    /**
+     * Test CMP activated didomi
+     */
+    public function testCmpActivatedWithDidomi()
+    {
+        $this->requestStack->expects($this->any())
+            ->method('getCurrentRequest')->willReturn($this->request);
+
+        $this->request->expects($this->any())->method('getUri')
+            ->willReturn('http://console/thud/norf.html');
+
+        $this->ds->expects($this->any())
+            ->method('get')
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp', 'cmp_apikey'])
+            ->willReturn([
+                'cookies'    => 'cmp',
+                'cmp_type'   => 'didomi',
+                'cmp_id'     => 'qwert',
+                'cmp_amp'    => null,
+                'cmp_apikey' => 'qwert'
+            ]);
+
+        $returnvalue = "foo-bar-baz";
+
+        $this->templateAdmin->expects($this->any())->method('fetch')
+            ->with('common/helpers/cmp_didomi.tpl', [ 'id' => 'qwert', 'apikey' => 'qwert' ])
             ->willReturn($returnvalue);
 
         $output = "<html><head>Hello World\n" . $returnvalue . "</head><body></body></html>";
@@ -250,12 +290,13 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp', 'cmp_apikey'])
             ->willReturn([
-                'cookies'  => 'cmp',
-                'cmp_type' => 'default',
-                'cmp_id'   => null,
-                'cmp_amp'  => null,
+                'cookies'    => 'cmp',
+                'cmp_type'   => 'default',
+                'cmp_id'     => null,
+                'cmp_amp'    => null,
+                'cmp_apikey' => null
             ]);
 
         $this->assertEquals($this->output, smarty_outputfilter_cmp_script(
@@ -277,18 +318,19 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp', 'cmp_apikey'])
             ->willReturn([
-                'cookies'  => 'cmp',
-                'cmp_type' => 'quantcast',
-                'cmp_id'   => 'qwert',
-                'cmp_amp'  => 1,
+                'cookies'    => 'cmp',
+                'cmp_type'   => 'quantcast',
+                'cmp_id'     => 'qwert',
+                'cmp_amp'    => 1,
+                'cmp_apikey' => ''
             ]);
 
         $returnvalue = "foo-bar-baz";
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('common/helpers/cmp_quantcast_amp.tpl', [ 'id' => 'qwert' ])
+            ->with('common/helpers/cmp_quantcast_amp.tpl', [ 'id' => 'qwert', 'apikey' => '' ])
             ->willReturn($returnvalue);
 
         $output = "<html><head>Hello World</head><body>\n"
@@ -313,18 +355,19 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
 
         $this->ds->expects($this->any())
             ->method('get')
-            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp'])
+            ->with(['cookies', 'cmp_type', 'cmp_id', 'cmp_amp', 'cmp_apikey'])
             ->willReturn([
-                'cookies'  => 'cmp',
-                'cmp_type' => 'onetrust',
-                'cmp_id'   => 'qwert',
-                'cmp_amp'  => 1,
+                'cookies'    => 'cmp',
+                'cmp_type'   => 'onetrust',
+                'cmp_id'     => 'qwert',
+                'cmp_amp'    => 1,
+                'cmp_apikey' => ''
             ]);
 
         $returnvalue = "foo-bar-baz";
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('common/helpers/cmp_onetrust_amp.tpl', [ 'id' => 'qwert' ])
+            ->with('common/helpers/cmp_onetrust_amp.tpl', [ 'id' => 'qwert', 'apikey' => '' ])
             ->willReturn($returnvalue);
 
         $output = "<html><head>Hello World</head><body>\n"

@@ -313,6 +313,12 @@
                         {t}OneTrust{/t}
                       </label>
                     </div>
+                    <div class="radio">
+                      <input class="form-control" id="cmp-didomi" ng-model="settings.cmp_type" ng-value="'didomi'" type="radio"/>
+                      <label for="cmp-didomi">
+                        {t}Didomi{/t}
+                      </label>
+                    </div>
                   </div>
                   <div class="form-group m-t-15" ng-if="settings.cmp_type == 'quantcast'">
                     <label class="form-label" for="cmp-id">
@@ -334,6 +340,23 @@
                     </span>
                     <div class="controls">
                       <input class="form-control" id="cmp-id" name="cmp-id" ng-model="settings.cmp_id" type="text">
+                    </div>
+                  </div>
+                  <div class="form-group m-t-15" ng-if="settings.cmp_type == 'didomi'">
+                    <label class="form-label" for="cmp-id">
+                      {t}Didomi noticeId{/t}
+                    </label>
+                    <span class="help">
+                      {t escape=off}Help to find your Didomi credentials <a class="external-link" href="https://support.didomi.io/" target="_blank" ng-click="$event.stopPropagation();">here</a>.{/t}
+                    </span>
+                    <div class="controls">
+                      <input class="form-control" id="cmp-id" name="cmp-id" ng-model="settings.cmp_id" type="text">
+                    </div>
+                    <label class="form-label" for="cmp-apikey">
+                      {t}Didomi apiKey{/t}
+                    </label>
+                    <div class="controls">
+                      <input class="form-control" id="cmp-apikey" name="cmp-apikey" ng-model="settings.cmp_apikey" type="text">
                     </div>
                   </div>
                   <div class="form-group m-t-15" ng-if="settings.cmp_type == 'onetrust' || settings.cmp_type == 'quantcast'">

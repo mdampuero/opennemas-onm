@@ -23,6 +23,7 @@
           cookies_hint_url: '',
           cmp_type: '',
           cmp_id: '',
+          cpm_apikey: '',
           cmp_amp: false,
           browser_update: false,
           items_per_page: '',
