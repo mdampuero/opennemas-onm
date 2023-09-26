@@ -92,6 +92,10 @@ class ArticleController extends ContentController
                 ->get('extraInfoContents.ARTICLE_MANAGER');
         }
 
+        $autoNotifications = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('webpush_automatic');
+
         $categories = $this->get('api.service.category')->responsify(
             $this->get('api.service.category')->getList()['items']
         );
@@ -104,6 +108,7 @@ class ArticleController extends ContentController
             'categories'    => $categories,
             'extra_fields'  => $extraFields ?? null,
             'subscriptions' => $subscriptions,
+            'auto_webpush'  => $autoNotifications ?? 0,
             'tags'          => $this->getTags($items),
             'formSettings'  => [
                 'name'             => $this->module,

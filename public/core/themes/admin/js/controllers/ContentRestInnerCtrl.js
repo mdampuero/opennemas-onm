@@ -215,12 +215,14 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      *   Saves tags, send notifications if  needed and, then, saves the item.
      */
     $scope.submit = function(item) {
-      if (item && $scope.hasPendingNotifications()) {
+      if (item && $scope.hasPendingNotifications() && !$scope.hasAutomaticNotifications()) {
         if (item.starttime <= $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
           $scope.openNotificationModal(item, false);
         } else {
           $scope.sendWPNotification(item, false);
         }
+      } else if ($scope.hasAutomaticNotifications()) {
+        $scope.sendWPNotification(item, true);
       } else {
         $scope.saveItem();
       }
@@ -416,6 +418,26 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           $scope.copy();
         }
       });
+    };
+
+    /**
+     * @function hasAutomaticNotifications
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *   Check if auto webpush setting is enabled.
+     *
+     * @return {Boolean} True if enabled. False
+     *                   otherwise.
+     */
+    $scope.hasAutomaticNotifications = function() {
+      if ($scope.data &&
+        $scope.data.extra.auto_webpush &&
+        $scope.data.extra.auto_webpush === '1') {
+        return true;
+      }
+
+      return false;
     };
 
     /**

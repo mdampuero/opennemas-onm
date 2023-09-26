@@ -98,4 +98,17 @@ class WebPushNotificationsHelper
             return null;
         }
     }
+
+    public function createNotificationFromData($data)
+    {
+        $notification = [
+            'status'    => $data['status'] ?? 0,
+            'body'      => $data['body'] ?? $data['description'] ?? '',
+            'title'     => $data['title'] ?? '',
+            'send_date' => $data['send_date'] ?? gmdate('Y-m-d H:i:s'),
+            'image'     => $data['image'] ?? null,
+        ];
+
+        return $notification;
+    }
 }
