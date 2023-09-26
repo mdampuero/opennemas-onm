@@ -540,7 +540,7 @@ class FrontendController extends Controller
     {
         $config = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get([ 'cookies', 'cmp_amp', 'cmp_type', 'cmp_id', 'cmp_apikey', 'site_color' ]);
+            ->get([ 'cookies', 'cmp_type', 'cmp_id', 'cmp_apikey', 'site_color' ]);
 
         // Get menu
         $menuService = $this->container->get('api.service.menu');
@@ -563,7 +563,6 @@ class FrontendController extends Controller
         $cmp = $config['cookies'] === 'cmp'
             && $config['cmp_type'] !== 'default'
             && !empty($config['cmp_id'])
-            && !empty($config['cmp_amp'])
             && !($config['cmp_id'] === 'didomi' && empty($config['cmp_apikey']));
 
         // Get suggested contents

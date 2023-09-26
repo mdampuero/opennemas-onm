@@ -16,7 +16,7 @@ function smarty_outputfilter_cmp_script($output, $smarty)
     $config = $smarty->getContainer()
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance')
-        ->get([ 'cookies', 'cmp_type', 'cmp_id', 'cmp_amp', 'cmp_apikey' ]);
+        ->get([ 'cookies', 'cmp_type', 'cmp_id', 'cmp_apikey' ]);
 
     if (is_null($request) || $config['cookies'] !== 'cmp') {
         return $output;
@@ -37,7 +37,6 @@ function smarty_outputfilter_cmp_script($output, $smarty)
             // Do nothing if CMP not configured
             if ($config['cmp_type'] === 'default'
                 || empty($config['cmp_id'])
-                || empty($config['cmp_amp'])
                 || ($config['cmp_id'] === 'didomi' && empty($config['cmp_apikey']))
             ) {
                 return $output;

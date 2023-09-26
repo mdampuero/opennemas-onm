@@ -359,17 +359,6 @@
                       <input class="form-control" id="cmp-apikey" name="cmp-apikey" ng-model="settings.cmp_apikey" type="text">
                     </div>
                   </div>
-                  <div class="form-group m-t-15" ng-if="settings.cmp_type == 'onetrust' || settings.cmp_type == 'quantcast'">
-                    <div class="checkbox">
-                      <input class="form-control" id="cmp-amp" name="cmp-amp" ng-false-value="'0'" ng-true-value="'1'" ng-model="settings.cmp_amp" type="checkbox"/>
-                      <label class="form-label" for="cmp-amp">
-                        {t}Use CMP on your AMP pages{/t}
-                      </label>
-                      <span class="badge badge-default text-bold text-uppercase">
-                        Beta
-                      </span>
-                    </div>
-                  </div>
                 </div>
                 <h4>
                   <i class="fa fa-internet-explorer"></i>

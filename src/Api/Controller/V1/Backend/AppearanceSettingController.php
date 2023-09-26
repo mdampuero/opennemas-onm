@@ -48,7 +48,6 @@ class AppearanceSettingController extends SettingController
         'cmp_type',
         'cmp_id',
         'cmp_apikey',
-        'cmp_amp',
         'browser_update',
         'items_per_page',
         'items_in_blog',
