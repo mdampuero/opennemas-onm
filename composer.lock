@@ -3023,7 +3023,7 @@
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:opennemas/panorama-php.git",
-                "reference": "c3f3541d6d8a5f5b18d9a73c581052273c58c816"
+                "reference": "87a3a0bf26f0491b8f7efff425d4a6a119461732"
             },
             "require": {
                 "php": ">=7.1"
@@ -3051,7 +3051,7 @@
             "keywords": [
                 "library"
             ],
-            "time": "2023-09-20T11:03:25+00:00"
+            "time": "2023-09-25T09:02:18+00:00"
         },
         {
             "name": "opennemas/task",
