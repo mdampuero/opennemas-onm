@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-06 10:21+0000\n"
-"PO-Revision-Date: 2023-09-06 12:22+0200\n"
+"POT-Creation-Date: 2023-09-26 13:15+0000\n"
+"PO-Revision-Date: 2023-09-26 15:18+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -65,29 +65,6 @@ msgstr "No se pudieron guardar las preferencias."
 
 msgid "Invalid token"
 msgstr "Token no válido"
-
-msgid "Book created successfully."
-msgstr "Libro creado correctamente."
-
-msgid "Unable to create the new book."
-msgstr "No se pudo crear el nuevo libro."
-
-#, php-format
-msgid "Unable to find the book with the id \"%d\""
-msgstr "No se pudo encontrar un libro con el identificador «%d»"
-
-msgid "You can't modify this book because you don't have enough privileges."
-msgstr "No puedes modificar este libro porque no tienes permisos suficientes."
-
-msgid "Book data sent not valid."
-msgstr "Los datos del libro enviados no son válidos."
-
-msgid "Book updated succesfully."
-msgstr "Libro actualizado correctamente."
-
-#, php-format
-msgid "Book '%s' deleted successfully."
-msgstr "Libro «%s» eliminado correctamente."
 
 #, php-format
 msgid "Unable to arquive content with id %s: %s"
@@ -238,31 +215,6 @@ msgstr "Contraseña actualizada correctamente"
 msgid "Unable to update your password."
 msgstr "No se ha podido actualizar la contraseña."
 
-msgid "Special successfully created."
-msgstr "Especial creado con éxito."
-
-msgid "Unable to create the new special."
-msgstr "No se pudo crear el nuevo especial."
-
-#, php-format
-msgid "Unable to find the special with the id \"%d\""
-msgstr "No se pudo encontrar el especial con el identificador «%d»"
-
-msgid "Special data sent not valid."
-msgstr "Los datos enviados del especial no son válidos."
-
-msgid "Special successfully updated."
-msgstr "Especial actualizado correctamente."
-
-msgid "Unable to update the special."
-msgstr "No se pudo actualizar el especial."
-
-msgid "Special deleted successfully."
-msgstr "Especial eliminado correctamente."
-
-msgid "You must give an id for delete a special."
-msgstr "Debes proporcionar un identificador para eliminar un especial."
-
 msgid "Browse"
 msgstr "Explorar"
 
@@ -320,9 +272,6 @@ msgstr "Encuestas"
 msgid "Static Pages"
 msgstr "Páginas estáticas"
 
-msgid "Specials"
-msgstr "Especiales"
-
 msgid "Letter to the editor"
 msgstr "Cartas al director"
 
@@ -346,9 +295,6 @@ msgstr "Álbumes"
 
 msgid "News Stand"
 msgstr "Portadas de papel"
-
-msgid "Books"
-msgstr "Libros"
 
 msgid "Subscriptions"
 msgstr "Suscripciones"
@@ -1752,17 +1698,14 @@ msgstr "Configurar las preferencias globales"
 msgid "Change the user group from one user"
 msgstr "Cambiar el grupo de usuario de un usuario"
 
-msgid "Manage widget"
-msgstr "Gestionar widget"
-
-msgid "Administrate settings"
-msgstr "Administrar configuraciones"
+msgid "Manage module setting"
+msgstr "Gestionar preferencias del módulo"
 
 msgid "Manage module settings"
 msgstr "Gestionar preferencias del módulo"
 
-msgid "Manage module setting"
-msgstr "Gestionar preferencias del módulo"
+msgid "Manage widget"
+msgstr "Gestionar widget"
 
 msgid "Manage favourite flag"
 msgstr "Gestionar estado de favorito"
@@ -1994,9 +1937,6 @@ msgid "Can't connect to server %s. Please check your connection details."
 msgstr ""
 "No se puede conectar al servidor %s. Compruebe los detalles de su conexión."
 
-msgid "Book"
-msgstr "Libro"
-
 msgid "trashed"
 msgstr "en papelera"
 
@@ -2041,9 +1981,6 @@ msgstr "Imagen"
 
 msgid "Video"
 msgstr "Vídeo"
-
-msgid "Special"
-msgstr "Especial"
 
 msgid "Poll"
 msgstr "Encuesta"
@@ -4584,24 +4521,6 @@ msgstr "Búsqueda interna a una palabra clave"
 msgid "Link to send email to"
 msgstr "Enlace para correo electrónico a"
 
-msgid "Delete book"
-msgstr "Eliminar libro"
-
-msgid "Are you sure that do you want delete \"<span>%title%</span>\"?"
-msgstr "¿Estás seguro de que quieres eliminar \"<span>%title%</span>\"?"
-
-msgid "Delete books"
-msgstr "Eliminar libros"
-
-msgid "Unable to find any book that matches your search."
-msgstr "No se pudieron encontrar libros que coincidan con tu búsqueda."
-
-msgid "Cover image"
-msgstr "Imagen de portada"
-
-msgid "Editorial"
-msgstr "Editorial"
-
 msgid "Config opinion module"
 msgstr "Configuración del módulo «Opinión»"
 
@@ -5155,6 +5074,18 @@ msgstr "Adobe analytics"
 msgid "Adobe analytics Base File"
 msgstr "Archivo base para Google Analytics"
 
+#, fuzzy
+msgid "Google Analytics (Native)"
+msgstr "Google Analytics"
+
+#, fuzzy
+msgid "Google analytics ID"
+msgstr "Google Analytics"
+
+#, fuzzy
+msgid "Google analytics config File"
+msgstr "Llave de la API de Google Analytics"
+
 msgid "Internal settings"
 msgstr "Preferencias internas"
 
@@ -5485,6 +5416,9 @@ msgstr "Quantcast"
 msgid "OneTrust"
 msgstr "OneTrust"
 
+msgid "Didomi"
+msgstr ""
+
 msgid "Quantcast UTID"
 msgstr "Quantcast UTID"
 
@@ -5515,8 +5449,20 @@ msgstr ""
 "a6fd-fb7ebff9f8dc_section-idm4591571479548831554522590036\" "
 "target=\"_blank\" ng-click=\"$event.stopPropagation();\">aqui</a>."
 
-msgid "Use CMP on your AMP pages"
-msgstr "Use CMP en sus páginas AMP"
+msgid "Didomi noticeId"
+msgstr ""
+
+msgid ""
+"Help to find your Didomi credentials <a class=\"external-link\" "
+"href=\"https://support.didomi.io/\" target=\"_blank\" ng-click=\"$event."
+"stopPropagation();\">here</a>."
+msgstr ""
+"Cómo encontrar sus crendenciales de Didomi <a class=\"external-link\" "
+"href=\"https://support.didomi.io/\" target=\"_blank\" ng-click=\"$event."
+"stopPropagation();\">aquí</a>."
+
+msgid "Didomi apiKey"
+msgstr ""
 
 msgid "Browser update"
 msgstr "Actualización de navegador"
@@ -5954,6 +5900,9 @@ msgstr "Campo adicional"
 msgid "Delete image"
 msgstr "Eliminar imagen"
 
+msgid "Are you sure that do you want delete \"<span>%title%</span>\"?"
+msgstr "¿Estás seguro de que quieres eliminar \"<span>%title%</span>\"?"
+
 msgid "Delete multiple images"
 msgstr "Eliminar múltiples imágenes"
 
@@ -6070,25 +6019,6 @@ msgstr "Este no es un estado válido"
 
 msgid "State/Province"
 msgstr "Provincia/Estado"
-
-msgid "Unable to find any special that matches your search."
-msgstr "No se pudieron encontrar especiales que coincidan con tu búsqueda."
-
-msgid "Section"
-msgstr "Sección"
-
-msgid "Special contents"
-msgstr "Contenidos especiales"
-
-msgid "Articles in left column"
-msgstr "Artículos en la columna izquierda"
-
-msgid "Articles in right column"
-msgstr "Artículos en la columna derecha"
-
-# Albums edit
-msgid "Image for Special"
-msgstr "Imagen para el especial"
 
 msgid "Logged in users"
 msgstr "Usuarios conectados"
@@ -7441,6 +7371,107 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
+
+#~ msgid "Book created successfully."
+#~ msgstr "Libro creado correctamente."
+
+#~ msgid "Unable to create the new book."
+#~ msgstr "No se pudo crear el nuevo libro."
+
+#, php-format
+#~ msgid "Unable to find the book with the id \"%d\""
+#~ msgstr "No se pudo encontrar un libro con el identificador «%d»"
+
+#~ msgid "You can't modify this book because you don't have enough privileges."
+#~ msgstr ""
+#~ "No puedes modificar este libro porque no tienes permisos suficientes."
+
+#~ msgid "Book data sent not valid."
+#~ msgstr "Los datos del libro enviados no son válidos."
+
+#~ msgid "Book updated succesfully."
+#~ msgstr "Libro actualizado correctamente."
+
+#, php-format
+#~ msgid "Book '%s' deleted successfully."
+#~ msgstr "Libro «%s» eliminado correctamente."
+
+#~ msgid "Special successfully created."
+#~ msgstr "Especial creado con éxito."
+
+#~ msgid "Unable to create the new special."
+#~ msgstr "No se pudo crear el nuevo especial."
+
+#, php-format
+#~ msgid "Unable to find the special with the id \"%d\""
+#~ msgstr "No se pudo encontrar el especial con el identificador «%d»"
+
+#~ msgid "Special data sent not valid."
+#~ msgstr "Los datos enviados del especial no son válidos."
+
+#~ msgid "Special successfully updated."
+#~ msgstr "Especial actualizado correctamente."
+
+#~ msgid "Unable to update the special."
+#~ msgstr "No se pudo actualizar el especial."
+
+#~ msgid "Special deleted successfully."
+#~ msgstr "Especial eliminado correctamente."
+
+#~ msgid "You must give an id for delete a special."
+#~ msgstr "Debes proporcionar un identificador para eliminar un especial."
+
+#~ msgid "Specials"
+#~ msgstr "Especiales"
+
+#~ msgid "Books"
+#~ msgstr "Libros"
+
+#~ msgid "Administrate settings"
+#~ msgstr "Administrar configuraciones"
+
+#~ msgid "Book"
+#~ msgstr "Libro"
+
+#~ msgid "Special"
+#~ msgstr "Especial"
+
+#~ msgid "Delete book"
+#~ msgstr "Eliminar libro"
+
+#~ msgid "Delete books"
+#~ msgstr "Eliminar libros"
+
+#~ msgid "Unable to find any book that matches your search."
+#~ msgstr "No se pudieron encontrar libros que coincidan con tu búsqueda."
+
+#~ msgid "Cover image"
+#~ msgstr "Imagen de portada"
+
+#~ msgid "Editorial"
+#~ msgstr "Editorial"
+
+#~ msgid "Use CMP on your AMP pages"
+#~ msgstr "Use CMP en sus páginas AMP"
+
+#~ msgid "Unable to find any special that matches your search."
+#~ msgstr "No se pudieron encontrar especiales que coincidan con tu búsqueda."
+
+#~ msgid "Section"
+#~ msgstr "Sección"
+
+#~ msgid "Special contents"
+#~ msgstr "Contenidos especiales"
+
+#~ msgid "Articles in left column"
+#~ msgstr "Artículos en la columna izquierda"
+
+#~ msgid "Articles in right column"
+#~ msgstr "Artículos en la columna derecha"
+
+# Albums edit
+#~ msgid "Image for Special"
+#~ msgstr "Imagen para el especial"
 
 #~ msgid "Activate users has a cost of 12€ user/month."
 #~ msgstr "Activar usuarios tiene un coste de 12€ usuario/mes."
