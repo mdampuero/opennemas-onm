@@ -98,23 +98,21 @@ class VideoHelper
     {
         $width  = $width ?? '560';
         $height = $height ?? '320';
-        $output = '';
+        $output = sprintf('<div>%s</div>', $item->body);
 
-        if ($item->type === 'script') {
-            $output = sprintf('<div>%s</div>', $item->body);
-        } else {
+        if ($item->type !== 'script') {
             $tpl  = 'video/render/web-source.tpl';
             $info = $item->information;
             if (!empty($item->information['source'])) {
                 $tpl            = 'video/render/external.tpl';
                 $info['source'] = array_filter($item->information['source']);
             }
-
             $output = $this->template->fetch($tpl, [
                 'title'  => $item->title,
                 'info'   => $info,
                 'height' => $height,
-                'width'  => $width
+                'width'  => $width,
+                'type'   => in_array(strtolower($item->type), ['youtube', 'vimeo']) ? strtolower($item->type) : ''
             ]);
         }
 
