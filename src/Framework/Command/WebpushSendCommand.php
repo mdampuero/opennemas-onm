@@ -54,10 +54,6 @@ class WebpushSendCommand extends Command
 
         $iteration = 1;
         foreach ($instances as $instance) {
-            if ($instance->hasMultilanguage()) {
-                continue;
-            }
-
             $this->getContainer()->get('cache.connection.instance')->init();
             $output->write(sprintf(
                 '<fg=blue;options=bold>==></><options=bold> (%s/%s) Processing instance %s </>',
@@ -69,22 +65,47 @@ class WebpushSendCommand extends Command
                 $this->getContainer()->get('core.loader')
                     ->load($instance->internal_name);
 
-                $as = $this->getContainer()->get('api.service.content');
+                $this->getContainer()->get('core.security')->setInstance($instance);
+                if ($instance->hasMultilanguage()) {
+                    continue;
+                }
+
+                $this->getContainer()->get('core.helper.url_generator')
+                    ->forceHttp(false)
+                    ->setInstance($instance);
+
+                // Set base url from instance information to fix url generation
+                $routerContext = $this->getContainer()->get('router')->getContext();
+
+                $routerContext->setHost($instance->getMainDomain());
+                $routerContext->setScheme(
+                    in_array(
+                        'es.openhost.module.frontendSsl',
+                        $instance->activated_modules
+                    ) ? 'https' : 'http'
+                );
+
+                $timezone = $this->getContainer()->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
+                    ->get('time_zone');
+
+                $this->getContainer()->get('core.locale')->setTimeZone($timezone);
+                $as          = $this->getContainer()->get('api.service.content');
+                $photoHelper = $this->getContainer()->get('core.helper.photo');
 
                 $favicoId = $this->getContainer()->get('orm.manager')
                     ->getDataSet('Settings', 'instance')
                     ->get('logo_favico');
 
-                $favico = $this->getContainer()->get('core.helper.photo')->getPhotoPath(
+                $favico = $photoHelper->getPhotoPath(
                     $as->getItem($favicoId),
                     null,
                     [ 192, 192 ],
                     true
                 );
 
-                $this->getContainer()->get('core.security')->setInstance($instance);
                 $context = $this->getContainer()->get('core.locale')->getContext();
-                $this->getContainer()->get('core.locale')->setContext('backend');
+                $this->getContainer()->get('core.locale')->setContext('backend')->apply();
                 $pendingItems = $as->getPendingNotifications();
                 $timeZone     = $this->getContainer()->get('core.locale')->getTimeZone();
                 $date         = new \DateTime(null, new \DateTimeZone('UTC'));
@@ -103,8 +124,7 @@ class WebpushSendCommand extends Command
                         ->get('core.helper.url_generator')->getUrl($item, ['_absolute' => true]);
                     $image       = $this->getContainer()
                         ->get('core.helper.featured_media')->getFeaturedMedia($item, 'inner');
-                    $imagePath   = $this->getContainer()
-                        ->get('core.helper.photo')->getPhotoPath($image, null, [], true);
+                    $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
 
                     $notificationStatus = 1;
                     try {
@@ -138,7 +158,7 @@ class WebpushSendCommand extends Command
                     }, $item->webpush_notifications);
                     $as->patchItem($item->pk_content, ['webpush_notifications' => $changedNotifications]);
                 }
-                $this->getContainer()->get('core.locale')->setContext($context);
+                $this->getContainer()->get('core.locale')->setContext($context)->apply();
             } catch (\Exception $e) {
                 $output->writeln(sprintf(
                     '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
