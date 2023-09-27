@@ -214,19 +214,23 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->template->expects($this->at(0))->method('fetch')
             ->with('video/render/external.tpl', [
+                    'isAmp'  => false,
                     'info'   => $video1->information,
                     'height' => 320,
                     'width'  => 560,
-                    'title'  => $video1->title
+                    'title'  => $video1->title,
+                    'type' => ''
                 ])
             ->willReturn($externalOutput);
 
         $this->template->expects($this->at(1))->method('fetch')
             ->with('video/render/web-source.tpl', [
+                    'isAmp'  => false,
                     'info'   => $video2->information,
                     'height' => 320,
                     'width'  => 560,
-                    'title'  => $video2->title
+                    'title'  => $video2->title,
+                    'type'   => 'youtube'
                 ])
             ->willReturn($webSourceOutput);
 

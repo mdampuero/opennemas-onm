@@ -221,10 +221,7 @@ class RouterListener implements EventSubscriberInterface
             // Raise na error if the url came localized and it's not localizable
             if ($hasModule &&
                 !empty($locale)
-                && !in_array(
-                    $parameters['_route'],
-                    $this->container->get('core.helper.l10n_route')->getLocalizableRoutes()
-                )
+                && !$this->container->get('core.helper.l10n_route')->isRouteLocalizable($parameters['_route'])
             ) {
                 throw new ResourceNotFoundException();
             }

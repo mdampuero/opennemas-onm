@@ -46,8 +46,7 @@ class UrlLocalizerDecorator extends UrlDecorator
         }
 
         // Localize if unknown route or route can be localized
-        if (in_array($routeName, $this->container->get('core.helper.l10n_route')->getLocalizableRoutes())
-        ) {
+        if ($this->container->get('core.helper.l10n_route')->isRouteLocalizable($routeName)) {
             $parts['path'] = '/' . $slugs[$requestLocale]
                 . (array_key_exists('path', $parts) ? $parts['path'] : '');
 

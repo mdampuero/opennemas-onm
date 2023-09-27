@@ -10,11 +10,12 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
 {
     $instance = $smarty->getContainer()->get('core.instance');
     $request  = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
+    $router   = $smarty->getContainer()->get('router');
     $l10nrh   = $smarty->getContainer()->get('core.helper.l10n_route');
 
     if (!$instance->hasMultilanguage()
         || empty($request)
-        || !in_array($request->get('_route'), $l10nrh->getLocalizableRoutes())
+        || !$l10nrh->isRouteLocalizable($request->get('_route'))
     ) {
         return;
     }
@@ -30,7 +31,6 @@ function smarty_function_render_hreflang_tags($params, &$smarty)
     $uri          = $request->getRequestUri();
     $content      = $smarty->getValue('o_content') ?? $smarty->getValue('tag');
     $category     = $smarty->getValue('o_category');
-    $router       = $smarty->getContainer()->get('router');
 
     if (empty($slugs)) {
         return;
