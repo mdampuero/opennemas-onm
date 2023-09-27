@@ -314,9 +314,9 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           {
             status: 0,
             body: null,
-            title: null,
+            title: $scope.item.title,
             send_date: $window.moment.utc($window.moment($scope.item.starttime)).format('YYYY-MM-DD HH:mm:ss'),
-            image: null,
+            image: image,
           }
         );
       } else {
