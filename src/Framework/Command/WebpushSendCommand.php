@@ -122,7 +122,7 @@ class WebpushSendCommand extends Command
 
                 $restrictedHours = $this->getContainer()->get('orm.manager')
                     ->getDataSet('Settings', 'instance')
-                    ->get('webpush_restricted_hours');
+                    ->get('webpush_restricted_hours', []);
 
                 $this->getContainer()->get('core.security')->setInstance($instance);
                 $context = $this->getContainer()->get('core.locale')->getContext();
