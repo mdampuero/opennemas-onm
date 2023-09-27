@@ -108,6 +108,7 @@ class VideoHelper
                 $info['source'] = array_filter($item->information['source']);
             }
             $output = $this->template->fetch($tpl, [
+                'isAmp'  => $amp,
                 'title'  => $item->title,
                 'info'   => $info,
                 'height' => $height,
