@@ -32,38 +32,27 @@
 {block name="commonColumnsBody"}
   <td class="v-align-middle">
     <div class="[% 'm-l-' + 30 * levels[getItemId(item)] %]">
-      [% item.title %]
-      <div class="listing-inline-actions">
-        <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_category_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
-        <a class="btn btn-default btn-small" href="[% routing.generate('backend_category_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
-          <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+      <div class="table-text ng-binding">
+        [% item.title %]
+      </div>
+      <div class="listing-inline-actions btn-group">
+        <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_category_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" class="btn-group" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+        <a class="btn btn-white btn-small" href="[% routing.generate('backend_category_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
+          <i class="fa fa-pencil"></i>
         </a>
+        {acl isAllowed="MASTER"}
+          <a class="btn btn-white btn-small"  href="#" ng-click="move(getItemId(item), item)" uib-tooltip="{t}Move contents{/t}" tooltip-placement="top">
+            <i class="fa fa-flip-horizontal fa-reply"></i>
+          </a>
+          <a class="btn btn-white btn-small" href="#" ng-click="empty(getItemId(item))" uib-tooltip="{t}Delete contents{/t}" tooltip-placement="top">
+            <i class="fa fa-fire"></i>
+          </a>
+        {/acl}
         <div uib-tooltip="{t}Only empty categories can be deleted{/t}" tooltip-enable="data.extra.stats[getItemId(item)] > 0" tooltip-class="tooltip-danger">
-          <button class="btn btn-danger btn-small" ng-click="delete(getItemId(item))" ng-disabled="data.extra.stats[getItemId(item)] > 0" type="button">
-            <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+          <button class="btn btn-white btn-small" ng-click="delete(getItemId(item))" ng-disabled="data.extra.stats[getItemId(item)] > 0" type="button" uib-tooltip="{t}Delete{/t}}" tooltip-placement="top">
+            <i class="fa fa-trash-o text-danger"></i>
           </button>
         </div>
-        {acl isAllowed="MASTER"}
-          <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
-            <button class="btn btn-white btn-small dropdown-toggle" data-toggle="dropdown" ng-disabled="isEmpty(item)" type="button">
-              <i class="fa fa-ellipsis-h"></i>
-            </button>
-            <ul class="dropdown-menu no-padding">
-              <li>
-                <a href="#" ng-click="move(getItemId(item), item)">
-                  <i class="fa fa-flip-horizontal fa-reply"></i>
-                  {t}Move contents{/t}
-                </a>
-              </li>
-              <li>
-                <a href="#" ng-click="empty(getItemId(item))">
-                  <i class="fa fa-fire"></i>
-                  {t}Delete contents{/t}
-                </a>
-              </li>
-            </ul>
-          </div>
-        {/acl}
       </div>
     </div>
   </td>

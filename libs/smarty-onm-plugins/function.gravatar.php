@@ -18,8 +18,9 @@ function smarty_function_gravatar($params, &$smarty)
     $size         = (isset($params['size'])) ? $params['size'] : 16;
     $email        = md5(strtolower(trim($params['email'])));
     $htmlAttrs    = [
-        'width' => $size,
+        'width'  => $size,
         'height' => $size,
+        'title'  => 'Avatar',
     ];
 
     if (array_key_exists('class', $params)) {

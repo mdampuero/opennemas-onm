@@ -90,7 +90,7 @@
         "opennemas/data": "1.1.2",
         "opennemas/orm": "1.6.0",
         "opennemas/task": "1.0.*",
-        "opennemas/panorama-php": "1.0.2",
+        "opennemas/panorama-php": "1.0.3",
         "cometcult/braintree-bundle": "dev-master",
         "google/recaptcha": "1.2",
         "rtconner/freshbooks-api": "dev-master",

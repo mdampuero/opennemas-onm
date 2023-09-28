@@ -325,6 +325,43 @@
                 </div>
               </div>
               {/if}
+              {if $app.security->hasPermission('MASTER')}
+                <div class="panel-group" id="panel-group-gfk" data-toggle="collapse">
+                  <div class="panel panel-default">
+                    <div class="panel-heading collapsed">
+                      <h4 class="panel-title">
+                        <a class="collapsed" data-parent="#panel-group-ga4-native" data-toggle="collapse" href="#ga4_native">
+                          <i class="fa fa-google"></i>{t}Google Analytics (Native){/t}
+                        </a>
+                      </h4>
+                    </div>
+                    <div class="panel-collapse collapse" id="ga4_native">
+                      <div class="panel-body">
+                        <div class="form-group">
+                          <label class="form-label" for="ga4-native-id">
+                            {t}Google analytics ID{/t}
+                          </label>
+                          <div class="controls">
+                            <input class="form-control" id="ga4-native-id" name="ga4-native-id" ng-model="settings.ga4_native_id" type="text">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label" for="ga4-native-config">
+                            {t}Google analytics config File{/t}
+                          </label>
+                          <div class="controls">
+                            <input class="form-control" id="ga4-native-config" name="ga4-native-config" ng-model="settings.ga4_native_config" type="text">
+                          </div>
+                        </div>
+                        <small class="help">
+                          <i class="fa fa-info-circle m-r-5 text-info"></i>
+                          {t}We are not responsible of the stats or of any third party services{/t}
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {/if}
               <h4>
                 <i class="fa fa-cog"></i>
                 {t}Internal settings{/t}
@@ -991,6 +1028,45 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-6">
+              <h4>
+                <i class="fa fa-bell"></i>
+                {t}WebPush service integration{/t}
+              </h4>
+              <div class="panel-group" id="panel-group-webpushr" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-webpushr" data-toggle="collapse" href="#webpushr">
+                        <i class="fa fa-envelope"></i>
+                        {t}Webpushr{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="webpushr">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <div class="form-group">
+                          <label class="form-label" for="webpushr-webpushrKey">
+                            {t}Webpushr Api Key{/t}
+                          </label>
+                          <div class="controls">
+                            <input class="form-control" id="webpushr-webpushrKey" name="webpushr-webpushrKey" ng-model="settings.webpush_apikey" type="text">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label" for="webpushr-webpushrAuthToken">
+                            {t}Webpushr Auth Key{/t}
+                          </label>
+                          <div class="controls">
+                            <input class="form-control" id="webpushr-webpushrAuthToken" name="webpushr-webpushrAuthToken" ng-model="settings.webpush_token" type="text">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
           </div>
         </div>
       </div>

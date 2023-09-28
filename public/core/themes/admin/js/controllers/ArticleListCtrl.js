@@ -49,6 +49,7 @@
          * @type {Object}
          */
         $scope.routes = {
+          saveItem:   'api_v1_backend_article_save_item',
           deleteItem: 'api_v1_backend_article_delete_item',
           deleteList: 'api_v1_backend_article_delete_list',
           getList:    'api_v1_backend_article_get_list',
@@ -56,6 +57,16 @@
           patchList:  'api_v1_backend_article_patch_list',
           public:     'frontend_article_show'
         };
+
+        /**
+         * @memberOf ArticleListCtrl
+         *
+         * @description
+         *  The current date and time formatted as 'YYYY-MM-DD HH:mm:ss' using the moment library.
+         *
+         * @type {String}
+         */
+        $scope.currentDateTime = $window.moment().format('YYYY-MM-DD HH:mm:ss');
 
         /**
          * @function getFrontendUrl

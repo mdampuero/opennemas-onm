@@ -21,44 +21,45 @@ orm:
                     - video
                     - widget
             properties:
-                available:           boolean
-                body:                l10n_string
-                changed:             datetime
-                content_status:      integer
-                content_type_name:   enum
-                created:             datetime
-                description:         l10n_string
-                endtime:             datetime
-                favorite:            boolean
-                fk_author:           integer
-                fk_content_type:     integer
-                fk_publisher:        integer
-                fk_user_last_editor: integer
-                frontpage:           integer
-                information:         array
-                in_home:             boolean
-                in_litter:           boolean
-                items:               array
-                params:              array
-                pk_content:          integer
-                position:            integer
-                slug:                l10n_string
-                starttime:           datetime
-                coverage_start_time: string
-                coverage_end_time:   string
-                title:               l10n_string
-                urn_source:          string
-                with_comment:        boolean
-                showcase:            boolean
-                categories:          array
-                live_blog_posting:   boolean
-                live_blog_updates:   array
-                tags:                array
-                related_contents:    array
-                subscriptions:       array
-                timetable:           array
-                title_int:           l10n_string
-                pretitle:            l10n_string
+                available:            boolean
+                body:                 l10n_string
+                changed:              datetime
+                content_status:       integer
+                content_type_name:    enum
+                created:              datetime
+                description:          l10n_string
+                endtime:              datetime
+                favorite:             boolean
+                fk_author:            integer
+                fk_content_type:      integer
+                fk_publisher:         integer
+                fk_user_last_editor:  integer
+                frontpage:            integer
+                information:          array
+                in_home:              boolean
+                in_litter:            boolean
+                items:                array
+                params:               array
+                pk_content:           integer
+                position:             integer
+                slug:                 l10n_string
+                starttime:            datetime
+                coverage_start_time:  string
+                coverage_end_time:    string
+                title:                l10n_string
+                urn_source:           string
+                with_comment:         boolean
+                showcase:             boolean
+                categories:           array
+                live_blog_posting:    boolean
+                live_blog_updates:    array
+                webpush_notifications: array
+                tags:                 array
+                related_contents:     array
+                subscriptions:        array
+                timetable:            array
+                title_int:            l10n_string
+                pretitle:             l10n_string
             converters:
                 default:
                     class:     Common\Model\Database\Data\Converter\ContentConverter
@@ -116,6 +117,25 @@ orm:
                                 content_id:
                                     type: integer
                                 tag_id:
+                                    type: integer
+                        webpush_notifications:
+                            table: content_notifications
+                            source_key: pk_content
+                            target_key: fk_content
+                            columns:
+                                id:
+                                    type: integer
+                                fk_content:
+                                    type: integer
+                                status    :
+                                    type: integer
+                                body:
+                                    type: string
+                                title:
+                                    type: string
+                                send_date:
+                                    type: datetime
+                                image:
                                     type: integer
                         live_blog_updates:
                             table: content_updates
