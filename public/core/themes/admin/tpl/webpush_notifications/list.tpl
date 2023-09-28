@@ -21,7 +21,7 @@
     <ul class="nav quick-section">
       {acl isAllowed="MASTER"}
         <li class="quicklinks">
-          <a class="btn btn-link" href="{url name=backend_webpush_notifications_config}" class="admin_add" title="{t}Config Web Push notifications module{/t}">
+          <a class="btn btn-link" href="{url name=backend_webpush_notifications_config}" class="admin_add" title="{t}Web Push notifications module config{/t}">
             <span class="fa fa-cog fa-lg"></span>
           </a>
         </li>
