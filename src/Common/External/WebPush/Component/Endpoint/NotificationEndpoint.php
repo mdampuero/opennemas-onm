@@ -45,10 +45,12 @@ class NotificationEndpoint extends Endpoint
             $response = $this->client->post($url, $data);
             $body     = json_decode($response->getBody(), true);
             if ($body['status'] == 'success') {
-                getService('application.log')->info('Notification was sent successfully');
+                getService('application.log')
+                    ->info('Notification ' . $body['ID'] . ' was sent successfully');
             }
             if ($body['status'] != 'success') {
-                getService('application.log')->info('Notification sending has failed because of ' . $body->description);
+                getService('application.log')
+                    ->info('Notification sending has failed because of ' . $body['description']);
             }
         } catch (\Exception $e) {
             getService('application.log')

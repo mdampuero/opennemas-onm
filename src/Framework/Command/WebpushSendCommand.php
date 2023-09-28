@@ -118,7 +118,7 @@ class WebpushSendCommand extends Command
 
                 $delay = $this->getContainer()->get('orm.manager')
                     ->getDataSet('Settings', 'instance')
-                    ->get('webpush_delay');
+                    ->get('webpush_delay', '1');
 
                 $restrictedHours = $this->getContainer()->get('orm.manager')
                     ->getDataSet('Settings', 'instance')
