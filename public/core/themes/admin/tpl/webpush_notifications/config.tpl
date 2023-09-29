@@ -95,9 +95,13 @@
                   <label>{t}API key{/t}</label>
                   <input class="form-control" ng-model="settings.webpush_service.apikey" type="text">
                 </div>
-                <div class="controls col-xs-8 m-t-10 m-b-15">
+                <div class="controls col-xs-8 m-t-10">
                   <label>{t}Authentication token{/t}</label>
                   <input class="form-control" ng-model="settings.webpush_service.token" type="text">
+                </div>
+                <div class="controls col-xs-8 m-t-10 m-b-15">
+                  <label>{t}Public key{/t}</label>
+                  <input class="form-control" ng-model="settings.webpush_service.publickey" type="text">
                 </div>
               </div>
             </div>

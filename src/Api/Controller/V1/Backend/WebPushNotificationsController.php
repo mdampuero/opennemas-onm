@@ -60,14 +60,16 @@ class WebPushNotificationsController extends ApiController
             ->get(['webpush_service',
                 'webpush_apikey',
                 'webpush_token',
+                'webpush_publickey',
                 'webpush_automatic',
                 'webpush_delay',
                 'webpush_restricted_hours']);
 
         $webpush_service = [
-            'service' => $settings['webpush_service'],
-            'apikey'  => $settings['webpush_apikey'],
-            'token'   => $settings['webpush_token']
+            'service'   => $settings['webpush_service'],
+            'apikey'    => $settings['webpush_apikey'],
+            'token'     => $settings['webpush_token'],
+            'publickey' => $settings['webpush_publickey']
         ];
 
         for ($i = 0; $i < 24; $i++) {
@@ -112,11 +114,13 @@ class WebPushNotificationsController extends ApiController
         $service         = $webpush_service['service'] ?? null;
         $apikey          = $webpush_service['apikey'] ?? null;
         $token           = $webpush_service['token'] ?? null;
+        $publickey       = $webpush_service['publickey'] ?? null;
 
         $settings = [
             'webpush_service'          => $service,
             'webpush_apikey'           => $apikey,
             'webpush_token'            => $token,
+            'webpush_publickey'        => $publickey,
             'webpush_automatic'        => $request->request->get('webpush_automatic'),
             'webpush_delay'            => $request->request->get('webpush_delay'),
             'webpush_restricted_hours' => $webpush_restricted_hours,

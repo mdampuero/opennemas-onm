@@ -57,6 +57,7 @@ class WebPushNotificationsController extends BackendController
             ->get(['webpush_service',
                 'webpush_apikey',
                 'webpush_token',
+                'webpush_publickey',
                 'webpush_automatic',
                 'webpush_delay',
                 'webpush_restricted_hours']);

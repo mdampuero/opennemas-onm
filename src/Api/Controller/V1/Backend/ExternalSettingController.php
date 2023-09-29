@@ -54,8 +54,6 @@ class ExternalSettingController extends SettingController
         'whatsapp_page',
         'tiktok_page',
         'dailymotion_page',
-        'webpush_apikey',
-        'webpush_token',
         'ojd',
         'payments',
         'pinterest_page',
