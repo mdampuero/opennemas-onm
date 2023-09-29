@@ -1,0 +1,7 @@
+# Web Push notifications routes
+frontend_webpush_notifications_script:
+    path:     /webpushr-sw.js
+    defaults: { _controller: FrontendBundle:WebPushNotifications:script }
+
+    options:
+        subdirectory: true
