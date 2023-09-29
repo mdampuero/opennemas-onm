@@ -197,7 +197,6 @@ class WebpushSendCommand extends Command
                         $onCooldown = true;
                     }
                 }
-                $this->getContainer()->get('core.locale')->setContext($context)->apply();
             } catch (\Exception $e) {
                 $output->writeln(sprintf(
                     '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
