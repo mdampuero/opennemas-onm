@@ -343,21 +343,35 @@
                     </div>
                   </div>
                   <div class="form-group m-t-15" ng-if="settings.cmp_type == 'didomi'">
-                    <label class="form-label" for="cmp-id">
-                      {t}Didomi noticeId{/t}
-                    </label>
-                    <span class="help">
-                      {t escape=off}Help to find your Didomi credentials <a class="external-link" href="https://support.didomi.io/" target="_blank" ng-click="$event.stopPropagation();">here</a>.{/t}
-                    </span>
-                    <div class="controls">
-                      <input class="form-control" id="cmp-id" name="cmp-id" ng-model="settings.cmp_id" type="text">
+                    <div class="col-md-6 form-group">
+                      <label class="form-label" for="cmp-id">
+                        {t}Didomi noticeId{/t}
+                      </label>
+                      <span class="help">
+                        {t escape=off}Help to find your Didomi credentials <a class="external-link" href="https://support.didomi.io/" target="_blank" ng-click="$event.stopPropagation();">here</a>.{/t}
+                      </span>
+                      <div class="controls">
+                        <input class="form-control" id="cmp-id" name="cmp-id" ng-model="settings.cmp_id" type="text">
+                      </div>
                     </div>
-                    <label class="form-label" for="cmp-apikey">
-                      {t}Didomi apiKey{/t}
-                    </label>
-                    <div class="controls">
-                      <input class="form-control" id="cmp-apikey" name="cmp-apikey" ng-model="settings.cmp_apikey" type="text">
+                    <div class="col-md-6 form-group">
+                      <label class="form-label" for="cmp-apikey">
+                        {t}Didomi apiKey{/t}
+                      </label>
+                      <div class="controls">
+                        <input class="form-control" id="cmp-apikey" name="cmp-apikey" ng-model="settings.cmp_apikey" type="text">
+                      </div>
                     </div>
+                    {is_module_activated name="AMP_MODULE"}
+                    <div class="form-group">
+                      <label class="form-label" for="cmp-id-amp">
+                        {t}Didomi noticeId for AMP{/t}
+                      </label>
+                      <div class="controls">
+                        <input class="form-control" id="cmp-id-amp" name="cmp-id-amp" ng-model="settings.cmp_id_amp" type="text">
+                      </div>
+                    </div>
+                    {/is_module_activated}
                   </div>
                 </div>
                 <h4>
