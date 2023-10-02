@@ -17,7 +17,7 @@ class UrlLocalizerDecoratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->routeHelper = $this->getMockBuilder('Locale')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getLocalizableRoutes' ])
+            ->setMethods([ 'isRouteLocalizable' ])
             ->getMock();
 
         $this->locale = $this->getMockBuilder('Locale')
@@ -151,7 +151,7 @@ class UrlLocalizerDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->locale->expects($this->at(2))->method('getSlugs')
             ->willReturn([ 'esp' => 'esp', 'eng' => 'eng' ]);
 
-        $this->routeHelper->expects($this->once())->method('getLocalizableRoutes')
+        $this->routeHelper->expects($this->once())->method('isRouteLocalizable')
             ->willReturn([ 'foo_baz' ]);
 
         $this->urlHelper->expects($this->once())->method('unparse')

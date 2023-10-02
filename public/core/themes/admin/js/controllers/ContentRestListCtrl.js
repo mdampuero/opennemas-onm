@@ -134,6 +134,51 @@
         };
 
         /**
+         * @function sendWPNotification
+         * @memberOf ContentRestInnerCtrl
+         *
+         * @description
+         *   Send webpush notification to all subscribers
+         */
+        $scope.sendWPNotification = function(content) {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-webpush',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return { status: 1 };
+              },
+              success: function() {
+                return null;
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response && content) {
+              var contentNotifications = content.webpush_notifications || [];
+              var image = content.related_contents[0] ? content.related_contents[0].target_id : null;
+
+              contentNotifications.push(
+                {
+                  status: 1,
+                  body: content.description,
+                  title: content.title,
+                  send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
+                  image: image,
+                }
+              );
+              $scope.patch(content, 'webpush_notifications', contentNotifications)
+                .then(function() {
+                  http.post('send_notification', [ content.pk_content ]);
+                  $scope.list();
+                });
+            }
+          });
+        };
+
+        /**
          * @function sendToTrash
          * @memberOf ContentRestListCtrl
          *

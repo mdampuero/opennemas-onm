@@ -196,16 +196,18 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeVarnishCacheForContent(Event $event)
     {
-        $item = $event->getArgument('item');
+        $item   = $event->getArgument('item');
+        $action = $event->getArgument('action');
 
         $items = !is_array($item) ? [ $item ] : $item;
 
         foreach ($items as $item) {
             try {
-                $this->container
-                    ->get(sprintf('api.helper.cache.%s', $item->content_type_name))->deleteItem($item);
+                $this->container->get(sprintf('api.helper.cache.%s', $item->content_type_name))
+                    ->deleteItem($item, [ 'action' => $action ]);
             } catch (ServiceNotFoundException $e) {
-                $this->container->get(sprintf('api.helper.cache.content'))->deleteItem($item);
+                $this->container->get(sprintf('api.helper.cache.content'))
+                    ->deleteItem($item, [ 'action' => $action ]);
             }
         }
     }
@@ -221,10 +223,11 @@ class HooksSubscriber implements EventSubscriberInterface
 
         foreach ($items as $item) {
             try {
-                $this->container
-                    ->get(sprintf('api.helper.cache.%s', $item->content_type_name))->deleteItem($item, true);
+                $this->container->get(sprintf('api.helper.cache.%s', $item->content_type_name))
+                    ->deleteItem($item, [ 'vote' => true ]);
             } catch (ServiceNotFoundException $e) {
-                $this->container->get(sprintf('api.helper.cache.content'))->deleteItem($item, true);
+                $this->container->get(sprintf('api.helper.cache.content'))
+                    ->deleteItem($item, [ 'vote' => true ]);
             }
         }
     }
