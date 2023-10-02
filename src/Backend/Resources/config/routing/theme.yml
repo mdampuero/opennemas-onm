@@ -1,3 +1,4 @@
-backend_theme_list:
-    path: /themes/
-    defaults: { _controller: BackendBundle:Theme:list }
+# Disabled Temporary (ONM-8729)
+# backend_theme_list:
+#     path: /themes/
+#     defaults: { _controller: BackendBundle:Theme:list }

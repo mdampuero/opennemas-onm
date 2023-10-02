@@ -293,6 +293,12 @@
                 routing.generate($scope.routes.redirect, { id: id });
             }
 
+            if ($scope.sendNotification) {
+              var itemId = $scope.itemHasId() ? $scope.getItemId() : id;
+
+              http.post('send_notification', [ itemId ]);
+            }
+
             if (response.status === 200 && $scope.refreshOnUpdate) {
               $timeout(function() {
                 $scope.getItem($scope.getItemId());
@@ -303,13 +309,13 @@
               $scope.draftSaved = null;
               webStorage.session.remove($scope.draftKey);
             }
-
             messenger.post(response.data);
           };
 
           if ($scope.itemHasId()) {
             route.name   = $scope.routes.updateItem;
             route.params = { id: $scope.getItemId() };
+
             http.put(route, data).then(successCb, $scope.errorCb);
             return;
           }

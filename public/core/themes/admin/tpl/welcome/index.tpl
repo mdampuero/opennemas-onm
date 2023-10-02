@@ -127,7 +127,8 @@
           <h4>{t}Want more features?{/t}</h4>
         </div>
         <div class="grid-body">
-          <p>{t}We have two ways to add functionality to you site. Check our Opennemas Store:{/t}</p>
+          {* Disabled Temporary (ONM-8729) *}
+          {* <p>{t}We have two ways to add functionality to you site. Check our Opennemas Store:{/t}</p>
 
           <div class="row">
             <div class="col-sm-6 plans">
@@ -144,7 +145,7 @@
                 <div class="description">{t}Add a specific feature in your site{/t}</div>
               </a>
             </div>
-          </div>
+          </div> *}
 
           {t}If you have special needs or want some advice extending your site{/t}
           <a href="javascript:UserVoice.showPopupWidget();" class="btn btn-large contact">{t}Contact us{/t}</a>

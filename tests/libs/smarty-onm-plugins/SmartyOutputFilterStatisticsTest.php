@@ -128,6 +128,7 @@ class SmartyOutputFilterStatisticsTest extends \PHPUnit\Framework\TestCase
                     'MCompass',
                     'Ojd',
                     'Prometeo',
+                    'GANative',
                 ]
             ])
             ->willReturn($returnvalue);

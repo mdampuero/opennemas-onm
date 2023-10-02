@@ -354,20 +354,21 @@ $menuXml = [
         'icon'    => 'fa fa-shopping-cart',
         'privilege' => 'ADMIN',
         'submenu' => [
-            [
-                'id'    => 'store',
-                'title' => _('Modules'),
-                'icon'  => 'fa fa-archive',
-                'link'  => url('admin_store_list'),
-                'privilege' => 'ADMIN'
-            ],
-            [
-                'id'          => 'theme-manager',
-                'title'       => _('Themes'),
-                'icon'        => 'fa fa-magic',
-                'link'        => url('backend_theme_list'),
-                'privilege'   => 'ADMIN',
-            ],
+            // Disabled Temporary (ONM-8729)
+            // [
+            //     'id'    => 'store',
+            //     'title' => _('Modules'),
+            //     'icon'  => 'fa fa-archive',
+            //     'link'  => url('admin_store_list'),
+            //     'privilege' => 'ADMIN'
+            // ],
+            // [
+            //     'id'          => 'theme-manager',
+            //     'title'       => _('Themes'),
+            //     'icon'        => 'fa fa-magic',
+            //     'link'        => url('backend_theme_list'),
+            //     'privilege'   => 'ADMIN',
+            // ],
             [
                 'id'          => 'domain_manager',
                 'title'       => _('Domains'),

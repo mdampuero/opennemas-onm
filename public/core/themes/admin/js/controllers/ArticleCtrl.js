@@ -73,6 +73,7 @@
           tags: [],
           external_link: '',
           agency: '',
+          webpush_notifications: []
         };
 
         $scope.defaultLiveBlogUpdate = {

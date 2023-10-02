@@ -172,7 +172,7 @@ class ContentCacheHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->queue->expects($this->at(0))->method('push')
             ->with(new ServiceTask('core.varnish', 'ban', [
-                sprintf('req.url ~ %s', $item->path)
+                sprintf('obj.http.x-url ~ %s', $item->path)
             ]));
 
         $helper->deleteItem($item);
