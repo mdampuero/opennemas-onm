@@ -7,7 +7,7 @@
  *
  * @return string
  */
-function smarty_outputfilter_webpush_script($output, $smarty)
+function smarty_outputfilter_webpush_notifications_script($output, $smarty)
 {
     $webpushService = $smarty->getContainer()->get('orm.manager')
         ->getDataSet('Settings', 'instance')
