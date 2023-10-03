@@ -136,4 +136,28 @@ class WebPushNotificationsController extends ApiController
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
+
+       /**
+     * Tries to connect to the server with the provided parameters.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function checkServerAction()
+    {
+        $msg      = $this->get('core.messenger');
+        $webpushr = $this->get('external.web_push.factory');
+        $endpoint = $webpushr->getEndpoint('subscriber');
+
+        try {
+            $endpoint = $webpushr->getEndpoint('subscriber');
+            $endpoint-> getSubscribers();
+            $msg->add(_('Server connection success!'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to connect to the server'), 'error', 400);
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
 }

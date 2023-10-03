@@ -26,6 +26,18 @@
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
+        /**
+         * @memberOf WebPushNotificationsConfigCtrl
+         *
+         * @description
+         *  The list of routes for the controller.
+         *
+         * @type {Object}
+         */
+        $scope.routes = {
+          checkServer:  'api_v1_backend_webpush_notifications_check_server'
+        };
+
         $scope.settings = {
           webpush_restricted_hours: []
         };
@@ -81,6 +93,29 @@
         $scope.loadHours = function($query) {
           return $scope.settings.hours.filter(function(el) {
             return el.indexOf($query) >= 0;
+          });
+        };
+
+        /**
+         * @function check
+         * @memberOf WebPushNotificationsConfigCtrl
+         *
+         * @description
+         *   Checks the connection to the server.
+         */
+        $scope.check = function() {
+          $scope.flags.http.checking = true;
+
+          var route = {
+            name: $scope.routes.checkServer
+          };
+
+          http.get(route).then(function(response) {
+            $scope.disableFlags('http');
+            $scope.status = 'success';
+          }, function() {
+            $scope.disableFlags('http');
+            $scope.status = 'failure';
           });
         };
 

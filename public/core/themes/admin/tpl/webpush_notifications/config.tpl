@@ -89,7 +89,7 @@
               </div>
             </div>
             <div class="row m-t-30" ng-if="settings.webpush_service.service == 'webpushr'">
-              <div class="col-md-6">
+              <div class="col-md-9">
                 <h4 class="no-margin">{t}Webpushr service credentials{/t}</h4>
                 <div class="controls col-xs-8 m-t-10">
                   <label>{t}API key{/t}</label>
@@ -102,6 +102,24 @@
                 <div class="controls col-xs-8 m-t-10 m-b-15">
                   <label>{t}Public key{/t}</label>
                   <input class="form-control" ng-model="settings.webpush_service.publickey" type="text">
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="p-l-30 p-r-30 p-t-35">
+                  <div class="text-center">
+                    <i class="fa fa-3x fa-question" ng-show="!status"></i>
+                    <i class="fa fa-3x fa-check text-success" ng-show="status === 'success'"></i>
+                    <i class="fa fa-3x fa-times text-danger" ng-show="status === 'failure'"></i>
+                    <p class="m-t-15 text-center">
+                      <strong>
+                        {t}Status{/t}
+                      </strong>
+                    </p>
+                    <button class="btn btn-block btn-default btn-loading m-t-5" ng-click="check()" ng-disabled="!settings.webpush_service.apikey || !settings.webpush_service.token || !settings.webpush_service.publickey || flags.http.checking" type="button">
+                      <i class="fa fa-sitemap m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.checking }"></i>
+                      {t}Connect{/t}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
