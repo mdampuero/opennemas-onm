@@ -99,7 +99,7 @@
   <a class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
     <i class="fa fa-external-link"></i>
   </a>
-  <a class="btn btn-white btn-small" href="[% data.extra.paths.newsstand + '/' + item.path %]" target="_blank" uib-tooltip="{t}Download{/t}" tooltip-placement="top">
+  <a class="btn btn-white btn-small" href="{$app.instance->getBaseUrl()}[% data.extra.paths.newsstand + '/' + item.path %]" target="_blank" uib-tooltip="{t}Download{/t}" tooltip-placement="top">
     <i class="fa fa-download"></i>
   </a>
   {acl isAllowed="KIOSKO_DELETE"}
