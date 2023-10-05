@@ -312,13 +312,14 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       if ($scope.hasPendingNotifications()) {
         $scope.removePendingNotification(false);
       }
+      var date = $scope.item.starttime < $window.moment().format('YYYY-MM-DD HH:mm:ss') ? $window.moment().format('YYYY-MM-DD HH:mm:ss') : $scope.item.starttime;
 
       $scope.data.item.webpush_notifications.push(
         {
           status: 0,
           body: null,
           title: $scope.item.title,
-          send_date: $window.moment.utc($window.moment($scope.item.starttime)).format('YYYY-MM-DD HH:mm:ss'),
+          send_date: $window.moment.utc($window.moment(date)).format('YYYY-MM-DD HH:mm:ss'),
           image: image,
           transaction_id: null
         }
