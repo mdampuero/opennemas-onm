@@ -462,6 +462,8 @@ DROP TABLE IF EXISTS `content_notifications`;
 CREATE TABLE `content_notifications` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `fk_content` bigint(20) unsigned NOT NULL,
+  'transaction_id' text DEFAULT NULL,
+  'transaction_id' text DEFAULT NULL,
   `status` int DEFAULT 0,
   `body` text DEFAULT NULL,
   `title` text DEFAULT NULL,

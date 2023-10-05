@@ -172,8 +172,9 @@ class WebpushSendCommand extends Command
                         $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
 
                         $notificationStatus = 1;
+
                         try {
-                            $endpoint->sendNotification([
+                            $sentNotification = $endpoint->sendNotification([
                                 'title'      => $article->title ?? '',
                                 'message'    => $article->body ?? '',
                                 'target_url' => $contentPath,
@@ -186,11 +187,12 @@ class WebpushSendCommand extends Command
                         $notificationService->patchItem(
                             $notification->id,
                             [
-                                'send_date' => gmdate('Y-m-d H:i:s'),
-                                'status'    => $notificationStatus,
-                                'image'     => $image->pk_content ?? null,
-                                'body'      => $article->body ?? '',
-                                'title'     => $article->title ?? '',
+                                'status'         => $notificationStatus,
+                                'body'           => $article->body ?? '',
+                                'title'          => $article->title ?? '',
+                                'send_date'      => gmdate('Y-m-d H:i:s'),
+                                'image'          => $image->pk_content ?? null,
+                                'transaction_id' => $sentNotification['ID'] ?? '',
                             ]
                         );
                         $redis->remove(sprintf('content-%s', $notification->fk_content));

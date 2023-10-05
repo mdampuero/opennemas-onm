@@ -30,7 +30,7 @@ class WebPushNotificationsController extends FrontendController
             return new Response(
                 "importScripts('https://cdn.webpushr.com/sw-server.min.js');",
                 200,
-                ['Content-Type' => 'text/javascript']
+                ['Content-Type:' => 'text/javascript']
             );
         }
 

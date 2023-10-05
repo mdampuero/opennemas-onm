@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-28 08:25+0000\n"
-"PO-Revision-Date: 2023-09-28 10:32+0200\n"
+"POT-Creation-Date: 2023-10-05 10:12+0000\n"
+"PO-Revision-Date: 2023-10-05 12:16+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -4599,9 +4599,6 @@ msgstr "Será enviada cuando el contenido esté publicado"
 msgid "Notifications delay time"
 msgstr "Tiempo de retraso en notificaciones"
 
-msgid "Won't take effect on manual sending"
-msgstr "No tendrá efecto para el envío manual"
-
 msgid "Restricted hours"
 msgstr "Horas restringidas"
 
@@ -4616,6 +4613,12 @@ msgstr "Credenciales del servicio Webpushr"
 
 msgid "Authentication token"
 msgstr "Token de autenticación"
+
+msgid "Public key"
+msgstr "Llave pública"
+
+msgid "Transaction Id"
+msgstr "Identificador de transacción"
 
 msgid "Send date"
 msgstr "Fecha de envío"
@@ -5202,9 +5205,6 @@ msgstr "Cantidad"
 
 msgid "Google Recaptcha"
 msgstr "Google Recaptcha"
-
-msgid "Public key"
-msgstr "Llave pública"
 
 msgid "Private key"
 msgstr "Llave privada"
@@ -7445,6 +7445,9 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
+
+#~ msgid "Won't take effect on manual sending"
+#~ msgstr "No tendrá efecto para el envío manual"
 
 #~ msgid "Webpushr Api Key"
 #~ msgstr "Webpushr Auth Key"

@@ -60,7 +60,7 @@
           $scope.backup.criteria    = $scope.criteria;
           $scope.app.columns.hidden = [ 'category', 'tags', 'content_views', 'created', 'changed', 'author', 'starttime', 'endtime' ];
           $scope.app.columns.selected =  _.uniq($scope.app.columns.selected
-            .concat([ 'send_date' ]));
+            .concat([ 'send_date', 'transaction_id' ]));
 
           oqlEncoder.configure({
             placeholder: {

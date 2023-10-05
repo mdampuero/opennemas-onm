@@ -506,7 +506,10 @@ done
         $starttime = !empty($starttime) ? $starttime->format("Y-m-d H:i:s") : null;
 
         $webpush_notifications = array_map(function ($item) use ($starttime) {
-            $item['send_date'] = $item['status'] == 0 ? $starttime : $item['send_date'];
+            $item['send_date'] = $item['status'] == 0
+                ? ($starttime < gmdate("Y-m-d H:i:s") ? $item['send_date']
+                : $starttime)
+                : $item['send_date'];
             return $item;
         }, $webpush_notifications);
 
@@ -611,9 +614,9 @@ done
         }
 
         $sql = "insert into content_notifications"
-            . "(fk_content, status, body, title, send_date, image) values "
+            . "(fk_content, status, body, title, send_date, image, transaction_id) values "
             . str_repeat(
-                '(?,?,?,?,?,?),',
+                '(?,?,?,?,?,?,?),',
                 count($webpush_notifications)
             );
 
@@ -623,11 +626,12 @@ done
         $types  = [];
 
         foreach ($webpush_notifications as $value) {
-            $value['send_date'] = empty($value['send_date']) ? gmdate("Y-m-d H:i:s") : $value['send_date'];
-            $value['image']     = empty($value['image']) ? null : $value['image'];
-            $value['body']      = empty($value['body']) ? null : $value['body'];
-            $value['title']     = empty($value['title']) ? null : $value['title'];
-            $value['status']    = empty($value['status']) && $value['status'] != 0 ? 2 : $value['status'];
+            $value['send_date']      = empty($value['send_date']) ? gmdate("Y-m-d H:i:s") : $value['send_date'];
+            $value['image']          = empty($value['image']) ? null : $value['image'];
+            $value['body']           = empty($value['body']) ? null : $value['body'];
+            $value['title']          = empty($value['title']) ? null : $value['title'];
+            $value['status']         = empty($value['status']) && $value['status'] != 0 ? 2 : $value['status'];
+            $value['transaction_id'] = empty($value['transaction_id']) ? null : $value['transaction_id'];
 
 
 
@@ -637,6 +641,7 @@ done
                 $value['title'],
                 $value['send_date'],
                 $value['image'],
+                $value['transaction_id']
             ]));
 
             $types = array_merge($types, [
@@ -646,6 +651,7 @@ done
                 empty($value['title']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
                 empty($value['send_date']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
                 empty($value['image']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+                empty($value['transaction_id']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
             ]);
         }
         $this->conn->executeQuery($sql, $params, $types);

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-28 08:25+0000\n"
-"PO-Revision-Date: 2023-09-28 10:43+0200\n"
+"POT-Creation-Date: 2023-10-05 10:12+0000\n"
+"PO-Revision-Date: 2023-10-05 12:15+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -4571,9 +4571,6 @@ msgstr "Enviarase cando se publique o contido"
 msgid "Notifications delay time"
 msgstr "Tempo de atraso da notificación"
 
-msgid "Won't take effect on manual sending"
-msgstr "Non terá efecto para o envío manual"
-
 msgid "Restricted hours"
 msgstr "Horario restrinxido"
 
@@ -4588,6 +4585,12 @@ msgstr "Credenciais do servizo Webpushr"
 
 msgid "Authentication token"
 msgstr "Token de autenticación"
+
+msgid "Public key"
+msgstr "Chave pública"
+
+msgid "Transaction Id"
+msgstr "Identificador de transacción"
 
 msgid "Send date"
 msgstr "Data de envío"
@@ -5173,9 +5176,6 @@ msgstr "Cantidade"
 
 msgid "Google Recaptcha"
 msgstr "Google Recaptcha"
-
-msgid "Public key"
-msgstr "Chave pública"
 
 msgid "Private key"
 msgstr "Chave privada"
@@ -7401,6 +7401,9 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 
 msgid "Group name"
 msgstr "Nome do grupo"
+
+#~ msgid "Won't take effect on manual sending"
+#~ msgstr "Non terá efecto para o envío manual"
 
 #~ msgid "Webpushr Api Key"
 #~ msgstr "Webpushr Api Key"

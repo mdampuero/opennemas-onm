@@ -162,16 +162,16 @@
 
               contentNotifications.push(
                 {
-                  status: 1,
-                  body: content.description,
+                  status: 0,
+                  body: null,
                   title: content.title,
                   send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
                   image: image,
+                  transaction_id: null,
                 }
               );
               $scope.patch(content, 'webpush_notifications', contentNotifications)
                 .then(function() {
-                  http.post('send_notification', [ content.pk_content ]);
                   $scope.list();
                 });
             }

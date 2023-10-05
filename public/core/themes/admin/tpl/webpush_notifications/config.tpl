@@ -73,10 +73,6 @@
                 <h4>{t}Notifications delay time{/t}</h4>
                 <div class="controls">
                   <select class="form-control-lg" ng-model="settings.webpush_delay" ng-options="option.value as option.label for option in options"></select>
-                  <div>
-                    <i class="fa fa-info-circle text-info"></i>
-                    <small class="text-muted">{t}Won't take effect on manual sending{/t}</small>
-                  </div>
                 </div>
               </div>
               <div class="col-md-3">
@@ -84,8 +80,6 @@
                 <tags-input ng-model="settings.webpush_restricted_hours" add-on-paste="true" add-from-autocomplete-only="true" placeholder="{t}Add an hour{/t}">
                   <auto-complete source="loadHours($query)" load-on-focus=true min-length="0" debounce-delay="0"></auto-complete>
                 </tags-input>
-                <i class="fa fa-info-circle text-info"></i>
-                <small class="text-muted">{t}Won't take effect on manual sending{/t}</small>
               </div>
             </div>
             <div class="row m-t-30" ng-if="settings.webpush_service.service == 'webpushr'">

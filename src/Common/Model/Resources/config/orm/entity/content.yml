@@ -127,6 +127,8 @@ orm:
                                     type: integer
                                 fk_content:
                                     type: integer
+                                transaction_id:
+                                    type: string
                                 status    :
                                     type: integer
                                 body:
