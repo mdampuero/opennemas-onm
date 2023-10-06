@@ -157,22 +157,31 @@
 
           modal.result.then(function(response) {
             if (response && content) {
-              var contentNotifications = content.webpush_notifications || [];
+              var route = {
+                name: 'api_v1_backend_article_get_item',
+                params: { id: content.pk_content }
+              };
 
-              contentNotifications.push(
-                {
-                  status: 0,
-                  body: null,
-                  title: content.title,
-                  send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
-                  image: null,
-                  transaction_id: null,
-                }
-              );
-              $scope.patch(content, 'webpush_notifications', contentNotifications)
-                .then(function() {
-                  $scope.list();
-                });
+              http.get(route).then(function(response) {
+                var notificationItem = angular.extend({}, response.data.item);
+                var contentNotifications = notificationItem.webpush_notifications || [];
+
+                contentNotifications.push(
+                  {
+                    status: 0,
+                    body: null,
+                    title: notificationItem.title,
+                    send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
+                    image: null,
+                    transaction_id: null,
+                  }
+                );
+                $scope.patch(content, 'webpush_notifications', contentNotifications)
+                  .then(function() {
+                    $scope.list();
+                  });
+              }, function() {
+              });
             }
           });
         };
