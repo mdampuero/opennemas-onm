@@ -48,7 +48,7 @@
   </dynamic-image>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('transaction_id')">
-    <span class="ng-cloak badge badge-default">
+    <span>
       <strong>
         [% item.transaction_id %]
       </strong>
