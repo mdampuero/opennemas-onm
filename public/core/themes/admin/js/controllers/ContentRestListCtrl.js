@@ -166,7 +166,7 @@
                   body: null,
                   title: content.title,
                   send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
-                  image: image,
+                  image: null,
                   transaction_id: null,
                 }
               );

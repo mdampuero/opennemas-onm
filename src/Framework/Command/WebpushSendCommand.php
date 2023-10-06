@@ -176,7 +176,7 @@ class WebpushSendCommand extends Command
                         try {
                             $sentNotification = $endpoint->sendNotification([
                                 'title'      => $article->title ?? '',
-                                'message'    => $article->body ?? '',
+                                'message'    => $article->description ?? '',
                                 'target_url' => $contentPath,
                                 'image'      => $imagePath,
                                 'icon'      => $favico,
@@ -188,7 +188,7 @@ class WebpushSendCommand extends Command
                             $notification->id,
                             [
                                 'status'         => $notificationStatus,
-                                'body'           => $article->body ?? '',
+                                'body'           => $article->description ?? '',
                                 'title'          => $article->title ?? '',
                                 'send_date'      => gmdate('Y-m-d H:i:s'),
                                 'image'          => $image->pk_content ?? null,

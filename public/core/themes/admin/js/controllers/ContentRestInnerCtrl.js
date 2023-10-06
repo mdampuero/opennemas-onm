@@ -320,7 +320,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           body: null,
           title: $scope.item.title,
           send_date: $window.moment.utc($window.moment(date)).format('YYYY-MM-DD HH:mm:ss'),
-          image: image,
+          image: null,
           transaction_id: null
         }
       );
