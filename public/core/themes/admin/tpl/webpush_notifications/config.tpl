@@ -9,18 +9,10 @@
             <li class="quicklinks">
               <h4>
                 <a class="no-padding" href="[% routing.generate('backend_webpush_notifications_list') %]">
-                  <i class="fa fa-camera"></i>
-                  {t}Web Push notifications{/t}
+                  <i class="fa fa-cog m-r-10"></i>
+                  {t}Web Push notifications Configuration{/t}
                 </a>
               </h4>
-            </li>
-            <li class="quicklinks hidden-xs m-l-5 m-r-5">
-              <h4>
-                <i class="fa fa-angle-right"></i>
-              </h4>
-            </li>
-            <li class="quicklinks">
-              <h4>{t}Configuration{/t}</h4>
             </li>
           </ul>
           <div class="all-actions pull-right">

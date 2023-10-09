@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Handles the actions for managing notifications
  */
-class WebPushNotificationsController extends BackendController
+class WebPushNotificationsDashboardController extends BackendController
 {
     /**
      * The extension name required by this controller.
@@ -68,7 +68,7 @@ class WebPushNotificationsController extends BackendController
             'token'   => $webPushNotificationsConfig['webpush_token']
         ];
 
-        return $this->render('webpush_notifications/config.tpl', [
+        return $this->render('webpush_notifications/dashboard.tpl', [
             'webpush_service'          => $webPushNotificationsService,
             'webpush_automatic'        => $webPushNotificationsConfig['webpush_automatic'],
             'webpush_delay'            => $webPushNotificationsConfig['webpush_delay'],

@@ -1,6 +1,6 @@
 # Web Push notifications controller routes
 backend_webpush_notifications_list:
-    path:     /webpush_notifications
+    path:     /webpush_notifications/history
     defaults: { _controller: BackendBundle:WebPushNotifications:list }
     options:
         expose: true
@@ -8,3 +8,11 @@ backend_webpush_notifications_list:
 backend_webpush_notifications_config:
     path:     /webpush_notifications/config
     defaults: { _controller: BackendBundle:WebPushNotifications:config }
+    options:
+        expose: true
+
+backend_webpush_notifications_dashboard:
+    path:     /webpush_notifications/dashboard
+    defaults: { _controller: BackendBundle:WebPushNotificationsDashboard:config }
+    options:
+        expose: true
