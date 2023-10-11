@@ -56,7 +56,8 @@ done
     public function create(Entity &$entity)
     {
         if (empty($entity->starttime) && !empty($entity->content_status)) {
-            $entity->starttime = new \DateTime();
+            $entity->starttime   = new \DateTime();
+            $entity->urldatetime = $entity->starttime->format('YmdHis');
         }
 
         // Don't allow changed date to be earlier than starttime
@@ -132,7 +133,15 @@ done
     public function update(Entity $entity)
     {
         if (empty($entity->starttime) && !empty($entity->content_status)) {
-            $entity->starttime = new \DateTime();
+            $entity->starttime   = new \DateTime();
+            $entity->urldatetime = $entity->starttime->format('YmdHis');
+        }
+
+        if (!empty($entity->starttime)
+            && !empty($entity->content_status)
+            && $entity->starttime > new \DateTime()
+        ) {
+            $entity->urldatetime = $entity->starttime->format('YmdHis');
         }
 
         // Don't allow changed date to be earlier than starttime

@@ -44,6 +44,7 @@ orm:
                 position:             integer
                 slug:                 l10n_string
                 starttime:            datetime
+                urldatetime:          string
                 coverage_start_time:  string
                 coverage_end_time:    string
                 title:                l10n_string
