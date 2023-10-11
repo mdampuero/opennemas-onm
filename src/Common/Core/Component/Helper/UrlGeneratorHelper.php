@@ -322,7 +322,7 @@ class UrlGeneratorHelper
 
         return $this->generateUriFromConfig('article', [
             'id'            => sprintf('%06d', $content->id),
-            'date'          => date('YmdHis', strtotime($created)),
+            'date'          => $this->getUrlDateTime($content),
             'category'      => urlencode($categorySlug),
             'slug'          => urlencode($content->slug),
         ]);
@@ -391,7 +391,7 @@ class UrlGeneratorHelper
 
         return $this->generateUriFromConfig(strtolower($content->content_type_name), [
             'id'       => sprintf('%06d', $content->id),
-            'date'     => date('YmdHis', strtotime($created)),
+            'date'     => $this->getUrlDateTime($content),
             'category' => urlencode($categorySlug),
             'slug'     => urlencode($content->slug),
         ]);
@@ -419,7 +419,7 @@ class UrlGeneratorHelper
 
         return $this->generateUriFromConfig('letter', [
             'id'       => sprintf('%06d', $content->id),
-            'date'     => date('YmdHis', strtotime($created)),
+            'date'     => $this->getUrlDateTime($content),
             'slug'     => urlencode($content->slug),
             'category' => urlencode(\Onm\StringUtils::generateSlug($content->author)),
         ]);
@@ -467,7 +467,7 @@ class UrlGeneratorHelper
 
         return $this->generateUriFromConfig($type, [
             'id'       => sprintf('%06d', $content->pk_content),
-            'date'     => date('YmdHis', strtotime($created)),
+            'date'     => $this->getUrlDateTime($content),
             'slug'     => urlencode($content->slug),
             'category' => urlencode($authorName),
         ]);
@@ -529,6 +529,26 @@ class UrlGeneratorHelper
         $uri = $this->container->get('router')->generate($routeName, $routeParams);
 
         return trim($uri, '/');
+    }
+
+    /**
+     * Returns the URL datetime for a content.
+     *
+     * @param mixed The content to get datetime for URL.
+     *
+     * @return string The user URI.
+     */
+    protected function getUrlDateTime($content)
+    {
+        if (!empty($content->urldatetime)) {
+            return $content->urldatetime;
+        }
+
+        $created = is_object($content->created)
+            ? $content->created->format('Y-m-d H:i:s')
+            : $content->created;
+
+        return date('YmdHis', strtotime($created));
     }
 
     /**
