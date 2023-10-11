@@ -152,13 +152,12 @@ done
         $live_blog_updates     = $entity->live_blog_updates;
         $webpush_notifications = $entity->webpush_notifications;
 
-        // Set urldatetime if starttime is already set and content is/will be published
+        // Set urldatetime if starttime is already set
         // And new starttime is greater than now (rescheduled)
         // OR new starttime is smaller than now
         //   And new starttime is smaller than old starttime
         //   And new starttime is smaller than urldatetime (e.g. scheduled to intime)
         if (!empty($entity->starttime)
-            && !empty($entity->content_status)
             && ($entity->starttime >= new \DateTime()
                 || ($entity->starttime < new \DateTime()
                     && $entity->starttime < $entity->getStored()['starttime']
