@@ -11,20 +11,18 @@ namespace Common\External\WebPush\Component\Endpoint;
 
 use Common\External\WebPush\Component\Exception\WebPushException;
 
-class SubscriberEndpoint extends Endpoint
+class StatusEndpoint extends Endpoint
 {
     /**
-     * Get the total and the active amount of webpush subscribers
+     * Get the data of the given Web Push notification.
      *
-     * @param array $params The action parameters.
-     *
-     * @return string Record inserted message.
+     * @return string
      *
      * @throws WebPushException If the action fails.
      */
-    public function getSubscribers()
+    public function getStatus($id)
     {
-        $url     = $this->url . $this->config['actions']['get_subscribers']['path'];
+        $url     = $this->url . $this->config['actions']['get_status']['path'] . $id;
         $headers = [
             'content-type'      => 'application/json',
             'webpushrKey'       => $this->auth->getConfiguration()['webpushrKey'],
@@ -39,13 +37,7 @@ class SubscriberEndpoint extends Endpoint
             $response = $this->client->get($url, $data);
             $body     = json_decode($response->getBody(), true);
         } catch (\Exception $e) {
-            throw new WebPushException('webpush.subscribers.get.failure: ' . $e->getMessage());
-        }
-
-        if (!array_key_exists('total_life_time_subscribers', $body)
-            && !array_key_exists('active_subscribers', $body)
-        ) {
-            throw new WebPushException('webpush.subscriber.get.failure');
+            throw new WebPushException('webpush.satus.get.failure: ' . $e->getMessage());
         }
 
         return $body;

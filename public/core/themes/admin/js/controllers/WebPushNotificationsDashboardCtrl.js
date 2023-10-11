@@ -34,13 +34,6 @@
          *
          * @type {Object}
          */
-        $scope.routes = {
-          checkServer:  'api_v1_backend_webpush_notifications_check_server'
-        };
-
-        $scope.settings = {
-          webpush_restricted_hours: []
-        };
 
         /**
          * @function init

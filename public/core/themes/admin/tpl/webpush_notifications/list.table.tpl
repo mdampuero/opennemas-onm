@@ -10,7 +10,7 @@
     <div class="checkbox column-filters-checkbox">
       <input id="transaction_id" checklist-model="app.columns.selected" checklist-value="'transaction_id'" type="checkbox">
       <label for="transaction_id">
-        {t}Transaction Id{/t}
+        {t}Identificator{/t}
       </label>
     </div>
     <div class="checkbox column-filters-checkbox">
@@ -23,6 +23,24 @@
       <input id="send_date" checklist-model="app.columns.selected" checklist-value="'send_date'" type="checkbox">
       <label for="send_date">
         {t}Send date{/t}
+      </label>
+    </div>
+    <div class="checkbox column-filters-checkbox">
+      <input id="successfully_sent" checklist-model="app.columns.selected" checklist-value="'successfully_sent'" type="checkbox">
+      <label for="successfully_sent">
+        {t}Successfully sent{/t}
+      </label>
+    </div>
+    <div class="checkbox column-filters-checkbox">
+      <input id="clicked" checklist-model="app.columns.selected" checklist-value="'clicked'" type="checkbox">
+      <label for="clicked">
+        {t}Clicked{/t}
+      </label>
+    </div>
+    <div class="checkbox column-filters-checkbox">
+      <input id="closed" checklist-model="app.columns.selected" checklist-value="'closed'" type="checkbox">
+      <label for="closed">
+        {t}Cerradas{/t}
       </label>
     </div>
 {/block}
@@ -39,6 +57,15 @@
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('send_date')" width="200">
       {t}Send date{/t}
+    </th>
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('successfully_sent')" width="200">
+      {t}Successfully sent{/t}
+    </th>
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('clicked')" width="200">
+      {t}Clicked{/t}
+    </th>
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('closed')" width="200">
+      {t}Cerradas{/t}
     </th>
 {/block}
 
@@ -71,6 +98,36 @@
     <span class="ng-cloak badge badge-default">
       <strong>
         [% item.send_date %]
+      </strong>
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('successfully_sent')">
+    <div class="spinner-wrapper" ng-show="!item.notificationData && item.status == 1">
+      <div class="loading-spinner"></div>
+    </div>
+    <span>
+      <strong>
+        [% item.notificationData.count.successfully_sent %]
+      </strong>
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('clicked')">
+    <div class="spinner-wrapper" ng-show="!item.notificationData && item.status == 1">
+    <div class="loading-spinner"></div>
+    </div>
+    <span>
+      <strong>
+        [% item.notificationData.count.clicked %]
+      </strong>
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('closed')">
+    <div class="spinner-wrapper" ng-show="!item.notificationData && item.status == 1">
+    <div class="loading-spinner"></div>
+    </div>
+    <span>
+      <strong>
+        [% item.notificationData.count.closed %]
       </strong>
     </span>
   </td>

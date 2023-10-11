@@ -186,7 +186,6 @@ class WebPushNotificationsController extends ApiController
     {
         $msg      = $this->get('core.messenger');
         $webpushr = $this->get('external.web_push.factory');
-        $endpoint = $webpushr->getEndpoint('subscriber');
 
         try {
             $endpoint = $webpushr->getEndpoint('subscriber');
@@ -197,5 +196,28 @@ class WebPushNotificationsController extends ApiController
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Retrieve all the data from the notification given.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getNotificationDataAction($id)
+    {
+        $msg      = $this->get('core.messenger');
+        $webpushr = $this->get('external.web_push.factory');
+
+        try {
+            $endpoint         = $webpushr->getEndpoint('status');
+            $notificationData = $endpoint->getStatus($id);
+            $msg->add(_('Server connection success!'), 'success');
+        } catch (\Exception $e) {
+            $msg->add($e->getMessage(), 'error', 400);
+        }
+
+        return new JsonResponse($notificationData);
     }
 }

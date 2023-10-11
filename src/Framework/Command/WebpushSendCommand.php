@@ -72,12 +72,14 @@ class WebpushSendCommand extends Command
                 $this->getContainer()->get('core.loader')
                     ->load($instance->internal_name);
 
-                $as                  = $this->getContainer()->get('api.service.content');
-                $webpushr            = $this->getContainer()->get('external.web_push.factory');
-                $endpoint            = $webpushr->getEndpoint('notification');
-                $articleService      = $this->getContainer()->get('api.service.article');
-                $notificationService = $this->getContainer()->get('api.service.webpush_notifications');
-                $onCooldown          = false;
+                $as                   = $this->getContainer()->get('api.service.content');
+                $webpushr             = $this->getContainer()->get('external.web_push.factory');
+                $notificationEndpoint = $webpushr->getEndpoint('notification');
+                $subscribersEndpoint  = $webpushr->getEndpoint('subscriber');
+                $statusEndpoint       = $webpushr->getEndpoint('status');
+                $articleService       = $this->getContainer()->get('api.service.article');
+                $notificationService  = $this->getContainer()->get('api.service.webpush_notifications');
+                $onCooldown           = false;
                 $this->getContainer()->get('core.security')->setInstance($instance);
                 if ($instance->hasMultilanguage()) {
                     continue;
@@ -174,7 +176,7 @@ class WebpushSendCommand extends Command
                         $notificationStatus = 1;
 
                         try {
-                            $sentNotification = $endpoint->sendNotification([
+                            $sentNotification = $notificationEndpoint->sendNotification([
                                 'title'      => $article->title ?? '',
                                 'message'    => $article->description ?? '',
                                 'target_url' => $contentPath,

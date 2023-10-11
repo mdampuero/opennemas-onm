@@ -20,8 +20,7 @@ class NotificationEndpoint extends Endpoint
      *
      * @return array
      *
-     * @throws \InvalidArgumentException If parameters are invalid.
-     * @throws WebPushException            If the action fails.
+     * @throws WebPushException If the action fails.
      */
     public function sendNotification($params)
     {

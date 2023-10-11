@@ -21,8 +21,8 @@
      *   Provides actions to list Web Push notifications.
      */
     .controller('WebPushNotificationsListCtrl', [
-      '$controller', '$scope', '$uibModal', 'http', 'messenger', 'oqlEncoder', 'routing',
-      function($controller, $scope, $uibModal, http, messenger, oqlEncoder, routing) {
+      '$controller', '$scope', '$uibModal', 'http', 'messenger', 'oqlEncoder', '$timeout', '$location',
+      function($controller, $scope, $uibModal, http, messenger, oqlEncoder, $timeout, $location) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
@@ -46,7 +46,8 @@
          * @type {Object}
          */
         $scope.routes = {
-          getList: 'api_v1_backend_webpush_notifications_get_list',
+          getList:   'api_v1_backend_webpush_notifications_get_list',
+          getNotificationData: 'api_v1_backend_webpush_notifications_get_notification_data'
         };
 
         /**
@@ -60,7 +61,7 @@
           $scope.backup.criteria    = $scope.criteria;
           $scope.app.columns.hidden = [ 'category', 'tags', 'content_views', 'created', 'changed', 'author', 'starttime', 'endtime' ];
           $scope.app.columns.selected =  _.uniq($scope.app.columns.selected
-            .concat([ 'send_date', 'transaction_id' ]));
+            .concat([ 'send_date', 'transaction_id', 'successfully_sent' ]));
 
           oqlEncoder.configure({
             placeholder: {
@@ -73,8 +74,52 @@
         };
 
         /**
-         * @function parseList
+         * @function list
          * @memberOf RestListCtrl
+         *
+         * @description
+         *   Reloads the list.
+         */
+        $scope.list = function() {
+          $scope.flags.http.loading = 1;
+
+          var oql   = oqlEncoder.getOql($scope.criteria);
+          var route = {
+            name: $scope.routes.getList,
+            params: { oql: oql }
+          };
+
+          $location.search('oql', oql);
+
+          return http.get(route).then(function(response) {
+            $scope.data = response.data;
+
+            if (!response.data.items) {
+              $scope.data.items = [];
+            }
+
+            $scope.items = $scope.data.items;
+            $scope.parseList(response.data);
+
+            $scope.items.forEach(function(item, index) {
+              if (item.status == 1) {
+                setTimeout(function() {
+                  $scope.getNotificationData(item);
+                }, index * 1000);
+              }
+            });
+
+            $scope.disableFlags('http');
+          }, function(response) {
+            messenger.post(response.data);
+            $scope.disableFlags('http');
+            $scope.items = [];
+          });
+        };
+
+        /**
+         * @function parseList
+         * @memberOf WebPushNotificationsListCtrl
          *
          * @description
          *   Parses the response and adds information to the scope.
@@ -92,6 +137,31 @@
          */
         $scope.isSelectable = function() {
           return false;
+        };
+
+        /**
+         * @function check
+         * @memberOf WebPushNotificationsListCtrl
+         *
+         * @description
+         *   Retrieve data from the given notification.
+         */
+        $scope.getNotificationData = function(item) {
+          $scope.flags.http.checking = true;
+
+          var route = {
+            name: $scope.routes.getNotificationData,
+            params: { id: item.transaction_id }
+          };
+
+          http.get(route).then(function(response) {
+            item.notificationData = response.data;
+            $scope.disableFlags('http');
+            $scope.status = 'success';
+          }, function() {
+            $scope.disableFlags('http');
+            $scope.status = 'failure';
+          });
         };
       }
     ]);
