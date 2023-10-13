@@ -27,6 +27,35 @@ class DataLayerHenneo extends DataLayer
     }
 
     /**
+     * Generates Data Layer code.
+     *
+     * @param Array   $data The Data Layer data.
+     *
+     * @return String $code The generated code.
+     */
+    public function getDataLayerCode()
+    {
+        $data = $this->getDataLayer();
+        $code = parent::getDataLayerCode();
+
+        // Add Marfeel custom metadata
+        $code .= "\n" . '<!-- Marfeel index meta-tags -->' . "\n";
+        foreach ($data as $key => $value) {
+            $code .= '<meta property="mrf:tags" content="' . $key . ':' . $value . '" />' . "\n";
+        }
+
+        $author  = $data['createdby'] ?? '';
+        $section = $data['categoria'] ?? '';
+
+        $code .= '<meta property="mrf:tags" content="subcategoria:sinsc" />' . "\n";
+        $code .= '<meta property="mrf:tags" content="terciariacategoria:sinct" />' . "\n";
+        $code .= '<meta property="mrf:authors" content="' . $author . '" />' . "\n";
+        $code .= '<meta property="mrf:sections" content="' . $section . '" />' . "\n";
+
+        return $code;
+    }
+
+    /**
      * Returns the customization for the extension.
      *
      * @param string $extension The extension to customize.
