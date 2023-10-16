@@ -75,11 +75,11 @@ EOF
         $this->input  = $input;
         $this->output = $output;
 
-        $epp              = $input->getOption('epp');
         $this->fields     = $this->input->getOption('fields');
-        $id               = $input->getOption('instance-id');
-        $name             = $input->getOption('instance-name');
+        $this->id         = $input->getOption('instance-id');
+        $this->name       = $input->getOption('instance-name');
         $this->onlyValues = $this->input->getOption('only-values');
+        $epp              = max(1, $input->getOption('epp'));
 
         $instance = $this->getContainer()->get('core.loader.instance')
             ->loadInstanceByName('manager')
@@ -97,6 +97,11 @@ EOF
 
         $oqlTemplate = 'limit %s offset %s';
 
+        if (!empty($this->id) || !empty($this->name)) {
+            $this->printInstanceInfo($this->getInstaceByNameOrId());
+            return;
+        }
+
         // Iterate over the pages and show information for the instances on that page
         $page = 0;
         while ($page * $epp < $instanceCount) {
@@ -106,18 +111,6 @@ EOF
             $instances = $this->getContainer()->get('orm.manager')
                 ->getRepository('Instance')->findBy($oql);
 
-            // If id instace parameter exits, use specific instance
-            if ($id) {
-                $instances = array_filter($instances, function ($instance) use ($id) {
-                    return $instance->id == $id;
-                });
-            }
-
-            if ($name) {
-                $instances = array_filter($instances, function ($instance) use ($name) {
-                    return $instance->internal_name == $name;
-                });
-            }
             $this->printInstanceInfo($instances);
             $page++;
         }
@@ -184,6 +177,22 @@ EOF
             $str = rtrim($str, ';');
 
             $this->output->writeln($str);
+        }
+    }
+
+    private function getInstaceByNameOrId()
+    {
+        try {
+            $filter = empty($this->id)
+                ? sprintf('internal_name = "%s"', $this->name)
+                : sprintf('id = "%s"', $this->id);
+
+            $oql = sprintf('%s limit 1', $filter);
+
+            return $this->getContainer()->get('orm.manager')
+                ->getRepository('Instance')->findBy($oql);
+        } catch (\Exception $e) {
+            return [];
         }
     }
 }
