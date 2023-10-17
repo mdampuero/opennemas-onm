@@ -75,8 +75,6 @@ class WebpushSendCommand extends Command
                 $as                   = $this->getContainer()->get('api.service.content');
                 $webpushr             = $this->getContainer()->get('external.web_push.factory');
                 $notificationEndpoint = $webpushr->getEndpoint('notification');
-                $subscribersEndpoint  = $webpushr->getEndpoint('subscriber');
-                $statusEndpoint       = $webpushr->getEndpoint('status');
                 $articleService       = $this->getContainer()->get('api.service.article');
                 $notificationService  = $this->getContainer()->get('api.service.webpush_notifications');
                 $onCooldown           = false;

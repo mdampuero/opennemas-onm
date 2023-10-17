@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 10:12+0000\n"
-"PO-Revision-Date: 2023-10-05 12:16+0200\n"
+"POT-Creation-Date: 2023-10-16 14:55+0000\n"
+"PO-Revision-Date: 2023-10-16 17:03+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -310,6 +310,12 @@ msgstr "Boletín de noticias"
 
 msgid "Web Push"
 msgstr "Web Push"
+
+msgid "History"
+msgstr ""
+
+msgid "Configuration"
+msgstr "Configuración"
 
 msgid "Utilities"
 msgstr "Utilidades"
@@ -1790,9 +1796,6 @@ msgstr "Ocultar etiquetas"
 
 msgid "Prevent search engine indexation"
 msgstr "Evitar el indexado de motores de búsqueda"
-
-msgid "Configuration"
-msgstr "Configuración"
 
 msgid "Cannot use a language code as subdirectory"
 msgstr "No se puede usar un código de idioma como subdirectorio"
@@ -4581,7 +4584,13 @@ msgstr "Enlace para correo electrónico a"
 msgid "Web Push notifications"
 msgstr "Notificaciones Web Push"
 
-msgid "Web Push notifications module config"
+msgid "Web Push notifications History"
+msgstr "Historial de notificaciones Web Push"
+
+msgid "Web Push notifications Dashboard"
+msgstr "Panel de control de notificaciones Web Push"
+
+msgid "Web Push notifications Configuration"
 msgstr "Configuración del módulo Web Push"
 
 msgid "Web Push service"
@@ -4617,14 +4626,23 @@ msgstr "Token de autenticación"
 msgid "Public key"
 msgstr "Llave pública"
 
-msgid "Transaction Id"
-msgstr "Identificador de transacción"
+msgid "Identificator"
+msgstr "Identificador"
 
 msgid "Send date"
 msgstr "Fecha de envío"
 
-msgid "Edit content"
-msgstr "Editar contenido"
+msgid "Successfully sent"
+msgstr "Enviado con éxito"
+
+msgid "Clicked"
+msgstr "Clickadas"
+
+msgid "Cerradas"
+msgstr ""
+
+msgid "Transaction Id"
+msgstr "Identificador de transacción"
 
 msgid "Config opinion module"
 msgstr "Configuración del módulo «Opinión»"
@@ -6793,9 +6811,6 @@ msgstr "L10n"
 msgid "Read"
 msgstr "Leídas"
 
-msgid "Clicked"
-msgstr "Clickadas"
-
 msgid "Opened"
 msgstr "Abiertas"
 
@@ -7360,6 +7375,9 @@ msgstr "Emails"
 msgid "Page views"
 msgstr "Páginas vistas"
 
+msgid "Web Push subscribers"
+msgstr "Suscriptores Web Push"
+
 msgid "Do you want to delete the purchase?"
 msgstr "Quieres eliminar esta compra?"
 
@@ -7446,6 +7464,9 @@ msgstr ""
 msgid "Group name"
 msgstr "Nombre del grupo"
 
+#~ msgid "Edit content"
+#~ msgstr "Editar contenido"
+
 #~ msgid "Won't take effect on manual sending"
 #~ msgstr "No tendrá efecto para el envío manual"
 
@@ -7479,9 +7500,6 @@ msgstr "Nombre del grupo"
 
 #~ msgid "Book '%s' deleted successfully."
 #~ msgstr "Libro «%s» eliminado correctamente."
-
-#~ msgid "Special successfully created."
-#~ msgstr "Especial creado con éxito."
 
 #~ msgid "Unable to create the new special."
 #~ msgstr "No se pudo crear el nuevo especial."

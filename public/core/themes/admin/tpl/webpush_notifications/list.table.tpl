@@ -68,7 +68,16 @@
       {t}Cerradas{/t}
     </th>
 {/block}
-
+{block name="commonColumnsBody"}
+  <td class="v-align-middle" ng-if="isColumnEnabled('title')">
+    <div class="table-text">
+      <a class="text-black" href="[% routing.generate('backend_article_show', { id: item.fk_content }) %]">[% item.title %]</a>
+    </div>
+    <div class="listing-inline-actions m-t-10 btn-group">
+      {block name="itemActions"}{/block}
+    </div>
+  </td>
+{/block}
 {block name="customColumnsBody"}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('image')">
   <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.image" transform="zoomcrop,220,220">
@@ -131,11 +140,6 @@
       </strong>
     </span>
   </td>
-{/block}
-{block name="itemActions"}
- <a class="btn btn-white btn-small" href="[% routing.generate('backend_article_show', { id: item.fk_content }) %]" target="_blank" uib-tooltip="{t}Edit content{/t}" tooltip-placement="top">
- <i class="fa fa-external-link"></i>
- </a>
 {/block}
 
 

@@ -105,7 +105,7 @@
               if (item.status == 1) {
                 setTimeout(function() {
                   $scope.getNotificationData(item);
-                }, index * 1000);
+                }, index * 1001);
               }
             });
 
