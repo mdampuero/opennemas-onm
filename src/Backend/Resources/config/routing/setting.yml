@@ -25,3 +25,7 @@ backend_settings_sitemap:
 backend_settings_master:
     path:     /settings/master
     defaults: { _controller: BackendBundle:MasterSettings:config }
+
+backend_settings_theme:
+    path:     /settings/theme
+    defaults: { _controller: BackendBundle:ThemeSettings:config }

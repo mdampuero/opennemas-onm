@@ -110,6 +110,20 @@ api_v1_backend_settings_master_save:
     options:
         expose: true
 
+api_v1_backend_settings_theme_list:
+    path:     /settings/theme
+    defaults: { _controller: ApiBundle:V1/Backend/ThemeSetting:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_settings_theme_save:
+    path:     /settings/theme
+    defaults: { _controller: ApiBundle:V1/Backend/ThemeSetting:save }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
 api_v1_backend_settings_save:
     path:     /settings
     defaults: { _controller: ApiBundle:V1/Backend/Setting:save }

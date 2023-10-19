@@ -3447,6 +3447,31 @@ textarea[class*="span"] {
 .radio input[type=radio]:checked + label:before {
   border: 1px solid #8e9095;
 }
+.radio label.no-radio {
+  border: 1px solid #d1dade;
+  border-radius: 4px;
+  padding: 15px;
+}
+.radio input[type=radio]:checked + label.no-radio {
+  border-color: #fff;
+  box-shadow: 0 0 5px 5px #76cbf0;
+}
+.radio input[type=radio] + label.no-radio:hover {
+  background-color: rgb(118 203 240 / 5%);
+}
+.radio input[type=radio] + label.no-radio > * {
+  white-space: normal;
+}
+.radio input[type=radio]:checked + label.no-radio > * {
+  color: #0090d9;
+}
+.radio input[type=radio]:checked + label.no-radio:before {
+  display: none;
+}
+.radio label.no-radio:before,
+.radio label.no-radio:after {
+  display: none;
+}
 .checkbox input[type=radio][disabled] + label:after {
   background-color: #eceff3;
 }
