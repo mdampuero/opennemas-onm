@@ -38,14 +38,28 @@ class DataLayerHenneo extends DataLayer
         $data = $this->getDataLayer();
         $code = parent::getDataLayerCode();
 
+        $author  = $data['createdby'] ?? '';
+        $section = $data['categoria'] ?? '';
+
+        // Remove unnecessary elements for Marfeel
+        $data = array_filter($data, function ($key) {
+            return !in_array($key, ['anteTitulo', 'categoria_id', 'createdby', 'platform']);
+        }, ARRAY_FILTER_USE_KEY);
+
         // Add Marfeel custom metadata
         $code .= "\n" . '<!-- Marfeel index meta-tags -->' . "\n";
         foreach ($data as $key => $value) {
-            $code .= '<meta property="mrf:tags" content="' . $key . ':' . $value . '" />' . "\n";
+            $content = $key . ':' . $value;
+            // Check for keys with multiple values
+            if (in_array($key, ['keywords', 'seotags'])) {
+                $content = '';
+                $values  = explode(',', $value);
+                foreach ($values as $value) {
+                    $content .= $key . ':' . $value . ';';
+                }
+            }
+            $code .= '<meta property="mrf:tags" content="' . $content . '" />' . "\n";
         }
-
-        $author  = $data['createdby'] ?? '';
-        $section = $data['categoria'] ?? '';
 
         $code .= '<meta property="mrf:tags" content="subcategoria:sinsc" />' . "\n";
         $code .= '<meta property="mrf:tags" content="terciariacategoria:sinct" />' . "\n";
