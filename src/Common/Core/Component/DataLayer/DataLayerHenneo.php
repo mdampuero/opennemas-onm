@@ -43,7 +43,10 @@ class DataLayerHenneo extends DataLayer
 
         // Remove unnecessary elements for Marfeel
         $data = array_filter($data, function ($key) {
-            return !in_array($key, ['anteTitulo', 'categoria_id', 'createdby', 'platform']);
+            return !in_array(
+                strtolower($key),
+                ['antetitulo', 'categoria_id', 'createdby', 'fechaactualizacion', 'platform']
+            );
         }, ARRAY_FILTER_USE_KEY);
 
         // Add Marfeel custom metadata
