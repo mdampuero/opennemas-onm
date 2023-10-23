@@ -54,7 +54,7 @@ class DataLayerHenneo extends DataLayer
         foreach ($data as $key => $value) {
             $content = $key . ':' . $value;
             // Check for keys with multiple values
-            if (in_array($key, ['keywords', 'seotags'])) {
+            if (in_array($key, ['keywords', 'seotag'])) {
                 $content = '';
                 $values  = explode(',', $value);
                 foreach ($values as $value) {
