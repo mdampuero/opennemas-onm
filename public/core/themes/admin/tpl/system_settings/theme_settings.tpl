@@ -175,6 +175,24 @@
                           </div>
                         </div>
                       </div>
+                      <div class="col-xs-12 col-md-4 m-t-15">
+                        <h4>
+                          <i class="fa fa-code-fork"></i>
+                          {t}Breadcrumb{/t}
+                        </h4>
+                        <label class="form-label" for="theme-header-color">
+                          <span class="help">
+                            {t}Set display of routes{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <select id="theme-breadcrumb" name="theme-breadcrumb" ng-model="settings.theme_options.breadcrumb" required>
+                              <option value="[% breadcrumb_name %]" ng-repeat="(breadcrumb_name,breadcrumb_value) in extra.theme_skins[settings.theme_skin].params.options.option_breadcrumb" ng-selected="[% breadcrumb_name === settings.theme_options.breadcrumb || settings.theme_options.breadcrumb == undefined %]">[% breadcrumb_value %]</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div class="row m-b-15">
                       <div class="col-xs-12 m-t-15">
@@ -280,7 +298,7 @@
                       <div class="col-xs-12 m-t-15" ng-if="settings.theme_options.article_header_media === 'header'">
                         <label class="form-label m-b-15" for="theme-option-align-header">
                           <h4>
-                            <i class="fa fa-sort-amount-asc"></i>
+                            <i class="fa fa-align-left"></i>
                             {t}Content header align{/t}
                           </h4>
                           <span class="help">
