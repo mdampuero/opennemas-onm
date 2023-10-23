@@ -26,21 +26,27 @@
       </label>
     </div>
     <div class="checkbox column-filters-checkbox">
-      <input id="successfully_sent" checklist-model="app.columns.selected" checklist-value="'successfully_sent'" type="checkbox">
-      <label for="successfully_sent">
-        {t}Successfully sent{/t}
+      <input id="impressions" checklist-model="app.columns.selected" checklist-value="'impressions'" type="checkbox">
+      <label for="impressions">
+        {t}Impressions{/t}
       </label>
     </div>
     <div class="checkbox column-filters-checkbox">
-      <input id="clicked" checklist-model="app.columns.selected" checklist-value="'clicked'" type="checkbox">
-      <label for="clicked">
-        {t}Clicked{/t}
+      <input id="clicks" checklist-model="app.columns.selected" checklist-value="'clicks'" type="checkbox">
+      <label for="clicks">
+        {t}Clicks{/t}
       </label>
     </div>
     <div class="checkbox column-filters-checkbox">
       <input id="closed" checklist-model="app.columns.selected" checklist-value="'closed'" type="checkbox">
       <label for="closed">
-        {t}Cerradas{/t}
+        {t}Closed{/t}
+      </label>
+    </div>
+    <div class="checkbox column-filters-checkbox">
+      <input id="ctr" checklist-model="app.columns.selected" checklist-value="'ctr'" type="checkbox">
+      <label for="ctr">
+        {t}CTR{/t}
       </label>
     </div>
 {/block}
@@ -58,14 +64,19 @@
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('send_date')" width="200">
       {t}Send date{/t}
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('successfully_sent')" width="200">
-      {t}Successfully sent{/t}
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('impressions')" width="200">
+      {t}Impressions{/t}
+      <i class="fa fa-info-circle text-info" uib-tooltip-html="'Times a notification was<br>displayed to the user'" tooltip-placement="bottom"></i>
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('clicked')" width="200">
-      {t}Clicked{/t}
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('clicks')" width="200">
+      {t}Clicks{/t}
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('closed')" width="200">
-      {t}Cerradas{/t}
+      {t}Closed{/t}
+    </th>
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')" width="200">
+      {t}CTR{/t}
+      <i class="fa fa-info-circle text-info" uib-tooltip-html="'Interactions (Clicks + Closed)<br>divided by Impressions'" tooltip-placement="bottom"></i>
     </th>
 {/block}
 {block name="commonColumnsBody"}
@@ -110,33 +121,31 @@
       </strong>
     </span>
   </td>
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('successfully_sent')">
-    <div class="spinner-wrapper" ng-show="!item.notificationData && item.status == 1">
-      <div class="loading-spinner"></div>
-    </div>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('impressions')">
     <span>
       <strong>
-        [% item.notificationData.count.successfully_sent %]
+        [% item.impressions %]
       </strong>
     </span>
   </td>
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('clicked')">
-    <div class="spinner-wrapper" ng-show="!item.notificationData && item.status == 1">
-    <div class="loading-spinner"></div>
-    </div>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('clicks')">
     <span>
       <strong>
-        [% item.notificationData.count.clicked %]
+        [% item.clicks %]
       </strong>
     </span>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('closed')">
-    <div class="spinner-wrapper" ng-show="!item.notificationData && item.status == 1">
-    <div class="loading-spinner"></div>
-    </div>
     <span>
       <strong>
-        [% item.notificationData.count.closed %]
+        [% item.closed %]
+      </strong>
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')">
+    <span>
+      <strong>
+        [%  (item.clicks + item.closed) / item.impressions * 100 %] %
       </strong>
     </span>
   </td>

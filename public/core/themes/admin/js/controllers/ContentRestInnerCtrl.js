@@ -298,7 +298,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      * @description
      *   Send webpush notification to all subscribers
      */
-    $scope.sendWPNotification = function(item, createNotification) {
+    $scope.sendWPNotification = function(item) {
       if (!$scope.validate()) {
         messenger.post(window.strings.forms.not_valid, 'error');
         return;
@@ -306,8 +306,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       if (!item) {
         return;
       }
-
-      var image = $scope.data.featuredFrontpage ? $scope.data.featuredFrontpage.target_id : null;
 
       if ($scope.hasPendingNotifications()) {
         $scope.removePendingNotification(false);
@@ -321,7 +319,10 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           title: $scope.item.title,
           send_date: $window.moment.utc($window.moment(date)).format('YYYY-MM-DD HH:mm:ss'),
           image: null,
-          transaction_id: null
+          transaction_id: null,
+          impressions: null,
+          clicks: null,
+          closed: null
         }
       );
 

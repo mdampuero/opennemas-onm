@@ -24,28 +24,29 @@ class SubscriberEndpoint extends Endpoint
      */
     public function getSubscribers()
     {
-        $url     = $this->url . $this->config['actions']['get_subscribers']['path'];
-        $headers = [
-            'content-type'      => 'application/json',
-            'webpushrKey'       => $this->auth->getConfiguration()['webpushrKey'],
-            'webpushrAuthToken' => $this->auth->getConfiguration()['webpushrAuthToken']
-        ];
-
-        $data = [
-            'headers' => $headers
-        ];
-
         try {
+            $url     = $this->url . $this->config['actions']['get_subscribers']['path'];
+            $headers = [
+                'content-type'      => 'application/json',
+                'webpushrKey'       => $this->auth->getConfiguration()['webpushrKey'],
+                'webpushrAuthToken' => $this->auth->getConfiguration()['webpushrAuthToken']
+            ];
+
+            $data = [
+                'headers' => $headers
+            ];
+
             $response = $this->client->get($url, $data);
             $body     = json_decode($response->getBody(), true);
+            if ($body['active_subscribers'] >= '0') {
+                getService('application.log')
+                    ->info('Web Push active subscribers amount was retrieved successfully');
+            }
         } catch (\Exception $e) {
+            getService('application.log')
+                ->error('Error retrieving the amount of Web Push active subscribers from server'
+                . $e->getMessage());
             throw new WebPushException('webpush.subscribers.get.failure: ' . $e->getMessage());
-        }
-
-        if (!array_key_exists('total_life_time_subscribers', $body)
-            && !array_key_exists('active_subscribers', $body)
-        ) {
-            throw new WebPushException('webpush.subscriber.get.failure');
         }
 
         return $body;

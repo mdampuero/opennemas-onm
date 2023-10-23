@@ -108,6 +108,9 @@ class WebPushNotificationsHelper
             'send_date'      => $data['send_date'] ?? gmdate('Y-m-d H:i:s'),
             'image'          => $data['image'] ?? null,
             'transaction_id' => $data['transaction_id'] ?? '',
+            'impressions'    => $data['impressions'] ?? '',
+            'clicks'         => $data['clicks'] ?? '',
+            'closed'         => $data['closed'] ?? '',
         ];
 
         return $notification;

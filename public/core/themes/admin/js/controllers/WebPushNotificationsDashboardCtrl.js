@@ -16,15 +16,27 @@
      * @requires linker
      * @requires localizer
      * @requires oqlEncoder
+     * @requires $window
      *
      * @description
      *   Provides actions to list articles.
      */
     .controller('WebPushNotificationsDashboardCtrl', [
-      '$controller', '$scope', 'cleaner', 'http', 'messenger',
-      function($controller, $scope, cleaner, http, messenger) {
+      '$controller', '$scope', 'cleaner', 'http', 'messenger', 'oqlEncoder', '$location', '$window',
+      function($controller, $scope, cleaner, http, messenger, oqlEncoder, $location, $window) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+
+        /**
+         * The criteria to search.
+         *
+         * @type {Object}
+         */
+        $scope.criteria = {
+          epp: 10,
+          orderBy: { id:  'desc' },
+          page: 1,
+        };
 
         /**
          * @memberOf WebPushNotificationsDashboardCtrl
@@ -34,6 +46,9 @@
          *
          * @type {Object}
          */
+        $scope.routes = {
+          getList:   'api_v1_backend_webpush_notifications_get_list',
+        };
 
         /**
          * @function init
@@ -45,10 +60,128 @@
         $scope.init = function() {
           http.get('api_v1_backend_webpush_notifications_get_config').then(function(response) {
             $scope.settings = response.data;
-            $scope.settings.webpush_delay = $scope.settings.webpush_delay || '1';
             $scope.disableFlags('http');
           }, function() {
             $scope.disableFlags('http');
+          });
+
+          $scope.list();
+        };
+
+        /**
+         * @function list
+         * @memberOf RestListCtrl
+         *
+         * @description
+         *   Reloads the list.
+         */
+        $scope.list = function() {
+          $scope.flags.http.loading = 1;
+
+          var oql   = oqlEncoder.getOql($scope.criteria);
+          var route = {
+            name: $scope.routes.getList,
+            params: { oql: oql }
+          };
+
+          $location.search('oql', oql);
+
+          return http.get(route).then(function(response) {
+            $scope.data = response.data;
+
+            if (!response.data.items) {
+              $scope.data.items = [];
+            }
+
+            $scope.items = $scope.data.items;
+
+            // Gets monthly data for notifications in list
+            var lastMonthDate = $window.moment().subtract(1, 'months').format('YYYY-MM-DD HH:mm:ss');
+
+            var lastMonthItems = $scope.items.filter((item) => item.send_date >= lastMonthDate);
+            var monthlyImpressions = 0;
+            var monthlyClicks      = 0;
+            var monthlyClosed      = 0;
+
+            lastMonthItems.forEach(function(item) {
+              monthlyImpressions += item.impressions;
+              monthlyClicks += item.clicks;
+              monthlyClosed += item.closed;
+            });
+
+            $scope.monthlyImpressions    = monthlyImpressions;
+            $scope.monthlyInteractions   = monthlyClicks + monthlyClosed;
+            $scope.monthlyCTR            = $scope.monthlyInteractions / monthlyImpressions;
+
+            // Sets up the active subscribers chart
+            var endDate = $window.moment().format('YYYY-MM-DD');
+            var startDate = $window.moment().subtract(1, 'months').format('YYYY-MM-DD');
+
+            var labels = [];
+            var currentDay = $window.moment(startDate);
+
+            while (currentDay.isSameOrBefore(endDate)) {
+              labels.push(currentDay.format('MM-DD'));
+              currentDay.add(1, 'days');
+            }
+
+            $scope.labels = labels;
+            $scope.series = [ 'Subs' ];
+            $scope.data = [ $scope.settings.webpush_active_subscribers ];
+
+            var numberOfDays = $scope.labels.length;
+
+            var numberOfSubs = $scope.settings.webpush_active_subscribers.length;
+
+            var dataValues = Array(numberOfDays - numberOfSubs).fill(null);
+
+            dataValues = dataValues.concat($scope.settings.webpush_active_subscribers.reverse());
+
+            $scope.data = [ dataValues ];
+
+            $scope.options = {
+              responsive: true,
+              maintainAspectRatio: true,
+              aspectRatio: 4,
+              scales: {
+                yAxes: [
+                  {
+                    ticks: {
+                      beginAtZero: true,
+                      stepSize: 1,
+                      callback: function(value) {
+                        if (value % 1 === 0) {
+                          return value;
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            };
+
+            $scope.parseList(response.data);
+
+            $scope.disableFlags('http');
+          }, function(response) {
+            messenger.post(response.data);
+            $scope.disableFlags('http');
+            $scope.items = [];
+          });
+        };
+
+        /**
+         * @function parseList
+         * @memberOf WebPushNotificationsListCtrl
+         *
+         * @description
+         *   Parses the response and adds information to the scope.
+         *
+         * @param {Object} data The data in the response.
+         */
+        $scope.parseList = function(data) {
+          data.items.forEach(function(item) {
+            item.image = Number(item.image);
           });
         };
       }

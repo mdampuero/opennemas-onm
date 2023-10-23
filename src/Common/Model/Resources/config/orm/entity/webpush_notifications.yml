@@ -7,6 +7,9 @@ orm:
                 id:              integer
                 fk_content:      integer
                 transaction_id:  string
+                impressions:     integer
+                clicks:          integer
+                closed:          integer
                 status:          integer
                 body:            string
                 title:           string
@@ -93,6 +96,15 @@ orm:
                         transaction_id:
                             type: string
                             options: { default: null, length: 512 }
+                        impressions:
+                            type: integer
+                            options: { length: 10, default: null, notnull: false }
+                        clicks:
+                            type: integer
+                            options: { length: 10, default: null, notnull: false }
+                        closed:
+                            type: integer
+                            options: { length: 10, default: null, notnull: false }
                         status:
                             type: integer
                             options: { length: 10, default: 0, notnull: true }

@@ -22,21 +22,30 @@ class StatusEndpoint extends Endpoint
      */
     public function getStatus($id)
     {
-        $url     = $this->url . $this->config['actions']['get_status']['path'] . $id;
-        $headers = [
-            'content-type'      => 'application/json',
-            'webpushrKey'       => $this->auth->getConfiguration()['webpushrKey'],
-            'webpushrAuthToken' => $this->auth->getConfiguration()['webpushrAuthToken']
-        ];
-
-        $data = [
-            'headers' => $headers
-        ];
-
         try {
+            $url     = $this->url . $this->config['actions']['get_status']['path'] . $id;
+            $headers = [
+                'content-type'      => 'application/json',
+                'webpushrKey'       => $this->auth->getConfiguration()['webpushrKey'],
+                'webpushrAuthToken' => $this->auth->getConfiguration()['webpushrAuthToken']
+            ];
+
+            $data = [
+                'headers' => $headers
+            ];
+
+
             $response = $this->client->get($url, $data);
             $body     = json_decode($response->getBody(), true);
+            if ($body['status'] == 'sent') {
+                getService('application.log')
+                    ->info('Notification ' . $body['campaign_id'] . ' was retrieved successfully');
+            }
         } catch (\Exception $e) {
+            getService('application.log')
+                ->error('Error retrieving the notification from server with campaign_id '
+                . $id
+                . $e->getMessage());
             throw new WebPushException('webpush.satus.get.failure: ' . $e->getMessage());
         }
 

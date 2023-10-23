@@ -614,9 +614,9 @@ done
         }
 
         $sql = "insert into content_notifications"
-            . "(fk_content, status, body, title, send_date, image, transaction_id) values "
+            . "(fk_content, status, body, title, send_date, image, transaction_id, impressions, clicks, closed) values "
             . str_repeat(
-                '(?,?,?,?,?,?,?),',
+                '(?,?,?,?,?,?,?,?,?,?),',
                 count($webpush_notifications)
             );
 
@@ -632,6 +632,9 @@ done
             $value['title']          = empty($value['title']) ? null : $value['title'];
             $value['status']         = empty($value['status']) && $value['status'] != 0 ? 2 : $value['status'];
             $value['transaction_id'] = empty($value['transaction_id']) ? null : $value['transaction_id'];
+            $value['impressions']    = empty($value['impressions']) ? null : $value['impressions'];
+            $value['clicks']         = empty($value['clicks']) ? null : $value['clicks'];
+            $value['closed']         = empty($value['closed']) ? null : $value['closed'];
 
 
 
@@ -641,7 +644,10 @@ done
                 $value['title'],
                 $value['send_date'],
                 $value['image'],
-                $value['transaction_id']
+                $value['transaction_id'],
+                $value['impressions'],
+                $value['clicks'],
+                $value['closed'],
             ]));
 
             $types = array_merge($types, [
@@ -652,6 +658,9 @@ done
                 empty($value['send_date']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
                 empty($value['image']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['transaction_id']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['impressions']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+                empty($value['clicks']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+                empty($value['closed']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
             ]);
         }
         $this->conn->executeQuery($sql, $params, $types);

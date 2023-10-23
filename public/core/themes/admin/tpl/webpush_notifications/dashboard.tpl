@@ -22,10 +22,79 @@
       <div class="grid simple">
         <div class="grid-body ng-cloak">
             <div class="row">
-              <div class="col-md-3">
-              {t}Dashboard{/t}
+              <div class="col-xs-3">
+                <div class="m-t-5">
+                  <div class="showcase-info showcase-info-score panel m-b-0">
+                    <div class="form-status text-center">
+                      <p class="onm-score text-center lead m-b-5">
+                        [% settings.webpush_active_subscribers[0] %]
+                      </p>
+                    </div>
+                    <label class="form-label text-center m-t-10">{t}Active Subscribers{/t}</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="m-t-5">
+                  <div class="showcase-info showcase-info-score panel m-b-0">
+                    <div class="form-status text-center">
+                      <p class="onm-score text-center lead m-b-5">
+                         [% monthlyImpressions %]
+                      </p>
+                    </div>
+                    <label class="form-label text-center m-t-10">
+                      {t}Impressions{/t}
+                      <i class="fa fa-info-circle text-info" uib-tooltip-html="'Times a notification was<br>displayed to the user'" tooltip-placement="bottom"></i>
+                      <br>
+                      <small class="form-label text-center ">{t}Monthly{/t}</small>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="m-t-5">
+                  <div class="showcase-info showcase-info-score panel m-b-0">
+                    <div class="form-status text-center">
+                      <p class="onm-score text-center lead m-b-5">
+                        [% monthlyInteractions %]
+                      </p>
+                    </div>
+                      <label class="form-label text-center m-t-10">
+                        {t}Interactions{/t}
+                        <i class="fa fa-info-circle text-info" uib-tooltip-html="'Times a notification was<br>clicked or closed'" tooltip-placement="bottom"></i>
+                        <br>
+                        <small class="form-label text-center ">{t}Monthly{/t}</small>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="m-t-5">
+                  <div class="showcase-info showcase-info-score panel m-b-0">
+                    <div class="form-status text-center">
+                      <p class="onm-score text-center lead m-b-5">
+                        [% monthlyCTR * 100 %]%
+                      </p>
+                    </div>
+                      <label class="form-label text-center m-t-10">
+                        {t}CTR{/t}
+                        <i class="fa fa-info-circle text-info" uib-tooltip-html="'Interactions (Clicks + Closed)<br>divided by Impressions'" tooltip-placement="bottom"></i>
+                        <br>
+                        <small class="form-label text-center ">{t}Monthly{/t}</small>
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
+        <div class="row m-t-30">
+          <div class="col-xs-12">
+            <div class="panel">
+              <div class="panel-heading">{t}New Active Subscribers {/t}</div>
+              <div class="panel-body">
+                <canvas id="myChart" class="chart chart-line" chart-data="data" chart-labels="labels" chart-series="series" chart-options="options"></canvas>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

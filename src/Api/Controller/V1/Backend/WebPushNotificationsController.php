@@ -63,7 +63,8 @@ class WebPushNotificationsController extends ApiController
                 'webpush_publickey',
                 'webpush_automatic',
                 'webpush_delay',
-                'webpush_restricted_hours']);
+                'webpush_restricted_hours',
+                'webpush_active_subscribers']);
 
         $webpush_service = [
             'service'   => $settings['webpush_service'],
@@ -77,11 +78,12 @@ class WebPushNotificationsController extends ApiController
         }
 
         return new JsonResponse([
-            'webpush_service'          => $webpush_service,
-            'webpush_automatic'        => $settings['webpush_automatic'],
-            'webpush_delay'            => $settings['webpush_delay'],
-            'webpush_restricted_hours' => $settings['webpush_restricted_hours'],
-            'hours'                    => $hours
+            'webpush_service'            => $webpush_service,
+            'webpush_automatic'          => $settings['webpush_automatic'],
+            'webpush_delay'              => $settings['webpush_delay'],
+            'webpush_restricted_hours'   => $settings['webpush_restricted_hours'],
+            'hours'                      => $hours,
+            'webpush_active_subscribers' => $settings['webpush_active_subscribers']
         ]);
     }
 

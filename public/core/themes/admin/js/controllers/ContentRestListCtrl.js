@@ -174,13 +174,15 @@
                     send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
                     image: null,
                     transaction_id: null,
+                    impressions: null,
+                    clicks: null,
+                    closed: null
                   }
                 );
                 $scope.patch(content, 'webpush_notifications', contentNotifications)
                   .then(function() {
                     $scope.list();
                   });
-              }, function() {
               });
             }
           });

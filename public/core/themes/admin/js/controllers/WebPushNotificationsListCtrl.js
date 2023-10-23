@@ -61,7 +61,7 @@
           $scope.backup.criteria    = $scope.criteria;
           $scope.app.columns.hidden = [ 'category', 'tags', 'content_views', 'created', 'changed', 'author', 'starttime', 'endtime' ];
           $scope.app.columns.selected =  _.uniq($scope.app.columns.selected
-            .concat([ 'send_date', 'transaction_id', 'successfully_sent' ]));
+            .concat([ 'send_date', 'transaction_id', 'impressions', 'ctr' ]));
 
           oqlEncoder.configure({
             placeholder: {
@@ -100,14 +100,6 @@
 
             $scope.items = $scope.data.items;
             $scope.parseList(response.data);
-
-            $scope.items.forEach(function(item, index) {
-              if (item.status == 1) {
-                setTimeout(function() {
-                  $scope.getNotificationData(item);
-                }, index * 1001);
-              }
-            });
 
             $scope.disableFlags('http');
           }, function(response) {

@@ -4636,7 +4636,7 @@ msgid "Successfully sent"
 msgstr "Enviado con éxito"
 
 msgid "Clicked"
-msgstr "Clickadas"
+msgstr "Clicks"
 
 msgid "Cerradas"
 msgstr ""
