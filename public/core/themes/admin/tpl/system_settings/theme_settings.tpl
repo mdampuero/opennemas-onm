@@ -195,7 +195,7 @@
                       </div>
                     </div>
                     <div class="row m-b-15">
-                      <div class="col-xs-12 m-t-15">
+                      <div class="col-xs-12 col-md-5 m-t-15">
                         <label class="form-label m-b-15" for="theme-option-content-header">
                           <h4>
                             <i class="fa fa-align-center"></i>
@@ -207,12 +207,37 @@
                         </label>
                         <div class="controls">
                           <div class="row" ng-model="settings.theme_options.content_header">
-                            <div class="panel panel-default col-xs-5 col-md-2" ng-repeat="(content_header_name,content_header_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_header">
+                            <div class="panel panel-default col-xs-5" ng-repeat="(content_header_name,content_header_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_header">
                               <div class="radio">
                                 <input id="theme-option-content-header-[% content_header_name %]" name="theme-option-content-header" ng-model="settings.theme_options.content_header" value="[% content_header_name %]" ng-checked="[% content_header_name === settings.theme_options.content_header %]" type="radio"/>
                                 <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-content-header-[% content_header_name %]">
                                   <img src="/themes/apolo/images/admin/content_header-[% content_header_name %].jpg" alt="[% content_header_name %]" class="img img-responsive img-rounded m-b-10">
                                   <h5>[% content_header_value %]</h5>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-xs-12 col-md-5 m-t-15">
+                        <label class="form-label m-b-15" for="theme-option-hamburger-position">
+                          <h4>
+                            <i class="fa fa-align-center"></i>
+                            {t}Hamburger menu{/t}
+                          </h4>
+                          <span class="help">
+                            {t}Choose where to appear menu{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="row" ng-model="settings.theme_options.hamburger_position">
+                            <div class="panel panel-default col-xs-5" ng-repeat="(hamburger_position_name,hamburger_position_value) in extra.theme_skins[settings.theme_skin].params.options.option_hamburger_position">
+                              <div class="radio">
+                                <input id="theme-option-hamburger-position-[% hamburger_position_name %]" name="theme-option-hamburger-position" ng-model="settings.theme_options.hamburger_position" value="[% hamburger_position_name %]" ng-checked="[% hamburger_position_name === settings.theme_options.hamburger_position %]" type="radio"/>
+                                <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-hamburger-position-[% hamburger_position_name %]">
+                                  <img src="/themes/apolo/images/admin/hamburger_position-[% hamburger_position_name %].jpg" alt="[% hamburger_position_value %]" class="img img-responsive img-rounded m-b-10">
+                                  <h5>[% hamburger_position_value %]</h5>
                                 </label>
                               </div>
                             </div>
@@ -270,7 +295,7 @@
                         </div>
                       </div>
 
-                      <div class="col-xs-12 m-t-15" ng-if="settings.theme_options.article_header_media === 'header'">
+                      <div class="col-xs-12 col-md-6 m-t-15" ng-if="settings.theme_options.article_header_media === 'header'">
                         <label class="form-label m-b-15" for="theme-option-order-header">
                           <h4>
                             <i class="fa fa-sort-amount-asc"></i>
@@ -282,7 +307,7 @@
                         </label>
                         <div class="controls">
                           <div class="row" ng-model="settings.theme_options.article_header_order">
-                            <div class="panel panel-default col-xs-5 col-md-2" ng-repeat="(header_order_name,header_order_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_header_order">
+                            <div class="panel panel-default col-xs-5 col-md-4" ng-repeat="(header_order_name,header_order_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_header_order">
                               <div class="radio">
                                 <input id="theme-option-order-header-[% header_order_name %]" name="theme-option-order-header" ng-model="settings.theme_options.article_header_order" value="[% header_order_name %]" ng-checked="[% header_order_name === settings.theme_options.article_header_order %]" type="radio"/>
                                 <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-order-header-[% header_order_name %]">
@@ -295,7 +320,7 @@
                         </div>
                       </div>
 
-                      <div class="col-xs-12 m-t-15" ng-if="settings.theme_options.article_header_media === 'header'">
+                      <div class="col-xs-12 col-md-5 m-t-15" ng-if="settings.theme_options.article_header_media === 'header'">
                         <label class="form-label m-b-15" for="theme-option-align-header">
                           <h4>
                             <i class="fa fa-align-left"></i>
@@ -307,7 +332,7 @@
                         </label>
                         <div class="controls">
                           <div class="row" ng-model="settings.theme_options.article_header_align">
-                            <div class="panel panel-default col-xs-5 col-md-2" ng-repeat="(header_align_name,header_align_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_header_align">
+                            <div class="panel panel-default col-xs-5 col-md-5" ng-repeat="(header_align_name,header_align_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_header_align">
                               <div class="radio">
                                 <input id="theme-option-align-header-[% header_align_name %]" name="theme-option-align-header" ng-model="settings.theme_options.article_header_align" value="[% header_align_name %]" ng-checked="[% header_align_name === settings.theme_options.article_header_align %]" type="radio"/>
                                 <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-align-header-[% header_align_name %]">
@@ -319,8 +344,9 @@
                           </div>
                         </div>
                       </div>
+                    </div>
 
-
+                    <div class="row m-b-15">
                       <div class="col-xs-12 col-md-4 m-t-15">
                         <label class="form-label m-b-15" for="theme-option-share-tools">
                           <h4>
