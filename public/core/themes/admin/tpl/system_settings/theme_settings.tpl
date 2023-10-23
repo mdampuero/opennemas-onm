@@ -277,6 +277,32 @@
                         </div>
                       </div>
 
+                      <div class="col-xs-12 m-t-15" ng-if="settings.theme_options.article_header_media === 'header'">
+                        <label class="form-label m-b-15" for="theme-option-align-header">
+                          <h4>
+                            <i class="fa fa-sort-amount-asc"></i>
+                            {t}Content header align{/t}
+                          </h4>
+                          <span class="help">
+                            {t}Choose headings alignment{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="row" ng-model="settings.theme_options.article_header_align">
+                            <div class="panel panel-default col-xs-5 col-md-2" ng-repeat="(header_align_name,header_align_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_header_align">
+                              <div class="radio">
+                                <input id="theme-option-align-header-[% header_align_name %]" name="theme-option-align-header" ng-model="settings.theme_options.article_header_align" value="[% header_align_name %]" ng-checked="[% header_align_name === settings.theme_options.article_header_align %]" type="radio"/>
+                                <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-align-header-[% header_align_name %]">
+                                  <img src="/themes/apolo/images/admin/article_header_align-[% header_align_name %].jpg" alt="[% header_align_value %]" class="img img-responsive img-rounded m-b-10">
+                                  <h5>[% header_align_value %]</h5>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
                       <div class="col-xs-12 col-md-4 m-t-15">
                         <label class="form-label m-b-15" for="theme-option-share-tools">
                           <h4>
