@@ -27,6 +27,52 @@ class DataLayerHenneo extends DataLayer
     }
 
     /**
+     * Generates Data Layer code.
+     *
+     * @param Array   $data The Data Layer data.
+     *
+     * @return String $code The generated code.
+     */
+    public function getDataLayerCode()
+    {
+        $data = $this->getDataLayer();
+        $code = parent::getDataLayerCode();
+
+        $author  = $data['createdby'] ?? '';
+        $section = $data['categoria'] ?? '';
+
+        // Remove unnecessary elements for Marfeel
+        $data = array_filter($data, function ($key) {
+            return !in_array(
+                strtolower($key),
+                ['antetitulo', 'categoria_id', 'createdby', 'fechaactualizacion', 'platform']
+            );
+        }, ARRAY_FILTER_USE_KEY);
+
+        // Add Marfeel custom metadata
+        $code .= "\n" . '<!-- Marfeel index meta-tags -->' . "\n";
+        foreach ($data as $key => $value) {
+            $content = $key . ':' . $value;
+            // Check for keys with multiple values
+            if (in_array($key, ['keywords', 'seotags'])) {
+                $content = '';
+                $values  = explode(',', $value);
+                foreach ($values as $value) {
+                    $content .= $key . ':' . $value . ';';
+                }
+            }
+            $code .= '<meta property="mrf:tags" content="' . $content . '" />' . "\n";
+        }
+
+        $code .= '<meta property="mrf:tags" content="subcategoria:sinsc" />' . "\n";
+        $code .= '<meta property="mrf:tags" content="terciariacategoria:sinct" />' . "\n";
+        $code .= '<meta property="mrf:authors" content="' . $author . '" />' . "\n";
+        $code .= '<meta property="mrf:sections" content="' . $section . '" />' . "\n";
+
+        return $code;
+    }
+
+    /**
      * Returns the customization for the extension.
      *
      * @param string $extension The extension to customize.
