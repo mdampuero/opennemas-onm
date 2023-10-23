@@ -106,6 +106,18 @@
                             </select>
                           </div>
                         </div>
+                        <label class="form-label m-t-15" for="theme-second-font-size">
+                          <span class="help">
+                            {t}Secondary font base size{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <select id="theme-second-font-size" name="theme-second-font-size" ng-model="settings.theme_options.theme_second_font_size" required>
+                              <option value="[% second_font_size_name %]" ng-repeat="(second_font_size_name,second_font_size_value) in extra.theme_skins[settings.theme_skin].params.options.option_second_font_size" ng-selected="[% second_font_size_name === settings.theme_options.theme_second_font_size || settings.theme_options.theme_second_font_size == undefined %]">[% second_font_size_value %]</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div class="row m-b-15">
