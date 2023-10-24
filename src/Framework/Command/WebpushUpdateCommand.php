@@ -127,7 +127,7 @@ class WebpushUpdateCommand extends Command
                 }
 
                 // If current time is 00:00 save active subcsribers in instance settings (once a day, 30/instance max)
-                if ($delayedUtcTime->format('H:i:s') == "00:00:00") {
+                if ($delayedUtcTime->format('H:i:s') != "00:00:00") {
                     return;
                 }
                 try {
