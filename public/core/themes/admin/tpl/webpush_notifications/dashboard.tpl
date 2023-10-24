@@ -44,7 +44,7 @@
                     </div>
                     <label class="form-label text-center m-t-10">
                       {t}Impressions{/t}
-                      <i class="fa fa-info-circle text-info" uib-tooltip-html="'Times a notification was<br>displayed to the user'" tooltip-placement="bottom"></i>
+                      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}displayed to the user{/t}'" tooltip-placement="bottom"></i>
                       <br>
                       <small class="form-label text-center ">{t}Monthly{/t}</small>
                     </label>
@@ -61,7 +61,7 @@
                     </div>
                       <label class="form-label text-center m-t-10">
                         {t}Interactions{/t}
-                        <i class="fa fa-info-circle text-info" uib-tooltip-html="'Times a notification was<br>clicked or closed'" tooltip-placement="bottom"></i>
+                        <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}clicked or closed{/t}'" tooltip-placement="bottom"></i>
                         <br>
                         <small class="form-label text-center ">{t}Monthly{/t}</small>
                     </label>
@@ -78,7 +78,7 @@
                     </div>
                       <label class="form-label text-center m-t-10">
                         {t}CTR{/t}
-                        <i class="fa fa-info-circle text-info" uib-tooltip-html="'Interactions (Clicks + Closed)<br>divided by Impressions'" tooltip-placement="bottom"></i>
+                        <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Interactions (Clicks + Closed){/t}<br>{t}divided by Impressions{/t}'" tooltip-placement="bottom"></i>
                         <br>
                         <small class="form-label text-center ">{t}Monthly{/t}</small>
                     </label>

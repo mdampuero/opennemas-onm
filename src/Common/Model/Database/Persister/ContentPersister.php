@@ -632,9 +632,9 @@ done
             $value['title']          = empty($value['title']) ? null : $value['title'];
             $value['status']         = empty($value['status']) && $value['status'] != 0 ? 2 : $value['status'];
             $value['transaction_id'] = empty($value['transaction_id']) ? null : $value['transaction_id'];
-            $value['impressions']    = empty($value['impressions']) ? null : $value['impressions'];
-            $value['clicks']         = empty($value['clicks']) ? null : $value['clicks'];
-            $value['closed']         = empty($value['closed']) ? null : $value['closed'];
+            $value['impressions']    = empty($value['impressions']) ? 0 : $value['impressions'];
+            $value['clicks']         = empty($value['clicks']) ? 0 : $value['clicks'];
+            $value['closed']         = empty($value['closed']) ? 0 : $value['closed'];
 
 
 

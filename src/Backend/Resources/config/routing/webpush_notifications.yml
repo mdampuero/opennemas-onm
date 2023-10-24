@@ -13,6 +13,6 @@ backend_webpush_notifications_config:
 
 backend_webpush_notifications_dashboard:
     path:     /webpush_notifications/dashboard
-    defaults: { _controller: BackendBundle:WebPushNotificationsDashboard:config }
+    defaults: { _controller: BackendBundle:WebPushNotificationsDashboard:dashboard }
     options:
         expose: true

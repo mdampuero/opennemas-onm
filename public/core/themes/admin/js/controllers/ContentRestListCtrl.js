@@ -174,9 +174,9 @@
                     send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
                     image: null,
                     transaction_id: null,
-                    impressions: null,
-                    clicks: null,
-                    closed: null
+                    impressions: 0,
+                    clicks: 0,
+                    closed: 0
                   }
                 );
                 $scope.patch(content, 'webpush_notifications', contentNotifications)

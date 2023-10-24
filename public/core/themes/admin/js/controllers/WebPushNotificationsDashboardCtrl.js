@@ -33,9 +33,7 @@
          * @type {Object}
          */
         $scope.criteria = {
-          epp: 10,
-          orderBy: { id:  'desc' },
-          page: 1,
+          send_date: $window.moment().subtract(1, 'months').format('YYYY-MM-DD HH:mm:ss')
         };
 
         /**
@@ -58,6 +56,12 @@
          *   Initializes the form.
          */
         $scope.init = function() {
+          oqlEncoder.configure({
+            placeholder: {
+              send_date: '[key] > "[value]"',
+            }
+          });
+
           http.get('api_v1_backend_webpush_notifications_get_config').then(function(response) {
             $scope.settings = response.data;
             $scope.disableFlags('http');
@@ -96,14 +100,11 @@
             $scope.items = $scope.data.items;
 
             // Gets monthly data for notifications in list
-            var lastMonthDate = $window.moment().subtract(1, 'months').format('YYYY-MM-DD HH:mm:ss');
-
-            var lastMonthItems = $scope.items.filter((item) => item.send_date >= lastMonthDate);
             var monthlyImpressions = 0;
             var monthlyClicks      = 0;
             var monthlyClosed      = 0;
 
-            lastMonthItems.forEach(function(item) {
+            $scope.items.forEach(function(item) {
               monthlyImpressions += item.impressions;
               monthlyClicks += item.clicks;
               monthlyClosed += item.closed;
@@ -111,7 +112,7 @@
 
             $scope.monthlyImpressions    = monthlyImpressions;
             $scope.monthlyInteractions   = monthlyClicks + monthlyClosed;
-            $scope.monthlyCTR            = $scope.monthlyInteractions / monthlyImpressions;
+            $scope.monthlyCTR            = Math.round($scope.monthlyInteractions / monthlyImpressions * 100) / 100;
 
             // Sets up the active subscribers chart
             var endDate = $window.moment().format('YYYY-MM-DD');

@@ -50,7 +50,7 @@ class WebPushNotificationsDashboardController extends BackendController
      * @Security("hasExtension('es.openhost.module.webpush_notifications')
      *     and hasPermission('WEBPUSH_ADMIN')")
      */
-    public function configAction()
+    public function dashboardAction()
     {
         return $this->render('webpush_notifications/dashboard.tpl');
     }

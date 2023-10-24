@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 14:55+0000\n"
-"PO-Revision-Date: 2023-10-16 17:03+0200\n"
+"POT-Creation-Date: 2023-10-24 13:20+0000\n"
+"PO-Revision-Date: 2023-10-24 15:29+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -4587,8 +4587,44 @@ msgstr "Notificaciones Web Push"
 msgid "Web Push notifications History"
 msgstr "Historial de notificaciones Web Push"
 
+msgid "Notifications data is updated every 15 minutes "
+msgstr "Los datos de las notificaciones se actualizan cada 15 minutos"
+
 msgid "Web Push notifications Dashboard"
 msgstr "Panel de control de notificaciones Web Push"
+
+msgid "Active Subscribers"
+msgstr "Subscriptores activos"
+
+msgid "Impressions"
+msgstr "Visualizaciones"
+
+msgid "Times a notification was"
+msgstr "Veces que una notificación fue"
+
+msgid "displayed to the user"
+msgstr "mostrada al usuario"
+
+msgid "Monthly"
+msgstr "Mensual"
+
+msgid "Interactions"
+msgstr "Interacciones"
+
+msgid "clicked or closed"
+msgstr "clicada o cerrada"
+
+msgid "CTR"
+msgstr "CTR"
+
+msgid "Interactions (Clicks + Closed)"
+msgstr "Interacciones (Clicks + Cerradas)"
+
+msgid "divided by Impressions"
+msgstr "dividido por Visualizaciones"
+
+msgid "New Active Subscribers "
+msgstr "Nuevos Subscriptores Activos"
 
 msgid "Web Push notifications Configuration"
 msgstr "Configuración del módulo Web Push"
@@ -4632,17 +4668,17 @@ msgstr "Identificador"
 msgid "Send date"
 msgstr "Fecha de envío"
 
-msgid "Successfully sent"
-msgstr "Enviado con éxito"
-
-msgid "Clicked"
+msgid "Clicks"
 msgstr "Clicks"
-
-msgid "Cerradas"
-msgstr ""
 
 msgid "Transaction Id"
 msgstr "Identificador de transacción"
+
+msgid "clicked by the user"
+msgstr "clicada por el usuario"
+
+msgid "closed by the user"
+msgstr "cerrada por el usuario"
 
 msgid "Config opinion module"
 msgstr "Configuración del módulo «Opinión»"
@@ -6811,6 +6847,9 @@ msgstr "L10n"
 msgid "Read"
 msgstr "Leídas"
 
+msgid "Clicked"
+msgstr "Clicks"
+
 msgid "Opened"
 msgstr "Abiertas"
 
@@ -7134,9 +7173,6 @@ msgstr "Tema"
 
 msgid "Theme addon"
 msgstr "Añadido de tema"
-
-msgid "Monthly"
-msgstr "Mensual"
 
 msgid "w/customization"
 msgstr "w/personalización"
@@ -7463,6 +7499,9 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
+
+#~ msgid "Successfully sent"
+#~ msgstr "Enviado con éxito"
 
 #~ msgid "Edit content"
 #~ msgstr "Editar contenido"

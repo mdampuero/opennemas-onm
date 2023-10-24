@@ -66,17 +66,19 @@
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('impressions')" width="200">
       {t}Impressions{/t}
-      <i class="fa fa-info-circle text-info" uib-tooltip-html="'Times a notification was<br>displayed to the user'" tooltip-placement="bottom"></i>
+      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}displayed to the user{/t}'" tooltip-placement="bottom"></i>
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('clicks')" width="200">
       {t}Clicks{/t}
+      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}clicked by the user{/t}'" tooltip-placement="bottom"></i>
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('closed')" width="200">
       {t}Closed{/t}
+      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}closed by the user{/t}'" tooltip-placement="bottom"></i>
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')" width="200">
       {t}CTR{/t}
-      <i class="fa fa-info-circle text-info" uib-tooltip-html="'Interactions (Clicks + Closed)<br>divided by Impressions'" tooltip-placement="bottom"></i>
+      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Interactions (Clicks + Closed){/t}<br>{t}divided by Impressions{/t}'" tooltip-placement="bottom"></i>
     </th>
 {/block}
 {block name="commonColumnsBody"}
@@ -124,7 +126,7 @@
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('impressions')">
     <span>
       <strong>
-        [% item.impressions %]
+        [% item.impressions | number:0 %]
       </strong>
     </span>
   </td>
@@ -145,7 +147,7 @@
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')">
     <span>
       <strong>
-        [%  (item.clicks + item.closed) / item.impressions * 100 %] %
+        [%  ((item.clicks + item.closed) / item.impressions * 100) | number:0 %] %
       </strong>
     </span>
   </td>
