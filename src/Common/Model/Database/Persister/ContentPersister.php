@@ -59,6 +59,10 @@ done
             $entity->starttime = new \DateTime();
         }
 
+        if (!empty($entity->starttime)) {
+            $entity->urldatetime = $entity->starttime->format('YmdHis');
+        }
+
         // Don't allow changed date to be earlier than starttime
         if ($entity->starttime > $entity->changed) {
             $entity->changed = $entity->starttime;
@@ -132,7 +136,8 @@ done
     public function update(Entity $entity)
     {
         if (empty($entity->starttime) && !empty($entity->content_status)) {
-            $entity->starttime = new \DateTime();
+            $entity->starttime   = new \DateTime();
+            $entity->urldatetime = $entity->starttime->format('YmdHis');
         }
 
         // Don't allow changed date to be earlier than starttime
@@ -146,6 +151,22 @@ done
         $relations             = $entity->related_contents;
         $live_blog_updates     = $entity->live_blog_updates;
         $webpush_notifications = $entity->webpush_notifications;
+
+        // Set urldatetime if starttime is already set
+        // And new starttime is greater than now (rescheduled)
+        // OR new starttime is smaller than now
+        //   And new starttime is smaller than old starttime
+        //   And new starttime is smaller than urldatetime (e.g. scheduled to intime)
+        if (!empty($entity->starttime)
+            && ($entity->starttime >= new \DateTime()
+                || ($entity->starttime < new \DateTime()
+                    && $entity->starttime < $entity->getStored()['starttime']
+                    && $entity->starttime->format('YmdHis') < $entity->urldatetime
+                )
+            )
+        ) {
+            $entity->urldatetime = $entity->starttime->format('YmdHis');
+        }
 
         // Categories change
         if (array_key_exists('categories', $changes)) {

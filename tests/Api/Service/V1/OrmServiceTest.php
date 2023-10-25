@@ -335,8 +335,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
     {
         $item = new Entity([ 'name' => 'wubble' ]);
 
-        $this->repository->expects($this->once())->method('countBy')
-            ->with('order by title asc')->willReturn(1);
         $this->repository->expects($this->once())->method('findBy')
             ->with('order by title asc')->willReturn([ $item ]);
 
@@ -382,8 +380,6 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
             new Entity([ 'name' => 'mumble' ])
         ];
 
-        $this->repository->expects($this->once())->method('countBy')
-            ->with('order by title asc')->willReturn(2);
         $this->repository->expects($this->once())->method('findBy')
             ->with('order by title asc')->willReturn($items);
 

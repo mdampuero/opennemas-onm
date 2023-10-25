@@ -65,6 +65,7 @@ class StructuredData
 
         $data['title']       = $data['content']->title;
         $data['description'] = $this->getDescription($data['content']);
+        $data['body']        = $this->getBody($data['content']);
 
         // Count description data words
         $data['wordCount'] = str_word_count($data['description']);
@@ -152,6 +153,18 @@ class StructuredData
         return !empty($description)
             ? $description
             : $this->ds->get('site_description');
+    }
+
+    /**
+     * Method to retrieve the body for a content.
+     *
+     * @param \Content $content The content object.
+     *
+     * @return string The body.
+     */
+    protected function getBody($content)
+    {
+        return trim(preg_replace('/\s+/', ' ', (strip_tags($content->body ?? ''))));
     }
 
     /**

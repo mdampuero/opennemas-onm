@@ -140,6 +140,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $data['content']        = new Content();
         $data['content']->tags  = [1,2,3,4];
         $data['content']->title = 'This is the title';
+        $data['content']->body  = 'Ymir';
         $data['video']          = new Content();
         $data['video']->tags    = [1,2,3,4,5];
 
@@ -154,12 +155,14 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $output['siteUrl']          = 'http://opennemas.com';
         $output['siteDescription']  = 'site description';
         $output['content']->title   = 'This is the title';
+        $output['content']->body    = 'Ymir';
         $output['title']            = 'This is the title';
         $output['description']      = 'This is the description';
         $output['wordCount']        = 4;
         $output['logo']             = 'logo';
         $output['author']           = 'author';
-        $output['languages']        = null;
+        $output['languages']        = '';
+        $output['body']             = 'Ymir';
         $output['externalServices'] = '[]';
 
 

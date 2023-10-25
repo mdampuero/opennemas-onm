@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-24 13:20+0000\n"
-"PO-Revision-Date: 2023-10-24 15:25+0200\n"
+"POT-Creation-Date: 2023-10-25 06:46+0000\n"
+"PO-Revision-Date: 2023-10-25 09:14+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -309,7 +309,7 @@ msgid "Web Push"
 msgstr "Web Push"
 
 msgid "History"
-msgstr ""
+msgstr "Historial"
 
 msgid "Configuration"
 msgstr "Configuración"
@@ -2879,6 +2879,9 @@ msgstr "Data de inicio de publicación"
 
 msgid "Publication end date"
 msgstr "Data de final de publicación"
+
+msgid "URL Datetime"
+msgstr ""
 
 msgid "This content will only be available in the time range specified above."
 msgstr ""
@@ -5539,6 +5542,9 @@ msgstr "Quantcast"
 msgid "OneTrust"
 msgstr "OneTrust"
 
+msgid "Didomi"
+msgstr "Didomi"
+
 msgid "Quantcast UTID"
 msgstr "Quantcast UTID"
 
@@ -5570,8 +5576,23 @@ msgstr ""
 "idm4591571479548831554522590036\" target=\"_blank\" ng-click=\"$event."
 "stopPropagation();\">aqui</a>."
 
-msgid "Use CMP on your AMP pages"
-msgstr "Utiliza CMP nas túas páxinas AMP"
+msgid "Didomi apiKey"
+msgstr "Didomi apiKey"
+
+msgid ""
+"Help to find your Didomi credentials <a class=\"external-link\" "
+"href=\"https://support.didomi.io/\" target=\"_blank\" ng-click=\"$event."
+"stopPropagation();\">here</a>."
+msgstr ""
+"Axuda a atopar as túas credenciais de Didomi <a class=\"external-link\" "
+"href=\"https://support.didomi.io/\" target=\"_blank\" ng-click=\"$event."
+"stopPropagation();\">aquí</a>."
+
+msgid "Didomi noticeId"
+msgstr "Didomi noticeId"
+
+msgid "Didomi noticeId for AMP"
+msgstr "Didomi noticeId para AMP"
 
 msgid "Browser update"
 msgstr "Actualización do navegador"
@@ -7455,6 +7476,9 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 
 msgid "Group name"
 msgstr "Nome do grupo"
+
+#~ msgid "Use CMP on your AMP pages"
+#~ msgstr "Utiliza CMP nas túas páxinas AMP"
 
 #~ msgid "Successfully sent"
 #~ msgstr "\\Enviado con éxito"

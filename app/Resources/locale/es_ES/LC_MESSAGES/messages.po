@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-24 13:20+0000\n"
-"PO-Revision-Date: 2023-10-24 15:29+0200\n"
+"POT-Creation-Date: 2023-10-25 06:46+0000\n"
+"PO-Revision-Date: 2023-10-25 09:15+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -312,7 +312,7 @@ msgid "Web Push"
 msgstr "Web Push"
 
 msgid "History"
-msgstr ""
+msgstr "Historial"
 
 msgid "Configuration"
 msgstr "Configuración"
@@ -2895,6 +2895,9 @@ msgstr "Fecha de inicio de publicación"
 
 msgid "Publication end date"
 msgstr "Fecha de final de publicación"
+
+msgid "URL Datetime"
+msgstr ""
 
 msgid "This content will only be available in the time range specified above."
 msgstr ""
@@ -5569,6 +5572,9 @@ msgstr "Quantcast"
 msgid "OneTrust"
 msgstr "OneTrust"
 
+msgid "Didomi"
+msgstr "Didomi"
+
 msgid "Quantcast UTID"
 msgstr "Quantcast UTID"
 
@@ -5599,8 +5605,23 @@ msgstr ""
 "a6fd-fb7ebff9f8dc_section-idm4591571479548831554522590036\" "
 "target=\"_blank\" ng-click=\"$event.stopPropagation();\">aqui</a>."
 
-msgid "Use CMP on your AMP pages"
-msgstr "Use CMP en sus páginas AMP"
+msgid "Didomi apiKey"
+msgstr "Didomi apiKey"
+
+msgid ""
+"Help to find your Didomi credentials <a class=\"external-link\" "
+"href=\"https://support.didomi.io/\" target=\"_blank\" ng-click=\"$event."
+"stopPropagation();\">here</a>."
+msgstr ""
+"Ayuda para encontrar tus credenciales de Didomi <a class=\"external-link\" "
+"href=\"https://support.didomi.io/\" target=\"_blank\" ng-click=\"$event."
+"stopPropagation();\">aquí</a>."
+
+msgid "Didomi noticeId"
+msgstr "Didomi noticeId"
+
+msgid "Didomi noticeId for AMP"
+msgstr "Didomi noticeId para AMP"
 
 msgid "Browser update"
 msgstr "Actualización de navegador"
@@ -7499,6 +7520,9 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
+
+#~ msgid "Use CMP on your AMP pages"
+#~ msgstr "Use CMP en sus páginas AMP"
 
 #~ msgid "Successfully sent"
 #~ msgstr "Enviado con éxito"
