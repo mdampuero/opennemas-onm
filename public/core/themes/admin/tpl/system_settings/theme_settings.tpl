@@ -572,6 +572,62 @@
                                 </div>
                               </div>
                             </div>
+                            <div class="col-xs-12 m-b-15">
+                              <label class="form-label m-b-15" for="theme-option-sidebar-widgets">
+                                <h4>
+                                  <i class="fa fa-puzzle-piece"></i>
+                                  {t}Sidebar widgets{/t}
+                                </h4>
+                                <span class="help">
+                                  {t}Choose widgets to display{/t}
+                                </span>
+                              </label>
+                              <div class="form-group m-b-0">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-sidebar-widget-today-news" name="theme-option-sidebar-widget-today-news" ng-model="settings.theme_options.sidebar_widget_today_news" ng-checked="[% settings.theme_options.sidebar_widget_today_news != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label for="theme-option-sidebar-widget-today-news">
+                                    <span>{t domain="base"}Today news{/t}</span>
+                                  </label>
+                                </div>
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-sidebar-widget-most-viewed" name="theme-option-sidebar-widget-most-viewed" ng-model="settings.theme_options.sidebar_widget_most_viewed" ng-checked="[% settings.theme_options.sidebar_widget_most_viewed != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label for="theme-option-sidebar-widget-most-viewed">
+                                    <span>{t domain="base"}Most viewed{/t}</span>
+                                  </label>
+                                </div>
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-sidebar-widget-most-seeing" name="theme-option-sidebar-widget-most-seeing" ng-model="settings.theme_options.sidebar_widget_most_seeing" ng-checked="[% settings.theme_options.sidebar_widget_most_seeing %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label for="theme-option-sidebar-widget-most-seeing">
+                                    <span>{t domain="base"}Most seeing/recent{/t}</span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 m-b-15">
+                              <label class="form-label m-b-15" for="theme-option-bodyend-widgets">
+                                <h4>
+                                  <i class="fa fa-puzzle-piece"></i>
+                                  {t}Body end widgets{/t}
+                                </h4>
+                                <span class="help">
+                                  {t}Choose widgets to display{/t}
+                                </span>
+                              </label>
+                              <div class="form-group m-b-0">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-bodyend-widget-more-in-section" name="theme-option-bodyend-widget-more-in-section" ng-model="settings.theme_options.widget_more_in_section" ng-checked="[% settings.theme_options.widget_more_in_section %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label for="theme-option-bodyend-widget-more-in-section">
+                                    <span>{t domain="base"}More in section{/t}</span>
+                                  </label>
+                                </div>
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-bodyend-widget-more-in-frontpage" name="theme-option-bodyend-widget-more-in-frontpage" ng-model="settings.theme_options.widget_more_in_frontpage" ng-checked="[% settings.theme_options.widget_more_in_frontpage %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label for="theme-option-bodyend-widget-more-in-frontpage">
+                                    <span>{t domain="base"}Most in frontpage{/t}</span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                       </div>
                     </div>
