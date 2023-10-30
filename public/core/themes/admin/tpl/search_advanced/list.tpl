@@ -79,9 +79,15 @@
                 </td>
                 <td class="right">
                   <div class="btn-group right">
-                    <a class="btn btn-white" href="[% [ 'album', 'attachment', 'opinion', 'photo', 'poll', 'static_page', 'video', 'widget' ].indexOf(content.content_type_name) != -1 ? edit(content.id, 'backend_' + content.content_type_name + '_show') : edit(content.id, 'admin_' + content.content_type_name + '_show') %]" title="Editar">
-                      <i class="fa fa-pencil"></i>
-                    </a>
+                    <a class="btn btn-white" href="[%
+                      content.content_type_name === 'obituary'
+                          ? routing.generate('backend_obituaries_show', { id: content.pk_content })
+                          : [ 'album', 'attachment', 'opinion', 'photo', 'poll', 'static_page', 'video', 'widget', 'article', 'letter', 'company' ].indexOf(content.content_type_name) != -1
+                              ? routing.generate('backend_' + content.content_type_name + '_show', { id: content.pk_content })
+                              : routing.generate('admin_' + content.content_type_name + '_show', { id: content.pk_content })
+                  %]" title="Editar">
+                    <i class="fa fa-pencil"></i>
+                  </a>
                   </div>
                 </td>
               </tr>
