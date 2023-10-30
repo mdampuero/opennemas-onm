@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_search}" method="GET" ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('content', 'backend_ws_contents_list')">
+<form action="{url name=admin_search}" method="GET" ng-app="BackendApp" ng-controller="SearchAdvancedListCtrl" ng-init="init()">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
