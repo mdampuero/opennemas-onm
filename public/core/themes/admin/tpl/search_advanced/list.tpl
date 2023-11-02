@@ -5,7 +5,7 @@
 {/block}
 
 {block name="ngInit"}
-  ng-controller="SearchAdvancedListCtrl" ng-init="init()"
+  ng-controller="GlobalSearchListCtrl" ng-init="init({json_encode($types)|clear_json})"
 {/block}
 
 {block name="icon"}

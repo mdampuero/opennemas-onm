@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  SearchAdvancedListCtrl
+     * @name  GlobalSearchListCtrl
      *
      * @requires $controller
      * @requires $scope
@@ -14,7 +14,7 @@
      * @description
      *   Controller for file list.
      */
-    .controller('SearchAdvancedListCtrl', [
+    .controller('GlobalSearchListCtrl', [
       '$controller', '$scope', 'oqlEncoder',
       function($controller, $scope, oqlEncoder) {
         // Initialize the super class and extend it.
@@ -35,7 +35,7 @@
         };
 
         /**
-         * @memberOf SearchAdvancedListCtrl
+         * @memberOf GlobalSearchListCtrl
          *
          * @description
          *  The list of routes for the controller.
@@ -48,12 +48,13 @@
 
         /**
          * @function init
-         * @memberOf SearchAdvancedListCtrl
+         * @memberOf GlobalSearchListCtrl
          *
          * @description
          *   Configures the controller.
          */
-        $scope.init = function() {
+        $scope.init = function(contentTypes) {
+          $scope.types              = contentTypes;
           $scope.backup.criteria    = $scope.criteria;
           $scope.app.columns.hidden = [ 'author', 'tags', 'content_views', 'starttime', 'endtime', 'category' ];
 
@@ -66,20 +67,7 @@
 
           $scope.list();
         };
-                /**
-         * @function isSelectable
-         * @memberOf ListCtrl
-         *
-         * @description
-         *   Checks if the item is selectable.
-         *
-         * @param {Object} item The item to check.
-         *
-         * @return {Boolean} True if the item is selectable. False otherwise.
-         */
-                $scope.isSelectable = function() {
-                  return false;
-                };
+
         /**
          * @inheritdoc
          */
@@ -87,6 +75,14 @@
           $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
           $scope.localize($scope.data.extra.categories, 'categories');
+        };
+
+        $scope.getContentTypeName = function(contentTypeName) {
+          var value = $scope.types.filter(function(element) {
+            return element.value === contentTypeName;
+          });
+
+          return value[0].name;
         };
       }
     ]);
