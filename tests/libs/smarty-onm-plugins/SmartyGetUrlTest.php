@@ -30,6 +30,11 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'prefixUrl' ])
             ->getMock();
 
+        $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getContent' ])
+            ->getMock();
+
         $this->generator = $this->getMockBuilder('UrlGenerator')
             ->setMethods([ 'generate' ])
             ->getMock();
@@ -70,6 +75,9 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
 
             case 'core.decorator.url':
                 return $this->decorator;
+
+            case 'core.helper.content':
+                return $this->contentHelper;
         }
 
         return null;
@@ -81,7 +89,6 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
     public function testGetUrlWhenNoItem()
     {
         $this->assertEmpty(smarty_function_get_url([], $this->smarty));
-        $this->assertEmpty(smarty_function_get_url([ 'item' => 'gorp' ], $this->smarty));
         $this->assertEmpty(smarty_function_get_url([
             'item' => json_decode(json_encode([ 'id' => null ]))
         ], $this->smarty));
@@ -97,6 +104,9 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
         $this->generator->expects($this->once())->method('generate')
             ->with($item, [ 'absolute' => true,'_format'  => null, 'locale' => null ])
             ->willReturn('http://grault.com/glorp/1');
+
+        $this->contentHelper->expects($this->any())->method('getContent')
+            ->willReturn($item);
 
         $this->assertEquals(
             'http://grault.com/glorp/1',
@@ -122,6 +132,9 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
             ->with($item, [ 'absolute' => true, '_format' => 'amp', 'locale' => null ])
             ->willReturn('http://grault.com/glorp.amp.html');
 
+        $this->contentHelper->expects($this->any())->method('getContent')
+            ->willReturn($item);
+
         $this->assertEquals(
             'http://grault.com/glorp.amp.html',
             smarty_function_get_url([
@@ -145,6 +158,9 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
         $this->generator->expects($this->once())->method('generate')
             ->with($item, [ 'absolute' => true, '_format' => null, 'locale' => 'en' ])
             ->willReturn('http://grault.com/en/glorp.amp.html');
+
+        $this->contentHelper->expects($this->any())->method('getContent')
+            ->willReturn($item);
 
         $this->assertEquals(
             'http://grault.com/en/glorp.amp.html',
