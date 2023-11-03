@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  ArticleListCtrl
+     * @name  WebPushNotificationsConfigCtrl
      *
      * @requires $controller
      * @requires $location
@@ -18,11 +18,11 @@
      * @requires oqlEncoder
      *
      * @description
-     *   Provides actions to list articles.
+     *   Provides actions to list notifications.
      */
     .controller('WebPushNotificationsConfigCtrl', [
-      '$controller', '$scope', 'cleaner', 'http', 'messenger',
-      function($controller, $scope, cleaner, http, messenger) {
+      '$controller', '$scope', 'http', 'messenger',
+      function($controller, $scope, http, messenger) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -35,7 +35,9 @@
          * @type {Object}
          */
         $scope.routes = {
-          checkServer:  'api_v1_backend_webpush_notifications_check_server'
+          checkServer: 'api_v1_backend_webpush_notifications_check_server',
+          getConfig:   'api_v1_backend_webpush_notifications_get_config',
+          saveConfig:  'api_v1_backend_webpush_notifications_save_config'
         };
 
         $scope.settings = {
@@ -50,9 +52,10 @@
          *   Initializes the form.
          */
         $scope.init = function() {
-          http.get('api_v1_backend_webpush_notifications_get_config').then(function(response) {
+          http.get($scope.routes.getConfig).then(function(response) {
             $scope.settings = response.data;
             $scope.settings.webpush_delay = $scope.settings.webpush_delay || '1';
+            $scope.settings.webpush_service.service = $scope.settings.webpush_service.service || 'webpushr';
             $scope.disableFlags('http');
           }, function() {
             $scope.disableFlags('http');
@@ -67,17 +70,23 @@
          *   Saves the configuration.
          */
         $scope.save = function() {
-          $scope.flags.http.saving = true;
+          if (!$scope.flags.http.checking) {
+            $scope.flags.http.saving = true;
+          }
 
           var data = $scope.settings;
 
-          http.put('api_v1_backend_webpush_notifications_save_config', data)
+          return http.put($scope.routes.saveConfig, data)
             .then(function(response) {
-              $scope.disableFlags('http');
-              messenger.post(response.data);
+              if (!$scope.flags.http.checking) {
+                $scope.disableFlags('http');
+                messenger.post(response.data);
+              }
             }, function(response) {
-              $scope.disableFlags('http');
-              messenger.post(response.data);
+              if (!$scope.flags.http.checking) {
+                $scope.disableFlags('http');
+                messenger.post(response.data);
+              }
             });
         };
 
@@ -106,17 +115,22 @@
         $scope.check = function() {
           $scope.flags.http.checking = true;
 
-          var route = {
-            name: $scope.routes.checkServer
-          };
+          $scope.save()
+            .then(function(response) {
+              var route = {
+                name: $scope.routes.checkServer
+              };
 
-          http.get(route).then(function(response) {
-            $scope.disableFlags('http');
-            $scope.status = 'success';
-          }, function() {
-            $scope.disableFlags('http');
-            $scope.status = 'failure';
-          });
+              http.get(route).then(function() {
+                $scope.disableFlags('http');
+                $scope.status = 'success';
+              }, function() {
+                $scope.disableFlags('http');
+                $scope.status = 'failure';
+              });
+            }, function() {
+              $scope.disableFlags('http');
+            });
         };
 
         $scope.options = [

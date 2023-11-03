@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  ArticleListCtrl
+     * @name  WebPushNotificationsDashboardCtrl
      *
      * @requires $controller
      * @requires $location
@@ -19,11 +19,11 @@
      * @requires $window
      *
      * @description
-     *   Provides actions to list articles.
+     *   Provides actions to list notifications .
      */
     .controller('WebPushNotificationsDashboardCtrl', [
-      '$controller', '$scope', 'cleaner', 'http', 'messenger', 'oqlEncoder', '$location', '$window',
-      function($controller, $scope, cleaner, http, messenger, oqlEncoder, $location, $window) {
+      '$controller', '$scope', 'http', 'messenger', 'oqlEncoder', '$location', '$window',
+      function($controller, $scope, http, messenger, oqlEncoder, $location, $window) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -46,6 +46,7 @@
          */
         $scope.routes = {
           getList:   'api_v1_backend_webpush_notifications_get_list',
+          getConfig: 'api_v1_backend_webpush_notifications_get_config'
         };
 
         /**
@@ -62,7 +63,7 @@
             }
           });
 
-          http.get('api_v1_backend_webpush_notifications_get_config').then(function(response) {
+          http.get($scope.routes.getConfig).then(function(response) {
             $scope.settings = response.data;
             $scope.disableFlags('http');
           }, function() {
@@ -100,44 +101,48 @@
             $scope.items = $scope.data.items;
 
             // Gets monthly data for notifications in list
-            var monthlyImpressions = 0;
+            $scope.monthlyImpressions = 0;
             var monthlyClicks      = 0;
             var monthlyClosed      = 0;
 
             $scope.items.forEach(function(item) {
-              monthlyImpressions += item.impressions;
+              $scope.monthlyImpressions += item.impressions;
               monthlyClicks += item.clicks;
               monthlyClosed += item.closed;
             });
 
-            $scope.monthlyImpressions    = monthlyImpressions;
-            $scope.monthlyInteractions   = monthlyClicks + monthlyClosed;
-            $scope.monthlyCTR            = Math.round($scope.monthlyInteractions / monthlyImpressions * 100) / 100;
+            $scope.monthlyInteractions = monthlyClicks + monthlyClosed;
+
+            $scope.monthlyCTR = Math.round($scope.monthlyInteractions / $scope.monthlyImpressions * 100) / 100;
 
             // Sets up the active subscribers chart
-            var endDate = $window.moment().format('YYYY-MM-DD');
-            var startDate = $window.moment().subtract(1, 'months').format('YYYY-MM-DD');
+            $scope.labels = [];
+            var currentDay = $window.moment($window.moment().subtract(1, 'months').format('YYYY-MM-DD'));
 
-            var labels = [];
-            var currentDay = $window.moment(startDate);
-
-            while (currentDay.isSameOrBefore(endDate)) {
-              labels.push(currentDay.format('MM-DD'));
+            while (currentDay.isSameOrBefore($window.moment().format('YYYY-MM-DD'))) {
+              $scope.labels.push(currentDay.format('MM-DD'));
               currentDay.add(1, 'days');
             }
 
-            $scope.labels = labels;
             $scope.series = [ 'Subs' ];
-            $scope.data = [ $scope.settings.webpush_active_subscribers ];
 
             var numberOfDays = $scope.labels.length;
 
-            var numberOfSubs = $scope.settings.webpush_active_subscribers.length;
+            var numberOfSubs = $scope.settings.webpush_active_subscribers &&
+              $scope.settings.webpush_active_subscribers.length ?
+              $scope.settings.webpush_active_subscribers.length : 0;
 
-            var dataValues = Array(numberOfDays - numberOfSubs).fill(null);
+            var dataValues = [];
 
-            dataValues = dataValues.concat($scope.settings.webpush_active_subscribers.reverse());
+            for (var i = 0; i < numberOfDays - numberOfSubs; i++) {
+              dataValues.push(null);
+            }
 
+            if ($scope.settings.webpush_active_subscribers) {
+              var subscribersArray = [].concat($scope.settings.webpush_active_subscribers);
+
+              dataValues = dataValues.concat(subscribersArray.reverse());
+            }
             $scope.data = [ dataValues ];
 
             $scope.options = {
@@ -161,28 +166,11 @@
               }
             };
 
-            $scope.parseList(response.data);
-
             $scope.disableFlags('http');
           }, function(response) {
             messenger.post(response.data);
             $scope.disableFlags('http');
             $scope.items = [];
-          });
-        };
-
-        /**
-         * @function parseList
-         * @memberOf WebPushNotificationsListCtrl
-         *
-         * @description
-         *   Parses the response and adds information to the scope.
-         *
-         * @param {Object} data The data in the response.
-         */
-        $scope.parseList = function(data) {
-          data.items.forEach(function(item) {
-            item.image = Number(item.image);
           });
         };
       }

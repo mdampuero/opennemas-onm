@@ -52,7 +52,7 @@
 {/block}
 
 {block name="customColumnsHeader"}
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('image')" width="200">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('image' )" width="200">
       {t}Image{/t}
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('transaction_id')" width="200">
@@ -64,32 +64,22 @@
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('send_date')" width="200">
       {t}Send date{/t}
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('impressions')" width="200">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('impressions')" width="150">
       {t}Impressions{/t}
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}displayed to the user{/t}'" tooltip-placement="bottom"></i>
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('clicks')" width="200">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('clicks')" width="150">
       {t}Clicks{/t}
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}clicked by the user{/t}'" tooltip-placement="bottom"></i>
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('closed')" width="200">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('closed')" width="150">
       {t}Closed{/t}
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}closed by the user{/t}'" tooltip-placement="bottom"></i>
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')" width="200">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')" width="150">
       {t}CTR{/t}
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Interactions (Clicks + Closed){/t}<br>{t}divided by Impressions{/t}'" tooltip-placement="bottom"></i>
     </th>
-{/block}
-{block name="commonColumnsBody"}
-  <td class="v-align-middle" ng-if="isColumnEnabled('title')">
-    <div class="table-text">
-      <a class="text-black" href="[% routing.generate('backend_article_show', { id: item.fk_content }) %]">[% item.title %]</a>
-    </div>
-    <div class="listing-inline-actions m-t-10 btn-group">
-      {block name="itemActions"}{/block}
-    </div>
-  </td>
 {/block}
 {block name="customColumnsBody"}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('image')">

@@ -285,7 +285,6 @@ class ApiController extends Controller
 
 
         while ($iterationDate->format('Y-m') <= $finalDate) {
-            $year = $iterationDate->format('Y');
             $years[] = [
                 'name' => (!is_null($fmt) ?
                     ucfirst($fmt->format($iterationDate)) :

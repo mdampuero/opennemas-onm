@@ -21,8 +21,8 @@
      *   Provides actions to list Web Push notifications.
      */
     .controller('WebPushNotificationsListCtrl', [
-      '$controller', '$scope', '$uibModal', 'http', 'messenger', 'oqlEncoder', '$timeout', '$location',
-      function($controller, $scope, $uibModal, http, messenger, oqlEncoder, $timeout, $location) {
+      '$controller', '$scope', 'http', 'messenger', 'oqlEncoder', '$location',
+      function($controller, $scope, http, messenger, oqlEncoder, $location) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
@@ -99,28 +99,12 @@
             }
 
             $scope.items = $scope.data.items;
-            $scope.parseList(response.data);
 
             $scope.disableFlags('http');
           }, function(response) {
             messenger.post(response.data);
             $scope.disableFlags('http');
             $scope.items = [];
-          });
-        };
-
-        /**
-         * @function parseList
-         * @memberOf WebPushNotificationsListCtrl
-         *
-         * @description
-         *   Parses the response and adds information to the scope.
-         *
-         * @param {Object} data The data in the response.
-         */
-        $scope.parseList = function(data) {
-          data.items.forEach(function(item) {
-            item.image = Number(item.image);
           });
         };
 

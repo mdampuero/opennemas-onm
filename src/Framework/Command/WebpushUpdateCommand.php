@@ -127,9 +127,9 @@ class WebpushUpdateCommand extends Command
                 }
 
                 // If current time is 00:00 save active subcsribers in instance settings (once a day, 30/instance max)
-                if ($delayedUtcTime->format('H:i:s') != "00:00:00") {
-                    return;
-                }
+                // if ($delayedUtcTime->format('H:i:s') != "00:00:00") {
+                //     continue;
+                // }
                 try {
                     $oldActiveSubscribers = $this->getContainer()->get('orm.manager')
                         ->getDataSet('Settings', 'instance')
@@ -138,7 +138,7 @@ class WebpushUpdateCommand extends Command
                     $incomingActiveSubscribers = $subscribersEndpoint->getSubscribers()['active_subscribers'];
 
                     if ($oldActiveSubscribers) {
-                        if (count($oldActiveSubscribers) == 31) {
+                        if (count($oldActiveSubscribers) == 32) {
                             array_pop($oldActiveSubscribers);
                         }
 

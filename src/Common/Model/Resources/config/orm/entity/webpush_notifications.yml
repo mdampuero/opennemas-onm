@@ -127,4 +127,17 @@ orm:
                             primary: true
                             unique:  true
                             flags:   {}
+                        -
+                            name:    status
+                            columns: [ status ]
+                            primary: false
+                            unique:  false
+                            flags:   {  }
+                        -
+                            name:    send_date
+                            columns: [ send_date ]
+                            primary: false
+                            unique:  false
+                            flags:   {  }
+                        -
 

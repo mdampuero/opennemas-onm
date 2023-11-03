@@ -80,11 +80,11 @@ class WebPushNotificationsHelper
     }
 
     /**
-     * Returns the first send date for the provided item.
+     * Returns the first send date from the notifications history.
      *
      * @return string The content body.
      */
-    public function getFirstItemDate($module)
+    public function getFirstItemDate()
     {
         $oql = sprintf(
             'send_date >="2000-01-01"'
@@ -93,6 +93,7 @@ class WebPushNotificationsHelper
 
         try {
             $item = $this->service->getItemBy($oql);
+
             return $item->send_date;
         } catch (\Exception $e) {
             return null;
