@@ -152,54 +152,6 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Generates a route based on the provided item and a list of parameters.
-     *
-     * @param mixed $item   A content or a route name.
-     * @param array $params The list of parameters.
-     *
-     * @return string The generated URL or null if an error is throw.
-     */
-    public function getUrl($item = null, array $params = []) : ?string
-    {
-        if (empty($item)) {
-            return null;
-        }
-        $item = is_string($item) ? $item : $this->contentHelper->getContent($item);
-
-        if (!empty($item->externalUri)) {
-            return $item->externalUri;
-        }
-        $absolute = array_key_exists('_absolute', $params) && $params['_absolute'];
-        $escape   = array_key_exists('_escape', $params) && $params['_escape'];
-        $isAmp    = array_key_exists('_amp', $params) && $params['_amp'];
-
-        // Remove special parameters
-        $params = array_filter($params, function ($a) {
-            return strpos($a, '_') !== 0;
-        }, ARRAY_FILTER_USE_KEY);
-
-        try {
-            $url = is_string($item)
-                ? $this->router->generate(
-                    $item,
-                    $params,
-                    $absolute
-                        ? \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
-                        : \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH
-                ) : $this->generate($item, [
-                    'absolute' => $absolute,
-                    '_format'  => $isAmp ? 'amp' : null,
-                ]);
-
-            $url = $this->container->get('core.decorator.url')->prefixUrl($url);
-
-            return $escape ? rawurlencode($url) : $url;
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    /**
      * Checks if the provided URI is for the provided item.
      *
      * @param Content $item The item.
