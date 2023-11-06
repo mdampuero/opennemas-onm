@@ -58,9 +58,6 @@ class WebpushSendCommand extends Command
                 continue;
             }
 
-            $redis = $this->getContainer()->get('cache.connection.instance');
-            $redis->init();
-
             $this->getContainer()->get('cache.connection.instance')->init();
             $output->write(sprintf(
                 '<fg=blue;options=bold>==></><options=bold> (%s/%s) Processing instance %s </>',
@@ -157,7 +154,6 @@ class WebpushSendCommand extends Command
                             $notification->id,
                             ['send_date' => $delayedUtcTime->format('Y-m-d H:i:s')]
                         );
-                        $redis->remove(sprintf('content-%s', $notification->fk_content));
                         continue;
                     }
                     $article  = $articleService->getItem($notification->fk_content);
@@ -195,7 +191,6 @@ class WebpushSendCommand extends Command
                                 'transaction_id' => $sentNotification['ID'] ?? '',
                             ]
                         );
-                        $redis->remove(sprintf('content-%s', $notification->fk_content));
                         $onCooldown = true;
                     }
                 }

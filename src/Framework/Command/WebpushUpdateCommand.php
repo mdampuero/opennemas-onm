@@ -58,9 +58,6 @@ class WebpushUpdateCommand extends Command
                 continue;
             }
 
-            $redis = $this->getContainer()->get('cache.connection.instance');
-            $redis->init();
-
             $this->getContainer()->get('cache.connection.instance')->init();
             $output->write(sprintf(
                 '<fg=blue;options=bold>==></><options=bold> (%s/%s) Processing instance %s </>',
@@ -121,15 +118,15 @@ class WebpushUpdateCommand extends Command
                         $notification,
                         $notificationsEndpoint,
                         $notificationService,
-                        $redis,
                         $output
                     );
                 }
 
-                // If current time is 00:00 save active subcsribers in instance settings (once a day, 30/instance max)
-                // if ($delayedUtcTime->format('H:i:s') != "00:00:00") {
-                //     continue;
-                // }
+                // If current time is 00:00 save active subcsribers in instance settings (once a day, 32/instance max)
+                if ($delayedUtcTime->format('H:i:s') != "00:00:00") {
+                    continue;
+                }
+
                 try {
                     $oldActiveSubscribers = $this->getContainer()->get('orm.manager')
                         ->getDataSet('Settings', 'instance')
@@ -207,7 +204,7 @@ class WebpushUpdateCommand extends Command
      *
      * @return array The list of instances.
      */
-    protected function processNotification($notification, $notificationsEndpoint, $notificationService, $redis, $output)
+    protected function processNotification($notification, $notificationsEndpoint, $notificationService, $output)
     {
         try {
             $getNotificationStatus = $notificationsEndpoint->getStatus($notification->transaction_id);
@@ -227,7 +224,6 @@ class WebpushUpdateCommand extends Command
                 'closed'    => $getNotificationStatus['count']['closed']
             ]
         );
-        $redis->remove(sprintf('content-%s', $notification->fk_content));
 
         // Stop the execution for 1.1 seconds
         usleep(1100000);

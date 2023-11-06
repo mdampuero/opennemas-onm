@@ -164,6 +164,11 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeSmartyCacheAll', 15],
                 ['removeVarnishCacheCurrentInstance', 10],
             ],
+
+            // Web Push notifications hooks
+            'webpushnotifications.patchItem' => [
+                ['removeObjectCacheForWebPushNotifications', 20]
+            ],
         ];
     }
 
@@ -296,6 +301,24 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $cache->remove($cache->getSetMembers('Widget_Keys'));
         $cache->remove('Widget_Keys');
+    }
+
+    /**
+     * Deletes the Web Push notification content from cache after the notification is updated.
+     *
+     * @param Event $event The event to handle.
+     *
+     * @return null
+     */
+    public function removeObjectCacheForWebPushNotifications(Event $event)
+    {
+        $item  = $event->getArgument('item');
+        $items = is_array($item) ? $item : [ $item ];
+
+        foreach ($items as $object) {
+            $this->cache->delete('content-' . $object->fk_content);
+            $this->cache->delete($object->content_type_name . '-' . $object->id);
+        }
     }
 
     /**

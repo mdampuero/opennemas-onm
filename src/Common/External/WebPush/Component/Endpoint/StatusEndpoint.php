@@ -37,10 +37,10 @@ class StatusEndpoint extends Endpoint
 
             $response = $this->client->get($url, $data);
             $body     = json_decode($response->getBody(), true);
-            if ($body['status'] == 'sent') {
-                getService('application.log')
-                    ->info('Notification ' . $body['campaign_id'] . ' was retrieved successfully');
-            }
+
+            // Pending of WebPushR to fix 'camapign_id' as parameter of the response
+            getService('application.log')
+                    ->info('Notification ' . $body['camapign_id'] . ' was retrieved successfully');
         } catch (\Exception $e) {
             getService('application.log')
                 ->error('Error retrieving the notification from server with campaign_id '

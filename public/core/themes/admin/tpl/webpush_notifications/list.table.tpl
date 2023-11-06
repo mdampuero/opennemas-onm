@@ -64,7 +64,7 @@
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('send_date')" width="200">
       {t}Send date{/t}
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('impressions')" width="150">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('impressions')" width="155">
       {t}Impressions{/t}
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}displayed to the user{/t}'" tooltip-placement="bottom"></i>
     </th>
