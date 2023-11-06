@@ -59,26 +59,78 @@
                       </div>
                     </div>
                   </div>
-                  <div ng-if="extra.theme_skins[settings.theme_skin].params.fonts">
-                    <ul class="nav nav-pills border-bottom border-light m-b-15 p-b-5" role="tablist">
-                      <li role="presentation" class="p-l-0 active">
-                        <a href="#tabGeneral" aria-controls="general" role="tab" data-toggle="tab">General</a>
-                      </li>
-                      <li role="presentation">
-                        <a href="#tabHeader" aria-controls="profile" role="tab" data-toggle="tab">Header</a>
-                      </li>
-                      <li role="presentation">
-                        <a href="#tabMenu" aria-controls="menu" role="tab" data-toggle="tab">Menu</a>
-                      </li>
-                      <li role="presentation">
-                        <a href="#tabFrontpage" aria-controls="frontpage" role="tab" data-toggle="tab">Frontpage</a>
-                      </li>
-                      <li role="presentation">
-                        <a href="#tabInners" aria-controls="inners" role="tab" data-toggle="tab">Inners</a>
-                      </li>
-                    </ul>
-                    <div class="tab-content">
-                      <div role="tabpanel" class="tab-pane fade in active" id="tabGeneral">
+                  <ul class="nav nav-pills border-bottom border-light m-b-15 p-b-5" role="tablist">
+                    <li role="presentation" class="p-l-0 active">
+                      <a href="#tabGeneral" aria-controls="general" role="tab" data-toggle="tab">{t domain="base"}General{/t}</a>
+                    </li>
+                    <li role="presentation" class="p-l-0">
+                      <a href="#tabFonts" aria-controls="fonts" role="tab" data-toggle="tab">{t domain="base"}Fonts{/t}</a>
+                    </li>
+                    <li role="presentation">
+                      <a href="#tabHeader" aria-controls="profile" role="tab" data-toggle="tab">{t domain="base"}Header{/t}</a>
+                    </li>
+                    <li role="presentation">
+                      <a href="#tabMenu" aria-controls="menu" role="tab" data-toggle="tab">{t domain="base"}Menu{/t}</a>
+                    </li>
+                    <li role="presentation">
+                      <a href="#tabFrontpage" aria-controls="frontpage" role="tab" data-toggle="tab">{t domain="base"}Frontpage{/t}</a>
+                    </li>
+                    <li role="presentation">
+                      <a href="#tabInners" aria-controls="inners" role="tab" data-toggle="tab">{t domain="base"}Inners{/t}</a>
+                    </li>
+                    <li role="presentation">
+                      <a href="#tabMobile" aria-controls="mobile" role="tab" data-toggle="tab">{t domain="base"}Mobile{/t}</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in active" id="tabGeneral">
+                      <div class="row" ng-if="extra.theme_skins[settings.theme_skin].params.options">
+                        <div class="col-xs-12 col-md-5 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-hamburger-position">
+                            <h4>
+                              <i class="fa fa-align-center"></i>
+                              {t}Hamburger menu{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Choose where to appear menu{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="row" ng-model="settings.theme_options.hamburger_position">
+                              <div class="panel panel-default col-xs-5" ng-repeat="(hamburger_position_name,hamburger_position_value) in extra.theme_skins[settings.theme_skin].params.options.option_hamburger_position">
+                                <div class="radio">
+                                  <input id="theme-option-hamburger-position-[% hamburger_position_name %]" name="theme-option-hamburger-position" ng-model="settings.theme_options.hamburger_position" value="[% hamburger_position_name %]" ng-checked="[% hamburger_position_name === settings.theme_options.hamburger_position %]" type="radio"/>
+                                  <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-hamburger-position-[% hamburger_position_name %]">
+                                    <img src="/themes/apolo/images/admin/hamburger_position-[% hamburger_position_name %].jpg" alt="[% hamburger_position_value %]" class="img img-responsive img-rounded m-b-10">
+                                    <h5>[% hamburger_position_value %]</h5>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <h4>
+                            <i class="fa fa-arrows-h"></i>
+                            {t}Page Layout{/t}
+                          </h4>
+                          <label class="form-label" for="theme-option-width">
+                            <span class="help">
+                              {t}Page containers width{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-option-width" name="theme-option-width" ng-model="settings.theme_options.general_page_width" required>
+                                <option value="[% page_width_name %]" ng-repeat="(page_width_name,page_width_value) in extra.theme_skins[settings.theme_skin].params.options.option_general_page_width" ng-selected="[% page_width_name === settings.theme_options.general_page_width || settings.theme_options.general_page_width == undefined %]">[% page_width_value %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tabFonts">
+                      <div ng-if="extra.theme_skins[settings.theme_skin].params.fonts">
                         <div class="row">
                           <div class="col-xs-12 m-b-15">
                             <h4>
@@ -163,114 +215,72 @@
                             </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-xs-12 col-md-5 m-b-15">
-                            <label class="form-label m-b-15" for="theme-option-hamburger-position">
-                              <h4>
-                                <i class="fa fa-align-center"></i>
-                                {t}Hamburger menu{/t}
-                              </h4>
-                              <span class="help">
-                                {t}Choose where to appear menu{/t}
-                              </span>
-                            </label>
-                            <div class="controls">
-                              <div class="row" ng-model="settings.theme_options.hamburger_position">
-                                <div class="panel panel-default col-xs-5" ng-repeat="(hamburger_position_name,hamburger_position_value) in extra.theme_skins[settings.theme_skin].params.options.option_hamburger_position">
-                                  <div class="radio">
-                                    <input id="theme-option-hamburger-position-[% hamburger_position_name %]" name="theme-option-hamburger-position" ng-model="settings.theme_options.hamburger_position" value="[% hamburger_position_name %]" ng-checked="[% hamburger_position_name === settings.theme_options.hamburger_position %]" type="radio"/>
-                                    <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-hamburger-position-[% hamburger_position_name %]">
-                                      <img src="/themes/apolo/images/admin/hamburger_position-[% hamburger_position_name %].jpg" alt="[% hamburger_position_value %]" class="img img-responsive img-rounded m-b-10">
-                                      <h5>[% hamburger_position_value %]</h5>
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
+                      </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tabHeader">
+                      <div class="row" ng-if="extra.theme_skins[settings.theme_skin].params.options">
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <h4>
+                            <i class="fa fa-align-center"></i>
+                            {t}Main header alignment{/t}
+                          </h4>
+                          <label class="form-label" for="theme-header-align">
+                            <span class="help">
+                              {t}Set main logo position{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-header-align" name="theme-header-align" ng-model="settings.theme_options.header_align" required>
+                                <option value="[% header_align_name %]" ng-repeat="(header_align_name,header_align_value) in extra.theme_skins[settings.theme_skin].params.options.option_header_align" ng-selected="[% header_align_name === settings.theme_options.header_align || settings.theme_options.header_align == undefined %]">[% header_align_value %]</option>
+                              </select>
                             </div>
                           </div>
-                          <div class="col-xs-12 col-md-4 m-b-15">
-                            <h4>
-                              <i class="fa fa-arrows-h"></i>
-                              {t}Page Layout{/t}
-                            </h4>
-                            <label class="form-label" for="theme-option-width">
-                              <span class="help">
-                                {t}Page containers width{/t}
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <h4>
+                            <i class="fa fa-paint-brush"></i>
+                            {t}Main header background{/t}
+                          </h4>
+                          <label class="form-label" for="theme-header-color">
+                            <span class="help">
+                              {t}Choose header appearance{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-header-color" name="theme-header-color" ng-model="settings.theme_options.header_color" required>
+                                <option value="[% header_color_name %]" ng-repeat="(header_color_name,header_color_value) in extra.theme_skins[settings.theme_skin].params.options.option_header_color" ng-selected="[% header_color_name === settings.theme_options.header_color || settings.theme_options.header_color == undefined %]">[% header_color_value %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <h4>
+                            <i class="fa fa-eyedropper"></i>
+                            {t}Main header border color{/t}
+                          </h4>
+                          <label class="form-label" for="theme-header-border-color">
+                            <span class="help">
+                              {t}Choose header border bottom color{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <span class="input-group-addon" ng-style="{ 'background-color': settings.theme_options.header_border_color }">
+                                &nbsp;&nbsp;&nbsp;&nbsp;
                               </span>
-                            </label>
-                            <div class="controls">
-                              <div class="input-group">
-                                <select id="theme-option-width" name="theme-option-width" ng-model="settings.theme_options.general_page_width" required>
-                                  <option value="[% page_width_name %]" ng-repeat="(page_width_name,page_width_value) in extra.theme_skins[settings.theme_skin].params.options.option_general_page_width" ng-selected="[% page_width_name === settings.theme_options.general_page_width || settings.theme_options.general_page_width == undefined %]">[% page_width_value %]</option>
-                                </select>
+                              <input class="form-control" colorpicker="hex" id="header-border-color" name="header-border-color" ng-model="settings.theme_options.header_border_color" type="text">
+                              <div class="input-group-btn">
+                                <button class="btn btn-default" ng-click="settings.theme_options.header_border_color = backup.theme_options.header_border_color" type="button">{t}Reset{/t}</button>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div role="tabpanel" class="tab-pane fade" id="tabHeader">
-                        <div class="row">
-                          <div class="col-xs-12 col-md-4 m-b-15">
-                            <h4>
-                              <i class="fa fa-align-center"></i>
-                              {t}Main header alignment{/t}
-                            </h4>
-                            <label class="form-label" for="theme-header-align">
-                              <span class="help">
-                                {t}Set main logo position{/t}
-                              </span>
-                            </label>
-                            <div class="controls">
-                              <div class="input-group">
-                                <select id="theme-header-align" name="theme-header-align" ng-model="settings.theme_options.header_align" required>
-                                  <option value="[% header_align_name %]" ng-repeat="(header_align_name,header_align_value) in extra.theme_skins[settings.theme_skin].params.options.option_header_align" ng-selected="[% header_align_name === settings.theme_options.header_align || settings.theme_options.header_align == undefined %]">[% header_align_value %]</option>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-xs-12 col-md-4 m-b-15">
-                            <h4>
-                              <i class="fa fa-paint-brush"></i>
-                              {t}Main header background{/t}
-                            </h4>
-                            <label class="form-label" for="theme-header-color">
-                              <span class="help">
-                                {t}Choose header appearance{/t}
-                              </span>
-                            </label>
-                            <div class="controls">
-                              <div class="input-group">
-                                <select id="theme-header-color" name="theme-header-color" ng-model="settings.theme_options.header_color" required>
-                                  <option value="[% header_color_name %]" ng-repeat="(header_color_name,header_color_value) in extra.theme_skins[settings.theme_skin].params.options.option_header_color" ng-selected="[% header_color_name === settings.theme_options.header_color || settings.theme_options.header_color == undefined %]">[% header_color_value %]</option>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-xs-12 col-md-4 m-b-15">
-                            <h4>
-                              <i class="fa fa-eyedropper"></i>
-                              {t}Main header border color{/t}
-                            </h4>
-                            <label class="form-label" for="theme-header-border-color">
-                              <span class="help">
-                                {t}Choose header border bottom color{/t}
-                              </span>
-                            </label>
-                            <div class="controls">
-                              <div class="input-group">
-                                <span class="input-group-addon" ng-style="{ 'background-color': settings.theme_options.header_border_color }">
-                                  &nbsp;&nbsp;&nbsp;&nbsp;
-                                </span>
-                                <input class="form-control" colorpicker="hex" id="header-border-color" name="header-border-color" ng-model="settings.theme_options.header_border_color" type="text">
-                                <div class="input-group-btn">
-                                  <button class="btn btn-default" ng-click="settings.theme_options.header_border_color = backup.theme_options.header_border_color" type="button">{t}Reset{/t}</button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div role="tabpanel" class="tab-pane fade" id="tabMenu">
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tabMenu">
+                      <div ng-if="extra.theme_skins[settings.theme_skin].params.options">
                         <div class="row">
                           <div class="col-xs-12 col-md-4 m-b-15">
                             <h4>
@@ -352,134 +362,175 @@
                           </div>
                         </div>
                       </div>
-                      <div role="tabpanel" class="tab-pane fade" id="tabFrontpage">
-                      </div>
-                      <div role="tabpanel" class="tab-pane fade" id="tabInners">
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tabFrontpage">
+                      <div ng-if="extra.theme_skins[settings.theme_skin].params.options">
                         <div class="row">
-                          <div class="col-xs-12 col-md-8">
-                            <div class="row">
-                              <div class="col-xs-12 m-b-15">
-                                <label class="form-label m-b-15" for="theme-option-article-header">
-                                  <h4>
-                                    <i class="fa fa-align-center"></i>
-                                    {t}Content header{/t}
-                                  </h4>
-                                  <span class="help">
-                                    {t}Display inner contents header at full width or inbody column{/t}
-                                  </span>
-                                </label>
-                                <div class="controls">
-                                  <div class="row" ng-model="settings.theme_options.article_header">
-                                    <div class="panel panel-default col-xs-5 col-md-4" ng-repeat="(article_header_name,article_header_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_header">
-                                      <div class="radio">
-                                        <input id="theme-option-article-header-[% article_header_name %]" name="theme-option-article-header" ng-model="settings.theme_options.article_header" value="[% article_header_name %]" ng-checked="[% article_header_name === settings.theme_options.article_header %]" type="radio"/>
-                                        <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-article-header-[% article_header_name %]">
-                                          <img src="/themes/apolo/images/admin/article_header-[% article_header_name %].jpg" alt="[% article_header_name %]" class="img img-responsive img-rounded m-b-10">
-                                          <h5>[% article_header_value %]</h5>
-                                        </label>
-                                      </div>
+                          <div class="col-xs-12 m-b-15">
+                            <label class="form-label m-b-15" for="theme-option-content-category-name">
+                              <h4>
+                                <i class="fa fa-share-alt-square"></i>
+                                {t}Category name{/t} / {t}Pretitle{/t}
+                              </h4>
+                              <span class="help">
+                                {t}Display pretitle or category in contents{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-option-content-category-name" name="theme-option-content-category-name" ng-model="settings.theme_options.content_category">
+                                  <option value="[% content_category_name %]" ng-repeat="(content_category_name,content_category_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_category_name" ng-selected="[% content_category_name === settings.theme_options.content_category || settings.theme_options.content_category == undefined %]">[% content_category_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-xs-12 m-b-15">
+                            <label class="form-label m-b-15" for="theme-option-content-subtitle">
+                              <h4>
+                                <i class="fa fa-share-alt-square"></i>
+                                {t}Subtitle{/t}
+                              </h4>
+                              <span class="help">
+                                {t}Display subtitle{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-option-content-subtitle" name="theme-option-content-subtitle" ng-model="settings.theme_options.content_subtitle">
+                                  <option value="[% content_subtitle_name %]" ng-repeat="(content_subtitle_name,content_subtitle_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_subtitle" ng-selected="[% content_subtitle_name === settings.theme_options.content_subtitle || settings.theme_options.content_subtitle == undefined %]">[% content_subtitle_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tabInners">
+                      <div class="row" ng-if="extra.theme_skins[settings.theme_skin].params.options">
+                        <div class="col-xs-12 col-md-8">
+                          <div class="row">
+                            <div class="col-xs-12 m-b-15">
+                              <label class="form-label m-b-15" for="theme-option-article-header">
+                                <h4>
+                                  <i class="fa fa-align-center"></i>
+                                  {t}Content header{/t}
+                                </h4>
+                                <span class="help">
+                                  {t}Display inner contents header at full width or inbody column{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="row" ng-model="settings.theme_options.article_header">
+                                  <div class="panel panel-default col-xs-5 col-md-4" ng-repeat="(article_header_name,article_header_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_header">
+                                    <div class="radio">
+                                      <input id="theme-option-article-header-[% article_header_name %]" name="theme-option-article-header" ng-model="settings.theme_options.article_header" value="[% article_header_name %]" ng-checked="[% article_header_name === settings.theme_options.article_header %]" type="radio"/>
+                                      <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-article-header-[% article_header_name %]">
+                                        <img src="/themes/apolo/images/admin/article_header-[% article_header_name %].jpg" alt="[% article_header_name %]" class="img img-responsive img-rounded m-b-10">
+                                        <h5>[% article_header_value %]</h5>
+                                      </label>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              <div class="col-xs-12 m-b-15">
-                                <label class="form-label m-b-15" for="theme-option-article-layout">
-                                  <h4>
-                                    <i class="fa fa-columns"></i>
-                                    {t}Sidebar{/t}
-                                  </h4>
-                                  <span class="help">
-                                    {t}Show or hide right sidebar{/t}
-                                  </span>
-                                </label>
-                                <div class="controls">
-                                  <div class="row" ng-model="settings.theme_options.article_layout">
-                                    <div class="panel panel-default col-xs-5 col-md-4" ng-repeat="(article_layout_name,article_layout_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_layout">
-                                      <div class="radio">
-                                        <input id="theme-option-article-layout-[% article_layout_name %]" name="theme-option-article-layout" ng-model="settings.theme_options.article_layout" value="[% article_layout_name %]" ng-checked="[% article_layout_name === settings.theme_options.article_layout %]" type="radio"/>
-                                        <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-article-layout-[% article_layout_name %]">
-                                          <img src="/themes/apolo/images/admin/article_layout-[% article_layout_name %].jpg" alt="[% article_layout_value %]" class="img img-responsive img-rounded m-b-10">
-                                          <h5>[% article_layout_value %]</h5>
-                                        </label>
-                                      </div>
+                            </div>
+                            <div class="col-xs-12 m-b-15">
+                              <label class="form-label m-b-15" for="theme-option-article-layout">
+                                <h4>
+                                  <i class="fa fa-columns"></i>
+                                  {t}Sidebar{/t}
+                                </h4>
+                                <span class="help">
+                                  {t}Show or hide right sidebar{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="row" ng-model="settings.theme_options.article_layout">
+                                  <div class="panel panel-default col-xs-5 col-md-4" ng-repeat="(article_layout_name,article_layout_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_layout">
+                                    <div class="radio">
+                                      <input id="theme-option-article-layout-[% article_layout_name %]" name="theme-option-article-layout" ng-model="settings.theme_options.article_layout" value="[% article_layout_name %]" ng-checked="[% article_layout_name === settings.theme_options.article_layout %]" type="radio"/>
+                                      <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-article-layout-[% article_layout_name %]">
+                                        <img src="/themes/apolo/images/admin/article_layout-[% article_layout_name %].jpg" alt="[% article_layout_value %]" class="img img-responsive img-rounded m-b-10">
+                                        <h5>[% article_layout_value %]</h5>
+                                      </label>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              <div class="col-xs-12 m-b-15">
-                                <label class="form-label m-b-15" for="theme-option-media-header">
-                                  <h4>
-                                    <i class="fa fa-picture-o"></i>
-                                    {t}Featured media{/t}
-                                  </h4>
-                                  <span class="help">
-                                    {t}Display in article header or just before the body{/t}
-                                  </span>
-                                </label>
-                                <div class="controls">
-                                  <div class="row" ng-model="settings.theme_options.article_header_media">
-                                    <div class="panel panel-default col-xs-5 col-md-4" ng-repeat="(header_media_name,header_media_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_header_media">
-                                      <div class="radio">
-                                        <input id="theme-option-media-header-[% header_media_name %]" name="theme-option-media-header" ng-model="settings.theme_options.article_header_media" value="[% header_media_name %]" ng-checked="[% header_media_name === settings.theme_options.article_header_media %]" type="radio"/>
-                                        <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-media-header-[% header_media_name %]">
-                                          <img src="/themes/apolo/images/admin/article_header_media-[% header_media_name %].jpg" alt="[% header_media_name %]" class="img img-responsive img-rounded m-b-10">
-                                          <h5>[% header_media_value %]</h5>
-                                        </label>
-                                      </div>
+                            </div>
+                            <div class="col-xs-12 m-b-15">
+                              <label class="form-label m-b-15" for="theme-option-media-header">
+                                <h4>
+                                  <i class="fa fa-picture-o"></i>
+                                  {t}Featured media{/t}
+                                </h4>
+                                <span class="help">
+                                  {t}Display in article header or just before the body{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="row" ng-model="settings.theme_options.article_header_media">
+                                  <div class="panel panel-default col-xs-5 col-md-4" ng-repeat="(header_media_name,header_media_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_header_media">
+                                    <div class="radio">
+                                      <input id="theme-option-media-header-[% header_media_name %]" name="theme-option-media-header" ng-model="settings.theme_options.article_header_media" value="[% header_media_name %]" ng-checked="[% header_media_name === settings.theme_options.article_header_media %]" type="radio"/>
+                                      <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-media-header-[% header_media_name %]">
+                                        <img src="/themes/apolo/images/admin/article_header_media-[% header_media_name %].jpg" alt="[% header_media_name %]" class="img img-responsive img-rounded m-b-10">
+                                        <h5>[% header_media_value %]</h5>
+                                      </label>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              <div class="col-xs-12 m-b-15" ng-if="settings.theme_options.article_header_media === 'header'">
-                                <label class="form-label m-b-15" for="theme-option-order-header">
-                                  <h4>
-                                    <i class="fa fa-sort-amount-asc"></i>
-                                    {t}Content header display order{/t}
-                                  </h4>
-                                  <span class="help">
-                                    {t}Choose what elements go first{/t}
-                                  </span>
-                                </label>
-                                <div class="controls">
-                                  <div class="row" ng-model="settings.theme_options.article_header_order">
-                                    <div class="panel panel-default col-xs-5 col-md-4" ng-repeat="(header_order_name,header_order_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_header_order">
-                                      <div class="radio">
-                                        <input id="theme-option-order-header-[% header_order_name %]" name="theme-option-order-header" ng-model="settings.theme_options.article_header_order" value="[% header_order_name %]" ng-checked="[% header_order_name === settings.theme_options.article_header_order %]" type="radio"/>
-                                        <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-order-header-[% header_order_name %]">
-                                          <img src="/themes/apolo/images/admin/article_header_order-[% header_order_name %].jpg" alt="[% header_order_name %]" class="img img-responsive img-rounded m-b-10">
-                                          <h5>[% header_order_value %]</h5>
-                                        </label>
-                                      </div>
+                            </div>
+                            <div class="col-xs-12 m-b-15" ng-if="settings.theme_options.article_header_media === 'header'">
+                              <label class="form-label m-b-15" for="theme-option-order-header">
+                                <h4>
+                                  <i class="fa fa-sort-amount-asc"></i>
+                                  {t}Content header display order{/t}
+                                </h4>
+                                <span class="help">
+                                  {t}Choose what elements go first{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="row" ng-model="settings.theme_options.article_header_order">
+                                  <div class="panel panel-default col-xs-5 col-md-4" ng-repeat="(header_order_name,header_order_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_header_order">
+                                    <div class="radio">
+                                      <input id="theme-option-order-header-[% header_order_name %]" name="theme-option-order-header" ng-model="settings.theme_options.article_header_order" value="[% header_order_name %]" ng-checked="[% header_order_name === settings.theme_options.article_header_order %]" type="radio"/>
+                                      <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-order-header-[% header_order_name %]">
+                                        <img src="/themes/apolo/images/admin/article_header_order-[% header_order_name %].jpg" alt="[% header_order_name %]" class="img img-responsive img-rounded m-b-10">
+                                        <h5>[% header_order_value %]</h5>
+                                      </label>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              <div class="col-xs-12 m-b-15" ng-if="settings.theme_options.article_header_media === 'header'">
-                                <label class="form-label m-b-15" for="theme-option-align-header">
-                                  <h4>
-                                    <i class="fa fa-align-left"></i>
-                                    {t}Content header align{/t}
-                                  </h4>
-                                  <span class="help">
-                                    {t}Choose headings alignment{/t}
-                                  </span>
-                                </label>
-                                <div class="controls">
-                                  <div class="row" ng-model="settings.theme_options.article_header_align">
-                                    <div class="panel panel-default col-xs-5 col-md-4" ng-repeat="(header_align_name,header_align_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_header_align">
-                                      <div class="radio">
-                                        <input id="theme-option-align-header-[% header_align_name %]" name="theme-option-align-header" ng-model="settings.theme_options.article_header_align" value="[% header_align_name %]" ng-checked="[% header_align_name === settings.theme_options.article_header_align %]" type="radio"/>
-                                        <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-align-header-[% header_align_name %]">
-                                          <img src="/themes/apolo/images/admin/article_header_align-[% header_align_name %].jpg" alt="[% header_align_value %]" class="img img-responsive img-rounded m-b-10">
-                                          <h5>[% header_align_value %]</h5>
-                                        </label>
-                                      </div>
+                            </div>
+                            <div class="col-xs-12 m-b-15" ng-if="settings.theme_options.article_header_media === 'header'">
+                              <label class="form-label m-b-15" for="theme-option-align-header">
+                                <h4>
+                                  <i class="fa fa-align-left"></i>
+                                  {t}Content header align{/t}
+                                </h4>
+                                <span class="help">
+                                  {t}Choose headings alignment{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="row" ng-model="settings.theme_options.article_header_align">
+                                  <div class="panel panel-default col-xs-5 col-md-4" ng-repeat="(header_align_name,header_align_value) in extra.theme_skins[settings.theme_skin].params.options.option_article_header_align">
+                                    <div class="radio">
+                                      <input id="theme-option-align-header-[% header_align_name %]" name="theme-option-align-header" ng-model="settings.theme_options.article_header_align" value="[% header_align_name %]" ng-checked="[% header_align_name === settings.theme_options.article_header_align %]" type="radio"/>
+                                      <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-align-header-[% header_align_name %]">
+                                        <img src="/themes/apolo/images/admin/article_header_align-[% header_align_name %].jpg" alt="[% header_align_value %]" class="img img-responsive img-rounded m-b-10">
+                                        <h5>[% header_align_value %]</h5>
+                                      </label>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
+                        </div>
                         <div class="col-xs-12 col-md-4">
                           <div class="row">
                             <div class="col-xs-12 m-b-15">
@@ -629,6 +680,71 @@
                               </div>
                             </div>
                           </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tabMobile">
+                      <div class="row" ng-if="extra.theme_skins[settings.theme_skin].params.options">
+                      <div class="col-xs-12 col-md-5 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-hamburger-position">
+                            <h4>
+                              <i class="fa fa-align-center"></i>
+                              {t}Hamburger menu{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Choose where to appear menu{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="row" ng-model="settings.theme_options.mobile_inner_aperture">
+                              <div class="panel panel-default col-xs-5" ng-repeat="(mobile_inner_aperture_name,mobile_inner_aperture_value) in extra.theme_skins[settings.theme_skin].params.options.option_mobile_inner_aperture">
+                                <div class="radio">
+                                  <input id="theme-option-mobile-inner-aperture-[% mobile_inner_aperture_name %]" name="theme-option-mobile-inner-aperture" ng-model="settings.theme_options.mobile_inner_aperture" value="[% mobile_inner_aperture_name %]" ng-checked="[% mobile_inner_aperture_name === settings.theme_options.mobile_inner_aperture %]" type="radio"/>
+                                  <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-mobile-inner-aperture-[% mobile_inner_aperture_name %]">
+                                    <img src="/themes/apolo/images/admin/mobile_inner_aperture-[% mobile_inner_aperture_name %].jpg" alt="[% mobile_inner_aperture_value %]" class="img img-responsive img-rounded m-b-10">
+                                    <h5>[% mobile_inner_aperture_value %]</h5>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 m-b-15">
+                        <label class="form-label m-b-15" for="theme-option-mobile-top-menu">
+                          <h4>
+                            <i class="fa fa-bars"></i>
+                            {t domain='base'}Top menu{/t}
+                          </h4>
+                          <span class="help">
+                            {t}Display top left menu{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <select id="theme-option-mobile-top-menu" name="theme-option-mobile-top-menu" ng-model="settings.theme_options.mobile_top_menu">
+                              <option value="[% mobile_top_menu_name %]" ng-repeat="(mobile_top_menu_name,mobile_top_menu_value) in extra.theme_skins[settings.theme_skin].params.options.option_mobile_top_menu" ng-selected="[% mobile_top_menu_name === settings.theme_options.mobile_top_menu || settings.theme_options.mobile_top_menu == undefined %]">[% mobile_top_menu_value %]</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 m-b-15">
+                        <label class="form-label m-b-15" for="theme-option-mobile-main-menu">
+                          <h4>
+                            <i class="fa fa-bars"></i>
+                            {t domain='base'}Main menu{/t}
+                          </h4>
+                          <span class="help">
+                            {t}Display main menu{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <select id="theme-option-mobile-main-menu" name="theme-option-mobile-main-menu" ng-model="settings.theme_options.mobile_main_menu">
+                              <option value="[% mobile_main_menu_name %]" ng-repeat="(mobile_main_menu_name,mobile_main_menu_value) in extra.theme_skins[settings.theme_skin].params.options.option_mobile_main_menu" ng-selected="[% mobile_main_menu_name === settings.theme_options.mobile_main_menu || settings.theme_options.mobile_main_menu == undefined %]">[% mobile_main_menu_value %]</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
