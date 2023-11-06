@@ -568,7 +568,12 @@ jQuery(function($) {
     fx: { opacity: 'toggle', duration: 'fast' }
   });
 
-  $('#content-provider').on('click', '.pagination a', function(e) {
+  $('#content-provider').on('click', '.pagination li.active a', function(e) {
+    // Prevent call on current page
+    e.preventDefault();
+  });
+
+  $('#content-provider').on('click', '.pagination li:not(.active) a', function(e) {
     e.preventDefault();
     var parent = $(this).closest('.ui-tabs-panel');
 

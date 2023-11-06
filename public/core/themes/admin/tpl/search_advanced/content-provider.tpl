@@ -21,9 +21,11 @@
   </div>
   <div id="pagination-wrapper" class="pagination-wrapper">
     {$pagination}
-  </div><!-- / -->
+  </div>
 {elseif (!empty($search_string))}
-  {t}No results{/t}
+  <div id="search_results_available" class="content-provider-block">
+    {t}No results{/t}
+  </div>
 {/if}
 
 <script>
@@ -66,7 +68,7 @@
       $('#search-form-content-provider').submit();
     });
 
-    $('.pagination a').on('click', function(e){
+    $('.pagination li:not(.active) a').on('click', function(e){
       e.preventDefault();
       var route = $(this).attr('href');
       getContentProviderItems(route, [], $(this).closest('.ui-tabs-panel'));
