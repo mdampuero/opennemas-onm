@@ -76,6 +76,7 @@
     "url": "{$url}",
     "wordCount": {$wordCount},
     "description": "{$description|replace:'\\':''|escape:'htmlall'}",
+    "articleBody": "{$body|replace:'\\':''|escape:'htmlall'}",
     "publisher": {
       "@type": "Organization",
       "name": "{$siteName|replace:'\\':''|escape:'htmlall'}",

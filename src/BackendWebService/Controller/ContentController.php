@@ -30,20 +30,14 @@ class ContentController extends Controller
 
         $oql = $request->query->get('oql', '');
 
-        list($criteria, $order, $epp, $page) =
-            $this->get('core.helper.oql')->getFiltersFromOql($oql);
-
-        $em = $this->get('entity_repository');
-
-        $results = $em->findBy($criteria, $order, $epp, $page);
-        $results = \Onm\StringUtils::convertToUtf8($results);
-        $total   = $em->countBy($criteria);
+        $cs      = $this->get('api.service.content');
+        $results = $cs->getList($oql);
 
         return [
             'o-filename' => $contentType,
             'extra'      => $this->loadExtraData(),
-            'results'    => $results,
-            'total'      => $total,
+            'results'   => $cs->responsify($results['items']),
+            'total'      => $results['total'],
         ];
     }
 
