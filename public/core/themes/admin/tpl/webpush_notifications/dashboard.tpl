@@ -73,7 +73,7 @@
                   <div class="showcase-info showcase-info-score panel m-b-0">
                     <div class="form-status text-center">
                       <p class="onm-score text-center lead m-b-5">
-                        [% monthlyCTR * 100 %]%
+                        [% monthlyCTR %]%
                       </p>
                     </div>
                       <label class="form-label text-center m-t-10">

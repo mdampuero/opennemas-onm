@@ -113,7 +113,7 @@
 
             $scope.monthlyInteractions = monthlyClicks + monthlyClosed;
 
-            $scope.monthlyCTR = Math.round($scope.monthlyInteractions / $scope.monthlyImpressions * 100) / 100;
+            $scope.monthlyCTR = Math.round($scope.monthlyInteractions / $scope.monthlyImpressions * 10000) / 100;
 
             // Sets up the active subscribers chart
             $scope.labels = [];
