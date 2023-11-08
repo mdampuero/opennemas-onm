@@ -44,12 +44,19 @@
          */
         $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
-
+          $scope.app.columns.selected = [ 'name', 'slug', 'contents' ];
           oqlEncoder.configure({ placeholder: {
             name: 'name ~ "%[value]%" or slug ~ "%[value]%"',
           } });
 
           $scope.list();
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.isSelectable = function() {
+          return false;
         };
 
         /**
