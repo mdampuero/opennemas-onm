@@ -20,76 +20,64 @@
     </div>
     <div class="content">
       <div class="grid simple">
-        <div class="grid-body ng-cloak">
+        <div class="grid-body bg-transparent ng-cloak">
             <div class="row">
               <div class="col-xs-3">
-                <div class="m-t-5">
-                  <div class="showcase-info showcase-info-score panel m-b-0">
-                    <div class="form-status text-center">
-                      <p class="onm-score text-center lead m-b-5">
-                        [% settings.webpush_active_subscribers[0] %]
-                      </p>
-                    </div>
-                    <label class="form-label text-center m-t-10">{t}Active Subscribers{/t}</label>
+                <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-b-0 p-15 bg-white">
+                  <label class="form-label">{t}Active Subscribers{/t}</label>
+                  <div class="form-status text-left">
+                    <p class="onm-score text-left lead m-b-0">
+                      <strong>[% settings.webpush_active_subscribers[0] %]</strong>
+                    </p>
                   </div>
                 </div>
               </div>
               <div class="col-xs-3">
-                <div class="m-t-5">
-                  <div class="showcase-info showcase-info-score panel m-b-0">
-                    <div class="form-status text-center">
-                      <p class="onm-score text-center lead m-b-5">
-                         [% monthlyImpressions %]
-                      </p>
-                    </div>
-                    <label class="form-label text-center m-t-10">
-                      {t}Impressions{/t}
-                      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}displayed to the user{/t}'" tooltip-placement="bottom"></i>
-                      <br>
-                      <small class="form-label text-center ">{t}Monthly{/t}</small>
-                    </label>
+                <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-b-0 p-15 bg-white">
+                  <label class="form-label">
+                    {t}Impressions{/t} <small class="form-label">({t}Monthly{/t})</small>
+                    <i class="fa fa-info-circle text-info pull-right" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}displayed to the user{/t}'" tooltip-placement="bottom"></i>
+                  </label>
+                  <div class="form-status text-left">
+                    <p class="onm-score text-left lead m-b-0">
+                        <strong>[% monthlyImpressions %]</strong>
+                    </p>
                   </div>
                 </div>
               </div>
               <div class="col-xs-3">
-                <div class="m-t-5">
-                  <div class="showcase-info showcase-info-score panel m-b-0">
-                    <div class="form-status text-center">
-                      <p class="onm-score text-center lead m-b-5">
-                        [% monthlyInteractions %]
-                      </p>
-                    </div>
-                      <label class="form-label text-center m-t-10">
-                        {t}Interactions{/t}
-                        <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}clicked or closed{/t}'" tooltip-placement="bottom"></i>
-                        <br>
-                        <small class="form-label text-center ">{t}Monthly{/t}</small>
-                    </label>
+                <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-b-0 p-15 bg-white">
+                  <label class="form-label">
+                    {t}Interactions{/t} <small class="form-label">({t}Monthly{/t})</small>
+                    <i class="fa fa-info-circle text-info pull-right" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}clicked or closed{/t}'" tooltip-placement="bottom"></i>
+                  </label>
+                  <div class="form-status text-left">
+                    <p class="onm-score text-left lead m-b-0">
+                      <strong>[% monthlyInteractions %]</strong>
+                    </p>
                   </div>
                 </div>
               </div>
               <div class="col-xs-3">
-                <div class="m-t-5">
-                  <div class="showcase-info showcase-info-score panel m-b-0">
-                    <div class="form-status text-center">
-                      <p class="onm-score text-center lead m-b-5">
-                        [% monthlyCTR %]%
-                      </p>
-                    </div>
-                      <label class="form-label text-center m-t-10">
-                        {t}CTR{/t}
-                        <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Interactions (Clicks + Closed){/t}<br>{t}divided by Impressions{/t}'" tooltip-placement="bottom"></i>
-                        <br>
-                        <small class="form-label text-center ">{t}Monthly{/t}</small>
-                    </label>
+                <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-b-0 p-15 bg-white">
+                  <label class="form-label">
+                    {t}CTR{/t} <small class="form-label">({t}Monthly{/t})</small>
+                    <i class="fa fa-info-circle text-info pull-right" uib-tooltip-html="'{t}Interactions (Clicks + Closed){/t}<br>{t}divided by Impressions{/t}'" tooltip-placement="bottom"></i>
+                  </label>
+                  <div class="form-status text-left">
+                    <p class="onm-score text-left lead m-b-0">
+                      <strong>[% monthlyCTR %]%</strong>
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-        <div class="row m-t-30">
+        <div class="row m-t-15">
           <div class="col-xs-12">
-            <div class="panel">
-              <div class="panel-heading">{t}New Active Subscribers {/t}</div>
+            <div class="panel bg-white onm-shadow">
+              <div class="panel-heading">
+                <div class="lead">{t}New Active Subscribers{/t}</div>
+              </div>
               <div class="panel-body">
                 <canvas id="myChart" class="chart chart-line" chart-data="data" chart-labels="labels" chart-series="series" chart-options="options"></canvas>
               </div>
