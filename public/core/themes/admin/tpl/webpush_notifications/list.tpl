@@ -51,12 +51,9 @@
                 </li>
               {/block}
               <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
-                <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+                <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t} ({t}Notifications data is updated every 15 minutes{/t})" tooltip-placement="bottom" type="button">
                   <i class="fa fa-lg fa-refresh m-l-5 m-r-5" ng-class="{ 'fa-spin': flags.http.loading }"></i>
                 </button>
-                <li class="hidden-xs hidden-sm ng-cloak quicklinks">
-                  <i class="fa fa-info-circle text-info" uib-tooltip="{t}Notifications data is updated every 15 minutes {/t}" tooltip-placement="right"></i>
-                </li>
               </li>
             </ul>
             <ul class="nav quick-section quick-section-fixed ng-cloak" ng-if="data.items.length > 0">

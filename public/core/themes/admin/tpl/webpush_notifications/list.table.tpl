@@ -1,5 +1,8 @@
 {extends file="common/extension/list.table.tpl"}
 
+{block name="itemActionsWrapper"}
+{/block}
+
 {block name="customColumns"}
     <div class="checkbox column-filters-checkbox">
       <input id="image" checklist-model="app.columns.selected" checklist-value="'image'" type="checkbox">
@@ -52,7 +55,7 @@
 {/block}
 
 {block name="customColumnsHeader"}
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('image' )" width="200">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('image' )" width="100">
       {t}Image{/t}
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('transaction_id')" width="200">
@@ -65,20 +68,20 @@
       {t}Send date{/t}
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('impressions')" width="155">
-      {t}Impressions{/t}
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}displayed to the user{/t}'" tooltip-placement="bottom"></i>
+      {t}Impressions{/t}
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('clicks')" width="150">
-      {t}Clicks{/t}
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}clicked by the user{/t}'" tooltip-placement="bottom"></i>
+      {t}Clicks{/t}
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('closed')" width="150">
-      {t}Closed{/t}
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}closed by the user{/t}'" tooltip-placement="bottom"></i>
+      {t}Closed{/t}
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')" width="150">
-      {t}CTR{/t}
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Interactions (Clicks + Closed){/t}<br>{t}divided by Impressions{/t}'" tooltip-placement="bottom"></i>
+      {t}CTR{/t}
     </th>
 {/block}
 {block name="customColumnsBody"}
@@ -88,9 +91,9 @@
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('transaction_id')">
     <span>
-      <strong>
-        [% item.transaction_id %]
-      </strong>
+      <code class="text-info" ng-if="item.transaction_id">
+        <small>[% item.transaction_id %]</small>
+      </code>
     </span>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('status')">
@@ -135,9 +138,9 @@
     </span>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')">
-    <span>
+    <span ng-if="item.impressions > 0">
       <strong>
-        [%  ((item.clicks + item.closed) / item.impressions * 100) | number:0 %] %
+        [% ((item.clicks + item.closed) / item.impressions * 100) | number:0 %] %
       </strong>
     </span>
   </td>

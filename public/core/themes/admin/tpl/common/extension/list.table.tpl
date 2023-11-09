@@ -122,9 +122,11 @@
                 <div class="table-text">
                   <a class="text-black" href="[% routing.generate('backend_article_show', { id: getItemId(item) }) %]">[% item.title %]</a>
                 </div>
-                <div class="listing-inline-actions m-t-10 btn-group">
-                  {block name="itemActions"}{/block}
-                </div>
+                {block name="itemActionsWrapper"}
+                  <div class="listing-inline-actions m-t-10 btn-group">
+                    {block name="itemActions"}{/block}
+                  </div>
+                {/block}
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('created')">
                 <div>
