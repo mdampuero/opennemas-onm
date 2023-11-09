@@ -89,9 +89,7 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
     public function testGetUrlWhenNoItem()
     {
         $this->assertEmpty(smarty_function_get_url([], $this->smarty));
-        $this->assertEmpty(smarty_function_get_url([
-            'item' => json_decode(json_encode([ 'id' => null ]))
-        ], $this->smarty));
+        $this->assertEmpty(smarty_function_get_url(['item' => null], $this->smarty));
     }
 
     /**

@@ -12,7 +12,9 @@ function smarty_function_get_url($params, &$smarty)
 
     $container     = $smarty->getContainer();
     $contentHelper = $container->get('core.helper.content');
-    $item          = is_string($params['item']) ? $params['item'] : $contentHelper->getContent($params['item']);
+    $item          = is_string($params['item']) || is_object($params['item'])
+        ? $params['item']
+        : $contentHelper->getContent($params['item']);
 
     if (empty($item)) {
         return '';
