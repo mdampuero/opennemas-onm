@@ -93,10 +93,10 @@ class TagController extends ApiController
     {
         // Get information
 
-        $tagService  = $this->get($this->service);
-        $tags        = $tagService->getList();
-        $extraData = $this->getExtraData($tags['items']);
-        $tags        = $tagService->responsify($tags['items']);
+        $tagService = $this->get($this->service);
+        $tags       = $tagService->getList();
+        $extraData  = $this->getExtraData($tags['items']);
+        $tags       = $tagService->responsify($tags['items']);
 
         // Prepare contents for CSV
         $headers = [
@@ -112,7 +112,7 @@ class TagController extends ApiController
                 $tag['name'],
                 $tag['slug'],
                 $tag['locale'] ?? '',
-                $extraData['stats'][$tag['id']]
+                $extraData['stats'][$tag['id']] ?? 0
             ];
 
             $data[] = $tagInfo;
