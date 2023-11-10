@@ -40,9 +40,8 @@
     {t}Locale{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('locale') == 'asc', 'fa fa-caret-down': isOrderedBy('locale') == 'desc'}"></i>
   </th>
-  <th class="text-center v-align-middle" class="text-center" ng-click="sort('stats')" ng-if="isColumnEnabled('contents')" width="120">
+  <th class="text-center v-align-middle" class="text-center" ng-if="isColumnEnabled('contents')" width="120">
     {t}Contents{/t}
-    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('stats') == 'asc', 'fa fa-caret-down': isOrderedBy('stats') == 'desc'}"></i>
   </th>
 {/block}
 
