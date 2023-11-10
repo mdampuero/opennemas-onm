@@ -297,6 +297,7 @@
               var itemId = $scope.itemHasId() ? $scope.getItemId() : id;
 
               http.post('send_notification', [ itemId ]);
+              $scope.sendNotification = false;
             }
 
             if (response.status === 200 && $scope.refreshOnUpdate) {
