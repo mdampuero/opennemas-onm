@@ -51,6 +51,19 @@
         };
 
         /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          $scope.expandFields();
+
+          if ($scope.data.extra.photos &&
+              $scope.data.extra.photos[$scope.item.image]) {
+            $scope.item.avatar_img_id =
+              $scope.data.extra.photos[$scope.item.image];
+          }
+        };
+
+        /**
          * @function init
          * @memberOf WebPushNotificationsListCtrl
          *

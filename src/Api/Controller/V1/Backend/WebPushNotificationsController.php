@@ -39,8 +39,63 @@ class WebPushNotificationsController extends ApiController
      */
     protected function getExtraData($items = null)
     {
-        return [
+        $response = [
             'years' => $this->getItemYears(),
+        ];
+
+        if (empty($items)) {
+            return $response;
+        }
+
+        if (!is_array($items)) {
+            $items = [ $items ];
+        }
+
+        $photos = [];
+
+        $ids = array_filter(array_map(function ($notification) {
+            return $notification->image;
+        }, $items), function ($photo) {
+                return !empty($photo);
+        });
+
+        try {
+            $photos = $this->get('api.service.content')->getListByIds($ids)['items'];
+            $photos = $this->get('data.manager.filter')
+                ->set($photos)
+                ->filter('mapify', [ 'key' => 'pk_content' ])
+                ->get();
+
+            $photos = [ 'photos' => $this->get('api.service.content')->responsify($photos) ];
+            return array_merge($response, $photos);
+        } catch (GetItemException $e) {
+        }
+        $photos = [ 'photos' => $photos, ];
+
+        return array_merge($response, $photos);
+    }
+
+        /**
+     * Returns a list of items.
+     *
+     * @param Request $request The request object.
+     *
+     * @return array The list of items and all extra information.
+     */
+    public function getListAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
+
+        $us  = $this->get($this->service);
+        $oql = $request->query->get('oql', '');
+
+        $response = $us->getList($oql);
+
+        return [
+            'items'      => $us->responsify($response['items']),
+            'total'      => $response['total'],
+            'extra'      => $this->getExtraData($response['items']),
+            'o-filename' => $this->filename,
         ];
     }
 

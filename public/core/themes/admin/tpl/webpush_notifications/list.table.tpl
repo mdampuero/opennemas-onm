@@ -3,13 +3,16 @@
 {block name="itemActionsWrapper"}
 {/block}
 
+{block name="commonColumns" prepend}
+  <div class="checkbox column-filters-checkbox">
+    <input id="image" checklist-model="app.columns.selected" checklist-value="'image'" type="checkbox">
+    <label for="image">
+      {t}Image{/t}
+    </label>
+  </div>
+{/block}
+
 {block name="customColumns"}
-    <div class="checkbox column-filters-checkbox">
-      <input id="image" checklist-model="app.columns.selected" checklist-value="'image'" type="checkbox">
-      <label for="image">
-        {t}Image{/t}
-      </label>
-    </div>
     <div class="checkbox column-filters-checkbox">
       <input id="transaction_id" checklist-model="app.columns.selected" checklist-value="'transaction_id'" type="checkbox">
       <label for="transaction_id">
@@ -54,10 +57,13 @@
     </div>
 {/block}
 
+{block name="commonColumnsHeader" prepend}
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('image' )" width="100">
+    {t}Image{/t}
+  </th>
+{/block}
+
 {block name="customColumnsHeader"}
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('image' )" width="100">
-      {t}Image{/t}
-    </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('transaction_id')" width="200">
       {t}Transaction Id{/t}
     </th>
@@ -84,11 +90,15 @@
       {t}CTR{/t}
     </th>
 {/block}
-{block name="customColumnsBody"}
+
+{block name="commonColumnsBody" prepend}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('image')">
-  <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="item.image" transform="zoomcrop,220,220">
-  </dynamic-image>
+    <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.image].path" transform="zoomcrop,220,220">
+    </dynamic-image>
   </td>
+{/block}
+
+{block name="customColumnsBody"}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('transaction_id')">
     <span>
       <code class="text-info" ng-if="item.transaction_id">
