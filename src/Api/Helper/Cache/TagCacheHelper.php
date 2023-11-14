@@ -8,6 +8,24 @@ use Opennemas\Task\Component\Task\ServiceTask;
 class TagCacheHelper extends CacheHelper
 {
     /**
+     * Removes caches for contents related to a tag.
+     *
+     * @param  array $ids The list of content ids.
+     *
+     * @return CacheHelper The current helper for method chaining.
+     */
+    public function deleteContents(array $ids = []) : CacheHelper
+    {
+        $this->queue->push(new ServiceTask('cache.connection.instance', 'remove', [
+            $ids
+        ]))->push(new ServiceTask('cache', 'delete', [
+            $ids
+        ]));
+
+        return $this;
+    }
+
+    /**
      * Removes caches for a tag.
      *
      * @param Tag $tag The tag.

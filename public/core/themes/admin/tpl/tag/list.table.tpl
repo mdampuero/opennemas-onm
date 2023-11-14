@@ -14,9 +14,15 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox" ng-if="data.extra.locale.multilanguage">
-    <input id="checkbox-published" checklist-model="app.columns.selected" checklist-value="'locale'" type="checkbox">
-    <label for="checkbox-published">
+    <input id="checkbox-locale" checklist-model="app.columns.selected" checklist-value="'locale'" type="checkbox">
+    <label for="checkbox-locale">
       {t}Locale{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-description" checklist-model="app.columns.selected" checklist-value="'description'" type="checkbox">
+    <label for="checkbox-description">
+     {t}Description{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
@@ -40,6 +46,10 @@
     {t}Locale{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('locale') == 'asc', 'fa fa-caret-down': isOrderedBy('locale') == 'desc'}"></i>
   </th>
+  <th class="v-align-middle" ng-click="sort('description')" ng-if="isColumnEnabled('description')" width="200">
+    {t}Description{/t}
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('description') == 'asc', 'fa fa-caret-down': isOrderedBy('description') == 'desc'}"></i>
+  </th>
   <th class="text-center v-align-middle" class="text-center" ng-if="isColumnEnabled('contents')" width="120">
     {t}Contents{/t}
   </th>
@@ -53,6 +63,9 @@
     <div class="listing-inline-actions btn-group">
       <a class="btn btn-white btn-small" href="[% routing.generate('backend_tag_show', { id: getItemId(item) }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
         <i class="fa fa-pencil text-success_"></i>
+      </a>
+      <a class="btn btn-white btn-small"  href="#" ng-click="move(getItemId(item), item)" uib-tooltip="{t}Move contents{/t}" tooltip-placement="top">
+        <i class="fa fa-flip-horizontal fa-reply"></i>
       </a>
       <button class="btn btn-white btn-small" ng-click="delete(item.id)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
         <i class="fa fa-trash-o text-danger"></i>
@@ -71,6 +84,11 @@
     <small class="text-italic" ng-if="!item.locale">
       &lt;{t}Any{/t}&gt;
     </small>
+  </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('description')">
+    <div class="table-text">
+      [% item.description %]
+    </div>
   </td>
   <td class="text-center" ng-if="isColumnEnabled('contents')">
     <span class="badge badge-default text-bold" ng-class="{ 'badge-danger': !data.extra.stats[getItemId(item)] || data.extra.stats[getItemId(item)] == 0 }">

@@ -43,6 +43,7 @@ class TagController extends ApiController
         'save'   => 'TAG_CREATE',
         'show'   => 'TAG_UPDATE',
         'update' => 'TAG_UPDATE',
+        'move'   => 'TAG_UPDATE',
     ];
 
     /**
@@ -102,7 +103,8 @@ class TagController extends ApiController
         $headers = [
             _('Name'),
             _('Slug'),
-            _('locale'),
+            _('Description'),
+            _('Locale'),
             _('Contents')
         ];
 
@@ -111,6 +113,7 @@ class TagController extends ApiController
             $tagInfo = [
                 $tag['name'],
                 $tag['slug'],
+                $tag['description'],
                 $tag['locale'] ?? '',
                 $extraData['stats'][$tag['id']] ?? 0
             ];
@@ -137,6 +140,28 @@ class TagController extends ApiController
         $response->headers->set('Expires', '0');
 
         return $response;
+    }
+
+    /**
+     * Moves all contents assigned to the tag to the target tag.
+     *
+     * @param Request $request The request object.
+     * @param integer $id      The tag id.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function moveItemAction(Request $request, $id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('move'));
+
+        $target = $request->request->get('target', null);
+        $msg    = $this->get('core.messenger');
+
+        $this->get($this->service)->moveItem($id, $target);
+
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**

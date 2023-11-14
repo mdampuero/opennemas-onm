@@ -51,6 +51,16 @@ api_v1_backend_tag_get_list:
     options:
         expose: true
 
+api_v1_backend_tag_move_item:
+    path:     /tags/{id}/move
+    defaults: { _controller: ApiBundle:V1/Backend/Tag:moveItem }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+
 api_v1_backend_tag_save_config:
     path:     /tags/config
     defaults: { _controller: ApiBundle:V1/Backend/Tag:saveConfig }

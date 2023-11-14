@@ -77,4 +77,37 @@ class TagSubscriber implements EventSubscriberInterface
 
         $this->helper->deleteList();
     }
+
+     /**
+     * Removes contents from cache, tag list actions and varnish caches for
+     * the instance after moving contents from a tag to another.
+     *
+     * @param Event $event The dispatched event.
+     */
+    public function onTagMove(Event $event)
+    {
+        if (!$event->hasArgument('contents')) {
+            return;
+        }
+
+        $contents = $event->getArgument('contents');
+        $cacheIds = [];
+
+        foreach ($contents as $content) {
+            $cacheIds[] = 'content-' . $content['id'];
+            $cacheIds[] = $content['type'] . '-' . $content['id'];
+        }
+
+        $source = $event->hasArgument('item')
+            ? [ $event->getArgument('item') ]
+            : $event->getArgument('items');
+
+        foreach ($source as $tag) {
+            $this->helper->deleteItem($tag);
+        }
+
+        $this->helper
+            ->deleteContents($cacheIds)
+            ->deleteItem($event->getArgument('target'));
+    }
 }
