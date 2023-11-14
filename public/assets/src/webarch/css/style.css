@@ -6072,7 +6072,7 @@ h4.custom-line-height {
     font-size: 14px;
   }
 }
-.btn {
+.btn:not(.btn-lg):not(.btn-sm):not(.btn-xs) {
   display: inline-block;
   padding: 9px 12px;
   padding-top: 7px;
