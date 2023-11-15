@@ -127,6 +127,118 @@
                             </div>
                           </div>
                         </div>
+                        <div class="col-xs-12 col-md-8 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-widget-header-type">
+                            <h4>
+                              <i class="fa fa-minus"></i>
+                              {t}Section headers{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Choose type{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="row" ng-model="settings.theme_options.widget_header_type">
+                              <div class="panel panel-default col-xs-5 col-md-4" ng-repeat="(widget_header_type_name,widget_header_type_value) in extra.theme_skins[settings.theme_skin].params.options.option_widget_header_type">
+                                <div class="radio">
+                                  <input id="theme-option-widget-header-type-[% widget_header_type_name %]" name="theme-option-widget-header-type" ng-model="settings.theme_options.widget_header_type" value="[% widget_header_type_name %]" ng-checked="[% widget_header_type_name === settings.theme_options.widget_header_type %]" type="radio"/>
+                                  <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-widget-header-type-[% widget_header_type_name %]">
+                                    <img src="/themes/apolo/images/admin/widget-header-[% widget_header_type_name %].jpg" alt="[% widget_header_type_value %]" class="img img-responsive img-rounded m-b-10">
+                                    <h5>[% widget_header_type_value %]</h5>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12">
+                          <div class="row">
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <label class="form-label" for="theme-option-widget-header-font">
+                                <span class="help">
+                                  {t}Section header font{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-widget-header-font" name="theme-option-widget-header-font" ng-model="settings.theme_options.widget_header_font">
+                                    <option value="[% widget_header_font_name %]" ng-repeat="(widget_header_font_name,widget_header_font_value) in extra.theme_skins[settings.theme_skin].params.options.option_widget_header_font" ng-selected="[% widget_header_font_name === settings.theme_options.widget_header_font || settings.theme_options.widget_header_font == undefined %]">[% widget_header_font_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <label class="form-label" for="theme-option-widget-header-font">
+                                <span class="help">
+                                  {t}Section header font weight{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-widget-header-font-weight" name="theme-option-widget-header-font-weight" ng-model="settings.theme_options.widget_header_font_weight">
+                                    <option value="[% widget_header_font_weight_name %]" ng-repeat="(widget_header_font_weight_name,widget_header_font_weight_value) in extra.theme_skins[settings.theme_skin].params.options.option_widget_header_font_weight" ng-selected="[% widget_header_font_weight_name === settings.theme_options.widget_header_font_weight || settings.theme_options.widget_header_font_weight == undefined %]">[% widget_header_font_weight_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <label class="form-label" for="theme-option-widget-header-color">
+                                <span class="help">
+                                  {t}Section header text color{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-widget-header-font-color" name="theme-option-widget-header-font-color" ng-model="settings.theme_options.widget_header_font_color">
+                                    <option value="[% widget_header_font_color_name %]" ng-repeat="(widget_header_font_color_name,widget_header_font_color_value) in extra.theme_skins[settings.theme_skin].params.options.option_widget_header_font_color" ng-selected="[% widget_header_font_color_name === settings.theme_options.widget_header_font_color || settings.theme_options.widget_header_font_color == undefined %]">[% widget_header_font_color_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <label class="form-label" for="theme-option-widget-border-position">
+                                <span class="help">
+                                  {t}Section header border position{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-widget-header-border-position" name="theme-option-widget-header-border-position" ng-model="settings.theme_options.widget_header_border_position">
+                                    <option value="[% widget_header_border_position_name %]" ng-repeat="(widget_header_border_position_name,widget_header_border_position_value) in extra.theme_skins[settings.theme_skin].params.options.option_widget_header_border_position" ng-selected="[% widget_header_border_position_name === settings.theme_options.widget_header_border_position || settings.theme_options.widget_header_border_position == undefined %]">[% widget_header_border_position_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <label class="form-label" for="theme-option-widget-border-color">
+                                <span class="help">
+                                  {t}Section header border color{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-widget-header-border-color" name="theme-option-widget-header-border-color" ng-model="settings.theme_options.widget_header_border_color">
+                                    <option value="[% widget_header_border_color_name %]" ng-repeat="(widget_header_border_color_name,widget_header_border_color_value) in extra.theme_skins[settings.theme_skin].params.options.option_widget_header_border_color" ng-selected="[% widget_header_border_color_name === settings.theme_options.widget_header_border_color || settings.theme_options.widget_header_border_color == undefined %]">[% widget_header_border_color_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.widget_header_type === 'type-b' || settings.theme_options.widget_header_type === 'type-c'">
+                              <label class="form-label" for="theme-option-widget-ribbon-color">
+                                <span class="help">
+                                  {t}Section header icon color{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-widget-header-ribbon-color" name="theme-option-widget-header-ribbon-color" ng-model="settings.theme_options.widget_header_ribbon_color">
+                                    <option value="[% widget_header_ribbon_color_name %]" ng-repeat="(widget_header_ribbon_color_name,widget_header_ribbon_color_value) in extra.theme_skins[settings.theme_skin].params.options.option_widget_header_ribbon_color" ng-selected="[% widget_header_ribbon_color_name === settings.theme_options.widget_header_ribbon_color || settings.theme_options.widget_header_ribbon_color == undefined %]">[% widget_header_ribbon_color_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tabFonts">
