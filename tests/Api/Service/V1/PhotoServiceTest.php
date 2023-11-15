@@ -69,7 +69,7 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->ih = $this->getMockBuilder('Common\Core\Component\Helper\ImageHelper')
             ->setConstructorArgs([ $this->il, '/wibble/flob', $this->processor ])
-            ->setMethods([ 'generatePath', 'exists', 'move', 'remove', 'getInformation' ])
+            ->setMethods([ 'applyRotation', 'generatePath', 'exists', 'move', 'remove', 'getInformation' ])
             ->getMock();
 
         $this->ip = $this->getMockBuilder('Common\Core\Component\Image\Processor')

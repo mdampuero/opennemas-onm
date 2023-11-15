@@ -87,6 +87,7 @@ class PhotoService extends ContentService
             ]);
 
             $ih->move($file, $path, $copy);
+            $ih->applyRotation($path);
 
             $ds = $this->container->get('orm.manager')
                 ->getDataSet('Settings', 'instance');
