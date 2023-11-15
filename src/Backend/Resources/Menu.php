@@ -276,24 +276,21 @@ $menuXml = [
         'title'       => _('Web Push'),
         'icon'        => 'fa fa-bell',
         'link'        => '#',
-        'module_name' => 'es.openhost.module.webpush_notifications',
-        'privilege'   => 'WEBPUSH_ADMIN',
+        'privilege'   => 'ADMIN',
         'submenu' => [
             [
                 'id'          => 'webpush_notifications_dashboard_manager',
                 'title'       => _('Dashboard'),
                 'icon'        => 'fa fa-tachometer',
                 'link'        => url('backend_webpush_notifications_dashboard'),
-                'module_name' => 'es.openhost.module.webpush_notifications',
-                'privilege'   => 'WEBPUSH_ADMIN'
+                'privilege'   => 'ADMIN'
             ],
             [
                 'id'          => 'webpush_notifications_history_manager',
                 'title'       => _('History'),
                 'icon'        => 'fa fa-history',
                 'link'        => url('backend_webpush_notifications_list'),
-                'module_name' => 'es.openhost.module.webpush_notifications',
-                'privilege'   => 'WEBPUSH_ADMIN'
+                'privilege'   => 'ADMIN'
             ],
             [
                 'id'          => 'webpush_notifications_config_manager',

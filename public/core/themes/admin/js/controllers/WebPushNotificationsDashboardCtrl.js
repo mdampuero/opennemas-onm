@@ -154,8 +154,12 @@
                   {
                     ticks: {
                       beginAtZero: true,
+                      maxTicksLimit: 11,
                       stepSize: 1,
                       callback: function(value) {
+                        if (value > 100) {
+                          return Math.round(value / 10) * 10;
+                        }
                         if (value % 1 === 0) {
                           return value;
                         }

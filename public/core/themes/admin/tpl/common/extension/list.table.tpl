@@ -65,6 +65,7 @@
     </div>
   </div>
 {/block}
+
 <div class="grid simple ng-cloak no-animate" ng-show="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
   <div class="grid-body no-padding">
     <div class="table-wrapper ng-cloak">

@@ -84,12 +84,125 @@ class WebPushNotificationsController extends ApiController
      */
     public function getListAction(Request $request)
     {
-        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
+        // Checks if it is a demo listing or a real one
+        if ($this->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')) {
+            $demo_response = [
+                'items' => [
+                    [
+                        'impressions' => 6000,
+                        'clicks' => 3000,
+                        'closed' => 2500,
+                        'send_date' => '2020-01-01 08:00:00',
+                        'title' => 'Lorem Ipsum Dolor',
+                        'status' => 1,
+                        'image' => null,
+                        'transaction_id' => '23854aer'
+                    ],
+                    [
+                        'impressions' => 0,
+                        'clicks' => 0,
+                        'closed' => 0,
+                        'send_date' => '2024-01-01 08:00:00',
+                        'title' => 'Sit Amet Consectetur',
+                        'status' => 0,
+                        'image' => null,
+                        'transaction_id' => '23872ser'
+                    ],
+                    [
+                        'impressions' => 6000,
+                        'clicks' => 3000,
+                        'closed' => 2500,
+                        'send_date' => '2020-01-01 08:00:00',
+                        'title' => 'Adipiscing Elit',
+                        'status' => 1,
+                        'image' => null,
+                        'transaction_id' => '25879adr'
+                    ],
+                    [
+                        'impressions' => 0,
+                        'clicks' => 0,
+                        'closed' => 0,
+                        'send_date' => '2024-01-01 08:00:00',
+                        'title' => 'Sed Do Eiusmod',
+                        'status' => 0,
+                        'image' => null,
+                        'transaction_id' => '6879der'
+                    ],
+                    [
+                        'impressions' => 6000,
+                        'clicks' => 3000,
+                        'closed' => 2500,
+                        'send_date' => '2020-01-010 08:00:00',
+                        'title' => 'Tempor Incididunt Ut Labore',
+                        'status' => 1,
+                        'image' => null,
+                        'transaction_id' => '23779aew'
+                    ],
+                    [
+                        'impressions' => 0,
+                        'clicks' => 0,
+                        'closed' => 0,
+                        'send_date' => '2024-01-01 08:00:00',
+                        'title' => 'Ut Enim Ad Minim Veniam',
+                        'status' => 0,
+                        'image' => null,
+                        'transaction_id' => '63879asr'
+                    ],
+                    [
+                        'impressions' => 0,
+                        'clicks' => 0,
+                        'closed' => 0,
+                        'send_date' => '2024-01-01 08:00:00',
+                        'title' => 'Laboris Nisi Ut Aliquip',
+                        'status' => 0,
+                        'image' => null,
+                        'transaction_id' => '43879ser'
+                    ],
+                    [
+                        'impressions' => 6000,
+                        'clicks' => 3000,
+                        'closed' => 2500,
+                        'send_date' => '2020-01-01 08:00:00',
+                        'title' => 'Titulo 1',
+                        'status' => 1,
+                        'image' => null,
+                        'transaction_id' => '63879aes'
+                    ],
+                    [
+                        'impressions' => 6000,
+                        'clicks' => 3000,
+                        'closed' => 2500,
+                        'send_date' => '2020-01-01 08:00:00',
+                        'title' => 'Ex Ea Commodo Consequat',
+                        'status' => 1,
+                        'image' => null,
+                        'transaction_id' => '53879adr'
+                    ],
+                    [
+                        'impressions' => 6000,
+                        'clicks' => 3000,
+                        'closed' => 2500,
+                        'send_date' => '2020-01-01 08:00:00',
+                        'title' => 'Duis Aute Irure Dolor In Reprehenderit',
+                        'status' => 1,
+                        'image' => null,
+                        'transaction_id' => '76879wes'
+                    ],
+                ]
+            ];
 
-        $us  = $this->get($this->service);
-        $oql = $request->query->get('oql', '');
+            return [
+                'items'      => $demo_response['items'],
+                'total'      => 3,
+            ];
+        } else {
+            $this->checkSecurity($this->extension, $this->getActionPermission('list'));
 
-        $response = $us->getList($oql);
+            $us  = $this->get($this->service);
+            $oql = $request->query->get('oql', '');
+
+            $response = $us->getList($oql);
+        }
 
         return [
             'items'      => $us->responsify($response['items']),
@@ -108,38 +221,67 @@ class WebPushNotificationsController extends ApiController
      */
     public function getConfigAction()
     {
-        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
+        // Checks if it is a demo listing or a real one
+        if ($this->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')) {
+            $demo_active_subscribers = [
+                8500,
+                8000,
+                7500,
+                7000,
+                6500,
+                5000,
+                6500,
+                6000,
+                5500,
+                5000,
+                4500,
+                4000,
+                3000,
+                2500,
+                2000,
+                1500,
+                750,
+                500,
+                250,
+                100
+            ];
+            return new JsonResponse([
+                'webpush_active_subscribers' => $demo_active_subscribers
+            ]);
+        } else {
+            $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
 
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get(['webpush_service',
-                'webpush_apikey',
-                'webpush_token',
-                'webpush_publickey',
-                'webpush_automatic',
-                'webpush_delay',
-                'webpush_restricted_hours',
-                'webpush_active_subscribers']);
+            $settings = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get(['webpush_service',
+                    'webpush_apikey',
+                    'webpush_token',
+                    'webpush_publickey',
+                    'webpush_automatic',
+                    'webpush_delay',
+                    'webpush_restricted_hours',
+                    'webpush_active_subscribers']);
 
-        $webpush_service = [
-            'service'   => $settings['webpush_service'],
-            'apikey'    => $settings['webpush_apikey'],
-            'token'     => $settings['webpush_token'],
-            'publickey' => $settings['webpush_publickey']
-        ];
+            $webpush_service = [
+                'service'   => $settings['webpush_service'],
+                'apikey'    => $settings['webpush_apikey'],
+                'token'     => $settings['webpush_token'],
+                'publickey' => $settings['webpush_publickey']
+            ];
 
-        for ($i = 0; $i < 24; $i++) {
-            $hours[] = sprintf("%02d:00", $i);
+            for ($i = 0; $i < 24; $i++) {
+                $hours[] = sprintf("%02d:00", $i);
+            }
+
+            return new JsonResponse([
+                'webpush_service'            => $webpush_service,
+                'webpush_automatic'          => $settings['webpush_automatic'],
+                'webpush_delay'              => $settings['webpush_delay'],
+                'webpush_restricted_hours'   => $settings['webpush_restricted_hours'],
+                'hours'                      => $hours,
+                'webpush_active_subscribers' => $settings['webpush_active_subscribers']
+            ]);
         }
-
-        return new JsonResponse([
-            'webpush_service'            => $webpush_service,
-            'webpush_automatic'          => $settings['webpush_automatic'],
-            'webpush_delay'              => $settings['webpush_delay'],
-            'webpush_restricted_hours'   => $settings['webpush_restricted_hours'],
-            'hours'                      => $hours,
-            'webpush_active_subscribers' => $settings['webpush_active_subscribers']
-        ]);
     }
 
     /**
