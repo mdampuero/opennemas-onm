@@ -37,7 +37,7 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
         $this->processor = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setMethods([
                 'close', 'getDescription', 'getHeight', 'getSize', 'getWidth',
-                'open', 'optimize', 'save', 'setImageRotation'
+                'open', 'optimize', 'save', 'strip', 'setImageRotation'
             ])->getMock();
 
         $this->il->expects($this->any())->method('getInstance')
@@ -85,6 +85,8 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
         $this->processor->expects($this->once())->method('open')
             ->with('/plugh/frog.jpg')->willReturn($this->processor);
         $this->processor->expects($this->once())->method('setImageRotation')
+            ->willReturn($this->processor);
+        $this->processor->expects($this->once())->method('strip')
             ->willReturn($this->processor);
         $this->processor->expects($this->once())->method('save')
             ->with('/plugh/frog.jpg')->willReturn($this->processor);
