@@ -47,8 +47,6 @@ class WebPushNotificationsDashboardController extends BackendController
      *
      * @return Response the response object
      *
-     * @Security("hasExtension('es.openhost.module.webpush_notifications')
-     *     and hasPermission('WEBPUSH_ADMIN')")
      */
     public function dashboardAction()
     {

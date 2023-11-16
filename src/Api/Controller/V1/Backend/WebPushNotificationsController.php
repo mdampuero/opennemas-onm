@@ -85,7 +85,7 @@ class WebPushNotificationsController extends ApiController
     public function getListAction(Request $request)
     {
         // Checks if it is a demo listing or a real one
-        if ($this->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')) {
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')) {
             $demo_response = [
                 'items' => [
                     [
@@ -212,7 +212,7 @@ class WebPushNotificationsController extends ApiController
         ];
     }
 
-        /**
+    /**
      * Get the Web Push notifications configuration
      *
      * @param Request $request The request object.
@@ -222,7 +222,7 @@ class WebPushNotificationsController extends ApiController
     public function getConfigAction()
     {
         // Checks if it is a demo listing or a real one
-        if ($this->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')) {
+        if (!$this->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')) {
             $demo_active_subscribers = [
                 8500,
                 8000,

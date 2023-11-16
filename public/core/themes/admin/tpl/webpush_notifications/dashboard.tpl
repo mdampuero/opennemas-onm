@@ -19,17 +19,17 @@
       </div>
     </div>
     <div class="content">
-      {is_module_activated name="es.openhost.module.webpush_notifications"}
+      {if !in_array("es.openhost.module.webpush_notifications", $app.instance->activated_modules)}
         <div class="grid simple m-b-2">
           <div class="grid-body bg-transparent">
             <div class="bg-white onm-shadow p-15">
-            <h2>{t}Improve your manager{/t}</h2>
-              <p class="lead">{t}Contact with us to enjoy this feature.{/t}</p>
-              <a class="btn btn-success btn-lg btn-block" href="mailto:sales@openhost.es" role="button" target="_blank">{t}I want this module{/t}</a>
+              <h2>{t}Improve your manager{/t}</h2>
+                <p class="lead">{t}Contact with us to enjoy this feature.{/t}</p>
+                <a class="btn btn-success btn-lg btn-block" href="mailto:sales@openhost.es" role="button" target="_blank">{t}I want this module{/t}</a>
             </div>
           </div>
         </div>
-      {/is_module_activated}
+      {/if}
       <div class="grid simple">
         <div class="grid-body bg-transparent ng-cloak">
             <div class="row">
