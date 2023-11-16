@@ -6072,7 +6072,7 @@ h4.custom-line-height {
     font-size: 14px;
   }
 }
-.btn:not(.btn-lg):not(.btn-sm):not(.btn-xs) {
+.btn {
   display: inline-block;
   padding: 9px 12px;
   padding-top: 7px;
@@ -6108,6 +6108,12 @@ h4.custom-line-height {
 .btn.disabled,
 .btn[disabled] {
   background-color: #b9c3c8;
+}
+.btn-group-lg>.btn-onm, .btn-lg-onm {
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+  border-radius: 6px;
 }
 .btn-cons {
   margin-right: 5px;

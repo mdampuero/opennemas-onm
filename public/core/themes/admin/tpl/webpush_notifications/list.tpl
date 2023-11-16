@@ -23,7 +23,7 @@
           <div class="bg-white onm-shadow p-15">
             <h2>{t}Improve your manager{/t}</h2>
               <p class="lead">{t}Contact with us to enjoy this feature.{/t}</p>
-              <a class="btn btn-success btn-lg btn-block" href="mailto:sales@openhost.es" role="button" target="_blank">{t}I want this module{/t}</a>
+              <a class="btn btn-success btn-lg btn-lg-onm btn-block" href="mailto:sales@openhost.es" role="button" target="_blank">{t}I want this module{/t}</a>
           </div>
         </div>
       </div>
