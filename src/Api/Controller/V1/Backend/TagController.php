@@ -104,9 +104,12 @@ class TagController extends ApiController
             _('Name'),
             _('Slug'),
             _('Description'),
-            _('Locale'),
             _('Contents')
         ];
+
+        if ($this->container->get('core.instance')->hasMultilanguage()) {
+            $headers[] = _('Locale');
+        }
 
         $data = [];
         foreach ($tags as $tag) {
@@ -114,9 +117,12 @@ class TagController extends ApiController
                 $tag['name'],
                 $tag['slug'],
                 $tag['description'],
-                $tag['locale'] ?? '',
                 $extraData['stats'][$tag['id']] ?? 0
             ];
+
+            if ($this->container->get('core.instance')->hasMultilanguage()) {
+                $tagInfo[] = $tag['locale'] ?? '';
+            }
 
             $data[] = $tagInfo;
         }
