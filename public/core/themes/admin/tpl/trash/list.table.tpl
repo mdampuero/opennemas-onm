@@ -39,12 +39,10 @@
 {/block}
 
 {block name="itemActions"}
-  <a class="btn btn-success btn-small" ng-click="restore(item.pk_content)" type="button">
-    <i class="fa fa-retweet m-r-5"></i>
-    {t}Restore{/t}
+  <a class="btn btn-white btn-small" ng-click="restore(item.pk_content)" type="button" uib-tooltip="{t}Restore{/t}" tooltip-placement="top">
+    <i class="fa fa-retweet text-success"></i>
   </a>
-  <button class="btn btn-danger btn-small" ng-click="delete(item.pk_content)" type="button">
-    <i class="fa fa-trash-o m-r-5"></i>
-    {t}Delete{/t}
+  <button class="btn btn-white btn-small" ng-click="delete(item.pk_content)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
+    <i class="fa fa-trash-o text-danger"></i>
   </button>
 {/block}

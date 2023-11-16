@@ -217,6 +217,7 @@
               content_type: 'article',
               category: [],
               opinion_type: '',
+              tag: '',
               epp: 5,
               in_litter: 0,
               filter: '',

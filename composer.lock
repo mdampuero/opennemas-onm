@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "884a6d65b0423039e7a321f42e87f79e",
+    "content-hash": "97019dceef5066df1b6e8f7ce97e8eff",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -3019,11 +3019,11 @@
         },
         {
             "name": "opennemas/panorama-php",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:opennemas/panorama-php.git",
-                "reference": "b58050977271ac5be705e8f64c0b82cb78d63520"
+                "reference": "87a3a0bf26f0491b8f7efff425d4a6a119461732"
             },
             "require": {
                 "php": ">=7.1"
@@ -3051,7 +3051,7 @@
             "keywords": [
                 "library"
             ],
-            "time": "2023-02-16T08:58:03+00:00"
+            "time": "2023-09-25T09:02:18+00:00"
         },
         {
             "name": "opennemas/task",

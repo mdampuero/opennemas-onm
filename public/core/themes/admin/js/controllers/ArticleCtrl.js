@@ -73,6 +73,7 @@
           tags: [],
           external_link: '',
           agency: '',
+          webpush_notifications: []
         };
 
         $scope.defaultLiveBlogUpdate = {
@@ -180,7 +181,7 @@
           return $scope.data.extra.base_url + $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
               id: item.pk_content.toString().padStart(6, '0'),
-              created: $window.moment(item.created).format('YYYYMMDDHHmmss'),
+              created: item.urldatetime || $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
               category_slug: $scope.selectedCategory.name
             })

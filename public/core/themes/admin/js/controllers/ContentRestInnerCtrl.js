@@ -126,6 +126,45 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     };
 
     /**
+     * @function parseCopyData
+     * @memberOf RestInnerCtrl
+     *
+     * @description
+     *   description
+     *
+     * @param {Object} data The data to parse.
+     *
+     * @return {Object} Parses data before copy.
+     */
+    $scope.parseCopyData = function(data) {
+      data = $scope.unsetItemId(data);
+      delete data.urn_source;
+      delete data.starttime;
+      delete data.endtime;
+      delete data.slug;
+      data.content_status = 0;
+      if (data.title) {
+        data.title = 'Copy of ' + data.title;
+      }
+
+      return data;
+    };
+
+    /**
+     * @function unsetItemId
+     * @memberOf RestInnerCtrl
+     *
+     * @description
+     *   Unsets the item id.
+     *
+     * @return {Integer} The item id.
+     */
+    $scope.unsetItemId = function(data) {
+      delete data.pk_content;
+      return data;
+    };
+
+    /**
      * @inheritdoc
      */
     $scope.hasMultilanguage = function() {
@@ -170,12 +209,31 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
     /**
      * @function submit
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *   Saves tags, send notifications if  needed and, then, saves the item.
+     */
+    $scope.submit = function(item) {
+      if (item && $scope.hasPendingNotifications()) {
+        if (item.starttime <= $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
+          $scope.openNotificationModal(item, false);
+        } else {
+          $scope.sendWPNotification(item, false);
+        }
+      } else {
+        $scope.saveItem();
+      }
+    };
+
+    /**
+     * @function saveItem
      * @memberOf StaticPageCtrl
      *
      * @description
      *   Saves tags and, then, saves the item.
      */
-    $scope.submit = function() {
+    $scope.saveItem = function() {
       if (!$scope.validate()) {
         messenger.post(window.strings.forms.not_valid, 'error');
         return;
@@ -192,6 +250,170 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           $scope.draftEnabled = false;
 
           $scope.save();
+        }
+      });
+    };
+
+    /**
+     * @function openNotificationModal
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *   Send webpush notification to all subscribers
+     */
+    $scope.openNotificationModal = function(item, createNotification) {
+      var status = 2;
+
+      if (createNotification) {
+        status = 1;
+      }
+      var modal = $uibModal.open({
+        templateUrl: 'modal-webpush',
+        backdrop: 'static',
+        controller: 'ModalCtrl',
+        resolve: {
+          template: function() {
+            return { status: status };
+          },
+          success: function() {
+            return null;
+          }
+        }
+      });
+
+      modal.result.then(function(response) {
+        if (response) {
+          $scope.sendWPNotification(item, createNotification);
+        }
+      });
+    };
+
+    /**
+     * @function sendWPNotification
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *   Send webpush notification to all subscribers
+     */
+    $scope.sendWPNotification = function(item, createNotification) {
+      if (!$scope.validate()) {
+        messenger.post(window.strings.forms.not_valid, 'error');
+        return;
+      }
+      if (!item) {
+        return;
+      }
+
+      var image = $scope.data.featuredFrontpage ? $scope.data.featuredFrontpage.target_id : null;
+
+      if ($scope.item.starttime > $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
+        $scope.removePendingNotification(false);
+        $scope.data.item.webpush_notifications.push(
+          {
+            status: 0,
+            body: null,
+            title: null,
+            send_date: $window.moment.utc($window.moment($scope.item.starttime)).format('YYYY-MM-DD HH:mm:ss'),
+            image: null,
+          }
+        );
+      } else {
+        $scope.sendNotification = true;
+        if ($scope.hasPendingNotifications()) {
+          $scope.removePendingNotification(false);
+          $scope.data.item.webpush_notifications.push(
+            {
+              status: 1,
+              body: $scope.item.description,
+              title: $scope.item.title,
+              send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
+              image: image,
+            }
+          );
+          createNotification = false;
+        }
+        if (createNotification) {
+          $scope.data.item.webpush_notifications.push(
+            {
+              status: 1,
+              body: $scope.item.description,
+              title: $scope.item.title,
+              send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
+              image: image,
+            }
+          );
+        }
+      }
+
+      if (!$scope.item.content_status) {
+        $scope.removePendingNotification(false);
+      }
+
+      $scope.saveItem();
+    };
+
+    /**
+     * @function hasPendingNotifications
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *  Check if items has pending notifications
+     */
+
+    $scope.hasPendingNotifications = function() {
+      for (var i = 0; i < $scope.item.webpush_notifications.length; i++) {
+        if ($scope.item.webpush_notifications[i].status === 0) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    /**
+     * @function removePendingNotification
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *  Generates the backend url of the featured media associated to the article.
+     */
+    $scope.removePendingNotification = function(saveItem) {
+      var notifications = $scope.data.item.webpush_notifications;
+
+      for (var i = 0; i < notifications.length; i++) {
+        if (notifications[i].status === 0) {
+          notifications.splice(i, 1);
+        }
+      }
+
+      $scope.data.item.webpush_notifications = notifications;
+      if (saveItem) {
+        $scope.saveItem();
+      }
+    };
+
+    /**
+     * @function duplicate
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *   Saves tags and, then, duplicates the item.
+     */
+    $scope.duplicate = function() {
+      if (!$scope.validate()) {
+        messenger.post(window.strings.forms.not_valid, 'error');
+        return;
+      }
+      $scope.flags.http.saving = true;
+
+      $scope.$broadcast('onmTagsInput.save', {
+        onError: $scope.errorCb,
+        onSuccess: function(ids) {
+          $scope.item.tags      = ids;
+          $scope.data.item.tags = ids;
+
+          $scope.draftEnabled = false;
+
+          $scope.copy();
         }
       });
     };

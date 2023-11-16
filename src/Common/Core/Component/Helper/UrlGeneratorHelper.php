@@ -117,7 +117,7 @@ class UrlGeneratorHelper
         $localize = $this->locale->getRequestLocale('frontend');
         if (array_key_exists('locale', $params) && !empty($params['locale'])) {
             $localize = $params['locale'];
-            $uri .= $this->locale->getSlugs()[$params['locale']] &&
+            $uri     .= $this->locale->getSlugs()[$params['locale']] &&
                 $this->locale->getSlugs()[$params['locale']] !== $this->locale->getSlug() ?
             '/' . $this->locale->getSlugs()[$params['locale']] :
             '';
@@ -149,6 +149,52 @@ class UrlGeneratorHelper
 
 
         return $uri;
+    }
+
+    /**
+     * Generates a route based on the provided item and a list of parameters.
+     *
+     * @param mixed $item   A content or a route name.
+     * @param array $params The list of parameters.
+     *
+     * @return string The generated URL or null if an error is throw.
+     */
+    public function getUrl($item = null, array $params = []) : ?string
+    {
+        if (empty($item)) {
+            return null;
+        }
+        $item = is_string($item) ? $item : $this->contentHelper->getContent($item);
+
+        if (!empty($item->externalUri)) {
+            return $item->externalUri;
+        }
+        $absolute = array_key_exists('_absolute', $params) && $params['_absolute'];
+        $escape   = array_key_exists('_escape', $params) && $params['_escape'];
+        $isAmp    = array_key_exists('_amp', $params) && $params['_amp'];
+
+        // Remove special parameters
+        $params = array_filter($params, function ($a) {
+            return strpos($a, '_') !== 0;
+        }, ARRAY_FILTER_USE_KEY);
+        try {
+            $url = is_string($item)
+                ? $this->router->generate(
+                    $item,
+                    $params,
+                    $absolute
+                        ? \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+                        : \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH
+                ) : $this->generate($item, [
+                    'absolute' => $absolute,
+                    '_format'  => $isAmp ? 'amp' : null,
+                ]);
+
+            $url = $this->container->get('core.decorator.url')->prefixUrl($url);
+            return $escape ? rawurlencode($url) : $url;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /**
@@ -276,7 +322,7 @@ class UrlGeneratorHelper
 
         return $this->generateUriFromConfig('article', [
             'id'            => sprintf('%06d', $content->id),
-            'date'          => date('YmdHis', strtotime($created)),
+            'date'          => $this->getUrlDateTime($content),
             'category'      => urlencode($categorySlug),
             'slug'          => urlencode($content->slug),
         ]);
@@ -345,7 +391,7 @@ class UrlGeneratorHelper
 
         return $this->generateUriFromConfig(strtolower($content->content_type_name), [
             'id'       => sprintf('%06d', $content->id),
-            'date'     => date('YmdHis', strtotime($created)),
+            'date'     => $this->getUrlDateTime($content),
             'category' => urlencode($categorySlug),
             'slug'     => urlencode($content->slug),
         ]);
@@ -373,7 +419,7 @@ class UrlGeneratorHelper
 
         return $this->generateUriFromConfig('letter', [
             'id'       => sprintf('%06d', $content->id),
-            'date'     => date('YmdHis', strtotime($created)),
+            'date'     => $this->getUrlDateTime($content),
             'slug'     => urlencode($content->slug),
             'category' => urlencode(\Onm\StringUtils::generateSlug($content->author)),
         ]);
@@ -421,7 +467,7 @@ class UrlGeneratorHelper
 
         return $this->generateUriFromConfig($type, [
             'id'       => sprintf('%06d', $content->pk_content),
-            'date'     => date('YmdHis', strtotime($created)),
+            'date'     => $this->getUrlDateTime($content),
             'slug'     => urlencode($content->slug),
             'category' => urlencode($authorName),
         ]);
@@ -483,6 +529,26 @@ class UrlGeneratorHelper
         $uri = $this->container->get('router')->generate($routeName, $routeParams);
 
         return trim($uri, '/');
+    }
+
+    /**
+     * Returns the URL datetime for a content.
+     *
+     * @param mixed The content to get datetime for URL.
+     *
+     * @return string The user URI.
+     */
+    protected function getUrlDateTime($content)
+    {
+        if (!empty($content->urldatetime)) {
+            return $content->urldatetime;
+        }
+
+        $created = is_object($content->created)
+            ? $content->created->format('Y-m-d H:i:s')
+            : $content->created;
+
+        return date('YmdHis', strtotime($created));
     }
 
     /**

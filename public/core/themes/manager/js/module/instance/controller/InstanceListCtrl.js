@@ -182,6 +182,20 @@
         };
 
         /**
+         * @function unsetItemId
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Unsets the item id.
+         *
+         * @return {Integer} The item id.
+         */
+        $scope.unsetItemId = function(item) {
+          delete item.id;
+          return item;
+        };
+
+        /**
          * @function list
          * @memberOf InstanceListCtrl
          *

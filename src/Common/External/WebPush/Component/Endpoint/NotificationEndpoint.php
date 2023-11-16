@@ -1,0 +1,62 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Common\External\WebPush\Component\Endpoint;
+
+use Common\External\WebPush\Component\Exception\WebPushException;
+
+class NotificationEndpoint extends Endpoint
+{
+    /**
+     * Sends a push notification to all WebPush subscribers.
+     *
+     * @param array  $params The notification parameters.
+     *
+     * @return array
+     *
+     * @throws \InvalidArgumentException If parameters are invalid.
+     * @throws WebPushException            If the action fails.
+     */
+    public function sendNotification($params)
+    {
+        try {
+            $url      = $this->url . $this->config['actions']['send_notification']['path'];
+            $headers  = [
+                'content-type'      => 'application/json',
+                'webpushrKey'       => $this->auth->getConfiguration()['webpushrKey'],
+                'webpushrAuthToken' => $this->auth->getConfiguration()['webpushrAuthToken']
+            ];
+            $data     = [
+                'headers' => $headers,
+                'json' => [
+                    'title'          => $params['title'],
+                    'message'        => $params['message'],
+                    'target_url'     => $params['target_url'],
+                    'icon'           => $params['icon'] ?? '',
+                    'image'          => $params['image'] ?? ''
+                ]
+            ];
+            $response = $this->client->post($url, $data);
+            $body     = json_decode($response->getBody(), true);
+            if ($body['status'] == 'success') {
+                getService('application.log')->info('Notification was sent successfully');
+            }
+            if ($body['status'] != 'success') {
+                getService('application.log')->info('Notification sending has failed because of ' . $body->description);
+            }
+        } catch (\Exception $e) {
+            getService('application.log')
+                ->error('Error sending the notification to server with params '
+                . json_encode($params)
+                . $e->getMessage());
+            throw new WebPushException('webpush.notification.send.failure: ' . $e->getMessage());
+        }
+        return $body;
+    }
+}

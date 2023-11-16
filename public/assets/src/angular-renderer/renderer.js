@@ -162,7 +162,7 @@
           var route  = 'frontend_' + item.content_type_name + '_show';
           var params = {
             id:      this.parseId(item.pk_content, 6),
-            created: window.moment(item.created).format('YYYYMMDDHHmmss')
+            created: item.urldatetime || window.moment(item.created).format('YYYYMMDDHHmmss')
           };
 
           if (item.content_type_name === 'opinion') {

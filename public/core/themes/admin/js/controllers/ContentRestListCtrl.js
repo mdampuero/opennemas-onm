@@ -51,6 +51,66 @@
         };
 
         /**
+         * @function createCopy
+         * @memberof ContentRestListCtrl
+         *
+         * @description
+         *  Returns localized tags for each item in list
+         *
+         * @param {array} data Data to create a copy
+         *
+         */
+        $scope.createCopy = function(item) {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-duplicate',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return { };
+              },
+              success: function() {
+                return null;
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response) {
+              var route = $scope.routes.saveItem;
+              var data  = $scope.parseDataForCopy(item);
+
+              http.post(route, data)
+                .then(function() {
+                  $scope.list();
+                }, $scope.errorCb);
+            }
+          });
+        };
+
+        /**
+         * @function parseDataForCopy
+         * @memberOf ArticleListCtrl
+         *
+         * @description
+         *   Parse data before copy
+         */
+        $scope.parseDataForCopy = function(data) {
+          delete data.pk_content;
+          delete data.urn_source;
+          delete data.starttime;
+          delete data.endtime;
+          delete data.urldatetime;
+          delete data.slug;
+          data.content_status = 0;
+          if (data.title) {
+            data.title = 'Copy of ' + data.title;
+          }
+
+          return data;
+        };
+
+        /**
          * @function hasFeaturedMedia
          * @memberof ContentRestListCtrl
          *
@@ -72,6 +132,51 @@
         $scope.hasMultilanguage = function() {
           return $scope.config && $scope.config.locale &&
             $scope.config.locale.multilanguage;
+        };
+
+        /**
+         * @function sendWPNotification
+         * @memberOf ContentRestInnerCtrl
+         *
+         * @description
+         *   Send webpush notification to all subscribers
+         */
+        $scope.sendWPNotification = function(content) {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-webpush',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return { status: 1 };
+              },
+              success: function() {
+                return null;
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response && content) {
+              var contentNotifications = content.webpush_notifications || [];
+              var image = content.related_contents[0] ? content.related_contents[0].target_id : null;
+
+              contentNotifications.push(
+                {
+                  status: 1,
+                  body: content.description,
+                  title: content.title,
+                  send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
+                  image: image,
+                }
+              );
+              $scope.patch(content, 'webpush_notifications', contentNotifications)
+                .then(function() {
+                  http.post('send_notification', [ content.pk_content ]);
+                  $scope.list();
+                });
+            }
+          });
         };
 
         /**

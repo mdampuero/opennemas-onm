@@ -205,6 +205,10 @@ class EntityManager extends BaseManager
             $this->parseCategory($filters);
         }
 
+        if ($this->hasTagFilter($filters)) {
+            $this->parseTag($filters);
+        }
+
         $sql .= " WHERE " . $filters;
 
         $limitSQL = $this->getLimitSQL($elementsPerPage, $page, $offset);
@@ -302,6 +306,18 @@ class EntityManager extends BaseManager
     }
 
     /**
+     * Checks if there is a tag condition in filters
+     *
+     * @param string $filters The filters.
+     *
+     * @return bool True if there is a tag condition. False otherwise.
+     */
+    protected function hasTagFilter($filters)
+    {
+        return strpos($filters, 'tag_id') !== false;
+    }
+
+    /**
      * Parse category condition and transforms it in a condition with a subquery
      * in the content_category table.
      *
@@ -319,6 +335,31 @@ class EntityManager extends BaseManager
                 $match,
                 sprintf(
                     'pk_content IN (SELECT content_id FROM content_category WHERE %s)',
+                    $match
+                ),
+                $filters
+            );
+        }
+    }
+
+    /**
+     * Parse tag condition and transforms it in a condition with a subquery
+     * in the contents_tags table.
+     *
+     * @param string $filters The filters to parse.
+     */
+    protected function parseTag(string &$filters)
+    {
+        $pattern = '/tag_id\s*=\s*[\'"]{0,1}[0-9]+[\'"]{0,1}'
+            . '|tag_id\s*((not|NOT)\s+)?(in|IN)\s*\([\'"0-9, ]+\)/';
+
+        preg_match_all($pattern, $filters, $matches);
+
+        foreach ($matches[0] as $match) {
+            $filters = str_replace(
+                $match,
+                sprintf(
+                    'pk_content IN (SELECT content_id FROM contents_tags WHERE %s)',
                     $match
                 ),
                 $filters

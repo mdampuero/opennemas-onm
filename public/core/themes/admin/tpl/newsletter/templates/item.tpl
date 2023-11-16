@@ -58,7 +58,9 @@ var newsletterTemplateTranslations = {
         <h4>{t}Subject{/t}</h4>
       </div>
       <div class="grid-body">
-        <input type="text" class="form-control" name="title" id="title" ng-model="item.title"/>
+        <input type="text" class="form-control" name="title" id="title" ng-model="item.title" required/>
+        <span class="fa fa-info-circle text-info" ng-if="!item.title && form.title.$invalid || (item.title.length !== undefined && !item.title.length)"></span>
+        <span class="help" ng-if="!item.title && form.title.$invalid || (item.title.length !== undefined && !item.title.length)">{t}This field is required{/t}</span>
         <div class="form-group m-t-20 m-b-5">
           <div class="checkbox">
             <input id="append_title" name="append_title" ng-false-value="0" ng-model="item.params.append_title" ng-true-value="1" type="checkbox">
@@ -289,6 +291,8 @@ var newsletterTemplateTranslations = {
                           <div ng-bind-html="item | highlight: $select.search"></div>
                         </ui-select-choices>
                       </ui-select>
+                      <i class="fa fa-tags fa-lg m-r-5 m-l-5" ng-if="!['static_page'].includes(content.criteria.content_type)"></i>
+                      <onm-tags-input filter="true" ng-if="!['static_page'].includes(content.criteria.content_type)" ng-model="content.criteria.tag" hide-generate="true" selection-only="true" generate-from="false" ignoreLocale="true" max-results="4" placeholder="{t}Search by tag{/t}"></onm-tags-input>
                     </div>
                     <button class="btn btn-danger" ng-click="removeContent(container, $index)" type="button">
                       <i class="fa fa-trash-o"></i>

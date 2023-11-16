@@ -73,34 +73,20 @@
 
 {block name="itemActions"}
   {acl isAllowed="PHOTO_UPDATE"}
-    <a class="btn btn-default btn-small" href="[% routing.generate('backend_photo_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available">
-      <i class="fa fa-pencil m-r-5"></i>
-      {t}Edit{/t}
+    <a class="btn btn-white btn-small" href="[% routing.generate('backend_photo_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
+      <i class="fa fa-pencil"></i>
     </a>
-    <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_photo_show', { id: getItemId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" ng-class="{ 'dropup': $index >= data.items.length - 1 }" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+    <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_photo_show', { id: getItemId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" ng-class="{ 'dropup': $index >= data.items.length - 1 }" class="btn-group" options="data.extra.locale" text="{t}Edit{/t}"></translator>
   {/acl}
+  <a class="btn btn-white btn-small" href="{$app.instance->getBaseUrl()}{$smarty.const.INSTANCE_MEDIA}[% extra.paths.photo + item.path %]" type="button" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
+    <i class="fa fa-external-link"></i>
+  </a>
+  <a class="btn btn-white btn-small" ng-click="launchPhotoEditor(item)" type="button" uib-tooltip="{t}Enhance{/t}" tooltip-placement="top">
+    <i class="fa fa-sliders"></i>
+  </a>
   {acl isAllowed="PHOTO_DELETE"}
-    <button class="btn btn-danger btn-small" ng-click="delete(item.pk_content)" type="button">
-      <i class="fa fa-trash-o m-r-5"></i>
-      {t}Delete{/t}
+    <button class="btn btn-white btn-small" ng-click="delete(item.pk_content)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
+      <i class="fa fa-trash-o text-danger"></i>
     </button>
   {/acl}
-  <div class="btn-group" ng-class="{ 'dropup': $index >= items.length - 1 }">
-    <button class="btn btn-small btn-white dropdown-toggle" data-toggle="dropdown" type="button">
-      <i class="fa fa-ellipsis-h"></i>
-    </button>
-    <ul class="dropdown-menu no-padding">
-      <li>
-        <a href="{$smarty.const.INSTANCE_MEDIA}[% extra.paths.photo + item.path %]" target="_blank">
-          <i class="fa fa-external-link m-r-5"></i>
-          {t}Link{/t}
-        </a>
-      </li>
-      <li>
-        <a class="btn btn-link" ng-click="launchPhotoEditor(item)" type="button" >
-          <i class="fa fa-sliders m-r-5"></i>{t}Enhance{/t}
-        </a>
-      </li>
-    </ul>
-  </div>
 {/block}

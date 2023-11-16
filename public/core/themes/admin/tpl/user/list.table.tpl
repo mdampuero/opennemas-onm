@@ -28,7 +28,7 @@
 
 {block name="commonColumnsBody"}
   <td class="text-center v-align-middle">
-    <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path" ng-if="item.avatar_img_id"></dynamic-image>
+    <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path"></dynamic-image>
   </td>
   <td>
     <div class="table-text" ng-if="item.name">
@@ -38,12 +38,12 @@
       {t}Unknown{/t}
     </small>
     {block name="itemActions"}
-      <div class="listing-inline-actions m-t-10">
-        <a class="btn btn-default btn-small" href="[% routing.generate('backend_user_show', { id: item.id }) %]">
-          <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+      <div class="listing-inline-actions m-t-10 btn-group">
+        <a class="btn btn-white btn-small" href="[% routing.generate('backend_user_show', { id: item.id }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
+          <i class="fa fa-pencil text-success_"></i>
         </a>
-        <button class="btn btn-danger btn-small" ng-click="delete(item.id)" ng-if="backup.master || item.id != backup.id" type="button">
-          <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+        <button class="btn btn-white btn-small" ng-click="delete(item.id)" ng-if="backup.master || item.id != backup.id" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
+          <i class="fa fa-trash-o text-danger"></i>
         </button>
       </div>
     {/block}
