@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-25 06:46+0000\n"
-"PO-Revision-Date: 2023-11-07 09:43+0100\n"
+"POT-Creation-Date: 2023-11-16 12:20+0000\n"
+"PO-Revision-Date: 2023-11-16 13:30+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -4562,7 +4562,18 @@ msgstr "Notificacións WebPush"
 msgid "Web Push notifications History"
 msgstr "Historial de notificaciones Web Push"
 
-msgid "Notifications data is updated every 15 minutes "
+msgid "Improve your manager"
+msgstr ""
+"16/10000\n"
+"mellora o teu xestor"
+
+msgid "Contact with us to enjoy this feature."
+msgstr "Contacta connosco para gozar desta función."
+
+msgid "I want this module"
+msgstr "Quero este módulo"
+
+msgid "Notifications data is updated every 15 minutes"
 msgstr "Os datos das notificacións actualízanse cada 15 minutos"
 
 msgid "Web Push notifications Dashboard"
@@ -4574,14 +4585,14 @@ msgstr "Subscriptores Activos"
 msgid "Impressions"
 msgstr "Visualizacións"
 
+msgid "Monthly"
+msgstr "Mensual"
+
 msgid "Times a notification was"
 msgstr "Veces que unha notificación foi"
 
 msgid "displayed to the user"
 msgstr "mostrada ao usuario"
-
-msgid "Monthly"
-msgstr "Mensual"
 
 msgid "Interactions"
 msgstr "Interaccións"
@@ -4598,7 +4609,7 @@ msgstr "Interaccións (Clicks + Pechadas)"
 msgid "divided by Impressions"
 msgstr "dividido por Visualizacións"
 
-msgid "New Active Subscribers "
+msgid "New Active Subscribers"
 msgstr "Novos Subscriptores Activos"
 
 msgid "Web Push notifications Configuration"
@@ -4622,11 +4633,11 @@ msgstr "Tempo de atraso da notificación"
 msgid "Restricted hours"
 msgstr "Horario restrinxido"
 
-msgid "Time zone: "
-msgstr "Fuso horario:"
-
 msgid "Add an hour"
 msgstr "Engadir unha hora"
+
+msgid "Time zone: "
+msgstr "Fuso horario:"
 
 msgid "Webpushr service credentials"
 msgstr "Credenciais do servizo Webpushr"
@@ -7614,10 +7625,6 @@ msgstr "Nome do grupo"
 
 #~ msgid "Word count"
 #~ msgstr "Número de palabras"
-
-#, fuzzy
-#~ msgid "Homepage manager"
-#~ msgstr "Xestor de portada"
 
 #, fuzzy
 #~ msgid "Advertising"
