@@ -168,6 +168,20 @@
                               </div>
                             </div>
                             <div class="col-xs-12 col-md-4 m-b-15">
+                              <label class="form-label" for="theme-widget-header-font-size">
+                                <span class="help">
+                                  {t}Section header font size{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-widget-header-font-size" name="theme-widget-header-font-size" ng-model="settings.theme_options.theme_widget_header_font_size">
+                                    <option value="[% widget_header_font_size_name %]" ng-repeat="(widget_header_font_size_name,widget_header_font_size_value) in extra.theme_skins[settings.theme_skin].params.options.option_widget_header_font_size" ng-selected="[% widget_header_font_size_name === settings.theme_options.widget_header_main_font_size || settings.theme_options.theme_widget_header_font_size == undefined %]">[% widget_header_font_size_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15">
                               <label class="form-label" for="theme-option-widget-header-font">
                                 <span class="help">
                                   {t}Section header font weight{/t}
@@ -181,6 +195,8 @@
                                 </div>
                               </div>
                             </div>
+                          </div>
+                          <div class="row">
                             <div class="col-xs-12 col-md-4 m-b-15">
                               <label class="form-label" for="theme-option-widget-header-color">
                                 <span class="help">
