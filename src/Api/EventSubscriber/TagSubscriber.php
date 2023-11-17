@@ -36,10 +36,12 @@ class TagSubscriber implements EventSubscriberInterface
      * Initializes the TagSubscriber.
      *
      * @param TagCacheHelper $helper The helper to remove tag-related caches.
+     * @param Cache          $redis  The cache service for redis.
      */
-    public function __construct(TagCacheHelper $helper)
+    public function __construct(TagCacheHelper $helper, $redis)
     {
         $this->helper = $helper;
+        $this->redis  = $redis;
     }
 
     /**
@@ -106,8 +108,11 @@ class TagSubscriber implements EventSubscriberInterface
             $this->helper->deleteItem($tag);
         }
 
+        foreach ($cacheIds as $cacheId) {
+            $this->redis->remove($cacheId);
+        }
+
         $this->helper
-            ->deleteContents($cacheIds)
-            ->deleteItem($event->getArgument('target'));
+            ->deleteItem($event->getArgument('item'), true);
     }
 }

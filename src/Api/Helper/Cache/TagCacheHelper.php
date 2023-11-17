@@ -30,7 +30,7 @@ class TagCacheHelper extends CacheHelper
      *
      * @param Tag $tag The tag.
      */
-    public function deleteItem(Tag $tag) : void
+    public function deleteItem(Tag $tag, $all = false) : void
     {
         $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
             [ 'tag', 'show', $tag->id ]
@@ -44,13 +44,15 @@ class TagCacheHelper extends CacheHelper
             )
         ]));
 
-        $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-            sprintf(
-                'obj.http.x-tags ~ ^instance-%s.*tag-%d.*',
-                $this->instance->internal_name,
-                $tag->id
-            )
-        ]));
+        if ($all) {
+            $this->queue->push(new ServiceTask('core.varnish', 'ban', [
+                sprintf(
+                    'obj.http.x-tags ~ ^instance-%s.*tag-%d.*',
+                    $this->instance->internal_name,
+                    $tag->id
+                )
+            ]));
+        }
     }
 
     /**

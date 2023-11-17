@@ -95,7 +95,7 @@ class TagRepository extends BaseRepository
             $ids = [ $ids ];
         }
 
-        $sql = 'SELECT tag_id AS "id", content_type_name AS "type"'
+        $sql = 'SELECT content_id AS "id", content_type_name AS "type"'
             . ' FROM contents_tags'
             . ' INNER JOIN contents'
             . ' ON contents_tags.content_id = contents.pk_content'

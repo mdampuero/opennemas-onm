@@ -129,7 +129,7 @@ class TagRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $this->conn->expects($this->at(0))->method('fetchAll')
             ->with(
-                'SELECT tag_id AS "id", content_type_name AS "type"'
+                'SELECT content_id AS "id", content_type_name AS "type"'
                     . ' FROM contents_tags INNER JOIN contents'
                     . ' ON contents_tags.content_id = contents.pk_content'
                     . ' WHERE tag_id IN (?)',
@@ -162,7 +162,7 @@ class TagRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->conn->expects($this->at(0))->method('fetchAll')
             ->with(
-                'SELECT tag_id AS "id", content_type_name AS "type"'
+                'SELECT content_id AS "id", content_type_name AS "type"'
                     . ' FROM contents_tags INNER JOIN contents'
                     . ' ON contents_tags.content_id = contents.pk_content'
                     . ' WHERE tag_id IN (?)',
