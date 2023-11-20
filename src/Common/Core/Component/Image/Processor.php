@@ -242,21 +242,16 @@ class Processor
         if (isset($exifData['ifd0.Orientation'])) {
             $orientation = (int) $exifData['ifd0.Orientation'];
 
-            $rotateVal = 0;
             switch ($orientation) {
                 case 8:
-                    $rotateVal = -90;
+                    $this->image->rotate(-90);
                     break;
                 case 3:
-                    $rotateVal = 180;
+                    $this->image->rotate(180);
                     break;
                 case 6:
-                    $rotateVal = 90;
+                    $this->image->rotate(90);
                     break;
-            }
-
-            if ($rotateVal !== 0) {
-                $this->image->rotate($rotateVal);
             }
         }
 
