@@ -39,11 +39,21 @@ class ImageHelper extends FileHelper
     }
 
     /**
-     * Checks if a file exists.
+     * Apply rotation on image if exists on EXIF data.
      *
      * @param string $path The path to file.
      *
      * @return bool True if the file exists. False otherwise.
+     */
+    public function applyRotation(string $path) : void
+    {
+        $this->processor->open($path)->setImageRotation()->strip()->save($path)->close();
+    }
+
+    /**
+     * Checks if a file exists.
+     *
+     * @param string $path The path to file.
      */
     public function exists(string $path) : bool
     {
@@ -102,7 +112,7 @@ class ImageHelper extends FileHelper
             'width'  => $this->processor->getWidth()
         ];
 
-        $description = $this->processor->getDescription();
+        $description = trim($this->processor->getDescription());
         if (!empty($description)) {
             $information['description'] = $description;
         }

@@ -37,7 +37,7 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
         $this->processor = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setMethods([
                 'close', 'getDescription', 'getHeight', 'getSize', 'getWidth',
-                'open', 'optimize', 'save'
+                'open', 'optimize', 'save', 'strip', 'setImageRotation'
             ])->getMock();
 
         $this->il->expects($this->any())->method('getInstance')
@@ -75,6 +75,23 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             '/\/waldo\/grault\/media\/bar\/images\/2010\/01\/01\/20100101152045[0-9]{5}.jpg/',
             $this->helper->generatePath($file, new \DateTime('2010-01-01 15:20:45'))
         );
+    }
+
+    /**
+     * Tests applyRotation.
+     */
+    public function testApplyRotation()
+    {
+        $this->processor->expects($this->once())->method('open')
+            ->with('/plugh/frog.jpg')->willReturn($this->processor);
+        $this->processor->expects($this->once())->method('setImageRotation')
+            ->willReturn($this->processor);
+        $this->processor->expects($this->once())->method('strip')
+            ->willReturn($this->processor);
+        $this->processor->expects($this->once())->method('save')
+            ->with('/plugh/frog.jpg')->willReturn($this->processor);
+
+        $this->helper->applyRotation('/plugh/frog.jpg');
     }
 
     /**
