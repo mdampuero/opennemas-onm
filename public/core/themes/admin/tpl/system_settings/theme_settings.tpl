@@ -994,6 +994,20 @@
                               </div>
                             </div>
                           </div>
+                          <div class="col-xs-12 m-b-15" ng-if="settings.theme_options.related_contents_auto == '1'">
+                            <label class="form-label m-b-15" for="theme-option-related-contents-auto-position">
+                              <span class="help">
+                                {t}Choose where to display{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-option-related-contents-auto-position" name="theme-option-related-contents-auto-position" ng-model="settings.theme_options.related_contents_auto_position">
+                                  <option value="[% related_contents_auto_position_name %]" ng-repeat="(related_contents_auto_position_name,related_contents_auto_position_value) in extra.theme_skins[settings.theme_skin].params.options.option_related_contents_auto_position" ng-selected="[% related_contents_auto_position_name === settings.theme_options.related_contents_auto_position || settings.theme_options.related_contents_auto_position == undefined %]">[% related_contents_auto_position_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
                           <div class="col-xs-12 m-b-15">
                             <label class="form-label m-b-15" for="theme-option-sidebar-widgets">
                               <h4>
