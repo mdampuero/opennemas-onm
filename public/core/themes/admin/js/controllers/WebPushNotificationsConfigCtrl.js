@@ -8,14 +8,9 @@
      * @name  WebPushNotificationsConfigCtrl
      *
      * @requires $controller
-     * @requires $location
      * @requires $scope
-     * @requires $timeout
      * @requires http
      * @requires messenger
-     * @requires linker
-     * @requires localizer
-     * @requires oqlEncoder
      *
      * @description
      *   Provides actions to list notifications.
@@ -116,7 +111,7 @@
           $scope.flags.http.checking = true;
 
           $scope.save()
-            .then(function(response) {
+            .then(function() {
               var route = {
                 name: $scope.routes.checkServer
               };

@@ -8,14 +8,11 @@
      * @name  WebPushNotificationsDashboardCtrl
      *
      * @requires $controller
-     * @requires $location
      * @requires $scope
-     * @requires $timeout
      * @requires http
      * @requires messenger
-     * @requires linker
-     * @requires localizer
      * @requires oqlEncoder
+     * @requires $location
      * @requires $window
      *
      * @description
@@ -102,16 +99,13 @@
 
             // Gets monthly data for notifications in list
             $scope.monthlyImpressions = 0;
-            var monthlyClicks      = 0;
-            var monthlyClosed      = 0;
+            $scope.monthlyInteractions = 0;
 
             $scope.items.forEach(function(item) {
               $scope.monthlyImpressions += item.impressions;
-              monthlyClicks += item.clicks;
-              monthlyClosed += item.closed;
+              $scope.monthlyInteractions += item.clicks;
+              $scope.monthlyInteractions += item.closed;
             });
-
-            $scope.monthlyInteractions = monthlyClicks + monthlyClosed;
 
             $scope.monthlyCTR = Math.round($scope.monthlyInteractions / $scope.monthlyImpressions * 10000) / 100;
 
@@ -132,18 +126,15 @@
               $scope.settings.webpush_active_subscribers.length ?
               $scope.settings.webpush_active_subscribers.length : 0;
 
-            var dataValues = [];
+            $scope.data = $scope.settings.webpush_active_subscribers ?
+              $scope.settings.webpush_active_subscribers.reverse() :
+              [];
 
             for (var i = 0; i < numberOfDays - numberOfSubs; i++) {
-              dataValues.push(null);
+              $scope.data.unshift(0);
             }
 
-            if ($scope.settings.webpush_active_subscribers) {
-              var subscribersArray = [].concat($scope.settings.webpush_active_subscribers);
-
-              dataValues = dataValues.concat(subscribersArray.reverse());
-            }
-            $scope.data = [ dataValues ];
+            $scope.data = [ $scope.data ];
 
             $scope.options = {
               responsive: true,

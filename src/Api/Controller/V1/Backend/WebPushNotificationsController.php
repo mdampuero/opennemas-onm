@@ -89,10 +89,10 @@ class WebPushNotificationsController extends ApiController
             $demo_response = [
                 'items' => [
                     [
-                        'impressions' => 6000,
-                        'clicks' => 3000,
-                        'closed' => 2500,
-                        'send_date' => '2020-01-01 08:00:00',
+                        'impressions' => 5476,
+                        'clicks' => 1327,
+                        'closed' => 3864,
+                        'send_date' => '2001-12-03 21:30:12',
                         'title' => 'Lorem Ipsum Dolor',
                         'status' => 1,
                         'image' => null,
@@ -193,7 +193,7 @@ class WebPushNotificationsController extends ApiController
 
             return [
                 'items'      => $demo_response['items'],
-                'total'      => 3,
+                'total'      => 10,
             ];
         } else {
             $this->checkSecurity($this->extension, $this->getActionPermission('list'));

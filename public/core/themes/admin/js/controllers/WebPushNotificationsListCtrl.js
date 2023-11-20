@@ -8,14 +8,11 @@
      * @name  WebPushNotificationsListCtrl
      *
      * @requires $controller
-     * @requires $location
      * @requires $scope
-     * @requires $timeout
      * @requires http
      * @requires messenger
-     * @requires linker
-     * @requires localizer
      * @requires oqlEncoder
+     * @requires $location
      *
      * @description
      *   Provides actions to list Web Push notifications.
@@ -46,7 +43,7 @@
          * @type {Object}
          */
         $scope.routes = {
-          getList:   'api_v1_backend_webpush_notifications_get_list',
+          getList:             'api_v1_backend_webpush_notifications_get_list',
           getNotificationData: 'api_v1_backend_webpush_notifications_get_notification_data'
         };
 
@@ -56,10 +53,8 @@
         $scope.buildScope = function() {
           $scope.expandFields();
 
-          if ($scope.data.extra.photos &&
-              $scope.data.extra.photos[$scope.item.image]) {
-            $scope.item.avatar_img_id =
-              $scope.data.extra.photos[$scope.item.image];
+          if ($scope.data.extra.photos && $scope.data.extra.photos[$scope.item.image]) {
+            $scope.item.avatar_img_id = $scope.data.extra.photos[$scope.item.image];
           }
         };
 

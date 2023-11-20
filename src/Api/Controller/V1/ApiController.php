@@ -283,7 +283,6 @@ class ApiController extends Controller
         $finalDate     = $currentDate->format('Y-m');
         $iterationDate = $firstContentDate;
 
-
         while ($iterationDate->format('Y-m') <= $finalDate) {
             $years[] = [
                 'name' => (!is_null($fmt) ?
