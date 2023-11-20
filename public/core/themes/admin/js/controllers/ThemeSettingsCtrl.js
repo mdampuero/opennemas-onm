@@ -25,8 +25,11 @@
          * @type {Object}
          */
         $scope.settings = {
-          theme_skin: 'default',
-          gfk: {}
+          gfk: {},
+          logo_enabled: false,
+          site_color: '',
+          site_color_secondary: '',
+          theme_skin: 'default'
         };
 
         $scope.routes = {
