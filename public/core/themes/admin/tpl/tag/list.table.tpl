@@ -34,21 +34,17 @@
 {/block}
 
 {block name="commonColumnsHeader"}
-  <th class="v-align-middle" ng-click="sort('name')" ng-if="isColumnEnabled('name')" width="400">
+  <th class="v-align-middle" ng-if="isColumnEnabled('name')" width="400">
     {t}Name{/t}
-    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
   </th>
-  <th class="v-align-middle" ng-click="sort('slug')" ng-if="isColumnEnabled('slug')" width="200">
+  <th class="v-align-middle" ng-if="isColumnEnabled('slug')" width="200">
     {t}Slug{/t}
-    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('slug') == 'asc', 'fa fa-caret-down': isOrderedBy('slug') == 'desc'}"></i>
   </th>
-  <th class="text-center v-align-middle" ng-click="sort('locale')" ng-if="data.extra.locale.multilanguage && isColumnEnabled('locale')" ng-if="isColumnEnabled('locale')" width="200">
+  <th class="text-center v-align-middle" ng-if="data.extra.locale.multilanguage && isColumnEnabled('locale')" ng-if="isColumnEnabled('locale')" width="200">
     {t}Locale{/t}
-    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('locale') == 'asc', 'fa fa-caret-down': isOrderedBy('locale') == 'desc'}"></i>
   </th>
-  <th class="v-align-middle" ng-click="sort('description')" ng-if="isColumnEnabled('description')" width="200">
+  <th class="v-align-middle" ng-if="isColumnEnabled('description')" width="200">
     {t}Description{/t}
-    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('description') == 'asc', 'fa fa-caret-down': isOrderedBy('description') == 'desc'}"></i>
   </th>
   <th class="text-center v-align-middle" class="text-center" ng-if="isColumnEnabled('contents')" width="120">
     {t}Contents{/t}
