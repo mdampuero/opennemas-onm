@@ -36,8 +36,8 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->processor = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setMethods([
-                'close', 'getDescription', 'getHeight', 'getSize', 'getWidth',
-                'open', 'optimize', 'save', 'strip', 'setImageRotation'
+                'close', 'getDescription', 'getHeight', 'getImageRotation', 'getSize',
+                'getWidth', 'open', 'optimize', 'save', 'strip', 'setImageRotation'
             ])->getMock();
 
         $this->il->expects($this->any())->method('getInstance')
@@ -80,16 +80,31 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests applyRotation.
      */
-    public function testApplyRotation()
+    public function testApplyRotationWhenRotation()
     {
         $this->processor->expects($this->once())->method('open')
             ->with('/plugh/frog.jpg')->willReturn($this->processor);
+        $this->processor->expects($this->once())->method('getImageRotation')
+            ->willReturn('8');
         $this->processor->expects($this->once())->method('setImageRotation')
             ->willReturn($this->processor);
         $this->processor->expects($this->once())->method('strip')
             ->willReturn($this->processor);
         $this->processor->expects($this->once())->method('save')
             ->with('/plugh/frog.jpg')->willReturn($this->processor);
+
+        $this->helper->applyRotation('/plugh/frog.jpg');
+    }
+
+    /**
+     * Tests applyRotation.
+     */
+    public function testApplyRotationWhenNoRotation()
+    {
+        $this->processor->expects($this->once())->method('open')
+            ->with('/plugh/frog.jpg')->willReturn($this->processor);
+        $this->processor->expects($this->once())->method('getImageRotation')
+            ->willReturn(null);
 
         $this->helper->applyRotation('/plugh/frog.jpg');
     }
