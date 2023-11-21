@@ -43,4 +43,86 @@ class UserRepository extends BaseRepository
 
         return $users;
     }
+
+       /**
+     * Returns a list where key is the user id and value is the number of
+     * contents assigned to the user.
+     *
+     * @param mixed $ids A user id or a list of user ids.
+     *
+     * @return array The list where keys are the user ids and values are the
+     *               number of contents.
+     */
+    public function countContents($ids)
+    {
+        if (empty($ids)) {
+            throw new \InvalidArgumentException();
+        }
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+        $sql = 'SELECT fk_author AS "id", COUNT(1) AS "contents" '
+            . 'FROM contents '
+            . 'WHERE fk_author IN (?) '
+            . 'GROUP BY fk_author';
+
+        $data = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        $contents = [];
+        foreach ($data as $value) {
+            $contents[$value['id']] = $value['contents'];
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Moves all contents assigned to users basing on a user id
+     *
+     * @param integer $id     The user id
+     * @param integer $target The user id of the target user.
+     *
+     * @return array The list of ids and content types of the moved contents.
+     */
+    public function moveContents($ids, $target)
+    {
+        if (empty($ids) || empty($target)) {
+            throw new \InvalidArgumentException();
+        }
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+
+        $sql = 'SELECT pk_content AS "id", content_type_name AS "type"'
+            . ' FROM contents'
+            . ' WHERE fk_author IN (?)';
+
+        $contents = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+        if (empty($contents)) {
+            return [];
+        }
+        $sql = 'UPDATE IGNORE contents SET fk_author = ?'
+            . ' WHERE fk_author IN (?)';
+        $this->conn->executeQuery(
+            $sql,
+            [ $target, $ids ],
+            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+        $sql = 'DELETE FROM contents WHERE fk_author IN (?)';
+        $this->conn->executeQuery(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        return $contents;
+    }
 }

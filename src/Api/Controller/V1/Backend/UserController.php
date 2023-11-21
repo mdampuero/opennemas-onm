@@ -39,6 +39,7 @@ class UserController extends ApiController
         'save'   => 'USER_CREATE',
         'show'   => 'USER_UPDATE',
         'update' => 'USER_UPDATE',
+        'move'   => 'USER_UPDATE',
     ];
 
     protected $module = 'user';
@@ -96,6 +97,24 @@ class UserController extends ApiController
                 'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ];
+    }
+
+    /**
+     * Moves all contents assigned to the user to the target user.
+     *
+     * @param Request $request The request object.
+     * @param integer $id      The user id.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function moveItemAction(Request $request, $id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('move'));
+        $target = $request->request->get('target', null);
+        $msg    = $this->get('core.messenger');
+        $this->get($this->service)->moveItem($id, $target);
+        $msg->add(_('Item saved successfully'), 'success');
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**

@@ -16,6 +16,7 @@ use Api\Exception\DeleteListException;
 use Api\Exception\GetItemException;
 use Api\Exception\InvalidArgumentException;
 use Api\Exception\UpdateItemException;
+use Api\Exception\ApiException;
 use Opennemas\Orm\Core\Exception\EntityNotFoundException;
 
 class UserService extends OrmService
@@ -161,7 +162,6 @@ class UserService extends OrmService
             }
 
             $oql = sprintf('id = %s and type != 1', $id);
-
             return $this->container->get('orm.manager')
                 ->getRepository($this->entity, $this->origin)
                 ->findOneBy($oql);
@@ -287,5 +287,56 @@ class UserService extends OrmService
         return $this->container->get('orm.oql.fixer')->fix($oql)
             ->addCondition('type != 1')
             ->getOql();
+    }
+
+      /**
+     * Moves all contents assigned to a user to another user.
+     *
+     * @param integer $id The user id of the source user.
+     * @param integer $to The user id of the target user.
+     */
+    public function moveItem($id, $to)
+    {
+        try {
+            $source = $this->getItem($id);
+            if ($this->isItemEmpty($source)) {
+                throw new ApiException('The item is empty', 400);
+            }
+
+            $target = $this->getItem($to);
+            $moved  = $this->em->getRepository($this->entity, $this->origin)
+                ->moveContents((int) $id, (int) $to);
+            $this->dispatcher->dispatch($this->getEventName('moveItem'), [
+                'id'       => $id,
+                'item'     => $source,
+                'target'   => $target,
+                'contents' => $moved
+            ]);
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
+    }
+    /**
+     * Checks if the user is empty of contents.
+     *
+     * @param Category $item The user.
+     *
+     * @return boolean True if the user is empty of contents. False otherwise.
+     */
+    protected function isItemEmpty($item)
+    {
+        try {
+            $contents = $this->em->getRepository($this->entity, $this->origin)
+                ->countContents($item->id);
+            if (!empty($contents)
+                && array_key_exists((int) $item->id, $contents)
+                && !empty($contents[$item->id])
+            ) {
+                return false;
+            }
+            return true;
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
     }
 }

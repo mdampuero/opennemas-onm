@@ -63,7 +63,7 @@
          */
         $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
-          $scope.app.columns.selected = [ 'picture', 'name', 'email', 'usergroups', 'social', 'enabled' ];
+          $scope.app.columns.selected = [ 'picture', 'name', 'email', 'username', 'usergroups', 'social', 'enabled' ];
           oqlEncoder.configure({
             placeholder: {
               name: 'name ~ "[value]" or username ~ "[value]"',
@@ -89,8 +89,8 @@
          * @description
          *   Confirm move action.
          *
-         * @param {Integer} id The tag id.
-         * @param {Object} tag The tag object.
+         * @param {Integer} id The user id.
+         * @param {Object} user The user object.
          */
         $scope.move = function(id, item) {
           var modal = $uibModal.open({
@@ -111,7 +111,7 @@
                     params: { id: id }
                   };
 
-                  return http.put(route, { target: template.target[0] });
+                  return http.put(route, { target: template.target });
                 };
               }
             }

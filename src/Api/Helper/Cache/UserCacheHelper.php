@@ -30,25 +30,52 @@ class UserCacheHelper extends CacheHelper
         $this->cache = $container->get('cache.connection.instance');
     }
 
-    /**
-     * TODO: Remove when using new ORM for users
+
+
+     /**
+     * Removes caches for contents related to a tag.
      *
-     * Removes users from old redis cache.
-     *
-     * @param User $item The user to remove from cache.
+     * @param  array $ids The list of content ids.
      *
      * @return CacheHelper The current helper for method chaining.
      */
-    public function deleteItem(User $item) : CacheHelper
+    public function deleteContents(array $ids = []) : CacheHelper
     {
-        $this->queue->push(new ServiceTask('cache', 'delete', [
-            sprintf('user-%s', $item->id)
+        $this->queue->push(new ServiceTask('cache.connection.instance', 'remove', [
+            $ids
+        ]))->push(new ServiceTask('cache', 'delete', [
+            $ids
         ]));
-
-        if (array_search(3, array_column($item->user_groups, 'user_group_id')) !== false) {
-            $this->cache->remove(sprintf('author-%s', $item->id));
-        }
-
         return $this;
+    }
+
+    public function newDeleteItem(User $item, $all = false) : void
+    {
+        $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
+            [ 'tag', 'show', $tag->id ]
+        ]));
+        $this->queue->push(new ServiceTask('core.varnish', 'ban', [
+            sprintf(
+                'obj.http.x-tags ~ ^instance-%s,.*,tag,show,tag-%s',
+                $this->instance->internal_name,
+                $tag->id
+            )
+        ]));
+        $this->queue->push(new ServiceTask('core.varnish', 'ban', [
+            sprintf(
+                'obj.http.x-tags ~ ^instance-%s.*tag-%d.*',
+                $this->instance->internal_name,
+                $tag->id
+            )
+        ]));
+        if ($all) {
+            $this->queue->push(new ServiceTask('core.varnish', 'ban', [
+                sprintf(
+                    'obj.http.x-tags ~ ^instance-%s.*tag-%d.*',
+                    $this->instance->internal_name,
+                    $tag->id
+                )
+            ]));
+        }
     }
 }
