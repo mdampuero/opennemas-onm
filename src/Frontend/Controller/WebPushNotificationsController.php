@@ -22,11 +22,15 @@ class WebPushNotificationsController extends FrontendController
      */
     protected function scriptAction($request)
     {
-        if ($smarty->getContainer()->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')
-            && $webpushService == 'webpushr'
-            && $webpushKeys
-            && !$smarty->getContainer()->get('core.instance')->hasMultilanguage()
-            && $smarty->getContainer()->get('core.security')->hasExtension('es.openhost.module.frontendSsl')) {
+        $webpushSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get(['webpush_service', 'webpush_apikey', 'webpush_token', 'webpush_publickey']);
+
+        if ($this->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')
+            && $webpushSettings['webpush_service'] == 'webpushr'
+            && $webpushSettings['webpush_apikey']
+            && !$this->get('core.instance')->hasMultilanguage()
+            && $this->get('core.security')->hasExtension('es.openhost.module.frontendSsl')) {
             return new Response(
                 "importScripts('https://cdn.webpushr.com/sw-server.min.js');",
                 200,
