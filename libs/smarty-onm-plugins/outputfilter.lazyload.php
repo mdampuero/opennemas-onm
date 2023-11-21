@@ -55,14 +55,23 @@ function smarty_outputfilter_lazyload($output, $smarty)
                 . ' data-ratio="16:9">'
                 . '</div>';
 
+            $cache = $smarty->getContainer()
+                ->get('cache.connection.instance');
+
             foreach ($urls as $key => $url) {
-                $video = unserialize(
-                    $smarty->getContainer()
-                        ->get('data.manager.filter')
-                        ->set($url)
-                        ->filter('panorama')
-                        ->get()
-                );
+                $video = $cache->get(current(explode('.', $matches[2][$key])) . '_' . $matches[3][$key]);
+
+                if (empty($video)) {
+                    $video = unserialize(
+                        $smarty->getContainer()
+                            ->get('data.manager.filter')
+                            ->set($url)
+                            ->filter('panorama')
+                            ->get()
+                    );
+
+                    $cache->set(current(explode('.', $matches[2][$key])) . '_' . $matches[3][$key], $video, 3600 * 24);
+                }
 
                 if (empty($video)) {
                     unset($matches[0][$key]);
