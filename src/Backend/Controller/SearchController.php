@@ -59,111 +59,89 @@ class SearchController extends Controller
     {
         $searchString = $request->query->filter('search_string', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
-        $related      = (bool) $request->query->get('related', true);
 
         $this->get('core.locale')->setContext('frontend');
 
-        $this->view->assign('related', $related);
+        if (empty($searchString)) {
+            return $this->render('search_advanced/content-provider.tpl');
+        }
 
-        if (!empty($searchString)) {
-            $fm     = $this->get('data.manager.filter');
-            $tokens = $fm->set($searchString)->filter('tags')->get();
-            $tokens = explode(',', $tokens);
+        $fm     = $this->get('data.manager.filter');
+        $tokens = $fm->set($searchString)->filter('tags')->get();
+        $tokens = explode(',', $tokens);
 
-            $er = $this->get('entity_repository');
+        $er = $this->get('entity_repository');
 
-            // Build field search with LIKE
-            $fields = ['title'];
-            $search = [];
-            foreach ($fields as $field) {
-                $searchChunk = [];
-                foreach ($tokens as $token) {
-                    $searchChunk[] = $field . " LIKE '%" . trim($token) . "%'";
-                }
-
-                $search[] = "(" . implode(' AND ', $searchChunk) . ") ";
+        // Build field search with LIKE
+        $fields = ['title'];
+        $search = [];
+        foreach ($fields as $field) {
+            $searchChunk = [];
+            foreach ($tokens as $token) {
+                $searchChunk[] = $field . " LIKE '%" . trim($token) . "%'";
             }
 
-            //Clean the input words
-            $tags = $this->get('api.service.tag')
-                ->getListByString($searchString);
+            $search[] = "(" . implode(' AND ', $searchChunk) . ") ";
+        }
 
-            $ids = array_map(function ($a) {
-                return $a->id;
-            }, $tags['items']);
+        //Clean the input words
+        $tags = $this->get('api.service.tag')
+            ->getListByString($searchString);
 
-            //Create the query if exist tagsWords
-            if (!empty($tagsWords)) {
-                $countTagsWords = count($tagsWords) - 1;
-                $tagsWords      = implode(',', $tagsWords);
-                $search[]       = ' pk_content in (SELECT contents_tags.content_id'
-                . " FROM contents_tags WHERE contents_tags.tag_id IN ($ids)"
-                . ' GROUP BY contents_tags.content_id'
-                . ' HAVING COUNT(contents_tags.tag_id) >'
-                . $countTagsWords . ')';
-            }
+        $ids = array_map(function ($a) {
+            return $a->id;
+        }, $tags['items']);
 
-            // Final search
-            $search = "(" . implode(' OR ', $search) . ")";
+        //Create the query if exist tagsWords
+        if (!empty($tagsWords)) {
+            $countTagsWords = count($tagsWords) - 1;
+            $tagsWords      = implode(',', $tagsWords);
+            $search[]       = ' pk_content in (SELECT contents_tags.content_id'
+            . " FROM contents_tags WHERE contents_tags.tag_id IN ($ids)"
+            . ' GROUP BY contents_tags.content_id'
+            . ' HAVING COUNT(contents_tags.tag_id) >'
+            . $countTagsWords . ')';
+        }
 
-            // Complete where clause
-            $criteria = ' in_litter = 0 AND content_status = 1 '
-                . ' AND fk_content_type IN (1, 2, 4, 7, 9, 11, 12)'
-                . ' AND ' . $search;
+        // Final search
+        $search = "(" . implode(' OR ', $search) . ")";
 
-            $order = [ 'starttime' => 'desc' ];
+        // Complete where clause
+        $criteria = ' in_litter = 0 AND content_status = 1 '
+            . ' AND fk_content_type IN (1, 2, 4, 7, 9, 11, 12)'
+            . ' AND ' . $search;
 
-            $results = $er->findBy($criteria, $order, 8, $page);
-            $total   = $er->countBy($criteria);
+        $order = [ 'starttime' => 'desc' ];
 
-            foreach ($results as $content) {
-                $content->content_partial_path =
-                    $content->content_type_name . '/content-provider/'
-                    . $content->content_type_name . '.tpl';
-            }
+        $results = $er->findBy($criteria, $order, 8, $page);
+        $total   = $er->countBy($criteria);
 
-            // Build the pagination
-            $pagination = $this->get('paginator')->get([
-                'boundary'    => true,
-                'directional' => true,
-                'epp'         => 8,
-                'page'        => $page,
-                'total'       => $total,
-                'route'       => [
-                    'name'   => 'admin_search_content_provider',
-                    'params' => [ 'search_string' => $searchString, 'related' => $related ]
-                ],
-            ]);
+        foreach ($results as $content) {
+            $content->content_partial_path =
+                $content->content_type_name . '/content-provider/'
+                . $content->content_type_name . '.tpl';
+        }
 
-            $this->view->assign([
+        // Build the pagination
+        $pagination = $this->get('paginator')->get([
+            'boundary'    => true,
+            'directional' => true,
+            'epp'         => 8,
+            'page'        => $page,
+            'total'       => $total,
+            'route'       => [
+                'name'   => 'admin_search_content_provider',
+                'params' => [ 'search_string' => $searchString ]
+            ],
+        ]);
+
+        return $this->render(
+            'search_advanced/content-provider.tpl',
+            [
                 'results'       => $results,
                 'search_string' => $searchString,
                 'pagination'    => $pagination
-            ]);
-
-            if ($related == true) {
-                return $this->render(
-                    'search_advanced/content-provider-related.tpl',
-                    [
-                        'contents'    => $results,
-                        'contentType' => 'Content',
-                    ]
-                );
-            } else {
-                return $this->render(
-                    'search_advanced/content-provider.tpl',
-                    [
-                        'contents'    => $results,
-                        'contentType' => 'Content',
-                    ]
-                );
-            }
-        } else {
-            if (!is_null($related)) {
-                return $this->render('search_advanced/content-provider-related.tpl');
-            } else {
-                return $this->render('search_advanced/content-provider.tpl');
-            }
-        }
+            ]
+        );
     }
 }
