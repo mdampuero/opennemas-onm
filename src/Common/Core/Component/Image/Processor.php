@@ -145,6 +145,18 @@ class Processor
     }
 
     /**
+     * Get image rotation if exists on metadata.
+     *
+     * @return Processor The current Processor.
+     */
+    public function getImageRotation() : ?string
+    {
+        $metadata = $this->image->metadata();
+
+        return $metadata['ifd0.Orientation'] ?? null;
+    }
+
+    /**
      * Returns the image mime-type.
      *
      * @return string The image mime-type.

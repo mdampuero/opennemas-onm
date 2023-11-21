@@ -47,7 +47,13 @@ class ImageHelper extends FileHelper
      */
     public function applyRotation(string $path) : void
     {
-        $this->processor->open($path)->setImageRotation()->strip()->save($path)->close();
+        $this->processor->open($path);
+
+        if ($this->processor->getImageRotation()) {
+            $this->processor->setImageRotation()->strip()->save($path);
+        }
+
+        $this->processor->close();
     }
 
     /**

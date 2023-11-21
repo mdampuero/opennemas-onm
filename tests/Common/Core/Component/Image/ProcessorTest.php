@@ -154,9 +154,31 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     public function testGetDescriptionWithoutExif()
     {
         $this->image->expects($this->once())->method('metadata')
-            ->willReturn([]);
+            ->willReturn(null);
 
-        $this->assertEquals('', $this->im->getDescription());
+        $this->assertEquals(null, $this->im->getDescription());
+    }
+
+    /**
+     * Tests getImageRotation.
+     */
+    public function testGetImageRotationWithRotation()
+    {
+        $this->image->expects($this->once())->method('metadata')
+            ->willReturn([ 'ifd0.Orientation' => '8']);
+
+        $this->assertEquals('8', $this->im->getImageRotation());
+    }
+
+    /**
+     * Tests getImageRotation
+     */
+    public function testGetImageRotationWithoutRotation()
+    {
+        $this->image->expects($this->once())->method('metadata')
+            ->willReturn(null);
+
+        $this->assertEquals(null, $this->im->getImageRotation());
     }
 
     /**
