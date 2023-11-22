@@ -869,6 +869,20 @@
                                 </div>
                               </div>
                             </div>
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <label class="form-label m-b-15" for="theme-option-content-readtime">
+                                <span class="help">
+                                  {t}Display content's readtime{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-content-readtime" name="theme-option-content-readtime" ng-model="settings.theme_options.content_readtime">
+                                    <option value="[% content_readtime_name %]" ng-repeat="(content_readtime_name,content_readtime_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_readtime" ng-selected="[% content_readtime_name === settings.theme_options.content_readtime || settings.theme_options.content_readtime == undefined %]">[% content_readtime_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1004,6 +1018,20 @@
                                 <div class="input-group">
                                   <select id="theme-option-archive-time" name="theme-option-archive-time" ng-model="settings.theme_options.archive_time">
                                     <option value="[% archive_time_name %]" ng-repeat="(archive_time_name,archive_time_value) in extra.theme_skins[settings.theme_skin].params.options.option_archive_time" ng-selected="[% archive_time_name === settings.theme_options.archive_time || settings.theme_options.archive_time == undefined %]">[% archive_time_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <label class="form-label m-b-15" for="theme-option-archive-readtime">
+                                <span class="help">
+                                  {t}Display content's readtime{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-archive-readtime" name="theme-option-archive-readtime" ng-model="settings.theme_options.archive_readtime">
+                                    <option value="[% archive_readtime_name %]" ng-repeat="(archive_readtime_name,archive_readtime_value) in extra.theme_skins[settings.theme_skin].params.options.option_archive_readtime" ng-selected="[% archive_readtime_name === settings.theme_options.archive_readtime || settings.theme_options.archive_readtime == undefined %]">[% archive_readtime_value %]</option>
                                   </select>
                                 </div>
                               </div>
