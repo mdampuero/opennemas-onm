@@ -12,6 +12,8 @@ namespace Api\Controller\V1\Backend;
 use Api\Controller\V1\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use League\Csv\Writer;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Displays, saves, modifies and removes users.
@@ -115,6 +117,72 @@ class UserController extends ApiController
         $this->get($this->service)->moveItem($id, $target);
         $msg->add(_('Item saved successfully'), 'success');
         return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Downloads the list of users.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function getReportAction()
+    {
+        // Get information
+        $userService = $this->get($this->service);
+        $users       = $userService->getList();
+        $extraData   = $this->getExtraData($users['items']);
+        $users       = $userService->responsify($users['items']);
+
+        // Prepare contents for CSV
+        $headers = [
+            _('Name'),
+            _('Email'),
+            _('Username'),
+            _('User groups'),
+            _('Social'),
+            _('Enabled')
+        ];
+
+        $data = [];
+        foreach ($users as $user) {
+            $groupNames = [];
+            foreach ($user['user_groups'] as $group) {
+                $groupId = $group['user_group_id'];
+                if (isset($extraData['user_groups'][$groupId])) {
+                    $groupNames[] = $extraData['user_groups'][$groupId]['name'];
+                }
+            }
+            $userGroupNames = implode(', ', $groupNames);
+
+            $userInfo = [
+                $user['name'],
+                $user['email'],
+                $user['username'],
+                $userGroupNames,
+                $user['twitter'] ?? '',
+                $user['activated'] ? '✓' : '✗'
+            ];
+
+            $data[] = $userInfo;
+        }
+        // Prepare the CSV content
+        $writer = Writer::createFromFileObject(new \SplTempFileObject());
+        $writer->setDelimiter(';');
+        $writer->setInputEncoding('utf-8');
+        $writer->insertOne($headers);
+        $writer->insertAll($data);
+        $response = new Response($writer, 200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'users list Export');
+        $response->headers->set(
+            'Content-Disposition',
+            'attachment; filename=users-' . date('Y-m-d') . '.csv'
+        );
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+        return $response;
     }
 
     /**
