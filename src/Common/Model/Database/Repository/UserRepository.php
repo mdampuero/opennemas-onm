@@ -40,6 +40,7 @@ class UserRepository extends BaseRepository
 
             $users[$meta['user_id']][$meta['meta_key']] = $meta['meta_value'];
         }
+
         return $users;
     }
 }

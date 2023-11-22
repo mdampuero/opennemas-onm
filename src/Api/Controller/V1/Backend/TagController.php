@@ -93,11 +93,9 @@ class TagController extends ApiController
     public function getReportAction()
     {
         // Get information
-
         $tagService = $this->get($this->service);
-        $tags       = $tagService->getList();
-        $extraData  = $this->getExtraData($tags['items']);
-        $tags       = $tagService->responsify($tags['items']);
+        $tags       = $this->get('api.service.tag')->getReport();
+        $extraData  = $this->get('api.service.tag')->getStats($tags, true);
 
         // Prepare contents for CSV
         $headers = [
@@ -117,7 +115,7 @@ class TagController extends ApiController
                 $tag['name'],
                 $tag['slug'],
                 $tag['description'],
-                $extraData['stats'][$tag['id']] ?? 0
+                $extraData[$tag['id']] ?? 0
             ];
 
             if ($this->container->get('core.instance')->hasMultilanguage()) {

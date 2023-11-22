@@ -157,4 +157,20 @@ class TagRepository extends BaseRepository
 
         return $stats;
     }
+
+    /**
+     * Returns a list of all tags.
+     *
+     * @return array The list of tags.
+     */
+    public function findTags()
+    {
+        $sql = 'SELECT * FROM tags';
+        try {
+            $tags = $this->conn->fetchAll($sql);
+            return $tags;
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Error al obtener etiquetas: " . $e->getMessage());
+        }
+    }
 }
