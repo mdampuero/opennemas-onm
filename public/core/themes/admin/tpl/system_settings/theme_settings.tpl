@@ -77,6 +77,9 @@
                     <a href="#tabFrontpage" aria-controls="frontpage" role="tab" data-toggle="tab">{t domain="base"}Frontpage{/t}</a>
                   </li>
                   <li role="presentation">
+                    <a href="#tabArchive" aria-controls="archive" role="tab" data-toggle="tab">{t domain="base"}Listings/Archive{/t}</a>
+                  </li>
+                  <li role="presentation">
                     <a href="#tabInners" aria-controls="inners" role="tab" data-toggle="tab">{t domain="base"}Inners{/t}</a>
                   </li>
                   <li role="presentation">
@@ -736,7 +739,7 @@
                   <div role="tabpanel" class="tab-pane fade" id="tabFrontpage">
                     <div ng-if="extra.theme_skins[settings.theme_skin].params.options">
                       <div class="row">
-                        <div class="col-xs-12 m-b-15">
+                        <div class="col-xs-12 col-md-4 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-content-category-name">
                             <h4>
                               <i class="fa fa-share-alt-square"></i>
@@ -754,7 +757,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-xs-12 m-b-15">
+                        <div class="col-xs-12 col-md-4 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-content-subtitle">
                             <h4>
                               <i class="fa fa-share-alt-square"></i>
@@ -769,6 +772,241 @@
                               <select id="theme-option-content-subtitle" name="theme-option-content-subtitle" ng-model="settings.theme_options.content_subtitle">
                                 <option value="[% content_subtitle_name %]" ng-repeat="(content_subtitle_name,content_subtitle_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_subtitle" ng-selected="[% content_subtitle_name === settings.theme_options.content_subtitle || settings.theme_options.content_subtitle == undefined %]">[% content_subtitle_value %]</option>
                               </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-content-summary">
+                            <h4>
+                              <i class="fa fa-share-alt-square"></i>
+                              {t}Summary{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Display summary/description{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-option-content-summary" name="theme-option-content-summary" ng-model="settings.theme_options.content_summary">
+                                <option value="[% content_summary_name %]" ng-repeat="(content_summary_name,content_summary_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_summary" ng-selected="[% content_summary_name === settings.theme_options.content_summary || settings.theme_options.content_summary == undefined %]">[% content_summary_value %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-content-info">
+                            <h4>
+                              <i class="fa fa-share-alt-square"></i>
+                              {t}Info{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Display content's info{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-option-content-info" name="theme-option-content-info" ng-model="settings.theme_options.content_info">
+                                <option value="[% content_info_name %]" ng-repeat="(content_info_name,content_info_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_info" ng-selected="[% content_info_name === settings.theme_options.content_info || settings.theme_options.content_info == undefined %]">[% content_info_value %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12" ng-if="settings.theme_options.content_info === 'visible'">
+                          <div class="row">
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <label class="form-label m-b-15" for="theme-option-content-author">
+                                <span class="help">
+                                  {t}Display content's author{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-content-author" name="theme-option-content-author" ng-model="settings.theme_options.content_author">
+                                    <option value="[% content_author_name %]" ng-repeat="(content_author_name,content_author_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_author" ng-selected="[% content_author_name === settings.theme_options.content_author || settings.theme_options.content_author == undefined %]">[% content_author_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.content_author === 'visible'">
+                              <label class="form-label m-b-15" for="theme-option-content-author-photo">
+                                <span class="help">
+                                  {t}Display author's photo{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-content-author-photo" name="theme-option-content-author-photo" ng-model="settings.theme_options.content_author_photo">
+                                    <option value="[% content_author_photo_name %]" ng-repeat="(content_author_photo_name,content_author_photo_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_author_photo" ng-selected="[% content_author_photo_name === settings.theme_options.content_author_photo || settings.theme_options.content_author_photo == undefined %]">[% content_author_photo_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <label class="form-label m-b-15" for="theme-option-content-date">
+                                <span class="help">
+                                  {t}Display content's date{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-content-date" name="theme-option-content-date" ng-model="settings.theme_options.content_date">
+                                    <option value="[% content_date_name %]" ng-repeat="(content_date_name,content_date_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_date" ng-selected="[% content_date_name === settings.theme_options.content_date || settings.theme_options.content_date == undefined %]">[% content_date_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.content_date === 'visible'">
+                              <label class="form-label m-b-15" for="theme-option-content-time">
+                                <span class="help">
+                                  {t}Display content's time{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-content-time" name="theme-option-content-time" ng-model="settings.theme_options.content_time">
+                                    <option value="[% content_time_name %]" ng-repeat="(content_time_name,content_time_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_time" ng-selected="[% content_time_name === settings.theme_options.content_time || settings.theme_options.content_time == undefined %]">[% content_time_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div role="tabpanel" class="tab-pane fade" id="tabArchive">
+                    <div ng-if="extra.theme_skins[settings.theme_skin].params.options">
+                      <div class="row">
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-archive-category-name">
+                            <h4>
+                              <i class="fa fa-share-alt-square"></i>
+                              {t}Category name{/t} / {t}Pretitle{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Display pretitle or category in contents{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-option-archive-category-name" name="theme-option-archive-category-name" ng-model="settings.theme_options.archive_category">
+                                <option value="[% archive_category_name %]" ng-repeat="(archive_category_name,archive_category_value) in extra.theme_skins[settings.theme_skin].params.options.option_archive_category_name" ng-selected="[% archive_category_name === settings.theme_options.archive_category || settings.theme_options.archive_category == undefined %]">[% archive_category_value %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-archive-subtitle">
+                            <h4>
+                              <i class="fa fa-share-alt-square"></i>
+                              {t}Subtitle{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Display subtitle{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-option-archive-subtitle" name="theme-option-archive-subtitle" ng-model="settings.theme_options.archive_subtitle">
+                                <option value="[% archive_subtitle_name %]" ng-repeat="(archive_subtitle_name,archive_subtitle_value) in extra.theme_skins[settings.theme_skin].params.options.option_archive_subtitle" ng-selected="[% archive_subtitle_name === settings.theme_options.archive_subtitle || settings.theme_options.archive_subtitle == undefined %]">[% archive_subtitle_value %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-archive-summary">
+                            <h4>
+                              <i class="fa fa-share-alt-square"></i>
+                              {t}Summary{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Display summary/description{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-option-archive-summary" name="theme-option-archive-summary" ng-model="settings.theme_options.archive_summary">
+                                <option value="[% archive_summary_name %]" ng-repeat="(archive_summary_name,archive_summary_value) in extra.theme_skins[settings.theme_skin].params.options.option_archive_summary" ng-selected="[% archive_summary_name === settings.theme_options.archive_summary || settings.theme_options.archive_summary == undefined %]">[% archive_summary_value %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-archive-info">
+                            <h4>
+                              <i class="fa fa-share-alt-square"></i>
+                              {t}Info{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Display content's info{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-option-archive-info" name="theme-option-archive-info" ng-model="settings.theme_options.archive_info">
+                                <option value="[% archive_info_name %]" ng-repeat="(archive_info_name,archive_info_value) in extra.theme_skins[settings.theme_skin].params.options.option_archive_info" ng-selected="[% archive_info_name === settings.theme_options.archive_info || settings.theme_options.archive_info == undefined %]">[% archive_info_value %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12" ng-if="settings.theme_options.archive_info === 'visible'">
+                          <div class="row">
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <label class="form-label m-b-15" for="theme-option-archive-author">
+                                <span class="help">
+                                  {t}Display content's author{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-archive-author" name="theme-option-archive-author" ng-model="settings.theme_options.archive_author">
+                                    <option value="[% archive_author_name %]" ng-repeat="(archive_author_name,archive_author_value) in extra.theme_skins[settings.theme_skin].params.options.option_archive_author" ng-selected="[% archive_author_name === settings.theme_options.archive_author || settings.theme_options.archive_author == undefined %]">[% archive_author_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.archive_author === 'visible'">
+                              <label class="form-label m-b-15" for="theme-option-archive-author-photo">
+                                <span class="help">
+                                  {t}Display author's photo{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-archive-author-photo" name="theme-option-archive-author-photo" ng-model="settings.theme_options.archive_author_photo">
+                                    <option value="[% archive_author_photo_name %]" ng-repeat="(archive_author_photo_name,archive_author_photo_value) in extra.theme_skins[settings.theme_skin].params.options.option_archive_author_photo" ng-selected="[% archive_author_photo_name === settings.theme_options.archive_author_photo || settings.theme_options.archive_author_photo == undefined %]">[% archive_author_photo_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <label class="form-label m-b-15" for="theme-option-archive-date">
+                                <span class="help">
+                                  {t}Display content's date{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-archive-date" name="theme-option-archive-date" ng-model="settings.theme_options.archive_date">
+                                    <option value="[% archive_date_name %]" ng-repeat="(archive_date_name,archive_date_value) in extra.theme_skins[settings.theme_skin].params.options.option_archive_date" ng-selected="[% archive_date_name === settings.theme_options.archive_date || settings.theme_options.archive_date == undefined %]">[% archive_date_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.archive_date === 'visible'">
+                              <label class="form-label m-b-15" for="theme-option-archive-time">
+                                <span class="help">
+                                  {t}Display content's time{/t}
+                                </span>
+                              </label>
+                              <div class="controls">
+                                <div class="input-group">
+                                  <select id="theme-option-archive-time" name="theme-option-archive-time" ng-model="settings.theme_options.archive_time">
+                                    <option value="[% archive_time_name %]" ng-repeat="(archive_time_name,archive_time_value) in extra.theme_skins[settings.theme_skin].params.options.option_archive_time" ng-selected="[% archive_time_name === settings.theme_options.archive_time || settings.theme_options.archive_time == undefined %]">[% archive_time_value %]</option>
+                                  </select>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
