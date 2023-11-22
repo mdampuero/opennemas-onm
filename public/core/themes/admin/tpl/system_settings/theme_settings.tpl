@@ -739,10 +739,84 @@
                   <div role="tabpanel" class="tab-pane fade" id="tabFrontpage">
                     <div ng-if="extra.theme_skins[settings.theme_skin].params.options">
                       <div class="row">
+                        <div class="col-xs-12 col-md-5 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-content-imageratio-normal">
+                            <h4>
+                              <i class="fa fa-image"></i>
+                              {t}Normal contents images{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Choose image aspect ratio{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="row" ng-model="settings.theme_options.content_imageratio_normal">
+                              <div class="panel panel-default col-xs-4" ng-repeat="(content_imageratio_normal_name,content_imageratio_normal_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_imageratio_normal">
+                                <div class="radio">
+                                  <input id="theme-option-content-imageratio-normal-[% content_imageratio_normal_name %]" name="theme-option-content-imageratio-normal" ng-model="settings.theme_options.content_imageratio_normal" value="[% content_imageratio_normal_name %]" ng-checked="[% content_imageratio_normal_name === settings.theme_options.content_imageratio_normal %]" type="radio"/>
+                                  <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-content-imageratio-normal-[% content_imageratio_normal_name %]">
+                                    <img src="/themes/apolo/images/admin/imageratio_normal-[% content_imageratio_normal_name %].jpg" alt="[% content_imageratio_normal_value %]" class="img img-responsive img-rounded m-b-10">
+                                    <h5>[% content_imageratio_normal_value %]</h5>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-5 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-content-imageratio-list">
+                            <h4>
+                              <i class="fa fa-image"></i>
+                              {t}List contents images{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Choose image aspect ratio{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="row" ng-model="settings.theme_options.content_imageratio_list">
+                              <div class="panel panel-default col-xs-4" ng-repeat="(content_imageratio_list_name,content_imageratio_list_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_imageratio_list">
+                                <div class="radio">
+                                  <input id="theme-option-content-imageratio-list-[% content_imageratio_list_name %]" name="theme-option-content-imageratio-list" ng-model="settings.theme_options.content_imageratio_list" value="[% content_imageratio_list_name %]" ng-checked="[% content_imageratio_list_name === settings.theme_options.content_imageratio_list %]" type="radio"/>
+                                  <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-content-imageratio-list-[% content_imageratio_list_name %]">
+                                    <img src="/themes/apolo/images/admin/imageratio_list-[% content_imageratio_list_name %].jpg" alt="[% content_imageratio_list_value %]" class="img img-responsive img-rounded m-b-10">
+                                    <h5>[% content_imageratio_list_value %]</h5>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-5 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-content-imageratio-tiny">
+                            <h4>
+                              <i class="fa fa-image"></i>
+                              {t}Tiny contents images{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Choose image aspect ratio{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="row" ng-model="settings.theme_options.content_imageratio_tiny">
+                              <div class="panel panel-default col-xs-4" ng-repeat="(content_imageratio_tiny_name,content_imageratio_tiny_value) in extra.theme_skins[settings.theme_skin].params.options.option_content_imageratio_tiny">
+                                <div class="radio">
+                                  <input id="theme-option-content-imageratio-tiny-[% content_imageratio_tiny_name %]" name="theme-option-content-imageratio-tiny" ng-model="settings.theme_options.content_imageratio_tiny" value="[% content_imageratio_tiny_name %]" ng-checked="[% content_imageratio_tiny_name === settings.theme_options.content_imageratio_tiny %]" type="radio"/>
+                                  <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-content-imageratio-tiny-[% content_imageratio_tiny_name %]">
+                                    <img src="/themes/apolo/images/admin/imageratio_tiny-[% content_imageratio_tiny_name %].jpg" alt="[% content_imageratio_tiny_value %]" class="img img-responsive img-rounded m-b-10">
+                                    <h5>[% content_imageratio_tiny_value %]</h5>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
                         <div class="col-xs-12 col-md-4 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-content-category-name">
                             <h4>
-                              <i class="fa fa-share-alt-square"></i>
+                              <i class="fa fa-folder"></i>
                               {t}Category name{/t} / {t}Pretitle{/t}
                             </h4>
                             <span class="help">
@@ -760,7 +834,7 @@
                         <div class="col-xs-12 col-md-4 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-content-subtitle">
                             <h4>
-                              <i class="fa fa-share-alt-square"></i>
+                              <i class="fa fa-header"></i>
                               {t}Subtitle{/t}
                             </h4>
                             <span class="help">
@@ -778,7 +852,7 @@
                         <div class="col-xs-12 col-md-4 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-content-summary">
                             <h4>
-                              <i class="fa fa-share-alt-square"></i>
+                              <i class="fa fa-align-left"></i>
                               {t}Summary{/t}
                             </h4>
                             <span class="help">
@@ -796,7 +870,7 @@
                         <div class="col-xs-12 col-md-4 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-content-info">
                             <h4>
-                              <i class="fa fa-share-alt-square"></i>
+                              <i class="fa fa-info"></i>
                               {t}Info{/t}
                             </h4>
                             <span class="help">
@@ -892,10 +966,36 @@
                   <div role="tabpanel" class="tab-pane fade" id="tabArchive">
                     <div ng-if="extra.theme_skins[settings.theme_skin].params.options">
                       <div class="row">
+                        <div class="col-xs-12 col-md-5 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-archive-appearance">
+                            <h4>
+                              <i class="fa fa-navicon"></i>
+                              {t}Layout{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Choose archive list appearance{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="row" ng-model="settings.theme_options.archive_appearance">
+                              <div class="panel panel-default col-xs-5" ng-repeat="(archive_appearance_name,archive_appearance_value) in extra.theme_skins[settings.theme_skin].params.options.option_archive_appearance">
+                                <div class="radio">
+                                  <input id="theme-option-archive-appearance-[% archive_appearance_name %]" name="theme-option-archive-appearance" ng-model="settings.theme_options.archive_appearance" value="[% archive_appearance_name %]" ng-checked="[% archive_appearance_name === settings.theme_options.archive_appearance %]" type="radio"/>
+                                  <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-archive-appearance-[% archive_appearance_name %]">
+                                    <img src="/themes/apolo/images/admin/archive_appearance-[% archive_appearance_name %].jpg" alt="[% archive_appearance_value %]" class="img img-responsive img-rounded m-b-10">
+                                    <h5>[% archive_appearance_value %]</h5>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
                         <div class="col-xs-12 col-md-4 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-archive-category-name">
                             <h4>
-                              <i class="fa fa-share-alt-square"></i>
+                              <i class="fa fa-folder"></i>
                               {t}Category name{/t} / {t}Pretitle{/t}
                             </h4>
                             <span class="help">
@@ -913,7 +1013,7 @@
                         <div class="col-xs-12 col-md-4 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-archive-subtitle">
                             <h4>
-                              <i class="fa fa-share-alt-square"></i>
+                              <i class="fa fa-header"></i>
                               {t}Subtitle{/t}
                             </h4>
                             <span class="help">
@@ -931,7 +1031,7 @@
                         <div class="col-xs-12 col-md-4 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-archive-summary">
                             <h4>
-                              <i class="fa fa-share-alt-square"></i>
+                              <i class="fa fa-align-left"></i>
                               {t}Summary{/t}
                             </h4>
                             <span class="help">
@@ -949,7 +1049,7 @@
                         <div class="col-xs-12 col-md-4 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-archive-info">
                             <h4>
-                              <i class="fa fa-share-alt-square"></i>
+                              <i class="fa fa-info"></i>
                               {t}Info{/t}
                             </h4>
                             <span class="help">
