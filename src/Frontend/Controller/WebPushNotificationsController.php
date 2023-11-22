@@ -20,7 +20,7 @@ class WebPushNotificationsController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function scriptAction($request)
+    public function scriptAction()
     {
         $webpushSettings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
