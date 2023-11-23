@@ -369,7 +369,7 @@ class WebPushNotificationsController extends ApiController
             'message'    => $content->description,
             'target_url' => $contentPath,
             'image'      => $imagePath,
-            'icon'      => $favico,
+            'icon'       => strpos($favico, '.png') ? $favico : '',
         ]);
         return new JsonResponse($notification);
     }
