@@ -175,7 +175,7 @@ class WebpushSendCommand extends Command
                                 'message'    => $article->description ?? '',
                                 'target_url' => $contentPath,
                                 'image'      => $imagePath,
-                                'icon'      => $favico,
+                                'icon'       => strpos($favico, '.png') ? $favico : '',
                             ]);
                         } catch (\Exception $e) {
                             $notificationStatus = 2;
