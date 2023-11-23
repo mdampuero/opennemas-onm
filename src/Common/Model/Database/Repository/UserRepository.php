@@ -125,4 +125,23 @@ class UserRepository extends BaseRepository
 
         return $contents;
     }
+
+    /**
+     * Returns a list of all users.
+     *
+     * @return array The list of users.
+     */
+    public function findUsers()
+    {
+        $sql = 'SELECT *
+        FROM users
+        LEFT JOIN user_user_group ON users.id = user_user_group.user_id;';
+        try {
+            $users = $this->conn->fetchAll($sql);
+
+            return $users;
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Error al obtener etiquetas: " . $e->getMessage());
+        }
+    }
 }

@@ -14,6 +14,7 @@ use Api\Exception\CreateItemException;
 use Api\Exception\DeleteItemException;
 use Api\Exception\DeleteListException;
 use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
 use Api\Exception\InvalidArgumentException;
 use Api\Exception\UpdateItemException;
 use Api\Exception\ApiException;
@@ -337,6 +338,22 @@ class UserService extends OrmService
             return true;
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * Get all the users for report.
+     *
+     * @return array The list of items.
+     */
+    public function getReport()
+    {
+        try {
+            return $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->findUsers();
+        } catch (\Exception $e) {
+            throw new GetListException($e->getMessage(), $e->getCode());
         }
     }
 }

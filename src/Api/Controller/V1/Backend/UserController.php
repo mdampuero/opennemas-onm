@@ -129,10 +129,10 @@ class UserController extends ApiController
     public function getReportAction()
     {
         // Get information
-        $userService = $this->get($this->service);
-        $users       = $userService->getList();
-        $extraData   = $this->getExtraData($users['items']);
-        $users       = $userService->responsify($users['items']);
+        $users      = $this->get('api.service.user')->getReport();
+        $userGroups = $this->getUserGroups();
+        dump($users);
+        die();
 
         // Prepare contents for CSV
         $headers = [
@@ -145,12 +145,13 @@ class UserController extends ApiController
         ];
 
         $data = [];
+
         foreach ($users as $user) {
             $groupNames = [];
             foreach ($user['user_groups'] as $group) {
                 $groupId = $group['user_group_id'];
-                if (isset($extraData['user_groups'][$groupId])) {
-                    $groupNames[] = $extraData['user_groups'][$groupId]['name'];
+                if (isset($userGroups[$groupId])) {
+                    $groupNames[] = $userGroups[$groupId]['name'];
                 }
             }
             $userGroupNames = implode(', ', $groupNames);
