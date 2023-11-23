@@ -990,6 +990,30 @@
                             </div>
                           </div>
                         </div>
+                        <div class="col-xs-12 col-md-5 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-archive-cover">
+                            <h4>
+                              <i class="fa fa-navicon"></i>
+                              {t}Category cover{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Show category cover (if exists){/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="row" ng-model="settings.theme_options.archive_cover">
+                              <div class="panel panel-default col-xs-5" ng-repeat="(archive_cover_name,archive_cover_value) in extra.theme_skins[settings.theme_skin].params.options.option_archive_cover">
+                                <div class="radio">
+                                  <input id="theme-option-archive-cover-[% archive_cover_name %]" name="theme-option-archive-cover" ng-model="settings.theme_options.archive_cover" value="[% archive_cover_name %]" ng-checked="[% archive_cover_name === settings.theme_options.archive_cover %]" type="radio"/>
+                                  <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-archive-cover-[% archive_cover_name %]">
+                                    <img src="/themes/apolo/images/admin/archive_cover-[% archive_cover_name %].jpg" alt="[% archive_cover_value %]" class="img img-responsive img-rounded m-b-10">
+                                    <h5>[% archive_cover_value %]</h5>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       <div class="row">
                         <div class="col-xs-12 col-md-4 m-b-15">
