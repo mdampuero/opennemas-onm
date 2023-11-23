@@ -1454,11 +1454,38 @@
                               </div>
                             </div>
                           </div>
+                          <div class="col-xs-12 m-b-15" ng-if="settings.theme_options.widget_more_in_section === 'true'">
+                            <label class="form-label m-b-15" for="theme-option-more-in-section-layout">
+                              <span class="help">
+                                {t}More in section widget layout{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-option-more-in-section-layout" name="theme-option-more-in-section-layout" ng-model="settings.theme_options.more_in_section_layout">
+                                  <option value="[% more_in_section_layout_name %]" ng-repeat="(more_in_section_layout_name,more_in_section_layout_value) in extra.theme_skins[settings.theme_skin].params.options.option_widget_more_in_section_layout" ng-selected="[% more_in_section_layout_name === settings.theme_options.more_in_section_layout || settings.theme_options.more_in_section_layout == undefined %]">[% more_in_section_layout_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-xs-12 m-b-15"  ng-if="settings.theme_options.widget_more_in_frontpage === 'true'">
+                            <label class="form-label m-b-15" for="theme-option-more-in-frontpage-layout">
+                              <span class="help">
+                                {t}More in frontpage widget layout{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-option-more-in-frontpage-layout" name="theme-option-more-in-frontpage-layout" ng-model="settings.theme_options.more_in_frontpage_layout">
+                                  <option value="[% more_in_frontpage_layout_name %]" ng-repeat="(more_in_frontpage_layout_name,more_in_frontpage_layout_value) in extra.theme_skins[settings.theme_skin].params.options.option_widget_more_in_frontpage_layout" ng-selected="[% more_in_frontpage_layout_name === settings.theme_options.more_in_frontpage_layout || settings.theme_options.more_in_frontpage_layout == undefined %]">[% more_in_frontpage_layout_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-
                   <div role="tabpanel" class="tab-pane fade" id="tabMobile">
                     <div class="row" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                       <div class="col-xs-12 m-b-15">
