@@ -103,7 +103,7 @@ class ReportController extends Controller
         $response->headers->set('Content-Description', 'Submissions Export');
         $response->headers->set('Content-Disposition', 'attachment; filename=' . $fileName);
         $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Cache-Control', 'no-cache');
         $response->headers->set('Expires', '0');
 
         return $response;
