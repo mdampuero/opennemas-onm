@@ -165,7 +165,7 @@ class TagRepository extends BaseRepository
      */
     public function findTags()
     {
-        $sql = 'SELECT * FROM tags';
+        $sql = 'SELECT * FROM tags ORDER BY name ASC';
         try {
             $tags = $this->conn->fetchAll($sql);
             return $tags;

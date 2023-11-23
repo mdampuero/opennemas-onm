@@ -95,7 +95,7 @@ class TagController extends ApiController
         // Get information
         $tagService = $this->get($this->service);
         $tags       = $this->get('api.service.tag')->getReport();
-        $extraData  = $this->get('api.service.tag')->getStats($tags, true);
+        $extraData  = $this->get('api.service.tag')->getStats($tags);
 
         // Prepare contents for CSV
         $headers = [

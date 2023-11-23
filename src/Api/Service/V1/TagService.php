@@ -187,7 +187,7 @@ class TagService extends OrmService
      * @return array A list where the key is a tag id and the value is the
      *               number of contents associated to the tag.
      */
-    public function getStats($tags, $csv = false)
+    public function getStats($tags)
     {
         if (empty($tags)) {
             return [];
@@ -196,15 +196,11 @@ class TagService extends OrmService
         if (!is_array($tags)) {
             $tags = [ $tags ];
         }
-        if ($csv) {
-            $ids = array_map(function ($a) {
-                return $a['id'];
-            }, $tags);
-        } else {
-            $ids = array_map(function ($a) {
-                return $a->id;
-            }, $tags);
-        }
+
+        $ids = array_map(function ($a) {
+            return is_array($a) ? $a['id'] : $a->id;
+        }, $tags);
+
 
         return $this->container->get('orm.manager')
             ->getRepository($this->entity, $this->origin)
