@@ -131,8 +131,6 @@ class UserController extends ApiController
         // Get information
         $users      = $this->get('api.service.user')->getReport();
         $userGroups = $this->getUserGroups();
-        dump($users);
-        die();
 
         // Prepare contents for CSV
         $headers = [
@@ -148,12 +146,14 @@ class UserController extends ApiController
 
         foreach ($users as $user) {
             $groupNames = [];
-            foreach ($user['user_groups'] as $group) {
-                $groupId = $group['user_group_id'];
+            $userGroupsArray = explode(',', $user['user_groups']);
+
+            foreach ($userGroupsArray as $groupId) {
                 if (isset($userGroups[$groupId])) {
                     $groupNames[] = $userGroups[$groupId]['name'];
                 }
             }
+
             $userGroupNames = implode(', ', $groupNames);
 
             $userInfo = [

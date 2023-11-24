@@ -133,9 +133,11 @@ class UserRepository extends BaseRepository
      */
     public function findUsers()
     {
-        $sql = 'SELECT *
+        $sql = 'SELECT users.*, GROUP_CONCAT(user_user_group.user_group_id) AS user_groups
         FROM users
-        LEFT JOIN user_user_group ON users.id = user_user_group.user_id;';
+        LEFT JOIN user_user_group ON users.id = user_user_group.user_id
+        GROUP BY users.id;
+        ';
         try {
             $users = $this->conn->fetchAll($sql);
 
