@@ -156,12 +156,24 @@ class UserController extends ApiController
 
             $userGroupNames = implode(', ', $groupNames);
 
+            $socialInfo = [];
+            if (isset($user['twitter'])) {
+                $socialInfo[] = $user['twitter'];
+            }
+            if (isset($user['facebook'])) {
+                $socialInfo[] = $user['facebook'];
+            }
+            if (isset($user['google'])) {
+                $socialInfo[] = $user['google'];
+            }
+            $socialInfoString = implode(', ', $socialInfo);
+
             $userInfo = [
                 $user['name'],
                 $user['email'],
                 $user['username'],
                 $userGroupNames,
-                $user['twitter'] ?? '',
+                $socialInfoString,
                 $user['activated'] ? '✓' : '✗'
             ];
 

@@ -87,4 +87,71 @@ class AuthorController extends ApiController
         $photos = [ 'photos' => $photos, ];
         return array_merge($response, $photos);
     }
+
+    /**
+     * Downloads the list of authors.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function getReportAction()
+    {
+        // Get information
+        $authors    = $this->get('api.service.author')->getReport();
+        $userGroups = $this->getUserGroups();
+
+        // Prepare contents for CSV
+        $headers = [
+            _('Name'),
+            _('Email'),
+            _('Username'),
+            _('User groups'),
+            _('Social'),
+            _('Enabled')
+        ];
+
+        $data = [];
+
+        foreach ($authors as $user) {
+            $groupNames = [];
+            $userGroupsArray = explode(',', $user['user_groups']);
+
+            foreach ($userGroupsArray as $groupId) {
+                if (isset($userGroups[$groupId])) {
+                    $groupNames[] = $userGroups[$groupId]['name'];
+                }
+            }
+
+            $userGroupNames = implode(', ', $groupNames);
+
+            $userInfo = [
+                $user['name'],
+                $user['email'],
+                $user['username'],
+                $userGroupNames,
+                $user['twitter'] ?? '',
+                $user['activated'] ? '✓' : '✗'
+            ];
+
+            $data[] = $userInfo;
+        }
+        // Prepare the CSV content
+        $writer = Writer::createFromFileObject(new \SplTempFileObject());
+        $writer->setDelimiter(';');
+        $writer->setInputEncoding('utf-8');
+        $writer->insertOne($headers);
+        $writer->insertAll($data);
+        $response = new Response($writer, 200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'authors list Export');
+        $response->headers->set(
+            'Content-Disposition',
+            'attachment; filename=authors-' . date('Y-m-d') . '.csv'
+        );
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+        return $response;
+    }
 }

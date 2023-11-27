@@ -53,4 +53,20 @@ class AuthorService extends UserService
             ->addCondition('type != 1 and user_group_id = 3')
             ->getOql();
     }
+
+    /**
+     * Get all the authors for report.
+     *
+     * @return array The list of items.
+     */
+    public function getReport()
+    {
+        try {
+            return $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->findAuthors();
+        } catch (\Exception $e) {
+            throw new GetListException($e->getMessage(), $e->getCode());
+        }
+    }
 }
