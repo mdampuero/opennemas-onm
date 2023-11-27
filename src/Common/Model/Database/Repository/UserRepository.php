@@ -154,15 +154,19 @@ class UserRepository extends BaseRepository
      */
     public function findAuthors()
     {
-        $sql = 'SELECT users.*, GROUP_CONCAT(user_user_group.user_group_id) AS user_groups
-        FROM users
-        LEFT JOIN user_user_group ON users.id = user_user_group.user_id
-        GROUP BY users.id;
-        ';
+        $sql = "SELECT users.*,
+                    GROUP_CONCAT(user_user_group.user_group_id) AS user_groups,
+                    usermeta.meta_value AS is_blog
+                FROM users
+                LEFT JOIN user_user_group ON users.id = user_user_group.user_id
+                LEFT JOIN usermeta ON users.id = usermeta.user_id AND usermeta.meta_key = 'is_blog'
+                WHERE user_user_group.user_group_id = 3
+                GROUP BY users.id;
+        ";
         try {
-            $users = $this->conn->fetchAll($sql);
+            $authors = $this->conn->fetchAll($sql);
 
-            return $users;
+            return $authors;
         } catch (\Exception $e) {
             throw new \RuntimeException("Error al obtener etiquetas: " . $e->getMessage());
         }

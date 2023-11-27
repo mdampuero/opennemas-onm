@@ -10,6 +10,8 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
+use League\Csv\Writer;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Displays, saves, modifies and removes authors.
@@ -98,44 +100,28 @@ class AuthorController extends ApiController
     public function getReportAction()
     {
         // Get information
-        $authors    = $this->get('api.service.author')->getReport();
-        $userGroups = $this->getUserGroups();
+        $authors = $this->get('api.service.author')->getReport();
 
         // Prepare contents for CSV
         $headers = [
             _('Name'),
             _('Email'),
-            _('Username'),
-            _('User groups'),
-            _('Social'),
-            _('Enabled')
+            _('Blog'),
+            _('Biography')
         ];
 
         $data = [];
-
-        foreach ($authors as $user) {
-            $groupNames = [];
-            $userGroupsArray = explode(',', $user['user_groups']);
-
-            foreach ($userGroupsArray as $groupId) {
-                if (isset($userGroups[$groupId])) {
-                    $groupNames[] = $userGroups[$groupId]['name'];
-                }
-            }
-
-            $userGroupNames = implode(', ', $groupNames);
-
-            $userInfo = [
-                $user['name'],
-                $user['email'],
-                $user['username'],
-                $userGroupNames,
-                $user['twitter'] ?? '',
-                $user['activated'] ? '✓' : '✗'
+        foreach ($authors as $author) {
+            $authorInfo = [
+                $author['name'],
+                $author['email'],
+                $author['is_blog'],
+                $author['bio']
             ];
 
-            $data[] = $userInfo;
+            $data[] = $authorInfo;
         }
+
         // Prepare the CSV content
         $writer = Writer::createFromFileObject(new \SplTempFileObject());
         $writer->setDelimiter(';');
