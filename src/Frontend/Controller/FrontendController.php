@@ -579,6 +579,7 @@ class FrontendController extends Controller
             'suggested'  => $suggestedContents,
             'site_color' => $config['site_color'] ?? '#005689',
             'cmp'        => $cmp,
+            'cmp_type'   => $config['cmp_type']
         ]);
     }
 
