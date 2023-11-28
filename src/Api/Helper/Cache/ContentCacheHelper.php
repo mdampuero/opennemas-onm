@@ -136,6 +136,9 @@ class ContentCacheHelper extends CacheHelper
         }
 
         $xtags[] = sprintf('%s-%d', $content->content_type_name, $content->pk_content);
+        if ($content->fk_author) {
+            $xtags[] = sprintf('author-%d', $content->fk_author);
+        }
 
         return implode(',', $xtags);
     }

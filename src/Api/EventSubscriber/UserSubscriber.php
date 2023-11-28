@@ -43,6 +43,10 @@ class UserSubscriber implements EventSubscriberInterface
             'user.updateItem' => [
                 ['logAction', 5],
                 [ 'onUserUpdate', 5 ],
+            ],
+            'user.moveItem' => [
+                ['logAction', 5],
+                [ 'onUserMove', 5 ],
             ]
         ];
     }
@@ -138,12 +142,12 @@ class UserSubscriber implements EventSubscriberInterface
             ? [ $event->getArgument('item') ]
             : $event->getArgument('items');
         foreach ($source as $user) {
-            $this->helper->deleteItem($user);
+            $this->helper->deleteItemVarnish($user);
         }
         foreach ($cacheIds as $cacheId) {
             $this->redis->remove($cacheId);
         }
         $this->helper
-            ->deleteItem($event->getArgument('item'), true);
+            ->deleteItemVarnish($event->getArgument('item'), true);
     }
 }

@@ -30,50 +30,53 @@ class UserCacheHelper extends CacheHelper
         $this->cache = $container->get('cache.connection.instance');
     }
 
-
-
-     /**
-     * Removes caches for contents related to a tag.
+    /**
+     * TODO: Remove when using new ORM for users
      *
-     * @param  array $ids The list of content ids.
+     * Removes users from old redis cache.
+     *
+     * @param User $item The user to remove from cache.
      *
      * @return CacheHelper The current helper for method chaining.
      */
-    public function deleteContents(array $ids = []) : CacheHelper
+    public function deleteItem(User $item) : CacheHelper
     {
-        $this->queue->push(new ServiceTask('cache.connection.instance', 'remove', [
-            $ids
-        ]))->push(new ServiceTask('cache', 'delete', [
-            $ids
+        $this->queue->push(new ServiceTask('cache', 'delete', [
+            sprintf('user-%s', $item->id)
         ]));
+
+        if (array_search(3, array_column($item->user_groups, 'user_group_id')) !== false) {
+            $this->cache->remove(sprintf('author-%s', $item->id));
+        }
+
         return $this;
     }
 
-    public function newDeleteItem(User $item, $all = false) : void
+    /**
+     * Removes caches for a user.
+     *
+     * @param User $user The user.
+     */
+    public function deleteItemVarnish(User $user, $all = false) : void
     {
         $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
-            [ 'tag', 'show', $tag->id ]
+            [ 'user', 'show', $user->id ]
         ]));
+
         $this->queue->push(new ServiceTask('core.varnish', 'ban', [
             sprintf(
-                'obj.http.x-tags ~ ^instance-%s,.*,tag,show,tag-%s',
+                'obj.http.x-users ~ ^instance-%s,.*,content-author-%s-frontpage',
                 $this->instance->internal_name,
-                $tag->id
+                $user->id
             )
         ]));
-        $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-            sprintf(
-                'obj.http.x-tags ~ ^instance-%s.*tag-%d.*',
-                $this->instance->internal_name,
-                $tag->id
-            )
-        ]));
+
         if ($all) {
             $this->queue->push(new ServiceTask('core.varnish', 'ban', [
                 sprintf(
-                    'obj.http.x-tags ~ ^instance-%s.*tag-%d.*',
+                    'obj.http.x-users ~ ^instance-%s,.*,author-%d',
                     $this->instance->internal_name,
-                    $tag->id
+                    $user->id
                 )
             ]));
         }
