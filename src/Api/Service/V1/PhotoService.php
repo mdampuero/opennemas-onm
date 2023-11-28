@@ -51,6 +51,24 @@ class PhotoService extends ContentService
                 throw new FileAlreadyExistsException();
             }
 
+            $config = $this->container->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('photo_settings', []);
+
+            $imageInfo    = $ih->getInformation($file->getPathname());
+            $autoOptimize = array_key_exists('optimize_images', $config) && $config['optimize_images'] == 'true';
+            $convertPng   = array_key_exists('convert_png', $config) && $config['convert_png'] == 'true';
+            $optimize     = $optimize || $autoOptimize;
+
+            // Check for png, size, optimize and update path
+            if ($file->getClientOriginalExtension() === 'png'
+                && $imageInfo['height'] > 120
+                && $optimize
+                && $convertPng
+            ) {
+                $path = str_replace('.png', '.jpg', $path);
+            }
+
             $filename         = basename($path);
             $originalFilename = pathinfo(
                 $file instanceof UploadedFile ?
@@ -66,7 +84,7 @@ class PhotoService extends ContentService
                 'path'           => 'images' . $date->format('/Y/m/d/') . $filename,
                 'title'          => $filename,
                 'slug'           => $filename,
-            ], $data, $ih->getInformation($file->getPathname()));
+            ], $data, $imageInfo);
 
             $data = $this->assignUser($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
 
@@ -88,21 +106,18 @@ class PhotoService extends ContentService
 
             $ih->move($file, $path, $copy);
             $ih->applyRotation($path);
+            if ($optimize) {
+                // Optimize image and update item
+                $ih->optimizeImage($path, $config);
+                $data = $this->assignUser(
+                    $ih->getInformation($path),
+                    [ 'fk_user_last_editor', 'fk_publisher' ]
+                );
 
-            $ds = $this->container->get('orm.manager')
-                ->getDataSet('Settings', 'instance');
+                $data = $this->em->getConverter($this->entity)
+                    ->objectify(array_merge($this->defaults, $data));
 
-            $config       = $ds->get('photo_settings', []);
-            $sh           = $this->container->get('core.helper.setting');
-            $config       = $sh->toBoolean($config, ['optimize_images']);
-            $imageQuality = $config['image_quality'] ?? 65;
-            $resolution   = !empty($config['image_resolution'])
-                ? explode('x', $config['image_resolution'])
-                : ['1920', '1920'];
-
-            if ($optimize || (array_key_exists('optimize_images', $config) && $config['optimize_images'])) {
-                $this->optimizeImage($path, $imageQuality, $resolution[0], $resolution[1]);
-                $this->updateImage($id, $path);
+                $this->updateItem($id, $data);
             }
 
             return $item;
@@ -110,34 +125,6 @@ class PhotoService extends ContentService
             $ih->remove($path);
             throw new CreateItemException($e->getMessage(), $e->getCode());
         }
-    }
-
-    protected function optimizeImage($path, $quality, $imageWidth, $imageHeight)
-    {
-        $processor = $this->container->get('core.image.processor');
-        $processor->open($path)
-            ->apply('thumbnail', [$imageWidth, $imageHeight, 'center', 'center'])
-            ->optimize([
-                'flatten'          => false,
-                'quality'          => $quality,
-                'resolution-units' => 'ppi',
-                'resolution-x'     => 72,
-                'resolution-y'     => 72
-            ])
-            ->save($path)
-            ->close();
-    }
-
-    protected function updateImage($id, $path)
-    {
-        $ih   = $this->container->get('core.helper.image');
-        $data = $ih->getInformation($path);
-        $data = $this->assignUser($data, [ 'fk_user_last_editor', 'fk_publisher' ]);
-
-        $data = $this->em->getConverter($this->entity)
-            ->objectify(array_merge($this->defaults, $data));
-
-        $this->updateItem($id, $data);
     }
 
     /**

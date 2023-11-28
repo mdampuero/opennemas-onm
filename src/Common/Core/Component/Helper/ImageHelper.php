@@ -153,6 +153,32 @@ class ImageHelper extends FileHelper
     }
 
     /**
+     * Optimizes the image in the provided path with parameters.
+     *
+     * @param string $path   The path to the file to optimize.
+     * @param string $config The parameters for the optimization.
+     */
+    public function optimizeImage($path, $config)
+    {
+        $quality    = $config['image_quality'] ?? 65;
+        $resolution = !empty($config['image_resolution'])
+            ? explode('x', $config['image_resolution'])
+            : ['1920', '1920'];
+
+        $this->processor->open($path)
+            ->apply('thumbnail', [$resolution[0], $resolution[1], 'center', 'center'])
+            ->optimize([
+                'flatten'          => false,
+                'quality'          => $quality,
+                'resolution-units' => 'ppi',
+                'resolution-x'     => 72,
+                'resolution-y'     => 72
+            ])
+            ->save($path)
+            ->close();
+    }
+
+    /**
      * @codeCoverageIgnore
      *
      * Removes an image basing on the path.
