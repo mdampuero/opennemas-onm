@@ -3,7 +3,7 @@
   <script type="application/json">
     {
       "consentInstanceId": "inmobi",
-      "checkConsentHref": "https://apis.cmp.inmobi.com/amp/check-consent",
+      "checkConsentHref": "https://api.cmp.inmobi.com/amp/check-consent",
       "consentRequired": "remote",
       "promptUISrc": "https://cmp.inmobi.com/tcfv2/amp.html",
       "postPromptUI": "post-prompt-ui",
