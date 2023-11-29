@@ -44,7 +44,7 @@ class UserRepository extends BaseRepository
         return $users;
     }
 
-       /**
+    /**
      * Returns a list where key is the user id and value is the number of
      * contents assigned to the user.
      *
@@ -162,7 +162,7 @@ class UserRepository extends BaseRepository
                 LEFT JOIN usermeta ON users.id = usermeta.user_id AND usermeta.meta_key = 'is_blog'
                 WHERE user_user_group.user_group_id = 3
                 GROUP BY users.id;
-        ";
+                ";
         try {
             $authors = $this->conn->fetchAll($sql);
 
