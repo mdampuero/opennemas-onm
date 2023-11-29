@@ -23,6 +23,12 @@
     </a>
   </li>
   <li class="quicklinks">
+    <a class="btn btn-white" href="[% routing.generate('api_v1_backend_tag_get_report') %]">
+      <span class="fa fa-download"></span>
+      {t}Download{/t}
+    </a>
+  </li>
+  <li class="quicklinks">
     <span class="h-seperate"></span>
   </li>
   {acl isAllowed="TAG_CREATE"}
@@ -53,7 +59,7 @@
       </span>
       <input class="input-min-45 input-300" ng-class="{ 'dirty': criteria.name }" name="name" ng-keyup="searchByKeypress($event)" ng-model="criteria.name" placeholder="{t}Search{/t}" type="text">
       <span class="input-group-addon input-group-addon-inside pointer ng-cloak no-animate" ng-click="clear('name')" ng-show="criteria.name">
-        <i class="fa fa-times"></i>
+      <i class="fa fa-times"></i>
       </span>
     </div>
   </li>
@@ -76,5 +82,8 @@
 {block name="modals"}
   <script type="text/ng-template" id="modal-delete">
     {include file="common/extension/modal.delete.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-move">
+    {include file="tag/modal.move.tpl"}
   </script>
 {/block}

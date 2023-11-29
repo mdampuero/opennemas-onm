@@ -127,7 +127,7 @@ class SubscriberController extends ApiController
             'attachment; filename=subscribers-' . date('Y-m-d') . '.csv'
         );
         $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Cache-Control', 'no-cache');
         $response->headers->set('Expires', '0');
 
         return $response;
