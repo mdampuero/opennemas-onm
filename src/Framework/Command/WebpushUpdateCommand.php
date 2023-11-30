@@ -214,6 +214,9 @@ class WebpushUpdateCommand extends Command
             return;
         }
 
+        $redis = $this->getContainer()->get('cache.connection.instance');
+        $redis->init();
+
         $notificationService->patchItem(
             $notification->id,
             [
@@ -222,6 +225,8 @@ class WebpushUpdateCommand extends Command
                 'closed'    => $getNotificationStatus['count']['closed']
             ]
         );
+
+        $redis->remove($notification->fk_content);
 
         // Stop the execution for 1.1 seconds
         usleep(1100000);

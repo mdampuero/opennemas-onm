@@ -166,7 +166,7 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
 
             // Web Push notifications hooks
-            'webpushnotifications.patchItem' => [
+            'web_push_notifications.patchItem' => [
                 ['removeObjectCacheForWebPushNotifications', 20]
             ],
         ];
@@ -312,12 +312,12 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeObjectCacheForWebPushNotifications(Event $event)
     {
+        $redis = $this->container->get('cache.connection.instance');
         $item  = $event->getArgument('item');
         $items = is_array($item) ? $item : [ $item ];
 
         foreach ($items as $object) {
-            $this->cache->delete('content-' . $object->fk_content);
-            $this->cache->delete($object->content_type_name . '-' . $object->id);
+            $redis->remove('content-' . $object->fk_content);
         }
     }
 

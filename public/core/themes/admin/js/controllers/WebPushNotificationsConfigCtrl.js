@@ -76,7 +76,7 @@
               if (!$scope.flags.http.checking) {
                 $scope.disableFlags('http');
                 messenger.post(response.data);
-                if (!$scope.settings.webpush_activated) {
+                if ($scope.settings.webpush_activated) {
                   messenger.post('Warning: Web Push module is not activated');
                 }
               }
@@ -84,7 +84,7 @@
               if (!$scope.flags.http.checking) {
                 $scope.disableFlags('http');
                 messenger.post(response.data);
-                if (!$scope.settings.webpush_activated) {
+                if ($scope.settings.webpush_activated) {
                   messenger.post('Warning: Web Push module is not activated');
                 }
               }
