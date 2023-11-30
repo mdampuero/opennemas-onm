@@ -149,7 +149,7 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getClientOriginalExtension', 'getClientOriginalName', 'getPathname' ])
+            ->setMethods([ 'getClientOriginalName', 'getPathname' ])
             ->getMock();
 
         $data = [
@@ -173,9 +173,6 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->ih->expects($this->any())->method('getInformation')
             ->willReturn([ 'height' => 121 ]);
-
-        $file->expects($this->once())->method('getClientOriginalExtension')
-            ->willReturn('png');
 
         $file->expects($this->once())->method('getPathname')
             ->willReturn('some/path');
@@ -262,7 +259,7 @@ class PhotoServiceTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\File')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getClientOriginalExtension', 'getClientOriginalName', 'getPathname' ])
+            ->setMethods([ 'getClientOriginalName', 'getPathname' ])
             ->getMock();
 
         $data = [ 'title' => 'plugh' ];

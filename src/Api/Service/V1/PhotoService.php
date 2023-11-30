@@ -61,7 +61,7 @@ class PhotoService extends ContentService
             $optimize     = $optimize || $autoOptimize;
 
             // Check for png, size, optimize and update path
-            if ($file->getClientOriginalExtension() === 'png'
+            if (pathinfo($path, PATHINFO_EXTENSION) === 'png'
                 && $imageInfo['height'] > 120
                 && $optimize
                 && $convertPng
