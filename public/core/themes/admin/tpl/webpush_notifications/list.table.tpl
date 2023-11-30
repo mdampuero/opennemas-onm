@@ -10,6 +10,12 @@
       {t}Image{/t}
     </label>
   </div>
+  <div class="checkbox column-filters-checkbox" ng-if="!isColumnHidden('title')">
+    <input id="checkbox-title" checklist-model="app.columns.selected" checklist-value="'title'" type="checkbox">
+    <label for="checkbox-title">
+      {t}Title{/t}
+    </label>
+  </div>
 {/block}
 
 {block name="customColumns"}
@@ -61,6 +67,9 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('image' )" width="100">
     {t}Image{/t}
   </th>
+  <th class="v-align-middle" ng-if="isColumnEnabled('title')" width="400">
+    {t}Title{/t}
+  </th>
 {/block}
 
 {block name="customColumnsHeader"}
@@ -95,6 +104,11 @@
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('image')">
     <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.image].path" transform="zoomcrop,220,220">
     </dynamic-image>
+  </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('title')">
+    <div class="table-text">
+      <a class="text-black" href="[% routing.generate('backend_article_show', { id: item.fk_content }) %]"">[% item.title %]</a>
+    </div>
   </td>
 {/block}
 

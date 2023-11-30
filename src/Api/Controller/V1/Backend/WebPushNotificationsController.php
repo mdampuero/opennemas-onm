@@ -279,7 +279,11 @@ class WebPushNotificationsController extends ApiController
                 'webpush_delay'              => $settings['webpush_delay'],
                 'webpush_restricted_hours'   => $settings['webpush_restricted_hours'],
                 'hours'                      => $hours,
-                'webpush_active_subscribers' => $settings['webpush_active_subscribers']
+                'webpush_active_subscribers' => $settings['webpush_active_subscribers'],
+                'webpush_activated'          => $this->get('core.security')
+                    ->hasExtension('es.openhost.module.webpush_notifications')
+                    ? false
+                    : true
             ]);
         }
     }
