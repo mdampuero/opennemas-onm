@@ -36,7 +36,7 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->processor = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setMethods([
-                'close', 'getDescription', 'getHeight', 'getImageRotation', 'getSize',
+                'apply', 'close', 'getDescription', 'getHeight', 'getImageRotation', 'getSize',
                 'getWidth', 'open', 'optimize', 'save', 'strip', 'setImageRotation'
             ])->getMock();
 
@@ -203,5 +203,33 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             ->with('/plugh/frog.jpg')->willReturn($this->processor);
 
         $this->helper->optimize('/plugh/frog.jpg');
+    }
+
+    /**
+     * Tests optimizeImage.
+     */
+    public function testOptimizeImage()
+    {
+        $this->processor->expects($this->once())->method('open')
+            ->willReturn($this->processor);
+
+        $this->processor->expects($this->once())->method('apply')
+            ->with('thumbnail', $this->isType('array'))
+            ->willReturn($this->processor);
+
+        $this->processor->expects($this->once())->method('optimize')
+            ->with($this->isType('array'))
+            ->willReturn($this->processor);
+
+        $this->processor->expects($this->once())->method('save')
+            ->willReturn($this->processor);
+
+        $this->processor->expects($this->once())->method('close')
+            ->willReturn($this->processor);
+
+        $this->helper->optimizeImage(
+            '/plugh/frog.jpg',
+            ['image_quality' => 80, 'image_resolution' => '1024x1024']
+        );
     }
 }
