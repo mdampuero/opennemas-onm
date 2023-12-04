@@ -1,6 +1,6 @@
 <figure class="op-ad{if $default} op-ad-default{/if}">
   <iframe height="{$height}" width="{$width}" style="border:0;margin:0;padding:0;">
-    <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+    <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
       <script>
         var googletag = googletag || {};
         googletag.cmd = googletag.cmd || [];
