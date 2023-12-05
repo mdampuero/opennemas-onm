@@ -460,10 +460,10 @@ class ContentManager
 
         $contents = $em->findBy($criteria, $order, $num, $page);
 
-        // Repeat with starttime 7 days
+        // Repeat with starttime 7 days more
         if (count($contents) == 0) {
             $date = new \DateTime();
-            $date->sub(new \DateInterval('P7D'));
+            $date->sub(new \DateInterval('P' . ($days + 7) . 'D'));
             $date = $date->format('Y-m-d H:i:s');
 
             $criteria['starttime'] = [
