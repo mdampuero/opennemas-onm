@@ -61,7 +61,11 @@ class FrontpagesController extends Controller
             $this->get('api.service.frontpage')->getCurrentVersionForCategory($categoryId, false);
 
         $xtags = implode(',', array_map(function ($content) {
-            return $content->content_type_name . '-' . $content->pk_content;
+            $tag = $content->content_type_name . '-' . $content->pk_content;
+            if (isset($content->fk_author)) {
+                $tag .= ',author-' . $content->fk_author;
+            }
+            return $tag;
         }, $contents));
 
         $contents = $this->get('api.service.frontpage_version')->filterPublishedContents($contents);
