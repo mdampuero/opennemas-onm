@@ -121,7 +121,7 @@ class UserSubscriber implements EventSubscriberInterface
             }
 
             if ($shouldDeleteVarnish) {
-                $this->helper->deleteInstance();
+                $this->helper->deleteItemVarnish($user, true);
             }
         }
     }

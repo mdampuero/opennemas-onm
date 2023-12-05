@@ -51,4 +51,33 @@ class UserCacheHelper extends CacheHelper
 
         return $this;
     }
+
+
+    /**
+     * Removes caches for a user.
+     *
+     * @param User $user The user.
+     */
+    public function deleteItemVarnish(User $user, $all = false) : void
+    {
+        $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
+            [ 'user', 'show', $user->id ]
+        ]));
+        $this->queue->push(new ServiceTask('core.varnish', 'ban', [
+            sprintf(
+                'obj.http.x-users ~ ^instance-%s,.*,content-author-%s-frontpage',
+                $this->instance->internal_name,
+                $user->id
+            )
+        ]));
+        if ($all) {
+            $this->queue->push(new ServiceTask('core.varnish', 'ban', [
+                sprintf(
+                    'obj.http.x-users ~ ^instance-%s,.*,author-%d',
+                    $this->instance->internal_name,
+                    $user->id
+                )
+            ]));
+        }
+    }
 }
