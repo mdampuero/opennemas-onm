@@ -107,11 +107,22 @@ class UserSubscriber implements EventSubscriberInterface
             ? $event->getArgument('item')
             : [ $event->getArgument('item') ];
 
-        // TODO: Remove when using new ORM for users
+        $shouldDeleteVarnish = true;
+
         foreach ($users as $user) {
             $this->helper->deleteItem($user);
-        }
+            if (isset($user->user_groups) && is_array($user->user_groups)) {
+                foreach ($user->user_groups as $group) {
+                    if ($group['user_group_id'] == 7) {
+                        $shouldDeleteVarnish = false;
+                        break;
+                    }
+                }
+            }
 
-        $this->helper->deleteInstance();
+            if ($shouldDeleteVarnish) {
+                $this->helper->deleteInstance();
+            }
+        }
     }
 }
