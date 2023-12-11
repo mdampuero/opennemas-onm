@@ -26,6 +26,7 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RequestContextAwareInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Initializes the context from the request and sets request attributes based on a matching route.
@@ -205,6 +206,12 @@ class RouterListener implements EventSubscriberInterface
 
         // add attributes based on the request (routing)
         try {
+            //Fix in order to prevent /admin/ throws a 404
+            if ($newRequest->getPathInfo() == '/admin/') {
+                $event->setResponse(new RedirectResponse('/admin', 301));
+                return;
+            }
+
             // matching a request is more powerful than matching
             // a URL path + context, so try that first
             if ($this->matcher instanceof RequestMatcherInterface) {
@@ -212,6 +219,15 @@ class RouterListener implements EventSubscriberInterface
             } else {
                 $parameters = $this->matcher->match($newRequest->getPathInfo());
             }
+
+            if ($instance->isSubdirectory() && array_key_exists('path', $parameters)) {
+                $parameters['path'] = substr(
+                    $parameters['path'],
+                    0,
+                    strlen($instance->subdirectory)
+                ) != $instance->subdirectory ? $instance->subdirectory . $parameters['path'] : $parameters['path'];
+            }
+
 
             $this->container->get('core.globals')
                 ->setRoute($parameters['_route']);

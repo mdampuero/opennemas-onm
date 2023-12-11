@@ -1,53 +1,53 @@
 manager_welcome:
-    path:  /manager/
+    path:  /manager
     defaults: { _controller: ManagerBundle:Welcome:default }
     options:
         expose: true
 
 manager_ads:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/ads.yml'
 
 manager_client:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/client.yml'
 
 manager_instance:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/instance.yml'
 
 manager_commands:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/command.yml'
 
 manager_module:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/module.yml'
 
 manager_notification:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/notification.yml'
 
 manager_opcache:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/opcache.yml'
 
 manager_purchase:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/purchase.yml'
 
 manager_report:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/report.yml'
 
 manager_sitemap:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/sitemap.yml'
 
 manager_user:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/user.yml'
 
 manager_user_group:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/user_group.yml'
