@@ -67,6 +67,9 @@ frontend_framework:
 frontend_frontpage:
     resource: '@FrontendBundle/Resources/config/routing/frontpage.yml'
 
+frontend_hbbtv:
+    resource: '@FrontendBundle/Resources/config/routing/hbbtv.yml'
+
 frontend_letter:
     resource: '@FrontendBundle/Resources/config/routing/letter.yml'
 
