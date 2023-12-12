@@ -182,7 +182,6 @@
                 );
                 $scope.patch(content, 'webpush_notifications', contentNotifications)
                   .then(function() {
-                    messenger.post('Notification ' + notificationItem.title + ' scheduled. For further details, click <a href="webpush_notifications/history">here</a>');
                     $scope.list();
                   });
               });

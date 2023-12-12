@@ -75,6 +75,30 @@ class ArticleController extends ContentController
         return new JsonResponse([ 'extra_fields' => $settings ]);
     }
 
+    public function patchItemAction(Request $request, $id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
+        $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', [ $id ]);
+
+        $msg = $this->get('core.messenger');
+
+        $this->get($this->service)
+            ->patchItem($id, $request->request->all());
+
+        if (array_key_exists('webpush_notifications', $request->request->all())) {
+            $msg->add(
+                _(
+                    'Notification scheduled successfully.'
+                    . ' For further details, click <a href="webpush_notifications/history">here</a>'
+                ),
+                'success'
+            );
+        } else {
+            $msg->add(_('Item saved successfully'), 'success');
+        }
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
     /**
      * Loads extra data related to the given contents.
      *

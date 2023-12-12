@@ -3,7 +3,7 @@
 {block name="itemActionsWrapper"}
 {/block}
 
-{block name="commonColumns" prepend}
+{block name="commonColumns"}
   <div class="checkbox column-filters-checkbox">
     <input id="image" checklist-model="app.columns.selected" checklist-value="'image'" type="checkbox">
     <label for="image">
@@ -63,7 +63,7 @@
     </div>
 {/block}
 
-{block name="commonColumnsHeader" prepend}
+{block name="commonColumnsHeader"}
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('image' )" width="100">
     {t}Image{/t}
   </th>
@@ -100,7 +100,7 @@
     </th>
 {/block}
 
-{block name="commonColumnsBody" prepend}
+{block name="commonColumnsBody"}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('image')">
     <dynamic-image class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.image].path" transform="zoomcrop,220,220">
     </dynamic-image>

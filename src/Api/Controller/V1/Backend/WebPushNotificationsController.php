@@ -5,8 +5,7 @@ namespace Api\Controller\V1\Backend;
 use Api\Controller\V1\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Common\Core\Annotation\Security;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class WebPushNotificationsController extends ApiController
 {
@@ -332,6 +331,8 @@ class WebPushNotificationsController extends ApiController
         try {
             $this->get('orm.manager')->getDataSet('Settings')->set($settings);
             $msg->add(_('Item saved successfully'), 'success');
+        } catch (AccessDeniedException $e) {
+            $msg->add(_('Webpush Module is not activated'), 'info');
         } catch (\Exception $e) {
             $msg->add(_('Unable to save settings'), 'error');
             $this->get('error.log')->error($e->getMessage());
