@@ -235,7 +235,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      * @description
      *   Saves tags and, then, saves the item.
      */
-    $scope.saveItem = function(webPushNotification = false) {
+    $scope.saveItem = function() {
       if (!$scope.validate()) {
         messenger.post(window.strings.forms.not_valid, 'error');
         return;
@@ -251,7 +251,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
           $scope.draftEnabled = false;
 
-          $scope.save(webPushNotification);
+          $scope.save();
         }
       });
     };
@@ -330,7 +330,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         $scope.removePendingNotification(false);
       }
 
-      $scope.saveItem(true);
+      $scope.saveItem();
     };
 
     /**

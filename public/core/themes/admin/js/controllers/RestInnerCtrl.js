@@ -258,7 +258,7 @@
          * @description
          *   Saves a new item.
          */
-        $scope.save = function(webPushNotification = false) {
+        $scope.save = function() {
           if ($scope.form.$invalid) {
             messenger.post($window.strings.forms.not_valid, 'error');
             $scope.disableFlags('http');
@@ -304,9 +304,6 @@
               webStorage.session.remove($scope.draftKey);
             }
             messenger.post(response.data);
-            if (webPushNotification) {
-              messenger.post('Notification ' + $scope.item.title + ' scheduled. For further details, click <a href="/admin/webpush_notifications/history">here</a>');
-            }
           };
 
           if ($scope.itemHasId()) {
