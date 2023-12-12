@@ -263,6 +263,12 @@ class RouterListener implements EventSubscriberInterface
             $request->attributes->set('_route_params', $parameters);
             $request->attributes->set('_locale', $locale);
         } catch (ResourceNotFoundException $e) {
+            //Fix in order to prevent /manager/ throws a 404
+            if ($newRequest->getPathInfo() == '/manager/') {
+                $event->setResponse(new RedirectResponse('/manager#/', 301));
+                return;
+            }
+
             $message = sprintf('No route found for "%s %s"', $request->getMethod(), $request->getPathInfo());
 
             if ($referer = $request->headers->get('referer')) {
