@@ -31,11 +31,9 @@ class WebPushNotificationsController extends FrontendController
             && $webpushSettings['webpush_apikey']
             && !$this->get('core.instance')->hasMultilanguage()
             && $this->get('core.security')->hasExtension('es.openhost.module.frontendSsl')) {
-            return new Response(
-                "importScripts('https://cdn.webpushr.com/sw-server.min.js');",
-                200,
-                ['Content-Type:' => 'text/javascript']
-            );
+                $response = new Response("importScripts('https://cdn.webpushr.com/sw-server.min.js');", 200);
+                $response->headers->set('Content-Type', 'text/javascript');
+                return $response;
         }
 
         throw new ResourceNotFoundException();
