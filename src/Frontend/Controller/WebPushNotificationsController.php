@@ -32,7 +32,7 @@ class WebPushNotificationsController extends FrontendController
             && !$this->get('core.instance')->hasMultilanguage()
             && $this->get('core.security')->hasExtension('es.openhost.module.frontendSsl')) {
                 $response = new Response("importScripts('https://cdn.webpushr.com/sw-server.min.js');", 200);
-                $response->headers->set('Content-Type', 'text/javascript');
+                $response->headers->set('Content-Type', 'application/javascript');
                 return $response;
         }
 
