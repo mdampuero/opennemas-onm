@@ -34,6 +34,7 @@ class WebPushNotificationsController extends FrontendController
                 $response = new Response("importScripts('https://cdn.webpushr.com/sw-server.min.js');", 200);
                 $response->headers->set('Content-Type', 'application/javascript');
                 $response->headers->set('Cache-Control', 'no-cache');
+                $response->headers->set('Content-Length', 59);
                 return $response;
         }
 
