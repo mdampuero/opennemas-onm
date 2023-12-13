@@ -31,10 +31,14 @@ class WebPushNotificationsController extends FrontendController
             && $webpushSettings['webpush_apikey']
             && !$this->get('core.instance')->hasMultilanguage()
             && $this->get('core.security')->hasExtension('es.openhost.module.frontendSsl')) {
-                $response = new Response("importScripts('https://cdn.webpushr.com/sw-server.min.js');", 200);
+                $fileName = 'webpushr-sw.js';
+                file_put_contents($fileName, "importScripts('https://cdn.webpushr.com/sw-server.min.js');");
+                $response = new Response();
+                $response->setContent(file_get_contents($fileName));
+                $response->setStatusCode(200);
                 $response->headers->set('Content-Type', 'application/javascript');
                 $response->headers->set('Cache-Control', 'no-cache');
-                $response->headers->set('Content-Length', 59);
+                $response->headers->set('Content-Length', filesize($fileName));
                 return $response;
         }
 
