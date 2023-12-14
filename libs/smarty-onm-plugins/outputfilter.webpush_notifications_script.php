@@ -22,7 +22,7 @@ function smarty_outputfilter_webpush_notifications_script($output, $smarty)
                 . "fjs = d.getElementsByTagName(s)[0];js = d.createElement(s); js.id = id;js.async=1;js.src = "
                 . "\"https://cdn.webpushr.com/app.min.js\";"
                 . "fjs.parentNode.appendChild(js);}(window,document, 'script', 'webpushr-jssdk'));"
-                . "webpushr('setup',{'key':'" . $webpushSettings['webpush_publickey'] . "', 'integration':'popup'  });"
+                . "webpushr('setup',{'key':'" . $webpushSettings['webpush_publickey'] . "' });"
                 . "</script>";
 
             $output = preg_replace(
