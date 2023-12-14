@@ -198,6 +198,15 @@ class BlogController extends FrontendController
         }
 
         $params['x-tags'] .= ',opinion-frontpage';
+        $authorsAdded      = [];
+
+        foreach ($response['items'] as $item) {
+            $fk_author = $item->fk_author;
+            if (!in_array($fk_author, $authorsAdded)) {
+                $params['x-tags'] .= ',author-' . $fk_author;
+                $authorsAdded[]    = $fk_author;
+            }
+        }
 
         $this->view->assign([
             'opinions'   => $response['items'],
