@@ -25,7 +25,7 @@ function smarty_outputfilter_webpush_notifications_script($output, $smarty)
                 . "webpushr('setup',{'key':'" . $webpushSettings['webpush_publickey'] . "', 'integration':'popup'  });"
                 . "</script>";
 
-            $output = str_replace('</body>', $script . '</body>', $output);
+            $output = str_replace('</head>', $script . '</head>', $output);
     }
 
     return $output;
