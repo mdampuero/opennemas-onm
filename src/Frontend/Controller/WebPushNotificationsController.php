@@ -11,6 +11,7 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * Defines the frontend controller for the articles.
@@ -31,15 +32,10 @@ class WebPushNotificationsController extends FrontendController
             && $webpushSettings['webpush_apikey']
             && !$this->get('core.instance')->hasMultilanguage()
             && $this->get('core.security')->hasExtension('es.openhost.module.frontendSsl')) {
-                $fileName = 'webpushr-sw.js';
-                file_put_contents($fileName, "importScripts('https://cdn.webpushr.com/sw-server.min.js');");
-                $response = new Response();
-                $response->setContent(file_get_contents($fileName));
-                $response->setStatusCode(200);
-                $response->headers->set('Content-Type', 'application/javascript');
-                $response->headers->set('Cache-Control', 'no-cache');
-                $response->headers->set('Content-Length', filesize($fileName));
-                return $response;
+            $response = new BinaryFileResponse('assets/js/webpush.js');
+            $response->headers->set('X-Status-Code', 200);
+            $response->headers->set('Content-Type', 'application/javascript');
+            return $response;
         }
 
         throw new ResourceNotFoundException();
