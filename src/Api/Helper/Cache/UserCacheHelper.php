@@ -65,6 +65,7 @@ class UserCacheHelper extends CacheHelper
             'content-author-' . $user->id . '-frontpage',
             'author-' . $user->id,
             'author-widget-' . $user->id,
+            'author-tag-' . $user->id,
             'rss-author-' . $user->id,
             'authors-frontpage',
             'sitemap',

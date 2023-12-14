@@ -95,6 +95,7 @@ class TagController extends FrontendController
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
         $params = $request->query->all();
+        $xtags  = '';
 
         // Deprecate resource parameter
         unset($params['resource']);
@@ -112,6 +113,15 @@ class TagController extends FrontendController
         if (!$this->isCached($params)) {
             $this->hydrateShow($params);
         }
+
+        foreach ($params['contents'] as $content) {
+            if ($content->fk_author) {
+                $xtags .= ',tag-author-' . $content->fk_author;
+            }
+        }
+
+        $xtags            = $params['x-tags'] . $xtags;
+        $params['x-tags'] = $xtags;
 
         return $this->render($this->getTemplate($action), $params);
     }
@@ -172,7 +182,7 @@ class TagController extends FrontendController
         return array_merge($params, [
             'item'        => $item[0],
             'items'       => $item,
-            'o_canonical' => $this->getCanonicalUrl($action, $params)
+            'o_canonical' => $this->getCanonicalUrl($action, $params),
         ]);
     }
 
@@ -210,7 +220,7 @@ class TagController extends FrontendController
         );
 
         $contents = $response['items'];
-        $total = $response['total'];
+        $total    = $response['total'];
 
         // No first page and no contents
         if ($params['page'] > 1 && empty($contents)) {
