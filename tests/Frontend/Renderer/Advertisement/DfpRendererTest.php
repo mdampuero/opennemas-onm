@@ -171,7 +171,7 @@ class DfpRendererTest extends TestCase
         $params = [ 'op-ad-default' => true ];
         $output = '<figure class="op-ad op-ad-default">
             <iframe height="300" width="300" style="border:0;margin:0;padding:0;">
-                <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+                <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
                 <script>
                 var googletag = googletag || {};
                 googletag.cmd = googletag.cmd || [];
@@ -352,7 +352,7 @@ class DfpRendererTest extends TestCase
         </head>
         <body>
           <div class="content">
-            <script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+            <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
             <script>
               var googletag = googletag || {};
               googletag.cmd = googletag.cmd || [];
@@ -429,7 +429,7 @@ class DfpRendererTest extends TestCase
             'sizes' => '[ [ 300, 300 ], [ 1, 1 ] ]'
         ];
 
-        $output = '<script async="async" src="https://www.googletagservices.com/tag/js/gpt.js"></script>
+        $output = '<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
             <script>
             var googletag = googletag || {};
             googletag.cmd = googletag.cmd || [];

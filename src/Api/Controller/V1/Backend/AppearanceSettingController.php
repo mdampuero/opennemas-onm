@@ -88,7 +88,7 @@ class AppearanceSettingController extends SettingController
 
     protected function saveFiles($settings)
     {
-        $logos    = array_intersect_key($settings, array_keys($this->references));
+        $logos    = array_intersect_key($settings, $this->references);
         $msg      = $this->get('core.messenger');
         $settings = [];
         foreach ($logos as $key => $id) {

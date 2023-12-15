@@ -1,6 +1,6 @@
 {extends file="base/admin.tpl"}
 {block name="content"}
-  <form ng-controller="PhotoConfigCtrl" ng-init="init({json_encode($extra_fields)|clear_json})">
+  <form ng-controller="PhotoConfigCtrl" ng-init="init()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
@@ -106,9 +106,26 @@
                   <option value="1280x960">1280x960px (4:3)</option>
                   <option value="1024x768">1024x768px (4:3)</option>
                 </select>
+              </div>
             </div>
           </div>
-        </div>
+          <div class="form-group m-t-20 m-l-20" ng-if="config.optimize_images">
+            <label class="form-label" for="image_type">
+              <div>
+                <i class="fa fa-file"></i>
+                {t}Image type{/t}
+              </div>
+              <div class="help">
+                {t}This will convert all png images with a height greater than 120px to jpg.{/t}
+              </div>
+            </label>
+            <div class="checkbox">
+              <input id="convert-png" name="convert-png" type="checkbox" ng-model="config.convert_png">
+              <label class="form-label" for="convert-png">
+                <span class="checkbox-title">{t}Convert png to jpg{/t}</span>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     </div>

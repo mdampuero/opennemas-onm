@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-02 09:59+0000\n"
-"PO-Revision-Date: 2023-10-02 12:08+0200\n"
+"POT-Creation-Date: 2023-11-29 07:26+0000\n"
+"PO-Revision-Date: 2023-11-29 08:30+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -2203,6 +2203,9 @@ msgstr "Data de inicio de publicación"
 
 msgid "Publication end date"
 msgstr "Data de final de publicación"
+
+msgid "URL Datetime"
+msgstr "Data URL"
 
 msgid "This content will only be available in the time range specified above."
 msgstr ""
@@ -4587,8 +4590,8 @@ msgstr ""
 "idm4591571479548831554522590036\" target=\"_blank\" ng-click=\"$event."
 "stopPropagation();\">aqui</a>."
 
-msgid "Didomi noticeId"
-msgstr "Didomi noticeId"
+msgid "Didomi apiKey"
+msgstr "Didomi apiKey"
 
 msgid ""
 "Help to find your Didomi credentials <a class=\"external-link\" href="
@@ -4599,8 +4602,8 @@ msgstr ""
 "\"https://support.didomi.io/\" target=\"_blank\" ng-click=\"$event."
 "stopPropagation();\">aquí</a>."
 
-msgid "Didomi apiKey"
-msgstr "Didomi apiKey"
+msgid "Didomi noticeId"
+msgstr "Didomi noticeId"
 
 msgid "Didomi noticeId for AMP"
 msgstr "Didomi noticeId para AMP"
@@ -5274,9 +5277,6 @@ msgstr ""
 msgid "Global search"
 msgstr "Busca global"
 
-msgid "Unable to find any content that matches your search."
-msgstr "Non se puideron atopar contidos que coincidan coa súa busca."
-
 msgid "Go back"
 msgstr "Atrás"
 
@@ -5679,6 +5679,16 @@ msgid "Regardless of resolution, images will keep its original aspect ratio"
 msgstr ""
 "Independentemente da resolución, as imaxes manterán a súa relación de "
 "aspecto orixinal"
+
+msgid "Image type"
+msgstr "Tipo de imaxen"
+
+msgid ""
+"This will convert all png images with a height greater than 120px to jpg."
+msgstr "Converte todas as imaxes png con unha altura superior a 120px a jpg."
+
+msgid "Convert png to jpg"
+msgstr "Converter de png a jpg"
 
 msgid "Delete multiple images"
 msgstr "Eliminar varias imaxes"
@@ -7374,6 +7384,9 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 
 msgid "Group name"
 msgstr "Nome do grupo"
+
+#~ msgid "Unable to find any content that matches your search."
+#~ msgstr "Non se puideron atopar contidos que coincidan coa súa busca."
 
 #~ msgid "Use CMP on your AMP pages"
 #~ msgstr "Utiliza CMP nas túas páxinas AMP"

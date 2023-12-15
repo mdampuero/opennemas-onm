@@ -39,11 +39,27 @@ class ImageHelper extends FileHelper
     }
 
     /**
-     * Checks if a file exists.
+     * Apply rotation on image if exists on EXIF data.
      *
      * @param string $path The path to file.
      *
      * @return bool True if the file exists. False otherwise.
+     */
+    public function applyRotation(string $path) : void
+    {
+        $this->processor->open($path);
+
+        if ($this->processor->getImageRotation()) {
+            $this->processor->setImageRotation()->strip()->save($path);
+        }
+
+        $this->processor->close();
+    }
+
+    /**
+     * Checks if a file exists.
+     *
+     * @param string $path The path to file.
      */
     public function exists(string $path) : bool
     {
@@ -102,7 +118,7 @@ class ImageHelper extends FileHelper
             'width'  => $this->processor->getWidth()
         ];
 
-        $description = $this->processor->getDescription();
+        $description = trim($this->processor->getDescription());
         if (!empty($description)) {
             $information['description'] = $description;
         }
@@ -134,6 +150,32 @@ class ImageHelper extends FileHelper
     public function optimize(string $path) : void
     {
         $this->processor->open($path)->optimize()->save($path);
+    }
+
+    /**
+     * Optimizes the image in the provided path with parameters.
+     *
+     * @param string $path   The path to the file to optimize.
+     * @param string $config The parameters for the optimization.
+     */
+    public function optimizeImage($path, $config)
+    {
+        $quality    = $config['image_quality'] ?? 65;
+        $resolution = !empty($config['image_resolution'])
+            ? explode('x', $config['image_resolution'])
+            : ['1920', '1920'];
+
+        $this->processor->open($path)
+            ->apply('thumbnail', [$resolution[0], $resolution[1], 'center', 'center'])
+            ->optimize([
+                'flatten'          => false,
+                'quality'          => $quality,
+                'resolution-units' => 'ppi',
+                'resolution-x'     => 72,
+                'resolution-y'     => 72
+            ])
+            ->save($path)
+            ->close();
     }
 
     /**

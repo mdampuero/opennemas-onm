@@ -59,6 +59,7 @@ class AssetController extends Controller
                 ->open($path)
                 ->strip()
                 ->apply($transform, $params)
+                ->setImageRotation()
                 ->getContent();
         } catch (\Exception $e) {
             throw new ResourceNotFoundException();

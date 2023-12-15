@@ -113,17 +113,6 @@ class HelperFunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests get_url when the provided parameter is a content.
-     */
-    public function testGetUrlForContent()
-    {
-        $this->ugh->expects($this->once())->method('getUrl')
-            ->with(new Content());
-
-        get_url(new Content());
-    }
-
-    /**
      * Tests get_image_dir when the theme is not configured in globals.
      */
     public function testGetImageDirWhenNoTheme()

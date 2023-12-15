@@ -1,29 +1,33 @@
-<amp-consent id="quantcast" layout="nodisplay">
+
+<amp-consent id="inmobi" layout="nodisplay">
   <script type="application/json">
     {
-      "consentInstanceId": "quantcast",
-      "checkConsentHref": "https://apis.cmp.quantcast.com/amp/check-consent",
+      "consentInstanceId": "inmobi",
+      "checkConsentHref": "https://api.cmp.inmobi.com/amp/check-consent",
       "consentRequired": "remote",
-      "promptUISrc": "https://cmp.quantcast.com/tcfv2/amp.html",
+      "promptUISrc": "https://cmp.inmobi.com/tcfv2/amp.html",
       "postPromptUI": "post-prompt-ui",
       "clientConfig": {
         "coreConfig": {
-          "quantcastAccountId": "{$id}",
+          "inmobiAccountId": "{$id}",
           "privacyMode": [ "GDPR" ],
           "displayUi": "always",
           "googleEnabled": true,
           "publisherCountryCode": "ES",
           "lang_": "{$smarty.const.CURRENT_LANGUAGE_SHORT}",
           "initScreenRejectButtonShowing": false,
+          "initScreenCloseButtonShowing": false,
+          "initScreenBodyTextOption": 1,
           "defaultToggleValue": "on",
-          "vendorPurposeIds": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+          "vendorPurposeIds": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
           "vendorFeaturesIds": [1, 2, 3],
-          "vendorPurposeLegitimateInterestIds": [2, 3, 4, 5, 6, 7, 8, 9, 10],
+          "vendorPurposeLegitimateInterestIds": [2, 7, 8, 9, 10, 11],
           "vendorSpecialFeaturesIds": [1, 2],
           "vendorSpecialPurposesIds": [1, 2],
-          "vendorListUpdateFreq": 30
+          "vendorListUpdateFreq": 30,
+          "gvlVersion": 3
         },
-        "tagVersion": "V2"
+        "tagVersion": "V3"
       }
     }
   </script>

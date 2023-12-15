@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-02 09:59+0000\n"
-"PO-Revision-Date: 2023-10-02 12:07+0200\n"
+"POT-Creation-Date: 2023-11-29 07:26+0000\n"
+"PO-Revision-Date: 2023-11-29 08:29+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -2215,6 +2215,9 @@ msgstr "Fecha de inicio de publicación"
 
 msgid "Publication end date"
 msgstr "Fecha de final de publicación"
+
+msgid "URL Datetime"
+msgstr "Fecha URL"
 
 msgid "This content will only be available in the time range specified above."
 msgstr ""
@@ -4612,8 +4615,8 @@ msgstr ""
 "a6fd-fb7ebff9f8dc_section-idm4591571479548831554522590036\" target=\"_blank"
 "\" ng-click=\"$event.stopPropagation();\">aqui</a>."
 
-msgid "Didomi noticeId"
-msgstr "Didomi noticeId"
+msgid "Didomi apiKey"
+msgstr "Didomi apiKey"
 
 msgid ""
 "Help to find your Didomi credentials <a class=\"external-link\" href="
@@ -4624,8 +4627,8 @@ msgstr ""
 "href=\"https://support.didomi.io/\" target=\"_blank\" ng-click=\"$event."
 "stopPropagation();\">aquí</a>."
 
-msgid "Didomi apiKey"
-msgstr "Didomi apiKey"
+msgid "Didomi noticeId"
+msgstr "Didomi noticeId"
 
 msgid "Didomi noticeId for AMP"
 msgstr "Didomi noticeId para AMP"
@@ -5304,9 +5307,6 @@ msgstr ""
 msgid "Global search"
 msgstr "Búsqueda global"
 
-msgid "Unable to find any content that matches your search."
-msgstr "No se pudieron encontrar contenidos que coincidan con tu búsqueda."
-
 msgid "Go back"
 msgstr "Atrás"
 
@@ -5709,6 +5709,17 @@ msgstr "Resolución de imagen"
 msgid "Regardless of resolution, images will keep its original aspect ratio"
 msgstr ""
 "Sin importar la resolución, las imagenes conservarán su aspecto original"
+
+msgid "Image type"
+msgstr "Tipo de imagen"
+
+msgid ""
+"This will convert all png images with a height greater than 120px to jpg."
+msgstr ""
+"Convertir todas las imágenes png con una altura superior a 120px a jpg."
+
+msgid "Convert png to jpg"
+msgstr "Convertir de png a jpg"
 
 msgid "Delete multiple images"
 msgstr "Eliminar múltiples imágenes"
@@ -7418,6 +7429,9 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
+
+#~ msgid "Unable to find any content that matches your search."
+#~ msgstr "No se pudieron encontrar contenidos que coincidan con tu búsqueda."
 
 #~ msgid "Use CMP on your AMP pages"
 #~ msgstr "Use CMP en sus páginas AMP"

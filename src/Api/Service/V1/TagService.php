@@ -10,6 +10,7 @@
 namespace Api\Service\V1;
 
 use Api\Exception\GetListException;
+use Api\Exception\ApiException;
 use Common\Model\Entity\Tag;
 use Common\Core\Component\Validator\Validator;
 
@@ -25,6 +26,62 @@ class TagService extends OrmService
         return parent::createItem($data);
     }
 
+    /**
+     * Moves all contents assigned to a tag to another tag.
+     *
+     * @param integer $id The tag id of the source tag.
+     * @param integer $to The tag id of the target tag.
+     */
+    public function moveItem($id, $to)
+    {
+        try {
+            $source = $this->getItem($id);
+
+            if ($this->isItemEmpty($source)) {
+                throw new ApiException('The item is empty', 400);
+            }
+
+            $target = $this->getItem($to);
+
+            $moved = $this->em->getRepository($this->entity, $this->origin)
+                ->moveContents((int) $id, (int) $to);
+
+            $this->dispatcher->dispatch($this->getEventName('moveItem'), [
+                'id'       => $id,
+                'item'     => $source,
+                'target'   => $target,
+                'contents' => $moved
+            ]);
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * Checks if the tag is empty.
+     *
+     * @param Category $item The tag.
+     *
+     * @return boolean True if the tag is empty. False otherwise.
+     */
+    protected function isItemEmpty($item)
+    {
+        try {
+            $contents = $this->em->getRepository($this->entity, $this->origin)
+                ->countContents($item->id);
+
+            if (!empty($contents)
+                && array_key_exists((int) $item->id, $contents)
+                && !empty($contents[$item->id])
+            ) {
+                return false;
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
+    }
     /**
      * Returns a list of tags associated to contents with content type in a
      * list of types.
@@ -141,8 +198,9 @@ class TagService extends OrmService
         }
 
         $ids = array_map(function ($a) {
-            return $a->id;
+            return is_array($a) ? $a['id'] : $a->id;
         }, $tags);
+
 
         return $this->container->get('orm.manager')
             ->getRepository($this->entity, $this->origin)
@@ -180,5 +238,21 @@ class TagService extends OrmService
             ->get();
 
         return $data;
+    }
+
+    /**
+     * Get all the tags users for report.
+     *
+     * @return array The list of items.
+     */
+    public function getReport()
+    {
+        try {
+            return $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->findTags();
+        } catch (\Exception $e) {
+            throw new GetListException($e->getMessage(), $e->getCode());
+        }
     }
 }
