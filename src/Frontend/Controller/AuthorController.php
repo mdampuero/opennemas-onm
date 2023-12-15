@@ -224,7 +224,7 @@ class AuthorController extends Controller
         foreach ($items as $item) {
             $fk_author = $item->id;
             if (!in_array($fk_author, $authorsAdded)) {
-                $xtags         .= ',author-' . $fk_author;
+                $xtags         .= ',content-author-' . $fk_author;
                 $authorsAdded[] = $fk_author;
             }
         }

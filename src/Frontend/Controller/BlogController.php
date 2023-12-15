@@ -203,7 +203,7 @@ class BlogController extends FrontendController
         foreach ($response['items'] as $item) {
             $fk_author = $item->fk_author;
             if (!in_array($fk_author, $authorsAdded)) {
-                $params['x-tags'] .= ',author-' . $fk_author;
+                $params['x-tags'] .= ',opinioni-author-' . $fk_author;
                 $authorsAdded[]    = $fk_author;
             }
         }

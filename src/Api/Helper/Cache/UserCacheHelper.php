@@ -60,15 +60,16 @@ class UserCacheHelper extends CacheHelper
     public function deleteItemVarnish(User $user) : void
     {
         $varnishKeys = [
+            'author-' . $user->id,
+            'frontpage-author-' . $user->id,
             'content-author-' . $user->id . '-frontpage',
             'opinion-author-' . $user->id . '-frontpage',
-            'content-author-' . $user->id . '-frontpage',
-            'author-' . $user->id,
+            'content-author-' . $user->id,
+            'opinion-author-' . $user->id,
             'author-widget-' . $user->id,
             'author-tag-' . $user->id,
             'author-category-' . $user->id,
             'rss-author-' . $user->id,
-            'authors-frontpage',
             'sitemap',
         ];
 
