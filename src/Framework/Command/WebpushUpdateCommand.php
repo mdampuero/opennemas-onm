@@ -123,7 +123,9 @@ class WebpushUpdateCommand extends Command
                 }
 
                 // If current time is 00:00 save active subcsribers in instance settings (once a day, 32/instance max)
-
+                if ($delayedUtcTime->format('H:i') >= '00:00' && $delayedUtcTime->format('H:i') < '00:05') {
+                    continue;
+                }
 
                 try {
                     $oldActiveSubscribers = $this->getContainer()->get('orm.manager')
