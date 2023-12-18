@@ -30,7 +30,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->image = $this->getMockBuilder('Image')
             ->setMethods([
                 'crop', 'get', 'getHeight','getImagick', 'getSize', 'getWidth',
-                'metadata', 'resize', 'save', 'strip', 'thumbnail'
+                'metadata', 'resize', 'save', 'strip', 'thumbnail', 'rotate'
             ])->getMock();
 
         $this->imagick = $this->getMockBuilder('Imagick')
@@ -154,10 +154,77 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     public function testGetDescriptionWithoutExif()
     {
         $this->image->expects($this->once())->method('metadata')
+            ->willReturn(null);
+
+        $this->assertEquals(null, $this->im->getDescription());
+    }
+
+    /**
+     * Tests getImageRotation.
+     */
+    public function testGetImageRotationWithRotation()
+    {
+        $this->image->expects($this->once())->method('metadata')
+            ->willReturn([ 'ifd0.Orientation' => '8']);
+
+        $this->assertEquals('8', $this->im->getImageRotation());
+    }
+
+    /**
+     * Tests getImageRotation
+     */
+    public function testGetImageRotationWithoutRotation()
+    {
+        $this->image->expects($this->once())->method('metadata')
+            ->willReturn(null);
+
+        $this->assertEquals(null, $this->im->getImageRotation());
+    }
+
+    /**
+     * Tests setImageRotation.
+     */
+    public function testSetImageRotationWithExifRotateValue8()
+    {
+        $this->image->expects($this->once())->method('metadata')
+            ->willReturn([ 'ifd0.Orientation' => '8']);
+
+        $this->im->setImageRotation();
+    }
+
+    /**
+     * Tests setImageRotation.
+     */
+    public function testSetImageRotationWithExifRotateValue3()
+    {
+        $this->image->expects($this->once())->method('metadata')
+            ->willReturn([ 'ifd0.Orientation' => '3']);
+
+        $this->im->setImageRotation();
+    }
+
+    /**
+     * Tests setImageRotation.
+     */
+    public function testSetImageRotationWithExifRotateValue6()
+    {
+        $this->image->expects($this->once())->method('metadata')
+            ->willReturn([ 'ifd0.Orientation' => '6']);
+
+        $this->im->setImageRotation();
+    }
+
+    /**
+     * Tests getDescription.
+     */
+    public function testSetImageRotationWithoutExif()
+    {
+        $this->image->expects($this->once())->method('metadata')
             ->willReturn([]);
 
-        $this->assertEquals('', $this->im->getDescription());
+        $this->im->setImageRotation();
     }
+
     /**
      * Tests getFormat.
      */

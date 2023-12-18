@@ -59,7 +59,7 @@
       </NewsComponent>
       <NewsComponent Duid="video_{$video->id}.video.text">
         <Role FormalName="Caption" />
-        <ContentItem Href="{get_url($video, [ '_absolute' => true ])}" {if $video->path}Url="{$video->path|escape:'html'}"{elseif $video->type == 'external'}Url="{$video->information['source']['mp4']|escape:'html'}"{/if}>
+        <ContentItem Href="{get_url item=$video absolute=true}" {if $video->path}Url="{$video->path|escape:'html'}"{elseif $video->type == 'external'}Url="{$video->information['source']['mp4']|escape:'html'}"{/if}>
           <MediaType FormalName="Text" />
           <Catalog>
             <Resource>

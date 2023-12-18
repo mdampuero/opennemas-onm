@@ -9,18 +9,22 @@
  */
 function smarty_outputfilter_canonical_url($output, $smarty)
 {
-    $request = $smarty->getContainer()
-        ->get('request_stack')
-        ->getCurrentRequest();
+    $request = $smarty->getContainer()->get('request_stack')->getCurrentRequest();
 
+    if (is_null($request)) {
+        return $output;
+    }
+
+    $uri = $request->getUri();
     if (empty($request)
         || preg_match('/newsletter/', $smarty->source->resource)
-        || preg_match('/\/rss/', $request->getRequestUri())
+        || preg_match('/\/rss\/(?!listado$)/', $uri)
+        || preg_match('/\/hbbtv/', $uri)
     ) {
         return $output;
     }
 
-    $url = preg_replace('/\?.*/', '', $request->getUri());
+    $url = preg_replace('/\?.*/', '', $uri);
 
     if ($smarty->hasValue('o_canonical')) {
         $url = $smarty->getValue('o_canonical');

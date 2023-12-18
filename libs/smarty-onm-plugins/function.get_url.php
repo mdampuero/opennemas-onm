@@ -5,20 +5,32 @@
 function smarty_function_get_url($params, &$smarty)
 {
     if (!array_key_exists('item', $params)
-        || !is_object($params['item'])
-        || empty($params['item']->id)
+        || empty($params['item'])
     ) {
         return '';
+    }
+
+    $container     = $smarty->getContainer();
+    $contentHelper = $container->get('core.helper.content');
+    $item          = is_string($params['item']) || is_object($params['item'])
+        ? $params['item']
+        : $contentHelper->getContent($params['item']);
+
+    if (empty($item)) {
+        return '';
+    }
+
+    if (!empty($item->externalUri)) {
+        return $item->externalUri;
     }
 
     $absolute    = array_key_exists('absolute', $params) && $params['absolute'];
     $escape      = array_key_exists('escape', $params) && $params['escape'];
     $isAmp       = array_key_exists('amp', $params) && $params['amp'];
     $translation = array_key_exists('locale', $params) && $params['locale'];
-    $container   = $smarty->getContainer();
 
     $url = $container->get('core.helper.url_generator')
-        ->generate($params['item'], [
+        ->generate($item, [
             'absolute' => $absolute,
             '_format'  => $isAmp ? 'amp' : null,
             'locale'   => $translation ? $params['locale'] : null,

@@ -26,7 +26,11 @@ class TagSubscriberTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'deleteItem', 'deleteList' ])
             ->getMock();
 
-        $this->subscriber = new TagSubscriber($this->helper);
+        $this->redis = $this->getMockBuilder('Opennemas\Cache\Redis\Redis')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->subscriber = new TagSubscriber($this->helper, $this->redis);
     }
 
     /**
@@ -89,8 +93,8 @@ class TagSubscriberTest extends \PHPUnit\Framework\TestCase
     public function testOnTagDelete()
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\TagSubscriber')
-            ->setConstructorArgs([ $this->helper ])
-            ->setMethods([ 'onTagUpdate' ])
+            ->setConstructorArgs([$this->helper, $this->redis])
+            ->setMethods(['onTagUpdate'])
             ->getMock();
 
         $subscriber->expects($this->once())->method('onTagUpdate');

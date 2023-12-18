@@ -336,7 +336,7 @@
           {/is_module_activated}
           {is_module_activated name="ADVANCED_SEARCH"}
           <li>
-            <a href="{url name=admin_search_content_provider related=0}"><i class="fa fa-search"></i></a>
+            <a href="{url name=admin_search_content_provider}"><i class="fa fa-search"></i></a>
           </li>
           {/is_module_activated}
         </ul>
