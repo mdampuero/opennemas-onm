@@ -73,10 +73,10 @@
 {/block}
 
 {block name="customColumnsHeader"}
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('transaction_id')" width="200">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('transaction_id')" width="150">
       {t}Transaction Id{/t}
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('status')" width="200">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('status')" width="120">
       {t}Status{/t}
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('send_date')" width="200">
@@ -86,15 +86,15 @@
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}displayed to the user{/t}'" tooltip-placement="bottom"></i>
       {t}Impressions{/t}
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('clicks')" width="150">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('clicks')" width="120">
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}clicked by the user{/t}'" tooltip-placement="bottom"></i>
       {t}Clicks{/t}
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('closed')" width="150">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('closed')" width="120">
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}closed by the user{/t}'" tooltip-placement="bottom"></i>
       {t}Closed{/t}
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')" width="150">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')" width="120">
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Interactions (Clicks + Closed){/t}<br>{t}divided by Impressions{/t}'" tooltip-placement="bottom"></i>
       {t}CTR{/t}
     </th>
