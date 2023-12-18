@@ -123,7 +123,7 @@ class WebpushUpdateCommand extends Command
                 }
 
                 // If current time is 00:00 save active subcsribers in instance settings (once a day, 32/instance max)
-                if (!($delayedUtcTime->format('H:i') >= '12:15' && $delayedUtcTime->format('H:i') < '12:20')) {
+                if (!($delayedUtcTime->format('H:i') >= '13:00' && $delayedUtcTime->format('H:i') < '13:05')) {
                     continue;
                 }
 
@@ -139,7 +139,9 @@ class WebpushUpdateCommand extends Command
                             array_pop($oldActiveSubscribers);
                         }
 
-                        !is_array($oldActiveSubscribers) ? $oldActiveSubscribers = [$oldActiveSubscribers] : null;
+                        $oldActiveSubscribers = is_array($oldActiveSubscribers) ?
+                            $oldActiveSubscribers :
+                            [ $oldActiveSubscribers ];
 
                         array_unshift($oldActiveSubscribers, $incomingActiveSubscribers);
 
@@ -148,7 +150,7 @@ class WebpushUpdateCommand extends Command
                         ];
                     } else {
                         $newActiveSubscribers = [
-                            'webpush_active_subscribers' => $incomingActiveSubscribers
+                            'webpush_active_subscribers' => [ $incomingActiveSubscribers ]
                         ];
                     }
 
