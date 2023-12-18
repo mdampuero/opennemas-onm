@@ -251,6 +251,7 @@ class NewsletterSchedulerCommand extends Command
             $newsletter = $this->newsletterService->createItem($data);
             $this->getContainer()->get('core.locale')->setContext('frontend')->apply();
             $newsletter->html = $this->newsletterRenderer->render($newsletter);
+            $this->newsletterService->updateItem($newsletter->id, $newsletter->getData());
             $this->getContainer()->get('core.locale')->setContext('backend')->apply();
             $data = $newsletter->getData();
 
