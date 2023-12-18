@@ -131,11 +131,6 @@ class ArchiveController extends Controller
                 ]
             ]);
 
-            // Only allow user to see 2 pages of archive
-            if ($page > 1) {
-                $pagination = null;
-            }
-
             $this->view->assign([
                 'library'    => $library,
                 'pagination' => $pagination,
