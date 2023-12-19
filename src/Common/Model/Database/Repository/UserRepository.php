@@ -136,14 +136,14 @@ class UserRepository extends BaseRepository
         $sql = 'SELECT users.*, GROUP_CONCAT(user_user_group.user_group_id) AS user_groups
         FROM users
         LEFT JOIN user_user_group ON users.id = user_user_group.user_id
-        GROUP BY users.id;
-        ';
+        WHERE users.type != "1"
+        GROUP BY users.id ORDER BY users.name ASC;';
         try {
             $users = $this->conn->fetchAll($sql);
 
             return $users;
         } catch (\Exception $e) {
-            throw new \RuntimeException("Error al obtener etiquetas: " . $e->getMessage());
+            throw new \RuntimeException("Error al obtener usuarios: " . $e->getMessage());
         }
     }
 
@@ -161,7 +161,7 @@ class UserRepository extends BaseRepository
                 LEFT JOIN user_user_group ON users.id = user_user_group.user_id
                 LEFT JOIN usermeta ON users.id = usermeta.user_id AND usermeta.meta_key = 'is_blog'
                 WHERE user_user_group.user_group_id = 3
-                GROUP BY users.id;
+                GROUP BY users.id ORDER BY users.name ASC;
                 ";
         try {
             $authors = $this->conn->fetchAll($sql);

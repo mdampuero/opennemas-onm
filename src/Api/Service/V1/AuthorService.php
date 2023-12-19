@@ -9,7 +9,7 @@
  */
 namespace Api\Service\V1;
 
-use Api\Exception\DeleteItemException;
+use Api\Exception\GetListException;
 use Api\Exception\GetItemException;
 
 class AuthorService extends UserService

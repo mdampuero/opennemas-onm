@@ -13,6 +13,7 @@ use Api\Controller\V1\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use League\Csv\Writer;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -128,10 +129,16 @@ class UserController extends ApiController
      */
     public function getReportAction()
     {
-        // Get information
-        $users      = $this->get('api.service.user')->getReport();
-        $userGroups = $this->getUserGroups();
-
+        try {
+            // Get information
+            $users      = $this->get('api.service.user')->getReport();
+            $userGroups = $this->getUserGroups();
+        } catch (\Exception $e) {
+            $logger = $this->get('application.log');
+            $logger->info('Users download failed : ' . $e->getMessage());
+            // Redirect to user list when failed
+            return new RedirectResponse($this->get('router')->generate('backend_users_list'));
+        }
         // Prepare contents for CSV
         $headers = [
             _('Name'),
@@ -143,9 +150,8 @@ class UserController extends ApiController
         ];
 
         $data = [];
-
         foreach ($users as $user) {
-            $groupNames = [];
+            $groupNames      = [];
             $userGroupsArray = explode(',', $user['user_groups']);
 
             foreach ($userGroupsArray as $groupId) {
@@ -157,27 +163,20 @@ class UserController extends ApiController
             $userGroupNames = implode(', ', $groupNames);
 
             $socialInfo = [];
-            if (isset($user['twitter'])) {
-                $socialInfo[] = $user['twitter'];
+            foreach (['twitter', 'facebook', 'google'] as $social) {
+                $socialInfo[] = array_key_exists($social, $user) ? ucfirst($social) . ': ' . $user[$social] : null;
             }
-            if (isset($user['facebook'])) {
-                $socialInfo[] = $user['facebook'];
-            }
-            if (isset($user['google'])) {
-                $socialInfo[] = $user['google'];
-            }
-            $socialInfoString = implode(', ', $socialInfo);
 
-            $userInfo = [
+            $socialInfoString = implode(', ', array_filter($socialInfo));
+
+            $data[] = [
                 $user['name'],
                 $user['email'],
                 $user['username'],
                 $userGroupNames,
                 $socialInfoString,
-                $user['activated'] ? '✓' : '✗'
+                $user['activated'] ? 1 : 0
             ];
-
-            $data[] = $userInfo;
         }
         // Prepare the CSV content
         $writer = Writer::createFromFileObject(new \SplTempFileObject());
@@ -193,7 +192,7 @@ class UserController extends ApiController
             'attachment; filename=users-' . date('Y-m-d') . '.csv'
         );
         $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Cache-Control', 'no-cache');
         $response->headers->set('Expires', '0');
         return $response;
     }

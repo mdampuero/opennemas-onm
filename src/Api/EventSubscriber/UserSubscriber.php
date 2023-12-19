@@ -147,7 +147,6 @@ class UserSubscriber implements EventSubscriberInterface
         foreach ($cacheIds as $cacheId) {
             $this->redis->remove($cacheId);
         }
-        $this->helper
-            ->deleteItemVarnish($event->getArgument('item'), true);
+        $this->helper->deleteInstance();
     }
 }

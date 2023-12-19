@@ -10,7 +10,9 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
+use Api\Exception\GetItemException;
 use League\Csv\Writer;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -100,7 +102,14 @@ class AuthorController extends ApiController
     public function getReportAction()
     {
         // Get information
-        $authors = $this->get('api.service.author')->getReport();
+        try {
+            $authors = $this->get('api.service.author')->getReport();
+        } catch (\Exception $e) {
+            $logger = $this->get('application.log');
+            $logger->info('Authors download failed : ' . $e->getMessage());
+            // Redirect to author list when failed
+            return new RedirectResponse($this->get('router')->generate('backend_authors_list'));
+        }
 
         // Prepare contents for CSV
         $headers = [
@@ -112,14 +121,12 @@ class AuthorController extends ApiController
 
         $data = [];
         foreach ($authors as $author) {
-            $authorInfo = [
+            $data[] = [
                 $author['name'],
                 $author['email'],
-                $author['is_blog'],
+                (int) $author['is_blog'],
                 $author['bio']
             ];
-
-            $data[] = $authorInfo;
         }
 
         // Prepare the CSV content
@@ -136,7 +143,7 @@ class AuthorController extends ApiController
             'attachment; filename=authors-' . date('Y-m-d') . '.csv'
         );
         $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Cache-Control', 'no-cache');
         $response->headers->set('Expires', '0');
         return $response;
     }

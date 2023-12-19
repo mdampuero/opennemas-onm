@@ -159,7 +159,7 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
                 LEFT JOIN user_user_group ON users.id = user_user_group.user_id
                 LEFT JOIN usermeta ON users.id = usermeta.user_id AND usermeta.meta_key = 'is_blog'
                 WHERE user_user_group.user_group_id = 3
-                GROUP BY users.id;
+                GROUP BY users.id ORDER BY users.name ASC;
                 "
             )->willReturn([ $user1, $user2 ]);
 
