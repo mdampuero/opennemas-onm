@@ -33,7 +33,7 @@ function smarty_outputfilter_lazyload($output, $smarty)
         $content = $smarty->getValue('o_content');
         if (!empty($content)) {
             preg_match_all(
-                '@<iframe.*?src="https:.*?youtube.com/embed/([^#\&\?\s]*).*?".*?>(?s).*?<\/iframe>@',
+                '@<iframe.*?src="https:.*?youtube.com/embed/([^#\&\?\s\"]*).*?".*?>(?s).*?<\/iframe>@',
                 $content->body,
                 $matches
             );
