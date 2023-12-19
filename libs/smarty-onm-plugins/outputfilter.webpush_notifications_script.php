@@ -16,6 +16,7 @@ function smarty_outputfilter_webpush_notifications_script($output, $smarty)
     if ($smarty->getContainer()->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')
         && $webpushSettings
         && $webpushSettings['webpush_service'] == 'webpushr'
+        && $webpushSettings['webpush_publickey']
         && !$smarty->getContainer()->get('core.instance')->hasMultilanguage()) {
             $script = "<script>(function(w,d, s, id) {if(typeof(w.webpushr)!=='undefined') "
                 . "return;w.webpushr=w.webpushr||function(){(w.webpushr.q=w.webpushr.q||[]).push(arguments)};var js, "
