@@ -38,7 +38,8 @@
                   <label class="form-label">{t}Active Subscribers{/t}</label>
                   <div class="form-status text-left">
                     <p class="onm-score text-left lead m-b-0">
-                      <strong>[% settings.webpush_active_subscribers[settings.webpush_active_subscribers.length - 1] %]</strong>
+                      <strong ng-if="settings.webpush_active_subscribers">[% settings.webpush_active_subscribers[settings.webpush_active_subscribers.length - 1] %]</strong>
+                      <strong ng-if="!settings.webpush_active_subscribers">0</strong>
                     </p>
                   </div>
                 </div>

@@ -90,21 +90,21 @@
               <div class="row">
                 <div class="controls col-xs-12 col-md-4 m-b-10">
                   <label>{t}API key{/t}</label>
+                  <input class="form-control" ng-model="settings.webpush_service.apikey" type="text">
                   <i class="fa fa-info-circle text-info"></i>
                   <small class="text-muted">{t}Can be found in Webpushr APP{/t} | Integration > REST API Keys > Key</small>
-                  <input class="form-control" ng-model="settings.webpush_service.apikey" type="text">
                 </div>
                 <div class="controls col-xs-12 col-md-4 m-b-10">
                   <label>{t}Authentication token{/t}</label>
+                  <input class="form-control" ng-model="settings.webpush_service.token" type="text">
                   <i class="fa fa-info-circle text-info"></i>
                   <small class="text-muted">{t}Can be found in Webpushr APP{/t} | Integration > REST API Keys > Authentication Token</small>
-                  <input class="form-control" ng-model="settings.webpush_service.token" type="text">
                 </div>
                 <div class="controls col-xs-12 col-md-4 m-b-10">
                   <label>{t}Public key{/t}</label>
+                  <input class="form-control" ng-model="settings.webpush_service.publickey" type="text">
                   <i class="fa fa-info-circle text-info"></i>
                   <small class="text-muted">{t}Can be found in Webpushr APP{/t} | Integration > Public key for AMP > Key</small>
-                  <input class="form-control" ng-model="settings.webpush_service.publickey" type="text">
                 </div>
               </div>
             </div>

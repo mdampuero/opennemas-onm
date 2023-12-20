@@ -96,77 +96,79 @@
             }
 
             $scope.items = $scope.data.items;
-
-            // Gets monthly data for notifications in list
-            $scope.monthlyImpressions = 0;
-            $scope.monthlyInteractions = 0;
-
-            $scope.items.forEach(function(item) {
-              $scope.monthlyImpressions += item.impressions;
-              $scope.monthlyInteractions += item.clicks;
-              $scope.monthlyInteractions += item.closed;
-            });
-
-            $scope.monthlyCTR = Math.round($scope.monthlyInteractions / $scope.monthlyImpressions * 10000) / 100;
-
-            // Sets up the active subscribers chart
-            $scope.labels = [];
-            var currentDay = $window.moment($window.moment().subtract(1, 'months').format('YYYY-MM-DD'));
-
-            while (currentDay.isSameOrBefore($window.moment().format('YYYY-MM-DD'))) {
-              $scope.labels.push(currentDay.format('MM-DD'));
-              currentDay.add(1, 'days');
-            }
-
-            $scope.series = [ 'Subs' ];
-
-            var numberOfDays = $scope.labels.length;
-
-            var numberOfSubs = $scope.settings.webpush_active_subscribers &&
-              $scope.settings.webpush_active_subscribers.length ?
-              $scope.settings.webpush_active_subscribers.length : 0;
-
-            $scope.data = $scope.settings.webpush_active_subscribers ?
-              $scope.settings.webpush_active_subscribers.reverse() :
-              [];
-
-            for (var i = 0; i < numberOfDays - numberOfSubs; i++) {
-              $scope.data.unshift(0);
-            }
-
-            $scope.data = [ $scope.data ];
-
-            $scope.options = {
-              responsive: true,
-              maintainAspectRatio: true,
-              aspectRatio: 4,
-              scales: {
-                yAxes: [
-                  {
-                    ticks: {
-                      beginAtZero: true,
-                      maxTicksLimit: 11,
-                      stepSize: 1,
-                      callback: function(value) {
-                        if (value > 100) {
-                          return Math.round(value / 10) * 10;
-                        }
-                        if (value % 1 === 0) {
-                          return value;
-                        }
-                      }
-                    }
-                  }
-                ]
-              }
-            };
-
+            $scope.generateStats();
             $scope.disableFlags('http');
           }, function(response) {
-            messenger.post(response.data);
+            // messenger.post(response.data);
             $scope.disableFlags('http');
             $scope.items = [];
           });
+        };
+
+        $scope.generateStats = function() {
+          // Gets monthly data for notifications in list
+          $scope.monthlyImpressions = 0;
+          $scope.monthlyInteractions = 0;
+
+          $scope.items.forEach(function(item) {
+            $scope.monthlyImpressions += item.impressions;
+            $scope.monthlyInteractions += item.clicks;
+            $scope.monthlyInteractions += item.closed;
+          });
+
+          $scope.monthlyCTR = Math.round($scope.monthlyInteractions / $scope.monthlyImpressions * 10000) / 100;
+
+          // Sets up the active subscribers chart
+          $scope.labels = [];
+          var currentDay = $window.moment($window.moment().subtract(1, 'months').format('YYYY-MM-DD'));
+
+          while (currentDay.isSameOrBefore($window.moment().format('YYYY-MM-DD'))) {
+            $scope.labels.push(currentDay.format('MM-DD'));
+            currentDay.add(1, 'days');
+          }
+
+          $scope.series = [ 'Subs' ];
+
+          var numberOfDays = $scope.labels.length;
+
+          var numberOfSubs = $scope.settings.webpush_active_subscribers &&
+            $scope.settings.webpush_active_subscribers.length ?
+            $scope.settings.webpush_active_subscribers.length : 0;
+
+          $scope.data = $scope.settings.webpush_active_subscribers ?
+            $scope.settings.webpush_active_subscribers.reverse() :
+            [];
+
+          for (var i = 0; i < numberOfDays - numberOfSubs; i++) {
+            $scope.data.unshift(0);
+          }
+
+          $scope.data = [ $scope.data ];
+
+          $scope.options = {
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 4,
+            scales: {
+              yAxes: [
+                {
+                  ticks: {
+                    beginAtZero: true,
+                    maxTicksLimit: 11,
+                    stepSize: 1,
+                    callback: function(value) {
+                      if (value > 100) {
+                        return Math.round(value / 10) * 10;
+                      }
+                      if (value % 1 === 0) {
+                        return value;
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          };
         };
       }
     ]);
