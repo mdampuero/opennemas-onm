@@ -85,9 +85,11 @@
         <a class="btn btn-white btn-small" href="[% routing.generate('backend_user_show', { id: item.id }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
           <i class="fa fa-pencil text-success_"></i>
         </a>
+        {acl isAllowed="MASTER"}
         <a class="btn btn-white btn-small"  href="#" ng-click="move(getItemId(item), item)" uib-tooltip="{t}Move contents{/t}" tooltip-placement="top">
           <i class="fa fa-flip-horizontal fa-reply"></i>
         </a>
+        {/acl}
         <button class="btn btn-white btn-small" ng-click="delete(item.id)" ng-if="backup.master || item.id != backup.id" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
           <i class="fa fa-trash-o text-danger"></i>
         </button>
