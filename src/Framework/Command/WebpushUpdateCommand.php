@@ -109,7 +109,7 @@ class WebpushUpdateCommand extends Command
                 $notifications = $notificationService
                     ->setCount(false)
                     ->getList(sprintf(
-                        "status = 1 and send_date >= '%s'",
+                        "status = 1 and send_date >= '%s' and transaction_id !is null",
                         $delayedUtcTime->format('Y-m-d H:i:s')
                     ))['items'];
 
@@ -215,6 +215,7 @@ class WebpushUpdateCommand extends Command
                 '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
                 $e->getMessage()
             ));
+            usleep(1100000);
             return;
         }
 
