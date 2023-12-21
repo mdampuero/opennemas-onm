@@ -6,6 +6,7 @@ parameters:
             - canonical_url
             - data_layer
             - cmp_script
+            - webpush_notifications_script
             - ads_generator
             - ads_scripts
             - adsense_validator

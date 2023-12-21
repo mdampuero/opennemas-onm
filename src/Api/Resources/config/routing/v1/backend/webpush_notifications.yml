@@ -1,0 +1,42 @@
+api_v1_backend_webpush_notifications_get_list:
+    path:    /webpush_notifications
+    defaults: { _controller: ApiBundle:V1/Backend/WebPushNotifications:getList, format: '.json'  }
+    methods: [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_webpush_notifications_get_config:
+    path:     /webpush_notifications/config
+    defaults: { _controller: ApiBundle:V1/Backend/WebPushNotifications:getConfig }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_webpush_notifications_save_config:
+    path:     /webpush_notifications/config
+    defaults: { _controller: ApiBundle:V1/Backend/WebPushNotifications:saveConfig }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_webpush_notifications_send_notification:
+    path: /webpush_notifications/send_notification
+    defaults: { _controller: ApiBundle:V1/Backend/WebpushNotifications:sendNotification }
+    methods: POST
+    options:
+      expose: true
+
+api_v1_backend_webpush_notifications_check_server:
+    path:     /webpush_notifications/check
+    defaults: { _controller: ApiBundle:V1/Backend/WebPushNotifications:checkServer }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_webpush_notifications_get_notification_data:
+    path:     /webpush_notifications/get_notification_data/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/WebPushNotifications:getNotificationData }
+    methods:  [ GET ]
+    options:
+        expose: true
+

@@ -467,7 +467,14 @@ CREATE TABLE `content_notifications` (
   `title` text DEFAULT NULL,
   `send_date` datetime DEFAULT NULL,
   `image` bigint(20) unsigned,
+  `transaction_id` text DEFAULT NULL,
+  `impressions` int DEFAULT 0,
+  `clicks` int DEFAULT 0,
+  `closed` int DEFAULT 0,
+
   PRIMARY KEY (`id`),
+  KEY `status` (`status`),
+  KEY `send_date` (`send_date`),
   CONSTRAINT `content_notifications_fk_content` FOREIGN KEY (`fk_content`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE,
   CONSTRAINT `content_notifications_image` FOREIGN KEY (`image`) REFERENCES `contents` (`pk_content`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

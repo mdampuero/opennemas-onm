@@ -4,45 +4,46 @@ orm:
             name:  Instance
             class: Common\Model\Entity\Instance
             properties:
-                activated:          boolean
-                activated_modules:  array
-                advertisements:     integer
-                albums:             integer
-                alexa:              integer
-                articles:           integer
-                attachments:        integer
-                changes_in_modules: array
-                client:             integer
-                comments:           integer
-                contact_mail:       string
-                contents:           integer
-                country:            string
-                created:            datetime
-                domain_expire:      datetime
-                domains:            array
-                emails:             integer
-                events:             integer
-                id:                 integer
-                internal_name:      string
-                kioskos:            integer
-                last_login:         datetime
-                letters:            integer
-                blocked:            boolean
-                main_domain:        integer
-                media_size:         float
-                name:               string
-                opinions:           integer
-                owner_id:           integer
-                page_views:         integer
-                photos:             integer
-                polls:              integer
-                purchased:          array
-                subdirectory:       string
-                settings:           array
-                static_pages:       integer
-                users:              integer
-                videos:             integer
-                widgets:            integer
+                activated:           boolean
+                activated_modules:   array
+                advertisements:      integer
+                albums:              integer
+                alexa:               integer
+                articles:            integer
+                attachments:         integer
+                changes_in_modules:  array
+                client:              integer
+                comments:            integer
+                contact_mail:        string
+                contents:            integer
+                country:             string
+                created:             datetime
+                domain_expire:       datetime
+                domains:             array
+                emails:              integer
+                events:              integer
+                id:                  integer
+                internal_name:       string
+                kioskos:             integer
+                last_login:          datetime
+                letters:             integer
+                blocked:             boolean
+                main_domain:         integer
+                media_size:          float
+                name:                string
+                opinions:            integer
+                owner_id:            integer
+                page_views:          integer
+                photos:              integer
+                polls:               integer
+                purchased:           array
+                subdirectory:        string
+                settings:            array
+                static_pages:        integer
+                users:               integer
+                videos:              integer
+                widgets:             integer
+                webpush_subscribers: integer
             converters:
                 default:
                     class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
@@ -163,6 +164,9 @@ orm:
                             type:    integer
                             options: { default: 0, unsigned: true, notnull: false }
                         events:
+                            type:    integer
+                            options: { default: 0, unsigned: true, notnull: false }
+                        webpush_subscribers:
                             type:    integer
                             options: { default: 0, unsigned: true, notnull: false }
                     index:

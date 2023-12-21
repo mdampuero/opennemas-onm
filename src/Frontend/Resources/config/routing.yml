@@ -123,3 +123,6 @@ frontend_video:
 
 frontend_widget:
     resource: '@FrontendBundle/Resources/config/routing/widget.yml'
+
+frontend_webpush_notifications:
+    resource: '@FrontendBundle/Resources/config/routing/webpush_notifications.yml'

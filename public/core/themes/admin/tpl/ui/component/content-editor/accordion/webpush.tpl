@@ -9,12 +9,15 @@
       <small><i class="fa fa-info-circle text-info"></i> {t}Check it as "Published" to send webpush notifications.{/t}</small>
     </div>
     <div>
-      <div class="text-center" ng-if="item.content_status">
+      <div class="text-center m-b-5 m-t-5" ng-if="hasAutomaticNotifications()">
+        <small><i class="fa fa-info-circle text-info"></i> {t}Automatic notification is enabled, save action will send a webpush notification{/t}</small>
+      </div>
+      <div class="text-center" ng-if="item.content_status && !hasAutomaticNotifications()">
         <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="openNotificationModal(item, true)" ng-if="!hasPendingNotifications() && getContentScheduling(item) == 0" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND NOTIFICATION{/t}</button>
         <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="openNotificationModal(item, false)" ng-if="!hasPendingNotifications() && getContentScheduling(item) == 1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}ADD SCHEDULED NOTIFICATION{/t}</button>
         <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="openNotificationModal(item, true)" ng-if="hasPendingNotifications() && getContentScheduling(item) == 0" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND SCHEDULED NOTIFICATION{/t}</button>
         <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="openNotificationModal(item, false)" ng-if="hasPendingNotifications() && getContentScheduling(item) == 1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}CHANGE SCHEDULED NOTIFICATION{/t}</button>
-         <button disabled class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-if="getContentScheduling(item) === -1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND NOTIFICATION{/t}</button>
+        <button disabled class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-if="getContentScheduling(item) === -1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND NOTIFICATION{/t}</button>
       </div>
       <div class="menu-dragable-accordion" id="webpush-container">
         <div class=" m-t-5" ng-repeat="notification in item.webpush_notifications.slice().reverse()">
