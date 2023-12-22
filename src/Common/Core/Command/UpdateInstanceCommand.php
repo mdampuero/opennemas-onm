@@ -236,9 +236,7 @@ class UpdateInstanceCommand extends Command
 
             $this->getContainer()->get('cache.connection.instance')->init();
             $this->writePad('- Counting active Web Push subscribers');
-            $webpushr                      = $this->getContainer()->get('external.web_push.factory');
-            $subscribersEndpoint           = $webpushr->getEndpoint('subscriber');
-            $activeSubscribers             = $subscribersEndpoint->getSubscribers()['active_subscribers'];
+            $activeSubscribers             = $helper->getWebPushSubscribers($instance);
             $instance->webpush_subscribers = intval($activeSubscribers);
 
             $this->writeStatus('success', 'DONE');
