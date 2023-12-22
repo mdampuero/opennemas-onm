@@ -155,9 +155,11 @@ class WebpushUpdateCommand extends Command
                     }
 
                     $this->getContainer()->get('orm.manager')->getDataSet('Settings')->set($newActiveSubscribers);
+                    usleep(1100000);
                 } catch (\Exception $e) {
                     $this->getContainer()->get('error.log')->error($e->getMessage());
                     $this->writeStatus('error', sprintf('FAIL (%s)', $e->getMessage()), true);
+                    usleep(1100000);
                 }
             } catch (\Exception $e) {
                 $output->writeln(sprintf(
