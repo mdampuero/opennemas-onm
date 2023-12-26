@@ -59,18 +59,21 @@ class UserCacheHelper extends CacheHelper
      */
     public function deleteItemVarnish(User $user) : void
     {
+        if (empty($user) || $user->type === 1) {
+            return;
+        }
+
         $varnishKeys = [
-            'author-' . $user->id,
-            'frontpage-author-' . $user->id,
+            'author-' . $user->id . '$',
             'content-author-' . $user->id . '-frontpage',
             'opinion-author-' . $user->id . '-frontpage',
-            'content-author-' . $user->id,
-            'opinion-author-' . $user->id,
-            'author-widget-' . $user->id,
-            'author-tag-' . $user->id,
-            'author-category-' . $user->id,
-            'rss-author-' . $user->id,
+            'opinion-frontpage',
+            'author-widget-' . $user->id . '$',
+            'author-widget-all',
+            'author-tag-' . $user->id . '$',
+            'author-category-' . $user->id . '$',
             'sitemap',
+            'archive',
         ];
 
         $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
