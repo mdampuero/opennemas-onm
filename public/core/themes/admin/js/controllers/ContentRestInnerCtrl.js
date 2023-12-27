@@ -215,12 +215,14 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      *   Saves tags, send notifications if  needed and, then, saves the item.
      */
     $scope.submit = function(item) {
-      if (item && $scope.hasPendingNotifications()) {
+      if (item && $scope.hasPendingNotifications() && !$scope.hasAutomaticNotifications()) {
         if (item.starttime <= $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
           $scope.openNotificationModal(item, false);
         } else {
           $scope.sendWPNotification(item, false);
         }
+      } else if ($scope.hasAutomaticNotifications()) {
+        $scope.sendWPNotification(item, true);
       } else {
         $scope.saveItem();
       }
@@ -267,6 +269,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       if (createNotification) {
         status = 1;
       }
+
       var modal = $uibModal.open({
         templateUrl: 'modal-webpush',
         backdrop: 'static',
@@ -295,7 +298,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      * @description
      *   Send webpush notification to all subscribers
      */
-    $scope.sendWPNotification = function(item, createNotification) {
+    $scope.sendWPNotification = function(item) {
       if (!$scope.validate()) {
         messenger.post(window.strings.forms.not_valid, 'error');
         return;
@@ -304,46 +307,24 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         return;
       }
 
-      var image = $scope.data.featuredFrontpage ? $scope.data.featuredFrontpage.target_id : null;
-
-      if ($scope.item.starttime > $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
+      if ($scope.hasPendingNotifications()) {
         $scope.removePendingNotification(false);
-        $scope.data.item.webpush_notifications.push(
-          {
-            status: 0,
-            body: null,
-            title: null,
-            send_date: $window.moment.utc($window.moment($scope.item.starttime)).format('YYYY-MM-DD HH:mm:ss'),
-            image: null,
-          }
-        );
-      } else {
-        $scope.sendNotification = true;
-        if ($scope.hasPendingNotifications()) {
-          $scope.removePendingNotification(false);
-          $scope.data.item.webpush_notifications.push(
-            {
-              status: 1,
-              body: $scope.item.description,
-              title: $scope.item.title,
-              send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
-              image: image,
-            }
-          );
-          createNotification = false;
-        }
-        if (createNotification) {
-          $scope.data.item.webpush_notifications.push(
-            {
-              status: 1,
-              body: $scope.item.description,
-              title: $scope.item.title,
-              send_date: $window.moment.utc($window.moment()).format('YYYY-MM-DD HH:mm:ss'),
-              image: image,
-            }
-          );
-        }
       }
+      var date = $scope.item.starttime < $window.moment().format('YYYY-MM-DD HH:mm:ss') ? $window.moment().format('YYYY-MM-DD HH:mm:ss') : $scope.item.starttime;
+
+      $scope.data.item.webpush_notifications.push(
+        {
+          status: 0,
+          body: null,
+          title: $scope.item.title,
+          send_date: $window.moment.utc($window.moment(date)).format('YYYY-MM-DD HH:mm:ss'),
+          image: null,
+          transaction_id: null,
+          impressions: 0,
+          clicks: 0,
+          closed: 0
+        }
+      );
 
       if (!$scope.item.content_status) {
         $scope.removePendingNotification(false);
@@ -416,6 +397,26 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           $scope.copy();
         }
       });
+    };
+
+    /**
+     * @function hasAutomaticNotifications
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *   Check if auto webpush setting is enabled.
+     *
+     * @return {Boolean} True if enabled. False
+     *                   otherwise.
+     */
+    $scope.hasAutomaticNotifications = function() {
+      if ($scope.data &&
+        $scope.data.extra.auto_webpush &&
+        $scope.data.extra.auto_webpush === '1') {
+        return true;
+      }
+
+      return false;
     };
 
     /**

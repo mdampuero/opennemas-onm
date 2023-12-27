@@ -4,7 +4,7 @@
   {else}
     <div class="lazyframe"
       data-vendor="{$type}"
-      data-title="{$title}"
+      data-title="{$title|escape:'html'}"
       data-thumbnail="{$info['thumbnail']}"
       data-src="{$info['embedUrl']}"
       data-ratio="16:9">
