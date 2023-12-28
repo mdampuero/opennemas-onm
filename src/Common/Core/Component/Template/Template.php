@@ -262,8 +262,8 @@ class Template extends \Smarty
     public function getFonts()
     {
         return $this->container->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('theme_font', 'default');
+            ->getDataSet('Settings', 'instance')
+            ->get('theme_font', 'default');
     }
 
     /**
@@ -274,8 +274,8 @@ class Template extends \Smarty
     public function getSecondaryFonts()
     {
         return $this->container->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('theme_font_secondary', 'default');
+            ->getDataSet('Settings', 'instance')
+            ->get('theme_font_secondary', 'default');
     }
 
     /**
@@ -283,11 +283,27 @@ class Template extends \Smarty
      *
      * @return string the file name of the variant
      */
-    public function getThemeOptions($option)
+    public function getThemeOptions()
     {
-        return $this->container->get('orm.manager')
-                ->getDataSet('Settings', 'instance')
-                ->get('theme_options', 'default');
+        $options = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('theme_options', []);
+
+        if (empty($options)) {
+            $options = $this->container->get('core.theme')->getSkinProperty(
+                $this->container->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
+                    ->get('theme_skin', 'default'),
+                'options'
+            );
+
+            $options = array_map(function ($option) {
+                $option = $option['default'];
+                return $option;
+            }, $options);
+        }
+
+        return $options;
     }
 
     /**
