@@ -163,9 +163,13 @@ class TagRepository extends BaseRepository
      *
      * @return array The list of tags.
      */
-    public function findTags()
+    public function findTagsWithContentCount()
     {
-        $sql = 'SELECT * FROM tags ORDER BY name ASC';
+        $sql = 'SELECT tags.*, COUNT(contents_tags.tag_id) AS content_count
+                FROM tags
+                LEFT JOIN contents_tags ON tags.id = contents_tags.tag_id
+                GROUP BY tags.id
+                ORDER BY tags.name ASC';
         try {
             $tags = $this->conn->fetchAll($sql);
             return $tags;
