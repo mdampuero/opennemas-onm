@@ -77,12 +77,6 @@ class UpdateInstanceCommand extends Command
 
             $this->getContainer()->get('core.globals')->setInstance($instance);
 
-            if (in_array("es.openhost.module.webpush_notifications", $instance->activated_modules)) {
-                $redis = $this->getContainer()->get('cache.connection.instance');
-                $redis->init();
-                $redis->remove('settings');
-            }
-
             $this->writeStep("Updating instance $instance->internal_name", true, 2);
 
             foreach ([ 'stats', 'media' ] as $stage) {
