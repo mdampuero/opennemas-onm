@@ -225,10 +225,6 @@ class UpdateInstanceCommand extends Command
         ), true);
 
         if (in_array("es.openhost.module.webpush_notifications", $instance->activated_modules)) {
-            $redis = $this->getContainer()->get('cache.connection.instance');
-            $redis->init();
-
-            $this->getContainer()->get('cache.connection.instance')->init();
             $this->writePad('- Counting active Web Push subscribers');
             $activeSubscribers             = $helper->getWebPushSubscribers($instance);
             $instance->webpush_subscribers = intval($activeSubscribers);
