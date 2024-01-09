@@ -66,6 +66,11 @@ class RouterListener implements EventSubscriberInterface
     private $requestStack;
 
     /**
+     * @var ServiceContainer
+     */
+    private $container;
+
+    /**
      * Constructor.
      *
      * RequestStack will become required in 3.0.
@@ -75,6 +80,7 @@ class RouterListener implements EventSubscriberInterface
      * @param RequestContext|null $context The RequestContext
      *                            (can be null when $matcher implements RequestContextAwareInterface)
      * @param LoggerInterface|null $logger The logger
+     * @param ServiceContainer $container The service container.
      *
      * @throws \InvalidArgumentException
      */
@@ -218,6 +224,19 @@ class RouterListener implements EventSubscriberInterface
                 $parameters = $this->matcher->matchRequest($newRequest);
             } else {
                 $parameters = $this->matcher->match($newRequest->getPathInfo());
+            }
+
+            // Log router redirects when requested uri differs from router
+            if (array_key_exists('_controller', $parameters) &&
+                strpos($parameters['_controller'], 'urlRedirectAction') !== false
+            ) {
+                $this->container->get('application.log')->info(
+                    sprintf(
+                        'Requested "%s" URI don\'t match router: "%s"',
+                        $parameters['_route'],
+                        $parameters['path']
+                    )
+                );
             }
 
             if ($instance->isSubdirectory() && array_key_exists('path', $parameters)) {
