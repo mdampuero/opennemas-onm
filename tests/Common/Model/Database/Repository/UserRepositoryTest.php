@@ -154,10 +154,12 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with(
                 "SELECT users.*,
                     GROUP_CONCAT(user_user_group.user_group_id) AS user_groups,
-                    usermeta.meta_value AS is_blog
+                    um1.meta_value AS is_blog,
+                    um2.meta_value AS bio_description
                 FROM users
                 LEFT JOIN user_user_group ON users.id = user_user_group.user_id
-                LEFT JOIN usermeta ON users.id = usermeta.user_id AND usermeta.meta_key = 'is_blog'
+                LEFT JOIN usermeta um1 ON users.id = um1.user_id AND um1.meta_key = 'is_blog'
+                LEFT JOIN usermeta um2 ON users.id = um2.user_id AND um2.meta_key = 'bio_description'
                 WHERE user_user_group.user_group_id = 3
                 GROUP BY users.id ORDER BY users.name ASC;
                 "

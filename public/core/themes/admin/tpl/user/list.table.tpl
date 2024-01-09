@@ -26,6 +26,24 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-bio" checklist-model="app.columns.selected" checklist-value="'bio'" type="checkbox">
+    <label for="checkbox-bio">
+      {t}Short Biography{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-description" checklist-model="app.columns.selected" checklist-value="'description'" type="checkbox">
+    <label for="checkbox-description">
+      {t}Biography{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-slug" checklist-model="app.columns.selected" checklist-value="'slug'" type="checkbox">
+    <label for="checkbox-slug">
+      {t}Slug{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-usergroups" checklist-model="app.columns.selected" checklist-value="'usergroups'" type="checkbox">
     <label for="checkbox-usergroups">
      {t}User groups{/t}
@@ -57,6 +75,15 @@
   </th>
   <th class="v-align-middle" ng-if="isColumnEnabled('username')" width="240">
     {t}Username{/t}
+  </th>
+  <th class="v-align-middle" ng-if="isColumnEnabled('bio')" width="240">
+    {t}Short Biography{/t}
+  </th>
+  <th class="v-align-middle" ng-if="isColumnEnabled('description')" width="240">
+    {t}Biography{/t}
+  </th>
+  <th class="v-align-middle" ng-if="isColumnEnabled('slug')" width="240">
+    {t}Slug{/t}
   </th>
   <th class="v-align-middle" ng-if="isColumnEnabled('usergroups')" width="200">
     {t}User groups{/t}
@@ -104,6 +131,21 @@
   <td class="v-align-middle" ng-if="isColumnEnabled('username')">
     <div class="table-text">
       [% item.username %]
+    </div>
+  </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('bio')">
+    <div class="table-text">
+      [% item.bio %]
+    </div>
+  </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('description')">
+    <div class="table-text">
+      [% item.bio_description %]
+    </div>
+  </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('slug')">
+    <div class="table-text">
+      [% item.slug %]
     </div>
   </td>
   <td class="v-align-middle" ng-if="isColumnEnabled('usergroups')">

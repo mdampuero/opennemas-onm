@@ -115,8 +115,10 @@ class AuthorController extends ApiController
         $headers = [
             _('Name'),
             _('Email'),
+            _('Biography'),
+            _('Slug'),
             _('Blog'),
-            _('Biography')
+            _('Short Biography')
         ];
 
         $data = [];
@@ -124,6 +126,8 @@ class AuthorController extends ApiController
             $data[] = [
                 $author['name'],
                 $author['email'],
+                $author['bio_description'],
+                $author['slug'],
                 (int) $author['is_blog'],
                 $author['bio']
             ];

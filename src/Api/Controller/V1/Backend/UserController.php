@@ -144,6 +144,8 @@ class UserController extends ApiController
             _('Name'),
             _('Email'),
             _('Username'),
+            _('Short Biography'),
+            _('Slug'),
             _('User groups'),
             _('Social'),
             _('Enabled')
@@ -173,6 +175,8 @@ class UserController extends ApiController
                 $user['name'],
                 $user['email'],
                 $user['username'],
+                $user['bio'],
+                $user['slug'],
                 $userGroupNames,
                 $socialInfoString,
                 $user['activated'] ? 1 : 0
