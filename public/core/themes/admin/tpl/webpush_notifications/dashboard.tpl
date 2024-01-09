@@ -76,7 +76,7 @@
                     {t}CTR{/t} <small class="form-label">({t}Monthly{/t})</small>
                     <i class="fa fa-info-circle text-info pull-right" uib-tooltip-html="'{t}Interactions (Clicks + Closed){/t}<br>{t}divided by Impressions{/t}'" tooltip-placement="bottom"></i>
                   </label>
-                  <div class="form-status text-left" ng-if="monthlyImpressions > 0">
+                  <div class="form-status text-left">
                     <p class="onm-score text-left lead m-b-0">
                       <strong>[% monthlyCTR %]%</strong>
                     </p>
