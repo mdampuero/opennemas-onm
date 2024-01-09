@@ -272,6 +272,33 @@ class InstanceHelper
     }
 
     /**
+     * Returns the amount of current Web Push subscirbers
+     *
+     * @param Instance $instance The current instance.
+     *
+     * @return int The amount of current Web Push subscirbers
+     */
+    public function getWebPushSubscribers(Instance $instance) : int
+    {
+        try {
+            $this->conn->selectDatabase($instance->getDatabaseName());
+
+            $sql = 'select value from settings where name = "webpush_active_subscribers"';
+
+            $auth = $this->conn->fetchAssoc($sql);
+            $auth = PhpSerializer::unserialize($auth['value']);
+
+            if (empty($auth)) {
+                return null;
+            }
+
+            return $auth[0];
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
      * Returns the created date of the last created content.
      *
      * @param Instance $instance The current instance.
