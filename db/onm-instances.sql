@@ -205,6 +205,7 @@ CREATE TABLE `instances` (
   `comments` int(10) unsigned NOT NULL DEFAULT '0',
   `kioskos` int(10) unsigned NOT NULL DEFAULT '0',
   `events` int(10) unsigned NOT NULL DEFAULT '0',
+  'webpush_subscribers' int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `owner_id` (`owner_id`),
   FULLTEXT KEY `domain_name` (`domains`),

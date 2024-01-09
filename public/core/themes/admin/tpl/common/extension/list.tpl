@@ -95,6 +95,7 @@
       </div>
     {/block}
     <div class="content">
+      {block name="demo"}{/block}
       <div class="listing-no-contents" ng-hide="!flags.http.loading">
         <div class="text-center p-b-15 p-t-15">
           <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>

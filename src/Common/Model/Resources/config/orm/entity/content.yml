@@ -128,6 +128,14 @@ orm:
                                     type: integer
                                 fk_content:
                                     type: integer
+                                transaction_id:
+                                    type: string
+                                impressions:
+                                    type: integer
+                                clicks:
+                                    type: integer
+                                closed:
+                                    type: integer
                                 status    :
                                     type: integer
                                 body:

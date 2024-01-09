@@ -166,6 +166,17 @@ class Importer
                 ->createItem($data, $file, true);
         }
 
+        $webpushNotification = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->init()
+            ->get('webpush_automatic');
+
+        if (!empty($webpushNotification)
+            && array_key_exists('content_type_name', $data)
+            && $data['content_type_name'] == 'article') {
+            $data['webpush_notifications'] = $this->container->get('core.helper.webpush_notifications')
+                ->createNotificationFromData($data);
+        }
         return $this->container->get('api.service.content')
             ->createItem($data);
     }

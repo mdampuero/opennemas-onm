@@ -54,7 +54,13 @@ class WebpushSendCommand extends Command
 
         $iteration = 1;
         foreach ($instances as $instance) {
-            $this->getContainer()->get('cache.connection.instance')->init();
+            if ($instance->hasMultilanguage()) {
+                continue;
+            }
+
+            $redis = $this->getContainer()->get('cache.connection.instance');
+            $redis->init();
+
             $output->write(sprintf(
                 '<fg=blue;options=bold>==></><options=bold> (%s/%s) Processing instance %s </>',
                 $iteration++,
@@ -65,6 +71,12 @@ class WebpushSendCommand extends Command
                 $this->getContainer()->get('core.loader')
                     ->load($instance->internal_name);
 
+                $as                   = $this->getContainer()->get('api.service.content');
+                $webpushr             = $this->getContainer()->get('external.web_push.factory');
+                $notificationEndpoint = $webpushr->getEndpoint('notification');
+                $articleService       = $this->getContainer()->get('api.service.article');
+                $notificationService  = $this->getContainer()->get('api.service.webpush_notifications');
+                $onCooldown           = false;
                 $this->getContainer()->get('core.security')->setInstance($instance);
                 if ($instance->hasMultilanguage()) {
                     continue;
@@ -90,7 +102,6 @@ class WebpushSendCommand extends Command
                     ->get('time_zone');
 
                 $this->getContainer()->get('core.locale')->setTimeZone($timezone);
-                $as          = $this->getContainer()->get('api.service.content');
                 $photoHelper = $this->getContainer()->get('core.helper.photo');
 
                 $favicoId = $this->getContainer()->get('orm.manager')
@@ -104,61 +115,91 @@ class WebpushSendCommand extends Command
                     true
                 );
 
+                $delay = $this->getContainer()->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
+                    ->get('webpush_delay', '1');
+
+                $restrictedHours = $this->getContainer()->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
+                    ->get('webpush_restricted_hours', []);
+
+                $this->getContainer()->get('core.security')->setInstance($instance);
                 $context = $this->getContainer()->get('core.locale')->getContext();
-                $this->getContainer()->get('core.locale')->setContext('backend')->apply();
-                $pendingItems = $as->getPendingNotifications();
-                $timeZone     = $this->getContainer()->get('core.locale')->getTimeZone();
-                $date         = new \DateTime(null, new \DateTimeZone('UTC'));
-                $utcDate      = $date->format('Y-m-d H:i:s');
-                foreach ($pendingItems as $item) {
-                    $itemDate          = new \DateTime($item->starttime->format('Y-m-d H:i:s'), $timeZone);
-                    $utcItemDate       = $itemDate->setTimezone(new \DateTimeZone('UTC'));
-                    $utcItemDateFormat = $utcItemDate->format('Y-m-d H:i:s');
-                    if ($utcItemDateFormat > $utcDate
-                        || !$this->getContainer()->get('core.helper.content')->isReadyForPublish($item)) {
+                $this->getContainer()->get('core.locale')->setContext('backend');
+                // Get current timeZone
+                $timeZone = $this->getContainer()->get('core.locale')->getTimeZone();
+                // Create current local time
+                $currentLocalTime = new \DateTime(null, $timeZone);
+
+                if (in_array($currentLocalTime->format('H:00'), $restrictedHours)) {
+                    $diff = $currentLocalTime->diff(
+                        new \DateTime($currentLocalTime->modify('next hour')->format('Y-m-d H:00:00'), $timeZone)
+                    );
+                    $currentLocalTime->add($diff);
+                    $onCooldown = true;
+                } else {
+                    // Add delay time in order to handle delayed notifications
+                    $currentLocalTime->add(new \DateInterval('PT' . $delay . 'M'));
+                }
+
+                $delayedUtcTime = $currentLocalTime->setTimezone(new \DateTimeZone('UTC'));
+                $notifications  = $notificationService
+                    ->setCount(false)
+                    ->getList(sprintf(
+                        "status = 0 and send_date <= '%s'",
+                        $delayedUtcTime->format('Y-m-d H:i:s')
+                    ))['items'];
+
+                foreach ($notifications as $notification) {
+                    if ($onCooldown) {
+                        $notificationService->patchItem(
+                            $notification->id,
+                            ['send_date' => $delayedUtcTime->format('Y-m-d H:i:s')]
+                        );
+                        $redis->remove($notification->fk_content);
                         continue;
                     }
-                    $webpushr    = $this->getContainer()->get('external.web_push.factory');
-                    $endpoint    = $webpushr->getEndpoint('notification');
-                    $contentPath = $this->getContainer()
-                        ->get('core.helper.url_generator')->getUrl($item, ['_absolute' => true]);
-                    $image       = $this->getContainer()
-                        ->get('core.helper.featured_media')->getFeaturedMedia($item, 'inner');
-                    $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
+                    $article  = $articleService->getItem($notification->fk_content);
+                    $localNow = new \DateTime(null, $timeZone);
+                    $localUTC = $localNow->setTimezone(new \DateTimeZone('UTC'));
+                    if ($this->getContainer()->get('core.helper.content')->isReadyForPublish($article)
+                        && $notification->send_date <= $localUTC) {
+                        $contentPath = $this->getContainer()
+                            ->get('core.helper.url_generator')->getUrl($article, ['_absolute' => true]);
+                        $image       = $this->getContainer()
+                            ->get('core.helper.featured_media')->getFeaturedMedia($article, 'inner');
+                        $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
 
-                    $notificationStatus = 1;
-                    try {
-                        $endpoint->sendNotification([
-                            'title'      => $item->title,
-                            'message'    => $item->description,
-                            'target_url' => $contentPath,
-                            'image'      => $imagePath,
-                            'icon'      => $favico,
-                        ]);
-                    } catch (\Exception $e) {
-                        $notificationStatus = 2;
-                    }
+                        $notificationStatus = 1;
 
-                    $title                = $item->title;
-                    $description          = $item->description;
-                    $changedNotifications = array_map(function ($element) use (
-                        $title,
-                        $description,
-                        $image,
-                        $notificationStatus
-                    ) {
-                        if ($element['status'] == 0) {
-                            $element['status']    = $notificationStatus;
-                            $element['body']      = $description;
-                            $element['title']     = $title;
-                            $element['send_date'] = gmdate("Y-m-d H:i:s");
-                            $element['image']     = $image->pk_content ?? '';
+                        try {
+                            $sentNotification = $notificationEndpoint->sendNotification([
+                                'title'      => $article->title ?? '',
+                                'message'    => $article->description ?? '',
+                                'target_url' => $contentPath,
+                                'image'      => $imagePath,
+                                'icon'       => strpos($favico, '.png') ? $favico : '',
+                            ]);
+                        } catch (\Exception $e) {
+                            $notificationStatus = 2;
                         }
-                        return $element;
-                    }, $item->webpush_notifications);
-                    $as->patchItem($item->pk_content, ['webpush_notifications' => $changedNotifications]);
+                        $notificationService->patchItem(
+                            $notification->id,
+                            [
+                                'status'         => $notificationStatus,
+                                'body'           => $article->description ?? '',
+                                'title'          => $article->title ?? '',
+                                'send_date'      => gmdate('Y-m-d H:i:s'),
+                                'image'          => $image->pk_content ?? null,
+                                'transaction_id' => $sentNotification['ID'] ?? '',
+                            ]
+                        );
+
+                        $redis->remove('content-' . $notification->fk_content);
+
+                        $onCooldown = true;
+                    }
                 }
-                $this->getContainer()->get('core.locale')->setContext($context)->apply();
             } catch (\Exception $e) {
                 $output->writeln(sprintf(
                     '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',

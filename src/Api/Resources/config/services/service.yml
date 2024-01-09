@@ -89,6 +89,11 @@ services:
         arguments: [ '@service_container', 'Common\Model\Entity\Newsletter' ]
         public:    true
 
+    api.service.webpush_notifications:
+        class:     Api\Service\V1\WebPushNotificationsService
+        arguments: [ '@service_container', 'Common\Model\Entity\WebPushNotifications' ]
+        public:    true
+
     api.service.newsstand:
         class:     Api\Service\V1\NewsstandService
         arguments: [ '@service_container', 'Common\Model\Entity\Content' ]

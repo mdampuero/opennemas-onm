@@ -170,7 +170,6 @@
             }
 
             $scope.items = $scope.data.items;
-
             $scope.parseList(response.data);
             $scope.disableFlags('http');
           }, function(response) {

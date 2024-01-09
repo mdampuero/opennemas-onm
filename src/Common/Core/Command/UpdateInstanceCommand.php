@@ -35,13 +35,13 @@ class UpdateInstanceCommand extends Command
                 'media',
                 'm',
                 InputOption::VALUE_NONE,
-                'If set, the command will gather the media sixe for the instance.'
+                'If set, the command will gather the media size for the instance.'
             )
             ->addOption(
                 'stats',
                 's',
                 InputOption::VALUE_NONE,
-                'If set, the command will gather content, users, sent emails info.'
+                'If set, the command will gather content, users, Web Push subcsribers, sent emails info.'
             );
 
         // Define 4 steps for level 1
@@ -76,6 +76,7 @@ class UpdateInstanceCommand extends Command
             }
 
             $this->getContainer()->get('core.globals')->setInstance($instance);
+
             $this->writeStep("Updating instance $instance->internal_name", true, 2);
 
             foreach ([ 'stats', 'media' ] as $stage) {
@@ -222,6 +223,18 @@ class UpdateInstanceCommand extends Command
             ' (%s)',
             $instance->users
         ), true);
+
+        if (in_array("es.openhost.module.webpush_notifications", $instance->activated_modules)) {
+            $this->writePad('- Counting active Web Push subscribers');
+            $activeSubscribers             = $helper->getWebPushSubscribers($instance);
+            $instance->webpush_subscribers = intval($activeSubscribers);
+
+            $this->writeStatus('success', 'DONE');
+            $this->writeStatus('info', sprintf(
+                ' (%s)',
+                $instance->webpush_subscribers
+            ), true);
+        }
 
         $this->writePad('- Counting contents');
         $contents = $helper->countContents($instance);
