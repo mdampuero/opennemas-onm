@@ -232,7 +232,7 @@ class RouterListener implements EventSubscriberInterface
             ) {
                 $this->container->get('application.log')->info(
                     sprintf(
-                        'Requested "%s" URI don\'t match router: "%s"',
+                        'Requested "%s" URI does not match router: "%s"',
                         $parameters['_route'],
                         $parameters['path']
                     )
