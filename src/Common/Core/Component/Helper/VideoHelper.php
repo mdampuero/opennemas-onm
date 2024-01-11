@@ -107,6 +107,7 @@ class VideoHelper
                 $tpl            = 'video/render/external.tpl';
                 $info['source'] = array_filter($item->information['source']);
             }
+
             $output = $this->template->fetch($tpl, [
                 'isAmp'  => $amp,
                 'title'  => $item->title,
