@@ -16,7 +16,7 @@ function smarty_outputfilter_cmp_script($output, $smarty)
     $config = $smarty->getContainer()
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance')
-        ->get([ 'cookies', 'cmp_type', 'cmp_id', 'cmp_id_amp', 'cmp_apikey' ]);
+        ->get([ 'cookies', 'cmp_type', 'cmp_id', 'cmp_id_amp', 'cmp_apikey', 'marfeel_pass' ]);
 
     if (is_null($request) || $config['cookies'] !== 'cmp') {
         return $output;
@@ -50,8 +50,9 @@ function smarty_outputfilter_cmp_script($output, $smarty)
             $code  = $smarty->getContainer()->get('core.template.admin')->fetch(
                 'common/helpers/cmp_' . $config['cmp_type'] . '_amp.tpl',
                 [
-                    'id'     => $ampId,
-                    'apikey' => $config['cmp_apikey'] ?? ''
+                    'apikey'    => $config['cmp_apikey'] ?? '',
+                    'id'        => $ampId,
+                    'mrfpassId' => $config['marfeel_pass']['id'] ?? ''
                 ]
             );
 
@@ -68,8 +69,9 @@ function smarty_outputfilter_cmp_script($output, $smarty)
         $code = $smarty->getContainer()->get('core.template.admin')->fetch(
             'common/helpers/cmp_' . $config['cmp_type'] . '.tpl',
             [
-                'id'     => $config['cmp_id'],
-                'apikey' => $config['cmp_apikey'] ?? ''
+                'apikey'    => $config['cmp_apikey'] ?? '',
+                'id'        => $config['cmp_id'],
+                'mrfpassId' => $config['marfeel_pass']['id'] ?? ''
             ]
         );
 

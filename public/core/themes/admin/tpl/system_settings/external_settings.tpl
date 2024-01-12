@@ -213,6 +213,31 @@
                 </div>
               </div>
               {if $app.security->hasPermission('MASTER')}
+              <div class="panel-group" id="panel-group-marfeel-pass" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#accordion-marfeel-pass" data-toggle="collapse" href="#marfeel-pass">
+                        <i class="fa fa-ticket"></i>{t}Marfeel Pass{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="marfeel-pass">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="marfeel-pass-id">
+                          {t}Marfeel Pass EXPERIENCE ID{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="marfeel-pass-id" name="marfeel-pass-id" ng-model="settings.marfeel_pass.id" type="text">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/if}
+              {if $app.security->hasPermission('MASTER')}
               <div class="panel-group" id="panel-group-gfk" data-toggle="collapse">
                 <div class="panel panel-default">
                   <div class="panel-heading collapsed">
