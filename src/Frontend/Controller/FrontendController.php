@@ -401,15 +401,21 @@ class FrontendController extends Controller
      */
     protected function getParameters($request, $item = null)
     {
-        $action = $this->get('core.globals')->getAction();
-        $params = array_merge($request->query->all(), [
+        $action    = $this->get('core.globals')->getAction();
+        $extension = $this->get('core.globals')->getExtension();
+        $params    = array_merge($request->query->all(), [
             'o_category' => null,
             'o_token'    => null,
             'x-tags'     => [
-                $this->get('core.globals')->getExtension(),
+                $extension,
                 $action
             ]
         ]);
+
+        $params = array_merge(
+            $params,
+            $this->container->get('core.helper.theme_settings')->getThemeVariables($extension, $action)
+        );
 
         // Always force a page parameter
         $params['page'] = array_key_exists('page', $params)

@@ -1,0 +1,204 @@
+<?php
+
+namespace Common\Core\Component\Helper;
+
+use Symfony\Component\DependencyInjection\Container;
+
+/**
+* Perform searches in Database Settings data
+*/
+class ThemeSettingsHelper
+{
+    /**
+     * The services container.
+     *
+     * @var Container
+     */
+    protected $container;
+
+    protected $toBool = [
+        'content_category_name',
+        'content_subtitle',
+        'content_summary',
+        'content_author',
+        'content_date',
+        'content_readtime',
+        'content_author_photo',
+        'archive_category_name',
+        'archive_subtitle',
+        'archive_summary',
+        'archive_author',
+        'archive_date',
+        'archive_readtime',
+        'archive_time',
+        'archive_author_photo',
+        'related_contents_auto',
+        'sidebar_widget_today_news',
+        'sidebar_widget_most_viewed',
+        'sidebar_widget_most_seeing_recent',
+        'widget_more_in_section',
+        'widget_more_in_frontpage',
+        'archive_cover',
+        'mobile_top_menu',
+        'mobile_main_menu',
+        'inner_content_date',
+        'inner_content_readtime',
+        'inner_content_author_photo',
+        'inner_content_author',
+        'inner_content_time'
+    ];
+
+    protected $generalSettings = [
+        'breadcrumb',
+        'main_logo_size',
+        'general_page_width',
+        'hamburger_position',
+        'widget_header_type',
+        'widget_header_font',
+        'widget_header_font_color',
+        'widget_header_font_size',
+        'widget_header_border_position',
+        'widget_header_font_weight',
+        'widget_header_border_color',
+        'main_font_size',
+        'main_font_weight',
+        'second_font_size',
+        'second_font_weight',
+        'header_align',
+        'header_color',
+        'header_border_color',
+        'menu_color',
+        'menu_link_color',
+        'menu_border',
+        'menu_border_color',
+        'mobile_logo_size',
+        'mobile_top_menu',
+        'mobile_main_menu',
+        'aspect_ratio' => 'content_imageratio_normal',
+        'aspect_ratio_tiny' => 'content_imageratio_tiny',
+        'aspect_ratio_list' => 'content_imageratio_list',
+    ];
+
+    protected $extensionSettings = [
+        'frontpages' => [
+            'show_category' => 'content_category_name',
+            'show_subtitle' => 'content_subtitle',
+            'show_summary' => 'content_summary',
+            'show_author' => 'content_author',
+            'show_date' => 'content_date',
+            'show_readtime' => 'content_readtime',
+            'content_author_photo',
+        ]
+    ];
+
+    protected $actionSettings = [
+        'list' => [
+            'archive_appearance',
+            'archive_cover',
+            'show_category' => 'archive_category_name',
+            'show_subtitle' => 'archive_subtitle',
+            'show_summary' => 'archive_summary',
+            'archive_author_photo',
+            'show_author' => 'archive_author',
+            'show_date' => 'archive_date',
+            'show_readtime' => 'archive_readtime',
+        ],
+        'show' => [
+            'article_header',
+            'article_layout',
+            'article_header_media',
+            'article_header_order',
+            'article_header_align',
+            'share_tools',
+            'tags_display',
+            'related_contents',
+            'related_contents_auto',
+            'related_contents_auto_position',
+            'sidebar_widget_today_news',
+            'sidebar_widget_most_viewed',
+            'sidebar_widget_most_seeing_recent',
+            'widget_more_in_section',
+            'widget_more_in_frontpage',
+            'widget_more_in_section_layout',
+            'widget_more_in_frontpage_layout',
+            'show_author' => 'inner_content_author',
+            'show_date' => 'inner_content_date',
+            'show_time' => 'inner_content_time',
+            'show_readtime' => 'inner_content_readtime',
+            'inner_content_author_photo',
+        ]
+    ];
+    /**
+     * Initializes the SettingLogoHelper.
+     *
+     * @param Container $container The service container.
+     */
+    public function __construct($container)
+    {
+        $this->container = $container;
+        $this->em        = $container->get('orm.manager');
+    }
+
+    public function getThemeSettings($base = false, $maped = true)
+    {
+        $themeOptions = $this->em
+            ->getDataSet('Settings', 'instance')
+            ->get('theme_options', []);
+
+        if (empty($themeOptions) || $base) {
+            $themeOptions = $this->container->get('core.theme')->getSkinProperty(
+                $this->em
+                    ->getDataSet('Settings', 'instance')
+                    ->get('theme_skin', 'default'),
+                'options'
+            );
+
+            if ($maped) {
+                $themeOptions = array_map(function ($option) {
+                    $option = $option['default'];
+                    return $option;
+                }, $themeOptions);
+            }
+        }
+
+        return $themeOptions;
+    }
+
+    public function getThemeVariables($extension, $action)
+    {
+        $action = strpos($action, 'list') !== false ? 'list' : $action;
+        $action = strpos($action, 'show') !== false ? 'show' : $action;
+
+        dump($action);
+        dump($extension);
+        $currentSettings   = $this->getThemeSettings();
+        $generalVariables  = $this->parseSettings($currentSettings, $this->generalSettings);
+        $specificVariables = [];
+
+        if (array_key_exists($action, $this->actionSettings)) {
+            $specificVariables = $this->parseSettings($currentSettings, $this->actionSettings[$action]);
+        }
+
+        if (array_key_exists($extension, $this->extensionSettings)) {
+            $specificVariables = $this->parseSettings($currentSettings, $this->extensionSettings[$extension]);
+        }
+
+        return array_merge($generalVariables, $specificVariables);
+    }
+
+    protected function parseSettings($master, $part)
+    {
+        $result = [];
+        foreach ($part as $key => $value) {
+            if (array_key_exists($value, $master)) {
+                $key = is_integer($key) ? $value : $key;
+
+                $result[$key] = in_array($value, $this->toBool)
+                    ? filter_var($master[$value], FILTER_VALIDATE_BOOLEAN)
+                    : $master[$value];
+            }
+        }
+
+        return $result;
+    }
+}

@@ -346,6 +346,7 @@
                       </div>
                     </div>
                     <div class="row" ng-if="extra.theme_skins[settings.theme_skin].params.options">
+
                       <div class="col-xs-12 col-md-5 m-b-15">
                         <label class="form-label m-b-15" for="theme-option-hamburger-position">
                           <h4>
@@ -388,6 +389,7 @@
                           </div>
                         </div>
                       </div>
+
                       <div class="col-xs-12 col-md-8 m-b-15">
                         <label class="form-label m-b-15" for="theme-option-widget-header-type">
                           <h4>
@@ -511,6 +513,98 @@
                                 <select id="theme-option-widget-header-ribbon-color" name="theme-option-widget-header-ribbon-color" ng-model="settings.theme_options.widget_header_ribbon_color">
                                   <option value="[% widget_header_ribbon_color_name %]" ng-repeat="(widget_header_ribbon_color_name,widget_header_ribbon_color_value) in extra.theme_skins[settings.theme_skin].params.options.widget_header_ribbon_color.options" ng-selected="[% widget_header_ribbon_color_name === settings.theme_options.widget_header_ribbon_color %]">[% widget_header_ribbon_color_value %]</option>
                                 </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 m-b-15">
+                        <h4>
+                          <i class="fa fa-code-fork"></i>
+                          {t}Breadcrumb{/t}
+                        </h4>
+                        <label class="form-label" for="theme-header-color">
+                          <span class="help">
+                            {t}Set display of routes{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <select id="theme-breadcrumb" name="theme-breadcrumb" ng-model="settings.theme_options.breadcrumb" required>
+                              <option value="[% breadcrumb_name %]" ng-repeat="(breadcrumb_name,breadcrumb_value) in extra.theme_skins[settings.theme_skin].params.options.breadcrumb.options" ng-selected="[% breadcrumb_name == settings.theme_options.breadcrumb || settings.theme_options.breadcrumb == undefined %]">[% breadcrumb_value %]</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-12 col-md-5 m-b-15">
+                        <label class="form-label m-b-15" for="theme-option-content-imageratio-normal">
+                          <h4>
+                            <i class="fa fa-image"></i>
+                            {t}Normal contents images{/t}
+                          </h4>
+                          <span class="help">
+                            {t}Choose image aspect ratio{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="row" ng-model="settings.theme_options.content_imageratio_normal">
+                            <div class="panel panel-default col-xs-4" ng-repeat="(content_imageratio_normal_name,content_imageratio_normal_value) in extra.theme_skins[settings.theme_skin].params.options.content_imageratio_normal.options">
+                              <div class="radio">
+                                <input id="theme-option-content-imageratio-normal-[% content_imageratio_normal_name %]" name="theme-option-content-imageratio-normal" ng-model="settings.theme_options.content_imageratio_normal" value="[% content_imageratio_normal_name %]" ng-checked="[% content_imageratio_normal_name == settings.theme_options.content_imageratio_normal %]" type="radio"/>
+                                <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-content-imageratio-normal-[% content_imageratio_normal_name %]">
+                                  <img src="/themes/apolo/images/admin/imageratio_normal-[% content_imageratio_normal_name %].jpg" alt="[% content_imageratio_normal_value %]" class="img img-responsive img-rounded m-b-10">
+                                  <h5>[% content_imageratio_normal_value %]</h5>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-5 m-b-15">
+                        <label class="form-label m-b-15" for="theme-option-content-imageratio-list">
+                          <h4>
+                            <i class="fa fa-image"></i>
+                            {t}List contents images{/t}
+                          </h4>
+                          <span class="help">
+                            {t}Choose image aspect ratio{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="row" ng-model="settings.theme_options.content_imageratio_list">
+                            <div class="panel panel-default col-xs-4" ng-repeat="(content_imageratio_list_name,content_imageratio_list_value) in extra.theme_skins[settings.theme_skin].params.options.content_imageratio_list.options">
+                              <div class="radio">
+                                <input id="theme-option-content-imageratio-list-[% content_imageratio_list_name %]" name="theme-option-content-imageratio-list" ng-model="settings.theme_options.content_imageratio_list" value="[% content_imageratio_list_name %]" ng-checked="[% content_imageratio_list_name === settings.theme_options.content_imageratio_list %]" type="radio"/>
+                                <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-content-imageratio-list-[% content_imageratio_list_name %]">
+                                  <img src="/themes/apolo/images/admin/imageratio_list-[% content_imageratio_list_name %].jpg" alt="[% content_imageratio_list_value %]" class="img img-responsive img-rounded m-b-10">
+                                  <h5>[% content_imageratio_list_value %]</h5>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-5 m-b-15">
+                        <label class="form-label m-b-15" for="theme-option-content-imageratio-tiny">
+                          <h4>
+                            <i class="fa fa-image"></i>
+                            {t}Tiny contents images{/t}
+                          </h4>
+                          <span class="help">
+                            {t}Choose image aspect ratio{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="row" ng-model="settings.theme_options.content_imageratio_tiny">
+                            <div class="panel panel-default col-xs-4" ng-repeat="(content_imageratio_tiny_name,content_imageratio_tiny_value) in extra.theme_skins[settings.theme_skin].params.options.content_imageratio_tiny.options">
+                              <div class="radio">
+                                <input id="theme-option-content-imageratio-tiny-[% content_imageratio_tiny_name %]" name="theme-option-content-imageratio-tiny" ng-model="settings.theme_options.content_imageratio_tiny" value="[% content_imageratio_tiny_name %]" ng-checked="[% content_imageratio_tiny_name === settings.theme_options.content_imageratio_tiny %]" type="radio"/>
+                                <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-content-imageratio-tiny-[% content_imageratio_tiny_name %]">
+                                  <img src="/themes/apolo/images/admin/imageratio_tiny-[% content_imageratio_tiny_name %].jpg" alt="[% content_imageratio_tiny_value %]" class="img img-responsive img-rounded m-b-10">
+                                  <h5>[% content_imageratio_tiny_value %]</h5>
+                                </label>
                               </div>
                             </div>
                           </div>
@@ -646,7 +740,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-md-4 m-b-15">
+                      <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.header_color == 'default'">
                         <h4>
                           <i class="fa fa-eyedropper"></i>
                           {t}Main header border color{/t}
@@ -710,7 +804,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-xs-12 col-md-4 m-b-15">
+                        <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.menu_color == 'default'">
                           <h4>
                             <i class="fa fa-eyedropper"></i>
                             {t}Main menu border color{/t}
@@ -758,80 +852,7 @@
 
                   <div role="tabpanel" class="tab-pane fade" id="tabFrontpage">
                     <div ng-if="extra.theme_skins[settings.theme_skin].params.options">
-                      <div class="row">
-                        <div class="col-xs-12 col-md-5 m-b-15">
-                          <label class="form-label m-b-15" for="theme-option-content-imageratio-normal">
-                            <h4>
-                              <i class="fa fa-image"></i>
-                              {t}Normal contents images{/t}
-                            </h4>
-                            <span class="help">
-                              {t}Choose image aspect ratio{/t}
-                            </span>
-                          </label>
-                          <div class="controls">
-                            <div class="row" ng-model="settings.theme_options.content_imageratio_normal">
-                              <div class="panel panel-default col-xs-4" ng-repeat="(content_imageratio_normal_name,content_imageratio_normal_value) in extra.theme_skins[settings.theme_skin].params.options.content_imageratio_normal.options">
-                                <div class="radio">
-                                  <input id="theme-option-content-imageratio-normal-[% content_imageratio_normal_name %]" name="theme-option-content-imageratio-normal" ng-model="settings.theme_options.content_imageratio_normal" value="[% content_imageratio_normal_name %]" ng-checked="[% content_imageratio_normal_name == settings.theme_options.content_imageratio_normal %]" type="radio"/>
-                                  <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-content-imageratio-normal-[% content_imageratio_normal_name %]">
-                                    <img src="/themes/apolo/images/admin/imageratio_normal-[% content_imageratio_normal_name %].jpg" alt="[% content_imageratio_normal_value %]" class="img img-responsive img-rounded m-b-10">
-                                    <h5>[% content_imageratio_normal_value %]</h5>
-                                  </label>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xs-12 col-md-5 m-b-15">
-                          <label class="form-label m-b-15" for="theme-option-content-imageratio-list">
-                            <h4>
-                              <i class="fa fa-image"></i>
-                              {t}List contents images{/t}
-                            </h4>
-                            <span class="help">
-                              {t}Choose image aspect ratio{/t}
-                            </span>
-                          </label>
-                          <div class="controls">
-                            <div class="row" ng-model="settings.theme_options.content_imageratio_list">
-                              <div class="panel panel-default col-xs-4" ng-repeat="(content_imageratio_list_name,content_imageratio_list_value) in extra.theme_skins[settings.theme_skin].params.options.content_imageratio_list.options">
-                                <div class="radio">
-                                  <input id="theme-option-content-imageratio-list-[% content_imageratio_list_name %]" name="theme-option-content-imageratio-list" ng-model="settings.theme_options.content_imageratio_list" value="[% content_imageratio_list_name %]" ng-checked="[% content_imageratio_list_name === settings.theme_options.content_imageratio_list %]" type="radio"/>
-                                  <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-content-imageratio-list-[% content_imageratio_list_name %]">
-                                    <img src="/themes/apolo/images/admin/imageratio_list-[% content_imageratio_list_name %].jpg" alt="[% content_imageratio_list_value %]" class="img img-responsive img-rounded m-b-10">
-                                    <h5>[% content_imageratio_list_value %]</h5>
-                                  </label>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xs-12 col-md-5 m-b-15">
-                          <label class="form-label m-b-15" for="theme-option-content-imageratio-tiny">
-                            <h4>
-                              <i class="fa fa-image"></i>
-                              {t}Tiny contents images{/t}
-                            </h4>
-                            <span class="help">
-                              {t}Choose image aspect ratio{/t}
-                            </span>
-                          </label>
-                          <div class="controls">
-                            <div class="row" ng-model="settings.theme_options.content_imageratio_tiny">
-                              <div class="panel panel-default col-xs-4" ng-repeat="(content_imageratio_tiny_name,content_imageratio_tiny_value) in extra.theme_skins[settings.theme_skin].params.options.content_imageratio_tiny.options">
-                                <div class="radio">
-                                  <input id="theme-option-content-imageratio-tiny-[% content_imageratio_tiny_name %]" name="theme-option-content-imageratio-tiny" ng-model="settings.theme_options.content_imageratio_tiny" value="[% content_imageratio_tiny_name %]" ng-checked="[% content_imageratio_tiny_name === settings.theme_options.content_imageratio_tiny %]" type="radio"/>
-                                  <label class="no-radio m-l-0 p-l-15 p-r-15 p-t-15 p-b-15" for="theme-option-content-imageratio-tiny-[% content_imageratio_tiny_name %]">
-                                    <img src="/themes/apolo/images/admin/imageratio_tiny-[% content_imageratio_tiny_name %].jpg" alt="[% content_imageratio_tiny_value %]" class="img img-responsive img-rounded m-b-10">
-                                    <h5>[% content_imageratio_tiny_value %]</h5>
-                                  </label>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+
                       <div class="row">
                         <div class="col-xs-12 col-md-4 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-content-category-name">
@@ -893,19 +914,9 @@
                               <i class="fa fa-info"></i>
                               {t}Info{/t}
                             </h4>
-                            <span class="help">
-                              {t}Display content's info{/t}
-                            </span>
                           </label>
-                          <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-option-content-info" name="theme-option-content-info" ng-model="settings.theme_options.content_info">
-                                <option value="[% content_info_name %]" ng-repeat="(content_info_name,content_info_value) in extra.theme_skins[settings.theme_skin].params.options.content_info.options" ng-selected="[% content_info_name === settings.theme_options.content_info || settings.theme_options.content_info == undefined %]">[% content_info_value %]</option>
-                              </select>
-                            </div>
-                          </div>
                         </div>
-                        <div class="col-xs-12" ng-if="settings.theme_options.content_info === 'visible'">
+                        <div class="col-xs-12">
                           <div class="row">
                             <div class="col-xs-12 col-md-4 m-b-15">
                               <label class="form-label m-b-15" for="theme-option-content-author">
@@ -921,7 +932,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.content_author === 'visible'">
+                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.content_author === 'true'">
                               <label class="form-label m-b-15" for="theme-option-content-author-photo">
                                 <span class="help">
                                   {t}Display author's photo{/t}
@@ -949,7 +960,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.content_date === 'visible'">
+                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.content_date === 'true'">
                               <label class="form-label m-b-15" for="theme-option-content-time">
                                 <span class="help">
                                   {t}Display content's time{/t}
@@ -1091,24 +1102,14 @@
                           </div>
                         </div>
                         <div class="col-xs-12 col-md-4 m-b-15">
-                          <label class="form-label m-b-15" for="theme-option-archive-info">
+                          <label class="form-label m-b-15">
                             <h4>
                               <i class="fa fa-info"></i>
                               {t}Info{/t}
                             </h4>
-                            <span class="help">
-                              {t}Display content's info{/t}
-                            </span>
                           </label>
-                          <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-option-archive-info" name="theme-option-archive-info" ng-model="settings.theme_options.archive_info">
-                                <option value="[% archive_info_name %]" ng-repeat="(archive_info_name,archive_info_value) in extra.theme_skins[settings.theme_skin].params.options.archive_info.options" ng-selected="[% archive_info_name === settings.theme_options.archive_info || settings.theme_options.archive_info == undefined %]">[% archive_info_value %]</option>
-                              </select>
-                            </div>
-                          </div>
                         </div>
-                        <div class="col-xs-12" ng-if="settings.theme_options.archive_info === 'visible'">
+                        <div class="col-xs-12">
                           <div class="row">
                             <div class="col-xs-12 col-md-4 m-b-15">
                               <label class="form-label m-b-15" for="theme-option-archive-author">
@@ -1124,7 +1125,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.archive_author === 'visible'">
+                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.archive_author === 'true'">
                               <label class="form-label m-b-15" for="theme-option-archive-author-photo">
                                 <span class="help">
                                   {t}Display author's photo{/t}
@@ -1152,7 +1153,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.archive_date === 'visible'">
+                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.archive_date === 'true'">
                               <label class="form-label m-b-15" for="theme-option-archive-time">
                                 <span class="help">
                                   {t}Display content's time{/t}
@@ -1314,24 +1315,7 @@
                       </div>
                       <div class="col-xs-12 col-md-4">
                         <div class="row">
-                          <div class="col-xs-12 m-b-15">
-                            <h4>
-                              <i class="fa fa-code-fork"></i>
-                              {t}Breadcrumb{/t}
-                            </h4>
-                            <label class="form-label" for="theme-header-color">
-                              <span class="help">
-                                {t}Set display of routes{/t}
-                              </span>
-                            </label>
-                            <div class="controls">
-                              <div class="input-group">
-                                <select id="theme-breadcrumb" name="theme-breadcrumb" ng-model="settings.theme_options.breadcrumb" required>
-                                  <option value="[% breadcrumb_name %]" ng-repeat="(breadcrumb_name,breadcrumb_value) in extra.theme_skins[settings.theme_skin].params.options.breadcrumb.options" ng-selected="[% breadcrumb_name == settings.theme_options.breadcrumb || settings.theme_options.breadcrumb == undefined %]">[% breadcrumb_value %]</option>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
+
                           <div class="col-xs-12 m-b-15">
                             <label class="form-label m-b-15" for="theme-option-share-tools">
                               <h4>
@@ -1404,7 +1388,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="col-xs-12 m-b-15" ng-if="settings.theme_options.related_contents_auto == '1'">
+                          <div class="col-xs-12 m-b-15" ng-if="settings.theme_options.related_contents_auto == 'true'">
                             <label class="form-label m-b-15" for="theme-option-related-contents-auto-position">
                               <span class="help">
                                 {t}Choose where to display{/t}
@@ -1414,6 +1398,82 @@
                               <div class="input-group">
                                 <select id="theme-option-related-contents-auto-position" name="theme-option-related-contents-auto-position" ng-model="settings.theme_options.related_contents_auto_position">
                                   <option value="[% related_contents_auto_position_name %]" ng-repeat="(related_contents_auto_position_name,related_contents_auto_position_value) in extra.theme_skins[settings.theme_skin].params.options.related_contents_auto_position.options" ng-selected="[% related_contents_auto_position_name === settings.theme_options.related_contents_auto_position || settings.theme_options.related_contents_auto_position == undefined %]">[% related_contents_auto_position_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <label class="form-label m-b-15" for="theme-option-inner-content-info">
+                            <h4>
+                              <i class="fa fa-info"></i>
+                              {t}Info{/t}
+                            </h4>
+                          </label>
+                          <div class="col-xs-12 m-b-15">
+                            <label class="form-label m-b-15" for="theme-option-inner-content-author">
+                              <span class="help">
+                                {t}Display content's author{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-option-inner-content-author" name="theme-option-inner-content-author" ng-model="settings.theme_options.inner_content_author">
+                                  <option value="[% content_author_name %]" ng-repeat="(content_author_name,content_author_value) in extra.theme_skins[settings.theme_skin].params.options.inner_content_author.options" ng-selected="[% content_author_name === settings.theme_options.inner_content_author %]">[% content_author_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-xs-12 m-b-15" ng-if="settings.theme_options.inner_content_author === 'true'">
+                            <label class="form-label m-b-15" for="theme-option-inner-content-author-photo">
+                              <span class="help">
+                                {t}Display author's photo{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-option-inner-content-author-photo" name="theme-option-inner-content-author-photo" ng-model="settings.theme_options.inner_content_author_photo">
+                                  <option value="[% content_author_photo_name %]" ng-repeat="(content_author_photo_name,content_author_photo_value) in extra.theme_skins[settings.theme_skin].params.options.inner_content_author_photo.options" ng-selected="[% content_author_photo_name === settings.theme_options.inner_content_author_photo %]">[% content_author_photo_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-xs-12 m-b-15">
+                            <label class="form-label m-b-15" for="theme-option-inner-content-date">
+                              <span class="help">
+                                {t}Display content's date{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-option-inner-content-date" name="theme-option-inner-content-date" ng-model="settings.theme_options.inner_content_date">
+                                  <option value="[% content_date_name %]" ng-repeat="(content_date_name,content_date_value) in extra.theme_skins[settings.theme_skin].params.options.inner_content_date.options" ng-selected="[% content_date_name === settings.theme_options.inner_content_date %]">[% content_date_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-xs-12 m-b-15" ng-if="settings.theme_options.inner_content_date === 'true'">
+                            <label class="form-label m-b-15" for="theme-option-inner-content-time">
+                              <span class="help">
+                                {t}Display content's time{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-option-inner-content-time" name="theme-option-inner-content-time" ng-model="settings.theme_options.inner_content_time">
+                                  <option value="[% content_time_name %]" ng-repeat="(content_time_name,content_time_value) in extra.theme_skins[settings.theme_skin].params.options.inner_content_time.options" ng-selected="[% content_time_name === settings.theme_options.inner_content_time %]">[% content_time_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-xs-12 m-b-15">
+                            <label class="form-label m-b-15" for="theme-option-inner-content-readtime">
+                              <span class="help">
+                                {t}Display content's readtime{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-option-inner-content-readtime" name="theme-option-inner-content-readtime" ng-model="settings.theme_options.inner_content_readtime">
+                                  <option value="[% content_readtime_name %]" ng-repeat="(content_readtime_name,content_readtime_value) in extra.theme_skins[settings.theme_skin].params.options.inner_content_readtime.options" ng-selected="[% content_readtime_name === settings.theme_options.inner_content_readtime %]">[% content_readtime_value %]</option>
                                 </select>
                               </div>
                             </div>
@@ -1442,7 +1502,7 @@
                                 </label>
                               </div>
                               <div class="checkbox p-b-10">
-                                <input id="theme-option-sidebar-widget-most-seeing" name="theme-option-sidebar-widget-most-seeing" ng-model="settings.theme_options.sidebar_widget_most_seeing" ng-checked="[% settings.theme_options.sidebar_widget_most_seeing %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                <input id="theme-option-sidebar-widget-most-seeing" name="theme-option-sidebar-widget-most-seeing" ng-model="settings.theme_options.sidebar_widget_most_seeing_recent" ng-checked="[% settings.theme_options.sidebar_widget_most_seeing_recent %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
                                 <label for="theme-option-sidebar-widget-most-seeing">
                                   <span>{t domain="base"}Most seeing/recent{/t}</span>
                                 </label>
@@ -1469,7 +1529,7 @@
                               <div class="checkbox p-b-10">
                                 <input id="theme-option-bodyend-widget-more-in-frontpage" name="theme-option-bodyend-widget-more-in-frontpage" ng-model="settings.theme_options.widget_more_in_frontpage" ng-checked="[% settings.theme_options.widget_more_in_frontpage %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
                                 <label for="theme-option-bodyend-widget-more-in-frontpage">
-                                  <span>{t domain="base"}Most in frontpage{/t}</span>
+                                  <span>{t domain="base"}More in frontpage{/t}</span>
                                 </label>
                               </div>
                             </div>

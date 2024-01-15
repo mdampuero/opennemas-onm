@@ -82,9 +82,11 @@ class ThemeSettingController extends SettingController
 
     public function listAction(Request $request)
     {
+        $settingHelper = $this->container->get('core.helper.setting');
+
         $settings = parent::listAction($request);
         if (!array_key_exists('theme_options', $settings['settings'])) {
-            $settings['settings']['theme_options'] = $this->getThemeSettings();
+            $settings['settings']['theme_options'] = $settingHelper->getThemeSettings();
         }
 
         return new JsonResponse(
@@ -111,7 +113,7 @@ class ThemeSettingController extends SettingController
      */
     public function downloadAction()
     {
-        $themeOptions = $this->getThemeSettings();
+        $themeOptions = $this->container->get('core.helper.setting')->getThemeSettings();
 
         $response = new JsonResponse($themeOptions);
         $response->headers->set('Content-Type', 'application/json');
@@ -137,7 +139,7 @@ class ThemeSettingController extends SettingController
 
         if ($this->isValidJsonSettings($jsonSettings)) {
             $settings       = json_decode($jsonSettings, true);
-            $currenSettings = $this->getThemeSettings();
+            $currenSettings = $this->container->get('core.helper.setting')->getThemeSettings();
             $finalSettings  = array_merge($currenSettings, $settings);
             return parent::saveSettings(['theme_options' => $finalSettings]);
         }
@@ -157,14 +159,15 @@ class ThemeSettingController extends SettingController
      */
     public function restoreAction()
     {
-        return parent::saveSettings(['theme_options' => $this->getThemeSettings(true)]);
+        $settingHelper = $this->container->get('core.helper.setting');
+        return parent::saveSettings(['theme_options' => $settingHelper->getThemeSettings(true)]);
     }
 
     public function isValidJsonSettings($jsonSettings)
     {
         try {
             $settings     = json_decode($jsonSettings, true);
-            $baseSettings = $this->getThemeSettings(true, false);
+            $baseSettings = $this->container->get('core.helper.setting')->getThemeSettings(true, false);
 
             foreach ($settings as $settingName => $settingValue) {
                 if (!array_key_exists($settingName, $baseSettings)) {
@@ -179,30 +182,5 @@ class ThemeSettingController extends SettingController
         } catch (\Exception $e) {
             return false;
         }
-    }
-
-    protected function getThemeSettings($base = false, $maped = true)
-    {
-        $themeOptions = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('theme_options', []);
-
-        if (empty($themeOptions) || $base) {
-            $themeOptions = $this->container->get('core.theme')->getSkinProperty(
-                $this->container->get('orm.manager')
-                    ->getDataSet('Settings', 'instance')
-                    ->get('theme_skin', 'default'),
-                'options'
-            );
-
-            if ($maped) {
-                $themeOptions = array_map(function ($option) {
-                    $option = $option['default'];
-                    return $option;
-                }, $themeOptions);
-            }
-        }
-
-        return $themeOptions;
     }
 }
