@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('advertisement', 'backend_ws_contents_list');
+<div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('advertisement', 'backend_ws_advertisements_list');
 advertisement_positions = {json_encode($advertisement_positions)|clear_json}; type = {json_encode($types)|clear_json};
 status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', value: 1 }, { name: '{t}No published{/t}', value: 0 } ];">
   <div class="page-navbar actions-navbar" ng-controller="AdBlockCtrl">
