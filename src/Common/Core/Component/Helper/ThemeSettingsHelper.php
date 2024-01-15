@@ -45,7 +45,8 @@ class ThemeSettingsHelper
         'inner_content_readtime',
         'inner_content_author_photo',
         'inner_content_author',
-        'inner_content_time'
+        'inner_content_time',
+
     ];
 
     protected $generalSettings = [
@@ -87,7 +88,7 @@ class ThemeSettingsHelper
             'show_author' => 'content_author',
             'show_date' => 'content_date',
             'show_readtime' => 'content_readtime',
-            'content_author_photo',
+            'show_author_photo' => 'content_author_photo',
         ]
     ];
 
@@ -98,10 +99,10 @@ class ThemeSettingsHelper
             'show_category' => 'archive_category_name',
             'show_subtitle' => 'archive_subtitle',
             'show_summary' => 'archive_summary',
-            'archive_author_photo',
             'show_author' => 'archive_author',
             'show_date' => 'archive_date',
             'show_readtime' => 'archive_readtime',
+            'show_author_photo' => 'archive_author_photo',
         ],
         'show' => [
             'article_header',
