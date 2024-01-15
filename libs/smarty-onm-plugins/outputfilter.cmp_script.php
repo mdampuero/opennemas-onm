@@ -71,7 +71,8 @@ function smarty_outputfilter_cmp_script($output, $smarty)
             [
                 'apikey'    => $config['cmp_apikey'] ?? '',
                 'id'        => $config['cmp_id'],
-                'mrfpassId' => $config['marfeel_pass']['id'] ?? ''
+                'mrfpassId' => $config['marfeel_pass']['id'] ?? '',
+                'mrfpassCmp' => $config['marfeel_pass']['cmp'] ?? ''
             ]
         );
 

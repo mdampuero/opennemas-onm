@@ -232,6 +232,17 @@
                           <input class="form-control" id="marfeel-pass-id" name="marfeel-pass-id" ng-model="settings.marfeel_pass.id" type="text">
                         </div>
                       </div>
+                      <div class="form-group">
+                        <label class="form-label" for="marfeel-pass-cmp">
+                          {t}Use Marfeel Pass CMP notice{/t}
+                        </label>
+                        <div class="controls">
+                          <select id="marfeel-pass-cmp" name="marfeel-pass-cmp" ng-model="settings.marfeel_pass.cmp">
+                            <option value="">{t}No{/t}</option>
+                            <option value="1">{t}Yes{/t}</option>
+                          </select>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -154,14 +154,17 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
                 'cmp_id'     => null,
                 'cmp_id_amp' => null,
                 'cmp_apikey' => '',
-                'mrfpassId'  => ''
+                'mrfpassId'  => '',
+                'mrfpassCmp'  => ''
             ]);
 
         $returnvalue = "foo-bar-baz";
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('common/helpers/cmp_default.tpl', [ 'id' => null, 'apikey' => null , 'mrfpassId' => ''])
-            ->willReturn($returnvalue);
+            ->with(
+                'common/helpers/cmp_default.tpl',
+                [ 'id' => null, 'apikey' => null , 'mrfpassId' => '', 'mrfpassCmp' => '' ]
+            )->willReturn($returnvalue);
 
         $output = "<html><head>Hello World\n" . $returnvalue . "</head><body></body></html>";
 
@@ -191,14 +194,17 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
                 'cmp_id'     => 'qwert',
                 'cmp_id_amp' => null,
                 'cmp_apikey' => '',
-                'mrfpassId'  => ''
+                'mrfpassId'  => '',
+                'mrfpassCmp'  => ''
             ]);
 
         $returnvalue = "foo-bar-baz";
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('common/helpers/cmp_quantcast.tpl', [ 'id' => 'qwert', 'apikey' => '', 'mrfpassId' => '' ])
-            ->willReturn($returnvalue);
+            ->with(
+                'common/helpers/cmp_quantcast.tpl',
+                [ 'id' => 'qwert', 'apikey' => '', 'mrfpassId' => '', 'mrfpassCmp' => '' ]
+            )->willReturn($returnvalue);
 
         $output = "<html><head>Hello World\n" . $returnvalue . "</head><body></body></html>";
 
@@ -228,14 +234,17 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
                 'cmp_id'     => 'qwert',
                 'cmp_id_amp' => null,
                 'cmp_apikey' => '',
-                'mrfpassId'  => ''
+                'mrfpassId'  => '',
+                'mrfpassCmp'  => ''
             ]);
 
         $returnvalue = "foo-bar-baz";
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('common/helpers/cmp_onetrust.tpl', [ 'id' => 'qwert', 'apikey' => '', 'mrfpassId' => '' ])
-            ->willReturn($returnvalue);
+            ->with(
+                'common/helpers/cmp_onetrust.tpl',
+                [ 'id' => 'qwert', 'apikey' => '', 'mrfpassId' => '', 'mrfpassCmp' => '' ]
+            )->willReturn($returnvalue);
 
         $output = "<html><head>Hello World\n" . $returnvalue . "</head><body></body></html>";
 
@@ -265,14 +274,17 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
                 'cmp_id'     => 'qwert',
                 'cmp_id_amp' => 'waldo',
                 'cmp_apikey' => 'qwert',
-                'mrfpassId'  => ''
+                'mrfpassId'  => '',
+                'mrfpassCmp'  => ''
             ]);
 
         $returnvalue = "foo-bar-baz";
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('common/helpers/cmp_didomi.tpl', [ 'id' => 'qwert', 'apikey' => 'qwert', 'mrfpassId' => '' ])
-            ->willReturn($returnvalue);
+            ->with(
+                'common/helpers/cmp_didomi.tpl',
+                [ 'id' => 'qwert', 'apikey' => 'qwert', 'mrfpassId' => '', 'mrfpassCmp' => '' ]
+            )->willReturn($returnvalue);
 
         $output = "<html><head>Hello World\n" . $returnvalue . "</head><body></body></html>";
 
