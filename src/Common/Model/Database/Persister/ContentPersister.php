@@ -59,6 +59,10 @@ done
             $entity->starttime = new \DateTime();
         }
 
+        if (!empty($entity->starttime)) {
+            $entity->urldatetime = $entity->starttime->format('YmdHis');
+        }
+
         // Don't allow changed date to be earlier than starttime
         if ($entity->starttime > $entity->changed) {
             $entity->changed = $entity->starttime;
@@ -132,7 +136,8 @@ done
     public function update(Entity $entity)
     {
         if (empty($entity->starttime) && !empty($entity->content_status)) {
-            $entity->starttime = new \DateTime();
+            $entity->starttime   = new \DateTime();
+            $entity->urldatetime = $entity->starttime->format('YmdHis');
         }
 
         // Don't allow changed date to be earlier than starttime
@@ -146,6 +151,22 @@ done
         $relations             = $entity->related_contents;
         $live_blog_updates     = $entity->live_blog_updates;
         $webpush_notifications = $entity->webpush_notifications;
+
+        // Set urldatetime if starttime is already set
+        // And new starttime is greater than now (rescheduled)
+        // OR new starttime is smaller than now
+        //   And new starttime is smaller than old starttime
+        //   And new starttime is smaller than urldatetime (e.g. scheduled to intime)
+        if (!empty($entity->starttime)
+            && ($entity->starttime >= new \DateTime()
+                || ($entity->starttime < new \DateTime()
+                    && $entity->starttime < $entity->getStored()['starttime']
+                    && $entity->starttime->format('YmdHis') < $entity->urldatetime
+                )
+            )
+        ) {
+            $entity->urldatetime = $entity->starttime->format('YmdHis');
+        }
 
         // Categories change
         if (array_key_exists('categories', $changes)) {
@@ -506,7 +527,10 @@ done
         $starttime = !empty($starttime) ? $starttime->format("Y-m-d H:i:s") : null;
 
         $webpush_notifications = array_map(function ($item) use ($starttime) {
-            $item['send_date'] = $item['status'] == 0 ? $starttime : $item['send_date'];
+            $item['send_date'] = $item['status'] == 0
+                ? ($starttime < gmdate("Y-m-d H:i:s") ? $item['send_date']
+                : $starttime)
+                : $item['send_date'];
             return $item;
         }, $webpush_notifications);
 
@@ -611,9 +635,9 @@ done
         }
 
         $sql = "insert into content_notifications"
-            . "(fk_content, status, body, title, send_date, image) values "
+            . "(fk_content, status, body, title, send_date, image, transaction_id, impressions, clicks, closed) values "
             . str_repeat(
-                '(?,?,?,?,?,?),',
+                '(?,?,?,?,?,?,?,?,?,?),',
                 count($webpush_notifications)
             );
 
@@ -623,11 +647,15 @@ done
         $types  = [];
 
         foreach ($webpush_notifications as $value) {
-            $value['send_date'] = empty($value['send_date']) ? gmdate("Y-m-d H:i:s") : $value['send_date'];
-            $value['image']     = empty($value['image']) ? null : $value['image'];
-            $value['body']      = empty($value['body']) ? null : $value['body'];
-            $value['title']     = empty($value['title']) ? null : $value['title'];
-            $value['status']    = empty($value['status']) && $value['status'] != 0 ? 2 : $value['status'];
+            $value['send_date']      = empty($value['send_date']) ? gmdate("Y-m-d H:i:s") : $value['send_date'];
+            $value['image']          = empty($value['image']) ? null : $value['image'];
+            $value['body']           = empty($value['body']) ? null : $value['body'];
+            $value['title']          = empty($value['title']) ? null : $value['title'];
+            $value['status']         = empty($value['status']) && $value['status'] != 0 ? 2 : $value['status'];
+            $value['transaction_id'] = empty($value['transaction_id']) ? null : $value['transaction_id'];
+            $value['impressions']    = empty($value['impressions']) ? 0 : $value['impressions'];
+            $value['clicks']         = empty($value['clicks']) ? 0 : $value['clicks'];
+            $value['closed']         = empty($value['closed']) ? 0 : $value['closed'];
 
 
 
@@ -637,6 +665,10 @@ done
                 $value['title'],
                 $value['send_date'],
                 $value['image'],
+                $value['transaction_id'],
+                $value['impressions'],
+                $value['clicks'],
+                $value['closed'],
             ]));
 
             $types = array_merge($types, [
@@ -646,6 +678,10 @@ done
                 empty($value['title']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
                 empty($value['send_date']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
                 empty($value['image']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+                empty($value['transaction_id']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['impressions']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+                empty($value['clicks']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+                empty($value['closed']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
             ]);
         }
         $this->conn->executeQuery($sql, $params, $types);

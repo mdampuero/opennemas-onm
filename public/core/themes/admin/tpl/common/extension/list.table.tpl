@@ -65,6 +65,7 @@
     </div>
   </div>
 {/block}
+
 <div class="grid simple ng-cloak no-animate" ng-show="!flags.http.loading && items.length > 0 && (!isModeSupported() || app.mode === 'list')">
   <div class="grid-body no-padding">
     <div class="table-wrapper ng-cloak">
@@ -120,11 +121,19 @@
             {block name="commonColumnsBody"}
               <td class="v-align-middle" ng-if="isColumnEnabled('title')">
                 <div class="table-text">
-                  <a class="text-black" href="[% routing.generate('backend_article_show', { id: getItemId(item) }) %]">[% item.title %]</a>
+                  <a class="text-black" href="[%
+                      item.content_type_name === 'obituary'
+                          ? routing.generate('backend_obituaries_show', { id: getItemId(item) })
+                          : [ 'album', 'attachment', 'opinion', 'photo', 'poll', 'static_page', 'video', 'widget', 'article', 'letter', 'company' ].indexOf(item.content_type_name) != -1
+                              ? routing.generate('backend_' + item.content_type_name + '_show', { id: getItemId(item) })
+                              : routing.generate('admin_' + item.content_type_name + '_show', { id: getItemId(item) })
+                  %]">[% item.title %]</a>
                 </div>
-                <div class="listing-inline-actions m-t-10 btn-group">
-                  {block name="itemActions"}{/block}
-                </div>
+                {block name="itemActionsWrapper"}
+                  <div class="listing-inline-actions m-t-10 btn-group">
+                    {block name="itemActions"}{/block}
+                  </div>
+                {/block}
               </td>
               <td class="text-center v-align-middle" ng-if="isColumnEnabled('created')">
                 <div>

@@ -158,6 +158,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-webpush-subscribers" checklist-model="columns.selected" checklist-value="'webpush_subscribers'" type="checkbox">
+    <label for="checkbox-webpush-subscribers">
+      {t}Web Push subscribers{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-blocked" checklist-model="columns.selected" checklist-value="'blocked'" type="checkbox">
     <label for="checkbox-blocked">
       {t}Blocked{/t}
@@ -278,6 +284,10 @@
   <th class="text-center pointer" ng-click="sort('page_views')" ng-show="isColumnEnabled('page_views')" width="120">
     <i class="fa fa-eye" uib-tooltip="{t}Page views{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('page_views') == 'asc', 'fa fa-caret-down': isOrderedBy('page_views') == 'desc'}"></i>
+  </th>
+  <th class="text-center pointer" ng-click="sort('webpush_subscribers')" ng-show="isColumnEnabled('webpush_subscribers')" width="120">
+    <i class="fa fa-bell" uib-tooltip="{t}Web Push{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('webpush_subscribers') == 'asc', 'fa fa-caret-down': isOrderedBy('webpush_subscribers') == 'desc'}"></i>
   </th>
   <th class="text-center" ng-show="isColumnEnabled('blocked')" width="60">
     <span>
@@ -458,6 +468,11 @@
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('page_views')" title="{t}Page views{/t}">
     <span class="badge text-bold">
       [% item.page_views %]
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('webpush_subscribers')" title="{t}Web Push{/t}">
+    <span class="badge text-bold">
+      [% item.webpush_subscribers %]
     </span>
   </td>
   <td class="text-center" ng-show="isColumnEnabled('blocked')">

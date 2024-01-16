@@ -18,6 +18,15 @@
 
 {block name="primaryActions"}
   <li class="quicklinks">
+    <a class="btn btn-white" href="[% routing.generate('api_v1_backend_user_get_report') %]">
+      <span class="fa fa-download"></span>
+      {t}Download{/t}
+    </a>
+  </li>
+  <li class="quicklinks">
+    <span class="h-seperate"></span>
+  </li>
+  <li class="quicklinks">
     <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_user_create') %]">
       <i class="fa fa-plus"></i>
       {t}Create{/t}
@@ -91,5 +100,8 @@
 {block name="modals"}
   <script type="text/ng-template" id="modal-delete">
     {include file="common/extension/modal.delete.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-move">
+    {include file="user/modal.move.tpl"}
   </script>
 {/block}

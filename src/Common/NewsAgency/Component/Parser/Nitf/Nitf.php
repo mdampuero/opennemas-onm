@@ -83,7 +83,9 @@ class Nitf extends Parser
      */
     public function getBody($data)
     {
-        $bodies = $data->xpath('//body/body.content');
+        $bodies = !empty($data->xpath('//body/body.content/block'))
+            ? $data->xpath('//body/body.content/block')
+            : $data->xpath('//body/body.content');
 
         if (empty($bodies)) {
             return '';

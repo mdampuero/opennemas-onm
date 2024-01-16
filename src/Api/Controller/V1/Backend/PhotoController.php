@@ -97,7 +97,7 @@ class PhotoController extends ContentController
         $sh = $this->get('core.helper.setting');
 
         $config = $ds->get('photo_settings', []);
-        $config = $sh->toBoolean($config, ['optimize_images']);
+        $config = $sh->toBoolean($config, ['optimize_images', 'convert_png']);
 
         $config['image_quality']    = $config['image_quality'] ?? '65';
         $config['image_resolution'] = $config['image_resolution'] ?? '1920x1080';

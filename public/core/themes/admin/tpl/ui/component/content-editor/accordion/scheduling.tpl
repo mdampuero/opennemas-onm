@@ -35,6 +35,9 @@
       </div>
     </div>
   </div>
+  {acl isAllowed="MASTER"}
+    {include file="ui/component/input/text.tpl" iNgActions="ng-disabled=\"true\"" iField="urldatetime" iTitle="{t}URL Datetime{/t}"}
+  {/acl}
   <span><i class="fa fa-info-circle text-info"></i> {t}This content will only be available in the time range specified above.{/t}</span>
   <span class="help-block">
     {t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"} ({$app.locale->getTimeZone()->getName()})

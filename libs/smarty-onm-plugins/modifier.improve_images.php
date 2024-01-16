@@ -16,14 +16,14 @@ function smarty_modifier_improve_images($html)
     );
 
     // Use data-src instead of src on images in order to apply lazyload.
-    $html = preg_replace('@<img(.*)src=@U', '<img$1data-src=', $html);
+    $html = preg_replace('@<img(.*)(src|data-src)=@U', '<img$1data-src=', $html);
     $html = preg_replace('@<img(.*)class="([^"]+)"@U', '<img$1class="$2 lazyload"', $html);
 
     // Add the lazy load to the leftovers.
     $html = preg_replace('@<img(((?!class).)*)/?>@U', '<img$1 class="lazyload">', $html);
 
     preg_match_all(
-        '@<img[^>]*(?(?=width)width="([0-9]+)"|(?!.width="))[^>]*(?(?=height)height="([0-9]+)"|(?!.height="))[^>]' .
+        '@<img[^>]*(?(?=width)width="([0-9]+)"|(?!.*width="))[^>]*(?(?=height)height="([0-9]+)"|(?!.*height="))[^>]' .
             '*data-src="((?!.*\://)(?!.*zoomcrop)[^"]+)"[^>]+>@mU',
         $html,
         $out,

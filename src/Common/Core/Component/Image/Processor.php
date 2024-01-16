@@ -145,6 +145,18 @@ class Processor
     }
 
     /**
+     * Get image rotation if exists on metadata.
+     *
+     * @return Processor The current Processor.
+     */
+    public function getImageRotation() : ?string
+    {
+        $metadata = $this->image->metadata();
+
+        return $metadata['ifd0.Orientation'] ?? null;
+    }
+
+    /**
      * Returns the image mime-type.
      *
      * @return string The image mime-type.
@@ -226,6 +238,34 @@ class Processor
     public function save($path)
     {
         $this->image->save($path, $this->optimization);
+
+        return $this;
+    }
+
+    /**
+     * Set image rotation if exists on metadata.
+     *
+     * @return Processor The current Processor.
+     */
+    public function setImageRotation()
+    {
+        $exifData = $this->image->metadata();
+
+        if (isset($exifData['ifd0.Orientation'])) {
+            $orientation = (int) $exifData['ifd0.Orientation'];
+
+            switch ($orientation) {
+                case 8:
+                    $this->image->rotate(-90);
+                    break;
+                case 3:
+                    $this->image->rotate(180);
+                    break;
+                case 6:
+                    $this->image->rotate(90);
+                    break;
+            }
+        }
 
         return $this;
     }

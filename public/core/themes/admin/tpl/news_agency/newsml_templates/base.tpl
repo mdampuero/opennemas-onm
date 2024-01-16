@@ -55,7 +55,7 @@
             <Property FormalName="Tesauro" Value="{get_category_slug($content)}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$content->id}" />
           </DescriptiveMetadata>
-          <ContentItem Href="{get_url($content, [ '_absolute' => true ])}">
+          <ContentItem Href="{get_url item=$content absolute=true}">
             <MediaType FormalName="Text" />
             <Format FormalName="NITF" />
             <MimeType FormalName="text/vnd.IPTC.NITF" />
@@ -92,7 +92,7 @@
                         <rights.owner>{get_author_name($content)}</rights.owner>
                         {if has_author_avatar($content)}
                           <rights.owner.photo>
-                          {get_url(get_content(get_author_avatar($content), 'Photo'), [ '_absolute' => true ])}
+                          {get_url item=get_content(get_author_avatar($content), 'Photo') absolute=true}
                           </rights.owner.photo>
                         {/if}
                         {if has_author_url($content)}
@@ -146,7 +146,7 @@
                       <block class="related-contents">
                         {foreach get_related_contents($content, 'inner') as $related}
                           <p>
-                            <a href="{get_url($related)}">
+                            <a href="{get_url item=$related}">
                               <![CDATA[{get_title($related)}]]>
                             </a>
                           </p>
@@ -288,7 +288,7 @@
                 </NewsComponent>
                 <NewsComponent Duid="video_{$content->id}.video.text">
                   <Role FormalName="Video Caption" />
-                  <ContentItem Href="{get_url($featuredMediaContent, [ '_absolute' => true ])}" {if $featuredMediaContent->path}Url="{$featuredMediaContent->path|escape:'html'}"{elseif $featuredMediaContent->type == 'external'}Url="{$featuredMediaContent->information['source']['mp4']|escape:'html'}"{/if}>
+                  <ContentItem Href="{get_url item=$featuredMediaContent absolute=true}" {if $featuredMediaContent->path}Url="{$featuredMediaContent->path|escape:'html'}"{elseif $featuredMediaContent->type == 'external'}Url="{$featuredMediaContent->information['source']['mp4']|escape:'html'}"{/if}>
                     <MediaType FormalName="Text" />
                     <Catalog>
                       <Resource>

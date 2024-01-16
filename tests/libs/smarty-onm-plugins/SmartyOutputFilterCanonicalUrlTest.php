@@ -99,7 +99,7 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
     {
         $output = '<html><head></head><body></body></html>';
 
-        $this->request->expects($this->once())->method('getRequestUri')
+        $this->request->expects($this->once())->method('getUri')
             ->willReturn('/rss/facebook-instant-articles');
 
         $this->rs->expects($this->any())->method('getCurrentRequest')
@@ -137,7 +137,7 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
     {
         $output = '<html><head></head><body></body></html>';
 
-        $this->request->expects($this->once())->method('getRequestUri')
+        $this->request->expects($this->any())->method('getUri')
             ->willReturn('/thud/norf');
 
         $this->rs->expects($this->any())->method('getCurrentRequest')
@@ -167,9 +167,6 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
     public function testCanonicalUrlWhenNoCanonical()
     {
         $output = '<html><head></head><body></body></html>';
-
-        $this->request->expects($this->once())->method('getRequestUri')
-            ->willReturn('/thud/norf');
 
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
@@ -205,9 +202,6 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->request->expects($this->once())->method('getRequestUri')
-            ->willReturn('/thud/norf');
-
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);
 
@@ -238,9 +232,6 @@ class SmartyOutputFilterCanonicalUrlTest extends \PHPUnit\Framework\TestCase
         $output = '<html><head></head><body></body></html>';
 
         $this->instance->no_redirect_domain = 1;
-
-        $this->request->expects($this->once())->method('getRequestUri')
-            ->willReturn('/thud/norf');
 
         $this->rs->expects($this->any())->method('getCurrentRequest')
             ->willReturn($this->request);

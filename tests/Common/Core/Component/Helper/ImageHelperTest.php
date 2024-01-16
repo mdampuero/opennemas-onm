@@ -36,8 +36,8 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->processor = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setMethods([
-                'close', 'getDescription', 'getHeight', 'getSize', 'getWidth',
-                'open', 'optimize', 'save'
+                'apply', 'close', 'getDescription', 'getHeight', 'getImageRotation', 'getSize',
+                'getWidth', 'open', 'optimize', 'save', 'strip', 'setImageRotation'
             ])->getMock();
 
         $this->il->expects($this->any())->method('getInstance')
@@ -75,6 +75,38 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             '/\/waldo\/grault\/media\/bar\/images\/2010\/01\/01\/20100101152045[0-9]{5}.jpg/',
             $this->helper->generatePath($file, new \DateTime('2010-01-01 15:20:45'))
         );
+    }
+
+    /**
+     * Tests applyRotation.
+     */
+    public function testApplyRotationWhenRotation()
+    {
+        $this->processor->expects($this->once())->method('open')
+            ->with('/plugh/frog.jpg')->willReturn($this->processor);
+        $this->processor->expects($this->once())->method('getImageRotation')
+            ->willReturn('8');
+        $this->processor->expects($this->once())->method('setImageRotation')
+            ->willReturn($this->processor);
+        $this->processor->expects($this->once())->method('strip')
+            ->willReturn($this->processor);
+        $this->processor->expects($this->once())->method('save')
+            ->with('/plugh/frog.jpg')->willReturn($this->processor);
+
+        $this->helper->applyRotation('/plugh/frog.jpg');
+    }
+
+    /**
+     * Tests applyRotation.
+     */
+    public function testApplyRotationWhenNoRotation()
+    {
+        $this->processor->expects($this->once())->method('open')
+            ->with('/plugh/frog.jpg')->willReturn($this->processor);
+        $this->processor->expects($this->once())->method('getImageRotation')
+            ->willReturn(null);
+
+        $this->helper->applyRotation('/plugh/frog.jpg');
     }
 
     /**
@@ -171,5 +203,33 @@ class ImageHelperTest extends \PHPUnit\Framework\TestCase
             ->with('/plugh/frog.jpg')->willReturn($this->processor);
 
         $this->helper->optimize('/plugh/frog.jpg');
+    }
+
+    /**
+     * Tests optimizeImage.
+     */
+    public function testOptimizeImage()
+    {
+        $this->processor->expects($this->once())->method('open')
+            ->willReturn($this->processor);
+
+        $this->processor->expects($this->once())->method('apply')
+            ->with('thumbnail', $this->isType('array'))
+            ->willReturn($this->processor);
+
+        $this->processor->expects($this->once())->method('optimize')
+            ->with($this->isType('array'))
+            ->willReturn($this->processor);
+
+        $this->processor->expects($this->once())->method('save')
+            ->willReturn($this->processor);
+
+        $this->processor->expects($this->once())->method('close')
+            ->willReturn($this->processor);
+
+        $this->helper->optimizeImage(
+            '/plugh/frog.jpg',
+            ['image_quality' => 80, 'image_resolution' => '1024x1024']
+        );
     }
 }

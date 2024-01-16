@@ -47,7 +47,8 @@ class AppearanceSettingController extends SettingController
         'cookies_hint_url',
         'cmp_type',
         'cmp_id',
-        'cmp_amp',
+        'cmp_id_amp',
+        'cmp_apikey',
         'browser_update',
         'items_per_page',
         'items_in_blog',
@@ -87,7 +88,7 @@ class AppearanceSettingController extends SettingController
 
     protected function saveFiles($settings)
     {
-        $logos    = array_intersect_key($settings, array_keys($this->references));
+        $logos    = array_intersect_key($settings, $this->references);
         $msg      = $this->get('core.messenger');
         $settings = [];
         foreach ($logos as $key => $id) {

@@ -252,7 +252,7 @@ class OrmService implements Service
     public function getItemBy($oql)
     {
         try {
-            $response = $this->getList($oql);
+            $response = $this->setCount(false)->getList($oql);
         } catch (\Exception $e) {
             throw new GetItemException($e->getMessage(), $e->getCode());
         }

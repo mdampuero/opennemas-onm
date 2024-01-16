@@ -460,7 +460,22 @@ class ContentManager
 
         $contents = $em->findBy($criteria, $order, $num, $page);
 
-        // Repeat with starttime filter changed
+        // Repeat with starttime 7 days more
+        if (count($contents) == 0) {
+            $date = new \DateTime();
+            $date->sub(new \DateInterval('P' . ($days + 7) . 'D'));
+            $date = $date->format('Y-m-d H:i:s');
+
+            $criteria['starttime'] = [
+                'union' => 'AND',
+                [ 'value' => $date, 'operator' => '>=' ],
+                [ 'value' => $now, 'operator' => '<' ]
+            ];
+
+            $contents = $em->findBy($criteria, $order, $num, $page);
+        }
+
+        // Repeat with starttime no filter
         if (count($contents) == 0) {
             $criteria['starttime'] = [['value' => $now, 'operator' => '<']];
 

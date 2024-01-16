@@ -13,13 +13,13 @@ services:
 
     core.subscriber.tag:
         class:     Api\EventSubscriber\TagSubscriber
-        arguments: [ '@api.helper.cache.tag' ]
+        arguments: [ '@api.helper.cache.tag', '@cache.connection.instance' ]
         tags:
             - { name: kernel.event_subscriber }
 
     core.subscriber.user:
         class:     Api\EventSubscriber\UserSubscriber
-        arguments: [ '@service_container', '@api.helper.cache.user' ]
+        arguments: [ '@service_container', '@api.helper.cache.user', '@cache.connection.instance' ]
         tags:
             - { name: kernel.event_subscriber }
 

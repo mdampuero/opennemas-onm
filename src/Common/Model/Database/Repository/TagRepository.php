@@ -39,6 +39,99 @@ class TagRepository extends BaseRepository
     }
 
     /**
+     * Returns a list where key is the tag id and value is the number of
+     * contents assigned to the tag.
+     *
+     * @param mixed $ids A tag id or a list of tag ids.
+     *
+     * @return array The list where keys are the tag ids and values are the
+     *               number of contents.
+     */
+    public function countContents($ids)
+    {
+        if (empty($ids)) {
+            throw new \InvalidArgumentException();
+        }
+
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+
+        $sql = 'SELECT tag_id AS "id", COUNT(1) AS "contents" '
+            . 'FROM contents_tags '
+            . 'WHERE tag_id IN (?) '
+            . 'GROUP BY tag_id';
+
+        $data = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        $contents = [];
+
+        foreach ($data as $value) {
+            $contents[$value['id']] = $value['contents'];
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Moves all contents assigned to tags basing on a tag id
+     *
+     * @param integer $id     The tag id
+     * @param integer $target The tag id of the target tag.
+     *
+     * @return array The list of ids and content types of the moved contents.
+     */
+    public function moveContents($ids, $target)
+    {
+        if (empty($ids) || empty($target)) {
+            throw new \InvalidArgumentException();
+        }
+
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+
+        $sql = 'SELECT content_id AS "id", content_type_name AS "type"'
+            . ' FROM contents_tags'
+            . ' INNER JOIN contents'
+            . ' ON contents_tags.content_id = contents.pk_content'
+            . ' WHERE tag_id IN (?)';
+
+        $contents = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        if (empty($contents)) {
+            return [];
+        }
+
+        $sql = 'UPDATE IGNORE contents_tags SET tag_id = ?'
+            . ' WHERE tag_id IN (?)';
+
+        $this->conn->executeQuery(
+            $sql,
+            [ $target, $ids ],
+            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        $sql = 'DELETE FROM contents_tags WHERE tag_id IN (?)';
+
+        $this->conn->executeQuery(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        return $contents;
+    }
+
+    /**
      * Returns the number of contents associated to every tag in a list of tags.
      *
      * @param array $ids The list of tag ids.
@@ -63,5 +156,25 @@ class TagRepository extends BaseRepository
         }
 
         return $stats;
+    }
+
+    /**
+     * Returns a list of all tags.
+     *
+     * @return array The list of tags.
+     */
+    public function findTagsWithContentCount()
+    {
+        $sql = 'SELECT tags.*, COUNT(contents_tags.tag_id) AS content_count
+                FROM tags
+                LEFT JOIN contents_tags ON tags.id = contents_tags.tag_id
+                GROUP BY tags.id
+                ORDER BY tags.name ASC';
+        try {
+            $tags = $this->conn->fetchAll($sql);
+            return $tags;
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Error al obtener etiquetas: " . $e->getMessage());
+        }
     }
 }

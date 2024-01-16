@@ -67,6 +67,9 @@ frontend_framework:
 frontend_frontpage:
     resource: '@FrontendBundle/Resources/config/routing/frontpage.yml'
 
+frontend_hbbtv:
+    resource: '@FrontendBundle/Resources/config/routing/hbbtv.yml'
+
 frontend_letter:
     resource: '@FrontendBundle/Resources/config/routing/letter.yml'
 
@@ -120,3 +123,6 @@ frontend_video:
 
 frontend_widget:
     resource: '@FrontendBundle/Resources/config/routing/widget.yml'
+
+frontend_webpush_notifications:
+    resource: '@FrontendBundle/Resources/config/routing/webpush_notifications.yml'

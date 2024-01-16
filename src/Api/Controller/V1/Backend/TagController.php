@@ -10,10 +10,12 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
+use League\Csv\Writer;
 use Common\Core\Component\Validator\Validator;
 use Common\Model\Entity\Tag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Lists and displays tags.
@@ -41,6 +43,7 @@ class TagController extends ApiController
         'save'   => 'TAG_CREATE',
         'show'   => 'TAG_UPDATE',
         'update' => 'TAG_UPDATE',
+        'move'   => 'TAG_UPDATE',
     ];
 
     /**
@@ -78,6 +81,89 @@ class TagController extends ApiController
         }
 
         return new JsonResponse($settings);
+    }
+
+        /**
+     * Downloads the list of tags.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function getReportAction()
+    {
+        // Get information
+        $tags = $this->get('api.service.tag')->getReport();
+
+        // Prepare contents for CSV
+        $headers = [
+            _('Name'),
+            _('Slug'),
+            _('Description'),
+            _('Contents')
+        ];
+
+        if ($this->container->get('core.instance')->hasMultilanguage()) {
+            $headers[] = _('Locale');
+        }
+
+        $data = [];
+        foreach ($tags as $tag) {
+            $tagInfo = [
+                $tag['name'],
+                $tag['slug'],
+                $tag['description'],
+                $tag['content_count']
+            ];
+
+            if ($this->container->get('core.instance')->hasMultilanguage()) {
+                $tagInfo[] = $tag['locale'] ?? '';
+            }
+
+            $data[] = $tagInfo;
+        }
+
+        // Prepare the CSV content
+        $writer = Writer::createFromFileObject(new \SplTempFileObject());
+        $writer->setDelimiter(';');
+        $writer->setInputEncoding('utf-8');
+        $writer->insertOne($headers);
+        $writer->insertAll($data);
+
+        $response = new Response($writer, 200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Tags list Export');
+        $response->headers->set(
+            'Content-Disposition',
+            'attachment; filename=tags-' . date('Y-m-d') . '.csv'
+        );
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Cache-Control', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
+    }
+
+    /**
+     * Moves all contents assigned to the tag to the target tag.
+     *
+     * @param Request $request The request object.
+     * @param integer $id      The tag id.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function moveItemAction(Request $request, $id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('move'));
+
+        $target = $request->request->get('target', null);
+        $msg    = $this->get('core.messenger');
+
+        $this->get($this->service)->moveItem($id, $target);
+
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**

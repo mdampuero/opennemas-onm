@@ -78,7 +78,7 @@ class Opinions
                 )['items'];
 
             foreach ($opinions as &$opinion) {
-                $opinion->externalUri = 'ext' . get_url($opinion);
+                $opinion->externalUri = 'ext' . getService('core.helper.url_generator')->generate($opinion);
             }
             return $opinions;
         } catch (GetListException $e) {
@@ -99,7 +99,7 @@ class Opinions
                 )['items'];
 
             foreach ($opinions as &$opinion) {
-                $opinion->externalUri = 'ext' . get_url($opinion);
+                $opinion->externalUri = 'ext' . getService('core.helper.url_generator')->generate($opinion);
             }
             return $opinions;
         } catch (GetListException $e) {
@@ -123,7 +123,7 @@ class Opinions
             )['items'];
 
             foreach ($opinions as &$opinion) {
-                $opinion->externalUri = 'ext' . get_url($opinion);
+                $opinion->externalUri = 'ext' . getService('core.helper.url_generator')->generate($opinion);
             }
 
             return $opinions;
@@ -213,7 +213,7 @@ class Opinions
 
         foreach ($otherOpinions as &$otherOpinion) {
             $otherOpinion->author_name_slug = $opinion->author_name_slug;
-            $otherOpinion->externalUri      = 'ext' . get_url($otherOpinion);
+            $otherOpinion->externalUri      = 'ext' . getService('core.helper.url_generator')->generate($otherOpinion);
         }
 
         return $otherOpinions;

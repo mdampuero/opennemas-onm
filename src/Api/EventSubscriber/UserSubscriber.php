@@ -43,6 +43,10 @@ class UserSubscriber implements EventSubscriberInterface
             'user.updateItem' => [
                 ['logAction', 5],
                 [ 'onUserUpdate', 5 ],
+            ],
+            'user.moveItem' => [
+                ['logAction', 5],
+                [ 'onUserMove', 5 ],
             ]
         ];
     }
@@ -52,11 +56,13 @@ class UserSubscriber implements EventSubscriberInterface
      *
      * @param Container       $container The service container.
      * @param UserCacheHelper $helper The helper to remove user caches.
+     * @param Cache           $redis  The cache service for redis.
      */
-    public function __construct($container, UserCacheHelper $helper)
+    public function __construct($container, UserCacheHelper $helper, $redis)
     {
         $this->container = $container;
         $this->helper    = $helper;
+        $this->redis     = $redis;
     }
 
     /**
@@ -112,6 +118,35 @@ class UserSubscriber implements EventSubscriberInterface
             $this->helper->deleteItem($user);
         }
 
+        $this->helper->deleteInstance();
+    }
+
+    /**
+     * Removes contents from cache, user list actions and varnish caches for
+     * the instance after moving contents from a user to another.
+     *
+     * @param Event $event The dispatched event.
+     */
+    public function onUserMove(Event $event)
+    {
+        if (!$event->hasArgument('contents')) {
+            return;
+        }
+        $contents = $event->getArgument('contents');
+        $cacheIds = [];
+        foreach ($contents as $content) {
+            $cacheIds[] = 'content-' . $content['id'];
+            $cacheIds[] = $content['type'] . '-' . $content['id'];
+        }
+        $source = $event->hasArgument('item')
+            ? [ $event->getArgument('item') ]
+            : $event->getArgument('items');
+        foreach ($source as $user) {
+            $this->helper->deleteItemVarnish($user);
+        }
+        foreach ($cacheIds as $cacheId) {
+            $this->redis->remove($cacheId);
+        }
         $this->helper->deleteInstance();
     }
 }

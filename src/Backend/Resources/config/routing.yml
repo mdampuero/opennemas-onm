@@ -172,6 +172,10 @@ backend_newsletter:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/newsletter.yml'
 
+backend_webpush_notifications:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/webpush_notifications.yml'
+
 backend_newsletter_template:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/newsletter_template.yml'

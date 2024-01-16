@@ -1,36 +1,106 @@
 {extends file="common/extension/list.table.tpl"}
 
-{block name="columns"}{/block}
+{block name="commonColumns"}
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-picture" checklist-model="app.columns.selected" checklist-value="'picture'" type="checkbox">
+    <label for="checkbox-picture">
+      {t}Picture{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-name" checklist-model="app.columns.selected" checklist-value="'name'" type="checkbox">
+    <label for="checkbox-name">
+      {t}Name{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-email" checklist-model="app.columns.selected" checklist-value="'email'" type="checkbox">
+    <label for="checkbox-email">
+      {t}Email{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-username" checklist-model="app.columns.selected" checklist-value="'username'" type="checkbox">
+    <label for="checkbox-username">
+      {t}Username{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-bio" checklist-model="app.columns.selected" checklist-value="'bio'" type="checkbox">
+    <label for="checkbox-bio">
+      {t}Short Biography{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-description" checklist-model="app.columns.selected" checklist-value="'description'" type="checkbox">
+    <label for="checkbox-description">
+      {t}Biography{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-slug" checklist-model="app.columns.selected" checklist-value="'slug'" type="checkbox">
+    <label for="checkbox-slug">
+      {t}Slug{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-usergroups" checklist-model="app.columns.selected" checklist-value="'usergroups'" type="checkbox">
+    <label for="checkbox-usergroups">
+     {t}User groups{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-social" checklist-model="app.columns.selected" checklist-value="'social'" type="checkbox">
+    <label for="checkbox-social">
+     {t}Social{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-enabled" checklist-model="app.columns.selected" checklist-value="'enabled'" type="checkbox">
+    <label for="checkbox-enabled">
+     {t}Enabled{/t}
+    </label>
+  </div>
+{/block}
 
 {block name="commonColumnsHeader"}
-  <th class="text-center v-align-middle" width="80">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('picture')" width="80">
     <i class="fa fa-picture-o"></i>
   </th>
-  <th class="v-align-middle" width="400">
+  <th class="v-align-middle" ng-if="isColumnEnabled('name')" width="400">
     {t}Name{/t}
   </th>
-  <th class="v-align-middle" width="400">
+  <th class="v-align-middle" ng-if="isColumnEnabled('email')" width="400">
     {t}Email{/t}
   </th>
-  <th class="v-align-middle" width="240">
+  <th class="v-align-middle" ng-if="isColumnEnabled('username')" width="240">
     {t}Username{/t}
   </th>
-  <th class="v-align-middle" width="200">
+  <th class="v-align-middle" ng-if="isColumnEnabled('bio')" width="240">
+    {t}Short Biography{/t}
+  </th>
+  <th class="v-align-middle" ng-if="isColumnEnabled('description')" width="240">
+    {t}Biography{/t}
+  </th>
+  <th class="v-align-middle" ng-if="isColumnEnabled('slug')" width="240">
+    {t}Slug{/t}
+  </th>
+  <th class="v-align-middle" ng-if="isColumnEnabled('usergroups')" width="200">
     {t}User groups{/t}
   </th>
-  <th class="text-center v-align-middle" width="100">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('social')" width="100">
     {t}Social{/t}
   </th>
-  <th class="text-center v-align-middle" width="100">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('enabled')" width="100">
     {t}Enabled{/t}
   </th>
 {/block}
 
 {block name="commonColumnsBody"}
-  <td class="text-center v-align-middle">
-    <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path" ng-if="item.avatar_img_id"></dynamic-image>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('picture')">
+    <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path"></dynamic-image>
   </td>
-  <td>
+  <td ng-if="isColumnEnabled('name')">
     <div class="table-text" ng-if="item.name">
       [% item.name %]
     </div>
@@ -42,23 +112,43 @@
         <a class="btn btn-white btn-small" href="[% routing.generate('backend_user_show', { id: item.id }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
           <i class="fa fa-pencil text-success_"></i>
         </a>
+        {acl isAllowed="MASTER"}
+        <a class="btn btn-white btn-small"  href="#" ng-click="move(getItemId(item), item)" uib-tooltip="{t}Move contents{/t}" tooltip-placement="top">
+          <i class="fa fa-flip-horizontal fa-reply"></i>
+        </a>
+        {/acl}
         <button class="btn btn-white btn-small" ng-click="delete(item.id)" ng-if="backup.master || item.id != backup.id" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
           <i class="fa fa-trash-o text-danger"></i>
         </button>
       </div>
     {/block}
   </td>
-  <td class="v-align-middle">
+  <td class="v-align-middle" ng-if="isColumnEnabled('email')">
     <div class="table-text">
       [% item.email %]
     </div>
   </td>
-  <td class="v-align-middle">
+  <td class="v-align-middle" ng-if="isColumnEnabled('username')">
     <div class="table-text">
       [% item.username %]
     </div>
   </td>
-  <td class="v-align-middle">
+  <td class="v-align-middle" ng-if="isColumnEnabled('bio')">
+    <div class="table-text">
+      [% item.bio %]
+    </div>
+  </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('description')">
+    <div class="table-text">
+      [% item.bio_description %]
+    </div>
+  </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('slug')">
+    <div class="table-text">
+      [% item.slug %]
+    </div>
+  </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('usergroups')">
     <ul class="no-style">
       <li class="m-b-5 m-r-5 pull-left" ng-repeat="(id, user_group) in item.user_groups" ng-if="data.extra.user_groups[user_group.user_group_id] && user_group.status !== 0" uib-tooltip="{t}User group disabled{/t}" tooltip-enable="data.extra.user_groups[user_group.user_group_id].enabled === 0">
         <a class="label text-uppercase" ng-class="{ 'label-danger': !data.extra.user_groups[id].enabled, 'label-default': data.extra.user_groups[user_group.user_group_id].enabled }" href="[% routing.generate('backend_user_group_show', { id: user_group.user_group_id }) %]">
@@ -68,7 +158,7 @@
       </li>
     </ul>
   </td>
-  <td class="text-center v-align-middle">
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('social')">
     <ul class="no-style">
       <li ng-show="item.facebook_id">
         <i class="fa fa-facebook-official fa-lg m-b-10 text-facebook"></i>
@@ -81,7 +171,7 @@
       </li>
     </ul>
   </td>
-  <td class="text-center v-align-middle">
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('enabled')">
     <button class="btn btn-white" ng-click="confirm('activated', item.activated != 1 ? 1 : 0, item)" type="button">
       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.activatedLoading, 'fa-check text-success' : !item.activatedLoading && item.activated == '1', 'fa-times text-error': !item.activatedLoading && item.activated == '0' }"></i>
     </button>

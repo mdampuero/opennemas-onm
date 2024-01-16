@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-20 06:13+0000\n"
-"PO-Revision-Date: 2023-09-20 08:14+0200\n"
+"POT-Creation-Date: 2023-12-18 08:22+0000\n"
+"PO-Revision-Date: 2023-12-18 09:27+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -308,6 +308,15 @@ msgstr "Listas"
 msgid "Newsletters"
 msgstr "Boletín de noticias"
 
+msgid "Web Push"
+msgstr "Web Push"
+
+msgid "History"
+msgstr "Historial"
+
+msgid "Configuration"
+msgstr "Configuración"
+
 msgid "Utilities"
 msgstr "Utilidades"
 
@@ -337,12 +346,6 @@ msgstr "Grupos de usuario"
 
 msgid "Store"
 msgstr "Tienda"
-
-msgid "Modules"
-msgstr "Módulos"
-
-msgid "Themes"
-msgstr "Temas"
 
 msgid "Domains"
 msgstr "Dominios"
@@ -1081,6 +1084,9 @@ msgstr "Instancias"
 msgid "Extensions"
 msgstr "Extensiones"
 
+msgid "Modules"
+msgstr "Módulos"
+
 msgid "Notifications"
 msgstr "Notificaciones"
 
@@ -1239,6 +1245,13 @@ msgstr ""
 "El tamaño mínimo para el %s es 200x200. Por favor ajusta el tamaño de la "
 "imagen."
 
+msgid ""
+"Notification scheduled successfully. For further details, click <a href="
+"\"webpush_notifications/history\">here</a>"
+msgstr ""
+"Notificación planificada con éxito. Para más detalles, pincha <a href="
+"\"webpush_notifications/history\">aquí</a>"
+
 msgid "Running cleanup in background"
 msgstr "Ejecutando limpieza en segundo plano"
 
@@ -1369,6 +1382,12 @@ msgstr "Sí"
 msgid "No"
 msgstr "No"
 
+msgid "Slug"
+msgstr "Slug"
+
+msgid "Locale"
+msgstr "Idioma"
+
 msgid "Contents translated successfully"
 msgstr "Contenidos traducidos correctamente"
 
@@ -1387,6 +1406,9 @@ msgstr "Comprueba la dirección del vídeo, parece ser incorrecta."
 msgid "Can't get video information. Check the url"
 msgstr ""
 "No es posible obtener la información del vídeo. Comprueba la dirección."
+
+msgid "Webpush Module is not activated"
+msgstr "El módulo Webpush no está activado"
 
 msgid "Author id"
 msgstr "Id del autor"
@@ -1471,9 +1493,6 @@ msgstr "No hay información de facturación."
 
 msgid "Author"
 msgstr "Autor"
-
-msgid "Slug"
-msgstr "Slug"
 
 msgid "External link"
 msgstr "Enlace externo"
@@ -1673,6 +1692,9 @@ msgstr "Portadas de fichero"
 msgid "Manage Newsletter"
 msgstr "Gestionar boletín de noticias"
 
+msgid "Manage Web Push notifications"
+msgstr "Administrar notificaciones Web Push"
+
 msgid "Manage caches"
 msgstr "Gestionar cachés"
 
@@ -1786,9 +1808,6 @@ msgstr "Ocultar etiquetas"
 
 msgid "Prevent search engine indexation"
 msgstr "Evitar el indexado de motores de búsqueda"
-
-msgid "Configuration"
-msgstr "Configuración"
 
 msgid "Cannot use a language code as subdirectory"
 msgstr "No se puede usar un código de idioma como subdirectorio"
@@ -2166,6 +2185,9 @@ msgstr "Activando"
 
 msgid "Active"
 msgstr "Activo"
+
+msgid "Themes"
+msgstr "Temas"
 
 msgid "Available"
 msgstr "Disponible"
@@ -3594,6 +3616,126 @@ msgstr "Volver a la lista"
 msgid "Email subject"
 msgstr "Asunto del email"
 
+msgid "Identificator"
+msgstr "Identificador"
+
+msgid "Send date"
+msgstr "Fecha de envío"
+
+msgid "Impressions"
+msgstr "Visualizaciones"
+
+msgid "Clicks"
+msgstr "Clicks"
+
+msgid "Closed"
+msgstr "Cerrada"
+
+msgid "CTR"
+msgstr "CTR"
+
+msgid "Transaction Id"
+msgstr "Identificador de transacción"
+
+msgid "Times a notification was"
+msgstr "Veces que una notificación fue"
+
+msgid "displayed to the user"
+msgstr "mostrada al usuario"
+
+msgid "clicked by the user"
+msgstr "clicada por el usuario"
+
+msgid "closed by the user"
+msgstr "cerrada por el usuario"
+
+msgid "Interactions (Clicks + Closed)"
+msgstr "Interacciones (Clicks + Cerradas)"
+
+msgid "divided by Impressions"
+msgstr "dividido por Visualizaciones"
+
+msgid "Scheduled"
+msgstr "Planificado"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Web Push notifications Configuration"
+msgstr "Configuración del módulo Web Push"
+
+msgid "Web Push service"
+msgstr "Servicio Web Push"
+
+msgid "Webpushr"
+msgstr "Webpushr"
+
+msgid "Automatic sent"
+msgstr "Envío automático"
+
+msgid "Will be sent when content is published"
+msgstr "Será enviada cuando el contenido esté publicado"
+
+msgid "Notifications delay time"
+msgstr "Tiempo de retraso en notificaciones"
+
+msgid "Restricted hours"
+msgstr "Horas restringidas"
+
+msgid "Webpushr service credentials"
+msgstr "Credenciales del servicio Webpushr"
+
+msgid "Can be found in Webpushr APP"
+msgstr "Puede encontrarse en la APP de Webpushr"
+
+msgid "Authentication token"
+msgstr "Token de autenticación"
+
+msgid "Public key"
+msgstr "Llave pública"
+
+msgid "Web Push notifications"
+msgstr "Notificaciones Web Push"
+
+msgid "Web Push notifications History"
+msgstr "Historial de notificaciones Web Push"
+
+msgid "Improve your manager"
+msgstr "Mejora tu gestor"
+
+msgid "Contact with us to enjoy this feature."
+msgstr "Contacta con nosotros para disfrutar de esta función."
+
+msgid "I want this module"
+msgstr "Quiero este módulo"
+
+msgid "Mosaic"
+msgstr "Mosaico"
+
+msgid "Reload"
+msgstr "Recargar"
+
+msgid "Notifications data is updated every 15 minutes"
+msgstr "Los datos de las notificaciones se actualizan cada 15 minutos"
+
+msgid "Web Push notifications Dashboard"
+msgstr "Panel de control de notificaciones Web Push"
+
+msgid "Active Subscribers"
+msgstr "Subscriptores activos"
+
+msgid "Monthly"
+msgstr "Mensual"
+
+msgid "Interactions"
+msgstr "Interacciones"
+
+msgid "clicked or closed"
+msgstr "clicada o cerrada"
+
+msgid "New Active Subscribers"
+msgstr "Nuevos Suscriptores Activos"
+
 msgid "transform"
 msgstr "transformar"
 
@@ -3841,6 +3983,17 @@ msgid "Regardless of resolution, images will keep its original aspect ratio"
 msgstr ""
 "Sin importar la resolución, las imagenes conservarán su aspecto original"
 
+msgid "Image type"
+msgstr "Tipo de imagen"
+
+msgid ""
+"This will convert all png images with a height greater than 120px to jpg."
+msgstr ""
+"Esto convertirá todas las imágenes png con una altura superior a 120px a jpg."
+
+msgid "Convert png to jpg"
+msgstr "Convertir png a jpg"
+
 msgid "Config photos module"
 msgstr "Configuración del módulo «Fotos»"
 
@@ -4079,9 +4232,6 @@ msgstr "Nueva encuesta"
 
 msgid "Open"
 msgstr "Abierta"
-
-msgid "Closed"
-msgstr "Cerrada"
 
 msgid "Answers"
 msgstr "Respuestas"
@@ -4358,9 +4508,6 @@ msgstr ""
 
 msgid "Global search"
 msgstr "Búsqueda global"
-
-msgid "Unable to find any content that matches your search."
-msgstr "No se pudieron encontrar contenidos que coincidan con tu búsqueda."
 
 msgid "Search Fields"
 msgstr "Campos de búsqueda"
@@ -5015,6 +5162,15 @@ msgstr "Adobe Analytics"
 msgid "Adobe analytics Base File"
 msgstr "Archivo base para Adobe Analytics"
 
+msgid "Google Analytics (Native)"
+msgstr "Google Analytics (Native)"
+
+msgid "Google analytics ID"
+msgstr "Google analytics ID"
+
+msgid "Google analytics config File"
+msgstr "Archivo de configuración de Google Analytics"
+
 msgid "Internal settings"
 msgstr "Preferencias internas"
 
@@ -5029,9 +5185,6 @@ msgstr "Shared secret"
 
 msgid "Google Recaptcha"
 msgstr "Google Recaptcha"
-
-msgid "Public key"
-msgstr "Llave pública"
 
 msgid "Private key"
 msgstr "Llave privada"
@@ -5291,18 +5444,6 @@ msgstr ""
 "Si ya tienes una <b>página de Dailymotion</b>, añade tu URL de la página en "
 "el formulario."
 
-msgid "WebPush service integration"
-msgstr "Integración con servicio de WebPush"
-
-msgid "Webpushr"
-msgstr "Webpushr"
-
-msgid "Webpushr Api Key"
-msgstr "Webpushr Auth Key"
-
-msgid "Webpushr Auth Key"
-msgstr "Webpushr Auth Key"
-
 msgid "Control Panel Language"
 msgstr "Idioma del panel de control"
 
@@ -5438,6 +5579,9 @@ msgstr "Quantcast"
 msgid "OneTrust"
 msgstr "OneTrust"
 
+msgid "Didomi"
+msgstr "Didomi"
+
 msgid "Quantcast UTID"
 msgstr "Quantcast UTID"
 
@@ -5468,8 +5612,23 @@ msgstr ""
 "a6fd-fb7ebff9f8dc_section-idm4591571479548831554522590036\" target=\"_blank"
 "\" ng-click=\"$event.stopPropagation();\">aqui</a>."
 
-msgid "Use CMP on your AMP pages"
-msgstr "Use CMP en sus páginas AMP"
+msgid "Didomi apiKey"
+msgstr "Didomi apiKey"
+
+msgid ""
+"Help to find your Didomi credentials <a class=\"external-link\" href="
+"\"https://support.didomi.io/\" target=\"_blank\" ng-click=\"$event."
+"stopPropagation();\">here</a>."
+msgstr ""
+"Ayuda para encontrar tus credenciales de Didomi <a class=\"external-link\" "
+"href=\"https://support.didomi.io/\" target=\"_blank\" ng-click=\"$event."
+"stopPropagation();\">aquí</a>."
+
+msgid "Didomi noticeId"
+msgstr "Didomi noticeId"
+
+msgid "Didomi noticeId for AMP"
+msgstr "Didomi noticeId para AMP"
 
 msgid "Browser update"
 msgstr "Actualización de navegador"
@@ -6190,6 +6349,13 @@ msgid "Check it as \"Published\" to send webpush notifications."
 msgstr ""
 "Marca el contenido como \"Publicado\" para enviar notificaciones WebPush"
 
+msgid ""
+"Automatic notification is enabled, save action will send a webpush "
+"notification"
+msgstr ""
+"El envío automático está activado, guardar el contenido enviará una "
+"notificación webpush"
+
 msgid "SEND NOTIFICATION"
 msgstr "ENVIAR NOTIFICACIÓN"
 
@@ -6290,6 +6456,9 @@ msgstr "Fecha de inicio de publicación"
 msgid "Publication end date"
 msgstr "Fecha de final de publicación"
 
+msgid "URL Datetime"
+msgstr "URL Fecha y Hora"
+
 msgid "This content will only be available in the time range specified above."
 msgstr ""
 "Este contenido sólo estará disponible en el rango de tiempo especificado "
@@ -6307,8 +6476,8 @@ msgstr "Selecciona un sector…"
 msgid "Internal search"
 msgstr "Búsqueda interna"
 
-msgid "Locale"
-msgstr "Idioma"
+msgid "Do you want to move contents in tag?"
+msgstr "¿Quieres mover los cotenidos en la categoría?"
 
 msgid "Maximum number of tags per content"
 msgstr "Número máximo de etiquetas por contenido"
@@ -6533,12 +6702,6 @@ msgstr "Actualizado"
 msgid "No category"
 msgstr "Sin categoría"
 
-msgid "Mosaic"
-msgstr "Mosaico"
-
-msgid "Reload"
-msgstr "Recargar"
-
 msgid "Unable to find any item or you don't have permission to see the list."
 msgstr ""
 "No se han encontrado elementos que coincidan con tu búsqueda o no tienes "
@@ -6730,7 +6893,7 @@ msgid "Read"
 msgstr "Leídas"
 
 msgid "Clicked"
-msgstr "Clickadas"
+msgstr "Clicks"
 
 msgid "Opened"
 msgstr "Abiertas"
@@ -6915,9 +7078,6 @@ msgstr "Tema"
 msgid "Theme addon"
 msgstr "Añadido de tema"
 
-msgid "Monthly"
-msgstr "Mensual"
-
 msgid "w/customization"
 msgstr "w/personalización"
 
@@ -6963,6 +7123,9 @@ msgstr "Tamaño del media"
 msgid "Page views"
 msgstr "Páginas vistas"
 
+msgid "Web Push subscribers"
+msgstr "Suscriptores Web Push"
+
 msgid "Blocked"
 msgstr "Bloqueada"
 
@@ -6979,9 +7142,6 @@ msgstr "Email de contacto de la instancia"
 
 msgid "Instance domains"
 msgstr "Dominios de la instancia"
-
-msgid "Error"
-msgstr "Error"
 
 msgid "A new instance has been created"
 msgstr "Se ha creado una nueva instancia"
@@ -7392,6 +7552,27 @@ msgstr "eliminarlo"
 msgid "delete them"
 msgstr "eliminarlos"
 
+#~ msgid "Unable to find any content that matches your search."
+#~ msgstr "No se pudieron encontrar contenidos que coincidan con tu búsqueda."
+
+#~ msgid "Use CMP on your AMP pages"
+#~ msgstr "Use CMP en sus páginas AMP"
+
+#~ msgid "Successfully sent"
+#~ msgstr "Enviado con éxito"
+
+#~ msgid "Edit content"
+#~ msgstr "Editar contenido"
+
+#~ msgid "Won't take effect on manual sending"
+#~ msgstr "No tendrá efecto para el envío manual"
+
+#~ msgid "Webpushr Api Key"
+#~ msgstr "Webpushr Auth Key"
+
+#~ msgid "Webpushr Auth Key"
+#~ msgstr "Webpushr Auth Key"
+
 #~ msgid "External"
 #~ msgstr "Externo"
 
@@ -7416,9 +7597,6 @@ msgstr "eliminarlos"
 
 #~ msgid "Book '%s' deleted successfully."
 #~ msgstr "Libro «%s» eliminado correctamente."
-
-#~ msgid "Special successfully created."
-#~ msgstr "Especial creado con éxito."
 
 #~ msgid "Unable to create the new special."
 #~ msgstr "No se pudo crear el nuevo especial."
@@ -7516,10 +7694,6 @@ msgstr "eliminarlos"
 
 #~ msgid "Word count"
 #~ msgstr "Número de palabras"
-
-#, fuzzy
-#~ msgid "Homepage manager"
-#~ msgstr "Gestor de portadas"
 
 #, fuzzy
 #~ msgid "Advertising"
@@ -7840,9 +8014,6 @@ msgstr "eliminarlos"
 
 #~ msgid "Keyword"
 #~ msgstr "Palabra clave"
-
-#~ msgid "Edit this content"
-#~ msgstr "Editar este contenido"
 
 #~ msgid "Are you sure that do you want remove \"%1\"?"
 #~ msgstr "¿Estás seguro de que quieres eliminar \"%1\"?"
@@ -8356,9 +8527,6 @@ msgstr "eliminarlos"
 
 #~ msgid "Purchases last month"
 #~ msgstr "Compras en el último mes"
-
-#~ msgid "Paypal API authentication"
-#~ msgstr "Autenticación del API de Paypal"
 
 #~ msgid "Get this parameters from your "
 #~ msgstr "Obtenga estos parametros desde su"

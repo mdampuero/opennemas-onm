@@ -44,6 +44,7 @@ orm:
                 position:             integer
                 slug:                 l10n_string
                 starttime:            datetime
+                urldatetime:          string
                 coverage_start_time:  string
                 coverage_end_time:    string
                 title:                l10n_string
@@ -126,6 +127,14 @@ orm:
                                 id:
                                     type: integer
                                 fk_content:
+                                    type: integer
+                                transaction_id:
+                                    type: string
+                                impressions:
+                                    type: integer
+                                clicks:
+                                    type: integer
+                                closed:
                                     type: integer
                                 status    :
                                     type: integer
