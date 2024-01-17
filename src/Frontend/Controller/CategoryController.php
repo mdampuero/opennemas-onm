@@ -300,14 +300,16 @@ class CategoryController extends FrontendController
         }
 
         $params['articles'] = $contents;
-        $xtags              = '';
+
+        $xtags = [];
 
         foreach ($contents as $content) {
             if ($content->fk_author) {
-                $xtags .= ',category-author-' . $content->fk_author;
+                $xtags[] = ',category-author-' . $content->fk_author;
             }
         }
 
+        $xtags            = implode(',', array_unique($xtags));
         $xtags            = $params['x-tags'] . $xtags;
         $params['x-tags'] = $xtags;
 

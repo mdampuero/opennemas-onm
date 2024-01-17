@@ -432,8 +432,8 @@ class FrontendController extends Controller
 
             $params['x-cacheable'] = empty($params['o_token'])
                 && (!$request->hasPreviousSession()
-                    || $request->hasPreviousSession()
-                    && empty($request->getSession()->getFlashBag()->peekAll()));
+                    || ($request->hasPreviousSession()
+                    && empty($request->getSession()->getFlashBag()->peekAll())));
 
             if ($item instanceof Content) {
                 $params['x-tags'][] = $this->get('api.helper.cache.content')->getXTags($item);

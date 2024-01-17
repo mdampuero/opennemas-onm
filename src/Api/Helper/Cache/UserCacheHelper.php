@@ -64,15 +64,13 @@ class UserCacheHelper extends CacheHelper
         }
 
         $varnishKeys = [
-            'author-' . $user->id . '$',
+            'author-' . $user->id . '(,|$)',
+            'author-widget-' . $user->id . '(,|$)',
             'content-author-' . $user->id . '-frontpage',
             'opinion-author-' . $user->id . '-frontpage',
             'opinion-frontpage',
-            'author-widget-' . $user->id . '$',
             'author-widget-all',
-            'author-tag-' . $user->id . '$',
-            'author-category-' . $user->id . '$',
-            'sitemap',
+            'sitemap,authors',
             'archive',
         ];
 

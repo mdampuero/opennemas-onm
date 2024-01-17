@@ -95,7 +95,7 @@ class TagController extends FrontendController
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
         $params = $request->query->all();
-        $xtags  = '';
+        $xtags  = [];
 
         // Deprecate resource parameter
         unset($params['resource']);
@@ -116,10 +116,10 @@ class TagController extends FrontendController
 
         foreach ($params['contents'] as $content) {
             if ($content->fk_author) {
-                $xtags .= ',tag-author-' . $content->fk_author;
+                $xtags[] = ',tag-author-' . $content->fk_author;
             }
         }
-
+        $xtags            = implode('', array_unique($xtags));
         $xtags            = $params['x-tags'] . $xtags;
         $params['x-tags'] = $xtags;
 
