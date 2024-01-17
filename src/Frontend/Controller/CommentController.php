@@ -54,13 +54,22 @@ class CommentController extends FrontendController
         $epp       = (int) $request->query->get('elems_per_page');
         $offset    = $request->query->getDigits('offset', 1);
 
-        $content = $this->getContent($contentId);
+        $cache = $this->container->get('cache.connection.instance');
+        $key   = 'comments-' . $contentId;
 
-        if (empty($content)) {
-            return new Response('', 404);
+        $comments = $cache->get($key);
+
+        if (empty($comments)) {
+            $content = $this->getContent($contentId);
+
+            if (empty($content)) {
+                return new Response('', 404);
+            }
+
+            $comments = $this->getComments($content, $epp, $offset);
+
+            $cache->set($key, $comments);
         }
-
-        $comments = $this->getComments($content, $epp, $offset);
 
         $sh = $this->get('core.helper.subscription');
 
