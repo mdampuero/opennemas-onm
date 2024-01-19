@@ -237,7 +237,7 @@ class WidgetFactory
             }
         }
 
-        return $xtags;
+        return array_unique($xtags);
     }
 
     /**
