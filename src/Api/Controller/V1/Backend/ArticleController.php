@@ -75,6 +75,30 @@ class ArticleController extends ContentController
         return new JsonResponse([ 'extra_fields' => $settings ]);
     }
 
+    public function patchItemAction(Request $request, $id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
+        $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', [ $id ]);
+
+        $msg = $this->get('core.messenger');
+
+        $this->get($this->service)
+            ->patchItem($id, $request->request->all());
+
+        if (array_key_exists('webpush_notifications', $request->request->all())) {
+            $msg->add(
+                _(
+                    'Notification scheduled successfully.'
+                    . ' For further details, click <a href="webpush_notifications/history">here</a>'
+                ),
+                'success'
+            );
+        } else {
+            $msg->add(_('Item saved successfully'), 'success');
+        }
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
     /**
      * Loads extra data related to the given contents.
      *
@@ -92,6 +116,10 @@ class ArticleController extends ContentController
                 ->get('extraInfoContents.ARTICLE_MANAGER');
         }
 
+        $autoNotifications = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('webpush_automatic');
+
         $categories = $this->get('api.service.category')->responsify(
             $this->get('api.service.category')->getList()['items']
         );
@@ -104,6 +132,7 @@ class ArticleController extends ContentController
             'categories'    => $categories,
             'extra_fields'  => $extraFields ?? null,
             'subscriptions' => $subscriptions,
+            'auto_webpush'  => $autoNotifications ?? 0,
             'tags'          => $this->getTags($items),
             'formSettings'  => [
                 'name'             => $this->module,

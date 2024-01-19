@@ -29,6 +29,12 @@ parameters:
                     actions:
                         get_subscribers:
                             path: '/v1/site/subscriber_count'
+            status:
+                class: 'Common\External\WebPush\Component\Endpoint\StatusEndpoint'
+                config:
+                    actions:
+                        get_status:
+                            path: '/v1/notification/status/id/'
 services:
     external.web_push.provider.config:
         class:     'Common\External\WebPush\Component\Configuration\OrmConfigurationProvider'

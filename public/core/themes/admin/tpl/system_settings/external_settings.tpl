@@ -213,6 +213,42 @@
                 </div>
               </div>
               {if $app.security->hasPermission('MASTER')}
+              <div class="panel-group" id="panel-group-marfeel-pass" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#accordion-marfeel-pass" data-toggle="collapse" href="#marfeel-pass">
+                        <i class="fa fa-ticket"></i>{t}Marfeel Pass{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="marfeel-pass">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="marfeel-pass-id">
+                          {t}Marfeel Pass EXPERIENCE ID{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="marfeel-pass-id" name="marfeel-pass-id" ng-model="settings.marfeel_pass.id" type="text">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label" for="marfeel-pass-cmp">
+                          {t}Use Marfeel Pass CMP notice{/t}
+                        </label>
+                        <div class="controls">
+                          <select id="marfeel-pass-cmp" name="marfeel-pass-cmp" ng-model="settings.marfeel_pass.cmp">
+                            <option value="">{t}No{/t}</option>
+                            <option value="1">{t}Yes{/t}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/if}
+              {if $app.security->hasPermission('MASTER')}
               <div class="panel-group" id="panel-group-gfk" data-toggle="collapse">
                 <div class="panel panel-default">
                   <div class="panel-heading collapsed">
@@ -1028,46 +1064,6 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <h4>
-                <i class="fa fa-bell"></i>
-                {t}WebPush service integration{/t}
-              </h4>
-              <div class="panel-group" id="panel-group-webpushr" data-toggle="collapse">
-                <div class="panel panel-default">
-                  <div class="panel-heading collapsed">
-                    <h4 class="panel-title">
-                      <a class="collapsed" data-parent="#panel-group-webpushr" data-toggle="collapse" href="#webpushr">
-                        <i class="fa fa-envelope"></i>
-                        {t}Webpushr{/t}
-                      </a>
-                    </h4>
-                  </div>
-                  <div class="panel-collapse collapse" id="webpushr">
-                    <div class="panel-body">
-                      <div class="form-group">
-                        <div class="form-group">
-                          <label class="form-label" for="webpushr-webpushrKey">
-                            {t}Webpushr Api Key{/t}
-                          </label>
-                          <div class="controls">
-                            <input class="form-control" id="webpushr-webpushrKey" name="webpushr-webpushrKey" ng-model="settings.webpush_apikey" type="text">
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label class="form-label" for="webpushr-webpushrAuthToken">
-                            {t}Webpushr Auth Key{/t}
-                          </label>
-                          <div class="controls">
-                            <input class="form-control" id="webpushr-webpushrAuthToken" name="webpushr-webpushrAuthToken" ng-model="settings.webpush_token" type="text">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-          </div>
         </div>
       </div>
     </div>

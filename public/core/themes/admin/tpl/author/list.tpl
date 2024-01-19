@@ -20,6 +20,15 @@
 {/block}
 
 {block name="primaryActions"}
+  <li class="quicklinks">
+    <a class="btn btn-white" href="[% routing.generate('api_v1_backend_author_get_report') %]">
+      <span class="fa fa-download"></span>
+      {t}Download{/t}
+    </a>
+  </li>
+  <li class="quicklinks">
+    <span class="h-seperate"></span>
+  </li>
   {acl isAllowed="AUTHOR_CREATE"}
     <li class="quicklinks">
       <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_author_create') %]">

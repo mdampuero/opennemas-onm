@@ -102,6 +102,9 @@ instances:
         events:
             type: integer
             options: { default: 0, unsigned: true }
+        webpush_subscribers:
+            type: integer
+            options: { default: 0, unsigned: true }
     index:
         -
             name: PRIMARY

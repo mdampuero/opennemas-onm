@@ -46,7 +46,11 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([$this, 'serviceContainerCallback']));
 
-        $this->subscriber = new UserSubscriber($this->container, $this->helper);
+        $this->redis = $this->getMockBuilder('Opennemas\Cache\Redis\Redis')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->subscriber = new UserSubscriber($this->container, $this->helper, $this->redis);
     }
 
     /**
@@ -112,7 +116,7 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
     public function testOnUserDelete()
     {
         $subscriber = $this->getMockBuilder('Api\EventSubscriber\UserSubscriber')
-            ->setConstructorArgs([ $this->container, $this->helper ])
+            ->setConstructorArgs([ $this->container, $this->helper, $this->redis ])
             ->setMethods([ 'onUserUpdate' ])
             ->getMock();
 

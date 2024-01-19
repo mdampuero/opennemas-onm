@@ -118,7 +118,7 @@
             title: 'Utils',
             rows: [
               [ 'ADVANCED_SEARCH', 'NEWSLETTER_MANAGER', 'KEYWORD_MANAGER' ],
-              [ 'SYNC_MANAGER', 'NEWS_AGENCY_IMPORTER' ],
+              [ 'SYNC_MANAGER', 'NEWS_AGENCY_IMPORTER', 'TRASH_MANAGER' ],
             ]
           },
           {

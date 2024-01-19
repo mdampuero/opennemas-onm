@@ -28,6 +28,7 @@ function smarty_outputfilter_browser_update($output, $smarty)
         || preg_match('/\/sharrre/', $uri)
         || preg_match('/\/ads\//', $uri)
         || preg_match('/\/comments\//', $uri)
+        || preg_match('/\/hbbtv/', $uri)
         || preg_match('/\/rss/', $uri)
         || preg_match('@\.amp\.html@', $uri)
     ) {

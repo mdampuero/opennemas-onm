@@ -1,3 +1,20 @@
+{if !empty($mrfpassCmp)}
+<script type="text/javascript">
+  if (!window.didomiConfig) {
+     window.didomiConfig = {};
+  }
+  if (!window.didomiConfig.notice) {
+     window.didomiConfig.notice = {};
+  }
+  if (!window.didomiConfig.app) {
+    window.didomiConfig.app = {};
+  }
+
+  // time in seconds pay to reject should be valid. In this example, one day in seconds is 24h * 60min * 60s = 86400.
+  window.didomiConfig.app.deniedConsentDuration = 86400;
+  window.didomiConfig.notice.enable = false;
+</script>
+{/if}
 <script type="text/javascript">
 var apikey = "{$apikey}";
 var id = "{$id}"

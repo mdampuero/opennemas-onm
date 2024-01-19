@@ -1,18 +1,5 @@
 <?php
 /**
- * Generates a route based on the provided item and a list of parameters.
- *
- * @param mixed $item   A content or a route name.
- * @param array $params The list of parameters.
- *
- * @return string The generated URL or null if an error is throw.
- */
-function get_url($item = null, array $params = []) : ?string
-{
-    return getService('core.helper.url_generator')->getUrl($item, $params);
-}
-
-/**
  * Returns the path to image folder for the active theme.
  *
  * @param bool  $absolute If the directory has to be absolute

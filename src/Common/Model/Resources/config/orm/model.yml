@@ -32,6 +32,7 @@ imports:
     - { resource: entity/keyword.yml }
     - { resource: entity/menu.yml }
     - { resource: entity/newsletter.yml }
+    - { resource: entity/webpush_notifications.yml }
     - { resource: entity/notification.yml }
     - { resource: entity/payment.yml }
     - { resource: entity/purchase.yml }
