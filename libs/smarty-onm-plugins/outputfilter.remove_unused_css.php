@@ -38,7 +38,7 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
 
     // Replace the style tag with the CSS code of the new optimized CSS file
     $output = preg_replace(
-        '@(<link.*id="theme-css".*?>)@',
+        '@(<link(?![^>]*libraries).*id="theme-css".*?>)@',
         '<style>' . $optimizedCss . '</style>',
         $output
     );
