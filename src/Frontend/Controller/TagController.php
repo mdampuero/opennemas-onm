@@ -119,9 +119,8 @@ class TagController extends FrontendController
                 $xtags[] = ',tag-author-' . $content->fk_author;
             }
         }
-        $xtags            = implode('', array_unique($xtags));
-        $xtags            = $params['x-tags'] . $xtags;
-        $params['x-tags'] = $xtags;
+
+        $params['x-tags'] .= implode(',', array_unique($xtags));
 
         return $this->render($this->getTemplate($action), $params);
     }

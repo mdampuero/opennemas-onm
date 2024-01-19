@@ -198,7 +198,7 @@ class BlogController extends FrontendController
 
         $xtags = [];
         foreach ($response['items'] as $item) {
-            $xtags[] = 'opinion-author-' . $item->fk_author;
+            $xtags[] = ',opinion-author-' . $item->fk_author;
         }
 
         $params['x-tags'] = implode(',', array_unique($xtags));
