@@ -218,19 +218,15 @@ class AuthorController extends Controller
 
         $this->getAds();
 
-        $xtags        = 'authors-frontpage';
-        $authorsAdded = [];
+        $xtags = ['authors-frontpage'];
 
         foreach ($items as $item) {
-            $fk_author = $item->id;
-            if (!in_array($fk_author, $authorsAdded)) {
-                $xtags         .= ',content-author-' . $fk_author;
-                $authorsAdded[] = $fk_author;
-            }
+            $xtags[] = 'content-author-' . $item->id;
         }
+
         return $this->render('user/frontpage_authors.tpl', [
             'cache_id'    => $cacheID,
-            'x-tags'      => $xtags,
+            'x-tags'      => implode(',', array_unique($xtags)),
             'x-cacheable' => true,
         ]);
     }

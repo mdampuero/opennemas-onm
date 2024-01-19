@@ -302,17 +302,13 @@ class CategoryController extends FrontendController
         $params['articles'] = $contents;
 
         $xtags = [];
-
         foreach ($contents as $content) {
             if ($content->fk_author) {
-                $xtags[] = ',category-author-' . $content->fk_author;
+                $xtags[] = 'category-author-' . $content->fk_author;
             }
         }
 
-        $xtags            = implode(',', array_unique($xtags));
-        $xtags            = $params['x-tags'] . $xtags;
-        $params['x-tags'] = $xtags;
-
+        $params['x-tags']    .= implode(',', array_unique($xtags));
         $params['total']      = $total;
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
