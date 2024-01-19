@@ -107,23 +107,12 @@ class UserSubscriber implements EventSubscriberInterface
             ? $event->getArgument('item')
             : [ $event->getArgument('item') ];
 
-        $shouldDeleteVarnish = true;
-
         foreach ($users as $user) {
             $this->helper->deleteItem($user);
-
-            if (isset($user->user_groups) && is_array($user->user_groups)) {
-                foreach ($user->user_groups as $group) {
-                    if ($group['user_group_id'] == 7) {
-                        $shouldDeleteVarnish = false;
-                        break;
-                    }
-                }
+            if ($user->type == 1) {
+                continue;
             }
-
-            if ($shouldDeleteVarnish) {
-                $this->helper->deleteItemVarnish($user);
-            }
+            $this->helper->deleteItemVarnish($user);
         }
     }
 }

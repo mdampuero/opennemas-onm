@@ -182,7 +182,7 @@ class TagController extends FrontendController
         return array_merge($params, [
             'item'        => $item[0],
             'items'       => $item,
-            'o_canonical' => $this->getCanonicalUrl($action, $params),
+            'o_canonical' => $this->getCanonicalUrl($action, $params)
         ]);
     }
 
