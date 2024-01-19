@@ -1,13 +1,13 @@
 # Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Opennemas Developers <developers@opennemas.com>, 2020-2023.
+# Opennemas Developers <developers@opennemas.com>, 2020-2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-18 08:22+0000\n"
-"PO-Revision-Date: 2023-12-18 09:27+0100\n"
+"POT-Creation-Date: 2024-01-19 12:29+0000\n"
+"PO-Revision-Date: 2024-01-19 13:35+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1252,6 +1252,18 @@ msgstr ""
 "Notificación planificada con éxito. Para más detalles, pincha <a href="
 "\"webpush_notifications/history\">aquí</a>"
 
+msgid "Biography"
+msgstr "Biografía"
+
+msgid "Slug"
+msgstr "Slug"
+
+msgid "Blog"
+msgstr "Blog"
+
+msgid "Short Biography"
+msgstr "Biografía corta"
+
 msgid "Running cleanup in background"
 msgstr "Ejecutando limpieza en segundo plano"
 
@@ -1364,9 +1376,6 @@ msgstr "En las últimas 24 horas"
 msgid "Opinion"
 msgstr "Opinión"
 
-msgid "Blog"
-msgstr "Blog"
-
 msgid "A minimum of 2 answers are required"
 msgstr "Se requiere un mínimo de 2 respuestas"
 
@@ -1382,9 +1391,6 @@ msgstr "Sí"
 msgid "No"
 msgstr "No"
 
-msgid "Slug"
-msgstr "Slug"
-
 msgid "Locale"
 msgstr "Idioma"
 
@@ -1399,6 +1405,15 @@ msgstr "Etiqueta"
 
 msgid "User"
 msgstr "Usuario"
+
+msgid "Username"
+msgstr "Nombre de usuario"
+
+msgid "Social"
+msgstr "Social"
+
+msgid "Enabled"
+msgstr "Activado"
 
 msgid "Please check the video url, seems to be incorrect"
 msgstr "Comprueba la dirección del vídeo, parece ser incorrecta."
@@ -2047,17 +2062,32 @@ msgstr ""
 msgid "Y-m-d H:i:s"
 msgstr "H:i:s d-m-Y"
 
-msgid "Username"
-msgstr "Nombre de usuario"
+msgid "Are you sure?"
+msgstr "¿Estás seguro?"
 
-msgid "Social"
-msgstr "Social"
+msgid "Do you want to move contents of user?"
+msgstr "¿Quieres mover los cotenidos del usuario?"
 
-msgid "Enabled"
-msgstr "Activado"
+msgid "Source"
+msgstr "Origen"
+
+msgid "Target"
+msgstr "Destino"
+
+msgid "Select an author"
+msgstr "Selecciona un autor"
+
+msgid "This action can not be undone"
+msgstr "Esta acción no se puede deshacer"
+
+msgid "Picture"
+msgstr "Imagen"
 
 msgid "Unknown"
 msgstr "Desconocido"
+
+msgid "Move contents"
+msgstr "Mover contenidos"
 
 msgid "User group disabled"
 msgstr "Grupos de usuario desactivado"
@@ -2125,12 +2155,6 @@ msgstr "Este campo es inválido"
 
 msgid "Blog URL"
 msgstr "URL del blog"
-
-msgid "Short Biography"
-msgstr "Biografía corta"
-
-msgid "Biography"
-msgstr "Biografía"
 
 msgid "Password"
 msgstr "Contraseña"
@@ -2833,17 +2857,11 @@ msgstr ""
 msgid "Are you sure you want to change your comment system handler?"
 msgstr "¿Estás seguro de que quieres cambiar tu gestor de comentarios?"
 
-msgid "Are you sure?"
-msgstr "¿Estás seguro?"
-
 msgid "Do you want to delete the item?"
 msgstr "¿Quieres eliminar el elemento?"
 
 msgid "Do you want to delete the selected items?"
 msgstr "¿Quieres eliminar los elementos seleccionados?"
-
-msgid "This action can not be undone"
-msgstr "Esta acción no se puede deshacer"
 
 msgid "Nickname"
 msgstr "Alias"
@@ -3176,9 +3194,6 @@ msgstr "como"
 msgid "by"
 msgstr "por"
 
-msgid "Select an author"
-msgstr "Selecciona un autor"
-
 msgid "in"
 msgstr "en"
 
@@ -3244,12 +3259,6 @@ msgstr "Autor por defecto"
 
 msgid "Author mapping"
 msgstr "Mapeo de autores"
-
-msgid "Source"
-msgstr "Origen"
-
-msgid "Target"
-msgstr "Destino"
 
 msgid "Author name from source"
 msgstr "Nombre del autor en origen"
@@ -4406,9 +4415,6 @@ msgstr "¿Quieres mover los contenidos en las categorías seleccionadas?"
 msgid "Visible"
 msgstr "Visible"
 
-msgid "Move contents"
-msgstr "Mover contenidos"
-
 msgid "Only empty categories can be deleted"
 msgstr "Solo se pueden eliminar categorías sin contenidos"
 
@@ -5132,6 +5138,15 @@ msgstr "Marfeel Compass"
 msgid "Marfeel Compass ID"
 msgstr "Marfeel Compass ID"
 
+msgid "Marfeel Pass"
+msgstr "Marfeel Pass"
+
+msgid "Marfeel Pass EXPERIENCE ID"
+msgstr "Marfeel Pass EXPERIENCE ID"
+
+msgid "Use Marfeel Pass CMP notice"
+msgstr "usar el aviso de CMP de Marfeel Pass"
+
 msgid "GFK Media ID"
 msgstr "GFK Media ID"
 
@@ -5267,6 +5282,9 @@ msgstr "Clave de variable"
 
 msgid "Select a value..."
 msgstr "Selecciona un valor…"
+
+msgid "Use Marfeel meta tags"
+msgstr "Usar meta tags de Marfeel"
 
 msgid "Act-On"
 msgstr "Act-On"
@@ -7738,9 +7756,6 @@ msgstr "eliminarlos"
 
 #~ msgid "Aerospace"
 #~ msgstr "Aeroespacial"
-
-#~ msgid "Agriculture"
-#~ msgstr "Agricultura"
 
 #~ msgid "Automotive"
 #~ msgstr "Automoción"

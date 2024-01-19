@@ -660,6 +660,19 @@
                           </button>
                         </div>
                       </div>
+                      {is_module_activated name="es.openhost.module.dataLayerHenneo"}
+                      <div class="form-group">
+                        <label class="form-label" for="marfeel-metatags">
+                          {t}Use Marfeel meta tags{/t}
+                        </label>
+                        <div class="controls">
+                          <select id="marfeel-metatags" name="marfeel-metatags" ng-model="settings.marfeel_metatags">
+                            <option value="">{t}No{/t}</option>
+                            <option value="1">{t}Yes{/t}</option>
+                          </select>
+                        </div>
+                      </div>
+                      {/is_module_activated}
                     </div>
                   </div>
                 </div>
