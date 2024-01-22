@@ -49,7 +49,7 @@
           </a>
         {/acl}
         <div uib-tooltip="{t}Only empty categories can be deleted{/t}" tooltip-enable="data.extra.stats[getItemId(item)] > 0" tooltip-class="tooltip-danger">
-          <button class="btn btn-white btn-small" ng-click="delete(getItemId(item))" ng-disabled="data.extra.stats[getItemId(item)] > 0" type="button" uib-tooltip="{t}Delete{/t}}" tooltip-placement="top">
+          <button class="btn btn-white btn-small" ng-click="delete(getItemId(item))" ng-disabled="data.extra.stats[getItemId(item)] > 0" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
             <i class="fa fa-trash-o text-danger"></i>
           </button>
         </div>

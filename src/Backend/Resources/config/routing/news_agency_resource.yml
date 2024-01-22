@@ -1,5 +1,5 @@
 backend_news_agency_resource_list:
-    path:     /news-agency/resources
+    path:     /news-agency/resources/
     defaults: { _controller: BackendBundle:NewsAgency:list }
     options:
         expose: true

@@ -1,11 +1,11 @@
 backend_comments_list:
-    path:     /comments
+    path:     /comments/
     defaults: { _controller: BackendBundle:Comment:list }
     options:
         expose: true
 
 backend_comment_show:
-    path:     /comments/{id}
+    path:     /comments/{id}/
     defaults: { _controller: BackendBundle:Comment:show }
     requirements:
         id: \d+
@@ -13,6 +13,6 @@ backend_comment_show:
         expose: true
 
 backend_comments_config:
-    path:     /comments/config
+    path:     /comments/config/
     defaults: { _controller: BackendBundle:Comment:config }
 

@@ -1,23 +1,23 @@
 backend_ws_picker_mode:
-    path:     /picker
+    path:     /picker/
     defaults: { _controller: BackendWebServiceBundle:Picker:picker }
     options:
         expose: true
 
 backend_ws_picker_get_months:
-    path:     /picker/months
+    path:     /picker/months/
     defaults: { _controller: BackendWebServiceBundle:Picker:getMonths }
     options:
         expose: true
 
 backend_ws_picker_list:
-    path:     /picker/list
+    path:     /picker/list/
     defaults: { _controller: BackendWebServiceBundle:Picker:list }
     options:
         expose: true
 
 backend_ws_picker_save_description:
-    path:     /picker/{id}/save-description
+    path:     /picker/{id}/save-description/
     defaults: { _controller: BackendWebServiceBundle:Picker:saveDescription }
     options:
         expose: true

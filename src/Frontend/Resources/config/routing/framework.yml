@@ -1,15 +1,15 @@
 frontend_framework_status:
-    path: /framework
+    path: /framework/
     defaults: { _controller: FrontendBundle:FrameworkStatus:checkFramework }
 
 frontend_framework_cache_status:
-    path: /framework/cache
+    path: /framework/cache/
     defaults: { _controller: FrontendBundle:FrameworkStatus:checkCache }
 
 frontend_framework_database_status:
-    path: /framework/database
+    path: /framework/database/
     defaults: { _controller: FrontendBundle:FrameworkStatus:checkDatabase }
 
 frontend_framework_nfs_status:
-    path: /framework/nfs
+    path: /framework/nfs/
     defaults: { _controller: FrontendBundle:FrameworkStatus:checkNFS }

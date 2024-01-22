@@ -1,12 +1,12 @@
 frontend_search_internal:
-    path: /search
+    path: /search/
     defaults: { _controller: FrontendBundle:Search:internal }
     options:
         l10n: true
         subdirectory: true
 
 frontend_search_google:
-    path: /search/google
+    path: /search/google/
     defaults: { _controller: FrontendBundle:Search:google }
     options:
         subdirectory: true

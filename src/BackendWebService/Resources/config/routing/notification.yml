@@ -1,26 +1,26 @@
 backend_ws_notification_patch:
-    path:     /notifications/{id}
+    path:     /notifications/{id}/
     defaults: { _controller: BackendWebServiceBundle:Notification:patch }
     methods:  [ PATCH ]
     options:
         expose: true
 
 backend_ws_notifications_latest:
-    path:     /notifications/latest
+    path:     /notifications/latest/
     defaults: { _controller: BackendWebServiceBundle:Notification:listLatest }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_ws_notifications_list:
-    path:     /notifications
+    path:     /notifications/
     defaults: { _controller: BackendWebServiceBundle:Notification:list }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_ws_notifications_patch:
-    path:     /notifications
+    path:     /notifications/
     defaults: { _controller: BackendWebServiceBundle:Notification:patchSelected }
     methods:  [ PATCH ]
     options:

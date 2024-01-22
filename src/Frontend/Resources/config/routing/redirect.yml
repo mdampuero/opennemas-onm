@@ -1,5 +1,5 @@
 frontend_redirect_content:
-  path: /redirect/content
+  path: /redirect/content/
   defaults: { _controller: FrontendBundle:Redirector:content }
   options:
     subdirectory: true

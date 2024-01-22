@@ -17,23 +17,23 @@ manager_instance:
     resource: '@ManagerBundle/Resources/config/routing/instance.yml'
 
 manager_commands:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/command.yml'
 
 manager_module:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/module.yml'
 
 manager_notification:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/notification.yml'
 
 manager_opcache:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/opcache.yml'
 
 manager_purchase:
-    prefix:   /manager/
+    prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/purchase.yml'
 
 manager_report:

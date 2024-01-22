@@ -16,7 +16,7 @@ namespace WebService\Handlers;
 class Ads
 {
     /*
-    * @url GET /ads/frontpage/:categoryId
+    * @url GET /ads/frontpage/:categoryId/
     */
     public function frontpage($category)
     {
