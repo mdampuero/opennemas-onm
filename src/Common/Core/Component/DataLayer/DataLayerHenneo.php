@@ -49,6 +49,14 @@ class DataLayerHenneo extends DataLayer
             );
         }, ARRAY_FILTER_USE_KEY);
 
+        $renderTags = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('marfeel_metatags', '');
+
+        if (empty($renderTags) || $renderTags != '1') {
+            return $code;
+        }
+
         // Add Marfeel custom metadata
         $code .= "\n" . '<!-- Marfeel index meta-tags -->' . "\n";
         foreach ($data as $key => $value) {
