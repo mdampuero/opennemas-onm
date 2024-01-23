@@ -38,6 +38,12 @@
       </label>
     </div>
     <div class="checkbox column-filters-checkbox">
+      <input id="total_sent" checklist-model="app.columns.selected" checklist-value="'total_sent'" type="checkbox">
+      <label for="total_sent">
+        {t}Total Sent{/t}
+      </label>
+    </div>
+    <div class="checkbox column-filters-checkbox">
       <input id="impressions" checklist-model="app.columns.selected" checklist-value="'impressions'" type="checkbox">
       <label for="impressions">
         {t}Impressions{/t}
@@ -79,23 +85,27 @@
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('status')" width="120">
       {t}Status{/t}
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('send_date')" width="200">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('send_date')" width="150">
       {t}Send date{/t}
     </th>
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('total_sent')" width="120">
+      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Total notification sending attempts{/t}'" tooltip-placement="bottom"></i>
+      {t}Total Sent{/t}
+    </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('impressions')" width="155">
-      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}displayed to the user{/t}'" tooltip-placement="bottom"></i>
+      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br/>{t}displayed to the user{/t}'" tooltip-placement="bottom"></i>
       {t}Impressions{/t}
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('clicks')" width="120">
-      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}clicked by the user{/t}'" tooltip-placement="bottom"></i>
+      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br/>{t}clicked by the user{/t}'" tooltip-placement="bottom"></i>
       {t}Clicks{/t}
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('closed')" width="120">
-      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}closed by the user{/t}'" tooltip-placement="bottom"></i>
+      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br/>{t}closed by the user{/t}'" tooltip-placement="bottom"></i>
       {t}Closed{/t}
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')" width="120">
-      <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Interactions (Clicks + Closed){/t}<br>{t}divided by Impressions{/t}'" tooltip-placement="bottom"></i>
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')" width="100">
+      <i class="fa fa-info-circle text-info" uib-tooltip-html="'(Clicks + Closed)<br/>{t}divided by{/t}<br/>{t}Impressions{/t}'" tooltip-placement="bottom"></i>
       {t}CTR{/t}
     </th>
 {/block}
@@ -140,31 +150,38 @@
       </strong>
     </span>
   </td>
+    <td class="text-center v-align-middle" ng-if="isColumnEnabled('total_sent')">
+    <span>
+      <strong>
+        [% item.send_count | number : 0 %]
+      </strong>
+    </span>
+  </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('impressions')">
     <span>
       <strong>
-        [% item.impressions | number:0 %]
+        [% item.impressions | number : 0 %]
       </strong>
     </span>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('clicks')">
     <span>
       <strong>
-        [% item.clicks %]
+        [% item.clicks | number : 0 %]
       </strong>
     </span>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('closed')">
     <span>
       <strong>
-        [% item.closed %]
+        [% item.closed | number : 0 %]
       </strong>
     </span>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')">
     <span ng-if="item.impressions > 0">
       <strong>
-        [% ((item.clicks + item.closed) / item.impressions * 100) | number:0 %] %
+        [% ((item.clicks + item.closed) / item.impressions * 100) | number : 2 %] %
       </strong>
     </span>
   </td>

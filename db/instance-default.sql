@@ -468,6 +468,7 @@ CREATE TABLE `content_notifications` (
   `send_date` datetime DEFAULT NULL,
   `image` bigint(20) unsigned,
   `transaction_id` text DEFAULT NULL,
+  `send_count` int unsigned DEFAULT 0,
   `impressions` int DEFAULT 0,
   `clicks` int DEFAULT 0,
   `closed` int DEFAULT 0,
