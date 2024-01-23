@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 12:29+0000\n"
-"PO-Revision-Date: 2024-01-19 13:35+0100\n"
+"POT-Creation-Date: 2024-01-23 15:42+0000\n"
+"PO-Revision-Date: 2024-01-23 16:43+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -310,6 +310,9 @@ msgstr "Boletín de noticias"
 
 msgid "Web Push"
 msgstr "Web Push"
+
+msgid "NEW"
+msgstr "NUEVO"
 
 msgid "History"
 msgstr "Historial"
@@ -3631,6 +3634,9 @@ msgstr "Identificador"
 msgid "Send date"
 msgstr "Fecha de envío"
 
+msgid "Total Sent"
+msgstr "Total enviado"
+
 msgid "Impressions"
 msgstr "Visualizaciones"
 
@@ -3646,6 +3652,9 @@ msgstr "CTR"
 msgid "Transaction Id"
 msgstr "Identificador de transacción"
 
+msgid "Total notification sending attempts"
+msgstr "Total de intentos de envío de notificación"
+
 msgid "Times a notification was"
 msgstr "Veces que una notificación fue"
 
@@ -3658,11 +3667,8 @@ msgstr "clicada por el usuario"
 msgid "closed by the user"
 msgstr "cerrada por el usuario"
 
-msgid "Interactions (Clicks + Closed)"
-msgstr "Interacciones (Clicks + Cerradas)"
-
-msgid "divided by Impressions"
-msgstr "dividido por Visualizaciones"
+msgid "divided by"
+msgstr "dividido por"
 
 msgid "Scheduled"
 msgstr "Planificado"
@@ -3741,6 +3747,12 @@ msgstr "Interacciones"
 
 msgid "clicked or closed"
 msgstr "clicada o cerrada"
+
+msgid "Interactions (Clicks + Closed)"
+msgstr "Interacciones (Clicks + Cerradas)"
+
+msgid "divided by Impressions"
+msgstr "dividido por Visualizaciones"
 
 msgid "New Active Subscribers"
 msgstr "Nuevos Suscriptores Activos"
