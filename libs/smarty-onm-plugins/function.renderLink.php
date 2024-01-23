@@ -42,10 +42,13 @@ function smarty_function_renderLink($params, &$smarty)
             break;
         case 'internal':
             if ($item->link == '/') {
-                $item->link = '';
+                $link = '';
+            } else {
+                $link = "/$item->link/";
             }
 
-            $link = "/$item->link";
+            $link = str_replace('//', '/', $link);
+
             break;
         case 'external':
             $link = "$item->link";
