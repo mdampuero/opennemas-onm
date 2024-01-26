@@ -382,7 +382,7 @@
                   <div class="form-group m-t-15" ng-if="settings.cmp_type == 'traffective'">
                     <div class="col-md-6 form-group">
                       <label class="form-label" for="cmp-id">
-                        {t}Traffective Domain{/t}
+                        {t}Domain{/t}
                       </label>
                       <div class="controls">
                         <input class="form-control" id="cmp-id" name="cmp-id" ng-model="settings.cmp_id" type="text">
@@ -390,7 +390,7 @@
                     </div>
                     <div class="col-md-6 form-group">
                       <label class="form-label" for="cmp-apikey">
-                        {t}Traffective Activation Key{/t}
+                        {t}Activation Key{/t}
                       </label>
                       <div class="controls">
                         <input class="form-control" id="cmp-apikey" name="cmp-apikey" ng-model="settings.cmp_apikey" type="text">
