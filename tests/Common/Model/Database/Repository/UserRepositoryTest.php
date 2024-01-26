@@ -14,7 +14,7 @@ class UserRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->conn = $this->getMockBuilder('Opennemas\Orm\Core\Connection')
             ->disableOriginalConstructor()
-            ->setMethods([ 'fetchAll', 'fetchArray' ])
+            ->setMethods([ 'executeQuery', 'fetchAll', 'fetchArray' ])
             ->getMock();
 
         $this->metadata = new Metadata([
