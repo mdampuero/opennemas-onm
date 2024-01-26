@@ -319,6 +319,12 @@
                         {t}Didomi{/t}
                       </label>
                     </div>
+                    <div class="radio">
+                      <input class="form-control" id="cmp-traffective" ng-model="settings.cmp_type" ng-value="'traffective'" type="radio"/>
+                      <label for="cmp-traffective">
+                        {t}Traffective{/t}
+                      </label>
+                    </div>
                   </div>
                   <div class="form-group m-t-15" ng-if="settings.cmp_type == 'quantcast'">
                     <label class="form-label" for="cmp-id">
@@ -372,6 +378,24 @@
                       </div>
                     </div>
                     {/is_module_activated}
+                  </div>
+                  <div class="form-group m-t-15" ng-if="settings.cmp_type == 'traffective'">
+                    <div class="col-md-6 form-group">
+                      <label class="form-label" for="cmp-id">
+                        {t}Traffective Domain{/t}
+                      </label>
+                      <div class="controls">
+                        <input class="form-control" id="cmp-id" name="cmp-id" ng-model="settings.cmp_id" type="text">
+                      </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <label class="form-label" for="cmp-apikey">
+                        {t}Traffective Activation Key{/t}
+                      </label>
+                      <div class="controls">
+                        <input class="form-control" id="cmp-apikey" name="cmp-apikey" ng-model="settings.cmp_apikey" type="text">
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <h4>
