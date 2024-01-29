@@ -11,6 +11,7 @@ namespace Common\Core\Component\Renderer;
 
 use Repository\EntityManager;
 use Api\Service\V1\AuthorService;
+use Api\Exception\GetItemException;
 
 /**
  * The AdvertisementRenderer service provides methods to generate the HTML code
@@ -49,17 +50,22 @@ class NewsletterRenderer
 
         $menuService = $this->container->get('api.service.menu');
 
-        $oql = ' name = "frontpage" ';
+        try {
+            $menu = $menuService->getItemBy(' position = "newsletter" ');
+        } catch (GetItemException $e) {
+            $menu = [];
+        }
 
         try {
-            $menu = $menuService->getItemBy($oql);
-
-            $menuHelper = $this->container->get('core.helper.menu');
-        } catch (\Exception $e) {
-            $menu             = [];
+            $menu = empty($menu) ?
+                $menuService->getItemBy(' name = "frontpage" ') :
+                $menu;
+        } catch (GetItemException $e) {
+            $menu             = new \stdClass();
             $menu->menu_items = [];
         }
 
+        $menuHelper = $this->container->get('core.helper.menu');
 
         $positions      = $this->container->get('core.helper.advertisement')
             ->getPositionsForGroup('newsletter', [ 1001, 1009 ]);
