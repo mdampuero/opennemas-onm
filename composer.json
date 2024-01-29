@@ -97,7 +97,7 @@
         "vdb/php-spider": "^0.4.4",
         "mobiledetect/mobiledetectlib": "^2.8",
         "globalpayments/php-sdk": "^3.0",
-        "momentum81/php-remove-unused-css": "^0.1.4"
+        "opennemas/remove-unused-css": "1.0.1"
     },
     "require-dev": {
         "mockery/mockery": "^1.2",
@@ -142,6 +142,10 @@
         {
             "type": "git",
             "url": "git@bitbucket.org:opennemas/task.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:opennemas/remove-unused-css.git"
         }
     ],
     "scripts": {

@@ -9,6 +9,30 @@
  */
 function smarty_outputfilter_remove_unused_css($output, $smarty)
 {
+    if (preg_match('/newsletter/', $smarty->source->resource)
+        && preg_match('/\/manager/', $uri)
+        && preg_match('/\/managerws/', $uri)
+        && preg_match('/\/sharrre/', $uri)
+        && preg_match('/\/ads\//', $uri)
+        && preg_match('/\/admin/', $uri)
+        && preg_match('/\/comments\//', $uri)
+        && preg_match('/\/rss\/(?!listado$)/', $uri)
+        && preg_match('@\.amp\.html@', $uri)
+        && preg_match('@(<link(?![^>]*libraries).*id="theme-css".*?>)@', $uri)
+    ) {
+        return $output;
+    }
+
+    $request = $smarty->getContainer()
+        ->get('request_stack')
+        ->getCurrentRequest();
+
+    if (is_null($request)) {
+        return $output;
+    }
+
+    $uri = $request->getUri();
+
     $removeUnusedCss = new \Momentum81\PhpRemoveUnusedCss\RemoveUnusedCssBasic();
     $template        = $smarty->getValue('_template');
     $cssFileName     = $template->getThemeSkinProperty('css_file');
@@ -17,10 +41,9 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
     // Get the current css theme file path
     $originalCssFilePath = $_SERVER['DOCUMENT_ROOT'] . $themePath . 'css/' . $cssFileName;
 
-    // Put the the html content in a .html file
-    $newHtmlFilePath      = sys_get_temp_dir() . '/html-aux.html';
-    $newCssFilePath       = sys_get_temp_dir() . '/css-aux.css';
-    $optimizedCssFilePath = str_replace('.css', '.refactored.min.css', $newCssFilePath);
+    // Put the the html and css content in a file
+    $newHtmlFilePath = sys_get_temp_dir() . '/html-aux.html';
+    $newCssFilePath  = sys_get_temp_dir() . '/css-aux.css';
 
     file_put_contents($newHtmlFilePath, $output);
     file_put_contents($newCssFilePath, file_get_contents($originalCssFilePath));
@@ -34,6 +57,7 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
         ->saveFiles();
 
     // Get the CSS code from the optimized CSS file
+    $optimizedCssFilePath = str_replace('.css', '.refactored.min.css', $newCssFilePath);
     $optimizedCss = file_get_contents($optimizedCssFilePath);
 
     // Replace the style tag with the CSS code of the new optimized CSS file
@@ -42,6 +66,11 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
         '<style>' . $optimizedCss . '</style>',
         $output
     );
-
+    if (file_exists($newHtmlFilePath)) {
+        unlink($newHtmlFilePath);
+    }
+    if (file_exists($newCssFilePath)) {
+        unlink($newCssFilePath);
+    }
     return $output;
 }

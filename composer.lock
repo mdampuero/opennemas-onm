@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fd9f5430482bb456223a760f5fbd7e91",
+    "content-hash": "c7a745342222fcb130e0635c4ec257a8",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2806,46 +2806,6 @@
             "time": "2021-02-19T21:22:57+00:00"
         },
         {
-            "name": "momentum81/php-remove-unused-css",
-            "version": "0.1.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/momentum81/php-remove-unused-css.git",
-                "reference": "fbfeabe935ba951b75ba5329783fc213ea09d56c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/momentum81/php-remove-unused-css/zipball/fbfeabe935ba951b75ba5329783fc213ea09d56c",
-                "reference": "fbfeabe935ba951b75ba5329783fc213ea09d56c",
-                "shasum": ""
-            },
-            "require": {
-                "matthiasmullie/minify": "^1.3",
-                "php": "^7.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Momentum81\\PhpRemoveUnusedCss\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "PHP Remove Unused CSS is a tool to remove unused CSS from your website using PHP",
-            "homepage": "https://github.com/momentum81/php-remove-unused-css",
-            "keywords": [
-                "momentum81",
-                "php-remove-unused-css"
-            ],
-            "support": {
-                "issues": "https://github.com/momentum81/php-remove-unused-css/issues",
-                "source": "https://github.com/momentum81/php-remove-unused-css/tree/0.1.4"
-            },
-            "time": "2020-11-02T11:13:59+00:00"
-        },
-        {
             "name": "monolog/monolog",
             "version": "1.24.0",
             "source": {
@@ -3216,6 +3176,35 @@
                 "library"
             ],
             "time": "2023-09-25T09:02:18+00:00"
+        },
+        {
+            "name": "opennemas/remove-unused-css",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:opennemas/remove-unused-css.git",
+                "reference": "806b4db3836d4d9f3c6b28940bce78c531cb9485"
+            },
+            "require": {
+                "matthiasmullie/minify": "^1.3",
+                "php": "^7.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Momentum81\\PhpRemoveUnusedCss\\": "src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "PHP Remove Unused CSS is a tool to remove unused CSS from your website using PHP",
+            "homepage": "https://bitbucket.org/opennemas/remove-unused-css",
+            "keywords": [
+                "opennemas",
+                "remove-unused-css"
+            ],
+            "time": "2024-01-29T09:57:02+00:00"
         },
         {
             "name": "opennemas/task",
