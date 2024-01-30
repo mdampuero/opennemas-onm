@@ -153,12 +153,12 @@ done
         $webpush_notifications = $entity->webpush_notifications;
 
         // Set urldatetime if starttime is already set
-        // And new starttime is greater than now (rescheduled)
+        // And new starttime is greater than now (rescheduled) and unpublished
         // OR new starttime is smaller than now
         //   And new starttime is smaller than old starttime
         //   And new starttime is smaller than urldatetime (e.g. scheduled to intime)
         if (!empty($entity->starttime)
-            && ($entity->starttime >= new \DateTime()
+            && (($entity->starttime >= new \DateTime() && empty($entity->content_status))
                 || ($entity->starttime < new \DateTime()
                     && $entity->starttime < $entity->getStored()['starttime']
                     && $entity->starttime->format('YmdHis') < $entity->urldatetime
