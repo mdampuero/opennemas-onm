@@ -12,6 +12,9 @@ namespace Api\Controller\V1\Backend;
 use Api\Controller\V1\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use League\Csv\Writer;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Displays, saves, modifies and removes users.
@@ -39,6 +42,7 @@ class UserController extends ApiController
         'save'   => 'USER_CREATE',
         'show'   => 'USER_UPDATE',
         'update' => 'USER_UPDATE',
+        'move'   => 'USER_UPDATE',
     ];
 
     protected $module = 'user';
@@ -96,6 +100,105 @@ class UserController extends ApiController
                 'expansibleFields' => $this->getFormSettings($this->module)
             ]
         ];
+    }
+
+    /**
+     * Moves all contents assigned to the user to the target user.
+     *
+     * @param Request $request The request object.
+     * @param integer $id      The user id.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function moveItemAction(Request $request, $id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('move'));
+        $target = $request->request->get('target', null);
+        $msg    = $this->get('core.messenger');
+        $this->get($this->service)->moveItem($id, $target);
+        $msg->add(_('Item saved successfully'), 'success');
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Downloads the list of users.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function getReportAction()
+    {
+        try {
+            // Get information
+            $users      = $this->get('api.service.user')->getReport();
+            $userGroups = $this->getUserGroups();
+        } catch (\Exception $e) {
+            $logger = $this->get('application.log');
+            $logger->info('Users download failed : ' . $e->getMessage());
+            // Redirect to user list when failed
+            return new RedirectResponse($this->get('router')->generate('backend_users_list'));
+        }
+        // Prepare contents for CSV
+        $headers = [
+            _('Name'),
+            _('Email'),
+            _('Username'),
+            _('Short Biography'),
+            _('Slug'),
+            _('User groups'),
+            _('Social'),
+            _('Enabled')
+        ];
+
+        $data = [];
+        foreach ($users as $user) {
+            $groupNames      = [];
+            $userGroupsArray = explode(',', $user['user_groups']);
+
+            foreach ($userGroupsArray as $groupId) {
+                if (isset($userGroups[$groupId])) {
+                    $groupNames[] = $userGroups[$groupId]['name'];
+                }
+            }
+
+            $userGroupNames = implode(', ', $groupNames);
+
+            $socialInfo = [];
+            foreach (['twitter', 'facebook', 'google'] as $social) {
+                $socialInfo[] = array_key_exists($social, $user) ? ucfirst($social) . ': ' . $user[$social] : null;
+            }
+
+            $socialInfoString = implode(', ', array_filter($socialInfo));
+
+            $data[] = [
+                $user['name'],
+                $user['email'],
+                $user['username'],
+                $user['bio'],
+                $user['slug'],
+                $userGroupNames,
+                $socialInfoString,
+                $user['activated'] ? 1 : 0
+            ];
+        }
+        // Prepare the CSV content
+        $writer = Writer::createFromFileObject(new \SplTempFileObject());
+        $writer->setDelimiter(';');
+        $writer->setInputEncoding('utf-8');
+        $writer->insertOne($headers);
+        $writer->insertAll($data);
+        $response = new Response($writer, 200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'users list Export');
+        $response->headers->set(
+            'Content-Disposition',
+            'attachment; filename=users-' . date('Y-m-d') . '.csv'
+        );
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Cache-Control', 'no-cache');
+        $response->headers->set('Expires', '0');
+        return $response;
     }
 
     /**

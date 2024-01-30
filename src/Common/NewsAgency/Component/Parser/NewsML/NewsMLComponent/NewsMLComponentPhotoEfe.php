@@ -53,6 +53,12 @@ class NewsMLComponentPhotoEfe extends NewsMLComponentPhoto
             return (string) $filename[0]->attributes()->Value;
         }
 
+        $filename = $data->xpath("//ContentItem");
+
+        if (!empty($filename)) {
+            return (string) $filename[0]->attributes()->Href;
+        }
+
         return $this->getFromBag('filename');
     }
 
@@ -95,9 +101,14 @@ class NewsMLComponentPhotoEfe extends NewsMLComponentPhoto
             if (empty($video)) {
                 $f = $file->xpath('/ContentItem/Characteristics/Property[@FormalName="EFE_Filename"]');
 
+                if (empty($f)) {
+                    $f = $file->xpath("//ContentItem");
+                }
+
                 if (!empty($f)
-                    && strpos($f[0]->attributes()->Value, 'w.')
-                    && !strpos($f[0]->attributes()->Value, 'miniw.')
+                    && (strpos($f[0]->attributes()->Value, 'w.')
+                    && !strpos($f[0]->attributes()->Value, 'miniw.'))
+                    || (string) $f[0]->attributes()->Href
                 ) {
                     $index = $i;
                 }

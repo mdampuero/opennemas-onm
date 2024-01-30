@@ -9,7 +9,7 @@
  */
 namespace Api\Service\V1;
 
-use Api\Exception\DeleteItemException;
+use Api\Exception\GetListException;
 use Api\Exception\GetItemException;
 
 class AuthorService extends UserService
@@ -52,5 +52,21 @@ class AuthorService extends UserService
         return $this->container->get('orm.oql.fixer')->fix($oql)
             ->addCondition('type != 1 and user_group_id = 3')
             ->getOql();
+    }
+
+    /**
+     * Get all the authors for report.
+     *
+     * @return array The list of items.
+     */
+    public function getReport()
+    {
+        try {
+            return $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->findAuthors();
+        } catch (\Exception $e) {
+            throw new GetListException($e->getMessage(), $e->getCode());
+        }
     }
 }

@@ -1,5 +1,5 @@
 frontend_widget_execute:
-    path:     /widget/{id}/{action}
+    path:     /widget/{id}/{action}/
     defaults: { _controller: FrontendBundle:Widget:execute }
     requirements:
         action: '[a-z]+'
@@ -8,7 +8,7 @@ frontend_widget_execute:
         subdirectory: true
 
 frontend_widget_render:
-    path:     /widget/render
+    path:     /widget/render/
     defaults: { _controller: FrontendBundle:Widget:render }
     options:
         l10n: true

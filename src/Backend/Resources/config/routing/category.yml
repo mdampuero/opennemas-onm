@@ -1,11 +1,11 @@
 backend_category_create:
-    path:     /categories/new
+    path:     /categories/new/
     defaults: { _controller: BackendBundle:Category:create }
     options:
         expose: true
 
 backend_category_show:
-    path:     /categories/{id}
+    path:     /categories/{id}/
     defaults: { _controller: BackendBundle:Category:show }
     options:
         expose: true
@@ -13,7 +13,7 @@ backend_category_show:
         id: \d+
 
 backend_categories_list:
-    path:     /categories
+    path:     /categories/
     defaults: { _controller: BackendBundle:Category:list }
     options:
         expose: true

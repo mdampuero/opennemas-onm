@@ -250,7 +250,7 @@ class TagService extends OrmService
         try {
             return $this->container->get('orm.manager')
                 ->getRepository($this->entity, $this->origin)
-                ->findTags();
+                ->findTagsWithContentCount();
         } catch (\Exception $e) {
             throw new GetListException($e->getMessage(), $e->getCode());
         }

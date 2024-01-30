@@ -1,13 +1,13 @@
 backend_albums_config:
-    path:     /albums/config
+    path:     /albums/config/
     defaults: { _controller: BackendBundle:Album:config }
 
 backend_album_create:
-    path:     /albums/new
+    path:     /albums/new/
     defaults: { _controller: BackendBundle:Album:create }
 
 backend_album_show:
-    path:     /albums/{id}
+    path:     /albums/{id}/
     defaults: { _controller: BackendBundle:Album:show }
     requirements:
         id: \d+
@@ -15,11 +15,11 @@ backend_album_show:
         expose: true
 
 backend_albums_content_provider:
-    path:     /albums/content-provider
+    path:     /albums/content-provider/
     defaults: { _controller: BackendBundle:Album:contentProvider }
 
 backend_albums_list:
-    path:     /albums
+    path:     /albums/
     defaults: { _controller: BackendBundle:Album:list }
     options:
         expose: true

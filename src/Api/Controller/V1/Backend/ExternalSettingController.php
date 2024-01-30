@@ -50,6 +50,8 @@ class ExternalSettingController extends SettingController
         'instagram_page',
         'linkedin_page',
         'marfeel_compass',
+        'marfeel_pass',
+        'marfeel_metatags',
         'telegram_page',
         'whatsapp_page',
         'tiktok_page',

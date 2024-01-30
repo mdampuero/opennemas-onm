@@ -1,19 +1,19 @@
 backend_obituaries_content_provider:
-    path:     /obituaries/content-provider
+    path:     /obituaries/content-provider/
     defaults: { _controller: BackendBundle:Obituary:contentProvider }
 
 backend_obituary_create:
-    path:     /obituaries/create
+    path:     /obituaries/create/
     defaults: { _controller: BackendBundle:Obituary:create }
 
 backend_obituaries_list:
-    path:     /obituaries
+    path:     /obituaries/
     defaults: { _controller: BackendBundle:Obituary:list }
     options:
         expose: true
 
 backend_obituaries_show:
-    path:     /obituaries/{id}
+    path:     /obituaries/{id}/
     defaults: { _controller: BackendBundle:Obituary:show }
     options:
         expose: true

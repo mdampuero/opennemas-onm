@@ -1,6 +1,6 @@
 # Obituaries routes
 frontend_obituaries:
-    path: /esquela
+    path: /esquela/
     defaults: { _controller: FrontendBundle:Obituary:list }
     options:
         l10n: true

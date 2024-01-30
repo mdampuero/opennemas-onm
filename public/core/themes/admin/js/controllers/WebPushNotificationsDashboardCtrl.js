@@ -30,7 +30,8 @@
          * @type {Object}
          */
         $scope.criteria = {
-          send_date: $window.moment().subtract(1, 'months').format('YYYY-MM-DD HH:mm:ss')
+          send_date: $window.moment().subtract(1, 'months').format('YYYY-MM-DD HH:mm:ss'),
+          epp: null
         };
 
         /**
@@ -98,8 +99,7 @@
             $scope.items = $scope.data.items;
             $scope.generateStats();
             $scope.disableFlags('http');
-          }, function(response) {
-            // messenger.post(response.data);
+          }, function() {
             $scope.disableFlags('http');
             $scope.items = [];
           });
@@ -117,7 +117,7 @@
           });
 
           $scope.monthlyCTR = Math.round($scope.monthlyInteractions / $scope.monthlyImpressions * 10000) / 100;
-
+          $scope.monthlyCTR = isNaN($scope.monthlyCTR) ? 0 : $scope.monthlyCTR;
           // Sets up the active subscribers chart
           $scope.labels = [];
           var currentDay = $window.moment($window.moment().subtract(1, 'months').format('YYYY-MM-DD'));

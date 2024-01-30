@@ -77,12 +77,6 @@ class UpdateInstanceCommand extends Command
 
             $this->getContainer()->get('core.globals')->setInstance($instance);
 
-            if (in_array("es.openhost.module.webpush_notifications", $instance->activated_modules)) {
-                $redis = $this->getContainer()->get('cache.connection.instance');
-                $redis->init();
-                $redis->remove('settings');
-            }
-
             $this->writeStep("Updating instance $instance->internal_name", true, 2);
 
             foreach ([ 'stats', 'media' ] as $stage) {
@@ -231,14 +225,8 @@ class UpdateInstanceCommand extends Command
         ), true);
 
         if (in_array("es.openhost.module.webpush_notifications", $instance->activated_modules)) {
-            $redis = $this->getContainer()->get('cache.connection.instance');
-            $redis->init();
-
-            $this->getContainer()->get('cache.connection.instance')->init();
             $this->writePad('- Counting active Web Push subscribers');
-            $webpushr                      = $this->getContainer()->get('external.web_push.factory');
-            $subscribersEndpoint           = $webpushr->getEndpoint('subscriber');
-            $activeSubscribers             = $subscribersEndpoint->getSubscribers()['active_subscribers'];
+            $activeSubscribers             = $helper->getWebPushSubscribers($instance);
             $instance->webpush_subscribers = intval($activeSubscribers);
 
             $this->writeStatus('success', 'DONE');

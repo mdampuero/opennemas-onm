@@ -1,12 +1,12 @@
 frontend_album_frontpage:
-    path:     /album
+    path:     /album/
     defaults: { _controller: FrontendBundle:Album:list }
     options:
         l10n: true
         subdirectory: true
 
 frontend_album_frontpage_category:
-    path:     /album/{category_slug}
+    path:     /album/{category_slug}/
     defaults: { _controller: FrontendBundle:Album:list }
     requirements:
         category_slug: '[^/]+'

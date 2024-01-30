@@ -1,24 +1,24 @@
 # Company controller routes
 backend_companies_config:
-    path:     /companies/config
+    path:     /companies/config/
     defaults: { _controller: BackendBundle:Company:config }
 
 backend_companies_content_provider:
-    path:     /companies/content-provider
+    path:     /companies/content-provider/
     defaults: { _controller: BackendBundle:Company:contentProvider }
 
 backend_company_create:
-    path:     /companies/create
+    path:     /companies/create/
     defaults: { _controller: BackendBundle:Company:create }
 
 backend_companies_list:
-    path:     /companies
+    path:     /companies/
     defaults: { _controller: BackendBundle:Company:list }
     options:
         expose: true
 
 backend_company_show:
-    path:     /companies/{id}
+    path:     /companies/{id}/
     defaults: { _controller: BackendBundle:Company:show }
     options:
         expose: true

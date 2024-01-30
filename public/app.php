@@ -27,9 +27,6 @@ if (PHP_VERSION_ID < 70000) {
     include_once __DIR__ . '/../tmp/bootstrap.php.cache';
 }
 
-// Little hack to allow final slashes in the url
-$_SERVER['REQUEST_URI'] = \Onm\StringUtils::normalizeUrl($_SERVER['REQUEST_URI']);
-
 if (file_exists(APPLICATION_PATH . '/.development')
     || (array_key_exists('OPENNEMAS_ENV', $_ENV) && $_ENV["OPENNEMAS_ENV"] == 'dev')
 ) {
