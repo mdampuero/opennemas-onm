@@ -105,7 +105,7 @@
       {t}Closed{/t}
     </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')" width="100">
-      <i class="fa fa-info-circle text-info" uib-tooltip-html="'(Clicks + Closed)<br/>{t}divided by{/t}<br/>{t}Impressions{/t}'" tooltip-placement="bottom"></i>
+      <i class="fa fa-info-circle text-info" uib-tooltip-html="'({t}Clicks + Closed{/t})/{t}Impressions{/t}'" tooltip-placement="bottom"></i>
       {t}CTR{/t}
     </th>
 {/block}
