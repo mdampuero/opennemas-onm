@@ -35,6 +35,9 @@ class WebPushNotificationsController extends FrontendController
             $response = new BinaryFileResponse('assets/js/webpush.js');
             $response->headers->set('X-Status-Code', 200);
             $response->headers->set('Content-Type', 'application/javascript');
+            $response->headers->set('Cache-Control', 'public');
+            $response->headers->set('max-age', 2628000);
+            $response->headers->set('s-maxage', 2628000);
             return $response;
         }
 

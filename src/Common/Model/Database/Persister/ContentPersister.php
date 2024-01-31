@@ -635,9 +635,10 @@ done
         }
 
         $sql = "insert into content_notifications"
-            . "(fk_content, status, body, title, send_date, image, transaction_id, impressions, clicks, closed) values "
+            . "(fk_content, status, body, title, send_date, image, transaction_id,"
+            . " send_count, impressions, clicks, closed) values "
             . str_repeat(
-                '(?,?,?,?,?,?,?,?,?,?),',
+                '(?,?,?,?,?,?,?,?,?,?,?),',
                 count($webpush_notifications)
             );
 
@@ -653,6 +654,7 @@ done
             $value['title']          = empty($value['title']) ? null : $value['title'];
             $value['status']         = empty($value['status']) && $value['status'] != 0 ? 2 : $value['status'];
             $value['transaction_id'] = empty($value['transaction_id']) ? null : $value['transaction_id'];
+            $value['send_count']     = empty($value['send_count']) ? 0 : $value['send_count'];
             $value['impressions']    = empty($value['impressions']) ? 0 : $value['impressions'];
             $value['clicks']         = empty($value['clicks']) ? 0 : $value['clicks'];
             $value['closed']         = empty($value['closed']) ? 0 : $value['closed'];
@@ -666,6 +668,7 @@ done
                 $value['send_date'],
                 $value['image'],
                 $value['transaction_id'],
+                $value['send_count'],
                 $value['impressions'],
                 $value['clicks'],
                 $value['closed'],
@@ -679,6 +682,7 @@ done
                 empty($value['send_date']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
                 empty($value['image']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['transaction_id']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['send_count']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['impressions']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['clicks']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['closed']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,

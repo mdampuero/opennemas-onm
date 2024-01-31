@@ -119,9 +119,9 @@ class WebpushSendCommand extends Command
                     ->getDataSet('Settings', 'instance')
                     ->get('webpush_delay', '1');
 
-                $restrictedHours = $this->getContainer()->get('orm.manager')
+                $allowedDate = $this->getContainer()->get('orm.manager')
                     ->getDataSet('Settings', 'instance')
-                    ->get('webpush_restricted_hours', []);
+                    ->get('webpush_allowed_date', null);
 
                 $this->getContainer()->get('core.security')->setInstance($instance);
                 $context = $this->getContainer()->get('core.locale')->getContext();
@@ -130,31 +130,34 @@ class WebpushSendCommand extends Command
                 $timeZone = $this->getContainer()->get('core.locale')->getTimeZone();
                 // Create current local time
                 $currentLocalTime = new \DateTime(null, $timeZone);
+                $targetTime       = new \DateTime(null, new \DateTimeZone('UTC'));
 
-                if (in_array($currentLocalTime->format('H:00'), $restrictedHours)) {
-                    $diff = $currentLocalTime->diff(
+                if ($this->isInRestrictedHours($currentLocalTime)) {
+                    $intervalToNextHour = $currentLocalTime->diff(
                         new \DateTime($currentLocalTime->modify('next hour')->format('Y-m-d H:00:00'), $timeZone)
                     );
-                    $currentLocalTime->add($diff);
+
+                    $targetTime->add($intervalToNextHour);
                     $onCooldown = true;
-                } else {
-                    // Add delay time in order to handle delayed notifications
-                    $currentLocalTime->add(new \DateInterval('PT' . $delay . 'M'));
                 }
 
-                $delayedUtcTime = $currentLocalTime->setTimezone(new \DateTimeZone('UTC'));
-                $notifications  = $notificationService
+                if (!empty($allowedDate) && $targetTime->format('Y-m-d H:i:s') < $allowedDate) {
+                    $targetTime = \DateTime::createFromFormat('Y-m-d H:i:s', $allowedDate);
+                    $onCooldown = true;
+                }
+
+                $notifications = $notificationService
                     ->setCount(false)
                     ->getList(sprintf(
                         "status = 0 and send_date <= '%s'",
-                        $delayedUtcTime->format('Y-m-d H:i:s')
+                        $targetTime->format('Y-m-d H:i:s')
                     ))['items'];
 
                 foreach ($notifications as $notification) {
                     if ($onCooldown) {
                         $notificationService->patchItem(
                             $notification->id,
-                            ['send_date' => $delayedUtcTime->format('Y-m-d H:i:s')]
+                            ['send_date' => $targetTime->format('Y-m-d H:i:s')]
                         );
                         $redis->remove($notification->fk_content);
                         continue;
@@ -162,43 +165,57 @@ class WebpushSendCommand extends Command
                     $article  = $articleService->getItem($notification->fk_content);
                     $localNow = new \DateTime(null, $timeZone);
                     $localUTC = $localNow->setTimezone(new \DateTimeZone('UTC'));
-                    if ($this->getContainer()->get('core.helper.content')->isReadyForPublish($article)
-                        && $notification->send_date <= $localUTC) {
-                        $contentPath = $this->getContainer()
-                            ->get('core.helper.url_generator')->getUrl($article, ['_absolute' => true]);
-                        $image       = $this->getContainer()
-                            ->get('core.helper.featured_media')->getFeaturedMedia($article, 'inner');
-                        $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
-
-                        $notificationStatus = 1;
-
-                        try {
-                            $sentNotification = $notificationEndpoint->sendNotification([
-                                'title'      => $article->title ?? '',
-                                'message'    => $article->description ?? '',
-                                'target_url' => $contentPath,
-                                'image'      => $imagePath,
-                                'icon'       => strpos($favico, '.png') ? $favico : '',
-                            ]);
-                        } catch (\Exception $e) {
-                            $notificationStatus = 2;
-                        }
-                        $notificationService->patchItem(
-                            $notification->id,
-                            [
-                                'status'         => $notificationStatus,
-                                'body'           => $article->description ?? '',
-                                'title'          => $article->title ?? '',
-                                'send_date'      => gmdate('Y-m-d H:i:s'),
-                                'image'          => $image->pk_content ?? null,
-                                'transaction_id' => $sentNotification['ID'] ?? '',
-                            ]
-                        );
-
-                        $redis->remove('content-' . $notification->fk_content);
-
-                        $onCooldown = true;
+                    if (!$this->getContainer()->get('core.helper.content')->isReadyForPublish($article)
+                        || $notification->send_date > $localUTC) {
+                        continue;
                     }
+
+                    $contentPath = $this->getContainer()
+                        ->get('core.helper.url_generator')->getUrl($article, ['_absolute' => true]);
+                    $image       = $this->getContainer()
+                        ->get('core.helper.featured_media')->getFeaturedMedia($article, 'inner');
+                    $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
+
+                    $notificationStatus = 1;
+
+                    try {
+                        $sentNotification = $notificationEndpoint->sendNotification([
+                            'title'      => $article->title ?? '',
+                            'message'    => $article->description ?? '',
+                            'target_url' => $contentPath,
+                            'image'      => $imagePath,
+                            'icon'       => strpos($favico, '.png') ? $favico : '',
+                        ]);
+                    } catch (\Exception $e) {
+                        $notificationStatus = 2;
+                    }
+                    $notificationService->patchItem(
+                        $notification->id,
+                        [
+                            'status'         => $notificationStatus,
+                            'body'           => $article->description ?? '',
+                            'title'          => $article->title ?? '',
+                            'send_date'      => gmdate('Y-m-d H:i:s'),
+                            'image'          => $image->pk_content ?? null,
+                            'transaction_id' => $sentNotification['ID'] ?? '',
+                        ]
+                    );
+
+                    $redis->remove('content-' . $notification->fk_content);
+
+                    $onCooldown = true;
+
+                    $utcTime     = new \DateTime(null, new \DateTimeZone('UTC'));
+                    $limitTime   = new \DateInterval('PT' . $delay . 'M');
+                    $allowedTime = $utcTime->add($limitTime);
+
+                    $this->getContainer()->get('orm.manager')
+                        ->getDataSet('Settings', 'instance')
+                        ->set(['webpush_allowed_date' => $allowedTime->format('Y-m-d H:i:s')]);
+
+                    $targetTime = $allowedTime->format('Y-m-d H:i:s') > $targetTime->format('Y-m-d H:i:s') ?
+                        $allowedTime :
+                        $targetTime;
                 }
             } catch (\Exception $e) {
                 $output->writeln(sprintf(
@@ -240,5 +257,14 @@ class WebpushSendCommand extends Command
 
         return $this->getContainer()->get('orm.manager')
             ->getRepository('Instance')->findBy($oql);
+    }
+
+    protected function isInRestrictedHours($time)
+    {
+        $restrictedHours = $this->getContainer()->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('webpush_restricted_hours', []);
+
+        return in_array($time->format('H:00'), $restrictedHours);
     }
 }
