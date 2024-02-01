@@ -100,8 +100,31 @@
           </div>
         </div>
       </div>
-      <div class="ng-cloak" ng-show="!item.widget_type">
+      <div class="ng-cloak" ng-show="!item.widget_type && !displayMultiBody()">
         {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Content{/t}" field="body" imagepicker=true rows=5}
+      </div>
+      <div class="ng-cloak" ng-show="!item.widget_type && displayMultiBody()">
+        <ul class="fake-tabs">
+          <li ng-repeat="(slug_key, slug_value) in data.extra.locale.slugs" ng-class="{ 'active': language === slug_key }" ng-click="changeLanguage(slug_key)">
+            [% data.extra.locale.available[slug_key] %]
+          </li>
+        </ul>
+        <div class="form-group no-margin" ng-repeat="(slug_key, slug_value) in data.extra.locale.slugs" ng-show="language === slug_key">
+          <label class="form-label clearfix m-t-10" for="body.[% slug_key %]">
+            <div class="pull-left">{t}Content{/t}</div>
+          </label>
+          {acl isAllowed='PHOTO_ADMIN'}
+            <div class="pull-right">
+              <div class="btn btn-mini" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-dynamic-target="editor.body.[% slug_key %]" photo-editor-enabled="true">
+                <i class="fa fa-plus"></i>
+                {t}Insert image{/t}
+              </div>
+            </div>
+          {/acl}
+          <div class="controls">
+            <textarea name="body.[% slug_key %]" id="body.[% slug_key %]" incomplete="incomplete" ng-model="item.body[slug_key]" onm-editor onm-editor-preset="simple" class="form-control" rows="55"></textarea>
+          </div>
+        </div>
       </div>
       <div class="ng-cloak" ng-show="item.widget_type && item.class">
         <div class="p-b-50 p-t-50 spinner-wrapper" ng-if="flags.http.formLoading">
