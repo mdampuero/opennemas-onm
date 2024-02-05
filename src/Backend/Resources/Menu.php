@@ -274,6 +274,7 @@ $menuXml = [
     [
         'id'          => 'webpush_notifications_mananger',
         'title'       => _('Web Push'),
+        'badge'       => '<span class="badge badge-primary pull-left m-t-10 m-r-5">' . _('NEW') . '</span> ',
         'icon'        => 'fa fa-bell',
         'link'        => '#',
         'privilege'   => 'ADMIN',

@@ -53,16 +53,14 @@ class CommentController extends FrontendController
         $contentId = $request->query->filter('content_id', null, FILTER_SANITIZE_NUMBER_INT);
         $epp       = (int) $request->query->get('elems_per_page');
         $offset    = $request->query->getDigits('offset', 1);
-
-        $content = $this->getContent($contentId);
+        $content   = $this->getContent($contentId);
 
         if (empty($content)) {
             return new Response('', 404);
         }
 
         $comments = $this->getComments($content, $epp, $offset);
-
-        $sh = $this->get('core.helper.subscription');
+        $sh       = $this->get('core.helper.subscription');
 
         if ($sh->hasAdvertisements($sh->getToken($content))) {
             $this->getAds();
@@ -76,6 +74,8 @@ class CommentController extends FrontendController
             'required_email' => $this->get('core.helper.comment')->isEmailRequired(),
             'offset'         => $offset,
             'more'           => $comments['total'] > ($epp * $offset),
+            'x-cacheable'    => true,
+            'x-tags'         => 'comments-' . $contentId,
             'recaptcha'      => $this->get('core.recaptcha')
                 ->setVersion(2)
                 ->configureFromSettings()

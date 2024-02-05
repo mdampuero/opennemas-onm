@@ -227,9 +227,10 @@ class WebpushUpdateCommand extends Command
         $notificationService->patchItem(
             $notification->id,
             [
+                'send_count'  => $getNotificationStatus['count']['successfully_sent'],
                 'impressions' => $getNotificationStatus['count']['delivered'],
-                'clicks'    => $getNotificationStatus['count']['clicked'],
-                'closed'    => $getNotificationStatus['count']['closed']
+                'clicks'      => $getNotificationStatus['count']['clicked'],
+                'closed'      => $getNotificationStatus['count']['closed']
             ]
         );
 
