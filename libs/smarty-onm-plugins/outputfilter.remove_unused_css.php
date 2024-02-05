@@ -9,17 +9,7 @@
  */
 function smarty_outputfilter_remove_unused_css($output, $smarty)
 {
-    if (preg_match('/newsletter/', $smarty->source->resource)
-        && preg_match('/\/manager/', $uri)
-        && preg_match('/\/managerws/', $uri)
-        && preg_match('/\/sharrre/', $uri)
-        && preg_match('/\/ads\//', $uri)
-        && preg_match('/\/admin/', $uri)
-        && preg_match('/\/comments\//', $uri)
-        && preg_match('/\/rss\/(?!listado$)/', $uri)
-        && preg_match('@\.amp\.html@', $uri)
-        && preg_match('@(<link(?![^>]*libraries).*id="theme-css".*?>)@', $uri)
-    ) {
+    if (!in_array($smarty->getTheme()->text_domain, ['apolo']) || stripos($output, '<!doctype html>') !== 0) {
         return $output;
     }
 
@@ -32,6 +22,19 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
     }
 
     $uri = $request->getUri();
+
+    if (preg_match('/newsletter/', $smarty->source->resource)
+        && preg_match('/\/manager/', $uri)
+        && preg_match('/\/managerws/', $uri)
+        && preg_match('/\/sharrre/', $uri)
+        && preg_match('/\/ads\//', $uri)
+        && preg_match('/\/admin/', $uri)
+        && preg_match('/\/comments\//', $uri)
+        && preg_match('/\/rss\/(?!listado$)/', $uri)
+        && preg_match('@\.amp\.html@', $uri)
+    ) {
+        return $output;
+    }
 
     $removeUnusedCss = new \Momentum81\PhpRemoveUnusedCss\RemoveUnusedCssBasic();
     $template        = $smarty->getValue('_template');
@@ -58,7 +61,7 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
 
     // Get the CSS code from the optimized CSS file
     $optimizedCssFilePath = str_replace('.css', '.refactored.min.css', $newCssFilePath);
-    $optimizedCss = file_get_contents($optimizedCssFilePath);
+    $optimizedCss         = file_get_contents($optimizedCssFilePath);
 
     // Replace the style tag with the CSS code of the new optimized CSS file
     $output = preg_replace(
@@ -73,5 +76,6 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
     if (file_exists($newCssFilePath)) {
         unlink($newCssFilePath);
     }
+
     return $output;
 }
