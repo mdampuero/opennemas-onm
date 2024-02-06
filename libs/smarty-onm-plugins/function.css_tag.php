@@ -53,7 +53,7 @@ function smarty_function_css_tag($params, &$smarty)
         $resource = str_replace('.css', '.' . $mtime . '.css', $resource);
     }
 
-    $output = "<link id=\"theme-css\" {$rel} {$type} href=\"{$resource}\" {$properties}>";
+    $output = "<link {$rel} {$type} href=\"{$resource}\" {$properties}>";
 
     return $output;
 }

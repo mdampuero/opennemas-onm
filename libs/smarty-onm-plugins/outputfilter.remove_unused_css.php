@@ -9,7 +9,7 @@
  */
 function smarty_outputfilter_remove_unused_css($output, $smarty)
 {
-    if (!in_array($smarty->getTheme()->text_domain, ['apolo']) || stripos($output, '<!doctype html>') !== 0) {
+    if (!in_array($smarty->getTheme()->text_domain, ['apolo'])) {
         return $output;
     }
 
@@ -41,6 +41,12 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
     $cssFileName     = $template->getThemeSkinProperty('css_file');
     $themePath       = $smarty->getTheme()->path;
 
+    $resource  = str_replace('.css', '.' . THEMES_DEPLOYED_AT . '.css', $cssFileName);
+    $stylePath = $smarty->getTheme()->path . 'css' . DS . $resource;
+
+    if (!preg_match('@(<link[^>]*href="' . $stylePath . '".*?>)@', $output)) {
+        return $output;
+    }
     // Get the current css theme file path
     $originalCssFilePath = $_SERVER['DOCUMENT_ROOT'] . $themePath . 'css/' . $cssFileName;
 
@@ -65,8 +71,8 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
 
     // Replace the style tag with the CSS code of the new optimized CSS file
     $output = preg_replace(
-        '@(<link(?![^>]*(libraries|print)).*id="theme-css".*?>)@',
-        '<style>' . $optimizedCss . '</style>',
+        '@(<link[^>]*href="' . $stylePath . '".*?>)@',
+        '<style id="optimized-css">' . $optimizedCss . '</style>',
         $output
     );
 
