@@ -212,14 +212,20 @@ class SimpleMenu
             $icon = '<i class="' . $element['icon'] . '" ></i>';
         }
 
+        if (array_key_exists('badge', $element)) {
+            $badge = $element['badge'];
+        }
+
         if (!array_key_exists('link', $element)) {
             return "$icon
+                    $badge
                     <span class=\"title\">$title</span>
                     $arrow";
         }
 
         return "<a href=\"$url\" $target $attrTitle $attrId>
                     $icon
+                    $badge
                     <span class=\"title\">$title</span>
                     $arrow
                 </a>";

@@ -130,6 +130,8 @@ orm:
                                     type: integer
                                 transaction_id:
                                     type: string
+                                send_count:
+                                    type: integer
                                 impressions:
                                     type: integer
                                 clicks:

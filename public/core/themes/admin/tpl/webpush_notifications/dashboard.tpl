@@ -38,7 +38,7 @@
                   <label class="form-label">{t}Active Subscribers{/t}</label>
                   <div class="form-status text-left">
                     <p class="onm-score text-left lead m-b-0">
-                      <strong ng-if="settings.webpush_active_subscribers">[% settings.webpush_active_subscribers[settings.webpush_active_subscribers.length - 1] %]</strong>
+                      <strong ng-if="settings.webpush_active_subscribers">[% settings.webpush_active_subscribers[settings.webpush_active_subscribers.length - 1] | number : 0 %]</strong>
                       <strong ng-if="!settings.webpush_active_subscribers">0</strong>
                     </p>
                   </div>
@@ -48,11 +48,11 @@
                 <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-b-0 p-15 bg-white">
                   <label class="form-label">
                     {t}Impressions{/t} <small class="form-label">({t}Monthly{/t})</small>
-                    <i class="fa fa-info-circle text-info pull-right" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}displayed to the user{/t}'" tooltip-placement="bottom"></i>
+                    <i class="fa fa-info-circle text-info pull-left m-t-2" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}displayed to the user{/t}'" tooltip-placement="bottom"></i>
                   </label>
                   <div class="form-status text-left">
                     <p class="onm-score text-left lead m-b-0">
-                        <strong>[% monthlyImpressions %]</strong>
+                        <strong>[% monthlyImpressions | number : 0 %]</strong>
                     </p>
                   </div>
                 </div>
@@ -61,11 +61,11 @@
                 <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-b-0 p-15 bg-white">
                   <label class="form-label">
                     {t}Interactions{/t} <small class="form-label">({t}Monthly{/t})</small>
-                    <i class="fa fa-info-circle text-info pull-right" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}clicked or closed{/t}'" tooltip-placement="bottom"></i>
+                    <i class="fa fa-info-circle text-info pull-left m-t-2" uib-tooltip-html="'{t}Times a notification was{/t}<br>{t}clicked or closed{/t}'" tooltip-placement="bottom"></i>
                   </label>
                   <div class="form-status text-left">
                     <p class="onm-score text-left lead m-b-0">
-                      <strong>[% monthlyInteractions %]</strong>
+                      <strong>[% monthlyInteractions | number : 0 %]</strong>
                     </p>
                   </div>
                 </div>
@@ -74,11 +74,11 @@
                 <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-b-0 p-15 bg-white">
                   <label class="form-label">
                     {t}CTR{/t} <small class="form-label">({t}Monthly{/t})</small>
-                    <i class="fa fa-info-circle text-info pull-right" uib-tooltip-html="'{t}Interactions (Clicks + Closed){/t}<br>{t}divided by Impressions{/t}'" tooltip-placement="bottom"></i>
+                    <i class="fa fa-info-circle text-info pull-left m-t-2" uib-tooltip-html="'{t}Interactions (Clicks + Closed){/t}<br>{t}divided by Impressions{/t}'" tooltip-placement="bottom"></i>
                   </label>
                   <div class="form-status text-left">
                     <p class="onm-score text-left lead m-b-0">
-                      <strong>[% monthlyCTR %]%</strong>
+                      <strong>[% monthlyCTR | number : 2 %]%</strong>
                     </p>
                   </div>
                 </div>

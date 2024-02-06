@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-26 11:09+0000\n"
-"PO-Revision-Date: 2024-01-26 12:18+0100\n"
+"POT-Creation-Date: 2024-02-06 11:59+0000\n"
+"PO-Revision-Date: 2024-02-06 13:04+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -307,6 +307,9 @@ msgstr "Boletíns de novas"
 
 msgid "Web Push"
 msgstr "Web Push"
+
+msgid "NEW"
+msgstr "NOVO"
 
 msgid "History"
 msgstr "Historial"
@@ -5410,17 +5413,26 @@ msgstr "Identificador"
 msgid "Send date"
 msgstr "Data de envío"
 
+msgid "Total Sent"
+msgstr "Total Enviados"
+
 msgid "Clicks"
 msgstr "Clicks"
 
 msgid "Transaction Id"
 msgstr "Identificador de transacción"
 
+msgid "Total notification sending attempts"
+msgstr "Total de intentos de envio da notificación"
+
 msgid "clicked by the user"
 msgstr "clicada polo usuario"
 
 msgid "closed by the user"
 msgstr "pechada polo usuario"
+
+msgid "Clicks + Closed"
+msgstr "Clics + Pechadas"
 
 msgid "Write here the text for search..."
 msgstr "Escribe aquí o texto a buscar…"
