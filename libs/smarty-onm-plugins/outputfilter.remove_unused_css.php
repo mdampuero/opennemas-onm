@@ -9,7 +9,7 @@
  */
 function smarty_outputfilter_remove_unused_css($output, $smarty)
 {
-    if (!in_array($smarty->getTheme()->text_domain, ['apolo'])) {
+    if (!in_array($smarty->getTheme()->text_domain, ['apolo']) || stripos($output, '<!doctype html>') !== 0) {
         return $output;
     }
 
@@ -79,6 +79,7 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
     if (file_exists($newHtmlFilePath)) {
         unlink($newHtmlFilePath);
     }
+
     if (file_exists($newCssFilePath)) {
         unlink($newCssFilePath);
     }
