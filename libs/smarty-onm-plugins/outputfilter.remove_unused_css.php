@@ -61,6 +61,7 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
     $removeUnusedCss->styleSheets($newCssFilePath)
         ->htmlFiles($newHtmlFilePath)
         ->setFilenameSuffix('.refactored.min')
+        ->alwaysInclude('onm-new-')
         ->minify()
         ->refactor()
         ->saveFiles();
