@@ -36,6 +36,8 @@
          */
         $scope.widgetForm = false;
 
+        $scope.language = null;
+
         /**
          * @memberOf WidgetCtrl
          *
@@ -252,6 +254,16 @@
           }
 
           $scope.item.params = params;
+
+          if ($scope.displayMultiBody()) {
+            $scope.language = $scope.data.extra.locale.selected || null;
+            if (typeof $scope.item.body !== 'object') {
+              var bodyValue = $scope.item.body;
+
+              $scope.item.body = {};
+              $scope.item.body[$scope.language] = bodyValue;
+            }
+          }
         };
 
         /**
@@ -301,8 +313,19 @@
         /**
          * @inheritdoc
          */
+        $scope.displayMultiBody = function() {
+          return $scope.data.extra && $scope.data.extra.locale && $scope.data.extra.locale.multilanguage;
+        };
+
+        /**
+         * @inheritdoc
+         */
         $scope.hasMultilanguage = function() {
           return false;
+        };
+
+        $scope.changeLanguage = function(key) {
+          $scope.language = key;
         };
 
         /**
