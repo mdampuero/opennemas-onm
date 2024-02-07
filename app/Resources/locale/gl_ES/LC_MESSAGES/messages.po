@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-31 10:00+0000\n"
-"PO-Revision-Date: 2024-01-31 11:03+0100\n"
+"POT-Creation-Date: 2024-02-06 11:59+0000\n"
+"PO-Revision-Date: 2024-02-06 13:04+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -4606,6 +4606,9 @@ msgstr "OneTrust"
 msgid "Didomi"
 msgstr "Didomi"
 
+msgid "Traffective"
+msgstr "Traffective"
+
 msgid "Quantcast UTID"
 msgstr "Quantcast UTID"
 
@@ -4654,6 +4657,12 @@ msgstr "Didomi noticeId"
 
 msgid "Didomi noticeId for AMP"
 msgstr "Didomi noticeId para AMP"
+
+msgid "Domain"
+msgstr "Dominio"
+
+msgid "Activation Key"
+msgstr "Activation Key"
 
 msgid "Browser update"
 msgstr "Actualización do navegador"
@@ -5414,7 +5423,7 @@ msgid "Transaction Id"
 msgstr "Identificador de transacción"
 
 msgid "Total notification sending attempts"
-msgstr "total de intentos de envio da notificación"
+msgstr "Total de intentos de envio da notificación"
 
 msgid "clicked by the user"
 msgstr "clicada polo usuario"
@@ -6281,9 +6290,6 @@ msgstr ""
 
 msgid "Smart Ad server integration"
 msgstr "Integración con servidor de publicidade Smart"
-
-msgid "Domain"
-msgstr "Dominio"
 
 msgid "The ad server Domain (i.e. https://www8.smartadserver.com/)."
 msgstr ""
@@ -7538,9 +7544,6 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 msgid "Group name"
 msgstr "Nome do grupo"
 
-#~ msgid "divided by"
-#~ msgstr "dividido por"
-
 #~ msgid "Unable to find any content that matches your search."
 #~ msgstr "Non se puideron atopar contidos que coincidan coa súa busca."
 
@@ -7833,9 +7836,6 @@ msgstr "Nome do grupo"
 
 #~ msgid "Please, find below the report."
 #~ msgstr "Embaixo pode atopar un informe."
-
-#~ msgid "Creative"
-#~ msgstr "Creativo"
 
 #~ msgid "Fishing"
 #~ msgstr "Pesca"
