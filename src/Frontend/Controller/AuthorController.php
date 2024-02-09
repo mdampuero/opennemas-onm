@@ -221,7 +221,7 @@ class AuthorController extends Controller
         $xtags = [',authors-frontpage'];
 
         foreach ($items as $item) {
-            $xtags[] = ',content-author-' . $item->id;
+            $xtags[] = ',author-' . $item->id;
         }
 
         return $this->render('user/frontpage_authors.tpl', [

@@ -116,7 +116,7 @@ class TagController extends FrontendController
 
         foreach ($params['contents'] as $content) {
             if ($content->fk_author) {
-                $xtags[] = ',tag-author-' . $content->fk_author;
+                $xtags[] = ',author-' . $content->fk_author;
             }
         }
 

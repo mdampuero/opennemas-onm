@@ -63,7 +63,7 @@ class FrontpagesController extends Controller
         $xtags = array_map(function ($content) {
             $tag = $content->content_type_name . '-' . $content->pk_content;
             if (isset($content->fk_author)) {
-                $tag .= ',frontpage-author-' . $content->fk_author;
+                $tag .= ',author-' . $content->fk_author;
             }
             return $tag;
         }, $contents);
