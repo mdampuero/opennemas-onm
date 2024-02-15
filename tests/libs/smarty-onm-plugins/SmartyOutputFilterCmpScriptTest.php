@@ -349,8 +349,15 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
         $returnvalue = "foo-bar-baz";
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('common/helpers/cmp_quantcast_amp.tpl', [ 'id' => 'qwert', 'apikey' => '', 'mrfpassId' => '' ])
-            ->willReturn($returnvalue);
+            ->with(
+                'common/helpers/cmp_quantcast_amp.tpl',
+                [
+                    'id' => 'qwert',
+                    'apikey' => '',
+                    'mrfpassId' => '',
+                    'canonical'  => 'http://console/thud/norf.html'
+                ]
+            )->willReturn($returnvalue);
 
         $output = "<html><head>Hello World</head><body>\n"
             . $returnvalue . "</body></html>";
@@ -381,14 +388,22 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
                 'cmp_id'     => 'qwert',
                 'cmp_id_amp' => null,
                 'cmp_apikey' => '',
-                'mrfpassId'  => null
+                'mrfpassId'  => null,
+                'canonical'  => 'http://console/thud/norf.html'
             ]);
 
         $returnvalue = "foo-bar-baz";
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('common/helpers/cmp_onetrust_amp.tpl', [ 'id' => 'qwert', 'apikey' => '', 'mrfpassId' => '' ])
-            ->willReturn($returnvalue);
+            ->with(
+                'common/helpers/cmp_onetrust_amp.tpl',
+                [
+                    'id' => 'qwert',
+                    'apikey' => '',
+                    'mrfpassId' => '',
+                    'canonical'  => 'http://console/thud/norf.html'
+                ]
+            )->willReturn($returnvalue);
 
         $output = "<html><head>Hello World</head><body>\n"
             . $returnvalue . "</body></html>";
@@ -419,14 +434,22 @@ class SmartyCmpScriptTest extends \PHPUnit\Framework\TestCase
                 'cmp_id'     => 'qwert',
                 'cmp_id_amp' => 'waldo',
                 'cmp_apikey' => 'qwert',
-                'mrfpassId'  => ''
+                'mrfpassId'  => '',
+                'canonical'  => 'http://console/thud/norf.html'
             ]);
 
         $returnvalue = "foo-bar-baz";
 
         $this->templateAdmin->expects($this->any())->method('fetch')
-            ->with('common/helpers/cmp_didomi_amp.tpl', [ 'id' => 'waldo', 'apikey' => 'qwert', 'mrfpassId' => ''])
-            ->willReturn($returnvalue);
+            ->with(
+                'common/helpers/cmp_didomi_amp.tpl',
+                [
+                    'id' => 'waldo',
+                    'apikey' => 'qwert',
+                    'mrfpassId' => '',
+                    'canonical' => 'http://console/thud/norf.html'
+                ]
+            )->willReturn($returnvalue);
 
         $output = "<html><head>Hello World</head><body>\n"
             . $returnvalue . "</body></html>";

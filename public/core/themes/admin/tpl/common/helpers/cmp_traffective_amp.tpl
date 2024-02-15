@@ -5,7 +5,7 @@
             "sandbox": "allow-top-navigation-by-user-activation allow-popups-to-escape-sandbox",
             "clientConfig": {
                 "domain": "{$id}",
-                "paywallRedirectUrl": "CANONICAL_URL",
+                "paywallRedirectUrl": "{$canonical}",
                 "activationKey": "{$apikey}"
             },
             "uiConfig": { "overlay": true }
