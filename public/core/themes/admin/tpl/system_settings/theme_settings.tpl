@@ -79,30 +79,29 @@
                       </div>
                     </div>
                   </div>
-
                 <ul class="nav nav-pills border-bottom border-light m-b-15 p-b-5" role="tablist">
                   <li role="presentation" class="p-l-0 active">
                     <a href="#tabGeneral" aria-controls="general" role="tab" data-toggle="tab">{t domain="base"}General{/t}</a>
                   </li>
-                  <li role="presentation" class="p-l-0">
+                  <li role="presentation" class="p-l-0" ng-if="extra.theme_skins[settings.theme_skin].params.fonts">
                     <a href="#tabFonts" aria-controls="fonts" role="tab" data-toggle="tab">{t domain="base"}Fonts{/t}</a>
                   </li>
-                  <li role="presentation">
+                  <li role="presentation" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                     <a href="#tabHeader" aria-controls="profile" role="tab" data-toggle="tab">{t domain="base"}Header{/t}</a>
                   </li>
-                  <li role="presentation">
+                  <li role="presentation" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                     <a href="#tabMenu" aria-controls="menu" role="tab" data-toggle="tab">{t domain="base"}Menu{/t}</a>
                   </li>
-                  <li role="presentation">
+                  <li role="presentation" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                     <a href="#tabFrontpage" aria-controls="frontpage" role="tab" data-toggle="tab">{t domain="base"}Frontpage{/t}</a>
                   </li>
-                  <li role="presentation">
+                  <li role="presentation" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                     <a href="#tabArchive" aria-controls="archive" role="tab" data-toggle="tab">{t domain="base"}Listings/Archive{/t}</a>
                   </li>
-                  <li role="presentation">
+                  <li role="presentation" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                     <a href="#tabInners" aria-controls="inners" role="tab" data-toggle="tab">{t domain="base"}Inners{/t}</a>
                   </li>
-                  <li role="presentation">
+                  <li role="presentation" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                     <a href="#tabMobile" aria-controls="mobile" role="tab" data-toggle="tab">{t domain="base"}Mobile{/t}</a>
                   </li>
                 </ul>
@@ -172,7 +171,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-md-5 m-b-15" ng-if="settings.logo_enabled">
+                      <div class="col-xs-12 col-md-5 m-b-15" ng-if="settings.logo_enabled && extra.theme_skins[settings.theme_skin].params.options">
                         <h4>
                           <i class="fa fa-arrows-h"></i>
                           {t}Logo size{/t}
@@ -537,7 +536,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row">
+                    <div class="row" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                       <div class="col-xs-12 col-md-5 m-b-15">
                         <label class="form-label m-b-15" for="theme-option-content-imageratio-normal">
                           <h4>

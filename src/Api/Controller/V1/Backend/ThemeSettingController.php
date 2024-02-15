@@ -82,7 +82,7 @@ class ThemeSettingController extends SettingController
 
     public function listAction(Request $request)
     {
-        $settingHelper = $this->container->get('core.helper.setting');
+        $settingHelper = $this->container->get('core.helper.theme_settings');
 
         $settings = parent::listAction($request);
         if (!array_key_exists('theme_options', $settings['settings'])) {
@@ -113,7 +113,7 @@ class ThemeSettingController extends SettingController
      */
     public function downloadAction()
     {
-        $themeOptions = $this->container->get('core.helper.setting')->getThemeSettings();
+        $themeOptions = $this->container->get('core.helper.theme_settings')->getThemeSettings();
 
         $response = new JsonResponse($themeOptions);
         $response->headers->set('Content-Type', 'application/json');
@@ -139,7 +139,7 @@ class ThemeSettingController extends SettingController
 
         if ($this->isValidJsonSettings($jsonSettings)) {
             $settings       = json_decode($jsonSettings, true);
-            $currenSettings = $this->container->get('core.helper.setting')->getThemeSettings();
+            $currenSettings = $this->container->get('core.helper.theme_settings')->getThemeSettings();
             $finalSettings  = array_merge($currenSettings, $settings);
             return parent::saveSettings(['theme_options' => $finalSettings]);
         }
@@ -159,15 +159,16 @@ class ThemeSettingController extends SettingController
      */
     public function restoreAction()
     {
-        $settingHelper = $this->container->get('core.helper.setting');
-        return parent::saveSettings(['theme_options' => $settingHelper->getThemeSettings(true)]);
+        $settingHelper = $this->container->get('core.helper.theme_settings');
+        $themeOptions = $settingHelper->getThemeSettings(true);
+        return parent::saveSettings(['theme_options' => $themeOptions]);
     }
 
     public function isValidJsonSettings($jsonSettings)
     {
         try {
             $settings     = json_decode($jsonSettings, true);
-            $baseSettings = $this->container->get('core.helper.setting')->getThemeSettings(true, false);
+            $baseSettings = $this->container->get('core.helper.theme_settings')->getThemeSettings(true, false);
 
             foreach ($settings as $settingName => $settingValue) {
                 if (!array_key_exists($settingName, $baseSettings)) {

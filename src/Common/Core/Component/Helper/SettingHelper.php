@@ -135,29 +135,4 @@ class SettingHelper
     {
         return boolval($this->ds->get('disable_default_ga'));
     }
-
-    public function getThemeSettings($base = false, $maped = true)
-    {
-        $themeOptions = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('theme_options', []);
-
-        if (empty($themeOptions) || $base) {
-            $themeOptions = $this->container->get('core.theme')->getSkinProperty(
-                $this->container->get('orm.manager')
-                    ->getDataSet('Settings', 'instance')
-                    ->get('theme_skin', 'default'),
-                'options'
-            );
-
-            if ($maped) {
-                $themeOptions = array_map(function ($option) {
-                    $option = $option['default'];
-                    return $option;
-                }, $themeOptions);
-            }
-        }
-
-        return $themeOptions;
-    }
 }

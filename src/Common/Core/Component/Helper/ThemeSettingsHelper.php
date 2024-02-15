@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\Container;
 /**
 * Perform searches in Database Settings data
 */
-class ThemeSettingsHelper
+class ThemeSettingsHelper extends SettingHelper
 {
     /**
      * The services container.
@@ -155,7 +155,7 @@ class ThemeSettingsHelper
                 'options'
             );
 
-            if ($maped) {
+            if ($maped && !empty($themeOptions)) {
                 $themeOptions = array_map(function ($option) {
                     $option = $option['default'];
                     return $option;
@@ -171,8 +171,6 @@ class ThemeSettingsHelper
         $action = strpos($action, 'list') !== false ? 'list' : $action;
         $action = strpos($action, 'show') !== false ? 'show' : $action;
 
-        dump($action);
-        dump($extension);
         $currentSettings   = $this->getThemeSettings();
         $generalVariables  = $this->parseSettings($currentSettings, $this->generalSettings);
         $specificVariables = [];
