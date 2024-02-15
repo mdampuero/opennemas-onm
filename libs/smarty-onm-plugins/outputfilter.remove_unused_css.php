@@ -40,22 +40,36 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
     $template        = $smarty->getValue('_template');
     $cssFileName     = $template->getThemeSkinProperty('css_file');
     $themePath       = $smarty->getTheme()->path;
+    $cache           = $smarty->getContainer()->get('cache.connection.instance');
 
-    $resource  = str_replace('.css', '.' . THEMES_DEPLOYED_AT . '.css', $cssFileName);
-    $stylePath = $smarty->getTheme()->path . 'css' . DS . $resource;
+    $cacheId = $smarty->getTheme()->text_domain
+        . '-' . $template->getThemeSkinProperty('css_file')
+        . '-' . THEMES_DEPLOYED_AT;
 
-    if (!preg_match('@(<link[^>]*href="' . $stylePath . '".*?>)@', $output)) {
-        return $output;
+    $originalCss = $cache->get($cacheId);
+
+    if (empty($originalCss)) {
+        $resource  = str_replace('.css', '.' . THEMES_DEPLOYED_AT . '.css', $cssFileName);
+        $stylePath = $smarty->getTheme()->path . 'css' . DS . $resource;
+
+        // Get the current css theme file path
+        $originalCssFilePath = $_SERVER['DOCUMENT_ROOT'] . $themePath . 'css/' . $cssFileName;
+        $originalCss         = file_get_contents($originalCssFilePath);
+
+        $cache->set(
+            $cacheId,
+            $originalCss,
+            86400
+        );
     }
-    // Get the current css theme file path
-    $originalCssFilePath = $_SERVER['DOCUMENT_ROOT'] . $themePath . 'css/' . $cssFileName;
 
     // Put the the html and css content in a file
     $newHtmlFilePath = sys_get_temp_dir() . '/html-aux.html';
     $newCssFilePath  = sys_get_temp_dir() . '/css-aux.css';
 
     file_put_contents($newHtmlFilePath, $output);
-    file_put_contents($newCssFilePath, file_get_contents($originalCssFilePath));
+    file_put_contents($newCssFilePath, $originalCss);
+
 
     // Use the removeUnusedCss library to get the CSS optimized file
     $removeUnusedCss->styleSheets($newCssFilePath)
