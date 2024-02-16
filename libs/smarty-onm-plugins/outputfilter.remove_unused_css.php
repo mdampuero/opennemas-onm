@@ -75,7 +75,13 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
     $removeUnusedCss->styleSheets($newCssFilePath)
         ->htmlFiles($newHtmlFilePath)
         ->setFilenameSuffix('.refactored.min')
-        ->alwaysInclude('onm-new', 'onm-aspect-ratio', 'widget')
+        ->alwaysInclude(
+            'onm-new',
+            'onm-aspect-ratio',
+            'widget',
+            'lazyload:not([src])',
+            "btn-link[aria-expanded='true']"
+        )
         ->minify()
         ->refactor()
         ->saveFiles();
