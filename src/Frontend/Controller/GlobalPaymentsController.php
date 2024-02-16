@@ -88,6 +88,7 @@ class GlobalPaymentsController extends Controller
         $contactEmail = $settings['contact_email'];
         $siteName     = $settings['site_name'];
         $subject      = 'Nueva colaboración de pago vía Global Payments';
+        $text[]       = 'Se ha realizado una nueva colaboración de pago, con los datos siguientes: ';
         $text[]       = "Nombre: {$hostedPaymentData->customerFirstName}";
         $text[]       = "Apellidos: {$hostedPaymentData->customerLastName}";
         $text[]       = "Email: {$hostedPaymentData->customerEmail}";
