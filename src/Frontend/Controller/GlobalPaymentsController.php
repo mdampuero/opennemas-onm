@@ -62,10 +62,63 @@ class GlobalPaymentsController extends Controller
                 ->withAddress($billingAddress, AddressType::BILLING)
                 ->serialize();
 
+            $this->sendEmail($hostedPaymentData);
+
             return new JsonResponse($hppJson, 200, [], true);
         } catch (ApiException $e) {
             return new JsonResponse(null, 500, false);
         }
+    }
+
+    /**
+     * Sends an email with payment data to contact email
+     *
+     * @param HostedPaymentData     $hostedPaymentData the payment data
+     *
+     * @return int the number of emails sent
+     */
+    private function sendEmail($hostedPaymentData)
+    {
+        $appLog       = $this->get('application.log');
+        $mailer       = $this->get('mailer');
+        $globals      = $this->get('core.globals');
+        $settings     = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get([ 'site_name', 'contact_email' ]);
+        $contactEmail = $settings['contact_email'];
+        $siteName     = $settings['site_name'];
+        $subject      = 'Nueva colaboración de pago vía Global Payments';
+        $text[]       = "Nombre: {$hostedPaymentData->customerFirstName}";
+        $text[]       = "Apellidos: {$hostedPaymentData->customerLastName}";
+        $text[]       = "Email: {$hostedPaymentData->customerEmail}";
+        $text[]       = "Teléfono: {$hostedPaymentData->customerPhoneMobile}";
+        $body         = implode("\r\n", $text);
+
+        try {
+            $message = \Swift_Message::newInstance();
+            $message
+                ->setSubject($subject)
+                ->setBody($body, 'text/plain')
+                ->setFrom([ 'no-reply@postman.opennemas.com' => $siteName])
+                ->setSender([ 'no-reply@postman.opennemas.com' => $siteName])
+                ->setTo($contactEmail);
+
+            $headers = $message->getHeaders();
+            $headers->addParameterizedHeader(
+                'ACUMBAMAIL-SMTPAPI',
+                $globals->getInstance()->internal_name . ' - Global Payments collaboration'
+            );
+
+            $appLog->notice(
+                "Email sent. Backend Global Payments payment registered sent (to: " . $contactEmail . ")"
+            );
+        } catch (\Exception $e) {
+            $appLog->notice('Unable to deliver your email: ' . $e->getMessage());
+
+            return 0;
+        }
+
+        return ($mailer->send($message)) ? 1 : 0;
     }
 
     /**
