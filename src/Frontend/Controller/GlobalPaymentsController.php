@@ -62,7 +62,7 @@ class GlobalPaymentsController extends Controller
                 ->withAddress($billingAddress, AddressType::BILLING)
                 ->serialize();
 
-            $this->sendEmail($hostedPaymentData);
+            $this->sendEmail($params);
 
             return new JsonResponse($hppJson, 200, [], true);
         } catch (ApiException $e) {
@@ -77,32 +77,36 @@ class GlobalPaymentsController extends Controller
      *
      * @return int the number of emails sent
      */
-    private function sendEmail($hostedPaymentData)
+    private function sendEmail($params)
     {
-        $appLog       = $this->get('application.log');
-        $mailer       = $this->get('mailer');
-        $globals      = $this->get('core.globals');
-        $settings     = $this->get('orm.manager')
+        $appLog     = $this->get('application.log');
+        $mailer     = $this->get('mailer');
+        $globals    = $this->get('core.globals');
+        $mailSender = $this->getParameter('mailer_no_reply_address');
+        $settings   = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get([ 'site_name', 'contact_email' ]);
-        $contactEmail = $settings['contact_email'];
-        $siteName     = $settings['site_name'];
-        $subject      = 'Nueva colaboración de pago vía Global Payments';
-        $text[]       = 'Se ha realizado una nueva colaboración de pago, con los datos siguientes: ';
-        $text[]       = "Nombre: {$hostedPaymentData->customerFirstName}";
-        $text[]       = "Apellidos: {$hostedPaymentData->customerLastName}";
-        $text[]       = "Email: {$hostedPaymentData->customerEmail}";
-        $text[]       = "Teléfono: {$hostedPaymentData->customerPhoneMobile}";
-        $body         = implode("\r\n", $text);
 
+
+        $notAllowed = [ 'terms' ];
+        $body       = '';
+        foreach ($params as $key => $value) {
+            if (!in_array($key, $notAllowed)) {
+                $body .= "<p><strong>" . ucfirst($key) . "</strong>: $value </p> \n";
+            }
+        }
+        $body .= "\n <p>Please ensure payment has been received before taking any action,"
+            . "this email is not binding on the payment process.</p>";
+
+        $subject = '[' . _('Contribute') . '] ';
         try {
             $message = \Swift_Message::newInstance();
             $message
                 ->setSubject($subject)
                 ->setBody($body, 'text/plain')
-                ->setFrom([ 'no-reply@postman.opennemas.com' => $siteName])
-                ->setSender([ 'no-reply@postman.opennemas.com' => $siteName])
-                ->setTo($contactEmail);
+                ->setFrom([ $mailSender => $settings['site_name']])
+                ->setSender([ $mailSender => $settings['site_name']])
+                ->setTo($settings['contact_email']);
 
             $headers = $message->getHeaders();
             $headers->addParameterizedHeader(
@@ -111,7 +115,7 @@ class GlobalPaymentsController extends Controller
             );
 
             $appLog->notice(
-                "Email sent. Backend Global Payments payment registered sent (to: " . $contactEmail . ")"
+                "Email sent. Backend Global Payments payment registered sent (to: " . $settings['contact_email'] . ")"
             );
         } catch (\Exception $e) {
             $appLog->notice('Unable to deliver your email: ' . $e->getMessage());
