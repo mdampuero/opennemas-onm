@@ -42,20 +42,19 @@ function smarty_outputfilter_remove_unused_css($output, $smarty)
     $themePath       = $smarty->getTheme()->path;
     $cache           = $smarty->getContainer()->get('cache.connection.instance');
 
-    $cacheId = $smarty->getTheme()->text_domain
+
+
+    $resource  = str_replace('.css', '.' . THEMES_DEPLOYED_AT . '.css', $cssFileName);
+    $stylePath = $themePath . 'css' . DS . $resource;
+    $cacheId   = $smarty->getTheme()->text_domain
         . '-' . $template->getThemeSkinProperty('css_file')
         . '-' . THEMES_DEPLOYED_AT;
 
     $originalCss = $cache->get($cacheId);
-
     if (empty($originalCss)) {
-        $resource  = str_replace('.css', '.' . THEMES_DEPLOYED_AT . '.css', $cssFileName);
-        $stylePath = $smarty->getTheme()->path . 'css' . DS . $resource;
-
         // Get the current css theme file path
         $originalCssFilePath = $_SERVER['DOCUMENT_ROOT'] . $themePath . 'css/' . $cssFileName;
         $originalCss         = file_get_contents($originalCssFilePath);
-
         $cache->set(
             $cacheId,
             $originalCss,
