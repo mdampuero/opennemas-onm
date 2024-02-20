@@ -239,7 +239,12 @@ class RouterListener implements EventSubscriberInterface
                 );
             }
 
-            if ($instance->isSubdirectory() && array_key_exists('path', $parameters)) {
+            //Fix in order to avoid redirection to main instance when no final slash on subdirectory routes
+            //TODO: refactor with standard prefixUrl() function
+            if ($instance->isSubdirectory()
+                && array_key_exists('path', $parameters)
+                && $this->container->get('core.helper.url')->isFrontendUri($parameters['path'])
+                && $parameters['_route'] !== 'asset_image') {
                 $parameters['path'] = substr(
                     $parameters['path'],
                     0,
