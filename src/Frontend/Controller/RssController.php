@@ -358,8 +358,7 @@ class RssController extends FrontendController
      */
     public function authorRSSAction(Request $request)
     {
-        $slug  = $request->get('author_slug', null);
-        $total = 10;
+        $slug = $request->get('author_slug', null);
 
         // Get user by slug
         try {
@@ -388,6 +387,10 @@ class RssController extends FrontendController
         if (($this->view->getCaching() === 0)
            || (!$this->view->isCached('rss/rss.tpl', $cacheID))
         ) {
+            $total = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('elements_in_rss', 10);
+
             $rssTitle = sprintf('RSS de «%s»', $user->name);
             // Get entity repository
             $er = $this->get('entity_repository');
@@ -420,6 +423,96 @@ class RssController extends FrontendController
             'x-cacheable' => true,
             'x-cache-for' => $expire,
             'x-tags'      => 'rss-author-' . $user->id
+        ]);
+
+        $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
+
+        return $response;
+    }
+
+    /**
+     * Shows the tag RSS.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function tagRSSAction(Request $request)
+    {
+        $slug = $request->get('tag_slug', null);
+
+        try {
+            $item = $this->get('api.service.tag')->getList(sprintf(
+                'slug = "%s"',
+                $slug
+            ))['items'];
+        } catch (\Exception $e) {
+            throw new ResourceNotFoundException();
+        }
+
+        if (empty($item)) {
+            throw new ResourceNotFoundException();
+        }
+
+        // Setup templating cache layer
+        $this->view->setConfig('rss');
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+        $this->setViewExpireDate($expire);
+
+        $cacheID = $this->view->getCacheId('rss', 'tag', $item[0]->slug);
+
+        if (($this->view->getCaching() === 0)
+           || (!$this->view->isCached('rss/rss.tpl', $cacheID))
+        ) {
+            $total = $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('elements_in_rss', 10);
+
+            $rssTitle = sprintf('RSS de «%s»', $item[0]->name);
+            // Get entity repository
+            $er = $this->get('entity_repository');
+
+            $order   = ['starttime' => 'DESC' ];
+            $filters = [
+                'join' => [
+                    [
+                        'table'               => 'contents_tags',
+                        'type'                => 'inner',
+                        'contents.pk_content' => [
+                            [
+                                'value' => 'contents_tags.content_id',
+                                'field' => true
+                            ]
+                        ]
+                    ]
+                ],
+                'tag_id'            => [['value' => $item[0]->id]],
+                'content_type_name' => [['value' => 'article']],
+                'content_status'    => [['value' => 1]],
+                'in_litter'         => [['value' => 0]],
+                'starttime'         => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'           => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
+            ];
+
+            $contents = $er->findBy($filters, $order, $total, 1);
+
+            $this->view->assign(['contents' => $contents, 'rss_title' => $rssTitle]);
+        }
+
+        $response = $this->render('rss/rss.tpl', [
+            'cache_id'    => $cacheID,
+            'x-cacheable' => true,
+            'x-cache-for' => $expire,
+            'x-tags'      => 'tag-' . $item[0]->id
         ]);
 
         $response->headers->set('Content-Type', 'text/xml; charset=UTF-8');
