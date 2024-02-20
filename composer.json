@@ -91,13 +91,13 @@
         "opennemas/orm": "1.6.0",
         "opennemas/task": "1.0.*",
         "opennemas/panorama-php": "1.0.3",
+        "opennemas/remove-unused-css": "1.0.7",
         "cometcult/braintree-bundle": "dev-master",
         "google/recaptcha": "1.2",
         "rtconner/freshbooks-api": "dev-master",
         "vdb/php-spider": "^0.4.4",
         "mobiledetect/mobiledetectlib": "^2.8",
-        "globalpayments/php-sdk": "^3.0",
-        "opennemas/remove-unused-css": "1.0.6"
+        "globalpayments/php-sdk": "^3.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.2",
