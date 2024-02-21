@@ -484,10 +484,11 @@ class RssController extends FrontendController
                                 'value' => 'contents_tags.content_id',
                                 'field' => true
                             ]
-                        ]
+                        ],
+                        'contents_tags.tag_id' => [[ 'value' => $item[0]->id ]],
+
                     ]
                 ],
-                'tag_id'            => [['value' => $item[0]->id]],
                 'content_type_name' => [['value' => 'article']],
                 'content_status'    => [['value' => 1]],
                 'in_litter'         => [['value' => 0]],
