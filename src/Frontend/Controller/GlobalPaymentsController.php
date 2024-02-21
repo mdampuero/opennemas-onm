@@ -95,10 +95,10 @@ class GlobalPaymentsController extends Controller
                 $body .= "<p><strong>" . ucfirst($key) . "</strong>: $value </p> \n";
             }
         }
-        $body .= "\n <p>Please ensure payment has been received before taking any action,"
+        $body .= "\n <p>*Please ensure payment has been received before taking any action,"
             . "this email is not binding on the payment process.</p>";
 
-        $subject = '[' . _('Contribute') . '] ';
+        $subject = '[' . _('Contribute') . '] - Card Payment';
         try {
             $message = \Swift_Message::newInstance();
             $message
