@@ -103,7 +103,7 @@ class GlobalPaymentsController extends Controller
             $message = \Swift_Message::newInstance();
             $message
                 ->setSubject($subject)
-                ->setBody($body, 'text/plain')
+                ->setBody($body, 'text/html')
                 ->setFrom([ $mailSender => $settings['site_name']])
                 ->setSender([ $mailSender => $settings['site_name']])
                 ->setTo($settings['contact_email']);
