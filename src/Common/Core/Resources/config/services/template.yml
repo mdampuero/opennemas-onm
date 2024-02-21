@@ -20,7 +20,6 @@ parameters:
             - fix_subdirectory_url
             - lazyscripts
             - lazyload
-            - remove_unused_css
     core.template.admin.filters:
         output:
             - css_includes

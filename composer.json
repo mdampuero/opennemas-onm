@@ -91,7 +91,6 @@
         "opennemas/orm": "1.6.0",
         "opennemas/task": "1.0.*",
         "opennemas/panorama-php": "1.0.3",
-        "opennemas/remove-unused-css": "1.0.7",
         "cometcult/braintree-bundle": "dev-master",
         "google/recaptcha": "1.2",
         "rtconner/freshbooks-api": "dev-master",
@@ -142,10 +141,6 @@
         {
             "type": "git",
             "url": "git@bitbucket.org:opennemas/task.git"
-        },
-        {
-            "type": "git",
-            "url": "git@bitbucket.org:opennemas/remove-unused-css.git"
         }
     ],
     "scripts": {
