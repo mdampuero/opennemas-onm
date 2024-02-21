@@ -120,6 +120,7 @@ class L10nRouteHelper
             'frontend_rss_frontpage_category',
             'frontend_rss',
             'frontend_rss_most_viewed',
+            'frontend_rss_tag',
             'frontend_rss_type',
             'frontend_rss_type_category',
             'frontend_rss_category',
