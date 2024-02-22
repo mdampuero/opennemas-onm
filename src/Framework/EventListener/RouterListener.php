@@ -252,6 +252,22 @@ class RouterListener implements EventSubscriberInterface
                 ) != $instance->subdirectory ? $instance->subdirectory . $parameters['path'] : $parameters['path'];
             }
 
+            //Fix in order to avoid redirections to main laguage on l10n routes with no final slash
+            if (array_key_exists('path', $parameters)
+                && $this->container->get('core.helper.url')->isFrontendUri($parameters['path'])
+                && $this->container->get('core.helper.locale')->hasMultilanguage()) {
+                $parts      = explode('/', $request->getRequestUri());
+                $shortSlugs = array_values($this->container->get('core.locale')->getSlugs('frontend'));
+
+                if (count($parts) > 1 && in_array($parts[1], $shortSlugs)) {
+                    $languageSlug       = '/' . $parts[1];
+                    $parameters['path'] = substr(
+                        $parameters['path'],
+                        0,
+                        strlen($languageSlug)
+                    ) != $languageSlug ? $languageSlug . $parameters['path'] : $parameters['path'];
+                }
+            }
 
             $this->container->get('core.globals')
                 ->setRoute($parameters['_route']);
