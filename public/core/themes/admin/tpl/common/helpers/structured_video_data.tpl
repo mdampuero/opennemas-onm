@@ -69,7 +69,7 @@
           "@type": "ImageObject",
           "url": "{$logo['url']}",
           "width": "{$logo['width']}",
-          "height": "{$logo['height']}",
+          "height": "{$logo['height']}"
       },
       "url": "{$siteUrl}"
     }
@@ -92,7 +92,7 @@
         "@type": "ImageObject",
         "url": "{$logo['url']}",
         "width": "{$logo['width']}",
-        "height": "{$logo['height']}",
+        "height": "{$logo['height']}"
       },
       "url": "{$siteUrl}"
     }
