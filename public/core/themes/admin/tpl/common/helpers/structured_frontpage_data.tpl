@@ -29,7 +29,9 @@
     "description": "{$siteDescription}",
     "image": {
       "@type": "ImageObject",
-      "url": "{$logo}"
+      "url": "{$logo['url']}",
+      "width": "{$logo['width']}",
+      "height": "{$logo['height']}",
     },
     "url": "{$siteUrl}",
     "creator": {
@@ -57,7 +59,9 @@
     {/if}
     "image": {
       "@type": "ImageObject",
-      "url": "{$logo}"
+      "url": "{$logo['url']}",
+      "width": "{$logo['width']}",
+      "height": "{$logo['height']}",
     }
   }]
 </script>
