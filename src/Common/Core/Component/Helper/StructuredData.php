@@ -65,9 +65,7 @@ class StructuredData
 
         $data['description'] = $this->getDescription($data['content']);
         $data['body']        = $this->getBody($data['content']);
-        $data['title']       = $data['content']->seo_title
-            ?? $data['content']->title_int
-            ?? $data['content']->title;
+        $data['title']       = $data['content']->title_int ?? $data['content']->title;
 
         // Count description data words
         $data['wordCount'] = str_word_count($data['description']);
