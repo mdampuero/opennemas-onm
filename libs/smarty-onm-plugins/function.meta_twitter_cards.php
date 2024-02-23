@@ -36,7 +36,7 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
             ) . "...";
         }
 
-        $title = $content->seo_title ?? $content->title_int ?? $content->title;
+        $title = $content->title_int ?? $content->title;
         $title = htmlspecialchars(
             html_entity_decode($title, ENT_COMPAT, 'UTF-8')
         );
