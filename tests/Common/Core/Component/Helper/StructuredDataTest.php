@@ -156,7 +156,6 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $output['siteDescription']    = 'site description';
         $output['content']->title     = 'This is the title';
         $output['content']->body      = 'Ymir';
-        $output['content']->seo_title = null;
         $output['content']->title_int = null;
         $output['title']              = 'This is the title';
         $output['description']        = 'This is the description';
