@@ -148,12 +148,16 @@ class ThemeSettingsHelper extends SettingHelper
             ->get('theme_options', []);
 
         if (empty($themeOptions) || $base) {
-            $themeOptions = $this->container->get('core.theme')->getSkinProperty(
-                $this->em
-                    ->getDataSet('Settings', 'instance')
-                    ->get('theme_skin', 'default'),
-                'options'
-            );
+            $skin = $this->em
+                ->getDataSet('Settings', 'instance')
+                ->get('theme_skin', 'default');
+
+            $skinParams = $this->container->get('core.theme')->getSkin($skin);
+
+            $themeOptions = array_key_exists('params', $skinParams)
+                && array_key_exists('options', $skinParams['params'])
+                ? $skinParams['params']['options']
+                : [];
 
             if ($maped && !empty($themeOptions)) {
                 $themeOptions = array_map(function ($option) {
@@ -189,6 +193,10 @@ class ThemeSettingsHelper extends SettingHelper
     protected function parseSettings($master, $part)
     {
         $result = [];
+        if (empty($master)) {
+            return $result;
+        }
+
         foreach ($part as $key => $value) {
             if (array_key_exists($value, $master)) {
                 $key = is_integer($key) ? $value : $key;

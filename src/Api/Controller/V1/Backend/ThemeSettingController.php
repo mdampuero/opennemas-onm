@@ -84,9 +84,14 @@ class ThemeSettingController extends SettingController
     {
         $settingHelper = $this->container->get('core.helper.theme_settings');
 
+
         $settings = parent::listAction($request);
         if (!array_key_exists('theme_options', $settings['settings'])) {
             $settings['settings']['theme_options'] = $settingHelper->getThemeSettings();
+        }
+        if (array_key_exists('theme_skin', $settings['settings'])) {
+            $skinParams = $this->container->get('core.theme')->getSkin($settings['settings']['theme_skin']);
+            $settings['settings']['theme_skin'] = strtolower($skinParams['internal_name']);
         }
 
         return new JsonResponse(
