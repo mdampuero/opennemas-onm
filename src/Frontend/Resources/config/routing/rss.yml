@@ -28,6 +28,15 @@ frontend_rss_author:
         l10n: true
         subdirectory: true
 
+frontend_rss_tag:
+    path: /rss/tag/{tag_slug}/
+    defaults: { _controller: FrontendBundle:Rss:tagRSS }
+    requirements:
+        tag_slug: '[^/]+'
+    options:
+        l10n: true
+        subdirectory: true
+
 # For app only
 frontend_rss_frontpage:
     path:     /rss/frontpage/

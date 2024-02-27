@@ -29,8 +29,9 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
             ) . "...";
         }
 
+        $title = $content->title_int ?? $content->title;
         $title = htmlspecialchars(
-            html_entity_decode($content->title, ENT_COMPAT, 'UTF-8')
+            html_entity_decode($title, ENT_COMPAT, 'UTF-8')
         );
     }
 

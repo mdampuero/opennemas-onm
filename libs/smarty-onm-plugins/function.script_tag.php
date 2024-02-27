@@ -35,8 +35,10 @@ function smarty_function_script_tag($params, &$smarty)
         $escape = true;
     }
 
+    $skipLazy = isset($params['noLazy']) ? '@' : '';
+
     // Clean internal properties
-    $keys = [ 'basepath', 'common', 'escape', 'src', 'type', ];
+    $keys = [ 'basepath', 'common', 'escape', 'src', 'type', 'noLazy'];
     foreach ($keys as $key) {
         unset($params[$key]);
     }
@@ -53,7 +55,7 @@ function smarty_function_script_tag($params, &$smarty)
         $resource = str_replace('.js', '.' . $mtime . '.js', $resource);
     }
 
-    $output = "<script src=\"{$resource}\" {$properties}></script>";
+    $output = "<" . $skipLazy . "script src=\"{$resource}\" {$properties}></script>";
 
     if ($escape) {
         $output = str_replace('</', '<\/', $output);
