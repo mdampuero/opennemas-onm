@@ -311,6 +311,12 @@ class NewsletterSenderHelper
 
         // Build the message
         try {
+            $newsletter->html = str_replace(
+                '%NEWSLETTER_EMAIL%',
+                base64_encode($mailbox['email']),
+                $newsletter->html
+            );
+
             $message = \Swift_Message::newInstance();
             $message
                 ->setSubject($newsletter->title)

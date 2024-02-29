@@ -85,6 +85,13 @@ class NewsletterController extends Controller
         ]);
     }
 
+    public function unsubscribeAction(Request $request)
+    {
+        $email = base64_decode($request->request->get('email_hash'));
+        dump($email);
+        die();
+    }
+
     /**
      * Creates the new subscription given information by POST
      *
