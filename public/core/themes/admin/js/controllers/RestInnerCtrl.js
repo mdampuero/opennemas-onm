@@ -310,6 +310,12 @@
             route.name   = $scope.routes.updateItem;
             route.params = { id: $scope.getItemId() };
 
+            // When updating created published item, if it does not have start time it will refresh the form
+            if ($scope.item.content_status === 1 && !$scope.item.starttime) {
+              $window.location.href =
+              routing.generate($scope.routes.redirect, { id: $scope.getItemId() });
+            }
+
             http.put(route, data).then(successCb, $scope.errorCb);
             return;
           }
