@@ -244,7 +244,8 @@ class RouterListener implements EventSubscriberInterface
             if ($instance->isSubdirectory()
                 && array_key_exists('path', $parameters)
                 && $this->container->get('core.helper.url')->isFrontendUri($parameters['path'])
-                && $parameters['_route'] !== 'asset_image') {
+                && $parameters['_route'] !== 'asset_image'
+            ) {
                 $parameters['path'] = substr(
                     $parameters['path'],
                     0,
@@ -253,20 +254,17 @@ class RouterListener implements EventSubscriberInterface
             }
 
             //Fix in order to avoid redirections to main laguage on l10n routes with no final slash
-            if (array_key_exists('path', $parameters)
-                && $this->container->get('core.helper.url')->isFrontendUri($parameters['path'])
-                && $this->container->get('core.helper.locale')->hasMultilanguage()) {
-                $parts      = explode('/', $request->getRequestUri());
-                $shortSlugs = array_values($this->container->get('core.locale')->getSlugs('frontend'));
-
-                if (count($parts) > 1 && in_array($parts[1], $shortSlugs)) {
-                    $languageSlug       = '/' . $parts[1];
+            //TODO: refactor with standard prefixUrl() function
+            if ($hasModule
+                && !empty($locale)
+                && array_key_exists('path', $parameters)
+                && $this->container->get('core.helper.l10n_route')->isRouteLocalizable($parameters['_route'])
+            ) {
                     $parameters['path'] = substr(
                         $parameters['path'],
                         0,
-                        strlen($languageSlug)
-                    ) != $languageSlug ? $languageSlug . $parameters['path'] : $parameters['path'];
-                }
+                        strlen($locale)
+                    ) != $locale ? '/' . $locale . $parameters['path'] : $parameters['path'];
             }
 
             $this->container->get('core.globals')
@@ -274,9 +272,9 @@ class RouterListener implements EventSubscriberInterface
             $this->container->get('core.globals')
                 ->setEndpoint($this->getEndpoint($parameters['_route']));
 
-            // Raise na error if the url came localized and it's not localizable
-            if ($hasModule &&
-                !empty($locale)
+            // Raise an error if the url came localized and it's not localizable
+            if ($hasModule
+                && !empty($locale)
                 && !$this->container->get('core.helper.l10n_route')->isRouteLocalizable($parameters['_route'])
             ) {
                 throw new ResourceNotFoundException();
