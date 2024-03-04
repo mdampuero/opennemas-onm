@@ -14,6 +14,8 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
         ->getCurrentRequest()
         ->getUri();
 
+    // Do not use AMP url for og:url
+    $url     = str_replace('.amp.html', '.html', $url);
     $title   = $ds->get('site_title');
     $summary = $ds->get('site_description');
 
