@@ -260,16 +260,13 @@ class UserController extends Controller
      */
     public function saveAction(Request $request)
     {
-        // if (empty($request->request->get('from_widget'))) {
-        //     if ('POST' != $request->getMethod() || !$this->checkRecaptcha($request)) {
-        //         return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
-        //     }
-        // }
+        if ('POST' != $request->getMethod() || !$this->checkRecaptcha($request)) {
+            return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
+        }
 
         $securityInput = $request->request->get('register_control');
         $userGroups    = $request->request->get('user_groups', []);
         $userGroups    = !is_array($userGroups) ? [ $userGroups => '' ] : $userGroups;
-
         $data          = array_merge(
             $request->request->all(),
             [

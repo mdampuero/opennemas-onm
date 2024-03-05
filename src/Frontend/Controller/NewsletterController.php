@@ -87,9 +87,43 @@ class NewsletterController extends Controller
 
     public function unsubscribeAction(Request $request)
     {
-        $email = base64_decode($request->request->get('email_hash'));
-        dump($email);
-        die();
+        try {
+            $email           = base64_decode($request->get('email_hash'));
+            $newsletterLists = $this->get('core.helper.newsletter')->getRecipients();
+            $user            = $this->get('api.service.subscriber')->getItemby(sprintf('email = "%s"', $email));
+
+            $userGroups = array_filter($user->user_groups, function ($element) {
+                return $element['status'] == 1;
+            });
+
+            $userGroups = array_map(function ($element) {
+                return $element['user_group_id'];
+            }, $userGroups);
+
+            $susbcribedNewsletters = array_filter($newsletterLists, function ($list) use ($userGroups) {
+                return in_array($list['id'], $userGroups);
+            });
+
+            //This featured does not support multi-subscribed lists
+            //TODO: Add multi-subscribed lists support
+            if (empty($susbcribedNewsletters) || count($susbcribedNewsletters) != 1) {
+                return new RedirectResponse($this->get('router')->generate('frontend_frontpage'));
+            }
+
+            $susbcribedNewsletter = array_pop($susbcribedNewsletters);
+            $unsubscribedId       = $susbcribedNewsletter['id'];
+            $finalUserGropus      = array_filter($user->user_groups, function ($item) use ($unsubscribedId) {
+                return $item['user_group_id'] != $unsubscribedId;
+            });
+
+            $this->get('api.service.subscriber')->patchItem($user->id, [ 'user_groups' => $finalUserGropus ]);
+            return $this->render('user/unsubscribe_completed.tpl', [
+                'email' => $email,
+                'lists' => [ $susbcribedNewsletter['name'] ]
+            ]);
+        } catch (\Exception $e) {
+            return new RedirectResponse($this->get('router')->generate('frontend_frontpage'));
+        }
     }
 
     /**

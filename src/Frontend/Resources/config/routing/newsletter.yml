@@ -28,7 +28,7 @@ frontend_newsletter_show:
         subdirectory: true
 
 frontend_newsletter_unsubscribe:
-    path: /newsletter/unsuscribe/{email_hash}/
+    path: /newsletter/unsubscribe/{email_hash}/
     defaults: { _controller: FrontendBundle:Newsletter:unsubscribe }
     options:
         l10n: true
