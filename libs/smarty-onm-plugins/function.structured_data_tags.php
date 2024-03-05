@@ -11,6 +11,9 @@ function smarty_function_structured_data_tags($params, &$smarty)
             ->getCurrentRequest()->getUri(),
     ];
 
+    // Do not use AMP url for structured data
+    $data['url'] = str_replace('.amp.html', '.html', $data['url']);
+
     if (!empty($content)) {
         $data['content'] = $content;
 
