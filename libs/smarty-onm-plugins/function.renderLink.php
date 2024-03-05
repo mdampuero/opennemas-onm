@@ -64,6 +64,10 @@ function smarty_function_renderLink($params, &$smarty)
             break;
     }
 
+    if ($item->link == 'empresa') {
+        $link = "/empresa";
+    }
+
     if (array_key_exists('noslash', $params) && !empty($params['noslash'])) {
         $link = substr($link, 1);
     }
