@@ -43,6 +43,8 @@ function smarty_function_renderLink($params, &$smarty)
         case 'internal':
             if ($item->link == '/') {
                 $link = '';
+            } elseif ($item->link == 'empresa') {
+                $link = "/$item->link";
             } else {
                 $link = "/$item->link/";
             }
@@ -62,10 +64,6 @@ function smarty_function_renderLink($params, &$smarty)
         default:
             $link = "/$item->link/";
             break;
-    }
-
-    if ($item->link == 'empresa') {
-        $link = "/empresa";
     }
 
     if (array_key_exists('noslash', $params) && !empty($params['noslash'])) {
