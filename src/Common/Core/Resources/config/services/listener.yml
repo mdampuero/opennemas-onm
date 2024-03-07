@@ -89,3 +89,9 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 0 }
         public: true
+
+    core.listener.http_clickjacking_headers:
+        class:     Common\Core\EventListener\HttpClickjackingHeadersListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 0 }
+        public: true
