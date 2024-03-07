@@ -84,6 +84,7 @@ class L10nRouteHelper
             'frontend_blog_show_amp',
             'category_frontpage',
             'frontend_company_show',
+            'frontend_companies_index',
             'frontend_companies',
             'frontend_content_print',
             'frontend_events',
