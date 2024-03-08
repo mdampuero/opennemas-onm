@@ -153,7 +153,7 @@ class CategoryController extends FrontendController
     /**
      * {@inheritdoc}
      *
-     * TODO: Remove when only an advertisement group.
+     * TODO: Remove when only an advertisement group without article_inner.
      */
     protected function getAdvertisements($category = null, $token = null)
     {
