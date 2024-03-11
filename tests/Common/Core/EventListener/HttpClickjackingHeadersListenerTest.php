@@ -80,23 +80,6 @@ class HttpClickjackingHeadersListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests onKernelRespone when the content is an ESI fragment, so it won't add the headers.
-     */
-    public function testOnKernelResponseWhenEsiFragment()
-    {
-        // Checks the response content-type
-        $this->headers->expects($this->any())->method('get')->with('Content-Type')->willReturn('text/html');
-
-        // Checks if it is an ESI fragment, looking the pattern "/widget/render/" in the uri
-        $this->request->method('getRequestUri')->willReturn('/widget/render/...');
-
-        // Won't add the headers, since the content is an ESI fragment
-        $this->headers->expects($this->never())->method('set');
-
-        $this->listener->onKernelResponse($this->event);
-    }
-
-    /**
      * Tests onKernelResponse for standard web page requests (neither API response nor ESI fragment), adding headers.
      */
     public function testOnKernelResponseForStandardRequests()

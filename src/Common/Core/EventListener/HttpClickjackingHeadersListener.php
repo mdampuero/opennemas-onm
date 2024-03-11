@@ -13,6 +13,8 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 class HttpClickjackingHeadersListener
 {
+    protected $ignoredContentTypes = [ 'json', 'xml' ];
+
     /**
      * Adds clickjacking headers to the response basing on if
      * is not an API JSON response or an ESI fragment
@@ -24,16 +26,7 @@ class HttpClickjackingHeadersListener
         $response            = $event->getResponse();
         $responseContentType = $response->headers->get('Content-Type');
 
-        // Waits for the moment when the content-type info is available, to gather the data
-        if (empty($responseContentType)) {
-            return;
-        }
-
-        $request = $event->getRequest();
-        $uri     = $request->getRequestUri();
-
-        // Won't add the headers if it is an API JSON response or an ESI fragment, since it is not necessary.
-        if (strpos($responseContentType, 'application/json') !== false || strpos($uri, '/widget/render/') !== false) {
+        if ($this->isIgnoredContentType($responseContentType)) {
             return;
         }
 
@@ -46,5 +39,26 @@ class HttpClickjackingHeadersListener
         if (!$response->headers->has('Content-Security-Policy')) {
             $response->headers->set('Content-Security-Policy', "frame-ancestors 'self'");
         }
+    }
+
+    /**
+     * Check if given content type header is in excluded types list
+     *
+     * @param String $contentType The current content type header.
+     * @return Boolean True if content type is list, false otherwise
+     */
+    protected function isIgnoredContentType($contentType)
+    {
+        if (empty($contentType)) {
+            return true;
+        }
+
+        foreach ($this->ignoredContentTypes as $ignoredCT) {
+            if (strpos($contentType, $ignoredCT) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
