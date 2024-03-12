@@ -56,8 +56,6 @@ class HttpClickjackingHeadersListenerTest extends \PHPUnit\Framework\TestCase
 
         $this->container->method('get')->with('core.helper.url')->willReturn($this->urlHelper);
 
-
-
         $this->listener = new HttpClickjackingHeadersListener($this->container);
     }
 
