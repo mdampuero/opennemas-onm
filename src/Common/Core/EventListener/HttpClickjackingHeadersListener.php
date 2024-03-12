@@ -16,6 +16,24 @@ class HttpClickjackingHeadersListener
     protected $ignoredContentTypes = [ 'json', 'xml' ];
 
     /**
+     * The service container.
+     *
+     * @param \Symfony\Component\DependencyInjection\Container
+     */
+    protected $container;
+
+    /**
+     * Initializes the AuthenticationListener.
+     *
+     * @param \Symfony\Component\DependencyInjection\Container $container The service container.
+     */
+    public function __construct($container)
+    {
+        $this->container = $container;
+    }
+
+
+    /**
      * Adds clickjacking headers to the response basing on if
      * is not an API JSON response or an ESI fragment
      *
@@ -23,9 +41,16 @@ class HttpClickjackingHeadersListener
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
+        $uri                 = $event->getRequest()->getRequestUri();
         $response            = $event->getResponse();
         $responseContentType = $response->headers->get('Content-Type');
 
+        // Checks if it is a frontend uri
+        if (!$this->container->get('core.helper.url')->isFrontendUri($uri)) {
+            return;
+        }
+
+        // Checks if it is the desired content-type
         if ($this->isIgnoredContentType($responseContentType)) {
             return;
         }
@@ -49,10 +74,6 @@ class HttpClickjackingHeadersListener
      */
     protected function isIgnoredContentType($contentType)
     {
-        if (empty($contentType)) {
-            return true;
-        }
-
         foreach ($this->ignoredContentTypes as $ignoredCT) {
             if (strpos($contentType, $ignoredCT) !== false) {
                 return true;

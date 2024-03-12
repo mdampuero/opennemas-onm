@@ -41,22 +41,38 @@ class HttpClickjackingHeadersListenerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getRequestUri', 'getSession' ])
             ->getMock();
 
+        $this->container = $this->getMockBuilder('ServiceContainer')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->urlHelper = $this->getMockBuilder('Common\Core\Component\Helper\UrlHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'isFrontendUri' ])
+            ->getMock();
+
         $this->response->headers = $this->headers;
 
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $this->listener = new HttpClickjackingHeadersListener();
+        $this->container->method('get')->with('core.helper.url')->willReturn($this->urlHelper);
+
+
+
+        $this->listener = new HttpClickjackingHeadersListener($this->container);
     }
 
     /**
      * Tests onKernelResponse when  content-type is not available yet, so it won't add the headers.
      */
-    public function testOnKernelResponseWhenEmptyContentType()
+    public function testOnKernelResponseWhenNotFrontendUri()
     {
-        // Checks the response content-type
-        $this->headers->expects($this->any())->method('get')->with('Content-Type')->willReturn(null);
+        // Checks if it is an ESI fragment, looking the pattern "/widget/render/" in the uri
+        $this->request->method('getRequestUri')->willReturn('/non/esi/page/...');
 
-        // Won't add the headers, since the response content-type is not available
+        // Checks if is a frontend page uri
+        $this->urlHelper->method('isFrontendUri')->with('/non/esi/page/...')->willReturn(false);
+
+        // Won't add the headers, since it is not an frontend page uri
         $this->headers->expects($this->never())->method('set');
 
         $this->listener->onKernelResponse($this->event);
@@ -72,6 +88,9 @@ class HttpClickjackingHeadersListenerTest extends \PHPUnit\Framework\TestCase
 
         // Checks if it is an ESI fragment, looking the pattern "/widget/render/" in the uri
         $this->request->method('getRequestUri')->willReturn('/non/esi/page/...');
+
+        // Checks if is a frontend page uri
+        $this->urlHelper->method('isFrontendUri')->with('/non/esi/page/...')->willReturn(true);
 
         // Won't add the headers, since the response content-type is application/json
         $this->headers->expects($this->never())->method('set');
@@ -89,6 +108,9 @@ class HttpClickjackingHeadersListenerTest extends \PHPUnit\Framework\TestCase
 
         // Checks if it is an ESI fragment, looking for the pattern "/widget/render/" in the uri.
         $this->request->method('getRequestUri')->willReturn('/non/esi/page/...');
+
+        // Checks if is a frontend page uri
+        $this->urlHelper->method('isFrontendUri')->with('/non/esi/page/...')->willReturn(true);
 
         // Will add the headers, since the content is neither an API response nor ESI fragment.
         $this->headers->expects($this->atLeastOnce())->method('set')
