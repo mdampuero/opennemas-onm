@@ -1573,6 +1573,20 @@
                               </div>
                             </div>
                           </div>
+                          <div class="col-xs-12 m-b-15" ng-if="settings.theme_options.widget_more_in_frontpage === 'true' || settings.theme_options.widget_more_in_section === 'true'">
+                            <label class="form-label m-b-15" for="theme-option-suggested-items">
+                              <span class="help">
+                                {t}Max items on suggested widgets{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-option-suggested-items" name="theme-option-suggested-items" ng-model="settings.theme_options.inner_content_suggested_items">
+                                  <option value="[% inner_content_suggested_items_name %]" ng-repeat="(inner_content_suggested_items_name,inner_content_suggested_items_value) in extra.theme_skins[settings.theme_skin].params.options.inner_content_suggested_items.options" ng-selected="[% inner_content_suggested_items_name === settings.theme_options.inner_content_suggested_items %]">[% inner_content_suggested_items_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>

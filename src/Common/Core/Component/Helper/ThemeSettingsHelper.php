@@ -133,6 +133,7 @@ class ThemeSettingsHelper extends SettingHelper
             'show_time' => 'inner_content_time',
             'show_readtime' => 'inner_content_readtime',
             'inner_content_author_photo',
+            'suggested_max_items' => 'inner_content_suggested_items'
         ]
     ];
     /**
