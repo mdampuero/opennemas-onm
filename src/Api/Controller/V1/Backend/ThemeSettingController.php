@@ -179,7 +179,9 @@ class ThemeSettingController extends SettingController
                 if (!array_key_exists($settingName, $baseSettings)) {
                     return false;
                 }
-                if (!array_key_exists($settingValue, $baseSettings[$settingName]['options'])) {
+                if (is_array($baseSettings[$settingName])
+                    && array_key_exists('options', $baseSettings[$settingName])
+                    && !array_key_exists($settingValue, $baseSettings[$settingName]['options'])) {
                     return false;
                 }
             }

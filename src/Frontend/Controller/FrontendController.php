@@ -414,7 +414,7 @@ class FrontendController extends Controller
 
         $params = array_merge(
             $params,
-            $this->container->get('core.helper.theme_settings')->getThemeVariables($extension, $action)
+            $this->get('core.helper.theme_settings')->getThemeVariables($extension, $action)
         );
 
         // Always force a page parameter

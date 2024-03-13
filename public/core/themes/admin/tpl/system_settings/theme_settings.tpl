@@ -610,6 +610,18 @@
                         </div>
                       </div>
                     </div>
+                    <h4>
+                      <i class="fa fa-code"></i>
+                      Custom {t}CSS{/t}
+                    </h4>
+                    <div class="form-group col-md-6">
+                      <label class="form-label" for="custom-theme-css">
+                        <span class="help">{t}This css will be added at the end of the original{/t}</span>
+                      </label>
+                      <div class="controls">
+                        <textarea class="form-control" id="custom-theme-css" name="theme-option-custom-css" ng-model="settings.theme_options.custom_css" rows="15"></textarea>
+                      </div>
+                    </div>
                   </div>
 
                   <div role="tabpanel" class="tab-pane fade" id="tabFonts">

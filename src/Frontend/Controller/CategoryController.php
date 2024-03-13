@@ -252,7 +252,7 @@ class CategoryController extends FrontendController
 
         $params = array_merge(
             $params,
-            $this->container->get('core.helper.theme_settings')->getThemeVariables($extension, $action)
+            $this->get('core.helper.theme_settings')->getThemeVariables($extension, $action)
         );
 
         if (!array_key_exists('page', $params)) {

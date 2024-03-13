@@ -16,6 +16,10 @@ class ThemeSettingsHelper extends SettingHelper
      */
     protected $container;
 
+    protected $aditionalThemeSettings = [
+        'custom_css' => ''
+    ];
+
     protected $toBool = [
         'content_category_name',
         'content_subtitle',
@@ -50,6 +54,7 @@ class ThemeSettingsHelper extends SettingHelper
     ];
 
     protected $generalSettings = [
+        'custom_css',
         'breadcrumb',
         'main_logo_size',
         'general_page_width',
@@ -165,6 +170,8 @@ class ThemeSettingsHelper extends SettingHelper
                     return $option;
                 }, $themeOptions);
             }
+
+            $themeOptions += $this->aditionalThemeSettings;
         }
 
         return $themeOptions;
@@ -174,6 +181,11 @@ class ThemeSettingsHelper extends SettingHelper
     {
         $action = strpos($action, 'list') !== false ? 'list' : $action;
         $action = strpos($action, 'show') !== false ? 'show' : $action;
+
+        //Some weird exceptions
+        if ($action == 'archive' || $extension == 'tag') {
+            $action = 'list';
+        }
 
         $currentSettings   = $this->getThemeSettings();
         $generalVariables  = $this->parseSettings($currentSettings, $this->generalSettings);
