@@ -534,7 +534,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
     // Defines a watcher after 5 seconds
     $timeout(function() {
-      // Saves a draft 1s after the last change
+      // Saves a draft 2.5s after the last change
       $scope.$watch(function() {
         var item  = angular.copy($scope.data.item);
 
@@ -578,7 +578,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
             });
 
             $scope.draftSaved = $window.moment().format('HH:mm');
-          }, 1000);
+          }, 2500);
         }
       }, true);
     }, 5000);
