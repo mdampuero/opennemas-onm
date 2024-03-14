@@ -310,6 +310,14 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       if ($scope.hasPendingNotifications()) {
         $scope.removePendingNotification(false);
       }
+
+      // When publishing created content, if it does not have the start time date settled, it will give it one
+      if ($scope.itemHasId()) {
+        if ($scope.item.content_status === 1 && !$scope.item.starttime) {
+          $scope.item.starttime = $window.moment().format('YYYY-MM-DD HH:mm:ss');
+        }
+      }
+
       var date = $scope.item.starttime < $window.moment().format('YYYY-MM-DD HH:mm:ss') ? $window.moment().format('YYYY-MM-DD HH:mm:ss') : $scope.item.starttime;
 
       $scope.data.item.webpush_notifications.push(
@@ -526,7 +534,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
     // Defines a watcher after 5 seconds
     $timeout(function() {
-      // Saves a draft 2.5s after the last change
+      // Saves a draft 1s after the last change
       $scope.$watch(function() {
         var item  = angular.copy($scope.data.item);
 
@@ -570,7 +578,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
             });
 
             $scope.draftSaved = $window.moment().format('HH:mm');
-          }, 2500);
+          }, 1000);
         }
       }, true);
     }, 5000);
