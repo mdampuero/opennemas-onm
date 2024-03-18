@@ -240,10 +240,12 @@ class AdvertisementManager extends EntityManager
 
         $advertisements = $this->findMulti($result);
         $contentHelper  = getService('core.helper.content');
+        $device         = getService('core.globals')->getDevice();
 
-        return array_filter($advertisements, function ($a) use ($contentHelper) {
+        return array_filter($advertisements, function ($a) use ($contentHelper, $device) {
             return $a->content_status == 1
                 && $a->in_litter == 0
+                && $a->params['devices'][$device] === 1
                 && $contentHelper->getSchedulingState($a) != \Content::DUED;
         });
     }

@@ -303,6 +303,12 @@ class AdvertisementRenderer extends Renderer
                     : $renderer->renderSafeFrame($advertisement, $params);
         }
 
+        // Filter advertisement by device
+        $device = $this->container->get('core.globals')->getDevice();
+        if ($advertisement->params['devices'][$device] !== 1) {
+            return;
+        }
+
         return $renderer->renderInline($advertisement, $params);
     }
 
