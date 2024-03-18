@@ -135,11 +135,6 @@ done
      */
     public function update(Entity $entity)
     {
-        if (empty($entity->starttime) && !empty($entity->content_status)) {
-            $entity->starttime   = new \DateTime();
-            $entity->urldatetime = $entity->starttime->format('YmdHis');
-        }
-
         // Don't allow changed date to be earlier than starttime
         if ($entity->starttime > $entity->changed) {
             $entity->changed = $entity->starttime;
