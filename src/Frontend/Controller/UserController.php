@@ -231,6 +231,10 @@ class UserController extends Controller
             throw new ResourceNotFoundException();
         }
 
+        if (!empty($this->get('core.user'))) {
+            return new RedirectResponse($this->get('router')->generate('frontend_user_show'));
+        }
+
         $countries = array_merge(
             [ '' => _('Select a country') . '...' ],
             $this->get('core.geo')->getCountries()
