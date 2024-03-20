@@ -54,7 +54,6 @@ class MasterSettingController extends SettingController
         'robots_txt_rules',
         'theme_font',
         'theme_font_secondary',
-        'theme_options',
         'theme_skin',
         'seo_information',
     ];
