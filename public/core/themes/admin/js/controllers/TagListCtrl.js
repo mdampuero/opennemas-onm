@@ -60,7 +60,7 @@
          * @inheritdoc
          */
         $scope.isSelectable = function() {
-          return false;
+          return true;
         };
 
         /**

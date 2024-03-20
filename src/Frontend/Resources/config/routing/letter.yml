@@ -1,5 +1,5 @@
 frontend_letter_frontpage:
-    path: /cartas-al-director
+    path: /cartas-al-director/
     defaults: { _controller: FrontendBundle:Letter:list }
     options:
         l10n: true

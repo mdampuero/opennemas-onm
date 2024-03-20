@@ -3,11 +3,11 @@ backend_videos_config:
     defaults: { _controller: BackendBundle:Video:config }
 
 backend_videos_create:
-    path:     /videos/new
+    path:     /videos/new/
     defaults: { _controller: BackendBundle:Video:create }
 
 backend_video_show:
-    path:     /videos/{id}
+    path:     /videos/{id}/
     defaults: { _controller: BackendBundle:Video:show }
     requirements:
         id: \d+
@@ -15,11 +15,11 @@ backend_video_show:
         expose: true
 
 backend_videos_content_provider:
-    path:     /videos/content-provider
+    path:     /videos/content-provider/
     defaults: { _controller: BackendBundle:Video:contentProvider }
 
 backend_videos_list:
-    path:     /videos
+    path:     /videos/
     defaults: { _controller: BackendBundle:Video:list }
     options:
         expose: true

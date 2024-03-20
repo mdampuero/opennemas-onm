@@ -1,5 +1,5 @@
 frontend_date_render:
-    path: /date
+    path: /date/
     defaults: { _controller: FrontendBundle:Date:render }
     options:
         subdirectory: true

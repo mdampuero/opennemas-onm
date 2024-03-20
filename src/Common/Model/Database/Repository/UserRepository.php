@@ -43,4 +43,138 @@ class UserRepository extends BaseRepository
 
         return $users;
     }
+
+    /**
+     * Returns a list where key is the user id and value is the number of
+     * contents assigned to the user.
+     *
+     * @param mixed $ids A user id or a list of user ids.
+     *
+     * @return array The list where keys are the user ids and values are the
+     *               number of contents.
+     */
+    public function countContents($ids)
+    {
+        if (empty($ids)) {
+            throw new \InvalidArgumentException();
+        }
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+        $sql = 'SELECT fk_author AS "id", COUNT(1) AS "contents" '
+            . 'FROM contents '
+            . 'WHERE fk_author IN (?) '
+            . 'GROUP BY fk_author';
+
+        $data = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        $contents = [];
+        foreach ($data as $value) {
+            $contents[$value['id']] = $value['contents'];
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Moves all contents assigned to users basing on a user id
+     *
+     * @param integer $id     The user id
+     * @param integer $target The user id of the target user.
+     *
+     * @return array The list of ids and content types of the moved contents.
+     */
+    public function moveContents($ids, $target)
+    {
+        if (empty($ids) || empty($target)) {
+            throw new \InvalidArgumentException();
+        }
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+
+        $sql = 'SELECT pk_content AS "id", content_type_name AS "type"'
+            . ' FROM contents'
+            . ' WHERE fk_author IN (?)';
+
+        $contents = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+        if (empty($contents)) {
+            return [];
+        }
+        $sql = 'UPDATE IGNORE contents SET fk_author = ?'
+            . ' WHERE fk_author IN (?)';
+        $this->conn->executeQuery(
+            $sql,
+            [ $target, $ids ],
+            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+        $sql = 'DELETE FROM contents WHERE fk_author IN (?)';
+        $this->conn->executeQuery(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        return $contents;
+    }
+
+    /**
+     * Returns a list of all users.
+     *
+     * @return array The list of users.
+     */
+    public function findUsers()
+    {
+        $sql = 'SELECT users.*,
+                    GROUP_CONCAT(user_user_group.user_group_id) AS user_groups,
+                    usermeta.meta_value AS bio_description
+                FROM users
+                LEFT JOIN user_user_group ON users.id = user_user_group.user_id
+                LEFT JOIN usermeta ON users.id = usermeta.user_id AND usermeta.meta_key = "bio_description"
+                WHERE users.type != "1"
+                GROUP BY users.id
+                ORDER BY users.name ASC;';
+        try {
+            $users = $this->conn->fetchAll($sql);
+
+            return $users;
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Error al obtener usuarios: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Returns a list of all authors.
+     *
+     * @return array The list of authors.
+     */
+    public function findAuthors()
+    {
+        $sql = "SELECT users.*,
+                    GROUP_CONCAT(user_user_group.user_group_id) AS user_groups,
+                    um1.meta_value AS is_blog,
+                    um2.meta_value AS bio_description
+                FROM users
+                LEFT JOIN user_user_group ON users.id = user_user_group.user_id
+                LEFT JOIN usermeta um1 ON users.id = um1.user_id AND um1.meta_key = 'is_blog'
+                LEFT JOIN usermeta um2 ON users.id = um2.user_id AND um2.meta_key = 'bio_description'
+                WHERE user_user_group.user_group_id = 3
+                GROUP BY users.id ORDER BY users.name ASC;
+                ";
+        try {
+            $authors = $this->conn->fetchAll($sql);
+
+            return $authors;
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Error al obtener etiquetas: " . $e->getMessage());
+        }
+    }
 }

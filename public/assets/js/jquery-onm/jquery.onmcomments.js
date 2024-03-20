@@ -33,7 +33,7 @@
   };
 
   $.fn.onmComments.options = {
-    url: '/comments/get',
+    url: '/comments/get/',
     elems_per_page: 10
   };
 })(jQuery, window, document);

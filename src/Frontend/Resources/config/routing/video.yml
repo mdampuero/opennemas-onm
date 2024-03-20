@@ -1,5 +1,5 @@
 frontend_video_frontpage:
-    path:     /video
+    path:     /video/
     defaults: { _controller: FrontendBundle:Video:list }
     options:
         l10n: true
@@ -7,7 +7,7 @@ frontend_video_frontpage:
 
 # Route to redirect to frontend_video_frontpage and to remove in the future
 frontend_video_frontpage_category:
-    path:     /video/{category_slug}
+    path:     /video/{category_slug}/
     defaults: { _controller: FrontendBundle:Video:list }
     requirements:
         category_slug: '[^/]+'

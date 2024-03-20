@@ -32,7 +32,8 @@
           deleteList: 'api_v1_backend_author_delete_list',
           getList:    'api_v1_backend_author_get_list',
           patchItem:  'api_v1_backend_author_patch_item',
-          patchList:  'api_v1_backend_author_patch_list'
+          patchList:  'api_v1_backend_author_patch_list',
+          moveItem:   'api_v1_backend_author_move_item',
         };
 
         /**
@@ -44,7 +45,7 @@
          */
         $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
-
+          $scope.app.columns.selected = [ 'picture', 'name', 'email', 'blog', 'biography' ];
           oqlEncoder.configure({
             placeholder: { name: 'name ~ "[value]" or username ~ "[value]"' }
           });

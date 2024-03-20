@@ -1,33 +1,33 @@
 backend_ws_domain_check_available:
-    path:     /domains/available
+    path:     /domains/available/
     defaults: { _controller: BackendWebServiceBundle:Domain:checkAvailable }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_ws_domain_check_valid:
-    path:     /domains/valid
+    path:     /domains/valid/
     defaults: { _controller: BackendWebServiceBundle:Domain:checkValid }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_ws_domain_delete:
-    path:     /domains/{id}
+    path:     /domains/{id}/
     defaults: { _controller: BackendWebServiceBundle:Domain:delete }
     methods:  [ DELETE ]
     options:
         expose: true
 
 backend_ws_domain_save:
-    path:    /domains
+    path:    /domains/
     defaults: { _controller: BackendWebServiceBundle:Domain:save}
     methods: [ POST ]
     options:
         expose: true
 
 backend_ws_domains_list:
-    path: /domains
+    path: /domains/
     defaults: { _controller: BackendWebServiceBundle:Domain:list}
     options:
         expose: true

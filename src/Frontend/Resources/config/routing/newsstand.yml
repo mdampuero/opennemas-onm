@@ -1,12 +1,12 @@
 frontend_newsstand_frontpage:
-    path:     /portadas-papel
+    path:     /portadas-papel/
     defaults: { _controller: FrontendBundle:Newsstand:list }
     options:
         l10n: true
         subdirectory: true
 
 frontend_newsstand_frontpage_date:
-    path:     /portadas-papel/{year}/{month}/{day}
+    path:     /portadas-papel/{year}/{month}/{day}/
     defaults: { _controller: FrontendBundle:Newsstand:list, month: 0, day: 1 }
     requirements:
         year:  '[0-9]{4}'

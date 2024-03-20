@@ -35,14 +35,14 @@ class HttpEfe extends Http
      */
     protected function getContentFromUrl(string $url) : ?string
     {
-        if (array_key_exists('username', $this->params)) {
+        $auth = '';
+        if (array_key_exists('username', $this->params)
+            && array_key_exists('password', $this->params)
+        ) {
             $auth = $this->params['username'] . ':' . $this->params['password'];
-            $url  = preg_replace('/(https?):\/\//', '$1://' . $auth . '@', $url);
         }
 
-        $ch   = curl_init();
-        $auth = '';
-
+        $ch                  = curl_init();
         $httpCode            = 0;
         $maxRedirects        = 0;
         $maxRedirectsAllowed = 3;
@@ -53,6 +53,8 @@ class HttpEfe extends Http
                 CURLOPT_RETURNTRANSFER => 1,
                 CURLOPT_SSL_VERIFYHOST => 0,
                 CURLOPT_SSL_VERIFYPEER => 0,
+                CURLOPT_HTTPAUTH       => CURLAUTH_BASIC,
+                CURLOPT_USERPWD        => $auth,
             ]);
 
             $content  = curl_exec($ch);

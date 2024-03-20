@@ -1,5 +1,5 @@
 backend_cache_config:
-    path:     /system/cache/{service}
+    path:     /system/cache/{service}/
     defaults: { _controller: BackendBundle:Cache:config }
     options:
         expose: true
@@ -7,7 +7,7 @@ backend_cache_config:
         service: 'smarty'
 
 backend_cache_list:
-    path:     /system/cache
+    path:     /system/cache/
     defaults: { _controller: BackendBundle:Cache:list }
     options:
         expose: true

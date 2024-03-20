@@ -1,19 +1,19 @@
 backend_subscription_create:
-    path:     /subscriptions/new
+    path:     /subscriptions/new/
     defaults: { _controller: BackendBundle:Subscription:create }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_subscriptions_list:
-    path:     /subscriptions
+    path:     /subscriptions/
     defaults: { _controller: BackendBundle:Subscription:list }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_subscription_show:
-    path:     /subscriptions/{id}
+    path:     /subscriptions/{id}/
     defaults: { _controller: BackendBundle:Subscription:show }
     methods:  [ GET ]
     options:

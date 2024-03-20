@@ -234,8 +234,8 @@ class MenuController extends ApiController
             }
 
             $link = array_key_exists('params', $page) ?
-                trim($this->get('router')->generate($page['route'], $page['params']), '/') :
-                trim($this->get('router')->generate($page['route']), '/');
+                ltrim($this->get('router')->generate($page['route'], $page['params']), '/') :
+                ltrim($this->get('router')->generate($page['route']), '/');
 
             return [ 'title' => _($page['title']), 'link'  => $link ];
         }, $this->modulePages));

@@ -310,6 +310,14 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       if ($scope.hasPendingNotifications()) {
         $scope.removePendingNotification(false);
       }
+
+      // When publishing created content, if it does not have the start time date settled, it will give it one
+      if ($scope.itemHasId()) {
+        if ($scope.item.content_status === 1 && !$scope.item.starttime) {
+          $scope.item.starttime = $window.moment().format('YYYY-MM-DD HH:mm:ss');
+        }
+      }
+
       var date = $scope.item.starttime < $window.moment().format('YYYY-MM-DD HH:mm:ss') ? $window.moment().format('YYYY-MM-DD HH:mm:ss') : $scope.item.starttime;
 
       $scope.data.item.webpush_notifications.push(

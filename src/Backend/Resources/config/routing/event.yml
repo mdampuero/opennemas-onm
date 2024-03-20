@@ -1,21 +1,21 @@
 backend_events_content_provider:
-    path:     /events/content-provider
+    path:     /events/content-provider/
     defaults: { _controller: BackendBundle:Event:contentProvider }
 
 backend_event_create:
-    path:     /events/new
+    path:     /events/new/
     defaults: { _controller: BackendBundle:Event:create }
     options:
         expose: true
 
 backend_event_show:
-    path:     /events/{id}
+    path:     /events/{id}/
     defaults: { _controller: BackendBundle:Event:show }
     options:
         expose: true
 
 backend_events_list:
-    path:     /events
+    path:     /events/
     defaults: { _controller: BackendBundle:Event:list }
     options:
         expose: true

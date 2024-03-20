@@ -14,6 +14,7 @@ use Api\Exception\CreateItemException;
 use Api\Exception\GetItemException;
 use Api\Exception\UpdateItemException;
 use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -87,6 +88,10 @@ class UserController extends Controller
      */
     public function showAction()
     {
+        if (empty($this->get('core.user'))) {
+            return new RedirectResponse($this->get('router')->generate('frontend_authentication_login'));
+        }
+
         $countries = array_merge(
             [ '' => _('Select a country') . '...' ],
             $this->get('core.geo')->getCountries()
@@ -224,6 +229,10 @@ class UserController extends Controller
 
         if (!$cs->hasExtension('NEWSLETTER_MANAGER') && !$cs->hasExtension('CONTENT_SUBSCRIPTIONS')) {
             throw new ResourceNotFoundException();
+        }
+
+        if (!empty($this->get('core.user'))) {
+            return new RedirectResponse($this->get('router')->generate('frontend_user_show'));
         }
 
         $countries = array_merge(

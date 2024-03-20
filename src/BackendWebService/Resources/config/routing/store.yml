@@ -1,33 +1,33 @@
 backend_ws_store_billing:
-    path:     /store/billing
+    path:     /store/billing/
     defaults: { _controller: BackendWebServiceBundle:Store:saveBilling }
     methods:  [ POST ]
     options:
         expose: true
 
 backend_ws_store_checkout:
-    path:     /store/checkout
+    path:     /store/checkout/
     defaults: { _controller: BackendWebServiceBundle:Store:checkout }
     methods:  [ POST ]
     options:
         expose: true
 
 backend_ws_store_check_phone:
-    path:     /store/phone
+    path:     /store/phone/
     defaults: { _controller: BackendWebServiceBundle:Store:checkPhone }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_ws_store_check_vat:
-    path:     /store/vat
+    path:     /store/vat/
     defaults: { _controller: BackendWebServiceBundle:Store:checkVat }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_ws_store_list:
-    path:     /store
+    path:     /store/
     defaults: { _controller: BackendWebServiceBundle:Store:list }
     methods:  [ GET ]
     options:
