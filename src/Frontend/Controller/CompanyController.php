@@ -208,10 +208,14 @@ class CompanyController extends FrontendController
         );
 
         $sql      = $select . $innerJoin . $where . $orderby;
+        $countSql = 'SELECT COUNT(*) as total FROM contents ' . $innerJoin . $where;
+
+
         $response = $this->get('api.service.content')->getListBySql($sql);
+        $total    = $this->get('orm.manager')->getConnection('instance')->executeQuery($countSql)->fetchAll();
 
         // No first page and no contents
-        if ($params['page'] > 1) {
+        if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }
 
@@ -238,14 +242,34 @@ class CompanyController extends FrontendController
             'search' => $defautSeaarch
         ];
 
+        $routePlace = is_array($defaultPlace) && array_key_exists('slug', $defaultPlace)
+            ? $defaultPlace['slug']
+            : '';
+
+        $routeSearch = is_array($defautSeaarch) && !empty($defautSeaarch[0])
+            ? reset($defautSeaarch[0])['value']
+            : '';
+
+        $route = [
+            'name' => 'frontend_companies',
+            'params' => [
+                'place' => $routePlace,
+                'search' => $routeSearch
+            ]
+        ];
+
+        if (!empty($params['q'])) {
+            $route['params'] = array_merge($route['params'], ['q' => $params['q']]);
+        }
+
         $params['x-tags']    .= ',company-frontpage';
         $params['contents']   = $response['items'];
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
             'epp'         => $params['epp'],
             'page'        => $params['page'],
-            'total'       => $response['total'],
-            'route'       => 'frontend_companies'
+            'total'       => $total[0]['total'],
+            'route'       => $route,
         ]);
 
         $params['tags'] = $this->getTags($response['items']);
