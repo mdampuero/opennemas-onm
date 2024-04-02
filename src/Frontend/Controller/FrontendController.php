@@ -107,7 +107,7 @@ class FrontendController extends Controller
 
         $expected = $this->getExpectedUri($action, [ 'item' => $item ]);
 
-        if ($request->getPathInfo() !== $expected
+        if ($request->getRequestUri() !== $expected
             && empty($this->get('request_stack')->getParentRequest())
         ) {
             return new RedirectResponse($expected, 301);
@@ -163,7 +163,7 @@ class FrontendController extends Controller
 
         $expected = $this->getExpectedUri($action, [ 'item' => $item, '_format' => 'amp' ]);
 
-        if ($request->getPathInfo() !== $expected
+        if ($request->getRequestUri() !== $expected
             && empty($this->get('request_stack')->getParentRequest())
         ) {
             return new RedirectResponse($expected, 301);
