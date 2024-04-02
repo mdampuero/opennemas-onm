@@ -108,7 +108,7 @@ class OpinionController extends FrontendController
         $expected = $this->get('core.helper.url_generator')->generate($author);
         $expected = $this->get('core.decorator.url')->prefixUrl($expected);
 
-        if ($request->getPathInfo() !== $expected) {
+        if ($request->getRequestUri() !== $expected) {
             return new RedirectResponse($expected);
         }
 
