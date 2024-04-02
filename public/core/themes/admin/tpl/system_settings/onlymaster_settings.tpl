@@ -117,6 +117,18 @@
                       </div>
                     </div>
                     <h4>
+                      <i class="fa fa-stop-circle"></i>
+                      {t}Lazyscript referer detect{/t}
+                    </h4>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <input {if $configs['lazy_referer'] eq "1"}checked{/if} id="lazy_referer" name="lazy_referer" ng-false-value="0" ng-model="settings.lazy_referer" ng-true-value="'1'" type="checkbox">
+                        <label for="lazy_referer">
+                          {t}Disabled{/t}
+                        </label>
+                      </div>
+                    </div>
+                    <h4>
                       <i class="fa fa-search"></i>
                       {t}SEO Information{/t}
                     </h4>
