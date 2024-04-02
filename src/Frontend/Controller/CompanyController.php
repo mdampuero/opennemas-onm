@@ -110,41 +110,43 @@ class CompanyController extends FrontendController
      */
     protected function hydrateList(array &$params = []) : void
     {
-        $ch          = $this->container->get('core.helper.company');
-        $placesArray = $ch->getLocalitiesAndProvices();
-
-        $date   = date('Y-m-d H:i:s');
-        $place  = '';
-        $search = '';
-        //This variable indicates when $place is a true place (locality or province) in order to build the sql
-        $placeFound = false;
-
-
-        //if first parameter is not empty
-        if (!empty($params['place'])) {
-            //match current param with places json
-            $place = $this->matchPlace($params['place']);
-            //if second parameter is not empty, find it on custom fields settings
-            if (!empty($params['search'])) {
-                $search = $this->matchCustomfields($params['search']);
-            }
-            //set $place as a true place
-            $placeFound = true;
-            //if no match at $place, match with custom fields settings and set $placeFound to false
-            if (empty($place)) {
-                $place      = $this->matchCustomfields($params['place']);
-                $placeFound = false;
-            }
-        }
-        if (!$this->isValidResource($params['search'], $params['place'], $search, $place)) {
-            throw new ResourceNotFoundException();
-        }
         // Invalid page provided as parameter
         if ($params['page'] <= 0
             || $params['page'] > $this->getParameter('core.max_page')
         ) {
             throw new ResourceNotFoundException();
         }
+
+        $ch          = $this->container->get('core.helper.company');
+        $placesArray = $ch->getLocalitiesAndProvices();
+        $date        = date('Y-m-d H:i:s');
+        $place       = '';
+        $search      = '';
+
+        // This variable indicates when $place is a true place (locality or province) in order to build the sql
+        $placeFound = false;
+
+        // If first parameter is not empty
+        if (!empty($params['place'])) {
+            // Match current param with places json
+            $place = $this->matchPlace($params['place']);
+            // If second parameter is not empty, find it on custom fields settings
+            if (!empty($params['search'])) {
+                $search = $this->matchCustomfields($params['search']);
+            }
+            // Set $place as a true place
+            $placeFound = true;
+            // If no match at $place, match with custom fields settings and set $placeFound to false
+            if (empty($place)) {
+                $place      = $this->matchCustomfields($params['place']);
+                $placeFound = false;
+            }
+        }
+
+        if (!$this->isValidResource($params['search'], $params['place'], $search, $place)) {
+            throw new ResourceNotFoundException();
+        }
+
         //Divide SQL in order to create several inner joins when necessary
         $select    = 'SELECT * FROM contents ';
         $innerJoin = '';
@@ -152,8 +154,8 @@ class CompanyController extends FrontendController
 
         if (!empty($place)) {
             $innerJoin = 'INNER JOIN contentmeta as t1 on pk_content = t1.fk_content ';
-            //if $place is a real place, $place structure must be like ['province' => ['nm' => 'Viana do Bolo', ...]],
-            //with only 1 root element
+            // If $place is a real place, $place structure must be like ['province' => ['nm' => 'Viana do Bolo', ...]],
+            // with only 1 root element
             if ($placeFound) {
                 $where .= sprintf(
                     't1.meta_name = "%s" AND t1.meta_value = "%s" ',
@@ -162,8 +164,8 @@ class CompanyController extends FrontendController
                     reset($place[0])['nm']
                 );
             } else {
-                //if not placefound $place structure must be like ['field' => ['name' => 'aasd' ...]],
-                //this array can contain as root element as duplicated words were defined in custom fields
+                // If not placefound $place structure must be like ['field' => ['name' => 'aasd' ...]],
+                // this array can contain as root element as duplicated words were defined in custom fields
                 foreach ($place as $key => $element) {
                     if ($key !== array_key_first($place)) {
                         $where .= 'OR ';
@@ -175,7 +177,8 @@ class CompanyController extends FrontendController
                         '\"%" ';
                 }
             }
-            //if $search, add inner join and look for province or locality match
+
+            // If $search, add inner join and look for province or locality match
             $where .= 'AND ';
             if (!empty($search)) {
                 $innerJoin .= 'INNER JOIN contentmeta as t2 on pk_content = t2.fk_content ';
@@ -192,11 +195,12 @@ class CompanyController extends FrontendController
                 $where .= 'AND ';
             }
         }
-        //build default filter
+
+        // Build default filter
         $where .= sprintf('content_type_name = "company" and in_litter = 0 and content_status = 1 ' .
         'and (starttime is null or starttime < "%s") ' .
         'and (endtime is null or endtime >= "%s") ', $date, $date);
-        //filter by title if $q was provided
+        // Filter by title if $q was provided
         if (!empty($params['q'])) {
             $where .= 'and title like "%' . $params['q'] . '%" ';
         }
@@ -209,8 +213,6 @@ class CompanyController extends FrontendController
 
         $sql      = $select . $innerJoin . $where . $orderby;
         $countSql = 'SELECT COUNT(*) as total FROM contents ' . $innerJoin . $where;
-
-
         $response = $this->get('api.service.content')->getListBySql($sql);
         $total    = $this->get('orm.manager')->getConnection('instance')->executeQuery($countSql)->fetchAll();
 
@@ -231,7 +233,8 @@ class CompanyController extends FrontendController
             json_decode($placesArray['localities']),
             json_decode($placesArray['provinces'])
         );
-        //Set place and search params for tpl
+
+        // Set place and search params for tpl
         $defaultPlace  = $placeFound ? reset($place[0]) : '';
         $defautSeaarch = $placeFound ?
             $this->matchCustomfields($params['search']) :
