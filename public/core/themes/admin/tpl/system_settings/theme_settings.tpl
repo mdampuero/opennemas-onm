@@ -58,33 +58,9 @@
           {if $app.security->hasPermission('MASTER')}
             <div class="row">
               <div class="col-xs-12">
-                <div ng-if="extra.theme_skins.length !== 0">
-                  <div class="row m-b-15">
-                    <div class="col-xs-12">
-                      <label class="form-label" for="theme-style">
-                        <h4>
-                          <i class="fa fa-paint-brush"></i>
-                          {t}Default skin{/t}
-                        </h4>
-                        <span class="help">
-                          {t}Your theme offers multiple skins to slightly change your theme. Select which one do you want.{/t}
-                        </span>
-                      </label>
-                      <div class="controls">
-                        <div class="input-group">
-                          <select id="theme-style" name="theme-style" ng-model="settings.theme_skin" required>
-                            <option value="[% code %]" ng-repeat="(code,style) in extra.theme_skins" ng-selected="[% code === settings.theme_skin || settings.theme_skin == undefined %]">[% style.name %]</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 <ul class="nav nav-pills border-bottom border-light m-b-15 p-b-5" role="tablist">
                   <li role="presentation" class="p-l-0 active">
                     <a href="#tabGeneral" aria-controls="general" role="tab" data-toggle="tab">{t domain="base"}General{/t}</a>
-                  </li>
-                  <li role="presentation" class="p-l-0" ng-if="extra.theme_skins[settings.theme_skin].params.fonts">
-                    <a href="#tabFonts" aria-controls="fonts" role="tab" data-toggle="tab">{t domain="base"}Fonts{/t}</a>
                   </li>
                   <li role="presentation" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                     <a href="#tabHeader" aria-controls="profile" role="tab" data-toggle="tab">{t domain="base"}Header{/t}</a>
@@ -105,247 +81,9 @@
                     <a href="#tabMobile" aria-controls="mobile" role="tab" data-toggle="tab">{t domain="base"}Mobile{/t}</a>
                   </li>
                 </ul>
-
                 <div class="tab-content">
                   <div role="tabpanel" class="tab-pane fade in active" id="tabGeneral">
-                    <div class="row">
-                      <h4>
-                        <i class="fa fa-paint-brush"></i>
-                        {t}Colors{/t}
-                      </h4>
-                      <div class="col-xs-12 col-md-4">
-                        <div class="form-group">
-                          <label class="form-label" for="site-color">
-                            {t}Site color{/t}
-                          </label>
-                          <span class="help">
-                            {t}Color used for links, menus and some widgets.{/t}
-                          </span>
-                          <div class="controls">
-                            <div class="input-group">
-                              <span class="input-group-addon" ng-style="{ 'background-color': settings.site_color }">
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                              </span>
-                              <input class="form-control" colorpicker="hex" id="site-color" name="site-color" ng-model="settings.site_color" type="text">
-                              <div class="input-group-btn">
-                                <button class="btn btn-default" ng-click="settings.site_color = backup.site_color" type="button">{t}Reset{/t}</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-xs-12 col-md-4">
-                        <div class="form-group">
-                          <label class="form-label" for="site-color-secondary">
-                            {t}Site secondary color{/t}
-                          </label>
-                          <span class="help">
-                            {t}Color used for custom elements.{/t}
-                          </span>
-                          <div class="controls">
-                            <div class="input-group">
-                              <span class="input-group-addon" ng-style="{ 'background-color': settings.site_color_secondary }">
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                              </span>
-                              <input class="form-control" colorpicker="hex" id="site-color-secondary" name="site-color-secondary" ng-model="settings.site_color_secondary" type="text">
-                              <div class="input-group-btn">
-                                <button class="btn btn-default" ng-click="settings.site_color_secondary = backup.site_color_secondary" type="button">{t}Reset{/t}</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-xs-12 col-md-5">
-                        <h4>
-                          <i class="fa fa-picture-o"></i>
-                          {t}Logo{/t}
-                        </h4>
-                        <div class="form-group">
-                          <div class="checkbox">
-                            <input class="form-control" id="logo-enabled" name="logo-enabled" ng-false-value="0" ng-model="settings.logo_enabled" ng-true-value="1"  type="checkbox"/>
-                            <label class="form-label" for="logo-enabled">
-                              {t}Use custom logo{/t}
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-xs-12 col-md-5 m-b-15" ng-if="settings.logo_enabled && extra.theme_skins[settings.theme_skin].params.options">
-                        <h4>
-                          <i class="fa fa-arrows-h"></i>
-                          {t}Logo size{/t}
-                        </h4>
-                        <label class="form-label" for="main-logo-size">
-                          <span class="help">
-                            {t}Choose header default size{/t}
-                          </span>
-                        </label>
-                        <div class="controls">
-                          <div class="input-group">
-                            <select id="main-logo-size" name="main-logo-size" ng-model="settings.theme_options.main_logo_size">
-                              <option value="[% main_logo_size_name %]" ng-selected="main_logo_size_name == settings.theme_options.main_logo_size" ng-repeat="(main_logo_size_name,main_logo_size_value) in extra.theme_skins[settings.theme_skin].params.options.main_logo_size.options">[% main_logo_size_value %]</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="form-group col-xs-12 col-md-5" ng-show="settings.logo_enabled">
-                        <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_default }"></div>
-                        <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_default }">
-                          <p>{t}Are you sure?{/t}</p>
-                          <div class="confirm-actions">
-                            <button class="btn btn-link" ng-click="toggleOverlay('logo_default')" type="button">
-                              <i class="fa fa-times fa-lg"></i>
-                              {t}No{/t}
-                            </button>
-                            <button class="btn btn-link" ng-click="removeFile('logo_default'); toggleOverlay('logo_default')" type="button">
-                              <i class="fa fa-check fa-lg"></i>
-                              {t}Yes{/t}
-                            </button>
-                          </div>
-                        </div>
-                        <label class="form-label" for="site-logo">{t}Large logo{/t}</label>
-                        <div class="thumbnail-placeholder">
-                          <div class="img-thumbnail" ng-if="!settings.logo_default">
-                            <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_default">
-                              <i class="fa fa-picture-o fa-2x"></i>
-                              <h5>{t}Pick an image{/t}</h5>
-                            </div>
-                          </div>
-                          <div class="dynamic-image-placeholder dynamic-image-no-margin ng-cloak" ng-if="settings.logo_default">
-                            <dynamic-image reescale="true" class="img-thumbnail " instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="settings.logo_default" ng-if="settings.logo_default" only-image="true">
-                              <div class="thumbnail-actions ng-cloak">
-                                <div class="thumbnail-action remove-action" ng-click="toggleOverlay('logo_default')">
-                                  <i class="fa fa-trash-o fa-2x"></i>
-                                </div>
-                                <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_default">
-                                  <i class="fa fa-camera fa-2x"></i>
-                                </div>
-                              </div>
-                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_default" media-picker-type="photo" ></div>
-                            </dynamic-image>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group col-xs-12 col-md-5" ng-if="settings.logo_enabled">
-                        <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_simple }"></div>
-                        <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_simple }">
-                          <p>{t}Are you sure?{/t}</p>
-                          <div class="confirm-actions">
-                            <button class="btn btn-link" ng-click="toggleOverlay('logo_simple')" type="button">
-                              <i class="fa fa-times fa-lg"></i>
-                              {t}No{/t}
-                            </button>
-                            <button class="btn btn-link" ng-click="removeFile('logo_simple'); toggleOverlay('logo_simple')" type="button">
-                              <i class="fa fa-check fa-lg"></i>
-                              {t}Yes{/t}
-                            </button>
-                          </div>
-                        </div>
-                        <label class="form-label" for="logo_simple">{t}Small logo{/t}</label>
-                        <div class="thumbnail-placeholder">
-                          <div class="img-thumbnail" ng-if="!settings.logo_simple">
-                            <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_simple">
-                              <i class="fa fa-picture-o fa-2x"></i>
-                              <h5>{t}Pick an image{/t}</h5>
-                            </div>
-                          </div>
-                          <div class="dynamic-image-placeholder dynamic-image-no-margin  ng-cloak " ng-if="settings.logo_simple">
-                            <dynamic-image reescale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="settings.logo_simple" ng-if="settings.logo_simple" only-image="true">
-                              <div class="thumbnail-actions ng-cloak">
-                                <div class="thumbnail-action remove-action" ng-click="toggleOverlay('logo_simple')">
-                                  <i class="fa fa-trash-o fa-2x"></i>
-                                </div>
-                                <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_simple">
-                                  <i class="fa fa-camera fa-2x"></i>
-                                </div>
-                              </div>
-                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_simple" media-picker-type="photo" ></div>
-                            </dynamic-image>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group col-xs-12 col-md-5" ng-if="settings.logo_enabled">
-                        <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_favico }"></div>
-                        <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_favico }">
-                          <p>{t}Are you sure?{/t}</p>
-                          <div class="confirm-actions">
-                            <button class="btn btn-link" ng-click="toggleOverlay('logo_favico')" type="button">
-                              <i class="fa fa-times fa-lg"></i>
-                              {t}No{/t}
-                            </button>
-                            <button class="btn btn-link" ng-click="removeFile('logo_favico'); toggleOverlay('logo_favico')" type="button">
-                              <i class="fa fa-check fa-lg"></i>
-                              {t}Yes{/t}
-                            </button>
-                          </div>
-                        </div>
-                        <label class="form-label" for="logo_favico">{t}Favico{/t}</label>
-                        <div class="thumbnail-placeholder">
-                          <div class="img-thumbnail" ng-if="!settings.logo_favico">
-                            <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_favico">
-                              <i class="fa fa-picture-o fa-2x"></i>
-                              <h5>{t}Pick an image{/t}</h5>
-                            </div>
-                          </div>
-                          <div class="dynamic-image-placeholder dynamic-image-no-margin  ng-cloak " ng-if="settings.logo_favico">
-                            <dynamic-image reescale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="settings.logo_favico" ng-if="settings.logo_favico" only-image="true">
-                              <div class="thumbnail-actions ng-cloak">
-                                <div class="thumbnail-action remove-action" ng-click="toggleOverlay('logo_favico')">
-                                  <i class="fa fa-trash-o fa-2x"></i>
-                                </div>
-                                <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_favico">
-                                  <i class="fa fa-camera fa-2x"></i>
-                                </div>
-                              </div>
-                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_favico" media-picker-type="photo" ></div>
-                            </dynamic-image>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group col-xs-12 col-md-5" ng-if="settings.logo_enabled">
-                        <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_embed }"></div>
-                        <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_embed }">
-                          <p>{t}Are you sure?{/t}</p>
-                          <div class="confirm-actions">
-                            <button class="btn btn-link" ng-click="toggleOverlay('logo_embed')" type="button">
-                              <i class="fa fa-times fa-lg"></i>
-                              {t}No{/t}
-                            </button>
-                            <button class="btn btn-link" ng-click="removeFile('logo_embed'); toggleOverlay('logo_embed')" type="button">
-                              <i class="fa fa-check fa-lg"></i>
-                              {t}Yes{/t}
-                            </button>
-                          </div>
-                        </div>
-                        <label class="form-label" for="logo_embed">{t}Social network default image{/t}</label>
-                        <div class="thumbnail-placeholder">
-                          <div class="img-thumbnail" ng-if="!settings.logo_embed">
-                            <div class="thumbnail-empty" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_embed">
-                              <i class="fa fa-picture-o fa-2x"></i>
-                              <h5>{t}Pick an image{/t}</h5>
-                            </div>
-                          </div>
-                          <div class="dynamic-image-placeholder dynamic-image-no-margin ng-cloak " ng-if="settings.logo_embed">
-                            <dynamic-image reescale="true" class="img-thumbnail" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="settings.logo_embed" ng-if="settings.logo_embed" only-image="true">
-                              <div class="thumbnail-actions ng-cloak">
-                                <div class="thumbnail-action remove-action" ng-click="toggleOverlay('logo_embed')">
-                                  <i class="fa fa-trash-o fa-2x"></i>
-                                </div>
-                                <div class="thumbnail-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_embed">
-                                  <i class="fa fa-camera fa-2x"></i>
-                                </div>
-                              </div>
-                              <div class="thumbnail-hidden-action" media-picker media-picker-mode="explore,upload" media-picker-selection="true" media-picker-max-size="1" media-picker-target="settings.logo_embed" media-picker-type="photo" ></div>
-                            </dynamic-image>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                     <div class="row" ng-if="extra.theme_skins[settings.theme_skin].params.options">
-
                       <div class="col-xs-12 col-md-5 m-b-15">
                         <label class="form-label m-b-15" for="theme-option-hamburger-position">
                           <h4>
@@ -609,110 +347,24 @@
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <h4>
-                      <i class="fa fa-code"></i>
-                      Custom {t}CSS{/t}
-                    </h4>
-                    <div class="form-group col-md-6">
-                      <label class="form-label" for="custom-theme-css">
-                        <span class="help">{t}This css will be added at the end of the original{/t}</span>
-                      </label>
-                      <div class="controls">
-                        <textarea class="form-control" id="custom-theme-css" name="theme-option-custom-css" ng-model="settings.theme_options.custom_css" rows="15"></textarea>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div role="tabpanel" class="tab-pane fade" id="tabFonts">
-                    <div ng-if="extra.theme_skins[settings.theme_skin].params.fonts">
-                      <div class="row">
-                        <div class="col-xs-12 m-b-15">
+                      <div class="col-xs-12 col-md-6 m-b-15">
+                        <label class="form-label m-b-15" for="theme-option-content-imageratio-tiny">
                           <h4>
-                            <i class="fa fa-font"></i>
-                            {t}Theme fonts{/t}
+                            <i class="fa fa-code"></i>
+                            Custom CSS
                           </h4>
-                        </div>
-                        <div class="col-xs-12 col-md-4 m-b-15">
-                          <label class="form-label" for="theme-font">
-                            <span class="help">
-                              {t}Your theme offers multiple fonts to match your page style. Select yout main font (titles, headings…).{/t}
-                            </span>
+                        </label>
+                        <div class="form-group">
+                          <label class="form-label" for="custom-theme-css">
+                            <span class="help">{t}This css will be added at the end of the original{/t}</span>
                           </label>
                           <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-font" name="theme-font" ng-model="settings.theme_font" required>
-                                <option value="[% font_name %]" ng-repeat="(font_name,font_url) in extra.theme_skins[settings.theme_skin].params.fonts" ng-selected="[% font_name === settings.theme_font %]">[% font_url %]</option>
-                              </select>
-                            </div>
-                          </div>
-                          <label class="form-label m-t-15" for="theme-main-font-size">
-                            <span class="help">
-                              {t}Main font base size{/t}
-                            </span>
-                          </label>
-                          <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-main-font-size" name="theme-main-font-size" ng-model="settings.theme_options.main_font_size" required>
-                                <option value="[% main_font_size_name %]" ng-repeat="(main_font_size_name,main_font_size_value) in extra.theme_skins[settings.theme_skin].params.options.main_font_size.options" ng-selected="[% main_font_size_name === settings.theme_options.main_font_size %]">[% main_font_size_value %]</option>
-                              </select>
-                            </div>
-                          </div>
-                          <label class="form-label m-t-15" for="theme-main-font-weight">
-                            <span class="help">
-                              {t}Main font weight{/t}
-                            </span>
-                          </label>
-                          <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-main-font-weight" name="theme-main-font-weight" ng-model="settings.theme_options.main_font_weight" required>
-                                <option value="[% main_font_weight_name %]" ng-repeat="(main_font_weight_name,main_font_weight_value) in extra.theme_skins[settings.theme_skin].params.options.main_font_weight.options" ng-selected="[% main_font_weight_name === settings.theme_options.main_font_weight %]">[% main_font_weight_value %]</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xs-12 col-md-4 m-b-15">
-                          <label class="form-label" for="theme-font-secondary">
-                            <span class="help">
-                              {t}Secondary font (body, summary…){/t}
-                            </span>
-                          </label>
-                          <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-font-secondary" name="theme-font-secondary" ng-model="settings.theme_font_secondary" required>
-                                <option value="[% secondary_font_name %]" ng-repeat="(secondary_font_name,secondary_font_url) in extra.theme_skins[settings.theme_skin].params.fonts" ng-selected="[% secondary_font_name === settings.theme_font_secondary || settings.theme_font_secondary == undefined %]">[% secondary_font_url %]</option>
-                              </select>
-                            </div>
-                          </div>
-                          <label class="form-label m-t-15" for="theme-second-font-size">
-                            <span class="help">
-                              {t}Secondary font base size{/t}
-                            </span>
-                          </label>
-                          <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-second-font-size" name="theme-second-font-size" ng-model="settings.theme_options.second_font_size" required>
-                                <option value="[% second_font_size_name %]" ng-repeat="(second_font_size_name,second_font_size_value) in extra.theme_skins[settings.theme_skin].params.options.second_font_size.options" ng-selected="[% second_font_size_name === settings.theme_options.second_font_size || settings.theme_options.second_font_size == undefined %]">[% second_font_size_value %]</option>
-                              </select>
-                            </div>
-                          </div>
-                          <label class="form-label m-t-15" for="theme-second-font-weight">
-                            <span class="help">
-                              {t}Secondary font weight{/t}
-                            </span>
-                          </label>
-                          <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-second-font-weight" name="theme-second-font-weight" ng-model="settings.theme_options.second_font_weight" required>
-                                <option value="[% second_font_weight_name %]" ng-repeat="(second_font_weight_name,second_font_weight_value) in extra.theme_skins[settings.theme_skin].params.options.second_font_weight.options" ng-selected="[% second_font_weight_name === settings.theme_options.second_font_weight || settings.theme_options.second_font_weight == undefined %]">[% second_font_weight_value %]</option>
-                              </select>
-                            </div>
+                            <textarea class="form-control" id="custom-theme-css" name="theme-option-custom-css" ng-model="settings.theme_options.custom_css" rows="15"></textarea>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-
                   <div role="tabpanel" class="tab-pane fade" id="tabHeader">
                     <div class="row" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                       <div class="col-xs-12 col-md-4 m-b-15">
@@ -1673,7 +1325,6 @@
                       </div>
                     </div>
                   </div>
-                </div>
                 </div>
               </div>
             </div>

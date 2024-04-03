@@ -40,6 +40,28 @@
               <div class="col-md-12">
                 <div class="row">
                   <div class="col-md-6">
+                    <div ng-if="extra.theme_skins.length !== 0">
+                      <div class="row m-b-15">
+                        <div class="col-xs-12">
+                          <label class="form-label" for="theme-style">
+                            <h4>
+                              <i class="fa fa-paint-brush"></i>
+                              {t}Default skin{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Your theme offers multiple skins to slightly change your theme. Select which one do you want.{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-style" name="theme-style" ng-model="settings.theme_skin" required>
+                                <option value="[% code %]" ng-repeat="(code,style) in extra.theme_skins" ng-selected="[% code === settings.theme_skin || settings.theme_skin == undefined %]">[% style.name %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <h4>
                       <i class="fa fa-newspaper-o"></i>
                       {t}Maximum elements per frontpage{/t}
@@ -60,6 +82,100 @@
                       </span>
                       <div class="controls">
                         <textarea class="form-control" id="robots-txt-rules" name="robots-txt-rules" ng-model="settings.robots_txt_rules" rows="6"></textarea>
+                      </div>
+                    </div>
+                    <div ng-if="extra.theme_skins[settings.theme_skin].params.fonts">
+                      <div class="row">
+                        <div class="col-xs-12 m-b-15">
+                          <h4>
+                            <i class="fa fa-font"></i>
+                            {t}Theme fonts{/t}
+                          </h4>
+                        </div>
+                        <div class="col-xs-12 col-md-6 m-b-15">
+                          <label class="form-label" for="theme-font">
+                            <span class="help">
+                              {t}Select your main font (titles, headings…).{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-font" name="theme-font" ng-model="settings.theme_font">
+                                <option value="[% font_name %]" ng-repeat="(font_name,font_url) in extra.theme_skins[settings.theme_skin].params.fonts" ng-selected="[% font_name === settings.theme_font %]">[% font_url %]</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div ng-if="extra.theme_skins[settings.theme_skin].params.options.main_font_size">
+                            <label class="form-label m-t-15" for="theme-main-font-size">
+                              <span class="help">
+                                {t}Main font base size{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-main-font-size" name="theme-main-font-size" ng-model="settings.theme_options.main_font_size">
+                                  <option value="[% main_font_size_name %]" ng-repeat="(main_font_size_name,main_font_size_value) in extra.theme_skins[settings.theme_skin].params.options.main_font_size.options" ng-selected="[% main_font_size_name === settings.theme_options.main_font_size %]">[% main_font_size_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div ng-if="extra.theme_skins[settings.theme_skin].params.options.main_font_weight">
+                            <label class="form-label m-t-15" for="theme-main-font-weight">
+                              <span class="help">
+                                {t}Main font weight{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-main-font-weight" name="theme-main-font-weight" ng-model="settings.theme_options.main_font_weight">
+                                  <option value="[% main_font_weight_name %]" ng-repeat="(main_font_weight_name,main_font_weight_value) in extra.theme_skins[settings.theme_skin].params.options.main_font_weight.options" ng-selected="[% main_font_weight_name === settings.theme_options.main_font_weight %]">[% main_font_weight_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 m-b-15">
+                          <label class="form-label" for="theme-font-secondary">
+                            <span class="help">
+                              {t}Secondary font (body, summary…){/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-font-secondary" name="theme-font-secondary" ng-model="settings.theme_font_secondary">
+                                <option value="[% secondary_font_name %]" ng-repeat="(secondary_font_name,secondary_font_url) in extra.theme_skins[settings.theme_skin].params.fonts" ng-selected="[% secondary_font_name === settings.theme_font_secondary || settings.theme_font_secondary == undefined %]">[% secondary_font_url %]</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div ng-if="extra.theme_skins[settings.theme_skin].params.options.second_font_size">
+                            <label class="form-label m-t-15" for="theme-second-font-size">
+                              <span class="help">
+                                {t}Secondary font base size{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-second-font-size" name="theme-second-font-size" ng-model="settings.theme_options.second_font_size">
+                                  <option value="[% second_font_size_name %]" ng-repeat="(second_font_size_name,second_font_size_value) in extra.theme_skins[settings.theme_skin].params.options.second_font_size.options" ng-selected="[% second_font_size_name === settings.theme_options.second_font_size || settings.theme_options.second_font_size == undefined %]">[% second_font_size_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div ng-if="extra.theme_skins[settings.theme_skin].params.options.second_font_weight">
+                            <label class="form-label m-t-15" for="theme-second-font-weight">
+                              <span class="help">
+                                {t}Secondary font weight{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-second-font-weight" name="theme-second-font-weight" ng-model="settings.theme_options.second_font_weight">
+                                  <option value="[% second_font_weight_name %]" ng-repeat="(second_font_weight_name,second_font_weight_value) in extra.theme_skins[settings.theme_skin].params.options.second_font_weight.options" ng-selected="[% second_font_weight_name === settings.theme_options.second_font_weight || settings.theme_options.second_font_weight == undefined %]">[% second_font_weight_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -128,7 +244,11 @@
                         </label>
                       </div>
                     </div>
+
                   </div>
+                </div>
+                <div class="row">
+
                 </div>
                 <div class="row">
                   <div class="col-md-6">
