@@ -120,7 +120,7 @@
          * @description
          *   Confirm restore settings to default value.
          */
-        $scope.openRestoreModal = function() {
+        $scope.openRestoreModal = function(downloadRoute) {
           var modal = $uibModal.open({
             templateUrl: 'modal-restore-settings',
             backdrop: 'static',
@@ -136,6 +136,7 @@
                     name: $scope.routes.restoreDefault,
                   };
 
+                  window.location = downloadRoute;
                   return http.put(route);
                 };
               }

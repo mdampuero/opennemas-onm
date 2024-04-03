@@ -23,7 +23,9 @@ class ThemeSettingController extends SettingController
      *
      * @var array
      */
-    protected $base64Encoded = [];
+    protected $base64Encoded = [
+        'custom_css'
+    ];
 
     /**
      * The list of settings that can be saved.
@@ -42,6 +44,7 @@ class ThemeSettingController extends SettingController
         'logo_simple',
         'logo_favico',
         'logo_embed',
+        'custom_css',
         'theme_options',
     ];
 

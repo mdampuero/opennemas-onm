@@ -17,7 +17,7 @@
             <ul class="nav quick-section">
             {acl isAllowed="MASTER"}
               <li class="quicklinks">
-                <a class="btn btn-white" ng-click="openRestoreModal()">
+                <a class="btn btn-white" ng-click="openRestoreModal(routing.generate('api_v1_backend_settings_theme_download'))">
                   <span class="fa fa-undo"></span>
                   {t}Restore{/t}
                 </a>
@@ -359,7 +359,7 @@
                             <span class="help">{t}This css will be added at the end of the original{/t}</span>
                           </label>
                           <div class="controls">
-                            <textarea class="form-control" id="custom-theme-css" name="theme-option-custom-css" ng-model="settings.theme_options.custom_css" rows="15"></textarea>
+                            <textarea class="form-control" id="custom-theme-css" name="theme-option-custom-css" ng-model="settings.custom_css" rows="15"></textarea>
                           </div>
                         </div>
                       </div>

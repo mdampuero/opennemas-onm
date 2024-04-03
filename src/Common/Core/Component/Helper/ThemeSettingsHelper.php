@@ -54,7 +54,6 @@ class ThemeSettingsHelper extends SettingHelper
     ];
 
     protected $generalSettings = [
-        'custom_css',
         'breadcrumb',
         'main_logo_size',
         'general_page_width',
@@ -171,8 +170,6 @@ class ThemeSettingsHelper extends SettingHelper
                     return $option;
                 }, $themeOptions);
             }
-
-            $themeOptions += $this->aditionalThemeSettings;
         }
 
         return $themeOptions;
