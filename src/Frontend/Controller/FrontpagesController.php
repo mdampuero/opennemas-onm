@@ -113,11 +113,7 @@ class FrontpagesController extends Controller
         $this->getAdvertisements($category);
 
         $invalidationDt->setTimeZone($this->get('core.locale')->getTimeZone());
-        $themeVariables = $this->get('core.helper.theme_settings')->getThemeVariables(
-            $this->get('core.globals')->getExtension(),
-            $this->get('core.globals')->getAction()
-        );
-        return $this->render('frontpage/frontpage.tpl', array_merge([
+        return $this->render('frontpage/frontpage.tpl', [
             'cache_id'    => $cacheId,
             'category'    => $category,
             'o_category'  => $category,
@@ -125,6 +121,6 @@ class FrontpagesController extends Controller
             'x-cache-for' => $invalidationDt->format('Y-m-d H:i:s'),
             'x-cacheable' => true,
             'x-tags'      => $xtags . ',frontpage-page-' . $categoryId
-        ], $themeVariables));
+        ]);
     }
 }

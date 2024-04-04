@@ -175,13 +175,19 @@ class ThemeSettingsHelper extends SettingHelper
         return $themeOptions;
     }
 
-    public function getThemeVariables($extension, $action)
+    public function getThemeVariables()
     {
+        $action    = $this->container->get('core.globals')->getAction();
+        $extension = $this->container->get('core.globals')->getExtension();
+
         $action = strpos($action, 'list') !== false ? 'list' : $action;
         $action = strpos($action, 'show') !== false ? 'show' : $action;
 
         //Some weird exceptions
-        if ($action == 'archive' || $extension == 'tag') {
+        if ($action == 'archive'
+            || $action == 'frontpageauthors'
+            || $action == 'authorfrontpage'
+            || $extension == 'tag') {
             $action = 'list';
         }
 
@@ -197,7 +203,8 @@ class ThemeSettingsHelper extends SettingHelper
             $specificVariables = $this->parseSettings($currentSettings, $this->extensionSettings[$extension]);
         }
 
-        return array_merge($generalVariables, $specificVariables);
+        $finalVars = array_merge($generalVariables, $specificVariables);
+        return array_merge($finalVars, [ 'theme_options' => true]);
     }
 
     protected function parseSettings($master, $part)

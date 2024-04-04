@@ -92,18 +92,11 @@ class AuthorController extends Controller
 
         $this->getAds();
 
-        $extension = $this->get('core.globals')->getExtension();
-        $action    = $this->get('core.globals')->getAction();
-        $params    = [
+        $params = [
             'cache_id'    => $cacheID,
             'x-tags'      => sprintf('content-author-%d-frontpage', $user->id),
             'x-cacheable' => true,
         ];
-
-        $params = array_merge(
-            $params,
-            $this->get('core.helper.theme_settings')->getThemeVariables($extension, 'authorlist')
-        );
 
         return $this->render('user/author_frontpage.tpl', $params);
     }
@@ -216,7 +209,6 @@ class AuthorController extends Controller
 
         $this->getAds();
 
-        $extension = $this->get('core.globals')->getExtension();
         $params    = [
             'authors_contents' => $items,
             'pagination'       => $pagination,
@@ -225,10 +217,6 @@ class AuthorController extends Controller
             'x-cacheable' => true,
         ];
 
-        $params = array_merge(
-            $params,
-            $this->get('core.helper.theme_settings')->getThemeVariables($extension, 'authorlist')
-        );
         return $this->render('user/frontpage_authors.tpl', $params);
     }
 

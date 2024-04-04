@@ -131,18 +131,12 @@ class ArchiveController extends Controller
                 ]
             ]);
 
-            $action    = $this->container->get('core.globals')->getAction();
-            $extension = $this->container->get('core.globals')->getExtension();
-            $params    = [
+            $params = [
                 'library'    => $library,
                 'pagination' => $pagination,
                 'page'       => $page,
             ];
 
-            $params = array_merge(
-                $params,
-                $this->container->get('core.helper.theme_settings')->getThemeVariables($extension, $action)
-            );
             $this->view->assign($params);
         }
 
