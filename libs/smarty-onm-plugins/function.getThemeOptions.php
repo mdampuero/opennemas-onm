@@ -1,6 +1,6 @@
 <?php
 /**
- * Returns the URL for a script.
+ * Returns all the theme settings defined on backend.
  *
  * @param array $params the list of parameters
  * @param \Smarty $smarty the smarty instance

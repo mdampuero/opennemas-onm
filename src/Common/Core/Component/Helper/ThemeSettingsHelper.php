@@ -21,21 +21,14 @@ class ThemeSettingsHelper extends SettingHelper
     ];
 
     protected $toBool = [
-        'content_category_name',
-        'content_subtitle',
-        'content_summary',
-        'content_author',
-        'content_date',
-        'content_readtime',
-        'content_author_photo',
-        'archive_category_name',
-        'archive_subtitle',
-        'archive_summary',
-        'archive_author',
-        'archive_date',
-        'archive_readtime',
-        'archive_time',
-        'archive_author_photo',
+        'show_category',
+        'show_subtitle',
+        'show_summary',
+        'show_author',
+        'show_date',
+        'show_readtime',
+        'show_author_photo',
+        'show_author_photo',
         'related_contents_auto',
         'sidebar_widget_today_news',
         'sidebar_widget_most_viewed',
@@ -45,12 +38,6 @@ class ThemeSettingsHelper extends SettingHelper
         'archive_cover',
         'mobile_top_menu',
         'mobile_main_menu',
-        'inner_content_date',
-        'inner_content_readtime',
-        'inner_content_author_photo',
-        'inner_content_author',
-        'inner_content_time',
-
     ];
 
     protected $generalSettings = [
@@ -108,6 +95,9 @@ class ThemeSettingsHelper extends SettingHelper
             'show_date' => 'archive_date',
             'show_readtime' => 'archive_readtime',
             'show_author_photo' => 'archive_author_photo',
+            'sidebar_widget_today_news' => 'sidebar_widget_today_news_list',
+            'sidebar_widget_most_viewed' => 'sidebar_widget_most_viewed_list',
+            'sidebar_widget_most_seeing_recent' => 'sidebar_widget_most_seeing_recent_list',
         ],
         'show' => [
             'article_header',
@@ -120,9 +110,9 @@ class ThemeSettingsHelper extends SettingHelper
             'related_contents',
             'related_contents_auto',
             'related_contents_auto_position',
-            'sidebar_widget_today_news',
-            'sidebar_widget_most_viewed',
-            'sidebar_widget_most_seeing_recent',
+            'sidebar_widget_today_news' => 'sidebar_widget_today_news_inner',
+            'sidebar_widget_most_viewed' => 'sidebar_widget_most_viewed_inner',
+            'sidebar_widget_most_seeing_recent' => 'sidebar_widget_most_seeing_recent_inner',
             'widget_more_in_section',
             'widget_more_in_frontpage',
             'widget_more_in_section_layout',
@@ -131,7 +121,7 @@ class ThemeSettingsHelper extends SettingHelper
             'show_date' => 'inner_content_date',
             'show_time' => 'inner_content_time',
             'show_readtime' => 'inner_content_readtime',
-            'inner_content_author_photo',
+            'show_author_photo' => 'inner_content_author_photo',
             'suggested_max_items' => 'inner_content_suggested_items'
         ]
     ];
@@ -218,7 +208,7 @@ class ThemeSettingsHelper extends SettingHelper
             if (array_key_exists($value, $master)) {
                 $key = is_integer($key) ? $value : $key;
 
-                $result[$key] = in_array($value, $this->toBool)
+                $result[$key] = in_array($key, $this->toBool)
                     ? filter_var($master[$value], FILTER_VALIDATE_BOOLEAN)
                     : $master[$value];
             }

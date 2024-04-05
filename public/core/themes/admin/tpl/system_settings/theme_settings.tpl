@@ -846,10 +846,40 @@
                             </div>
                           </div>
                         </div>
+                        <div class="col-xs-12 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-sidebar-widgets">
+                            <h4>
+                              <i class="fa fa-puzzle-piece"></i>
+                              {t}Sidebar widgets{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Choose widgets to display{/t}
+                            </span>
+                          </label>
+                          <div class="form-group m-b-0">
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-sidebar-widget-today-news-list" name="theme-option-sidebar-widget-today-news-list" ng-model="settings.theme_options.sidebar_widget_today_news_list" ng-checked="[% settings.theme_options.sidebar_widget_today_news_list != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label for="theme-option-sidebar-widget-today-news-list">
+                                <span>{t domain="base"}Today news{/t}</span>
+                              </label>
+                            </div>
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-sidebar-widget-most-viewed-list" name="theme-option-sidebar-widget-most-viewed-list" ng-model="settings.theme_options.sidebar_widget_most_viewed_list" ng-checked="[% settings.theme_options.sidebar_widget_most_viewed_list != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label for="theme-option-sidebar-widget-most-viewed-list">
+                                <span>{t domain="base"}Most viewed{/t}</span>
+                              </label>
+                            </div>
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-sidebar-widget-most-seeing-list" name="theme-option-sidebar-widget-most-seeing-list" ng-model="settings.theme_options.sidebar_widget_most_seeing_recent_list" ng-checked="[% settings.theme_options.sidebar_widget_most_seeing_recent_list %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label for="theme-option-sidebar-widget-most-seeing-list">
+                                <span>{t domain="base"}Most seeing/recent{/t}</span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-
                   <div role="tabpanel" class="tab-pane fade" id="tabInners">
                     <div class="row" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                       <div class="col-xs-12 col-md-8">
@@ -1153,20 +1183,20 @@
                             </label>
                             <div class="form-group m-b-0">
                               <div class="checkbox p-b-10">
-                                <input id="theme-option-sidebar-widget-today-news" name="theme-option-sidebar-widget-today-news" ng-model="settings.theme_options.sidebar_widget_today_news" ng-checked="[% settings.theme_options.sidebar_widget_today_news != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
-                                <label for="theme-option-sidebar-widget-today-news">
+                                <input id="theme-option-sidebar-widget-today-news-inner" name="theme-option-sidebar-widget-today-news-inner" ng-model="settings.theme_options.sidebar_widget_today_news_inner" ng-checked="[% settings.theme_options.sidebar_widget_today_news_inner != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                <label for="theme-option-sidebar-widget-today-news-inner">
                                   <span>{t domain="base"}Today news{/t}</span>
                                 </label>
                               </div>
                               <div class="checkbox p-b-10">
-                                <input id="theme-option-sidebar-widget-most-viewed" name="theme-option-sidebar-widget-most-viewed" ng-model="settings.theme_options.sidebar_widget_most_viewed" ng-checked="[% settings.theme_options.sidebar_widget_most_viewed != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
-                                <label for="theme-option-sidebar-widget-most-viewed">
+                                <input id="theme-option-sidebar-widget-most-viewed-inner" name="theme-option-sidebar-widget-most-viewed-inner" ng-model="settings.theme_options.sidebar_widget_most_viewed_inner" ng-checked="[% settings.theme_options.sidebar_widget_most_viewed_inner != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                <label for="theme-option-sidebar-widget-most-viewed-inner">
                                   <span>{t domain="base"}Most viewed{/t}</span>
                                 </label>
                               </div>
                               <div class="checkbox p-b-10">
-                                <input id="theme-option-sidebar-widget-most-seeing" name="theme-option-sidebar-widget-most-seeing" ng-model="settings.theme_options.sidebar_widget_most_seeing_recent" ng-checked="[% settings.theme_options.sidebar_widget_most_seeing_recent %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
-                                <label for="theme-option-sidebar-widget-most-seeing">
+                                <input id="theme-option-sidebar-widget-most-seeing-inner" name="theme-option-sidebar-widget-most-seeing-inner" ng-model="settings.theme_options.sidebar_widget_most_seeing_recent_inner" ng-checked="[% settings.theme_options.sidebar_widget_most_seeing_recent_inner %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                <label for="theme-option-sidebar-widget-most-seeing-inner">
                                   <span>{t domain="base"}Most seeing/recent{/t}</span>
                                 </label>
                               </div>
