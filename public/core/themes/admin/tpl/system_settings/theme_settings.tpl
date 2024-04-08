@@ -108,26 +108,45 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-md-4 m-b-15">
-                        <h4>
-                          <i class="fa fa-arrows-h"></i>
-                          {t}Page Layout{/t}
-                        </h4>
-                        <label class="form-label" for="theme-option-width">
-                          <span class="help">
-                            {t}Page containers width{/t}
-                          </span>
-                        </label>
-                        <div class="controls">
-                          <div class="input-group">
-                            <select id="theme-option-width" name="theme-option-width" ng-model="settings.theme_options.general_page_width" required>
-                              <option value="[% page_width_name %]" ng-repeat="(page_width_name,page_width_value) in extra.theme_skins[settings.theme_skin].params.options.general_page_width.options" ng-selected="[% page_width_name == settings.theme_options.general_page_width %]">[% page_width_value %]</option>
-                            </select>
+                        <div class="col-xs-12 col-md-2 m-b-15">
+                          <h4>
+                            <i class="fa fa-arrows-h"></i>
+                            {t}Logo size{/t}
+                          </h4>
+                          <label class="form-label" for="theme-option-width">
+                            <span class="help">
+                              {t}Choose logo default size{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-option-main-logo-size" name="theme-option-main-logo-size" ng-model="settings.theme_options.main_logo_size">
+                                <option value="[% main_logo_size_name %]" ng-repeat="(main_logo_size_name,main_logo_size_value) in extra.theme_skins[settings.theme_skin].params.options.main_logo_size.options" ng-selected="[% main_logo_size_name === settings.theme_options.main_logo_size || settings.theme_options.main_logo_size == undefined %]">[% main_logo_size_value %]</option>
+                              </select>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                        <div class="col-xs-12 col-md-3 m-b-15">
+                          <h4>
+                            <i class="fa fa-arrows-h"></i>
+                            {t}Page Layout{/t}
+                          </h4>
+                          <label class="form-label" for="theme-option-width">
+                            <span class="help">
+                              {t}Page containers width{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-option-width" name="theme-option-width" ng-model="settings.theme_options.general_page_width" required>
+                                <option value="[% page_width_name %]" ng-repeat="(page_width_name,page_width_value) in extra.theme_skins[settings.theme_skin].params.options.general_page_width.options" ng-selected="[% page_width_name == settings.theme_options.general_page_width %]">[% page_width_value %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
                       <div ng-if="extra.theme_skins[settings.theme_skin].params.fonts">
-                        <div class="col-xs-12 col-md-4">
+                        <div class="col-xs-12 col-md-4 m-t-30">
                           <div class="col-xs-12">
                             <h4>
                               <i class="fa fa-font"></i>
