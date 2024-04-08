@@ -1299,7 +1299,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.logo_enabled">
+                      <div class="col-xs-12 col-md-4 m-b-15">
                         <h4>
                           <i class="fa fa-arrows-h"></i>
                           {t}Mobile logo size{/t}

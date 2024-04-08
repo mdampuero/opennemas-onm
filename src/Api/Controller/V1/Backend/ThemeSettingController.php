@@ -33,17 +33,6 @@ class ThemeSettingController extends SettingController
      * @var array
      */
     protected $keys = [
-        'site_color',
-        'site_color_secondary',
-        'full_rss',
-        'theme_font',
-        'theme_font_secondary',
-        'theme_skin',
-        'logo_enabled',
-        'logo_default',
-        'logo_simple',
-        'logo_favico',
-        'logo_embed',
         'custom_css',
         'theme_options',
     ];
@@ -53,13 +42,7 @@ class ThemeSettingController extends SettingController
      *
      * @var array
      */
-    protected $toint = [
-        'logo_enabled',
-        'logo_default',
-        'logo_simple',
-        'logo_favico',
-        'logo_embed',
-    ];
+    protected $toint = [];
 
     /**
      * The list of settings that can be saved only by MASTER users.
@@ -80,7 +63,12 @@ class ThemeSettingController extends SettingController
      */
     public function saveAction(Request $request)
     {
-        return parent::saveSettings($request->get('settings'));
+        $settings = $request->get('settings');
+        if (array_key_exists('custom_css', $settings)) {
+            $settings['custom_css'] = strip_tags($settings['custom_css']);
+        }
+
+        return parent::saveSettings($settings);
     }
 
     public function listAction(Request $request)
@@ -92,6 +80,7 @@ class ThemeSettingController extends SettingController
         if (!array_key_exists('theme_options', $settings['settings'])) {
             $settings['settings']['theme_options'] = $settingHelper->getThemeSettings();
         }
+
         if (array_key_exists('theme_skin', $settings['settings'])) {
             $skinParams = $this->container->get('core.theme')->getSkin($settings['settings']['theme_skin']);
             $settings['settings']['theme_skin'] = strtolower($skinParams['internal_name']);

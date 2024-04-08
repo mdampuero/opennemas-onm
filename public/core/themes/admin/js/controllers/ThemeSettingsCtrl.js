@@ -28,9 +28,6 @@
          * @type {Object}
          */
         $scope.settings = {
-          logo_enabled: false,
-          site_color: '',
-          site_color_secondary: '',
           theme_skin: 'default'
         };
 

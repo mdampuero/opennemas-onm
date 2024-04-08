@@ -26,6 +26,7 @@ class ThemeSettingsHelper extends SettingHelper
         'show_summary',
         'show_author',
         'show_date',
+        'show_time',
         'show_readtime',
         'show_author_photo',
         'show_author_photo',
@@ -79,6 +80,7 @@ class ThemeSettingsHelper extends SettingHelper
             'show_summary' => 'content_summary',
             'show_author' => 'content_author',
             'show_date' => 'content_date',
+            'show_time' => 'content_time',
             'show_readtime' => 'content_readtime',
             'show_author_photo' => 'content_author_photo',
         ]
@@ -93,6 +95,7 @@ class ThemeSettingsHelper extends SettingHelper
             'show_summary' => 'archive_summary',
             'show_author' => 'archive_author',
             'show_date' => 'archive_date',
+            'show_time' => 'archive_time',
             'show_readtime' => 'archive_readtime',
             'show_author_photo' => 'archive_author_photo',
             'sidebar_widget_today_news' => 'sidebar_widget_today_news_list',
