@@ -281,10 +281,6 @@ gmaps@0.4.22:
   resolved "https://registry.yarnpkg.com/gmaps/-/gmaps-0.4.22.tgz#a1cf1f4a9d7fb3a09c44c3234fecb559aa037779"
   integrity sha1-oc8fSp1/s6CcRMMjT+y1WaoDd3k=
 
-"imageresize@https://github.com/nmmf/imageresize.git":
-  version "0.0.0"
-  resolved "https://github.com/nmmf/imageresize.git#3bf13dc04754f9850b42f971bc21f645cbd72b54"
-
 inherits@^2.0.3:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
