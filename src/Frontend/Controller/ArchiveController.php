@@ -131,13 +131,11 @@ class ArchiveController extends Controller
                 ]
             ]);
 
-            $params = [
+            $this->view->assign([
                 'library'    => $library,
                 'pagination' => $pagination,
                 'page'       => $page,
-            ];
-
-            $this->view->assign($params);
+            ]);
         }
 
         $this->getAds();

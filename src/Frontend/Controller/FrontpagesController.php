@@ -113,6 +113,7 @@ class FrontpagesController extends Controller
         $this->getAdvertisements($category);
 
         $invalidationDt->setTimeZone($this->get('core.locale')->getTimeZone());
+
         return $this->render('frontpage/frontpage.tpl', [
             'cache_id'    => $cacheId,
             'category'    => $category,

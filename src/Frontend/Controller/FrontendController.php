@@ -441,7 +441,7 @@ class FrontendController extends Controller
             } else {
                 $params['x-tags'][] = sprintf(
                     '%s-%s',
-                    $this->get('core.globals')->getExtension(),
+                    $extension,
                     $item->id
                 );
             }
@@ -464,6 +464,7 @@ class FrontendController extends Controller
         }
 
         $this->getAdvertisements($params['o_category'], $params['o_token']);
+
         return array_merge($this->params, $params, [
             'cache_id'    => $this->getCacheId($params),
             'o_canonical' => $this->getCanonicalUrl($action, $params),

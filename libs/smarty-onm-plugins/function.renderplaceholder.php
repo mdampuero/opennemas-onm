@@ -4,6 +4,8 @@
 function smarty_function_renderplaceholder($params, &$smarty)
 {
     $outputHTML = '';
+    // Create ad hoc inheritance with theme settings
+    $params = array_merge($params, $smarty->getcontainer()->get('core.helper.theme_settings')->getThemeVariables());
 
     // Get all the parameters passed to the function
     $items       = $params['items'];
