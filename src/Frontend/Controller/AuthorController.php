@@ -92,13 +92,11 @@ class AuthorController extends Controller
 
         $this->getAds();
 
-        $params = [
+        return $this->render('user/author_frontpage.tpl', [
             'cache_id'    => $cacheID,
             'x-tags'      => sprintf('content-author-%d-frontpage', $user->id),
             'x-cacheable' => true,
-        ];
-
-        return $this->render('user/author_frontpage.tpl', $params);
+        ]);
     }
 
     /**
@@ -209,15 +207,13 @@ class AuthorController extends Controller
 
         $this->getAds();
 
-        $params    = [
+        return $this->render('user/frontpage_authors.tpl', [
             'authors_contents' => $items,
             'pagination'       => $pagination,
             'page'             => $page,
             'x-tags'      => 'authors-frontpage',
             'x-cacheable' => true,
-        ];
-
-        return $this->render('user/frontpage_authors.tpl', $params);
+        ]);
     }
 
     /**
