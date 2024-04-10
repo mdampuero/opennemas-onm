@@ -241,12 +241,13 @@ class CategoryController extends FrontendController
      */
     protected function getParameters($request, $item = null)
     {
-        $action = $this->get('core.globals')->getAction();
-        $params = array_merge($request->query->all(), [
+        $action    = $this->get('core.globals')->getAction();
+        $extension = $this->get('core.globals')->getExtension();
+        $params    = array_merge($request->query->all(), [
             'category'   => $item,
             'time'       => time(),
             'o_category' => $item,
-            'x-tags'     => $this->get('core.globals')->getExtension() . '-' . $item->id
+            'x-tags'     => $extension . '-' . $item->id
         ]);
 
         if (!array_key_exists('page', $params)) {
