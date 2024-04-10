@@ -149,77 +149,68 @@ class AuthorController extends Controller
 
         // Setup templating cache layer
         $this->view->setConfig('articles');
-        $cacheID = $this->view->getCacheId('frontpage', 'authors', $page);
 
-        if ($this->view->getCaching() === 0
-           || !$this->view->isCached('user/frontpage_author.tpl', $cacheID)
-        ) {
-            $sql = "SELECT SQL_CALC_FOUND_ROWS contents.fk_author as id, count(pk_content) as total FROM contents"
-                . " WHERE contents.fk_author IN (SELECT users.id FROM users)"
-                . " AND fk_content_type IN (1, 4, 7, 9)  AND content_status = 1 AND in_litter!= 1"
-                . " GROUP BY contents.fk_author ORDER BY total DESC"
-                . " LIMIT $itemsPerPage OFFSET $offset";
+        $sql = "SELECT SQL_CALC_FOUND_ROWS contents.fk_author as id, count(pk_content) as total FROM contents"
+            . " WHERE contents.fk_author IN (SELECT users.id FROM users)"
+            . " AND fk_content_type IN (1, 4, 7, 9)  AND content_status = 1 AND in_litter!= 1"
+            . " GROUP BY contents.fk_author ORDER BY total DESC"
+            . " LIMIT $itemsPerPage OFFSET $offset";
 
-            $items = $this->get('dbal_connection')->fetchAll($sql);
+        $items = $this->get('dbal_connection')->fetchAll($sql);
 
-            $sql = 'SELECT FOUND_ROWS()';
+        $sql = 'SELECT FOUND_ROWS()';
 
-            $total = $this->get('dbal_connection')->fetchAssoc($sql);
-            $total = array_pop($total);
+        $total = $this->get('dbal_connection')->fetchAssoc($sql);
+        $total = array_pop($total);
 
-            // Redirect to last page
-            if (ceil($total / $itemsPerPage) < $page) {
-                $page = ceil($total / $itemsPerPage);
+        // Redirect to last page
+        if (ceil($total / $itemsPerPage) < $page) {
+            $page = ceil($total / $itemsPerPage);
 
-                return $this->redirectToRoute('frontend_frontpage_authors', [
-                    'page' => $page
-                ]);
-            }
-
-            // Use id as array key
-            $items = $this->get('data.manager.filter')
-                ->set($items)
-                ->filter('mapify', [ 'key' => 'id' ])
-                ->get();
-
-            $response = $this->get('api.service.author')->getListByIds(array_keys($items));
-            $authors  = $this->get('data.manager.filter')
-                ->set($response['items'])
-                ->filter('mapify', [ 'key' => 'id' ])
-                ->get();
-
-            foreach ($items as &$item) {
-                $author = $authors[$item['id']];
-
-                $author->total_contents = $item['total'];
-
-                $item = $author;
-            }
-
-            $items = array_filter($items, function ($a) {
-                return !is_array($a);
-            });
-
-            // Build the pagination
-            $pagination = $this->get('paginator')->get([
-                'directional' => true,
-                'epp'         => $itemsPerPage,
-                'page'        => $page,
-                'total'       => $total,
-                'route'       => 'frontend_frontpage_authors'
-            ]);
-
-            $this->view->assign([
-                'authors_contents' => $items,
-                'pagination'       => $pagination,
-                'page'             => $page,
+            return $this->redirectToRoute('frontend_frontpage_authors', [
+                'page' => $page
             ]);
         }
+
+        // Use id as array key
+        $items = $this->get('data.manager.filter')
+            ->set($items)
+            ->filter('mapify', [ 'key' => 'id' ])
+            ->get();
+
+        $response = $this->get('api.service.author')->getListByIds(array_keys($items));
+        $authors  = $this->get('data.manager.filter')
+            ->set($response['items'])
+            ->filter('mapify', [ 'key' => 'id' ])
+            ->get();
+
+        foreach ($items as &$item) {
+            $author = $authors[$item['id']];
+
+            $author->total_contents = $item['total'];
+
+            $item = $author;
+        }
+
+        $items = array_filter($items, function ($a) {
+            return !is_array($a);
+        });
+
+        // Build the pagination
+        $pagination = $this->get('paginator')->get([
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $page,
+            'total'       => $total,
+            'route'       => 'frontend_frontpage_authors'
+        ]);
 
         $this->getAds();
 
         return $this->render('user/frontpage_authors.tpl', [
-            'cache_id'    => $cacheID,
+            'authors_contents' => $items,
+            'pagination'       => $pagination,
+            'page'             => $page,
             'x-tags'      => 'authors-frontpage',
             'x-cacheable' => true,
         ]);

@@ -65,7 +65,7 @@ class SimpleMenu
     /**
      * Renders an element
      *
-     * @param string $element the element name
+     * @param array $element the element object
      * @param SimpleXMLElement $element the element to render
      * @param boolean $last whether this element is the last in the list
      *
@@ -73,6 +73,11 @@ class SimpleMenu
      */
     private function renderElement($element)
     {
+        if (array_key_exists('theme', $element)
+            && !in_array(getService('core.theme')->text_domain, $element['theme'])) {
+            return '';
+        }
+
         if (in_array('separator', $element)) {
             return $this->renderSeparator();
         }
