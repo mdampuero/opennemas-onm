@@ -504,6 +504,14 @@ $menuXml = [
                 'icon'        => 'fa fa-rebel',
                 'link'        => url('backend_settings_master'),
                 'privilege'   => 'MASTER'
+            ],
+            [
+                'id'          => 'theme_settings',
+                'title'       => _('Theme settings'),
+                'icon'        => 'fa fa-eye',
+                'theme'       => [ 'apolo' ],
+                'link'        => url('backend_settings_theme'),
+                'privilege'   => 'MASTER'
             ]
         ]
     ]

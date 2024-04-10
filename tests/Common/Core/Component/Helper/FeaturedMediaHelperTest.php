@@ -346,7 +346,7 @@ class FeaturedMediaHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEmpty($this->helper->getFeaturedMediaCaption($content, 'frontpage'));
         $this->assertEquals(
-            'glorp &quot;foobar&quot; &lt;p&gt;fubar&lt;/p&gt;',
+            'glorp "foobar" fubar',
             $this->helper->getFeaturedMediaCaption($content, 'inner')
         );
     }
