@@ -38,6 +38,7 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
             $bodyStartScript .= '_amp';
             $bodyEndScript   .= '_amp';
             $customCssAmp     = 'custom_css_amp';
+            $customCss        = '';
         }
 
         $settings = $smarty->getContainer()
