@@ -135,9 +135,13 @@
       </div>
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.where }">
         <div class="form-group">
-          <label class="form-label" for="event_place">{t}Place{/t}</label>
+          <label class="form-label" for="event_place">{t}Place name{/t}</label>
           <div class="controls">
             <input class="form-control"  id="event_place" name="event_place" ng-model="item.event_place" type="text">
+          </div>
+          <label class="form-label" for="event_address">{t}Place address{/t}</label>
+          <div class="controls">
+            <input class="form-control"  id="event_address" name="event_address" ng-model="item.event_address" type="text">
           </div>
         </div>
       </div>
