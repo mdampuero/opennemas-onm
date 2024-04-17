@@ -34,6 +34,38 @@
   ]},
   {
     "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{$url}"
+    },
+    "headline": "{$title|replace:'\\':''|escape:'htmlall'}",
+    "author": {
+      "@type": "Person",
+      "name": "{$author|replace:'\\':''|escape:'htmlall'}"
+    },
+    "dateCreated": "{format_date date=$content->created format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
+    "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
+    "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
+    "articleSection": "{$category->title|replace:'\\':''|escape:'htmlall'}",
+    "keywords": "{$keywords|replace:'\\':''|escape:'htmlall'}",
+    "url": "{$url}",
+    "wordCount": "{$wordCount}",
+    "description": "{$description|replace:'\\':''|escape:'htmlall'}",
+    "publisher": {
+      "@type": "Organization",
+      "name": "{$siteName|replace:'\\':''|escape:'htmlall'}",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{$logo['url']}",
+        "width": "467",
+        "height": "120"
+      },
+      "url": "{$siteUrl}"
+    }
+  },
+  {
+    "@context": "http://schema.org",
     "@type": "ImageGallery",
     "description": "{$description|replace:'\\':''|escape:'htmlall'}",
     "keywords": "{$keywords|replace:'\\':''|escape:'htmlall'}",
