@@ -43,7 +43,15 @@
     "author": {
       "@type": "Person",
       "name": "{$author|replace:'\\':''|escape:'htmlall'}"
+      {if has_author_url($content)}
+        ,"url": "{$app.instance->getBaseUrl()}{get_author_url($content)}"
+      {else}
+        ,"url": "{$app.instance->getBaseUrl()}"
+      {/if}
     },
+    {if has_featured_media($content, 'frontpage')}
+    "image": "{get_photo_path(get_featured_media($content, 'frontpage'), null, [], true)}",
+    {/if}
     "dateCreated": "{format_date date=$content->created format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
     "dateModified": "{format_date date=$content->changed format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
