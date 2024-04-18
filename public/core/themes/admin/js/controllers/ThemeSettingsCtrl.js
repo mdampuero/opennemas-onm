@@ -57,11 +57,25 @@
               },
               success: function() {
                 return function(modal, template) {
+                  const reader = new FileReader();
+
                   var route = {
                     name: $scope.routes.importConfig,
                   };
 
-                  return http.put(route, { theme_settings: template.settings });
+                  if (template.file.type !== 'application/json') {
+                    return messenger.post('No es un fichero JSON Válido', 'error');
+                  }
+
+                  reader.readAsText(template.file);
+                  reader.onload = function() {
+                    var content = reader.result;
+
+                    return http.put(route, { theme_settings: content }).then(function() {
+                      $scope.list();
+                    });
+                  };
+
                 };
               }
             }
