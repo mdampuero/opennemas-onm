@@ -126,6 +126,7 @@ class L10nRouteHelper
             'frontend_rss_type_category',
             'frontend_rss_category',
             'frontend_search_internal',
+            'frontend_search_google',
             'frontend_static_page',
             'frontend_suggested_show',
             'frontend_tag_index',
