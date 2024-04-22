@@ -63,6 +63,8 @@
       "name": "{$author|replace:'\\':''|escape:'htmlall'}"
       {if has_author_url($content)}
         , "url": "{$app.instance->getBaseUrl()}{get_author_url($content)}"
+      {else}
+       , "url": "{$app.instance->getBaseUrl()}"
       {/if}
     },
     "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
