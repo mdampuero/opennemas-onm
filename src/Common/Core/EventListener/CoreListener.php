@@ -36,6 +36,7 @@ class CoreListener
         'oauth',
         'suggested',
         'widget\/render',
+        'styles\/inline',
         'ws',
     ];
 
