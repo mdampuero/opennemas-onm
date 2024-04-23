@@ -134,14 +134,23 @@ class ThemeSettingController extends SettingController
     {
         $jsonSettings = $request->request->get('theme_settings', null);
 
-        if ($this->isValidJsonSettings($jsonSettings)) {
-            $settings       = json_decode($jsonSettings, true);
-            $currenSettings = $this->container->get('core.helper.theme_settings')->getThemeSettings();
-            $finalSettings  = array_merge($currenSettings, $settings);
-            return parent::saveSettings(['theme_options' => $finalSettings]);
+        $settings       = json_decode($jsonSettings, true);
+        $baseSettings   = $this->container->get('core.helper.theme_settings')->getThemeSettings(true, false);
+        $currenSettings = $this->container->get('core.helper.theme_settings')->getThemeSettings();
+
+        foreach ($settings as $settingName => $settingValue) {
+            if (!array_key_exists($settingName, $baseSettings)) {
+                unset($settings[$settingName]);
+                continue;
+            }
+
+            if (!array_key_exists($settingValue, $baseSettings[$settingName]['options'])) {
+                unset($settings[$settingName]);
+            }
         }
 
-        return new JsonResponse(_('Invalid parameters, please add a valid JSON'), 400);
+        $finalSettings = array_merge($currenSettings, $settings);
+        return parent::saveSettings(['theme_options' => $finalSettings]);
     }
 
     /**
@@ -159,28 +168,5 @@ class ThemeSettingController extends SettingController
         $settingHelper = $this->container->get('core.helper.theme_settings');
         $themeOptions = $settingHelper->getThemeSettings(true);
         return parent::saveSettings(['theme_options' => $themeOptions]);
-    }
-
-    public function isValidJsonSettings($jsonSettings)
-    {
-        try {
-            $settings     = json_decode($jsonSettings, true);
-            $baseSettings = $this->container->get('core.helper.theme_settings')->getThemeSettings(true, false);
-
-            foreach ($settings as $settingName => $settingValue) {
-                if (!array_key_exists($settingName, $baseSettings)) {
-                    return false;
-                }
-                if (is_array($baseSettings[$settingName])
-                    && array_key_exists('options', $baseSettings[$settingName])
-                    && !array_key_exists($settingValue, $baseSettings[$settingName]['options'])) {
-                    return false;
-                }
-            }
-
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
     }
 }

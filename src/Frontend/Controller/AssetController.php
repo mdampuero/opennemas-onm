@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use MatthiasMullie\Minify;
 
 /**
  * Handles the actions for assets.
@@ -153,6 +154,27 @@ class AssetController extends Controller
         return new Response($response, 200, [
             'Content-Type' => 'text/css',
             'x-tags'       => 'frontpagecss',
+            'x-cacheable'  => true,
+        ]);
+    }
+
+    /**
+     * Retrieves the minified inline styles for the css file
+    **/
+    public function inlineCssAction()
+    {
+        $template   = $this->container->get('core.template');
+        $theme      = $this->container->get('core.theme');
+        $publicPath = $this->container->getParameter('core.paths.public');
+        $filename   = $template->getThemeSkinProperty('css_file');
+        $themePart  = $theme->path . 'css' . DS . $filename;
+
+        $minifier = new Minify\CSS($publicPath . $themePart);
+        $content  = $minifier->minify();
+
+        return new Response('<style>' . $content . '</style>', 200, [
+            'Content-Type' => 'text/css',
+            'x-tags'       => 'inline-css',
             'x-cacheable'  => true,
         ]);
     }

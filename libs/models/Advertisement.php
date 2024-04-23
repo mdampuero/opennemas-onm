@@ -155,13 +155,6 @@ class Advertisement extends Content
                 explode(',', $this->fk_content_categories);
         }
 
-        // Check if it contains a flash element
-        if ($this->with_script == 0) {
-            $img = getService('api.service.photo')->getItem($this->path);
-
-            $this->is_flash = !empty($img) && $img->type_img == "swf";
-        }
-
         if (is_null($this->params)
             || !array_key_exists('restriction_devices', $this->params)
             || (array_key_exists('restriction_devices', $this->params)
