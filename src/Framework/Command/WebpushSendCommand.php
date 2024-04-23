@@ -72,7 +72,7 @@ class WebpushSendCommand extends Command
                     ->load($instance->internal_name);
 
                 $as                   = $this->getContainer()->get('api.service.content');
-                $webpushr             = $this->getContainer()->get('external.web_push.factory');
+                $webpushr             = $this->getContainer()->get('external.web_push.factory.webpushr');
                 $notificationEndpoint = $webpushr->getEndpoint('notification');
                 $articleService       = $this->getContainer()->get('api.service.article');
                 $notificationService  = $this->getContainer()->get('api.service.webpush_notifications');

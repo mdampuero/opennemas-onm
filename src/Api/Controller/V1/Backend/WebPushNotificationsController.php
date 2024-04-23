@@ -340,7 +340,7 @@ class WebPushNotificationsController extends ApiController
      */
     public function sendNotificationAction(Request $request)
     {
-        $webpushr    = $this->get('external.web_push.factory');
+        $webpushr    = $this->get('external.web_push.factory.webpushr');
         $endpoint    = $webpushr->getEndpoint('notification');
         $itemId      = $request->request->all();
         $content     = $this->get('api.service.content')->getItem($itemId[0]);
@@ -379,11 +379,11 @@ class WebPushNotificationsController extends ApiController
     public function checkServerAction()
     {
         $msg      = $this->get('core.messenger');
-        $webpushr = $this->get('external.web_push.factory');
+        $webpushr = $this->get('external.web_push.factory.webpushr');
 
         try {
             $endpoint = $webpushr->getEndpoint('subscriber');
-            $endpoint-> getSubscribers();
+            $endpoint->getSubscribers();
             $msg->add(_('Server connection success!'), 'success');
         } catch (\Exception $e) {
             $msg->add(_('Unable to connect to the server'), 'error', 400);
@@ -402,7 +402,7 @@ class WebPushNotificationsController extends ApiController
     public function getNotificationDataAction($id)
     {
         $msg      = $this->get('core.messenger');
-        $webpushr = $this->get('external.web_push.factory');
+        $webpushr = $this->get('external.web_push.factory.webpushr');
 
         try {
             $endpoint         = $webpushr->getEndpoint('status');

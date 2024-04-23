@@ -9,12 +9,13 @@
  */
 namespace Common\External\WebPush\Component\Configuration;
 
-class OrmConfigurationProvider implements ConfigurationProvider
+class SendPulseConfigurationProvider implements ConfigurationProvider
 {
-    private $authUri = 'v1/authentication';
+    private $authUri = 'oauth/access_token';
 
     private $isTokenRequired = false;
 
+    private $dataset;
     /**
      * Initializes the OrmConfigurationProvider
      *
@@ -31,8 +32,9 @@ class OrmConfigurationProvider implements ConfigurationProvider
     public function getConfiguration()
     {
         return [
-            'webpushrKey' => $this->dataset->get('webpush_apikey', ''),
-            'webpushrAuthToken' => $this->dataset->get('webpush_token', ''),
+            "grant_type" => "client_credentials",
+            "client_id" => $this->dataset->get('webpush_apikey', ''),
+            "client_secret" => $this->dataset->get('webpush_token', '')
         ];
     }
 
@@ -44,17 +46,21 @@ class OrmConfigurationProvider implements ConfigurationProvider
         return $this->authUri;
     }
 
+    public function getAuthHeaders()
+    {
+        return [
+            "grant_type" => "client_credentials",
+            "client_id" => "237b4af9c99d0f89bdbd876dcd5a0000",
+            "client_secret" => "a99e7d506d3701c5c04de3db1913eeee"
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function isTokenRequired()
     {
         return $this->isTokenRequired;
-    }
-
-    public function getAuthHeaders()
-    {
-        return [];
     }
 
     /**

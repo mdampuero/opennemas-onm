@@ -132,6 +132,7 @@
           { value: '1', label: '1 min' },
           { value: '5', label: '5 mins' },
           { value: '10', label: '10 mins' },
+          { value: '15', label: '15 mins' },
           { value: '30', label: '30 mins' },
           { value: '60', label: '60 mins' }
         ];

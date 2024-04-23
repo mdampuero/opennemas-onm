@@ -25,7 +25,14 @@ class Authentication
      *
      * @var ConfigurationProvider
      */
-    protected $configurationProvider;
+    protected $configProvider;
+
+    /**
+     * The token provider.
+     *
+     * @var TokenProvider
+     */
+    protected $tokenProvider;
 
     /**
      * The WebPush API URL.
@@ -34,6 +41,8 @@ class Authentication
      */
     protected $url;
 
+    protected $config;
+
     /**
      * Initializes the Authentication service.
      *
@@ -41,12 +50,18 @@ class Authentication
      * @param Client                $client         The HTTP client.
      * @param string                $url            The WebPush API URL.
      */
-    public function __construct($configProvider, $client, $url)
+    public function __construct($configProvider, $client, $tokenProvider, $url)
     {
         $this->client         = $client;
         $this->configProvider = $configProvider;
         $this->url            = $url;
-        $this->config         = $this->configProvider->getConfiguration();
+        $this->tokenProvider  = $tokenProvider;
+
+        $this->config = $this->configProvider->getConfiguration();
+
+        if ($this->configProvider->isTokenRequired()) {
+            $this->tokenProvider->setNamespace(md5(json_encode($this->config)));
+        }
     }
 
     /**
@@ -62,16 +77,17 @@ class Authentication
      */
     public function authenticate()
     {
-        $data = [
-            'headers' => [
-                'content-type'      => 'application/json',
-                'webpushrKey'       => $this->config['webpushrKey'],
-                'webpushrAuthToken' => $this->config['webpushrAuthToken']
-            ]
-        ];
+        $authParams = $this->configProvider->isTokenRequired() ? $this->getAuthHeaders() : $this->getConfiguration();
+        $headers    = array_merge(
+            [ 'content-type' => 'application/json' ],
+            $authParams
+        );
 
         try {
-            $response = $this->client->post($this->url . 'v1/authentication', $data);
+            $response = $this->client->post(
+                $this->url . $this->configProvider->getAuthRoute(),
+                [ 'headers' => $headers ]
+            );
         } catch (\Exception $e) {
             throw new WebPushException('web_push.authentication.failure: ' . $e->getMessage());
         }

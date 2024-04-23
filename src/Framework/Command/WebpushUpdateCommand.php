@@ -69,7 +69,7 @@ class WebpushUpdateCommand extends Command
                 $this->getContainer()->get('core.loader')
                     ->load($instance->internal_name);
 
-                $webpushr              = $this->getContainer()->get('external.web_push.factory');
+                $webpushr              = $this->getContainer()->get('external.web_push.factory.webpushr');
                 $notificationsEndpoint = $webpushr->getEndpoint('status');
                 $subscribersEndpoint   = $webpushr->getEndpoint('subscriber');
                 $notificationService   = $this->getContainer()->get('api.service.webpush_notifications');

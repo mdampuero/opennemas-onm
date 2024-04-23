@@ -3,6 +3,7 @@ parameters:
         config_provider: 'external.web_push.provider.config'
         http_client:     'external.web_push.http_client'
         url:             'https://api.webpushr.com'
+        token_provider:  'external.web_push.provider.token'
         endpoints:
             notification:
                 class: 'Common\External\WebPush\Component\Endpoint\NotificationEndpoint'
@@ -35,16 +36,49 @@ parameters:
                     actions:
                         get_status:
                             path: '/v1/notification/status/id/'
+    external.send_pulse:
+        config_provider: 'external.send_pulse.provider.config'
+        http_client:     'external.web_push.http_client'
+        url:             'https://api.sendpulse.com'
+        token_provider:  'external.send_pulse.provider.token'
+        endpoints:
+            status:
+                class: 'Common\External\WebPush\Component\Endpoint\StatusEndpoint'
+                config:
+                    actions:
+                        get_status:
+                            path: '/push/websites/'
 services:
     external.web_push.provider.config:
         class:     'Common\External\WebPush\Component\Configuration\OrmConfigurationProvider'
         arguments: [ '@orm.manager' ]
 
-    external.web_push.factory:
+    external.send_pulse.provider.config:
+        class:     'Common\External\WebPush\Component\Configuration\SendPulseConfigurationProvider'
+        arguments: [ '@orm.manager' ]
+
+    external.web_push.factory.webpushr:
         class:     'Common\External\WebPush\Component\Factory\WebPushFactory'
         arguments: [ '@service_container', '%external.web_push%' ]
         public: true
 
+    external.web_push.factory.sendpulse:
+        class:     'Common\External\WebPush\Component\Factory\WebPushFactory'
+        arguments: [ '@service_container', '%external.send_pulse%' ]
+        public: true
+
     external.web_push.http_client:
         class:   'GuzzleHttp\Client'
-        factory: [ '@external.web_push.factory', 'getClient' ]
+        factory: [ '@external.web_push.factory.webpushr', 'getClient' ]
+
+    external.web_push.http_client.send_pulse:
+        class:   'GuzzleHttp\Client'
+        factory: [ '@external.web_push.factory.sendpulse', 'getClient' ]
+
+    external.send_pulse.provider.token:
+        class:     'Common\External\WebPush\Component\Authentication\Token\RedisTokenProvider'
+        arguments: [ '@cache.connection.instance' ]
+
+    external.web_push.provider.token:
+        class:     'Common\External\WebPush\Component\Authentication\Token\EmptyTokenProvider'
+        arguments: [ '@cache.connection.instance' ]

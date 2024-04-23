@@ -64,6 +64,7 @@ class WebPushFactory
         $this->auth = new Authentication(
             $this->container->get($this->config['config_provider']),
             $this->container->get($this->config['http_client']),
+            $this->container->get($this->config['token_provider']),
             $this->config['url']
         );
 

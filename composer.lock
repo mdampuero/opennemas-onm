@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "97019dceef5066df1b6e8f7ce97e8eff",
+    "content-hash": "e3c3225abdb6fbbb66ac54204c5d6cce",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -4432,6 +4432,61 @@
                 "freshbooks"
             ],
             "time": "2017-10-03T04:51:15+00:00"
+        },
+        {
+            "name": "sendpulse/rest-api",
+            "version": "2.0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sendpulse/sendpulse-rest-api-php.git",
+                "reference": "3743f96de07e6504f9b11591ed944a973f04e5ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sendpulse/sendpulse-rest-api-php/zipball/3743f96de07e6504f9b11591ed944a973f04e5ff",
+                "reference": "3743f96de07e6504f9b11591ed944a973f04e5ff",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sendpulse\\RestApi\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Maksym Ustymenko",
+                    "email": "m.ustymenko@sendpulse.com"
+                },
+                {
+                    "name": "Alexey Moroz",
+                    "email": "a.moroz@sendpulse.com"
+                },
+                {
+                    "name": "Evgeniy Bilovol",
+                    "email": "e.bilovol@sendpulse.com"
+                }
+            ],
+            "description": "Sendpulse REST API client library",
+            "keywords": [
+                "api",
+                "rest",
+                "sendpulse"
+            ],
+            "support": {
+                "issues": "https://github.com/sendpulse/sendpulse-rest-api-php/issues",
+                "source": "https://github.com/sendpulse/sendpulse-rest-api-php/tree/2.0.1.1"
+            },
+            "time": "2023-10-25T12:30:14+00:00"
         },
         {
             "name": "sensio/distribution-bundle",
