@@ -29,7 +29,6 @@ class ThemeSettingsHelper extends SettingHelper
         'show_time',
         'show_readtime',
         'show_author_photo',
-        'show_author_photo',
         'show_opinion_media',
         'related_contents_auto',
         'sidebar_widget_today_news',
