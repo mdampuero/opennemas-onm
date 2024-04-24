@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 13:01+0000\n"
-"PO-Revision-Date: 2024-04-03 15:04+0200\n"
+"POT-Creation-Date: 2024-04-24 11:23+0000\n"
+"PO-Revision-Date: 2024-04-24 15:06+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -391,6 +391,9 @@ msgstr "Sitemap"
 
 msgid "Only masters"
 msgstr "Só masters"
+
+msgid "Theme settings"
+msgstr "Configuración do tema"
 
 msgid "You don't have enough privileges for modify this content."
 msgstr "Non tes permisos dabondo para modificar este contido."
@@ -3868,6 +3871,18 @@ msgstr "Eliminando"
 msgid "Yes, delete all"
 msgstr "Si, eliminalos todos"
 
+msgid "Import Settings"
+msgstr "Importar configuración"
+
+msgid "Insert a valid JSON"
+msgstr "Insira un JSON válido"
+
+msgid "Import"
+msgstr "Importar"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
 msgid "Are you sure that do you want send to the trash \"%1\"?"
 msgstr "Tes certeza que queres enviar ao lixo «%1»?"
 
@@ -4028,11 +4043,11 @@ msgstr ""
 "Os campos seleccionados ampliaranse automaticamente cando se cargue o "
 "formulario"
 
-msgid "Cancel"
-msgstr "Cancelar"
-
 msgid "Confirm"
 msgstr "Confirmar"
+
+msgid "Do you want to restore the Theme Settings to default values?"
+msgstr "Queres restaurar a configuración do tema aos valores predeterminados?"
 
 msgid "Do you want to duplicate the item?"
 msgstr "Queres duplicar o elemento?"
@@ -4730,9 +4745,6 @@ msgstr "<a href=\"http://www.opennemas.com\">%1</a> non existe."
 
 msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
 msgstr "Desexas rexistrar <a href=\"http://www.opennemas.com\">%1?</a>"
-
-msgid "Import"
-msgstr "Importar"
 
 msgid "Imported"
 msgstr "Importado"
@@ -5558,6 +5570,277 @@ msgstr ""
 "Se xa tes unha <strong>páxina de Dailymotion</strong>, engade o teu "
 "identificador de páxina no formulario."
 
+msgid "Header"
+msgstr "Cabeceira"
+
+msgid "Menu"
+msgstr "Menú"
+
+msgid "Listings/Archive"
+msgstr "Listados/Hemeroteca"
+
+msgid "Inners"
+msgstr "Interiores"
+
+msgid "Mobile"
+msgstr "Móbil"
+
+msgid "Hamburger menu"
+msgstr "Menú hamburguesa"
+
+msgid "Choose where to appear menu"
+msgstr "Escolla onde aparecer o menú"
+
+msgid "Logo size"
+msgstr "Tamaño do logotipo"
+
+msgid "Choose logo default size"
+msgstr "Escolla o tamaño predeterminado do logotipo"
+
+msgid "Page Layout"
+msgstr "Esquema de páxina"
+
+msgid "Page containers width"
+msgstr "Ancho dos contedores de páxina"
+
+msgid "Theme fonts"
+msgstr "Fontes temáticas"
+
+msgid "Main font base size"
+msgstr "Tamaño base da fonte principal"
+
+msgid "Main font weight"
+msgstr "Peso da fonte principal"
+
+msgid "Secondary font base size"
+msgstr "Tamaño base da fonte secundaria"
+
+msgid "Secondary font weight"
+msgstr "Peso de letra secundario"
+
+msgid "Section headers"
+msgstr "Cabeceiras de sección"
+
+msgid "Choose type"
+msgstr "Escolla o tipo"
+
+msgid "Section header font"
+msgstr "Tipo de letra da cabeceira da sección"
+
+msgid "Section header font size"
+msgstr "Tamaño da fonte da cabeceira da sección"
+
+msgid "Section header font weight"
+msgstr "Peso da fonte da cabeceira da sección"
+
+msgid "Section header text color"
+msgstr "Cor do texto da cabeceira da sección"
+
+msgid "Section header border position"
+msgstr "Posición do bordo da cabeceira da sección"
+
+msgid "Section header border color"
+msgstr "Cor do bordo da cabeceira da sección"
+
+msgid "Section header icon color"
+msgstr "Cor da icona da cabeceira da sección"
+
+msgid "Breadcrumb"
+msgstr "Miga de pan"
+
+msgid "Set display of routes"
+msgstr "Establecer a visualización de rutas"
+
+msgid "Normal contents images"
+msgstr "Imaxes de contido normal"
+
+msgid "Choose image aspect ratio"
+msgstr "Escolla a relación de aspecto da imaxe"
+
+msgid "List contents images"
+msgstr "Imaxes de contido de listas"
+
+msgid "Tiny contents images"
+msgstr "Imaxes de contido pequeno"
+
+msgid "This css will be added at the end of the original"
+msgstr "Este css engadirase ao final do orixinal"
+
+msgid "Main header alignment"
+msgstr "Aliñación da cabeceira principal"
+
+msgid "Set main logo position"
+msgstr "Establece a posición do logotipo principal"
+
+msgid "Main header background"
+msgstr "Fondo de cabeceira principal"
+
+msgid "Choose header appearance"
+msgstr "Escolla o aspecto da cabeceira"
+
+msgid "Main header border color"
+msgstr "Cor do bordo da cabeceira principal"
+
+msgid "Choose header border bottom color"
+msgstr "Escolla a cor inferior do bordo da cabeceira"
+
+msgid "Main menu background"
+msgstr "Fondo do menú principal"
+
+msgid "Choose menu appearance"
+msgstr "Escolla o aspecto do menú"
+
+msgid "Main menu border width"
+msgstr "Ancho do bordo do menú principal"
+
+msgid "Choose main menu bottom border width"
+msgstr "Escolla o ancho do bordo inferior do menú principal"
+
+msgid "Main menu border color"
+msgstr "Cor do bordo do menú principal"
+
+msgid "Choose main menu border bottom color"
+msgstr "Escolla a cor inferior do bordo do menú principal"
+
+msgid "Main menu link color"
+msgstr "Cor da ligazón do menú principal"
+
+msgid "Choose main menu links color"
+msgstr "Escolla a cor das ligazóns do menú principal"
+
+msgid "Display pretitle or category in contents"
+msgstr "Mostrar pretítulo ou categoría nos contidos"
+
+msgid "Subtitle"
+msgstr "Subtitulo"
+
+msgid "Display subtitle"
+msgstr "Mostrar subtítulos"
+
+msgid "Display summary/description"
+msgstr "Mostrar resumo/descrición"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Display content's author"
+msgstr "Mostrar o autor do contido"
+
+msgid "Display author's photo"
+msgstr "Mostra a foto do autor"
+
+msgid "Display content's date"
+msgstr "Mostrar a data do contido"
+
+msgid "Display content's time"
+msgstr "Mostrar o tempo do contido"
+
+msgid "Display content's readtime"
+msgstr "Mostra o tempo de lectura do contido"
+
+msgid "Layout"
+msgstr "Maquetación"
+
+msgid "Choose archive list appearance"
+msgstr "Escolla o aspecto da lista da hemeroteca"
+
+msgid "Category cover"
+msgstr "Portada da categoría"
+
+msgid "Show category cover (if exists)"
+msgstr "Mostrar a portada da categoría (se existe)"
+
+msgid "Sidebar widgets"
+msgstr "Widgets da barra lateral"
+
+msgid "Choose widgets to display"
+msgstr "Escolla widgets para mostrar"
+
+msgid "Today news"
+msgstr "Novas de hoxe"
+
+msgid "Most seeing/recent"
+msgstr "Máis vistos/recentes"
+
+msgid "Content header"
+msgstr "Cabeceira do contido"
+
+msgid "Display inner contents header at full width or inbody column"
+msgstr ""
+"Mostra o encabezado do contido interno a ancho completo ou a columna interna"
+
+msgid "Sidebar"
+msgstr "Barra lateral"
+
+msgid "Show or hide right sidebar"
+msgstr "Mostrar ou ocultar a barra lateral dereita"
+
+msgid "Featured media"
+msgstr "Medios destacados"
+
+msgid "Display in article header or just before the body"
+msgstr "Mostrar na cabeceira do artigo ou xusto antes do corpo"
+
+msgid "Content header display order"
+msgstr "Orde de visualización da cabeceira do contido"
+
+msgid "Choose what elements go first"
+msgstr "Escolle que elementos van primeiro"
+
+msgid "Content header align"
+msgstr "Aliñación da cabeceira do contido"
+
+msgid "Choose headings alignment"
+msgstr "Escolla o aliñamento dos títulos"
+
+msgid "Share tools"
+msgstr "Ferramentas de compartir"
+
+msgid "Choose where to display"
+msgstr "Escolle onde queres mostrar"
+
+msgid "Automatic related contents"
+msgstr "Contidos relacionados automáticos"
+
+msgid "Display suggested related when not manual ones selected"
+msgstr "Mostra as suxerencias relacionadas cando non se seleccionan as manuais"
+
+msgid "Body end widgets"
+msgstr "Widgets do fin do corpo"
+
+msgid "More in section"
+msgstr "Máis na sección"
+
+msgid "More in frontpage"
+msgstr "Máis en portada"
+
+msgid "More in section widget layout"
+msgstr "Disposición do widget de máis na sección"
+
+msgid "More in frontpage widget layout"
+msgstr "Disposición do widget máis na portada"
+
+msgid "Max items on suggested widgets"
+msgstr "Máximo de elementos nos widgets suxeridos"
+
+msgid "Mobile logo size"
+msgstr "Tamaño do logotipo do móbil"
+
+msgid "Choose header logo default size"
+msgstr "Escolla o tamaño predeterminado do logotipo da cabeceira"
+
+msgid "Top menu"
+msgstr "Menú superior"
+
+msgid "Display top left menu"
+msgstr "Mostra o menú superior esquerdo"
+
+msgid "Main menu"
+msgstr "Menú principal"
+
+msgid "Display main menu"
+msgstr "Mostrar menú principal"
+
 msgid "Colors"
 msgstr "Cores"
 
@@ -5772,6 +6055,16 @@ msgstr "Engadir novo tradutor"
 msgid "Must have at least 2 languages to configure the translation system"
 msgstr "Debe ter can menos 2 idiomas para configurar o sistema de traducións"
 
+msgid "Default skin"
+msgstr "Skin por defecto"
+
+msgid ""
+"Your theme offers multiple skins to slightly change your theme. Select which "
+"one do you want."
+msgstr ""
+"O teu tema ofrece varias skins que o cambian lixeiramente. Selecciona o que "
+"quere."
+
 msgid "Maximum elements per frontpage"
 msgstr "Elementos máximos por portada"
 
@@ -5786,6 +6079,12 @@ msgstr ""
 "Engade reglas personalizadas como 'Disallow: /tag' ao ficheiro robots.txt. "
 "Consulta a <a href=\"http://www.robotstxt.org/robotstxt.html\" "
 "target=\"_blank\" ng-click=\"$event.stopPropagation();\">documentación</a>."
+
+msgid "Select your main font (titles, headings…)."
+msgstr "Seleccione o tipo de letra principal (títulos, encabezamentos...)."
+
+msgid "Secondary font (body, summary…)"
+msgstr "Tipo de letra secundario (corpo, resumo...)"
 
 msgid "Redirect to frontpage non-migrated contents"
 msgstr "Redirixir a portada contidos non migrados"
@@ -5803,36 +6102,13 @@ msgid "Show full content on RSS"
 msgstr "Mostrar todo o contido en RSS"
 
 msgid "Lazyscript referer detect"
-msgstr ""
+msgstr "Detección de referer en Lazyscript"
 
 msgid "SEO Information"
 msgstr "Información SEO"
 
 msgid "Show SEO information on contents"
 msgstr "Mostrar información de SEO sobre contidos"
-
-msgid "Default skin"
-msgstr "Skin por defecto"
-
-msgid ""
-"Your theme offers multiple skins to slightly change your theme. Select which "
-"one do you want."
-msgstr ""
-"O teu tema ofrece varias skins que o cambian lixeiramente. Selecciona o que "
-"quere."
-
-msgid "Theme fonts"
-msgstr "Fontes temáticas"
-
-msgid ""
-"Your theme offers multiple fonts to match your page style. Select yout main "
-"font (titles, headings…)."
-msgstr ""
-"O teu tema ofrece varias fontes para combinar co estilo da túa páxina. "
-"Seleccione o tipo de letra principal (títulos, títulos...)."
-
-msgid "Secondary font (body, summary…)"
-msgstr "Tipo de letra secundario (corpo, resumo...)"
 
 msgid "Scripts"
 msgstr "Scripts"
@@ -5857,9 +6133,6 @@ msgstr "Estos scripts incluiranse antes da etiqueta </body>"
 
 msgid "CSS"
 msgstr "CSS"
-
-msgid "This css will be added at the end of the original"
-msgstr "Este css engadirase ao final do orixinal"
 
 msgid "Site name"
 msgstr "Nome do sitio"
@@ -5926,9 +6199,6 @@ msgid "If enabled, the category main page needs to be manually updated"
 msgstr ""
 "Se está activado, a páxina principal da categoría debe actualizarse "
 "manualmente"
-
-msgid "Menu"
-msgstr "Menú"
 
 msgid "Only empty categories can be deleted"
 msgstr "Só se poden eliminar categorías sen contidos"
@@ -6414,7 +6684,7 @@ msgstr ""
 "etiquetas, unha por liña."
 
 msgid "Do you want to move contents in tag?"
-msgstr "¿Queres mover os contidos na categoría?"
+msgstr "¿Queres mover os contidos na etiqueta?"
 
 msgid "There is nothing to see here, kid."
 msgstr "Nada que ver aquí, raparigo."
@@ -6489,9 +6759,6 @@ msgstr "Preferencias para a portada principal"
 
 msgid "Title for home frontpage"
 msgstr "Titulo para a portada principal"
-
-msgid "Subtitle"
-msgstr "Subtitulo"
 
 msgid "Live post"
 msgstr "Artigo en vivo"
@@ -7509,9 +7776,6 @@ msgstr "Editar usuario"
 msgid "ID"
 msgstr "ID"
 
-msgid "Info"
-msgstr "Info"
-
 msgid "No client data available"
 msgstr "No hai datos do cliente"
 
@@ -7554,6 +7818,22 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 
 msgid "Group name"
 msgstr "Nome do grupo"
+
+#~ msgid "Invalid parameters, please add a valid JSON"
+#~ msgstr "Parámetros non válidos. Engade un JSON válido"
+
+#~ msgid "Fonts"
+#~ msgstr "Tipos de letra"
+
+#~ msgid "Choose header default size"
+#~ msgstr "Escolla o tamaño predeterminado da cabeceira"
+
+#~ msgid ""
+#~ "Your theme offers multiple fonts to match your page style. Select yout "
+#~ "main font (titles, headings…)."
+#~ msgstr ""
+#~ "O teu tema ofrece varias fontes para combinar co estilo da túa páxina. "
+#~ "Seleccione o tipo de letra principal (títulos, títulos...)."
 
 #~ msgid "Unable to find any content that matches your search."
 #~ msgstr "Non se puideron atopar contidos que coincidan coa súa busca."
@@ -8328,9 +8608,6 @@ msgstr "Nome do grupo"
 #~ msgid "Editing menu"
 #~ msgstr "Editando menú"
 
-#~ msgid "Creating menu"
-#~ msgstr "Creando menú"
-
 #~ msgid "Click on arrow to reveal more configuration options."
 #~ msgstr "Prema na frecha para mostrar máis opcións de configuración."
 
@@ -8342,9 +8619,6 @@ msgstr "Nome do grupo"
 
 #~ msgid "Synched blog category"
 #~ msgstr "Categoria sincronizada blog"
-
-#~ msgid "Clean containers"
-#~ msgstr "Limpar contenedores"
 
 #~ msgid "Clean contents"
 #~ msgstr "Limpar contidos"
@@ -8544,9 +8818,6 @@ msgstr "Nome do grupo"
 #~ msgstr ""
 #~ "Activa un ámbito de proba na súa conta de Paypal (só se é un "
 #~ "desenvolvedor)"
-
-#~ msgid "More information"
-#~ msgstr "Máis información"
 
 #~ msgid "Validate here your Paypal API credentials in the selected mode"
 #~ msgstr "Valida aquí as túas credenciais de API Paypal no modo seleccionado"

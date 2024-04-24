@@ -37,6 +37,7 @@
             required:      '=',
             selectionOnly: '=',
             filter:        '=',
+            exclude: '='
           },
           template: function() {
             return '<div class="tags-input-buttons">' +
@@ -292,6 +293,11 @@
 
               var items = response.data.items;
 
+              if ($scope.exclude && $scope.exclude.length) {
+                items = items.filter(function(item) {
+                  return $scope.exclude.indexOf(item.id) === -1;
+                });
+              }
               if (!$scope.selectionOnly) {
                 var found = items.filter(function(e) {
                   return e.name === query || e.slug === query;

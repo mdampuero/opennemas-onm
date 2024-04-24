@@ -242,13 +242,13 @@ class FeaturedMediaHelper
             });
 
             return !empty($related)
-                ? htmlentities(array_shift($related)['caption'])
+                ? strip_tags(array_shift($related)['caption'], '<a>')
                 : null;
         }
 
         foreach ($map[$contentType][$type] as $key) {
             if (!empty($item->{$key})) {
-                return htmlentities($item->{$key});
+                return strip_tags($item->{$key}, '<a>');
             }
         }
 

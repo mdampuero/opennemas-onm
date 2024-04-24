@@ -83,6 +83,10 @@ class ContentUrlMatcher
 
         $content = $this->em->find(\classify($type), $id);
 
+        if (empty($content)) {
+            return null;
+        }
+
         $created = $content->created instanceof \DateTime ?
             $content->created->format('Y-m-d H:i:s') :
             $content->created;
