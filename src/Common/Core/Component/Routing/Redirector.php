@@ -123,6 +123,8 @@ class Redirector
             ->filter('url_decode')
             ->get();
 
+        $source = rtrim($source, '/');
+
         if (!is_array($contentType) && !empty($contentType)) {
             $contentType = explode(',', $contentType);
         }
