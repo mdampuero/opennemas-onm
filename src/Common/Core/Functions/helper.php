@@ -23,24 +23,6 @@ function get_image_dir($absolute = false) : ?string
 }
 
 /**
- * Returns the patch to image folder for the public image folder
- *
- *  @param bool $absolute If the directory has to be absolute
- *
- *  @return string The path to image folder for the public folder.
- */
-function get_image_base($absolute = false) : ?string
-{
-    $instance = getService('core.globals')->getInstance();
-
-    if ($absolute) {
-        return $instance->getBaseUrl() . '/assets/images';
-    }
-
-    return '/assets/images';
-}
-
-/**
  * Returns the path to image folder for the active instance.
  *
  * @return string The path to image folder for the active instance.
