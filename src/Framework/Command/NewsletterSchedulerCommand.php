@@ -248,6 +248,7 @@ class NewsletterSchedulerCommand extends Command
         unset($data['id']);
 
         try {
+            $this->getContainer()->get('core.globals')->setDevice('desktop');
             $newsletter = $this->newsletterService->createItem($data);
             $this->getContainer()->get('core.locale')->setContext('frontend')->apply();
             $newsletter->html = $this->newsletterRenderer->render($newsletter);
