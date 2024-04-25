@@ -314,8 +314,10 @@ class RouterListener implements EventSubscriberInterface
             }
 
             try {
-                $url = $this->container->get('core.redirector')
-                    ->getUrl(preg_replace('/^\//', '', $request->getRequestUri()));
+                if ($this->container->get('core.helper.url')->isFrontendUri($request->getRequestUri())) {
+                    $url = $this->container->get('core.redirector')
+                        ->getUrl(preg_replace('/^\//', '', $request->getRequestUri()));
+                }
             } catch (ApiException $e) {
                 throw new NotFoundHttpException($message, $e);
             }
