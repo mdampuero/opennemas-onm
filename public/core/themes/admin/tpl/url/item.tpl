@@ -52,7 +52,7 @@
           </label>
         </div>
       </div>
-      <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.redirection }" ng-click="expanded.redirection = !expanded.redirection" ng-show="item.type != 5">
+      <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.redirection }" ng-click="expanded.redirection = !expanded.redirection" ng-show="item.type != 5 && item.type != 6">
         <i class="fa fa-retweet m-r-10"></i>{t}Redirection{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.redirection }"></i>
         <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.redirection">
@@ -213,6 +213,24 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <div class="radio">
+            <input id="type-uri-410" ng-model="item.type" ng-value="6" type="radio">
+            <label for="type-uri-410">
+              <i class="fa fa-code"></i>
+              <strong>{t}URI{/t}</strong>
+              -
+              <i class="fa fa-file-text-o"></i>
+              <strong>{t}410 GONE{/t}</strong>
+            </label>
+          </div>
+          <div class="help m-l-3" ng-if="isHelpEnabled()">
+            <i class="fa fa-info-circle m-r-5 text-info"></i>
+            {t}Redirects URIs to error 410 GONE{/t}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="grid simple">
@@ -228,12 +246,12 @@
           <div class="form-group">
             <label for="name" class="form-label">
               <span ng-if="item.type === 0">{t}Content{/t}</span>
-              <span ng-if="item.type === 1 || item.type === 2">URI</span>
-              <span ng-if="item.type >= 3">{t}Regex{/t}</span>
+              <span ng-if="item.type === 1 || item.type === 2 || item.type === 6">URI</span>
+              <span ng-if="item.type >= 3 && item.type != 6">{t}Regex{/t}</span>
             </label>
             <div class="controls">
               <div class="input-group">
-                <input class="form-control" id="name" name="name" ng-model="item.source" placeholder="[% item.type == 0 ? '1234' : (item.type == 1 || item.type == 2 ? 'qux/thud/norf': '^[a-z]+/([0-9]+)$') %]" required type="text">
+                <input class="form-control" id="name" name="name" ng-model="item.source" placeholder="[% item.type == 0 ? '1234' : (item.type == 1 || item.type == 2 || item.type == 6 ? 'qux/thud/norf': '^[a-z]+/([0-9]+)$') %]" required type="text">
                 <span class="input-group-btn">
                   <a class="btn btn-default" href="/[% item.source %]" ng-disabled="!item.source || (item.type !== 1 && item.type !== 2)" target="_blank" title="{t}Test{/t}">
                     <i class="fa fa-external-link"></i>
@@ -243,7 +261,7 @@
             </div>
           </div>
         </div>
-        <div ng-class="{ 'col-md-8': item.type !== 2 && item.type !== 4, 'col-md-6': item.type === 2 || item.type === 4 }" ng-if="item.type !== 5">
+        <div ng-class="{ 'col-md-8': item.type !== 2 && item.type !== 4, 'col-md-6': item.type === 2 || item.type === 4 }" ng-if="item.type !== 5 && item.type !== 6">
           <div class="row">
             <div ng-class="{ 'col-md-6': item.type !== 2 && item.type !== 4, 'col-md-12': item.type === 2 || item.type === 4 }">
               <div class="form-group">
@@ -303,12 +321,12 @@
           <div class="form-group no-margin">
             <label for="name" class="form-label">
               <span ng-if="item.type === 0">{t}Content{/t}</span>
-              <span ng-if="item.type === 1 || item.type === 2">URI</span>
+              <span ng-if="item.type === 1 || item.type === 2 || item.type === 6">URI</span>
               <span ng-if="item.type === 3 || item.type === 4 || item.type === 5">{t}Regex{/t}</span>
             </label>
             <div class="controls">
               <input class="form-control" ng-if="item.type === 0" readonly type="text" value="1324">
-              <input class="form-control" ng-if="item.type === 1 || item.type === 2"  readonly type="text" value="glorp">
+              <input class="form-control" ng-if="item.type === 1 || item.type === 2 || item.type === 6"  readonly type="text" value="glorp">
               <input class="form-control" ng-if="item.type === 3 || item.type === 4 || item.type === 5"  readonly type="text" value="^[a-z]+/[0-9]+">
             </div>
           </div>
