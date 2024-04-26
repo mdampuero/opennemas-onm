@@ -189,12 +189,14 @@
                   <small class="text-italic" ng-if="!item.category_id && !item.categories">
                     &lt;{t}No category{/t}&gt;
                   </small>
-                  <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.category_id }) %]" ng-if="item.category_id">
-                    [% (categories | filter: { id: item.category_id } : true)[0].title %]
-                  </a>
-                  <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: id }) %]" ng-if="item.categories" ng-repeat="id in item.categories">
-                    [% (categories | filter: { id: id } : true)[0].title %]
-                  </a>
+                  <div class="table-text">
+                    <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.category_id }) %]" ng-if="item.category_id">
+                      [% (categories | filter: { id: item.category_id } : true)[0].title %]
+                    </a>
+                    <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: id }) %]" ng-if="item.categories" ng-repeat="id in item.categories">
+                      [% (categories | filter: { id: id } : true)[0].title %]
+                    </a>
+                  </div>
                 {/block}
               </td>
               <td class="v-align-middle" ng-if="isColumnEnabled('tags')">
