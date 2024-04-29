@@ -124,7 +124,7 @@
                   <a class="text-black" href="[%
                       item.content_type_name === 'obituary'
                           ? routing.generate('backend_obituaries_show', { id: getItemId(item) })
-                          : [ 'album', 'attachment', 'opinion', 'photo', 'poll', 'static_page', 'video', 'widget', 'article', 'letter', 'company' ].indexOf(item.content_type_name) != -1
+                          : [ 'album', 'attachment', 'opinion', 'photo', 'poll', 'static_page', 'event', 'video', 'widget', 'article', 'letter', 'company' ].indexOf(item.content_type_name) != -1
                               ? routing.generate('backend_' + item.content_type_name + '_show', { id: getItemId(item) })
                               : routing.generate('admin_' + item.content_type_name + '_show', { id: getItemId(item) })
                   %]">[% item.title %]</a>

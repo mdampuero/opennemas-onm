@@ -8,6 +8,7 @@
   </span>
   <span class="badge badge-default m-r-5 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category && item.{$field}">
     <strong>
+        <span ng-if="selectedCategory.title.length > 100">...</span>
       [% selectedCategory.title %]
     </strong>
   </span>
