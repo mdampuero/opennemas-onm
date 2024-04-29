@@ -212,8 +212,6 @@
             {t}Redirects URIs to error 410 GONE{/t}
           </div>
         </div>
-      </div>
-      <div class="row">
         <div class="col-md-6 form-group">
           <div class="radio">
             <input id="type-uri-410" ng-model="item.type" ng-value="6" type="radio">
