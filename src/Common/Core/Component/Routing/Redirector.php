@@ -334,8 +334,9 @@ class Redirector
         $source = rtrim($source, '/');
 
         $oql = sprintf(
-            'type in [%s] and source = "%s" and enabled = 1 limit 1',
+            'type in [%s] and (source = "%s/" or source = "%s") and enabled = 1 limit 1',
             implode(',', [ 0, 1, 2 ]),
+            $source,
             $source
         );
 

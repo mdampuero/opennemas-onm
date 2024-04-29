@@ -878,13 +878,13 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $this->service->expects($this->at(0))->method('getItemBy')
-            ->with('type in [0,1,2] and source = "1234" and enabled = 1 limit 1')
+            ->with('type in [0,1,2] and (source = "1234/" or source = "1234") and enabled = 1 limit 1')
             ->will($this->throwException(new \Exception()));
 
         $this->service->expects($this->at(1))->method('getItemBy')
             ->with(
                 'content_type in ["thud"] and type in [0,1,2] '
-                . 'and source = "1234" and enabled = 1 limit 1'
+                . 'and (source = "1234/" or source = "1234") and enabled = 1 limit 1'
             )->willReturn($url);
 
         $this->assertEmpty($method->invokeArgs($this->redirector, [ 1234 ]));
@@ -909,13 +909,13 @@ class RedirectorTest extends \PHPUnit\Framework\TestCase
         $method->setAccessible(true);
 
         $this->service->expects($this->at(0))->method('getItemBy')
-            ->with('type in [0,1,2] and source = "1234" and enabled = 1 limit 1')
+            ->with('type in [0,1,2] and (source = "1234/" or source = "1234") and enabled = 1 limit 1')
             ->will($this->throwException(new \Exception()));
 
         $this->service->expects($this->at(1))->method('getItemBy')
             ->with(
                 'content_type in ["thud","bar"] and type in [0,1,2] '
-                . 'and source = "1234" and enabled = 1 limit 1'
+                . 'and (source = "1234/" or source = "1234") and enabled = 1 limit 1'
             )->willReturn($url);
 
         $this->assertEmpty($method->invokeArgs($this->redirector, [ 1234 ]));
