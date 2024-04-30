@@ -64,7 +64,7 @@
       </span>
     </div>
   </li>
-  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="type = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Content{/t} {t}to{/t} {t}Content{/t}', value: 0}, { name: 'URI {t}to{/t} {t}Content{/t}', value: 1 }, { name: 'URI {t}to{/t} URI', value: 2 }, { name: 'Regex {t}to{/t} Content', value: 3 }, { name: 'Regex {t}to{/t} URI', value: 4 }, { name: 'Regex {t}to{/t} 410 GONE', value: 5 } ]">
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="type = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Content{/t} {t}to{/t} {t}Content{/t}', value: 0}, { name: 'URI {t}to{/t} {t}Content{/t}', value: 1 }, { name: 'URI {t}to{/t} URI', value: 2 }, { name: 'Regex {t}to{/t} Content', value: 3 }, { name: 'Regex {t}to{/t} URI', value: 4 }, { name: 'Regex {t}to{/t} 410 GONE', value: 5 }, { name: 'URI {t}to{/t} 410 GONE', value: 6 } ]">
     <ui-select name="type" theme="select2" ng-model="criteria.type">
       <ui-select-match>
         <strong>{t}Type{/t}:</strong> [% $select.selected.name %]

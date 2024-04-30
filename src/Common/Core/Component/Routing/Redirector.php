@@ -74,7 +74,7 @@ class Redirector
      */
     public function getResponse(Request $request, Url $url)
     {
-        if ($url->type == 5) {
+        if ($url->type == 5 || $url->type == 6) {
             throw new GoneHttpException();
         }
 
@@ -333,7 +333,7 @@ class Redirector
     {
         $oql = sprintf(
             'type in [%s] and source = "%s" and enabled = 1 limit 1',
-            implode(',', [ 0, 1, 2 ]),
+            implode(',', [ 0, 1, 2, 6]),
             $source
         );
 
