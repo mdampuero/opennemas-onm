@@ -57,7 +57,6 @@
           );
 
           oqlEncoder.configure({ placeholder: {
-            body: 'body ~ "%[value]%"',
             name: 'name ~ "%[value]%" or slug ~ "%[value]%"',
           } });
 
