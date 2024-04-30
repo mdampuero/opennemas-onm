@@ -29,7 +29,13 @@ class ThemeSettingsHelper extends SettingHelper
         'show_time',
         'show_readtime',
         'show_author_photo',
+        'show_author_bio',
         'show_opinion_media',
+        'show_opinion_media',
+        'show_opinion_summary',
+        'show_opinion_author',
+        'show_opinion_author_photo',
+        'show_opinion_author_bio',
         'related_contents_auto',
         'sidebar_widget_today_news',
         'sidebar_widget_most_viewed',
@@ -84,7 +90,12 @@ class ThemeSettingsHelper extends SettingHelper
             'show_time' => 'content_time',
             'show_readtime' => 'content_readtime',
             'show_author_photo' => 'content_author_photo',
+            'show_author_bio' => 'content_author_bio',
             'show_opinion_media' => 'content_opinion_media',
+            'show_opinion_summary' => 'content_opinion_summary',
+            'show_opinion_author' => 'content_opinion_author',
+            'show_opinion_author_photo' => 'content_opinion_author_photo',
+            'show_opinion_author_bio' => 'content_opinion_author_bio',
         ]
     ];
 
@@ -100,6 +111,12 @@ class ThemeSettingsHelper extends SettingHelper
             'show_time' => 'archive_time',
             'show_readtime' => 'archive_readtime',
             'show_author_photo' => 'archive_author_photo',
+            'show_author_bio' => 'archive_author_bio',
+            'show_opinion_media' => 'archive_opinion_media',
+            'show_opinion_summary' => 'archive_opinion_summary',
+            'show_opinion_author' => 'archive_opinion_author',
+            'show_opinion_author_photo' => 'archive_opinion_author_photo',
+            'show_opinion_author_bio' => 'archive_opinion_author_bio',
             'sidebar_widget_today_news' => 'sidebar_widget_today_news_list',
             'sidebar_widget_most_viewed' => 'sidebar_widget_most_viewed_list',
             'sidebar_widget_most_seeing_recent' => 'sidebar_widget_most_seeing_recent_list',
@@ -127,6 +144,7 @@ class ThemeSettingsHelper extends SettingHelper
             'show_time' => 'inner_content_time',
             'show_readtime' => 'inner_content_readtime',
             'show_author_photo' => 'inner_content_author_photo',
+            'show_author_bio' => 'inner_content_author_bio',
             'suggested_max_items' => 'inner_content_suggested_items'
         ]
     ];
