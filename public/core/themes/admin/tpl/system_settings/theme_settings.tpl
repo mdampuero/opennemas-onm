@@ -364,6 +364,25 @@
                       <div class="col-xs-12 col-md-4 m-b-15">
                         <h4>
                           <i class="fa fa-puzzle-piece"></i>
+                          {t}Pre-main widget{/t}
+                        </h4>
+                        <label class="form-label" for="theme-general-main-widget">
+                          <span class="help">
+                            {t}Widget to show before main content{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              ID
+                            </span>
+                            <input class="form-control" id="general-main-widget" name="general-main-widget" ng-model="settings.theme_options.general_main_widget" type="text">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4 m-b-15">
+                        <h4>
+                          <i class="fa fa-puzzle-piece"></i>
                           {t}Pre-footer widget{/t}
                         </h4>
                         <label class="form-label" for="theme-general-footer-widget">
