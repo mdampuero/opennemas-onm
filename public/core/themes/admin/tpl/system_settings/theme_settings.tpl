@@ -1415,93 +1415,168 @@
 
                   <div role="tabpanel" class="tab-pane fade" id="tabOpinion">
                     <div ng-if="extra.theme_skins[settings.theme_skin].params.options">
-
-                      <div class="row">
-                        <div class="col-xs-12 col-md-4 m-b-15">
-                          <label class="form-label m-b-15" for="theme-option-content-opinion-media">
+                      <div class="row m-b-30">
+                        <div class="col-xs-12 m-b-10">
+                          <label class="form-label" for="theme-option-opinon-home">
                             <h4>
-                              <i class="fa fa-picture-o"></i>
-                              {t}Media{/t}
+                              <i class="fa fa-newspaper-o"></i>
+                              {t}Home{/t}
                             </h4>
                             <span class="help">
-                              {t}Display featured media in opinions{/t}
+                              {t}Choose options for contents{/t}
                             </span>
                           </label>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
                           <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-option-content-opinion-media" name="theme-option-content-opinion-media" ng-model="settings.theme_options.content_opinion_media">
-                                <option value="[% content_opinion_media_name %]" ng-repeat="(content_opinion_media_name,content_opinion_media_value) in extra.theme_skins[settings.theme_skin].params.options.content_opinion_media.options" ng-selected="[% content_opinion_media_name === settings.theme_options.content_opinion_media || settings.theme_options.content_opinion_media == undefined %]">[% content_opinion_media_value %]</option>
-                              </select>
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-content-opinion-media" name="theme-option-content-opinion-media" ng-model="settings.theme_options.content_opinion_media" ng-checked="[% settings.theme_options.content_opinion_media != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label for="theme-option-content-opinion-media">
+                                <span>
+                                  <i class="fa fa-picture-o"></i>
+                                  <strong>{t}Media{/t}</strong><br>
+                                  {t}Display featured media in opinions{/t}
+                                </span>
+                              </label>
                             </div>
                           </div>
                         </div>
                         <div class="col-xs-12 col-md-4 m-b-15">
-                          <label class="form-label m-b-15" for="theme-option-content-opinion-summary">
-                            <h4>
-                              <i class="fa fa-align-left"></i>
-                              {t}Summary{/t}
-                            </h4>
-                            <span class="help">
-                              {t}Display summary/description{/t}
-                            </span>
-                          </label>
                           <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-option-content-opinion-summary" name="theme-option-content-opinion-summary" ng-model="settings.theme_options.content_opinion_summary">
-                                <option value="[% content_opinion_summary_name %]" ng-repeat="(content_opinion_summary_name,content_opinion_summary_value) in extra.theme_skins[settings.theme_skin].params.options.content_opinion_summary.options" ng-selected="[% content_opinion_summary_name === settings.theme_options.content_opinion_summary || settings.theme_options.content_opinion_summary == undefined %]">[% content_opinion_summary_value %]</option>
-                              </select>
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-content-opinion-summary" name="theme-option-content-opinion-summary" ng-model="settings.theme_options.content_opinion_summary" ng-checked="[% settings.theme_options.content_opinion_summary != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label for="theme-option-content-opinion-summary">
+                                <span>
+                                  <i class="fa fa-align-left"></i>
+                                  <strong>{t}Summary{/t}</strong><br>
+                                  {t}Display summary/description{/t}
+                                </span>
+                              </label>
                             </div>
                           </div>
-                        </div>
-                        <div class="col-xs-12 m-b-15">
-                          <label class="form-label m-b-15" for="theme-option-content-opinion-info">
-                            <h4>
-                              <i class="fa fa-info"></i>
-                              {t}Info{/t}
-                            </h4>
-                          </label>
                         </div>
                         <div class="col-xs-12">
                           <div class="row">
                             <div class="col-xs-12 col-md-4 m-b-15">
-                              <label class="form-label m-b-15" for="theme-option-content-opinion-author">
-                                <span class="help">
-                                  {t}Display content's author{/t}
-                                </span>
-                              </label>
                               <div class="controls">
-                                <div class="input-group">
-                                  <select id="theme-option-content-opinion-author" name="theme-option-content-opinion-author" ng-model="settings.theme_options.content_opinion_author">
-                                    <option value="[% content_opinion_author_name %]" ng-repeat="(content_opinion_author_name,content_opinion_author_value) in extra.theme_skins[settings.theme_skin].params.options.content_opinion_author.options" ng-selected="[% content_opinion_author_name === settings.theme_options.content_opinion_author || settings.theme_options.content_opinion_author == undefined %]">[% content_opinion_author_value %]</option>
-                                  </select>
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-content-opinion-author" name="theme-option-content-opinion-author" ng-model="settings.theme_options.content_opinion_author" ng-checked="[% settings.theme_options.content_opinion_author != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label for="theme-option-content-opinion-author">
+                                    <span>
+                                      <i class="fa fa-address-card"></i>
+                                      {t}Display content's author{/t}
+                                    </span>
+                                  </label>
                                 </div>
                               </div>
                             </div>
                             <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.content_opinion_author === 'true'">
-                              <label class="form-label m-b-15" for="theme-option-content-opinion-author-photo">
-                                <span class="help">
-                                  {t}Display author's photo{/t}
-                                </span>
-                              </label>
                               <div class="controls">
-                                <div class="input-group">
-                                  <select id="theme-option-content-opinion-author-photo" name="theme-option-content-opinion-author-photo" ng-model="settings.theme_options.content_opinion_author_photo">
-                                    <option value="[% content_opinion_author_photo_name %]" ng-repeat="(content_opinion_author_photo_name,content_opinion_author_photo_value) in extra.theme_skins[settings.theme_skin].params.options.content_opinion_author_photo.options" ng-selected="[% content_opinion_author_photo_name === settings.theme_options.content_opinion_author_photo || settings.theme_options.content_opinion_author_photo == undefined %]">[% content_opinion_author_photo_value %]</option>
-                                  </select>
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-content-opinion-author-photo" name="theme-option-content-opinion-author-photo" ng-model="settings.theme_options.content_opinion_author_photo" ng-checked="[% settings.theme_options.content_opinion_author_photo != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label for="theme-option-content-opinion-author-photo">
+                                    <span>
+                                      <i class="fa fa-user"></i>
+                                      {t}Display author's photo{/t}
+                                    </span>
+                                  </label>
                                 </div>
                               </div>
                             </div>
                             <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.content_opinion_author === 'true'">
-                              <label class="form-label m-b-15" for="theme-option-content-opinion-author-bio">
-                                <span class="help">
-                                  {t}Display author's bio{/t}
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-content-opinion-author-bio" name="theme-option-content-opinion-author-bio" ng-model="settings.theme_options.content_opinion_author_bio" ng-checked="[% settings.theme_options.content_opinion_author_bio != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label for="theme-option-content-opinion-author-bio">
+                                    <span>
+                                      <i class="fa fa-plus-circle"></i>
+                                      {t}Display author's bio{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-b-30">
+                        <div class="col-xs-12 m-b-10">
+                          <label class="form-label m-b-10" for="theme-option-opinon-home">
+                            <h4>
+                              <i class="fa fa-minus"></i>
+                              {t}{t domain="base"}Listings/Archive{/t}{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Choose options for contents{/t}
+                            </span>
+                          </label>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <div class="controls">
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-archive-opinion-media" name="theme-option-archive-opinion-media" ng-model="settings.theme_options.archive_opinion_media" ng-checked="[% settings.theme_options.archive_opinion_media != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label for="theme-option-archive-opinion-media">
+                                <span>
+                                  <i class="fa fa-picture-o"></i>
+                                  <strong>{t}Media{/t}</strong><br>
+                                  {t}Display featured media in opinions{/t}
                                 </span>
                               </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <div class="controls">
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-archive-opinion-summary" name="theme-option-archive-opinion-summary" ng-model="settings.theme_options.archive_opinion_summary" ng-checked="[% settings.theme_options.archive_opinion_summary != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label for="theme-option-archive-opinion-summary">
+                                <span>
+                                  <i class="fa fa-align-left"></i>
+                                  <strong>{t}Summary{/t}</strong><br>
+                                  {t}Display summary/description{/t}
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12">
+                          <div class="row">
+                            <div class="col-xs-12 col-md-4 m-b-15">
                               <div class="controls">
-                                <div class="input-group">
-                                  <select id="theme-option-content-opinion-author-bio" name="theme-option-content-opinion-author-bio" ng-model="settings.theme_options.content_opinion_author_bio">
-                                    <option value="[% content_opinion_author_bio_name %]" ng-repeat="(content_opinion_author_bio_name,content_opinion_author_bio_value) in extra.theme_skins[settings.theme_skin].params.options.content_opinion_author_bio.options" ng-selected="[% content_opinion_author_bio_name === settings.theme_options.content_opinion_author_bio || settings.theme_options.content_opinion_author_bio == undefined %]">[% content_opinion_author_bio_value %]</option>
-                                  </select>
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-archive-opinion-author" name="theme-option-archive-opinion-author" ng-model="settings.theme_options.archive_opinion_author" ng-checked="[% settings.theme_options.archive_opinion_author != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label for="theme-option-archive-opinion-author">
+                                    <span>
+                                      <i class="fa fa-address-card"></i>
+                                      {t}Display content's author{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.archive_opinion_author === 'true'">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-archive-opinion-author-photo" name="theme-option-archive-opinion-author-photo" ng-model="settings.theme_options.archive_opinion_author_photo" ng-checked="[% settings.theme_options.archive_opinion_author_photo != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label for="theme-option-archive-opinion-author-photo">
+                                    <span>
+                                      <i class="fa fa-user"></i>
+                                      {t}Display author's photo{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.archive_opinion_author === 'true'">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-archive-opinion-author-bio" name="theme-option-archive-opinion-author-bio" ng-model="settings.theme_options.archive_opinion_author_bio" ng-checked="[% settings.theme_options.archive_opinion_author_bio != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label for="theme-option-archive-opinion-author-bio">
+                                    <span>
+                                      <i class="fa fa-plus-circle"></i>
+                                      {t}Display author's bio{/t}
+                                    </span>
+                                  </label>
                                 </div>
                               </div>
                             </div>

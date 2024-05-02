@@ -31,7 +31,6 @@ class ThemeSettingsHelper extends SettingHelper
         'show_author_photo',
         'show_author_bio',
         'show_opinion_media',
-        'show_opinion_media',
         'show_opinion_summary',
         'show_opinion_author',
         'show_opinion_author_photo',
