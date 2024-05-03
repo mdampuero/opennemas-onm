@@ -72,7 +72,7 @@
         <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.organizer = !expanded.organizer">
-        <i class="fa fa-map-marker m-r-10"></i>
+        <i class="fa fa-user m-r-10"></i>
         {t}Organizer data{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.organizer }"></i>
       </div>
