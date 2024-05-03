@@ -40,8 +40,8 @@
   "description": "{$content->description|replace:'\\':''|escape:'htmlall'}",
   "location": {
     "@type": "Place",
-    "name": "{$content->event_place|escape:'htmlall'}",
-    "address": "{$content->event_address|escape:'htmlall'}"
+    "name": {($content->event_place) ? "\"{$content->event_place|escape:'htmlall'}\"" : ""},
+    "address": {($content->event_address) ? "\"{$content->event_address}\"" : ""}
   }
-}]
+}
 </script>

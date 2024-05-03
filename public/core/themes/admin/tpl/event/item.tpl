@@ -71,6 +71,23 @@
       <div class="grid-collapse-title">
         <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
       </div>
+      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.organizer = !expanded.organizer">
+        <i class="fa fa-map-marker m-r-10"></i>
+        {t}Organizer data{/t}
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.organizer }"></i>
+      </div>
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.organizer }">
+        <div class="form-group">
+          <label class="form-label" for="event_organizer_name">{t}Organizer name{/t}</label>
+          <div class="controls">
+            <input class="form-control"  id="event_organizer_name" name="event_organizer_name" ng-model="item.event_organizer_name" type="text" required>
+          </div>
+          <label class="form-label" for="event_organizer_url">{t}Organizer website{/t}</label>
+          <div class="controls">
+            <input class="form-control"  id="event_organizer_url" name="event_organizer_url" ng-model="item.event_organizer_url" type="text" required>
+          </div>
+        </div>
+      </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.when = !expanded.when">
         <i class="fa fa-calendar m-r-10"></i>{t}Event date{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.when }"></i>
@@ -137,11 +154,11 @@
         <div class="form-group">
           <label class="form-label" for="event_place">{t}Place name{/t}</label>
           <div class="controls">
-            <input class="form-control"  id="event_place" name="event_place" ng-model="item.event_place" type="text">
+            <input class="form-control"  id="event_place" name="event_place" ng-model="item.event_place" type="text" required>
           </div>
           <label class="form-label" for="event_address">{t}Place address{/t}</label>
           <div class="controls">
-            <input class="form-control"  id="event_address" name="event_address" ng-model="item.event_address" type="text">
+            <input class="form-control"  id="event_address" name="event_address" ng-model="item.event_address" type="text" required>
           </div>
         </div>
       </div>
