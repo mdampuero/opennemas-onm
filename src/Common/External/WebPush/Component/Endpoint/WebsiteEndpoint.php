@@ -11,30 +11,28 @@ namespace Common\External\WebPush\Component\Endpoint;
 
 use Common\External\WebPush\Component\Exception\WebPushException;
 
-class StatusEndpoint extends Endpoint
+class WebsiteEndpoint extends Endpoint
 {
     /**
-     * Get the data of the given Web Push notification.
+     * Get the data of the current websites.
      *
      * @return string
      *
      * @throws WebPushException If the action fails.
      */
-    public function getStatus($params = [])
+    public function getList($params = [])
     {
-        //TODO Replace getStaus($id) call on webpushr in order to use array of parameters like [ 'id' => $id ]
         try {
-            $url = $this->url . $this->replaceUriWildCards($this->config['actions']['get_status']['path'], $params);
+            $url = $this->url . $this->replaceUriWildCards($this->config['actions']['get_list']['path'], $params);
 
             $response = $this->client->get($url, [ 'headers' => $this->auth->getAuthHeaders() ]);
             $body     = json_decode($response->getBody(), true);
 
-            // Pending of WebPushR to fix 'camapign_id' as parameter of the response
             getService('application.log')
-                    ->info('Notification was retrieved successfully');
+                    ->info('websites list was retrieved successfully');
         } catch (\Exception $e) {
             getService('application.log')
-                ->error('Error retrieving the notification from server '
+                ->error('Error retrieving the websites list from server '
                 . $e->getMessage());
             throw new WebPushException('webpush.satus.get.failure: ' . $e->getMessage());
         }

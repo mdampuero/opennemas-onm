@@ -35,10 +35,10 @@ parameters:
                 config:
                     actions:
                         get_status:
-                            path: '/v1/notification/status/id/'
+                            path: '/v1/notification/status/id/{id}'
     external.send_pulse:
         config_provider: 'external.send_pulse.provider.config'
-        http_client:     'external.web_push.http_client'
+        http_client:     'external.web_push.http_client.send_pulse'
         url:             'https://api.sendpulse.com'
         token_provider:  'external.send_pulse.provider.token'
         endpoints:
@@ -48,6 +48,44 @@ parameters:
                     actions:
                         get_status:
                             path: '/push/websites/'
+            website:
+                class: 'Common\External\WebPush\Component\Endpoint\WebsiteEndpoint'
+                config:
+                    actions:
+                        get_list:
+                            path: '/push/websites/'
+            code_snippet:
+                class: 'Common\External\WebPush\Component\Endpoint\CodeSnippetEndpoint'
+                config:
+                    actions:
+                        get_code:
+                            path: '/push/websites/{id}/code'
+            notification:
+                class: 'Common\External\WebPush\Component\Endpoint\NotificationEndpoint'
+                config:
+                    actions:
+                        send_notification:
+                            path: '/push/tasks'
+                            parameters:
+                                required:
+                                    - tittle
+                                    - website_id
+                                    - body
+                                    - ttl
+                                optional:
+                                    - link
+                                    - filter_lang
+                                    - filter_browser
+                                    - filter_region
+                                    - filter_url
+                                    - filter_subscription_date_from
+                                    - filter_subscription_date_to
+                                    - filter
+                                    - stretch_time
+                                    - send_date
+                                    - buttons
+                                    - image
+                                    - icon
 services:
     external.web_push.provider.config:
         class:     'Common\External\WebPush\Component\Configuration\OrmConfigurationProvider'

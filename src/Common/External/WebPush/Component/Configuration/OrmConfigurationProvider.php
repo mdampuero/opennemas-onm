@@ -15,6 +15,8 @@ class OrmConfigurationProvider implements ConfigurationProvider
 
     private $isTokenRequired = false;
 
+    private $dataset;
+
     /**
      * Initializes the OrmConfigurationProvider
      *

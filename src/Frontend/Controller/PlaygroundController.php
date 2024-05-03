@@ -93,6 +93,34 @@ class PlaygroundController extends Controller
         return new Response($this->render('playground.tpl'), 200);
     }
 
+    private function sendPulse()
+    {
+        try {
+            $sendpulseHelper = $this->get('core.helper.sendpulse');
+            $sendpulse       = $this->get('external.web_push.factory.sendpulse');
+            $endpoint        = $sendpulse->getEndpoint('code_snippet');
+            $snippet         = $endpoint->getCode([ 'id' => $sendpulseHelper->getWebsiteId() ]);
+            dump($snippet);
+            // $mainDomain = $this->get('core.instance')->getMainDomain();
+            // $mainDomain = 'verdadesymentiras.com';
+            // dump($mainDomain);
+
+            // $webId = null;
+            // foreach ($websiteList as $website) {
+            //     if (strpos($mainDomain, $website['url']) !== false) {
+            //         $webId = $website['id'];
+            //         break;
+            //     }
+            // }
+            // dump($webId);
+            // $this->get('orm.manager')
+            //     ->getDataSet('Settings', 'instance')
+            //     ->set('sendpulse_website_id', $webId);
+
+            return new Response($snippet, 200);
+        } catch (\Exception $e) {
+        }
+    }
     /**
      * Displays a widget basing on the request parameters.
      *

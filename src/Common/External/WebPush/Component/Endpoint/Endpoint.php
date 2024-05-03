@@ -112,4 +112,23 @@ class Endpoint
 
         $this->config = $config;
     }
+
+    public function replaceUriWildCards($uri, $parameters)
+    {
+        preg_match_all('@.*({.+})@U', $uri, $matches);
+        if (!array_key_exists(1, $matches) || empty($matches[1])) {
+            return $uri;
+        }
+
+        foreach ($matches[1] as $wildcard) {
+            $key = trim($wildcard, '{}');
+            if (!array_key_exists($key, $parameters)) {
+                throw new \Exception("Error procesing endpoint uri wildcards");
+            }
+
+            $uri = str_replace($wildcard, (string) $parameters[$key], $uri);
+        }
+
+        return $uri;
+    }
 }

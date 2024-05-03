@@ -11,9 +11,9 @@ namespace Common\External\WebPush\Component\Configuration;
 
 class SendPulseConfigurationProvider implements ConfigurationProvider
 {
-    private $authUri = 'oauth/access_token';
+    private $authUri = '/oauth/access_token';
 
-    private $isTokenRequired = false;
+    private $isTokenRequired = true;
 
     private $dataset;
     /**
@@ -46,15 +46,18 @@ class SendPulseConfigurationProvider implements ConfigurationProvider
         return $this->authUri;
     }
 
-    public function getAuthHeaders()
+    public function getConfigHeaders()
     {
-        return [
-            "grant_type" => "client_credentials",
-            "client_id" => "237b4af9c99d0f89bdbd876dcd5a0000",
-            "client_secret" => "a99e7d506d3701c5c04de3db1913eeee"
-        ];
+        return [];
     }
 
+    public function getConfigParams()
+    {
+        return [
+            'headers' => $this->getConfigHeaders(),
+            'form_params' => $this->getConfiguration()
+        ];
+    }
     /**
      * {@inheritdoc}
      */

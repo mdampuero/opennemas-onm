@@ -77,16 +77,12 @@ class Authentication
      */
     public function authenticate()
     {
-        $authParams = $this->configProvider->isTokenRequired() ? $this->getAuthHeaders() : $this->getConfiguration();
-        $headers    = array_merge(
-            [ 'content-type' => 'application/json' ],
-            $authParams
-        );
+        $requestParams = $this->configProvider->getConfigParams();
 
         try {
             $response = $this->client->post(
-                $this->url . $this->configProvider->getAuthRoute(),
-                [ 'headers' => $headers ]
+                $this->url . $this->configProvider->getAuthUri(),
+                $requestParams
             );
         } catch (\Exception $e) {
             throw new WebPushException('web_push.authentication.failure: ' . $e->getMessage());
@@ -94,8 +90,40 @@ class Authentication
 
         $body = json_decode($response->getBody(), true);
 
+
+        if ($this->configProvider->isTokenRequired()) {
+            $this->tokenProvider->setAccessToken($body['access_token'], $body['expires_in']);
+        }
+
         if (empty($body)) {
             throw new WebPushException('web_push.authentication.failure: no response');
         }
+    }
+
+    /**
+     * Returns the access token.
+     *
+     * @return string The access token.
+     *
+     * @throws ActOnException
+     */
+    public function getToken()
+    {
+        if ($this->tokenProvider->hasAccessToken()) {
+            return $this->tokenProvider->getAccessToken();
+        }
+
+        $this->authenticate();
+
+        return $this->tokenProvider->getAccessToken();
+    }
+
+    public function getAuthHeaders()
+    {
+        if (!$this->configProvider->isTokenRequired()) {
+            return $this->getConfiguration();
+        }
+
+        return ['Authorization' => 'Bearer ' . $this->getToken()];
     }
 }
