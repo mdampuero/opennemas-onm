@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-03 10:35+0000\n"
-"PO-Revision-Date: 2024-05-03 12:36+0200\n"
+"POT-Creation-Date: 2024-05-06 13:27+0000\n"
+"PO-Revision-Date: 2024-05-06 15:28+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -6090,7 +6090,7 @@ msgstr ""
 "target=\"_blank\" ng-click=\"$event.stopPropagation();\">documentación</a>."
 
 msgid "Select your main font (titles, headings…)."
-msgstr ""
+msgstr "Seleccione o tipo de letra principal (títulos, encabezamentos...)."
 
 msgid "Secondary font (body, summary…)"
 msgstr "Tipo de letra secundario (corpo, resumo...)"
@@ -6111,7 +6111,7 @@ msgid "Show full content on RSS"
 msgstr "Mostrar todo o contido en RSS"
 
 msgid "Lazyscript referer detect"
-msgstr ""
+msgstr "Detección de referer en Lazyscript"
 
 msgid "SEO Information"
 msgstr "Información SEO"
@@ -6208,6 +6208,9 @@ msgid "If enabled, the category main page needs to be manually updated"
 msgstr ""
 "Se está activado, a páxina principal da categoría debe actualizarse "
 "manualmente"
+
+msgid "Seo title"
+msgstr "Titulo SEO"
 
 msgid "Only empty categories can be deleted"
 msgstr "Só se poden eliminar categorías sen contidos"
@@ -7827,6 +7830,10 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 
 msgid "Group name"
 msgstr "Nome do grupo"
+
+#, fuzzy
+#~ msgid "Seo_title"
+#~ msgstr "Titulo do sitio"
 
 #~ msgid "Event Organizer"
 #~ msgstr "Organizador do evento"

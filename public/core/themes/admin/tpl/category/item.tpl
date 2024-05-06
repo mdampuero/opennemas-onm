@@ -262,6 +262,14 @@
         </div>
       </div>
       <div class="form-group no-margin">
+        <label for="title" class="form-label">
+          {t}Seo title{/t}
+        </label>
+        <div class="controls input-with-icon right">
+          <input class="form-control" id="seo_title" name="seo_title" ng-model="item.seo_title">
+        </div>
+      </div>
+      <div class="form-group no-margin">
         <label class="form-label" for="description">
           {t}Description{/t}
         </label>
