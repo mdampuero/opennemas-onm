@@ -35,6 +35,9 @@
         </div>
       </div>
       <div class="row">
+        <div class="col-sm-6 form-group">
+          {include file="ui/component/input/text.tpl" iField="seo_title" iMessageField="seo_title" iRequired="false" iTitle="{t}Seo_title{/t}" iValidation=false}
+        </div>
         <div class="col-sm-6 form-group" ng-if="config.locale.multilanguage">
           <label class="form-label" for="locale">
             {t}Language{/t}

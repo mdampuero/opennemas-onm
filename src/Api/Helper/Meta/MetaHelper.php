@@ -120,7 +120,7 @@ class MetaHelper
             'exception_code'       => !empty($exception) && $exception->getcode() ? $exception->getcode() : '',
             'category_name'        => $cah->getCategoryName($content),
             'category_description' => $cah->getCategoryDescription($content),
-            'tag_name'             => $content->name ?? '',
+            'tag_name'             => $content->seo_title ?? $content->name ?? '',
             'tag_description'      => $content->description ?? '',
             'author_name'          => $ah->getAuthorName($content),
             'author_description'   => $ah->getAuthorBioSummary($content) ?? $ah->getAuthorBioBody($content),
