@@ -43,7 +43,7 @@
           autoGrow_onStartup: true,
           autoGrow_maxHeight: 500,
           wordcount: {
-            showWordCount: true,
+            countSpacesAsChars: true,
             showCharCount: true
           },
           allowedContent: true,

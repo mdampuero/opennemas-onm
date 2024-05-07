@@ -108,45 +108,45 @@
                           </div>
                         </div>
                       </div>
-                        <div class="col-xs-12 col-md-2 m-b-15">
-                          <h4>
-                            <i class="fa fa-arrows-h"></i>
-                            {t}Logo size{/t}
-                          </h4>
-                          <label class="form-label" for="theme-option-width">
-                            <span class="help">
-                              {t}Choose logo default size{/t}
-                            </span>
-                          </label>
-                          <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-option-main-logo-size" name="theme-option-main-logo-size" ng-model="settings.theme_options.main_logo_size">
-                                <option value="[% main_logo_size_name %]" ng-repeat="(main_logo_size_name,main_logo_size_value) in extra.theme_skins[settings.theme_skin].params.options.main_logo_size.options" ng-selected="[% main_logo_size_name === settings.theme_options.main_logo_size || settings.theme_options.main_logo_size == undefined %]">[% main_logo_size_value %]</option>
-                              </select>
-                            </div>
+                      <div class="col-xs-12 col-md-3 m-b-15">
+                        <h4>
+                          <i class="fa fa-arrows-h"></i>
+                          {t}Logo size{/t}
+                        </h4>
+                        <label class="form-label" for="theme-option-width">
+                          <span class="help">
+                            {t}Choose logo default size{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <select id="theme-option-main-logo-size" name="theme-option-main-logo-size" ng-model="settings.theme_options.main_logo_size">
+                              <option value="[% main_logo_size_name %]" ng-repeat="(main_logo_size_name,main_logo_size_value) in extra.theme_skins[settings.theme_skin].params.options.main_logo_size.options" ng-selected="[% main_logo_size_name === settings.theme_options.main_logo_size || settings.theme_options.main_logo_size == undefined %]">[% main_logo_size_value %]</option>
+                            </select>
                           </div>
                         </div>
-                        <div class="col-xs-12 col-md-3 m-b-15">
-                          <h4>
-                            <i class="fa fa-arrows-h"></i>
-                            {t}Page Layout{/t}
-                          </h4>
-                          <label class="form-label" for="theme-option-width">
-                            <span class="help">
-                              {t}Page containers width{/t}
-                            </span>
-                          </label>
-                          <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-option-width" name="theme-option-width" ng-model="settings.theme_options.general_page_width" required>
-                                <option value="[% page_width_name %]" ng-repeat="(page_width_name,page_width_value) in extra.theme_skins[settings.theme_skin].params.options.general_page_width.options" ng-selected="[% page_width_name == settings.theme_options.general_page_width %]">[% page_width_value %]</option>
-                              </select>
-                            </div>
+                      </div>
+                      <div class="col-xs-12 col-md-3 m-b-15">
+                        <h4>
+                          <i class="fa fa-arrows-h"></i>
+                          {t}Page Layout{/t}
+                        </h4>
+                        <label class="form-label" for="theme-option-width">
+                          <span class="help">
+                            {t}Page containers width{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <select id="theme-option-width" name="theme-option-width" ng-model="settings.theme_options.general_page_width" required>
+                              <option value="[% page_width_name %]" ng-repeat="(page_width_name,page_width_value) in extra.theme_skins[settings.theme_skin].params.options.general_page_width.options" ng-selected="[% page_width_name == settings.theme_options.general_page_width %]">[% page_width_value %]</option>
+                            </select>
                           </div>
                         </div>
+                      </div>
 
                       <div ng-if="extra.theme_skins[settings.theme_skin].params.fonts">
-                        <div class="col-xs-12 col-md-4 m-t-30">
+                        <div class="col-xs-12 col-md-7 m-t-30">
                           <div class="col-xs-12">
                             <h4>
                               <i class="fa fa-font"></i>
@@ -343,7 +343,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 m-b-15">
+                      <div class="col-xs-12 col-md-4 m-b-15">
                         <h4>
                           <i class="fa fa-code-fork"></i>
                           {t}Breadcrumb{/t}
@@ -358,6 +358,25 @@
                             <select id="theme-breadcrumb" name="theme-breadcrumb" ng-model="settings.theme_options.breadcrumb" required>
                               <option value="[% breadcrumb_name %]" ng-repeat="(breadcrumb_name,breadcrumb_value) in extra.theme_skins[settings.theme_skin].params.options.breadcrumb.options" ng-selected="[% breadcrumb_name == settings.theme_options.breadcrumb || settings.theme_options.breadcrumb == undefined %]">[% breadcrumb_value %]</option>
                             </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4 m-b-15">
+                        <h4>
+                          <i class="fa fa-puzzle-piece"></i>
+                          {t}Pre-footer widget{/t}
+                        </h4>
+                        <label class="form-label" for="theme-general-footer-widget">
+                          <span class="help">
+                            {t}Widget to show before footer{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              ID
+                            </span>
+                            <input class="form-control" id="general-footer-widget" name="general-footer-widget" ng-model="settings.theme_options.general_footer_widget" type="text">
                           </div>
                         </div>
                       </div>
@@ -660,6 +679,24 @@
                           </div>
                         </div>
                         <div class="col-xs-12 col-md-4 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-content-summary">
+                            <h4>
+                              <i class="fa fa-picture-o"></i>
+                              {t}Opinions media{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Display featured media in opinions{/t}
+                            </span>
+                          </label>
+                          <div class="controls">
+                            <div class="input-group">
+                              <select id="theme-option-content-opinion-media" name="theme-option-content-opinion-media" ng-model="settings.theme_options.content_opinion_media">
+                                <option value="[% content_opinion_media_name %]" ng-repeat="(content_opinion_media_name,content_opinion_media_value) in extra.theme_skins[settings.theme_skin].params.options.content_opinion_media.options" ng-selected="[% content_opinion_media_name === settings.theme_options.content_opinion_media || settings.theme_options.content_opinion_media == undefined %]">[% content_opinion_media_value %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-content-info">
                             <h4>
                               <i class="fa fa-info"></i>

@@ -29,7 +29,7 @@ class ThemeSettingsHelper extends SettingHelper
         'show_time',
         'show_readtime',
         'show_author_photo',
-        'show_author_photo',
+        'show_opinion_media',
         'related_contents_auto',
         'sidebar_widget_today_news',
         'sidebar_widget_most_viewed',
@@ -45,6 +45,7 @@ class ThemeSettingsHelper extends SettingHelper
         'breadcrumb',
         'main_logo_size',
         'general_page_width',
+        'general_footer_widget',
         'hamburger_position',
         'widget_header_type',
         'widget_header_font',
@@ -83,6 +84,7 @@ class ThemeSettingsHelper extends SettingHelper
             'show_time' => 'content_time',
             'show_readtime' => 'content_readtime',
             'show_author_photo' => 'content_author_photo',
+            'show_opinion_media' => 'content_opinion_media',
         ]
     ];
 

@@ -421,10 +421,10 @@ class AdvertisementsController extends Controller
                 'site_id' => $formValues->getDigits('revive_ad_server_site_id'),
             ],
             'tradedoubler_id'  => $formValues->getDigits('tradedoubler_id'),
+            'restricted_urls' => $formValues->filter('restricted_urls', '')
         ];
 
         if ($this->get('core.security')->hasPermission('MASTER')) {
-            $settings['restricted_urls']            = $formValues->filter('restricted_urls', '');
             $settings['ads_settings']['safe_frame'] = empty($formValues->get('safe_frame')) ? 0 : 1;
             $settings['dfp_custom_code']            = base64_encode($formValues->get('dfp_custom_code'));
             $settings['smart_custom_code']          = base64_encode($formValues->get('smart_custom_code'));
