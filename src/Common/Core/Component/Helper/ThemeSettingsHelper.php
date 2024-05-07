@@ -138,6 +138,15 @@ class ThemeSettingsHelper extends SettingHelper
                 'show_author_bio' => 'content_author_bio',
             ],
             'show' => [
+                'show_category' => 'content_category_name',
+                'show_subtitle' => 'content_subtitle',
+                'show_summary' => 'content_summary',
+                'show_author' => 'content_author',
+                'show_date' => 'content_date',
+                'show_time' => 'content_time',
+                'show_readtime' => 'content_readtime',
+                'show_author_photo' => 'content_author_photo',
+                'show_author_bio' => 'content_author_bio',
             ]
         ],
         'opinion' => [
