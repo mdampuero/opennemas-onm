@@ -75,18 +75,13 @@
         <i class="fa fa-user m-r-10"></i>
         {t}Organizer data{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.organizer }"></i>
+        <span class="pull-right" ng-if="!expanded.organizer">
+          {include file="common/component/icon/status.tpl" iFlag="event_organizer_name" iForm="form.event_organizer_name" iNgModel="item.event_organizer_name" iValidation=true}
+        </span>
       </div>
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.organizer }">
-        <div class="form-group">
-          <label class="form-label" for="event_organizer_name">{t}Organizer name{/t}</label>
-          <div class="controls">
-            <input class="form-control"  id="event_organizer_name" name="event_organizer_name" ng-model="item.event_organizer_name" type="text" required>
-          </div>
-          <label class="form-label" for="event_organizer_url">{t}Organizer website{/t}</label>
-          <div class="controls">
-            <input class="form-control"  id="event_organizer_url" name="event_organizer_url" ng-model="item.event_organizer_url" type="text" required>
-          </div>
-        </div>
+        {include file="ui/component/input/text.tpl" iField="event_organizer_name" iRequired=true iTitle="{t}Organizer name{/t}" iValidation=true}
+        {include file="ui/component/input/text.tpl" iField="event_organizer_url" iTitle="{t}Organizer website{/t}"}
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.when = !expanded.when">
         <i class="fa fa-calendar m-r-10"></i>{t}Event date{/t}
