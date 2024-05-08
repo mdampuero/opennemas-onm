@@ -49,6 +49,7 @@
           {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Published{/t}" field="content_status"}
         {/acl}
       </div>
+      {include file="ui/component/content-editor/accordion/textarea.tpl" title="{t}Description{/t}" field="description"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
     </div>
   </div>
@@ -58,7 +59,6 @@
   <div class="grid simple">
     <div class="grid-body">
       {include file="ui/component/input/text.tpl" iField="title" iRequired=true iTitle="{t}Name{/t}" iValidation=true}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=4}
       <div class="controls">
         <div class="row">
           <div class="col-lg-6 col-md-6">
