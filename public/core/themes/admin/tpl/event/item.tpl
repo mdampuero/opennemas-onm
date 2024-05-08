@@ -141,21 +141,16 @@
         </div>
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.where = !expanded.where">
-        <i class="fa fa-map-marker m-r-10"></i>
+        <i class="fa fa-user m-r-10"></i>
         {t}Event location{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.where }"></i>
+        <span class="pull-right" ng-if="!expanded.where">
+          {include file="common/component/icon/status.tpl" iFlag="event_place" iForm="form.event_place" iNgModel="item.event_place" iValidation=true}
+        </span>
       </div>
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.where }">
-        <div class="form-group">
-          <label class="form-label" for="event_place">{t}Place name{/t}</label>
-          <div class="controls">
-            <input class="form-control"  id="event_place" name="event_place" ng-model="item.event_place" type="text" required>
-          </div>
-          <label class="form-label" for="event_address">{t}Place address{/t}</label>
-          <div class="controls">
-            <input class="form-control"  id="event_address" name="event_address" ng-model="item.event_address" type="text" required>
-          </div>
-        </div>
+        {include file="ui/component/input/text.tpl" iField="event_place" iRequired=true iTitle="{t}Place name{/t}" iValidation=true}
+        {include file="ui/component/input/text.tpl" iField="event_address" iTitle="{t}Place address{/t}" }
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.external_website = !expanded.external_website">
         <i class="fa fa-external-link m-r-10"></i>
