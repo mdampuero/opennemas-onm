@@ -62,21 +62,23 @@
       <div class="controls">
         <div class="row">
           <div class="col-lg-6 col-md-6">
-            <div class="form-group">
+            <div class="form-group no-margin">
               <label class="form-label">
                 {t}Type{/t}
               </label>
-              <div class="radio m-b-5 m-t-5">
-                <input id="renderlet-html" ng-change="resetContent()" ng-model="item.widget_type" ng-value="" type="radio" ng-checked="!item.widget_type">
-                <label for="renderlet-html">
-                  HTML
-                </label>
-              </div>
-              <div class="radio m-t-5">
-                <input id="renderlet-intelligent" ng-change="resetContent()" ng-model="item.widget_type" ng-value="'intelligentwidget'" type="radio">
-                <label for="renderlet-intelligent">
-                  {t}IntelligentWidget{/t}
-                </label>
+              <div>
+                <div class="radio radio-inline p-l-4 ml-3">
+                  <input id="renderlet-html" ng-change="resetContent()" ng-model="item.widget_type" ng-value="" type="radio" ng-checked="!item.widget_type">
+                  <label for="renderlet-html">
+                    HTML
+                  </label>
+                </div>
+                <div class="radio radio-inline ml-3">
+                  <input id="renderlet-intelligent" ng-change="resetContent()" ng-model="item.widget_type" ng-value="'intelligentwidget'" type="radio">
+                  <label for="renderlet-intelligent">
+                    {t}IntelligentWidget{/t}
+                  </label>
+                </div>
               </div>
             </div>
           </div>
@@ -103,7 +105,7 @@
       <div class="ng-cloak" ng-show="!item.widget_type && !displayMultiBody()">
         {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Content{/t}" field="body" imagepicker=true rows=5}
       </div>
-      <div class="ng-cloak" ng-show="!item.widget_type && displayMultiBody()">
+      <div class="ng-cloak clearfix m-t-15" ng-show="!item.widget_type && displayMultiBody()">
         <ul class="fake-tabs">
           <li ng-repeat="(slug_key, slug_value) in data.extra.locale.slugs" ng-class="{ 'active': language === slug_key }" ng-click="changeLanguage(slug_key)">
             [% data.extra.locale.available[slug_key] %]
@@ -122,7 +124,7 @@
             </div>
           {/acl}
           <div class="controls">
-            <textarea name="body.[% slug_key %]" id="body.[% slug_key %]" incomplete="incomplete" ng-model="item.body[slug_key]" onm-editor onm-editor-preset="simple" class="form-control" rows="55"></textarea>
+            <textarea name="body.[% slug_key %]" id="body.[% slug_key %]" incomplete="incomplete" ng-model="item.body[slug_key]" onm-editor onm-editor-preset="simple" class="form-control" rows="80"></textarea>
           </div>
         </div>
       </div>
