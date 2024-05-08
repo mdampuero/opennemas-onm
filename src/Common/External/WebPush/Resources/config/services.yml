@@ -36,17 +36,23 @@ parameters:
                     actions:
                         get_status:
                             path: '/v1/notification/status/id/{id}'
+            test_connection:
+                class: 'Common\External\WebPush\Component\Endpoint\ConnectionEndpoint'
+                config:
+                    actions:
+                        test_connection:
+                            path: '/v1/site/subscriber_count'
     external.send_pulse:
         config_provider: 'external.send_pulse.provider.config'
         http_client:     'external.web_push.http_client.send_pulse'
         url:             'https://api.sendpulse.com'
         token_provider:  'external.send_pulse.provider.token'
         endpoints:
-            status:
-                class: 'Common\External\WebPush\Component\Endpoint\StatusEndpoint'
+            test_connection:
+                class: 'Common\External\WebPush\Component\Endpoint\ConnectionEndpoint'
                 config:
                     actions:
-                        get_status:
+                        test_connection:
                             path: '/push/websites/'
             website:
                 class: 'Common\External\WebPush\Component\Endpoint\WebsiteEndpoint'

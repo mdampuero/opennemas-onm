@@ -16,8 +16,8 @@
      *   Provides actions to list notifications.
      */
     .controller('WebPushNotificationsConfigCtrl', [
-      '$controller', '$scope', 'http', 'messenger',
-      function($controller, $scope, http, messenger) {
+      '$controller', '$scope', 'http', 'messenger', 'routing',
+      function($controller, $scope, http, messenger, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -32,7 +32,8 @@
         $scope.routes = {
           checkServer: 'api_v1_backend_webpush_notifications_check_server',
           getConfig:   'api_v1_backend_webpush_notifications_get_config',
-          saveConfig:  'api_v1_backend_webpush_notifications_save_config'
+          saveConfig:  'api_v1_backend_webpush_notifications_save_config',
+          removeData:  'api_v1_backend_webpush_notifications_remove_data'
         };
 
         $scope.settings = {
@@ -125,6 +126,27 @@
               });
             }, function() {
               $scope.disableFlags('http');
+            });
+        };
+
+        $scope.removeSavedSettings = function() {
+          if (!$scope.flags.http.checking) {
+            $scope.flags.http.saving = true;
+          }
+
+          return http.post($scope.routes.removeData)
+            .then(function(response) {
+              if (!$scope.flags.http.checking) {
+                $scope.disableFlags('http');
+                messenger.post(response.data);
+              }
+              window.location = routing.generate('backend_webpush_notifications_config');
+            }, function(response) {
+              if (!$scope.flags.http.checking) {
+                $scope.disableFlags('http');
+                messenger.post(response.data);
+              }
+              window.location = routing.generate('backend_webpush_notifications_config');
             });
         };
 

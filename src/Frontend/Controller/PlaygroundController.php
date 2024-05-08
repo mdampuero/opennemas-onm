@@ -96,11 +96,23 @@ class PlaygroundController extends Controller
     private function sendPulse()
     {
         try {
-            $sendpulseHelper = $this->get('core.helper.sendpulse');
-            $sendpulse       = $this->get('external.web_push.factory.sendpulse');
-            $endpoint        = $sendpulse->getEndpoint('code_snippet');
-            $snippet         = $endpoint->getCode([ 'id' => $sendpulseHelper->getWebsiteId() ]);
-            dump($snippet);
+            $service = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('webpush_service');
+
+            $webpush              = $this->get(sprintf('external.web_push.factory.%s', $service));
+            $notificationEndpoint = $webpush->getEndpoint('notification');
+            $webpushHelper        = $this->get(sprintf('core.helper.%s', $service));
+            $notificationData     = $webpushHelper->getNotificationData(870929);
+            $sentNotification     = $notificationEndpoint->sendNotification([ 'data' => $notificationData ]);
+            // $service  = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('webpush_service');
+            // $webpush  = $this->get(sprintf('external.web_push.factory.%s', $service));
+            // $endpoint = $webpush->getEndpoint('test_connection');
+            // $result   = $endpoint->testConnection();
+            // $sendpulseHelper = $this->get('core.helper.sendpulse');
+            // $sendpulse       = $this->get('external.web_push.factory.sendpulse');
+            // $endpoint        = $sendpulse->getEndpoint('code_snippet');
+            // $snippet         = $endpoint->getCode([ 'id' => $sendpulseHelper->getWebsiteId() ]);
+            // dump($sentNotification);
+            // die();
             // $mainDomain = $this->get('core.instance')->getMainDomain();
             // $mainDomain = 'verdadesymentiras.com';
             // dump($mainDomain);
@@ -119,6 +131,8 @@ class PlaygroundController extends Controller
 
             return new Response($snippet, 200);
         } catch (\Exception $e) {
+            dump($e);
+            die();
         }
     }
     /**

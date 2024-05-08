@@ -77,21 +77,95 @@ class SendpulseHelper
         return $websiteId;
     }
 
-    public function getJsFileResponse()
+    public function getWebpushCollectionFile()
     {
-        $webpushSettings = $this->ds->get(['webpush_service', 'webpush_apikey']);
-
-        if ($this->container->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')
-            && $webpushSettings['webpush_service'] == 'sendpulse'
-            && !empty($this->getWebsiteId())
-            && !$this->container->get('core.instance')->hasMultilanguage()) {
-            $response = new BinaryFileResponse('assets/js/sp-push-worker-fb.js');
-            $response->headers->set('X-Status-Code', 200);
-            $response->headers->set('Content-Type', 'application/javascript');
-            $response->headers->set('Cache-Control', 'public');
-            $response->headers->set('max-age', 2628000);
-            $response->headers->set('s-maxage', 2628000);
-            return $response;
+        if (!$this->container->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')
+            || $this->ds->get('webpush_service') !== 'sendpulse') {
+            throw new \Exception('Module not activated');
         }
+
+        $response = new BinaryFileResponse('assets/js/sendpulse.js');
+        $response->headers->set('X-Status-Code', 200);
+        $response->headers->set('Content-Type', 'application/javascript');
+        $response->headers->set('Cache-Control', 'public');
+        $response->headers->set('max-age', 2628000);
+        $response->headers->set('s-maxage', 2628000);
+        return $response;
+    }
+
+    public function getWebpushCollectionScript()
+    {
+        if (!$this->container->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')
+            || $this->ds->get('webpush_service') !== 'sendpulse') {
+            throw new \Exception('Module not activated');
+        }
+
+        $script = $this->ds->get('webpush_script');
+
+        if (empty($script)) {
+            try {
+                $webpushService = $this->container->get($this->service);
+                $endpoint       = $webpushService->getEndpoint('code_snippet');
+                $response       = $endpoint->getCode([ 'id' => $this->getWebsiteId() ]);
+                $script         = array_key_exists('script_code', $response) ? $response['script_code'] : '';
+                $this->ds->set('webpush_script', $script);
+            } catch (\Exception $e) {
+                $script = '';
+            }
+        }
+
+        return $script;
+    }
+
+    public function removeAccountData()
+    {
+        $this->ds->set('webpush_script', '');
+        $this->ds->set('webpush_apikey', '');
+        $this->ds->set('webpush_token', '');
+        $this->ds->set('webpush_publickey', '');
+        $this->ds->set('sendpulse_website_id', '');
+        $cache = $this->container->get('cache.connection.instance');
+        $cache->remove('sendpulse-access-token');
+        $cache->remove('sendpulse-refresh-token');
+        $cache->remove('webpush_script');
+        $cache->remove('webpush_apikey');
+        $cache->remove('webpush_token');
+        $cache->remove('webpush_publickey');
+        $cache->remove('sendpulse_website_id');
+    }
+
+    public function getNotificationData($article)
+    {
+        if (is_string($article) || is_int($article)) {
+            $article = $this->container->get('api.service.article')->getItem($article);
+        }
+
+        if (empty($article)) {
+            return [];
+        }
+
+        $contentService = $this->container->get('api.service.content');
+        $photoHelper    = $this->container->get('core.helper.photo');
+
+        $favico = $photoHelper->getPhotoPath(
+            $contentService->getItem($this->ds->get('logo_favico')),
+            null,
+            [ 192, 192 ],
+            true
+        );
+
+        $contentPath = $this->container->get('core.helper.url_generator')->getUrl($article, ['_absolute' => true]);
+        $image       = $this->container->get('core.helper.featured_media')->getFeaturedMedia($article, 'inner');
+        $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
+
+        $data = [
+            'title'   => $article->title ?? '',
+            'body' => $article->description ?? '',
+            'website_id' => $this->getWebsiteId(),
+            'ttl'      => 86400,
+            'link' => $contentPath
+        ];
+
+        return $data;
     }
 }

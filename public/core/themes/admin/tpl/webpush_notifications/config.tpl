@@ -76,6 +76,19 @@
               <i class="fa fa-info-circle text-info"></i>
               <small class="text-muted">{t}Time zone: {/t} {date_default_timezone_get()}</small>
             </div>
+            <div class="col-xs-6 col-md-3 m-b-15">
+              <h4>{t}Stop subscribers collection{/t}</h4>
+              <div class="controls">
+                <div class="checkbox">
+                  <input class="form-control" id="webpush_stop_collection" name="webpush_stop_collection" ng-false-value="'0'" ng-model="settings.webpush_stop_collection" ng-true-value="'1'" type="checkbox"/>
+                  <label class="form-label" for="webpush_stop_collection">
+                    {t}Stop asking to subscribe{/t}
+                  </label>
+                </div>
+              </div>
+              <i class="fa fa-info-circle text-info"></i>
+              <small class="text-muted">{t}Users will not be able to subscribe to your notifications{/t}</small>
+            </div>
           </div>
         </div>
       </div>
@@ -111,7 +124,7 @@
             </div>
             <div class="col-xs-12">
               <div class="p-t-15">
-                <div class="text-center_">
+                <div class="text-center">
                   <button class="btn btn-block btn-loading m-t-5" ng-class="{ 'btn-light': !status , 'btn-success': status === 'success' , 'btn-danger': status === 'failure' }" ng-click="check()" ng-disabled="!settings.webpush_service.apikey || !settings.webpush_service.token || !settings.webpush_service.publickey || flags.http.checking" type="button">
                     <i class="fa fa-plug m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.checking }"></i>
                     {t}Connect{/t}
@@ -144,7 +157,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-12">
+            <div class="col-xs-6">
               <div class="p-t-15">
                 <div class="text-center_">
                   <button class="btn btn-block btn-loading m-t-5" ng-class="{ 'btn-light': !status , 'btn-success': status === 'success' , 'btn-danger': status === 'failure' }" ng-click="check()" type="button">
@@ -152,6 +165,15 @@
                     {t}Connect{/t}
                     <i class="fa fa-check m-l-5" ng-show="status === 'success'"></i>
                     <i class="fa fa-exclamation-circle m-l-5" ng-show="status === 'failure'"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="p-t-15">
+                <div class="text-center_">
+                  <button class="btn btn-block btn-loading m-t-5" class="btn-light" ng-click="removeSavedSettings()" type="button">
+                    {t}Remove account data{/t}
                   </button>
                 </div>
               </div>

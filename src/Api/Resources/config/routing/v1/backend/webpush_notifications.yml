@@ -33,10 +33,11 @@ api_v1_backend_webpush_notifications_check_server:
     options:
         expose: true
 
-api_v1_backend_webpush_notifications_get_notification_data:
-    path:     /webpush_notifications/get_notification_data/{id}
-    defaults: { _controller: ApiBundle:V1/Backend/WebPushNotifications:getNotificationData }
-    methods:  [ GET ]
+api_v1_backend_webpush_notifications_remove_data:
+    path:     /webpush_notifications/data/remove
+    defaults: { _controller: ApiBundle:V1/Backend/WebPushNotifications:removeData }
+    methods:  [ POST ]
     options:
         expose: true
+
 

@@ -249,6 +249,7 @@ class WebPushNotificationsController extends ApiController
                     'webpush_automatic',
                     'webpush_delay',
                     'webpush_restricted_hours',
+                    'webpush_stop_collection',
                     'webpush_active_subscribers']);
 
             $webpush_service = [
@@ -267,6 +268,7 @@ class WebPushNotificationsController extends ApiController
                 'webpush_automatic'          => $settings['webpush_automatic'],
                 'webpush_delay'              => $settings['webpush_delay'],
                 'webpush_restricted_hours'   => $settings['webpush_restricted_hours'],
+                'webpush_stop_collection'    => $settings['webpush_stop_collection'],
                 'hours'                      => $hours,
                 'webpush_active_subscribers' => $settings['webpush_active_subscribers'],
                 'webpush_activated'          => $this->get('core.security')
@@ -315,6 +317,7 @@ class WebPushNotificationsController extends ApiController
             'webpush_publickey'        => $publickey,
             'webpush_automatic'        => $request->request->get('webpush_automatic'),
             'webpush_delay'            => $request->request->get('webpush_delay'),
+            'webpush_stop_collection'  => $request->request->get('webpush_stop_collection'),
             'webpush_restricted_hours' => $webpush_restricted_hours,
         ];
 
@@ -378,12 +381,12 @@ class WebPushNotificationsController extends ApiController
      */
     public function checkServerAction()
     {
-        $msg      = $this->get('core.messenger');
-        $webpushr = $this->get('external.web_push.factory.webpushr');
-
+        $msg = $this->get('core.messenger');
         try {
-            $endpoint = $webpushr->getEndpoint('subscriber');
-            $endpoint->getSubscribers();
+            $service  = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('webpush_service');
+            $webpush  = $this->get(sprintf('external.web_push.factory.%s', $service));
+            $endpoint = $webpush->getEndpoint('test_connection');
+            $endpoint->testConnection();
             $msg->add(_('Server connection success!'), 'success');
         } catch (\Exception $e) {
             $msg->add(_('Unable to connect to the server'), 'error', 400);
@@ -392,26 +395,18 @@ class WebPushNotificationsController extends ApiController
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
-    /**
-     * Retrieve all the data from the notification given.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function getNotificationDataAction($id)
+    public function removeDataAction()
     {
-        $msg      = $this->get('core.messenger');
-        $webpushr = $this->get('external.web_push.factory.webpushr');
-
+        $msg     = $this->get('core.messenger');
+        $service = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('webpush_service');
         try {
-            $endpoint         = $webpushr->getEndpoint('status');
-            $notificationData = $endpoint->getStatus($id);
-            $msg->add(_('Server connection success!'), 'success');
+            $webpushHelper = $this->get(sprintf('core.helper.%s', $service));
+            $webpushHelper->removeAccountData();
+            $msg->add(_('Account data removed successfully'), 'success');
         } catch (\Exception $e) {
-            $msg->add($e->getMessage(), 'error', 400);
+            $msg->add(_('Unexpected error'), 'error', 400);
         }
 
-        return new JsonResponse($notificationData);
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 }

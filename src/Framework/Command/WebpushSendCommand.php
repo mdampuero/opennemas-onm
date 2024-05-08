@@ -71,9 +71,11 @@ class WebpushSendCommand extends Command
                 $this->getContainer()->get('core.loader')
                     ->load($instance->internal_name);
 
-                $as                   = $this->getContainer()->get('api.service.content');
-                $webpushr             = $this->getContainer()->get('external.web_push.factory.webpushr');
-                $notificationEndpoint = $webpushr->getEndpoint('notification');
+                $service = $this->getContainer()->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')->get('webpush_service');
+
+                $webpush              = $this->getContainer()->get(sprintf('external.web_push.factory.%s', $service));
+                $notificationEndpoint = $webpush->getEndpoint('notification');
                 $articleService       = $this->getContainer()->get('api.service.article');
                 $notificationService  = $this->getContainer()->get('api.service.webpush_notifications');
                 $onCooldown           = false;
@@ -102,18 +104,6 @@ class WebpushSendCommand extends Command
                     ->get('time_zone');
 
                 $this->getContainer()->get('core.locale')->setTimeZone($timezone);
-                $photoHelper = $this->getContainer()->get('core.helper.photo');
-
-                $favicoId = $this->getContainer()->get('orm.manager')
-                    ->getDataSet('Settings', 'instance')
-                    ->get('logo_favico');
-
-                $favico = $photoHelper->getPhotoPath(
-                    $as->getItem($favicoId),
-                    null,
-                    [ 192, 192 ],
-                    true
-                );
 
                 $delay = $this->getContainer()->get('orm.manager')
                     ->getDataSet('Settings', 'instance')
@@ -170,22 +160,15 @@ class WebpushSendCommand extends Command
                         continue;
                     }
 
-                    $contentPath = $this->getContainer()
-                        ->get('core.helper.url_generator')->getUrl($article, ['_absolute' => true]);
-                    $image       = $this->getContainer()
+                    $image = $this->getContainer()
                         ->get('core.helper.featured_media')->getFeaturedMedia($article, 'inner');
-                    $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
 
                     $notificationStatus = 1;
 
                     try {
-                        $sentNotification = $notificationEndpoint->sendNotification([
-                            'title'      => $article->title ?? '',
-                            'message'    => $article->description ?? '',
-                            'target_url' => $contentPath,
-                            'image'      => $imagePath,
-                            'icon'       => strpos($favico, '.png') ? $favico : '',
-                        ]);
+                        $webpushHelper    = $this->getContainer()->get(sprintf('core.helper.%s', $service));
+                        $notificationData = $webpushHelper->getNotificationData($article);
+                        $sentNotification = $notificationEndpoint->sendNotification($notificationData);
                     } catch (\Exception $e) {
                         $notificationStatus = 2;
                     }
