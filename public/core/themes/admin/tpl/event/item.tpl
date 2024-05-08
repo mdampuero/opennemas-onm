@@ -141,7 +141,7 @@
         </div>
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.where = !expanded.where">
-        <i class="fa fa-user m-r-10"></i>
+        <i class="fa fa-map-marker m-r-10"></i>
         {t}Event location{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.where }"></i>
         <span class="pull-right" ng-if="!expanded.where">
