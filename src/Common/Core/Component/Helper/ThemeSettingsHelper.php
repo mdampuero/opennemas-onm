@@ -40,6 +40,11 @@ class ThemeSettingsHelper extends SettingHelper
         'archive_cover',
         'mobile_top_menu',
         'mobile_main_menu',
+        'show_opinion_summary',
+        'show_opinion_media',
+        'show_opinion_author',
+        'show_opinion_author_photo',
+        'show_opinion_author_bio',
     ];
 
     protected $generalSettings = [
@@ -136,6 +141,11 @@ class ThemeSettingsHelper extends SettingHelper
                 'show_readtime' => 'content_readtime',
                 'show_author_photo' => 'content_author_photo',
                 'show_author_bio' => 'content_author_bio',
+                'show_opinion_summary' => 'content_opinion_summary',
+                'show_opinion_media' => 'content_opinion_media',
+                'show_opinion_author' => 'content_opinion_author',
+                'show_opinion_author_photo' => 'content_opinion_author_photo',
+                'show_opinion_author_bio' => 'content_opinion_author_bio',
             ],
             'show' => [
                 'show_category' => 'content_category_name',
@@ -147,15 +157,15 @@ class ThemeSettingsHelper extends SettingHelper
                 'show_readtime' => 'content_readtime',
                 'show_author_photo' => 'content_author_photo',
                 'show_author_bio' => 'content_author_bio',
+                'show_opinion_summary' => 'content_opinion_summary',
+                'show_opinion_media' => 'content_opinion_media',
+                'show_opinion_author' => 'content_opinion_author',
+                'show_opinion_author_photo' => 'content_opinion_author_photo',
+                'show_opinion_author_bio' => 'content_opinion_author_bio',
             ]
         ],
         'opinion' => [
             'show' => [
-                'show_summary' => 'content_opinion_summary',
-                'show_media' => 'content_opinion_media',
-                'show_author' => 'content_opinion_author',
-                'show_author_photo' => 'content_opinion_author_photo',
-                'show_author_bio' => 'content_opinion_author_bio',
             ],
             'list' => [
                 'show_summary' => 'archive_opinion_summary',
@@ -222,10 +232,17 @@ class ThemeSettingsHelper extends SettingHelper
             || $extension == 'tag') {
             $action = 'list';
         }
+        //Treat archive as a fake frontpage
+        if ($action == 'archive') {
+            $extension = 'frontpages';
+        }
 
         $themeSettings  = $this->getThemeSettings();
         $targetSettings = $this->getMappedSettings($extension, $action);
-
+        // dump($extension);
+        // dump($action);
+        // dump($this->parseSettings($themeSettings, $targetSettings));
+        // die();
         return $this->parseSettings($themeSettings, $targetSettings);
     }
 
