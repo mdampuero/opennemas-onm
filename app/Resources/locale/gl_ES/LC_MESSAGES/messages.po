@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-07 11:24+0000\n"
-"PO-Revision-Date: 2024-05-07 14:02+0200\n"
+"POT-Creation-Date: 2024-05-08 12:12+0000\n"
+"PO-Revision-Date: 2024-05-08 14:19+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -2326,7 +2326,7 @@ msgstr ""
 "etiquetas, unha por liña."
 
 msgid "Do you want to move contents in tag?"
-msgstr "¿Queres mover os contidos na categoría?"
+msgstr "¿Queres mover os contidos na etiqueta?"
 
 msgid "Source"
 msgstr "Orixe"
@@ -3723,7 +3723,7 @@ msgid "Place name"
 msgstr "Nome do lugar"
 
 msgid "Place address"
-msgstr "Enderezo do correo"
+msgstr "Enderezo do lugar"
 
 msgid "Website URL"
 msgstr "URL do sitio web"
@@ -7132,6 +7132,12 @@ msgstr "Usuario de Twitter"
 msgid "Facebook user"
 msgstr "Usuario de Facebook"
 
+msgid "Instagram user"
+msgstr "Usuario de Instagram"
+
+msgid "LinkedIn user"
+msgstr "Usuario de LinkedIn"
+
 msgid "No biography"
 msgstr "Sen biografía"
 
@@ -7838,14 +7844,11 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 msgid "Group name"
 msgstr "Nome do grupo"
 
-#~ msgid "Invalid parameters, please add a valid JSON"
-#~ msgstr "Parámetros non válidos. Engade un JSON válido"
-
-#~ msgid "Event Organizer"
-#~ msgstr "Organizador do evento"
-
 #~ msgid "Place"
 #~ msgstr "Lugar"
+
+#~ msgid "Invalid parameters, please add a valid JSON"
+#~ msgstr "Parámetros non válidos. Engade un JSON válido"
 
 #~ msgid "Fonts"
 #~ msgstr "Tipos de letra"
