@@ -43,13 +43,13 @@
   "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
   "location": {
     "@type": "Place",
-    "name": {($content->event_place) ? "{$content->event_place|escape:'htmlall'}" : ""},
-    "address": {($content->event_address) ? "{$content->event_address}" : ""}
+    "name": "{($content->event_place) ? "{$content->event_place|escape:'htmlall'}" : ""}",
+    "address": "{($content->event_address) ? "{$content->event_address}" : ""}"
   },
   "organizer": {
     "@type": "Organization",
-    "name": {($content->event_organizer_name) ? "{$content->event_organizer_name|escape:'htmlall'}" : "{$siteName|replace:'\\':''|escape:'htmlall'}"},
-    "url": {($content->event_organizer_url) ? "{$content->event_organizer_url}" : "{$siteUrl}"}
+    "name": "{($content->event_organizer_name) ? "{$content->event_organizer_name|escape:'htmlall'}" : "{$siteName|replace:'\\':''|escape:'htmlall'}"}",
+    "url": "{($content->event_organizer_url) ? "{$content->event_organizer_url}" : "{$siteUrl}"}"
   }
   {if has_featured_media($content, 'frontpage')}
     , "image":
