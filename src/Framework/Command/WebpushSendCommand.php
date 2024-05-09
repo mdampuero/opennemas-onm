@@ -74,6 +74,14 @@ class WebpushSendCommand extends Command
                 $service = $this->getContainer()->get('orm.manager')
                     ->getDataSet('Settings', 'instance')->get('webpush_service');
 
+                if (empty($service)) {
+                    $output->writeln(sprintf(
+                        '<fg=red;options=bold>SERVICE NOT FOUND</> <fg=blue;options=bold>(Instance %s skipped)</>',
+                        $instance->internal_name
+                    ));
+                    continue;
+                }
+
                 $webpush              = $this->getContainer()->get(sprintf('external.web_push.factory.%s', $service));
                 $notificationEndpoint = $webpush->getEndpoint('notification');
                 $articleService       = $this->getContainer()->get('api.service.article');
@@ -168,7 +176,7 @@ class WebpushSendCommand extends Command
                     try {
                         $webpushHelper    = $this->getContainer()->get(sprintf('core.helper.%s', $service));
                         $notificationData = $webpushHelper->getNotificationData($article);
-                        $sentNotification = $notificationEndpoint->sendNotification($notificationData);
+                        $sentNotification = $notificationEndpoint->sendNotification([ 'data' => $notificationData ]);
                     } catch (\Exception $e) {
                         $notificationStatus = 2;
                     }
@@ -180,7 +188,7 @@ class WebpushSendCommand extends Command
                             'title'          => $article->title ?? '',
                             'send_date'      => gmdate('Y-m-d H:i:s'),
                             'image'          => $image->pk_content ?? null,
-                            'transaction_id' => $sentNotification['ID'] ?? '',
+                            'transaction_id' => $sentNotification['ID'] ?? $sentNotification['id'] ?? '',
                         ]
                     );
 

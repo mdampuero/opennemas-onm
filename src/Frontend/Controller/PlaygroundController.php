@@ -96,13 +96,43 @@ class PlaygroundController extends Controller
     private function sendPulse()
     {
         try {
-            $service = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('webpush_service');
+            // $contentService = $this->get('api.service.content');
+            // $photoHelper    = $this->get('core.helper.photo');
 
-            $webpush              = $this->get(sprintf('external.web_push.factory.%s', $service));
-            $notificationEndpoint = $webpush->getEndpoint('notification');
-            $webpushHelper        = $this->get(sprintf('core.helper.%s', $service));
-            $notificationData     = $webpushHelper->getNotificationData(870929);
-            $sentNotification     = $notificationEndpoint->sendNotification([ 'data' => $notificationData ]);
+            // $favico = $contentService->getItem(
+            //     $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('logo_favico')
+            // );
+
+            // $favicoPath  = $photoHelper->getPhotoPath($favico, null, [], true);
+
+            // $curl = curl_init();
+            // curl_setopt($curl, CURLOPT_URL, $favicoPath);
+            // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            // curl_setopt($curl, CURLOPT_HEADER, false);
+            // $iconContent = curl_exec($curl);
+            // curl_close($curl);
+
+            // dump($favicoPath);
+            // dump($iconContent);
+            // die();
+            // $service = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('webpush_service');
+
+            // $webpushHelper        = $this->get(sprintf('core.helper.%s', $service));
+            // $webpush              = $this->get(sprintf('external.web_push.factory.%s', $service));
+            // $notificationEndpoint = $webpush->getEndpoint('subscriber');
+            // $notificationData     = $notificationEndpoint->getSubscribers(
+            //     $webpushHelper->prepareDataForEndpoint('subscriber')
+            // );
+            // dump($notificationData);
+            // $weblist = $webpush->getEndpoint('website');
+            // $list = $weblist->getList();
+            // dump($list);
+            // die();
+            // $notificationEndpoint = $webpush->getEndpoint('notification');
+            // $webpushHelper        = $this->get(sprintf('core.helper.%s', $service));
+            // $notificationData     = $webpushHelper->getNotificationData(870929);
+            // dump($notificationData);
+            // $sentNotification     = $notificationEndpoint->sendNotification([ 'data' => $notificationData ]);
             // $service  = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('webpush_service');
             // $webpush  = $this->get(sprintf('external.web_push.factory.%s', $service));
             // $endpoint = $webpush->getEndpoint('test_connection');
@@ -129,7 +159,7 @@ class PlaygroundController extends Controller
             //     ->getDataSet('Settings', 'instance')
             //     ->set('sendpulse_website_id', $webId);
 
-            return new Response($snippet, 200);
+            return new Response('OK', 200);
         } catch (\Exception $e) {
             dump($e);
             die();

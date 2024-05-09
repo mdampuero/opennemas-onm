@@ -25,41 +25,28 @@ class NotificationEndpoint extends Endpoint
     public function sendNotification($params)
     {
         try {
-            $url     = $this->url . $this->config['actions']['send_notification']['path'];
-            $headers = [
-                'content-type'      => 'application/json',
-                'webpushrKey'       => $this->auth->getConfiguration()['webpushrKey'],
-                'webpushrAuthToken' => $this->auth->getConfiguration()['webpushrAuthToken']
-            ];
+            $url = $this->url
+            . $this->replaceUriWildCards($this->config['actions']['send_notification']['path'], $params);
 
-            if (array_key_exists('image', $params)) {
-                $parts = explode('.', $params['image']);
-                if (empty(end($parts))) {
-                    unset($params['image']);
-                }
-            }
+            $data = array_key_exists('data', $params) && !empty($params['data']) ? $params['data'] : [];
 
-            $data = [
-                'headers' => $headers,
-                'json' => [
-                    'title'          => $params['title'],
-                    'message'        => $params['message'],
-                    'target_url'     => $params['target_url'],
-                    'icon'           => $params['icon'] ?? null,
-                    'image'          => $params['image'] ?? null
+            $response = $this->client->post(
+                $url,
+                [
+                    'headers'     => $this->auth->getAuthHeaders(),
+                    'form_params' => $data
                 ]
-            ];
+            );
 
-            $data['json'] = array_filter($data['json']);
-            $response     = $this->client->post($url, $data);
-            $body         = json_decode($response->getBody(), true);
-            if ($body['status'] == 'success') {
+            $body = json_decode($response->getBody(), true);
+
+            if ($response->getStatusCode() == 200) {
+                $notificationID = $body['ID'] ?? $body['id'] ?? '';
                 getService('application.log')
-                    ->info('Notification ' . $body['ID'] . ' was sent successfully');
-            }
-            if ($body['status'] != 'success') {
+                    ->info('Webpush notification was sent successfully (ID: ' . $notificationID . ' )');
+            } else {
                 getService('application.log')
-                    ->info('Notification sending has failed because of ' . $body['description']);
+                    ->info('Webpush notification has failed');
             }
         } catch (\Exception $e) {
             getService('application.log')

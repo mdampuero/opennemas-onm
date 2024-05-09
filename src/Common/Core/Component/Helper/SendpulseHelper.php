@@ -19,8 +19,7 @@ class SendpulseHelper
     protected $service = 'external.web_push.factory.sendpulse';
 
     protected $endpointData = [
-        'code_snippet' => [ 'id' => 'getWebsiteId'],
-        'notification' => [ 'website_id' => 'getWebsiteId'],
+        'subscriber'   => [ 'id' => 'getWebsiteId'],
     ];
 
     /**
@@ -44,7 +43,7 @@ class SendpulseHelper
 
         $data = [];
         foreach ($this->endpointData[$endpoint] as $param => $method) {
-            if (function_exists($method)) {
+            if (method_exists($this, $method)) {
                 $data[$param] = $this->$method();
             }
         }
@@ -147,25 +146,69 @@ class SendpulseHelper
         $contentService = $this->container->get('api.service.content');
         $photoHelper    = $this->container->get('core.helper.photo');
 
-        $favico = $photoHelper->getPhotoPath(
-            $contentService->getItem($this->ds->get('logo_favico')),
-            null,
-            [ 192, 192 ],
-            true
-        );
+        // $favico = $photoHelper->getPhotoPath(
+        //     $contentService->getItem($this->ds->get('logo_favico')),
+        //     null,
+        //     [ 192, 192 ],
+        //     true
+        // );
 
         $contentPath = $this->container->get('core.helper.url_generator')->getUrl($article, ['_absolute' => true]);
         $image       = $this->container->get('core.helper.featured_media')->getFeaturedMedia($article, 'inner');
         $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
+        $favico      = $contentService->getItem($this->ds->get('logo_favico'));
+        $favicoPath  = $photoHelper->getPhotoPath($favico, null, [ 192, 192 ], true);
 
         $data = [
             'title'   => $article->title ?? '',
             'body' => $article->description ?? '',
             'website_id' => $this->getWebsiteId(),
             'ttl'      => 86400,
-            'link' => $contentPath
+            'link' => $contentPath,
         ];
 
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $imagePath);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        $imageContent = curl_exec($curl);
+        curl_close($curl);
+
+        $data['image'] = [
+            'name' => $image->title ?? '',
+            'data' => base64_encode($imageContent)
+        ];
+
+        if (empty($imageContent)) {
+            unset($data['image']);
+        }
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $favicoPath);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        $iconContent = curl_exec($curl);
+        curl_close($curl);
+
+        $data['icon'] = [
+            'name' => $favico->title ?? '',
+            'data' => base64_encode($iconContent)
+        ];
+
+        if (empty($iconContent)) {
+            unset($data['icon']);
+        }
+
         return $data;
+    }
+
+    public function parseNotificationData($data)
+    {
+        return [
+            'send_count'  => $data['send'],
+            'impressions' => $data['delivered'],
+            'clicks'      => $data['redirect'],
+            'closed'      => $data['unsubscribed']
+        ];
     }
 }

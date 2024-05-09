@@ -29,9 +29,11 @@ class StatusEndpoint extends Endpoint
             $response = $this->client->get($url, [ 'headers' => $this->auth->getAuthHeaders() ]);
             $body     = json_decode($response->getBody(), true);
 
-            // Pending of WebPushR to fix 'camapign_id' as parameter of the response
-            getService('application.log')
-                    ->info('Notification was retrieved successfully');
+            if ($response->getStatusCode() == 200) {
+                // Pending of WebPushR to fix 'camapign_id' as parameter of the response
+                getService('application.log')
+                        ->info('Notification was retrieved successfully');
+            }
         } catch (\Exception $e) {
             getService('application.log')
                 ->error('Error retrieving the notification from server '

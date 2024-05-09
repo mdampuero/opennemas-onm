@@ -149,4 +149,14 @@ class WebpushrHelper
 
         return $data;
     }
+
+    public function parseNotificationData($data)
+    {
+        return [
+            'send_count'  => $data['count']['successfully_sent'],
+            'impressions' => $data['count']['delivered'],
+            'clicks'      => $data['count']['clicked'],
+            'closed'      => $data['count']['closed']
+        ];
+    }
 }

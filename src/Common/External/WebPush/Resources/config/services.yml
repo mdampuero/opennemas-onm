@@ -60,6 +60,18 @@ parameters:
                     actions:
                         get_list:
                             path: '/push/websites/'
+            status:
+                class: 'Common\External\WebPush\Component\Endpoint\StatusEndpoint'
+                config:
+                    actions:
+                        get_status:
+                            path: '/push/tasks/{id}'
+            subscriber:
+                class: 'Common\External\WebPush\Component\Endpoint\SubscriberEndpoint'
+                config:
+                    actions:
+                        get_subscribers:
+                            path: '/push/websites/{id}/subscriptions/total'
             code_snippet:
                 class: 'Common\External\WebPush\Component\Endpoint\CodeSnippetEndpoint'
                 config:

@@ -28,8 +28,10 @@ class WebsiteEndpoint extends Endpoint
             $response = $this->client->get($url, [ 'headers' => $this->auth->getAuthHeaders() ]);
             $body     = json_decode($response->getBody(), true);
 
-            getService('application.log')
-                    ->info('websites list was retrieved successfully');
+            if ($response->getStatusCode() == 200) {
+                getService('application.log')
+                    ->info('website list was retrieved successfully');
+            }
         } catch (\Exception $e) {
             getService('application.log')
                 ->error('Error retrieving the websites list from server '
