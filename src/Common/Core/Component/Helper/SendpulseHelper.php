@@ -61,7 +61,6 @@ class SendpulseHelper
             $websiteList     = $websiteEndpoint->getList();
 
             $mainDomain = $this->instance->getMainDomain();
-            $mainDomain = 'verdadesymentiras.com';
 
             foreach ($websiteList as $website) {
                 if (strpos($mainDomain, $website['url']) !== false) {
