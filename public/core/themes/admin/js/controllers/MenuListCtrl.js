@@ -66,7 +66,9 @@ angular.module('BackendApp.controllers')
       $scope.init = function() {
         $scope.backup.criteria    = $scope.criteria;
         $scope.app.columns.hidden = [];
-        $scope.app.columns.selected = [ 'name', 'position' ];
+        $scope.app.columns.selected = _.uniq($scope.app.columns.selected
+          .concat([ 'name', 'position' ]));
+
         oqlEncoder.configure({
           placeholder: {
             name: 'name ~ "%[value]%"'

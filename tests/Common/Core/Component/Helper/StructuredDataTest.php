@@ -266,6 +266,37 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests generateJsonLDCode
      */
+    public function testGenerateJsonLDCodeWithEvent()
+    {
+        $data                               = [];
+        $data['content']                    = new \Content();
+        $data['content']->tags              = [1,2,3,4];
+        $data['content']->content_type_name = 'event';
+        $data['summary']                    = 'This is a test summary';
+        $data['created']                    = '10-10-2010 00:00:00';
+        $data['changed']                    = '10-10-2010 00:00:00';
+        $data['url']                        = 'http://console/';
+        $data['author']                     = 'John Doe';
+
+
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags', 'extractParamsFromData' ])
+            ->getMock();
+
+        $object->expects($this->once())->method('extractParamsFromData')
+            ->with($data)
+            ->willReturn($data);
+
+        $this->tpl->expects($this->at(0))->method('fetch')
+            ->with('common/helpers/structured_event_data.tpl', $data);
+
+        $object->generateJsonLDCode($data);
+    }
+
+    /**
+     * Tests generateJsonLDCode
+     */
     public function testGenerateJsonLDCodeArticleWithVideo()
     {
         $data                               = [];
