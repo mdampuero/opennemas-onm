@@ -135,6 +135,32 @@ function get_author_social_twitter_url($item = null) : ?string
 }
 
 /**
+ * Returns the author instagram url for the provided item.
+ *
+ * @param Content $item The item to get author instagram url for. If not provided, the
+ *                      function will try to search the item in the template.
+ *
+ * @return string The instagram url if author is present. Null otherwise.
+ */
+function get_author_social_instagram_url($item = null) : ?string
+{
+    return getService('core.helper.author')->getAuthorSocialInstagramUrl($item);
+}
+
+/**
+ * Returns the author linkedin url for the provided item.
+ *
+ * @param Content $item The item to get author linkedin url for. If not provided, the
+ *                      function will try to search the item in the template.
+ *
+ * @return string The linkedin url if author is present. Null otherwise.
+ */
+function get_author_social_linkedin_url($item = null) : ?string
+{
+    return getService('core.helper.author')->getAuthorSocialLinkedinUrl($item);
+}
+
+/**
  * Returns the relative URL to the automatic frontpage of the author for the
  * provided item.
  *
@@ -266,6 +292,36 @@ function has_author_social_facebook_url($item = null) : bool
 function has_author_social_twitter_url($item = null) : bool
 {
     return getService('core.helper.author')->hasAuthorSocialTwitterUrl($item);
+}
+
+/**
+ * Checks if the author has a instagram account provided as
+ * parameter.
+ *
+ * @param mixed $item The item to check author's instagram account for or the author. If
+ *                    not provided, the function will try to search the item in
+ *                    the template.
+ *
+ * @return bool True if the author has a instagram account defined. False otherwise.
+ */
+function has_author_social_instagram_url($item = null) : bool
+{
+    return getService('core.helper.author')->hasAuthorSocialInstagramUrl($item);
+}
+
+/**
+ * Checks if the author has a linkedin account provided as
+ * parameter.
+ *
+ * @param mixed $item The item to check author's linkedin account for or the author. If
+ *                    not provided, the function will try to search the item in
+ *                    the template.
+ *
+ * @return bool True if the author has a linkedin account defined. False otherwise.
+ */
+function has_author_social_linkedin_url($item = null) : bool
+{
+    return getService('core.helper.author')->hasAuthorSocialLinkedInUrl($item);
 }
 
 /**

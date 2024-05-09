@@ -65,8 +65,13 @@ class SearchController extends Controller
             ->filter('slug')
             ->get();
 
-        return $this->redirect($this->generateUrl('frontend_tag_frontpage', [
-            'slug' => $slug
-        ]));
+
+        return $this->redirect(
+            $this->get('core.decorator.url')->prefixUrl(
+                $this->generateUrl('frontend_tag_frontpage', [
+                    'slug' => $slug
+                ])
+            )
+        );
     }
 }

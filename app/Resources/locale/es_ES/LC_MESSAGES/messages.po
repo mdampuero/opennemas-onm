@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-10 10:50+0000\n"
-"PO-Revision-Date: 2024-04-10 14:11+0200\n"
+"POT-Creation-Date: 2024-05-08 12:12+0000\n"
+"PO-Revision-Date: 2024-05-08 14:16+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1399,9 +1399,6 @@ msgstr "No"
 
 msgid "Locale"
 msgstr "Idioma"
-
-msgid "Invalid parameters, please add a valid JSON"
-msgstr "Parámetros inválidos, por favor añade un JSON válido"
 
 msgid "Contents translated successfully"
 msgstr "Contenidos traducidos correctamente"
@@ -2834,6 +2831,9 @@ msgstr "410 GONE"
 msgid "Redirects URIs to error 410 GONE"
 msgstr "Redireccionar URIs a error 410 GONE"
 
+msgid "URI"
+msgstr "URI"
+
 msgid "Test"
 msgstr "Probar"
 
@@ -3716,6 +3716,15 @@ msgstr "Personalizar contenido"
 msgid "Remove from all frontpages"
 msgstr "Quitar de todas las portadas"
 
+msgid "Organizer data"
+msgstr "Datos del Organizador"
+
+msgid "Organizer name"
+msgstr "Nombre del organizador"
+
+msgid "Organizer website"
+msgstr "Sitio web del organizador"
+
 msgid "Start date"
 msgstr "Fecha de inicio"
 
@@ -3728,8 +3737,11 @@ msgstr "Fecha de fin"
 msgid "End hour"
 msgstr "Hora de fin"
 
-msgid "Place"
-msgstr "Lugar"
+msgid "Place name"
+msgstr "Nombre del lugar"
+
+msgid "Place address"
+msgstr "Dirección del lugar"
 
 msgid "Website URL"
 msgstr "URL del sitio web"
@@ -4576,6 +4588,12 @@ msgstr "Miga de pan"
 msgid "Set display of routes"
 msgstr "Establecer visualización de rutas"
 
+msgid "Pre-footer widget"
+msgstr "Widget previo al pie de página"
+
+msgid "Widget to show before footer"
+msgstr "Widget para mostrar antes del pie de página"
+
 msgid "Normal contents images"
 msgstr "Imágenes de contenido normal"
 
@@ -4641,6 +4659,12 @@ msgstr "Mostrar subtítulo"
 
 msgid "Display summary/description"
 msgstr "Mostrar resumen/descripción"
+
+msgid "Opinions media"
+msgstr "Media de opiniones"
+
+msgid "Display featured media in opinions"
+msgstr "Mostrar media destacados en opiniones"
 
 msgid "Info"
 msgstr "Info"
@@ -7143,6 +7167,12 @@ msgstr "Usuario en twitter"
 msgid "Facebook user"
 msgstr "Usuario de Facebook"
 
+msgid "Instagram user"
+msgstr "Usuario de Instagram"
+
+msgid "LinkedIn user"
+msgstr "Usuario de LinkedIn"
+
 msgid "No biography"
 msgstr "Sin biografía"
 
@@ -7859,6 +7889,12 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
+
+#~ msgid "Place"
+#~ msgstr "Lugar"
+
+#~ msgid "Invalid parameters, please add a valid JSON"
+#~ msgstr "Parámetros inválidos, por favor añade un JSON válido"
 
 #~ msgid "Fonts"
 #~ msgstr "Fuentes"
