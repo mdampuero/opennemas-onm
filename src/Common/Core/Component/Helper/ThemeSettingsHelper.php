@@ -43,8 +43,10 @@ class ThemeSettingsHelper extends SettingHelper
 
     protected $generalSettings = [
         'breadcrumb',
+        'progressbar',
         'main_logo_size',
         'general_page_width',
+        'general_main_widget',
         'general_footer_widget',
         'hamburger_position',
         'widget_header_type',

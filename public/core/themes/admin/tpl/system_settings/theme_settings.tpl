@@ -363,6 +363,43 @@
                       </div>
                       <div class="col-xs-12 col-md-4 m-b-15">
                         <h4>
+                          <i class="fa fa-minus"></i>
+                          {t}Progress bar{/t}
+                        </h4>
+                        <label class="form-label" for="theme-progressbar">
+                          <span class="help">
+                            {t}Set display of scroll progress bar{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <select id="theme-progressbar" name="theme-progressbar" ng-model="settings.theme_options.progressbar">
+                              <option value="[% progressbar_name %]" ng-repeat="(progressbar_name,progressbar_value) in extra.theme_skins[settings.theme_skin].params.options.progressbar.options" ng-selected="[% progressbar_name == settings.theme_options.progressbar || settings.theme_options.progressbar == undefined %]">[% progressbar_value %]</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4 m-b-15">
+                        <h4>
+                          <i class="fa fa-puzzle-piece"></i>
+                          {t}Pre-main widget{/t}
+                        </h4>
+                        <label class="form-label" for="theme-general-main-widget">
+                          <span class="help">
+                            {t}Widget to show before main content{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              ID
+                            </span>
+                            <input class="form-control" id="general-main-widget" name="general-main-widget" ng-model="settings.theme_options.general_main_widget" type="text">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4 m-b-15">
+                        <h4>
                           <i class="fa fa-puzzle-piece"></i>
                           {t}Pre-footer widget{/t}
                         </h4>
