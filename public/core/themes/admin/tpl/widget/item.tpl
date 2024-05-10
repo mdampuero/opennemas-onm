@@ -123,8 +123,13 @@
               </div>
             </div>
           {/acl}
-          <div class="controls">
-            <textarea name="body.[% slug_key %]" id="body.[% slug_key %]" incomplete="incomplete" ng-model="item.body[slug_key]" onm-editor onm-editor-preset="simple" class="form-control" rows="80"></textarea>
+          <div class="controls widget-textarea-custom">
+            <style>
+              .widget-textarea-custom .cke_contents {
+                min-height: 500px;
+              }
+            </style>
+            <textarea name="body.[% slug_key %]" id="body.[% slug_key %]" incomplete="incomplete" ng-model="item.body[slug_key]" onm-editor onm-editor-preset="standard" class="form-control" rows=50></textarea>
           </div>
         </div>
       </div>
