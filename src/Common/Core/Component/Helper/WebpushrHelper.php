@@ -59,7 +59,7 @@ class WebpushrHelper
             throw new \Exception();
         }
 
-        $response = new BinaryFileResponse('assets/js/webpush.js');
+        $response = new BinaryFileResponse('assets/js/webpushr.js');
         $response->headers->set('X-Status-Code', 200);
         $response->headers->set('Content-Type', 'application/javascript');
         $response->headers->set('Cache-Control', 'public');
