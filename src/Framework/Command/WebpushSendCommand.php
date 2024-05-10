@@ -178,6 +178,10 @@ class WebpushSendCommand extends Command
                         $notificationData = $webpushHelper->getNotificationData($article);
                         $sentNotification = $notificationEndpoint->sendNotification([ 'data' => $notificationData ]);
                     } catch (\Exception $e) {
+                        $output->writeln(sprintf(
+                            '<fg=red;options=bold>NOTIFICATION FAILED</> <fg=blue;options=bold>(%s)</>',
+                            $e->getMessage()
+                        ));
                         $notificationStatus = 2;
                     }
                     $notificationService->patchItem(
