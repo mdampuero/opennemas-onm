@@ -93,6 +93,55 @@ class PlaygroundController extends Controller
         return new Response($this->render('playground.tpl'), 200);
     }
 
+    private function testConnection()
+    {
+        try {
+            $service  = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('webpush_service');
+            $webpush  = $this->get(sprintf('external.web_push.factory.%s', $service));
+            $endpoint = $webpush->getEndpoint('test_connection');
+            $endpoint->testConnection();
+            dump('OK');
+            die();
+        } catch (\Exception $e) {
+            dump($e);
+            die();
+        }
+    }
+
+    private function getSubscribers()
+    {
+        try {
+            $service     = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('webpush_service');
+            $webpush     = $this->get(sprintf('external.web_push.factory.%s', $service));
+            $endpoint    = $webpush->getEndpoint('subscriber');
+            $subscribers = $endpoint->getSubscribers();
+            dump($subscribers);
+            die();
+        } catch (\Exception $e) {
+            dump($e);
+            die();
+        }
+    }
+
+    private function sendNotification()
+    {
+        try {
+            $service = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('webpush_service');
+
+            $webpush              = $this->get(sprintf('external.web_push.factory.%s', $service));
+            $notificationEndpoint = $webpush->getEndpoint('notification');
+
+            $webpushHelper    = $this->get(sprintf('core.helper.%s', $service));
+            $notificationData = $webpushHelper->getNotificationData('870922');
+            $sentNotification = $notificationEndpoint->sendNotification([ 'data' => $notificationData ]);
+            dump($sentNotification);
+            die();
+        } catch (\Exception $e) {
+            dump($e);
+            die();
+        }
+    }
+
     private function sendPulse()
     {
         try {

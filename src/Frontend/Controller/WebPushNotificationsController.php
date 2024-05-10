@@ -35,8 +35,6 @@ class WebPushNotificationsController extends FrontendController
             $webpushHelper = $this->get(sprintf('core.helper.%s', $service));
             return $webpushHelper->getWebpushCollectionFile();
         } catch (\Exception $e) {
-            dump($e);
-            die();
             throw new ResourceNotFoundException();
         }
         throw new ResourceNotFoundException();

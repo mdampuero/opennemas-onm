@@ -33,6 +33,7 @@ class OrmConfigurationProvider implements ConfigurationProvider
     public function getConfiguration()
     {
         return [
+            'Content-Type' => 'application/json',
             'webpushrKey' => $this->dataset->get('webpush_apikey', ''),
             'webpushrAuthToken' => $this->dataset->get('webpush_token', ''),
         ];
