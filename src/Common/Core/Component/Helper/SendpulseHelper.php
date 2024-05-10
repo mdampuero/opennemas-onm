@@ -18,6 +18,8 @@ class SendpulseHelper
 {
     protected $service = 'external.web_push.factory.sendpulse';
 
+    protected $avaliableImageType = ['jpg', 'png', 'gif'];
+
     protected $endpointData = [
         'subscriber'   => [ 'id' => 'getWebsiteId'],
     ];
@@ -166,20 +168,22 @@ class SendpulseHelper
             'link' => $contentPath,
         ];
 
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $imagePath);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HEADER, false);
-        $imageContent = curl_exec($curl);
-        curl_close($curl);
+        $imageContent = '';
+        $extension    = pathinfo(parse_url($imagePath, PHP_URL_PATH), PATHINFO_EXTENSION);
+        if (in_array($extension, $this->avaliableImageType) && $image->size <= 200) {
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $imagePath);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_HEADER, false);
+            $imageContent = curl_exec($curl);
+            curl_close($curl);
+        }
 
-        $data['image'] = [
-            'name' => $image->title ?? '',
-            'data' => base64_encode($imageContent)
-        ];
-
-        if (empty($imageContent)) {
-            unset($data['image']);
+        if (!empty($imageContent)) {
+            $data['image'] = [
+                'name' => $image->title ?? '',
+                'data' => base64_encode($imageContent)
+            ];
         }
 
         $curl = curl_init();
@@ -189,13 +193,11 @@ class SendpulseHelper
         $iconContent = curl_exec($curl);
         curl_close($curl);
 
-        $data['icon'] = [
-            'name' => $favico->title ?? '',
-            'data' => base64_encode($iconContent)
-        ];
-
-        if (empty($iconContent)) {
-            unset($data['icon']);
+        if (!empty($iconContent)) {
+            $data['icon'] = [
+                'name' => $favico->title ?? '',
+                'data' => base64_encode($iconContent)
+            ];
         }
 
         return $data;
