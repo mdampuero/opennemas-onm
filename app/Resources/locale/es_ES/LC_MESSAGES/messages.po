@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 12:12+0000\n"
-"PO-Revision-Date: 2024-05-08 14:16+0200\n"
+"POT-Creation-Date: 2024-05-09 15:07+0000\n"
+"PO-Revision-Date: 2024-05-09 17:10+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -3717,7 +3717,7 @@ msgid "Remove from all frontpages"
 msgstr "Quitar de todas las portadas"
 
 msgid "Organizer data"
-msgstr "Datos del Organizador"
+msgstr "Datos del organizador"
 
 msgid "Organizer name"
 msgstr "Nombre del organizador"
@@ -4588,11 +4588,23 @@ msgstr "Miga de pan"
 msgid "Set display of routes"
 msgstr "Establecer visualización de rutas"
 
+msgid "Progress bar"
+msgstr "Barra de progreso"
+
+msgid "Set display of scroll progress bar"
+msgstr "Configurar la visualización de la barra de progreso"
+
+msgid "Pre-main widget"
+msgstr "widget previo al contenido principal"
+
+msgid "Widget to show before main content"
+msgstr "Widget a mostrar antes del contenido principal"
+
 msgid "Pre-footer widget"
-msgstr "Widget previo al pie de página"
+msgstr "widget previo al pie de página"
 
 msgid "Widget to show before footer"
-msgstr "Widget para mostrar antes del pie de página"
+msgstr "Widget a mostrar antes del pie de página"
 
 msgid "Normal contents images"
 msgstr "Imágenes de contenido normal"
@@ -4660,12 +4672,6 @@ msgstr "Mostrar subtítulo"
 msgid "Display summary/description"
 msgstr "Mostrar resumen/descripción"
 
-msgid "Opinions media"
-msgstr "Media de opiniones"
-
-msgid "Display featured media in opinions"
-msgstr "Mostrar media destacados en opiniones"
-
 msgid "Info"
 msgstr "Info"
 
@@ -4674,6 +4680,9 @@ msgstr "Mostrar el autor del contenido"
 
 msgid "Display author's photo"
 msgstr "Mostrar foto del autor"
+
+msgid "Display author's bio"
+msgstr "Mostrar biografía del autor"
 
 msgid "Display content's date"
 msgstr "Mostrar la fecha del contenido"
@@ -4769,6 +4778,12 @@ msgstr "Disposición del widget más en portada"
 
 msgid "Max items on suggested widgets"
 msgstr "Máximo de elementos en widgets sugeridos"
+
+msgid "Choose options for contents"
+msgstr "Elegir opciones para contenidos"
+
+msgid "Display featured media in opinions"
+msgstr "Mostrar imagen destacada en opiniones"
 
 msgid "Mobile logo size"
 msgstr "Tamaño del logotipo móvil"
