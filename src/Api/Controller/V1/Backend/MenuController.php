@@ -125,6 +125,7 @@ class MenuController extends ApiController
             'internal'         => $this->getModulePages(),
             'static'           => $this->getStaticPages(),
             'syncBlogCategory' => $this->getSyncSites(),
+            'tags'             => $this->getTagsByOQL(),
             'keys'             => $this->getL10nKeys(),
             'multilanguage'    => in_array(
                 'es.openhost.module.multilanguage',
@@ -133,6 +134,26 @@ class MenuController extends ApiController
         ];
 
         return $params;
+    }
+
+    private function getTagsByOQL()
+    {
+        $context = $this->get('core.locale')->getContext();
+        $this->get('core.locale')->setContext('frontend');
+
+        $locale = $this->get('core.locale')->getLocale();
+
+        $oql = 'locale is null or locale = "' . $locale . '"';
+
+        $response = $this->get('api.service.tag')->getList($oql);
+
+        return array_map(function ($a) {
+            return [
+                'title' => $a->name,
+                'slug'  => $a->slug,
+                'id'    => $a->id,
+            ];
+        }, $response['items']);
     }
 
     /**

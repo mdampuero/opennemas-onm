@@ -81,6 +81,9 @@
           static: {
             link_name: 'slug',
           },
+          tags: {
+            link_name: 'slug',
+          },
           'blog-category': {
             link_name: 'name'
           },

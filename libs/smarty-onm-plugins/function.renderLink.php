@@ -7,64 +7,33 @@
  *
  * @return string
  */
-function smarty_function_renderLink($params, &$smarty)
+function smarty_function_renderLink($params, $smarty)
 {
-    $item     = $params['item'];
-    $nameMenu = $params['name'];
-    $nameUrl  = 'seccion';
-    if (isset($nameMenu) && !empty($nameMenu)) {
-        if ($nameMenu == 'video') {
-            $nameUrl = 'video';
-        } elseif ($nameMenu == 'album') {
-            $nameUrl = 'album';
-        } elseif ($nameMenu == 'special') {
-            $nameUrl = 'especiales';
-        } elseif ($nameMenu == 'encuesta') {
-            $nameUrl = 'encuesta';
-        }
-    }
+    $item       = $params['item'];
+    $nameMenu   = $params['name'];
+    $nameUrlMap = [
+        'video'    => 'video',
+        'album'    => 'album',
+        'special'  => 'especiales',
+        'encuesta' => 'encuesta'
+    ];
 
-    switch ($item->type) {
-        case 'category':
-            $link = "/$nameUrl/$item->link/";
-            break;
-        case 'videoCategory':
-            $link = "/video/$item->link/";
-            break;
-        case 'albumCategory':
-            $link = "/album/$item->link/";
-            break;
-        case 'pollCategory':
-            $link = "/encuesta/$item->link/";
-            break;
-        case 'static':
-            $link = "/" . STATIC_PAGE_PATH . "/$item->link.html";
-            break;
-        case 'internal':
-            if ($item->link == '/') {
-                $link = '';
-            } elseif ($item->link == 'empresa') {
-                $link = "/$item->link";
-            } else {
-                $link = "/$item->link/";
-            }
+    $nameUrl = isset($nameUrlMap[$nameMenu]) ? $nameUrlMap[$nameMenu] : 'seccion';
 
-            $link = str_replace('//', '/', $link);
+    $typeToUrlMap = [
+        'category'         => "/$nameUrl/$item->link/",
+        'videoCategory'    => "/video/$item->link/",
+        'albumCategory'    => "/album/$item->link/",
+        'pollCategory'     => "/encuesta/$item->link/",
+        'static'           => "/" . STATIC_PAGE_PATH . "/$item->link.html",
+        'internal'         => ($item->link == '/') ? "" : "/$item->link/",
+        'external'         => "$item->link",
+        'syncBlogCategory' => "/ext$nameUrl/blog/$item->link/",
+        'blog-category'    => "/blog/section/$item->link/",
+        'tags'             => "/tags/$item->link/",
+    ];
 
-            break;
-        case 'external':
-            $link = "$item->link";
-            break;
-        case 'syncBlogCategory':
-            $link = "/ext$nameUrl/blog/$item->link/";
-            break;
-        case 'blog-category':
-            $link = "/blog/section/$item->link/";
-            break;
-        default:
-            $link = "/$item->link/";
-            break;
-    }
+    $link = isset($typeToUrlMap[$item->type]) ? $typeToUrlMap[$item->type] : "/$item->link/";
 
     if (array_key_exists('noslash', $params) && !empty($params['noslash'])) {
         $link = substr($link, 1);
