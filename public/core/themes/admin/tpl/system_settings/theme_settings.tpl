@@ -346,7 +346,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-md-5 m-b-15">
+                      <div class="col-xs-12 col-md-4 m-b-15">
                         <h4>
                           <i class="fa fa-code-fork"></i>
                           {t}Breadcrumb{/t}
@@ -354,7 +354,7 @@
                         <div class="controls">
                           <div class="checkbox p-b-10">
                             <input id="theme-breadcrumb" name="theme-breadcrumb" ng-model="settings.theme_options.breadcrumb" ng-checked="[% settings.theme_options.breadcrumb != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
-                            <label for="theme-header-color">
+                            <label for="theme-breadcrumb">
                               <span class="help">
                                 {t}Set display of routes{/t}
                               </span>
