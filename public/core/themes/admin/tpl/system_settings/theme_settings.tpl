@@ -367,16 +367,14 @@
                           <i class="fa fa-minus"></i>
                           {t}Progress bar{/t}
                         </h4>
-                        <label class="form-label" for="theme-progressbar">
-                          <span class="help">
-                            {t}Set display of scroll progress bar{/t}
-                          </span>
-                        </label>
                         <div class="controls">
-                          <div class="input-group">
-                            <select id="theme-progressbar" name="theme-progressbar" ng-model="settings.theme_options.progressbar">
-                              <option value="[% progressbar_name %]" ng-repeat="(progressbar_name,progressbar_value) in extra.theme_skins[settings.theme_skin].params.options.progressbar.options" ng-selected="[% progressbar_name == settings.theme_options.progressbar || settings.theme_options.progressbar == undefined %]">[% progressbar_value %]</option>
-                            </select>
+                          <div class="checkbox p-b-10">
+                            <input id="theme-progressbar" name="theme-progressbar" ng-model="settings.theme_options.progressbar" ng-checked="[% settings.theme_options.progressbar != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                            <label for="theme-progressbar">
+                              <span class="help">
+                                {t}Set display of scroll progress bar{/t}
+                              </span>
+                            </label>
                           </div>
                         </div>
                       </div>
