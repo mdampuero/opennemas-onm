@@ -42,10 +42,10 @@ class NotificationEndpoint extends Endpoint
             if ($response->getStatusCode() == 200) {
                 $notificationID = $body['ID'] ?? $body['id'] ?? '';
                 getService('application.log')
-                    ->info('Webpush notification was sent successfully (ID: ' . $notificationID . ' )');
+                    ->info('Webpush notification was successfully sent (ID: ' . $notificationID . ' )');
             } else {
                 getService('application.log')
-                    ->info('Webpush notification has failed');
+                    ->info('Webpush notification has failed (status code ==> ' . $response->getStatusCode() . ')');
             }
         } catch (\Exception $e) {
             getService('application.log')

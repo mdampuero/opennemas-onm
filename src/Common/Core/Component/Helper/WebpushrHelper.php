@@ -9,6 +9,7 @@
  */
 namespace Common\Core\Component\Helper;
 
+use Api\Exception\GetItemException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
@@ -109,8 +110,12 @@ class WebpushrHelper
 
     public function getNotificationData($article)
     {
-        if (is_string($article) || is_int($article)) {
-            $article = $this->container->get('api.service.article')->getItem($article);
+        try {
+            if (is_string($article) || is_int($article)) {
+                $article = $this->container->get('api.service.article')->getItem($article);
+            }
+        } catch (GetItemException $e) {
+            $article = '';
         }
 
         if (empty($article)) {
@@ -132,8 +137,8 @@ class WebpushrHelper
         $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
 
         $data = [
-            'title'   => $article->title ?? '',
-            'message' => $article->description ?? '',
+            'title'      => $article->title ?? '',
+            'message'    => $article->description ?? '',
             'target_url' => $contentPath,
             'image'      => $imagePath,
             'icon'       => strpos($favico, '.png') ? $favico : '',

@@ -147,13 +147,6 @@ class SendpulseHelper
         $contentService = $this->container->get('api.service.content');
         $photoHelper    = $this->container->get('core.helper.photo');
 
-        // $favico = $photoHelper->getPhotoPath(
-        //     $contentService->getItem($this->ds->get('logo_favico')),
-        //     null,
-        //     [ 192, 192 ],
-        //     true
-        // );
-
         $contentPath = $this->container->get('core.helper.url_generator')->getUrl($article, ['_absolute' => true]);
         $image       = $this->container->get('core.helper.featured_media')->getFeaturedMedia($article, 'inner');
         $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
@@ -161,11 +154,11 @@ class SendpulseHelper
         $favicoPath  = $photoHelper->getPhotoPath($favico, null, [ 192, 192 ], true);
 
         $data = [
-            'title'   => $article->title ?? '',
-            'body' => $article->description ?? '',
+            'title'      => $article->title ?? '',
+            'body'       => $article->description ?? '',
             'website_id' => $this->getWebsiteId(),
-            'ttl'      => 86400,
-            'link' => $contentPath,
+            'ttl'        => 86400, //Max ttl allowed
+            'link'       => $contentPath,
         ];
 
         $imageContent = '';

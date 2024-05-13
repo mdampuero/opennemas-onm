@@ -22,21 +22,14 @@ class StatusEndpoint extends Endpoint
      */
     public function getStatus($params = [])
     {
-        //TODO Replace getStaus($id) call on webpushr in order to use array of parameters like [ 'id' => $id ]
         try {
             $url = $this->url . $this->replaceUriWildCards($this->config['actions']['get_status']['path'], $params);
 
             $response = $this->client->get($url, [ 'headers' => $this->auth->getAuthHeaders() ]);
             $body     = json_decode($response->getBody(), true);
-
-            if ($response->getStatusCode() == 200) {
-                // Pending of WebPushR to fix 'camapign_id' as parameter of the response
-                getService('application.log')
-                        ->info('Notification was retrieved successfully');
-            }
         } catch (\Exception $e) {
             getService('application.log')
-                ->error('Error retrieving the notification from server '
+                ->error('Error retrieving the notification status from server '
                 . $e->getMessage());
             throw new WebPushException('webpush.satus.get.failure: ' . $e->getMessage());
         }

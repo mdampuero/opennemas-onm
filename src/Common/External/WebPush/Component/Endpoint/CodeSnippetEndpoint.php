@@ -29,10 +29,10 @@ class CodeSnippetEndpoint extends Endpoint
             $body     = json_decode($response->getBody(), true);
 
             getService('application.log')
-                    ->info('websites list was retrieved successfully');
+                    ->info('WebPush code snippet was successfully retrieved');
         } catch (\Exception $e) {
             getService('application.log')
-                ->error('Error retrieving the websites list from server '
+                ->error('Error retrieving the WebPush code snippet from server '
                 . $e->getMessage());
             throw new WebPushException('webpush.satus.get.failure: ' . $e->getMessage());
         }
