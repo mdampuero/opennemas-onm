@@ -366,7 +366,8 @@
           restrict: 'A',
           scope: {
             ngModel:    '=',
-            incomplete: '='
+            incomplete: '=',
+            minheight:   '='
           },
           require: [ 'ngModel', '^?form' ],
           link: function(scope, element, attrs, ctrls) {
@@ -385,7 +386,10 @@
                   return;
                 }
 
+                var minHeight = scope.minheight || '200px';
                 var options  = Editor.configure(attrs.onmEditorPreset);
+
+                options.height = minHeight;
                 var instance = Editor.init(element[0], options);
 
                 // Updates CKEditor when model changes
