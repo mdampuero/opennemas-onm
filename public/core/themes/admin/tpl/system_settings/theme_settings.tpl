@@ -1372,6 +1372,21 @@
                                 <i class="fa fa-puzzle-piece"></i>
                                 {t}Sidebar widgets{/t}
                               </h4>
+                            </label>
+                            <label class="form-label" for="theme-sidebar-widget-custom">
+                              <span class="help">
+                                {t}Show custom widget{/t}
+                              </span>
+                            </label>
+                            <div class="controls m-b-15">
+                              <div class="input-group">
+                                <span class="input-group-addon">
+                                  ID
+                                </span>
+                                <input class="form-control" id="sidebar-widget-custom" name="sidebar-widget-custom" ng-model="settings.theme_options.sidebar_widget_custom" type="text">
+                              </div>
+                            </div>
+                            <label>
                               <span class="help">
                                 {t}Choose widgets to display{/t}
                               </span>

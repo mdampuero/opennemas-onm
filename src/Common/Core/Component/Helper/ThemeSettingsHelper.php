@@ -58,6 +58,7 @@ class ThemeSettingsHelper extends SettingHelper
         'general_main_widget',
         'general_footer_widget',
         'hamburger_position',
+        'sidebar_widget_custom',
         'widget_header_type',
         'widget_header_font',
         'widget_header_font_color',
