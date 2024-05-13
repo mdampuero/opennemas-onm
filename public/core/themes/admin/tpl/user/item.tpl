@@ -283,7 +283,7 @@
                 <span class="input-group-addon pointer" ng-click="passwordUnlocked = !passwordUnlocked">
                   <i class="fa fa-lock" ng-class="{ 'fa-unlock-alt': passwordUnlocked }"></i>
                 </span>
-                <input class="form-control no-animate" id="password" name="password" ng-model="item.password" maxlength="20" type="[% !passwordUnlocked ? 'password' : 'text' %]">
+                <input class="form-control no-animate" id="password" name="password" ng-model="item.password" maxlength="50" type="[% !passwordUnlocked ? 'password' : 'text' %]">
               </div>
             </div>
           </div>
@@ -294,7 +294,7 @@
                 <span class="input-group-addon pointer" ng-click="rpasswordUnlocked = !rpasswordUnlocked">
                   <i class="fa fa-lock" ng-class="{ 'fa-unlock-alt': rpasswordUnlocked }"></i>
                 </span>
-                <input class="form-control" id="rpassword" id="rpassword" maxlength="20" ng-model="rpassword" maxlength="20" type="[% !rpasswordUnlocked ? 'password' : 'text' %]">
+                <input class="form-control" id="rpassword" id="rpassword" ng-model="rpassword" maxlength="50" type="[% !rpasswordUnlocked ? 'password' : 'text' %]">
               </div>
               <span class="input-group-status">
                 <span class="fa fa-check text-success" ng-if="form.password.$dirty && item.password === rpassword"></span>
