@@ -348,6 +348,22 @@
                       </div>
                       <div class="col-xs-12 col-md-4 m-b-15">
                         <h4>
+                          <i class="fa fa-minus"></i>
+                          {t}Topbar{/t}
+                        </h4>
+                        <div class="controls">
+                          <div class="checkbox p-b-10">
+                            <input id="theme-general-topbar" name="theme-general-topbar" ng-model="settings.theme_options.general_topbar" ng-checked="[% settings.theme_options.general_topbar != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                            <label for="theme-general-topbar">
+                              <span class="help">
+                                {t}Set display of header's top bar{/t}
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4 m-b-15">
+                        <h4>
                           <i class="fa fa-code-fork"></i>
                           {t}Breadcrumb{/t}
                         </h4>
@@ -375,6 +391,25 @@
                                 {t}Set display of scroll progress bar{/t}
                               </span>
                             </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4 m-b-15">
+                        <h4>
+                          <i class="fa fa-puzzle-piece"></i>
+                          {t}Header right widget{/t}
+                        </h4>
+                        <label class="form-label" for="theme-general-header-right-widget">
+                          <span class="help">
+                            {t}Widget to show before main content{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              ID
+                            </span>
+                            <input class="form-control" id="general-header-right-widget" name="general-header-right-widget" ng-model="settings.theme_options.general_header_right_widget" type="text">
                           </div>
                         </div>
                       </div>

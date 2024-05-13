@@ -21,6 +21,7 @@ class ThemeSettingsHelper extends SettingHelper
     ];
 
     protected $toBool = [
+        'general_topbar',
         'show_category',
         'show_subtitle',
         'show_summary',
@@ -51,7 +52,9 @@ class ThemeSettingsHelper extends SettingHelper
         'breadcrumb',
         'progressbar',
         'main_logo_size',
+        'general_topbar',
         'general_page_width',
+        'general_header_right_widget',
         'general_main_widget',
         'general_footer_widget',
         'hamburger_position',
