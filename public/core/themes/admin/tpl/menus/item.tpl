@@ -28,7 +28,7 @@
       {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="blog-category" iIcon="fa fa-bookmark" iSearchModel="search_categories" iName="{t}Automatic categories{/t}" iData="dragables['blog-category']"}
       {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="static" iIcon="fa fa-file" iSearchModel="search_pages" iName="{t}Static pages{/t}" iData="dragables.static"}
       {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="internal" iIcon="fa fa-cube" iSearchModel="search_modules" iName="{t}Modules{/t}" iData="dragables.internal"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="tags" iIcon="fa fa-file" iSearchModel="search_tags" iName="{t}Tags{/t}" iData="dragables.tags"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="tags" iIcon="fa fa-tags" iSearchModel="search_tags" iName="{t}Tags{/t}" iData="dragables.tags"}
       {is_module_activated name="SYNC_MANAGER"}
         {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="syncBlogCategory" iIcon="fa fa-exchange" iSearchModel="search_sites" iName="{t}Synchronized sites{/t}" iData="dragables.syncBlogCategory"}
       {/is_module_activated}
