@@ -103,7 +103,7 @@
         </div>
       </div>
       <div class="ng-cloak" ng-show="!item.widget_type && !displayMultiBody()">
-        {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Content{/t}" field="body" imagepicker=true rows=5}
+        {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Content{/t}" minheight="500" field="body" imagepicker=true rows=5}
       </div>
       <div class="ng-cloak clearfix m-t-15" ng-show="!item.widget_type && displayMultiBody()">
         <ul class="fake-tabs">
@@ -123,13 +123,8 @@
               </div>
             </div>
           {/acl}
-          <div class="controls widget-textarea-custom">
-            <style>
-              .widget-textarea-custom .cke_contents {
-                min-height: 500px;
-              }
-            </style>
-            <textarea name="body.[% slug_key %]" id="body.[% slug_key %]" incomplete="incomplete" ng-model="item.body[slug_key]" onm-editor onm-editor-preset="standard" class="form-control" rows=50></textarea>
+          <div class="controls">
+            <textarea name="body.[% slug_key %]" id="body.[% slug_key %]" incomplete="incomplete" ng-model="item.body[slug_key]" onm-editor onm-editor-preset="simple" onm-editor-height="500" class="form-control" rows=50></textarea>
           </div>
         </div>
       </div>

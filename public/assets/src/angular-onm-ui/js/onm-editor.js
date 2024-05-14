@@ -94,7 +94,6 @@
                 groups: [ 'mode', 'document', 'doctools' ]
               }
             ],
-            autoGrow_maxHeight: 200,
           },
 
           full: {
@@ -366,8 +365,7 @@
           restrict: 'A',
           scope: {
             ngModel:    '=',
-            incomplete: '=',
-            minheight:   '='
+            incomplete: '='
           },
           require: [ 'ngModel', '^?form' ],
           link: function(scope, element, attrs, ctrls) {
@@ -386,10 +384,14 @@
                   return;
                 }
 
-                var minHeight = scope.minheight || '200px';
                 var options  = Editor.configure(attrs.onmEditorPreset);
 
-                options.height = minHeight;
+                options.autoGrow_minHeQight = attrs.onmEditorHeight || 200;
+
+                if (attrs.onmEditorHeight) {
+                  delete options.autoGrow_maxHeight;
+                }
+
                 var instance = Editor.init(element[0], options);
 
                 // Updates CKEditor when model changes
