@@ -99,7 +99,7 @@ class StructuredData
         $template = 'common/helpers/structured_frontpage_data.tpl';
         if (array_key_exists('content', $params)) {
             $template = 'common/helpers/structured_content_data.tpl';
-            if (in_array($params['content']->content_type_name, ['album', 'video'])) {
+            if (in_array($params['content']->content_type_name, ['album', 'video', 'event'])) {
                 $template = 'common/helpers/structured_'
                     . $params['content']->content_type_name . '_data.tpl';
             }

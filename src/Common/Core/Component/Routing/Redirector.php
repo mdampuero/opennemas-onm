@@ -323,7 +323,7 @@ class Redirector
     }
 
     /**
-     * Returns an URL with source value equals to provided paramter.
+     * Returns an URL with source value equals to provided parameter.
      *
      * @param string $source The source value.
      *
@@ -331,9 +331,12 @@ class Redirector
      */
     protected function getLiteralUrl($source, $contentType = null)
     {
+        $source = rtrim($source, '/');
+
         $oql = sprintf(
-            'type in [%s] and source = "%s" and enabled = 1 limit 1',
-            implode(',', [ 0, 1, 2, 6]),
+            'type in [%s] and (source = "%s/" or source = "%s") and enabled = 1 limit 1',
+            implode(',', [ 0, 1, 2, 6 ]),
+            $source,
             $source
         );
 
