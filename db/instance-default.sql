@@ -149,7 +149,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `categorymeta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `categorymeta` (
   `fk_category` bigint(20) unsigned NOT NULL,
   `meta_name` varchar(255) NOT NULL,
@@ -898,7 +898,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tagsmeta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `tagsmeta` (
   `fk_tags` int(10) unsigned NOT NULL,
   `meta_name` varchar(255) NOT NULL,
