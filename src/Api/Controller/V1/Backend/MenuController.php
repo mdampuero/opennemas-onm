@@ -138,22 +138,26 @@ class MenuController extends ApiController
 
     private function getTagsByOQL()
     {
-        $context = $this->get('core.locale')->getContext();
-        $this->get('core.locale')->setContext('frontend');
+        $localeService = $this->get('core.locale');
+        $context = $localeService->getContext();
+        $localeService->setContext('backend');
+        $locale = $localeService->getLocale();
 
-        $locale = $this->get('core.locale')->getLocale();
 
         $oql = 'locale is null or locale = "' . $locale . '"';
 
-        $response = $this->get('api.service.tag')->getList($oql);
-
-        return array_map(function ($a) {
-            return [
-                'title' => $a->name,
-                'slug'  => $a->slug,
-                'id'    => $a->id,
-            ];
-        }, $response['items']);
+        try {
+            $response = $this->get('api.service.tag')->getList($oql);
+            return array_map(function ($a) {
+                return [
+                    'title' => $a->name,
+                    'slug'  => $a->slug,
+                    'id'    => $a->id,
+                ];
+            }, $response['items']);
+        } catch(\Exception $e) {
+            return [];
+        }
     }
 
     /**
