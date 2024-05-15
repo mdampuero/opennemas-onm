@@ -17,7 +17,7 @@ class SendPulseConfigurationProvider implements ConfigurationProvider
 
     private $dataset;
     /**
-     * Initializes the OrmConfigurationProvider
+     * Initializes the SendPulseConfigurationProvider
      *
      * @param EntityManager $em The entity manager.
      */

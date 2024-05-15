@@ -13,12 +13,36 @@ use Api\Exception\GetItemException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
- * The UrlHelper service provides methods to parse and generate URLs.
+ * The Webpushr helper provides methods to work with webpushr API.
  */
 class WebpushrHelper
 {
+    /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
+
+    /**
+     * The Settings DataSet.
+     *
+     * @var DataSet
+     */
+    protected $ds;
+
+    /**
+     * The service name.
+     *
+     * @var String
+     */
     protected $service = 'external.web_push.factory.webpushr';
 
+    /**
+     * Avaliable image types.
+     *
+     * @var Array
+     */
     protected $endpointData = [];
 
     /**
@@ -29,11 +53,16 @@ class WebpushrHelper
     public function __construct($container)
     {
         $this->container = $container;
-        $this->instance  = $this->container->get('core.instance');
-        $this->cache     = $this->container->get('cache.connection.instance');
         $this->ds        = $this->container->get('orm.manager')->getDataSet('Settings', 'instance');
     }
 
+    /**
+     * Get prevoius requiered data for an endpoint.
+     *
+     * @param String $endpoint The endpoint name.
+     *
+     * @return Array The endpoint data.
+     */
     public function prepareDataForEndpoint($endpoint = null)
     {
         if (!array_key_exists($endpoint, $this->endpointData)) {
@@ -50,6 +79,11 @@ class WebpushrHelper
         return $data;
     }
 
+    /**
+     * Get SendPulse required JS file
+     *
+     * @return BinaryFileResponse The file respinse.
+     */
     public function getWebpushCollectionFile()
     {
         if (!$this->container->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')
@@ -69,6 +103,11 @@ class WebpushrHelper
         return $response;
     }
 
+    /**
+     * Get SendPulse required script
+     *
+     * @return String The service script.
+     */
     public function getWebpushCollectionScript()
     {
         if (!$this->container->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')
@@ -91,6 +130,9 @@ class WebpushrHelper
         return $script;
     }
 
+    /**
+     * Remove account data
+     */
     public function removeAccountData()
     {
         $this->ds->set('webpush_script', '');
@@ -108,6 +150,13 @@ class WebpushrHelper
         $cache->remove('sendpulse_website_id');
     }
 
+    /**
+     * Get requiered data in order to send a push notification
+     *
+     * @param Mixed $article The article object.
+     *
+     * @return Array The notification data.
+     */
     public function getNotificationData($article)
     {
         try {
@@ -155,6 +204,13 @@ class WebpushrHelper
         return $data;
     }
 
+    /**
+     * Parse notification information in order to match with all services
+     *
+     * @param Mixed $data The article object.
+     *
+     * @return Array the parsed Data.
+     */
     public function parseNotificationData($data)
     {
         return [

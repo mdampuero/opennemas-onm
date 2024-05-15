@@ -27,7 +27,6 @@ function smarty_outputfilter_webpush_notifications_script($output, $smarty)
         && !preg_match('/\/rss\/(?!listado$)/', $uri)
         && !preg_match('@\.amp\.html@', $uri)
     ) {
-        // Get webpushr configuration
         $webpushService = $smarty->getContainer()->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('webpush_service');

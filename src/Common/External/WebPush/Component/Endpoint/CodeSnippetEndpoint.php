@@ -14,9 +14,9 @@ use Common\External\WebPush\Component\Exception\WebPushException;
 class CodeSnippetEndpoint extends Endpoint
 {
     /**
-     * Get the data of the current websites.
+     * Get the collection snippet for the website.
      *
-     * @return string
+     * @return String
      *
      * @throws WebPushException If the action fails.
      */
@@ -34,7 +34,7 @@ class CodeSnippetEndpoint extends Endpoint
             getService('application.log')
                 ->error('Error retrieving the WebPush code snippet from server '
                 . $e->getMessage());
-            throw new WebPushException('webpush.satus.get.failure: ' . $e->getMessage());
+            throw new WebPushException('webpush.snippet.get.failure: ' . $e->getMessage());
         }
 
         return $body;

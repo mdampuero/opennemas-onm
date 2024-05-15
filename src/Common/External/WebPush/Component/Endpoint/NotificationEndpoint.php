@@ -26,9 +26,9 @@ class NotificationEndpoint extends Endpoint
     {
         try {
             $url = $this->url
-            . $this->replaceUriWildCards($this->config['actions']['send_notification']['path'], $params);
+                . $this->replaceUriWildCards($this->config['actions']['send_notification']['path'], $params);
 
-            $data          = array_key_exists('data', $params) && !empty($params['data']) ? $params['data'] : [];
+            $data          = $params['data'] ?? [];
             $requestParams = [ 'headers' => $this->auth->getAuthHeaders() ];
             if (!empty($data)) {
                 //Webpushr service needs 'json' field and sendpulse use the standard 'form_params'

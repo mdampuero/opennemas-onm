@@ -9,7 +9,7 @@
  */
 namespace Common\External\WebPush\Component\Authentication\Token;
 
-class EmptyTokenProvider implements TokenProvider
+class DefaultTokenProvider implements TokenProvider
 {
     /**
      * The redis connection.
@@ -62,9 +62,7 @@ class EmptyTokenProvider implements TokenProvider
      */
     public function getAccessToken()
     {
-        return $this->execute(function () {
-            return $this->conn->get('sendpulse-access-token');
-        }, []);
+        return [];
     }
 
     /**
@@ -80,9 +78,7 @@ class EmptyTokenProvider implements TokenProvider
      */
     public function getRefreshToken()
     {
-        return $this->execute(function () {
-            return $this->conn->get('sendpulse-refresh-token');
-        }, []);
+        return [];
     }
 
     /**
@@ -90,9 +86,7 @@ class EmptyTokenProvider implements TokenProvider
      */
     public function hasAccessToken()
     {
-        return $this->execute(function () {
-            return $this->conn->exists('sendpulse-access-token');
-        }, []);
+        return false;
     }
 
     /**
@@ -100,9 +94,7 @@ class EmptyTokenProvider implements TokenProvider
      */
     public function hasRefreshToken()
     {
-        return $this->execute(function () {
-            return $this->conn->exists('sendpulse-refresh-token');
-        }, []);
+        return false;
     }
 
     /**
@@ -110,11 +102,7 @@ class EmptyTokenProvider implements TokenProvider
      */
     public function setAccessToken($token, $ttl)
     {
-        return $this->execute(function ($a, $b) {
-            $this->conn->set('sendpulse-access-token', $a, $b);
-
-            return $this;
-        }, [ $token, $ttl ]);
+        return $this;
     }
 
     /**
@@ -132,10 +120,6 @@ class EmptyTokenProvider implements TokenProvider
      */
     public function setRefreshToken($token)
     {
-        return $this->execute(function ($a) {
-            $this->conn->set('sendpulse-refresh-token', $a);
-
-            return $this;
-        }, [ $token ]);
+        return $this;
     }
 }

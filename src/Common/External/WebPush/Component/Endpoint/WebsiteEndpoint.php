@@ -31,7 +31,7 @@ class WebsiteEndpoint extends Endpoint
             getService('application.log')
                 ->error('Error retrieving the websites list from server '
                 . $e->getMessage());
-            throw new WebPushException('webpush.satus.get.failure: ' . $e->getMessage());
+            throw new WebPushException('webpush.website.get.failure: ' . $e->getMessage());
         }
 
         return $body;

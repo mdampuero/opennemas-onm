@@ -106,7 +106,7 @@ parameters:
                                     - icon
 services:
     external.web_push.provider.config:
-        class:     'Common\External\WebPush\Component\Configuration\OrmConfigurationProvider'
+        class:     'Common\External\WebPush\Component\Configuration\WebpushrConfigurationProvider'
         arguments: [ '@orm.manager' ]
 
     external.send_pulse.provider.config:
@@ -136,5 +136,5 @@ services:
         arguments: [ '@cache.connection.instance' ]
 
     external.web_push.provider.token:
-        class:     'Common\External\WebPush\Component\Authentication\Token\EmptyTokenProvider'
+        class:     'Common\External\WebPush\Component\Authentication\Token\DefaultTokenProvider'
         arguments: [ '@cache.connection.instance' ]

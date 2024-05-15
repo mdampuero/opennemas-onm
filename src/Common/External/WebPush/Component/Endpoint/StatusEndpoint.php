@@ -31,7 +31,7 @@ class StatusEndpoint extends Endpoint
             getService('application.log')
                 ->error('Error retrieving the notification status from server '
                 . $e->getMessage());
-            throw new WebPushException('webpush.satus.get.failure: ' . $e->getMessage());
+            throw new WebPushException('webpush.status.get.failure: ' . $e->getMessage());
         }
 
         return $body;

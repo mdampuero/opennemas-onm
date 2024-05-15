@@ -129,6 +129,13 @@
             });
         };
 
+        /**
+         * @function removeSavedSettings
+         * @memberOf WebPushNotificationsConfigCtrl
+         *
+         * @description
+         *   Remove service settings.
+         */
         $scope.removeSavedSettings = function() {
           if (!$scope.flags.http.checking) {
             $scope.flags.http.saving = true;

@@ -9,7 +9,7 @@
  */
 namespace Common\External\WebPush\Component\Configuration;
 
-class OrmConfigurationProvider implements ConfigurationProvider
+class WebpushrConfigurationProvider implements ConfigurationProvider
 {
     private $authUri = 'v1/authentication';
 
@@ -18,7 +18,7 @@ class OrmConfigurationProvider implements ConfigurationProvider
     private $dataset;
 
     /**
-     * Initializes the OrmConfigurationProvider
+     * Initializes the WebpushrConfigurationProvider
      *
      * @param EntityManager $em The entity manager.
      */

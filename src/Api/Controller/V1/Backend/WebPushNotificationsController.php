@@ -292,17 +292,17 @@ class WebPushNotificationsController extends ApiController
 
         $msg = $this->get('core.messenger');
 
-        $webpush_restricted_hours = $request->request->get('webpush_restricted_hours');
+        $restictedHours = $request->request->get('webpush_restricted_hours');
 
-        if (!is_array($webpush_restricted_hours)) {
-            $webpush_restricted_hours = [];
+        if (!is_array($restictedHours)) {
+            $restictedHours = [];
         }
 
-        foreach ($webpush_restricted_hours as &$hour) {
+        foreach ($restictedHours as &$hour) {
             $hour = $hour['text'];
         }
-        $webpush_restricted_hours = array_unique($webpush_restricted_hours);
-        sort($webpush_restricted_hours);
+        $restictedHours = array_unique($restictedHours);
+        sort($restictedHours);
 
         $webpush_service = $request->request->get('webpush_service');
         $service         = $webpush_service['service'] ?? null;
@@ -318,7 +318,7 @@ class WebPushNotificationsController extends ApiController
             'webpush_automatic'        => $request->request->get('webpush_automatic'),
             'webpush_delay'            => $request->request->get('webpush_delay'),
             'webpush_stop_collection'  => $request->request->get('webpush_stop_collection'),
-            'webpush_restricted_hours' => $webpush_restricted_hours,
+            'webpush_restricted_hours' => $restictedHours,
         ];
 
         try {
@@ -335,47 +335,7 @@ class WebPushNotificationsController extends ApiController
     }
 
     /**
-     * Send Web Push notification.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse
-     */
-    public function sendNotificationAction(Request $request)
-    {
-        $webpushr    = $this->get('external.web_push.factory.webpushr');
-        $endpoint    = $webpushr->getEndpoint('notification');
-        $itemId      = $request->request->all();
-        $content     = $this->get('api.service.content')->getItem($itemId[0]);
-        $contentPath = $this->get('core.helper.url_generator')->getUrl($content, ['_absolute' => true]);
-        $image       = $this->get('core.helper.featured_media')->getFeaturedMedia($content, 'inner');
-        $imagePath   = $this->get('core.helper.photo')->getPhotoPath($image, null, [], true);
-
-        $favicoId = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('logo_favico');
-
-        $favico = $this->get('core.helper.photo')->getPhotoPath(
-            $this->get('api.service.content')->getItem($favicoId),
-            null,
-            [ 192, 192 ],
-            true
-        );
-
-        $notification = $endpoint->sendNotification([
-            'title'      => $content->title,
-            'message'    => $content->description,
-            'target_url' => $contentPath,
-            'image'      => $imagePath,
-            'icon'       => strpos($favico, '.png') ? $favico : '',
-        ]);
-        return new JsonResponse($notification);
-    }
-
-    /**
-     * Tries to connect to the server with the provided parameters.
-     *
-     * @param Request $request The request object.
+     * Tries to connect to the server.
      *
      * @return JsonResponse The response object.
      */
@@ -395,11 +355,16 @@ class WebPushNotificationsController extends ApiController
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
+    /**
+     * Remove webpush account data.
+     *
+     * @return JsonResponse The response object.
+     */
     public function removeDataAction()
     {
-        $msg     = $this->get('core.messenger');
-        $service = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('webpush_service');
+        $msg = $this->get('core.messenger');
         try {
+            $service       = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('webpush_service');
             $webpushHelper = $this->get(sprintf('core.helper.%s', $service));
             $webpushHelper->removeAccountData();
             $msg->add(_('Account data removed successfully'), 'success');

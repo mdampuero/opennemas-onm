@@ -14,7 +14,7 @@ use Common\External\WebPush\Component\Exception\WebPushException;
 class ConnectionEndpoint extends Endpoint
 {
     /**
-     * Get the data of the given Web Push notification.
+     * Test API connection
      *
      * @return string
      *
@@ -31,7 +31,7 @@ class ConnectionEndpoint extends Endpoint
             $response = $this->client->get($url, [ 'headers' => $this->auth->getAuthHeaders() ]);
             $body     = json_decode($response->getBody(), true);
         } catch (\Exception $e) {
-            throw new WebPushException('webpush.satus.get.failure: ' . $e->getMessage());
+            throw new WebPushException('webpush.connection.get.failure: ' . $e->getMessage());
         }
 
         return $body;

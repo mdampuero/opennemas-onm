@@ -37,10 +37,15 @@ class Authentication
     /**
      * The WebPush API URL.
      *
-     * @var string
+     * @var String
      */
     protected $url;
 
+    /**
+     * The Authentication config.
+     *
+     * @var Mixed
+     */
     protected $config;
 
     /**
@@ -48,7 +53,8 @@ class Authentication
      *
      * @param ConfigurationProvider $configProvider The configuration provider.
      * @param Client                $client         The HTTP client.
-     * @param string                $url            The WebPush API URL.
+     * @param TokenProvider         $tokenProvider  The token provider.
+     * @param String                $url            The WebPush API URL.
      */
     public function __construct($configProvider, $client, $tokenProvider, $url)
     {
@@ -66,6 +72,8 @@ class Authentication
 
     /**
      * Get the Configuration Provider configuration
+     *
+     * @return Mixed Configuration data
      */
     public function getConfiguration()
     {
@@ -74,6 +82,8 @@ class Authentication
 
     /**
      * Authenticates the current user, check if credetials are valid
+     *
+     * @throws WebPushException
      */
     public function authenticate()
     {
@@ -103,9 +113,9 @@ class Authentication
     /**
      * Returns the access token.
      *
-     * @return string The access token.
+     * @throws WebPushException
      *
-     * @throws ActOnException
+     * @return String The access token.
      */
     public function getToken()
     {
@@ -118,6 +128,11 @@ class Authentication
         return $this->tokenProvider->getAccessToken();
     }
 
+    /**
+     * Returns the auth headers.
+     *
+     * @return Array The auth headers.
+     */
     public function getAuthHeaders()
     {
         if (!$this->configProvider->isTokenRequired()) {

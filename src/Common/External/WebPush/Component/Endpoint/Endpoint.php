@@ -113,6 +113,14 @@ class Endpoint
         $this->config = $config;
     }
 
+    /**
+     * Replace URI wildcards with params.
+     *
+     * @param String $uri The endpoint uri.
+     * @param Array  $parameters Parameters to match uri wildcards.
+     *
+     * @return String parsed URI
+     */
     public function replaceUriWildCards($uri, $parameters)
     {
         preg_match_all('@.*({.+})@U', $uri, $matches);
