@@ -346,7 +346,23 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-md-5 m-b-15">
+                      <div class="col-xs-12 col-md-4 m-b-15">
+                        <h4>
+                          <i class="fa fa-minus"></i>
+                          {t}Topbar{/t}
+                        </h4>
+                        <div class="controls">
+                          <div class="checkbox p-b-10">
+                            <input id="theme-general-topbar" name="theme-general-topbar" ng-model="settings.theme_options.general_topbar" ng-checked="[% settings.theme_options.general_topbar != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                            <label for="theme-general-topbar">
+                              <span class="help">
+                                {t}Set display of header's top bar{/t}
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4 m-b-15">
                         <h4>
                           <i class="fa fa-code-fork"></i>
                           {t}Breadcrumb{/t}
@@ -354,7 +370,7 @@
                         <div class="controls">
                           <div class="checkbox p-b-10">
                             <input id="theme-breadcrumb" name="theme-breadcrumb" ng-model="settings.theme_options.breadcrumb" ng-checked="[% settings.theme_options.breadcrumb != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
-                            <label for="theme-header-color">
+                            <label for="theme-breadcrumb">
                               <span class="help">
                                 {t}Set display of routes{/t}
                               </span>
@@ -367,16 +383,33 @@
                           <i class="fa fa-minus"></i>
                           {t}Progress bar{/t}
                         </h4>
-                        <label class="form-label" for="theme-progressbar">
+                        <div class="controls">
+                          <div class="checkbox p-b-10">
+                            <input id="theme-progressbar" name="theme-progressbar" ng-model="settings.theme_options.progressbar" ng-checked="[% settings.theme_options.progressbar != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                            <label for="theme-progressbar">
+                              <span class="help">
+                                {t}Set display of scroll progress bar{/t}
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4 m-b-15">
+                        <h4>
+                          <i class="fa fa-puzzle-piece"></i>
+                          {t}Header right widget{/t}
+                        </h4>
+                        <label class="form-label" for="theme-general-header-right-widget">
                           <span class="help">
-                            {t}Set display of scroll progress bar{/t}
+                            {t}Widget to show before main content{/t}
                           </span>
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <select id="theme-progressbar" name="theme-progressbar" ng-model="settings.theme_options.progressbar">
-                              <option value="[% progressbar_name %]" ng-repeat="(progressbar_name,progressbar_value) in extra.theme_skins[settings.theme_skin].params.options.progressbar.options" ng-selected="[% progressbar_name == settings.theme_options.progressbar || settings.theme_options.progressbar == undefined %]">[% progressbar_value %]</option>
-                            </select>
+                            <span class="input-group-addon">
+                              ID
+                            </span>
+                            <input class="form-control" id="general-header-right-widget" name="general-header-right-widget" ng-model="settings.theme_options.general_header_right_widget" type="text">
                           </div>
                         </div>
                       </div>
@@ -1339,6 +1372,21 @@
                                 <i class="fa fa-puzzle-piece"></i>
                                 {t}Sidebar widgets{/t}
                               </h4>
+                            </label>
+                            <label class="form-label" for="theme-sidebar-widget-custom">
+                              <span class="help">
+                                {t}Show custom widget{/t}
+                              </span>
+                            </label>
+                            <div class="controls m-b-15">
+                              <div class="input-group">
+                                <span class="input-group-addon">
+                                  ID
+                                </span>
+                                <input class="form-control" id="sidebar-widget-custom" name="sidebar-widget-custom" ng-model="settings.theme_options.sidebar_widget_custom" type="text">
+                              </div>
+                            </div>
+                            <label>
                               <span class="help">
                                 {t}Choose widgets to display{/t}
                               </span>
