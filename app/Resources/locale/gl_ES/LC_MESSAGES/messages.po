@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-15 07:56+0000\n"
-"PO-Revision-Date: 2024-05-15 09:57+0200\n"
+"POT-Creation-Date: 2024-05-15 09:05+0000\n"
+"PO-Revision-Date: 2024-05-15 11:06+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1392,9 +1392,6 @@ msgstr "Non"
 msgid "Locale"
 msgstr "Idioma"
 
-msgid "Invalid parameters, please add a valid JSON"
-msgstr "Parámetros non válidos. Engade un JSON válido"
-
 msgid "Contents translated successfully"
 msgstr "Contido traducido correctamente"
 
@@ -2329,7 +2326,7 @@ msgstr ""
 "etiquetas, unha por liña."
 
 msgid "Do you want to move contents in tag?"
-msgstr "¿Queres mover os contidos na categoría?"
+msgstr "¿Queres mover os contidos na etiqueta?"
 
 msgid "Source"
 msgstr "Orixe"
@@ -2344,7 +2341,7 @@ msgid "This action can not be undone"
 msgstr "Esta acción non se pode desfacer"
 
 msgid "Seo title"
-msgstr "Titulo SEO"
+msgstr "Titulo Seo"
 
 msgid "Seo description"
 msgstr "Descrición Seo"
@@ -2823,6 +2820,9 @@ msgstr "410 GONE"
 
 msgid "Redirects URIs to error 410 GONE"
 msgstr "Redirixe os URI ao erro 410 GONE"
+
+msgid "URI"
+msgstr "URI"
 
 msgid "Test"
 msgstr "Probar"
@@ -3711,7 +3711,7 @@ msgid "Organizer name"
 msgstr "Nome do organizador"
 
 msgid "Organizer website"
-msgstr "Páxina web do organizador"
+msgstr "Sitio web do organizador"
 
 msgid "Start date"
 msgstr "Data de inicio"
@@ -3729,7 +3729,7 @@ msgid "Place name"
 msgstr "Nome do lugar"
 
 msgid "Place address"
-msgstr "Enderezo do correo"
+msgstr "Enderezo do lugar"
 
 msgid "Website URL"
 msgstr "URL do sitio web"
@@ -4568,6 +4568,24 @@ msgstr "Miga de pan"
 msgid "Set display of routes"
 msgstr "Establecer a visualización de rutas"
 
+msgid "Progress bar"
+msgstr "Barra de progreso"
+
+msgid "Set display of scroll progress bar"
+msgstr "Establecer a visualización da barra de progreso"
+
+msgid "Pre-main widget"
+msgstr "Widget previo ó contido principal"
+
+msgid "Widget to show before main content"
+msgstr "Widget a mostrar antes do contido principal"
+
+msgid "Pre-footer widget"
+msgstr "Widget previo ó pé de páxina"
+
+msgid "Widget to show before footer"
+msgstr "Widget a mostrar antes do pé de páxina"
+
 msgid "Normal contents images"
 msgstr "Imaxes de contido normal"
 
@@ -4642,6 +4660,9 @@ msgstr "Mostrar o autor do contido"
 
 msgid "Display author's photo"
 msgstr "Mostra a foto do autor"
+
+msgid "Display author's bio"
+msgstr "Mostrar a biografía do autor"
 
 msgid "Display content's date"
 msgstr "Mostrar a data do contido"
@@ -4736,6 +4757,12 @@ msgstr "Disposición do widget máis na portada"
 
 msgid "Max items on suggested widgets"
 msgstr "Máximo de elementos nos widgets suxeridos"
+
+msgid "Choose options for contents"
+msgstr "Escoller opcións para contidos"
+
+msgid "Display featured media in opinions"
+msgstr "Mostrar imaxe destacada en opinións"
 
 msgid "Mobile logo size"
 msgstr "Tamaño do logotipo do móbil"
@@ -7126,6 +7153,12 @@ msgstr "Usuario de Twitter"
 msgid "Facebook user"
 msgstr "Usuario de Facebook"
 
+msgid "Instagram user"
+msgstr "Usuario de Instagram"
+
+msgid "LinkedIn user"
+msgstr "Usuario de LinkedIn"
+
 msgid "No biography"
 msgstr "Sen biografía"
 
@@ -7832,15 +7865,11 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 msgid "Group name"
 msgstr "Nome do grupo"
 
-#, fuzzy
-#~ msgid "Seo_title"
-#~ msgstr "Titulo do sitio"
-
-#~ msgid "Event Organizer"
-#~ msgstr "Organizador do evento"
-
 #~ msgid "Place"
 #~ msgstr "Lugar"
+
+#~ msgid "Invalid parameters, please add a valid JSON"
+#~ msgstr "Parámetros non válidos. Engade un JSON válido"
 
 #~ msgid "Fonts"
 #~ msgstr "Tipos de letra"

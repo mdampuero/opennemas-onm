@@ -37,7 +37,7 @@ function smarty_function_url($params, &$smarty)
     unset($params['name'], $params['absolute'], $params['sluggable'], $params['slug_key']);
 
     // TODO: Refactor the code to don't use this array.
-    $esi = [ 'frontend_suggested_show', 'frontend_date_render', 'frontend_widget_render' ];
+    $esi = [ 'frontend_suggested_show', 'frontend_date_render', 'frontend_widget_render', 'frontend_inline_styles' ];
 
     try {
         foreach ($params as $key => $value) {

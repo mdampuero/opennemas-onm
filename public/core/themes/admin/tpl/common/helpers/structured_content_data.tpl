@@ -63,6 +63,8 @@
       "name": "{$author|replace:'\\':''|escape:'htmlall'}"
       {if has_author_url($content)}
         , "url": "{$app.instance->getBaseUrl()}{get_author_url($content)}"
+      {else}
+       , "url": "{$app.instance->getBaseUrl()}"
       {/if}
     },
     "datePublished": "{format_date date=$content->starttime format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}",
@@ -97,6 +99,15 @@
         }
       },
       {include file='./structured_image_data.tpl' image=get_featured_media($content, 'inner')}
+    {elseif get_type(get_featured_media($content, 'inner')) === 'album'}
+      , "image": {
+          "@type": "ImageObject",
+          "url": "{get_photo_path(get_featured_media(get_featured_media($content, 'inner'), 'frontpage'), null, [], true)}",
+          "height": {get_photo_height(get_featured_media(get_featured_media($content, 'inner'), 'frontpage'))},
+          "width": {get_photo_width(get_featured_media(get_featured_media($content, 'inner'), 'frontpage'))}
+        }
+      },
+      {include file='./structured_image_data.tpl' image=get_featured_media(get_featured_media($content, 'inner'), 'frontpage')}
     {elseif get_type(get_featured_media($content, 'inner')) === 'video'}
       , "video": {
           "@type": "VideoObject",

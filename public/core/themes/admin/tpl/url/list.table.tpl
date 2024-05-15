@@ -43,10 +43,10 @@
   </td>
   <td class="v-align-middle">
     <div class="table-text">
-      <a href="" ng-if="item.type == 5">
+      <a href="" ng-if="item.type == 5 || item.type == 6">
         410 GONE
       </a>
-      <a href="/[% item.target %]" ng-if="item.type == 2 || item.type == 4">
+      <a href="/[% item.target %]" ng-if="item.type == 2 || item.type == 4 ">
         [% item.target %]
       </a>
       <a href="[% routing.generate('backend_' + item.content_type + '_show', { id: item.target }) %]" ng-if="(item.type == 0 || item.type == 1 || item.type == 3) && item.content_type !== 'kiosko'">
@@ -59,19 +59,19 @@
   </td>
   <td class="text-center v-align-middle">
     <small>
-      <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0, 'fa-code': item.type == 1 || item.type == 2, 'fa-asterisk': item.type > 2 }"></i>
+      <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0, 'fa-code': item.type == 1 || item.type == 2 || item.type == 6, 'fa-asterisk': item.type > 2 }"></i>
       <strong ng-if="isHelpEnabled() && item.type == 0">{t}Content{/t}</strong>
-      <strong ng-if="isHelpEnabled() && item.type == 1 || item.type == 2">URI</strong>
-      <strong ng-if="isHelpEnabled() && item.type > 2">{t}Regex{/t}</strong>
+      <strong ng-if="isHelpEnabled() && item.type == 1 || item.type == 2 || item.type == 6">URI</strong>
+      <strong ng-if="isHelpEnabled() && item.type > 2 && item.type != 6">{t}Regex{/t}</strong>
       {t}to{/t}
       <i class="fa" ng-class="{ 'fa-file-text-o': item.type == 0 || item.type == 1 || item.type == 3, 'fa-code': item.type == 2 || item.type == 4 }"></i>
       <strong ng-if="isHelpEnabled() && (item.type == 0 || item.type == 1 || item.type == 3)">{t}Content{/t}</strong>
       <strong ng-if="isHelpEnabled() && (item.type == 2 || item.type == 4)">URI</strong>
-      <strong ng-if="isHelpEnabled() && (item.type == 5)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 410 GONE</strong>
+      <strong ng-if="isHelpEnabled() && (item.type == 5 || item.type == 6)"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 410 GONE</strong>
     </small>
   </td>
   <td class="text-center v-align-middle">
-    <button class="btn btn-white" ng-click="patch(item, 'redirection', item.redirection != 1 ? 1 : 0)" type="button" ng-if="item.type != 5">
+    <button class="btn btn-white" ng-click="patch(item, 'redirection', item.redirection != 1 ? 1 : 0)" type="button" ng-if="item.type != 5 && item.type != 6">
       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.redirectionLoading, 'fa-exchange-alt text-error' : !item.redirectionLoading && item.redirection == 0, 'fa-retweet text-success': !item.redirectionLoading && item.redirection == 1 }"></i>
       <span class="badge text-uppercase text-bold" ng-class="{ 'badge-success': !item.redirection, 'badge-warning text-black': item.redirection }">
         [% item.redirection ? '301' : '200' %]
