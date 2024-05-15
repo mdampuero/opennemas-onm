@@ -271,7 +271,7 @@
       </div>
       <div class="form-group no-margin">
         <label class="form-label" for="description">
-          {t}Description{/t}
+          {t}Seo description{/t}
         </label>
         <div class="controls">
           <textarea class="form-control" name="description" ng-model="item.description" rows="5"></textarea>
