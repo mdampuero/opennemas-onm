@@ -9,6 +9,8 @@
  */
 namespace Common\External\WebPush\Component\Endpoint;
 
+use GuzzleHttp\Client;
+
 class Endpoint
 {
     /**
@@ -46,9 +48,9 @@ class Endpoint
      * @param Client                $client         The HTTP client.
      * @param string                $url            The WebPush API URL.
      */
-    public function __construct($auth, $client, $url)
+    public function __construct($auth, $url)
     {
-        $this->client = $client;
+        $this->client = new Client();
         $this->auth   = $auth;
         $this->url    = $url;
     }
