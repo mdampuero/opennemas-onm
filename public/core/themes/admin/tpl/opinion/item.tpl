@@ -85,7 +85,7 @@
         <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
       </div>
       {is_module_activated name="es.openhost.module.advancedSubscription"}
-      {include file="ui/component/content-editor/accordion/advanced-subcription.tpl"}
+        {include file="ui/component/content-editor/accordion/advanced-subcription.tpl"}
       {/is_module_activated}
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Featured in frontpage{/t}" types="photo,video,album"}
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
