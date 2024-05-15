@@ -35,6 +35,9 @@
         </div>
       </div>
       <div class="row">
+        <div class="col-sm-6 form-group">
+          {include file="ui/component/input/text.tpl" iField="seo_title" iMessageField="seo_title" iRequired="false" iTitle="{t}Seo title{/t}" iValidation=false}
+        </div>
         <div class="col-sm-6 form-group" ng-if="config.locale.multilanguage">
           <label class="form-label" for="locale">
             {t}Language{/t}
@@ -49,7 +52,7 @@
       </div>
       <div class="form-group no-margin">
         <label class="form-label" for="description">
-          {t}Description{/t}
+          {t}Seo description{/t}
         </label>
         <div class="controls">
           <textarea name="description" id="description" ng-model="item.description" class="form-control" rows="5"></textarea>

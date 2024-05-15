@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-09 15:07+0000\n"
-"PO-Revision-Date: 2024-05-09 17:10+0200\n"
+"POT-Creation-Date: 2024-05-15 09:05+0000\n"
+"PO-Revision-Date: 2024-05-15 11:06+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -2352,6 +2352,12 @@ msgstr "Buscar por etiqueta"
 
 msgid "This action can not be undone"
 msgstr "Esta acción no se puede deshacer"
+
+msgid "Seo title"
+msgstr "Título Seo"
+
+msgid "Seo description"
+msgstr "Descripción Seo"
 
 msgid "Config tag module"
 msgstr "Configuración del módulo «Etiquetas»"

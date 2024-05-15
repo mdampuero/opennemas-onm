@@ -16,6 +16,7 @@ orm:
                 logo_id:             integer
                 color:               string
                 cover_id:            integer
+                seo_title:           l10n_string
             converters:
                 default:
                     class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
@@ -31,6 +32,11 @@ orm:
             mapping:
                 database:
                     table: category
+                    metas:
+                        table: categorymeta
+                        ids:
+                            id: fk_category
+                        key: meta_name
                     columns:
                         id:
                             type: integer
