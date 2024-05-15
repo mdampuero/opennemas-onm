@@ -10,6 +10,7 @@
 namespace Common\External\WebPush\Component\Authentication;
 
 use Common\External\WebPush\Component\Exception\WebPushException;
+use GuzzleHttp\Client;
 
 class Authentication
 {
@@ -52,16 +53,15 @@ class Authentication
      * Initializes the Authentication service.
      *
      * @param ConfigurationProvider $configProvider The configuration provider.
-     * @param Client                $client         The HTTP client.
      * @param TokenProvider         $tokenProvider  The token provider.
      * @param String                $url            The WebPush API URL.
      */
-    public function __construct($configProvider, $client, $tokenProvider, $url)
+    public function __construct($configProvider, $tokenProvider, $url)
     {
-        $this->client         = $client;
         $this->configProvider = $configProvider;
         $this->url            = $url;
         $this->tokenProvider  = $tokenProvider;
+        $this->client         = new Client();
 
         $this->config = $this->configProvider->getConfiguration();
 

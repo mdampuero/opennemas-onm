@@ -1,7 +1,6 @@
 parameters:
     external.web_push:
         config_provider: 'external.web_push.provider.config'
-        http_client:     'external.web_push.http_client'
         url:             'https://api.webpushr.com'
         token_provider:  'external.web_push.provider.token'
         endpoints:
@@ -44,7 +43,6 @@ parameters:
                             path: '/v1/site/subscriber_count'
     external.send_pulse:
         config_provider: 'external.send_pulse.provider.config'
-        http_client:     'external.web_push.http_client.send_pulse'
         url:             'https://api.sendpulse.com'
         token_provider:  'external.send_pulse.provider.token'
         endpoints:
@@ -122,14 +120,6 @@ services:
         class:     'Common\External\WebPush\Component\Factory\WebPushFactory'
         arguments: [ '@service_container', '%external.send_pulse%' ]
         public: true
-
-    external.web_push.http_client:
-        class:   'GuzzleHttp\Client'
-        factory: [ '@external.web_push.factory.webpushr', 'getClient' ]
-
-    external.web_push.http_client.send_pulse:
-        class:   'GuzzleHttp\Client'
-        factory: [ '@external.web_push.factory.sendpulse', 'getClient' ]
 
     external.send_pulse.provider.token:
         class:     'Common\External\WebPush\Component\Authentication\Token\RedisTokenProvider'

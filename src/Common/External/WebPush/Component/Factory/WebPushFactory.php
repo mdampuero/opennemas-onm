@@ -10,7 +10,6 @@
 namespace Common\External\WebPush\Component\Factory;
 
 use Common\External\WebPush\Component\Authentication\Authentication;
-use GuzzleHttp\Client;
 
 class WebPushFactory
 {
@@ -21,12 +20,6 @@ class WebPushFactory
      */
     protected $auth;
 
-    /**
-     * The HTTP client
-     *
-     * @var Client
-     */
-    protected $client;
 
     /**
      * The WebPush configuration.
@@ -63,26 +56,11 @@ class WebPushFactory
     {
         $this->auth = new Authentication(
             $this->container->get($this->config['config_provider']),
-            $this->container->get($this->config['http_client']),
             $this->container->get($this->config['token_provider']),
             $this->config['url']
         );
 
         return $this->auth;
-    }
-
-    /**
-     * Returns a new Guzzle client.
-     *
-     * @return Client The new Guzzle client.
-     */
-    public function getClient()
-    {
-        if (empty($this->client)) {
-            $this->client = new Client();
-        }
-
-        return $this->client;
     }
 
     /**
@@ -100,7 +78,6 @@ class WebPushFactory
         $class = new \ReflectionClass($class);
         $args  = [
             $this->getAuthentication(),
-            $this->container->get($this->config['http_client']),
             $this->config['url']
         ];
 
