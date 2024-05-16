@@ -215,40 +215,48 @@ class SendpulseHelper
 
         $data = [
             'title'      => $article->title ?? '',
-            'body'       => $article->description ?? '',
+            'body'       => $article->description ?? substr($article->body, 0, 157) . '...',
             'website_id' => $this->getWebsiteId(),
             'ttl'        => 86400, //Max ttl allowed
             'link'       => $contentPath,
         ];
 
         $imageContent = '';
-        $extension    = pathinfo(parse_url($imagePath, PHP_URL_PATH), PATHINFO_EXTENSION);
-        if (in_array($extension, $this->avaliableImageType) && $image->size <= 200) {
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $imagePath);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_HEADER, false);
-            $imageContent = curl_exec($curl);
-            curl_close($curl);
+
+        if (!empty($image) && !empty($imagePath) && $image->size <= 200) {
+            $extension = pathinfo(parse_url($imagePath, PHP_URL_PATH), PATHINFO_EXTENSION);
+
+            if (in_array($extension, $this->avaliableImageType)) {
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $imagePath);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($curl, CURLOPT_HEADER, false);
+                $imageContent = curl_exec($curl);
+                curl_close($curl);
+            }
         }
 
         if (!empty($imageContent)) {
             $data['image'] = [
-                'name' => $image->title ?? '',
+                'name' => $image->title ?? 'image_title',
                 'data' => base64_encode($imageContent)
             ];
         }
 
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $favicoPath);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HEADER, false);
-        $iconContent = curl_exec($curl);
-        curl_close($curl);
+        $iconContent = '';
+
+        if (!empty($favico) && !empty($favicoPath)) {
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $favicoPath);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_HEADER, false);
+            $iconContent = curl_exec($curl);
+            curl_close($curl);
+        }
 
         if (!empty($iconContent)) {
             $data['icon'] = [
-                'name' => $favico->title ?? '',
+                'name' => $favico->title ?? 'icon_title',
                 'data' => base64_encode($iconContent)
             ];
         }
