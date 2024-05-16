@@ -386,7 +386,9 @@
 
                 var options  = Editor.configure(attrs.onmEditorPreset);
 
-                options.autoGrow_minHeight = Math.max(attrs.onmEditorHeight || 200, options.autoGrow_minHeight || 0);
+                options.autoGrow_minHeight = Math.max(
+                  attrs.onmEditorHeight || 200, options.autoGrow_minHeight || 0
+                );
 
                 if (attrs.onmEditorHeight) {
                   delete options.autoGrow_maxHeight;
