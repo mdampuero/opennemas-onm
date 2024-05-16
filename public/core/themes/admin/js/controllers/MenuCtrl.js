@@ -35,7 +35,9 @@
           pk_menu:    null,
           name:       '',
           menu_items: [],
-          position:   ''
+          position:   '',
+          locale: null,
+          referenceId: null,
         };
 
         /**
@@ -378,6 +380,7 @@
                 link_name: item[$scope.replacements[key].link_name],
                 pk_father: 0,
                 position: 0,
+                locale: item.locale || $scope.data.extra.locale.selected,
               });
             });
           });
@@ -554,6 +557,18 @@
 
           $scope.dragables = $scope.filterDragables($scope.menuData);
         });
+
+        $scope.$watch('config.locale.selected', function(nv, ov) {
+          if ($scope.dragables) {
+            $scope.dragables.tags = $scope.menuData.tags.filter($scope.filterLocale(nv));
+          }
+        });
+
+        $scope.filterLocale = function(locale) {
+          return function(element) {
+            return element.locale === locale;
+          };
+        };
       }
     ]);
 })();

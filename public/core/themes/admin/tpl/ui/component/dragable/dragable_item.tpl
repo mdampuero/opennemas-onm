@@ -1,4 +1,4 @@
-<li ng-repeat="item in {$iData} track by item.link_name" ui-tree-node class="ng-scope angular-ui-tree-node" >
+<li ng-repeat="item in {$iData} track by item.link_name+item.locale" ui-tree-node class="ng-scope angular-ui-tree-node" >
   <div ui-tree-handle class="menu-item angular-ui-tree-handle">
     <span ui-tree-handle>
     <span class="angular-ui-tree-icon"></span>

@@ -10,6 +10,7 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Displays, saves, modifies and removes menus.
@@ -138,24 +139,20 @@ class MenuController extends ApiController
 
     private function getTagsByOQL()
     {
-        $localeService = $this->get('core.locale');
-        $context = $localeService->getContext();
-        $localeService->setContext('backend');
-        $locale = $localeService->getLocale();
-
-
-        $oql = 'locale is null or locale = "' . $locale . '"';
+        $oql = '';
 
         try {
             $response = $this->get('api.service.tag')->getList($oql);
+
             return array_map(function ($a) {
                 return [
                     'title' => $a->name,
                     'slug'  => $a->slug,
+                    'locale' => $a->locale,
                     'id'    => $a->id,
                 ];
             }, $response['items']);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return [];
         }
     }

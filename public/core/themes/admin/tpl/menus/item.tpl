@@ -19,7 +19,6 @@
   </a>
 {/block}
 
-{block name="translator"}{/block}
 
 {block name="rightColumn"}
   <div class="grid simple">
