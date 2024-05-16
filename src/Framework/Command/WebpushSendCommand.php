@@ -127,8 +127,8 @@ class WebpushSendCommand extends Command
                 // Get current timeZone
                 $timeZone = $this->getContainer()->get('core.locale')->getTimeZone();
                 // Create current local time
-                $currentLocalTime = new \DateTime(null, $timeZone);
-                $targetTime       = new \DateTime(null, new \DateTimeZone('UTC'));
+                $currentLocalTime = new \DateTime('now', $timeZone);
+                $targetTime       = new \DateTime('now', new \DateTimeZone('UTC'));
 
                 if ($this->isInRestrictedHours($currentLocalTime)) {
                     $intervalToNextHour = $currentLocalTime->diff(
@@ -161,7 +161,7 @@ class WebpushSendCommand extends Command
                         continue;
                     }
                     $article  = $articleService->getItem($notification->fk_content);
-                    $localNow = new \DateTime(null, $timeZone);
+                    $localNow = new \DateTime('now', $timeZone);
                     $localUTC = $localNow->setTimezone(new \DateTimeZone('UTC'));
                     if (!$this->getContainer()->get('core.helper.content')->isReadyForPublish($article)
                         || $notification->send_date > $localUTC) {
@@ -200,7 +200,7 @@ class WebpushSendCommand extends Command
 
                     $onCooldown = true;
 
-                    $utcTime     = new \DateTime(null, new \DateTimeZone('UTC'));
+                    $utcTime     = new \DateTime('now', new \DateTimeZone('UTC'));
                     $limitTime   = new \DateInterval('PT' . $delay . 'M');
                     $allowedTime = $utcTime->add($limitTime);
 

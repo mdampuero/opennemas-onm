@@ -215,7 +215,9 @@ class SendpulseHelper
 
         $data = [
             'title'      => $article->title ?? '',
-            'body'       => $article->description ?? substr($article->body, 0, 157) . '...',
+            'body'       => !empty($article->description)
+                ? $article->description
+                : substr($article->body, 0, 157) . '...',
             'website_id' => $this->getWebsiteId(),
             'ttl'        => 86400, //Max ttl allowed
             'link'       => $contentPath,
