@@ -261,7 +261,7 @@
           </div>
         </div>
       </div>
-      <div class="form-group no-margin">
+      <div class="form-group">
         <label for="title" class="form-label">
           {t}Seo title{/t}
         </label>
