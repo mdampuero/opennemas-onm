@@ -48,6 +48,8 @@ orm:
                                     type: integer
                                 pk_father:
                                     type: integer
+                                locale:
+                                    type: string
                     columns:
                         pk_menu:
                             type: integer

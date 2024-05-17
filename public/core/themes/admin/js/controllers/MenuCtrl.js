@@ -290,7 +290,7 @@
 
           $scope.parents = $scope.parents.map(function(parent, index) {
             if ($scope.hasMultilanguage()) {
-              parent.title = $scope.getL10nTitle(parent, selectedLocale);
+              /// parent.title = $scope.getL10nTitle(parent, selectedLocale);
 
               originals[index + 1] = parent.title;
             }
@@ -317,7 +317,7 @@
               var item = $scope.childs[parent][child];
 
               if ($scope.hasMultilanguage()) {
-                item.title = $scope.getL10nTitle(item, selectedLocale);
+                // item.title = $scope.getL10nTitle(item, selectedLocale);
 
                 originals[menuItems.length + 1] = item.title;
               }
