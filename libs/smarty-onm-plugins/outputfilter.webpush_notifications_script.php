@@ -27,12 +27,15 @@ function smarty_outputfilter_webpush_notifications_script($output, $smarty)
         && !preg_match('/\/rss\/(?!listado$)/', $uri)
         && !preg_match('@\.amp\.html@', $uri)
     ) {
-        $webpushService = $smarty->getContainer()->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('webpush_service');
+        $ds      = $smarty->getContainer()->get('orm.manager')->getDataSet('Settings', 'instance');
+        $service = $ds->get('webpush_service');
+
+        if (empty($service) || !empty($ds->get('webpush_stop_collection'))) {
+            return $output;
+        }
 
         try {
-            $webpushHelper = $smarty->getContainer()->get(sprintf('core.helper.%s', $webpushService));
+            $webpushHelper = $smarty->getContainer()->get(sprintf('core.helper.%s', $service));
             $script        = $webpushHelper->getWebpushCollectionScript();
 
             $output = preg_replace(
