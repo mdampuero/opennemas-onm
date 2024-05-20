@@ -30,6 +30,7 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
         $headerScript    = 'header_script';
         $bodyStartScript = 'body_start_script';
         $bodyEndScript   = 'body_end_script';
+        $customCss       = 'custom_css';
         $customCssAmp    = '';
 
         if (preg_match('@\.amp\.html@', $uri)) {
@@ -37,12 +38,13 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
             $bodyStartScript .= '_amp';
             $bodyEndScript   .= '_amp';
             $customCssAmp     = 'custom_css_amp';
+            $customCss        = '';
         }
 
         $settings = $smarty->getContainer()
             ->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get([ $headerScript, $bodyStartScript, $bodyEndScript, $customCssAmp ]);
+            ->get([ $headerScript, $bodyStartScript, $bodyEndScript, $customCss, $customCssAmp ]);
 
         if (array_key_exists($headerScript, $settings)
             && !empty($settings[$headerScript])
@@ -50,6 +52,21 @@ function smarty_outputfilter_ads_scripts($output, $smarty)
             $output = preg_replace(
                 '@(</head>)@',
                 "\n" . base64_decode($settings[$headerScript]) . "\n" . '${1}',
+                $output
+            );
+        }
+
+        if (array_key_exists($customCss, $settings)
+            && !empty($settings[$customCss])
+        ) {
+            $output = preg_replace(
+                '@(</head>)@',
+                "\n"
+                . '<style id="custom_style">'
+                . base64_decode($settings[$customCss])
+                . '</style>'
+                . "\n"
+                . '${1}',
                 $output
             );
         }

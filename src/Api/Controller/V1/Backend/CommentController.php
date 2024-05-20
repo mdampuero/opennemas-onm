@@ -151,7 +151,7 @@ class CommentController extends ApiController
 
             $this->get('core.dispatcher')
                 ->dispatch('comments.config');
-
+            $this->get('api.service.redis')->deleteItemByPattern('comments-*');
             $msg->add(_('Settings saved.'), 'success', 200);
         } catch (\Exception $e) {
             $msg->add(_('There was an error while saving the settings'), 'error', 400);

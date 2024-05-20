@@ -1,12 +1,12 @@
 backend_subscriber_create:
-    path:     /subscribers/new
+    path:     /subscribers/new/
     defaults: { _controller: BackendBundle:Subscriber:create }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_subscriber_show:
-    path:     /subscribers/{id}
+    path:     /subscribers/{id}/
     defaults: { _controller: BackendBundle:Subscriber:show }
     methods:  [ GET ]
     requirements:
@@ -15,14 +15,14 @@ backend_subscriber_show:
         expose: true
 
 backend_subscribers_list:
-    path:     /subscribers
+    path:     /subscribers/
     defaults: { _controller: BackendBundle:Subscriber:list }
     methods:  [ GET ]
     options:
         expose: true
 
 backend_subscribers_settings:
-    path:     /subscribers/settings
+    path:     /subscribers/settings/
     defaults: { _controller: BackendBundle:Subscriber:settings }
     methods:  [ GET ]
     options:

@@ -1,12 +1,12 @@
 frontend_events:
-    path: /events
+    path: /events/
     defaults: { _controller: FrontendBundle:Event:list }
     options:
         l10n: true
         subdirectory: true
 
 frontend_event_show:
-    path: /event/{slug}
+    path: /event/{slug}/
     defaults: { _controller: FrontendBundle:Event:show, _format: html }
     requirements:
         slug : '[^/.]+'

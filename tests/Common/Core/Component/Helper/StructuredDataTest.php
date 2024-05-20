@@ -63,7 +63,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $this->ph = $this->getMockBuilder('Common\Core\Component\Helper\PhotoHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'getPhotoPath' ])
+            ->setMethods([ 'getPhotoPath', 'getPhotoWidth', 'getPhotoHeight' ])
             ->getMock();
 
         $this->ts = $this->getMockBuilder('Api\Service\V1\TagService')
@@ -144,26 +144,27 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
         $data['video']          = new Content();
         $data['video']->tags    = [1,2,3,4,5];
 
-        $output                     = [];
-        $output['content']          = new Content();
-        $output['video']            = new Content();
-        $output['content']->tags    = [1,2,3,4];
-        $output['video']->tags      = [1,2,3,4,5];
-        $output['videoKeywords']    = 'keywords,object,json,linking,data';
-        $output['keywords']         = 'keywords,object,json,linking';
-        $output['siteName']         = 'site name';
-        $output['siteUrl']          = 'http://opennemas.com';
-        $output['siteDescription']  = 'site description';
-        $output['content']->title   = 'This is the title';
-        $output['content']->body    = 'Ymir';
-        $output['title']            = 'This is the title';
-        $output['description']      = 'This is the description';
-        $output['wordCount']        = 4;
-        $output['logo']             = 'logo';
-        $output['author']           = 'author';
-        $output['languages']        = '';
-        $output['body']             = 'Ymir';
-        $output['externalServices'] = '[]';
+        $output                       = [];
+        $output['content']            = new Content();
+        $output['video']              = new Content();
+        $output['content']->tags      = [1,2,3,4];
+        $output['video']->tags        = [1,2,3,4,5];
+        $output['videoKeywords']      = 'keywords,object,json,linking,data';
+        $output['keywords']           = 'keywords,object,json,linking';
+        $output['siteName']           = 'site name';
+        $output['siteUrl']            = 'http://opennemas.com';
+        $output['siteDescription']    = 'site description';
+        $output['content']->title     = 'This is the title';
+        $output['content']->body      = 'Ymir';
+        $output['content']->title_int = null;
+        $output['title']              = 'This is the title';
+        $output['description']        = 'This is the description';
+        $output['wordCount']          = 4;
+        $output['logo']               = 'logo';
+        $output['author']             = 'author';
+        $output['languages']          = '';
+        $output['body']               = 'Ymir';
+        $output['externalServices']   = '[]';
 
 
 
@@ -258,6 +259,37 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
 
         $this->tpl->expects($this->at(0))->method('fetch')
             ->with('common/helpers/structured_album_data.tpl', $data);
+
+        $object->generateJsonLDCode($data);
+    }
+
+    /**
+     * Tests generateJsonLDCode
+     */
+    public function testGenerateJsonLDCodeWithEvent()
+    {
+        $data                               = [];
+        $data['content']                    = new \Content();
+        $data['content']->tags              = [1,2,3,4];
+        $data['content']->content_type_name = 'event';
+        $data['summary']                    = 'This is a test summary';
+        $data['created']                    = '10-10-2010 00:00:00';
+        $data['changed']                    = '10-10-2010 00:00:00';
+        $data['url']                        = 'http://console/';
+        $data['author']                     = 'John Doe';
+
+
+        $object = $this->getMockBuilder('Common\Core\Component\Helper\StructuredData')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'getTags', 'extractParamsFromData' ])
+            ->getMock();
+
+        $object->expects($this->once())->method('extractParamsFromData')
+            ->with($data)
+            ->willReturn($data);
+
+        $this->tpl->expects($this->at(0))->method('fetch')
+            ->with('common/helpers/structured_event_data.tpl', $data);
 
         $object->generateJsonLDCode($data);
     }
@@ -415,7 +447,7 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             [
                 'pk_content'        => 2,
                 'content_type_name' => 'photo',
-                'path'   => '/path_to_file/logo.jpg',
+                'path'              => '/path_to_file/logo.jpg',
                 'width'             => 1920,
                 'height'            => 1080
             ]
@@ -431,8 +463,22 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->with($media, null, [], true)
             ->willReturn('https://opennemas.com/media/opennemas/path_to_file/logo.jpg');
 
+        $this->ph->expects($this->any())
+            ->method('getPhotoWidth')
+            ->with($media)
+            ->willReturn("1920");
+
+        $this->ph->expects($this->any())
+            ->method('getPhotoHeight')
+            ->with($media)
+            ->willReturn("1080");
+
         $this->assertEquals(
-            'https://opennemas.com/media/opennemas/path_to_file/logo.jpg',
+            [
+                'url'    => 'https://opennemas.com/media/opennemas/path_to_file/logo.jpg',
+                'width'  => "1920",
+                'height' => "1080"
+            ],
             $method->invokeArgs($this->object, [])
         );
     }
@@ -455,7 +501,11 @@ class StructuredDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
 
         $this->assertEquals(
-            '/media/opennemas/assets/images/logos/opennemas-powered-horizontal.png',
+            [
+                'url'    => '/media/opennemas/assets/images/logos/opennemas-powered-horizontal.png',
+                'width'  => 350,
+                'height' => 60
+            ],
             $method->invokeArgs($this->object, [])
         );
     }

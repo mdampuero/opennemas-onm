@@ -213,6 +213,36 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="instagram">
+                  {t}Instagram user{/t}
+                </label>
+                <div class="controls">
+                  <div class="input-group">
+                    <span class="input-group-addon btn-instagram">
+                      <i class="fa fa-instagram"></i>
+                    </span>
+                    <input class="form-control" id="instagram" name="instagram" ng-model="item.instagram" placeholder="{t}Username{/t}" type="text">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="linkedin">
+                  {t}LinkedIn user{/t}
+                </label>
+                <div class="controls">
+                  <div class="input-group">
+                    <span class="input-group-addon btn-linkedin">
+                      <i class="fa fa-linkedin"></i>
+                    </span>
+                    <input class="form-control" id="linkedin" name="linkedin" ng-model="item.linkedin" placeholder="{t}Username{/t}" type="text">
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-label" for="url">

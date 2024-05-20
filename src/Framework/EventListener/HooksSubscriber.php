@@ -57,7 +57,20 @@ class HooksSubscriber implements EventSubscriberInterface
             // Comments Config hooks
             'comments.config' => [
                 ['removeSmartyCacheAll', 15],
-                ['removeVarnishCacheCurrentInstance', 10]
+                ['removeVarnishCacheForAllComments', 10]
+            ],
+            // Comments hooks
+            'comment.createItem' => [
+                [ 'removeVarnishCacheForComments', 10 ]
+            ],
+            'comment.updateItem' => [
+                [ 'removeVarnishCacheForComments', 10 ]
+            ],
+            'comment.patchItem'  => [
+                [ 'removeVarnishCacheForComments', 10 ]
+            ],
+            'comment.patchList'  => [
+                [ 'removeVarnishCacheForComments', 10 ]
             ],
             // Content hooks
             'content.update-set-num-views' => [
@@ -235,6 +248,59 @@ class HooksSubscriber implements EventSubscriberInterface
                     ->deleteItem($item, [ 'vote' => true ]);
             }
         }
+    }
+
+    /**
+     * Removes varnish cache for comments snippet.
+     *
+     * @param Event $event The event object.
+     *
+     * @return null
+     */
+    public function removeVarnishCacheForComments(Event $event)
+    {
+        $item   = $event->getArgument('item');
+        $action = $event->getArgument('action');
+
+        $action     = explode("::", $action);
+        $actionName = end($action);
+
+        $items = is_array($item) ? $item : [ $item ];
+        $items = array_filter($items, function ($item) use ($actionName) {
+            if ($actionName != 'createItem' || ( $actionName == 'createItem' && $item->status != 'pending')) {
+                return $item;
+            }
+        });
+
+        $itemKeys = array_map(function ($item) {
+            return $item->content_id;
+        }, $items);
+
+        $instanceName = $this->container->get('core.instance')->internal_name;
+
+        foreach ($itemKeys as $key) {
+            $this->container->get('task.service.queue')->push(
+                new ServiceTask('core.varnish', 'ban', [
+                    sprintf('obj.http.x-tags ~ ^instance-%s.*comments-%s(,|$)', $instanceName, $key)
+                ])
+            );
+        }
+    }
+
+    /**
+     * Removes varnish cache for all comments snippets.
+     *
+     * @return null
+     */
+    public function removeVarnishCacheForAllComments()
+    {
+        $instanceName = $this->container->get('core.instance')->internal_name;
+
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ ^instance-%s.*comments-*', $instanceName)
+            ])
+        );
     }
 
     /**

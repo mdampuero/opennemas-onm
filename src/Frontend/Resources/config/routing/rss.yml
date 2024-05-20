@@ -1,26 +1,26 @@
 frontend_rss_facebook_instant_articles:
-    path:     /rss/facebook-instant-articles
+    path:     /rss/facebook-instant-articles/
     defaults: { _controller: FrontendBundle:Rss:facebookInstantArticles }
     options:
         l10n: true
         subdirectory: true
 
 frontend_rss_showcase:
-    path:     /rss/google-news-showcase
+    path:     /rss/google-news-showcase/
     defaults: { _controller: FrontendBundle:Rss:googleNews}
     options:
         l10n: true
         subdirectory: true
 
 frontend_rss_listing:
-    path:     /rss/listado
+    path:     /rss/listado/
     defaults: { _controller: FrontendBundle:Rss:index }
     options:
         l10n: true
         subdirectory: true
 
 frontend_rss_author:
-    path: /rss/author/{author_slug}
+    path: /rss/author/{author_slug}/
     defaults: { _controller: FrontendBundle:Rss:authorRSS }
     requirements:
         author_slug: '[^/]+'
@@ -28,9 +28,18 @@ frontend_rss_author:
         l10n: true
         subdirectory: true
 
+frontend_rss_tag:
+    path: /rss/tag/{tag_slug}/
+    defaults: { _controller: FrontendBundle:Rss:tagRSS }
+    requirements:
+        tag_slug: '[^/]+'
+    options:
+        l10n: true
+        subdirectory: true
+
 # For app only
 frontend_rss_frontpage:
-    path:     /rss/frontpage
+    path:     /rss/frontpage/
     defaults: { _controller: FrontendBundle:Rss:frontpageRss }
     options:
         l10n: true
@@ -38,7 +47,7 @@ frontend_rss_frontpage:
 
 # For app only
 frontend_rss_frontpage_category:
-    path:     /rss/frontpage/{category}
+    path:     /rss/frontpage/{category}/
     defaults: { _controller: FrontendBundle:Rss:frontpageRss }
     requirements:
         category: '[^/]+'
@@ -47,21 +56,21 @@ frontend_rss_frontpage_category:
         subdirectory: true
 
 frontend_rss:
-    path:     /rss
+    path:     /rss/
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     options:
         l10n: true
         subdirectory: true
 
 frontend_rss_most_viewed:
-    path:     /rss/most-viewed
+    path:     /rss/most-viewed/
     defaults: { _controller: FrontendBundle:Rss:mostViewedRss }
     options:
         l10n: true
         subdirectory: true
 
 frontend_rss_type:
-    path:     /rss/{type}
+    path:     /rss/{type}/
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     requirements:
         type: '(album|opinion|video|event|poll|obituary|company)'
@@ -70,7 +79,7 @@ frontend_rss_type:
         subdirectory: true
 
 frontend_rss_type_category:
-    path:     /rss/{type}/{category}
+    path:     /rss/{type}/{category}/
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     requirements:
         type:     '(album|video|event|poll)'
@@ -80,7 +89,7 @@ frontend_rss_type_category:
         subdirectory: true
 
 frontend_rss_category:
-    path: /rss/{category}
+    path: /rss/{category}/
     defaults: { _controller: FrontendBundle:Rss:generalRss }
     requirements:
         category: '[^/]+'

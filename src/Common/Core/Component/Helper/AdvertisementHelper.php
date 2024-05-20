@@ -213,14 +213,14 @@ class AdvertisementHelper
             foreach ($adsContainers as $container) {
                 $containerLines = explode("\n", $container->ads_lines);
                 foreach ($containerLines as $line) {
-                    $adsLines[] = trim($line);
+                    $adsLines[] = str_replace(' ', '', $line);
                 }
             }
         }
 
         $containerLines = explode("\n", $adsTxt);
         foreach ($containerLines as $line) {
-            $adsLines[] = trim($line);
+            $adsLines[] = str_replace(' ', '', $line);
         }
 
         return implode("\n", array_unique($adsLines));

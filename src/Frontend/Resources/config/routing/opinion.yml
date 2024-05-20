@@ -26,17 +26,17 @@ frontend_opinion_show_amp:
         subdirectory: true
 
 frontend_opinion_author_frontpage:
-    path: /opinion/autor/{author_id}/{author_slug}
+    path: /opinion/autor/{author_id}/{author_slug}/
     defaults: { _controller: FrontendBundle:Opinion:listAuthor }
     requirements:
-        author_slug   : '(.*)?'
+        author_slug   : '[^/]+'
         author_id     : '([0-9]+)'
     options:
         l10n: true
         subdirectory: true
 
 frontend_opinion_frontpage:
-    path: /opinion
+    path: /opinion/
     defaults: { _controller: FrontendBundle:Opinion:list }
     options:
         l10n: true

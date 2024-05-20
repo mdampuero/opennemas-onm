@@ -300,6 +300,28 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests getAuthorSocialInstagramUrl.
+     */
+    public function testGetAuthorSocialInstagramUrl()
+    {
+        $user = new User([ 'name'    => 'Michelle Price', 'instagram' => 'Michelle']);
+
+        $this->assertNull($this->helper->getAuthorSocialInstagramUrl(131));
+        $this->assertEquals('https://www.instagram.com/Michelle', $this->helper->getAuthorSocialInstagramUrl($user));
+    }
+
+    /**
+     * Tests getAuthorSociallinkedinUrl.
+     */
+    public function testGetAuthorSocialLinkedinUrl()
+    {
+        $user = new User([ 'name'    => 'Michelle Price', 'linkedin' => 'Michelle']);
+
+        $this->assertNull($this->helper->getAuthorSociallinkedinUrl(131));
+        $this->assertEquals('https://www.linkedin.com/in/Michelle', $this->helper->getAuthorSocialLinkedinUrl($user));
+    }
+
+    /**
      * Tests getAuthorSocialTwitterUrl.
      */
     public function testGetAuthorSocialTwitterUrl()

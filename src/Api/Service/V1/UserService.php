@@ -203,7 +203,7 @@ class UserService extends OrmService
             }
 
             $oql   = sprintf('id != "%s" and email = "%s"', $id, $data['email']);
-            $items = $this->getList($oql);
+            $items = $this->container->get('api.service.user')->getList($oql);
 
             if (!empty($items['items'])) {
                 throw new \Exception(

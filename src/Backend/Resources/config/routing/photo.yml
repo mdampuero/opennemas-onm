@@ -1,9 +1,9 @@
 backend_photo_create:
-    path:     /photos/new
+    path:     /photos/new/
     defaults: { _controller: BackendBundle:Photo:create }
 
 backend_photo_show:
-    path:     /photos/{id}
+    path:     /photos/{id}/
     defaults: { _controller: BackendBundle:Photo:show }
     requirements:
         id: \d+
@@ -11,13 +11,13 @@ backend_photo_show:
         expose: true
 
 backend_photos_list:
-    path:     /photos
+    path:     /photos/
     defaults: { _controller: BackendBundle:Photo:list }
     options:
         expose: true
 
 backend_photos_config:
-    path:     /photos/config
+    path:     /photos/config/
     defaults: { _controller: BackendBundle:Photo:config }
     options:
         expose: true

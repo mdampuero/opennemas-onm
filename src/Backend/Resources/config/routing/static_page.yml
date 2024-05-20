@@ -1,17 +1,17 @@
 backend_static_page_create:
-    path:     /static-pages/new
+    path:     /static-pages/new/
     defaults: { _controller: BackendBundle:StaticPage:create }
     options:
         expose: true
 
 backend_static_page_show:
-    path:     /static-pages/{id}
+    path:     /static-pages/{id}/
     defaults: { _controller: BackendBundle:StaticPage:show }
     options:
         expose: true
 
 backend_static_pages_list:
-    path:     /static-pages
+    path:     /static-pages/
     defaults: { _controller: BackendBundle:StaticPage:list }
     options:
         expose: true

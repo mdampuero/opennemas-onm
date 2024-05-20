@@ -1,106 +1,106 @@
 admin_content_set_available:
-    path:     /content/set-available
+    path:     /content/set-available/
     defaults: { _controller: BackendBundle:Content:setAvailable }
 
 admin_content_toggle_suggested:
-    path:     /content/toggle-suggested
+    path:     /content/toggle-suggested/
     defaults: { _controller: BackendBundle:Content:toggleSuggested }
 
 admin_content_quick_info:
-    path:     /content/quick-info
+    path:     /content/quick-info/
     defaults: { _controller: BackendBundle:Content:quickInfo }
 
 admin_content_send_to_trash:
-    path:     /content/send-to-trash
+    path:     /content/send-to-trash/
     defaults: { _controller: BackendBundle:Content:sendToTrash }
 
 admin_content_update_property:
-    path:     /content/update-property
+    path:     /content/update-property/
     defaults: { _controller: BackendBundle:Content:updateProperty }
 
 admin_instance_sync:
-    path:     /instance-sync
+    path:     /instance-sync/
     defaults: { _controller: BackendBundle:InstanceSync:list }
 
 admin_instance_sync_create:
-    path:     /instance-sync/create
+    path:     /instance-sync/create/
     defaults: { _controller: BackendBundle:InstanceSync:create }
 
 admin_instance_sync_fetch_categories:
-    path:     /instance-sync/fetch-categories
+    path:     /instance-sync/fetch-categories/
     defaults: { _controller: BackendBundle:InstanceSync:fetchCategories }
 
 admin_instance_sync_show:
-    path:     /instance-sync/show
+    path:     /instance-sync/show/
     defaults: { _controller: BackendBundle:InstanceSync:show }
 
 admin_instance_sync_delete:
-    path:     /instance-sync/delete
+    path:     /instance-sync/delete/
     defaults: { _controller: BackendBundle:InstanceSync:delete }
 
 # Ads manager routes
 admin_ads:
-    path:     /ads
+    path:     /ads/
     defaults: { _controller: BackendBundle:Advertisements:list }
 
 admin_ad_create:
-    path:     /ads/create
+    path:     /ads/create/
     defaults: { _controller: BackendBundle:Advertisements:create }
 
 admin_ad_show:
-    path:     /ads/{id}/show
+    path:     /ads/{id}/show/
     defaults: { _controller: BackendBundle:Advertisements:show }
 
 admin_advertisement_show:
-    path:     /ads/{id}/show
+    path:     /ads/{id}/show/
     defaults: { _controller: BackendBundle:Advertisements:show }
     options:
         expose: true
 
 admin_ad_update:
-    path:     /ad/{id}/update
+    path:     /ad/{id}/update/
     defaults: { _controller: BackendBundle:Advertisements:update }
 
 admin_ads_content_provider:
-    path:     /ads/content-provider
+    path:     /ads/content-provider/
     defaults: { _controller: BackendBundle:Advertisements:contentProvider }
 
 admin_ads_config:
-    path:     /ads/config
+    path:     /ads/config/
     defaults: { _controller: BackendBundle:Advertisements:config }
 
 # Search controller routes
 admin_search:
-    path:     /search
+    path:     /search/
     defaults: { _controller: BackendBundle:Search:default }
 
 admin_search_content_provider:
-    path:     /search/content-provider
+    path:     /search/content-provider/
     defaults: { _controller: BackendBundle:Search:contentProvider }
 
 # Trash controller routes
 admin_trash:
-    path:     /trash
+    path:     /trash/
     defaults: { _controller: BackendBundle:Trash:default }
 
 admin_system_settings_save:
-    path:     /system/settings/save
+    path:     /system/settings/save/
     defaults: { _controller: BackendBundle:SystemSettings:save }
     methods:  [POST]
 
 # Getting started routes
 admin_getting_started:
-    path:     /getting-started
+    path:     /getting-started/
     defaults: { _controller: BackendBundle:GettingStarted:gettingStarted }
 
 admin_getting_started_accept_terms:
-    path:     /getting-started/accept-terms
+    path:     /getting-started/accept-terms/
     defaults: { _controller: BackendBundle:GettingStarted:acceptTerms }
     options:
         expose: true
 
 admin_getting_started_finish:
-    path:     /getting-started/finish
+    path:     /getting-started/finish/
     defaults: { _controller: BackendBundle:GettingStarted:finishWizard }
 
 # Routing refactoring starts here

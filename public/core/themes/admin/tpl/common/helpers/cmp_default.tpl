@@ -32,11 +32,6 @@
     }
 </script>
 <style>
-  .ot-floating-button,
-  button#onetrust-reject-all-handler {
-    display: none !important;
-  }
-
   .overlay {
     background-color: #57585A;
     position: fixed;

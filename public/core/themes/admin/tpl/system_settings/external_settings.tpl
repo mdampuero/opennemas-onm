@@ -550,7 +550,7 @@
                       </div>
                       <small class="help">
                         <i class="fa fa-info-circle m-r-5 text-info"></i>
-                        {t escape=off}You can get your Publication name in <a class="external-link" href="https://www.google.es/search?num=100&hl=es&safe=off&gl=es&tbm=nws&q={$smarty.server.HTTP_HOST}&oq={$smarty.server.HTTP_HOST}" target="_blank" ng-click="$event.stopPropagation();">Google News search</a> for your site.{/t}
+                        {t escape=off}You can get your Publication name in <a class="external-link" href="https://www.google.es/search?num=100&hl=es&safe=off&gl=es&tbm=nws&q={$app.instance->getBaseUrl()}&oq={$app.instance->getBaseUrl()}" target="_blank" ng-click="$event.stopPropagation();">Google News search</a> for your site.{/t}
                       </small>
                     </div>
                   </div>
@@ -660,6 +660,19 @@
                           </button>
                         </div>
                       </div>
+                      {is_module_activated name="es.openhost.module.dataLayerHenneo"}
+                      <div class="form-group">
+                        <label class="form-label" for="marfeel-metatags">
+                          {t}Use Marfeel meta tags{/t}
+                        </label>
+                        <div class="controls">
+                          <select id="marfeel-metatags" name="marfeel-metatags" ng-model="settings.marfeel_metatags">
+                            <option value="">{t}No{/t}</option>
+                            <option value="1">{t}Yes{/t}</option>
+                          </select>
+                        </div>
+                      </div>
+                      {/is_module_activated}
                     </div>
                   </div>
                 </div>

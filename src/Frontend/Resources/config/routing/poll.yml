@@ -1,5 +1,5 @@
 frontend_poll_frontpage:
-    path:     /encuesta
+    path:     /encuesta/
     defaults: { _controller: FrontendBundle:Poll:list }
     requirements:
     options:
@@ -7,7 +7,7 @@ frontend_poll_frontpage:
         subdirectory: true
 
 frontend_poll_frontpage_category:
-    path:     /encuesta/{category_slug}
+    path:     /encuesta/{category_slug}/
     defaults: { _controller: FrontendBundle:Poll:list, page: 1 }
     requirements:
         category_slug: '[^/]+'
@@ -29,7 +29,7 @@ frontend_poll_show:
         subdirectory: true
 
 frontend_poll_vote:
-    path: /encuesta/{id}/vote
+    path: /encuesta/{id}/vote/
     defaults: { _controller: FrontendBundle:Poll:vote }
     requirements:
         id: '([0-9]+)'

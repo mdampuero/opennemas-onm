@@ -17,24 +17,7 @@ class ContentPersister extends BasePersister
 {
     /**
      * Initializes a new DatabasePersister.
-     *PATH=$PATH:/home/opennemas/current/bin
-dir="$(dirname $0)/.."
-output_path="$dir/output"
-
-[ -d $output_path ] && rm -rf $output_path/* || mkdir -p $output_path
-
-for database in $(console core:instance:list -f BD_DATABASE | cut -d' ' -f 4); do
-    echo "Updating database $database..."
-    echo "$(echo 'SET @database='$database';' | cat - $dir/src/check.sql)" > $dir/src/checkDatabase.sql
-    console database:execute-script $dir/src/changes.sql -d $database
-    console database:execute-script $dir/src/checkDatabase.sql   -d $database > $output_path/out
-
-    echo -e "\nChecking database $database..." >> $output_path/result
-    grep -q "TRUE" $output_path/out \
-        && { rm $output_path/out; echo "OK" >> $output_path/result; } \
-        || { mv $output_path/out $output_path/$database.out; \
-            echo "FAIL" >> $output_path/result; }
-done
+     *
      * @param Connection $conn     The database connection.
      * @param Metadata   $metadata The entity metadata.
      * @param Cache      $cache    The cache service.
@@ -153,12 +136,12 @@ done
         $webpush_notifications = $entity->webpush_notifications;
 
         // Set urldatetime if starttime is already set
-        // And new starttime is greater than now (rescheduled)
+        // And new starttime is greater than now (rescheduled) and unpublished
         // OR new starttime is smaller than now
         //   And new starttime is smaller than old starttime
         //   And new starttime is smaller than urldatetime (e.g. scheduled to intime)
         if (!empty($entity->starttime)
-            && ($entity->starttime >= new \DateTime()
+            && (($entity->starttime >= new \DateTime() && empty($entity->content_status))
                 || ($entity->starttime < new \DateTime()
                     && $entity->starttime < $entity->getStored()['starttime']
                     && $entity->starttime->format('YmdHis') < $entity->urldatetime
@@ -635,9 +618,10 @@ done
         }
 
         $sql = "insert into content_notifications"
-            . "(fk_content, status, body, title, send_date, image, transaction_id, impressions, clicks, closed) values "
+            . "(fk_content, status, body, title, send_date, image, transaction_id,"
+            . " send_count, impressions, clicks, closed) values "
             . str_repeat(
-                '(?,?,?,?,?,?,?,?,?,?),',
+                '(?,?,?,?,?,?,?,?,?,?,?),',
                 count($webpush_notifications)
             );
 
@@ -653,6 +637,7 @@ done
             $value['title']          = empty($value['title']) ? null : $value['title'];
             $value['status']         = empty($value['status']) && $value['status'] != 0 ? 2 : $value['status'];
             $value['transaction_id'] = empty($value['transaction_id']) ? null : $value['transaction_id'];
+            $value['send_count']     = empty($value['send_count']) ? 0 : $value['send_count'];
             $value['impressions']    = empty($value['impressions']) ? 0 : $value['impressions'];
             $value['clicks']         = empty($value['clicks']) ? 0 : $value['clicks'];
             $value['closed']         = empty($value['closed']) ? 0 : $value['closed'];
@@ -666,6 +651,7 @@ done
                 $value['send_date'],
                 $value['image'],
                 $value['transaction_id'],
+                $value['send_count'],
                 $value['impressions'],
                 $value['clicks'],
                 $value['closed'],
@@ -679,6 +665,7 @@ done
                 empty($value['send_date']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
                 empty($value['image']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['transaction_id']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['send_count']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['impressions']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['clicks']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['closed']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,

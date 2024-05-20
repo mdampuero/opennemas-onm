@@ -21,6 +21,8 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
         ->getCurrentRequest()
         ->getUri();
 
+    // Do not use AMP url for twitter:domain
+    $url     = str_replace('.amp.html', '.html', $url);
     $title   = $ds->get('site_title');
     $summary = $ds->get('site_description');
 
@@ -36,8 +38,9 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
             ) . "...";
         }
 
+        $title = $content->title_int ?? $content->title;
         $title = htmlspecialchars(
-            html_entity_decode($content->title, ENT_COMPAT, 'UTF-8')
+            html_entity_decode($title, ENT_COMPAT, 'UTF-8')
         );
     }
 

@@ -63,9 +63,9 @@ class StructuredData
             return $data;
         }
 
-        $data['title']       = $data['content']->title;
         $data['description'] = $this->getDescription($data['content']);
         $data['body']        = $this->getBody($data['content']);
+        $data['title']       = $data['content']->title_int ?? $data['content']->title;
 
         // Count description data words
         $data['wordCount'] = str_word_count($data['description']);
@@ -99,7 +99,7 @@ class StructuredData
         $template = 'common/helpers/structured_frontpage_data.tpl';
         if (array_key_exists('content', $params)) {
             $template = 'common/helpers/structured_content_data.tpl';
-            if (in_array($params['content']->content_type_name, ['album', 'video'])) {
+            if (in_array($params['content']->content_type_name, ['album', 'video', 'event'])) {
                 $template = 'common/helpers/structured_'
                     . $params['content']->content_type_name . '_data.tpl';
             }
@@ -177,20 +177,31 @@ class StructuredData
         $sh = $this->container->get('core.helper.setting');
 
         // Default logo information
-        $logo = $this->instance->getBaseUrl()
+        $width  = 350;
+        $height = 60;
+        $logo   = $this->instance->getBaseUrl()
             . '/assets/images/logos/opennemas-powered-horizontal.png';
 
         // Get instance logo size
         if ($sh->hasLogo('default')) {
+            $logoDefault = $sh->getLogo('default');
             $logo = $this->container->get('core.helper.photo')->getPhotoPath(
-                $sh->getLogo('default'),
+                $logoDefault,
                 null,
                 [],
                 true
             );
+
+            $width = $this->container->get('core.helper.photo')->getPhotoWidth(
+                $logoDefault
+            );
+
+            $height = $this->container->get('core.helper.photo')->getPhotoHeight(
+                $logoDefault
+            );
         }
 
-        return $logo;
+        return [ 'url' => $logo, 'width' => $width, 'height' => $height];
     }
 
     /**

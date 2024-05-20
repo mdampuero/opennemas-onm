@@ -54,6 +54,7 @@ class UrlController extends ApiController
                     ['name' => 'category', 'title' => _('Category')],
                     ['name' => 'tag', 'title' => _('Tag')],
                     ['name' => 'user', 'title' => _('User')],
+                    ['name' => 'user_group', 'title' => _('User Group')],
                 ]
             ),
             'formSettings'  => [

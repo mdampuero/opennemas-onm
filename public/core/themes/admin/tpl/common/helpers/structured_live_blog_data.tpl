@@ -79,7 +79,9 @@
       "name": "{$siteName|replace:'\\':''|escape:'htmlall'}",
       "logo": {
           "@type": "ImageObject",
-          "url": "{$logo}"
+          "url": "{$logo['url']}",
+          "width": "{$logo['width']}",
+          "height": "{$logo['height']}"
       },
       "url": "{$siteUrl}"
     }
@@ -139,7 +141,9 @@
     "name": "{$siteName}",
     "logo": {
         "@type": "ImageObject",
-        "url": "{$logo}"
+        "url": "{$logo['url']}",
+        "width": "{$logo['width']}",
+        "height": "{$logo['height']}"
     },
     "url": "{$siteUrl}"
   },
@@ -219,7 +223,9 @@
         "name": "{$siteName}",
         "logo": {
             "@type": "ImageObject",
-            "url": "{$logo}"
+            "url": "{$logo['url']}",
+            "width": "{$logo['width']}",
+            "height": "{$logo['height']}"
         },
         "url": "{$siteUrl}"
       },

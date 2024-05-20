@@ -300,6 +300,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.helper.theme_settings:
+        class:     Common\Core\Component\Helper\ThemeSettingsHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.helper.sitemap:
         class:     Common\Core\Component\Helper\SitemapHelper
         arguments: [ '@service_container', '@core.instance', '@orm.manager', '@orm.connection.instance', '%core.paths.cache%' ]

@@ -95,7 +95,8 @@ class WebPushNotificationsController extends ApiController
                         'title' => 'Lorem Ipsum Dolor',
                         'status' => 1,
                         'image' => null,
-                        'transaction_id' => '23854aer'
+                        'transaction_id' => '23854aer',
+                        'send_count' => 6438
                     ],
                     [
                         'impressions' => 0,
@@ -105,7 +106,8 @@ class WebPushNotificationsController extends ApiController
                         'title' => 'Sit Amet Consectetur',
                         'status' => 0,
                         'image' => null,
-                        'transaction_id' => '23872ser'
+                        'transaction_id' => '23872ser',
+                        'send_count' => 0
                     ],
                     [
                         'impressions' => 6000,
@@ -115,7 +117,8 @@ class WebPushNotificationsController extends ApiController
                         'title' => 'Adipiscing Elit',
                         'status' => 1,
                         'image' => null,
-                        'transaction_id' => '25879adr'
+                        'transaction_id' => '25879adr',
+                        'send_count' => 6235
                     ],
                     [
                         'impressions' => 0,
@@ -125,7 +128,8 @@ class WebPushNotificationsController extends ApiController
                         'title' => 'Sed Do Eiusmod',
                         'status' => 0,
                         'image' => null,
-                        'transaction_id' => '6879der'
+                        'transaction_id' => '6879der',
+                        'send_count' => 0
                     ],
                     [
                         'impressions' => 6000,
@@ -135,7 +139,8 @@ class WebPushNotificationsController extends ApiController
                         'title' => 'Tempor Incididunt Ut Labore',
                         'status' => 1,
                         'image' => null,
-                        'transaction_id' => '23779aew'
+                        'transaction_id' => '23779aew',
+                        'send_count' => 7422
                     ],
                     [
                         'impressions' => 0,
@@ -145,7 +150,8 @@ class WebPushNotificationsController extends ApiController
                         'title' => 'Ut Enim Ad Minim Veniam',
                         'status' => 0,
                         'image' => null,
-                        'transaction_id' => '63879asr'
+                        'transaction_id' => '63879asr',
+                        'send_count' => 0
                     ],
                     [
                         'impressions' => 0,
@@ -155,7 +161,8 @@ class WebPushNotificationsController extends ApiController
                         'title' => 'Laboris Nisi Ut Aliquip',
                         'status' => 0,
                         'image' => null,
-                        'transaction_id' => '43879ser'
+                        'transaction_id' => '43879ser',
+                        'send_count' => 0
                     ],
                     [
                         'impressions' => 6000,
@@ -165,7 +172,8 @@ class WebPushNotificationsController extends ApiController
                         'title' => 'Titulo 1',
                         'status' => 1,
                         'image' => null,
-                        'transaction_id' => '63879aes'
+                        'transaction_id' => '63879aes',
+                        'send_count' => 6235
                     ],
                     [
                         'impressions' => 6000,
@@ -185,7 +193,8 @@ class WebPushNotificationsController extends ApiController
                         'title' => 'Duis Aute Irure Dolor In Reprehenderit',
                         'status' => 1,
                         'image' => null,
-                        'transaction_id' => '76879wes'
+                        'transaction_id' => '76879wes',
+                        'send_count' => 6235
                     ],
                 ]
             ];
@@ -223,26 +232,7 @@ class WebPushNotificationsController extends ApiController
         // Checks if it is a demo listing or a real one
         if (!$this->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')) {
             $demo_active_subscribers = [
-                8500,
-                8000,
-                7500,
-                7000,
-                6500,
-                5000,
-                6500,
-                6000,
-                5500,
-                5000,
-                4500,
-                4000,
-                3000,
-                2500,
-                2000,
-                1500,
-                750,
-                500,
-                250,
-                100
+                8500,8000,7500,7000,6500,5000,6500,6000,5500,5000,4500,4000,3000,2500,2000,1500,750,500,250,100
             ];
             return new JsonResponse([
                 'webpush_active_subscribers' => $demo_active_subscribers

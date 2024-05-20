@@ -444,8 +444,12 @@ class AdvertisementRendererTest extends TestCase
         $ad              = new \Advertisement();
         $ad->pk_content  = 123;
         $ad->positions   = [ 37 ];
-        $ad->params      = [ 'width' => 300, 'floating' => true ];
         $ad->with_script = 3;
+        $ad->params      = [
+            'width'    => 300,
+            'floating' => true,
+            'devices'  => [ 'phone' => 1, 'desktop' => 1 ]
+        ];
 
         $this->ds->expects($this->at(0))->method('get')
             ->with('ads_settings')
@@ -456,6 +460,9 @@ class AdvertisementRendererTest extends TestCase
             ->setMethods([ 'renderInline' ])
             ->getMock();
 
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('desktop');
+
         $renderer->expects($this->any())->method('renderInline')
             ->willReturn('foo');
 
@@ -465,6 +472,46 @@ class AdvertisementRendererTest extends TestCase
 
         $this->assertEquals(
             'foo',
+            $this->renderer->render($ad, $ad->params)
+        );
+    }
+
+    /**
+     * Tests render with inline mode when no device.
+     */
+    public function testRenderWithInlineModeWhenNoDevice()
+    {
+        $ad              = new \Advertisement();
+        $ad->pk_content  = 123;
+        $ad->positions   = [ 37 ];
+        $ad->with_script = 3;
+        $ad->params      = [
+            'width'    => 300,
+            'floating' => true,
+            'devices'  => [ 'phone' => 1, 'desktop' => 0 ]
+        ];
+
+        $this->ds->expects($this->at(0))->method('get')
+            ->with('ads_settings')
+            ->willReturn([ 'safe_frame' => 0 ]);
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\DfpRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderInline' ])
+            ->getMock();
+
+        $this->globals->expects($this->any())->method('getDevice')
+            ->willReturn('desktop');
+
+        $renderer->expects($this->any())->method('renderInline')
+            ->willReturn('');
+
+        $this->renderer->expects($this->once())->method('getRendererClass')
+            ->with(3)
+            ->willReturn($renderer);
+
+        $this->assertEquals(
+            '',
             $this->renderer->render($ad, $ad->params)
         );
     }

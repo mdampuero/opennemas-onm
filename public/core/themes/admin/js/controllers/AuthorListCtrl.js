@@ -45,7 +45,9 @@
          */
         $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
-          $scope.app.columns.selected = [ 'picture', 'name', 'email', 'blog', 'biography' ];
+          $scope.app.columns.selected = _.uniq($scope.app.columns.selected
+            .concat([ 'picture', 'name', 'email', 'blog', 'biography' ]));
+
           oqlEncoder.configure({
             placeholder: { name: 'name ~ "[value]" or username ~ "[value]"' }
           });

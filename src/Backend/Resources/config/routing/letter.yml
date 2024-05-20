@@ -1,10 +1,10 @@
 # Letter controller routes
 backend_letter_create:
-    path:     /letters/new
+    path:     /letters/new/
     defaults: { _controller: BackendBundle:Letter:create }
 
 backend_letter_show:
-    path:     /letters/{id}
+    path:     /letters/{id}/
     defaults: { _controller: BackendBundle:Letter:show }
     requirements:
         id: \d+
@@ -12,15 +12,15 @@ backend_letter_show:
         expose: true
 
 backend_letter_update:
-    path:     /letter/{id}/update
+    path:     /letter/{id}/update/
     defaults: { _controller: BackendBundle:Letter:update }
 
 backend_letters_content_provider:
-    path:     /letters/content-provider
+    path:     /letters/content-provider/
     defaults: { _controller: BackendBundle:Letter:contentProvider }
 
 backend_letters_list:
-    path:     /letters
+    path:     /letters/
     defaults: { _controller: BackendBundle:Letter:list }
     options:
         expose: true

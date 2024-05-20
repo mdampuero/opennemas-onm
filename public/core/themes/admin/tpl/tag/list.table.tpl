@@ -1,3 +1,4 @@
+
 {extends file="common/extension/list.table.tpl"}
 
 {block name="commonColumns"}
@@ -61,7 +62,7 @@
         <i class="fa fa-pencil text-success_"></i>
       </a>
       {acl isAllowed="MASTER"}
-      <a class="btn btn-white btn-small"  href="#" ng-click="move(getItemId(item), item)" uib-tooltip="{t}Move contents{/t}" tooltip-placement="top">
+      <a class="btn btn-white btn-small"  href="#" ng-click="move(getItemId(item), item)" ng-disabled="!data.extra.stats[getItemId(item)]" uib-tooltip="{t}Move contents{/t}" tooltip-placement="top">
         <i class="fa fa-flip-horizontal fa-reply"></i>
       </a>
       {/acl}

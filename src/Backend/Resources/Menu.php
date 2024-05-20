@@ -274,6 +274,7 @@ $menuXml = [
     [
         'id'          => 'webpush_notifications_mananger',
         'title'       => _('Web Push'),
+        'badge'       => '<span class="badge badge-primary pull-left m-t-10 m-r-5">' . _('NEW') . '</span> ',
         'icon'        => 'fa fa-bell',
         'link'        => '#',
         'privilege'   => 'ADMIN',
@@ -502,6 +503,14 @@ $menuXml = [
                 'title'       => _('Only masters'),
                 'icon'        => 'fa fa-rebel',
                 'link'        => url('backend_settings_master'),
+                'privilege'   => 'MASTER'
+            ],
+            [
+                'id'          => 'theme_settings',
+                'title'       => _('Theme settings'),
+                'icon'        => 'fa fa-eye',
+                'theme'       => [ 'apolo' ],
+                'link'        => url('backend_settings_theme'),
                 'privilege'   => 'MASTER'
             ]
         ]

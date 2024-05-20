@@ -4,7 +4,7 @@
     "@type": "NewsMediaOrganization",
     "name": "{$siteName}",
     "url": "{$siteUrl}",
-    "logo": "{$logo}",
+    "logo": "{$logo['url']}",
     "sameAs": {$externalServices},
     "potentialAction": {
       "@type": "ReadAction",

@@ -65,7 +65,7 @@ class SimpleMenu
     /**
      * Renders an element
      *
-     * @param string $element the element name
+     * @param array $element the element object
      * @param SimpleXMLElement $element the element to render
      * @param boolean $last whether this element is the last in the list
      *
@@ -73,6 +73,11 @@ class SimpleMenu
      */
     private function renderElement($element)
     {
+        if (array_key_exists('theme', $element)
+            && !in_array(getService('core.theme')->text_domain, $element['theme'])) {
+            return '';
+        }
+
         if (in_array('separator', $element)) {
             return $this->renderSeparator();
         }
@@ -212,14 +217,20 @@ class SimpleMenu
             $icon = '<i class="' . $element['icon'] . '" ></i>';
         }
 
+        if (array_key_exists('badge', $element)) {
+            $badge = $element['badge'];
+        }
+
         if (!array_key_exists('link', $element)) {
             return "$icon
+                    $badge
                     <span class=\"title\">$title</span>
                     $arrow";
         }
 
         return "<a href=\"$url\" $target $attrTitle $attrId>
                     $icon
+                    $badge
                     <span class=\"title\">$title</span>
                     $arrow
                 </a>";

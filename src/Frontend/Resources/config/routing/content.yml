@@ -9,13 +9,13 @@ frontend_content_print:
         subdirectory: true
 
 frontend_content_stats:
-    path: /content/stats
+    path: /content/stats/
     defaults: { _controller: FrontendBundle:Contents:stats }
     options:
         subdirectory: true
 
 frontend_content_permalink:
-    path: /content/{id}
+    path: /content/{id}/
     defaults: { _controller: FrontendBundle:Contents:permalink }
     requirements:
         id : '([0-9]+)'

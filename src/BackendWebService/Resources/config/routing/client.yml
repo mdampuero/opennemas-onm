@@ -1,12 +1,12 @@
 backend_ws_client_save:
-    path:     /client
+    path:     /client/
     defaults: { _controller: BackendWebServiceBundle:Client:save }
     methods:  [ POST ]
     options:
         expose: true
 
 backend_ws_client_show:
-    path:     /client/{id}
+    path:     /client/{id}/
     defaults: { _controller: BackendWebServiceBundle:Client:show }
     methods:  [ GET ]
     requirements:
@@ -15,7 +15,7 @@ backend_ws_client_show:
         expose: true
 
 backend_ws_client_update:
-    path:     /client/{id}
+    path:     /client/{id}/
     defaults: { _controller: BackendWebServiceBundle:Client:update }
     methods:  [ PUT ]
     requirements:

@@ -8,7 +8,7 @@
   </span>
   <span class="badge badge-default m-r-5 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.category && item.{$field}">
     <strong>
-      [% selectedCategory.title %]
+      [% selectedCategory.title.length > 20 ? selectedCategory.title.substring(0, 20) + '...' : selectedCategory.title %]
     </strong>
   </span>
 </div>

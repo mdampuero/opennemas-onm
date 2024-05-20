@@ -101,7 +101,7 @@
                     </div>
                   </div>
                   <div class="form-group col-md-12" ng-show="settings.logo_enabled">
-                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_default }"></div>
+                    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_default }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_default }">
                       <p>{t}Are you sure?{/t}</p>
                       <div class="confirm-actions">
@@ -139,7 +139,7 @@
                     </div>
                   </div>
                   <div class="form-group col-md-12" ng-if="settings.logo_enabled">
-                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_simple }"></div>
+                    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_simple }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_simple }">
                       <p>{t}Are you sure?{/t}</p>
                       <div class="confirm-actions">
@@ -177,7 +177,7 @@
                     </div>
                   </div>
                   <div class="form-group col-md-12" ng-if="settings.logo_enabled">
-                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_favico }"></div>
+                    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_favico }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_favico }">
                       <p>{t}Are you sure?{/t}</p>
                       <div class="confirm-actions">
@@ -213,10 +213,9 @@
                         </dynamic-image>
                       </div>
                     </div>
-
                   </div>
                   <div class="form-group col-md-12" ng-if="settings.logo_enabled">
-                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_embed }"></div>
+                    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_embed }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_embed }">
                       <p>{t}Are you sure?{/t}</p>
                       <div class="confirm-actions">
@@ -319,6 +318,12 @@
                         {t}Didomi{/t}
                       </label>
                     </div>
+                    <div class="radio">
+                      <input class="form-control" id="cmp-traffective" ng-model="settings.cmp_type" ng-value="'traffective'" type="radio"/>
+                      <label for="cmp-traffective">
+                        {t}Traffective{/t}
+                      </label>
+                    </div>
                   </div>
                   <div class="form-group m-t-15" ng-if="settings.cmp_type == 'quantcast'">
                     <label class="form-label" for="cmp-id">
@@ -372,6 +377,24 @@
                       </div>
                     </div>
                     {/is_module_activated}
+                  </div>
+                  <div class="form-group m-t-15" ng-if="settings.cmp_type == 'traffective'">
+                    <div class="col-md-6 form-group">
+                      <label class="form-label" for="cmp-id">
+                        {t}Domain{/t}
+                      </label>
+                      <div class="controls">
+                        <input class="form-control" id="cmp-id" name="cmp-id" ng-model="settings.cmp_id" type="text">
+                      </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <label class="form-label" for="cmp-apikey">
+                        {t}Activation Key{/t}
+                      </label>
+                      <div class="controls">
+                        <input class="form-control" id="cmp-apikey" name="cmp-apikey" ng-model="settings.cmp_apikey" type="text">
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <h4>

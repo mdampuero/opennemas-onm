@@ -107,7 +107,7 @@ class FrontendController extends Controller
 
         $expected = $this->getExpectedUri($action, [ 'item' => $item ]);
 
-        if ($request->getPathInfo() !== $expected
+        if (strpos($request->getRequestUri(), $expected) === false
             && empty($this->get('request_stack')->getParentRequest())
         ) {
             return new RedirectResponse($expected, 301);
@@ -163,7 +163,7 @@ class FrontendController extends Controller
 
         $expected = $this->getExpectedUri($action, [ 'item' => $item, '_format' => 'amp' ]);
 
-        if ($request->getPathInfo() !== $expected
+        if (strpos($request->getRequestUri(), $expected) === false
             && empty($this->get('request_stack')->getParentRequest())
         ) {
             return new RedirectResponse($expected, 301);
@@ -401,12 +401,13 @@ class FrontendController extends Controller
      */
     protected function getParameters($request, $item = null)
     {
-        $action = $this->get('core.globals')->getAction();
-        $params = array_merge($request->query->all(), [
+        $action    = $this->get('core.globals')->getAction();
+        $extension = $this->get('core.globals')->getExtension();
+        $params    = array_merge($request->query->all(), [
             'o_category' => null,
             'o_token'    => null,
             'x-tags'     => [
-                $this->get('core.globals')->getExtension(),
+                $extension,
                 $action
             ]
         ]);
@@ -440,7 +441,7 @@ class FrontendController extends Controller
             } else {
                 $params['x-tags'][] = sprintf(
                     '%s-%s',
-                    $this->get('core.globals')->getExtension(),
+                    $extension,
                     $item->id
                 );
             }

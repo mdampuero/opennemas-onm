@@ -26,6 +26,7 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RequestContextAwareInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Initializes the context from the request and sets request attributes based on a matching route.
@@ -65,6 +66,11 @@ class RouterListener implements EventSubscriberInterface
     private $requestStack;
 
     /**
+     * @var ServiceContainer
+     */
+    private $container;
+
+    /**
      * Constructor.
      *
      * RequestStack will become required in 3.0.
@@ -74,6 +80,7 @@ class RouterListener implements EventSubscriberInterface
      * @param RequestContext|null $context The RequestContext
      *                            (can be null when $matcher implements RequestContextAwareInterface)
      * @param LoggerInterface|null $logger The logger
+     * @param ServiceContainer $container The service container.
      *
      * @throws \InvalidArgumentException
      */
@@ -205,6 +212,12 @@ class RouterListener implements EventSubscriberInterface
 
         // add attributes based on the request (routing)
         try {
+            //Fix in order to prevent /admin/ throws a 404
+            if ($newRequest->getPathInfo() == '/admin/') {
+                $event->setResponse(new RedirectResponse('/admin', 301));
+                return;
+            }
+
             // matching a request is more powerful than matching
             // a URL path + context, so try that first
             if ($this->matcher instanceof RequestMatcherInterface) {
@@ -213,14 +226,55 @@ class RouterListener implements EventSubscriberInterface
                 $parameters = $this->matcher->match($newRequest->getPathInfo());
             }
 
+            // Log router redirects when requested uri differs from router
+            if (array_key_exists('_controller', $parameters) &&
+                strpos($parameters['_controller'], 'urlRedirectAction') !== false
+            ) {
+                $this->container->get('application.log')->info(
+                    sprintf(
+                        'Requested "%s" URI does not match router: "%s"',
+                        $parameters['_route'],
+                        $parameters['path']
+                    )
+                );
+            }
+
+            //Fix in order to avoid redirection to main instance when no final slash on subdirectory routes
+            //TODO: refactor with standard prefixUrl() function
+            if ($instance->isSubdirectory()
+                && array_key_exists('path', $parameters)
+                && $this->container->get('core.helper.url')->isFrontendUri($parameters['path'])
+                && $parameters['_route'] !== 'asset_image'
+            ) {
+                $parameters['path'] = substr(
+                    $parameters['path'],
+                    0,
+                    strlen($instance->subdirectory)
+                ) != $instance->subdirectory ? $instance->subdirectory . $parameters['path'] : $parameters['path'];
+            }
+
+            //Fix in order to avoid redirections to main laguage on l10n routes with no final slash
+            //TODO: refactor with standard prefixUrl() function
+            if ($hasModule
+                && !empty($locale)
+                && array_key_exists('path', $parameters)
+                && $this->container->get('core.helper.l10n_route')->isRouteLocalizable($parameters['_route'])
+            ) {
+                    $parameters['path'] = substr(
+                        $parameters['path'],
+                        0,
+                        strlen($locale)
+                    ) != $locale ? '/' . $locale . $parameters['path'] : $parameters['path'];
+            }
+
             $this->container->get('core.globals')
                 ->setRoute($parameters['_route']);
             $this->container->get('core.globals')
                 ->setEndpoint($this->getEndpoint($parameters['_route']));
 
-            // Raise na error if the url came localized and it's not localizable
-            if ($hasModule &&
-                !empty($locale)
+            // Raise an error if the url came localized and it's not localizable
+            if ($hasModule
+                && !empty($locale)
                 && !$this->container->get('core.helper.l10n_route')->isRouteLocalizable($parameters['_route'])
             ) {
                 throw new ResourceNotFoundException();
@@ -247,6 +301,12 @@ class RouterListener implements EventSubscriberInterface
             $request->attributes->set('_route_params', $parameters);
             $request->attributes->set('_locale', $locale);
         } catch (ResourceNotFoundException $e) {
+            //Fix in order to prevent /manager/ throws a 404
+            if ($newRequest->getPathInfo() == '/manager/') {
+                $event->setResponse(new RedirectResponse('/manager#/', 301));
+                return;
+            }
+
             $message = sprintf('No route found for "%s %s"', $request->getMethod(), $request->getPathInfo());
 
             if ($referer = $request->headers->get('referer')) {

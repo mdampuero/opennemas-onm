@@ -52,7 +52,8 @@ function smarty_outputfilter_cmp_script($output, $smarty)
                 [
                     'apikey'    => $config['cmp_apikey'] ?? '',
                     'id'        => $ampId,
-                    'mrfpassId' => $config['marfeel_pass']['id'] ?? ''
+                    'mrfpassId' => $config['marfeel_pass']['id'] ?? '',
+                    'canonical' => str_replace('.amp', '', $uri)
                 ]
             );
 

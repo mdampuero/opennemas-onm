@@ -89,7 +89,15 @@ class FormController extends Controller
         if (!empty($email) && $isValid) {
             // Check data form is correcty and serialize form
             $body       = '';
-            $notAllowed = [ 'cx', 'g-recaptcha-response', 'recipient', 'security_code', 'subject' ];
+            $notAllowed = [
+                'cx',
+                'g-recaptcha-response',
+                'recipient', 'security_code',
+                'subject',
+                'terms',
+                'allow-charge',
+                'action'
+            ];
 
             foreach ($request->request as $key => $value) {
                 if (!in_array($key, $notAllowed)) {
