@@ -220,4 +220,16 @@ class WebpushrHelper
             'closed'      => $data['count']['closed']
         ];
     }
+
+    /**
+     * Check if transaction ID is valid for current service
+     *
+     * @param Mixed $transactionId The transaction ID.
+     *
+     * @return Bool true if ti is not empty, false otherwise.
+     */
+    public function isValidId($transactionId)
+    {
+        return !empty($transactionId);
+    }
 }

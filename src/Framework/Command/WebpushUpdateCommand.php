@@ -228,6 +228,14 @@ class WebpushUpdateCommand extends Command
      */
     protected function processNotification($notification, $endpoint, $notificationService, $output, $helper)
     {
+        if (!$helper->isValidId($notification->transaction_id)) {
+            $output->writeln(sprintf(
+                '<fg=red;options=bold>TRANSACTION ID IS NOT VALID</> <fg=blue;options=bold>(%s)</>',
+                $notification->transaction_id
+            ));
+            return;
+        }
+
         try {
             $notificationData = $endpoint->getStatus([ 'id' => $notification->transaction_id ]);
             $parsedData       = $helper->parseNotificationData($notificationData);

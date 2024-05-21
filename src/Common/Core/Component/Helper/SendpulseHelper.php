@@ -282,4 +282,16 @@ class SendpulseHelper
             'closed'      => $data['unsubscribed']
         ];
     }
+
+    /**
+     * Check if transaction ID is valid for current service
+     *
+     * @param Mixed $transactionId The transaction ID.
+     *
+     * @return Bool true if ti is not empty and is numeric, false otherwise.
+     */
+    public function isValidId($transactionId)
+    {
+        return !empty($transactionId) && is_numeric($transactionId);
+    }
 }
