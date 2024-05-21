@@ -278,7 +278,7 @@ class InstanceHelper
      *
      * @return int The amount of current Web Push subscirbers
      */
-    public function getWebPushSubscribers(Instance $instance) : int
+    public function getWebPushSubscribers(Instance $instance)
     {
         try {
             $this->conn->selectDatabase($instance->getDatabaseName());

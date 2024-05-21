@@ -9,6 +9,8 @@
  */
 namespace Common\External\WebPush\Component\Endpoint;
 
+use GuzzleHttp\Client;
+
 class Endpoint
 {
     /**
@@ -46,9 +48,9 @@ class Endpoint
      * @param Client                $client         The HTTP client.
      * @param string                $url            The WebPush API URL.
      */
-    public function __construct($auth, $client, $url)
+    public function __construct($auth, $url)
     {
-        $this->client = $client;
+        $this->client = new Client();
         $this->auth   = $auth;
         $this->url    = $url;
     }
@@ -111,5 +113,32 @@ class Endpoint
         }
 
         $this->config = $config;
+    }
+
+    /**
+     * Replace URI wildcards with params.
+     *
+     * @param String $uri The endpoint uri.
+     * @param Array  $parameters Parameters to match uri wildcards.
+     *
+     * @return String parsed URI
+     */
+    public function replaceUriWildCards($uri, $parameters)
+    {
+        preg_match_all('@.*({.+})@U', $uri, $matches);
+        if (!array_key_exists(1, $matches) || empty($matches[1])) {
+            return $uri;
+        }
+
+        foreach ($matches[1] as $wildcard) {
+            $key = trim($wildcard, '{}');
+            if (!array_key_exists($key, $parameters)) {
+                throw new \Exception("Error procesing endpoint uri wildcards");
+            }
+
+            $uri = str_replace($wildcard, (string) $parameters[$key], $uri);
+        }
+
+        return $uri;
     }
 }

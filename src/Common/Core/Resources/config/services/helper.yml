@@ -54,6 +54,11 @@ services:
         arguments: [ '@service_container' ]
         public:     true
 
+    core.helper.webpushr:
+        class:      Common\Core\Component\Helper\WebpushrHelper
+        arguments: [ '@service_container' ]
+        public:     true
+
     core.helper.webpush_notifications:
         class:      Common\Core\Component\Helper\WebPushNotificationsHelper
         arguments: [ '@service_container' ]
@@ -293,6 +298,11 @@ services:
     core.helper.related:
         class:     Common\Core\Component\Helper\RelatedHelper
         arguments: [ '@core.helper.content', '@core.helper.subscription', '@core.template.frontend' ]
+        public:    true
+
+    core.helper.sendpulse:
+        class:     Common\Core\Component\Helper\SendpulseHelper
+        arguments: [ '@service_container' ]
         public:    true
 
     core.helper.setting:

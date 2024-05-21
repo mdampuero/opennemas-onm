@@ -71,9 +71,19 @@ class WebpushSendCommand extends Command
                 $this->getContainer()->get('core.loader')
                     ->load($instance->internal_name);
 
-                $as                   = $this->getContainer()->get('api.service.content');
-                $webpushr             = $this->getContainer()->get('external.web_push.factory');
-                $notificationEndpoint = $webpushr->getEndpoint('notification');
+                $service = $this->getContainer()->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')->get('webpush_service');
+
+                if (empty($service)) {
+                    $output->writeln(sprintf(
+                        '<fg=red;options=bold>SERVICE NOT FOUND</> <fg=blue;options=bold>(Instance %s skipped)</>',
+                        $instance->internal_name
+                    ));
+                    continue;
+                }
+
+                $webpush              = $this->getContainer()->get(sprintf('external.web_push.factory.%s', $service));
+                $notificationEndpoint = $webpush->getEndpoint('notification');
                 $articleService       = $this->getContainer()->get('api.service.article');
                 $notificationService  = $this->getContainer()->get('api.service.webpush_notifications');
                 $onCooldown           = false;
@@ -102,18 +112,6 @@ class WebpushSendCommand extends Command
                     ->get('time_zone');
 
                 $this->getContainer()->get('core.locale')->setTimeZone($timezone);
-                $photoHelper = $this->getContainer()->get('core.helper.photo');
-
-                $favicoId = $this->getContainer()->get('orm.manager')
-                    ->getDataSet('Settings', 'instance')
-                    ->get('logo_favico');
-
-                $favico = $photoHelper->getPhotoPath(
-                    $as->getItem($favicoId),
-                    null,
-                    [ 192, 192 ],
-                    true
-                );
 
                 $delay = $this->getContainer()->get('orm.manager')
                     ->getDataSet('Settings', 'instance')
@@ -129,8 +127,8 @@ class WebpushSendCommand extends Command
                 // Get current timeZone
                 $timeZone = $this->getContainer()->get('core.locale')->getTimeZone();
                 // Create current local time
-                $currentLocalTime = new \DateTime(null, $timeZone);
-                $targetTime       = new \DateTime(null, new \DateTimeZone('UTC'));
+                $currentLocalTime = new \DateTime('now', $timeZone);
+                $targetTime       = new \DateTime('now', new \DateTimeZone('UTC'));
 
                 if ($this->isInRestrictedHours($currentLocalTime)) {
                     $intervalToNextHour = $currentLocalTime->diff(
@@ -163,30 +161,27 @@ class WebpushSendCommand extends Command
                         continue;
                     }
                     $article  = $articleService->getItem($notification->fk_content);
-                    $localNow = new \DateTime(null, $timeZone);
+                    $localNow = new \DateTime('now', $timeZone);
                     $localUTC = $localNow->setTimezone(new \DateTimeZone('UTC'));
                     if (!$this->getContainer()->get('core.helper.content')->isReadyForPublish($article)
                         || $notification->send_date > $localUTC) {
                         continue;
                     }
 
-                    $contentPath = $this->getContainer()
-                        ->get('core.helper.url_generator')->getUrl($article, ['_absolute' => true]);
-                    $image       = $this->getContainer()
+                    $image = $this->getContainer()
                         ->get('core.helper.featured_media')->getFeaturedMedia($article, 'inner');
-                    $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
 
                     $notificationStatus = 1;
 
                     try {
-                        $sentNotification = $notificationEndpoint->sendNotification([
-                            'title'      => $article->title ?? '',
-                            'message'    => $article->description ?? '',
-                            'target_url' => $contentPath,
-                            'image'      => $imagePath,
-                            'icon'       => strpos($favico, '.png') ? $favico : '',
-                        ]);
+                        $webpushHelper    = $this->getContainer()->get(sprintf('core.helper.%s', $service));
+                        $notificationData = $webpushHelper->getNotificationData($article);
+                        $sentNotification = $notificationEndpoint->sendNotification([ 'data' => $notificationData ]);
                     } catch (\Exception $e) {
+                        $output->writeln(sprintf(
+                            '<fg=red;options=bold>NOTIFICATION FAILED</> <fg=blue;options=bold>(%s)</>',
+                            $e->getMessage()
+                        ));
                         $notificationStatus = 2;
                     }
                     $notificationService->patchItem(
@@ -197,7 +192,7 @@ class WebpushSendCommand extends Command
                             'title'          => $article->title ?? '',
                             'send_date'      => gmdate('Y-m-d H:i:s'),
                             'image'          => $image->pk_content ?? null,
-                            'transaction_id' => $sentNotification['ID'] ?? '',
+                            'transaction_id' => $sentNotification['ID'] ?? $sentNotification['id'] ?? '',
                         ]
                     );
 
@@ -205,7 +200,7 @@ class WebpushSendCommand extends Command
 
                     $onCooldown = true;
 
-                    $utcTime     = new \DateTime(null, new \DateTimeZone('UTC'));
+                    $utcTime     = new \DateTime('now', new \DateTimeZone('UTC'));
                     $limitTime   = new \DateInterval('PT' . $delay . 'M');
                     $allowedTime = $utcTime->add($limitTime);
 

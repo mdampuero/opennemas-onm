@@ -12,6 +12,7 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Defines the frontend controller for the articles.
@@ -21,26 +22,21 @@ class WebPushNotificationsController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    public function scriptAction()
+    public function scriptAction(Request $request)
     {
-        $webpushSettings = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get(['webpush_service', 'webpush_apikey', 'webpush_token', 'webpush_publickey']);
+        $settingsDs = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+        $service    = $request->attributes->get('service') ?? $settingsDs->get('webpush_service');
 
-        if ($this->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')
-            && $webpushSettings['webpush_service'] == 'webpushr'
-            && $webpushSettings['webpush_apikey']
-            && !$this->get('core.instance')->hasMultilanguage()
-            && $this->get('core.security')->hasExtension('es.openhost.module.frontendSsl')) {
-            $response = new BinaryFileResponse('assets/js/webpush.js');
-            $response->headers->set('X-Status-Code', 200);
-            $response->headers->set('Content-Type', 'application/javascript');
-            $response->headers->set('Cache-Control', 'public');
-            $response->headers->set('max-age', 2628000);
-            $response->headers->set('s-maxage', 2628000);
-            return $response;
+        if (empty($service) || !empty($settingsDs->get('webpush_stop_collection'))) {
+            throw new ResourceNotFoundException();
         }
 
+        try {
+            $webpushHelper = $this->get(sprintf('core.helper.%s', $service));
+            return $webpushHelper->getWebpushCollectionFile();
+        } catch (\Exception $e) {
+            throw new ResourceNotFoundException();
+        }
         throw new ResourceNotFoundException();
     }
 }

@@ -11,27 +11,30 @@ namespace Common\External\WebPush\Component\Endpoint;
 
 use Common\External\WebPush\Component\Exception\WebPushException;
 
-class StatusEndpoint extends Endpoint
+class CodeSnippetEndpoint extends Endpoint
 {
     /**
-     * Get the data of the given Web Push notification.
+     * Get the collection snippet for the website.
      *
-     * @return string
+     * @return String
      *
      * @throws WebPushException If the action fails.
      */
-    public function getStatus($params = [])
+    public function getCode($params = [])
     {
         try {
-            $url = $this->url . $this->replaceUriWildCards($this->config['actions']['get_status']['path'], $params);
+            $url = $this->url . $this->replaceUriWildCards($this->config['actions']['get_code']['path'], $params);
 
             $response = $this->client->get($url, [ 'headers' => $this->auth->getAuthHeaders() ]);
             $body     = json_decode($response->getBody(), true);
+
+            getService('application.log')
+                    ->info('WebPush code snippet was successfully retrieved');
         } catch (\Exception $e) {
             getService('application.log')
-                ->error('Error retrieving the notification status from server '
+                ->error('Error retrieving the WebPush code snippet from server '
                 . $e->getMessage());
-            throw new WebPushException('webpush.status.get.failure: ' . $e->getMessage());
+            throw new WebPushException('webpush.snippet.get.failure: ' . $e->getMessage());
         }
 
         return $body;
