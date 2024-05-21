@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 12:12+0000\n"
-"PO-Revision-Date: 2024-05-08 14:19+0200\n"
+"POT-Creation-Date: 2024-05-15 09:05+0000\n"
+"PO-Revision-Date: 2024-05-15 11:06+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -2340,6 +2340,12 @@ msgstr "Buscar por eqtiqueta"
 msgid "This action can not be undone"
 msgstr "Esta acción non se pode desfacer"
 
+msgid "Seo title"
+msgstr "Titulo Seo"
+
+msgid "Seo description"
+msgstr "Descrición Seo"
+
 msgid "Config tag module"
 msgstr "Configuración do módulo «Etiquetas»"
 
@@ -3705,7 +3711,7 @@ msgid "Organizer name"
 msgstr "Nome do organizador"
 
 msgid "Organizer website"
-msgstr "Páxina web do organizador"
+msgstr "Sitio web do organizador"
 
 msgid "Start date"
 msgstr "Data de inicio"
@@ -4562,8 +4568,20 @@ msgstr "Miga de pan"
 msgid "Set display of routes"
 msgstr "Establecer a visualización de rutas"
 
+msgid "Progress bar"
+msgstr "Barra de progreso"
+
+msgid "Set display of scroll progress bar"
+msgstr "Establecer a visualización da barra de progreso"
+
+msgid "Pre-main widget"
+msgstr "Widget previo ó contido principal"
+
+msgid "Widget to show before main content"
+msgstr "Widget a mostrar antes do contido principal"
+
 msgid "Pre-footer widget"
-msgstr "Widget previo ao pé de páxina"
+msgstr "Widget previo ó pé de páxina"
 
 msgid "Widget to show before footer"
 msgstr "Widget a mostrar antes do pé de páxina"
@@ -4634,12 +4652,6 @@ msgstr "Mostrar subtítulos"
 msgid "Display summary/description"
 msgstr "Mostrar resumo/descrición"
 
-msgid "Opinions media"
-msgstr "Media das opinións"
-
-msgid "Display featured media in opinions"
-msgstr "Mostrar imaxe destacada en opinións"
-
 msgid "Info"
 msgstr "Info"
 
@@ -4648,6 +4660,9 @@ msgstr "Mostrar o autor do contido"
 
 msgid "Display author's photo"
 msgstr "Mostra a foto do autor"
+
+msgid "Display author's bio"
+msgstr "Mostrar a biografía do autor"
 
 msgid "Display content's date"
 msgstr "Mostrar a data do contido"
@@ -4742,6 +4757,12 @@ msgstr "Disposición do widget máis na portada"
 
 msgid "Max items on suggested widgets"
 msgstr "Máximo de elementos nos widgets suxeridos"
+
+msgid "Choose options for contents"
+msgstr "Escoller opcións para contidos"
+
+msgid "Display featured media in opinions"
+msgstr "Mostrar imaxe destacada en opinións"
 
 msgid "Mobile logo size"
 msgstr "Tamaño do logotipo do móbil"

@@ -78,6 +78,9 @@
                     <a href="#tabInners" aria-controls="inners" role="tab" data-toggle="tab">{t domain="base"}Inners{/t}</a>
                   </li>
                   <li role="presentation" ng-if="extra.theme_skins[settings.theme_skin].params.options">
+                    <a href="#tabOpinion" aria-controls="opinion" role="tab" data-toggle="tab">{t domain="base"}Opinion{/t}</a>
+                  </li>
+                  <li role="presentation" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                     <a href="#tabMobile" aria-controls="mobile" role="tab" data-toggle="tab">{t domain="base"}Mobile{/t}</a>
                   </li>
                 </ul>
@@ -345,19 +348,87 @@
                       </div>
                       <div class="col-xs-12 col-md-4 m-b-15">
                         <h4>
+                          <i class="fa fa-minus"></i>
+                          {t}Topbar{/t}
+                        </h4>
+                        <div class="controls">
+                          <div class="checkbox p-b-10">
+                            <input id="theme-general-topbar" name="theme-general-topbar" ng-model="settings.theme_options.general_topbar" ng-checked="[% settings.theme_options.general_topbar != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                            <label for="theme-general-topbar">
+                              <span class="help">
+                                {t}Set display of header's top bar{/t}
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4 m-b-15">
+                        <h4>
                           <i class="fa fa-code-fork"></i>
                           {t}Breadcrumb{/t}
                         </h4>
-                        <label class="form-label" for="theme-header-color">
+                        <div class="controls">
+                          <div class="checkbox p-b-10">
+                            <input id="theme-breadcrumb" name="theme-breadcrumb" ng-model="settings.theme_options.breadcrumb" ng-checked="[% settings.theme_options.breadcrumb != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                            <label for="theme-breadcrumb">
+                              <span class="help">
+                                {t}Set display of routes{/t}
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4 m-b-15">
+                        <h4>
+                          <i class="fa fa-minus"></i>
+                          {t}Progress bar{/t}
+                        </h4>
+                        <div class="controls">
+                          <div class="checkbox p-b-10">
+                            <input id="theme-progressbar" name="theme-progressbar" ng-model="settings.theme_options.progressbar" ng-checked="[% settings.theme_options.progressbar != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                            <label for="theme-progressbar">
+                              <span class="help">
+                                {t}Set display of scroll progress bar{/t}
+                              </span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4 m-b-15">
+                        <h4>
+                          <i class="fa fa-puzzle-piece"></i>
+                          {t}Header right widget{/t}
+                        </h4>
+                        <label class="form-label" for="theme-general-header-right-widget">
                           <span class="help">
-                            {t}Set display of routes{/t}
+                            {t}Widget to show before main content{/t}
                           </span>
                         </label>
                         <div class="controls">
                           <div class="input-group">
-                            <select id="theme-breadcrumb" name="theme-breadcrumb" ng-model="settings.theme_options.breadcrumb" required>
-                              <option value="[% breadcrumb_name %]" ng-repeat="(breadcrumb_name,breadcrumb_value) in extra.theme_skins[settings.theme_skin].params.options.breadcrumb.options" ng-selected="[% breadcrumb_name == settings.theme_options.breadcrumb || settings.theme_options.breadcrumb == undefined %]">[% breadcrumb_value %]</option>
-                            </select>
+                            <span class="input-group-addon">
+                              ID
+                            </span>
+                            <input class="form-control" id="general-header-right-widget" name="general-header-right-widget" ng-model="settings.theme_options.general_header_right_widget" type="text">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4 m-b-15">
+                        <h4>
+                          <i class="fa fa-puzzle-piece"></i>
+                          {t}Pre-main widget{/t}
+                        </h4>
+                        <label class="form-label" for="theme-general-main-widget">
+                          <span class="help">
+                            {t}Widget to show before main content{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              ID
+                            </span>
+                            <input class="form-control" id="general-main-widget" name="general-main-widget" ng-model="settings.theme_options.general_main_widget" type="text">
                           </div>
                         </div>
                       </div>
@@ -622,7 +693,6 @@
 
                   <div role="tabpanel" class="tab-pane fade" id="tabFrontpage">
                     <div ng-if="extra.theme_skins[settings.theme_skin].params.options">
-
                       <div class="row">
                         <div class="col-xs-12 col-md-4 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-content-category-name">
@@ -630,15 +700,15 @@
                               <i class="fa fa-folder"></i>
                               {t}Category name{/t} / {t}Pretitle{/t}
                             </h4>
-                            <span class="help">
-                              {t}Display pretitle or category in contents{/t}
-                            </span>
                           </label>
                           <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-option-content-category-name" name="theme-option-content-category-name" ng-model="settings.theme_options.content_category_name">
-                                <option value="[% content_category_key %]" ng-repeat="(content_category_key,content_category_value) in extra.theme_skins[settings.theme_skin].params.options.content_category_name.options" ng-selected="[% content_category_key === settings.theme_options.content_category_name %]">[% content_category_value %]</option>
-                              </select>
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-content-category-name" name="theme-option-content-category-name" ng-model="settings.theme_options.content_category_name" ng-checked="[% settings.theme_options.content_category_name != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label class="form-label m-b-15" for="theme-option-content-category-name">
+                                <span class="help">
+                                  {t}Display pretitle or category in contents{/t}
+                                </span>
+                              </label>
                             </div>
                           </div>
                         </div>
@@ -648,15 +718,15 @@
                               <i class="fa fa-header"></i>
                               {t}Subtitle{/t}
                             </h4>
-                            <span class="help">
-                              {t}Display subtitle{/t}
-                            </span>
                           </label>
                           <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-option-content-subtitle" name="theme-option-content-subtitle" ng-model="settings.theme_options.content_subtitle">
-                                <option value="[% content_subtitle_name %]" ng-repeat="(content_subtitle_name,content_subtitle_value) in extra.theme_skins[settings.theme_skin].params.options.content_subtitle.options" ng-selected="[% content_subtitle_name === settings.theme_options.content_subtitle || settings.theme_options.content_subtitle == undefined %]">[% content_subtitle_value %]</option>
-                              </select>
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-content-subtitle" name="theme-option-content-subtitle" ng-model="settings.theme_options.content_subtitle" ng-checked="[% settings.theme_options.content_subtitle != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label class="form-label m-b-15" for="theme-option-content-subtitle">
+                                <span class="help">
+                                  {t}Display subtitle{/t}
+                                </span>
+                              </label>
                             </div>
                           </div>
                         </div>
@@ -666,33 +736,15 @@
                               <i class="fa fa-align-left"></i>
                               {t}Summary{/t}
                             </h4>
-                            <span class="help">
-                              {t}Display summary/description{/t}
-                            </span>
                           </label>
                           <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-option-content-summary" name="theme-option-content-summary" ng-model="settings.theme_options.content_summary">
-                                <option value="[% content_summary_name %]" ng-repeat="(content_summary_name,content_summary_value) in extra.theme_skins[settings.theme_skin].params.options.content_summary.options" ng-selected="[% content_summary_name === settings.theme_options.content_summary || settings.theme_options.content_summary == undefined %]">[% content_summary_value %]</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xs-12 col-md-4 m-b-15">
-                          <label class="form-label m-b-15" for="theme-option-content-summary">
-                            <h4>
-                              <i class="fa fa-picture-o"></i>
-                              {t}Opinions media{/t}
-                            </h4>
-                            <span class="help">
-                              {t}Display featured media in opinions{/t}
-                            </span>
-                          </label>
-                          <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-option-content-opinion-media" name="theme-option-content-opinion-media" ng-model="settings.theme_options.content_opinion_media">
-                                <option value="[% content_opinion_media_name %]" ng-repeat="(content_opinion_media_name,content_opinion_media_value) in extra.theme_skins[settings.theme_skin].params.options.content_opinion_media.options" ng-selected="[% content_opinion_media_name === settings.theme_options.content_opinion_media || settings.theme_options.content_opinion_media == undefined %]">[% content_opinion_media_value %]</option>
-                              </select>
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-content-summary" name="theme-option-content-summary" ng-model="settings.theme_options.content_summary" ng-checked="[% settings.theme_options.content_summary != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label class="form-label m-b-15" for="theme-option-content-summary">
+                                <span class="help">
+                                  {t}Display summary/description{/t}
+                                </span>
+                              </label>
                             </div>
                           </div>
                         </div>
@@ -707,72 +759,77 @@
                         <div class="col-xs-12">
                           <div class="row">
                             <div class="col-xs-12 col-md-4 m-b-15">
-                              <label class="form-label m-b-15" for="theme-option-content-author">
-                                <span class="help">
-                                  {t}Display content's author{/t}
-                                </span>
-                              </label>
                               <div class="controls">
-                                <div class="input-group">
-                                  <select id="theme-option-content-author" name="theme-option-content-author" ng-model="settings.theme_options.content_author">
-                                    <option value="[% content_author_name %]" ng-repeat="(content_author_name,content_author_value) in extra.theme_skins[settings.theme_skin].params.options.content_author.options" ng-selected="[% content_author_name === settings.theme_options.content_author || settings.theme_options.content_author == undefined %]">[% content_author_value %]</option>
-                                  </select>
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-content-author" name="theme-option-content-author" ng-model="settings.theme_options.content_author" ng-checked="[% settings.theme_options.content_author != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label class="form-label m-b-15" for="theme-option-content-author">
+                                    <span class="help">
+                                      {t}Display content's author{/t}
+                                    </span>
+                                  </label>
                                 </div>
                               </div>
                             </div>
-                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.content_author === 'true'">
-                              <label class="form-label m-b-15" for="theme-option-content-author-photo">
-                                <span class="help">
-                                  {t}Display author's photo{/t}
-                                </span>
-                              </label>
+                            <div class="col-xs-12 col-md-4 m-b-15" >
                               <div class="controls">
-                                <div class="input-group">
-                                  <select id="theme-option-content-author-photo" name="theme-option-content-author-photo" ng-model="settings.theme_options.content_author_photo">
-                                    <option value="[% content_author_photo_name %]" ng-repeat="(content_author_photo_name,content_author_photo_value) in extra.theme_skins[settings.theme_skin].params.options.content_author_photo.options" ng-selected="[% content_author_photo_name === settings.theme_options.content_author_photo || settings.theme_options.content_author_photo == undefined %]">[% content_author_photo_value %]</option>
-                                  </select>
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-content-author-photo" name="theme-option-content-author-photo" ng-model="settings.theme_options.content_author_photo" ng-checked="[% settings.theme_options.content_author_photo != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.content_author === 'true'"/>
+                                  <input id="theme-option-content-author-photo" name="theme-option-content-author-photo" ng-model="settings.theme_options.content_author_photo" ng-checked="[% settings.theme_options.content_author_photo != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.content_author !== 'true'"/>
+                                  <label class="form-label m-b-15" for="theme-option-content-author-photo">
+                                    <span class="help">
+                                      {t}Display author's photo{/t}
+                                    </span>
+                                  </label>
                                 </div>
                               </div>
                             </div>
-                            <div class="col-xs-12 col-md-4 m-b-15">
-                              <label class="form-label m-b-15" for="theme-option-content-date">
-                                <span class="help">
-                                  {t}Display content's date{/t}
-                                </span>
-                              </label>
+                            <div class="col-xs-12 col-md-4 m-b-15" >
                               <div class="controls">
-                                <div class="input-group">
-                                  <select id="theme-option-content-date" name="theme-option-content-date" ng-model="settings.theme_options.content_date">
-                                    <option value="[% content_date_name %]" ng-repeat="(content_date_name,content_date_value) in extra.theme_skins[settings.theme_skin].params.options.content_date.options" ng-selected="[% content_date_name === settings.theme_options.content_date || settings.theme_options.content_date == undefined %]">[% content_date_value %]</option>
-                                  </select>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.content_date === 'true'">
-                              <label class="form-label m-b-15" for="theme-option-content-time">
-                                <span class="help">
-                                  {t}Display content's time{/t}
-                                </span>
-                              </label>
-                              <div class="controls">
-                                <div class="input-group">
-                                  <select id="theme-option-content-time" name="theme-option-content-time" ng-model="settings.theme_options.content_time">
-                                    <option value="[% content_time_name %]" ng-repeat="(content_time_name,content_time_value) in extra.theme_skins[settings.theme_skin].params.options.content_time.options" ng-selected="[% content_time_name === settings.theme_options.content_time || settings.theme_options.content_time == undefined %]">[% content_time_value %]</option>
-                                  </select>
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-content-author-bio" name="theme-option-content-author-bio" ng-model="settings.theme_options.content_author_bio" ng-checked="[% settings.theme_options.content_author_bio != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.content_author === 'true'"/>
+                                  <input id="theme-option-content-author-bio" name="theme-option-content-author-bio" ng-model="settings.theme_options.content_author_bio" ng-checked="[% settings.theme_options.content_author_bio != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.content_author !== 'true'"/>
+                                  <label class="form-label m-b-15" for="theme-option-content-author-bio">
+                                    <span class="help">
+                                      {t}Display author's bio{/t}
+                                    </span>
+                                  </label>
                                 </div>
                               </div>
                             </div>
                             <div class="col-xs-12 col-md-4 m-b-15">
-                              <label class="form-label m-b-15" for="theme-option-content-readtime">
-                                <span class="help">
-                                  {t}Display content's readtime{/t}
-                                </span>
-                              </label>
                               <div class="controls">
-                                <div class="input-group">
-                                  <select id="theme-option-content-readtime" name="theme-option-content-readtime" ng-model="settings.theme_options.content_readtime">
-                                    <option value="[% content_readtime_name %]" ng-repeat="(content_readtime_name,content_readtime_value) in extra.theme_skins[settings.theme_skin].params.options.content_readtime.options" ng-selected="[% content_readtime_name === settings.theme_options.content_readtime || settings.theme_options.content_readtime == undefined %]">[% content_readtime_value %]</option>
-                                  </select>
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-content-date" name="theme-option-content-date" ng-model="settings.theme_options.content_date" ng-checked="[% settings.theme_options.content_date != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label class="form-label m-b-15" for="theme-option-content-date">
+                                    <span class="help">
+                                      {t}Display content's date{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15" >
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-content-time" name="theme-option-content-time" ng-model="settings.theme_options.content_time" ng-checked="[% settings.theme_options.content_time != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.content_date === 'true'"/>
+                                  <input id="theme-option-content-time" name="theme-option-content-time" ng-model="settings.theme_options.content_time" ng-checked="[% settings.theme_options.content_time != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.content_date !== 'true'"/>
+                                  <label class="form-label m-b-15" for="theme-option-content-time">
+                                    <span class="help">
+                                      {t}Display content's time{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-content-readtime" name="theme-option-content-readtime" ng-model="settings.theme_options.content_readtime" ng-checked="[% settings.theme_options.content_readtime != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label class="form-label m-b-15" for="theme-option-content-readtime">
+                                    <span class="help">
+                                      {t}Display content's readtime{/t}
+                                    </span>
+                                  </label>
                                 </div>
                               </div>
                             </div>
@@ -841,15 +898,15 @@
                               <i class="fa fa-folder"></i>
                               {t}Category name{/t} / {t}Pretitle{/t}
                             </h4>
-                            <span class="help">
-                              {t}Display pretitle or category in contents{/t}
-                            </span>
                           </label>
                           <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-option-archive-category-name" name="theme-option-archive-category-name" ng-model="settings.theme_options.archive_category_name">
-                                <option value="[% archive_category_key %]" ng-repeat="(archive_category_key,archive_category_value) in extra.theme_skins[settings.theme_skin].params.options.archive_category_name.options" ng-selected="[% archive_category_key === settings.theme_options.archive_category_name %]">[% archive_category_value %]</option>
-                              </select>
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-archive-category-name" name="theme-option-archive-category-name" ng-model="settings.theme_options.archive_category_name" ng-checked="[% settings.theme_options.archive_category_name != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label class="form-label m-b-15" for="theme-option-archive-category-name">
+                                <span class="help">
+                                  {t}Display pretitle or category in contents{/t}
+                                </span>
+                              </label>
                             </div>
                           </div>
                         </div>
@@ -859,15 +916,15 @@
                               <i class="fa fa-header"></i>
                               {t}Subtitle{/t}
                             </h4>
-                            <span class="help">
-                              {t}Display subtitle{/t}
-                            </span>
                           </label>
                           <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-option-archive-subtitle" name="theme-option-archive-subtitle" ng-model="settings.theme_options.archive_subtitle">
-                                <option value="[% archive_subtitle_name %]" ng-repeat="(archive_subtitle_name,archive_subtitle_value) in extra.theme_skins[settings.theme_skin].params.options.archive_subtitle.options" ng-selected="[% archive_subtitle_name === settings.theme_options.archive_subtitle || settings.theme_options.archive_subtitle == undefined %]">[% archive_subtitle_value %]</option>
-                              </select>
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-archive-subtitle" name="theme-option-archive-subtitle" ng-model="settings.theme_options.archive_subtitle" ng-checked="[% settings.theme_options.archive_subtitle != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label class="form-label m-b-15" for="theme-option-archive-subtitle">
+                                <span class="help">
+                                  {t}Display subtitle{/t}
+                                </span>
+                              </label>
                             </div>
                           </div>
                         </div>
@@ -877,20 +934,20 @@
                               <i class="fa fa-align-left"></i>
                               {t}Summary{/t}
                             </h4>
-                            <span class="help">
-                              {t}Display summary/description{/t}
-                            </span>
                           </label>
                           <div class="controls">
-                            <div class="input-group">
-                              <select id="theme-option-archive-summary" name="theme-option-archive-summary" ng-model="settings.theme_options.archive_summary">
-                                <option value="[% archive_summary_name %]" ng-repeat="(archive_summary_name,archive_summary_value) in extra.theme_skins[settings.theme_skin].params.options.archive_summary.options" ng-selected="[% archive_summary_name === settings.theme_options.archive_summary || settings.theme_options.archive_summary == undefined %]">[% archive_summary_value %]</option>
-                              </select>
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-archive-summary" name="theme-option-archive-summary" ng-model="settings.theme_options.archive_summary" ng-checked="[% settings.theme_options.archive_summary != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label class="form-label m-b-15" for="theme-option-archive-summary">
+                                <span class="help">
+                                  {t}Display summary/description{/t}
+                                </span>
+                              </label>
                             </div>
                           </div>
                         </div>
-                        <div class="col-xs-12 col-md-4 m-b-15">
-                          <label class="form-label m-b-15">
+                        <div class="col-xs-12 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-archive-info">
                             <h4>
                               <i class="fa fa-info"></i>
                               {t}Info{/t}
@@ -900,72 +957,77 @@
                         <div class="col-xs-12">
                           <div class="row">
                             <div class="col-xs-12 col-md-4 m-b-15">
-                              <label class="form-label m-b-15" for="theme-option-archive-author">
-                                <span class="help">
-                                  {t}Display content's author{/t}
-                                </span>
-                              </label>
                               <div class="controls">
-                                <div class="input-group">
-                                  <select id="theme-option-archive-author" name="theme-option-archive-author" ng-model="settings.theme_options.archive_author">
-                                    <option value="[% archive_author_name %]" ng-repeat="(archive_author_name,archive_author_value) in extra.theme_skins[settings.theme_skin].params.options.archive_author.options" ng-selected="[% archive_author_name === settings.theme_options.archive_author || settings.theme_options.archive_author == undefined %]">[% archive_author_value %]</option>
-                                  </select>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.archive_author === 'true'">
-                              <label class="form-label m-b-15" for="theme-option-archive-author-photo">
-                                <span class="help">
-                                  {t}Display author's photo{/t}
-                                </span>
-                              </label>
-                              <div class="controls">
-                                <div class="input-group">
-                                  <select id="theme-option-archive-author-photo" name="theme-option-archive-author-photo" ng-model="settings.theme_options.archive_author_photo">
-                                    <option value="[% archive_author_photo_name %]" ng-repeat="(archive_author_photo_name,archive_author_photo_value) in extra.theme_skins[settings.theme_skin].params.options.archive_author_photo.options" ng-selected="[% archive_author_photo_name === settings.theme_options.archive_author_photo || settings.theme_options.archive_author_photo == undefined %]">[% archive_author_photo_value %]</option>
-                                  </select>
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-archive-author" name="theme-option-archive-author" ng-model="settings.theme_options.archive_author" ng-checked="[% settings.theme_options.archive_author != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label class="form-label m-b-15" for="theme-option-archive-author">
+                                    <span class="help">
+                                      {t}Display content's author{/t}
+                                    </span>
+                                  </label>
                                 </div>
                               </div>
                             </div>
                             <div class="col-xs-12 col-md-4 m-b-15">
-                              <label class="form-label m-b-15" for="theme-option-archive-date">
-                                <span class="help">
-                                  {t}Display content's date{/t}
-                                </span>
-                              </label>
                               <div class="controls">
-                                <div class="input-group">
-                                  <select id="theme-option-archive-date" name="theme-option-archive-date" ng-model="settings.theme_options.archive_date">
-                                    <option value="[% archive_date_name %]" ng-repeat="(archive_date_name,archive_date_value) in extra.theme_skins[settings.theme_skin].params.options.archive_date.options" ng-selected="[% archive_date_name === settings.theme_options.archive_date || settings.theme_options.archive_date == undefined %]">[% archive_date_value %]</option>
-                                  </select>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-xs-12 col-md-4 m-b-15" ng-if="settings.theme_options.archive_date === 'true'">
-                              <label class="form-label m-b-15" for="theme-option-archive-time">
-                                <span class="help">
-                                  {t}Display content's time{/t}
-                                </span>
-                              </label>
-                              <div class="controls">
-                                <div class="input-group">
-                                  <select id="theme-option-archive-time" name="theme-option-archive-time" ng-model="settings.theme_options.archive_time">
-                                    <option value="[% archive_time_name %]" ng-repeat="(archive_time_name,archive_time_value) in extra.theme_skins[settings.theme_skin].params.options.archive_time.options" ng-selected="[% archive_time_name === settings.theme_options.archive_time || settings.theme_options.archive_time == undefined %]">[% archive_time_value %]</option>
-                                  </select>
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-archive-author-photo" name="theme-option-archive-author-photo" ng-model="settings.theme_options.archive_author_photo" ng-checked="[% settings.theme_options.archive_author_photo != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.archive_author === 'true'"/>
+                                  <input id="theme-option-archive-author-photo" name="theme-option-archive-author-photo" ng-model="settings.theme_options.archive_author_photo" ng-checked="[% settings.theme_options.archive_author_photo != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.archive_author !== 'true'"/>
+                                  <label class="form-label m-b-15" for="theme-option-archive-author-photo">
+                                    <span class="help">
+                                      {t}Display author's photo{/t}
+                                    </span>
+                                  </label>
                                 </div>
                               </div>
                             </div>
                             <div class="col-xs-12 col-md-4 m-b-15">
-                              <label class="form-label m-b-15" for="theme-option-archive-readtime">
-                                <span class="help">
-                                  {t}Display content's readtime{/t}
-                                </span>
-                              </label>
                               <div class="controls">
-                                <div class="input-group">
-                                  <select id="theme-option-archive-readtime" name="theme-option-archive-readtime" ng-model="settings.theme_options.archive_readtime">
-                                    <option value="[% archive_readtime_name %]" ng-repeat="(archive_readtime_name,archive_readtime_value) in extra.theme_skins[settings.theme_skin].params.options.archive_readtime.options" ng-selected="[% archive_readtime_name === settings.theme_options.archive_readtime || settings.theme_options.archive_readtime == undefined %]">[% archive_readtime_value %]</option>
-                                  </select>
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-archive-author-bio" name="theme-option-archive-author-bio" ng-model="settings.theme_options.archive_author_bio" ng-checked="[% settings.theme_options.archive_author_bio != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.archive_author === 'true'"/>
+                                  <input id="theme-option-archive-author-bio" name="theme-option-archive-author-bio" ng-model="settings.theme_options.archive_author_bio" ng-checked="[% settings.theme_options.archive_author_bio != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.archive_author !== 'true'"/>
+                                  <label class="form-label m-b-15" for="theme-option-archive-author-bio">
+                                    <span class="help">
+                                      {t}Display author's bio{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-archive-date" name="theme-option-archive-date" ng-model="settings.theme_options.archive_date" ng-checked="[% settings.theme_options.archive_date != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label class="form-label m-b-15" for="theme-option-archive-date">
+                                    <span class="help">
+                                      {t}Display content's date{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-archive-time" name="theme-option-archive-time" ng-model="settings.theme_options.archive_time" ng-checked="[% settings.theme_options.archive_time != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.archive_date === 'true'"/>
+                                  <input id="theme-option-archive-time" name="theme-option-archive-time" ng-model="settings.theme_options.archive_time" ng-checked="[% settings.theme_options.archive_time != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.archive_date !== 'true'"/>
+                                  <label class="form-label m-b-15" for="theme-option-archive-time">
+                                    <span class="help">
+                                      {t}Display content's time{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-archive-readtime" name="theme-option-archive-readtime" ng-model="settings.theme_options.archive_readtime" ng-checked="[% settings.theme_options.archive_readtime != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label class="form-label m-b-15" for="theme-option-archive-readtime">
+                                    <span class="help">
+                                      {t}Display content's readtime{/t}
+                                    </span>
+                                  </label>
                                 </div>
                               </div>
                             </div>
@@ -1005,6 +1067,7 @@
                       </div>
                     </div>
                   </div>
+
                   <div role="tabpanel" class="tab-pane fade" id="tabInners">
                     <div class="row" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                       <div class="col-xs-12 col-md-8">
@@ -1226,73 +1289,80 @@
                               {t}Info{/t}
                             </h4>
                           </label>
-                          <div class="col-xs-12 m-b-15">
-                            <label class="form-label m-b-15" for="theme-option-inner-content-author">
-                              <span class="help">
-                                {t}Display content's author{/t}
-                              </span>
-                            </label>
-                            <div class="controls">
-                              <div class="input-group">
-                                <select id="theme-option-inner-content-author" name="theme-option-inner-content-author" ng-model="settings.theme_options.inner_content_author">
-                                  <option value="[% content_author_name %]" ng-repeat="(content_author_name,content_author_value) in extra.theme_skins[settings.theme_skin].params.options.inner_content_author.options" ng-selected="[% content_author_name === settings.theme_options.inner_content_author %]">[% content_author_value %]</option>
-                                </select>
+                          <div class="col-xs-12">
+                            <div class="col-xs-12 col-md-12">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-inner-content-author" name="theme-option-inner_content-author" ng-model="settings.theme_options.inner_content_author" ng-checked="[% settings.theme_options.inner_content_author != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label class="form-label m-b-15" for="theme-option-inner-content-author">
+                                    <span class="help">
+                                      {t}Display content's author{/t}
+                                    </span>
+                                  </label>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div class="col-xs-12 m-b-15" ng-if="settings.theme_options.inner_content_author === 'true'">
-                            <label class="form-label m-b-15" for="theme-option-inner-content-author-photo">
-                              <span class="help">
-                                {t}Display author's photo{/t}
-                              </span>
-                            </label>
-                            <div class="controls">
-                              <div class="input-group">
-                                <select id="theme-option-inner-content-author-photo" name="theme-option-inner-content-author-photo" ng-model="settings.theme_options.inner_content_author_photo">
-                                  <option value="[% content_author_photo_name %]" ng-repeat="(content_author_photo_name,content_author_photo_value) in extra.theme_skins[settings.theme_skin].params.options.inner_content_author_photo.options" ng-selected="[% content_author_photo_name === settings.theme_options.inner_content_author_photo %]">[% content_author_photo_value %]</option>
-                                </select>
+                            <div class="col-xs-12 col-md-12">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-inner-content-author-photo" name="theme-option-inner_content-author-photo" ng-model="settings.theme_options.inner_content_author_photo" ng-checked="[% settings.theme_options.inner_content_author_photo != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.inner_content_author === 'true'"/>
+                                  <input id="theme-option-inner-content-author-photo" name="theme-option-inner_content-author-photo" ng-model="settings.theme_options.inner_content_author_photo" ng-checked="[% settings.theme_options.inner_content_author_photo != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.inner_content_author !== 'true'"/>
+                                  <label class="form-label m-b-15" for="theme-option-inner-content-author-photo">
+                                    <span class="help">
+                                      {t}Display author's photo{/t}
+                                    </span>
+                                  </label>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div class="col-xs-12 m-b-15">
-                            <label class="form-label m-b-15" for="theme-option-inner-content-date">
-                              <span class="help">
-                                {t}Display content's date{/t}
-                              </span>
-                            </label>
-                            <div class="controls">
-                              <div class="input-group">
-                                <select id="theme-option-inner-content-date" name="theme-option-inner-content-date" ng-model="settings.theme_options.inner_content_date">
-                                  <option value="[% content_date_name %]" ng-repeat="(content_date_name,content_date_value) in extra.theme_skins[settings.theme_skin].params.options.inner_content_date.options" ng-selected="[% content_date_name === settings.theme_options.inner_content_date %]">[% content_date_value %]</option>
-                                </select>
+                            <div class="col-xs-12 col-md-12">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-inner-content-author-bio" name="theme-option-inner_content-author-bio" ng-model="settings.theme_options.inner_content_author_bio" ng-checked="[% settings.theme_options.inner_content_author_bio != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.inner_content_author === 'true'"/>
+                                  <input id="theme-option-inner-content-author-bio" name="theme-option-inner_content-author-bio" ng-model="settings.theme_options.inner_content_author_bio" ng-checked="[% settings.theme_options.inner_content_author_bio != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.inner_content_author !== 'true'"/>
+                                  <label class="form-label m-b-15" for="theme-option-inner-content-author-bio">
+                                    <span class="help">
+                                      {t}Display author's bio{/t}
+                                    </span>
+                                  </label>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div class="col-xs-12 m-b-15" ng-if="settings.theme_options.inner_content_date === 'true'">
-                            <label class="form-label m-b-15" for="theme-option-inner-content-time">
-                              <span class="help">
-                                {t}Display content's time{/t}
-                              </span>
-                            </label>
-                            <div class="controls">
-                              <div class="input-group">
-                                <select id="theme-option-inner-content-time" name="theme-option-inner-content-time" ng-model="settings.theme_options.inner_content_time">
-                                  <option value="[% content_time_name %]" ng-repeat="(content_time_name,content_time_value) in extra.theme_skins[settings.theme_skin].params.options.inner_content_time.options" ng-selected="[% content_time_name === settings.theme_options.inner_content_time %]">[% content_time_value %]</option>
-                                </select>
+                            <div class="col-xs-12 col-md-12">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-inner-content-date" name="theme-option-inner_content-date" ng-model="settings.theme_options.inner_content_date" ng-checked="[% settings.theme_options.inner_content_date != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label class="form-label m-b-15" for="theme-option-inner-content-date">
+                                    <span class="help">
+                                      {t}Display content's date{/t}
+                                    </span>
+                                  </label>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div class="col-xs-12 m-b-15">
-                            <label class="form-label m-b-15" for="theme-option-inner-content-readtime">
-                              <span class="help">
-                                {t}Display content's readtime{/t}
-                              </span>
-                            </label>
-                            <div class="controls">
-                              <div class="input-group">
-                                <select id="theme-option-inner-content-readtime" name="theme-option-inner-content-readtime" ng-model="settings.theme_options.inner_content_readtime">
-                                  <option value="[% content_readtime_name %]" ng-repeat="(content_readtime_name,content_readtime_value) in extra.theme_skins[settings.theme_skin].params.options.inner_content_readtime.options" ng-selected="[% content_readtime_name === settings.theme_options.inner_content_readtime %]">[% content_readtime_value %]</option>
-                                </select>
+                            <div class="col-xs-12 col-md-12">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-inner-content-time" name="theme-option-inner_content-time" ng-model="settings.theme_options.inner_content_time" ng-checked="[% settings.theme_options.inner_content_time != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.inner_content_date === 'true'"/>
+                                  <input id="theme-option-inner-content-time" name="theme-option-inner_content-time" ng-model="settings.theme_options.inner_content_time" ng-checked="[% settings.theme_options.inner_content_time != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.inner_content_date !== 'true'"/>
+                                  <label class="form-label m-b-15" for="theme-option-inner-content-time">
+                                    <span class="help">
+                                      {t}Display content's time{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-12">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-inner-content-readtime" name="theme-option-inner_content-readtime" ng-model="settings.theme_options.inner_content_readtime" ng-checked="[% settings.theme_options.inner_content_readtime != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label class="form-label m-b-15" for="theme-option-inner-content-readtime">
+                                    <span class="help">
+                                      {t}Display content's readtime{/t}
+                                    </span>
+                                  </label>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -1302,6 +1372,21 @@
                                 <i class="fa fa-puzzle-piece"></i>
                                 {t}Sidebar widgets{/t}
                               </h4>
+                            </label>
+                            <label class="form-label" for="theme-sidebar-widget-custom">
+                              <span class="help">
+                                {t}Show custom widget{/t}
+                              </span>
+                            </label>
+                            <div class="controls m-b-15">
+                              <div class="input-group">
+                                <span class="input-group-addon">
+                                  ID
+                                </span>
+                                <input class="form-control" id="sidebar-widget-custom" name="sidebar-widget-custom" ng-model="settings.theme_options.sidebar_widget_custom" type="text">
+                              </div>
+                            </div>
+                            <label>
                               <span class="help">
                                 {t}Choose widgets to display{/t}
                               </span>
@@ -1398,6 +1483,184 @@
                       </div>
                     </div>
                   </div>
+
+                  <div role="tabpanel" class="tab-pane fade" id="tabOpinion">
+                    <div ng-if="extra.theme_skins[settings.theme_skin].params.options">
+                      <div class="row m-b-30">
+                        <div class="col-xs-12 m-b-10">
+                          <label class="form-label" for="theme-option-opinon-home">
+                            <h4>
+                              <i class="fa fa-newspaper-o"></i>
+                              {t}Home{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Choose options for contents{/t}
+                            </span>
+                          </label>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <div class="controls">
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-content-opinion-media" name="theme-option-content-opinion-media" ng-model="settings.theme_options.content_opinion_media" ng-checked="[% settings.theme_options.content_opinion_media != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label for="theme-option-content-opinion-media">
+                                <span>
+                                  <i class="fa fa-picture-o"></i>
+                                  <strong>{t}Media{/t}</strong><br>
+                                  {t}Display featured media in opinions{/t}
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <div class="controls">
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-content-opinion-summary" name="theme-option-content-opinion-summary" ng-model="settings.theme_options.content_opinion_summary" ng-checked="[% settings.theme_options.content_opinion_summary != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label for="theme-option-content-opinion-summary">
+                                <span>
+                                  <i class="fa fa-align-left"></i>
+                                  <strong>{t}Summary{/t}</strong><br>
+                                  {t}Display summary/description{/t}
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12">
+                          <div class="row">
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-content-opinion-author" name="theme-option-content-opinion-author" ng-model="settings.theme_options.content_opinion_author" ng-checked="[% settings.theme_options.content_opinion_author != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label for="theme-option-content-opinion-author">
+                                    <span>
+                                      <i class="fa fa-address-card"></i>
+                                      {t}Display content's author{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15" >
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-content-opinion-author-photo" name="theme-option-content-opinion-author-photo" ng-model="settings.theme_options.content_opinion_author_photo" ng-checked="[% settings.theme_options.content_opinion_author_photo != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.content_opinion_author === 'true'"/>
+                                  <input id="theme-option-content-opinion-author-photo" name="theme-option-content-opinion-author-photo" ng-model="settings.theme_options.content_opinion_author_photo" ng-checked="[% settings.theme_options.content_opinion_author_photo != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.content_opinion_author !== 'true'"/>
+                                  <label for="theme-option-content-opinion-author-photo">
+                                    <span>
+                                      <i class="fa fa-user"></i>
+                                      {t}Display author's photo{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15" >
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-content-opinion-author-bio" name="theme-option-content-opinion-author-bio" ng-model="settings.theme_options.content_opinion_author_bio" ng-checked="[% settings.theme_options.content_opinion_author_bio != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.content_opinion_author === 'true'"/>
+                                  <input id="theme-option-content-opinion-author-bio" name="theme-option-content-opinion-author-bio" ng-model="settings.theme_options.content_opinion_author_bio" ng-checked="[% settings.theme_options.content_opinion_author_bio != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.content_opinion_author !== 'true'"/>
+                                  <label for="theme-option-content-opinion-author-bio">
+                                    <span>
+                                      <i class="fa fa-plus-circle"></i>
+                                      {t}Display author's bio{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row m-b-30">
+                        <div class="col-xs-12 m-b-10">
+                          <label class="form-label m-b-10" for="theme-option-opinon-home">
+                            <h4>
+                              <i class="fa fa-minus"></i>
+                              {t}{t domain="base"}Listings/Archive{/t}{/t}
+                            </h4>
+                            <span class="help">
+                              {t}Choose options for contents{/t}
+                            </span>
+                          </label>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <div class="controls">
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-archive-opinion-media" name="theme-option-archive-opinion-media" ng-model="settings.theme_options.archive_opinion_media" ng-checked="[% settings.theme_options.archive_opinion_media != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label for="theme-option-archive-opinion-media">
+                                <span>
+                                  <i class="fa fa-picture-o"></i>
+                                  <strong>{t}Media{/t}</strong><br>
+                                  {t}Display featured media in opinions{/t}
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <div class="controls">
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-archive-opinion-summary" name="theme-option-archive-opinion-summary" ng-model="settings.theme_options.archive_opinion_summary" ng-checked="[% settings.theme_options.archive_opinion_summary != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label for="theme-option-archive-opinion-summary">
+                                <span>
+                                  <i class="fa fa-align-left"></i>
+                                  <strong>{t}Summary{/t}</strong><br>
+                                  {t}Display summary/description{/t}
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12">
+                          <div class="row">
+                            <div class="col-xs-12 col-md-4 m-b-15">
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-archive-opinion-author" name="theme-option-archive-opinion-author" ng-model="settings.theme_options.archive_opinion_author" ng-checked="[% settings.theme_options.archive_opinion_author != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                  <label for="theme-option-archive-opinion-author">
+                                    <span>
+                                      <i class="fa fa-address-card"></i>
+                                      {t}Display content's author{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15" >
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-archive-opinion-author-photo" name="theme-option-archive-opinion-author-photo" ng-model="settings.theme_options.archive_opinion_author_photo" ng-checked="[% settings.theme_options.archive_opinion_author_photo != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.archive_opinion_author === 'true'"/>
+                                  <input id="theme-option-archive-opinion-author-photo" name="theme-option-archive-opinion-author-photo" ng-model="settings.theme_options.archive_opinion_author_photo" ng-checked="[% settings.theme_options.archive_opinion_author_photo != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.archive_opinion_author !== 'true'"/>
+                                  <label for="theme-option-archive-opinion-author-photo">
+                                    <span>
+                                      <i class="fa fa-user"></i>
+                                      {t}Display author's photo{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-xs-12 col-md-4 m-b-15" >
+                              <div class="controls">
+                                <div class="checkbox p-b-10">
+                                  <input id="theme-option-archive-opinion-author-bio" name="theme-option-archive-opinion-author-bio" ng-model="settings.theme_options.archive_opinion_author_bio" ng-checked="[% settings.theme_options.archive_opinion_author_bio != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.archive_opinion_author === 'true'"/>
+                                  <input id="theme-option-archive-opinion-author-bio" name="theme-option-archive-opinion-author-bio" ng-model="settings.theme_options.archive_opinion_author_bio" ng-checked="[% settings.theme_options.archive_opinion_author_bio != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.archive_opinion_author !== 'true'"/>
+                                  <label for="theme-option-archive-opinion-author-bio">
+                                    <span>
+                                      <i class="fa fa-plus-circle"></i>
+                                      {t}Display author's bio{/t}
+                                    </span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div role="tabpanel" class="tab-pane fade" id="tabMobile">
                     <div class="row" ng-if="extra.theme_skins[settings.theme_skin].params.options">
                       <div class="col-xs-12 m-b-15">

@@ -115,12 +115,16 @@ class MetaHelper
         $cah = $this->container->get('core.helper.category');
         $ah  = $this->container->get('core.helper.author');
 
+        $category = $cah->getCategory($content);
+
         $data = [
             'action'               => $action,
             'exception_code'       => !empty($exception) && $exception->getcode() ? $exception->getcode() : '',
-            'category_name'        => $cah->getCategoryName($content),
-            'category_description' => $cah->getCategoryDescription($content),
+            'category_name'        => $category->title,
+            'category_seo_name'    => $category->seo_title ?? '',
+            'category_description' => $category->description,
             'tag_name'             => $content->name ?? '',
+            'tag_seo_name'         => $content->seo_title ?? '',
             'tag_description'      => $content->description ?? '',
             'author_name'          => $ah->getAuthorName($content),
             'author_description'   => $ah->getAuthorBioSummary($content) ?? $ah->getAuthorBioBody($content),
