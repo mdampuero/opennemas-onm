@@ -1,7 +1,8 @@
-<div class="form-group {$class}">
-  <label class="form-label clearfix" for="{$field}">
-    <div class="pull-left">{$title}</div>
-  </label>
+<div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.{$field} = !expanded.{$field}">
+  <i class="fa fa-pencil m-r-10"></i>{$title}
+  <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.{$field} }"></i>
+</div>
+<div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.{$field} }">
   {if $imagepicker}
     {acl isAllowed='PHOTO_ADMIN'}
       <div class="pull-right">
@@ -21,6 +22,6 @@
     </div>
   {/if}
   <div class="controls">
-    <textarea name="{$field}" id="{$field}" incomplete="incomplete" ng-model="item.{$field}" onm-editor onm-editor-preset="{if !isset($preset)}simple{else}{$preset}{/if}" {if isset($minheight)}onm-editor-height="{$minheight}"{/if} class="form-control" rows="{if !isset($rows)}15{else}{$rows}{/if}"></textarea>
+    <textarea name="{$field}" id="{$field}" ng-model="item.{$field}" class="form-control" rows="{if !isset($rows)}15{else}{$rows}{/if}"></textarea>
   </div>
 </div>
