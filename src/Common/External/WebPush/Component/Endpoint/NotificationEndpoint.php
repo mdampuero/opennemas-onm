@@ -49,9 +49,8 @@ class NotificationEndpoint extends Endpoint
             }
         } catch (\Exception $e) {
             getService('application.log')
-                ->error('Error sending the notification to server with params '
-                . json_encode($params)
-                . $e->getMessage());
+                ->error('Error sending the notification to server [ ' . $e->getMessage() . ' ] params : '
+                . json_encode($params));
             throw new WebPushException('webpush.notification.send.failure: ' . $e->getMessage());
         }
         return $body;
