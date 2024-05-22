@@ -119,10 +119,6 @@ class Authentication
      */
     public function getToken()
     {
-        if ($this->tokenProvider->hasAccessToken()) {
-            return $this->tokenProvider->getAccessToken();
-        }
-
         $this->authenticate();
 
         return $this->tokenProvider->getAccessToken();
