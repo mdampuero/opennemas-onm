@@ -29,7 +29,7 @@ class CoreListener
         '_wdt',
         'api',
         'asset',
-        'auth',
+        'auth($|\/|\?)',
         'build\/assets',
         'date',
         'manager',
