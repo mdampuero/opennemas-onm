@@ -549,7 +549,7 @@ class Redirector
 
         $urls = $this->service->getList($oql);
 
-        if ($urls['total'] === 0) {
+        if (!array_key_exists('total', $urls) || $urls['total'] === 0) {
             return null;
         }
 
