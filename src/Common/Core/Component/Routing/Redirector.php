@@ -549,10 +549,6 @@ class Redirector
 
         $urls = $this->service->getList($oql);
 
-        if (!array_key_exists('total', $urls) || $urls['total'] === 0) {
-            return null;
-        }
-
         foreach ($urls['items'] as $url) {
             $pattern = preg_replace([ '/\//' ], [ '\\/' ], $url->source);
 
