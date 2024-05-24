@@ -275,8 +275,6 @@
           // Parses data before save
           data = $scope.parseData(data);
 
-          console.log(data);
-
           /**
            * Callback executed when subscriber is saved/updated successfully.
            *

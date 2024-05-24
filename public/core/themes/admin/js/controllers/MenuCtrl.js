@@ -561,10 +561,9 @@
             $scope.dragables.tags = $scope.menuData.tags.filter($scope.filterLocale(nv));
           }
 
-          if($scope.parents) {
+          if ($scope.parents) {
             $scope.filterParents = $scope.parents.filter($scope.filterLocale(nv));
           }
-
         });
 
         $scope.filterLocale = function(locale) {

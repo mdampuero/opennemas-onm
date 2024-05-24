@@ -94,8 +94,13 @@ class MenuPersisterTest extends \PHPUnit\Framework\TestCase
                                 'position' => [
                                     'type' => 'integer'
                                 ],
-
                                 'pk_father' => [
+                                    'type' => 'integer'
+                                ],
+                                'locale' => [
+                                    'type' => 'string'
+                                ],
+                                'referenceId' => [
                                     'type' => 'integer'
                                 ]
                             ]
@@ -131,7 +136,9 @@ class MenuPersisterTest extends \PHPUnit\Framework\TestCase
                     'position' => 1,
                     'pk_father' => 0,
                     'pk_menu' => 1,
-                    'type' => 'Arachne'
+                    'type' => 'Arachne',
+                    'locale' => null,
+                    'referenceId' => 0
                 ],
                 [
                     'title' => 'Apollo',
@@ -140,7 +147,9 @@ class MenuPersisterTest extends \PHPUnit\Framework\TestCase
                     'position' => 2,
                     'pk_father' => 0,
                     'pk_menu' => 1,
-                    'type' => 'Odin'
+                    'type' => 'Odin',
+                    'locale' => null,
+                    'referenceId' => 0
                 ],
             ]
         ]);
@@ -194,10 +203,11 @@ class MenuPersisterTest extends \PHPUnit\Framework\TestCase
 
         $this->conn->expects($this->at(3))->method('executeQuery')
             ->with(
-                'insert into menu_items(pk_item, pk_menu, title, link_name, type, position, pk_father) ' .
-                'values (?,?,?,?,?,?,?),(?,?,?,?,?,?,?)',
-                [ 1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, 2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0],
-                [ 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 1, 1 ]
+                'insert into menu_items(pk_item, pk_menu, title, link_name, type, position, pk_father, locale,
+                    referenceId) ' .
+                'values (?,?,?,?,?,?,?,?,?),(?,?,?,?,?,?,?,?,?)',
+                [ 1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, null, 0, 2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0, null, 0],
+                [ 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1]
             )
             ->will($this->throwException(new \Exception()));
 
@@ -225,10 +235,11 @@ class MenuPersisterTest extends \PHPUnit\Framework\TestCase
 
         $this->conn->expects($this->at(3))->method('executeQuery')
             ->with(
-                'insert into menu_items(pk_item, pk_menu, title, link_name, type, position, pk_father) ' .
-                'values (?,?,?,?,?,?,?),(?,?,?,?,?,?,?)',
-                [ 1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, 2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0],
-                [ 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 1, 1 ]
+                'insert into menu_items(pk_item, pk_menu, title, link_name, type, position, pk_father, locale,
+                    referenceId) ' .
+                'values (?,?,?,?,?,?,?,?,?),(?,?,?,?,?,?,?,?,?)',
+                [ 1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, null, 0, 2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0, null, 0 ],
+                [ 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1]
             );
 
         $this->persister->create($this->menuWithItems);
@@ -256,10 +267,11 @@ class MenuPersisterTest extends \PHPUnit\Framework\TestCase
 
         $this->conn->expects($this->at(3))->method('executeQuery')
             ->with(
-                'insert into menu_items(pk_item, pk_menu, title, link_name, type, position, pk_father) ' .
-                'values (?,?,?,?,?,?,?),(?,?,?,?,?,?,?)',
-                [ 1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, 2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0],
-                [ 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 1, 1 ]
+                'insert into menu_items(pk_item, pk_menu, title, link_name, type, position, pk_father, locale,
+                    referenceId) ' .
+                'values (?,?,?,?,?,?,?,?,?),(?,?,?,?,?,?,?,?,?)',
+                [ 1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, null, 0, 2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0, null, 0 ],
+                [ 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1]
             )
             ->will($this->throwException(new \Exception()));
 
@@ -287,10 +299,11 @@ class MenuPersisterTest extends \PHPUnit\Framework\TestCase
 
         $this->conn->expects($this->at(3))->method('executeQuery')
             ->with(
-                'insert into menu_items(pk_item, pk_menu, title, link_name, type, position, pk_father) ' .
-                'values (?,?,?,?,?,?,?),(?,?,?,?,?,?,?)',
-                [ 1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, 2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0],
-                [ 1, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 1, 1 ]
+                'insert into menu_items(pk_item, pk_menu, title, link_name, type, position, pk_father, locale,
+                    referenceId) ' .
+                'values (?,?,?,?,?,?,?,?,?),(?,?,?,?,?,?,?,?,?)',
+                [ 1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, null, 0, 2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0, null, 0 ],
+                [ 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1]
             );
 
         $this->persister->update($this->menuWithItems);
