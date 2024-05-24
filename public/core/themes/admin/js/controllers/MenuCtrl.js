@@ -36,8 +36,6 @@
           name:       '',
           menu_items: [],
           position:   '',
-          locale: null,
-          referenceId: null,
         };
 
         /**
@@ -290,7 +288,7 @@
 
           $scope.parents = $scope.parents.map(function(parent, index) {
             if ($scope.hasMultilanguage()) {
-              /// parent.title = $scope.getL10nTitle(parent, selectedLocale);
+              // parent.title = $scope.getL10nTitle(parent, selectedLocale);
 
               originals[index + 1] = parent.title;
             }
@@ -562,6 +560,11 @@
           if ($scope.dragables) {
             $scope.dragables.tags = $scope.menuData.tags.filter($scope.filterLocale(nv));
           }
+
+          if($scope.parents) {
+            $scope.filterParents = $scope.parents.filter($scope.filterLocale(nv));
+          }
+
         });
 
         $scope.filterLocale = function(locale) {

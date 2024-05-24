@@ -49,8 +49,8 @@
     </div>
     <div class="grid-body">
       <div class="menu-items ng-cloak angular-ui-tree" ui-tree="treeOptions" data-max-depth="2">
-        <ol ui-tree-nodes="" ng-model="parents">
-          <li ng-repeat="item in parents track by item.pk_item" ui-tree-node ng-include="'menu-item'"></li>
+        <ol ui-tree-nodes="" ng-model="filterParents">
+          <li ng-repeat="item in filterParents track by item.pk_item+item.locale" ui-tree-node ng-include="'menu-item'"></li>
         </ol>
       </div>
     </div>
