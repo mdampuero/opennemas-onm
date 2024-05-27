@@ -311,9 +311,11 @@
             route.params = { id: $scope.getItemId() };
 
             // When updating created published item, if it does not have start time it will refresh the form
-            if ($scope.item.content_status === 1 && !$scope.item.starttime) {
-              $window.location.href =
-              routing.generate($scope.routes.redirect, { id: $scope.getItemId() });
+            if ($scope.item.content_status === 1 && !data.starttime) {
+              $scope.item.starttime  = $window.moment().format('YYYY-MM-DD HH:mm:ss');
+              $scope.item.urldatetime = $window.moment().format('YYYYMMDDHHmmss');
+              data.starttime = $scope.item.starttime;
+              data.urldatetime = $scope.item.urldatetime;
             }
 
             http.put(route, data).then(successCb, $scope.errorCb);

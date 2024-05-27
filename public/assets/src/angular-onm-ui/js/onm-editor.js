@@ -34,7 +34,7 @@
          */
         this.defaults = {
           plugins: 'a11yhelp,autogrow,autokeywords,autolink,autonofollow,autotoc,basicstyles,blockquote,clipboard,contextmenu,elementspath' +
-            ',enterkey,entities,filebrowser,find,floatingspace,font,format,horizontalrule,htmlwriter,image2,imageresize,' +
+            ',enterkey,entities,filebrowser,find,floatingspace,font,format,horizontalrule,htmlwriter,image2,' +
             'indentblock,justify,link,list,magicline,maximize,pastefromword,pastespecial,pastetext,removeformat,' +
             'resize,scayt,sourcearea,stylescombo,tab,table,tabletools,toolbar,undo,wordcount,wsc,wysiwygarea',
           disableNativeSpellChecker: false,
@@ -43,7 +43,7 @@
           autoGrow_onStartup: true,
           autoGrow_maxHeight: 500,
           wordcount: {
-            showWordCount: true,
+            countSpacesAsChars: true,
             showCharCount: true
           },
           allowedContent: true,
@@ -94,7 +94,6 @@
                 groups: [ 'mode', 'document', 'doctools' ]
               }
             ],
-            autoGrow_maxHeight: 200,
           },
 
           full: {
@@ -386,6 +385,15 @@
                 }
 
                 var options  = Editor.configure(attrs.onmEditorPreset);
+
+                options.autoGrow_minHeight = Math.max(
+                  attrs.onmEditorHeight || 200, options.autoGrow_minHeight || 0
+                );
+
+                if (attrs.onmEditorHeight) {
+                  delete options.autoGrow_maxHeight;
+                }
+
                 var instance = Editor.init(element[0], options);
 
                 // Updates CKEditor when model changes

@@ -298,7 +298,6 @@
     @Common/components/ckeditor4/plugins/font/plugin.js,
     @Common/components/ckeditor4/plugins/font/lang/en.js,
     @Common/components/ckeditor4/plugins/font/lang/es.js,
-    @Common/components/imageresize/plugin.js,
     @Common/src/ckeditor-autokeywords/plugin.js,
     @Common/src/ckeditor-autokeywords/lang/en.js,
     @Common/src/ckeditor-autokeywords/lang/es.js,

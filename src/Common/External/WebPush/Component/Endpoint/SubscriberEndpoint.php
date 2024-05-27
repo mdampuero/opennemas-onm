@@ -22,23 +22,18 @@ class SubscriberEndpoint extends Endpoint
      *
      * @throws WebPushException If the action fails.
      */
-    public function getSubscribers()
+    public function getSubscribers($params = [])
     {
         try {
-            $url     = $this->url . $this->config['actions']['get_subscribers']['path'];
-            $headers = [
-                'content-type'      => 'application/json',
-                'webpushrKey'       => $this->auth->getConfiguration()['webpushrKey'],
-                'webpushrAuthToken' => $this->auth->getConfiguration()['webpushrAuthToken']
-            ];
+            $url = $this->url . $this->replaceUriWildCards(
+                $this->config['actions']['get_subscribers']['path'],
+                $params
+            );
 
-            $data = [
-                'headers' => $headers
-            ];
-
-            $response = $this->client->get($url, $data);
+            $response = $this->client->get($url, [ 'headers' => $this->auth->getAuthHeaders() ]);
             $body     = json_decode($response->getBody(), true);
-            if ($body['active_subscribers'] >= '0') {
+
+            if ($response->getStatusCode() == 200) {
                 getService('application.log')
                     ->info('Web Push active subscribers amount was retrieved successfully');
             }

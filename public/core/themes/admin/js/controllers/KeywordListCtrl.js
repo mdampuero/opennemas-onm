@@ -56,7 +56,9 @@
          */
         $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
-          $scope.app.columns.selected = [ 'keyword', 'type', 'value' ];
+          $scope.app.columns.selected = _.uniq($scope.app.columns.selected
+            .concat([ 'keyword', 'type', 'value' ]));
+
           oqlEncoder.configure({
             placeholder: {
               keyword: 'keyword ~ "%[value]%"',

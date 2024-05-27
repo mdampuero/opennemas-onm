@@ -149,7 +149,7 @@
 
           oqlEncoder.configure({
             placeholder: {
-              name: 'name ~ "[value]"'
+              name: 'name ~ "[value]" or instances ~ "[value]"',
             }
           });
 
