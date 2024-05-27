@@ -45,25 +45,17 @@ class HttpClickjackingHeadersListener
         $response            = $event->getResponse();
         $responseContentType = $response->headers->get('Content-Type');
 
-        // Checks if it is a frontend uri
-        if (!$this->container->get('core.helper.url')->isFrontendUri($uri)) {
+        // Checks if it is a frontend uri or if it is the desired content-type
+        if (!$this->container->get('core.helper.url')->isFrontendUri($uri)
+            || $this->isIgnoredContentType($responseContentType)
+        ) {
             return;
         }
 
-        // Checks if it is the desired content-type
-        if ($this->isIgnoredContentType($responseContentType)) {
-            return;
-        }
-
-       // Adding header to avoid page from beign showed on iframe
-        if (!$response->headers->has('X-Frame-Options')) {
-            $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
-        }
-
-        // Adding header with modern CSP to avoid clickjacking
-        if (!$response->headers->has('Content-Security-Policy')) {
-            $response->headers->set('Content-Security-Policy', "frame-ancestors 'self'");
-        }
+       // Force headeres in order to avoid page from beign showed on iframe
+       // Adding header with modern CSP to avoid clickjacking
+        $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
+        $response->headers->set('Content-Security-Policy', "frame-ancestors 'self'");
     }
 
     /**
