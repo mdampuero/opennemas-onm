@@ -114,11 +114,13 @@
         $scope.treeOptions = {
           // Generate a unique pk_item for the new element dropped
           beforeDrop: function(e) {
-            if ($scope.config && $scope.config.locale) {
-              $scope.defaultLink.locale = $scope.config.locale.selected;
+            if ($scope.hasMultilanguage()) {
+              if ($scope.config && $scope.config.locale) {
+                $scope.defaultLink.locale = $scope.config.locale.selected;
 
-              if ($scope.linkData && $scope.linkData.length > 0) {
-                $scope.linkData[0].locale = $scope.config.locale.selected;
+                if ($scope.linkData && $scope.linkData.length > 0) {
+                  $scope.linkData[0].locale = $scope.config.locale.selected;
+                }
               }
             }
           },
@@ -441,26 +443,30 @@
         };
 
         /**
-         * @param {Object} dragable A menu item object.
+         * Checks if a menu item is already present in the menu.
          *
-         * @returns true if the menu item is already in the menu, false otherwise.
+         * @param {Object} draggable A menu item object to be checked.
+         * @returns {boolean} true if the menu item is already in the menu, false otherwise.
          */
-        $scope.isAlreadyInMenu = function(dragable) {
-          if (dragable.type === 'external') {
+        $scope.isAlreadyInMenu = function(draggable) {
+          if (draggable.type === 'external') {
             return false;
           }
 
-          for (var parent in $scope.parents) {
-            var item = $scope.parents[parent];
+          var localeSelected = $scope.config.locale.selected;
+          var hasMultiLanguage = $scope.hasMultilanguage();
 
-            if ($scope.isEqual(item, dragable) && item.locale === $scope.config.locale.selected) {
+          for (var parentKey in $scope.parents) {
+            var parentItem = $scope.parents[parentKey];
+
+            if ($scope.isEqual(parentItem, draggable) && (!hasMultiLanguage || parentItem.locale === localeSelected)) {
               return true;
             }
 
-            for (var child in $scope.childs[item.pk_item]) {
-              var childItem = $scope.childs[item.pk_item][child];
+            for (var childKey in $scope.childs[parentItem.pk_item]) {
+              var childItem = $scope.childs[parentItem.pk_item][childKey];
 
-              if ($scope.isEqual(childItem, dragable) && childItem.locale === $scope.config.locale.selected) {
+              if ($scope.isEqual(childItem, draggable) && (!hasMultiLanguage || childItem.locale === localeSelected)) {
                 return true;
               }
             }
