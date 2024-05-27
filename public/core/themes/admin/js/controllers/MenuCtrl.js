@@ -526,6 +526,10 @@
         };
 
         $scope.visible  = function(item) {
+          if (!$scope.hasMultilanguage()) {
+            return item;
+          }
+
           return item.locale === $scope.config.locale.selected;
         };
 
