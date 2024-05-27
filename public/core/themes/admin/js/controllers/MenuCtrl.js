@@ -124,7 +124,13 @@
           },
           dropped: function(e) {
             if (e.source.cloneModel) {
-              e.source.cloneModel.pk_item = ++$scope.last;
+              var element = e.source.cloneModel;
+
+              element.pk_item = ++$scope.last;
+
+              if ($scope.hasMultilanguage()) {
+                element.locale = $scope.config.locale.selected;
+              }
             }
           }
         };
@@ -300,7 +306,6 @@
             if ($scope.hasMultilanguage()) {
               originals[index + 1] = parent.title;
             }
-
             map[index + 1]   = parent.pk_item;
             parent.pk_menu   = $scope.data.item.pk_menu;
             parent.position  = index;
