@@ -453,12 +453,14 @@
           for (var parent in $scope.parents) {
             var item = $scope.parents[parent];
 
-            if ($scope.isEqual(item, dragable)) {
+            if ($scope.isEqual(item, dragable) && item.locale === $scope.config.locale.selected) {
               return true;
             }
 
             for (var child in $scope.childs[item.pk_item]) {
-              if ($scope.isEqual($scope.childs[item.pk_item][child], dragable)) {
+              var childItem = $scope.childs[item.pk_item][child];
+
+              if ($scope.isEqual(childItem, dragable) && childItem.locale === $scope.config.locale.selected) {
                 return true;
               }
             }
