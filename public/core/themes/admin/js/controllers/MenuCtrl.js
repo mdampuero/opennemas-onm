@@ -54,6 +54,7 @@
           link_name: '/',
           pk_father: 0,
           position: 0,
+          locale: null
         };
 
         /**
@@ -112,6 +113,15 @@
          */
         $scope.treeOptions = {
           // Generate a unique pk_item for the new element dropped
+          beforeDrop: function(e) {
+            if ($scope.config && $scope.config.locale) {
+              $scope.defaultLink.locale = $scope.config.locale.selected;
+
+              if ($scope.linkData && $scope.linkData.length > 0) {
+                $scope.linkData[0].locale = $scope.config.locale.selected;
+              }
+            }
+          },
           dropped: function(e) {
             if (e.source.cloneModel) {
               e.source.cloneModel.pk_item = ++$scope.last;
@@ -288,8 +298,6 @@
 
           $scope.parents = $scope.parents.map(function(parent, index) {
             if ($scope.hasMultilanguage()) {
-              // parent.title = $scope.getL10nTitle(parent, selectedLocale);
-
               originals[index + 1] = parent.title;
             }
 
@@ -315,8 +323,6 @@
               var item = $scope.childs[parent][child];
 
               if ($scope.hasMultilanguage()) {
-                // item.title = $scope.getL10nTitle(item, selectedLocale);
-
                 originals[menuItems.length + 1] = item.title;
               }
 
@@ -506,6 +512,10 @@
             item.title[defaultLocale];
         };
 
+        $scope.visible  = function(item) {
+          return item.locale === $scope.config.locale.selected;
+        };
+
         /**
          * Watcher to generate the array of childs for the new parents.
          */
@@ -556,19 +566,9 @@
           $scope.dragables = $scope.filterDragables($scope.menuData);
         });
 
-        $scope.$watch('config.locale.selected', function(nv, ov) {
-          if ($scope.dragables) {
-            $scope.dragables.tags = $scope.menuData.tags.filter($scope.filterLocale(nv));
-          }
-
-          if ($scope.parents) {
-            $scope.filterParents = $scope.parents.filter($scope.filterLocale(nv));
-          }
-        });
-
         $scope.filterLocale = function(locale) {
           return function(element) {
-            return element.locale === locale;
+            return !element.locale || element.locale === locale;
           };
         };
       }

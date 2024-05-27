@@ -23,15 +23,15 @@
 {block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="category" iIcon="fa fa-newspaper-o" iSearchModel="search_manual_categories" iName="{t}Manual categories{/t}" iData="dragables.category"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="blog-category" iIcon="fa fa-bookmark" iSearchModel="search_categories" iName="{t}Automatic categories{/t}" iData="dragables['blog-category']"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="static" iIcon="fa fa-file" iSearchModel="search_pages" iName="{t}Static pages{/t}" iData="dragables.static"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="internal" iIcon="fa fa-cube" iSearchModel="search_modules" iName="{t}Modules{/t}" iData="dragables.internal"}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="tags" iIcon="fa fa-tags" iSearchModel="search_tags" iName="{t}Tags{/t}" iData="dragables.tags"}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="category" iIcon="fa fa-newspaper-o" iSearchModel="search_manual_categories" iName="{t}Manual categories{/t}" iData="dragables.category" iFilter=false}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="blog-category" iIcon="fa fa-bookmark" iSearchModel="search_categories" iName="{t}Automatic categories{/t}" iData="dragables['blog-category']" iFilter=false}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="static" iIcon="fa fa-file" iSearchModel="search_pages" iName="{t}Static pages{/t}" iData="dragables.static" iFilter=false}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="internal" iIcon="fa fa-cube" iSearchModel="search_modules" iName="{t}Modules{/t}" iData="dragables.internal" iFilter=false}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="tags" iIcon="fa fa-tags" iName="{t}Tags{/t}" iData="dragables.tags" iFilter=true}
       {is_module_activated name="SYNC_MANAGER"}
-        {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="syncBlogCategory" iIcon="fa fa-exchange" iSearchModel="search_sites" iName="{t}Synchronized sites{/t}" iData="dragables.syncBlogCategory"}
+        {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="syncBlogCategory" iIcon="fa fa-exchange" iSearchModel="search_sites" iName="{t}Synchronized sites{/t}" iFilter=false iData="dragables.syncBlogCategory"}
       {/is_module_activated}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="external" iIcon="fa fa-external-link" iName="{t}Custom link{/t}" iData="linkData" iSimple=true}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="external" iIcon="fa fa-external-link" iName="{t}Custom link{/t}" iData="linkData" iSimple=true iFilter=false}
     </div>
   </div>
 {/block}
@@ -48,9 +48,9 @@
       </div>
     </div>
     <div class="grid-body">
-      <div class="menu-items ng-cloak angular-ui-tree" ui-tree="treeOptions" data-max-depth="2">
-        <ol ui-tree-nodes="" ng-model="filterParents">
-          <li ng-repeat="item in filterParents track by item.pk_item+item.locale" ui-tree-node ng-include="'menu-item'"></li>
+      <div class="menu-items ng-cloak angular-ui-tree" ui-tree="treeOptions" data-dropzone-enabled="true" data-max-depth="2">
+        <ol ui-tree-nodes="" ng-model="parents">
+          <li ng-repeat="item in parents track by item.pk_item+item.locale" ui-tree-node ng-include="'menu-item'" ng-show="visible(item)"></li>
         </ol>
       </div>
     </div>
