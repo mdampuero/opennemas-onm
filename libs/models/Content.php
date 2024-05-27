@@ -1197,11 +1197,17 @@ class Content implements \JsonSerializable, CsvSerializable
             }
         }
 
+        $timeZone  = getService('core.locale')->getTimeZone();
+        $starttime = new DateTime($this->starttime, new \DateTimeZone("UTC"));
+        $endtime   = new DateTime($this->endtime, new \DateTimeZone("UTC"));
+        $starttime->setTimeZone($timeZone);
+        $endtime->setTimeZone($timeZone);
+
         return [
             'title'           => $this->__get('title'),
             'category'        => getService('core.helper.category')->getCategoryName($this),
-            'starttime'       => $this->starttime,
-            'endtime'         => $this->endtime,
+            'starttime'       => $starttime->format('Y-m-d H:i:s'),
+            'endtime'         => $endtime->format('Y-m-d H:i:s'),
             'scheduled_state' => $this->getL10nSchedulingState($contentHelper->getSchedulingState($this)),
             'state'           => $this->getL10nStatus($this->getStatus()),
             'last_editor'     => $user->name ?? '',
