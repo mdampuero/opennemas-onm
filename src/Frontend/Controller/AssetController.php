@@ -129,13 +129,24 @@ class AssetController extends Controller
                 // Background color
                 if (!empty($item->bgcolor)) {
                     $response .= "#content-{$item->pk_content}.onm-new { "
-                            . "background-color:{$item->bgcolor} !important; }\n";
+                            . "--this-bgcolor:{$item->bgcolor};"
+                            . "background-color:var(--this-bgcolor, {$item->bgcolor}) !important; }\n";
 
                     $response .= "#content-{$item->pk_content}.colorize { "
                             . "padding:10px !important; border-radius:5px; }\n";
                 }
 
                 if (!empty($item->title_props)) {
+                    $response .= "#content-{$item->pk_content} { ";
+
+                    foreach ($item->title_props as $property => $value) {
+                        if (!empty($value)) {
+                            $response .= "--this-{$property}:{$value};";
+                        }
+                    }
+
+                    $response .= "}\n";
+
                     $response .= "#content-{$item->pk_content} .custom-text, "
                                 . "#content-{$item->pk_content} .title a, "
                                 . "#content-{$item->pk_content} .nw-title a { ";
