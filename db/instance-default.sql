@@ -607,6 +607,8 @@ CREATE TABLE `menu_items` (
   `type` varchar(255) NOT NULL COMMENT '''category'',''external'',''static'', internal''',
   `position` int(11) NOT NULL,
   `pk_father` int(11) DEFAULT NULL,
+  `locale` varchar (255) DEFAULT NULL,
+  `referenceId` int(25) DEFAULT NULL,
   PRIMARY KEY (`pk_item`,`pk_menu`),
   KEY `pk_item` (`pk_item`),
   KEY `pk_menu` (`pk_menu`),
