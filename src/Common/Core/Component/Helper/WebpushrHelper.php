@@ -185,11 +185,13 @@ class WebpushrHelper
         $image       = $this->container->get('core.helper.featured_media')->getFeaturedMedia($article, 'inner');
         $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
 
-        $body = !empty($article->description) ? $article->description : substr($article->body, 0, 157) . '...';
+        $body = !empty($article->description)
+            ? strip_tags($article->description)
+            : mb_substr(strip_tags($article->body), 0, 157) . '...';
 
         $data = [
             'title'      => $article->title ?? '',
-            'message'    => strip_tags($body),
+            'message'    => $body,
             'target_url' => $contentPath,
             'image'      => $imagePath,
             'icon'       => strpos($favico, '.png') ? $favico : '',
