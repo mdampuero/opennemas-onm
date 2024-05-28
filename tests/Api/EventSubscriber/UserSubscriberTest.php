@@ -40,7 +40,7 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->helper = $this->getMockBuilder('Api\Helper\Cache\UserCacheHelper')
             ->disableOriginalConstructor()
-            ->setMethods([ 'deleteInstance', 'deleteItem' ])
+            ->setMethods([ 'deleteItem', 'deleteItemVarnish' ])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
@@ -137,7 +137,25 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->helper->expects($this->once())->method('deleteItem')
             ->with($user);
-        $this->helper->expects($this->once())->method('deleteInstance');
+
+        $this->helper->expects($this->once())->method('deleteItemVarnish')
+            ->with($user);
+
+        $this->subscriber->onUserUpdate($this->event);
+    }
+
+    /**
+     * Tests onUserUpdate when only a subscriber user was updated.
+     */
+    public function testOnUserUpdateForSubUser()
+    {
+        $user = new User(['id' => 3750, 'user_groups' => [['user_group_id' => 7]]]);
+
+        $this->event->expects($this->any())->method('getArgument')
+            ->with('item')->willReturn($user);
+
+        $this->helper->expects($this->once())->method('deleteItem')
+            ->with($user);
 
         $this->subscriber->onUserUpdate($this->event);
     }
@@ -157,10 +175,12 @@ class UserSubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->helper->expects($this->at(0))->method('deleteItem')
             ->with($users[0]);
-        $this->helper->expects($this->at(1))->method('deleteItem')
+        $this->helper->expects($this->at(1))->method('deleteItemVarnish')
+            ->with($users[0]);
+        $this->helper->expects($this->at(2))->method('deleteItem')
             ->with($users[1]);
-
-        $this->helper->expects($this->at(2))->method('deleteInstance');
+        $this->helper->expects($this->at(3))->method('deleteItemVarnish')
+            ->with($users[1]);
 
         $this->subscriber->onUserUpdate($this->event);
     }

@@ -300,7 +300,16 @@ class CategoryController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
-        $params['articles']   = $contents;
+        $params['articles'] = $contents;
+
+        $xtags = [];
+        foreach ($contents as $content) {
+            if ($content->fk_author) {
+                $xtags[] = ',author-' . $content->fk_author;
+            }
+        }
+
+        $params['x-tags']    .= implode(',', array_unique($xtags));
         $params['total']      = $total;
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,

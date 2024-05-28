@@ -633,7 +633,7 @@ class Importer
             '{{content_type_name}}-frontpage$',
             '{{content_type_name}}-frontpage',
             'content_type_name-widget-article',
-            'authors-frontpage',
+            'author-{{fk_author}}(,|$)',
             'rss-article$',
             'sitemap',
             'category-{{categories}}',
@@ -648,7 +648,7 @@ class Importer
             'tag-{{tags}}',
         ];
         $opinionsBans = [
-            'authors-frontpage',
+            'author-{{fk_author}}(,|$)',
             'sitemap',
             'opinion-author-{{fk_author}}-frontpage',
             'content-author-{{fk_author}}-frontpage',

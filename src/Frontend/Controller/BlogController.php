@@ -193,12 +193,15 @@ class BlogController extends FrontendController
 
         if (!empty($expire)) {
             $this->setViewExpireDate($expire);
-
             $params['x-cache-for'] = $expire;
         }
 
-        $params['x-tags'] .= ',opinion-frontpage';
+        $xtags = [];
+        foreach ($response['items'] as $item) {
+            $xtags[] = ',author-' . $item->fk_author;
+        }
 
+        $params['x-tags'] = implode(',', array_unique($xtags));
         $this->view->assign([
             'opinions'   => $response['items'],
             'pagination' => $pagination,

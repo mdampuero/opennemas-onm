@@ -190,7 +190,12 @@ class OpinionController extends FrontendController
             'total'      => $response['total']
         ]);
 
-        $params['x-tags'] .= ',opinion-frontpage';
+        $xtags = [];
+        foreach ($response['items'] as $item) {
+            $xtags[] = ',author-' . $item->fk_author;
+        }
+
+        $params['x-tags'] .= implode(',', array_unique($xtags));
 
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
 

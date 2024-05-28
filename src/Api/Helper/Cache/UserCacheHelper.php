@@ -57,26 +57,37 @@ class UserCacheHelper extends CacheHelper
      *
      * @param User $user The user.
      */
-    public function deleteItemVarnish(User $user, $all = false) : void
+    public function deleteItemVarnish(User $user) : void
     {
+        if (empty($user) || $user->type === 1) {
+            return;
+        }
+
+        $varnishKeys = [
+            'author-' . $user->id . '(,|$)',
+            'author-widget-' . $user->id . '(,|$)',
+            'content-author-' . $user->id . '-frontpage',
+            'opinion-author-' . $user->id . '-frontpage',
+            'author-widget-all',
+            'sitemap,authors',
+            'archive',
+        ];
+
         $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
             [ 'user', 'show', $user->id ]
         ]));
 
-        $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-            sprintf(
-                'obj.http.x-users ~ ^instance-%s,.*,content-author-%s-frontpage',
-                $this->instance->internal_name,
-                $user->id
-            )
-        ]));
+        $banRegExpr = '';
+        foreach ($varnishKeys as $key) {
+            $banRegExpr .= '|(' . $key . ')';
+        }
 
-        if ($all) {
+        if (!empty($banRegExpr)) {
             $this->queue->push(new ServiceTask('core.varnish', 'ban', [
                 sprintf(
-                    'obj.http.x-users ~ ^instance-%s,.*,author-%d',
+                    'obj.http.x-tags ~ ^instance-%s.*%s',
                     $this->instance->internal_name,
-                    $user->id
+                    '(' . substr($banRegExpr, 1) . ')'
                 )
             ]));
         }
