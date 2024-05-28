@@ -204,10 +204,15 @@ class MenuPersisterTest extends \PHPUnit\Framework\TestCase
         $this->conn->expects($this->at(3))->method('executeQuery')
             ->with(
                 'insert into menu_items'
-                . ' (pk_item, pk_menu, title, link_name, type, position, pk_father, locale, referenceId) ' .
+                . '(pk_item, pk_menu, title, link_name, type, position, pk_father, locale, referenceId) ' .
                 'values (?,?,?,?,?,?,?,?,?),(?,?,?,?,?,?,?,?,?)',
-                [ 1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, null, 0, 2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0, null, 0],
-                [ 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 1]
+                [
+                    1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, null, 0,
+                    2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0, null, 0],
+                [
+                    1, 1, 2, 2, 2, 1, 1, 2, 1,
+                    1, 1, 2, 2, 2, 1, 1, 2, 1
+                ]
             )
             ->will($this->throwException(new \Exception()));
 
@@ -236,15 +241,15 @@ class MenuPersisterTest extends \PHPUnit\Framework\TestCase
         $this->conn->expects($this->at(3))->method('executeQuery')
             ->with(
                 'insert into menu_items'
-                . ' (pk_item, pk_menu, title, link_name, type, position, pk_father, locale, referenceId) ' .
+                . '(pk_item, pk_menu, title, link_name, type, position, pk_father, locale, referenceId) ' .
                 'values (?,?,?,?,?,?,?,?,?),(?,?,?,?,?,?,?,?,?)',
                 [
                     1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, null, 0,
                     2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0, null, 0
                 ],
                 [
-                    1, 1, 2, 2, 2, 1, 1, 1, 1,
-                    1, 1, 2, 2, 2, 1, 1, 1, 1
+                    1, 1, 2, 2, 2, 1, 1, 2, 1,
+                    1, 1, 2, 2, 2, 1, 1, 2, 1
                 ]
             );
 
@@ -280,8 +285,8 @@ class MenuPersisterTest extends \PHPUnit\Framework\TestCase
                     1, 1, 'Medusa', 'Bacchus', 'Arachne', 1, 0, null, 0,
                     2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0, null, 0 ],
                 [
-                    1, 1, 2, 2, 2, 1, 1, 1, 1,
-                    1, 1, 2, 2, 2, 1, 1, 1, 1
+                    1, 1, 2, 2, 2, 1, 1, 2, 1,
+                    1, 1, 2, 2, 2, 1, 1, 2, 1
                 ]
             )
             ->will($this->throwException(new \Exception()));
@@ -318,8 +323,8 @@ class MenuPersisterTest extends \PHPUnit\Framework\TestCase
                     2, 1, 'Apollo', 'Heimdalr', 'Odin', 2, 0, null, 0
                 ],
                 [
-                    1, 1, 2, 2, 2, 1, 1, 1, 1,
-                    1, 1, 2, 2, 2, 1, 1, 1, 1
+                    1, 1, 2, 2, 2, 1, 1, 2, 1,
+                    1, 1, 2, 2, 2, 1, 1, 2, 1
                 ]
             );
 
