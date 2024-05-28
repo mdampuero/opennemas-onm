@@ -373,8 +373,8 @@
         /**
          * Adapt the extra data to the format of a menu item.
          *
-         * @param {array} data The array of the extra data.
-         * @returns The extra data unified with menu item.
+         * @param {Object} data The object containing the extra data.
+         * @returns {Object} The extra data unified with menu items.
          */
         $scope.transformExtraData = function(data) {
           var object = {};
@@ -383,7 +383,7 @@
             object[key] = [];
 
             data[key].forEach(function(item) {
-              object[key].push({
+              var transformedItem = {
                 pk_item: null,
                 pk_menu: null,
                 title: item.title,
@@ -391,8 +391,13 @@
                 link_name: item[$scope.replacements[key].link_name],
                 pk_father: 0,
                 position: 0,
-                locale: item.locale || $scope.data.extra.locale.selected,
-              });
+              };
+
+              if ($scope.hasMultilanguage()) {
+                transformedItem.locale = item.locale || $scope.data.extra.locale.selected;
+              }
+
+              object[key].push(transformedItem);
             });
           });
 
@@ -402,18 +407,19 @@
             if (!data.syncBlogCategory[site].categories) {
               return;
             }
+
             data.syncBlogCategory[site].categories.forEach(function(category) {
-              object.syncBlogCategory.push(
-                {
-                  pk_item: null,
-                  pk_menu: null,
-                  title: category,
-                  type: 'syncBlogCategory',
-                  link_name: category,
-                  pk_father: 0,
-                  position: 0,
-                }
-              );
+              var transformedCategory = {
+                pk_item: null,
+                pk_menu: null,
+                title: category,
+                type: 'syncBlogCategory',
+                link_name: category,
+                pk_father: 0,
+                position: 0,
+              };
+
+              object.syncBlogCategory.push(transformedCategory);
             });
           });
 
@@ -454,19 +460,18 @@
           }
 
           var localeSelected = $scope.config.locale.selected;
-          var hasMultiLanguage = $scope.hasMultilanguage();
 
           for (var parentKey in $scope.parents) {
             var parentItem = $scope.parents[parentKey];
 
-            if ($scope.isEqual(parentItem, draggable) && (!hasMultiLanguage || parentItem.locale === localeSelected)) {
+            if ($scope.isEqual(parentItem, draggable) && (!$scope.hasMultilanguage() || parentItem.locale === localeSelected)) {
               return true;
             }
 
             for (var childKey in $scope.childs[parentItem.pk_item]) {
               var childItem = $scope.childs[parentItem.pk_item][childKey];
 
-              if ($scope.isEqual(childItem, draggable) && (!hasMultiLanguage || childItem.locale === localeSelected)) {
+              if ($scope.isEqual(childItem, draggable) && (!$scope.hasMultilanguage() || childItem.locale === localeSelected)) {
                 return true;
               }
             }

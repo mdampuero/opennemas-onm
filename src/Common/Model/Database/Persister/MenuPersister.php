@@ -182,8 +182,8 @@ class MenuPersister extends BasePersister
                 $value['type'],
                 (int) $value['position'],
                 (int) $value['pk_father'],
-                $value['locale'],
-                0
+                $value['locale'] ?? null,
+                $value['referenceId'] ?? null
             ]);
 
             $types = array_merge($types, [
