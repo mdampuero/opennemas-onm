@@ -213,11 +213,13 @@ class SendpulseHelper
         $favico      = $contentService->getItem($this->ds->get('logo_favico'));
         $favicoPath  = $photoHelper->getPhotoPath($favico, null, [ 192, 192 ], true);
 
-        $body = !empty($article->description) ? $article->description : substr($article->body, 0, 157) . '...';
+        $body = !empty($article->description)
+            ? strip_tags($article->description)
+            : mb_substr(strip_tags($article->body), 0, 157) . '...';
 
         $data = [
             'title'      => $article->title ?? '',
-            'body'       => strip_tags($body),
+            'body'       => $body,
             'website_id' => $this->getWebsiteId(),
             'ttl'        => 86400, //Max ttl allowed
             'link'       => $contentPath,
