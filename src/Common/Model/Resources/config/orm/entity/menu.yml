@@ -50,6 +50,8 @@ orm:
                                     type: integer
                                 locale:
                                     type: string
+                                referenceId:
+                                    type: integer
                     columns:
                         pk_menu:
                             type: integer

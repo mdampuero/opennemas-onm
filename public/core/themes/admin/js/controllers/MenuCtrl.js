@@ -54,7 +54,8 @@
           link_name: '/',
           pk_father: 0,
           position: 0,
-          locale: null
+          locale: null,
+          referenceId: null
         };
 
         /**
@@ -81,15 +82,19 @@
           },
           static: {
             link_name: 'slug',
+            referenceId: 'pk_content',
           },
           tags: {
             link_name: 'slug',
+            referenceId: 'id',
           },
           'blog-category': {
-            link_name: 'name'
+            link_name: 'name',
+            referenceId: 'id',
           },
           category: {
-            link_name: 'name'
+            link_name: 'name',
+            referenceId: 'id',
           }
         };
 
@@ -391,6 +396,7 @@
                 link_name: item[$scope.replacements[key].link_name],
                 pk_father: 0,
                 position: 0,
+                referenceId: item[$scope.replacements[key].referenceId] || null,
               };
 
               if ($scope.hasMultilanguage()) {
