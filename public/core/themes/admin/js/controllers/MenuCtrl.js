@@ -537,11 +537,14 @@
         };
 
         $scope.visible  = function(item) {
-          if (!$scope.hasMultilanguage()) {
-            return item;
-          }
+          if ($scope.hasMultilanguage()) {
+            if (item.locale === null) {
+              item.locale = $scope.data.extra.locale.default;
+            }
 
-          return item.locale === $scope.config.locale.selected;
+            return item.locale === $scope.config.locale.selected;
+          }
+          return true;
         };
 
         /**

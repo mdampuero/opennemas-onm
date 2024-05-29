@@ -34,6 +34,7 @@ function smarty_function_render_menu($params, &$smarty)
     try {
         $menuHelper  = $smarty->getContainer()->get('core.helper.menu');
         $menuService = $smarty->getContainer()->get('api.service.menu');
+        $locale      = $smarty->getContainer()->get('core.locale')->getRequestLocale();
 
         $menuService->setCount(0);
 
@@ -42,7 +43,11 @@ function smarty_function_render_menu($params, &$smarty)
             return '';
         }
 
-        $menuItemsObject = $menuHelper->castToObjectNested($menu->menu_items);
+        $filteredMenuItems = array_filter($menu->menu_items, function ($menuItem) use ($locale) {
+            return !isset($menuItem['locale']) || $menuItem['locale'] === $locale;
+        });
+
+        $menuItemsObject = $menuHelper->castToObjectNested($filteredMenuItems);
 
         $smarty->assign([
             'menuItems'       => !empty($menuItemsObject) ? $menuItemsObject : [],

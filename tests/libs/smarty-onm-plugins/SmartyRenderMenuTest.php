@@ -25,6 +25,10 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()->setMethods([ 'getRequestLocale' ])
+            ->getMock();
+
         $this->menu = $this->getMockBuilder('Menu')
             ->setMethods([ 'getRawItems', 'localize' ])
             ->getMock();
@@ -46,6 +50,9 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->locale->expects($this->any())->method('getRequestLocale')
+            ->willReturn(null);
 
         $menu = new \stdClass();
         $menu->menu_items = [];
@@ -69,6 +76,8 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
                 return $this->ms;
             case 'core.helper.menu':
                 return $this->mh;
+            case 'core.locale':
+                return $this->locale;
             default:
                 return null;
         }

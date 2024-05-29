@@ -19,6 +19,7 @@ class MenuService extends OrmService
      */
     protected function localizeItem($item)
     {
+        $locale         = $this->container->get('core.locale')->getRequestLocale();
         $localizedMenus = [];
 
         if (!$item->menu_items || empty($item->menu_items)) {
