@@ -9,33 +9,29 @@
  */
 function smarty_function_renderLink($params, &$smarty)
 {
-    $item        = $params['item'];
-    $type        = $item->type;
+    $item = $params['item'];
+    $type = $item->type;
     $referenceId = $item->referenceId;
 
-    $fetchItem = getItemByIdAndType($referenceId, $type);
+    $fetchServicesMap = fetchServices();
+    $fetchServices    = $fetchServicesMap[$type] ?? '';
 
-    if (!$fetchItem) {
-        $fetchItem = '';
+    if (!$fetchServices) {
+        $fetchServices = $item->type;
+        dump($fetchServices);
+    } else {
+        $fetchElementByReference = $smarty->getContainer()->get($fetchServices)->getItem([$referenceId]);
+
+        dump($fetchElementByReference);
     }
-
-    dump($fetchItem);
 
     die();
 }
 
-function getItemByIdAndType($referenceId, $itemType)
+function fetchServices()
 {
-    $fetchFunction = 'get' . ucfirst($itemType) . 'ByReference';
-
-    if ($fetchFunction && function_exists($fetchFunction)) {
-        return $fetchFunction($referenceId);
-    }
-
-    return false;
-}
-
-function getTagsByReference($referenceId)
-{
-    return $referenceId;
+    return [
+        'tags' => 'api.service.tag',
+        'blog-category' => 'api.service.category'
+    ];
 }
