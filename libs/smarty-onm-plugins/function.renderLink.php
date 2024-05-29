@@ -9,75 +9,33 @@
  */
 function smarty_function_renderLink($params, &$smarty)
 {
-    $item     = $params['item'];
-    $nameMenu = $params['name'];
+    $item        = $params['item'];
+    $type        = $item->type;
+    $referenceId = $item->referenceId;
 
-    $nameUrlMap = getNameUrlMap();
-    $nameUrl    = $nameUrlMap[$nameMenu] ?? 'seccion';
+    $fetchItem = getItemByIdAndType($referenceId, $type);
 
-    $typeToUrlMap = getTypeToUrlMap($item, $nameUrl);
-
-    $link = $typeToUrlMap[$item->type] ?? "/$item->link/";
-
-    if (!empty($params['noslash'])) {
-        $link = ltrim($link, '/');
+    if (!$fetchItem) {
+        $fetchItem = '';
     }
 
-    if ($item->type !== 'external') {
-        $link = prefixInternalUrl($link, $smarty);
+    dump($fetchItem);
+
+    die();
+}
+
+function getItemByIdAndType($referenceId, $itemType)
+{
+    $fetchFunction = 'get' . ucfirst($itemType) . 'ByReference';
+
+    if ($fetchFunction && function_exists($fetchFunction)) {
+        return $fetchFunction($referenceId);
     }
 
-    return $link;
+    return false;
 }
 
-/**
- * Get the name URL map.
- *
- * @return array
- */
-function getNameUrlMap()
+function getTagsByReference($referenceId)
 {
-    return [
-        'video' => 'video',
-        'album' => 'album',
-        'special' => 'especiales',
-        'encuesta' => 'encuesta'
-    ];
-}
-
-/**
- * Get the type to URL map.
- *
- * @param object $item
- * @param string $nameUrl
- *
- * @return array
- */
-function getTypeToUrlMap($item, $nameUrl)
-{
-    return [
-        'category' => "/$nameUrl/$item->link/",
-        'videoCategory' => "/video/$item->link/",
-        'albumCategory' => "/album/$item->link/",
-        'pollCategory' => "/encuesta/$item->link/",
-        'static' => "/" . STATIC_PAGE_PATH . "/$item->link.html",
-        'internal' => ($item->link == '/') ? "" : "/$item->link/",
-        'external' => "$item->link",
-        'syncBlogCategory' => "/ext$nameUrl/blog/$item->link/",
-        'blog-category' => "/blog/section/$item->link/",
-        'tags' => "/tags/$item->link/",
-    ];
-}
-
-/**
- * Prefix the URL for internal links.
- *
- * @param string $link
- * @param \Smarty $smarty
- *
- * @return string
- */
-function prefixInternalUrl($link, $smarty)
-{
-    return $smarty->getContainer()->get('core.decorator.url')->prefixUrl($link);
+    return $referenceId;
 }
