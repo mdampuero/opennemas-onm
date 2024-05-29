@@ -252,6 +252,31 @@
         };
 
         /**
+         * @function saveItem
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Generate slug and, then, saves the item.
+         */
+        $scope.saveItem = function() {
+          $scope.flags.http.saving = true;
+
+          if (!$scope.item.slug) {
+            $scope.save();
+          } else {
+            // Force slug to be valid
+            $scope.getSlug($scope.item.slug, function(response) {
+              $scope.item.slug           = response.data.slug;
+              $scope.data.item.slug      = response.data.slug;
+              $scope.flags.generate.slug = false;
+              $scope.flags.block.slug    = true;
+
+              $scope.save();
+            });
+          }
+        };
+
+        /**
          * @function save
          * @memberOf RestInnerCtrl
          *

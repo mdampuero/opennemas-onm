@@ -230,10 +230,10 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
     /**
      * @function saveItem
-     * @memberOf StaticPageCtrl
+     * @memberOf ContentRestInnerCtrl
      *
      * @description
-     *   Saves tags and, then, saves the item.
+     *   Saves tags, generate slug and, then, saves the item.
      */
     $scope.saveItem = function() {
       if (!$scope.validate()) {
@@ -242,17 +242,25 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       }
 
       $scope.flags.http.saving = true;
+      // Force slug to be valid
+      $scope.getSlug($scope.item.slug, function(response) {
+        $scope.draftEnabled        = false;
+        $scope.item.slug           = response.data.slug;
+        $scope.data.item.slug      = response.data.slug;
+        $scope.flags.generate.slug = false;
+        $scope.flags.block.slug    = true;
 
-      $scope.$broadcast('onmTagsInput.save', {
-        onError: $scope.errorCb,
-        onSuccess: function(ids) {
-          $scope.item.tags      = ids;
-          $scope.data.item.tags = ids;
+        $scope.form.slug.$setDirty(true);
 
-          $scope.draftEnabled = false;
+        $scope.$broadcast('onmTagsInput.save', {
+          onError: $scope.errorCb,
+          onSuccess: function(ids) {
+            $scope.item.tags      = ids;
+            $scope.data.item.tags = ids;
 
-          $scope.save();
-        }
+            $scope.save();
+          }
+        });
       });
     };
 
