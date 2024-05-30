@@ -45,6 +45,10 @@ class HttpClickjackingHeadersListenerTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->instance = $this->getMockBuilder('Common\Model\Entity\Instance')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->urlHelper = $this->getMockBuilder('Common\Core\Component\Helper\UrlHelper')
             ->disableOriginalConstructor()
             ->setMethods([ 'isFrontendUri' ])
@@ -54,11 +58,31 @@ class HttpClickjackingHeadersListenerTest extends \PHPUnit\Framework\TestCase
 
         $this->event->method('getRequest')->willReturn($this->request);
 
-        $this->container->method('get')->with('core.helper.url')->willReturn($this->urlHelper);
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
 
         $this->listener = new HttpClickjackingHeadersListener($this->container);
     }
 
+    /**
+     * Returns a mock basing on parameter when calling get method in service
+     * container.
+     *
+     * @param string $name The service name.
+     *
+     * @return mixed The mocked service.
+     */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.helper.url':
+                return $this->urlHelper;
+            case 'core.instance':
+                return $this->instance;
+            default:
+                return null;
+        }
+    }
     /**
      * Tests onKernelResponse when  content-type is not available yet, so it won't add the headers.
      */
