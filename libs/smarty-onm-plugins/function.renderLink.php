@@ -9,29 +9,53 @@
  */
 function smarty_function_renderLink($params, &$smarty)
 {
-    $item = $params['item'];
-    $type = $item->type;
+    $item        = $params['item'];
+    $type        = $item->type;
     $referenceId = $item->referenceId;
+    $alt_url     = $type === 'category' ? true : false;
+
+    $multilanguage = $smarty->getContainer()->get('core.instance')->hasMultilanguage();
+
+    $locale = $multilanguage
+        ? $smarty->getContainer()->get('core.locale')->getRequestLocaleShort()
+        : null;
 
     $fetchServicesMap = fetchServices();
     $fetchServices    = $fetchServicesMap[$type] ?? '';
 
-    if (!$fetchServices) {
-        $fetchServices = $item->type;
-        dump($fetchServices);
-    } else {
-        $fetchElementByReference = $smarty->getContainer()->get($fetchServices)->getItem([$referenceId]);
+    $fetchElementByReference = empty(!$fetchServices)
+                                ? $smarty->getContainer()->get($fetchServices)->getItem($referenceId)
+                                : $item->link;
 
-        dump($fetchElementByReference);
+    if (!empty($fetchServices)) {
+        $url = $smarty->getContainer()->get('core.helper.url_generator')
+            ->generate($fetchElementByReference, [
+                'locale'   => $locale,
+                'alternative_url' => $alt_url
+            ]);
     }
 
-    die();
+    if ($type === 'internal' || $type === 'external') {
+        $url = $item->link;
+    }
+
+    if (!empty($params['noslash'])) {
+        $url = ltrim($url, '/');
+    }
+
+    if ($item->type !== 'external') {
+        $url = $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url);
+    }
+
+    return $url;
 }
 
 function fetchServices()
 {
     return [
         'tags' => 'api.service.tag',
-        'blog-category' => 'api.service.category'
+        'blog-category' => 'api.service.category',
+        'category' => 'api.service.category',
+        'static' => 'api.service.content',
     ];
 }
