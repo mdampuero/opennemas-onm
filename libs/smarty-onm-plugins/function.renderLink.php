@@ -20,8 +20,7 @@ function smarty_function_renderLink($params, &$smarty)
         ? $smarty->getContainer()->get('core.locale')->getRequestLocaleShort()
         : null;
 
-    $fetchServicesMap = fetchServices();
-    $fetchServices    = $fetchServicesMap[$type] ?? '';
+    $fetchServices = fetchService($type);
 
     $fetchElementByReference = empty(!$fetchServices)
                                 ? $smarty->getContainer()->get($fetchServices)->getItem($referenceId)
@@ -50,12 +49,14 @@ function smarty_function_renderLink($params, &$smarty)
     return $url;
 }
 
-function fetchServices()
+function fetchService($type)
 {
-    return [
+    static $fetchServices = [
         'tags' => 'api.service.tag',
         'blog-category' => 'api.service.category',
         'category' => 'api.service.category',
         'static' => 'api.service.content',
     ];
+
+    return $fetchServices[$type] ?? '';
 }
