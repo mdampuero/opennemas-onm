@@ -51,14 +51,14 @@ class NewsletterRenderer
         $menuService = $this->container->get('api.service.menu');
 
         try {
-            $menu = $menuService->getItemBy(' position = "newsletter" ');
+            $menu = $menuService->getItemLocaleBy(' position = "newsletter" ');
         } catch (GetItemException $e) {
             $menu = [];
         }
 
         try {
             $menu = empty($menu) ?
-                $menuService->getItemBy(' name = "frontpage" ') :
+                $menuService->getItemLocaleBy(' name = "frontpage" ') :
                 $menu;
         } catch (GetItemException $e) {
             $menu             = new \stdClass();

@@ -34,7 +34,11 @@ function smarty_function_renderLink($params, &$smarty)
             ]);
     }
 
-    if ($type === 'internal' || $type === 'external') {
+    if ($type === 'internal') {
+        $url = '/' . $locale . '/' . $item->link;
+    }
+
+    if ($type === 'external') {
         $url = $item->link;
     }
 

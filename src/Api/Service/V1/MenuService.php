@@ -65,4 +65,26 @@ class MenuService extends OrmService
 
         return $items;
     }
+
+    public function getItemLocaleBy($oql)
+    {
+        try {
+            $locale = $this->container->get('core.locale')->getRequestLocale();
+            $item   = $this->getItemBy($oql);
+
+            if (isset($item->menu_items) && is_array($item->menu_items)) {
+                $filteredItems = array_filter($item->menu_items, function ($element) use ($locale) {
+                    return $element['locale'] === $locale;
+                });
+
+                $item->menu_items = $filteredItems;
+
+                return $item;
+            } else {
+                throw new \Exception("'menu_items' no está presente o no es un array");
+            }
+        } catch (\Throwable $th) {
+            echo "Error: " . $th->getMessage();
+        }
+    }
 }
