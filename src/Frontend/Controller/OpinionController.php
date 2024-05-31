@@ -196,6 +196,7 @@ class OpinionController extends FrontendController
         }
 
         $params['x-tags'] .= implode(',', array_unique($xtags));
+        $params['x-tags'] .= ',opinion-frontpage';
 
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
 
