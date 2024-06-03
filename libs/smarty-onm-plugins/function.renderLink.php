@@ -14,32 +14,38 @@ function smarty_function_renderLink($params, &$smarty)
     $referenceId = $item->referenceId;
     $alt_url     = $type === 'category' ? true : false;
 
-    $multilanguage = $smarty->getContainer()->get('core.instance')->hasMultilanguage();
-
-    $locale = $multilanguage
-        ? $smarty->getContainer()->get('core.locale')->getRequestLocaleShort()
-        : null;
+    $container     = $smarty->getContainer();
+    $coreInstance  = $container->get('core.instance');
+    $multilanguage = $coreInstance->hasMultilanguage();
+    $locale        = $multilanguage
+                ? $container->get('core.locale')->getRequestLocaleShort()
+                : null;
 
     $fetchServices = fetchService($type);
-
-    $fetchElementByReference = empty(!$fetchServices)
-                                ? $smarty->getContainer()->get($fetchServices)->getItem($referenceId)
-                                : $item->link;
-
     if (!empty($fetchServices)) {
-        $url = $smarty->getContainer()->get('core.helper.url_generator')
-            ->generate($fetchElementByReference, [
-                'locale'   => $locale,
-                'alternative_url' => $alt_url
-            ]);
+        $fetchElementByReference = $container->get($fetchServices)->getItem($referenceId);
+    } else {
+        $fetchElementByReference = $item->link;
     }
 
-    if ($type === 'internal') {
-        $url = '/' . $locale . '/' . $item->link;
-    }
+    $urlGenerator = $container->get('core.helper.url_generator');
 
-    if ($type === 'external') {
-        $url = $item->link;
+    switch ($type) {
+        case 'internal':
+            $url = $url = '/' . $locale . '/' . $item->link;
+            break;
+        case 'external':
+            $url = $item->link;
+            break;
+        default:
+            if (!empty($fetchServices)) {
+                $url = $urlGenerator->generate($fetchElementByReference, [
+                    'locale' => $locale,
+                    'alternative_url' => $alt_url
+                ]);
+            } else {
+                $url = $item->link;
+            }
     }
 
     if (!empty($params['noslash'])) {
