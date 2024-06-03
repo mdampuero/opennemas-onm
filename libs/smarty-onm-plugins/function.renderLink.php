@@ -17,6 +17,7 @@ function smarty_function_renderLink($params, &$smarty)
     $container     = $smarty->getContainer();
     $coreInstance  = $container->get('core.instance');
     $multilanguage = $coreInstance->hasMultilanguage();
+    $localeDefault = $container->get('core.locale')->getLocaleShort('frontend');
     $locale        = $multilanguage
                 ? $container->get('core.locale')->getRequestLocaleShort()
                 : null;
@@ -32,7 +33,12 @@ function smarty_function_renderLink($params, &$smarty)
 
     switch ($type) {
         case 'internal':
-            $url = $url = '/' . $locale . '/' . $item->link;
+            $formatLink = ltrim($item->link, '/');
+            if ($locale === $localeDefault) {
+                $url = '/' . $formatLink;
+            } else {
+                $url = $url = '/' . $locale . '/' . $formatLink;
+            }
             break;
         case 'external':
             $url = $item->link;
@@ -46,10 +52,6 @@ function smarty_function_renderLink($params, &$smarty)
             } else {
                 $url = $item->link;
             }
-    }
-
-    if (!empty($params['noslash'])) {
-        $url = ltrim($url, '/');
     }
 
     if ($item->type !== 'external') {
