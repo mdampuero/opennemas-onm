@@ -386,12 +386,13 @@
 
           Object.keys($scope.replacements).forEach(function(key) {
             object[key] = [];
-
             data[key].forEach(function(item) {
+              var translatedTitle = $scope.getTranslateTitle(item.title, $scope.data.extra.locale.selected,
+                $scope.data.extra.locale.default);
               var transformedItem = {
                 pk_item: null,
                 pk_menu: null,
-                title: item.title,
+                title: translatedTitle,
                 type: key,
                 link_name: item[$scope.replacements[key].link_name],
                 pk_father: 0,
@@ -513,6 +514,25 @@
           });
 
           return Object.assign(data, item);
+        };
+
+        /**
+         * @param {Object} data          The data item to translate.
+         * @param {string} locale        The locale to translate to.
+         * @param {string} defaultLocale The default locale.
+         *
+         * @returns The object translated to the selected locale.
+         */
+        $scope.getTranslateTitle = function(data, locale, defaultLocale) {
+          if (typeof data === 'object') {
+            if (data.hasOwnProperty(locale)) {
+              return data[locale];
+            }
+
+            return data[defaultLocale];
+          }
+
+          return data;
         };
 
         /**

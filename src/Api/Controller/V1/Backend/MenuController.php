@@ -208,7 +208,7 @@ class MenuController extends ApiController
         $oql = 'visible = 1 and enabled = 1'
         . ' order by title asc';
 
-        $categories = $this->get('api.service.category')->getList($oql);
+        $categories = $this->get('api.service.category')->getListWithoutLocalizer($oql);
         $this->get('core.locale')->setContext($context);
 
         return $this->get('api.service.category')

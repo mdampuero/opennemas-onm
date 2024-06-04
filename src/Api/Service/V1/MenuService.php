@@ -80,8 +80,6 @@ class MenuService extends OrmService
                 $item->menu_items = $filteredItems;
 
                 return $item;
-            } else {
-                throw new \Exception("'menu_items' no está presente o no es un array");
             }
         } catch (\Throwable $th) {
             echo "Error: " . $th->getMessage();
