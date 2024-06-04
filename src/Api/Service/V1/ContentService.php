@@ -297,4 +297,28 @@ class ContentService extends OrmService
 
         parent::validate($item);
     }
+
+    public function getListWithoutLocalizer($oql = '')
+    {
+        try {
+            $oql = $this->getOqlForList($oql);
+
+            $repository = $this->em->getRepository($this->entity, $this->origin);
+
+            $response = [ 'items' => $repository->findBy($oql) ];
+
+            if ($this->count) {
+                $response['total'] = $repository->countBy($oql);
+            }
+
+            $this->dispatcher->dispatch($this->getEventName('getList'), [
+                'items' => $response['items'],
+                'oql'   => $oql
+            ]);
+
+            return $response;
+        } catch (\Exception $e) {
+            throw new GetListException($e->getMessage(), $e->getCode());
+        }
+    }
 }

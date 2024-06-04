@@ -170,7 +170,7 @@ class MenuController extends ApiController
         $oql = 'content_type_name = "static_page" and in_litter = 0 and content_status = 1 '
            . ' order by created desc';
 
-        $response = $this->get('api.service.content')->getList($oql);
+        $response = $this->get('api.service.content')->getListWithoutLocalizer($oql);
         $this->get('core.locale')->setContext($context);
 
         return array_map(function ($a) {
