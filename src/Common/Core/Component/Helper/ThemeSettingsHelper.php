@@ -81,6 +81,7 @@ class ThemeSettingsHelper extends SettingHelper
         'mobile_top_menu',
         'mobile_main_menu',
         'mobile_inner_aperture',
+        'content_author_photo_crop',
         'aspect_ratio' => 'content_imageratio_normal',
         'aspect_ratio_tiny' => 'content_imageratio_tiny',
         'aspect_ratio_list' => 'content_imageratio_list',
