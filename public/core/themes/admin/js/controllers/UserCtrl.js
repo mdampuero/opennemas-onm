@@ -102,17 +102,6 @@
         };
 
         /**
-         * @function confirm
-         * @memberOf UserCtrl
-         *
-         * @description
-         *   Confirm user update.
-         */
-        $scope.confirm = function() {
-          $scope.save();
-        };
-
-        /**
          * @function convertTo
          * @memberOf UserCtrl
          *
