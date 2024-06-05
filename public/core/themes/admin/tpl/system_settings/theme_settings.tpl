@@ -559,7 +559,7 @@
                   </div>
                   <div role="tabpanel" class="tab-pane fade" id="tabHeader">
                     <div class="row" ng-if="extra.theme_skins[settings.theme_skin].params.options">
-                      <div class="col-xs-12 col-md- m-b-15">
+                      <div class="col-xs-12 col-md-4 m-b-15">
                         <h4>
                           <i class="fa fa-align-center"></i>
                           {t}Main header alignment{/t}
