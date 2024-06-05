@@ -250,7 +250,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         $scope.flags.block.slug    = true;
 
         $scope.form.slug.$setDirty(true);
-        $scope.saveDraft();
 
         $scope.$broadcast('onmTagsInput.save', {
           onError: $scope.errorCb,
@@ -479,32 +478,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       };
 
       return routing.generate(routes[item.content_type_name], { id: item.pk_content });
-    };
-
-    $scope.saveDraft = function() {
-      $scope.form.$setDirty(true);
-
-      if ($scope.draftKey !== null) {
-        $scope.draftSaved = null;
-
-        if ($scope.dtm) {
-          $timeout.cancel($scope.dtm);
-        }
-
-        var item  = angular.copy($scope.data.item);
-
-        // Removes the uploaded file if exists from the properties watched to avoid errors.
-        for (var prop in item) {
-          if (item.hasOwnProperty(prop) && item[prop] instanceof File) {
-            item[prop] = null;
-          }
-        }
-        webStorage.session.set($scope.draftKey, {
-          item: item,
-          related: $scope.related ? $scope.related.exportRelated() : []
-        });
-        $scope.draftSaved = $window.moment().format('HH:mm');
-      }
     };
 
     // Generates slug when flag changes
