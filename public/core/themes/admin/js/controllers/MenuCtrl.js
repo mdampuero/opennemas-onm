@@ -204,6 +204,7 @@
           $scope.parents   = $scope.filterParents();
           $scope.childs    = $scope.filterChilds($scope.parents);
           $scope.dragables = $scope.filterDragables($scope.menuData);
+          $scope.localizableDrag = angular.copy($scope.dragables);
           $scope.linkData  = [ Object.assign({}, $scope.defaultLink) ];
           $scope.last      = $scope.getLastIndex($scope.data.item.menu_items);
         };
@@ -387,12 +388,10 @@
           Object.keys($scope.replacements).forEach(function(key) {
             object[key] = [];
             data[key].forEach(function(item) {
-              var translatedTitle = $scope.getTranslateTitle(item.title, $scope.data.extra.locale.selected,
-                $scope.data.extra.locale.default);
               var transformedItem = {
                 pk_item: null,
                 pk_menu: null,
-                title: translatedTitle,
+                title: item.title,
                 type: key,
                 link_name: item[$scope.replacements[key].link_name],
                 pk_father: 0,
@@ -471,14 +470,19 @@
           for (var parentKey in $scope.parents) {
             var parentItem = $scope.parents[parentKey];
 
-            if ($scope.isEqual(parentItem, draggable) && (!$scope.hasMultilanguage() || parentItem.locale === localeSelected)) {
+            if ($scope.isEqual(parentItem, draggable) && (
+              !$scope.hasMultilanguage() || parentItem.locale === localeSelected
+            )) {
               return true;
             }
 
             for (var childKey in $scope.childs[parentItem.pk_item]) {
               var childItem = $scope.childs[parentItem.pk_item][childKey];
 
-              if ($scope.isEqual(childItem, draggable) && (!$scope.hasMultilanguage() || childItem.locale === localeSelected)) {
+              if ($scope.isEqual(childItem, draggable) && (
+                !$scope.hasMultilanguage() ||
+                childItem.locale === localeSelected
+              )) {
                 return true;
               }
             }
@@ -525,13 +529,13 @@
          */
         $scope.getTranslateTitle = function(data, locale, defaultLocale) {
           if (typeof data === 'object') {
+
             if (data.hasOwnProperty(locale)) {
               return data[locale];
             }
 
             return data[defaultLocale];
           }
-
           return data;
         };
 
@@ -615,6 +619,21 @@
           }
 
           $scope.dragables = $scope.filterDragables($scope.menuData);
+        });
+
+        $scope.$watch('config.locale.selected', function(nv, ov) {
+          if (nv !== ov) {
+            Object.keys($scope.localizableDrag).forEach(function(key) {
+              var dragable = $scope.localizableDrag[key];
+
+              dragable.forEach(function(item) {
+                var translateTitle = $scope.getTranslateTitle(item.title,
+                  $scope.config.locale.selected, $scope.config.locale);
+
+                $scope.dragables.key.title = translateTitle;
+              });
+            });
+          }
         });
 
         $scope.filterLocale = function(locale) {
