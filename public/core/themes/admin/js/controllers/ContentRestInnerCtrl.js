@@ -241,6 +241,8 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         return;
       }
 
+      $scope.draftEnabled = false;
+
       $scope.flags.http.saving = true;
       // Force slug to be valid
       $scope.getSlug($scope.item.slug, function(response) {
@@ -256,8 +258,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           onSuccess: function(ids) {
             $scope.item.tags      = ids;
             $scope.data.item.tags = ids;
-
-            $scope.draftEnabled = false;
+            $scope.draftEnabled = true;
             $scope.save();
           }
         });

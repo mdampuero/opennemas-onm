@@ -329,6 +329,10 @@
               webStorage.session.remove($scope.draftKey);
             }
             messenger.post(response.data);
+
+            if ($scope.dtm) {
+              $timeout.cancel($scope.dtm);
+            }
           };
 
           if ($scope.itemHasId()) {
