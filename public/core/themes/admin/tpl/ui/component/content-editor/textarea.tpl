@@ -22,5 +22,8 @@
   {/if}
   <div class="controls">
     <textarea name="{$field}" id="{$field}" incomplete="incomplete" ng-model="item.{$field}" onm-editor onm-editor-preset="{if !isset($preset)}simple{else}{$preset}{/if}" {if isset($minheight)}onm-editor-height="{$minheight}"{/if} class="form-control" rows="{if !isset($rows)}15{else}{$rows}{/if}"></textarea>
+    {if $IA}
+      {include file="ui/component/button/ia_modal.tpl" iField=$field}
+    {/if}
   </div>
 </div>

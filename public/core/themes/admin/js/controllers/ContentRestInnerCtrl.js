@@ -427,6 +427,28 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       return false;
     };
 
+    $scope.openIAModal = function(field) {
+      $uibModal.open({
+        templateUrl: 'modal-openai',
+        backdrop: 'static',
+        controller: 'OpenAIModalCtrl',
+        resolve: {
+          template: function() {
+            return null;
+          },
+          success: function() {
+            return function(modal, template) {
+              if (field in $scope) {
+                $scope[field] = template.response;
+              } else {
+                $scope.item[field] = template.response;
+              }
+            };
+          }
+        }
+      });
+    };
+
     /**
      * @function validate
      * @memberOf ContentRestInnerCtrl

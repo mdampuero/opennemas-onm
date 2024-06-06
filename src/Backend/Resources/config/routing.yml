@@ -200,6 +200,10 @@ backend_obituary:
     prefix: /
     resource: '@BackendBundle/Resources/config/routing/obituary.yml'
 
+backend_openai:
+    prefix:    /
+    resource: '@BackendBundle/Resources/config/routing/openai.yml'
+
 backend_opinion:
     prefix:    /
     resource: '@BackendBundle/Resources/config/routing/opinion.yml'

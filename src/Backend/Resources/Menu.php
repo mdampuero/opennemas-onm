@@ -274,7 +274,6 @@ $menuXml = [
     [
         'id'          => 'webpush_notifications_mananger',
         'title'       => _('Web Push'),
-        'badge'       => '<span class="badge badge-primary pull-left m-t-10 m-r-5">' . _('NEW') . '</span> ',
         'icon'        => 'fa fa-bell',
         'link'        => '#',
         'privilege'   => 'ADMIN',
@@ -303,7 +302,33 @@ $menuXml = [
             ],
         ]
     ],
-
+    [
+        'id'          => 'openai',
+        'title'       => _('OpenAI'),
+        'badge'       => '<span class="badge badge-primary pull-left m-t-10 m-r-5">' . _('NEW') . '</span> ',
+        'icon'        => 'fa fa-bell',
+        'link'        => '#',
+        'module_name' => 'es.openhost.module.openai',
+        'privilege'   => 'ADMIN',
+        'submenu' => [
+            [
+                'id'          => 'openai_config',
+                'title'       => _('Configuration'),
+                'icon'        => 'fa fa-cog fa-lg',
+                'link'        => url('backend_openai_config'),
+                'module_name' => 'es.openhost.module.openai',
+                'privilege'   => 'MASTER'
+            ],
+            [
+                'id'          => 'openai_usage',
+                'title'       => _('Usage'),
+                'icon'        => 'fa fa-line-chart',
+                'link'        => url('backend_openai_usage'),
+                'module_name' => 'es.openhost.module.openai',
+                'privilege'   => 'ADMIN'
+            ],
+        ]
+    ],
     // Utils menu
     [
         'id'      => 'util',
