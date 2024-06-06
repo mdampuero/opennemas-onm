@@ -529,7 +529,6 @@
          */
         $scope.getTranslateTitle = function(data, locale, defaultLocale) {
           if (typeof data === 'object') {
-
             if (data.hasOwnProperty(locale)) {
               return data[locale];
             }
