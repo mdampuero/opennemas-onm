@@ -60,6 +60,8 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
                     'hasAuthorSlug',
                     'hasAuthorSocialFacebookUrl',
                     'hasAuthorSocialTwitterUrl',
+                    'hasAuthorSocialInstagramUrl',
+                    'hasAuthorSocialLinkedinUrl',
                     'hasAuthorUrl',
                     'isBlog'
                 ]
