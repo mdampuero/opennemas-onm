@@ -122,8 +122,8 @@ class WebpushSendCommand extends Command
                     ->get('webpush_allowed_date', null);
 
                 $this->getContainer()->get('core.security')->setInstance($instance);
-                $context = $this->getContainer()->get('core.locale')->getContext();
-                $this->getContainer()->get('core.locale')->setContext('backend');
+
+                $this->getContainer()->get('core.locale')->setContext('frontend');
                 // Get current timeZone
                 $timeZone = $this->getContainer()->get('core.locale')->getTimeZone();
                 // Create current local time
