@@ -396,7 +396,7 @@
                 link_name: item[$scope.replacements[key].link_name],
                 pk_father: 0,
                 position: 0,
-                referenceId: item[$scope.replacements[key].referenceId] || null,
+                referenceId: item[$scope.replacements[key].referenceId],
               };
 
               if ($scope.hasMultilanguage()) {
@@ -633,6 +633,7 @@
                   var translateTitle = $scope.getTranslateTitle(item.title, locale, defaultLocale);
 
                   $scope.dragables[key][i].title = translateTitle;
+                  $scope.dragables[key][i].link_name = translateTitle;
                 }
               }
             }
