@@ -532,7 +532,6 @@
             if (data.hasOwnProperty(locale)) {
               return data[locale];
             }
-
             return data[defaultLocale];
           }
           return data;
@@ -622,16 +621,21 @@
 
         $scope.$watch('config.locale.selected', function(nv, ov) {
           if (nv !== ov) {
-            Object.keys($scope.localizableDrag).forEach(function(key) {
-              var dragable = $scope.localizableDrag[key];
+            var locale = $scope.config.locale.selected;
+            var defaultLocale = $scope.config.locale.default;
 
-              dragable.forEach(function(item) {
-                var translateTitle = $scope.getTranslateTitle(item.title,
-                  $scope.config.locale.selected, $scope.config.locale);
+            for (var key in $scope.localizableDrag) {
+              if ($scope.localizableDrag.hasOwnProperty(key)) {
+                var dragable = $scope.localizableDrag[key];
 
-                $scope.dragables.key.title = translateTitle;
-              });
-            });
+                for (var i = 0; i < dragable.length; i++) {
+                  var item = dragable[i];
+                  var translateTitle = $scope.getTranslateTitle(item.title, locale, defaultLocale);
+
+                  $scope.dragables[key][i].title = translateTitle;
+                }
+              }
+            }
           }
         });
 
