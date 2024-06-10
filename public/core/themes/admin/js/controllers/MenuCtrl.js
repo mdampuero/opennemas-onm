@@ -204,9 +204,10 @@
           $scope.parents   = $scope.filterParents();
           $scope.childs    = $scope.filterChilds($scope.parents);
           $scope.dragables = $scope.filterDragables($scope.menuData);
-          $scope.localizableDrag = angular.copy($scope.dragables);
           $scope.linkData  = [ Object.assign({}, $scope.defaultLink) ];
           $scope.last      = $scope.getLastIndex($scope.data.item.menu_items);
+
+          $scope.localizableDrag = angular.copy($scope.dragables);
         };
 
         /**
@@ -384,16 +385,21 @@
          */
         $scope.transformExtraData = function(data) {
           var object = {};
+          var localeSelected = $scope.config.locale.selected || $scope.config.locale.default;
 
           Object.keys($scope.replacements).forEach(function(key) {
             object[key] = [];
             data[key].forEach(function(item) {
+              var translatedLinkName = $scope.getTranslateTitle(item[$scope.replacements[key].link_name],
+                localeSelected,
+                $scope.config.locale.default);
+
               var transformedItem = {
                 pk_item: null,
                 pk_menu: null,
                 title: item.title,
                 type: key,
-                link_name: item[$scope.replacements[key].link_name],
+                link_name: translatedLinkName,
                 pk_father: 0,
                 position: 0,
                 referenceId: item[$scope.replacements[key].referenceId],
@@ -465,7 +471,7 @@
             return false;
           }
 
-          var localeSelected = $scope.config.locale.selected;
+          var localeSelected = $scope.config.locale.selected || $scope.config.locale.default;
 
           for (var parentKey in $scope.parents) {
             var parentItem = $scope.parents[parentKey];
@@ -633,7 +639,6 @@
                   var translateTitle = $scope.getTranslateTitle(item.title, locale, defaultLocale);
 
                   $scope.dragables[key][i].title = translateTitle;
-                  $scope.dragables[key][i].link_name = translateTitle;
                 }
               }
             }
