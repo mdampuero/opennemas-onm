@@ -366,12 +366,6 @@
          * @param {Object} item The item to remove from the array of menu items.
          */
         $scope.removeItem = function(item) {
-          if (typeof $scope.dragables !== 'object' || Array.isArray($scope.dragables)) {
-            $scope.dragables = {};
-          }
-
-          $scope.dragables[item.pk_item] = item;
-
           for (var id in $scope.childs) {
             $scope.childs[id] = $scope.childs[id].filter(function(child) {
               return child.pk_item !== item.pk_item;
