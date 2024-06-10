@@ -48,7 +48,7 @@
                   </h5>
                 </li>
                 <li class="quicklinks">
-                  <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" type="button">
+                  <button class="btn btn-loading btn-success text-uppercase" ng-click="saveItem()" type="button">
                     <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                     {t}Save{/t}
                   </button>

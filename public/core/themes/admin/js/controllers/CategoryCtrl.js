@@ -84,6 +84,31 @@
             $scope.item.id !== null;
         };
 
+        /**
+         * @function saveItem
+         * @memberOf CategoryCtrl
+         *
+         * @description
+         *   Generate slug and then saves the item.
+         */
+        $scope.saveItem = function() {
+          $scope.flags.http.saving = true;
+
+          if (!$scope.item.name) {
+            $scope.save();
+          } else {
+            // Force slug to be valid
+            $scope.getSlug($scope.item.name, function(response) {
+              $scope.item.name           = response.data.slug;
+              $scope.data.item.name      = response.data.slug;
+              $scope.flags.generate.name = false;
+              $scope.flags.block.name    = true;
+
+              $scope.save();
+            });
+          }
+        };
+
         // Updates the logo_id when an image is selected
         $scope.$watch('item.logo_id', function(nv, ov) {
           if (!ov && !nv || nv && !angular.isObject(nv)) {
