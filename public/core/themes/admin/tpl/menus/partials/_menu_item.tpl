@@ -3,10 +3,10 @@
     <span class="angular-ui-tree-icon"></span>
   </span>
   <span class="menu-item-type-icon fa fa-cube" ng-if="item.type == 'internal'" tooltip-placement="right" uib-tooltip="{t}Module{/t}"></span>
-  <span class="menu-item-type-icon fa fa-newspaper-o" ng-if="item.type == 'category'" tooltip-placement="right" uib-tooltip="{t}Manual categories{/t} - [% item.link_name %]"></span>
-  <span class="menu-item-type-icon fa fa-bookmark" ng-if="item.type == 'blog-category'" tooltip-placement="right" uib-tooltip="{t}Automatic categories{/t} - [% item.link_name %]"></span>
-  <span class="menu-item-type-icon fa fa-file" ng-if="item.type == 'static'" tooltip-placement="right" uib-tooltip="{t}Static Pages{/t} - [% item.link_name %]"></span>
-  <span class="menu-item-type-icon fa fa-tag" ng-if="item.type == 'tags'" tooltip-placement="right" uib-tooltip="{t}Tags{/t} - [% item.link_name %]"></span>
+  <span class="menu-item-type-icon fa fa-newspaper-o" ng-if="item.type == 'category'" tooltip-placement="right" uib-tooltip="{t}Manual categories{/t} - [% item.title %]"></span>
+  <span class="menu-item-type-icon fa fa-bookmark" ng-if="item.type == 'blog-category'" tooltip-placement="right" uib-tooltip="{t}Automatic categories{/t} - [% item.title %]"></span>
+  <span class="menu-item-type-icon fa fa-file" ng-if="item.type == 'static'" tooltip-placement="right" uib-tooltip="{t}Static Pages{/t} - [% item.title %]"></span>
+  <span class="menu-item-type-icon fa fa-tag" ng-if="item.type == 'tags'" tooltip-placement="right" uib-tooltip="{t}Tags{/t} - [% item.title %]"></span>
   <span class="menu-item-type-icon fa fa-exchange" ng-if="item.type == 'syncBlogCategory'" tooltip-placement="right" uib-tooltip="{t}Synchronized instances{/t}"></span>
   <span class="menu-item-type-icon fa fa-external-link" ng-if="item.type == 'external'" tooltip-placement="right" uib-tooltip="{t}External link{/t}"></span>
   <div class="p-l-35 p-r-35">
@@ -15,7 +15,7 @@
         <input data-nodrag class="menu-item-title" ng-model="item.title" type="text">
       </div>
       <div ng-if="item.type === 'external'" class="col-sm-9 col-lg-9">
-        <input data-nodrag class="menu-item-link" ng-model="item.link_name" type="text">
+        <input data-nodrag class="menu-item-link" ng-model="item.title" type="text">
       </div>
     </div>
   </div>

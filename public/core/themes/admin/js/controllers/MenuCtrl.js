@@ -366,6 +366,12 @@
          * @param {Object} item The item to remove from the array of menu items.
          */
         $scope.removeItem = function(item) {
+          if (typeof $scope.dragables !== 'object' || Array.isArray($scope.dragables)) {
+            $scope.dragables = {};
+          }
+
+          $scope.dragables[item.pk_item] = item;
+
           for (var id in $scope.childs) {
             $scope.childs[id] = $scope.childs[id].filter(function(child) {
               return child.pk_item !== item.pk_item;
@@ -571,11 +577,11 @@
             item.locale = $scope.data.extra.locale.default;
           }
 
-          var menuItems = $scope.item.menu_items.filter(function(element) {
-            return element.locale === $scope.config.locale.selected || element.locale === null;
-          });
-
           if (filterParents) {
+            var menuItems = $scope.item.menu_items.filter(function(element) {
+              return element.locale === $scope.config.locale.selected;
+            });
+
             var isVisible = !menuItems.some(function(element) {
               return item.title === element.title && item.type === element.type;
             });
@@ -648,8 +654,10 @@
                 for (var i = 0; i < dragable.length; i++) {
                   var item = dragable[i];
                   var translateTitle = $scope.getTranslateTitle(item.title, locale, defaultLocale);
+                  var translateLink = $scope.getTranslateTitle(item.link_name, locale, defaultLocale);
 
                   $scope.dragables[key][i].title = translateTitle;
+                  $scope.dragables[key][i].link_name = translateLink;
                 }
               }
             }
