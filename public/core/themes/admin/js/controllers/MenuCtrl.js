@@ -385,21 +385,17 @@
          */
         $scope.transformExtraData = function(data) {
           var object = {};
-          var localeSelected = $scope.config.locale.selected || $scope.config.locale.default;
 
           Object.keys($scope.replacements).forEach(function(key) {
             object[key] = [];
-            data[key].forEach(function(item) {
-              var translatedLinkName = $scope.getTranslateTitle(item[$scope.replacements[key].link_name],
-                localeSelected,
-                $scope.config.locale.default);
 
+            data[key].forEach(function(item) {
               var transformedItem = {
                 pk_item: null,
                 pk_menu: null,
                 title: item.title,
                 type: key,
-                link_name: translatedLinkName,
+                link_name: item[$scope.replacements[key].link_name],
                 pk_father: 0,
                 position: 0,
                 referenceId: item[$scope.replacements[key].referenceId],
@@ -564,15 +560,30 @@
             item.title[defaultLocale];
         };
 
-        $scope.visible  = function(item) {
-          if ($scope.hasMultilanguage()) {
-            if (item.locale === null) {
-              item.locale = $scope.data.extra.locale.default;
-            }
-
-            return item.locale === $scope.config.locale.selected;
+        /**
+         * Determina si un elemento es visible según ciertos criterios.
+         * @param {Object} item - El elemento a evaluar.
+         * @param {boolean} filterParents - Indica si se deben filtrar los elementos padre.
+         * @returns {boolean} Retorna true si el elemento es visible, de lo contrario retorna false.
+         */
+        $scope.visible = function(item, filterParents) {
+          if ($scope.hasMultilanguage() && item.locale === null) {
+            item.locale = $scope.data.extra.locale.default;
           }
-          return true;
+
+          var menuItems = $scope.item.menu_items.filter(function(element) {
+            return element.locale === $scope.config.locale.selected || element.locale === null;
+          });
+
+          if (filterParents) {
+            var isVisible = !menuItems.some(function(element) {
+              return item.title === element.title && item.type === element.type;
+            });
+
+            return isVisible;
+          }
+
+          return item.locale === $scope.config.locale.selected;
         };
 
         /**
