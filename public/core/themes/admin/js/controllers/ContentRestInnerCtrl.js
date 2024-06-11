@@ -241,28 +241,43 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         return;
       }
 
-      $scope.draftEnabled = false;
-
+      $scope.draftEnabled      = false;
       $scope.flags.http.saving = true;
-      // Force slug to be valid
-      $scope.getSlug($scope.item.slug, function(response) {
-        $scope.item.slug           = response.data.slug;
-        $scope.data.item.slug      = response.data.slug;
-        $scope.flags.generate.slug = false;
-        $scope.flags.block.slug    = true;
 
-        $scope.form.slug.$setDirty(true);
-
+      if ($scope.form.tags) {
         $scope.$broadcast('onmTagsInput.save', {
           onError: $scope.errorCb,
           onSuccess: function(ids) {
             $scope.item.tags      = ids;
             $scope.data.item.tags = ids;
-            $scope.draftEnabled = true;
-            $scope.save();
+
+            if ($scope.item.slug) {
+              // Force slug to be valid
+              $scope.getSlug($scope.item.slug, function(response) {
+                $scope.item.slug           = response.data.slug;
+                $scope.data.item.slug      = response.data.slug;
+                $scope.flags.generate.slug = false;
+                $scope.flags.block.slug    = true;
+
+                $scope.save();
+              });
+            } else {
+              $scope.save();
+            }
           }
         });
-      });
+      } else if ($scope.item.slug) {
+        $scope.getSlug($scope.item.slug, function(response) {
+          $scope.item.slug           = response.data.slug;
+          $scope.data.item.slug      = response.data.slug;
+          $scope.flags.generate.slug = false;
+          $scope.flags.block.slug    = true;
+
+          $scope.save();
+        });
+      } else {
+        $scope.save();
+      }
     };
 
     /**
@@ -498,8 +513,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           $scope.item.slug           = response.data.slug;
           $scope.flags.generate.slug = false;
           $scope.flags.block.slug    = true;
-
-          $scope.form.slug.$setDirty(true);
         });
       }, 250);
     }, true);
