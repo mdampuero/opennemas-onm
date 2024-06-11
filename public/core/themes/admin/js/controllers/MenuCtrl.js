@@ -475,7 +475,7 @@
             return false;
           }
 
-          var localeSelected = $scope.config.locale.selected;
+          var localeSelected = $scope.config.locale.selected || $scope.config.locale.default;
 
           for (var parentKey in $scope.parents) {
             var parentItem = $scope.parents[parentKey];
@@ -490,7 +490,8 @@
               var childItem = $scope.childs[parentItem.pk_item][childKey];
 
               if ($scope.isEqual(childItem, draggable) && (
-                !$scope.hasMultilanguage() || childItem.locale === localeSelected
+                !$scope.hasMultilanguage() ||
+                childItem.locale === localeSelected
               )) {
                 return true;
               }
@@ -583,7 +584,7 @@
             item.locale = $scope.data.extra.locale.selected;
           }
 
-          if (filterParents) {
+          if (filterParents && item.type !== 'tags') {
             var menuItems = $scope.item.menu_items.filter(function(element) {
               return element.locale === $scope.config.locale.selected;
             });
