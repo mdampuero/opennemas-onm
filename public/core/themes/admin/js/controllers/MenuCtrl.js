@@ -263,8 +263,17 @@
          */
         $scope.filterItems = function(dragables) {
           return dragables.filter(function(dragable) {
+            var titleString = dragable.title;
+
+            if (typeof dragable.title === 'object') {
+              titleString = $scope.getTranslateTitle(dragable.title,
+                $scope.config.locale.selected, $scope.config.locale.default);
+            }
+
+            titleString = typeof titleString === 'string' ? titleString : '';
+
             var valid = !$scope.search[dragable.type] ||
-              dragable.title.toLowerCase().indexOf($scope.search[dragable.type].toLowerCase()) !== -1;
+              titleString.toLowerCase().indexOf($scope.search[dragable.type].toLowerCase()) !== -1;
 
             return valid && !$scope.isAlreadyInMenu(dragable);
           });
@@ -656,8 +665,10 @@
                     if ($scope.dragables[key][i]) {
                       var item = dragable[i];
                       var translateTitle = $scope.getTranslateTitle(item.title, locale, defaultLocale);
+                      var translateLink = $scope.getTranslateTitle(item.link_name, locale, defaultLocale);
 
                       $scope.dragables[key][i].title = translateTitle;
+                      $scope.dragables[key][i].link_name = translateLink;
                     }
                   }
                 }
