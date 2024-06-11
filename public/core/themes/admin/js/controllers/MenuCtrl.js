@@ -117,8 +117,7 @@
          * @type {Object}
          */
         $scope.treeOptions = {
-          // Generate a unique pk_item for the new element dropped
-          beforeDrop: function(e) {
+          beforeDrop: function() {
             if ($scope.hasMultilanguage()) {
               if ($scope.config && $scope.config.locale) {
                 $scope.defaultLink.locale = $scope.config.locale.selected;
@@ -476,7 +475,7 @@
             return false;
           }
 
-          var localeSelected = $scope.config.locale.selected || $scope.config.locale.default;
+          var localeSelected = $scope.config.locale.selected;
 
           for (var parentKey in $scope.parents) {
             var parentItem = $scope.parents[parentKey];
@@ -491,8 +490,7 @@
               var childItem = $scope.childs[parentItem.pk_item][childKey];
 
               if ($scope.isEqual(childItem, draggable) && (
-                !$scope.hasMultilanguage() ||
-                childItem.locale === localeSelected
+                !$scope.hasMultilanguage() || childItem.locale === localeSelected
               )) {
                 return true;
               }
@@ -509,8 +507,12 @@
          * @returns true if the objects are equal, false otherwise.
          */
         $scope.isEqual = function(original, copy) {
+          if (original.type === 'internal' && copy.type === 'internal') {
+            return original.locale === copy.locale && original.type === copy.type &&
+              original.link_name === copy.link_name;
+          }
           return original.locale === copy.locale && original.type === copy.type &&
-            original.referenceId === copy.referenceId;
+              original.referenceId === copy.referenceId;
         };
 
         /**
@@ -578,7 +580,7 @@
          */
         $scope.visible = function(item, filterParents) {
           if ($scope.hasMultilanguage() && item.locale === null) {
-            item.locale = $scope.data.extra.locale.default;
+            item.locale = $scope.data.extra.locale.selected;
           }
 
           if (filterParents) {
@@ -652,27 +654,35 @@
          * @param {Object} $scope - The scope object.
          */
         $scope.$watch('config.locale.selected', function(nv, ov) {
-          if (nv !== ov) {
-            var locale = $scope.config.locale.selected;
-            var defaultLocale = $scope.config.locale.default;
+          if (nv === ov) {
+            return;
+          }
 
-            for (var key in $scope.localizableDrag) {
-              if ($scope.localizableDrag.hasOwnProperty(key)) {
-                var dragable = $scope.localizableDrag[key];
+          var locale = $scope.config.locale.selected;
+          var defaultLocale = $scope.config.locale.default;
 
-                if ($scope.dragables[key] && Array.isArray($scope.dragables[key])) {
-                  for (var i = 0; i < dragable.length; i++) {
-                    if ($scope.dragables[key][i]) {
-                      var item = dragable[i];
-                      var translateTitle = $scope.getTranslateTitle(item.title, locale, defaultLocale);
-                      var translateLink = $scope.getTranslateTitle(item.link_name, locale, defaultLocale);
+          for (var key in $scope.localizableDrag) {
+            if (!$scope.localizableDrag.hasOwnProperty(key)) {
+              continue;
+            }
 
-                      $scope.dragables[key][i].title = translateTitle;
-                      $scope.dragables[key][i].link_name = translateLink;
-                    }
-                  }
-                }
+            var dragable = $scope.localizableDrag[key];
+
+            if (!$scope.dragables[key] || !Array.isArray($scope.dragables[key])) {
+              continue;
+            }
+
+            for (var i = 0; i < dragable.length; i++) {
+              if (!$scope.dragables[key][i]) {
+                continue;
               }
+
+              var item = dragable[i];
+              var translateTitle = $scope.getTranslateTitle(item.title, locale, defaultLocale);
+              var translateLink = $scope.getTranslateTitle(item.link_name, locale, defaultLocale);
+
+              $scope.dragables[key][i].title = translateTitle;
+              $scope.dragables[key][i].link_name = translateLink;
             }
           }
         });
