@@ -202,11 +202,10 @@
           $scope.menuData  = $scope.transformExtraData($scope.data.extra);
           $scope.parents   = $scope.filterParents();
           $scope.childs    = $scope.filterChilds($scope.parents);
-          $scope.dragables = $scope.filterDragables($scope.menuData);
+          $scope.localizableDrag = angular.copy($scope.menuData);
+          $scope.dragables = $scope.filterDragables($scope.localizableDrag);
           $scope.linkData  = [ Object.assign({}, $scope.defaultLink) ];
           $scope.last      = $scope.getLastIndex($scope.data.item.menu_items);
-
-          $scope.localizableDrag = angular.copy($scope.dragables);
         };
 
         /**
@@ -249,7 +248,7 @@
           var object = {};
 
           Object.keys(dragables).forEach(function(type) {
-            object[type] = $scope.filterItems($scope.menuData[type]);
+            object[type] = $scope.filterItems(dragables[type]);
           });
 
           return object;
@@ -267,6 +266,12 @@
             if (typeof dragable.title === 'object') {
               titleString = $scope.getTranslateTitle(dragable.title,
                 $scope.config.locale.selected, $scope.config.locale.default);
+
+              dragable.title = titleString;
+
+              if (dragable.locale === null) {
+                dragable.locale = $scope.config.locale.selected;
+              }
             }
 
             titleString = typeof titleString === 'string' ? titleString : '';
@@ -410,7 +415,7 @@
               };
 
               if ($scope.hasMultilanguage()) {
-                transformedItem.locale = item.locale || $scope.data.extra.locale.selected;
+                transformedItem.locale = item.locale || null;
               }
 
               object[key].push(transformedItem);
@@ -475,6 +480,28 @@
             return false;
           }
 
+          var localeSelected = $scope.config.locale.selected;
+
+          for (var parentKey in $scope.parents) {
+            var parentItem = $scope.parents[parentKey];
+
+            if (parentItem.locale === localeSelected) {
+              if ($scope.isEqual(parentItem, draggable) && (
+                !$scope.hasMultilanguage() || parentItem.locale === draggable.locale
+              )) {
+                return true;
+              }
+            }
+          }
+          return false;
+        };
+
+        /*
+        $scope.isAlreadyInMenu = function(draggable) {
+          if (draggable.type === 'external') {
+            return false;
+          }
+
           var localeSelected = $scope.config.locale.selected || $scope.config.locale.default;
 
           for (var parentKey in $scope.parents) {
@@ -490,8 +517,7 @@
               var childItem = $scope.childs[parentItem.pk_item][childKey];
 
               if ($scope.isEqual(childItem, draggable) && (
-                !$scope.hasMultilanguage() ||
-                childItem.locale === localeSelected
+                !$scope.hasMultilanguage() || childItem.locale === localeSelected
               )) {
                 return true;
               }
@@ -500,6 +526,7 @@
 
           return false;
         };
+        */
 
         /**
          * @param {Object} original The original object.
@@ -659,9 +686,14 @@
             return;
           }
 
+          /*
           var locale = $scope.config.locale.selected;
           var defaultLocale = $scope.config.locale.default;
+          */
 
+          $scope.dragables = $scope.filterDragables($scope.localizableDrag);
+
+          /*
           for (var key in $scope.localizableDrag) {
             if (!$scope.localizableDrag.hasOwnProperty(key)) {
               continue;
@@ -686,6 +718,7 @@
               $scope.dragables[key][i].link_name = translateLink;
             }
           }
+          */
         });
 
         $scope.filterLocale = function(locale) {
