@@ -321,7 +321,10 @@ class Importer
                 $categories = array_filter(
                     $this->config['categories_map'],
                     function ($a) use ($resource) {
-                        return $a['slug'] == $resource->category;
+                        return preg_match(
+                            '/' . str_replace('/', '\/', $a['slug']) . '/i',
+                            $resource->category
+                        );
                     }
                 );
 
