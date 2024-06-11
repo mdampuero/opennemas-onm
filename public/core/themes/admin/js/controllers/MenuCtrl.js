@@ -500,7 +500,8 @@
          * @returns true if the objects are equal, false otherwise.
          */
         $scope.isEqual = function(original, copy) {
-          return original.type === copy.type && original.link_name === copy.link_name;
+          return original.locale === copy.locale && original.type === copy.type &&
+            original.referenceId === copy.referenceId;
         };
 
         /**
@@ -636,6 +637,11 @@
           $scope.dragables = $scope.filterDragables($scope.menuData);
         });
 
+        /**
+         * Watches for changes in the selected locale and updates titles accordingly.
+         *
+         * @param {Object} $scope - The scope object.
+         */
         $scope.$watch('config.locale.selected', function(nv, ov) {
           if (nv !== ov) {
             var locale = $scope.config.locale.selected;
@@ -645,13 +651,15 @@
               if ($scope.localizableDrag.hasOwnProperty(key)) {
                 var dragable = $scope.localizableDrag[key];
 
-                for (var i = 0; i < dragable.length; i++) {
-                  var item = dragable[i];
-                  var translateTitle = $scope.getTranslateTitle(item.title, locale, defaultLocale);
-                  var translateLink = $scope.getTranslateTitle(item.link_name, locale, defaultLocale);
+                if ($scope.dragables[key] && Array.isArray($scope.dragables[key])) {
+                  for (var i = 0; i < dragable.length; i++) {
+                    if ($scope.dragables[key][i]) {
+                      var item = dragable[i];
+                      var translateTitle = $scope.getTranslateTitle(item.title, locale, defaultLocale);
 
-                  $scope.dragables[key][i].title = translateTitle;
-                  $scope.dragables[key][i].link_name = translateLink;
+                      $scope.dragables[key][i].title = translateTitle;
+                    }
+                  }
                 }
               }
             }
