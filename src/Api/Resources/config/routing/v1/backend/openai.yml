@@ -1,0 +1,34 @@
+api_v1_backend_openai_get_list:
+    path:    /openai
+    defaults: { _controller: ApiBundle:V1/Backend/OpenAI:getList, format: '.json'  }
+    methods: [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_openai_get_config:
+    path:     /openai/config
+    defaults: { _controller: ApiBundle:V1/Backend/OpenAI:getConfig }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_openai_get_pricing:
+    path:     /openai/pricing
+    defaults: { _controller: ApiBundle:V1/Backend/OpenAI:getPricing }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_openai_save_config:
+    path:     /openai/config
+    defaults: { _controller: ApiBundle:V1/Backend/OpenAI:saveConfig }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_openai_generate:
+    path:     /openai/generate
+    defaults: { _controller: ApiBundle:V1/Backend/OpenAI:generate }
+    methods:  [ POST ]
+    options:
+        expose: true

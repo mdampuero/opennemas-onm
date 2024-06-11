@@ -1,0 +1,11 @@
+backend_openai_config:
+    path:     /openai/config/
+    defaults: { _controller: BackendBundle:OpenAI:config }
+    options:
+        expose: true
+
+backend_openai_usage:
+    path:     /openai/usage/
+    defaults: { _controller: BackendBundle:OpenAI:usage }
+    options:
+        expose: true
