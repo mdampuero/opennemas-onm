@@ -263,23 +263,22 @@
          */
         $scope.filterItems = function(dragables) {
           return dragables.filter(function(dragable) {
-            var titleString = dragable.title;
-
             if (typeof dragable.title === 'object') {
-              titleString = $scope.getTranslateTitle(dragable.title,
+              var titleString = $scope.getTranslatedProperty(dragable.title,
+                $scope.config.locale.selected, $scope.config.locale.default);
+
+              var linkString = $scope.getTranslatedProperty(dragable.link_name,
                 $scope.config.locale.selected, $scope.config.locale.default);
 
               dragable.title = titleString;
-
+              dragable.link_name = linkString;
               dragable.locale = $scope.config.locale.selected;
             }
 
-            // titleString = typeof titleString === 'string' ? titleString : '';
+            var valid = !$scope.search[dragable.type] ||
+                dragable.title.toLowerCase().indexOf($scope.search[dragable.type].toLowerCase()) !== -1;
 
-            // var valid = !$scope.search[dragable.type] ||
-            //   titleString.toLowerCase().indexOf($scope.search[dragable.type].toLowerCase()) !== -1;
-
-            return !$scope.isAlreadyInMenu(dragable);
+            return valid && !$scope.isAlreadyInMenu(dragable);
           });
         };
 
@@ -520,38 +519,6 @@
           return false;
         };
 
-        /*
-        $scope.isAlreadyInMenu = function(draggable) {
-          if (draggable.type === 'external') {
-            return false;
-          }
-
-          var localeSelected = $scope.config.locale.selected || $scope.config.locale.default;
-
-          for (var parentKey in $scope.parents) {
-            var parentItem = $scope.parents[parentKey];
-
-            if ($scope.isEqual(parentItem, draggable) && (
-              !$scope.hasMultilanguage() || parentItem.locale === localeSelected
-            )) {
-              return true;
-            }
-
-            for (var childKey in $scope.childs[parentItem.pk_item]) {
-              var childItem = $scope.childs[parentItem.pk_item][childKey];
-
-              if ($scope.isEqual(childItem, draggable) && (
-                !$scope.hasMultilanguage() || childItem.locale === localeSelected
-              )) {
-                return true;
-              }
-            }
-          }
-
-          return false;
-        };
-        */
-
         /**
          * @param {Object} original The original object.
          * @param {Object} copy     The item to check if is a copy of the original
@@ -587,13 +554,13 @@
         };
 
         /**
-         * @param {Object} data          The data item to translate.
-         * @param {string} locale        The locale to translate to.
-         * @param {string} defaultLocale The default locale.
-         *
-         * @returns The object translated to the selected locale.
+         * Translates a data item to the specified locale.
+         * @param {Object} data - The data item to translate.
+         * @param {string} locale - The locale to translate to.
+         * @param {string} defaultLocale - The default locale.
+         * @returns {Object} The object translated to the selected locale.
          */
-        $scope.getTranslateTitle = function(data, locale, defaultLocale) {
+        $scope.getTranslatedProperty = function(data, locale, defaultLocale) {
           if (typeof data === 'object') {
             if (data.hasOwnProperty(locale)) {
               return data[locale];
@@ -625,10 +592,10 @@
         };
 
         /**
-         * Determina si un elemento es visible según ciertos criterios.
-         * @param {Object} item - El elemento a evaluar.
-         * @param {boolean} filterParents - Indica si se deben filtrar los elementos padre.
-         * @returns {boolean} Retorna true si el elemento es visible, de lo contrario retorna false.
+         * Determines if an item is visible based on certain criteria.
+         * @param {Object} item - The item to evaluate.
+         * @param {boolean} filterParents - Indicates if parent items should be filtered.
+         * @returns {boolean} Returns true if the item is visible, otherwise returns false.
          */
         $scope.visible = function(item, filterParents) {
           if (!$scope.hasMultilanguage()) {
@@ -637,25 +604,6 @@
             }
             return true;
           }
-          // if (item.type === 'category') {
-          //   console.log(item);
-          //   console.log($scope.data.extra.locale.selected);
-          // }
-          // if (item.locale === null) {
-          //   item.locale = $scope.data.extra.locale.selected;
-          // }
-
-          // if (filterParents && item.type !== 'tags') {
-          //   var menuItems = $scope.item.menu_items.filter(function(element) {
-          //     return element.locale === $scope.config.locale.selected;
-          //   });
-
-          //   var isVisible = !menuItems.some(function(element) {
-          //     return item.title === element.title && item.type === element.type;
-          //   });
-
-          //   return isVisible;
-          // }
 
           if (filterParents && $scope.isAlreadyInMenu(item)) {
             return false;
@@ -700,10 +648,22 @@
         });
 
         /**
-         * Watcher to refresh the dragable items when something changes in search or childs.
+         * Watcher to refresh the draggable items when the children or parents change.
          */
         $scope.$watch(function() {
           return JSON.stringify($scope.childs) + JSON.stringify($scope.parents);
+        }, function(nv, ov) {
+          if (nv === ov || !ov) {
+            return;
+          }
+          $scope.dragables = $scope.filterDragables($scope.localizableDrag);
+        });
+
+        /**
+         * Watcher to refresh the draggable items when the search changes.
+         */
+        $scope.$watch(function() {
+          return JSON.stringify($scope.search);
         }, function(nv, ov) {
           if (nv === ov || !ov) {
             return;
@@ -721,41 +681,15 @@
             return;
           }
 
-          /*
-          var locale = $scope.config.locale.selected;
-          var defaultLocale = $scope.config.locale.default;
-          */
-
           $scope.dragables = $scope.filterDragables($scope.localizableDrag);
-
-          /*
-          for (var key in $scope.localizableDrag) {
-            if (!$scope.localizableDrag.hasOwnProperty(key)) {
-              continue;
-            }
-
-            var dragable = $scope.localizableDrag[key];
-
-            if (!$scope.dragables[key] || !Array.isArray($scope.dragables[key])) {
-              continue;
-            }
-
-            for (var i = 0; i < dragable.length; i++) {
-              if (!$scope.dragables[key][i]) {
-                continue;
-              }
-
-              var item = dragable[i];
-              var translateTitle = $scope.getTranslateTitle(item.title, locale, defaultLocale);
-              var translateLink = $scope.getTranslateTitle(item.link_name, locale, defaultLocale);
-
-              $scope.dragables[key][i].title = translateTitle;
-              $scope.dragables[key][i].link_name = translateLink;
-            }
-          }
-          */
         });
 
+        /**
+         * Filters elements based on the specified locale.
+         *
+         * @param {string} locale - The locale to filter by.
+         * @returns {Function} A function that checks if an element matches the specified locale.
+         */
         $scope.filterLocale = function(locale) {
           return function(element) {
             return !element.locale || element.locale === locale;
