@@ -2,6 +2,8 @@
 
 namespace Api\Service\V1;
 
+use Api\Exception\GetItemException;
+
 class MenuService extends OrmService
 {
     protected $keys = [
@@ -81,8 +83,8 @@ class MenuService extends OrmService
 
                 return $item;
             }
-        } catch (\Throwable $th) {
-            echo "Error: " . $th->getMessage();
+        } catch (\Exception $e) {
+            throw new GetItemException($e->getMessage(), $e->getCode());
         }
     }
 }

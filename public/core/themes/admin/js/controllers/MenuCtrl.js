@@ -200,10 +200,12 @@
           $scope.data.extra['blog-category'] = angular.copy($scope.data.extra.category);
 
           $scope.menuData  = $scope.transformExtraData($scope.data.extra);
+
           $scope.parents   = $scope.filterParents();
           $scope.childs    = $scope.filterChilds($scope.parents);
           $scope.localizableDrag = angular.copy($scope.menuData);
           $scope.dragables = $scope.filterDragables($scope.localizableDrag);
+
           $scope.linkData  = [ Object.assign({}, $scope.defaultLink) ];
           $scope.last      = $scope.getLastIndex($scope.data.item.menu_items);
         };
@@ -248,7 +250,7 @@
           var object = {};
 
           Object.keys(dragables).forEach(function(type) {
-            object[type] = $scope.filterItems(dragables[type]);
+            object[type] = $scope.filterItems(angular.copy(dragables[type]));
           });
 
           return object;
@@ -269,17 +271,15 @@
 
               dragable.title = titleString;
 
-              if (dragable.locale === null) {
-                dragable.locale = $scope.config.locale.selected;
-              }
+              dragable.locale = $scope.config.locale.selected;
             }
 
-            titleString = typeof titleString === 'string' ? titleString : '';
+            // titleString = typeof titleString === 'string' ? titleString : '';
 
-            var valid = !$scope.search[dragable.type] ||
-              titleString.toLowerCase().indexOf($scope.search[dragable.type].toLowerCase()) !== -1;
+            // var valid = !$scope.search[dragable.type] ||
+            //   titleString.toLowerCase().indexOf($scope.search[dragable.type].toLowerCase()) !== -1;
 
-            return valid && !$scope.isAlreadyInMenu(dragable);
+            return !$scope.isAlreadyInMenu(dragable);
           });
         };
 
@@ -412,6 +412,7 @@
                 pk_father: 0,
                 position: 0,
                 referenceId: item[$scope.replacements[key].referenceId],
+                locale: null
               };
 
               if ($scope.hasMultilanguage()) {
@@ -438,6 +439,7 @@
                 link_name: category,
                 pk_father: 0,
                 position: 0,
+                locale: null
               };
 
               object.syncBlogCategory.push(transformedCategory);
@@ -485,11 +487,33 @@
           for (var parentKey in $scope.parents) {
             var parentItem = $scope.parents[parentKey];
 
+            if (!$scope.hasMultilanguage() && $scope.isEqual(parentItem, draggable)) {
+              return true;
+            }
+
             if (parentItem.locale === localeSelected) {
               if ($scope.isEqual(parentItem, draggable) && (
                 !$scope.hasMultilanguage() || parentItem.locale === draggable.locale
               )) {
                 return true;
+              }
+            }
+          }
+
+          for (var parent in $scope.childs) {
+            for (var child in $scope.childs[parent]) {
+              var item = $scope.childs[parent][child];
+
+              if (!$scope.hasMultilanguage() && $scope.isEqual(item, draggable)) {
+                return true;
+              }
+
+              if (item.locale === localeSelected) {
+                if ($scope.isEqual(item, draggable) && (
+                  !$scope.hasMultilanguage() || item.locale === draggable.locale
+                )) {
+                  return true;
+                }
               }
             }
           }
@@ -607,23 +631,37 @@
          * @returns {boolean} Retorna true si el elemento es visible, de lo contrario retorna false.
          */
         $scope.visible = function(item, filterParents) {
-          if ($scope.hasMultilanguage() && item.locale === null) {
-            item.locale = $scope.data.extra.locale.selected;
+          if (!$scope.hasMultilanguage()) {
+            if (filterParents && $scope.isAlreadyInMenu(item)) {
+              return false;
+            }
+            return true;
+          }
+          // if (item.type === 'category') {
+          //   console.log(item);
+          //   console.log($scope.data.extra.locale.selected);
+          // }
+          // if (item.locale === null) {
+          //   item.locale = $scope.data.extra.locale.selected;
+          // }
+
+          // if (filterParents && item.type !== 'tags') {
+          //   var menuItems = $scope.item.menu_items.filter(function(element) {
+          //     return element.locale === $scope.config.locale.selected;
+          //   });
+
+          //   var isVisible = !menuItems.some(function(element) {
+          //     return item.title === element.title && item.type === element.type;
+          //   });
+
+          //   return isVisible;
+          // }
+
+          if (filterParents && $scope.isAlreadyInMenu(item)) {
+            return false;
           }
 
-          if (filterParents && item.type !== 'tags') {
-            var menuItems = $scope.item.menu_items.filter(function(element) {
-              return element.locale === $scope.config.locale.selected;
-            });
-
-            var isVisible = !menuItems.some(function(element) {
-              return item.title === element.title && item.type === element.type;
-            });
-
-            return isVisible;
-          }
-
-          return item.locale === $scope.config.locale.selected;
+          return item.locale === null || item.locale === $scope.config.locale.selected;
         };
 
         /**
@@ -638,7 +676,7 @@
             return parent.pk_item;
           }).join(',');
         }, function(nv, ov) {
-          if (!nv && !ov) {
+          if (!nv && !ov || nv === ov || !ov) {
             return;
           }
 
@@ -647,8 +685,6 @@
           var newKey = nv.split(',').filter(function(key) {
             return !oldKeys.includes(key);
           });
-
-          $scope.dragables = $scope.filterDragables($scope.menuData);
 
           if (!newKey || newKey.length === 0) {
             return;
@@ -667,13 +703,12 @@
          * Watcher to refresh the dragable items when something changes in search or childs.
          */
         $scope.$watch(function() {
-          return JSON.stringify($scope.childs) + JSON.stringify($scope.search);
+          return JSON.stringify($scope.childs) + JSON.stringify($scope.parents);
         }, function(nv, ov) {
-          if (nv === ov) {
+          if (nv === ov || !ov) {
             return;
           }
-
-          $scope.dragables = $scope.filterDragables($scope.menuData);
+          $scope.dragables = $scope.filterDragables($scope.localizableDrag);
         });
 
         /**
@@ -682,7 +717,7 @@
          * @param {Object} $scope - The scope object.
          */
         $scope.$watch('config.locale.selected', function(nv, ov) {
-          if (nv === ov) {
+          if (nv === ov || !ov) {
             return;
           }
 
