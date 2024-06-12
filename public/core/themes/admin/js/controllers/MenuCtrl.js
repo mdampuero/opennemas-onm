@@ -526,12 +526,20 @@
          * @returns true if the objects are equal, false otherwise.
          */
         $scope.isEqual = function(original, copy) {
+          if (!$scope.hasMultilanguage()) {
+            if (original.referenceId !== null) {
+              return original.referenceId === copy.referenceId && original.type === copy.type;
+            }
+            return original.link_name === copy.link_name && original.type === copy.type;
+          }
+
           if (original.type === 'internal' && copy.type === 'internal') {
             return original.locale === copy.locale && original.type === copy.type &&
               original.link_name === copy.link_name;
           }
+
           return original.locale === copy.locale && original.type === copy.type &&
-              original.referenceId === copy.referenceId;
+                 original.referenceId === copy.referenceId;
         };
 
         /**
