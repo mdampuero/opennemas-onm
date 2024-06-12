@@ -253,9 +253,9 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
             if ($scope.item.slug) {
               // Force slug to be valid
-              $scope.getSlug($scope.item.slug, function(response) {
-                $scope.item.slug           = response.data.slug;
-                $scope.data.item.slug      = response.data.slug;
+              $scope.getSlug($scope.data.item.slug, function(response) {
+                $scope.data.item.slug           = response.data.slug;
+
                 $scope.flags.generate.slug = false;
                 $scope.flags.block.slug    = true;
 
@@ -266,9 +266,8 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
             }
           }
         });
-      } else if ($scope.item.slug) {
-        $scope.getSlug($scope.item.slug, function(response) {
-          $scope.item.slug           = response.data.slug;
+      } else if ($scope.data.item.slug) {
+        $scope.getSlug($scope.data.item.slug, function(response) {
           $scope.data.item.slug      = response.data.slug;
           $scope.flags.generate.slug = false;
           $scope.flags.block.slug    = true;

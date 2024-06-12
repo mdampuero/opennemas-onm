@@ -100,7 +100,6 @@
             // Force slug to be valid
             $scope.getSlug($scope.item.name, function(response) {
               $scope.item.name           = response.data.slug;
-              $scope.data.item.name      = response.data.slug;
               $scope.flags.generate.name = false;
               $scope.flags.block.name    = true;
 
