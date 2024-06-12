@@ -63,10 +63,6 @@
         };
 
         $scope.getData = function() {
-          if (!$scope.hasMultilanguage()) {
-            return angular.extend({}, $scope.item);
-          }
-
           var data = angular.extend({}, $scope.data.item);
 
           if ($scope.item.params && Object.keys($scope.item.params).length > 0) {
@@ -94,12 +90,12 @@
         $scope.saveItem = function() {
           $scope.flags.http.saving = true;
 
-          if (!$scope.item.name) {
+          if (!$scope.data.item.name) {
             $scope.save();
           } else {
             // Force slug to be valid
-            $scope.getSlug($scope.item.name, function(response) {
-              $scope.item.name           = response.data.slug;
+            $scope.getSlug($scope.data.item.name, function(response) {
+              $scope.data.item.name           = response.data.slug;
               $scope.flags.generate.name = false;
               $scope.flags.block.name    = true;
 
