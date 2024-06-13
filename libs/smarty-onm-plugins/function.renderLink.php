@@ -1,4 +1,8 @@
 <?php
+
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+use SebastianBergmann\Environment\Console;
+
 /**
  * Check type of menu element and prepare link
  *
@@ -11,7 +15,7 @@ function smarty_function_renderLink($params, &$smarty)
 {
     $item        = $params['item'];
     $type        = $item->type;
-    $referenceId = $item->referenceId;
+    $referenceId = !empty($item->referenceId) ? $item->referenceId : null;
     $alt_url     = $type === 'category' ? true : false;
 
     $container     = $smarty->getContainer();
@@ -22,9 +26,32 @@ function smarty_function_renderLink($params, &$smarty)
                 ? $container->get('core.locale')->getRequestLocaleShort()
                 : null;
 
-    $fetchServices = fetchService($type);
+    static $fetchServices = [
+        'tags' => 'api.service.tag',
+        'blog-category' => 'api.service.category',
+        'category' => 'api.service.category',
+        'static' => 'api.service.content',
+    ];
+
+    static $nameUrlMap = [
+        'video'    => 'video',
+        'album'    => 'album',
+        'special'  => 'especiales',
+        'encuesta' => 'encuesta'
+    ];
+
+    $fetchServices = $fetchServices[$type] ?? null;
+
+
     if (!empty($fetchServices)) {
-        $fetchElementByReference = $container->get($fetchServices)->getItem($referenceId);
+        if ($referenceId) {
+            $fetchElementByReference = $container->get($fetchServices)->getItem($referenceId);
+        } else {
+            $nameUrl                 = empty($nameUrlMap[$item->name]) ? null : $nameUrlMap[$item->name];
+            $mapUrl                  = getTypeToUrlMap($item, $nameUrl);
+            $fetchElementByReference = null;
+            $fetchServices           = false;
+        }
     } else {
         $fetchElementByReference = $item->link;
     }
@@ -34,10 +61,15 @@ function smarty_function_renderLink($params, &$smarty)
     switch ($type) {
         case 'internal':
             $formatLink = ltrim($item->link, '/');
-            if ($locale === $localeDefault) {
-                $url = '/' . $formatLink;
+
+            if ($multilanguage) {
+                if ($locale === $localeDefault) {
+                    $url = '/' . $formatLink;
+                } else {
+                    $url = $url = '/' . $locale . '/' . $formatLink;
+                }
             } else {
-                $url = $url = '/' . $locale . '/' . $formatLink;
+                $url = $url = '/' . $formatLink;
             }
             break;
         case 'external':
@@ -45,12 +77,17 @@ function smarty_function_renderLink($params, &$smarty)
             break;
         default:
             if (!empty($fetchServices)) {
-                $url = $urlGenerator->generate($fetchElementByReference, [
-                    'locale' => $locale,
-                    'alternative_url' => $alt_url
-                ]);
+                if ($fetchElementByReference) {
+                    $url = $urlGenerator->generate($fetchElementByReference, [
+                        'locale' => $locale,
+                        'alternative_url' => $alt_url,
+                        'absolute' => true
+                    ]);
+                } else {
+                    $url = $mapUrl[$item->type] ?? "/$item->link/";
+                }
             } else {
-                $url = $item->link;
+                $url = $mapUrl[$item->type] ?? "/$item->link/";
             }
     }
 
@@ -61,14 +98,26 @@ function smarty_function_renderLink($params, &$smarty)
     return $url;
 }
 
-function fetchService($type)
+/**
+ * Get the type to URL map.
+ *
+ * @param object $item
+ * @param string $nameUrl
+ *
+ * @return array
+ */
+function getTypeToUrlMap($item, $nameUrl)
 {
-    static $fetchServices = [
-        'tags' => 'api.service.tag',
-        'blog-category' => 'api.service.category',
-        'category' => 'api.service.category',
-        'static' => 'api.service.content',
+    return [
+        'category' => ($nameUrl) ? "/$nameUrl/" : "/$item->link/",
+        'videoCategory' => "/video/$item->link/",
+        'albumCategory' => "/album/$item->link/",
+        'pollCategory' => "/encuesta/$item->link/",
+        'static' => "/" . STATIC_PAGE_PATH . "/$item->link.html",
+        'internal' => ($item->link == '/') ? "" : "/$item->link/",
+        'external' => "$item->link",
+        'syncBlogCategory' => "/ext$nameUrl/blog/$item->link/",
+        'blog-category' => "/blog/section/$item->link/",
+        'tags' => "/tags/$item->link/",
     ];
-
-    return $fetchServices[$type] ?? '';
 }
