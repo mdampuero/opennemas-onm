@@ -491,6 +491,16 @@
             }
 
             if (parentItem.locale === localeSelected) {
+              if (parentItem.type === draggable.type) {
+                if (parentItem.referenceId !== null && parentItem.referenceId === draggable.referenceId) {
+                  return true;
+                }
+
+                if (parentItem.referenceId === null && parentItem.link_name === draggable.link_name) {
+                  return true;
+                }
+              }
+
               if ($scope.isEqual(parentItem, draggable) && (
                 !$scope.hasMultilanguage() || parentItem.locale === draggable.locale
               )) {
@@ -508,6 +518,16 @@
               }
 
               if (item.locale === localeSelected) {
+                if (item.type === draggable.type) {
+                  if (item.referenceId !== null && item.referenceId === draggable.referenceId) {
+                    return true;
+                  }
+
+                  if (item.referenceId === null && item.link_name === draggable.link_name) {
+                    return true;
+                  }
+                }
+
                 if ($scope.isEqual(item, draggable) && (
                   !$scope.hasMultilanguage() || item.locale === draggable.locale
                 )) {
