@@ -2,6 +2,7 @@
 
 namespace Common\Core\Component\Helper;
 
+use DateTime;
 use GuzzleHttp\Client;
 
 /**
@@ -122,7 +123,35 @@ class OpenAIHelper
             ? $response['usage']
             : [];
 
+        $this->saveAction($data, $response);
+
         return $responseData;
+    }
+
+    protected function saveAction($params, $response)
+    {
+        $messages     = $params['messages'] ?? [];
+        $responseData = isset($response['choices'][0]['message']['content'])
+            ? $response['choices'][0]['message']['content']
+            : '';
+
+        $tokens = array_key_exists('usage', $response) && !empty($response['usage'])
+            ? $response['usage']
+            : [];
+
+        $date = new DateTime('now', new \DateTimeZone("UTC"));
+
+        unset($params['messages']);
+
+        $data = [
+            'messages' => $messages,
+            'response' => $responseData,
+            'tokens' => $tokens,
+            'params' => $params,
+            'date' => $date->format('Y-m-d H:i:s')
+        ];
+
+        $this->container->get('api.service.ai')->createItem($data);
     }
 
     public function saveTokens($tokens)

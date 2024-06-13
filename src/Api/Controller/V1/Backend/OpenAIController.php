@@ -298,18 +298,23 @@ class OpenAIController extends ApiController
 
     public function generateAction(Request $request)
     {
-        $message = [];
+        try {
+            $message = [];
 
-        $message['system'] = $request->request->get('system_prompt', '');
-        $message['user']   = $request->request->get('user_prompt', '');
+            $message['system'] = $request->request->get('system_prompt', '');
+            $message['user']   = $request->request->get('user_prompt', '');
 
-        $response = $this->get($this->helper)->sendMessage($message);
+            $response = $this->get($this->helper)->sendMessage($message);
 
-        if (array_key_exists('tokens', $response) && !empty($response['tokens'])) {
-            $this->get($this->helper)->saveTokens($response['tokens']);
+            if (array_key_exists('tokens', $response) && !empty($response['tokens'])) {
+                $this->get($this->helper)->saveTokens($response['tokens']);
+            }
+
+            return new JsonResponse($response);
+        } catch (\Exception $e) {
+            dump($e);
+            die();
         }
-
-        return new JsonResponse($response);
     }
 
     public function getPricingAction()
