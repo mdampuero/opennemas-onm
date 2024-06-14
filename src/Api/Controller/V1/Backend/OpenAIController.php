@@ -332,9 +332,9 @@ class OpenAIController extends ApiController
             $totalTokens      = $item->getData()['tokens']['total_tokens'];
 
             if (isset($agrupatedTokens[$model])) {
-                $agrupatedTokens[$model]['prompt_tokens'] += $promptTokens;
+                $agrupatedTokens[$model]['prompt_tokens']     += $promptTokens;
                 $agrupatedTokens[$model]['completion_tokens'] += $completionTokens;
-                $agrupatedTokens[$model]['total_tokens'] += $totalTokens;
+                $agrupatedTokens[$model]['total_tokens']      += $totalTokens;
             } else {
                 $agrupatedTokens[$model] = [
                     'prompt_tokens' => $promptTokens,
