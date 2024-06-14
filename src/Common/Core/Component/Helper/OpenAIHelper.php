@@ -232,20 +232,21 @@ class OpenAIHelper
     public function getTokensMonthly()
     {
         $date       = new DateTime();
-        $currentDay = $date->format('d');
+        $currentDay = (int) $date->format('d');
+
+        $startDate = new DateTime();
+        $endDate   = new DateTime();
 
         if ($currentDay < 27) {
-            $startDate = (new DateTime('last month'))
+            $startDate->modify('first day of last month')
                 ->setDate($date->format('Y'), $date->format('m') - 1, 27)
                 ->setTime(0, 0, 0);
-            $endDate   = (new DateTime())
-                ->setDate($date->format('Y'), $date->format('m'), 27)
+            $endDate->setDate($date->format('Y'), $date->format('m'), 27)
                 ->setTime(0, 0, 0);
         } else {
-            $startDate = (new DateTime())
-                ->setDate($date->format('Y'), $date->format('m'), 27)
+            $startDate->setDate($date->format('Y'), $date->format('m'), 27)
                 ->setTime(0, 0, 0);
-            $endDate   = (new DateTime('next month'))
+            $endDate->modify('first day of next month')
                 ->setDate($date->format('Y'), $date->format('m') + 1, 27)
                 ->setTime(0, 0, 0);
         }
@@ -260,6 +261,7 @@ class OpenAIHelper
 
         return $result;
     }
+
 
     public function getPricing()
     {
