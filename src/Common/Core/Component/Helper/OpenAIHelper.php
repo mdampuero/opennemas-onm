@@ -4,6 +4,7 @@ namespace Common\Core\Component\Helper;
 
 use DateTime;
 use GuzzleHttp\Client;
+use SebastianBergmann\Environment\Console;
 
 /**
  * Helper class to retrieve OpenAI data.
@@ -139,7 +140,7 @@ class OpenAIHelper
             ? $response['usage']
             : [];
 
-        $date = new DateTime('now', new \DateTimeZone("UTC"));
+        $date = new DateTime('now');
 
         unset($params['messages']);
 
@@ -228,6 +229,16 @@ class OpenAIHelper
         return $tokens;
     }
 
+    public function getTokensMonthly()
+    {
+        $date = new DateTime();
+        $oql  = sprintf("date > '%s'", $date->format('Y-m-01 00:00:00'));
+
+        $result = $this->container->get('api.service.ai')->getList($oql);
+
+        return $result;
+    }
+
     public function getPricing()
     {
         return $this->pricing;
@@ -235,30 +246,25 @@ class OpenAIHelper
 
     public function getSpentMoney()
     {
-        //Costs are per 1M tokens
+        // Costs are per 1M tokens
         $conversion = 1000000;
 
-        $tokens  = $this->getTokens();
+        $tokens  = $this->getTokensMonthly();
         $pricing = $this->getPricing();
 
         $total = 0;
 
-        foreach ($tokens as $modelName => $tokenInfo) {
-            if (!array_key_exists($modelName, $pricing)) {
-                continue;
+        foreach ($tokens['items'] as $modelName => $tokenInfo) {
+            $model            = $tokenInfo->getData()['params']['model']; // Obtener el modelo del token
+            $promptTokens     = $tokenInfo->getData()['tokens']['prompt_tokens'];
+            $completionTokens = $tokenInfo->getData()['tokens']['completion_tokens'];
+
+            if (isset($pricing[$model])) {
+                $inputPrice  = isset($pricing[$model]['input']) ? $pricing[$model]['input'] : 0;
+                $outputPrice = isset($pricing[$model]['output']) ? $pricing[$model]['output'] : 0;
+
+                $total += ($promptTokens * $inputPrice + $completionTokens * $outputPrice) / $conversion;
             }
-
-            $inputTokens = is_numeric($tokenInfo['prompt_tokens'])
-                ? (float) $tokenInfo['prompt_tokens']
-                : 0;
-
-            $total += ($inputTokens * $pricing[$modelName]['input']) / $conversion;
-
-            $outputTokens = is_numeric($tokenInfo['completion_tokens'])
-                ? (float) $tokenInfo['completion_tokens']
-                : 0;
-
-            $total += ($outputTokens * $pricing[$modelName]['output']) / $conversion;
         }
 
         return $total;

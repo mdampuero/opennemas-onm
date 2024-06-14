@@ -323,8 +323,29 @@ class OpenAIController extends ApiController
         $pricing = $this->get($this->helper)->getPricing();
         $money   = $this->get($this->helper)->getSpentMoney();
 
+        $agrupatedTokens = [];
+
+        foreach ($tokens['items'] as $item) {
+            $model            = $item->getData()['params']['model'];
+            $promptTokens     = $item->getData()['tokens']['prompt_tokens'];
+            $completionTokens = $item->getData()['tokens']['completion_tokens'];
+            $totalTokens      = $item->getData()['tokens']['total_tokens'];
+
+            if (isset($agrupatedTokens[$model])) {
+                $agrupatedTokens[$model]['prompt_tokens'] += $promptTokens;
+                $agrupatedTokens[$model]['completion_tokens'] += $completionTokens;
+                $agrupatedTokens[$model]['total_tokens'] += $totalTokens;
+            } else {
+                $agrupatedTokens[$model] = [
+                    'prompt_tokens' => $promptTokens,
+                    'completion_tokens' => $completionTokens,
+                    'total_tokens' => $totalTokens
+                ];
+            }
+        }
+
         $data = [
-            'tokens' => $tokens,
+            'tokens' => $agrupatedTokens,
             'prices' => $pricing,
             'total' => $money
         ];
