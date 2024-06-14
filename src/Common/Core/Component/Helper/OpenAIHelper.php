@@ -231,8 +231,30 @@ class OpenAIHelper
 
     public function getTokensMonthly()
     {
-        $date = new DateTime();
-        $oql  = sprintf("date > '%s'", $date->format('Y-m-01 00:00:00'));
+        $date       = new DateTime();
+        $currentDay = $date->format('d');
+
+        if ($currentDay < 27) {
+            $startDate = (new DateTime('last month'))
+                ->setDate($date->format('Y'), $date->format('m') - 1, 27)
+                ->setTime(0, 0, 0);
+            $endDate   = (new DateTime())
+                ->setDate($date->format('Y'), $date->format('m'), 27)
+                ->setTime(0, 0, 0);
+        } else {
+            $startDate = (new DateTime())
+                ->setDate($date->format('Y'), $date->format('m'), 27)
+                ->setTime(0, 0, 0);
+            $endDate   = (new DateTime('next month'))
+                ->setDate($date->format('Y'), $date->format('m') + 1, 27)
+                ->setTime(0, 0, 0);
+        }
+
+        $oql = sprintf(
+            "date >= '%s' and date < '%s'",
+            $startDate->format('Y-m-d H:i:s'),
+            $endDate->format('Y-m-d H:i:s')
+        );
 
         $result = $this->container->get('api.service.ai')->getList($oql);
 
@@ -265,6 +287,8 @@ class OpenAIHelper
                 $total += ($promptTokens * $inputPrice + $completionTokens * $outputPrice) / $conversion;
             }
         }
+
+        $total = round($total, 15);
 
         return $total;
     }
