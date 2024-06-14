@@ -254,7 +254,7 @@ class OpenAIHelper
 
         $total = 0;
 
-        foreach ($tokens['items'] as $modelName => $tokenInfo) {
+        foreach ($tokens['items'] as $tokenInfo) {
             $model            = $tokenInfo->getData()['params']['model']; // Obtener el modelo del token
             $promptTokens     = $tokenInfo->getData()['tokens']['prompt_tokens'];
             $completionTokens = $tokenInfo->getData()['tokens']['completion_tokens'];
