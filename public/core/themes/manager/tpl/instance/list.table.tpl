@@ -164,6 +164,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-ai-spent" checklist-model="columns.selected" checklist-value="'ai_spent'" type="checkbox">
+    <label for="checkbox-ai-spent">
+      {t}AI Spent{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-blocked" checklist-model="columns.selected" checklist-value="'blocked'" type="checkbox">
     <label for="checkbox-blocked">
       {t}Blocked{/t}
@@ -288,6 +294,10 @@
   <th class="text-center pointer" ng-click="sort('webpush_subscribers')" ng-show="isColumnEnabled('webpush_subscribers')" width="120">
     <i class="fa fa-bell" uib-tooltip="{t}Web Push{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('webpush_subscribers') == 'asc', 'fa fa-caret-down': isOrderedBy('webpush_subscribers') == 'desc'}"></i>
+  </th>
+  <th class="text-center pointer" ng-click="sort('ai_spent')" ng-show="isColumnEnabled('ai_spent')" width="120">
+    <i class="fa fa-coins" uib-tooltip="{t}AI Spent{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('ai_spent') == 'asc', 'fa fa-caret-down': isOrderedBy('ai_spent') == 'desc'}"></i>
   </th>
   <th class="text-center" ng-show="isColumnEnabled('blocked')" width="60">
     <span>
@@ -473,6 +483,11 @@
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('webpush_subscribers')" title="{t}Web Push{/t}">
     <span class="badge text-bold">
       [% item.webpush_subscribers %]
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('ai_spent')" title="{t}AI Spent{/t}">
+    <span class="badge text-bold">
+      [% item.ai_spent %]
     </span>
   </td>
   <td class="text-center" ng-show="isColumnEnabled('blocked')">
