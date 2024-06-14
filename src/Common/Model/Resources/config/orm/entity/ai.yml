@@ -16,7 +16,7 @@ orm:
                     arguments: [ '@orm.metadata.ai' ]
             repositories:
                 instance:
-                    class:     Common\Model\Database\Repository\BaseRepository
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
                     arguments: [ '@orm.connection.instance', '@orm.metadata.ai', '@cache.connection.instance' ]
             persisters:
                 instance:
@@ -44,3 +44,10 @@ orm:
                         date:
                             type: datetimetz
                             options: { default: null, notnull: false }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [id]
+                            primary: true
+                            unique: true
+                            flags: {}

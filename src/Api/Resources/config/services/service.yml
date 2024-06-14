@@ -26,7 +26,7 @@ services:
 
     api.service.ai:
         class:     Api\Service\V1\AIService
-        arguments: [ '@service_container', 'Common\Model\Entity\AI' ]
+        arguments: [ '@service_container', 'Common\Model\Entity\Ai' ]
         public:    true
 
     api.service.company:

@@ -26,7 +26,7 @@ class OpenAIController extends ApiController
     /**
      * {@inheritdoc}
      */
-    protected $service = 'api.service.openai';
+    protected $service = 'api.service.ai';
 
             /**
      * {@inheritdoc}
@@ -319,7 +319,7 @@ class OpenAIController extends ApiController
 
     public function getPricingAction()
     {
-        $tokens  = $this->get($this->helper)->getTokens();
+        $tokens  = $this->get($this->helper)->getTokensMonthly();
         $pricing = $this->get($this->helper)->getPricing();
         $money   = $this->get($this->helper)->getSpentMoney();
 
