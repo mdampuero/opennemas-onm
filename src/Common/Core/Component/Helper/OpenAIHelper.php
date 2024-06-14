@@ -246,7 +246,6 @@ class OpenAIHelper
 
     public function getSpentMoney()
     {
-        // Costs are per 1M tokens
         $conversion = 1000000;
 
         $tokens  = $this->getTokensMonthly();
@@ -255,7 +254,7 @@ class OpenAIHelper
         $total = 0;
 
         foreach ($tokens['items'] as $tokenInfo) {
-            $model            = $tokenInfo->getData()['params']['model']; // Obtener el modelo del token
+            $model            = $tokenInfo->getData()['params']['model'];
             $promptTokens     = $tokenInfo->getData()['tokens']['prompt_tokens'];
             $completionTokens = $tokenInfo->getData()['tokens']['completion_tokens'];
 
