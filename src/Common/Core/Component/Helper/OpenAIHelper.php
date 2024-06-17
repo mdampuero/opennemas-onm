@@ -206,8 +206,19 @@ class OpenAIHelper
             ->getDataSet('Settings', 'instance')
             ->get('openai_config', []);
 
+        $provider = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_service');
+
+        $credentials = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_credentials', []);
+
+        if ($provider === 'custom') {
+            $this->openaiApiKey = $credentials['apikey'];
+        }
+
         if (empty($settings)) {
-            //TODO: Get settings from manager
             $settings = $this->defautlParams;
         }
 
