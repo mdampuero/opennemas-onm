@@ -315,26 +315,19 @@ class InstanceHelper
             $currentDay = (int) $date->format('d');
 
             $startDate = new DateTime();
-            $endDate   = new DateTime();
 
             if ($currentDay < 27) {
                 $startDate->modify('first day of last month')
                     ->setDate($date->format('Y'), $date->format('m') - 1, 27)
                     ->setTime(0, 0, 0);
-                $endDate->setDate($date->format('Y'), $date->format('m'), 27)
-                    ->setTime(0, 0, 0);
             } else {
                 $startDate->setDate($date->format('Y'), $date->format('m'), 27)
-                    ->setTime(0, 0, 0);
-                $endDate->modify('first day of last month')
-                    ->setDate($date->format('Y'), $date->format('m') + 1, 27)
                     ->setTime(0, 0, 0);
             }
 
             $startDateStr = $startDate->format('Y-m-d H:i:s');
-            $endDateStr   = $endDate->format('Y-m-d H:i:s');
 
-            $sql = "select params, tokens from ai_actions where date BETWEEN '$startDateStr' and '$endDateStr'";
+            $sql = "SELECT params, tokens FROM ai_actions WHERE date >= '$startDateStr'";
 
             $results = $this->conn->fetchAll($sql);
 
