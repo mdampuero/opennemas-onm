@@ -70,7 +70,7 @@ class OpenAIHelper
      *
      * @var String
      */
-    protected $openaiApiKey = 'sk-api-user-d3iXVlWZnWnKB9aiTD8OT3BlbkFJH7vBMP5vYhrHArmTLHUk';
+    protected $openaiApiKey;
 
      /**
      * Initializes the Menu service.
@@ -216,6 +216,8 @@ class OpenAIHelper
 
         if ($provider === 'custom') {
             $this->openaiApiKey = $credentials['apikey'];
+        } else {
+            $this->openaiApiKey = $this->container->getParameter('opennemas.openai.key');
         }
 
         if (empty($settings)) {

@@ -143,6 +143,7 @@ parameters:
     freshbooks.domain:           company_name
     freshbooks.token:            long_alphanum_token
     freshbooks.url:              https://%freshbooks.domain%.freshbooks.com
+    opennemas.openai.key:        long_alphanum_token
     panorama:
         youtube:
             api_key: your api_key here
