@@ -296,7 +296,7 @@
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('webpush_subscribers') == 'asc', 'fa fa-caret-down': isOrderedBy('webpush_subscribers') == 'desc'}"></i>
   </th>
   <th class="text-center pointer" ng-click="sort('ai_spent')" ng-show="isColumnEnabled('ai_spent')" width="120">
-    <i class="fa fa-coins" uib-tooltip="{t}AI Spent{/t}" tooltip-placement="bottom"></i>
+    <i class="fa fa-bell" uib-tooltip="{t}AI Spent{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('ai_spent') == 'asc', 'fa fa-caret-down': isOrderedBy('ai_spent') == 'desc'}"></i>
   </th>
   <th class="text-center" ng-show="isColumnEnabled('blocked')" width="60">

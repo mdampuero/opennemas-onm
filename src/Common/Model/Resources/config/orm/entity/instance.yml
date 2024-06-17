@@ -44,7 +44,7 @@ orm:
                 videos:              integer
                 widgets:             integer
                 webpush_subscribers: integer
-                ai_spent:            integer
+                ai_spent:            float
             converters:
                 default:
                     class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
@@ -171,7 +171,7 @@ orm:
                             type:    integer
                             options: { default: 0, unsigned: true, notnull: false }
                         ai_spent:
-                            type:    integer
+                            type:    float
                             options: { default: 0, unsigned: true, notnull: false }
                     index:
                         -

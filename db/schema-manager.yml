@@ -106,7 +106,7 @@ instances:
             type: integer
             options: { default: 0, unsigned: true }
         ai_spent:
-            type: integer
+            type: float
             options: { default: 0, unsigned: true }
     index:
         -
