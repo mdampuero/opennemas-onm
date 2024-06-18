@@ -34,193 +34,6 @@ class OpenAIController extends ApiController
     protected $helper = 'core.helper.openai';
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getExtraData($items = null)
-    {
-        // $response = [
-        //     'years' => $this->getItemYears(),
-        // ];
-
-        // if (empty($items)) {
-        //     return $response;
-        // }
-
-        // if (!is_array($items)) {
-        //     $items = [ $items ];
-        // }
-
-        // $photos = [];
-
-        // $ids = array_filter(array_map(function ($notification) {
-        //     return $notification->image;
-        // }, $items), function ($photo) {
-        //         return !empty($photo);
-        // });
-
-        // try {
-        //     $photos = $this->get('api.service.content')->getListByIds($ids)['items'];
-        //     $photos = $this->get('data.manager.filter')
-        //         ->set($photos)
-        //         ->filter('mapify', [ 'key' => 'pk_content' ])
-        //         ->get();
-
-        //     $photos = [ 'photos' => $this->get('api.service.content')->responsify($photos) ];
-        //     return array_merge($response, $photos);
-        // } catch (GetItemException $e) {
-        // }
-        // $photos = [ 'photos' => $photos, ];
-
-        // return array_merge($response, $photos);
-    }
-
-        /**
-     * Returns a list of items.
-     *
-     * @param Request $request The request object.
-     *
-     * @return array The list of items and all extra information.
-     */
-    // public function getListAction(Request $request)
-    // {
-    //     // Checks if it is a demo listing or a real one
-    //     if (!$this->get('core.security')->hasExtension('es.openhost.module.webpush_notifications')) {
-    //         $demo_response = [
-    //             'items' => [
-    //                 [
-    //                     'impressions' => 5476,
-    //                     'clicks' => 1327,
-    //                     'closed' => 3864,
-    //                     'send_date' => '2001-12-03 21:30:12',
-    //                     'title' => 'Lorem Ipsum Dolor',
-    //                     'status' => 1,
-    //                     'image' => null,
-    //                     'transaction_id' => '23854aer',
-    //                     'send_count' => 6438
-    //                 ],
-    //                 [
-    //                     'impressions' => 0,
-    //                     'clicks' => 0,
-    //                     'closed' => 0,
-    //                     'send_date' => '2024-01-01 08:00:00',
-    //                     'title' => 'Sit Amet Consectetur',
-    //                     'status' => 0,
-    //                     'image' => null,
-    //                     'transaction_id' => '23872ser',
-    //                     'send_count' => 0
-    //                 ],
-    //                 [
-    //                     'impressions' => 6000,
-    //                     'clicks' => 3000,
-    //                     'closed' => 2500,
-    //                     'send_date' => '2020-01-01 08:00:00',
-    //                     'title' => 'Adipiscing Elit',
-    //                     'status' => 1,
-    //                     'image' => null,
-    //                     'transaction_id' => '25879adr',
-    //                     'send_count' => 6235
-    //                 ],
-    //                 [
-    //                     'impressions' => 0,
-    //                     'clicks' => 0,
-    //                     'closed' => 0,
-    //                     'send_date' => '2024-01-01 08:00:00',
-    //                     'title' => 'Sed Do Eiusmod',
-    //                     'status' => 0,
-    //                     'image' => null,
-    //                     'transaction_id' => '6879der',
-    //                     'send_count' => 0
-    //                 ],
-    //                 [
-    //                     'impressions' => 6000,
-    //                     'clicks' => 3000,
-    //                     'closed' => 2500,
-    //                     'send_date' => '2020-01-010 08:00:00',
-    //                     'title' => 'Tempor Incididunt Ut Labore',
-    //                     'status' => 1,
-    //                     'image' => null,
-    //                     'transaction_id' => '23779aew',
-    //                     'send_count' => 7422
-    //                 ],
-    //                 [
-    //                     'impressions' => 0,
-    //                     'clicks' => 0,
-    //                     'closed' => 0,
-    //                     'send_date' => '2024-01-01 08:00:00',
-    //                     'title' => 'Ut Enim Ad Minim Veniam',
-    //                     'status' => 0,
-    //                     'image' => null,
-    //                     'transaction_id' => '63879asr',
-    //                     'send_count' => 0
-    //                 ],
-    //                 [
-    //                     'impressions' => 0,
-    //                     'clicks' => 0,
-    //                     'closed' => 0,
-    //                     'send_date' => '2024-01-01 08:00:00',
-    //                     'title' => 'Laboris Nisi Ut Aliquip',
-    //                     'status' => 0,
-    //                     'image' => null,
-    //                     'transaction_id' => '43879ser',
-    //                     'send_count' => 0
-    //                 ],
-    //                 [
-    //                     'impressions' => 6000,
-    //                     'clicks' => 3000,
-    //                     'closed' => 2500,
-    //                     'send_date' => '2020-01-01 08:00:00',
-    //                     'title' => 'Titulo 1',
-    //                     'status' => 1,
-    //                     'image' => null,
-    //                     'transaction_id' => '63879aes',
-    //                     'send_count' => 6235
-    //                 ],
-    //                 [
-    //                     'impressions' => 6000,
-    //                     'clicks' => 3000,
-    //                     'closed' => 2500,
-    //                     'send_date' => '2020-01-01 08:00:00',
-    //                     'title' => 'Ex Ea Commodo Consequat',
-    //                     'status' => 1,
-    //                     'image' => null,
-    //                     'transaction_id' => '53879adr'
-    //                 ],
-    //                 [
-    //                     'impressions' => 6000,
-    //                     'clicks' => 3000,
-    //                     'closed' => 2500,
-    //                     'send_date' => '2020-01-01 08:00:00',
-    //                     'title' => 'Duis Aute Irure Dolor In Reprehenderit',
-    //                     'status' => 1,
-    //                     'image' => null,
-    //                     'transaction_id' => '76879wes',
-    //                     'send_count' => 6235
-    //                 ],
-    //             ]
-    //         ];
-
-    //         return [
-    //             'items'      => $demo_response['items'],
-    //             'total'      => 10,
-    //         ];
-    //     } else {
-    //         $this->checkSecurity($this->extension, $this->getActionPermission('list'));
-
-    //         $us  = $this->get($this->service);
-    //         $oql = $request->query->get('oql', '');
-
-    //         $response = $us->getList($oql);
-    //     }
-
-    //     return [
-    //         'items'      => $us->responsify($response['items']),
-    //         'total'      => $response['total'],
-    //         'extra'      => $this->getExtraData($response['items']),
-    //         'o-filename' => $this->filename,
-    //     ];
-    // }
-
-    /**
      * Get the Web Push notifications configuration
      *
      * @param Request $request The request object.
@@ -258,10 +71,7 @@ class OpenAIController extends ApiController
                 $settings[$key] = (float) $value;
             }
         }
-        // dump($settings);
-        // dump($credentials);
-        // dump($serviceName);
-        // die();
+
         return new JsonResponse([
             'openai_service'     => $serviceName,
             'openai_credentials' => $credentials,
@@ -298,6 +108,10 @@ class OpenAIController extends ApiController
 
     public function generateAction(Request $request)
     {
+        if (!$this->get('core.security')->hasExtension($this->extension)) {
+            return new JsonResponse(['error' => 'Access denied.'], JsonResponse::HTTP_FORBIDDEN);
+        }
+
         try {
             $message = [];
 
@@ -306,16 +120,21 @@ class OpenAIController extends ApiController
 
             $response = $this->get($this->helper)->sendMessage($message);
 
+            if (isset($response['error'])) {
+                return new JsonResponse(['error' => $response['error']], JsonResponse::HTTP_REQUEST_TIMEOUT);
+            }
+
             if (array_key_exists('tokens', $response) && !empty($response['tokens'])) {
                 $this->get($this->helper)->saveTokens($response['tokens']);
             }
 
             return new JsonResponse($response);
         } catch (\Exception $e) {
-            dump($e);
-            die();
+            return new JsonResponse(['error' => 'An error occurred: ' .
+                $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
 
     public function getPricingAction()
     {

@@ -55,7 +55,7 @@
 
           http.post($scope.routes.generateText, $scope.template)
             .then(function(response) {
-              console.log(response.data);
+              // console.log(response.data);
               $scope.template.response = response.data.message;
               $scope.last_token_usage = response.data.tokens.total_tokens;
 

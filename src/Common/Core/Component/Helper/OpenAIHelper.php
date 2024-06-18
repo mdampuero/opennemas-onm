@@ -87,6 +87,12 @@ class OpenAIHelper
     {
         $data = array_merge($this->getConfig(), $params);
 
+        if (empty($this->openaiApiKey)) {
+            return [
+                'error' => 'API key is missing'
+            ];
+        }
+
         $data['messages'] = [];
 
         if (array_key_exists('system', $messages) && !empty($messages['system'])) {
@@ -103,31 +109,35 @@ class OpenAIHelper
             ];
         }
 
-        $response = $this->client->request('POST', $this->openaiEndpoint, [
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $this->openaiApiKey
-            ],
-            'json' => $data
-        ]);
-
-        // Decodificar la respuesta JSON
-        $response = json_decode($response->getBody(), true);
-
         $responseData = [];
-        // Guardar la respuesta en otro campo de texto
-        $responseData['message'] = isset($response['choices'][0]['message']['content'])
-            ? $response['choices'][0]['message']['content']
-            : '';
 
-        $responseData['tokens'] = array_key_exists('usage', $response) && !empty($response['usage'])
-            ? $response['usage']
-            : [];
+        try {
+            $response = $this->client->request('POST', $this->openaiEndpoint, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->openaiApiKey
+                ],
+                'json' => $data
+            ]);
 
-        $this->saveAction($data, $response);
+            $response = json_decode($response->getBody(), true);
+
+            $responseData['message'] = isset($response['choices'][0]['message']['content'])
+                ? $response['choices'][0]['message']['content']
+                : '';
+
+            $responseData['tokens'] = array_key_exists('usage', $response) && !empty($response['usage'])
+                ? $response['usage']
+                : [];
+
+            $this->saveAction($data, $response);
+        } catch (\Exception $e) {
+            $responseData['error'] = $e->getMessage();
+        }
 
         return $responseData;
     }
+
 
     protected function saveAction($params, $response)
     {
