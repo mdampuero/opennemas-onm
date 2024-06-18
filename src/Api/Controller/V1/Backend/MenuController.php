@@ -10,7 +10,6 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Displays, saves, modifies and removes menus.

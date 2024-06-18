@@ -2,8 +2,6 @@
 
 namespace Common\Core\Component\Helper;
 
-use Doctrine\ORM\Query\Expr\Func;
-
 /**
  * Helper class to retrieve Menu data.
  */

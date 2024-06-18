@@ -19,7 +19,6 @@
   </a>
 {/block}
 
-.
 {block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">

@@ -29,7 +29,7 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->setMethods([ 'getRequestLocale' ])
             ->getMock();
 
-        $this->hasML = $this->getMockBuilder('Common\Model\Entity\Instance')
+        $this->instance = $this->getMockBuilder('Common\Model\Entity\Instance')
             ->disableOriginalConstructor()->setMethods([ 'hasMultilanguage' ])
             ->getMock();
 
@@ -58,7 +58,7 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
         $this->locale->expects($this->any())->method('getRequestLocale')
             ->willReturn('es_ES');
 
-        $this->hasML->expects($this->any())->method('hasMultilanguage')
+        $this->instance->expects($this->any())->method('hasMultilanguage')
             ->willReturn('es.openhost.module.multilanguage');
 
         $menu = new \stdClass();
@@ -86,7 +86,7 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
             case 'core.locale':
                 return $this->locale;
             case 'core.instance':
-                return $this->hasML;
+                return $this->instance;
             default:
                 return null;
         }
