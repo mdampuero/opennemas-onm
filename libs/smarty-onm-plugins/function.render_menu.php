@@ -45,9 +45,10 @@ function smarty_function_render_menu($params, &$smarty)
             return '';
         }
 
-        $menuItems = $locale === null ? $menu->menu_items :
-            array_filter($menu->menu_items, function ($menuItem) use ($locale) {
-                return !isset($menuItem['locale']) || $menuItem['locale'] === $locale;
+        $menuItems = empty($locale)
+            ? $menu->menu_items
+            : array_filter($menu->menu_items, function ($menuItem) use ($locale) {
+                return empty($menuItem['locale']) || $menuItem['locale'] === $locale;
             });
 
         $menuItemsObject = $menuHelper->castToObjectNested($menuItems);
@@ -57,11 +58,7 @@ function smarty_function_render_menu($params, &$smarty)
             'actual_category' => $params['actual_category'] ?? null
         ]);
 
-        // Don't cache this template
-        $caching         = $smarty->caching;
-        $smarty->caching = 0;
-        $output          = $smarty->fetch($tpl);
-        $smarty->caching = $caching;
+        $output = $smarty->fetch($tpl);
 
         return $output;
     } catch (\Api\Exception\GetItemException $e) {

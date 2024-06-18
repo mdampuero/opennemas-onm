@@ -481,31 +481,11 @@
             return false;
           }
 
-          var localeSelected = $scope.config.locale.selected;
-
           for (var parentKey in $scope.parents) {
             var parentItem = $scope.parents[parentKey];
 
-            if (!$scope.hasMultilanguage() && $scope.isEqual(parentItem, draggable)) {
+            if ($scope.isEqual(parentItem, draggable)) {
               return true;
-            }
-
-            if (parentItem.locale === localeSelected) {
-              if (parentItem.type === draggable.type) {
-                if (parentItem.referenceId !== null && parentItem.referenceId === draggable.referenceId) {
-                  return true;
-                }
-
-                if (parentItem.referenceId === null && parentItem.link_name === draggable.link_name) {
-                  return true;
-                }
-              }
-
-              if ($scope.isEqual(parentItem, draggable) && (
-                !$scope.hasMultilanguage() || parentItem.locale === draggable.locale
-              )) {
-                return true;
-              }
             }
           }
 
@@ -513,26 +493,8 @@
             for (var child in $scope.childs[parent]) {
               var item = $scope.childs[parent][child];
 
-              if (!$scope.hasMultilanguage() && $scope.isEqual(item, draggable)) {
+              if ($scope.isEqual(item, draggable)) {
                 return true;
-              }
-
-              if (item.locale === localeSelected) {
-                if (item.type === draggable.type) {
-                  if (item.referenceId !== null && item.referenceId === draggable.referenceId) {
-                    return true;
-                  }
-
-                  if (item.referenceId === null && item.link_name === draggable.link_name) {
-                    return true;
-                  }
-                }
-
-                if ($scope.isEqual(item, draggable) && (
-                  !$scope.hasMultilanguage() || item.locale === draggable.locale
-                )) {
-                  return true;
-                }
               }
             }
           }
@@ -547,6 +509,10 @@
          */
         $scope.isEqual = function(original, copy) {
           if (!$scope.hasMultilanguage()) {
+            if (original.type === 'internal' && copy.type === 'internal') {
+              return original.type === copy.type && original.link_name === copy.link_name;
+            }
+
             if (original.referenceId !== null) {
               return original.referenceId === copy.referenceId && original.type === copy.type;
             }
@@ -554,7 +520,7 @@
           }
 
           if (original.type === 'internal' && copy.type === 'internal') {
-            return original.locale === copy.locale && original.type === copy.type &&
+            return (original.locale === copy.locale || copy.locale === null) &&
               original.link_name === copy.link_name;
           }
 
