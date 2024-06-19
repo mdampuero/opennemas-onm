@@ -21,7 +21,7 @@ function smarty_modifier_improve_images($html)
 
     // Add the lazy load to the leftovers.
     $html = preg_replace(
-        '@<img((?!(\s|.*?\s)class\s*=\s*["\'][^"\']*["\'])[^>]*)>@i',
+        '@<img((?!(\s|.*?\s)class\s*=\s*["\'][^"\']*["\'])[^>]*?)/?>@i',
         '<img$1 class="lazyload">',
         $html
     );
