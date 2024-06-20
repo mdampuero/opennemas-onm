@@ -25,12 +25,7 @@
 
 {block name="commonColumnsBody"}
   <td class="text-center v-align-middle">
-    <div ng-if="item.avatar_img_id">
       <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id]"></dynamic-image>
-    </div>
-    <div ng-if="!item.avatar_img_id">
-      No image
-    </div>
   </td>
   <td class="v-align-middle">
     <div class="table-text" ng-if="item.name">
