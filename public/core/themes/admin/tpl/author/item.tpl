@@ -35,7 +35,7 @@
         </a>
       </li>
       <li class="quicklinks">
-        <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="saveItem()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
           <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
           {t}Save{/t}
         </button>
@@ -209,6 +209,36 @@
                       <i class="fa fa-facebook"></i>
                     </span>
                     <input class="form-control" id="facebook" name="facebook" ng-model="item.facebook" placeholder="{t}Username{/t}" type="text">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="instagram">
+                  {t}Instagram user{/t}
+                </label>
+                <div class="controls">
+                  <div class="input-group">
+                    <span class="input-group-addon btn-instagram">
+                      <i class="fa fa-instagram"></i>
+                    </span>
+                    <input class="form-control" id="instagram" name="instagram" ng-model="item.instagram" placeholder="{t}Username{/t}" type="text">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label" for="linkedin">
+                  {t}LinkedIn user{/t}
+                </label>
+                <div class="controls">
+                  <div class="input-group">
+                    <span class="input-group-addon btn-linkedin">
+                      <i class="fa fa-linkedin"></i>
+                    </span>
+                    <input class="form-control" id="linkedin" name="linkedin" ng-model="item.linkedin" placeholder="{t}Username{/t}" type="text">
                   </div>
                 </div>
               </div>

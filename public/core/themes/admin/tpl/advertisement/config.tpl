@@ -364,7 +364,6 @@
         </div>
       </uib-tab>
       {/is_module_activated}
-      {if $app.security->hasPermission('MASTER')}
       <uib-tab heading="{t}Restricted URLs{/t}">
         <div class="form-group">
           <label for="ads_txt" class="form-label">
@@ -376,7 +375,6 @@
           </div>
         </div>
       </uib-tab>
-      {/if}
     </uib-tabset>
   </div>
 </form>

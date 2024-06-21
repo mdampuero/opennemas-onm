@@ -244,7 +244,8 @@ class RouterListener implements EventSubscriberInterface
             if ($instance->isSubdirectory()
                 && array_key_exists('path', $parameters)
                 && $this->container->get('core.helper.url')->isFrontendUri($parameters['path'])
-                && $parameters['_route'] !== 'asset_image') {
+                && $parameters['_route'] !== 'asset_image'
+            ) {
                 $parameters['path'] = substr(
                     $parameters['path'],
                     0,
@@ -252,15 +253,28 @@ class RouterListener implements EventSubscriberInterface
                 ) != $instance->subdirectory ? $instance->subdirectory . $parameters['path'] : $parameters['path'];
             }
 
+            //Fix in order to avoid redirections to main laguage on l10n routes with no final slash
+            //TODO: refactor with standard prefixUrl() function
+            if ($hasModule
+                && !empty($locale)
+                && array_key_exists('path', $parameters)
+                && $this->container->get('core.helper.l10n_route')->isRouteLocalizable($parameters['_route'])
+            ) {
+                    $parameters['path'] = substr(
+                        $parameters['path'],
+                        0,
+                        strlen($locale)
+                    ) != $locale ? '/' . $locale . $parameters['path'] : $parameters['path'];
+            }
 
             $this->container->get('core.globals')
                 ->setRoute($parameters['_route']);
             $this->container->get('core.globals')
                 ->setEndpoint($this->getEndpoint($parameters['_route']));
 
-            // Raise na error if the url came localized and it's not localizable
-            if ($hasModule &&
-                !empty($locale)
+            // Raise an error if the url came localized and it's not localizable
+            if ($hasModule
+                && !empty($locale)
                 && !$this->container->get('core.helper.l10n_route')->isRouteLocalizable($parameters['_route'])
             ) {
                 throw new ResourceNotFoundException();
@@ -300,8 +314,10 @@ class RouterListener implements EventSubscriberInterface
             }
 
             try {
-                $url = $this->container->get('core.redirector')
-                    ->getUrl(preg_replace('/^\//', '', $request->getRequestUri()));
+                if ($this->container->get('core.helper.url')->isFrontendUri($request->getRequestUri())) {
+                    $url = $this->container->get('core.redirector')
+                        ->getUrl(preg_replace('/^\//', '', $request->getRequestUri()));
+                }
             } catch (ApiException $e) {
                 throw new NotFoundHttpException($message, $e);
             }

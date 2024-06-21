@@ -153,7 +153,7 @@ class CategoryController extends FrontendController
     /**
      * {@inheritdoc}
      *
-     * TODO: Remove when only an advertisement group.
+     * TODO: Remove when only an advertisement group without article_inner.
      */
     protected function getAdvertisements($category = null, $token = null)
     {
@@ -241,12 +241,13 @@ class CategoryController extends FrontendController
      */
     protected function getParameters($request, $item = null)
     {
-        $action = $this->get('core.globals')->getAction();
-        $params = array_merge($request->query->all(), [
+        $action    = $this->get('core.globals')->getAction();
+        $extension = $this->get('core.globals')->getExtension();
+        $params    = array_merge($request->query->all(), [
             'category'   => $item,
             'time'       => time(),
             'o_category' => $item,
-            'x-tags'     => $this->get('core.globals')->getExtension() . '-' . $item->id
+            'x-tags'     => $extension . '-' . $item->id
         ]);
 
         if (!array_key_exists('page', $params)) {
@@ -299,7 +300,16 @@ class CategoryController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
-        $params['articles']   = $contents;
+        $params['articles'] = $contents;
+
+        $xtags = [];
+        foreach ($contents as $content) {
+            if ($content->fk_author) {
+                $xtags[] = ',author-' . $content->fk_author;
+            }
+        }
+
+        $params['x-tags']    .= implode(',', array_unique($xtags));
         $params['total']      = $total;
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,

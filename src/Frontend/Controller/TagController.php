@@ -36,7 +36,7 @@ class TagController extends FrontendController
      */
     protected $groups = [
         'list' => 'article_inner',
-        'show' => 'article_inner',
+        'show' => 'tag_frontpage',
     ];
 
     /**
@@ -95,6 +95,7 @@ class TagController extends FrontendController
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
         $params = $request->query->all();
+        $xtags  = [];
 
         // Deprecate resource parameter
         unset($params['resource']);
@@ -113,7 +114,41 @@ class TagController extends FrontendController
             $this->hydrateShow($params);
         }
 
+        foreach ($params['contents'] as $content) {
+            if ($content->fk_author) {
+                $xtags[] = ',author-' . $content->fk_author;
+            }
+        }
+
+        $params['x-tags'] .= implode(',', array_unique($xtags));
+
         return $this->render($this->getTemplate($action), $params);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * TODO: Remove when only an advertisement group without article_inner.
+     */
+    protected function getAdvertisements($category = null, $token = null)
+    {
+        $categoryId = empty($category) ? 0 : $category->id;
+        $action     = $this->get('core.globals')->getAction();
+        $group      = $this->getAdvertisementGroup($action);
+
+        $positions = array_merge(
+            $this->get('core.helper.advertisement')->getPositionsForGroup('all'),
+            $this->get('core.helper.advertisement')->getPositionsForGroup($group),
+            $this->get('core.helper.advertisement')->getPositionsForGroup('article_inner'),
+            $this->getAdvertisementPositions($group)
+        );
+
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $categoryId);
+
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
     }
 
     /**
@@ -210,11 +245,19 @@ class TagController extends FrontendController
         );
 
         $contents = $response['items'];
-        $total = $response['total'];
+        $total    = $response['total'];
 
         // No first page and no contents
         if ($params['page'] > 1 && empty($contents)) {
             throw new ResourceNotFoundException();
+        }
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
         }
 
         $params = array_merge($params, [

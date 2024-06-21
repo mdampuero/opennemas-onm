@@ -48,7 +48,7 @@ class UrlHelper
             return false;
         }
 
-        if (!$this->instance->isSubdirectory()) {
+        if (empty($this->instance) || !$this->instance->isSubdirectory()) {
             return true;
         }
 

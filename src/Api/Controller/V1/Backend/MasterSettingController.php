@@ -50,6 +50,7 @@ class MasterSettingController extends SettingController
         'gfk',
         'header_script',
         'header_script_amp',
+        'lazy_referer',
         'redirection',
         'robots_txt_rules',
         'theme_font',

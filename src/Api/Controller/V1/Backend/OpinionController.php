@@ -195,11 +195,16 @@ class OpinionController extends ContentController
             $this->get('api.service.category')->getList()['items']
         );
 
+        $subscriptions = $this->get('api.service.subscription')->responsify(
+            $this->get('api.service.subscription')->getList('enabled = 1 order by name asc')['items']
+        );
+
         return array_merge([
-            'categories'   => $categories,
-            'extra_fields' => $extraFields ?? null,
-            'tags'         => $this->getTags($items),
-            'formSettings' => [
+            'categories'    => $categories,
+            'extra_fields'  => $extraFields ?? null,
+            'tags'          => $this->getTags($items),
+            'subscriptions' => $subscriptions,
+            'formSettings'  => [
                 'name'             => $this->module,
                 'expansibleFields' => $this->getFormSettings($this->module)
             ]

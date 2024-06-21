@@ -101,7 +101,7 @@
                     </div>
                   </div>
                   <div class="form-group col-md-12" ng-show="settings.logo_enabled">
-                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_default }"></div>
+                    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_default }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_default }">
                       <p>{t}Are you sure?{/t}</p>
                       <div class="confirm-actions">
@@ -139,7 +139,7 @@
                     </div>
                   </div>
                   <div class="form-group col-md-12" ng-if="settings.logo_enabled">
-                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_simple }"></div>
+                    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_simple }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_simple }">
                       <p>{t}Are you sure?{/t}</p>
                       <div class="confirm-actions">
@@ -177,7 +177,7 @@
                     </div>
                   </div>
                   <div class="form-group col-md-12" ng-if="settings.logo_enabled">
-                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_favico }"></div>
+                    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_favico }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_favico }">
                       <p>{t}Are you sure?{/t}</p>
                       <div class="confirm-actions">
@@ -213,10 +213,9 @@
                         </dynamic-image>
                       </div>
                     </div>
-
                   </div>
                   <div class="form-group col-md-12" ng-if="settings.logo_enabled">
-                  <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_embed }"></div>
+                    <div class="overlay photo-overlay ng-cloak" ng-class="{ 'open': overlay.logo_embed }"></div>
                     <div class="confirm-dialog ng-cloak" ng-class="{ 'open': overlay.logo_embed }">
                       <p>{t}Are you sure?{/t}</p>
                       <div class="confirm-actions">

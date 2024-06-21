@@ -154,8 +154,10 @@ class NewsletterRenderer
             ]);
         }
 
-        if ($criteria['filter'] === 'most_viewed') {
-            $date->sub(new \DateInterval('P3D'));
+        if ($criteria['filter'] === 'most_viewed' || $criteria['filter'] === 'most_viewed_24') {
+            $criteria['filter'] === 'most_viewed_24'
+                ? $date->sub(new \DateInterval('P1D'))
+                : $date->sub(new \DateInterval('P3D'));
 
             $searchCriteria = array_merge($searchCriteria, [
                 'join' => [

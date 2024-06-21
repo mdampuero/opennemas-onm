@@ -174,7 +174,7 @@ CREATE TABLE `instances` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `internal_name` varchar(100) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `domains` varchar(500) NOT NULL,
+  `domains` text NOT NULL,
   `main_domain` varchar(255) NOT NULL,
   `settings` text,
   `activated` tinyint(1) NOT NULL,

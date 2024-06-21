@@ -62,8 +62,12 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.backup.criteria = $scope.criteria;
-          $scope.app.columns.selected = [ 'picture', 'name', 'email', 'username', 'usergroups', 'social', 'enabled' ];
+          $scope.backup.criteria      = $scope.criteria;
+          $scope.app.columns.hidden   = [];
+          $scope.app.columns.selected = _.uniq($scope.app.columns.selected
+            .concat([ 'picture', 'name', 'email', 'username', 'usergroups',
+              'social', 'enabled' ]));
+
           oqlEncoder.configure({
             placeholder: {
               name: 'name ~ "[value]" or username ~ "[value]"',

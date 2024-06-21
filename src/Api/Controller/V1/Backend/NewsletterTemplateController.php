@@ -202,7 +202,8 @@ class NewsletterTemplateController extends Controller
             'filters' => [
                 [ 'value' => '', 'title' => _('No filter') ],
                 [ 'value' => 'in_last_day', 'title' => _('Last in 24 hours') ],
-                [ 'value' => 'most_viewed', 'title' => _('Most viewed') ],
+                [ 'value' => 'most_viewed_24', 'title' => _('Most viewed 24hs') ],
+                [ 'value' => 'most_viewed', 'title' => _('Most viewed 3 days') ],
             ],
             'opinion_types' => [
                 [ 'value' => '', 'title' => _('Any') ],

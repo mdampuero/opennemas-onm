@@ -252,6 +252,30 @@
         };
 
         /**
+         * @function saveItem
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Generate slug and, then, saves the item.
+         */
+        $scope.saveItem = function() {
+          $scope.flags.http.saving = true;
+
+          if (!$scope.item.slug) {
+            $scope.save();
+          } else {
+            // Force slug to be valid
+            $scope.getSlug($scope.item.slug, function(response) {
+              $scope.item.slug           = response.data.slug;
+              $scope.flags.generate.slug = false;
+              $scope.flags.block.slug    = true;
+
+              $scope.save();
+            });
+          }
+        };
+
+        /**
          * @function save
          * @memberOf RestInnerCtrl
          *
@@ -304,11 +328,23 @@
               webStorage.session.remove($scope.draftKey);
             }
             messenger.post(response.data);
+
+            if ($scope.dtm) {
+              $timeout.cancel($scope.dtm);
+            }
           };
 
           if ($scope.itemHasId()) {
             route.name   = $scope.routes.updateItem;
             route.params = { id: $scope.getItemId() };
+
+            // When updating created published item, if it does not have start time it will refresh the form
+            if ($scope.item.content_status === 1 && !data.starttime) {
+              $scope.item.starttime  = $window.moment().format('YYYY-MM-DD HH:mm:ss');
+              $scope.item.urldatetime = $window.moment().format('YYYYMMDDHHmmss');
+              data.starttime = $scope.item.starttime;
+              data.urldatetime = $scope.item.urldatetime;
+            }
 
             http.put(route, data).then(successCb, $scope.errorCb);
             return;

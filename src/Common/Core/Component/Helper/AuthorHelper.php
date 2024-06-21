@@ -298,6 +298,36 @@ class AuthorHelper
     }
 
     /**
+     * Returns the author instagram url for the provided item.
+     *
+     * @param Content $item The item to get author instagram url for. If not provided, the
+     *                      function will try to search the item in the template.
+     *
+     * @return string The instagram url if author is present. Null otherwise.
+     */
+    public function getAuthorSocialInstagramUrl($item = null) : ?string
+    {
+        $author = $this->getAuthor($item);
+
+        return !empty($author->instagram) ? ("https://www.instagram.com/" . $author->instagram) : null;
+    }
+
+    /**
+     * Returns the author linkedin url for the provided item.
+     *
+     * @param Content $item The item to get author linkedin url for. If not provided, the
+     *                      function will try to search the item in the template.
+     *
+     * @return string The linkedin url if author is present. Null otherwise.
+     */
+    public function getAuthorSocialLinkedinUrl($item = null) : ?string
+    {
+        $author = $this->getAuthor($item);
+
+        return !empty($author->linkedin) ? ("https://www.linkedin.com/in/" . $author->linkedin) : null;
+    }
+
+    /**
      * Returns the relative URL to the automatic frontpage of the author for the
      * provided item.
      *
@@ -458,6 +488,36 @@ class AuthorHelper
     public function hasAuthorSocialTwitterUrl($item = null) : bool
     {
         return !empty($this->getAuthorSocialTwitterUrl($item));
+    }
+
+    /**
+     * Checks if the author has a instagram account provided as
+     * parameter.
+     *
+     * @param mixed $item The item to check author's instagram account for or the author. If
+     *                    not provided, the function will try to search the item in
+     *                    the template.
+     *
+     * @return bool True if the author has a instagram account defined. False otherwise.
+     */
+    public function hasAuthorSocialInstagramUrl($item = null) : bool
+    {
+        return !empty($this->getAuthorSocialInstagramUrl($item));
+    }
+
+    /**
+     * Checks if the author has a linkedin account provided as
+     * parameter.
+     *
+     * @param mixed $item The item to check author's linkedin account for or the author. If
+     *                    not provided, the function will try to search the item in
+     *                    the template.
+     *
+     * @return bool True if the author has a linkedin account defined. False otherwise.
+     */
+    public function hasAuthorSocialLinkedinUrl($item = null) : bool
+    {
+        return !empty($this->getAuthorSocialLinkedinUrl($item));
     }
 
     /**

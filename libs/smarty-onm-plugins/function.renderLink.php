@@ -43,6 +43,8 @@ function smarty_function_renderLink($params, &$smarty)
         case 'internal':
             if ($item->link == '/') {
                 $link = '';
+            } elseif ($item->link == 'empresa') {
+                $link = "/$item->link";
             } else {
                 $link = "/$item->link/";
             }

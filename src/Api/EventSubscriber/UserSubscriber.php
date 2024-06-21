@@ -113,12 +113,13 @@ class UserSubscriber implements EventSubscriberInterface
             ? $event->getArgument('item')
             : [ $event->getArgument('item') ];
 
-        // TODO: Remove when using new ORM for users
         foreach ($users as $user) {
             $this->helper->deleteItem($user);
+            if ($user->type == 1) {
+                continue;
+            }
+            $this->helper->deleteItemVarnish($user);
         }
-
-        $this->helper->deleteInstance();
     }
 
     /**

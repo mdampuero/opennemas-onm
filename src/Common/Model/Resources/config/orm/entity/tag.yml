@@ -24,6 +24,11 @@ orm:
             mapping:
                 database:
                     table: tags
+                    metas:
+                        table: tagsmeta
+                        ids:
+                            id: fk_tags
+                        key: meta_name
                     columns:
                         id:
                             type: integer

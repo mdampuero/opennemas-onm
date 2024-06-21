@@ -60,6 +60,8 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
                     'hasAuthorSlug',
                     'hasAuthorSocialFacebookUrl',
                     'hasAuthorSocialTwitterUrl',
+                    'hasAuthorSocialInstagramUrl',
+                    'hasAuthorSocialLinkedinUrl',
                     'hasAuthorUrl',
                     'isBlog'
                 ]
@@ -313,6 +315,30 @@ class AuthorFunctionsTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->assertTrue(has_author_social_twitter_url($this->item));
+    }
+
+        /**
+     * Tests has_author_social_instagram_url.
+     */
+    public function testHasAuthorSocialInstagramUrl()
+    {
+        $this->helper->expects($this->once())->method('hasAuthorSocialInstagramUrl')
+            ->with($this->item)
+            ->willReturn(true);
+
+        $this->assertTrue(has_author_social_instagram_url($this->item));
+    }
+
+        /**
+     * Tests has_author_social_linkedin_url.
+     */
+    public function testHasAuthorSocialLinkedinUrl()
+    {
+        $this->helper->expects($this->once())->method('hasAuthorSocialLinkedinUrl')
+            ->with($this->item)
+            ->willReturn(true);
+
+        $this->assertTrue(has_author_social_linkedin_url($this->item));
     }
 
     /**

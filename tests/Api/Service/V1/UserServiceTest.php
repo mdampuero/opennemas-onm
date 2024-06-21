@@ -107,6 +107,9 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
 
             case 'orm.oql.fixer':
                 return $this->fixer;
+
+            case 'api.service.user':
+                return $this->service;
         }
     }
 

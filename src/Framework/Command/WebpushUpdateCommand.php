@@ -69,9 +69,21 @@ class WebpushUpdateCommand extends Command
                 $this->getContainer()->get('core.loader')
                     ->load($instance->internal_name);
 
-                $webpushr              = $this->getContainer()->get('external.web_push.factory');
-                $notificationsEndpoint = $webpushr->getEndpoint('status');
-                $subscribersEndpoint   = $webpushr->getEndpoint('subscriber');
+                $service = $this->getContainer()->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')->get('webpush_service');
+
+                if (empty($service)) {
+                    $output->writeln(sprintf(
+                        '<fg=red;options=bold>SERVICE NOT FOUND</> <fg=blue;options=bold>(Instance %s skipped)</>',
+                        $instance->internal_name
+                    ));
+                    continue;
+                }
+
+                $webpush               = $this->getContainer()->get(sprintf('external.web_push.factory.%s', $service));
+                $webpushHelper         = $this->getContainer()->get(sprintf('core.helper.%s', $service));
+                $notificationsEndpoint = $webpush->getEndpoint('status');
+                $subscribersEndpoint   = $webpush->getEndpoint('subscriber');
                 $notificationService   = $this->getContainer()->get('api.service.webpush_notifications');
                 $this->getContainer()->get('core.security')->setInstance($instance);
                 if ($instance->hasMultilanguage()) {
@@ -94,7 +106,6 @@ class WebpushUpdateCommand extends Command
                 );
 
                 $this->getContainer()->get('core.security')->setInstance($instance);
-                $context = $this->getContainer()->get('core.locale')->getContext();
                 $this->getContainer()->get('core.locale')->setContext('backend');
 
                 // Get current timeZone
@@ -118,7 +129,8 @@ class WebpushUpdateCommand extends Command
                         $notification,
                         $notificationsEndpoint,
                         $notificationService,
-                        $output
+                        $output,
+                        $webpushHelper
                     );
                 }
 
@@ -132,7 +144,13 @@ class WebpushUpdateCommand extends Command
                         ->getDataSet('Settings', 'instance')
                         ->get('webpush_active_subscribers');
 
-                    $incomingActiveSubscribers = $subscribersEndpoint->getSubscribers()['active_subscribers'];
+                    $subscriberData = $subscribersEndpoint->getSubscribers(
+                        $webpushHelper->prepareDataForEndpoint('subscriber')
+                    );
+
+                    $incomingActiveSubscribers = array_key_exists('active_subscribers', $subscriberData)
+                        ? $subscriberData['active_subscribers']
+                        : $subscriberData['total'];
 
                     if ($oldActiveSubscribers) {
                         if (count($oldActiveSubscribers) == 32) {
@@ -208,10 +226,19 @@ class WebpushUpdateCommand extends Command
      *
      * @return array The list of instances.
      */
-    protected function processNotification($notification, $notificationsEndpoint, $notificationService, $output)
+    protected function processNotification($notification, $endpoint, $notificationService, $output, $helper)
     {
+        if (!$helper->isValidId($notification->transaction_id)) {
+            $output->writeln(sprintf(
+                '<fg=red;options=bold>TRANSACTION ID IS NOT VALID</> <fg=blue;options=bold>(%s)</>',
+                $notification->transaction_id
+            ));
+            return;
+        }
+
         try {
-            $getNotificationStatus = $notificationsEndpoint->getStatus($notification->transaction_id);
+            $notificationData = $endpoint->getStatus([ 'id' => $notification->transaction_id ]);
+            $parsedData       = $helper->parseNotificationData($notificationData);
         } catch (\Exception $e) {
             $output->writeln(sprintf(
                 '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
@@ -224,16 +251,7 @@ class WebpushUpdateCommand extends Command
         $redis = $this->getContainer()->get('cache.connection.instance');
         $redis->init();
 
-        $notificationService->patchItem(
-            $notification->id,
-            [
-                'send_count'  => $getNotificationStatus['count']['successfully_sent'],
-                'impressions' => $getNotificationStatus['count']['delivered'],
-                'clicks'      => $getNotificationStatus['count']['clicked'],
-                'closed'      => $getNotificationStatus['count']['closed']
-            ]
-        );
-
+        $notificationService->patchItem($notification->id, $parsedData);
         $redis->remove($notification->fk_content);
 
         // Stop the execution for 1.1 seconds

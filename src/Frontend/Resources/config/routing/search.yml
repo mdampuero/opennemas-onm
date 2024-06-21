@@ -9,4 +9,5 @@ frontend_search_google:
     path: /search/google/
     defaults: { _controller: FrontendBundle:Search:google }
     options:
+        l10n: true
         subdirectory: true

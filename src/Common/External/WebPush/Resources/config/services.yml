@@ -1,8 +1,8 @@
 parameters:
     external.web_push:
         config_provider: 'external.web_push.provider.config'
-        http_client:     'external.web_push.http_client'
         url:             'https://api.webpushr.com'
+        token_provider:  'external.web_push.provider.token'
         endpoints:
             notification:
                 class: 'Common\External\WebPush\Component\Endpoint\NotificationEndpoint'
@@ -34,17 +34,97 @@ parameters:
                 config:
                     actions:
                         get_status:
-                            path: '/v1/notification/status/id/'
+                            path: '/v1/notification/status/id/{id}'
+            test_connection:
+                class: 'Common\External\WebPush\Component\Endpoint\ConnectionEndpoint'
+                config:
+                    actions:
+                        test_connection:
+                            path: '/v1/site/subscriber_count'
+    external.send_pulse:
+        config_provider: 'external.send_pulse.provider.config'
+        url:             'https://api.sendpulse.com'
+        token_provider:  'external.send_pulse.provider.token'
+        endpoints:
+            test_connection:
+                class: 'Common\External\WebPush\Component\Endpoint\ConnectionEndpoint'
+                config:
+                    actions:
+                        test_connection:
+                            path: '/push/websites/'
+            website:
+                class: 'Common\External\WebPush\Component\Endpoint\WebsiteEndpoint'
+                config:
+                    actions:
+                        get_list:
+                            path: '/push/websites/'
+            status:
+                class: 'Common\External\WebPush\Component\Endpoint\StatusEndpoint'
+                config:
+                    actions:
+                        get_status:
+                            path: '/push/tasks/{id}'
+            subscriber:
+                class: 'Common\External\WebPush\Component\Endpoint\SubscriberEndpoint'
+                config:
+                    actions:
+                        get_subscribers:
+                            path: '/push/websites/{id}/subscriptions/total'
+            code_snippet:
+                class: 'Common\External\WebPush\Component\Endpoint\CodeSnippetEndpoint'
+                config:
+                    actions:
+                        get_code:
+                            path: '/push/websites/{id}/code'
+            notification:
+                class: 'Common\External\WebPush\Component\Endpoint\NotificationEndpoint'
+                config:
+                    actions:
+                        send_notification:
+                            path: '/push/tasks'
+                            parameters:
+                                required:
+                                    - tittle
+                                    - website_id
+                                    - body
+                                    - ttl
+                                optional:
+                                    - link
+                                    - filter_lang
+                                    - filter_browser
+                                    - filter_region
+                                    - filter_url
+                                    - filter_subscription_date_from
+                                    - filter_subscription_date_to
+                                    - filter
+                                    - stretch_time
+                                    - send_date
+                                    - buttons
+                                    - image
+                                    - icon
 services:
     external.web_push.provider.config:
-        class:     'Common\External\WebPush\Component\Configuration\OrmConfigurationProvider'
+        class:     'Common\External\WebPush\Component\Configuration\WebpushrConfigurationProvider'
         arguments: [ '@orm.manager' ]
 
-    external.web_push.factory:
+    external.send_pulse.provider.config:
+        class:     'Common\External\WebPush\Component\Configuration\SendPulseConfigurationProvider'
+        arguments: [ '@orm.manager' ]
+
+    external.web_push.factory.webpushr:
         class:     'Common\External\WebPush\Component\Factory\WebPushFactory'
         arguments: [ '@service_container', '%external.web_push%' ]
         public: true
 
-    external.web_push.http_client:
-        class:   'GuzzleHttp\Client'
-        factory: [ '@external.web_push.factory', 'getClient' ]
+    external.web_push.factory.sendpulse:
+        class:     'Common\External\WebPush\Component\Factory\WebPushFactory'
+        arguments: [ '@service_container', '%external.send_pulse%' ]
+        public: true
+
+    external.send_pulse.provider.token:
+        class:     'Common\External\WebPush\Component\Authentication\Token\RedisTokenProvider'
+        arguments: [ '@cache.connection.instance' ]
+
+    external.web_push.provider.token:
+        class:     'Common\External\WebPush\Component\Authentication\Token\DefaultTokenProvider'
+        arguments: [ '@cache.connection.instance' ]

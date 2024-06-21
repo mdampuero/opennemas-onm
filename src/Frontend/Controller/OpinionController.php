@@ -108,7 +108,7 @@ class OpinionController extends FrontendController
         $expected = $this->get('core.helper.url_generator')->generate($author);
         $expected = $this->get('core.decorator.url')->prefixUrl($expected);
 
-        if ($request->getPathInfo() !== $expected) {
+        if (strpos($request->getRequestUri(), $expected) === false) {
             return new RedirectResponse($expected);
         }
 
@@ -190,6 +190,12 @@ class OpinionController extends FrontendController
             'total'      => $response['total']
         ]);
 
+        $xtags = [];
+        foreach ($response['items'] as $item) {
+            $xtags[] = ',author-' . $item->fk_author;
+        }
+
+        $params['x-tags'] .= implode(',', array_unique($xtags));
         $params['x-tags'] .= ',opinion-frontpage';
 
         $expire = $this->get('core.helper.content')->getCacheExpireDate();

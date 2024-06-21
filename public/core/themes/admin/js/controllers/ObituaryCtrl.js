@@ -186,7 +186,7 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          if (!$scope.selectedCategory || !item.pk_content) {
+          if (!item.pk_content) {
             return '';
           }
 

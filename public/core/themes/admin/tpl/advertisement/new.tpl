@@ -725,7 +725,7 @@ jQuery(document).ready(function($) {
               {is_module_activated name="AMP_MODULE"}
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Google AMP{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1050, 1074) > 0">[% countPositionsSelectedbyRange(1050, 1074) %]</span>
+                  {t}Google AMP{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1050, 1074) > 0 || countPositionsSelectedbyRange(1078, 1089) > 0">[% countPositionsSelectedbyRange(1050, 1074) +  countPositionsSelectedbyRange(1078, 1089) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -738,7 +738,7 @@ jQuery(document).ready(function($) {
               {is_module_activated name="FIA_MODULE"}
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Facebook Instant Articles{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1075, 1089) > 0">[% countPositionsSelectedbyRange(1075, 1089) %]</span>
+                  {t}Facebook Instant Articles{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1075, 1077) > 0">[% countPositionsSelectedbyRange(1075, 1089) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   {include file="advertisement/partials/advertisement_positions_fia.tpl"}

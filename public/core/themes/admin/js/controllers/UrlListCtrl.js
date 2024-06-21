@@ -47,7 +47,7 @@
           $scope.backup.criteria  = $scope.criteria;
 
           oqlEncoder.configure({ placeholder: {
-            source: 'source ~ "[value]" or target ~ "[value]"'
+            source: '(source ~ "[value]" or target ~ "[value]")'
           } });
           $scope.list();
         };
