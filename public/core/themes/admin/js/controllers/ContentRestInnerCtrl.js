@@ -230,10 +230,10 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
     /**
      * @function saveItem
-     * @memberOf StaticPageCtrl
+     * @memberOf ContentRestInnerCtrl
      *
      * @description
-     *   Saves tags and, then, saves the item.
+     *   Saves tags, generate slug and, then, saves the item.
      */
     $scope.saveItem = function() {
       if (!$scope.validate()) {
@@ -241,19 +241,42 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         return;
       }
 
+      $scope.draftEnabled      = false;
       $scope.flags.http.saving = true;
 
-      $scope.$broadcast('onmTagsInput.save', {
-        onError: $scope.errorCb,
-        onSuccess: function(ids) {
-          $scope.item.tags      = ids;
-          $scope.data.item.tags = ids;
+      if ($scope.form.tags) {
+        $scope.$broadcast('onmTagsInput.save', {
+          onError: $scope.errorCb,
+          onSuccess: function(ids) {
+            $scope.item.tags      = ids;
+            $scope.data.item.tags = ids;
 
-          $scope.draftEnabled = false;
+            if ($scope.item.slug) {
+              // Force slug to be valid
+              $scope.getSlug($scope.data.item.slug, function(response) {
+                $scope.data.item.slug           = response.data.slug;
+
+                $scope.flags.generate.slug = false;
+                $scope.flags.block.slug    = true;
+
+                $scope.save();
+              });
+            } else {
+              $scope.save();
+            }
+          }
+        });
+      } else if ($scope.data.item.slug) {
+        $scope.getSlug($scope.data.item.slug, function(response) {
+          $scope.data.item.slug      = response.data.slug;
+          $scope.flags.generate.slug = false;
+          $scope.flags.block.slug    = true;
 
           $scope.save();
-        }
-      });
+        });
+      } else {
+        $scope.save();
+      }
     };
 
     /**
@@ -489,8 +512,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           $scope.item.slug           = response.data.slug;
           $scope.flags.generate.slug = false;
           $scope.flags.block.slug    = true;
-
-          $scope.form.slug.$setDirty(true);
         });
       }, 250);
     }, true);

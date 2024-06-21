@@ -113,8 +113,6 @@
               $scope.item.slug           = response.data.slug;
               $scope.flags.generate.slug = false;
               $scope.flags.block.slug    = true;
-
-              $scope.form.slug.$setDirty(true);
             });
           }, 250);
         }, true);
