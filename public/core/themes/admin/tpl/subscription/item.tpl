@@ -148,17 +148,35 @@
       </h4>
     </div>
     <div class="grid-body">
-      <div class="form-group no-margin">
-        <label class="pointer" for="member-newsletter">
-          <div class="checkbox">
-            <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_SEND_NEWSLETTER')" id="member-newsletter" {is_module_activated deactivated="1" name="NEWSLETTER_MANAGER"}ng-disabled="true"{/is_module_activated} type="checkbox">
-            <label for="member-newsletter">{t}Send newsletter{/t}</label>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label class="pointer" for="member-newsletter">
+              <div class="checkbox">
+                <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_SEND_NEWSLETTER')" id="member-newsletter" {is_module_activated deactivated="1" name="NEWSLETTER_MANAGER"}ng-disabled="true"{/is_module_activated} type="checkbox">
+                <label for="member-newsletter">{t}Send newsletter{/t}</label>
+              </div>
+              <div class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                <i class="fa fa-info-circle m-r-5 text-info"></i>
+                {t}If enabled, this subscription will be selectable when creating newsletters{/t}
+              </div>
+            </label>
           </div>
-          <div class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
-            <i class="fa fa-info-circle m-r-5 text-info"></i>
-            {t}If enabled, this subscription will be selectable when creating newsletters{/t}
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label class="pointer" for="member-subscriberemail">
+              <div class="checkbox">
+                <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_SUBSCRIBE_ONLY_EMAIL')" id="member-subscriberemail" {is_module_activated deactivated="1" name="NEWSLETTER_MANAGER"}ng-disabled="true"{/is_module_activated} type="checkbox">
+                <label for="member-subscriberemail">{t}Send newsletter via email to subscriber{/t}</label>
+              </div>
+              <div class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+                <i class="fa fa-info-circle m-r-5 text-info"></i>
+                {t}If enabled, the newsletter will only be sent to the subscriber via email{/t}
+              </div>
+            </label>
           </div>
-        </label>
+        </div>
       </div>
     </div>
   </div>
