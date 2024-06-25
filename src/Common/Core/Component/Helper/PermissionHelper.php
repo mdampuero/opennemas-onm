@@ -1373,13 +1373,6 @@ class PermissionHelper
                 'module'      => 'FRONTEND',
                 'enabled'     => 1
             ],
-            231 => [
-                'id'          => 262,
-                'name'        => 'MEMBER_SUBSCRIBE_ONLY_EMAIL',
-                'description' => _('Member subscribe only email'),
-                'module'      => 'FRONTEND',
-                'enabled'     => 1
-            ],
             232 => [
                 'id'          => 232,
                 'name'        => 'NON_MEMBER_HIDE_SUMMARY',
