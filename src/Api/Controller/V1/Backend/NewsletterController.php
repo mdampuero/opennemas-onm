@@ -135,6 +135,7 @@ class NewsletterController extends Controller
             ->getDataSet('Settings', 'instance')
             ->get([
                 'newsletter_manual',
+                'sendmailNewsletter',
                 'newsletter_maillist',
                 'newsletter_subscriptionType',
                 'actOn.marketingLists',
