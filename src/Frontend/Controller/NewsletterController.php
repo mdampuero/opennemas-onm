@@ -89,6 +89,7 @@ class NewsletterController extends Controller
     {
         try {
             $email           = base64_decode($request->get('email_hash'));
+            $listId          = $request->get('list_id');
             $newsletterLists = $this->get('core.helper.newsletter')->getRecipients();
             $user            = $this->get('api.service.subscriber')->getItemby(sprintf('email = "%s"', $email));
 
@@ -104,15 +105,17 @@ class NewsletterController extends Controller
                 return in_array($list['id'], $userGroups);
             });
 
-            //This featured does not support multi-subscribed lists
-            //TODO: Add multi-subscribed lists support
-            if (empty($susbcribedNewsletters) || count($susbcribedNewsletters) != 1) {
+            $susbcribedNewsletter = array_filter($susbcribedNewsletters, function ($newsletter) use ($listId) {
+                return $newsletter['id'] == $listId;
+            });
+
+            if (empty($susbcribedNewsletter)) {
                 return new RedirectResponse($this->get('router')->generate('frontend_frontpage'));
             }
 
-            $susbcribedNewsletter = array_pop($susbcribedNewsletters);
-            $unsubscribedId       = $susbcribedNewsletter['id'];
-            $finalUserGropus      = array_filter($user->user_groups, function ($item) use ($unsubscribedId) {
+            $susbcribed      = array_pop($susbcribedNewsletter);
+            $unsubscribedId  = $susbcribed['id'];
+            $finalUserGropus = array_filter($user->user_groups, function ($item) use ($unsubscribedId) {
                 return $item['user_group_id'] != $unsubscribedId;
             });
 
