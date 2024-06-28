@@ -135,8 +135,8 @@ class NewsletterController extends Controller
             }
 
             // Get the newsletter details
-            $newsletter = array_pop($newsletterToUnsubscribe);
-            $newsletterName = $newsletter['name'];
+            $newsletter          = array_pop($newsletterToUnsubscribe);
+            $newsletterName      = $newsletter['name'];
             $unsubscribedGroupId = $newsletter['id'];
 
             // Remove the unsubscribed group from the user's active groups
