@@ -108,6 +108,10 @@ class NewsletterController extends Controller
                     sprintf('email = "%s"', $email)
                 );
 
+            if (!$user || !isset($user->user_groups)) {
+                return new RedirectResponse($this->get('router')->generate('frontend_frontpage'));
+            }
+
             // Filter user groups to only include active ones (status == 1)
             $activeUserGroups = array_map(function ($group) {
                 return $group['user_group_id'];
