@@ -113,16 +113,17 @@ class NewsletterController extends Controller
                 return new RedirectResponse($this->get('router')->generate('frontend_frontpage'));
             }
 
-            $susbcribed      = array_pop($susbcribedNewsletter);
-            $unsubscribedId  = $susbcribed['id'];
-            $finalUserGropus = array_filter($user->user_groups, function ($item) use ($unsubscribedId) {
+            $susbcribed         = array_pop($susbcribedNewsletter);
+            $susbcribedListName = $susbcribedNewsletter['name'];
+            $unsubscribedId     = $susbcribed['id'];
+            $finalUserGropus    = array_filter($user->user_groups, function ($item) use ($unsubscribedId) {
                 return $item['user_group_id'] != $unsubscribedId;
             });
 
             $this->get('api.service.subscriber')->patchItem($user->id, [ 'user_groups' => $finalUserGropus ]);
             return $this->render('user/unsubscribe_completed.tpl', [
                 'email' => $email,
-                'lists' => [ $susbcribedNewsletter['name'] ]
+                'lists' => [ $susbcribedListName ]
             ]);
         } catch (\Exception $e) {
             return new RedirectResponse($this->get('router')->generate('frontend_frontpage'));

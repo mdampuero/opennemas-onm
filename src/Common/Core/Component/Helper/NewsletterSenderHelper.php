@@ -285,7 +285,13 @@ class NewsletterSenderHelper
         $errors = [];
         foreach ($users as $user) {
             try {
-                $sentEmails += $this->sendEmail($newsletter, $user);
+                $replacement = empty($list)
+                ? base64_encode($user['email'])
+                : [base64_encode($user['email']), $list->pk_user_group];
+
+                $newsletterCopy = clone $newsletter;
+
+                $sentEmails += $this->sendEmail($newsletterCopy, $user, $replacement);
             } catch (\Swift_RfcComplianceException $e) {
                 $errors[] = sprintf(_('Email not valid: %s %s'), $user['email'], $e->getMessage());
             } catch (\Exception $e) {
@@ -304,7 +310,7 @@ class NewsletterSenderHelper
      *
      * @return int the number of emails sent
      */
-    private function sendEmail($newsletter, $mailbox)
+    private function sendEmail($newsletter, $mailbox, $replacement)
     {
         $this->newsletterConfigs = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
         $this->siteName          = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
@@ -312,8 +318,8 @@ class NewsletterSenderHelper
         // Build the message
         try {
             $newsletter->html = str_replace(
-                '%NEWSLETTER_EMAIL%',
-                base64_encode($mailbox['email']),
+                ['%NEWSLETTER_EMAIL%', '%NEWSLETTER_ID%'],
+                $replacement,
                 $newsletter->html
             );
 
