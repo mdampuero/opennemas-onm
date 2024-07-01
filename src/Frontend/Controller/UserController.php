@@ -269,9 +269,11 @@ class UserController extends Controller
      */
     public function saveAction(Request $request)
     {
+        /*
         if ('POST' != $request->getMethod() || !$this->checkRecaptcha($request)) {
             return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         }
+        */
 
         $securityInput = $request->request->get('register_control');
         $userGroups    = $request->request->get('user_groups', []);
@@ -279,7 +281,7 @@ class UserController extends Controller
         $data          = array_merge(
             $request->request->all(),
             [
-                'name'        => $request->request->filter('name', null, FILTER_SANITIZE_SPECIAL_CHARS),
+                'name'       => $request->request->filter('email', null, FILTER_SANITIZE_EMAIL),
                 'email'       => $request->request->filter('email', null, FILTER_SANITIZE_EMAIL),
                 'user_groups' => $userGroups,
                 'password'    => $request->request->get('password'),
@@ -384,7 +386,7 @@ class UserController extends Controller
                 ->getHtml(),
             'settings'      => $this->getSettings(),
             'subscriptions' => $this->getSubscriptions(),
-            'name'          => null
+            'name'          => $data['email']
         ]);
     }
 
