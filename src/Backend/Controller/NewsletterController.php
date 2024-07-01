@@ -386,6 +386,9 @@ class NewsletterController extends Controller
         $id         = (int) $request->query->getDigits('id');
         $recipients = $request->request->get('recipients');
 
+        dump($id);
+        dump($recipients);
+        die();
         $newsletterService = $this->get('api.service.newsletter');
         try {
             $newsletter = $newsletterService->getItem($id);
