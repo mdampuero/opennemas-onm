@@ -71,7 +71,7 @@
 
 {block name="commonColumnsBody"}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('picture')">
-    <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path" transform="thumbnail,50,50" ng-if="item.avatar_img_id && item.avatar_img_id != 0"></dynamic-image>
+    <dynamic-image class="img-thumbnail img-thumbnail-circle" instance="{$smarty.const.INSTANCE_MEDIA}" ng-model="data.extra.photos[item.avatar_img_id].path" transform="thumbnail,50,50"></dynamic-image>
   </td>
   <td class="v-align-middle" ng-if="isColumnEnabled('name')">
     <div class="table-text">
