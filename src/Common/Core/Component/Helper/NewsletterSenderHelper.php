@@ -313,9 +313,13 @@ class NewsletterSenderHelper
         $this->newsletterConfigs = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
         $this->siteName          = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
 
+        // Encode the email address in Base64
+        $encodedEmail = urlencode(base64_encode($mailbox['email']));
+
+        // Check if $list is empty and assign the second value accordingly
         $replacement = empty($list)
-        ? [base64_encode($mailbox['email']), null]
-        : [base64_encode($mailbox['email']), $list->pk_user_group];
+            ? [$encodedEmail, null]
+            : [$encodedEmail, $list->pk_user_group];
 
         // Build the message
         try {
