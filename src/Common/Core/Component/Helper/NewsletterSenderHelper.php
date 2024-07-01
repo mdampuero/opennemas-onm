@@ -144,7 +144,9 @@ class NewsletterSenderHelper
                         }
                     }
                 } else {
-                    $sentEmails += $this->sendEmail($newsletter, $mailbox);
+                    $newsletterCopy = clone $newsletter;
+
+                    $sentEmails += $this->sendEmail($newsletterCopy, $mailbox);
 
                     $sendResults[] = [ $mailbox, $sentEmails > 0, '' ];
                 }
@@ -312,7 +314,7 @@ class NewsletterSenderHelper
         $this->siteName          = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
 
         $replacement = empty($list)
-        ? [base64_encode($mailbox['email'])]
+        ? [base64_encode($mailbox['email']), null]
         : [base64_encode($mailbox['email']), $list->pk_user_group];
 
         // Build the message
