@@ -33,3 +33,6 @@ frontend_newsletter_unsubscribe:
     options:
         l10n: true
         subdirectory: true
+    requirements:
+        email_hash: \w+
+        list_id: '([0-9]+)'
