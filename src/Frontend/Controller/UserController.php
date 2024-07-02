@@ -269,11 +269,9 @@ class UserController extends Controller
      */
     public function saveAction(Request $request)
     {
-        /*
         if ('POST' != $request->getMethod() || !$this->checkRecaptcha($request)) {
             return $this->redirect($this->generatePrefixedUrl('frontend_user_register'));
         }
-        */
 
         $securityInput = $request->request->get('register_control');
         $userGroups    = $request->request->get('user_groups', []);

@@ -144,9 +144,7 @@ class NewsletterSenderHelper
                         }
                     }
                 } else {
-                    $newsletterCopy = clone $newsletter;
-
-                    $sentEmails += $this->sendEmail($newsletterCopy, $mailbox);
+                    $sentEmails += $this->sendEmail($newsletter, $mailbox);
 
                     $sendResults[] = [ $mailbox, $sentEmails > 0, '' ];
                 }
@@ -287,9 +285,7 @@ class NewsletterSenderHelper
         $errors = [];
         foreach ($users as $user) {
             try {
-                $newsletterCopy = clone $newsletter;
-
-                $sentEmails += $this->sendEmail($newsletterCopy, $user, $list);
+                $sentEmails += $this->sendEmail($newsletter, $user, $list);
             } catch (\Swift_RfcComplianceException $e) {
                 $errors[] = sprintf(_('Email not valid: %s %s'), $user['email'], $e->getMessage());
             } catch (\Exception $e) {
@@ -323,8 +319,8 @@ class NewsletterSenderHelper
 
         // Build the message
         try {
-            $newsletter->html = str_replace(
-                ['%NEWSLETTER_EMAIL%', '%NEWSLETTER_ID%'],
+            $newsletterFinalHtml = str_replace(
+                ['%SUBSCRIBER_EMAIL%', '%NEWSLETTER_LIST_ID%'],
                 $replacement,
                 $newsletter->html
             );
@@ -332,7 +328,7 @@ class NewsletterSenderHelper
             $message = \Swift_Message::newInstance();
             $message
                 ->setSubject($newsletter->title)
-                ->setBody($newsletter->html, 'text/html')
+                ->setBody($newsletterFinalHtml, 'text/html')
                 ->setFrom([$this->newsletterConfigs['sender'] => $this->siteName])
                 ->setSender($this->noReplyAddress)
                 ->setTo([ $mailbox['email'] => $mailbox['name']]);
