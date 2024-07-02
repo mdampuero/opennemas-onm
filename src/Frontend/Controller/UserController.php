@@ -279,16 +279,14 @@ class UserController extends Controller
         $data          = array_merge(
             $request->request->all(),
             [
-                'name'        => $request->request->get('name'),
+                'name'        => empty($request->request->filter('name', null, FILTER_SANITIZE_SPECIAL_CHARS)) ?
+                                    $request->request->filter('email', null, FILTER_SANITIZE_EMAIL) :
+                                    $request->request->filter('name', null, FILTER_SANITIZE_SPECIAL_CHARS),
                 'email'       => $request->request->filter('email', null, FILTER_SANITIZE_EMAIL),
                 'user_groups' => $userGroups,
                 'password'    => $request->request->get('password'),
             ]
         );
-
-        if (empty($data['name'])) {
-            $data['name'] = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-        }
 
         if (!empty($securityInput)) {
             $this->get('application.log')->error(
