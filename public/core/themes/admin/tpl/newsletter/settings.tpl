@@ -177,12 +177,12 @@
             <input type="text" required id="sender" name="newsletter_maillist[sender]" ng-model="settings.newsletter_maillist.sender" class="form-control" placeholder="noreply@your_domain_name.com"/>
           </div>
         </div>
-        <div class="form-group">
-            <input type="checkbox" id="senderCheckbox" name="sendmailNewsletter" ng-false-value="'0'" ng-model="settings.sendmailNewsletter" ng-true-value="'1'" />
-            <label for="senderCheckbox" class="form-label">{t}Enable Email Newsletter{/t}</label>
-            <span class="help">{t escape=off}Check to enable sending the newsletter via email{/t}</span>
-        </div>
         {if $app.security->hasPermission('MASTER')}
+          <div class="form-group">
+            <input type="checkbox" id="subscribe-email" name="newsletter_subscribe_email" ng-false-value="'0'" ng-model="settings.newsletter_subscribe_email" ng-true-value="'1'" />
+            <label for="subscribe-email" class="form-label">{t}Newsletter subscription only email{/t}</label>
+            <span class="help">{t escape=off}Check to enable subscribing using only an email account{/t}</span>
+          </div>
           <div class="form-group" >
             <input id="manual_send" ng-false-value="'0'" ng-model="settings.newsletter_manual" ng-true-value="'1'" type="checkbox"/>
             <label for="subscription" class="form-label">{t}Enable manual send{/t}</label>

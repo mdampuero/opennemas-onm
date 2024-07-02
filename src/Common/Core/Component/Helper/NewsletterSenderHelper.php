@@ -314,13 +314,13 @@ class NewsletterSenderHelper
 
         // Check if $list is empty and assign the second value accordingly
         $replacement = empty($list)
-            ? [$encodedEmail, null]
+            ? [$encodedEmail, 0]
             : [$encodedEmail, $list->pk_user_group];
 
         // Build the message
         try {
             $newsletterFinalHtml = str_replace(
-                ['%SUBSCRIBER_EMAIL%', '%NEWSLETTER_LIST_ID%'],
+                ['%25SUBSCRIBER_EMAIL%25', '%25NEWSLETTER_LIST_ID%25'],
                 $replacement,
                 $newsletter->html
             );
