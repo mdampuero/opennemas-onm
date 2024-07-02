@@ -53,6 +53,7 @@ class ThemeSettingsHelper extends SettingHelper
         'progressbar',
         'main_logo_size',
         'general_topbar',
+        'general_header_date',
         'general_page_width',
         'general_header_right_widget',
         'general_main_widget',
