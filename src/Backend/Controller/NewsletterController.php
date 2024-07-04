@@ -251,7 +251,7 @@ class NewsletterController extends Controller
 
             $this->get('session')->getFlashBag()->add(
                 'error',
-                _("There was an error while saving the newsletter ")
+                _("There was an error while saving the newsletter")
             );
 
             return $this->redirect($this->generateUrl('backend_newsletters_list'));
@@ -281,7 +281,7 @@ class NewsletterController extends Controller
         } catch (\Api\Exception\GetItemException $e) {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                _("There was an error while fetching the newsletter ")
+                _("There was an error while fetching the newsletter")
             );
 
             return $this->redirect($this->generateUrl(
@@ -325,7 +325,7 @@ class NewsletterController extends Controller
 
             $this->get('session')->getFlashBag()->add(
                 'error',
-                _("There was an error while saving the newsletter ")
+                _("There was an error while saving the newsletter")
             );
 
             return new JsonResponse(['messages' => [[
@@ -413,7 +413,7 @@ class NewsletterController extends Controller
 
             $this->get('session')->getFlashBag()->add(
                 'error',
-                _("There was an error while sending the newsletter ")
+                _("There was an error while sending the newsletter")
             );
 
             return $this->redirect($this->generateUrl('backend_newsletters_list'));
