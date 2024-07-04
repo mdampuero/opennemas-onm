@@ -1,0 +1,32 @@
+parameters
+  external.press_clipping:
+    config_provider: 'external.press_clipping.provider.config'
+    url: 'https://pressclipping.cedro.org'
+    token_provider: 'external.press_clipping.provider.token'
+    endpoints:
+      upload_info:
+        class: 'Common\External\PressClipping\Component\Endpoint\UploadController'
+        config:
+          actions:
+            upload_info:
+              path: '/api/DigitalData_api/uploadInfo'
+              parameters:
+                  required:
+                      - publicationID
+                      - title
+                      - subtitle
+                      - author
+                      - pubDate
+                      - body
+                      - category
+                      - image
+                      - articleID
+                      - articleURL
+services:
+    external.press_clipping.provider.config:
+        class:     'Common\External\PressClipping\Component\Configuration\OrmConfigurationProvider'
+        arguments: [ '@orm.manager' ]
+
+    external.press_clipping.provider.token:
+        class:     'Common\External\PressClipping\Component\Authentication\Token\RedisTokenProvider'
+        arguments: [ '@cache.connection.instance' ]
