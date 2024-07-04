@@ -206,7 +206,7 @@ class ContentHelper
         }
 
         return array_key_exists('caption', $item)
-            ? htmlentities($item['caption'])
+            ? strip_tags($item['caption'], '<a>')
             : null;
     }
 
