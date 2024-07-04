@@ -101,74 +101,27 @@ class NewsletterController extends Controller
             $email  = base64_decode($request->get('email_hash'));
             $listId = $request->get('list_id');
 
-            // Get the list of newsletter recipients and the user by email.
-            $newsletterLists = $this->get('core.helper.newsletter')->getRecipients();
-            $user            = $this->get('api.service.subscriber')
-                ->getItemby(
-                    sprintf('email = "%s"', $email)
-                );
+            // Get list and user.
+            $list = $this->get('api.service.subscription')->getItem($listId);
+            $user = $this->get('api.service.subscriber')->getItemby(sprintf('email = "%s"', $email));
 
-            // If the user or their user_groups are not found, redirect to the front page.
-            if (!$user || !isset($user->user_groups)) {
+            // Check for empty user groups and newsletter list (permission 224)
+            if (empty($user->user_groups) || !in_array(224, $list->privileges)) {
                 return new RedirectResponse($this->get('router')->generate('frontend_frontpage'));
             }
 
-            // Filter user groups to only include active ones (status == 1)
-            $activeUserGroups = array_map(function ($group) {
-                return $group['user_group_id'];
-            }, array_filter($user->user_groups, function ($group) {
-                return $group['status'] == 1;
-            }));
-
-            // Find subscribed newsletters based on active user groups.
-            $subscribedNewsletters = array_filter($newsletterLists, function ($list) use ($activeUserGroups) {
-                return in_array($list['id'], $activeUserGroups);
+            // Remove list from user groups
+            $user->user_groups = array_filter($user->user_groups, function ($a) use ($list) {
+                return $a['user_group_id'] != $list->pk_user_group;
             });
 
-            // Find the specific newsletter to unsubscribe from
-            $newsletterToUnsubscribe = array_filter($subscribedNewsletters, function ($newsletter) use ($listId) {
-                return $newsletter['id'] == $listId;
-            });
-
-            // Initialize an array to keep track of the names of the unsubscribed newsletters
-            $unsubscribedNewsletterNames = [];
-
-            if (empty($newsletterToUnsubscribe)) {
-                // Unsubscribe from all active newsletters
-                foreach ($activeUserGroups as $unsubscribedGroupId) {
-                    // Search in $newsletterLists arrays for the $unsubscribedGroupId
-                    $groupName = array_search($unsubscribedGroupId, array_column($newsletterLists, 'id'));
-                    if ($groupName !== false) {
-                        $unsubscribedNewsletterNames[] = $newsletterLists[$groupName]['name'];
-                    }
-
-                    $user->user_groups = array_filter($user->user_groups, function ($group) use ($unsubscribedGroupId) {
-                        return $group['user_group_id'] != $unsubscribedGroupId;
-                    });
-                }
-
-                // Update the user with the new groups
-                $this->get('api.service.subscriber')->patchItem($user->id, ['user_groups' => $user->user_groups]);
-            } else {
-                // Get the newsletter details
-                $newsletter                    = array_pop($newsletterToUnsubscribe);
-                $newsletterName                = $newsletter['name'];
-                $unsubscribedGroupId           = $newsletter['id'];
-                $unsubscribedNewsletterNames[] = $newsletterName;
-
-                // Remove the unsubscribed group from the user's active groups
-                $updatedUserGroups = array_filter($user->user_groups, function ($group) use ($unsubscribedGroupId) {
-                    return $group['user_group_id'] != $unsubscribedGroupId;
-                });
-
-                // Update the user with the new groups
-                $this->get('api.service.subscriber')->patchItem($user->id, ['user_groups' => $updatedUserGroups]);
-            }
+            // Update the user with the new groups
+            $this->get('api.service.subscriber')->patchItem($user->id, ['user_groups' => $user->user_groups]);
 
             // Render the unsubscribe completion page
             return $this->render('user/unsubscribe_completed.tpl', [
                 'email' => $email,
-                'lists' => $unsubscribedNewsletterNames
+                'lists' => $list->name
             ]);
         } catch (\Exception $e) {
             return new RedirectResponse($this->get('router')->generate('frontend_frontpage'));
