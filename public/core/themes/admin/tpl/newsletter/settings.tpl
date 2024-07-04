@@ -88,17 +88,14 @@
             </div>
           </div>
         </div>
-
         <div class="ng-cloak" ng-show="settings.newsletter_subscriptionType === 'create_subscriptor'">
           {t escape=off 1=$smarty.capture.subscriptors}You've choosen to use the <a href="%1" target="_blank">internal subscription list</a> to send your newsletters.{/t}
         </div>
-
         {is_module_activated name="es.openhost.module.acton"}
         <div ng-if="settings.newsletter_subscriptionType == 'acton'">
           <h5>
             {t}Act-On marketing lists{/t}
           </h5>
-
           <div class="actonList ng-cloak" ng-repeat="list in settings['actOn.marketingLists']">
             <div class="row">
               <div class="form-group col-md-6">
@@ -120,9 +117,7 @@
               </div>
             </div>
           </div>
-
           <a ng-click="addList()" class="btn btn-block">{t}Add new marketing list{/t}</a>
-
           <div class="row m-t-15">
             <div class="form-group">
               <label for="acton_form_page" class="form-label">{t}Form static page url{/t}</label>
@@ -132,7 +127,6 @@
               </div>
             </div>
           </div>
-
           <div class="row m-t-15">
             <div class="form-group col-sm-6">
               <label for="acton_header_id" class="form-label">{t}Act-On header id{/t}</label>
@@ -149,12 +143,10 @@
               </div>
             </div>
           </div>
-
         </div>
         {/is_module_activated}
       </div>
     </div>
-
     <div class="grid simple ng-cloak" ng-if="!flags.loading && settings">
       <div class="grid-title">
         <h4>
