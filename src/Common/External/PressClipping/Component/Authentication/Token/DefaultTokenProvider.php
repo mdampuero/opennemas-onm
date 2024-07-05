@@ -7,9 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Common\External\WebPush\Component\Authentication\Token;
-
-use Common\External\PressClipping\Component\Authentication\Token\ITokenProvider;
+namespace Common\External\PressClipping\Component\Authentication\Token;
 
 class DefaultTokenProvider implements ITokenProvider
 {
