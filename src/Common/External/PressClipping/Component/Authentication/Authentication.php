@@ -16,7 +16,7 @@ use GuzzleHttp\Client;
 class Authentication
 {
     private const ACCESS_TOKEN_KEY = 'access_token';
-    private const EXPIRES_IN_KEY = 'expires_in';
+    private const EXPIRES_IN_KEY   = 'expires_in';
 
     /**
      * The HTTP Client
