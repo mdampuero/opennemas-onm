@@ -12,16 +12,16 @@ namespace Common\External\PressClipping\Component\Configuration;
 interface IConfigurationProvider
 {
     /**
-     * Returns the WebPush configuration.
+     * Returns the PressClipping configuration.
      *
-     * @return array The WebPush configuration.
+     * @return array The PressClipping configuration.
      */
     public function getConfiguration();
 
     /**
-     * Updates the WebPush configuration.
+     * Updates the PressClipping configuration.
      *
-     * @param array $config The WebPush configuration.
+     * @param array $config The PressClipping configuration.
      */
     public function setConfiguration($config);
 }
