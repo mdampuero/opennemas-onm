@@ -10,11 +10,14 @@
 
 namespace Common\External\PressClipping\Component\Authentication;
 
-// use Common\External\PressClipping\Component\Exception\PressClippingException;
+use Common\External\PressClipping\Component\Exception\PressClippingException;
 use GuzzleHttp\Client;
 
 class Authentication
 {
+    private const ACCESS_TOKEN_KEY = 'access_token';
+    private const EXPIRES_IN_KEY = 'expires_in';
+
     /**
      * The HTTP Client
      *
@@ -57,12 +60,12 @@ class Authentication
      * @param TokenProvider         $tokenProvider  The token provider.
      * @param string                $url            The PressClipping API URL.
      */
-    public function __construct($configProvider, $tokenProvider, $url)
+    public function __construct($configProvider, $tokenProvider, string $url, Client $client = null)
     {
         $this->configProvider = $configProvider;
         $this->url            = $url;
         $this->tokenProvider  = $tokenProvider;
-        $this->client         = new Client();
+        $this->client         = $client ?? new Client();
 
         $this->config = $this->configProvider->getConfiguration();
 
@@ -88,6 +91,60 @@ class Authentication
      */
     public function authenticate()
     {
-        // TODO: authenticate method and PressClippingException
+        $requestParams = $this->configProvider->getConfigParams();
+
+        try {
+            $response = $this->client->post(
+                $this->url . $this->configProvider->getAuthUri(),
+                $requestParams
+            );
+        } catch (\Exception $e) {
+            throw new PressClippingException(
+                'pressclipping.authentication.failure: ' . $e->getMessage()
+            );
+        }
+
+        $body = json_decode($response->getBody(), true);
+
+        if ($this->configProvider->isTokenRequired()) {
+            $this->tokenProvider->setAccessToken(
+                $body[self::ACCESS_TOKEN_KEY],
+                $body[self::EXPIRES_IN_KEY]
+            );
+        }
+
+        if (empty($body)) {
+            throw new PressClippingException(
+                'pressclipping.authentication.failure: no response'
+            );
+        }
+    }
+
+    /**
+     * Returns the access token
+     *
+     * @throws PressClippingException
+     *
+     * @return String The access token
+     */
+    public function getToken()
+    {
+        $this->authenticate();
+
+        return $this->tokenProvider->getAccessToken();
+    }
+
+    /**
+     * Returns the auth headers
+     *
+     * @return Array The Auth Headers
+     */
+    public function getAuthHeaders()
+    {
+        if (!$this->configProvider->isTokenRequired()) {
+            return $this->getConfiguration();
+        }
+
+        return ['Authorization' => 'Bearer ' . $this->getToken()];
     }
 }
