@@ -40,7 +40,7 @@
 
         /**
          * @function init
-         * @memberOf WebPushNotificationsConfigCtrl
+         * @memberOf PressClippingCtrl
          *
          * @description
          *   Initializes the form.
@@ -53,7 +53,7 @@
 
         /**
          * @function check
-         * @memberOf WebPushNotificationsConfigCtrl
+         * @memberOf PressClippingCtrl
          *
          * @description
          *   Checks the connection to the server.
