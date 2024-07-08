@@ -53,9 +53,7 @@ class PressClippingController extends ApiController
     {
         $msg = $this->get('core.messenger');
         try {
-            $service       = $this->get('orm.manager')
-                ->getDataSet('Settings', 'instance')->get('pressclipping_service');
-            $pressclipping = $this->get(sprintf('external.pressclipping.factory.%s', $service));
+            $pressclipping = $this->get('external.press_clipping.factory');
             $endpoint      = $pressclipping->getEndpoint('test_connection');
 
             $endpoint->testConnection();
