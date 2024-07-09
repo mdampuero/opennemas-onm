@@ -30,6 +30,7 @@
          * @type {Object}
          */
         $scope.routes = {
+          getConfig: 'api_v1_backend_pressclipping_get_config',
           checkServer: 'api_v1_backend_pressclipping_check_server',
           saveConfig: 'api_v1_backend_pressclipping_save_config',
         };
@@ -47,9 +48,13 @@
          *   Initializes the form.
          */
         $scope.init = function() {
-          $scope.settings.pressclipping_service.service = 'cedro';
-
-          $scope.disableFlags('http');
+          http.get($scope.routes.getConfig).then(function(response) {
+            $scope.settings = response.data;
+            $scope.settings.pressclipping_service.service = $scope.settings.pressclipping_service.service || 'cedro';
+            $scope.disableFlags('http');
+          }, function() {
+            $scope.disableFlags('http');
+          });
         };
 
         /**

@@ -65,6 +65,28 @@ class PressClippingController extends ApiController
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
+    public function getConfigAction()
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get(['pressclipping_service',
+                'pressclipping_apikey',
+                'pressclipping_token',
+                'pressclipping_publickey']);
+
+        $pressclipping_service = [
+            'service'   => $settings['pressclipping_service'],
+            'apikey'    => $settings['pressclipping_apikey'],
+            'token'     => $settings['pressclipping_token'],
+            'publickey' => $settings['pressclipping_publickey']
+        ];
+
+        return new JsonResponse([
+            'pressclipping_service'      => $pressclipping_service
+        ]);
+    }
 
     public function saveConfigAction(Request $request)
     {
