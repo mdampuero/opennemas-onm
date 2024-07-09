@@ -385,7 +385,7 @@ class ContentPersisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testUpdateContentWhenException()
     {
-        $this->metadata->mapping = $this->mapping;
+        $this->metadata->mapping    = $this->mapping;
         $this->metadata->properties = $this->properties;
         $this->metadata->expects($this->any())->method('getId')
             ->willReturn([

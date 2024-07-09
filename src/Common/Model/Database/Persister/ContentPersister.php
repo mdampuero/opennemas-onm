@@ -38,8 +38,15 @@ class ContentPersister extends BasePersister
      */
     public function create(Entity &$entity)
     {
+        $dateNow = new \DateTime();
+
         if (empty($entity->starttime) && !empty($entity->content_status)) {
-            $entity->starttime = new \DateTime();
+            $entity->starttime = $dateNow;
+        }
+
+        // Prevent forcing starttime value before now/created
+        if ($entity->starttime < $dateNow) {
+            $entity->starttime = $dateNow;
         }
 
         if (!empty($entity->starttime)) {
@@ -126,6 +133,11 @@ class ContentPersister extends BasePersister
         // Don't allow changed date to be earlier than starttime
         if ($entity->starttime > $entity->changed) {
             $entity->changed = $entity->starttime;
+        }
+
+        // Prevent forcing starttime value before now/created
+        if ($entity->starttime < $entity->created) {
+            $entity->starttime = $entity->getStored()['starttime'];
         }
 
         $changes               = $entity->getChanges();
