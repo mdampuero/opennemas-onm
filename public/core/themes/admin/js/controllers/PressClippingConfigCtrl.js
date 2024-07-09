@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  PressClippingCtrl
+     * @name  PressClippingConfigCtrl
      *
      * @requires $controller
      * @requires $scope
@@ -15,14 +15,14 @@
      * @description
      *   Provides actions to list notifications.
      */
-    .controller('PressClippingCtrl', [
+    .controller('PressClippingConfigCtrl', [
       '$controller', '$scope', 'http', 'messenger', 'routing',
       function($controller, $scope, http, messenger, routing) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf PressClippingCtrl
+         * @memberof PressClippingConfigCtrl
          *
          * @description
          *  The list of routes for the controller.
@@ -42,7 +42,7 @@
 
         /**
          * @function init
-         * @memberOf PressClippingCtrl
+         * @memberOf PressClippingConfigCtrl
          *
          * @description
          *   Initializes the form.
@@ -59,7 +59,7 @@
 
         /**
          * @function save
-         * @memberof PressClippingCtrl
+         * @memberof PressClippingConfigCtrl
          *
          * @description
          *  Saves the configuration
@@ -87,7 +87,7 @@
 
         /**
          * @function check
-         * @memberOf PressClippingCtrl
+         * @memberof PressClippingConfigCtrl
          *
          * @description
          *   Checks the connection to the server.
