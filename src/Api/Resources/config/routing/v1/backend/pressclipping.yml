@@ -1,6 +1,13 @@
-api_v1_backend_presclipping_check_server:
+api_v1_backend_pressclipping_check_server:
     path:        /pressclipping/check
     defaults: { _controller: ApiBundle:V1/Backend/PressClipping:checkServer }
     methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_pressclipping_save_config:
+    path:     /pressclipping/config
+    defaults: { _controller: ApiBundle:V1/Backend/PressClipping:saveConfig }
+    methods:  [ PUT ]
     options:
         expose: true

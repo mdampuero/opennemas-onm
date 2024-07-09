@@ -272,7 +272,7 @@ $menuXml = [
     ],
 
     [
-        'id'          => 'webpush_notifications_mananger',
+        'id'          => 'webpush_notifications_manager',
         'title'       => _('Web Push'),
         'icon'        => 'fa fa-bell',
         'link'        => '#',
@@ -306,26 +306,25 @@ $menuXml = [
     // PressClipping
 
     [
-        'id'          => 'presclipping_mananager',
+        'id'          => 'pressclipping_manager',
         'title'       => _('PressClipping'),
         'icon'        => 'fa fa-bell',
         'link'        => '#',
         'privilege'   => 'ADMIN',
         'submenu' => [
             [
-                'id'          => 'presclipping_dashboard_manager',
+                'id'          => 'pressclipping_dashboard_manager',
                 'title'       => _('Dashboard'),
                 'icon'        => 'fa fa-tachometer',
                 'link'        => url('backend_pressclipping_dashboard'),
                 'privilege'   => 'ADMIN'
             ],
             [
-                'id'          => 'presclipping_config_manager',
+                'id'          => 'pressclipping_config_manager',
                 'title'       => _('Configuration'),
                 'icon'        => 'fa fa-cog fa-lg',
                 'link'        => url('backend_pressclipping_settings'),
-                'module_name' => 'es.openhost.module.webpush_notifications',
-                'privilege'   => 'MASTER'
+                'privilege'   => 'ADMIN'
             ],
         ]
     ],

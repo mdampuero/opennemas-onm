@@ -30,7 +30,7 @@
          * @type {Object}
          */
         $scope.routes = {
-          checkServer: 'api_v1_backend_presclipping_check_server',
+          checkServer: 'api_v1_backend_pressclipping_check_server',
           saveConfig: 'api_v1_backend_pressclipping_save_config',
         };
 
@@ -68,7 +68,7 @@
 
           return http.put($scope.routes.saveConfig, data)
             .then(function(response) {
-              if (!screenTop.flags.http.checking) {
+              if (!$scope.flags.http.checking) {
                 $scope.disableFlags('http');
                 messenger.post(response.data);
               }

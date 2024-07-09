@@ -64,4 +64,35 @@ class PressClippingController extends ApiController
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
+
+
+    public function saveConfigAction(Request $request)
+    {
+        $msg = $this->get('core.messenger');
+
+        $pressclipping_service = $request->request->get('pressclipping_service');
+        $service               = $pressclipping_service['service'] ?? null;
+        $apikey                = $pressclipping_service['apikey'] ?? null;
+        $token                 = $pressclipping_service['token'] ?? null;
+        $publickey             = $pressclipping_service['publickey'] ?? null;
+
+        $settings = [
+            'pressclipping_service'          => $service,
+            'pressclipping_apikey'           => $apikey,
+            'pressclipping_token'            => $token,
+            'pressclipping_publickey'        => $publickey,
+        ];
+
+        try {
+            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
+            $msg->add(_('Item saved successfully'), 'success');
+        } catch (AccessDeniedException $e) {
+            $msg->add(_('Webpush Module is not activated'), 'info');
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to save settings'), 'error');
+            $this->get('error.log')->error($e->getMessage());
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
 }
