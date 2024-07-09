@@ -310,6 +310,7 @@ $menuXml = [
         'title'       => _('PressClipping'),
         'icon'        => 'fa fa-bell',
         'link'        => '#',
+        'module_name' => 'es.openhost.module.pressclipping',
         'privilege'   => 'ADMIN',
         'submenu' => [
             [
@@ -317,6 +318,7 @@ $menuXml = [
                 'title'       => _('Dashboard'),
                 'icon'        => 'fa fa-tachometer',
                 'link'        => url('backend_pressclipping_dashboard'),
+                'module_name' => 'es.openhost.module.pressclipping',
                 'privilege'   => 'ADMIN'
             ],
             [
@@ -324,6 +326,7 @@ $menuXml = [
                 'title'       => _('Configuration'),
                 'icon'        => 'fa fa-cog fa-lg',
                 'link'        => url('backend_pressclipping_settings'),
+                'module_name' => 'es.openhost.module.pressclipping',
                 'privilege'   => 'ADMIN'
             ],
         ]
