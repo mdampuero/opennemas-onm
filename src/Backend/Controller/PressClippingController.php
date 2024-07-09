@@ -38,7 +38,7 @@ class PressClippingController extends BackendController
     protected $resource = 'presclipping';
 
     /**
-     * Configures the PressClipping Module
+     * Dashboard the PressClipping Module
      *
      * @param Request $request The request object.
      * @return Response the response object.
@@ -46,5 +46,16 @@ class PressClippingController extends BackendController
     public function dashboardAction()
     {
         return $this->render('pressclipping/dashboard.tpl');
+    }
+
+    /**
+     * Configures the PressClipping Module
+     *
+     * @param Request $request The request object.
+     * @return Response the response object.
+     */
+    public function settingsAction()
+    {
+        return $this->render('pressclipping/settings.tpl');
     }
 }

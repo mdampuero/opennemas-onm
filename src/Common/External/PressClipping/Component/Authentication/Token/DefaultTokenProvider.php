@@ -9,7 +9,7 @@
  */
 namespace Common\External\PressClipping\Component\Authentication\Token;
 
-class DefaultTokenProvider implements ITokenProvider
+class DefaultTokenProvider implements TokenProvider
 {
     /**
      * The redis connection.

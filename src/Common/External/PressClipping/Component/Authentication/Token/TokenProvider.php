@@ -9,7 +9,7 @@
  */
 namespace Common\External\PressClipping\Component\Authentication\Token;
 
-interface ITokenProvider
+interface TokenProvider
 {
     /**
      * Returns the access token.

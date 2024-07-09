@@ -17,9 +17,9 @@
      */
     .controller('PressClippingCtrl', [
       '$controller', '$scope', 'http', 'messenger', 'routing',
-      function($controller, $scope, http) {
+      function($controller, $scope, http, messenger, routing) {
         // Initialize the super class and extend it.
-        $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
+        $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
          * @memberOf PressClippingCtrl
@@ -31,6 +31,7 @@
          */
         $scope.routes = {
           checkServer: 'api_v1_backend_presclipping_check_server',
+          saveConfig: 'api_v1_backend_pressclipping_save_config',
         };
 
         // Initialize settings with pressclipping_service
@@ -52,6 +53,34 @@
         };
 
         /**
+         * @function save
+         * @memberof PressClippingCtrl
+         *
+         * @description
+         *  Saves the configuration
+         */
+        $scope.save = function() {
+          if (!$scope.flags.http.checking) {
+            $scope.flags.http.saving = true;
+          }
+
+          var data = $scope.settings;
+
+          return http.put($scope.routes.saveConfig, data)
+            .then(function(response) {
+              if (!screenTop.flags.http.checking) {
+                $scope.disableFlags('http');
+                messenger.post(response.data);
+              }
+            }, function(response) {
+              if (!$scope.flags.http.checking) {
+                $scope.disableFlags('http');
+                messenger.post(response.data);
+              }
+            });
+        };
+
+        /**
          * @function check
          * @memberOf PressClippingCtrl
          *
@@ -61,17 +90,22 @@
         $scope.check = function() {
           $scope.flags.http.checking = true;
 
-          var route = {
-            name: $scope.routes.checkServer
-          };
+          $scope.save()
+            .then(function() {
+              var route = {
+                name: $scope.routes.checkServer
+              };
 
-          http.get(route).then(function() {
-            $scope.disableFlags('http');
-            $scope.status = 'success';
-          }, function() {
-            $scope.disableFlags('http');
-            $scope.status = 'failure';
-          });
+              http.get(route).then(function() {
+                $scope.disableFlags('http');
+                $scope.status = 'success';
+              }, function() {
+                $scope.disableFlags('http');
+                $scope.status = 'failure';
+              });
+            }, function() {
+              $scope.disableFlags('http');
+            });
         };
       }
     ]);

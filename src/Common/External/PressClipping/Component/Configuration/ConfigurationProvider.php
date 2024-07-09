@@ -9,7 +9,7 @@
  */
 namespace Common\External\PressClipping\Component\Configuration;
 
-interface IConfigurationProvider
+interface ConfigurationProvider
 {
     /**
      * Returns the PressClipping configuration.

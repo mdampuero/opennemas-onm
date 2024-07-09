@@ -98,6 +98,9 @@ class Authentication
                 $this->url . $this->configProvider->getAuthUri(),
                 $requestParams
             );
+
+            dump($response);
+            die();
         } catch (\Exception $e) {
             throw new PressClippingException(
                 'pressclipping.authentication.failure: ' . $e->getMessage()
