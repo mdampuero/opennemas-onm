@@ -44,6 +44,69 @@ class PressClippingController extends ApiController
         // TODO: Desarrollo futuro
     }
 
+    public function getListAction(Request $request)
+    {
+        $demo_response = [
+            "items" => [
+                [
+                    "send_date" => "2020-01-01 08:00:00",
+                    "title" => "Duis Aute Irure Dolor In Reprehenderit",
+                    "status" => 1
+                ],
+                [
+                    "send_date" => "2021-02-15 09:30:00",
+                    "title" => "Lorem Ipsum Dolor Sit Amet",
+                    "status" => 1
+                ],
+                [
+                    "send_date" => "2022-03-20 14:00:00",
+                    "title" => "Consectetur Adipiscing Elit",
+                    "status" => 0
+                ],
+                [
+                    "send_date" => "2023-04-10 11:45:00",
+                    "title" => "Sed Do Eiusmod Tempor",
+                    "status" => 1
+                ],
+                [
+                    "send_date" => "2024-05-05 16:20:00",
+                    "title" => "Incididunt Ut Labore Et Dolore",
+                    "status" => 0
+                ],
+                [
+                    "send_date" => "2025-06-30 08:00:00",
+                    "title" => "Magna Aliqua Ut Enim",
+                    "status" => 1
+                ],
+                [
+                    "send_date" => "2026-07-25 13:10:00",
+                    "title" => "Ad Minim Veniam",
+                    "status" => 0
+                ],
+                [
+                    "send_date" => "2027-08-15 07:30:00",
+                    "title" => "Quis Nostrud Exercitation",
+                    "status" => 1
+                ],
+                [
+                    "send_date" => "2028-09-10 10:00:00",
+                    "title" => "Ullamco Laboris Nisi",
+                    "status" => 0
+                ],
+                [
+                    "send_date" => "2029-10-05 15:45:00",
+                    "title" => "Ut Aliquip Ex Ea Commodo",
+                    "status" => 1
+                ]
+            ]
+        ];
+
+        return new JsonResponse([
+            'items' => $demo_response['items'],
+            'total' => 10,
+        ]);
+    }
+
     /**
      * Tries to connect to the server.
      *

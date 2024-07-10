@@ -30,12 +30,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          // TODO: Falta definir
+          getList: 'api_v1_backend_pressclipping_get_list'
         };
 
         // Initialize settings with pressclipping_service
         $scope.settings = {
-          // TODO: Falta definir
         };
 
         /**
@@ -46,7 +45,19 @@
          *   Initializes the form.
          */
         $scope.init = function() {
-          // TODO : Falta inicio
+          http.get($scope.routes.getList).then(function(response) {
+            $scope.data = response.data;
+
+            if (!response.data.items) {
+              $scope.data.items = [];
+            }
+
+            $scope.items = $scope.data.items;
+
+            $scope.disableFlags('http');
+          }, function() {
+            $scope.disableFlags('http');
+          });
         };
       }
     ]);
