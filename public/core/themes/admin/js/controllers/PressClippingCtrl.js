@@ -33,10 +33,6 @@
           getList: 'api_v1_backend_pressclipping_get_list'
         };
 
-        // Initialize settings with pressclipping_service
-        $scope.settings = {
-        };
-
         /**
          * @function init
          * @memberof PressClippingCtrl
