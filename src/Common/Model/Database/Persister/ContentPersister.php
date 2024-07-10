@@ -45,7 +45,7 @@ class ContentPersister extends BasePersister
         }
 
         // Prevent forcing starttime value before now/created
-        if ($entity->starttime < $dateNow) {
+        if (!empty($entity->starttime) && $entity->starttime < $dateNow) {
             $entity->starttime = $dateNow;
         }
 
