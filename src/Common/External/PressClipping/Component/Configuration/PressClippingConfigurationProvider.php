@@ -11,8 +11,6 @@ namespace Common\External\PressClipping\Component\Configuration;
 
 class PressClippingConfigurationProvider implements ConfigurationProvider
 {
-    private $authUri = '';
-
     private $isTokenRequired = true;
 
     private $dataset;
@@ -42,30 +40,14 @@ class PressClippingConfigurationProvider implements ConfigurationProvider
     /**
      * {@inheritdoc}
      */
-    public function getAuthUri()
-    {
-        return $this->authUri;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isTokenRequired()
     {
         return $this->isTokenRequired;
     }
 
-    public function getAuthHeaders()
-    {
-        return [
-            'Authorization' => 'Bearer ' . $this->dataset->get('pressclipping_token', ''),
-        ];
-    }
-
     public function getConfigParams()
     {
         return [
-            'headers' => $this->getAuthHeaders(),
             'form_params' => $this->getConfiguration()
         ];
     }
