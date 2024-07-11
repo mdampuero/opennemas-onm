@@ -15,9 +15,6 @@ use GuzzleHttp\Client;
 
 class Authentication
 {
-    private const ACCESS_TOKEN_KEY = 'pressclipping_access_token';
-    private const EXPIRES_IN_KEY   = 'expires_in';
-
     /**
      * The HTTP Client
      *
