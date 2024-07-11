@@ -136,6 +136,53 @@ class PressClippingController extends ApiController
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
+    /**
+     * Tries to connect to the server.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function uploadAction()
+    {
+        $article = [
+            [
+                "publicationID" => "12345",
+                "title" => "Example Article",
+                "subtitle" => "An example subtitle",
+                "author" => "John Doe",
+                "pubDate" => "2024-07-11 10:30:00",
+                "body" => "<p>This is the content of the article.</p>",
+                "category" => "Technology",
+                "image" => "https://example.com/image.jpg",
+                "articleID" => "67890",
+                "articleURL" => "https://example.com/article"
+            ]
+        ];
+
+        $msg = $this->get('core.messenger');
+        try {
+            $pressclipping = $this->get('external.press_clipping.factory');
+            $endpoint      = $pressclipping->getEndpoint('upload_info');
+            $body          = $endpoint->uploadData($article);
+            if (isset($body['errorCode']) && isset($body['errorMessage'])) {
+                $msg->add(
+                    sprintf(
+                        _('Error %d: %s'),
+                        $body['errorCode'],
+                        $body['errorMessage']
+                    ),
+                    'error',
+                    400
+                );
+            } else {
+                $msg->add(_('Server connection success'), 'success');
+            }
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to connect to the server'), 'error', 400);
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
     public function getConfigAction()
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));

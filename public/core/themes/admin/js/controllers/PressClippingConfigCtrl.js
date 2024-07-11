@@ -33,6 +33,7 @@
           getConfig: 'api_v1_backend_pressclipping_get_config',
           checkServer: 'api_v1_backend_pressclipping_check_server',
           saveConfig: 'api_v1_backend_pressclipping_save_config',
+          uploadDump: 'api_v1_backend_pressclipping_upload_data',
         };
 
         // Initialize settings with pressclipping_service
@@ -107,6 +108,34 @@
               }, function() {
                 $scope.disableFlags('http');
                 $scope.status = 'failure';
+              });
+            }, function() {
+              $scope.disableFlags('http');
+            });
+        };
+
+        /**
+         * @function dump
+         * @memberof PressClippingConfigCtrl
+         *
+         * @description
+         *   Checks the connection to the server.
+         */
+        $scope.dump = function() {
+          $scope.flags.http.checking = true;
+
+          $scope.save()
+            .then(function() {
+              var route = {
+                name: $scope.routes.uploadDump
+              };
+
+              http.post(route).then(function() {
+                $scope.disableFlags('http');
+                $scope.statusDump = 'success';
+              }, function() {
+                $scope.disableFlags('http');
+                $scope.statusDump = 'failure';
               });
             }, function() {
               $scope.disableFlags('http');

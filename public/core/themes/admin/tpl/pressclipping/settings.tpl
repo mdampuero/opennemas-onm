@@ -72,6 +72,16 @@
                   </button>
                 </div>
               </div>
+              <div class="p-t-15">
+                <div class="text-center">
+                  <button class="btn btn-block btn-loading m-t-5" ng-class="{ 'btn-light': !status , 'btn-success': statusDump === 'success' , 'btn-danger': statusDump === 'failure' }" ng-click="dump()" ng-disabled="!settings.pressclipping_service.apikey || flags.http.checking" type="button">
+                    <i class="fa fa-plug m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.checking }"></i>
+                    {t}Dump Data{/t}
+                    <i class="fa fa-check m-l-5" ng-show="statusDump === 'success'"></i>
+                    <i class="fa fa-exclamation-circle m-l-5" ng-show="statusDump === 'failure'"></i>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
