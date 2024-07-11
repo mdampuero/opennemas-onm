@@ -53,30 +53,18 @@
                 </div>
               </div>
               <div class="row">
-                <div class="controls col-xs-12 col-md-4 m-b-10">
+                <div class="controls col-xs-12 col-md-12 m-b-10">
                   <label>{t}API key{/t}</label>
                   <input class="form-control" ng-model="settings.pressclipping_service.apikey" type="text">
                   <i class="fa fa-info-circle text-info"></i>
                   <small class="text-muted">{t}Can be found in Webpushr APP{/t} | Integration > REST API Keys > Key</small>
-                </div>
-                <div class="controls col-xs-12 col-md-4 m-b-10">
-                  <label>{t}Authentication token{/t}</label>
-                  <input class="form-control" ng-model="settings.pressclipping_service.token" type="text">
-                  <i class="fa fa-info-circle text-info"></i>
-                  <small class="text-muted">{t}Can be found in Webpushr APP{/t} | Integration > REST API Keys > Authentication Token</small>
-                </div>
-                <div class="controls col-xs-12 col-md-4 m-b-10">
-                  <label>{t}Public key{/t}</label>
-                  <input class="form-control" ng-model="settings.pressclipping_service.publickey" type="text">
-                  <i class="fa fa-info-circle text-info"></i>
-                  <small class="text-muted">{t}Can be found in Webpushr APP{/t} | Integration > Public key for AMP > Key</small>
                 </div>
               </div>
             </div>
             <div class="col-xs-12">
               <div class="p-t-15">
                 <div class="text-center">
-                  <button class="btn btn-block btn-loading m-t-5" ng-class="{ 'btn-light': !status , 'btn-success': status === 'success' , 'btn-danger': status === 'failure' }" ng-click="check()" ng-disabled="!settings.pressclipping_service.apikey || !settings.pressclipping_service.token || !settings.pressclipping_service.publickey || flags.http.checking" type="button">
+                  <button class="btn btn-block btn-loading m-t-5" ng-class="{ 'btn-light': !status , 'btn-success': status === 'success' , 'btn-danger': status === 'failure' }" ng-click="check()" ng-disabled="!settings.pressclipping_service.apikey || flags.http.checking" type="button">
                     <i class="fa fa-plug m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.checking }"></i>
                     {t}Connect{/t}
                     <i class="fa fa-check m-l-5" ng-show="status === 'success'"></i>
