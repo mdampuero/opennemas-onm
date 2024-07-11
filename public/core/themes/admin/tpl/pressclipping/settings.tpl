@@ -57,7 +57,7 @@
                   <label>{t}API key{/t}</label>
                   <input class="form-control" ng-model="settings.pressclipping_service.apikey" type="text">
                   <i class="fa fa-info-circle text-info"></i>
-                  <small class="text-muted">{t}Can be found in Webpushr APP{/t} | Integration > REST API Keys > Key</small>
+                  <small class="text-muted">{t}Can be found in your CEDRO Account{/t} | Token </small>
                 </div>
               </div>
             </div>
