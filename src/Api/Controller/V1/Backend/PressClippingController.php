@@ -10,43 +10,68 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class PressClippingController extends ApiController
 {
     /**
-     * {@inheritdoc}
+     * Override extension property.
+     *
+     * @var string
      */
     protected $extension = 'es.openhost.module.pressclipping';
 
     /**
-     * {@inheritdoc}
+     * Override permissions property.
+     *
+     * @var array
      */
     protected $permissions = [
-        // TODO: Falta especificar
+        // TODO: Specify permissions
     ];
 
     /**
-     * {@inheritdoc}
+     * Override module property.
+     *
+     * @var string
      */
     protected $module = 'pressclipping';
 
     /**
-     * {@inheritdoc}
+     * Override service property.
+     *
+     * @var string
      */
     protected $service = 'api.service.pressclipping';
 
     /**
-     * {@inheritdoc}
+     * Override helper property.
+     *
+     * @var string
      */
     protected $helper = 'core.helper.pressclipping';
 
     /**
-     * {@inheritdoc}
+     * Retrieves a list of demo items.
+     *
+     * @param Request $request The request object.
+     * @return JsonResponse The JSON response containing demo items.
      */
-    protected function getExtraData()
-    {
-        // TODO: Desarrollo futuro
-    }
-
     public function getListAction(Request $request)
     {
-        $demo_response = [
+        // Generate demo response data
+        $demo_response = $this->generateDemoResponse();
+
+        // Return JSON response with demo data
+        return new JsonResponse([
+            'items' => $demo_response['items'],
+            'total' => count($demo_response['items']),
+        ]);
+    }
+
+    /**
+     * Generates demo response data.
+     *
+     * @return array Demo response data.
+     */
+    private function generateDemoResponse(): array
+    {
+        return [
             "items" => [
                 [
                     "send_date" => "2020-01-01 08:00:00",
@@ -100,27 +125,24 @@ class PressClippingController extends ApiController
                 ]
             ]
         ];
-
-        return new JsonResponse([
-            'items' => $demo_response['items'],
-            'total' => 10,
-        ]);
     }
 
     /**
-     * Tries to connect to the server.
+     * Checks the server connection status.
      *
-     * @return JsonResponse The response object.
+     * @return JsonResponse The JSON response containing server connection status.
      */
     public function checkServerAction()
     {
+        // Get messenger service
         $msg = $this->get('core.messenger');
-        try {
-            $pressclipping = $this->get('external.press_clipping.factory');
-            $endpoint      = $pressclipping->getEndpoint('test_connection');
-            $body          = $endpoint->testConnection();
 
-            if (isset($body['errorCode']) && isset($body['errorMessage'])) {
+        try {
+            $pressClipping = $this->get('external.press_clipping.factory')
+                ->getEndpoint('test_connection');
+            $body          = $pressClipping->testConnection();
+
+            if (isset($body['errorCode'], $body['errorMessage'])) {
                 if ($body['errorCode'] === '004') {
                     $msg->add(_('Server connection success'), 'success');
                 } else {
@@ -137,12 +159,13 @@ class PressClippingController extends ApiController
     }
 
     /**
-     * Tries to connect to the server.
+     * Uploads an article to the server.
      *
-     * @return JsonResponse The response object.
+     * @return JsonResponse The JSON response containing upload status.
      */
     public function uploadAction()
     {
+        // Example article data
         $article = [
             [
                 "publicationID" => "12345",
@@ -158,12 +181,19 @@ class PressClippingController extends ApiController
             ]
         ];
 
+        // Get messenger service
         $msg = $this->get('core.messenger');
+
         try {
-            $pressclipping = $this->get('external.press_clipping.factory');
-            $endpoint      = $pressclipping->getEndpoint('upload_info');
-            $body          = $endpoint->uploadData($article);
-            if (isset($body['errorCode']) && isset($body['errorMessage'])) {
+            // Get press clipping endpoint
+            $pressClipping = $this->get('external.press_clipping.factory')
+                ->getEndpoint('upload_info');
+
+            // Upload article data
+            $body = $pressClipping->uploadData($article);
+
+            // Handle response based on presence of error codes
+            if (isset($body['errorCode'], $body['errorMessage'])) {
                 $msg->add(
                     sprintf(
                         _('Error %d: %s'),
@@ -174,15 +204,22 @@ class PressClippingController extends ApiController
                     400
                 );
             } else {
-                $msg->add(_('Server connection success'), 'success');
+                $msg->add(_('Article uploaded successfully'), 'success');
             }
         } catch (\Exception $e) {
+            // Handle connection failure
             $msg->add(_('Unable to connect to the server'), 'error', 400);
         }
 
+        // Return JSON response with messages
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
+    /**
+     * Retrieves configuration settings.
+     *
+     * @return JsonResponse The JSON response containing configuration settings.
+     */
     public function getConfigAction()
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
@@ -202,6 +239,12 @@ class PressClippingController extends ApiController
         ]);
     }
 
+    /**
+     * Saves configuration settings.
+     *
+     * @param Request $request The request object containing configuration data.
+     * @return JsonResponse The JSON response containing the result of saving settings.
+     */
     public function saveConfigAction(Request $request)
     {
         $msg = $this->get('core.messenger');
@@ -219,7 +262,7 @@ class PressClippingController extends ApiController
             $this->get('orm.manager')->getDataSet('Settings')->set($settings);
             $msg->add(_('Item saved successfully'), 'success');
         } catch (AccessDeniedException $e) {
-            $msg->add(_('Webpush Module is not activated'), 'info');
+            $msg->add(_('PressClipping Module is not activated'), 'info');
         } catch (\Exception $e) {
             $msg->add(_('Unable to save settings'), 'error');
             $this->get('error.log')->error($e->getMessage());
