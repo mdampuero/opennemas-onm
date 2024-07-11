@@ -121,7 +121,11 @@ class PressClippingController extends ApiController
             $body          = $endpoint->testConnection();
 
             if (isset($body['errorCode']) && isset($body['errorMessage'])) {
-                $msg->add(sprintf(_('Error %s: %s'), $body['errorCode'], $body['errorMessage']), 'error');
+                if ($body['errorCode'] === '004') {
+                    $msg->add(_('Server connection success'), 'success');
+                } else {
+                    $msg->add(_('Unable to connect to the server'), 'error', 400);
+                }
             } else {
                 $msg->add(_('Server connection success'), 'success');
             }
