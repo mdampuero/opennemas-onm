@@ -9,7 +9,7 @@ parameters:
             config:
             actions:
                 upload_info:
-                    path: '/api/DigitalData_api/uploadInfo'
+                    path: '/api/DigitalData_api/uploadInfo/'
                     parameters:
                         required:
                             - publicationID
@@ -27,7 +27,7 @@ parameters:
             config:
                 actions:
                     test_connection:
-                        path: '/v1/pressclipping/test_connection'
+                        path: '/api/DigitalData_api/uploadInfo/'
 services:
     external.press_clipping.provider.config:
         class:     'Common\External\PressClipping\Component\Configuration\PressClippingConfigurationProvider'

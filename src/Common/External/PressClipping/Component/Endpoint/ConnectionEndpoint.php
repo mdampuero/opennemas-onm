@@ -28,13 +28,12 @@ class ConnectionEndpoint extends Endpoint
                 $params
             );
 
-            $response = $this->client->get(
-                $url,
-                [
-                    'headers' => $this->auth->getAuthHeaders()
-                ]
-            );
-            $body     = json_decode($response->getBody(), true);
+            $response = $this->client->get($url);
+
+            // Decodificar el cuerpo de la respuesta
+            $body = json_decode($response->getBody(), true);
+
+            return $body;
         } catch (\Exception $e) {
             throw new PressClippingException(
                 'pressclipping.connection.get.failure: ' . $e->getMessage()

@@ -118,9 +118,13 @@ class PressClippingController extends ApiController
         try {
             $pressclipping = $this->get('external.press_clipping.factory');
             $endpoint      = $pressclipping->getEndpoint('test_connection');
+            $body          = $endpoint->testConnection();
 
-            $endpoint->testConnection();
-            $msg->add(_('Server connection success!'), 'success');
+            if (isset($body['errorCode']) && isset($body['errorMessage'])) {
+                $msg->add(sprintf(_('Error %s: %s'), $body['errorCode'], $body['errorMessage']), 'error');
+            } else {
+                $msg->add(_('Server connection success'), 'success');
+            }
         } catch (\Exception $e) {
             $msg->add(_('Unable to connect to the server'), 'error', 400);
         }
