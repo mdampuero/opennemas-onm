@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->root('act_on');
+        $rootNode    = $treeBuilder->root('pressclipping');
 
         return $treeBuilder;
     }

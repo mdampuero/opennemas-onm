@@ -11,7 +11,7 @@ namespace Common\External\PressClipping\Component\Configuration;
 
 class PressClippingConfigurationProvider implements ConfigurationProvider
 {
-    private $authUri = 'v1/authenticate';
+    private $authUri = '';
 
     private $isTokenRequired = true;
 
@@ -34,8 +34,8 @@ class PressClippingConfigurationProvider implements ConfigurationProvider
     {
         return [
             'Content-Type' => 'application/json',
-            'pressClippingApiKey' => 'asdasdasdasd', // $this->dataset->get('pressclipping_apikey', ''),
-            'pressClippingAuthToken' => 'sadasdasdasdasdasd', //$this->dataset->get('pressclipping_token', ''),
+            'pressClippingApiKey' => $this->dataset->get('pressclipping_apikey', ''),
+            'pressClippingAuthToken' => $this->dataset->get('pressclipping_token', ''),
         ];
     }
 

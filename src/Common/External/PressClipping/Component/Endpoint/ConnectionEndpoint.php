@@ -23,10 +23,12 @@ class ConnectionEndpoint extends Endpoint
     public function testConnection($params = [])
     {
         try {
+            $token = $this->auth->getToken();
+
             $url = $this->url . $this->replaceUriWildCards(
                 $this->config['actions']['test_connection']['path'],
                 $params
-            );
+            ) . '/' . $token;
 
             $response = $this->client->get($url);
 

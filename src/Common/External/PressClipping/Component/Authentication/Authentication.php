@@ -15,7 +15,7 @@ use GuzzleHttp\Client;
 
 class Authentication
 {
-    private const ACCESS_TOKEN_KEY = 'access_token';
+    private const ACCESS_TOKEN_KEY = 'pressclipping_access_token';
     private const EXPIRES_IN_KEY   = 'expires_in';
 
     /**
@@ -91,31 +91,12 @@ class Authentication
      */
     public function authenticate()
     {
-        $requestParams = $this->configProvider->getConfigParams();
+        $requestParams = $this->configProvider->getConfigParams()['form_params'];
 
-        try {
-            $response = $this->client->post(
-                $this->url . $this->configProvider->getAuthUri(),
-                $requestParams
-            );
-        } catch (\Exception $e) {
-            throw new PressClippingException(
-                'pressclipping.authentication.failure: ' . $e->getMessage()
-            );
-        }
-
-        $body = json_decode($response->getBody(), true);
-
-        if ($this->configProvider->isTokenRequired()) {
+        if ($requestParams) {
             $this->tokenProvider->setAccessToken(
-                $body[self::ACCESS_TOKEN_KEY],
-                $body[self::EXPIRES_IN_KEY]
-            );
-        }
-
-        if (empty($body)) {
-            throw new PressClippingException(
-                'pressclipping.authentication.failure: no response'
+                $requestParams['pressClippingApiKey'],
+                $requestParams['pressClippingAuthToken']
             );
         }
     }
@@ -132,19 +113,5 @@ class Authentication
         $this->authenticate();
 
         return $this->tokenProvider->getAccessToken();
-    }
-
-    /**
-     * Returns the auth headers
-     *
-     * @return Array The Auth Headers
-     */
-    public function getAuthHeaders()
-    {
-        if (!$this->configProvider->isTokenRequired()) {
-            return $this->getConfiguration();
-        }
-
-        return ['Authorization' => 'Bearer ' . $this->getToken()];
     }
 }

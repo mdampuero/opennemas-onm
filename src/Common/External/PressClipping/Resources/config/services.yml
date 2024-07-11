@@ -39,5 +39,5 @@ services:
         public: true
 
     external.press_clipping.provider.token:
-        class:     'Common\External\PressClipping\Component\Authentication\Token\DefaultTokenProvider'
+        class:     'Common\External\PressClipping\Component\Authentication\Token\RedisTokenProvider'
         arguments: [ '@cache.connection.instance' ]
