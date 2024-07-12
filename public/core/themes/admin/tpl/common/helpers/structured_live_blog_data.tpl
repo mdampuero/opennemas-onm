@@ -63,7 +63,7 @@
       {else}
       "image":[],
       {/if}
-      "url": "{$siteUrl}"
+      "url": "{$url}"
     }{if !$smarty.foreach.update.last},{/if}
     {/foreach}
   ]
