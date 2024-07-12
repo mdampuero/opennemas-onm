@@ -315,6 +315,44 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     };
 
     /**
+     * @function sendPressClipping
+     * @memberof ContentRestInnerCtrl
+     *
+     * @description
+     *  Send a PressClipping item for CEDRO
+     */
+    $scope.sendPressClipping = function(item) {
+      if (!$scope.data.item) {
+        $scope.data.item = {};
+      }
+
+      // Ensure pressclipping is defined as an array
+      if (!$scope.data.item.pressclipping) {
+        $scope.data.item.pressclipping = [];
+      }
+
+      var date = $scope.item.starttime < $window.moment().format('YYYY-MM-DD HH:mm:ss') ? $window.moment().format('YYYY-MM-DD HH:mm:ss') : $scope.item.starttime;
+
+      // TODO: Comentar o indagar para ver si podemos traernos el usuario.
+
+      // Now you can safely push the new item into the pressclipping array
+      $scope.data.item.pressclipping.push({
+        publicationID: '1235466',
+        title: item.title,
+        subtitle: item.description,
+        author: item.fk_author,
+        pubDate: date,
+        body: item.body,
+        category: item.categories,
+        image: 'https://example.com/image.jpg',
+        articleID: '67890',
+        articleURL: 'https://example.com/article'
+      });
+
+      // TODO: Falta por enviar los datos al restApi
+    };
+
+    /**
      * @function sendWPNotification
      * @memberOf ContentRestInnerCtrl
      *
