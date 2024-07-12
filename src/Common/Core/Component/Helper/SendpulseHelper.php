@@ -216,7 +216,7 @@ class SendpulseHelper
         $data = [
             'title'      => $article->title ?? '',
             'body'       => $body,
-            'website_id' => '74433',
+            'website_id' => $this->getWebsiteId(),
             'ttl'        => 86400, //Max ttl allowed
             'link'       => $contentPath,
         ];
