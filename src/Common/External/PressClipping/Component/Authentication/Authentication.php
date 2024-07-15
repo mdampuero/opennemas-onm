@@ -117,5 +117,8 @@ class Authentication
 
     public function getPubID()
     {
+        $this->authenticate();
+
+        return $this->tokenProvider->getPubID();
     }
 }

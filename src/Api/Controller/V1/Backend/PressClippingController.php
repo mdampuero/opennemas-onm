@@ -174,7 +174,6 @@ class PressClippingController extends ApiController
             // Dump  article data
             $article = [
                 [
-                    "publicationID" => "8136",
                     "title" => "Example Article",
                     "subtitle" => "An example subtitle",
                     "author" => "John Doe",

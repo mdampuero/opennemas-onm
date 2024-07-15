@@ -29,6 +29,14 @@ class UploadEndpoint extends Endpoint
             // Get authentication token
             $token = $this->auth->getToken();
 
+            // Get PublicationID
+            $pubID = $this->auth->getPubID();
+
+            // Add PublicationID each Article
+            foreach ($articles as &$article) {
+                $article['publicationID'] = $pubID;
+            }
+
             // Construct the URL with the token
             $url = $this->url . $this->config['actions']['upload_info']['path'] . '/' . $token;
 
