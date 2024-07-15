@@ -93,7 +93,10 @@ class Authentication
         if ($requestParams) {
             $this->tokenProvider->setAccessToken(
                 $requestParams['pressClippingApiKey'],
-                $requestParams['pressClippingAuthToken']
+                '3600'
+            );
+            $this->tokenProvider->setPubID(
+                $requestParams['pressClippingPubID']
             );
         }
     }
@@ -110,5 +113,9 @@ class Authentication
         $this->authenticate();
 
         return $this->tokenProvider->getAccessToken();
+    }
+
+    public function getPubID()
+    {
     }
 }

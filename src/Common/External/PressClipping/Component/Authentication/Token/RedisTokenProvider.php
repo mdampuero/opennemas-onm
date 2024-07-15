@@ -139,4 +139,26 @@ class RedisTokenProvider implements TokenProvider
             return $this;
         }, [ $token ]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPubID()
+    {
+        return $this->execute(function () {
+            return $this->conn->get('pressclipping-publication-id');
+        }, []);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPubID($pubID)
+    {
+        return $this->execute(function ($a) {
+            $this->conn->set('pressclipping-publication-id', $a);
+
+            return $this;
+        }, [ $pubID]);
+    }
 }

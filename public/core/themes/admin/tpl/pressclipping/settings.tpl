@@ -66,7 +66,13 @@
                 </div>
               </div>
               <div class="row">
-                <div class="controls col-xs-12 col-md-12 m-b-10">
+                <div class="controls col-xs-6 col-md-6 m-b-10">
+                  <label>{t}Publication ID{/t}</label>
+                  <input class="form-control" ng-model="settings.pressclipping_service.pubID" type="text">
+                  <i class="fa fa-info-circle text-info"></i>
+                  <small class="text-muted">{t}Can be found in your CEDRO Account{/t}</small>
+                </div>
+                <div class="controls col-xs-6 col-md-6 m-b-10">
                   <label>{t}API key{/t}</label>
                   <input class="form-control" ng-model="settings.pressclipping_service.apikey" type="text">
                   <i class="fa fa-info-circle text-info"></i>

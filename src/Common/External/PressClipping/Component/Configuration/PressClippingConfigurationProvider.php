@@ -34,6 +34,7 @@ class PressClippingConfigurationProvider implements ConfigurationProvider
             'Content-Type' => 'application/json',
             'pressClippingApiKey' => $this->dataset->get('pressclipping_apikey', ''),
             'pressClippingAuthToken' => $this->dataset->get('pressclipping_token', ''),
+            'pressClippingPubID' => $this->dataset->get('pressclipping_pubID', ''),
         ];
     }
 

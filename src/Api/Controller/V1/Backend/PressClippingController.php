@@ -174,7 +174,7 @@ class PressClippingController extends ApiController
             // Dump  article data
             $article = [
                 [
-                    "publicationID" => "12345",
+                    "publicationID" => "8136",
                     "title" => "Example Article",
                     "subtitle" => "An example subtitle",
                     "author" => "John Doe",
@@ -235,11 +235,13 @@ class PressClippingController extends ApiController
             ->getDataSet('Settings', 'instance')
             ->get(['pressclipping_service',
                 'pressclipping_automatic',
+                'pressclipping_pubID',
                 'pressclipping_apikey',
             ]);
 
         $pressclipping_service = [
             'service'   => $settings['pressclipping_service'],
+            'pubID'   => $settings['pressclipping_pubID'],
             'apikey'    => $settings['pressclipping_apikey'],
             'automatic'    => $settings['pressclipping_automatic'],
         ];
@@ -261,11 +263,13 @@ class PressClippingController extends ApiController
 
         $pressclipping_service = $request->request->get('pressclipping_service');
         $service               = $pressclipping_service['service'] ?? null;
+        $pubID                 = $pressclipping_service['pubID'] ?? null;
         $apikey                = $pressclipping_service['apikey'] ?? null;
         $automatic             = $pressclipping_service['automatic'] ?? 0;
 
         $settings = [
             'pressclipping_service'          => $service,
+            'pressclipping_pubID'            => $pubID,
             'pressclipping_apikey'           => $apikey,
             'pressclipping_automatic'        => $automatic
         ];
