@@ -167,11 +167,12 @@ class PressClippingController extends ApiController
     {
         $data = $request->request->all();
 
-        // Verify if $data contain the array.
+        // Check if $data contains an array of articles.
+        // If $data contains an array with at least one element and the first element is an array,
+        // then assign $data to $article. Otherwise, assign a default article to $article.
         if (isset($data[0]) && is_array($data[0])) {
             $article = $data;
         } else {
-            // Dump  article data
             $article = [
                 [
                     "title" => "Example Article",

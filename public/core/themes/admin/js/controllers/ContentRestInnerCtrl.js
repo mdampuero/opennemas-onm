@@ -322,12 +322,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      *  Send a PressClipping item for CEDRO
      */
     $scope.sendPressClipping = function(item) {
-      // Validate the item data before proceeding
-      if (!item || !item.title || !item.description || !item.fk_author || !item.body || !item.categories) {
-        $scope.status = 'failure';
-        return;
-      }
-
       // Initialize $scope.data.item if not defined
       if (!$scope.data.item) {
         $scope.data.item = {};
@@ -345,7 +339,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
       // Add the new press clipping to the array
       $scope.data.item.pressclipping.push({
-        publicationID: '1235466',
         title: item.title,
         subtitle: item.description,
         author: item.fk_author,
@@ -353,7 +346,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         body: item.body,
         category: item.categories,
         image: 'https://example.com/image.jpg',
-        articleID: '67890',
+        articleID: item.pk_content,
         articleURL: 'https://example.com/article'
       });
 
@@ -368,9 +361,11 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       http.post(route, data).then(
         function() {
           $scope.status = 'success';
+          delete $scope.data.item.pressclipping;
         },
         function() {
           $scope.status = 'failure';
+          delete $scope.data.item.pressclipping;
         }
       );
     };
