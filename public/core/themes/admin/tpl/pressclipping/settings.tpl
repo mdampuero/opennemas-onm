@@ -40,6 +40,19 @@
                 </select>
               </div>
             </div>
+            <div class="col-xs-6 col-md-3">
+              <h4>{t}Automatic sent{/t}</h4>
+              <div class="controls">
+                <div class="checkbox">
+                  <input class="form-control" id="pressclipping-automatic" name="pressclipping-automatic" ng-false-value="'0'" ng-model="settings.pressclipping_service.automatic" ng-true-value="'1'" type="checkbox"/>
+                  <label class="form-label" for="pressclipping-automatic">
+                    {t}Activated{/t}
+                  </label>
+                </div>
+              </div>
+              <i class="fa fa-info-circle text-info"></i>
+              <small class="text-muted">{t}Will be sent when content is published{/t}</small>
+            </div>
           </div>
         </div>
       </div>
