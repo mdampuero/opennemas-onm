@@ -163,23 +163,30 @@ class PressClippingController extends ApiController
      *
      * @return JsonResponse The JSON response containing upload status.
      */
-    public function uploadAction()
+    public function uploadAction(Request $request = null)
     {
-        // Example article data
-        $article = [
-            [
-                "publicationID" => "12345",
-                "title" => "Example Article",
-                "subtitle" => "An example subtitle",
-                "author" => "John Doe",
-                "pubDate" => "2024-07-11 10:30:00",
-                "body" => "<p>This is the content of the article.</p>",
-                "category" => "Technology",
-                "image" => "https://example.com/image.jpg",
-                "articleID" => "67890",
-                "articleURL" => "https://example.com/article"
-            ]
-        ];
+        $data = $request->request->all();
+
+        // Verify if $data contain the array.
+        if (isset($data[0]) && is_array($data[0])) {
+            $article = $data;
+        } else {
+            // Dump  article data
+            $article = [
+                [
+                    "publicationID" => "12345",
+                    "title" => "Example Article",
+                    "subtitle" => "An example subtitle",
+                    "author" => "John Doe",
+                    "pubDate" => "2024-07-11 10:30:00",
+                    "body" => "<p>This is the content of the article.</p>",
+                    "category" => "Technology",
+                    "image" => "https://example.com/image.jpg",
+                    "articleID" => "67890",
+                    "articleURL" => "https://example.com/article"
+                ]
+            ];
+        }
 
         // Get messenger service
         $msg = $this->get('core.messenger');

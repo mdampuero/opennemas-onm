@@ -2,9 +2,9 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
-  '$controller', '$uibModal', '$scope', 'cleaner',
+  '$controller', '$uibModal', '$scope', 'cleaner', 'http',
   'messenger', 'routing', '$timeout', 'webStorage', '$window', 'translator',
-  function($controller, $uibModal, $scope, cleaner,
+  function($controller, $uibModal, $scope, cleaner, http,
       messenger, routing, $timeout, webStorage, $window, translator) {
     'use strict';
 
@@ -322,6 +322,13 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      *  Send a PressClipping item for CEDRO
      */
     $scope.sendPressClipping = function(item) {
+      // Validate the item data before proceeding
+      if (!item || !item.title || !item.description || !item.fk_author || !item.body || !item.categories) {
+        $scope.status = 'failure';
+        return;
+      }
+
+      // Initialize $scope.data.item if not defined
       if (!$scope.data.item) {
         $scope.data.item = {};
       }
@@ -331,11 +338,12 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         $scope.data.item.pressclipping = [];
       }
 
-      var date = $scope.item.starttime < $window.moment().format('YYYY-MM-DD HH:mm:ss') ? $window.moment().format('YYYY-MM-DD HH:mm:ss') : $scope.item.starttime;
+      // Determine the appropriate publication date
+      var date = $scope.item.starttime < $window.moment().format('YYYY-MM-DD HH:mm:ss') ?
+        $window.moment().format('YYYY-MM-DD HH:mm:ss') :
+        $scope.item.starttime;
 
-      // TODO: Comentar o indagar para ver si podemos traernos el usuario.
-
-      // Now you can safely push the new item into the pressclipping array
+      // Add the new press clipping to the array
       $scope.data.item.pressclipping.push({
         publicationID: '1235466',
         title: item.title,
@@ -349,7 +357,22 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         articleURL: 'https://example.com/article'
       });
 
-      // TODO: Falta por enviar los datos al restApi
+      // Define the API route
+      var route = {
+        name: 'api_v1_backend_pressclipping_upload_data',
+      };
+
+      // Send the data to the API
+      var data = $scope.data.item.pressclipping;
+
+      http.post(route, data).then(
+        function() {
+          $scope.status = 'success';
+        },
+        function() {
+          $scope.status = 'failure';
+        }
+      );
     };
 
     /**
