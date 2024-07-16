@@ -215,14 +215,21 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      *   Saves tags, send notifications if  needed and, then, saves the item.
      */
     $scope.submit = function(item) {
-      if (item && $scope.hasPendingNotifications() && !$scope.hasAutomaticNotifications()) {
+      if (item && $scope.hasPendingNotifications() &&
+        !$scope.hasAutomaticNotifications() &&
+        !$scope.hasAutomaticPressClipping()) {
         if (item.starttime <= $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
           $scope.openNotificationModal(item, false);
         } else {
           $scope.sendWPNotification(item, false);
         }
+      } else if ($scope.hasAutomaticNotifications() && $scope.hasAutomaticPressClipping()) {
+        $scope.sendPressClipping(item, true);
+        $scope.sendWPNotification(item, true);
       } else if ($scope.hasAutomaticNotifications()) {
         $scope.sendWPNotification(item, true);
+      } else if ($scope.hasAutomaticPressClipping()) {
+        $scope.sendPressClipping(item, true);
       } else {
         $scope.saveItem();
       }
@@ -368,6 +375,11 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           delete $scope.data.item.pressclipping;
         }
       );
+
+      // If webpush is not enabled  save item.
+      if (!$scope.hasAutomaticNotifications()) {
+        $scope.saveItem();
+      }
     };
 
     /**
@@ -500,6 +512,26 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       if ($scope.data &&
         $scope.data.extra.auto_webpush &&
         $scope.data.extra.auto_webpush === '1') {
+        return true;
+      }
+
+      return false;
+    };
+
+    /**
+     * @function hasAutomaticPressClipping
+     * @memberOf ContentRestInnerCtrl
+     *
+     * @description
+     *   Check if auto pressclipping setting is enabled.
+     *
+     * @return {Boolean} True if enabled. False
+     *                   otherwise.
+     */
+    $scope.hasAutomaticPressClipping = function() {
+      if ($scope.data &&
+        $scope.data.extra.auto_pressclipping &&
+        $scope.data.extra.auto_pressclipping === '1') {
         return true;
       }
 
