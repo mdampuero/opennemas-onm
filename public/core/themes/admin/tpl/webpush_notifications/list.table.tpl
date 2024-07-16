@@ -55,7 +55,6 @@
         {t}Clicks{/t}
       </label>
     </div>
-    [% data.extra.service %]
     <div class="checkbox column-filters-checkbox" ng-if="data.extra.service === 'webpushr'">
       <input id="closed" checklist-model="app.columns.selected" checklist-value="'closed'" type="checkbox">
       <label for="closed">
