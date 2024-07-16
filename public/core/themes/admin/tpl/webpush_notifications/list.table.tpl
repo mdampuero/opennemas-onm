@@ -55,14 +55,13 @@
         {t}Clicks{/t}
       </label>
     </div>
-    {if ({setting name=webpush_service} === 'webpushr')}
-    <div class="checkbox column-filters-checkbox">
+    [% data.extra.service %]
+    <div class="checkbox column-filters-checkbox" ng-if="data.extra.service === 'webpushr'">
       <input id="closed" checklist-model="app.columns.selected" checklist-value="'closed'" type="checkbox">
       <label for="closed">
         {t}Closed{/t}
       </label>
     </div>
-    {/if}
     <div class="checkbox column-filters-checkbox">
       <input id="ctr" checklist-model="app.columns.selected" checklist-value="'ctr'" type="checkbox">
       <label for="ctr">
@@ -102,12 +101,10 @@
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br/>{t}clicked by the user{/t}'" tooltip-placement="bottom"></i>
       {t}Clicks{/t}
     </th>
-    {if ({setting name=webpush_service} === 'webpushr')}
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('closed')" width="120">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('closed') && data.extra.service === 'webpushr'" width="120">
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br/>{t}closed by the user{/t}'" tooltip-placement="bottom"></i>
       {t}Closed{/t}
     </th>
-    {/if}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')" width="100">
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'({t}Clicks + Closed{/t})<br>/ {t}Impressions{/t}'" tooltip-placement="bottom"></i>
       {t}CTR{/t}
@@ -175,15 +172,13 @@
       </strong>
     </span>
   </td>
-  {if ({setting name=webpush_service} === 'webpushr')}
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('closed')">
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('closed') && data.extra.service === 'webpushr'">
     <span>
       <strong>
         [% item.closed | number : 0 %]
       </strong>
     </span>
   </td>
-  {/if}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('ctr')">
     <span ng-if="item.impressions > 0">
       <strong>
