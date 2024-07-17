@@ -113,34 +113,6 @@
               $scope.disableFlags('http');
             });
         };
-
-        /**
-         * @function dump
-         * @memberof PressClippingConfigCtrl
-         *
-         * @description
-         *   Checks the connection to the server.
-         */
-        $scope.dump = function() {
-          $scope.flags.http.checking = true;
-
-          $scope.save()
-            .then(function() {
-              var route = {
-                name: $scope.routes.uploadDump
-              };
-
-              http.post(route).then(function() {
-                $scope.disableFlags('http');
-                $scope.statusDump = 'success';
-              }, function() {
-                $scope.disableFlags('http');
-                $scope.statusDump = 'failure';
-              });
-            }, function() {
-              $scope.disableFlags('http');
-            });
-        };
       }
     ]);
 })();

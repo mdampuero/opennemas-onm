@@ -338,6 +338,8 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         $window.moment().format('YYYY-MM-DD HH:mm:ss') :
         $scope.item.starttime;
 
+      var featured = $scope.getFeaturedMedia($scope.item, 'featured_frontpage');
+
       // Add the new press clipping to the array
       $scope.data.item.pressclipping.push({
         title: item.title,
@@ -346,9 +348,9 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         pubDate: date,
         body: item.body,
         category: item.categories,
-        image: 'https://example.com/image.jpg',
+        image: featured.path,
         articleID: item.pk_content,
-        articleURL: 'https://example.com/article'
+        articleURL: item.slug
       });
 
       // Define the API route
@@ -358,6 +360,8 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
       // Send the data to the API
       var data = $scope.data.item.pressclipping;
+
+      console.log(data);
 
       http.post(route, data).then(
         function() {
