@@ -234,7 +234,6 @@ class PressClippingController extends ApiController
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get(['pressclipping_service',
-                'pressclipping_automatic',
                 'pressclipping_pubID',
                 'pressclipping_apikey',
             ]);
@@ -242,8 +241,7 @@ class PressClippingController extends ApiController
         $pressclipping_service = [
             'service'   => $settings['pressclipping_service'],
             'pubID'   => $settings['pressclipping_pubID'],
-            'apikey'    => $settings['pressclipping_apikey'],
-            'automatic'    => $settings['pressclipping_automatic'],
+            'apikey'    => $settings['pressclipping_apikey']
         ];
 
         return new JsonResponse([
@@ -265,13 +263,11 @@ class PressClippingController extends ApiController
         $service               = $pressclipping_service['service'] ?? null;
         $pubID                 = $pressclipping_service['pubID'] ?? null;
         $apikey                = $pressclipping_service['apikey'] ?? null;
-        $automatic             = $pressclipping_service['automatic'] ?? 0;
 
         $settings = [
             'pressclipping_service'          => $service,
             'pressclipping_pubID'            => $pubID,
             'pressclipping_apikey'           => $apikey,
-            'pressclipping_automatic'        => $automatic
         ];
 
         try {
