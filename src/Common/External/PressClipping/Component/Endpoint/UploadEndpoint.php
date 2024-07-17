@@ -32,8 +32,6 @@ class UploadEndpoint extends Endpoint
             // Get PublicationID
             $pubID = $this->auth->getPubID();
 
-            // Get Core URL
-            $coreUrl = getService('core.decorator.url');
             // Add PublicationID each Article
             foreach ($articles as &$article) {
                 $article['publicationID'] = $pubID;
