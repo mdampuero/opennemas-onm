@@ -47,84 +47,54 @@ class PressClippingController extends ApiController
     protected $helper = 'core.helper.pressclipping';
 
     /**
-     * Retrieves a list of demo items.
+     * Retrieves a list of items.
      *
      * @param Request $request The request object.
      * @return JsonResponse The JSON response containing demo items.
      */
     public function getListAction(Request $request)
     {
-        // Generate demo response data
-        $demo_response = $this->generateDemoResponse();
+        $listConnection = $this->get('dbal_connection');
 
-        // Return JSON response with demo data
+        $list = $listConnection->fetchAll(
+            "SELECT contentmeta.fk_content, contents.title, contentmeta.meta_name, contentmeta.meta_value
+             FROM contentmeta
+             JOIN contents ON contentmeta.fk_content = contents.pk_content
+             WHERE contentmeta.meta_name IN ('pressclipping_sended', 'pressclipping_status')"
+        );
+
+        // Array to store results grouped by pk_content
+        $groupedList = [];
+
+        // Iterate over each row of $list
+        foreach ($list as $item) {
+            $pkContent = $item['fk_content'];
+
+            // If pk_content is not already in $groupedList, initialize it as an empty array
+            if (!isset($groupedList[$pkContent])) {
+                $groupedList[$pkContent] = [
+                    'title' => $item['title'],
+                    'pressclipping_sended' => null,
+                    'pressclipping_status' => null,
+                ];
+            }
+
+            if ($item['meta_name'] == 'pressclipping_sended') {
+                $groupedList[$pkContent]['pressclipping_sended'] = $item['meta_value'];
+            }
+
+            if ($item['meta_name'] == 'pressclipping_status') {
+                $groupedList[$pkContent]['pressclipping_status'] = $item['meta_value'];
+            }
+        }
+
+        // Convert associative array to indexed array
+        $groupedList = array_values($groupedList);
+
+        // Return JSON response with items data
         return new JsonResponse([
-            'items' => $demo_response['items'],
-            'total' => count($demo_response['items']),
+            'items' => $groupedList,
         ]);
-    }
-
-    /**
-     * Generates demo response data.
-     *
-     * @return array Demo response data.
-     */
-    private function generateDemoResponse(): array
-    {
-        return [
-            "items" => [
-                [
-                    "send_date" => "2020-01-01 08:00:00",
-                    "title" => "Duis Aute Irure Dolor In Reprehenderit",
-                    "status" => 1
-                ],
-                [
-                    "send_date" => "2021-02-15 09:30:00",
-                    "title" => "Lorem Ipsum Dolor Sit Amet",
-                    "status" => 1
-                ],
-                [
-                    "send_date" => "2022-03-20 14:00:00",
-                    "title" => "Consectetur Adipiscing Elit",
-                    "status" => 0
-                ],
-                [
-                    "send_date" => "2023-04-10 11:45:00",
-                    "title" => "Sed Do Eiusmod Tempor",
-                    "status" => 1
-                ],
-                [
-                    "send_date" => "2024-05-05 16:20:00",
-                    "title" => "Incididunt Ut Labore Et Dolore",
-                    "status" => 0
-                ],
-                [
-                    "send_date" => "2025-06-30 08:00:00",
-                    "title" => "Magna Aliqua Ut Enim",
-                    "status" => 1
-                ],
-                [
-                    "send_date" => "2026-07-25 13:10:00",
-                    "title" => "Ad Minim Veniam",
-                    "status" => 0
-                ],
-                [
-                    "send_date" => "2027-08-15 07:30:00",
-                    "title" => "Quis Nostrud Exercitation",
-                    "status" => 1
-                ],
-                [
-                    "send_date" => "2028-09-10 10:00:00",
-                    "title" => "Ullamco Laboris Nisi",
-                    "status" => 0
-                ],
-                [
-                    "send_date" => "2029-10-05 15:45:00",
-                    "title" => "Ut Aliquip Ex Ea Commodo",
-                    "status" => 1
-                ]
-            ]
-        ];
     }
 
     /**
@@ -199,6 +169,25 @@ class PressClippingController extends ApiController
             // Upload article data
             $body = $pressClipping->uploadData($article);
 
+            $pressClippingLogger = $this->get('dbal_connection');
+
+            $pressClippingStatus = isset($body['errorCode']) ? 'Not sended' : 'Sended';
+
+            $metas = [
+                [
+                    'fk_content' => $article[0]['articleID'],
+                    'meta_name' => 'pressclipping_status',
+                    'meta_value' => $pressClippingStatus
+                ],
+                [
+                    'fk_content' => $article[0]['articleID'],
+                    'meta_name' => 'pressclipping_sended',
+                    'meta_value' => date('Y-m-d')
+                ]
+            ];
+
+            $this->insertOrUpdateMetas($pressClippingLogger, $metas);
+
             // Handle response based on presence of error codes
             if (isset($body['errorCode'], $body['errorMessage'])) {
                 $msg->add(
@@ -220,6 +209,28 @@ class PressClippingController extends ApiController
 
         // Return JSON response with messages
         return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Inserts or updates meta data in the database.
+     *
+     * @param \Doctrine\DBAL\Connection $connection
+     * @param array $metas
+     */
+    protected function insertOrUpdateMetas($connection, array $metas)
+    {
+        foreach ($metas as $meta) {
+            $connection->executeUpdate(
+                "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+                . " VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?",
+                [
+                    $meta['fk_content'],
+                    $meta['meta_name'],
+                    $meta['meta_value'],
+                    $meta['meta_value']
+                ]
+            );
+        }
     }
 
     /**

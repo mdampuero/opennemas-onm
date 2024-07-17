@@ -64,19 +64,17 @@
                     <td>
                       <div ng-if="item.title != ''">[% item.title %]</div>
                       <div class="small-text">
-                        <strong>{t}Created:{/t}</strong> [% item.send_date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %] <br>
+                        <strong>{t}Sended:{/t}</strong> [% item.pressclipping_sended | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %] <br>
                       </div>
                     </td>
                     <td class="hidden-xs text-center">
                       <div>
-                        <i class="fa fa-check text-success" ng-show="item.status != 0 && item.status != -1"></i>
-                        <i class="fa fa-cogs text-info" ng-show="item.status == -1"></i>
-                        <i class="fa fa-inbox" ng-show="item.status == 0"></i>
-                        <i class="fa fa-clock text-info" ng-show="item.status == 0"></i>
+                        <i class="fa fa-check text-success" ng-show="item.pressclipping_status !== 'Not sended'"></i>
+                        <i class="fa fa-cogs text-info" ng-show="item.pressclipping_status === 'Not sended'"></i>
+                        <i class="fa fa-clock text-info" ng-show="item.pressclipping_status === 'Not sended'"></i>
                       </div>
-                      <div ng-show="item.status == 0">{t}Not sent{/t}</div>
-                      <div ng-show="item.status != 0 && item.status != -1">{t}Sent{/t}</div>
-                      <div ng-show="item.status == -1">{t}Sending{/t}</div>
+                      <div ng-show="item.pressclipping_status === 'Not sended'">{t}Not sent{/t}</div>
+                      <div ng-show="item.pressclipping_status !== 'Not sended'">{t}Sent{/t}</div>
                     </td>
                   </tr>
                 </tbody>

@@ -42,7 +42,6 @@ orm:
                 params:               array
                 pk_content:           integer
                 position:             integer
-                pressclipping:        array
                 slug:                 l10n_string
                 starttime:            datetime
                 urldatetime:          string
