@@ -11,6 +11,24 @@
       <div class="text-center" ng-if="item.content_status">
         <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="sendPressClipping(item)" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND PRESSCLIPPING{/t}</button>
       </div>
+      <div class="menu-dragable-accordion" id="pressclipping-container">
+        <div class=" m-t-5" ng-repeat="notification in item.pressclipping.slice().reverse()">
+          <div ng-if="statusPressclipping === 'success'" class="alert alert-success" id="alerteo">
+            <i class="fa fa-check"></i>
+            {t}Notification sent{/t}
+            <small>
+              [% notification.send_date | moment : 'YYYY-MM-DD HH:mm:ss': null : '{$app.locale->getTimeZone()->getName()}' %]
+            </small>
+          </div>
+          <div ng-if="statusPressclipping=== 'failure'" class="alert alert-danger">
+            <i class="fa fa-exclamation-triangle"></i>
+            {t}Notification failed{/t}
+            <small>
+              [% notification.send_date | moment : 'YYYY-MM-DD HH:mm:ss': null : '{$app.locale->getTimeZone()->getName()}' %]
+            </small>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

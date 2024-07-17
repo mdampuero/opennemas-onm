@@ -361,15 +361,13 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       // Send the data to the API
       var data = $scope.data.item.pressclipping;
 
-      console.log(data);
-
       http.post(route, data).then(
         function() {
-          $scope.status = 'success';
+          $scope.statusPressclipping = 'success';
           delete $scope.data.item.pressclipping;
         },
         function() {
-          $scope.status = 'failure';
+          $scope.statusPressclipping = 'failure';
           delete $scope.data.item.pressclipping;
         }
       );
