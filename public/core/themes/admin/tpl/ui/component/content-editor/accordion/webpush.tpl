@@ -43,6 +43,7 @@
             <small>
               [% notification.send_date | moment : 'YYYY-MM-DD HH:mm:ss': null : '{$app.locale->getTimeZone()->getName()}' %]
             </small>
+          </div>
         </div>
       </div>
     </div>

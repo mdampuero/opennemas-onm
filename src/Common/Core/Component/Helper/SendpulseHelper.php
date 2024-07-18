@@ -204,14 +204,10 @@ class SendpulseHelper
             return [];
         }
 
-        $contentService = $this->container->get('api.service.content');
-        $photoHelper    = $this->container->get('core.helper.photo');
-
+        $imageHelper = $this->container->get('core.helper.image');
         $contentPath = $this->container->get('core.helper.url_generator')->getUrl($article, ['_absolute' => true]);
         $image       = $this->container->get('core.helper.featured_media')->getFeaturedMedia($article, 'inner');
-        $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
-        $favico      = $contentService->getItem($this->ds->get('logo_favico'));
-        $favicoPath  = $photoHelper->getPhotoPath($favico, null, [ 192, 192 ], true);
+        $favico      = $this->container->get('api.service.content')->getItem($this->ds->get('logo_favico'));
 
         $body = !empty($article->description)
             ? strip_tags($article->description)
@@ -227,41 +223,27 @@ class SendpulseHelper
 
         $imageContent = '';
 
-        if (!empty($image) && !empty($imagePath) && $image->size <= 200) {
-            $extension = pathinfo(parse_url($imagePath, PHP_URL_PATH), PATHINFO_EXTENSION);
+        $basePath = $this->container->getParameter('core.paths.public')
+            . $this->container->get('core.instance')->getMediaShortPath() . DS;
 
-            if (in_array($extension, $this->avaliableImageType)) {
-                $curl = curl_init();
-                curl_setopt($curl, CURLOPT_URL, $imagePath);
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($curl, CURLOPT_HEADER, false);
-                $imageContent = curl_exec($curl);
-                curl_close($curl);
-            }
-        }
+        $imagePath  = $basePath . $image->path;
+        $favicoPath = $basePath . $favico->path;
 
-        if (!empty($imageContent)) {
+        if ($imageHelper->exists($imagePath) && $image->size <= 200) {
+            // Get image content and base64 encode
+            $imageContent  = file_get_contents($imagePath);
             $data['image'] = [
-                'name' => $image->title ?? 'image_title',
+                'name' => basename($imagePath),
                 'data' => base64_encode($imageContent)
             ];
         }
 
-        $iconContent = '';
-
-        if (!empty($favico) && !empty($favicoPath)) {
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $favicoPath);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($curl, CURLOPT_HEADER, false);
-            $iconContent = curl_exec($curl);
-            curl_close($curl);
-        }
-
-        if (!empty($iconContent)) {
-            $data['icon'] = [
-                'name' => $favico->title ?? 'icon_title',
-                'data' => base64_encode($iconContent)
+        if ($imageHelper->exists($favicoPath)) {
+            // Get favico content and base64 encode
+            $favicoContent = file_get_contents($favicoPath);
+            $data['icon']  = [
+                'name' => basename($favicoPath),
+                'data' => base64_encode($favicoContent)
             ];
         }
 

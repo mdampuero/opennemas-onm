@@ -129,3 +129,8 @@
     {/if}
   ]
 </script>
+
+
+{if $content->live_blog_posting}
+  {include file="common/helpers/structured_live_blog_data.tpl"}
+{/if}

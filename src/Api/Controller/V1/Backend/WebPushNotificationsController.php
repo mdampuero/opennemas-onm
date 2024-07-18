@@ -39,7 +39,10 @@ class WebPushNotificationsController extends ApiController
     protected function getExtraData($items = null)
     {
         $response = [
-            'years' => $this->getItemYears(),
+            'years'   => $this->getItemYears(),
+            'service' => $this->get('orm.manager')
+                ->getDataSet('Settings')
+                ->get('webpush_service')
         ];
 
         if (empty($items)) {
