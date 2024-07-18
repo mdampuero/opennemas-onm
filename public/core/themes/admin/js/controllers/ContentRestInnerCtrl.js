@@ -316,6 +316,32 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     };
 
     /**
+     * @function getFrontendUrl
+     * @memberOf ArticleCtrl
+     *
+     * @description
+     *   Generates the public URL basing on the item.
+     *
+     * @param {String} item  The item to generate route for.
+     *
+     * @return {String} The URL for the content.
+     */
+    $scope.getFrontendUrl = function(item) {
+      if (!$scope.selectedCategory || !item.pk_content) {
+        return '';
+      }
+
+      return $scope.data.extra.base_url + $scope.getL10nUrl(
+        routing.generate($scope.routes.public, {
+          id: item.pk_content.toString().padStart(6, '0'),
+          created: item.urldatetime || $window.moment(item.created).format('YYYYMMDDHHmmss'),
+          slug: item.slug,
+          category_slug: $scope.selectedCategory.name
+        })
+      );
+    };
+
+    /**
      * @function sendPressClipping
      * @memberof ContentRestInnerCtrl
      *
@@ -348,9 +374,9 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         pubDate: date,
         body: item.body,
         category: item.categories,
-        image: featured.path,
+        image: $scope.data.extra.base_url + '/' + featured.path,
         articleID: item.pk_content,
-        articleURL: item.slug
+        articleURL: $scope.getFrontendUrl(item)
       });
 
       // Define the API route
