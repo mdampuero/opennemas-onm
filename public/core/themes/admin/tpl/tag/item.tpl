@@ -28,15 +28,15 @@
     <div class="grid-body">
       <div class="row">
         <div class="col-md-6 form-group">
-          {include file="ui/component/input/text.tpl" iField="name" iMessageField="name" iFlag="validating" iNgActions="ng-blur=\"generate()\" ng-change=\"isValid()\"" iRequired="true" iTitle="{t}Name{/t}" iValidation=true}
+          {include file="ui/component/input/text.tpl" iField="name" iMessageField="name" iFlag="validating" iNgActions="ng-blur=\"generate()\" ng-change=\"isValid()\"" iRequired=true iTitle="{t}Name{/t}" iValidation=true}
         </div>
         <div class="col-md-6">
-          {include file="ui/component/input/slug.tpl" iField="slug" iFlag="slug" iNgModel="item.slug" iRequired="true" iTitle="{t}Slug{/t}" iValidation=true}
+          {include file="ui/component/input/slug.tpl" iField="slug" iFlag="slug" iNgModel="item.slug" iRequired=true iTitle="{t}Slug{/t}" iValidation=true}
         </div>
       </div>
       <div class="row">
         <div class="col-sm-6 form-group">
-          {include file="ui/component/input/text.tpl" iField="seo_title" iMessageField="seo_title" iRequired="false" iTitle="{t}Seo title{/t}" iValidation=false}
+          {include file="ui/component/input/text.tpl" iField="seo_title" iMessageField="seo_title" iRequired=false iTitle="{t}Seo title{/t}" iValidation=false}
         </div>
         <div class="col-sm-6 form-group" ng-if="config.locale.multilanguage">
           <label class="form-label" for="locale">
