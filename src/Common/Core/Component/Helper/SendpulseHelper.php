@@ -221,28 +221,23 @@ class SendpulseHelper
             'link'       => $contentPath,
         ];
 
-        $imageContent = '';
-
         $basePath = $this->container->getParameter('core.paths.public')
             . $this->container->get('core.instance')->getMediaShortPath() . DS;
 
-        $imagePath  = $basePath . $image->path;
-        $favicoPath = $basePath . $favico->path;
-
-        if ($imageHelper->exists($imagePath) && $image->size <= 200) {
+        if ($image && $imageHelper->exists($basePath . $image->path) && $image->size <= 200) {
             // Get image content and base64 encode
-            $imageContent  = file_get_contents($imagePath);
+            $imageContent  = file_get_contents($basePath . $image->path);
             $data['image'] = [
-                'name' => basename($imagePath),
+                'name' => basename($image->path),
                 'data' => base64_encode($imageContent)
             ];
         }
 
-        if ($imageHelper->exists($favicoPath)) {
+        if ($favico && $imageHelper->exists($basePath . $favico->path)) {
             // Get favico content and base64 encode
-            $favicoContent = file_get_contents($favicoPath);
+            $favicoContent = file_get_contents($basePath . $favico->path);
             $data['icon']  = [
-                'name' => basename($favicoPath),
+                'name' => basename($favico->path),
                 'data' => base64_encode($favicoContent)
             ];
         }
