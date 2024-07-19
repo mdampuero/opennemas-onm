@@ -39,7 +39,7 @@
 
           if (textarea) {
             var editor = CodeMirror.fromTextArea(textarea, {
-              mode: 'html',
+              mode: 'htmlmixed',
               theme: 'dracula',
               lineNumbers: true,
               matchBrackets: true,

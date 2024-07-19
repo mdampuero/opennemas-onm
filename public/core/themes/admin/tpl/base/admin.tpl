@@ -24,6 +24,7 @@
   <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
   <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <link href="/assets/css/codemirror.css" rel="stylesheet" type="text/css">
+  <link href="/assets/css/codemirror/dracula.css" rel="stylesheet" type="text/css">
   {block name="header-css"}
     {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
       @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
