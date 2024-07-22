@@ -35,25 +35,48 @@
         };
 
         $timeout(function() {
-          var textarea = document.getElementById('header-script');
+          // Associative array of all element IDs and corresponding keys in $scope.settings
+          var selectors = [
+            { id: 'header-script', key: 'header_script' },
+            { id: 'body-start-script', key: 'body_start_script' },
+            { id: 'body-end-script', key: 'body_end_script' },
+            { id: 'header-script-amp', key: 'header_script_amp' },
+            { id: 'body-start-script-amp', key: 'body_start_script_amp' },
+            { id: 'body-end-script-amp', key: 'body_end_script_amp' },
+            { id: 'custom-css-amp', key: 'custom_css_amp' }
+          ];
 
-          if (textarea) {
-            var editor = CodeMirror.fromTextArea(textarea, {
-              mode: 'htmlmixed',
-              theme: 'dracula',
-              lineNumbers: true,
-              matchBrackets: true,
-              autoCloseBrackets: true
-            });
+          // Initialize $scope.settings with empty values if they don't exist
+          selectors.forEach(function(element) {
+            if (!$scope.settings[element.key]) {
+              $scope.settings[element.key] = '';
+            }
+          });
 
-            editor.setValue($scope.settings.header_script);
+          // Iterate over each selector and configure CodeMirror
+          selectors.forEach(function(selector) {
+            var textarea = document.getElementById(selector.id);
 
-            editor.on('change', function() {
-              $scope.$apply(function() {
-                $scope.settings.header_script = editor.getValue();
+            if (textarea) {
+              var editor = CodeMirror.fromTextArea(textarea, {
+                mode: 'htmlmixed',
+                theme: 'dracula',
+                lineNumbers: true,
+                matchBrackets: true,
+                autoCloseBrackets: true
               });
-            });
-          }
+
+              // Set the initial value of the editor from $scope.settings
+              editor.setValue($scope.settings[selector.key]);
+
+              // Update $scope.settings when the editor content changes
+              editor.on('change', function() {
+                $scope.$apply(function() {
+                  $scope.settings[selector.key] = editor.getValue();
+                });
+              });
+            }
+          });
         }, 1000);
       }
     ]);
