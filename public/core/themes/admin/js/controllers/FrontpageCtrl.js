@@ -700,10 +700,35 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     };
 
     $scope.openModal = function($event) {
+      // Obtener la URL del atributo data-url
       var url = $event.currentTarget.getAttribute('data-url');
 
-      $scope.modalUrl = $sce.trustAsResourceUrl(url);
+      // Crear un elemento <a> para analizar la URL
+      var a = document.createElement('a');
+
+      a.href = url;
+
+      // Obtener solo el dominio
+      var domain = a.protocol + '//' + a.hostname;
+
+      // Concatenar el dominio con la parte específica que deseas
+      var fullUrl = domain + url;
+
+      // Asignar la URL al iframe dentro del modal
+      var iframe = document.getElementById('modal-iframe');
+
+      iframe.src = fullUrl;
+
+      // Mostrar el modal
       $('#modal-edit-id').modal('show');
+
+      $('#modal-edit-id').on('hidden.bs.modal', function() {
+        // Realizar una acción cuando el modal se cierra
+        $scope.$apply(function() {
+          // Por ejemplo, refrescar la página
+          location.reload();
+        });
+      });
     };
   }
 ]);

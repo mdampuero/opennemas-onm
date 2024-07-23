@@ -8,7 +8,7 @@
         </h4>
       </div>
       <div class="modal-body">
-          <iframe ng-src="{$url}/{$scope.modalUrl}" width="100%" height="600px" frameborder="0"></iframe>
+        <iframe id="modal-iframe" width="100%" height="600px" frameborder="0"></iframe>
       </div>
       <div class="modal-footer">
       </div>
