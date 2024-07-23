@@ -3,8 +3,8 @@
  */
 angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
   '$controller', 'http', '$uibModal', '$scope', '$interval', 'routing',
-  'messenger', '$window',
-  function($controller, http, $uibModal, $scope, $interval, routing, messenger, $window) {
+  'messenger', '$window', '$sce',
+  function($controller, http, $uibModal, $scope, $interval, routing, messenger, $window, $sce) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -697,6 +697,13 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
           }
         }
       });
+    };
+
+    $scope.openModal = function($event) {
+      var url = $event.currentTarget.getAttribute('data-url');
+
+      $scope.modalUrl = $sce.trustAsResourceUrl(url);
+      $('#modal-edit-id').modal('show');
     };
   }
 ]);

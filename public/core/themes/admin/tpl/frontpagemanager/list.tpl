@@ -156,7 +156,7 @@
                   <li class="visible-sm">
                     <a href="#" ng-click="openLayoutModal()">
                       <i class="fa fa-cog"></i>
-                      {t}Settings{/t}
+                      {t}Settings{/t} asdadsasd
                     </a>
                   </li>
                 {/is_module_activated}
@@ -407,6 +407,7 @@
 {block name="modals"}
   {include file="frontpagemanager/modals/_modal_send_to_trash.tpl"}
   {include file="frontpagemanager/modals/_modal_archive.tpl"}
+  {include file="frontpagemanager/modals/_modal_content_widget.tpl"}
 
   {is_module_activated name="ADVANCED_FRONTPAGE_MANAGER"}
   {include file="frontpagemanager/modals/_modal_customize_content.tpl"}
