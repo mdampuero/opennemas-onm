@@ -700,35 +700,18 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     };
 
     $scope.openModal = function($event) {
-      // Obtener la URL del atributo data-url
-      var url = $event.currentTarget.getAttribute('data-url');
+      var relativeUrl = $event.currentTarget.getAttribute('data-url');
 
-      // Crear un elemento <a> para analizar la URL
-      var a = document.createElement('a');
+      var baseUrl = window.location.origin;
+      var fullUrl = baseUrl + relativeUrl;
 
-      a.href = url;
+      document.getElementById('modal-iframe').src = fullUrl;
 
-      // Obtener solo el dominio
-      var domain = a.protocol + '//' + a.hostname;
-
-      // Concatenar el dominio con la parte específica que deseas
-      var fullUrl = domain + url;
-
-      // Asignar la URL al iframe dentro del modal
-      var iframe = document.getElementById('modal-iframe');
-
-      iframe.src = fullUrl;
-
-      // Mostrar el modal
-      $('#modal-edit-id').modal('show');
-
-      $('#modal-edit-id').on('hidden.bs.modal', function() {
-        // Realizar una acción cuando el modal se cierra
-        $scope.$apply(function() {
-          // Por ejemplo, refrescar la página
-          location.reload();
-        });
-      });
+      $('#modal-widget-edit').modal('show');
     };
+
+    $('#modal-edit-id').off('hidden.bs.modal').on('hidden.bs.modal', function() {
+      location.reload();
+    });
   }
 ]);
