@@ -699,19 +699,27 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       });
     };
 
-    $scope.openModal = function($event) {
+    $scope.widgetEditModal = function($event) {
       var relativeUrl = $event.currentTarget.getAttribute('data-url');
-
       var baseUrl = window.location.origin;
       var fullUrl = baseUrl + relativeUrl;
 
-      document.getElementById('modal-iframe').src = fullUrl;
+      var modalInstance = $uibModal.open({
+        templateUrl: 'modal-widget-edit',
+        backdrop: true,
+        controller: 'ModalWidgetEditCtrl',
+        resolve: {
+          fullUrl: function() {
+            return fullUrl;
+          }
+        }
+      });
 
-      $('#modal-widget-edit').modal('show');
+      modalInstance.result.then(null, function(reason) {
+        if (reason === 'backdrop click') {
+          location.reload();
+        }
+      });
     };
-
-    $('#modal-edit-id').off('hidden.bs.modal').on('hidden.bs.modal', function() {
-      location.reload();
-    });
   }
 ]);

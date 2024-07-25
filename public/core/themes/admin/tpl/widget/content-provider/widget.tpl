@@ -18,7 +18,7 @@
         </a>
         <ul class="dropdown-menu pull-right dropdown-menu-right no-padding">
             <li>
-                <a title="Edit '{$content->title}'" ng-click="openModal($event)" data-url="{url name=backend_widget_show id=$content->id}">
+                <a title="Edit '{$content->title}'" ng-click="widgetEditModal($event)" data-url="{url name=backend_widget_show id=$content->id}">
                     <i class="fa fa-pencil"></i> {t}Edit{/t}
                 </a>
             </li>

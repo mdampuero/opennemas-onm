@@ -401,13 +401,15 @@
 <script type="text/ng-template" id="modal-remove-frontpage">
   {include file="frontpagemanager/modals/_modal_remove_frontpage.tpl"}
 </script>
+<script type="text/ng-template" id="modal-widget-edit">
+  {include file="frontpagemanager/modals/_modal_widget_edit.tpl"}
+</script>
 {/block}
 
 
 {block name="modals"}
   {include file="frontpagemanager/modals/_modal_send_to_trash.tpl"}
   {include file="frontpagemanager/modals/_modal_archive.tpl"}
-  {include file="frontpagemanager/modals/_modal_content_widget.tpl"}
 
   {is_module_activated name="ADVANCED_FRONTPAGE_MANAGER"}
   {include file="frontpagemanager/modals/_modal_customize_content.tpl"}
