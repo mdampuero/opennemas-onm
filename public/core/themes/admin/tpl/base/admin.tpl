@@ -24,7 +24,7 @@
   <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
   <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
   <link href="/assets/css/codemirror.css" rel="stylesheet" type="text/css">
-  <link href="/assets/css/codemirror/dracula.css" rel="stylesheet" type="text/css">
+  <link href="/assets/css/codemirror/theme/dracula.css" rel="stylesheet" type="text/css">
   {block name="header-css"}
     {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
       @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
@@ -561,7 +561,11 @@
       @AdminTheme/js/services/*,
       @AdminTheme/js/admin.js" filters="uglifyjs" output="admin"}
     {/javascripts}
-    <script src="/assets/js/codemirror.js"></script>
+    <script src="/assets/js/codemirror/codemirror.js"></script>
+    <script src="/assets/js/codemirror/mode/css.min.js"></script>
+    <script src="/assets/js/codemirror/mode/htmlmixed.min.js"></script>
+    <script src="/assets/js/codemirror/mode/javascript.min.js"></script>
+    <script src="/assets/js/codemirror/mode/xml.min.js"></script>
   {/block}
   {block name="footer-js"}{/block}
   {uservoice_widget}
