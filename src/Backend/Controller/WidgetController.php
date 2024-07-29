@@ -95,4 +95,23 @@ class WidgetController extends BackendController
         } catch (GetListException $e) {
         }
     }
+
+    /**
+     * Displays the form to quick edit an item.
+     *
+     * @param Request $request The request object.
+     * @param integer $id      The item id.
+     *
+     * @return Response The response object.
+     */
+    public function quickShowAction(Request $request, $id)
+    {
+        $params = [ 'id' => $id ];
+
+        if ($this->get('core.helper.locale')->hasMultilanguage()) {
+            $params['locale'] = $request->query->get('locale');
+        }
+
+        return $this->render($this->resource . '/item-quick.tpl', $params);
+    }
 }
