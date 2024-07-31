@@ -23,8 +23,6 @@
   {/block}
   <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet" type="text/css">
   <link href="/assets/components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href="/assets/css/codemirror.css" rel="stylesheet" type="text/css">
-  <link href="/assets/css/codemirror/theme/dracula.css" rel="stylesheet" type="text/css">
   {block name="header-css"}
     {stylesheets src="@Common/components/bootstrap/dist/css/bootstrap.min.css,
       @Common/components/angular-bootstrap-colorpicker/css/colorpicker.min.css,
@@ -55,6 +53,8 @@
       @Common/src/angular-fly-to-cart/less/main.less,
       @Common/src/angular-picker/less/main.less,
       @Common/src/photo-editor/css/photo-editor.css,
+      @Common/components/codemirror/lib/codemirror.css,
+      @Common/components/codemirror/theme/dracula.css,
       @AdminTheme/less/*" filters="cssrewrite,less" output="admin"}
     {/stylesheets}
   {/block}
@@ -552,6 +552,11 @@
       @Common/src/angular-scroll/angular-scroll.js,
       @Common/src/angular-translator/js/translator.js,
       @Common/src/photo-editor/js/photo-editor.js,
+      @Common/components/codemirror/lib/codemirror.js,
+      @Common/components/codemirror/mode/css/css.js,
+      @Common/components/codemirror/mode/javascript/javascript.js,
+      @Common/components/codemirror/mode/htmlmixed/htmlmixed.js,
+      @Common/components/codemirror/mode/xml/xml.js,
       @AdminTheme/js/app.js,
       @AdminTheme/js/config.js,
       @AdminTheme/js/controllers/*,
@@ -561,11 +566,6 @@
       @AdminTheme/js/services/*,
       @AdminTheme/js/admin.js" filters="uglifyjs" output="admin"}
     {/javascripts}
-    <script src="/assets/js/codemirror/codemirror.js"></script>
-    <script src="/assets/js/codemirror/mode/css.min.js"></script>
-    <script src="/assets/js/codemirror/mode/htmlmixed.min.js"></script>
-    <script src="/assets/js/codemirror/mode/javascript.min.js"></script>
-    <script src="/assets/js/codemirror/mode/xml.min.js"></script>
   {/block}
   {block name="footer-js"}{/block}
   {uservoice_widget}

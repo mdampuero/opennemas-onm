@@ -50,7 +50,8 @@
     "ng-tags-input": "3.2.0",
     "select2": "3.5.1",
     "swfobject": "https://github.com/swfobject/swfobject.git#2.2",
-    "pdfjs-dist": "2.3.200"
+    "pdfjs-dist": "2.3.200",
+    "codemirror": "^5.65.16"
   },
   "resolutions": {
     "angular": "1.7.9"
