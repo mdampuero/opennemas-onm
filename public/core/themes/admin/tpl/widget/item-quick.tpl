@@ -1,8 +1,3 @@
-{extends file="common/extension/item-nomenu.tpl"}
-
-{block name="ngInit"}
-  ng-controller="WidgetCtrl" ng-init="getItem({$id});"
-{/block}
 
 {block name="rightColumn" append}
   <div class="grid simple">

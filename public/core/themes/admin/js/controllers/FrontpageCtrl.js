@@ -698,19 +698,16 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
         }
       });
     };
-
     $scope.widgetEditModal = function($event) {
-      var relativeUrl = $event.currentTarget.getAttribute('data-url');
-      var baseUrl = window.location.origin;
-      var fullUrl = baseUrl + relativeUrl;
+      var widgetID = $event.currentTarget.getAttribute('data-id');
 
       var modalInstance = $uibModal.open({
         templateUrl: 'modal-widget-edit',
         backdrop: true,
         controller: 'ModalWidgetEditCtrl',
         resolve: {
-          fullUrl: function() {
-            return fullUrl;
+          widgetID: function() {
+            return widgetID;
           }
         }
       });
