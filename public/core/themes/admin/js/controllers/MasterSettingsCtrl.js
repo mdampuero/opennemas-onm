@@ -34,7 +34,16 @@
           getConfig: 'api_v1_backend_settings_master_list'
         };
 
-        // Use a $watch to wait for the DOM to be ready
+        /**
+         * @memberof MasterSettingsCtrl
+         *
+         * @description
+         * Watcher that monitors the presence of specific elements in the DOM
+         * (identified by their IDs) and initializes CodeMirror textareas
+         * for these elements once they are loaded. It ensures that the
+         * corresponding entries in $scope.settings are initialized and synchronized
+         * with the content of the CodeMirror editors.
+         */
         $scope.$watch(
           function() {
             // Check if all required elements are present in the DOM
