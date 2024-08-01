@@ -20,7 +20,8 @@
      */
     .controller('ModalWidgetEditCtrl', [
       '$uibModalInstance', '$controller', '$scope', '$timeout', '$compile', 'http', 'widgetID',
-      function($uibModalInstance, $controller, $scope, $timeout, $compile, http, widgetID) {
+      'routing',
+      function($uibModalInstance, $controller, $scope, $timeout, $compile, http, widgetID, routing) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
         // Initialize the item object
         $scope.item = {
@@ -87,6 +88,18 @@
           $scope.item.params = result;
         };
 
+        $scope.save = function() {
+          var route = {
+            name: $scope.routes.updateItem,
+            params: { id: widgetID }
+          };
+
+          http.put(route, $scope.item)
+            .then(function(response) {
+              // TODO: Falta por especificar que realizar en el paso.
+            });
+        };
+
         // Initialize the controller
         $scope.init = function(index) {
           $scope.data.index = index;
@@ -143,6 +156,7 @@
          * @inheritdoc
          */
         $scope.buildScope = function() {
+          $scope.expandFields();
           var params = [];
 
           for (var key in $scope.item.params) {
@@ -180,11 +194,13 @@
             Object.keys(params).forEach(function(key) {
               object[key] = params[key];
             });
-
-            return object;
+          } else {
+            params.forEach(function(param) {
+              object[param.name] = param.value;
+            });
           }
 
-          return {};
+          return object;
         };
 
         // Add an empty parameter to the list
@@ -225,6 +241,13 @@
         $scope.close = function() {
           location.reload();
           $uibModalInstance.dismiss('cancel');
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.displayMultiBody = function() {
+          return $scope.data.extra && $scope.data.extra.locale && $scope.data.extra.locale.multilanguage;
         };
 
         // Watch for changes in the item class and get the form accordingly

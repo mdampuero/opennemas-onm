@@ -224,9 +224,8 @@ class ApiController extends Controller
 
         $msg = $this->get('core.messenger');
 
-        $data = $request;
-        dump($data);
-        die();
+        $data = $request->request->all();
+
         $msg->add(_('Datos recibidos: ') . print_r($data, true), 'info');
 
         $item = $this->get($this->service)
