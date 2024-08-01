@@ -699,15 +699,15 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
       });
     };
     $scope.widgetEditModal = function($event) {
-      var widgetID = $event.currentTarget.getAttribute('data-id');
+      var id = $event.currentTarget.getAttribute('data-id');
 
       var modalInstance = $uibModal.open({
         templateUrl: 'modal-widget-edit',
         backdrop: true,
         controller: 'ModalWidgetEditCtrl',
         resolve: {
-          widgetID: function() {
-            return widgetID;
+          id: function() {
+            return id;
           }
         }
       });

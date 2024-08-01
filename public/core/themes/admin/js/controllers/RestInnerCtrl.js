@@ -175,7 +175,6 @@
 
           http.get(route).then(function(response) {
             $scope.data = response.data;
-
             if (!response.data.item) {
               $scope.data.item = {};
             }

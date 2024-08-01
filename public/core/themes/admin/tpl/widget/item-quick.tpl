@@ -1,4 +1,3 @@
-
 {block name="rightColumn" append}
   <div class="grid simple">
     <div class="grid-body no-padding">
@@ -15,7 +14,7 @@
 
 {block name="leftColumn"}
   <div class="grid simple">
-    <div class="grid-body">
+    <div class="grid-body" ng-init="getItem(id);">
       {include file="ui/component/input/text.tpl" iField="title" iRequired=true iTitle="{t}Name{/t}" iValidation=true}
       <div class="ng-cloak" ng-show="!item.widget_type && !displayMultiBody()">
         {include file="ui/component/content-editor/textarea.tpl" class="no-margin" title="{t}Content{/t}" minheight="500" field="body" imagepicker=true rows=5}
