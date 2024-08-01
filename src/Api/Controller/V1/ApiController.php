@@ -224,12 +224,8 @@ class ApiController extends Controller
 
         $msg = $this->get('core.messenger');
 
-        $data = $request->request->all();
-
-        $msg->add(_('Datos recibidos: ') . print_r($data, true), 'info');
-
         $item = $this->get($this->service)
-            ->createItem($data);
+            ->createItem($request->request->all());
 
         $msg->add(_('Item saved successfully'), 'success', 201);
 
@@ -244,7 +240,6 @@ class ApiController extends Controller
 
         return $response;
     }
-
 
     /**
      * Updates the item information given its id and the new information.

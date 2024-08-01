@@ -24,6 +24,7 @@
         $.extend(this, $controller('WidgetCtrl', { $scope: $scope }));
 
         $scope.id = id;
+        $scope.getItem(id);
       }
     ]);
 })();
