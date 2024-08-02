@@ -15,8 +15,8 @@
      * Controller responsible for managing the master settings with CodeMirror editors.
      */
     .controller('MasterSettingsCtrl', [
-      '$controller', '$scope', '$timeout',
-      function($controller, $scope, $timeout) {
+      '$controller', '$scope',
+      function($controller, $scope) {
         // Inherit from the SettingsCtrl controller
         $.extend(this, $controller('SettingsCtrl', { $scope: $scope }));
 
