@@ -701,20 +701,14 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
     $scope.widgetEditModal = function($event) {
       var id = $event.currentTarget.getAttribute('data-id');
 
-      var modalInstance = $uibModal.open({
+      $uibModal.open({
         templateUrl: 'modal-widget-edit',
-        backdrop: true,
+        backdrop: false,
         controller: 'ModalWidgetEditCtrl',
         resolve: {
           id: function() {
             return id;
           }
-        }
-      });
-
-      modalInstance.result.then(null, function(reason) {
-        if (reason === 'backdrop click') {
-          location.reload();
         }
       });
     };
