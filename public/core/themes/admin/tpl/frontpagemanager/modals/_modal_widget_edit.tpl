@@ -3,7 +3,7 @@
     <div class="modal-header">
       <h3 class="modal-title">{t}Edit Widget{/t}</h3>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" ng-init="getItem(id)">
       {include file="widget/item-quick.tpl"}
     </div>
     <div class="modal-footer">

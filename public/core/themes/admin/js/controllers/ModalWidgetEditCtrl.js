@@ -28,7 +28,6 @@
         $.extend(this, $controller('WidgetCtrl', { $scope: $scope }));
 
         $scope.id = id;
-        $scope.getItem(id);
 
         /**
          * Builds the scope for the controller, transforming item params.
