@@ -156,7 +156,7 @@
                   <li class="visible-sm">
                     <a href="#" ng-click="openLayoutModal()">
                       <i class="fa fa-cog"></i>
-                      {t}Settings{/t} asdadsasd
+                      {t}Settings{/t}
                     </a>
                   </li>
                 {/is_module_activated}

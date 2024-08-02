@@ -3,8 +3,8 @@
  */
 angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
   '$controller', 'http', '$uibModal', '$scope', '$interval', 'routing',
-  'messenger', '$window', '$sce',
-  function($controller, http, $uibModal, $scope, $interval, routing, messenger, $window, $sce) {
+  'messenger', '$window',
+  function($controller, http, $uibModal, $scope, $interval, routing, messenger, $window) {
     'use strict';
 
     // Initialize the super class and extend it.

@@ -19,11 +19,3 @@ backend_widgets_list:
     defaults: { _controller: BackendBundle:Widget:list }
     options:
         expose: true
-
-backend_widget_quick_show:
-    path:     /widgets/quick-show/{id}/
-    defaults: { _controller: BackendBundle:Widget:quickShow }
-    requirements:
-        id: \d+
-    options:
-        expose: true
