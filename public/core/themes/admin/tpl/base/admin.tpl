@@ -54,7 +54,7 @@
       @Common/src/angular-picker/less/main.less,
       @Common/src/photo-editor/css/photo-editor.css,
       @Common/components/codemirror/lib/codemirror.css,
-      @Common/components/codemirror/theme/dracula.css,
+      @Common/components/codemirror/theme/material-palenight.css,
       @AdminTheme/less/*" filters="cssrewrite,less" output="admin"}
     {/stylesheets}
   {/block}

@@ -9,7 +9,6 @@
      *
      * @requires $controller
      * @requires $scope
-     * @requires $timeout
      *
      * @description
      * Controller responsible for managing the master settings with CodeMirror editors.
@@ -69,73 +68,104 @@
          *
          * @param {string} id The ID of the textarea element.
          */
-        $scope.initializeEditor = function(id) {
-          var textarea = document.getElementById(id);
-          var editor = '';
+        $scope.initializeEditor = function() {
+          var selectors = [
+            { id: 'header-script', key: 'header_script' },
+            { id: 'body-start-script', key: 'body_start_script' },
+            { id: 'body-end-script', key: 'body_end_script' },
+            { id: 'header-script-amp', key: 'header_script_amp' },
+            { id: 'body-start-script-amp', key: 'body_start_script_amp' },
+            { id: 'body-end-script-amp', key: 'body_end_script_amp' },
+            { id: 'custom-css-amp', key: 'custom_css_amp' }
+          ];
 
-          if (textarea) {
-            // Create a new CodeMirror instance
-            editor = CodeMirror.fromTextArea(textarea, {
-              autoCloseBrackets: true,
-              lineNumbers: true,
-              lineWrapping: true,
-              matchBrackets: true,
-              mode: 'htmlmixed',
-              theme: 'dracula',
-              scrollbarStyle: null
-            });
+          // Initialize $scope.settings with empty values if they don't exist
+          selectors.forEach(function(element) {
+            if (!$scope.settings[element.key]) {
+              $scope.settings[element.key] = '';
+            }
+          });
 
-            // Store the editor instance in $scope.editors
-            $scope.editors[id] = editor;
+          // Initialize $scope.editors and $scope.contentVisibility
+          $scope.editors = {};
+          $scope.contentVisibility = {};
 
-            // Set the initial value from $scope.settings
-            editor.setValue($scope.settings[id]);
+          selectors.forEach(function(selector) {
+            var textarea = document.getElementById(selector.id);
+            var editor = '';
 
-            // Update $scope.settings when the editor content changes
-            editor.on('change', function() {
-              $scope.$apply(function() {
-                $scope.settings[id] = editor.getValue();
+            if (textarea) {
+              // Create a new CodeMirror instance
+              editor = CodeMirror.fromTextArea(textarea, {
+                autoCloseBrackets: true,
+                lineNumbers: true,
+                lineWrapping: true,
+                matchBrackets: true,
+                mode: 'htmlmixed',
+                theme: 'default',
+                scrollbarStyle: null
               });
-            });
 
-            // Initialize content visibility for this editor
-            $scope.contentVisibility[id] = false;
-          }
+              // Store the editor instance in $scope.editors
+              $scope.editors[selector.id] = editor;
+
+              // Set the initial value from $scope.settings
+              editor.setValue($scope.settings[selector.key]);
+
+              // Update $scope.settings when the editor content changes
+              editor.on('change', function() {
+                $scope.$apply(function() {
+                  $scope.settings[selector.key] = editor.getValue();
+                });
+              });
+            }
+          });
         };
 
         /**
          * @ngdoc method
-         * @name toggleContent
+         * @name toggleAllEditorsTheme
          * @methodOf MasterSettingsCtrl
          *
          * @description
-         * Toggles the visibility of the editor content based on its ID.
-         * Initializes the editor if not already done.
-         *
-         * @param {string} id The ID of the editor to toggle.
+         * Toggles the theme of all CodeMirror editors between 'default' and 'material-palenight'.
          */
-        $scope.toggleContent = function(id) {
-          var editor = $scope.editors[id];
+        $scope.toggleAllEditorsTheme = function() {
+          var newTheme = 'default';
 
-          // If editor is not initialized, initialize it
-          if (!editor) {
-            $scope.initializeEditor(id);
-            editor = $scope.editors[id];
+          // Check if at least one editor currently has the 'material-palenight' theme
+          var anyPalenight = Object.keys($scope.editors).some(function(id) {
+            return $scope.editors[id].getOption('theme') === 'material-palenight';
+          });
+
+          // If any editor has the 'material-palenight' theme, switch to 'default', otherwise to 'material-palenight'
+          if (!anyPalenight) {
+            newTheme = 'material-palenight';
           }
 
-          if (editor) {
-            // Toggle editor mode and theme based on visibility state
-            if ($scope.contentVisibility[id]) {
-              editor.setOption('mode', 'htmlmixed');
-              editor.setOption('theme', 'dracula');
-            } else {
-              editor.setOption('mode', false);
-              editor.setOption('theme', 'default');
-            }
-            // Toggle visibility state
-            $scope.contentVisibility[id] = !$scope.contentVisibility[id];
-          }
+          // Update the theme for all editors
+          Object.keys($scope.editors).forEach(function(id) {
+            $scope.editors[id].setOption('theme', newTheme);
+          });
         };
+
+        $scope.$watch(
+          function() {
+            // Check if all required elements are present in the DOM
+            return document.getElementById('header-script') &&
+                   document.getElementById('body-start-script') &&
+                   document.getElementById('body-end-script') &&
+                   document.getElementById('header-script-amp') &&
+                   document.getElementById('body-start-script-amp') &&
+                   document.getElementById('body-end-script-amp') &&
+                   document.getElementById('custom-css-amp');
+          },
+          function(newVal) {
+            if (newVal) {
+              $scope.initializeEditor();
+            }
+          }
+        );
       }
     ]);
 })();

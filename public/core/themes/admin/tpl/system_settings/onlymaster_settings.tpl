@@ -16,6 +16,14 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
+                <div class="form-group">
+                  <label class="switch">
+                    <input type="checkbox" id="themeSwitch" ng-model="isDarkTheme" ng-change="toggleAllEditorsTheme()">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </li>
+              <li class="quicklinks">
                 <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="settingForm.$invalid" type="button">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving}"></i>
                   <span class="text">{t}Save{/t}</span>
@@ -209,49 +217,28 @@
                       {t}Scripts{/t} Web
                     </h4>
                     <div class="form-group">
-                      <div class="col-md-10">
-                        <label class="form-label" for="header-script">
-                          {t}Scripts in header{/t}
-                          <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
-                        </label>
-                      </div>
-                      <div class="col-auto">
-                        <button class="p-3 mr-6 btn btn-dark" ng-click="toggleContent('header-script')">
-                          <i class="fa fa-moon-o"></i>
-                        </button>
-                      </div>
+                      <label class="form-label" for="header-script">
+                        {t}Scripts in header{/t}
+                        <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
+                      </label>
                       <div class="controls">
                         <textarea class="form-control" id="header-script" name="header-script" ng-model="settings.header_script" rows="6"></textarea>
                       </div>
                     </div>
                     <div class="form-group">
-                      <div class="col-md-10">
-                        <label class="form-label" for="body-start-script">
-                          {t}Scripts at body start{/t}
-                          <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
-                        </label>
-                      </div>
-                      <div class="col-auto">
-                        <button class="p-3 mr-6 btn btn-dark" ng-click="toggleContent('body-start-script')">
-                          <i class="fa fa-moon-o"></i>
-                        </button>
-                      </div>
+                      <label class="form-label" for="body-start-script">
+                        {t}Scripts at body start{/t}
+                        <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
+                      </label>
                       <div class="controls">
                         <textarea class="form-control" id="body-start-script" name="body-start-script" ng-model="settings.body_start_script" rows="6"></textarea>
                       </div>
                     </div>
                     <div class="form-group">
-                      <div class="col-md-10">
-                        <label class="form-label" for="body-end-script">
-                          {t}Scripts at body end{/t}
-                          <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
-                        </label>
-                      </div>
-                      <div class="col-auto">
-                        <button class="p-3 mr-6 btn btn-dark" ng-click="toggleContent('body-end-script')">
-                          <i class="fa fa-moon-o"></i>
-                        </button>
-                      </div>
+                      <label class="form-label" for="body-end-script">
+                        {t}Scripts at body end{/t}
+                        <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
+                      </label>
                       <div class="controls">
                         <textarea class="form-control" id="body-end-script" name="body-end-script" ng-model="settings.body_end_script" rows="6"></textarea>
                       </div>
@@ -263,49 +250,28 @@
                       {t}Scripts{/t} AMP
                     </h4>
                     <div class="form-group">
-                      <div class="col-md-10">
-                        <label class="form-label" for="header-script-amp">
-                          {t}Scripts in header{/t}
-                          <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
-                        </label>
-                      </div>
-                      <div class="col-auto">
-                        <button class="p-3 mr-6 btn btn-dark" ng-click="toggleContent('header-script-amp')">
-                          <i class="fa fa-moon-o"></i>
-                        </button>
-                      </div>
+                      <label class="form-label" for="header-script-amp">
+                        {t}Scripts in header{/t}
+                        <span class="help">{t}This scripts will be included before the </head> tag{/t}</span>
+                      </label>
                       <div class="controls">
                         <textarea class="form-control" id="header-script-amp" name="header-script-amp" ng-model="settings.header_script_amp" rows="6"></textarea>
                       </div>
                     </div>
                     <div class="form-group">
-                      <div class="col-md-10">
-                        <label class="form-label" for="body-start-script-amp">
-                          {t}Scripts at body start{/t}
-                          <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
-                        </label>
-                      </div>
-                      <div class="col-auto">
-                        <button class="p-3 mr-6 btn btn-dark" ng-click="toggleContent('body-start-script-amp')">
-                          <i class="fa fa-moon-o"></i>
-                        </button>
-                      </div>
+                      <label class="form-label" for="body-start-script-amp">
+                        {t}Scripts at body start{/t}
+                        <span class="help">{t}This scripts will be included before the <body> tag{/t}</span>
+                      </label>
                       <div class="controls">
                         <textarea class="form-control" id="body-start-script-amp" name="body-start-script-amp" ng-model="settings.body_start_script_amp" rows="6"></textarea>
                       </div>
                     </div>
                     <div class="form-group">
-                      <div class="col-md-10">
-                        <label class="form-label" for="body-end-script-amp">
-                          {t}Scripts at body end{/t}
-                          <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
-                        </label>
-                      </div>
-                      <div class="col-auto">
-                        <button class="p-3 mr-6 btn btn-dark" ng-click="toggleContent('body-end-script-amp')">
-                          <i class="fa fa-moon-o"></i>
-                        </button>
-                      </div>
+                      <label class="form-label" for="body-end-script-amp">
+                        {t}Scripts at body end{/t}
+                        <span class="help">{t}This scripts will be included before the </body> tag{/t}</span>
+                      </label>
                       <div class="controls">
                         <textarea class="form-control" id="body-end-script-amp" name="body-end-script-amp" ng-model="settings.body_end_script_amp" rows="6"></textarea>
                       </div>
@@ -315,16 +281,9 @@
                       {t}CSS{/t} AMP
                     </h4>
                     <div class="form-group">
-                      <div class="col-md-10">
-                        <label class="form-label" for="custom-css-amp">
-                          <span class="help">{t}This css will be added at the end of the original{/t}</span>
-                        </label>
-                      </div>
-                      <div class="col-auto">
-                        <button class="p-3 mr-6 btn btn-dark" ng-click="toggleContent('custom-css-amp')">
-                          <i class="fa fa-moon-o"></i>
-                        </button>
-                      </div>
+                      <label class="form-label" for="custom-css-amp">
+                        <span class="help">{t}This css will be added at the end of the original{/t}</span>
+                      </label>
                       <div class="controls">
                         <textarea class="form-control" id="custom-css-amp" name="custom-css-amp" ng-model="settings.custom_css_amp" rows="6"></textarea>
                       </div>
