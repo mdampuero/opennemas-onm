@@ -1,7 +1,7 @@
 <div class="modal-dialog modal-lg">
   <div class="modal-content">
     <div class="modal-header">
-      <h3 class="modal-title">Editar Widget</h3>
+      <h3 class="modal-title">{t}Edit Widget{/t}</h3>
     </div>
     <div class="modal-body">
       {include file="widget/item-quick.tpl"}
@@ -11,7 +11,7 @@
         <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
         {t}Save{/t}
       </button>
-      <button class="btn btn-danger" ng-click="close()">Cerrar</button>
+      <button class="btn btn-danger" ng-click="close()">{t}Close{/t}</button>
     </div>
   </div>
 </div>
