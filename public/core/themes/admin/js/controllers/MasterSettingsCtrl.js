@@ -83,6 +83,7 @@
                     mode: 'htmlmixed',
                     theme: 'dracula',
                     lineNumbers: true,
+                    lineWrapping: true,
                     matchBrackets: true,
                     autoCloseBrackets: true
                   });
