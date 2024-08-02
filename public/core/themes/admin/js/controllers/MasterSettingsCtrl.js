@@ -80,12 +80,13 @@
 
                 if (textarea) {
                   var editor = CodeMirror.fromTextArea(textarea, {
-                    mode: 'htmlmixed',
-                    theme: 'dracula',
+                    autoCloseBrackets: true,
                     lineNumbers: true,
                     lineWrapping: true,
                     matchBrackets: true,
-                    autoCloseBrackets: true
+                    mode: 'htmlmixed',
+                    theme: 'dracula',
+                    scrollbarStyle: null
                   });
 
                   // Set the initial value of the editor from $scope.settings
