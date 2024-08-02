@@ -9,18 +9,20 @@
      *
      * @requires $controller
      * @requires $scope
+     * @requires $timeout
+     *
+     * @description
+     * Controller responsible for managing the master settings with CodeMirror editors.
      */
     .controller('MasterSettingsCtrl', [
       '$controller', '$scope', '$timeout',
       function($controller, $scope, $timeout) {
-        // Initialize the super class and extend it.
+        // Inherit from the SettingsCtrl controller
         $.extend(this, $controller('SettingsCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf MasterSettingsCtrl
-         *
          * @description
-         *  The settings object with default values.
+         * Default settings object with initial values.
          *
          * @type {Object}
          */
@@ -29,80 +31,111 @@
           gfk: {}
         };
 
+        /**
+         * @description
+         * API routes for saving and retrieving configuration.
+         *
+         * @type {Object}
+         */
         $scope.routes = {
           saveConfig: 'api_v1_backend_settings_master_save',
           getConfig: 'api_v1_backend_settings_master_list'
         };
 
         /**
-         * @memberof MasterSettingsCtrl
+         * @description
+         * Store CodeMirror editor instances keyed by their IDs.
+         *
+         * @type {Object}
+         */
+        $scope.editors = {};
+
+        /**
+         * @description
+         * Visibility states for each editor's content.
+         *
+         * @type {Object}
+         */
+        $scope.contentVisibility = {};
+
+        /**
+         * @ngdoc method
+         * @name initializeEditor
+         * @methodOf MasterSettingsCtrl
          *
          * @description
-         * Watcher that monitors the presence of specific elements in the DOM
-         * (identified by their IDs) and initializes CodeMirror textareas
-         * for these elements once they are loaded. It ensures that the
-         * corresponding entries in $scope.settings are initialized and synchronized
-         * with the content of the CodeMirror editors.
+         * Initializes a CodeMirror editor for a given textarea ID.
+         * Updates the corresponding settings and sets up a watcher for content changes.
+         *
+         * @param {string} id The ID of the textarea element.
          */
-        $scope.$watch(
-          function() {
-            // Check if all required elements are present in the DOM
-            return document.getElementById('header-script') &&
-                   document.getElementById('body-start-script') &&
-                   document.getElementById('body-end-script') &&
-                   document.getElementById('header-script-amp') &&
-                   document.getElementById('body-start-script-amp') &&
-                   document.getElementById('body-end-script-amp') &&
-                   document.getElementById('custom-css-amp');
-          },
-          function(newVal) {
-            if (newVal) {
-              var selectors = [
-                { id: 'header-script', key: 'header_script' },
-                { id: 'body-start-script', key: 'body_start_script' },
-                { id: 'body-end-script', key: 'body_end_script' },
-                { id: 'header-script-amp', key: 'header_script_amp' },
-                { id: 'body-start-script-amp', key: 'body_start_script_amp' },
-                { id: 'body-end-script-amp', key: 'body_end_script_amp' },
-                { id: 'custom-css-amp', key: 'custom_css_amp' }
-              ];
+        $scope.initializeEditor = function(id) {
+          var textarea = document.getElementById(id);
+          var editor = '';
 
-              // Initialize $scope.settings with empty values if they don't exist
-              selectors.forEach(function(element) {
-                if (!$scope.settings[element.key]) {
-                  $scope.settings[element.key] = '';
-                }
+          if (textarea) {
+            // Create a new CodeMirror instance
+            editor = CodeMirror.fromTextArea(textarea, {
+              autoCloseBrackets: true,
+              lineNumbers: true,
+              lineWrapping: true,
+              matchBrackets: true,
+              mode: 'htmlmixed',
+              theme: 'dracula',
+              scrollbarStyle: null
+            });
+
+            // Store the editor instance in $scope.editors
+            $scope.editors[id] = editor;
+
+            // Set the initial value from $scope.settings
+            editor.setValue($scope.settings[id]);
+
+            // Update $scope.settings when the editor content changes
+            editor.on('change', function() {
+              $scope.$apply(function() {
+                $scope.settings[id] = editor.getValue();
               });
+            });
 
-              // Iterate over each selector and configure CodeMirror
-              selectors.forEach(function(selector) {
-                var textarea = document.getElementById(selector.id);
-
-                if (textarea) {
-                  var editor = CodeMirror.fromTextArea(textarea, {
-                    autoCloseBrackets: true,
-                    lineNumbers: true,
-                    lineWrapping: true,
-                    matchBrackets: true,
-                    mode: 'htmlmixed',
-                    theme: 'dracula',
-                    scrollbarStyle: null
-                  });
-
-                  // Set the initial value of the editor from $scope.settings
-                  editor.setValue($scope.settings[selector.key]);
-
-                  // Update $scope.settings when the editor content changes
-                  editor.on('change', function() {
-                    $scope.$apply(function() {
-                      $scope.settings[selector.key] = editor.getValue();
-                    });
-                  });
-                }
-              });
-            }
+            // Initialize content visibility for this editor
+            $scope.contentVisibility[id] = false;
           }
-        );
+        };
+
+        /**
+         * @ngdoc method
+         * @name toggleContent
+         * @methodOf MasterSettingsCtrl
+         *
+         * @description
+         * Toggles the visibility of the editor content based on its ID.
+         * Initializes the editor if not already done.
+         *
+         * @param {string} id The ID of the editor to toggle.
+         */
+        $scope.toggleContent = function(id) {
+          var editor = $scope.editors[id];
+
+          // If editor is not initialized, initialize it
+          if (!editor) {
+            $scope.initializeEditor(id);
+            editor = $scope.editors[id];
+          }
+
+          if (editor) {
+            // Toggle editor mode and theme based on visibility state
+            if ($scope.contentVisibility[id]) {
+              editor.setOption('mode', 'htmlmixed');
+              editor.setOption('theme', 'dracula');
+            } else {
+              editor.setOption('mode', false);
+              editor.setOption('theme', 'default');
+            }
+            // Toggle visibility state
+            $scope.contentVisibility[id] = !$scope.contentVisibility[id];
+          }
+        };
       }
     ]);
 })();
