@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  MasterSettingsCtrl
+     * @name MasterSettingsCtrl
      *
      * @requires $controller
      * @requires $scope
@@ -19,43 +19,20 @@
         // Inherit from the SettingsCtrl controller
         $.extend(this, $controller('SettingsCtrl', { $scope: $scope }));
 
-        /**
-         * @description
-         * Default settings object with initial values.
-         *
-         * @type {Object}
-         */
+        // Initialize settings with default values
         $scope.settings = {
           theme_skin: 'default',
           gfk: {}
         };
 
-        /**
-         * @description
-         * API routes for saving and retrieving configuration.
-         *
-         * @type {Object}
-         */
+        // API routes for saving and retrieving configuration
         $scope.routes = {
           saveConfig: 'api_v1_backend_settings_master_save',
           getConfig: 'api_v1_backend_settings_master_list'
         };
 
-        /**
-         * @description
-         * Store CodeMirror editor instances keyed by their IDs.
-         *
-         * @type {Object}
-         */
+        // Store CodeMirror editor instances keyed by their IDs
         $scope.editors = {};
-
-        /**
-         * @description
-         * Visibility states for each editor's content.
-         *
-         * @type {Object}
-         */
-        $scope.contentVisibility = {};
 
         /**
          * @ngdoc method
@@ -63,10 +40,8 @@
          * @methodOf MasterSettingsCtrl
          *
          * @description
-         * Initializes a CodeMirror editor for a given textarea ID.
+         * Initializes CodeMirror editors for all textareas identified by their IDs.
          * Updates the corresponding settings and sets up a watcher for content changes.
-         *
-         * @param {string} id The ID of the textarea element.
          */
         $scope.initializeEditor = function() {
           var selectors = [
@@ -86,23 +61,21 @@
             }
           });
 
-          // Initialize $scope.editors and $scope.contentVisibility
+          // Initialize $scope.editors
           $scope.editors = {};
-          $scope.contentVisibility = {};
 
           selectors.forEach(function(selector) {
             var textarea = document.getElementById(selector.id);
-            var editor = '';
 
             if (textarea) {
               // Create a new CodeMirror instance
-              editor = CodeMirror.fromTextArea(textarea, {
+              var editor = CodeMirror.fromTextArea(textarea, {
                 autoCloseBrackets: true,
                 lineNumbers: true,
                 lineWrapping: true,
                 matchBrackets: true,
                 mode: 'htmlmixed',
-                theme: 'default',
+                theme: $scope.settings.theme_skin,
                 scrollbarStyle: null
               });
 
@@ -133,12 +106,12 @@
         $scope.toggleAllEditorsTheme = function() {
           var newTheme = 'default';
 
-          // Check if at least one editor currently has the 'material-palenight' theme
+          // Check if any editor is currently using the 'material-palenight' theme
           var anyPalenight = Object.keys($scope.editors).some(function(id) {
             return $scope.editors[id].getOption('theme') === 'material-palenight';
           });
 
-          // If any editor has the 'material-palenight' theme, switch to 'default', otherwise to 'material-palenight'
+          // Determine the new theme based on the current state
           if (!anyPalenight) {
             newTheme = 'material-palenight';
           }
@@ -147,8 +120,12 @@
           Object.keys($scope.editors).forEach(function(id) {
             $scope.editors[id].setOption('theme', newTheme);
           });
+
+          // Update the settings with the new theme
+          $scope.settings.theme_skin = newTheme;
         };
 
+        // Watch for the presence of all required elements in the DOM before initializing editors
         $scope.$watch(
           function() {
             // Check if all required elements are present in the DOM
