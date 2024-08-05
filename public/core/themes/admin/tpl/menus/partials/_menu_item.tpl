@@ -15,7 +15,7 @@
         <input data-nodrag class="menu-item-title" ng-model="item.title" type="text">
       </div>
       <div ng-if="item.type === 'external'" class="col-sm-9 col-lg-9">
-        <input data-nodrag class="menu-item-link" ng-model="item.title" type="text">
+        <input data-nodrag class="menu-item-link" ng-model="item.link_name" type="text">
       </div>
     </div>
   </div>
