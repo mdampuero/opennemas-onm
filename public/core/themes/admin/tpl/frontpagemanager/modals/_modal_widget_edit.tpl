@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-lg">
+<div class="modal-dialog modal-lg custom-height">
   <div class="modal-content">
     <div class="modal-header">
       <h3 class="modal-title">{t}Edit Widget{/t}</h3>
