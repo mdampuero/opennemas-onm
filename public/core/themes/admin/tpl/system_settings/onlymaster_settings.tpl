@@ -17,9 +17,9 @@
             <ul class="nav quick-section">
               <li class="quicklinks">
                 <div class="form-group">
-                  <label class="switch">
+                  <label class="my-switch">
                     <input type="checkbox" id="themeSwitch" ng-model="isDarkTheme" ng-change="toggleAllEditorsTheme()">
-                    <span class="slider round"></span>
+                    <span class="my-slider round"></span>
                   </label>
                 </div>
               </li>

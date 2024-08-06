@@ -120,9 +120,6 @@
           Object.keys($scope.editors).forEach(function(id) {
             $scope.editors[id].setOption('theme', newTheme);
           });
-
-          // Update the settings with the new theme
-          $scope.settings.theme_skin = newTheme;
         };
 
         // Watch for the presence of all required elements in the DOM before initializing editors

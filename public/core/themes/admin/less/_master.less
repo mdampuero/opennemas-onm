@@ -1,4 +1,4 @@
-.switch {
+.my-switch {
   position: relative;
   display: inline-block;
   margin-right: 10px;
@@ -6,14 +6,13 @@
   height: 34px;
 }
 
-.switch input {
+.my-switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-/* Slider styles */
-.slider {
+.my-slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -25,24 +24,22 @@
   border-radius: 34px;
 }
 
-.slider:before {
+.my-slider:before {
   position: absolute;
   content: "";
   height: 26px;
   width: 26px;
   border-radius: 50%;
   left: 4px;
-  bottom: 0px;
+  bottom: 4px;
   background-color: white;
   transition: .4s;
 }
 
-/* Change slider color when checked */
-input:checked + .slider {
+input:checked + .my-slider {
   background-color: #000000;
 }
 
-/* Move the slider when checked */
-input:checked + .slider:before {
+input:checked + .my-slider:before {
   transform: translateX(26px);
 }
