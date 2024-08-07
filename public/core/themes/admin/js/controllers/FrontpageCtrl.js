@@ -704,7 +704,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
 
       $uibModal.open({
         templateUrl: 'modal-widget-edit',
-        backdrop: false,
+        backdrop: true,
         controller: 'ModalWidgetEditCtrl',
         resolve: {
           id: function() {
