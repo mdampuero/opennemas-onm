@@ -451,6 +451,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
               ).format('YYYY-MM-DD HH:mm:ss');
             $scope.versions.sort($scope.comparePublishDates);
             $scope.getReloadVersionStatus();
+            location.reload();
           }
 
           return null;
