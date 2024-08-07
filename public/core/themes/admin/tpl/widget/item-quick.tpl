@@ -1,17 +1,3 @@
-{block name="rightColumn" append}
-  <div class="grid simple">
-    <div class="grid-body no-padding">
-      <div class="grid-collapse-title">
-        {acl isAllowed="WIDGET_AVAILABLE"}
-          {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Published{/t}" field="content_status"}
-        {/acl}
-      </div>
-      {include file="ui/component/content-editor/accordion/textarea.tpl" title="{t}Description{/t}" field="description"}
-      {include file="ui/component/content-editor/accordion/scheduling.tpl"}
-    </div>
-  </div>
-{/block}
-
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
@@ -75,6 +61,20 @@
         </div>
         <div class="widget-form" ng-show="!flags.http.formLoading && widgetForm"></div>
       </div>
+    </div>
+  </div>
+{/block}
+
+{block name="rightColumn" append}
+  <div class="grid simple">
+    <div class="grid-body no-padding">
+      <div class="grid-collapse-title">
+        {acl isAllowed="WIDGET_AVAILABLE"}
+          {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Published{/t}" field="content_status"}
+        {/acl}
+      </div>
+      {include file="ui/component/content-editor/accordion/textarea.tpl" title="{t}Description{/t}" field="description"}
+      {include file="ui/component/content-editor/accordion/scheduling.tpl"}
     </div>
   </div>
 {/block}
