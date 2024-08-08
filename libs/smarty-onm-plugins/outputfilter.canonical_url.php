@@ -37,7 +37,11 @@ function smarty_outputfilter_canonical_url($output, $smarty)
     // If no redirect allowed, force canonical with mainDomain
     $instance = $smarty->getContainer()->get('core.instance');
     if (!empty($instance->no_redirect_domain)) {
-        $url = preg_replace('/' . $request->getHost() . '/', $instance->getMainDomain(), $url);
+        $url = preg_replace(
+            '/' . preg_quote($request->getHost(), '/') . '/',
+            $instance->getMainDomain(),
+            $url
+        );
     }
 
     // Check for content custom canonical
