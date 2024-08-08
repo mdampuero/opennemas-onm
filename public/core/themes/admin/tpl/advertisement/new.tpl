@@ -67,7 +67,7 @@ jQuery(document).ready(function($) {
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." ng-disabled="AdvertisementForm.$invalid" type="submit" id="save-button">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." ng-disabled="AdvertisementForm.$invalid || positions.length === 0" type="submit" id="save-button">
                     <i class="fa fa-save"></i>
                     <span class="text">{t}Save{/t}</span>
                 </button>
