@@ -24,7 +24,11 @@ function smarty_outputfilter_canonical_url($output, $smarty)
         return $output;
     }
 
-    $url = preg_replace('/\?.*/', '', $uri);
+    if (!preg_match('/\/comments\/get\//', $uri)) {
+        $url = preg_replace('/\?.*/', '', $uri);
+    } else {
+        $url = $uri;
+    }
 
     if ($smarty->hasValue('o_canonical')) {
         $url = $smarty->getValue('o_canonical');
