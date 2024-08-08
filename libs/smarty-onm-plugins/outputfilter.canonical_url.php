@@ -50,7 +50,7 @@ function smarty_outputfilter_canonical_url($output, $smarty)
         $url = $content->canonicalurl;
     }
 
-    $tpl = '<link rel="canonical" href="%s"/>';
+    $canonicalTag = sprintf('<link rel="canonical" href="%s"/>', htmlspecialchars($url, ENT_QUOTES, 'UTF-8'));
 
-    return str_replace('</head>', sprintf($tpl, $url) . '</head>', $output);
+    return str_replace('</head>', $canonicalTag . '</head>', $output);
 }
