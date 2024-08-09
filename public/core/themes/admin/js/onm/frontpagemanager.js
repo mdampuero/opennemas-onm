@@ -105,10 +105,10 @@ window.makeContentProviderAndPlaceholdersSortable = function() {
       window.initializePopovers();
     },
     start: function(event, ui) {
-      this._currentDraggedElement = ui.item[0];
+      this.currentDraggedElement = ui.item[0];
     },
     stop: function(event, ui) {
-      var draggedElement = this._currentDraggedElement;
+      var draggedElement = this.currentDraggedElement;
 
       if (draggedElement) {
         var contentActionButtons = jQuery(draggedElement).find('.content-action-buttons');
