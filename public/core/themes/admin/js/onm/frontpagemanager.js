@@ -111,21 +111,26 @@ window.makeContentProviderAndPlaceholdersSortable = function() {
       var draggedElement = this.currentDraggedElement;
 
       if (draggedElement) {
-        var contentActionButtons = jQuery(draggedElement).find('.content-action-buttons');
+        var actionButtons = jQuery(draggedElement).find('.content-action-buttons');
 
-        if (contentActionButtons.length > 0) {
-          var dropdownMenu = contentActionButtons.find('.dropdown-menu');
+        if (actionButtons.length) {
+          var dropdownMenu = actionButtons.find('.dropdown-menu');
 
-          if (dropdownMenu.length > 0) {
+          if (dropdownMenu.length) {
             var quickEditLink = dropdownMenu.find('a#quickedit');
 
-            if (quickEditLink.length > 0) {
+            if (quickEditLink.length) {
               quickEditLink.addClass('disabled-link');
             }
           }
         }
 
-        window.showMessage(window.frontpage_messages.remember_save_positions, 'info', 3, 1234);
+        window.showMessage(
+          window.frontpage_messages.remember_save_positions,
+          'info',
+          3,
+          1234
+        );
       }
     },
     tolerance: 'pointer'
