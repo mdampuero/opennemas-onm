@@ -101,13 +101,13 @@ window.makeContentProviderAndPlaceholdersSortable = function() {
     connectWith: 'div.placeholder div.content',
     placeholder: 'placeholder-element',
     handle: '.description',
-    update: function() {
+    update: function(event, ui) {
       window.initializePopovers();
     },
-    start: function(ui) {
+    start: function(event, ui) {
       this._currentDraggedElement = ui.item[0];
     },
-    stop: function() {
+    stop: function(event, ui) {
       var draggedElement = this._currentDraggedElement;
 
       if (draggedElement) {
