@@ -104,8 +104,29 @@ window.makeContentProviderAndPlaceholdersSortable = function() {
     update: function() {
       window.initializePopovers();
     },
+    start: function(ui) {
+      this._currentDraggedElement = ui.item[0];
+    },
     stop: function() {
-      window.showMessage(window.frontpage_messages.remember_save_positions, 'info', 3, 1234);
+      var draggedElement = this._currentDraggedElement;
+
+      if (draggedElement) {
+        var contentActionButtons = jQuery(draggedElement).find('.content-action-buttons');
+
+        if (contentActionButtons.length > 0) {
+          var dropdownMenu = contentActionButtons.find('.dropdown-menu');
+
+          if (dropdownMenu.length > 0) {
+            var quickEditLink = dropdownMenu.find('a#quickedit');
+
+            if (quickEditLink.length > 0) {
+              quickEditLink.addClass('disabled-link');
+            }
+          }
+        }
+
+        window.showMessage(window.frontpage_messages.remember_save_positions, 'info', 3, 1234);
+      }
     },
     tolerance: 'pointer'
   }).disableSelection();
