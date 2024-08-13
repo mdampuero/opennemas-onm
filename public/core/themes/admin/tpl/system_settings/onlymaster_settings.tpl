@@ -16,6 +16,14 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
+                <div class="form-group">
+                  <label class="my-switch">
+                    <input type="checkbox" id="themeSwitch" ng-model="isDarkTheme" ng-change="toggleAllEditorsTheme()">
+                    <span class="my-slider round"></span>
+                  </label>
+                </div>
+              </li>
+              <li class="quicklinks">
                 <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="settingForm.$invalid" type="button">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving}"></i>
                   <span class="text">{t}Save{/t}</span>
