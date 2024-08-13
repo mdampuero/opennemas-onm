@@ -51,6 +51,7 @@ class MasterSettingController extends SettingController
         'header_script',
         'header_script_amp',
         'lazy_referer',
+        'fonts_preload',
         'redirection',
         'robots_txt_rules',
         'theme_font',
