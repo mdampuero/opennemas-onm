@@ -114,6 +114,7 @@ class MasterSettingController extends SettingController
                 parent::listAction($request),
                 [
                     'extra' => [
+                        'theme' => $this->get('core.theme')->text_domain,
                         'theme_skins' => $this->get('core.theme')->getSkins()
                     ]
                 ]

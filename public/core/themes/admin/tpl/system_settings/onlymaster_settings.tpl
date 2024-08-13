@@ -188,16 +188,18 @@
                         </label>
                       </div>
                     </div>
-                    <h4>
-                      <i class="fa fa-font"></i>
-                      {t}Font preloading{/t}
-                    </h4>
-                    <div class="form-group">
-                      <div class="checkbox">
-                        <input {if $configs['fonts_preload'] eq "1"}checked{/if} id="fonts_preload" name="fonts_preload" ng-false-value="0" ng-model="settings.fonts_preload" ng-true-value="'1'" type="checkbox">
-                        <label for="fonts_preload">
-                          {t}Disabled{/t}
-                        </label>
+                    <div ng-if="extra.theme == 'pekka'">
+                      <h4>
+                        <i class="fa fa-font"></i>
+                        {t}Font preloading{/t}
+                      </h4>
+                      <div class="form-group">
+                        <div class="checkbox">
+                          <input {if $configs['fonts_preload'] eq "1"}checked{/if} id="fonts_preload" name="fonts_preload" ng-false-value="0" ng-model="settings.fonts_preload" ng-true-value="'1'" type="checkbox">
+                          <label for="fonts_preload">
+                            {t}Disabled{/t}
+                          </label>
+                        </div>
                       </div>
                     </div>
                     <h4>
