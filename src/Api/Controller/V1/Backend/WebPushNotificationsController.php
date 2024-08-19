@@ -350,7 +350,7 @@ class WebPushNotificationsController extends ApiController
             $webpush  = $this->get(sprintf('external.web_push.factory.%s', $service));
             $endpoint = $webpush->getEndpoint('test_connection');
             $endpoint->testConnection();
-            $msg->add(_('Server connection s-uccess!'), 'success');
+            $msg->add(_('Server connection success!'), 'success');
         } catch (\Exception $e) {
             $msg->add(_('Unable to connect to the server'), 'error', 400);
         }

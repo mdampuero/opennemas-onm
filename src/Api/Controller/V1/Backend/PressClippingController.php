@@ -139,23 +139,9 @@ class PressClippingController extends ApiController
 
         // Check if $data contains an array of articles.
         // If $data contains an array with at least one element and the first element is an array,
-        // then assign $data to $article. Otherwise, assign a default article to $article.
+        // then assign $data to $article.
         if (isset($data[0]) && is_array($data[0])) {
             $article = $data;
-        } else {
-            $article = [
-                [
-                    "title" => "Example Article",
-                    "subtitle" => "An example subtitle",
-                    "author" => "John Doe",
-                    "pubDate" => "2024-07-11 10:30:00",
-                    "body" => "<p>This is the content of the article.</p>",
-                    "category" => "Technology",
-                    "image" => "https://example.com/image.jpg",
-                    "articleID" => "67890",
-                    "articleURL" => "https://example.com/article"
-                ]
-            ];
         }
 
         // Get messenger service
@@ -276,9 +262,9 @@ class PressClippingController extends ApiController
         $apikey                = $pressclipping_service['apikey'] ?? null;
 
         $settings = [
-            'pressclipping_service'          => $service,
-            'pressclipping_pubID'            => $pubID,
-            'pressclipping_apikey'           => $apikey,
+            'pressclipping_service' => $service,
+            'pressclipping_pubID'   => $pubID,
+            'pressclipping_apikey'  => $apikey,
         ];
 
         try {
