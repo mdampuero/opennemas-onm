@@ -18,7 +18,11 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-loading btn-success ng-cloak text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+                <button class="btn btn-loading btn-success ng-cloak text-uppercase" ng-click="save()"
+                  ng-disabled="
+                    flags.http.loading || flags.http.saving ||
+                    settings.pressclipping_service.pubID.length === 0 || settings.pressclipping_service.apikey.length === 0"
+                  type="button">
                   <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                   {t}Save{/t}
                 </button>
