@@ -74,8 +74,22 @@
             <div class="col-xs-12">
               <div class="p-t-15">
                 <div class="text-center">
-                  <button class="btn btn-block btn-loading m-t-5" ng-class="{ 'btn-light': !status , 'btn-success': status === 'success' , 'btn-danger': status === 'failure' }" ng-click="check()" ng-disabled="!settings.pressclipping_service.apikey || flags.http.checking" type="button">
-                    <i class="fa fa-plug m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.checking }"></i>
+                  <button class="btn btn-block btn-loading m-t-5"
+                          ng-class="{
+                            'btn-light': !status,
+                            'btn-success': status === 'success',
+                            'btn-danger': status === 'failure'
+                          }"
+                          ng-click="check()"
+                          ng-disabled="
+                            flags.http.loading ||
+                            flags.http.saving ||
+                            settings.pressclipping_service.pubID.length === 0 ||
+                            settings.pressclipping_service.apikey.length === 0"
+                          type="button">
+                    <i class="fa fa-plug m-r-5"
+                      ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.checking }">
+                    </i>
                     {t}Connect{/t}
                     <i class="fa fa-check m-l-5" ng-show="status === 'success'"></i>
                     <i class="fa fa-exclamation-circle m-l-5" ng-show="status === 'failure'"></i>
