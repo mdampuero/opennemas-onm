@@ -49,6 +49,13 @@
       </div>
       <div class="grid simple onm-shadow">
         <div class="grid-body ng-cloak">
+          <div class="ng-cloak m-b-5 positions-selected-counter">
+            <div class="alert alert-warning"
+                ng-if="settings.pressclipping_service.pubID.length === 0 || settings.pressclipping_service.apikey.length === 0">
+              <span class="fa fa-info-circle text-info fa-lg"></span>&nbsp;
+              {t}The fields Publication ID or API Key are empty.{/t}
+            </div>
+          </div>
           <div class="row" ng-if="settings.pressclipping_service.service == 'cedro'">
             <div class="col-xs-12">
               <div class="col-xs-12">
