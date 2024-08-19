@@ -76,6 +76,7 @@ class CommentController extends FrontendController
             'more'           => $comments['total'] > ($epp * $offset),
             'x-cacheable'    => true,
             'x-tags'         => 'comments-' . $contentId,
+            'o_canonical'    => $request->getUri(),
             'recaptcha'      => $this->get('core.recaptcha')
                 ->setVersion(2)
                 ->configureFromSettings()

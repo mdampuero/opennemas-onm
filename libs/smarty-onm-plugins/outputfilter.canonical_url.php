@@ -24,11 +24,7 @@ function smarty_outputfilter_canonical_url($output, $smarty)
         return $output;
     }
 
-    if (!preg_match('/\/comments\/get\//', $uri)) {
-        $url = preg_replace('/\?.*/', '', $uri);
-    } else {
-        $url = $uri;
-    }
+    $url = preg_replace('/\?.*/', '', $uri);
 
     if ($smarty->hasValue('o_canonical')) {
         $url = $smarty->getValue('o_canonical');
@@ -38,7 +34,7 @@ function smarty_outputfilter_canonical_url($output, $smarty)
     $instance = $smarty->getContainer()->get('core.instance');
     if (!empty($instance->no_redirect_domain)) {
         $url = preg_replace(
-            '/' . preg_quote($request->getHost(), '/') . '/',
+            '/' . $request->getHost() . '/',
             $instance->getMainDomain(),
             $url
         );
@@ -50,7 +46,7 @@ function smarty_outputfilter_canonical_url($output, $smarty)
         $url = $content->canonicalurl;
     }
 
-    $canonicalTag = sprintf('<link rel="canonical" href="%s"/>', htmlspecialchars($url, ENT_QUOTES, 'UTF-8'));
+    $tpl = '<link rel="canonical" href="%s"/>';
 
-    return str_replace('</head>', $canonicalTag . '</head>', $output);
+    return str_replace('</head>', sprintf($tpl, $url) . '</head>', $output);
 }
