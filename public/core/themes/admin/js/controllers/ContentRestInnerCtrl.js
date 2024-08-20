@@ -354,8 +354,8 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         $scope.data.item = {};
       }
 
-      // Ensure pressclipping is defined as an array
-      if (!$scope.data.item.pressclipping) {
+      // Ensure pressclipping is defined as an array and hasn't been corrupted
+      if (!Array.isArray($scope.data.item.pressclipping)) {
         $scope.data.item.pressclipping = [];
       }
 
