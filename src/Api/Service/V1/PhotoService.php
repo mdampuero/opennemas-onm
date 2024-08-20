@@ -135,9 +135,13 @@ class PhotoService extends ContentService
         try {
             $item = $this->getItem($id);
 
-            $this->container->get('core.helper.image')->remove($item->path);
+            if (!$item) {
+                throw new DeleteItemException("Item with ID $id not found");
+            }
 
             parent::deleteItem($id);
+
+            $this->container->get('core.helper.image')->remove($item->path);
         } catch (\Exception $e) {
             throw new DeleteItemException($e->getMessage(), $e->getCode());
         }
