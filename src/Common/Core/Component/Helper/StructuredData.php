@@ -103,10 +103,6 @@ class StructuredData
                 $template = 'common/helpers/structured_'
                     . $params['content']->content_type_name . '_data.tpl';
             }
-
-            if ($params['content']->live_blog_posting) {
-                $template = 'common/helpers/structured_live_blog_data.tpl';
-            }
         }
 
         return $this->tpl->fetch($template, $params);
