@@ -56,12 +56,17 @@ class PressClippingController extends ApiController
     {
         $listConnection = $this->get('dbal_connection');
 
-        $list = $listConnection->fetchAll(
-            "SELECT contentmeta.fk_content, contents.title, contentmeta.meta_name, contentmeta.meta_value
-             FROM contentmeta
-             JOIN contents ON contentmeta.fk_content = contents.pk_content
-             WHERE contentmeta.meta_name IN ('pressclipping_sended', 'pressclipping_status')"
-        );
+        $oql = $request->query->get('oql', '');
+
+        $query = "
+            SELECT contentmeta.fk_content, contents.title, contentmeta.meta_name, contentmeta.meta_value
+            FROM contentmeta
+            JOIN contents ON contentmeta.fk_content = contents.pk_content
+            WHERE contentmeta.meta_name IN ('pressclipping_sended', 'pressclipping_status')
+            $oql
+        ";
+
+        $list = $listConnection->fetchAll($query);
 
         // Array to store results grouped by pk_content
         $groupedList = [];
@@ -73,6 +78,7 @@ class PressClippingController extends ApiController
             // If pk_content is not already in $groupedList, initialize it as an empty array
             if (!isset($groupedList[$pkContent])) {
                 $groupedList[$pkContent] = [
+                    'fk_content' => $item['fk_content'],
                     'title' => $item['title'],
                     'pressclipping_sended' => null,
                     'pressclipping_status' => null,
@@ -168,7 +174,7 @@ class PressClippingController extends ApiController
                 [
                     'fk_content' => $article[0]['articleID'],
                     'meta_name' => 'pressclipping_sended',
-                    'meta_value' => date('Y-m-d')
+                    'meta_value' => date('Y-m-d H:i:s')
                 ]
             ];
 

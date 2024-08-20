@@ -10,6 +10,8 @@
     <div>
       <div class="text-center" ng-if="item.content_status">
         <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="sendPressClipping(item)" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND PRESSCLIPPING{/t}</button>
+        <button disabled class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-if="getContentScheduling(item) === -1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND NOTIFICATION{/t}</button>
+
       </div>
       <div class="menu-dragable-accordion" id="pressclipping-container">
         <div class=" m-t-5" ng-repeat="notification in item.pressclipping.slice().reverse()">
