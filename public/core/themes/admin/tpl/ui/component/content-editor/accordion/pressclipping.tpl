@@ -8,9 +8,24 @@
       <small><i class="fa fa-info-circle text-info"></i> {t}Check it as "Published" to send pressclipping.{/t}</small>
     </div>
     <div>
-      <div class="text-center" ng-if="item.content_status">
-        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-click="sendPressClipping(item)" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND PRESSCLIPPING{/t}</button>
-        <button disabled class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-if="getContentScheduling(item) === -1" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND NOTIFICATION{/t}</button>
+      <div class="text-center" ng-if="item.content_status" ng-show="!item.pressclipping_sended">
+        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-show="!item.pressclipping_sended" ng-click="sendPressClipping(item)" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND PRESSCLIPPING{/t}</button>
+      </div>
+      <div class="text-center" ng-if="item.content_status" ng-show="item.pressclipping_sended">
+        <div class="alert alert-success" id="alerteo">
+          <i class="fa fa-check"></i>
+          {t}Notification sent{/t}
+          <small>
+            [% item.pressclipping_sended | moment : 'YYYY-MM-DD HH:mm:ss': null %]
+          </small>
+        </div>
+        <button
+          class="btn btn-mini btn-block ng-scope m-b-5 btn-danger"
+          ng-click="removePressClipping(item.pk_content)"
+          ng-show="item.pressclipping_sended"
+          type="button">
+          <i class="fa fa-paper-plane m-r-5"></i>{t}REMOVE DATA FROM PRESSCLIPPING{/t}
+        </button>
 
       </div>
       <div class="menu-dragable-accordion" id="pressclipping-container">

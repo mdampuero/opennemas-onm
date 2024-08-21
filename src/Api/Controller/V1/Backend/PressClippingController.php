@@ -134,6 +134,62 @@ class PressClippingController extends ApiController
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
+    public function removeDataAction(Request $request = null)
+    {
+        $data = $request->request->all();
+
+        if (isset($data[0]) && is_array($data[0])) {
+            $article = $data;
+        }
+
+        // Get messenger service
+        $msg = $this->get('core.messenger');
+
+        try {
+            $pressClipping = $this->get('external.press_clipping.factory')
+                ->getEndpoint('remove_info');
+
+            // Upload article data
+            $body = $pressClipping->removeData($article);
+
+            $pressClippingLogger = $this->get('dbal_connection');
+
+            $metas = [
+                [
+                    'fk_content' => $article[0]['articleID'],
+                    'meta_name' => 'pressclipping_status'
+                ],
+                [
+                    'fk_content' => $article[0]['articleID'],
+                    'meta_name' => 'pressclipping_sended'
+                ]
+            ];
+
+            $this->removeMetas($pressClippingLogger, $metas);
+
+            // Handle response based on presence of error codes
+            if (isset($body['errorCode'], $body['errorMessage'])) {
+                $msg->add(
+                    sprintf(
+                        _('Error %d: %s'),
+                        $body['errorCode'],
+                        $body['errorMessage']
+                    ),
+                    'error',
+                    400
+                );
+            } else {
+                $msg->add(_('Article remove successfully'), 'success');
+            }
+        } catch (\Exception $e) {
+            // Handle connection failure
+            $msg->add(_('Unable to connect to the server'), 'error', 400);
+        }
+
+        // Return JSON response with messages
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
     /**
      * Uploads an article to the server.
      *
@@ -220,6 +276,28 @@ class PressClippingController extends ApiController
                     $meta['meta_name'],
                     $meta['meta_value'],
                     $meta['meta_value']
+                ]
+            );
+        }
+    }
+
+    /**
+     * Removes meta data from the database associated with the provided content.
+     *
+     * This function deletes the entries in the `contentmeta` table that match
+     * the provided `fk_content` and `meta_name` values.
+     *
+     * @param \Doctrine\DBAL\Connection $connection The database connection to use.
+     * @param array $metas An array of meta data definitions to be removed.
+     */
+    protected function removeMetas($connection, array $metas)
+    {
+        foreach ($metas as $meta) {
+            $connection->executeUpdate(
+                "DELETE FROM contentmeta WHERE `fk_content` = ? AND `meta_name` = ?",
+                [
+                    $meta['fk_content'],
+                    $meta['meta_name']
                 ]
             );
         }

@@ -57,9 +57,6 @@
                 </span>
               </div>
             </li>
-            <li class="hidden-xs ng-cloak m-r-10 quicklinks">
-              {include file="ui/component/select/pressclipping_status.tpl" label="true" ngModel="criteria.pressclipping_status"}
-            </li>
           {/block}
           <li class="quicklinks hidden-xs ng-cloak" ng-show="!isModeSupported() || app.mode === 'list'">
             <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t} ({t}Pressclipping data is updated every 15 minutes{/t})" tooltip-placement="bottom" type="button">

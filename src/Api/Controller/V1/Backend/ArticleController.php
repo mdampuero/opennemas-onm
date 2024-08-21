@@ -120,10 +120,6 @@ class ArticleController extends ContentController
             ->getDataSet('Settings', 'instance')
             ->get('webpush_automatic');
 
-        $autoPressClipping = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('pressclipping_automatic');
-
         $categories = $this->get('api.service.category')->responsify(
             $this->get('api.service.category')->getList()['items']
         );
@@ -137,7 +133,6 @@ class ArticleController extends ContentController
             'extra_fields'        => $extraFields ?? null,
             'subscriptions'       => $subscriptions,
             'auto_webpush'        => $autoNotifications ?? 0,
-            'auto_pressclipping'  => $autoPressClipping ?? 0,
             'tags'                => $this->getTags($items),
             'formSettings'        => [
                 'name'             => $this->module,

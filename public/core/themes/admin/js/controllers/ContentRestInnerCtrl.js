@@ -400,6 +400,49 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     };
 
     /**
+     * @function removePressClipping
+     * @memberof ContentRestInnerCtrl
+     *
+     * @description
+     *  Remove a PressClipping item for CEDRO
+     */
+    $scope.removePressClipping = function(articleID) {
+      // Initialize $scope.data.item if not defined
+      if (!$scope.data.item) {
+        $scope.data.item = {};
+      }
+
+      // Ensure pressclipping is defined as an array and hasn't been corrupted
+      if (!Array.isArray($scope.data.item.pressclipping)) {
+        $scope.data.item.pressclipping = [];
+      }
+
+      // Add the new press clipping to the array
+      $scope.data.item.pressclipping.push({
+        articleID: articleID,
+      });
+
+      // Define the API route
+      var route = {
+        name: 'api_v1_backend_pressclipping_remove_data',
+      };
+
+      // Send the data to the API
+      var data = $scope.data.item.pressclipping;
+
+      http.post(route, data).then(
+        function() {
+          $scope.statusPressclipping = 'success';
+          delete $scope.data.item.pressclipping;
+        },
+        function() {
+          $scope.statusPressclipping = 'failure';
+          delete $scope.data.item.pressclipping;
+        }
+      );
+    };
+
+    /**
      * @function sendWPNotification
      * @memberOf ContentRestInnerCtrl
      *
