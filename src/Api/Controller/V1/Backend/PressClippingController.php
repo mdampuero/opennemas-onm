@@ -285,4 +285,43 @@ class PressClippingController extends ApiController
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
+
+    /**
+     * Removes account data for the PressClipping module.
+     *
+     * This action clears the settings related to the PressClipping module by
+     * setting them to empty values. It also handles different scenarios such as
+     * access denial or general exceptions and logs errors accordingly.
+     *
+     * @return JsonResponse A JSON response containing the message(s) and status code.
+     */
+    public function removeDataAction()
+    {
+        // Get the messenger service for displaying messages to the user
+        $msg = $this->get('core.messenger');
+
+        // Settings to be cleared
+        $settings = [
+            'pressclipping_pubID'   => '',
+            'pressclipping_apikey'  => '',
+        ];
+
+        try {
+            // Update the settings in the database
+            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
+
+            // Add success message
+            $msg->add(_('Account data removed successfully'), 'success');
+        } catch (AccessDeniedException $e) {
+            // Handle case where the PressClipping module is not activated
+            $msg->add(_('PressClipping Module is not activated'), 'info');
+        } catch (\Exception $e) {
+            // Handle any other exceptions and log the error
+            $msg->add(_('Unable to remove account data'), 'error');
+            $this->get('error.log')->error($e->getMessage());
+        }
+
+        // Return a JSON response with the accumulated messages and status code
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
 }

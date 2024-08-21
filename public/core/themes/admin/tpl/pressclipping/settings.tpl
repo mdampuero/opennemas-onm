@@ -21,7 +21,11 @@
                 <button class="btn btn-loading btn-success ng-cloak text-uppercase" ng-click="save()"
                   ng-disabled="
                     flags.http.loading || flags.http.saving ||
-                    settings.pressclipping_service.pubID.length === 0 || settings.pressclipping_service.apikey.length === 0"
+                    !settings.pressclipping_service.pubID ||
+                    settings.pressclipping_service.pubID.length === 0 ||
+                    !settings.pressclipping_service.apikey ||
+                    settings.pressclipping_service.apikey.length === 0
+                    "
                   type="button">
                   <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                   {t}Save{/t}
@@ -78,7 +82,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-12">
+            <div class="col-xs-6">
               <div class="p-t-15">
                 <div class="text-center">
                   <button class="btn btn-block btn-loading m-t-5"
@@ -91,7 +95,9 @@
                           ng-disabled="
                             flags.http.loading ||
                             flags.http.saving ||
+                            !settings.pressclipping_service.pubID ||
                             settings.pressclipping_service.pubID.length === 0 ||
+                            !settings.pressclipping_service.apikey ||
                             settings.pressclipping_service.apikey.length === 0"
                           type="button">
                     <i class="fa fa-plug m-r-5"
@@ -100,6 +106,17 @@
                     {t}Connect{/t}
                     <i class="fa fa-check m-l-5" ng-show="status === 'success'"></i>
                     <i class="fa fa-exclamation-circle m-l-5" ng-show="status === 'failure'"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="p-t-15">
+                <div class="text-center">
+                  <button class="btn btn-block btn-loading m-t-5"
+                          ng-click="removeSettings()"
+                          type="button">
+                    {t}Remove account data{/t}
                   </button>
                 </div>
               </div>

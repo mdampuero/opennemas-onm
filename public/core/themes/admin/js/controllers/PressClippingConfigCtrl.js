@@ -34,6 +34,7 @@
           checkServer: 'api_v1_backend_pressclipping_check_server',
           saveConfig: 'api_v1_backend_pressclipping_save_config',
           uploadDump: 'api_v1_backend_pressclipping_upload_data',
+          removeData: 'api_v1_backend_pressclipping_remove_data'
         };
 
         // Initialize settings with pressclipping_service
@@ -111,6 +112,51 @@
               });
             }, function() {
               $scope.disableFlags('http');
+            });
+        };
+
+        /**
+         * @function check
+         * @memberof PressClippingConfigCtrl
+         *
+         * @description
+         * This function sends a POST request to remove the PressClipping settings.
+         * It manages the HTTP request state by toggling flags and posting messages using
+         * the `messenger` service. Upon completion or failure, it redirects the user
+         * to the PressClipping settings page.
+         *
+         */
+        $scope.removeSettings = function() {
+          // Check if the HTTP checking flag is not set
+          if (!$scope.flags.http.checking) {
+            // Set the saving flag to true to indicate the request is being processed
+            $scope.flags.http.saving = true;
+          }
+
+          // Send a POST request to the server to remove the settings
+          return http.post($scope.routes.removeData)
+            .then(function(response) {
+              // Handle successful response
+              if (!$scope.flags.http.checking) {
+                // Disable HTTP flags after the request is done
+                $scope.disableFlags('http');
+                // Post the response data using the messenger service
+                messenger.post(response.data);
+              }
+
+              // Redirect to the PressClipping settings page
+              window.location = routing.generate('backend_pressclipping_settings');
+            }, function(response) {
+              // Handle error response
+              if (!$scope.flags.http.checking) {
+                // Disable HTTP flags after the request is done
+                $scope.disableFlags('http');
+                // Post the response data using the messenger service
+                messenger.post(response.data);
+              }
+
+              // Redirect to the PressClipping settings page
+              window.location = routing.generate('backend_pressclipping_settings');
             });
         };
       }
