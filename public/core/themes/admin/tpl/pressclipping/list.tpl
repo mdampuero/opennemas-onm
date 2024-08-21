@@ -1,7 +1,7 @@
 {extends file="common/extension/list.tpl"}
 
 {block name="metaTitle"}
-  > {t}Web Push notifications{/t}
+  > {t}PressClipping{/t}
 {/block}
 
 {block name="ngInit"}

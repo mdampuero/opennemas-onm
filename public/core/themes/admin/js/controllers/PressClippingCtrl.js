@@ -66,7 +66,7 @@
 
           oqlEncoder.configure({
             placeholder: {
-              title: 'title ~ "%[value]%"'
+              title: 'and title like "%[value]%"'
             }
           });
 
@@ -116,7 +116,7 @@
             $scope.data.item.pressclipping = [];
           }
 
-          $scope.data.item.pressclipping.backup({
+          $scope.data.item.pressclipping.push({
             articleID: articleID
           });
 
@@ -131,10 +131,14 @@
             function() {
               $scope.statusPressclipping = 'success';
               delete $scope.data.item.pressclipping;
+
+              location.reload();
             },
             function() {
               $scope.statusPressclipping = 'failure';
               delete $scope.data.item.pressclipping;
+
+              location.reload();
             }
           );
         };

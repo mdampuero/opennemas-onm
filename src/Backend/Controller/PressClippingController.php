@@ -45,7 +45,7 @@ class PressClippingController extends BackendController
      */
     public function dashboardAction()
     {
-        return $this->render('pressclipping/dashboard.tpl');
+        return $this->render('pressclipping/list.tpl');
     }
 
     /**
