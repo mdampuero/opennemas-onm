@@ -22,6 +22,16 @@ parameters:
                                 - image
                                 - articleID
                                 - articleURL
+        remove_info:
+            class: 'Common\External\PressClipping\Component\Endpoint\RemoveEndpoint'
+            config:
+                actions:
+                    remove_info:
+                        path: '/api/DigitalData_api/deleteArticles/'
+                        parameters:
+                            required:
+                                - publicationID
+                                - articleID
         test_connection:
             class: 'Common\External\PressClipping\Component\Endpoint\ConnectionEndpoint'
             config:

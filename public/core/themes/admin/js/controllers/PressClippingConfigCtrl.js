@@ -34,7 +34,7 @@
           checkServer: 'api_v1_backend_pressclipping_check_server',
           saveConfig: 'api_v1_backend_pressclipping_save_config',
           uploadDump: 'api_v1_backend_pressclipping_upload_data',
-          removeData: 'api_v1_backend_pressclipping_remove_data'
+          removeData: 'api_v1_backend_pressclipping_remove_config'
         };
 
         // Initialize settings with pressclipping_service

@@ -295,7 +295,7 @@ class PressClippingController extends ApiController
      *
      * @return JsonResponse A JSON response containing the message(s) and status code.
      */
-    public function removeDataAction()
+    public function removeConfigAction()
     {
         // Get the messenger service for displaying messages to the user
         $msg = $this->get('core.messenger');
