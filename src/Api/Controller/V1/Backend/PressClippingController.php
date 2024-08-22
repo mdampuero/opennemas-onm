@@ -17,15 +17,6 @@ class PressClippingController extends ApiController
     protected $extension = 'es.openhost.module.pressclipping';
 
     /**
-     * Override permissions property.
-     *
-     * @var array
-     */
-    protected $permissions = [
-        // TODO: Specify permissions
-    ];
-
-    /**
      * Override module property.
      *
      * @var string
@@ -134,6 +125,19 @@ class PressClippingController extends ApiController
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
+    /**
+     * Handles the removal of pressclipping data for a given article.
+     *
+     * This action retrieves article data from the request, interacts with an external pressclipping service
+     * to remove the article information, and updates the database accordingly. It then logs the success or error
+     * messages and returns a JSON response with the appropriate status code.
+     *
+     * @param Request|null $request The HTTP request object containing the article data. Default is null.
+     *
+     * @return JsonResponse JSON response containing success or error messages along with the HTTP status code.
+     *
+     * @throws \Exception If there is an issue connecting to the external press clipping service.
+     */
     public function removeDataAction(Request $request = null)
     {
         $data = $request->request->all();

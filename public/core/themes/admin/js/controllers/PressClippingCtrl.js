@@ -106,42 +106,6 @@
             $scope.items = [];
           });
         };
-
-        $scope.removeData = function(articleID) {
-          if (!$scope.data.item) {
-            $scope.data.item = {};
-          }
-
-          if (!Array.isArray($scope.data.item.pressclipping)) {
-            $scope.data.item.pressclipping = [];
-          }
-
-          $scope.data.item.pressclipping.push({
-            articleID: articleID
-          });
-
-          var route = {
-            name: 'api_v1_backend_pressclipping_remove_data'
-          };
-
-          // Send the data to the API
-          var data = $scope.data.item.pressclipping;
-
-          http.post(route, data).then(
-            function() {
-              $scope.statusPressclipping = 'success';
-              delete $scope.data.item.pressclipping;
-
-              location.reload();
-            },
-            function() {
-              $scope.statusPressclipping = 'failure';
-              delete $scope.data.item.pressclipping;
-
-              location.reload();
-            }
-          );
-        };
       }
     ]);
 })();

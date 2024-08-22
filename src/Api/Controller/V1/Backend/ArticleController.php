@@ -129,12 +129,12 @@ class ArticleController extends ContentController
         );
 
         return array_merge([
-            'categories'          => $categories,
-            'extra_fields'        => $extraFields ?? null,
-            'subscriptions'       => $subscriptions,
-            'auto_webpush'        => $autoNotifications ?? 0,
-            'tags'                => $this->getTags($items),
-            'formSettings'        => [
+            'categories'    => $categories,
+            'extra_fields'  => $extraFields ?? null,
+            'subscriptions' => $subscriptions,
+            'auto_webpush'  => $autoNotifications ?? 0,
+            'tags'          => $this->getTags($items),
+            'formSettings'  => [
                 'name'             => $this->module,
                 'expansibleFields' => $this->getFormSettings($this->module)
             ]

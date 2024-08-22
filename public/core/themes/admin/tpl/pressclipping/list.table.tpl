@@ -25,12 +25,6 @@
         {t}Send date{/t}
       </label>
     </div>
-    <div class="checkbox column-filters-checkbox">
-      <input id="actions" checklist-model="app.columns.selected" checklist-value="'actions'" type="checkbox">
-      <label for="actions">
-        {t}Actions{/t}
-      </label>
-    </div>
 {/block}
 
 {block name="commonColumnsHeader"}
@@ -73,13 +67,6 @@
         [% item.pressclipping_sended %]
       </strong>
     </span>
-  </td>
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('actions')">
-    <strong>
-      <a class="btn btn-primary btn-sm" ng-click="removeData(item.fk_content)">
-          <i class="fa fa-trash"></i>
-      </a>
-    </strong>
   </td>
 {/block}
 
