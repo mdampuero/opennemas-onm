@@ -390,13 +390,14 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       http.post(route, data).then(
         function() {
           $scope.statusPressclipping = 'success';
-          delete $scope.data.item.pressclipping;
         },
         function() {
           $scope.statusPressclipping = 'failure';
-          delete $scope.data.item.pressclipping;
         }
       );
+
+      delete $scope.data.item.pressclipping;
+      $scope.saveItem();
     };
 
     /**
@@ -433,13 +434,14 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       http.post(route, data).then(
         function() {
           $scope.statusPressclipping = 'success';
-          delete $scope.data.item.pressclipping;
         },
         function() {
           $scope.statusPressclipping = 'failure';
-          delete $scope.data.item.pressclipping;
         }
       );
+
+      delete $scope.data.item.pressclipping;
+      $scope.saveItem();
     };
 
     /**
