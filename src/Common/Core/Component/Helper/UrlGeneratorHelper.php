@@ -519,22 +519,22 @@ class UrlGeneratorHelper
      */
     protected function getUriForUser($user, $sitemap = false, $locale = null)
     {
+        $routeName   = 'frontend_opinion_author_frontpage';
+        $routeParams = [
+            'author_slug' => $user->slug,
+            'author_id'   => $user->id,
+        ];
+
+        if ($user->is_blog) {
+            $routeName   = 'frontend_blog_author_frontpage';
+            $routeParams = [ 'author_slug' => $user->slug ];
+        }
+
         if ($sitemap) {
             $routeName   = 'frontend_author_frontpage';
             $routeParams = [
                 'author_slug' => $user->slug,
             ];
-        } else {
-            $routeName   = 'frontend_opinion_author_frontpage';
-            $routeParams = [
-                'author_slug' => $user->slug,
-                'author_id'   => $user->id,
-            ];
-        }
-
-        if ($user->is_blog) {
-            $routeName   = 'frontend_blog_author_frontpage';
-            $routeParams = [ 'author_slug' => $user->slug ];
         }
 
         $uri = $this->container->get('router')->generate($routeName, $routeParams);
