@@ -115,6 +115,7 @@ class UrlGeneratorHelper
         $this->locale->setContext('frontend');
 
         $localize = $this->locale->getRequestLocale('frontend');
+        $sitemap  = isset($params['sitemap']) ? $params['sitemap'] : false;
         if (array_key_exists('locale', $params) && !empty($params['locale'])) {
             $localize = $params['locale'];
             $uri     .= $this->locale->getSlugs()[$params['locale']] &&
@@ -122,7 +123,6 @@ class UrlGeneratorHelper
             '/' . $this->locale->getSlugs()[$params['locale']] :
             '';
         }
-
         $method = 'getUriForContent';
 
         if (!$content instanceof \Content) {
@@ -138,7 +138,11 @@ class UrlGeneratorHelper
                 ])
                 ->get();
 
-            $uri .= '/' . $this->{$method}($content, $localize);
+            if ($method === 'getUriForUser') {
+                $uri .= '/' . $this->{$method}($content, $sitemap, $localize);
+            } else {
+                $uri .= '/' . $this->{$method}($content, $localize);
+            }
         }
 
         $this->locale->setContext($context);
@@ -513,13 +517,20 @@ class UrlGeneratorHelper
      *
      * @return string The user URI.
      */
-    protected function getUriForUser($user, $locale = null)
+    protected function getUriForUser($user, $sitemap = false, $locale = null)
     {
-        $routeName   = 'frontend_opinion_author_frontpage';
-        $routeParams = [
-            'author_slug' => $user->slug,
-            'author_id'   => $user->id,
-        ];
+        if ($sitemap) {
+            $routeName   = 'frontend_author_frontpage';
+            $routeParams = [
+                'author_slug' => $user->slug,
+            ];
+        } else {
+            $routeName   = 'frontend_opinion_author_frontpage';
+            $routeParams = [
+                'author_slug' => $user->slug,
+                'author_id'   => $user->id,
+            ];
+        }
 
         if ($user->is_blog) {
             $routeName   = 'frontend_blog_author_frontpage';
