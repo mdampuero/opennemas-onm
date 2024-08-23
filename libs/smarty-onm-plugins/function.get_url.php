@@ -25,7 +25,7 @@ function smarty_function_get_url($params, &$smarty)
     }
 
     $absolute    = array_key_exists('absolute', $params) && $params['absolute'];
-    $isSitemap       = array_key_exists('sitemap', $params) && $params['sitemap'];
+    $isSitemap   = array_key_exists('sitemap', $params) && $params['sitemap'];
     $escape      = array_key_exists('escape', $params) && $params['escape'];
     $isAmp       = array_key_exists('amp', $params) && $params['amp'];
     $translation = array_key_exists('locale', $params) && $params['locale'];
@@ -33,7 +33,7 @@ function smarty_function_get_url($params, &$smarty)
     $url = $container->get('core.helper.url_generator')
         ->generate($item, [
             'absolute' => $absolute,
-            'sitemap'      => $isSitemap ? $isSitemap : false,
+            'sitemap'  => $isSitemap ? $isSitemap : false,
             '_format'  => $isAmp ? 'amp' : null,
             'locale'   => $translation ? $params['locale'] : null,
         ]);
