@@ -242,10 +242,7 @@ class ThemeSettingsHelper extends SettingHelper
 
         $themeSettings  = $this->getThemeSettings();
         $targetSettings = $this->getMappedSettings($extension, $action);
-        // dump($extension);
-        // dump($action);
-        // dump($this->parseSettings($themeSettings, $targetSettings));
-        // die();
+
         return $this->parseSettings($themeSettings, $targetSettings);
     }
 
