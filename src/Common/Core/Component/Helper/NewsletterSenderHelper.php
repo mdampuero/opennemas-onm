@@ -285,7 +285,7 @@ class NewsletterSenderHelper
         $errors = [];
         foreach ($users as $user) {
             try {
-                $sentEmails += $this->sendEmail($newsletter, $user);
+                $sentEmails += $this->sendEmail($newsletter, $user, $list);
             } catch (\Swift_RfcComplianceException $e) {
                 $errors[] = sprintf(_('Email not valid: %s %s'), $user['email'], $e->getMessage());
             } catch (\Exception $e) {
@@ -304,17 +304,31 @@ class NewsletterSenderHelper
      *
      * @return int the number of emails sent
      */
-    private function sendEmail($newsletter, $mailbox)
+    private function sendEmail($newsletter, $mailbox, $list = null)
     {
         $this->newsletterConfigs = $this->ormManager->getDataSet('Settings', 'instance')->get('newsletter_maillist');
         $this->siteName          = $this->ormManager->getDataSet('Settings', 'instance')->get('site_name');
 
+        // Encode the email address in Base64
+        $encodedEmail = urlencode(base64_encode($mailbox['email']));
+
+        // Check if $list is empty and assign the second value accordingly
+        $replacement = empty($list)
+            ? [$encodedEmail, 0]
+            : [$encodedEmail, $list->pk_user_group];
+
         // Build the message
         try {
+            $newsletterFinalHtml = str_replace(
+                ['%25SUBSCRIBER_EMAIL%25', '%25NEWSLETTER_LIST_ID%25'],
+                $replacement,
+                $newsletter->html
+            );
+
             $message = \Swift_Message::newInstance();
             $message
                 ->setSubject($newsletter->title)
-                ->setBody($newsletter->html, 'text/html')
+                ->setBody($newsletterFinalHtml, 'text/html')
                 ->setFrom([$this->newsletterConfigs['sender'] => $this->siteName])
                 ->setSender($this->noReplyAddress)
                 ->setTo([ $mailbox['email'] => $mailbox['name']]);

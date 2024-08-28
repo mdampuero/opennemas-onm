@@ -42,7 +42,7 @@
                   <a href="#">{t}Free{/t}</a>
                 </li>
                 <li ng-click="type = 'purchased'">
-                  <a href="#">{t}My selection {/t}</a>
+                  <a href="#">{t}My selection{/t}</a>
                 </li>
               </ul>
             </li>

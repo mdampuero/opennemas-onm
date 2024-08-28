@@ -74,7 +74,7 @@
                 <auto-complete source="loadHours($query)" load-on-focus=true min-length="0" debounce-delay="0"></auto-complete>
               </tags-input>
               <i class="fa fa-info-circle text-info"></i>
-              <small class="text-muted">{t}Time zone: {/t} {date_default_timezone_get()}</small>
+              <small class="text-muted">{t}Time zone:{/t} {date_default_timezone_get()}</small>
             </div>
             <div class="col-xs-6 col-md-3 m-b-15">
               <h4>{t}Stop subscribers collection{/t}</h4>

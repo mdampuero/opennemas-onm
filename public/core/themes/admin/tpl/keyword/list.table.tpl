@@ -60,7 +60,7 @@
 
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('type')">
     <div class="table-text ng-binding">
-    <span ng-if="item.type == 'url'"><span class="fa fa-external-link"></span> {t}External link to {/t}</span>
+    <span ng-if="item.type == 'url'"><span class="fa fa-external-link"></span> {t}External link to{/t}</span>
     <span ng-if="item.type == 'intsearch'" ><span class="fa fa-link"></span> {t}Internal search to keyword{/t}</span>
     <span ng-if="item.type == 'email'"><span class="fa fa-envelope"></span> {t}Link to send email to{/t}</span>
     </div>
