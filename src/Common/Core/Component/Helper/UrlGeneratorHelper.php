@@ -532,9 +532,7 @@ class UrlGeneratorHelper
 
         if ($sitemap) {
             $routeName   = 'frontend_author_frontpage';
-            $routeParams = [
-                'author_slug' => $user->slug,
-            ];
+            $routeParams = [ 'author_slug' => $user->slug,];
         }
 
         $uri = $this->container->get('router')->generate($routeName, $routeParams);
