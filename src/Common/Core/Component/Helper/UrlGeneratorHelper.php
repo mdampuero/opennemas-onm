@@ -115,7 +115,7 @@ class UrlGeneratorHelper
         $this->locale->setContext('frontend');
 
         $localize = $this->locale->getRequestLocale('frontend');
-        $sitemap  = isset($params['sitemap']) ? $params['sitemap'] : false;
+        $sitemap  = $params['sitemap'] ?? false;
         if (array_key_exists('locale', $params) && !empty($params['locale'])) {
             $localize = $params['locale'];
             $uri     .= $this->locale->getSlugs()[$params['locale']] &&
@@ -139,7 +139,7 @@ class UrlGeneratorHelper
                 ->get();
 
             if ($method === 'getUriForUser') {
-                $uri .= '/' . $this->{$method}($content, $sitemap, $localize);
+                $uri .= '/' . $this->{$method}($content, $localize, $sitemap);
             } else {
                 $uri .= '/' . $this->{$method}($content, $localize);
             }
@@ -517,7 +517,7 @@ class UrlGeneratorHelper
      *
      * @return string The user URI.
      */
-    protected function getUriForUser($user, $sitemap = false, $locale = null)
+    protected function getUriForUser($user, $locale = null, $sitemap = false)
     {
         $routeName   = 'frontend_opinion_author_frontpage';
         $routeParams = [
