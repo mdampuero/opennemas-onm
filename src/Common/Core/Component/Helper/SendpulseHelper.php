@@ -258,7 +258,7 @@ class SendpulseHelper
             'send_count'  => $data['send'],
             'impressions' => $data['delivered'],
             'clicks'      => $data['redirect'],
-            'closed'      => $data['unsubscribed']
+            'closed'      => $data['unsubscribed'] ?? 0
         ];
     }
 
