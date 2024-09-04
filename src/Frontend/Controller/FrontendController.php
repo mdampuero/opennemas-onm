@@ -41,7 +41,8 @@ class FrontendController extends Controller
      * @var array
      */
     protected $queries = [
-        'list' => [ 'page' ]
+        'list' => [ 'page' ],
+        'listTag' => [ 'page' ]
     ];
 
     /**
@@ -89,6 +90,28 @@ class FrontendController extends Controller
         }
 
         return $this->render($this->getTemplate($action), $params);
+    }
+
+
+    public function listTagAction(Request $request)
+    {
+        $this->checkSecurity($this->extension);
+
+        $action = $this->get('core.globals')->getAction();
+        $item   = $this->getItemByTag($request);
+
+        $params = $this->getParameters($request, $item);
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrateListbyTags($params);
+        }
+
+        return $this->render(
+            $this->getTemplate($this->get('core.globals')->getAction()),
+            $params
+        );
     }
 
     /**
