@@ -103,14 +103,22 @@
          * Toggles the theme of all CodeMirror editors between 'default' and 'material-palenight'.
          */
         $scope.toggleAllEditorsTheme = function() {
-          // Detect if any editor is using 'material-palenight' theme
-          const isAnyPalenight = Object.values($scope.editors).some((editor) => editor.getOption('theme') === 'material-palenight');
+          var newTheme = $scope.settings.theme_editor;
 
-          // Toggle theme based on the current state
-          const newTheme = isAnyPalenight ? $scope.settings.theme_editor : 'material-palenight';
+          // Check if any editor is currently using the 'material-palenight' theme
+          var anyPalenight = Object.keys($scope.editors).some(function(id) {
+            return $scope.editors[id].getOption('theme') === 'material-palenight';
+          });
 
-          // Apply the new theme to all editors
-          Object.values($scope.editors).forEach((editor) => editor.setOption('theme', newTheme));
+          // Determine the new theme based on the current state
+          if (!anyPalenight) {
+            newTheme = 'material-palenight';
+          }
+
+          // Update the theme for all editors
+          Object.keys($scope.editors).forEach(function(id) {
+            $scope.editors[id].setOption('theme', newTheme);
+          });
         };
 
         // Watch for the presence of all required elements in the DOM before initializing editors
