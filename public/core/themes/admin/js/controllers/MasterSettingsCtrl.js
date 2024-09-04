@@ -21,7 +21,7 @@
 
         // Initialize settings with default values
         $scope.settings = {
-          theme_skin: 'default',
+          theme_editor: 'default',
           gfk: {}
         };
 
@@ -75,8 +75,7 @@
                 lineWrapping: true,
                 matchBrackets: true,
                 mode: 'htmlmixed',
-                theme: $scope.settings.theme_skin,
-                scrollbarStyle: null
+                theme: $scope.settings.theme_editor
               });
 
               // Store the editor instance in $scope.editors
@@ -104,22 +103,14 @@
          * Toggles the theme of all CodeMirror editors between 'default' and 'material-palenight'.
          */
         $scope.toggleAllEditorsTheme = function() {
-          var newTheme = 'default';
+          // Detect if any editor is using 'material-palenight' theme
+          const isAnyPalenight = Object.values($scope.editors).some((editor) => editor.getOption('theme') === 'material-palenight');
 
-          // Check if any editor is currently using the 'material-palenight' theme
-          var anyPalenight = Object.keys($scope.editors).some(function(id) {
-            return $scope.editors[id].getOption('theme') === 'material-palenight';
-          });
+          // Toggle theme based on the current state
+          const newTheme = isAnyPalenight ? $scope.settings.theme_editor : 'material-palenight';
 
-          // Determine the new theme based on the current state
-          if (!anyPalenight) {
-            newTheme = 'material-palenight';
-          }
-
-          // Update the theme for all editors
-          Object.keys($scope.editors).forEach(function(id) {
-            $scope.editors[id].setOption('theme', newTheme);
-          });
+          // Apply the new theme to all editors
+          Object.values($scope.editors).forEach((editor) => editor.setOption('theme', newTheme));
         };
 
         // Watch for the presence of all required elements in the DOM before initializing editors
