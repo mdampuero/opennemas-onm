@@ -129,6 +129,32 @@ class ContentService extends OrmService
     }
 
     /**
+     * Returns a content basing on a slug and content type.
+     *
+     * @param string $slug        The category slug.
+     * @param string $contentType The id of the content type.
+     *
+     * @return Content The content.
+     */
+    public function getItemByTagAndContentType($tag, $contentType)
+    {
+        $response = $this->getListBySql(sprintf(
+            'SELECT c.*
+             FROM contents c
+             JOIN contents_tags ct ON c.pk_content = ct.content_id
+             JOIN tags t ON ct.tag_id = t.id
+             WHERE t.slug = "%s"
+               AND c.fk_content_type = "%s"
+               AND c.in_litter = 0
+               AND c.content_status = 1',
+            $tag,           // Variable que contiene el slug del tag, por ejemplo 'eve'
+            $contentType    // Variable que contiene el nombre del tipo de contenido, por ejemplo 'event'
+        ));
+
+        return $response['items'];
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getOqlForList($oql)

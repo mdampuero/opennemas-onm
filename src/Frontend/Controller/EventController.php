@@ -69,7 +69,7 @@ class EventController extends FrontendController
      */
     protected $templates = [
         'list' => 'event/list.tpl',
-        'listTag' => 'event/tag.tpl',
+        'listTag' => 'event/list.tpl',
         'show' => 'event/item.tpl'
     ];
 
@@ -104,27 +104,10 @@ class EventController extends FrontendController
         return $item;
     }
 
-    protected function getItemByTag(Request $request)
-    {
-        try {
-            $oql = sprintf(
-                'slug regexp "(.*\"|^)%s(\".*|$)"',
-                $request->get('tag')
-            );
-
-            $item = $this->get('api.service.tag')
-                ->getItemBy($oql);
-        } catch (\Exception $e) {
-            throw new ResourceNotFoundException();
-        }
-
-        return $item;
-    }
-
     /**
      * {@inheritdoc}
      */
-    protected function hydrateList(array &$params = []) : void
+    protected function hydrateList(array &$params = [], bool $tagList = false) : void
     {
         $date = gmdate('Y-m-d H:i:s');
 
@@ -135,91 +118,54 @@ class EventController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $response = $this->get('api.service.content')->getListBySql(sprintf(
-            'select * from contents '
-            . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
-            . 'and cm1.meta_name = "event_start_date" '
-            . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
-            . 'and cm2.meta_name = "event_end_date" '
-            . 'where content_type_name="event" and content_status=1 and in_litter=0 '
-            . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))'
-            . 'and (starttime is null or starttime < "%s") '
-            . 'and (endtime is null or endtime > "%s") '
-            . 'order by cm1.meta_value asc',
-            gmdate('Y-m-d'),
-            gmdate('Y-m-d'),
-            gmdate('Y-m-d'),
-            $date,
-            $date,
-        ));
+        if (!$tagList) {
+            $response = $this->get('api.service.content')->getListBySql(sprintf(
+                'select * from contents '
+                . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
+                . 'and cm1.meta_name = "event_start_date" '
+                . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
+                . 'and cm2.meta_name = "event_end_date" '
+                . 'where content_type_name="event" and content_status=1 and in_litter=0 '
+                . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))'
+                . 'and (starttime is null or starttime < "%s") '
+                . 'and (endtime is null or endtime > "%s") '
+                . 'order by cm1.meta_value asc',
+                gmdate('Y-m-d'),
+                gmdate('Y-m-d'),
+                gmdate('Y-m-d'),
+                $date,
+                $date,
+            ));
+        } else {
+            $response = $this->get('api.service.content')->getListBySql(sprintf(
+                'select * from contents c'
+                . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
+                . 'and cm1.meta_name = "event_start_date" '
+                . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
+                . 'and cm2.meta_name = "event_end_date" '
+                . 'join contents_tags ct ON c.pk_content = ct.content_id'
+                . 'join tags t ON ct.tag_id = t.id'
+                . 'where content_type_name="event" and content_status=1 and in_litter=0 '
+                . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))'
+                . 'and (starttime is null or starttime < "%s") '
+                . 'and (endtime is null or endtime > "%s") '
+                . 'and t.slug = "%s" '
+                . 'order by cm1.meta_value asc',
+                gmdate('Y-m-d'),
+                gmdate('Y-m-d'),
+                gmdate('Y-m-d'),
+                $date,
+                $date,
+                'eve',
+            ));
+        }
+
 
         $items = $response['items'];
         $total = count($items);
         $limit = ($params['epp'] * ($params['page'] - 1) + $params['epp']) > count($items)
             ? (count($items) - ($params['epp'] * ($params['page'] - 1)))
             : $params['epp'];
-
-        $items = array_slice(
-            $items,
-            $params['epp'] * ($params['page'] - 1),
-            $limit
-        );
-
-        // No first page and no contents
-        if ($params['page'] > 1 && empty($items)) {
-            throw new ResourceNotFoundException();
-        }
-
-        $expire = $this->get('core.helper.content')->getCacheExpireDate();
-
-        if (!empty($expire)) {
-            $this->setViewExpireDate($expire);
-
-            $params['x-cache-for'] = $expire;
-        }
-
-        $params['x-tags'] .= ',event-frontpage';
-
-        $params['contents']   = $items;
-        $params['pagination'] = $this->get('paginator')->get([
-            'directional' => true,
-            'epp'         => $params['epp'],
-            'page'        => $params['page'],
-            'total'       => $total,
-            'route'       => 'frontend_events'
-        ]);
-
-        $params['tags'] = $this->getTags($items);
-    }
-
-    protected function hydrateListbyTags(array &$params = []) : void
-    {
-        $date = gmdate('Y-m-d H:i:s');
-
-        // Invalid page provided as parameter
-        if ($params['page'] <= 0
-            || $params['page'] > $this->getParameter('core.max_page')
-        ) {
-            throw new ResourceNotFoundException();
-        }
-
-        $tagId = (int) $params['contentId'];
-
-        $response = $this->get('api.service.content')->getListBySql(sprintf(
-            'select * from contents '
-            . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
-            . 'and cm1.meta_name = "event_start_date" '
-            . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
-            . 'and cm2.meta_name = "event_end_date" '
-            . 'left join contents_tags as ct1 on contents.pk_content = ct1.content_id '
-            . 'where content_type_name="event" and content_status=1 and in_litter=0 '
-            . 'and (ct1.tag_id = %d) '
-            . 'order by cm1.meta_value asc',
-            $tagId,
-        ));
-
-        $items = $response['items'];
-        $total = count($items);
 
         $items = array_slice(
             $items,

@@ -98,20 +98,23 @@ class FrontendController extends Controller
         $this->checkSecurity($this->extension);
 
         $action = $this->get('core.globals')->getAction();
-        $item   = $this->getItemByTag($request);
+        $params = $request->query->all();
 
-        $params = $this->getParameters($request, $item);
+        $expected = $this->getExpectedUri($action, $params);
+
+        if ($request->getRequestUri() !== $expected) {
+            return new RedirectResponse($expected, 301);
+        }
+
+        $params = $this->getParameters($request);
 
         $this->view->setConfig($this->getCacheConfiguration($action));
 
         if (!$this->isCached($params)) {
-            $this->hydrateListbyTags($params);
+            $this->hydrateList($params);
         }
 
-        return $this->render(
-            $this->getTemplate($this->get('core.globals')->getAction()),
-            $params
-        );
+        return $this->render($this->getTemplate($action), $params);
     }
 
     /**
