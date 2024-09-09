@@ -106,12 +106,12 @@ class FrontendController extends Controller
             return new RedirectResponse($expected, 301);
         }
 
-        $params = $this->getParameters($request);
+        // $params = $this->getParameters($request);
 
         $this->view->setConfig($this->getCacheConfiguration($action));
 
         if (!$this->isCached($params)) {
-            $this->hydrateList($params);
+            $this->hydrateListTag($params);
         }
 
         return $this->render($this->getTemplate($action), $params);

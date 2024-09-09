@@ -69,7 +69,7 @@ class EventController extends FrontendController
      */
     protected $templates = [
         'list' => 'event/list.tpl',
-        'listTag' => 'event/list.tpl',
+        'listtag' => 'event/list.tpl',
         'show' => 'event/item.tpl'
     ];
 
@@ -107,7 +107,7 @@ class EventController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function hydrateList(array &$params = [], bool $tagList = false) : void
+    protected function hydrateList(array &$params = []) : void
     {
         $date = gmdate('Y-m-d H:i:s');
 
@@ -118,53 +118,29 @@ class EventController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        if (!$tagList) {
-            $response = $this->get('api.service.content')->getListBySql(sprintf(
-                'select * from contents '
-                . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
-                . 'and cm1.meta_name = "event_start_date" '
-                . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
-                . 'and cm2.meta_name = "event_end_date" '
-                . 'where content_type_name="event" and content_status=1 and in_litter=0 '
-                . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))'
-                . 'and (starttime is null or starttime < "%s") '
-                . 'and (endtime is null or endtime > "%s") '
-                . 'order by cm1.meta_value asc',
-                gmdate('Y-m-d'),
-                gmdate('Y-m-d'),
-                gmdate('Y-m-d'),
-                $date,
-                $date,
-            ));
-        } else {
-            $response = $this->get('api.service.content')->getListBySql(sprintf(
-                'select * from contents c'
-                . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
-                . 'and cm1.meta_name = "event_start_date" '
-                . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
-                . 'and cm2.meta_name = "event_end_date" '
-                . 'join contents_tags ct ON c.pk_content = ct.content_id'
-                . 'join tags t ON ct.tag_id = t.id'
-                . 'where content_type_name="event" and content_status=1 and in_litter=0 '
-                . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))'
-                . 'and (starttime is null or starttime < "%s") '
-                . 'and (endtime is null or endtime > "%s") '
-                . 'and t.slug = "%s" '
-                . 'order by cm1.meta_value asc',
-                gmdate('Y-m-d'),
-                gmdate('Y-m-d'),
-                gmdate('Y-m-d'),
-                $date,
-                $date,
-                'eve',
-            ));
-        }
-
+        // Ejecutar la consulta SQL
+        $response = $this->get('api.service.content')->getListBySql(sprintf(
+            'select * from contents '
+            . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
+            . 'and cm1.meta_name = "event_start_date" '
+            . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
+            . 'and cm2.meta_name = "event_end_date" '
+            . 'where content_type_name="event" and content_status=1 and in_litter=0 '
+            . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))'
+            . 'and (starttime is null or starttime < "%s") '
+            . 'and (endtime is null or endtime > "%s") '
+            . 'order by cm1.meta_value asc',
+            gmdate('Y-m-d'),
+            gmdate('Y-m-d'),
+            gmdate('Y-m-d'),
+            $date,
+            $date
+        ));
 
         $items = $response['items'];
         $total = count($items);
-        $limit = ($params['epp'] * ($params['page'] - 1) + $params['epp']) > count($items)
-            ? (count($items) - ($params['epp'] * ($params['page'] - 1)))
+        $limit = ($params['epp'] * ($params['page'] - 1) + $params['epp']) > $total
+            ? ($total - ($params['epp'] * ($params['page'] - 1)))
             : $params['epp'];
 
         $items = array_slice(
@@ -182,7 +158,6 @@ class EventController extends FrontendController
 
         if (!empty($expire)) {
             $this->setViewExpireDate($expire);
-
             $params['x-cache-for'] = $expire;
         }
 
@@ -198,5 +173,52 @@ class EventController extends FrontendController
         ]);
 
         $params['tags'] = $this->getTags($items);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function hydrateListTag(array &$params = []) : void
+    {
+        $currentDate = gmdate('Y-m-d');
+        $fullDate    = gmdate('Y-m-d H:i:s');
+
+        $oql = sprintf(
+            'SELECT * FROM contents c
+            INNER JOIN contentmeta as cm1 ON c.pk_content = cm1.fk_content
+            AND cm1.meta_name = "event_start_date"
+            LEFT JOIN contentmeta as cm2 ON c.pk_content = cm2.fk_content
+            AND cm2.meta_name = "event_end_date"
+            JOIN contents_tags ct ON c.pk_content = ct.content_id
+            JOIN tags t ON ct.tag_id = t.id
+            WHERE content_type_name="event"
+            AND content_status=1
+            AND in_litter=0
+            AND (cm1.meta_value >= "%s" OR (cm1.meta_value < "%s" AND cm2.meta_value >= "%s"))
+            AND (starttime IS NULL OR starttime < "%s")
+            AND (endtime IS NULL OR endtime > "%s")
+            AND t.slug = "%s"
+            ORDER BY cm1.meta_value ASC',
+            $currentDate,
+            $currentDate,
+            $currentDate,
+            $fullDate,
+            $fullDate,
+            $params['tag']
+        );
+
+        $response = $this->get('api.service.content')->getListBySql($oql);
+        $items    = $response['items'];
+
+        if (empty($items)) {
+            throw new ResourceNotFoundException();
+        }
+
+        if ($expire = $this->get('core.helper.content')->getCacheExpireDate()) {
+            $this->setViewExpireDate($expire);
+            $params['x-cache-for'] = $expire;
+        }
+
+        $params['contents'] = $items;
     }
 }
