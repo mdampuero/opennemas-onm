@@ -105,6 +105,32 @@ class EventController extends FrontendController
     }
 
     /**
+     * Retrieves a tag item based on the slug provided in the request and the current locale.
+     *
+     * @param Request $request The current HTTP request object, which contains the tag slug.
+     *
+     * @return array The tag item data.
+     *
+     * @throws ResourceNotFoundException If the tag item cannot be found or an error occurs while fetching the item.
+     */
+    protected function getItemTag(Request $request)
+    {
+        try {
+            $locale = $this->container->get('core.locale')->getRequestLocale();
+            $item   = $this->get('api.service.tag')->getItemBy(sprintf(
+                'slug = "%s" and locale = "%s"',
+                $request->get('tag'),
+                $locale
+            ));
+        } catch (\Exception $e) {
+            throw new ResourceNotFoundException();
+        }
+
+
+        return $item;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function hydrateList(array &$params = []) : void
@@ -188,6 +214,7 @@ class EventController extends FrontendController
 
         $action = $this->get('core.globals')->getAction();
         $params = $request->query->all();
+        $item   = $this->getItemTag($request);
 
         $expected = $this->getExpectedUri($action, $params);
 
@@ -195,7 +222,7 @@ class EventController extends FrontendController
             return new RedirectResponse($expected, 301);
         }
 
-        $params = $this->getParameters($request);
+        $params = $this->getParameters($request, $item);
 
         $this->view->setConfig($this->getCacheConfiguration($action));
 
