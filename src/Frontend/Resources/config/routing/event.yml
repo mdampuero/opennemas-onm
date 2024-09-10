@@ -5,9 +5,9 @@ frontend_events:
         l10n: true
         subdirectory: true
 
-frontend_event_listtag:
+frontend_event_taglist:
     path: /events/{tag}/
-    defaults: { _controller: FrontendBundle:Event:listTag, _format: html }
+    defaults: { _controller: FrontendBundle:Event:tagList, _format: html } #  Tag list
     requirements:
         tag : '[^/.]+'
     options:

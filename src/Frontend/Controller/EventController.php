@@ -55,7 +55,7 @@ class EventController extends FrontendController
      */
     protected $routes = [
         'list' => 'frontend_events',
-        'listTag' => 'frontend_event_listtag',
+        'tagList' => 'frontend_event_taglist',
         'show' => 'frontend_event_show'
     ];
 
@@ -69,7 +69,7 @@ class EventController extends FrontendController
      */
     protected $templates = [
         'list' => 'event/list.tpl',
-        'listtag' => 'event/list.tpl',
+        'taglist' => 'event/list.tpl',
         'show' => 'event/item.tpl'
     ];
 
@@ -176,7 +176,43 @@ class EventController extends FrontendController
     }
 
     /**
-     * {@inheritdoc}
+     * Handles the listing of tags and redirects if the request URI does not match the expected URI.
+     * @param Request $request The current HTTP request object.
+     * @return RedirectResponse|Response A redirect response if the URI is incorrect,
+     * otherwise renders the tag listing template.
+     * @throws SecurityException If the user does not have the required permissions.
+     */
+    public function tagListAction(Request $request)
+    {
+        $this->checkSecurity($this->extension);
+
+        $action = $this->get('core.globals')->getAction();
+        $params = $request->query->all();
+
+        $expected = $this->getExpectedUri($action, $params);
+
+        if ($request->getRequestUri() !== $expected) {
+            return new RedirectResponse($expected, 301);
+        }
+
+        $params = $this->getParameters($request);
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrateListTag($params);
+        }
+
+        return $this->render($this->getTemplate($action), $params);
+    }
+
+    /**
+     * Hydrates the list of tags by querying the database for content that matches specific criteria
+     * and updates the given parameters array with the resulting content.
+     *
+     * @param array $params The parameters array, passed by reference, to be populated with content data.
+     * @return void
+     * @throws ResourceNotFoundException If no content is found that matches the query.
      */
     protected function hydrateListTag(array &$params = []) : void
     {

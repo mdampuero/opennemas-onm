@@ -42,7 +42,7 @@ class FrontendController extends Controller
      */
     protected $queries = [
         'list' => [ 'page' ],
-        'listTag' => [ 'page' ]
+        'tagList' => [ 'page' ]
     ];
 
     /**
@@ -87,31 +87,6 @@ class FrontendController extends Controller
 
         if (!$this->isCached($params)) {
             $this->hydrateList($params);
-        }
-
-        return $this->render($this->getTemplate($action), $params);
-    }
-
-
-    public function listTagAction(Request $request)
-    {
-        $this->checkSecurity($this->extension);
-
-        $action = $this->get('core.globals')->getAction();
-        $params = $request->query->all();
-
-        $expected = $this->getExpectedUri($action, $params);
-
-        if ($request->getRequestUri() !== $expected) {
-            return new RedirectResponse($expected, 301);
-        }
-
-        // $params = $this->getParameters($request);
-
-        $this->view->setConfig($this->getCacheConfiguration($action));
-
-        if (!$this->isCached($params)) {
-            $this->hydrateListTag($params);
         }
 
         return $this->render($this->getTemplate($action), $params);
