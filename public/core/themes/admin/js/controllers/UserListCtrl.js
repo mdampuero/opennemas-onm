@@ -70,7 +70,7 @@
 
           oqlEncoder.configure({
             placeholder: {
-              name: 'name ~ "[value]" or username ~ "[value]"',
+              name: 'name ~ "[value]" or username ~ "[value]" or email ~ "[value]"',
               user_group_id: '([key] = "[value]" and status != 0)',
             }
           });
