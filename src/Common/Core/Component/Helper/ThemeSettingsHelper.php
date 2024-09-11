@@ -208,10 +208,7 @@ class ThemeSettingsHelper extends SettingHelper
 
             $skinParams = $this->container->get('core.theme')->getSkin($skin);
 
-            $themeOptions = array_key_exists('params', $skinParams)
-                && array_key_exists('options', $skinParams['params'])
-                ? $skinParams['params']['options']
-                : [];
+            $themeOptions = $skinParams['params']['options'] ?? [];
 
             if ($maped && !empty($themeOptions)) {
                 $themeOptions = array_map(function ($option) {
@@ -246,10 +243,7 @@ class ThemeSettingsHelper extends SettingHelper
 
         $themeSettings  = $this->getThemeSettings();
         $targetSettings = $this->getMappedSettings($extension, $action);
-        // dump($extension);
-        // dump($action);
-        // dump($this->parseSettings($themeSettings, $targetSettings));
-        // die();
+
         return $this->parseSettings($themeSettings, $targetSettings);
     }
 
