@@ -100,7 +100,8 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
         $item = json_decode(json_encode([ 'id' => '1' ]));
 
         $this->generator->expects($this->once())->method('generate')
-            ->with($item, [ 'absolute' => true,'_format'  => null, 'locale' => null ])
+            ->with($item, [ 'absolute' => true,'_format'  => null,
+                'sitemap'  => false, 'locale' => null ])
             ->willReturn('http://grault.com/glorp/1');
 
         $this->contentHelper->expects($this->any())->method('getContent')
@@ -127,7 +128,8 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
         ]));
 
         $this->generator->expects($this->once())->method('generate')
-            ->with($item, [ 'absolute' => true, '_format' => 'amp', 'locale' => null ])
+            ->with($item, [ 'absolute' => true, '_format' => 'amp',
+                'sitemap'  => false, 'locale' => null ])
             ->willReturn('http://grault.com/glorp.amp.html');
 
         $this->contentHelper->expects($this->any())->method('getContent')
@@ -154,7 +156,8 @@ class SmartyGetUrlTest extends \PHPUnit\Framework\TestCase
         ]));
 
         $this->generator->expects($this->once())->method('generate')
-            ->with($item, [ 'absolute' => true, '_format' => null, 'locale' => 'en' ])
+            ->with($item, [ 'absolute' => true, '_format' => null,
+                'sitemap'  => false, 'locale' => 'en' ])
             ->willReturn('http://grault.com/en/glorp.amp.html');
 
         $this->contentHelper->expects($this->any())->method('getContent')
