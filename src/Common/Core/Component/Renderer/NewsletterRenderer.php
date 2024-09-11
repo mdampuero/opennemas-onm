@@ -78,13 +78,6 @@ class NewsletterRenderer
 
         $this->tpl->assign('ads_format', 'newsletter');
 
-        // Process public URL for images and links
-        $publicUrl = preg_replace(
-            '@^http[s]?://(.*?)/$@i',
-            'http://$1',
-            $this->container->get('core.globals')->getInstance()->getMainDomain()
-        );
-
         $time = new \DateTime(null, $this->container->get('core.locale')->getTimeZone());
 
         $newsletter->title = !empty($newsletter->params['append_title']) ?
@@ -96,7 +89,7 @@ class NewsletterRenderer
             'newsletterContent' => $newsletterContent,
             'menuFrontpage'     => $menuHelper->castToObjectFlat($menu->menu_items, false),
             'current_date'      => new \DateTime(),
-            'URL_PUBLIC'        => 'http://' . $publicUrl,
+            'URL_PUBLIC'        => $this->container->get('core.globals')->getInstance()->getBaseUrl(),
         ]);
     }
 
