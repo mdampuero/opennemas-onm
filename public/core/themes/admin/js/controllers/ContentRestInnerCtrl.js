@@ -315,32 +315,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     };
 
     /**
-     * @function getFrontendUrl
-     * @memberOf ArticleCtrl
-     *
-     * @description
-     *   Generates the public URL basing on the item.
-     *
-     * @param {String} item  The item to generate route for.
-     *
-     * @return {String} The URL for the content.
-     */
-    $scope.getFrontendUrl = function(item) {
-      if (!$scope.selectedCategory || !item.pk_content) {
-        return '';
-      }
-
-      return $scope.data.extra.base_url + $scope.getL10nUrl(
-        routing.generate($scope.routes.public, {
-          id: item.pk_content.toString().padStart(6, '0'),
-          created: item.urldatetime || $window.moment(item.created).format('YYYYMMDDHHmmss'),
-          slug: item.slug,
-          category_slug: $scope.selectedCategory.name
-        })
-      );
-    };
-
-    /**
      * @function sendPressClipping
      * @memberof ContentRestInnerCtrl
      *
