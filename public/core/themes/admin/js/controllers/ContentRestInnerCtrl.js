@@ -215,8 +215,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      *   Saves tags, send notifications if  needed and, then, saves the item.
      */
     $scope.submit = function(item) {
-      if (item && $scope.hasPendingNotifications() &&
-        !$scope.hasAutomaticNotifications()) {
+      if (item && $scope.hasPendingNotifications() && !$scope.hasAutomaticNotifications()) {
         if (item.starttime <= $window.moment().format('YYYY-MM-DD HH:mm:ss')) {
           $scope.openNotificationModal(item, false);
         } else {
