@@ -8,36 +8,23 @@
       <small><i class="fa fa-info-circle text-info"></i> {t}Check it as "Published" to send pressclipping.{/t}</small>
     </div>
     <div>
-      <div class="text-center" ng-if="item.content_status" ng-show="!item.pressclipping_sended">
-        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success" ng-show="!item.pressclipping_sended" ng-click="sendPressClipping(item)" type="button"><i class="fa fa-paper-plane m-r-5"></i>{t}SEND PRESSCLIPPING{/t}</button>
-      </div>
-      <div class="text-center" ng-if="item.content_status" ng-show="item.pressclipping_sended">
-        <div class="alert alert-success" id="alerteo">
-          <i class="fa fa-check"></i>
-          {t}Notification sent{/t}
-          <small>
-            [% item.pressclipping_sended | moment : 'YYYY-MM-DD HH:mm:ss': null %]
-          </small>
-        </div>
-        <button
-          class="btn btn-mini btn-block ng-scope m-b-5 btn-danger"
-          ng-click="removePressClipping(item.pk_content)"
-          ng-show="item.pressclipping_sended"
-          type="button">
-          <i class="fa fa-paper-plane m-r-5"></i>{t}REMOVE DATA FROM PRESSCLIPPING{/t}
-        </button>
-
-      </div>
       <div class="menu-dragable-accordion" id="pressclipping-container">
-        <div class=" m-t-5" ng-repeat="notification in item.pressclipping.slice().reverse()">
-          <div ng-if="statusPressclipping === 'success'" class="alert alert-success" id="alerteo">
+        <div class=" m-t-5">
+          <div ng-show="item.pressclipping_sended" class="alert alert-success" id="alerteo">
             <i class="fa fa-check"></i>
-            {t}Notification sent{/t}
+            {t}Article sent{/t}
             <small>
               [% notification.send_date | moment : 'YYYY-MM-DD HH:mm:ss': null : '{$app.locale->getTimeZone()->getName()}' %]
             </small>
           </div>
-          <div ng-if="statusPressclipping=== 'failure'" class="alert alert-danger">
+          <div ng-show="!item.pressclipping_sended && statusPressclipping" class="alert alert-warning" id="alerteo">
+            <i class="fa fa-check"></i>
+            {t}Article deleted{/t}
+            <small>
+              [% notification.send_date | moment : 'YYYY-MM-DD HH:mm:ss': null : '{$app.locale->getTimeZone()->getName()}' %]
+            </small>
+          </div>
+          <div ng-show="statusPressclipping === 'failure'" class="alert alert-danger">
             <i class="fa fa-exclamation-triangle"></i>
             {t}Notification failed{/t}
             <small>
@@ -45,6 +32,21 @@
             </small>
           </div>
         </div>
+      </div>
+      <div class="text-center" ng-if="item.content_status">
+        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-success"
+                ng-show="!item.pressclipping_sended"
+                ng-click="sendPressClipping(item)"
+                type="button">
+          <i class="fa fa-paper-plane m-r-5"></i>{t}SEND PRESSCLIPPING{/t}
+        </button>
+
+        <button class="btn btn-mini btn-block ng-scope m-b-5 btn-danger"
+                ng-show="item.pressclipping_sended"
+                ng-click="removePressClipping(item.pk_content)"
+                type="button">
+          <i class="fa fa-paper-plane m-r-5"></i>{t}REMOVE PRESSCLIPPING{/t}
+        </button>
       </div>
     </div>
   </div>

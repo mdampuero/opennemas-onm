@@ -314,6 +314,13 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       });
     };
 
+    $scope.formatDate = function(date) {
+      if (date) {
+        return new Date(date).toISOString().replace('T', ' ').substring(0, 19);
+      }
+      return '';
+    };
+
     /**
      * @function sendPressClipping
      * @memberof ContentRestInnerCtrl
@@ -322,11 +329,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      *  Send a PressClipping item for CEDRO
      */
     $scope.sendPressClipping = function(item) {
-      // Initialize $scope.data.item if not defined
-      if (!$scope.data.item) {
-        $scope.data.item = {};
-      }
-
       // Ensure pressclipping is defined as an array and hasn't been corrupted
       if (!Array.isArray($scope.data.item.pressclipping)) {
         $scope.data.item.pressclipping = [];
@@ -359,18 +361,21 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
       // Send the data to the API
       var data = $scope.data.item.pressclipping;
+      var date = new Date();
 
       http.post(route, data).then(
         function() {
-          $scope.statusPressclipping = 'success';
+          $scope.data.item.pressclipping_sended = $scope.formatDate(date);
+          $scope.data.item.pressclipping_status = 'Sended';
+          $scope.save();
         },
         function() {
-          $scope.statusPressclipping = 'failure';
+          $scope.data.item.pressclipping_sended = new Date();
+          $scope.save();
         }
       );
 
       delete $scope.data.item.pressclipping;
-      $scope.saveItem();
     };
 
     /**
@@ -381,11 +386,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      *  Remove a PressClipping item for CEDRO
      */
     $scope.removePressClipping = function(articleID) {
-      // Initialize $scope.data.item if not defined
-      if (!$scope.data.item) {
-        $scope.data.item = {};
-      }
-
       // Ensure pressclipping is defined as an array and hasn't been corrupted
       if (!Array.isArray($scope.data.item.pressclipping)) {
         $scope.data.item.pressclipping = [];
@@ -406,15 +406,16 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
       http.post(route, data).then(
         function() {
-          $scope.statusPressclipping = 'success';
+          $scope.data.item.pressclipping_sended = null;
+          $scope.data.item.pressclipping_status = null;
+          $scope.save();
         },
         function() {
-          $scope.statusPressclipping = 'failure';
+          $scope.statusPressclipping = false;
         }
       );
 
       delete $scope.data.item.pressclipping;
-      $scope.saveItem();
     };
 
     /**
