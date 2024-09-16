@@ -64,7 +64,7 @@
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('send_date')">
     <span class="ng-cloak badge badge-default">
       <strong>
-        [% item.pressclipping_sended %]
+        [% item.pressclipping_sended | moment : 'YYYY-MM-DD HH:mm:ss': null : '{$app.locale->getTimeZone()->getName()}' %]
       </strong>
     </span>
   </td>

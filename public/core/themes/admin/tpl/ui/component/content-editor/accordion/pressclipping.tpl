@@ -14,21 +14,21 @@
             <i class="fa fa-check"></i>
             {t}Article sent{/t}
             <small>
-              [% notification.send_date | moment : 'YYYY-MM-DD HH:mm:ss': null : '{$app.locale->getTimeZone()->getName()}' %]
+              [% item.pressclipping_sended | moment : 'YYYY-MM-DD HH:mm:ss': null : '{$app.locale->getTimeZone()->getName()}' %]
             </small>
           </div>
           <div ng-show="!item.pressclipping_sended && statusPressclipping" class="alert alert-warning" id="alerteo">
             <i class="fa fa-check"></i>
             {t}Article deleted{/t}
             <small>
-              [% notification.send_date | moment : 'YYYY-MM-DD HH:mm:ss': null : '{$app.locale->getTimeZone()->getName()}' %]
+              [% item.pressclipping_sended | moment : 'YYYY-MM-DD HH:mm:ss': null : '{$app.locale->getTimeZone()->getName()}' %]
             </small>
           </div>
           <div ng-show="statusPressclipping === 'failure'" class="alert alert-danger">
             <i class="fa fa-exclamation-triangle"></i>
             {t}Notification failed{/t}
             <small>
-              [% notification.send_date | moment : 'YYYY-MM-DD HH:mm:ss': null : '{$app.locale->getTimeZone()->getName()}' %]
+              [% item.pressclipping_sended | moment : 'YYYY-MM-DD HH:mm:ss': null : '{$app.locale->getTimeZone()->getName()}' %]
             </small>
           </div>
         </div>

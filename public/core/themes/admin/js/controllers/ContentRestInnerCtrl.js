@@ -314,22 +314,6 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       });
     };
 
-    $scope.formatDate = function(date) {
-      if (date) {
-        const d = new Date(date);
-
-        const year = d.getFullYear();
-        const month = ('0' + (d.getMonth() + 1)).slice(-2);
-        const day = ('0' + d.getDate()).slice(-2);
-        const hours = ('0' + d.getHours()).slice(-2);
-        const minutes = ('0' + d.getMinutes()).slice(-2);
-        const seconds = ('0' + d.getSeconds()).slice(-2);
-
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-      }
-      return '';
-    };
-
     /**
      * @function sendPressClipping
      * @memberof ContentRestInnerCtrl
@@ -374,12 +358,12 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
       http.post(route, data).then(
         function() {
-          $scope.data.item.pressclipping_sended = $scope.formatDate(date);
+          $scope.data.item.pressclipping_sended = $window.moment.utc($window.moment(date)).format('YYYY-MM-DD HH:mm:ss');
           $scope.data.item.pressclipping_status = 'Sended';
           $scope.save();
         },
         function() {
-          $scope.data.item.pressclipping_sended = new Date();
+          $scope.data.item.pressclipping_sended = $window.moment.utc($window.moment(date)).format('YYYY-MM-DD HH:mm:ss');
           $scope.save();
         }
       );
