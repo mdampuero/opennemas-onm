@@ -45,6 +45,8 @@ class PressClippingController extends ApiController
      */
     public function getListAction(Request $request)
     {
+        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
+
         $listConnection = $this->get('dbal_connection');
 
         $oql = $request->query->get('oql', '');
