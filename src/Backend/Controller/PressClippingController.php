@@ -44,7 +44,7 @@ class PressClippingController extends BackendController
      * @return Response the response object.
      *
      * @Security("hasExtension('es.openhost.module.pressclipping')
-     *     and hasPermission('WEBPUSH_ADMIN')")
+     *     and hasPermission('PRESSCLIPPING_ADMIN')")
      */
     public function dashboardAction()
     {
@@ -58,7 +58,7 @@ class PressClippingController extends BackendController
      * @return Response the response object.
      *
      * @Security("hasExtension('es.openhost.module.pressclipping')
-     *     and hasPermission('WEBPUSH_ADMIN')")
+     *     and hasPermission('PRESSCLIPPING_ADMIN')")
      */
     public function settingsAction()
     {

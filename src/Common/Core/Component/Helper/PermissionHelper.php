@@ -1583,6 +1583,13 @@ class PermissionHelper
                 'module'      => 'es.openhost.module.companies',
                 'enabled'     => 1
             ],
+            262 => [
+                'id'          => 262,
+                'name'        => 'PRESSCLIPPING_ADMIN',
+                'description' => _('Configuration'),
+                'module'      => 'es.openhost.module.pressclipping',
+                'enabled'     => 1
+            ],
         ];
     }
 }
