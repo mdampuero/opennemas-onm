@@ -31,10 +31,10 @@ class PressClippingConfigurationProvider implements ConfigurationProvider
     public function getConfiguration()
     {
         return [
-            'Content-Type' => 'application/json',
-            'pressClippingApiKey' => $this->dataset->get('pressclipping_apikey', ''),
+            'Content-Type'           => 'application/json',
+            'pressClippingApiKey'    => $this->dataset->get('pressclipping_apikey', ''),
             'pressClippingAuthToken' => $this->dataset->get('pressclipping_token', ''),
-            'pressClippingPubID' => $this->dataset->get('pressclipping_pubID', ''),
+            'pressClippingPubID'     => $this->dataset->get('pressclipping_pubID', ''),
         ];
     }
 

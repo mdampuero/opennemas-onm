@@ -69,8 +69,8 @@ class PressClippingController extends ApiController
             // If pk_content is not already in $groupedList, initialize it as an empty array
             if (!isset($groupedList[$pkContent])) {
                 $groupedList[$pkContent] = [
-                    'fk_content' => $item['fk_content'],
-                    'title' => $item['title'],
+                    'fk_content'           => $item['fk_content'],
+                    'title'                => $item['title'],
                     'pressclipping_sended' => null,
                     'pressclipping_status' => null,
                 ];
@@ -247,12 +247,12 @@ class PressClippingController extends ApiController
 
         $pressclipping_service = [
             'service'   => $settings['pressclipping_service'],
-            'pubID'   => $settings['pressclipping_pubID'],
+            'pubID'     => $settings['pressclipping_pubID'],
             'apikey'    => $settings['pressclipping_apikey']
         ];
 
         return new JsonResponse([
-            'pressclipping_service'      => $pressclipping_service
+            'pressclipping_service' => $pressclipping_service
         ]);
     }
 
@@ -306,8 +306,8 @@ class PressClippingController extends ApiController
 
         // Settings to be cleared
         $settings = [
-            'pressclipping_pubID'   => '',
-            'pressclipping_apikey'  => '',
+            'pressclipping_pubID'  => '',
+            'pressclipping_apikey' => '',
         ];
 
         try {
