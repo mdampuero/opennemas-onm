@@ -24,6 +24,12 @@
 
 {block name="customColumns"}
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-description" checklist-model="app.columns.selected" checklist-value="'description'" type="checkbox">
+    <label for="checkbox-description">
+      {t}Description{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-size" checklist-model="app.columns.selected" checklist-value="'size'" type="checkbox">
     <label for="checkbox-size">
       {t}Size{/t}
@@ -38,6 +44,13 @@
 {/block}
 
 {block name="customColumnsHeader"}
+  {acl isAllowed="PHOTO_DESCRIPTION"}
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('description')" width="150">
+      <span class="m-l-5">
+        {t}Description{/t}
+      </span>
+    </th>
+  {/acl}
   {acl isAllowed="PHOTO_RESOLUTION"}
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('size')" width="150">
       <span class="m-l-5">
@@ -55,6 +68,13 @@
 {/block}
 
 {block name="customColumnsBody"}
+  {acl isAllowed="PHOTO_DESCRIPTION"}
+    <td class="text-center v-align-middle" ng-if="isColumnEnabled('description')">
+      <span class="m-l-5">
+        [% item.description | striptags %]
+      </span>
+    </td>
+  {/acl}
   {acl isAllowed="PHOTO_RESOLUTION"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('size')">
       <span class="badge badge-default text-bold">
