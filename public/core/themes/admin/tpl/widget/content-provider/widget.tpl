@@ -24,7 +24,7 @@
             </li>
             <li>
                 <a id="quickedit" title="Edit '{$content->title}'" ng-click="widgetEditModal($event)" data-id="{$content->id}">
-                    <i class="fa fa-pencil"></i> {t}Quick Edit{/t}
+                    <i class="fa fa-pencil-square-o"></i> {t}Quick Edit{/t}
                 </a>
             </li>
             <li>
