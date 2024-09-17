@@ -61,6 +61,10 @@ orm:
                 timetable:            array
                 title_int:            l10n_string
                 pretitle:             l10n_string
+                noindex:              integer
+                seo_title:            string
+                seo_description:      string
+                canonicalurl:         string
             converters:
                 default:
                     class:     Common\Model\Database\Data\Converter\ContentConverter
