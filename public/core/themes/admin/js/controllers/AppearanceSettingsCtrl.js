@@ -25,7 +25,6 @@
           cmp_id: '',
           cmp_id_amp: '',
           cmp_apikey: '',
-          browser_update: false,
           items_per_page: '',
           items_in_blog: '',
           elements_in_rss: ''

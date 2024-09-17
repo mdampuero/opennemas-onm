@@ -10,7 +10,6 @@ parameters:
             - ads_generator
             - ads_scripts
             - adsense_validator
-            - browser_update
             - google_tag_manager
             - css_includes
             - generate_fb_admin_tag
@@ -25,7 +24,6 @@ parameters:
             - css_includes
             - js_includes
             - backend_analytics
-            - browser_update
             - trimwhitespace
         ignore_cli:
             - backend_analytics
@@ -33,7 +31,6 @@ parameters:
         output:
             - css_includes
             - js_includes
-            - browser_update
 services:
     core.template:
         alias:     core.template.frontend
