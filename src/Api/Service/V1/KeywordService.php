@@ -79,39 +79,87 @@ class KeywordService extends OrmService
         $placeholderMap = [];
 
         foreach ($keywordsSorted as $keyword) {
-            if (array_key_exists($keyword->type, $types)) {
-                // Escape the keyword to avoid issues in the regular expression
-                $keywordPattern = preg_quote($keyword->keyword, '@');
+            if ($this->isKeywordTypeValid($keyword->type, $types)) {
+                $keywordPattern = $this->getKeywordPattern($keyword->keyword);
+                $placeholder    = $this->generatePlaceholder($keyword->id);
+                $replacement    = $this->createReplacementLink($keyword, $types[$keyword->type]);
 
-                // Generate a unique placeholder
-                $placeholder = "##KEYWORD_ONM_PLACEHOLDER_" . $keyword->id . "##";
-
-                // Create the replacement <a> tag
-                $replacement = sprintf(
-                    '<a href="%s" target="_blank">%s</a>',
-                    $types[$keyword->type] . $keyword->value,
-                    $keyword->keyword
-                );
-
-                // Store the placeholder and its corresponding <a> tag in the associative array
                 $placeholderMap[$placeholder] = $replacement;
 
-                // Replace the keyword in the text with the unique placeholder
-                $text = preg_replace_callback(
-                    '@<a\b[^>]*>.*?<\/a>|(\b' . $keywordPattern . '\b)@',
-                    function ($matches) use ($placeholder) {
-                        // If the first group is empty, it means the keyword was found outside of <a>
-                        if (!empty($matches[1])) {
-                            return $placeholder;
-                        }
-                        return $matches[0];
-                    },
-                    $text
-                );
+                $text = $this->replaceKeywordInText($text, $keywordPattern, $placeholder);
             }
         }
 
         return [$text, $placeholderMap];
+    }
+
+    /**
+     * Checks if the keyword type is valid by verifying its existence in the types array.
+     *
+     * @param string $keywordType The type of the keyword to check.
+     * @param array $types The array containing valid keyword types.
+     * @return bool True if the keyword type is valid, false otherwise.
+     */
+    private function isKeywordTypeValid($keywordType, $types)
+    {
+        return array_key_exists($keywordType, $types);
+    }
+
+    /**
+     * Escapes the keyword to make it safe for use in a regular expression pattern.
+     *
+     * @param string $keyword The keyword to escape.
+     * @return string The escaped keyword for use in a regular expression.
+     */
+    private function getKeywordPattern($keyword)
+    {
+        return preg_quote($keyword, '@');
+    }
+
+    /**
+     * Generates a unique placeholder string for a keyword based on its ID.
+     *
+     * @param int $keywordId The ID of the keyword.
+     * @return string A unique placeholder string for the keyword.
+     */
+    private function generatePlaceholder($keywordId)
+    {
+        return "##KEYWORD_ONM_PLACEHOLDER_" . $keywordId . "##";
+    }
+
+    /**
+     * Creates an HTML <a> tag as a replacement for the keyword, using its URL and display text.
+     *
+     * @param object $keyword The keyword object containing details like the value and display text.
+     * @param string $typeUrl The base URL associated with the keyword type.
+     * @return string The formatted <a> tag containing the keyword's URL and display text.
+     */
+    private function createReplacementLink($keyword, $typeUrl)
+    {
+        return sprintf(
+            '<a href="%s" target="_blank">%s</a>',
+            $typeUrl . $keyword->value,
+            $keyword->keyword
+        );
+    }
+
+    /**
+     * Replaces occurrences of the keyword in the text with a unique placeholder, excluding instances inside <a> tags.
+     *
+     * @param string $text The text where the keyword needs to be replaced.
+     * @param string $keywordPattern The regular expression pattern of the keyword.
+     * @param string $placeholder The unique placeholder string that will replace the keyword.
+     * @return string The modified text with the keyword replaced by the placeholder.
+     */
+    private function replaceKeywordInText($text, $keywordPattern, $placeholder)
+    {
+        return preg_replace_callback(
+            '@<a\b[^>]*>.*?<\/a>|(\b' . $keywordPattern . '\b)@',
+            function ($matches) use ($placeholder) {
+                return !empty($matches[1]) ? $placeholder : $matches[0];
+            },
+            $text
+        );
     }
 
     /**
