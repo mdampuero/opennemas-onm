@@ -15,9 +15,10 @@ class ReplaceUrlFilter extends Filter
      */
     public function filter($str)
     {
-        $pattern  = $this->getParameter('pattern');
-        $instance = $this->container->get('core.instance')->internal_name;
-        $tokens   = [];
+        $pattern   = $this->getParameter('pattern');
+        $delimiter = $this->getParameter('delimiter', '');
+        $instance  = $this->container->get('core.instance')->internal_name;
+        $tokens    = [];
 
         preg_match_all($pattern, $str, $matches);
 
@@ -53,7 +54,7 @@ class ReplaceUrlFilter extends Filter
 
             $url = $this->container->get('core.decorator.url')->prefixUrl($url);
 
-            $str = str_replace($token, $url, $str);
+            $str = str_replace($delimiter . $token . $delimiter, $url, $str);
         }
 
         return $str;
