@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Tests\Api\Service\V1;
 
 use Api\Service\V1\ContentService;
@@ -28,7 +30,7 @@ class KeywordServiceTest extends \PHPUnit\Framework\TestCase
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get' ])
             ->getMock();
- 
+
         $this->text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
 
         $this->service = $this->getMockBuilder('Api\Service\V1\KeywordService')
@@ -40,12 +42,12 @@ class KeywordServiceTest extends \PHPUnit\Framework\TestCase
     public function testReplaceTerms()
     {
         $keywords = [
-                new Keyword([ 'keyword' => 'Lorem', 'type' => 'url', 'value' => 'glorp' ]),
-                new Keyword([ 'keyword' => 'ipsum','type' => 'email', 'value' => 'baz' ]),
-                new Keyword([ 'keyword' => 'dolor','type' => 'intsearch', 'value' => 'foo' ]),
-                new Keyword([ 'keyword' => 'sit','type' => '', 'value' => 'default' ])
-            ];
-        
+            new Keyword(['id' => '1', 'keyword' => 'Lorem', 'type' => 'url', 'value'       => 'glorp']),
+            new Keyword(['id' => '2', 'keyword' => 'ipsum', 'type' => 'email', 'value'     => 'baz']),
+            new Keyword(['id' => '3', 'keyword' => 'dolor', 'type' => 'intsearch', 'value' => 'foo']),
+            new Keyword(['id' => '4', 'keyword' => 'sit', 'type'   => '', 'value'          => 'default'])
+        ];
+
         $expected = '<a href="glorp" target="_blank">Lorem</a> ' .
             '<a href="mailto:baz" target="_blank">ipsum</a> ' .
             '<a href="/tag/foo" target="_blank">dolor</a> ' .
