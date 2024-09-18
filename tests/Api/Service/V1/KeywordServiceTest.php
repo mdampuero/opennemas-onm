@@ -65,6 +65,7 @@ class KeywordServiceTest extends \PHPUnit\Framework\TestCase
             new Keyword(['id' => '4', 'keyword' => 'sit amet', 'type'   => 'url', 'value' => 'link_sit_amet']),
             new Keyword(['id' => '5', 'keyword' => 'sit', 'type'   => 'email', 'value' => 'link_sit'])
         ];
+
         $newText = $this->text . ' Lorem dolor sit, consectetur adipiscing sit';
 
         $expected = '<a href="mailto:link_lorem_ipsum" target="_blank">Lorem ipsum</a> ' .
@@ -91,6 +92,7 @@ class KeywordServiceTest extends \PHPUnit\Framework\TestCase
             '<a href="mailto:baz" target="_blank">ipsum</a> ' .
             '<a href="/tag/foo" target="_blank">dolor</a> ' .
             'sit amet, consectetur adipiscing elit.';
+
         $textreplace_1 = $this->service->replaceTerms($this->text, $keywords);
 
         $textreplace_2 = $this->service->replaceTerms($textreplace_1, $keywords);
