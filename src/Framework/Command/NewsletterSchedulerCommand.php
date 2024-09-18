@@ -241,13 +241,13 @@ class NewsletterSchedulerCommand extends Command
 
         // Limpiar los datos vacíos en 'contents'
         if (isset($storedData['contents']) && is_array($storedData['contents'])) {
-            $storedData['contents'] = array_filter($storedData['contents'], function($content) {
+            $storedData['contents'] = array_filter($storedData['contents'], function ($content) {
                 return isset($content['items']) && is_array($content['items']) && !empty($content['items']);
             });
         }
 
         // Limpiar los datos vacíos en otros campos si es necesario
-        $storedData = array_filter($storedData, function($value) {
+        $storedData = array_filter($storedData, function ($value) {
             return !empty($value) || $value === 0 || $value === '0';
         });
 
