@@ -69,7 +69,7 @@
           {include file="ui/component/content-editor/accordion/checkbox.tpl" field="frontpage" title="{t}Suggested for frontpage{/t}"}
         </div>
         <div class="m-t-5">
-          {include file="ui/component/content-editor/accordion/checkbox.tpl" field="noindex" title="{t}Allow Noindex in this article{/t}"}
+          {include file="ui/component/content-editor/accordion/checkbox.tpl" field="noindex" title="{t}Mark this article to prevent indexing{/t}"}
         </div>
       </div>
       {is_module_activated name="es.openhost.module.live_blog_posting"}

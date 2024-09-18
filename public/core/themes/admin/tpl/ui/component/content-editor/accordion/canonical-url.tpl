@@ -4,6 +4,6 @@
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded' : expanded.canonical }">
   <div class="form-group no-margin">
-      {include file="ui/component/input/text.tpl" iField="canonicalurl" iRequired=false iTitle="{t}CANONICAL URL{/t}" iValidation=false iHelp="{t}Write the Canonical URL for this article{/t}"}
+      {include file="ui/component/input/text.tpl" iField="canonicalurl" iRequired=false iTitle="{t}CANONICAL URL{/t}" iValidation=false}
   </div>
 </div>
