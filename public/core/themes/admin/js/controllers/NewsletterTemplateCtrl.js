@@ -122,27 +122,23 @@
           });
 
           if ($scope.item.contents) {
-            $scope.item.contents.map(function(item) {
-              item.items.map(function(e) {
-                if (e.e_type === 'list' &&
-                  (e.criteria.category === '' ||
-                    typeof e.criteria.category === 'undefined')) {
-                  e.criteria.category = [];
-                }
+            $scope.item.contents.forEach(function(item) {
+              if (Array.isArray(item.items)) {
+                item.items.forEach(function(e) {
+                  if (e.e_type === 'list') {
+                    if (!e.criteria || typeof e.criteria.category === 'undefined' || e.criteria.category === '') {
+                      e.criteria.category = [];
+                    }
 
-                if (e.e_type === 'list' &&
-                  typeof e.criteria.category === 'string') {
-                  e.criteria.category = [ parseInt(e.criteria.category) ];
-                }
+                    if (typeof e.criteria.category === 'string') {
+                      e.criteria.category = [parseInt(e.criteria.category)];
+                    }
 
-                // If the element is a list then convert its category criteria to numbers
-                if (e.e_type === 'list') {
-                  e.criteria.category = e.criteria.category.map(Number);
-                }
-
-                return e;
-              });
-
+                    e.criteria.category = e.criteria.category.map(Number);
+                  }
+                  return e;
+                });
+              }
               return item;
             });
           }
