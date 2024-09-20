@@ -107,7 +107,7 @@ var newsletterTemplateTranslations = {
               </div>
             </div>
             <div class="form-group hours col-xs-12">
-              <h5>{t}Hours{/t} <small class="pull-right">({t}Time zone: {/t} {date_default_timezone_get()})</small></h5>
+              <h5>{t}Hours{/t} <small class="pull-right">({t}Time zone:{/t} {date_default_timezone_get()})</small></h5>
               <tags-input ng-model="item.schedule.hours" minTags=1 add-on-paste="true" add-from-autocomplete-only="true" placeholder="{t}Add an hour{/t}">
                 <auto-complete source="loadHours($query)" load-on-focus=true min-length="0" debounce-delay="0"></auto-complete>
               </tags-input>

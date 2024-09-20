@@ -154,13 +154,13 @@ class Recaptcha
         }
 
         $html = '<script src="https://www.google.com/recaptcha/api.js?render=%s"></script>'
-            . '<input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">'
+            . '<input type="hidden" class="g-recaptcha-onm" id="g-recaptcha-response" name="g-recaptcha-response">'
             . '<input type="hidden" name="action" value="validate_captcha">'
             . '<script>'
                 . 'grecaptcha.ready(function() {'
                     . 'grecaptcha.execute("%s", {action:"validate_captcha"})'
                             . '.then(function(token) {'
-                        . 'document.getElementById("g-recaptcha-response").value = token;'
+                        . 'document.querySelectorAll(".g-recaptcha-onm").forEach(elem => (elem.value = token));'
                     . '});'
                 . '});'
             . '</script>';

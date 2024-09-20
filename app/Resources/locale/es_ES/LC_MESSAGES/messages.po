@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-08 12:12+0000\n"
-"PO-Revision-Date: 2024-05-08 14:16+0200\n"
+"POT-Creation-Date: 2024-08-20 09:53+0000\n"
+"PO-Revision-Date: 2024-08-20 11:54+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -124,7 +124,7 @@ msgid "Version deleted properly"
 msgstr "Versión eliminada correctamente"
 
 msgid "Configuration saved successfully"
-msgstr "Configuración guardada correctamente."
+msgstr "Configuración guardada correctamente"
 
 msgid "There was an error while saving the configuration"
 msgstr "Se ha producido un error al guardar configuración"
@@ -154,10 +154,10 @@ msgstr "%s boletines enviados desde %s (%d permitidos)."
 msgid "Unable to edit a newsletter already sent"
 msgstr "No se puede editar un boletín ya enviado"
 
-msgid "There was an error while saving the newsletter "
+msgid "There was an error while saving the newsletter"
 msgstr "Se ha producido un error al guardar el boletín"
 
-msgid "There was an error while fetching the newsletter "
+msgid "There was an error while fetching the newsletter"
 msgstr "Se ha producido un error al obtener el boletín"
 
 #, php-format
@@ -168,7 +168,7 @@ msgstr "Contenido guardado con éxito"
 msgid "Error while updating content"
 msgstr "Se ha producido un error al actualizar el contenido"
 
-msgid "There was an error while sending the newsletter "
+msgid "There was an error while sending the newsletter"
 msgstr "Se ha producido un error al enviar el boletín"
 
 msgid "Please fill the mail list email address in the module configuration."
@@ -665,7 +665,7 @@ msgid ""
 "you."
 msgstr ""
 "Plantillas modernas y actuales con un diseño  creado por un creativo "
-"profesional desde 0. "
+"profesional desde 0."
 
 msgid "Instance not activated"
 msgstr "Instancia no activada"
@@ -680,13 +680,13 @@ msgid "You can't do that!"
 msgstr "¡No puedes hacer eso!"
 
 msgid "Ask an administrator."
-msgstr "Pregúntale al administrador"
+msgstr "Pregúntale al administrador."
 
 msgid "Something is wrong!"
 msgstr "¡Algo está mal!"
 
 msgid "You don't have permission to perform this action"
-msgstr "No tienes permiso para realizar esta acción."
+msgstr "No tienes permiso para realizar esta acción"
 
 msgid "Something unexpected happened!"
 msgstr "¡Ha pasado algo inesperado!"
@@ -724,11 +724,11 @@ msgid ""
 msgstr ""
 "Nota que <a href=\"http://help.opennemas.com/knowledgebase/articles/368173-"
 "precios-opennemas-licencias-de-usuario\" target=\"_blank\" title=\"Descubre "
-"más\">el precio es de %s € usuario/mes</a>"
+"más\">el precio es de %s € usuario/mes</a>."
 
 #, php-format
-msgid "This month you're recording %d page views. "
-msgstr "Este mes estás registrando %d páginas vistas. "
+msgid "This month you're recording %d page views."
+msgstr "Este mes estás registrando %d páginas vistas."
 
 #, php-format
 msgid ""
@@ -753,7 +753,7 @@ msgid "You have voted this comment previously."
 msgstr "Ya has votado en este comentario anteriormente."
 
 msgid "Please fill the captcha code."
-msgstr "Por favor complete el código captcha"
+msgstr "Por favor complete el código captcha."
 
 msgid "Your comment was rejected due to:"
 msgstr "Tu comentario se ha rechazado debido a:"
@@ -782,7 +782,7 @@ msgid "The information has been sent"
 msgstr "La información ha sido enviada"
 
 msgid "Sorry, we were unable to complete your request"
-msgstr "No hemos podido completar tu petición."
+msgstr "No hemos podido completar tu petición"
 
 msgid "Unable to save the letter."
 msgstr "No se pudo guardar la carta."
@@ -876,7 +876,7 @@ msgid "Password recovery email was sent."
 msgstr "El correo de recuperación de contraseña fue enviado."
 
 msgid "Please provide a valid email address."
-msgstr "Por favor, escribe una dirección de correo electrónico válida"
+msgstr "Por favor, escribe una dirección de correo electrónico válida."
 
 #, php-format
 msgid ""
@@ -888,12 +888,12 @@ msgstr ""
 "contraseña, pulsa <a href=\"%s\">aquí</a> para recuperarla.</li></ul>"
 
 msgid "Unable to create your user account. Please try it later."
-msgstr "No se pudo crear tu cuenta de usuario. Por favor inténtalo más tarde"
+msgstr "No se pudo crear tu cuenta de usuario. Por favor inténtalo más tarde."
 
 msgid "Unable to send your registration email. Please try it later."
 msgstr ""
 "No se pudo enviar el correo electrónico de registro. Por favor inténtalo más "
-"tarde"
+"tarde."
 
 msgid "This account is already verified"
 msgstr "Esta cuenta ya está verificada"
@@ -937,7 +937,7 @@ msgid "Ads.txt container saved successfully"
 msgstr "Contenedor de Ads.txt guardado correctamente"
 
 msgid "Ads.txt container deleted successfully."
-msgstr "Contenedor de Ads.txt eliminado completamente"
+msgstr "Contenedor de Ads.txt eliminado completamente."
 
 msgid "Bad request"
 msgstr "Petición incorrecta"
@@ -1021,7 +1021,7 @@ msgid "%s modules deleted successfully."
 msgstr "%s módulos eliminados correctamente."
 
 msgid "Module saved successfully"
-msgstr "Módulo guardado correctamente."
+msgstr "Módulo guardado correctamente"
 
 #, php-format
 msgid "%s modules saved successfully"
@@ -1283,7 +1283,7 @@ msgid "Pending"
 msgstr "Pendiente"
 
 msgid "Settings saved."
-msgstr "Opciones guardadas"
+msgstr "Opciones guardadas."
 
 msgid "There was an error while saving the settings"
 msgstr "Se ha producido un error al guardar las preferencias"
@@ -1333,7 +1333,7 @@ msgid "Photo"
 msgstr "Foto"
 
 msgid "Server connection success!"
-msgstr "Servidor actualizado correctamente."
+msgstr "Servidor actualizado correctamente!"
 
 msgid "Unable to connect to the server"
 msgstr "No se pudo crear el nuevo servidor"
@@ -1378,6 +1378,12 @@ msgstr "Sin filtro"
 
 msgid "Last in 24 hours"
 msgstr "En las últimas 24 horas"
+
+msgid "Most viewed 24hs"
+msgstr "Más vistos 24hs"
+
+msgid "Most viewed 3 days"
+msgstr "Más vistos 3 días"
 
 msgid "Opinion"
 msgstr "Opinión"
@@ -1425,14 +1431,19 @@ msgid "Enabled"
 msgstr "Activado"
 
 msgid "Please check the video url, seems to be incorrect"
-msgstr "Comprueba la dirección del vídeo, parece ser incorrecta."
+msgstr "Comprueba la dirección del vídeo, parece ser incorrecta"
 
 msgid "Can't get video information. Check the url"
-msgstr ""
-"No es posible obtener la información del vídeo. Comprueba la dirección."
+msgstr "No es posible obtener la información del vídeo. Comprueba la dirección"
 
 msgid "Webpush Module is not activated"
 msgstr "El módulo Webpush no está activado"
+
+msgid "Account data removed successfully"
+msgstr "Los datos de la cuenta se eliminaron correctamente"
+
+msgid "Unexpected error"
+msgstr "Error inesperado"
 
 msgid "Author id"
 msgstr "Id del autor"
@@ -1633,7 +1644,7 @@ msgid ""
 "Check the form and try again"
 msgstr ""
 "No hemos podido completar tu petición.\n"
-"Comprueba el formulario e inténtalo de nuevo."
+"Comprueba el formulario e inténtalo de nuevo"
 
 msgid "The transaction was successful"
 msgstr "La transacción fue exitosa"
@@ -1972,7 +1983,7 @@ msgid ""
 "permissions to access it"
 msgstr ""
 "El directorio '%s' en el servidor '%s' no existe o no tiene permisos "
-"suficientes para acceder a él."
+"suficientes para acceder a él"
 
 #, php-format
 msgid "Can't connect to server %s. Please check your connection details."
@@ -2190,7 +2201,17 @@ msgid ""
 "In order to dislay the text complexity, you need to save the article first."
 msgstr ""
 "Para mostrar la complejidad del texto, se necesita guardar el contenido "
-"primero"
+"primero."
+
+msgid "There are no enabled <a href=\"%1\">subscriptions</a>"
+msgstr "No hay <a href=\"%1\">suscripciones</a> disponibles"
+
+msgid ""
+"The content will be fully available only for subscribers in the selected "
+"subscriptions"
+msgstr ""
+"El contenido estará disponible por completo solo para los suscriptores de "
+"las suscripciones seleccionadas"
 
 msgid "Allow comments"
 msgstr "Permitir comentarios"
@@ -2218,7 +2239,7 @@ msgstr "Notificaciones Webpush"
 
 msgid "Check it as \"Published\" to send webpush notifications."
 msgstr ""
-"Marca el contenido como \"Publicado\" para enviar notificaciones WebPush"
+"Marca el contenido como \"Publicado\" para enviar notificaciones WebPush."
 
 msgid ""
 "Automatic notification is enabled, save action will send a webpush "
@@ -2352,6 +2373,12 @@ msgstr "Buscar por etiqueta"
 
 msgid "This action can not be undone"
 msgstr "Esta acción no se puede deshacer"
+
+msgid "Seo title"
+msgstr "Título Seo"
+
+msgid "Seo description"
+msgstr "Descripción Seo"
 
 msgid "Config tag module"
 msgstr "Configuración del módulo «Etiquetas»"
@@ -2913,7 +2940,7 @@ msgid "Filter"
 msgstr "Filtro"
 
 msgid "filters"
-msgstr "Filtros"
+msgstr "filtros"
 
 msgid "To be automatically imported, contents have to"
 msgstr "Para ser importados automáticamente, los contenidos tienen que"
@@ -2995,6 +3022,9 @@ msgstr "Servidor"
 
 msgid "View"
 msgstr "Vistas"
+
+msgid "No category"
+msgstr "Sin categoría"
 
 msgid "No tags"
 msgstr "Sin etiquetas"
@@ -3447,25 +3477,25 @@ msgid "Top right Image"
 msgstr "Imagen superior derecha"
 
 msgid "image-top-right"
-msgstr "Imagen superior derecha"
+msgstr "imagen superior derecha"
 
 msgid "Top Left Image"
 msgstr "Imagen arriba a la izquierda"
 
 msgid "image-top-left"
-msgstr "Imagen superior izquierda"
+msgstr "imagen superior izquierda"
 
 msgid "Wide image"
 msgstr "Imagen amplia"
 
 msgid "image-middle-wide"
-msgstr "Imagen en medio amplia"
+msgstr "imagen en medio amplia"
 
 msgid "Right image"
 msgstr "Imagen de la derecha"
 
 msgid "image-middle-left"
-msgstr "Imagen centro a la izquierda"
+msgstr "imagen centro a la izquierda"
 
 msgid "Left image"
 msgstr "Imagen de la izquierda"
@@ -3600,7 +3630,7 @@ msgid "Confirm"
 msgstr "Confirmar"
 
 msgid "Thank you for your purchase!"
-msgstr "Gracias por tu compra"
+msgstr "Gracias por tu compra!"
 
 msgid ""
 "Check your email, we have sent you an email with the invoice and purchase "
@@ -3717,7 +3747,7 @@ msgid "Remove from all frontpages"
 msgstr "Quitar de todas las portadas"
 
 msgid "Organizer data"
-msgstr "Datos del Organizador"
+msgstr "Datos del organizador"
 
 msgid "Organizer name"
 msgstr "Nombre del organizador"
@@ -3777,7 +3807,7 @@ msgid "VAT number"
 msgstr "Número de identificación fiscal"
 
 msgid "Thank you for choosing Opennemas!"
-msgstr "Gracias por elegir Opennemas"
+msgstr "Gracias por elegir Opennemas!"
 
 msgid "You have just purchased the following items:"
 msgstr "Acabas de comprar los siguientes productos:"
@@ -3916,9 +3946,6 @@ msgstr "Socios"
 msgid "My selection"
 msgstr "Mi selección"
 
-msgid "My selection "
-msgstr "Mi selección"
-
 msgid "No items available to purchase"
 msgstr "No hay elementos disponibles para comprar"
 
@@ -3990,16 +4017,6 @@ msgstr "Tamaño"
 
 msgid "Suggested for frontpage"
 msgstr "Sugerir en portada principal"
-
-msgid "There are no enabled <a href=\"%1\">subscriptions</a>"
-msgstr "No hay <a href=\"%1\">suscripciones</a> disponibles"
-
-msgid ""
-"The content will be fully available only for subscribers in the selected "
-"subscriptions"
-msgstr ""
-"El contenido estará disponible por completo solo para los suscriptores de "
-"las suscripciones seleccionadas"
 
 msgid "SEO Information"
 msgstr "Información SEO"
@@ -4160,8 +4177,8 @@ msgstr "Valor"
 msgid "New keyword"
 msgstr "Nueva palabra clave"
 
-msgid "External link to "
-msgstr "Enlace externo a "
+msgid "External link to"
+msgstr "Enlace externo a"
 
 msgid "Internal search to keyword"
 msgstr "Búsqueda interna a una palabra clave"
@@ -4362,7 +4379,7 @@ msgid "Main language"
 msgstr "Idioma principal"
 
 msgid "When no language in the URL, the main language will be used"
-msgstr "Cuando la URL no selecciona un idioma, se usará el idioma principal "
+msgstr "Cuando la URL no selecciona un idioma, se usará el idioma principal"
 
 msgid "Customize the language appears in the URL (e.g. en)."
 msgstr "Personalizar el idioma que aparece en la URL (e.g. en)."
@@ -4582,17 +4599,38 @@ msgstr "Color del borde del encabezado de sección"
 msgid "Section header icon color"
 msgstr "Color del icono del encabezado de sección"
 
+msgid "Topbar"
+msgstr "Barra superior"
+
+msgid "Set display of header's top bar"
+msgstr "Establecer visualización de la barra superior del encabezado"
+
 msgid "Breadcrumb"
 msgstr "Miga de pan"
 
 msgid "Set display of routes"
 msgstr "Establecer visualización de rutas"
 
+msgid "Progress bar"
+msgstr "Barra de progreso"
+
+msgid "Set display of scroll progress bar"
+msgstr "Configurar la visualización de la barra de progreso"
+
+msgid "Header right widget"
+msgstr "Widget derecho del encabezado"
+
+msgid "Widget to show before main content"
+msgstr "Widget a mostrar antes del contenido principal"
+
+msgid "Pre-main widget"
+msgstr "Widget previo al contenido principal"
+
 msgid "Pre-footer widget"
 msgstr "Widget previo al pie de página"
 
 msgid "Widget to show before footer"
-msgstr "Widget para mostrar antes del pie de página"
+msgstr "Widget a mostrar antes del pie de página"
 
 msgid "Normal contents images"
 msgstr "Imágenes de contenido normal"
@@ -4660,12 +4698,6 @@ msgstr "Mostrar subtítulo"
 msgid "Display summary/description"
 msgstr "Mostrar resumen/descripción"
 
-msgid "Opinions media"
-msgstr "Media de opiniones"
-
-msgid "Display featured media in opinions"
-msgstr "Mostrar media destacados en opiniones"
-
 msgid "Info"
 msgstr "Info"
 
@@ -4674,6 +4706,9 @@ msgstr "Mostrar el autor del contenido"
 
 msgid "Display author's photo"
 msgstr "Mostrar foto del autor"
+
+msgid "Display author's bio"
+msgstr "Mostrar biografía del autor"
 
 msgid "Display content's date"
 msgstr "Mostrar la fecha del contenido"
@@ -4703,13 +4738,13 @@ msgid "Choose widgets to display"
 msgstr "Elija widgets para mostrar"
 
 msgid "Today news"
-msgstr "noticias de hoy"
+msgstr "Noticias de hoy"
 
 msgid "Most seeing/recent"
 msgstr "Más visto/reciente"
 
 msgid "Content header"
-msgstr "encabezado de contenido"
+msgstr "Encabezado de contenido"
 
 msgid "Display inner contents header at full width or inbody column"
 msgstr ""
@@ -4726,7 +4761,7 @@ msgid "Featured media"
 msgstr "Media destacados"
 
 msgid "Display in article header or just before the body"
-msgstr "Mostrar en el encabezado del artículo o justo antes del cuerpo."
+msgstr "Mostrar en el encabezado del artículo o justo antes del cuerpo"
 
 msgid "Content header display order"
 msgstr "Orden de visualización del encabezado del contenido"
@@ -4752,6 +4787,9 @@ msgstr "Contenidos relacionados automáticos"
 msgid "Display suggested related when not manual ones selected"
 msgstr "Mostrar sugerencias relacionadas cuando no se seleccionan las manuales"
 
+msgid "Show custom widget"
+msgstr "Mostrar widget personalizado"
+
 msgid "Body end widgets"
 msgstr "Widgets del final del cuerpo"
 
@@ -4762,13 +4800,19 @@ msgid "More in frontpage"
 msgstr "Más en portada"
 
 msgid "More in section widget layout"
-msgstr "disposición del widget más en sección"
+msgstr "Disposición del widget más en sección"
 
 msgid "More in frontpage widget layout"
 msgstr "Disposición del widget más en portada"
 
 msgid "Max items on suggested widgets"
 msgstr "Máximo de elementos en widgets sugeridos"
+
+msgid "Choose options for contents"
+msgstr "Elegir opciones para contenidos"
+
+msgid "Display featured media in opinions"
+msgstr "Mostrar imagen destacada en opiniones"
 
 msgid "Mobile logo size"
 msgstr "Tamaño del logotipo móvil"
@@ -4842,6 +4886,9 @@ msgstr "Mostrar todo el contenido en RSS"
 
 msgid "Lazyscript referer detect"
 msgstr "Detección de referer en Lazyscript"
+
+msgid "Font preloading"
+msgstr "Precarga"
 
 msgid "Show SEO information on contents"
 msgstr "Mostrar información SEO en contenidos"
@@ -5076,7 +5123,7 @@ msgid "Marfeel Pass EXPERIENCE ID"
 msgstr "Marfeel Pass EXPERIENCE ID"
 
 msgid "Use Marfeel Pass CMP notice"
-msgstr "usar el aviso de CMP de Marfeel Pass"
+msgstr "Usar el aviso de CMP de Marfeel Pass"
 
 msgid "GFK Media ID"
 msgstr "GFK Media ID"
@@ -5302,7 +5349,7 @@ msgid ""
 "form. Default will be set with Opennemas."
 msgstr ""
 "Si tienes una <strong>página en Twitter</strong>, añade el nombre de perfíl "
-"en el formulario. Por defecto, se usará el de OpenNemas"
+"en el formulario. Por defecto, se usará el de OpenNemas."
 
 msgid "Instagram Page"
 msgstr "Página de Instagram"
@@ -5351,7 +5398,7 @@ msgid ""
 "form. Default will be set with Opennemas."
 msgstr ""
 "Si tienes una <strong>página en LinkedIn</strong>, añade el nombre de perfíl "
-"en el formulario. Por defecto, se usará el de OpenNemas"
+"en el formulario. Por defecto, se usará el de OpenNemas."
 
 msgid "Telegram"
 msgstr "Telegram"
@@ -5406,7 +5453,7 @@ msgid "<a href=\"http://www.opennemas.com\">%1</a> doesn’t exist."
 msgstr "<a href=\"http://www.opennemas.com\">%1</a> no existe."
 
 msgid "Do you want to register <a href=\"http://www.opennemas.com\">%1?</a>"
-msgstr "Desea registrar <a href=\"http://www.opennemas.com\">%1</a>?"
+msgstr "Desea registrar <a href=\"http://www.opennemas.com\">%1?</a>"
 
 msgid "%1 not activated - Opennemas"
 msgstr "'%1' no activado - Opennemas"
@@ -5419,7 +5466,7 @@ msgid ""
 "articles."
 msgstr ""
 "Toda la información de %1 en %2 Noticias, eventos, reportajes y artículos de "
-"opinión"
+"opinión."
 
 msgid "Attachment"
 msgstr "Adjuntos"
@@ -5592,7 +5639,7 @@ msgid "Are you sure you want to remove permanently %1 item(s)?"
 msgstr ""
 "¿Está seguro de que quiere eliminar de forma permanente %1 elemento(s)?"
 
-msgid " You will not be able to restore them back."
+msgid "You will not be able to restore them back."
 msgstr "No podrás restaurarlos."
 
 msgid "Yes, remove them all"
@@ -5604,8 +5651,8 @@ msgstr "Eliminar de forma permanente el elemento"
 msgid "Are you sure that do you want remove permanently from trash \"%1\"?"
 msgstr "¿Estás seguro de que quieres eliminar de forma permanente \"%1\"?"
 
-msgid " You will not be able to restore it back."
-msgstr "No podrás restaurarlos"
+msgid "You will not be able to restore it back."
+msgstr "No podrás restaurarlos."
 
 msgid "Yes, remove"
 msgstr "Si, eliminar"
@@ -5643,9 +5690,6 @@ msgstr "Columnas"
 msgid "Updated"
 msgstr "Actualizado"
 
-msgid "No category"
-msgstr "Sin categoría"
-
 msgid "No available contents"
 msgstr "No hay contenidos disponibles"
 
@@ -5657,6 +5701,9 @@ msgstr "Servicio Web Push"
 
 msgid "Webpushr"
 msgstr "Webpushr"
+
+msgid "SendPulse"
+msgstr "SendPulse"
 
 msgid "Automatic sent"
 msgstr "Envío automático"
@@ -5673,8 +5720,17 @@ msgstr "Horas restringidas"
 msgid "Add an hour"
 msgstr "Añadir una hora"
 
-msgid "Time zone: "
+msgid "Time zone:"
 msgstr "Zona horaria:"
+
+msgid "Stop subscribers collection"
+msgstr "Detener la recopilación de suscriptores"
+
+msgid "Stop asking to subscribe"
+msgstr "Dejar de preguntar para suscribirte"
+
+msgid "Users will not be able to subscribe to your notifications"
+msgstr "Los usuarios no podrán suscribirse a sus notificaciones"
 
 msgid "Webpushr service credentials"
 msgstr "Credenciales del servicio Webpushr"
@@ -5684,6 +5740,21 @@ msgstr "Puede encontrarse en la APP de Webpushr"
 
 msgid "Authentication token"
 msgstr "Token de autenticación"
+
+msgid "SendPulse service credentials"
+msgstr "Credenciales del servicio SendPulse"
+
+msgid "API ID"
+msgstr "API ID"
+
+msgid "Can be found in SendPulse Account Settings"
+msgstr "Se puede encontrar en Configuración de la cuenta SendPulse"
+
+msgid "API Secret"
+msgstr "API Secret"
+
+msgid "Remove account data"
+msgstr "Eliminar datos de la cuenta"
 
 msgid "Web Push notifications Dashboard"
 msgstr "Panel de control de notificaciones Web Push"
@@ -5844,7 +5915,7 @@ msgid "Menu structure"
 msgstr "Estructura del menú"
 
 msgid "Use drag and drop to sort and nest elements."
-msgstr "Usa arrastrar y soltar para ordenar y anidar elementos"
+msgstr "Usa arrastrar y soltar para ordenar y anidar elementos."
 
 msgid "Position"
 msgstr "Posición"
@@ -5969,6 +6040,14 @@ msgstr "Remitente"
 msgid "Email sender"
 msgstr "Emisor del correo"
 
+msgid "Newsletter subscription only email"
+msgstr "Suscripción al boletín solo por correo electrónico"
+
+msgid "Check to enable subscribing using only an email account"
+msgstr ""
+"Marque para habilitar la suscripción usando solo una cuenta de correo "
+"electrónico"
+
 msgid "Enable manual send"
 msgstr "Habilitar envío manual"
 
@@ -6064,7 +6143,7 @@ msgid "There is no active container"
 msgstr "No hay ningún contenedor activado"
 
 msgid "You must select a container"
-msgstr "Debes seleccionar algún contenedor."
+msgstr "Debes seleccionar algún contenedor"
 
 msgid "Add Container label"
 msgstr "Añadir nombre del contenedor"
@@ -6210,7 +6289,7 @@ msgid "No item selected"
 msgstr "No se seleccionaron elementos"
 
 msgid "Click in one item to show information about it"
-msgstr "Pulsa sobre un elemento para mostrar información sobre él."
+msgstr "Pulsa sobre un elemento para mostrar información sobre él"
 
 msgid "Image details"
 msgstr "Detalles de la imagen"
@@ -6465,7 +6544,7 @@ msgid ""
 "subscription"
 msgstr ""
 "Si está activado, los no-miembros no podrán acceder al contenido de esta "
-"suscripción."
+"suscripción"
 
 msgid ""
 "The content will not be available in frontpages, widgets, RSS and sitemaps"
@@ -6483,7 +6562,7 @@ msgstr ""
 "contenidos en esta suscripción"
 
 msgid "Username or password are incorrect"
-msgstr "Nombre de usuario o contraseña incorrecto."
+msgstr "Nombre de usuario o contraseña incorrecto"
 
 msgid "Please, check if the credentials are correct and try again."
 msgstr "Compruebe que las credenciales son las correctas y pruebe de nuevo."
@@ -6539,7 +6618,7 @@ msgstr "No hay ninguna configuración de sincronización disponible"
 
 msgid "Try adding one site to synchronize on the config button above."
 msgstr ""
-"Intenta añadir un site para sincronizar utilizando el botón de configuración"
+"Intenta añadir un site para sincronizar utilizando el botón de configuración."
 
 msgid "Ads"
 msgstr "Publicidades"
@@ -6595,7 +6674,7 @@ msgid ""
 "This settings limits ads between paragraphs to the total number of "
 "paragraphs."
 msgstr ""
-"Este ajuste limita la publicidad entre párrafos al número total de párrafos"
+"Este ajuste limita la publicidad entre párrafos al número total de párrafos."
 
 msgid "AdSense integration"
 msgstr "Integración con AdSense"
@@ -6799,7 +6878,7 @@ msgid ""
 "zone id from your Google DFP panel"
 msgstr ""
 "Google DFP usa un identificador de unidad para identificar una publicidad. "
-"Completa el id de zona desde tu panel de Google DFP."
+"Completa el id de zona desde tu panel de Google DFP"
 
 msgid "Format ID"
 msgstr "Format ID"
@@ -6891,7 +6970,7 @@ msgstr ""
 "que categorías futuras queden sin desmarcar"
 
 msgid "No positions selected, mark those you want on the form below."
-msgstr "No se seleccionó ninguna posición, marca las que quieras justo debajo"
+msgstr "No se seleccionó ninguna posición, marca las que quieras justo debajo."
 
 msgid "%1 positions"
 msgstr "%1 posición"
@@ -7687,7 +7766,7 @@ msgid "Do you really want to delete the selected modules?"
 msgstr "¿Estás seguro de que quieres eliminar los módulos seleccionados?"
 
 msgid "log out"
-msgstr "Salir"
+msgstr "salir"
 
 msgid "delete it"
 msgstr "eliminarlo"
@@ -7889,6 +7968,12 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
+
+#~ msgid "Time zone: "
+#~ msgstr "Zona horaria:"
+
+#~ msgid "My selection "
+#~ msgstr "Mi selección"
 
 #~ msgid "Place"
 #~ msgstr "Lugar"

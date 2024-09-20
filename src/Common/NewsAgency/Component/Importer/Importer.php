@@ -321,7 +321,10 @@ class Importer
                 $categories = array_filter(
                     $this->config['categories_map'],
                     function ($a) use ($resource) {
-                        return $a['slug'] == $resource->category;
+                        return preg_match(
+                            '/' . str_replace('/', '\/', $a['slug']) . '/i',
+                            $resource->category
+                        );
                     }
                 );
 
@@ -633,7 +636,7 @@ class Importer
             '{{content_type_name}}-frontpage$',
             '{{content_type_name}}-frontpage',
             'content_type_name-widget-article',
-            'authors-frontpage',
+            'author-{{fk_author}}(,|$)',
             'rss-article$',
             'sitemap',
             'category-{{categories}}',
@@ -648,7 +651,7 @@ class Importer
             'tag-{{tags}}',
         ];
         $opinionsBans = [
-            'authors-frontpage',
+            'author-{{fk_author}}(,|$)',
             'sitemap',
             'opinion-author-{{fk_author}}-frontpage',
             'content-author-{{fk_author}}-frontpage',

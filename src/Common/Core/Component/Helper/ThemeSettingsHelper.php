@@ -21,6 +21,7 @@ class ThemeSettingsHelper extends SettingHelper
     ];
 
     protected $toBool = [
+        'general_topbar',
         'show_category',
         'show_subtitle',
         'show_summary',
@@ -29,7 +30,8 @@ class ThemeSettingsHelper extends SettingHelper
         'show_time',
         'show_readtime',
         'show_author_photo',
-        'show_opinion_media',
+        'show_author_bio',
+        'show_media',
         'related_contents_auto',
         'sidebar_widget_today_news',
         'sidebar_widget_most_viewed',
@@ -39,16 +41,25 @@ class ThemeSettingsHelper extends SettingHelper
         'archive_cover',
         'mobile_top_menu',
         'mobile_main_menu',
+        'show_opinion_summary',
+        'show_opinion_media',
+        'show_opinion_author',
+        'show_opinion_author_photo',
+        'show_opinion_author_bio',
     ];
 
     protected $generalSettings = [
         'breadcrumb',
         'progressbar',
         'main_logo_size',
+        'general_topbar',
+        'general_header_date',
         'general_page_width',
+        'general_header_right_widget',
         'general_main_widget',
         'general_footer_widget',
         'hamburger_position',
+        'sidebar_widget_custom',
         'widget_header_type',
         'widget_header_font',
         'widget_header_font_color',
@@ -76,62 +87,103 @@ class ThemeSettingsHelper extends SettingHelper
         'aspect_ratio_list' => 'content_imageratio_list',
     ];
 
-    protected $extensionSettings = [
+    protected $settingsMap = [
+        'general' => [
+            'list' => [
+                'archive_appearance',
+                'archive_cover',
+                'show_category' => 'archive_category_name',
+                'show_subtitle' => 'archive_subtitle',
+                'show_summary' => 'archive_summary',
+                'show_author' => 'archive_author',
+                'show_date' => 'archive_date',
+                'show_time' => 'archive_time',
+                'show_readtime' => 'archive_readtime',
+                'show_author_photo' => 'archive_author_photo',
+                'show_author_bio' => 'archive_author_bio',
+                'show_opinion_media' => 'archive_opinion_media',
+                'show_opinion_summary' => 'archive_opinion_summary',
+                'show_opinion_author' => 'archive_opinion_author',
+                'show_opinion_author_photo' => 'archive_opinion_author_photo',
+                'show_opinion_author_bio' => 'archive_opinion_author_bio',
+                'sidebar_widget_today_news' => 'sidebar_widget_today_news_list',
+                'sidebar_widget_most_viewed' => 'sidebar_widget_most_viewed_list',
+                'sidebar_widget_most_seeing_recent' => 'sidebar_widget_most_seeing_recent_list',
+            ],
+            'show' => [
+                'article_header',
+                'article_layout',
+                'article_header_media',
+                'article_header_order',
+                'article_header_align',
+                'share_tools',
+                'tags_display',
+                'related_contents',
+                'related_contents_auto',
+                'related_contents_auto_position',
+                'sidebar_widget_today_news' => 'sidebar_widget_today_news_inner',
+                'sidebar_widget_most_viewed' => 'sidebar_widget_most_viewed_inner',
+                'sidebar_widget_most_seeing_recent' => 'sidebar_widget_most_seeing_recent_inner',
+                'widget_more_in_section',
+                'widget_more_in_frontpage',
+                'widget_more_in_section_layout',
+                'widget_more_in_frontpage_layout',
+                'show_author' => 'inner_content_author',
+                'show_date' => 'inner_content_date',
+                'show_time' => 'inner_content_time',
+                'show_readtime' => 'inner_content_readtime',
+                'show_author_photo' => 'inner_content_author_photo',
+                'show_author_bio' => 'inner_content_author_bio',
+                'suggested_max_items' => 'inner_content_suggested_items'
+            ]
+        ],
         'frontpages' => [
-            'show_category' => 'content_category_name',
-            'show_subtitle' => 'content_subtitle',
-            'show_summary' => 'content_summary',
-            'show_author' => 'content_author',
-            'show_date' => 'content_date',
-            'show_time' => 'content_time',
-            'show_readtime' => 'content_readtime',
-            'show_author_photo' => 'content_author_photo',
-            'show_opinion_media' => 'content_opinion_media',
-        ]
+            'list' => [
+                'show_category' => 'content_category_name',
+                'show_subtitle' => 'content_subtitle',
+                'show_summary' => 'content_summary',
+                'show_author' => 'content_author',
+                'show_date' => 'content_date',
+                'show_time' => 'content_time',
+                'show_readtime' => 'content_readtime',
+                'show_author_photo' => 'content_author_photo',
+                'show_author_bio' => 'content_author_bio',
+                'show_opinion_summary' => 'content_opinion_summary',
+                'show_opinion_media' => 'content_opinion_media',
+                'show_opinion_author' => 'content_opinion_author',
+                'show_opinion_author_photo' => 'content_opinion_author_photo',
+                'show_opinion_author_bio' => 'content_opinion_author_bio',
+            ],
+            'show' => [
+                'show_category' => 'content_category_name',
+                'show_subtitle' => 'content_subtitle',
+                'show_summary' => 'content_summary',
+                'show_author' => 'content_author',
+                'show_date' => 'content_date',
+                'show_time' => 'content_time',
+                'show_readtime' => 'content_readtime',
+                'show_author_photo' => 'content_author_photo',
+                'show_author_bio' => 'content_author_bio',
+                'show_opinion_summary' => 'content_opinion_summary',
+                'show_opinion_media' => 'content_opinion_media',
+                'show_opinion_author' => 'content_opinion_author',
+                'show_opinion_author_photo' => 'content_opinion_author_photo',
+                'show_opinion_author_bio' => 'content_opinion_author_bio',
+            ]
+        ],
+        'opinion' => [
+            'show' => [
+            ],
+            'list' => [
+                'show_summary' => 'archive_opinion_summary',
+                'show_media' => 'archive_opinion_media',
+                'show_author' => 'archive_opinion_author',
+                'show_author_photo' => 'archive_opinion_author_photo',
+                'show_author_bio' => 'archive_opinion_author_bio',
+            ]
+        ],
     ];
 
-    protected $actionSettings = [
-        'list' => [
-            'archive_appearance',
-            'archive_cover',
-            'show_category' => 'archive_category_name',
-            'show_subtitle' => 'archive_subtitle',
-            'show_summary' => 'archive_summary',
-            'show_author' => 'archive_author',
-            'show_date' => 'archive_date',
-            'show_time' => 'archive_time',
-            'show_readtime' => 'archive_readtime',
-            'show_author_photo' => 'archive_author_photo',
-            'sidebar_widget_today_news' => 'sidebar_widget_today_news_list',
-            'sidebar_widget_most_viewed' => 'sidebar_widget_most_viewed_list',
-            'sidebar_widget_most_seeing_recent' => 'sidebar_widget_most_seeing_recent_list',
-        ],
-        'show' => [
-            'article_header',
-            'article_layout',
-            'article_header_media',
-            'article_header_order',
-            'article_header_align',
-            'share_tools',
-            'tags_display',
-            'related_contents',
-            'related_contents_auto',
-            'related_contents_auto_position',
-            'sidebar_widget_today_news' => 'sidebar_widget_today_news_inner',
-            'sidebar_widget_most_viewed' => 'sidebar_widget_most_viewed_inner',
-            'sidebar_widget_most_seeing_recent' => 'sidebar_widget_most_seeing_recent_inner',
-            'widget_more_in_section',
-            'widget_more_in_frontpage',
-            'widget_more_in_section_layout',
-            'widget_more_in_frontpage_layout',
-            'show_author' => 'inner_content_author',
-            'show_date' => 'inner_content_date',
-            'show_time' => 'inner_content_time',
-            'show_readtime' => 'inner_content_readtime',
-            'show_author_photo' => 'inner_content_author_photo',
-            'suggested_max_items' => 'inner_content_suggested_items'
-        ]
-    ];
     /**
      * Initializes the SettingLogoHelper.
      *
@@ -156,10 +208,7 @@ class ThemeSettingsHelper extends SettingHelper
 
             $skinParams = $this->container->get('core.theme')->getSkin($skin);
 
-            $themeOptions = array_key_exists('params', $skinParams)
-                && array_key_exists('options', $skinParams['params'])
-                ? $skinParams['params']['options']
-                : [];
+            $themeOptions = $skinParams['params']['options'] ?? [];
 
             if ($maped && !empty($themeOptions)) {
                 $themeOptions = array_map(function ($option) {
@@ -172,10 +221,10 @@ class ThemeSettingsHelper extends SettingHelper
         return $themeOptions;
     }
 
-    public function getThemeVariables()
+    public function getThemeVariables($action = null, $extension = null)
     {
-        $action    = $this->container->get('core.globals')->getAction();
-        $extension = $this->container->get('core.globals')->getExtension();
+        $action    = !empty($action) ? $action : $this->container->get('core.globals')->getAction();
+        $extension = !empty($extension) ? $extension : $this->container->get('core.globals')->getExtension();
 
         $action = strpos($action, 'list') !== false ? 'list' : $action;
         $action = strpos($action, 'show') !== false ? 'show' : $action;
@@ -187,21 +236,28 @@ class ThemeSettingsHelper extends SettingHelper
             || $extension == 'tag') {
             $action = 'list';
         }
-
-        $currentSettings   = $this->getThemeSettings();
-        $generalVariables  = $this->parseSettings($currentSettings, $this->generalSettings);
-        $specificVariables = [];
-
-        if (array_key_exists($action, $this->actionSettings)) {
-            $specificVariables = $this->parseSettings($currentSettings, $this->actionSettings[$action]);
+        //Treat archive as a fake frontpage
+        if ($action == 'archive') {
+            $extension = 'frontpages';
         }
 
-        if (array_key_exists($extension, $this->extensionSettings)) {
-            $specificVariables = $this->parseSettings($currentSettings, $this->extensionSettings[$extension]);
+        $themeSettings  = $this->getThemeSettings();
+        $targetSettings = $this->getMappedSettings($extension, $action);
+
+        return $this->parseSettings($themeSettings, $targetSettings);
+    }
+
+    protected function getMappedSettings($extension, $action)
+    {
+        $action = $action == 'show' ? 'show' : 'list';
+
+        $targetSettings = array_merge($this->generalSettings, $this->settingsMap['general'][$action]);
+
+        if (array_key_exists($extension, $this->settingsMap)) {
+            $targetSettings = array_merge($targetSettings, $this->settingsMap[$extension][$action]);
         }
 
-        $finalVars = array_merge($generalVariables, $specificVariables);
-        return array_merge($finalVars, [ 'theme_options' => true]);
+        return $targetSettings;
     }
 
     protected function parseSettings($master, $part)

@@ -154,9 +154,14 @@
     </small>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('category')">
-    <span class="label label-default text-bold">
-      [% item.category %]
-    </span>
+    <small class="text-italic" ng-if="!item.category">
+      &lt;{t}No category{/t}&gt;
+    </small>
+    <div class="table-text" ng-if="item.category">
+      <span class="label label-default text-bold">
+        [% item.category %]
+      </span>
+    </div>
   </td>
   <td class="v-align-middle" ng-if="isColumnEnabled('tags')">
     <small class="text-italic" ng-if="!item.tags || item.tags.split(',').length === 0">

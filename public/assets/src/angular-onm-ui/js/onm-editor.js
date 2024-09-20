@@ -94,7 +94,6 @@
                 groups: [ 'mode', 'document', 'doctools' ]
               }
             ],
-            autoGrow_maxHeight: 200,
           },
 
           full: {
@@ -386,6 +385,15 @@
                 }
 
                 var options  = Editor.configure(attrs.onmEditorPreset);
+
+                options.autoGrow_minHeight = Math.max(
+                  attrs.onmEditorHeight || 200, options.autoGrow_minHeight || 0
+                );
+
+                if (attrs.onmEditorHeight) {
+                  delete options.autoGrow_maxHeight;
+                }
+
                 var instance = Editor.init(element[0], options);
 
                 // Updates CKEditor when model changes
@@ -499,6 +507,13 @@
             checkLoaded();
           }
         }
+
+        // Set link default protocol to https
+        $window.CKEDITOR.on('dialogDefinition', function(ev) {
+          if (ev.data.name === 'link') {
+            ev.data.definition.getContents('info').get('protocol').default = 'https://';
+          }
+        });
 
         $window.CKEDITOR.on('loaded', checkLoaded);
         $timeout(checkLoaded, 0);

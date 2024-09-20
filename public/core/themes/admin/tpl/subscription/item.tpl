@@ -148,7 +148,7 @@
       </h4>
     </div>
     <div class="grid-body">
-      <div class="form-group no-margin">
+      <div class="form-group">
         <label class="pointer" for="member-newsletter">
           <div class="checkbox">
             <input checklist-model="item.privileges" checklist-value="getPermissionId('MEMBER_SEND_NEWSLETTER')" id="member-newsletter" {is_module_activated deactivated="1" name="NEWSLETTER_MANAGER"}ng-disabled="true"{/is_module_activated} type="checkbox">

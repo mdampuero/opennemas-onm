@@ -47,27 +47,38 @@ class NewsMLEfe extends NewsML
     }
 
     /**
+     * Returns the category assigned to the resouce
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The category.
+     */
+    public function getCategory($data)
+    {
+        $categories = $data->xpath("//SubHeadLine");
+
+
+        if (is_array($categories) && !empty($categories)) {
+            $categories = $categories[0];
+
+            return iconv(mb_detect_encoding($categories), "UTF-8", $categories);
+        }
+
+        return $categories;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getTags($data)
     {
-        $tags = $data->xpath("//Property[@FormalName=\"Tesauro\"]");
+        $tags = $data->xpath("//SubHeadLine");
 
         if (empty($tags)) {
             return $this->getFromBag('tags');
         }
 
-        $tags = (string) $tags[0]->attributes()->Value;
-
-        $groups = explode(";", $tags);
-        $tags   = [];
-        foreach ($groups as $group) {
-            preg_match('@(.*):(.*)@', $group, $matches);
-
-            if (!empty($matches)) {
-                $tags = array_merge($tags, explode(',', $matches[2]));
-            }
-        }
+        $tags = explode(" ", (string) $tags[0]);
 
         return implode(',', array_unique($tags));
     }

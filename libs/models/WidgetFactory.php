@@ -232,9 +232,12 @@ class WidgetFactory
 
         foreach ($this->params['contents'] as $content) {
             $xtags[] = sprintf('%s-%d', $content->content_type_name, $content->pk_content);
+            if ($content->fk_author) {
+                $xtags[] = sprintf('author-widget-%d', $content->fk_author);
+            }
         }
 
-        return $xtags;
+        return array_unique($xtags);
     }
 
     /**

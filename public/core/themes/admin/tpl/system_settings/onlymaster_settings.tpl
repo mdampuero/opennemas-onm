@@ -16,6 +16,14 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
+                <div class="form-group">
+                  <label class="my-switch">
+                    <input type="checkbox" id="themeSwitch" ng-model="isDarkTheme" ng-change="toggleAllEditorsTheme()">
+                    <span class="my-slider round"></span>
+                  </label>
+                </div>
+              </li>
+              <li class="quicklinks">
                 <button class="btn btn-loading btn-primary" ng-click="save()" ng-disabled="settingForm.$invalid" type="button">
                   <i class="fa fa-save" ng-class="{ 'fa-circle-o-notch fa-spin': saving}"></i>
                   <span class="text">{t}Save{/t}</span>
@@ -186,6 +194,20 @@
                         <label for="lazy_referer">
                           {t}Disabled{/t}
                         </label>
+                      </div>
+                    </div>
+                    <div ng-if="extra.theme == 'pekka'">
+                      <h4>
+                        <i class="fa fa-font"></i>
+                        {t}Font preloading{/t}
+                      </h4>
+                      <div class="form-group">
+                        <div class="checkbox">
+                          <input {if $configs['fonts_preload'] eq "1"}checked{/if} id="fonts_preload" name="fonts_preload" ng-false-value="0" ng-model="settings.fonts_preload" ng-true-value="'1'" type="checkbox">
+                          <label for="fonts_preload">
+                            {t}Disabled{/t}
+                          </label>
+                        </div>
                       </div>
                     </div>
                     <h4>

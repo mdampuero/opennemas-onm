@@ -53,6 +53,8 @@
       @Common/src/angular-fly-to-cart/less/main.less,
       @Common/src/angular-picker/less/main.less,
       @Common/src/photo-editor/css/photo-editor.css,
+      @Common/components/codemirror/lib/codemirror.css,
+      @Common/components/codemirror/theme/material-palenight.css,
       @AdminTheme/less/*" filters="cssrewrite,less" output="admin"}
     {/stylesheets}
   {/block}
@@ -550,6 +552,11 @@
       @Common/src/angular-scroll/angular-scroll.js,
       @Common/src/angular-translator/js/translator.js,
       @Common/src/photo-editor/js/photo-editor.js,
+      @Common/components/codemirror/lib/codemirror.js,
+      @Common/components/codemirror/mode/css/css.js,
+      @Common/components/codemirror/mode/javascript/javascript.js,
+      @Common/components/codemirror/mode/htmlmixed/htmlmixed.js,
+      @Common/components/codemirror/mode/xml/xml.js,
       @AdminTheme/js/app.js,
       @AdminTheme/js/config.js,
       @AdminTheme/js/controllers/*,

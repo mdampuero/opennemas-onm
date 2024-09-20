@@ -207,13 +207,13 @@ class NotificationService
 
         $notification->title = [
             CURRENT_LANGUAGE_SHORT =>
-                sprintf(_('This month you\'re recording %d page views. '), $instance->page_views)
+                sprintf(_('This month you\'re recording %d page views.'), $instance->page_views)
         ];
 
         $notification->body = [
             CURRENT_LANGUAGE_SHORT =>
                 '<li>'
-                . sprintf(_('This month you\'re recording %d page views. '), $instance->page_views)
+                . sprintf(_('This month you\'re recording %d page views.'), $instance->page_views)
                 . sprintf(
                     _('Note that <a href="http://help.opennemas.com/knowledgebase/articles/666994-pricing-'
                     . 'opennemas-page-views-and-storage-space" target="_blank" title="Learn more">'

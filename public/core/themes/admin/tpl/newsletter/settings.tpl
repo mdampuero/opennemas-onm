@@ -88,17 +88,14 @@
             </div>
           </div>
         </div>
-
         <div class="ng-cloak" ng-show="settings.newsletter_subscriptionType === 'create_subscriptor'">
           {t escape=off 1=$smarty.capture.subscriptors}You've choosen to use the <a href="%1" target="_blank">internal subscription list</a> to send your newsletters.{/t}
         </div>
-
         {is_module_activated name="es.openhost.module.acton"}
         <div ng-if="settings.newsletter_subscriptionType == 'acton'">
           <h5>
             {t}Act-On marketing lists{/t}
           </h5>
-
           <div class="actonList ng-cloak" ng-repeat="list in settings['actOn.marketingLists']">
             <div class="row">
               <div class="form-group col-md-6">
@@ -120,9 +117,7 @@
               </div>
             </div>
           </div>
-
           <a ng-click="addList()" class="btn btn-block">{t}Add new marketing list{/t}</a>
-
           <div class="row m-t-15">
             <div class="form-group">
               <label for="acton_form_page" class="form-label">{t}Form static page url{/t}</label>
@@ -132,7 +127,6 @@
               </div>
             </div>
           </div>
-
           <div class="row m-t-15">
             <div class="form-group col-sm-6">
               <label for="acton_header_id" class="form-label">{t}Act-On header id{/t}</label>
@@ -149,12 +143,10 @@
               </div>
             </div>
           </div>
-
         </div>
         {/is_module_activated}
       </div>
     </div>
-
     <div class="grid simple ng-cloak" ng-if="!flags.loading && settings">
       <div class="grid-title">
         <h4>
@@ -178,10 +170,16 @@
           </div>
         </div>
         {if $app.security->hasPermission('MASTER')}
+          <div class="form-group">
+            <input type="checkbox" id="subscribe-email" name="newsletter_subscribe_email" ng-false-value="'0'" ng-model="settings.newsletter_subscribe_email" ng-true-value="'1'" />
+            <label for="subscribe-email" class="form-label">{t}Newsletter subscription only email{/t}</label>
+            <span class="help">{t escape=off}Check to enable subscribing using only an email account{/t}</span>
+          </div>
           <div class="form-group" >
             <input id="manual_send" ng-false-value="'0'" ng-model="settings.newsletter_manual" ng-true-value="'1'" type="checkbox"/>
             <label for="subscription" class="form-label">{t}Enable manual send{/t}</label>
           </div>
+
         {/if}
       </div>
     </div>

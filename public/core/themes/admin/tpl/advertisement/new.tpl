@@ -67,7 +67,7 @@ jQuery(document).ready(function($) {
                 <span class="h-seperate"></span>
               </li>
               <li class="quicklinks">
-                <button class="btn btn-primary" data-text="{t}Saving{/t}..." ng-disabled="AdvertisementForm.$invalid" type="submit" id="save-button">
+                <button class="btn btn-primary" data-text="{t}Saving{/t}..." ng-disabled="AdvertisementForm.$invalid || positions.length === 0" type="submit" id="save-button">
                     <i class="fa fa-save"></i>
                     <span class="text">{t}Save{/t}</span>
                 </button>
@@ -530,7 +530,10 @@ jQuery(document).ready(function($) {
         {* contents only shown when page is already loaded *}
         <div class="grid-title shaded ng-cloak positions-selected">
           <div class="ng-cloak m-b-5 positions-selected-counter">
-            <span ng-if="positions.length == 0">{t}No positions selected, mark those you want on the form below.{/t}</span>
+            <span ng-if="positions.length == 0">
+              <span class="fa fa-info-circle text-info fa-lg">&nbsp;</span>
+              {t}No positions selected, mark those you want on the form below.{/t}
+            </span>
             <span ng-if="positions.length > 0">{t 1="[% positions.length %]"}%1 positions{/t}</span>
           </div>
           <div class="ng-cloak positions-selected-list collapsed" ng-class="{ collapsed : !expanded.positions }">
@@ -725,7 +728,7 @@ jQuery(document).ready(function($) {
               {is_module_activated name="AMP_MODULE"}
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Google AMP{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1050, 1074) > 0">[% countPositionsSelectedbyRange(1050, 1074) %]</span>
+                  {t}Google AMP{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1050, 1074) > 0 || countPositionsSelectedbyRange(1078, 1089) > 0">[% countPositionsSelectedbyRange(1050, 1074) +  countPositionsSelectedbyRange(1078, 1089) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   <div class="row">
@@ -738,7 +741,7 @@ jQuery(document).ready(function($) {
               {is_module_activated name="FIA_MODULE"}
               <uib-tab>
                 <uib-tab-heading>
-                  {t}Facebook Instant Articles{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1075, 1089) > 0">[% countPositionsSelectedbyRange(1075, 1089) %]</span>
+                  {t}Facebook Instant Articles{/t} <span class="badge" ng-show="countPositionsSelectedbyRange(1075, 1077) > 0">[% countPositionsSelectedbyRange(1075, 1089) %]</span>
                 </uib-tab-heading>
                 <div class="tab-wrapper">
                   {include file="advertisement/partials/advertisement_positions_fia.tpl"}

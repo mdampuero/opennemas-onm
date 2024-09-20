@@ -115,7 +115,7 @@ class UrlGeneratorHelper
         $this->locale->setContext('frontend');
 
         $localize = $this->locale->getRequestLocale('frontend');
-
+        $sitemap  = $params['sitemap'] ?? false;
         if (array_key_exists('locale', $params) && !empty($params['locale'])) {
             $localize = $params['locale'];
             $uri     .= $this->locale->getSlugs()[$params['locale']] &&
@@ -123,7 +123,6 @@ class UrlGeneratorHelper
             '/' . $this->locale->getSlugs()[$params['locale']] :
             '';
         }
-
         $method = 'getUriForContent';
 
         if (!$content instanceof \Content) {
@@ -142,7 +141,11 @@ class UrlGeneratorHelper
                 ])
                 ->get();
 
-            $uri .= '/' . $this->{$method}($content, $localize);
+            if ($method === 'getUriForUser') {
+                $uri .= '/' . $this->{$method}($content, $localize, $sitemap);
+            } else {
+                $uri .= '/' . $this->{$method}($content, $localize);
+            }
         }
 
         $this->locale->setContext($context);
@@ -541,7 +544,7 @@ class UrlGeneratorHelper
      *
      * @return string The user URI.
      */
-    protected function getUriForUser($user, $locale = null)
+    protected function getUriForUser($user, $locale = null, $sitemap = false)
     {
         $routeName   = 'frontend_opinion_author_frontpage';
         $routeParams = [
@@ -552,6 +555,11 @@ class UrlGeneratorHelper
         if ($user->is_blog) {
             $routeName   = 'frontend_blog_author_frontpage';
             $routeParams = [ 'author_slug' => $user->slug ];
+        }
+
+        if ($sitemap) {
+            $routeName   = 'frontend_author_frontpage';
+            $routeParams = [ 'author_slug' => $user->slug,];
         }
 
         $uri = $this->container->get('router')->generate($routeName, $routeParams);

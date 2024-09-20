@@ -60,9 +60,15 @@ class FrontpagesController extends Controller
         list($contentPositions, $contents, $invalidationDt, $lastSaved) =
             $this->get('api.service.frontpage')->getCurrentVersionForCategory($categoryId, false);
 
-        $xtags = implode(',', array_map(function ($content) {
-            return $content->content_type_name . '-' . $content->pk_content;
-        }, $contents));
+        $xtags = array_map(function ($content) {
+            $tag = $content->content_type_name . '-' . $content->pk_content;
+            if (isset($content->fk_author)) {
+                $tag .= ',author-' . $content->fk_author;
+            }
+            return $tag;
+        }, $contents);
+
+        $xtags = implode(',', array_unique($xtags));
 
         $contents = $this->get('api.service.frontpage_version')->filterPublishedContents($contents);
 

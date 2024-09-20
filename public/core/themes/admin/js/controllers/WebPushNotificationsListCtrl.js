@@ -107,7 +107,6 @@
             }
 
             $scope.items = $scope.data.items;
-
             $scope.disableFlags('http');
           }, function(response) {
             messenger.post(response.data);

@@ -32,7 +32,7 @@
         </a>
       </li>
       <li class="quicklinks">
-        <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="saveItem()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
           <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
           {t}Save{/t}
         </button>
@@ -261,9 +261,17 @@
           </div>
         </div>
       </div>
+      <div class="form-group">
+        <label for="title" class="form-label">
+          {t}Seo title{/t}
+        </label>
+        <div class="controls input-with-icon right">
+          <input class="form-control" id="seo_title" name="seo_title" ng-model="item.seo_title">
+        </div>
+      </div>
       <div class="form-group no-margin">
         <label class="form-label" for="description">
-          {t}Description{/t}
+          {t}Seo description{/t}
         </label>
         <div class="controls">
           <textarea class="form-control" name="description" ng-model="item.description" rows="5"></textarea>

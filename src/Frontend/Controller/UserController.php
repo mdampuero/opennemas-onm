@@ -274,12 +274,17 @@ class UserController extends Controller
         }
 
         $securityInput = $request->request->get('register_control');
+        $userGroups    = $request->request->get('user_groups', []);
+        $userGroups    = !is_array($userGroups) ? [ $userGroups => '' ] : $userGroups;
+        $email         = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+        $name          = $request->request->filter('name', null, FILTER_SANITIZE_SPECIAL_CHARS);
         $data          = array_merge(
             $request->request->all(),
             [
-                'name'     => $request->request->filter('name', null, FILTER_SANITIZE_SPECIAL_CHARS),
-                'email'    => $request->request->filter('email', null, FILTER_SANITIZE_EMAIL),
-                'password' => $request->request->get('password'),
+                'name'        => empty($name) ? $email : $name,
+                'email'       => $email,
+                'user_groups' => $userGroups,
+                'password'    => $request->request->get('password'),
             ]
         );
 

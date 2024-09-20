@@ -20,33 +20,18 @@ class StatusEndpoint extends Endpoint
      *
      * @throws WebPushException If the action fails.
      */
-    public function getStatus($id)
+    public function getStatus($params = [])
     {
         try {
-            $url     = $this->url . $this->config['actions']['get_status']['path'] . $id;
-            $headers = [
-                'content-type'      => 'application/json',
-                'webpushrKey'       => $this->auth->getConfiguration()['webpushrKey'],
-                'webpushrAuthToken' => $this->auth->getConfiguration()['webpushrAuthToken']
-            ];
+            $url = $this->url . $this->replaceUriWildCards($this->config['actions']['get_status']['path'], $params);
 
-            $data = [
-                'headers' => $headers
-            ];
-
-
-            $response = $this->client->get($url, $data);
+            $response = $this->client->get($url, [ 'headers' => $this->auth->getAuthHeaders() ]);
             $body     = json_decode($response->getBody(), true);
-
-            // Pending of WebPushR to fix 'camapign_id' as parameter of the response
-            getService('application.log')
-                    ->info('Notification ' . $body['camapign_id'] . ' was retrieved successfully');
         } catch (\Exception $e) {
             getService('application.log')
-                ->error('Error retrieving the notification from server with campaign_id '
-                . $id
+                ->error('Error retrieving the notification status from server '
                 . $e->getMessage());
-            throw new WebPushException('webpush.satus.get.failure: ' . $e->getMessage());
+            throw new WebPushException('webpush.status.get.failure: ' . $e->getMessage());
         }
 
         return $body;

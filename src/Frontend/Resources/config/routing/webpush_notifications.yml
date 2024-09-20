@@ -1,7 +1,13 @@
 # Web Push notifications routes
-frontend_webpush_notifications_script:
-    path:     /webpushr-sw.js
-    defaults: { _controller: FrontendBundle:WebPushNotifications:script }
-
+frontend_webpush_notifications_script_sendpulse:
+    path:     /sp-push-worker-fb.js
+    defaults: { _controller: FrontendBundle:WebPushNotifications:script, service: sendpulse }
     options:
         subdirectory: true
+
+frontend_webpush_notifications_script_webpushr:
+    path:     /webpushr-sw.js
+    defaults: { _controller: FrontendBundle:WebPushNotifications:script, service: webpushr }
+    options:
+        subdirectory: true
+

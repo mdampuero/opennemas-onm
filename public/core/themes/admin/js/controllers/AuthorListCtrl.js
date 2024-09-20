@@ -49,7 +49,7 @@
             .concat([ 'picture', 'name', 'email', 'blog', 'biography' ]));
 
           oqlEncoder.configure({
-            placeholder: { name: 'name ~ "[value]" or username ~ "[value]"' }
+            placeholder: { name: 'name ~ "[value]" or username ~ "[value]" or email ~ "[value]"' }
           });
 
           $scope.list();
