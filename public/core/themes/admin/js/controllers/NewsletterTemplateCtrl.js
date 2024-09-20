@@ -136,15 +136,14 @@
 
                     e.criteria.category = e.criteria.category.map(Number);
                   }
-                  return e; // Devolver el elemento después de las modificaciones
+                  return e;
                 });
-                return true; // Mantener el item si tiene elementos en items
+                return true;
               }
-              return false; // Eliminar el item si items está vacío o no es un array
+              return false;
             });
           }
         };
-
 
         /**
          * @function getItemIds
