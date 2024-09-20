@@ -122,9 +122,9 @@
           });
 
           if ($scope.item.contents) {
-            $scope.item.contents.forEach(function(item) {
-              if (Array.isArray(item.items)) {
-                item.items.forEach(function(e) {
+            $scope.item.contents = $scope.item.contents.filter(function(item) {
+              if (Array.isArray(item.items) && item.items.length > 0) {
+                item.items = item.items.filter(function(e) {
                   if (e.e_type === 'list') {
                     if (!e.criteria || typeof e.criteria.category === 'undefined' || e.criteria.category === '') {
                       e.criteria.category = [];
@@ -136,13 +136,15 @@
 
                     e.criteria.category = e.criteria.category.map(Number);
                   }
-                  return e;
+                  return e; // Devolver el elemento después de las modificaciones
                 });
+                return true; // Mantener el item si tiene elementos en items
               }
-              return item;
+              return false; // Eliminar el item si items está vacío o no es un array
             });
           }
         };
+
 
         /**
          * @function getItemIds
@@ -298,12 +300,37 @@
          *
          */
         $scope.saveVal = function() {
-          if (!($scope.item.contents instanceof Array) ||
-            $scope.item.contents.length === 0
-          ) {
+          if (!Array.isArray($scope.item.contents) || $scope.item.contents.length === 0) {
             messenger.post(newsletterTemplateTranslations.contenidosRequerido);
             return null;
           }
+
+          $scope.item.contents = $scope.item.contents.filter(function(item) {
+            if (Array.isArray(item.items) && item.items.length > 0) {
+              item.items = item.items.filter(function(e) {
+                if (e.e_type === 'list') {
+                  if (!e.criteria || typeof e.criteria.category === 'undefined' || e.criteria.category === '') {
+                    e.criteria.category = [];
+                  }
+
+                  if (typeof e.criteria.category === 'string') {
+                    e.criteria.category = [parseInt(e.criteria.category)];
+                  }
+
+                  e.criteria.category = e.criteria.category.map(Number);
+                }
+                return e;
+              });
+              return item.items.length > 0;
+            }
+            return false;
+          });
+
+          if ($scope.item.contents.length === 0) {
+            messenger.post(newsletterTemplateTranslations.contenidosRequerido);
+            return null;
+          }
+
           $scope.save();
           return null;
         };

@@ -136,13 +136,16 @@ class NewsletterSchedulerCommand extends Command
                 try {
                     $output->write(str_pad(' - Newsletter sent and registered ', 50, '.'));
 
+                    $this->sendScheduledTemplate($template, $output);
+
+                    /*
                     if ($this->canWeSendTemplate($template, $time)) {
-                        $this->sendScheduledTemplate($template, $output);
                     } else {
                         $output->writeln(sprintf(
                             '<fg=yellow;options=bold>SKIP</> <fg=blue;options=bold>(Nothing to send)</>'
                         ));
                     }
+                    */
                 } catch (\Exception $e) {
                     $output->writeln(sprintf(
                         '<fg=red;options=bold>FAIL</> <fg=blue;options=bold>(%s)</>',
