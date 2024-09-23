@@ -79,52 +79,17 @@ class KeywordService extends OrmService
         $placeholderMap = [];
 
         foreach ($keywordsSorted as $keyword) {
-            if ($this->isKeywordTypeValid($keyword->type, $types)) {
-                $keywordPattern = $this->getKeywordPattern($keyword->keyword);
-                $placeholder    = $this->generatePlaceholder($keyword->id);
-                $replacement    = $this->createReplacementLink($keyword, $types[$keyword->type]);
+            if (array_key_exists($keyword->type, $types)) {
+                $placeholder = "##KEYWORD_ONM_PLACEHOLDER_" . $keyword->id . "##";
+                $replacement = $this->createReplacementLink($keyword, $types[$keyword->type]);
 
                 $placeholderMap[$placeholder] = $replacement;
 
-                $text = $this->replaceKeywordInText($text, $keywordPattern, $placeholder);
+                $text = $this->replaceKeywordInText($text, preg_quote($keyword->keyword, '@'), $placeholder);
             }
         }
 
         return [$text, $placeholderMap];
-    }
-
-    /**
-     * Checks if the keyword type is valid by verifying its existence in the types array.
-     *
-     * @param string $keywordType The type of the keyword to check.
-     * @param array $types The array containing valid keyword types.
-     * @return bool True if the keyword type is valid, false otherwise.
-     */
-    private function isKeywordTypeValid($keywordType, $types)
-    {
-        return array_key_exists($keywordType, $types);
-    }
-
-    /**
-     * Escapes the keyword to make it safe for use in a regular expression pattern.
-     *
-     * @param string $keyword The keyword to escape.
-     * @return string The escaped keyword for use in a regular expression.
-     */
-    private function getKeywordPattern($keyword)
-    {
-        return preg_quote($keyword, '@');
-    }
-
-    /**
-     * Generates a unique placeholder string for a keyword based on its ID.
-     *
-     * @param int $keywordId The ID of the keyword.
-     * @return string A unique placeholder string for the keyword.
-     */
-    private function generatePlaceholder($keywordId)
-    {
-        return "##KEYWORD_ONM_PLACEHOLDER_" . $keywordId . "##";
     }
 
     /**
