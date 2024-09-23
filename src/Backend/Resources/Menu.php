@@ -308,7 +308,7 @@ $menuXml = [
     [
         'id'          => 'pressclipping_manager',
         'title'       => _('PressClipping'),
-        'icon'        => 'fa fa-bell',
+        'icon'        => 'fa fa-paperclip',
         'link'        => '#',
         'module_name' => 'es.openhost.module.pressclipping',
         'submenu' => [
