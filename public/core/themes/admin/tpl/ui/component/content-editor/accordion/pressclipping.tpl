@@ -1,5 +1,5 @@
 <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.pressclipping = !expanded.pressclipping" ng-if="!hasMultilanguage()">
-  <i class="fa fa-bell m-r-10"></i>{t}PressClipping{/t}
+  <i class="fa fa-paperclip m-r-10"></i>{t}PressClipping{/t}
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.pressclipping }"></i>
 </div>
 <div class="grid-collapse-body ng-cloak" ng-if="!hasMultilanguage()" ng-class="{ 'expanded': expanded.pressclipping }">
