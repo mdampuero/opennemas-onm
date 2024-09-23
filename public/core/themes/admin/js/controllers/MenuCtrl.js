@@ -415,7 +415,11 @@
               };
 
               if ($scope.hasMultilanguage()) {
-                transformedItem.locale = item.locale || null;
+                if (transformedItem.type !== 'tags') {
+                  transformedItem.locale = item.locale || $scope.config.locale.default;
+                } else {
+                  transformedItem.locale = item.locale || null;
+                }
               }
 
               object[key].push(transformedItem);
