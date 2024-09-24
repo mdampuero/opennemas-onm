@@ -54,9 +54,9 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $routes = [
-        'list' => 'frontend_events',
+        'list'    => 'frontend_events',
         'tagList' => 'frontend_event_taglist',
-        'show' => 'frontend_event_show'
+        'show'    => 'frontend_event_show'
     ];
 
     /**
@@ -68,9 +68,9 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $templates = [
-        'list' => 'event/list.tpl',
+        'list'    => 'event/list.tpl',
         'taglist' => 'event/list.tpl',
-        'show' => 'event/item.tpl'
+        'show'    => 'event/item.tpl'
     ];
 
     /**
@@ -116,11 +116,9 @@ class EventController extends FrontendController
     protected function getItemTag(Request $request)
     {
         try {
-            $locale = $this->container->get('core.locale')->getRequestLocale();
-            $item   = $this->get('api.service.tag')->getItemBy(sprintf(
-                'slug = "%s" and locale = "%s"',
-                $request->get('tag'),
-                $locale
+            $item = $this->get('api.service.tag')->getItemBy(sprintf(
+                'slug = "%s"',
+                $request->get('tag')
             ));
         } catch (\Exception $e) {
             throw new ResourceNotFoundException();

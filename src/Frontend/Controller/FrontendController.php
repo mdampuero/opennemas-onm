@@ -41,8 +41,7 @@ class FrontendController extends Controller
      * @var array
      */
     protected $queries = [
-        'list' => [ 'page' ],
-        'tagList' => [ 'page' ]
+        'list' => [ 'page' ]
     ];
 
     /**
