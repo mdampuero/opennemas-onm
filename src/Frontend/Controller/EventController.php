@@ -116,9 +116,13 @@ class EventController extends FrontendController
     protected function getItemTag(Request $request)
     {
         try {
+            $locale = $this->container->get('core.locale')->getRequestLocale();
+            $tag = $request->get('tag');
+
             $item = $this->get('api.service.tag')->getItemBy(sprintf(
-                'slug = "%s"',
-                $request->get('tag')
+                'slug = "%s" and (locale = "%s" OR locale IS NULL)',
+                $tag,
+                $locale
             ));
         } catch (\Exception $e) {
             throw new ResourceNotFoundException();
