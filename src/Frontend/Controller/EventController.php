@@ -146,7 +146,6 @@ class EventController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        // Ejecutar la consulta SQL
         $response = $this->get('api.service.content')->getListBySql(sprintf(
             'select * from contents '
             . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
