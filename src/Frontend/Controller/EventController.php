@@ -117,7 +117,7 @@ class EventController extends FrontendController
     {
         try {
             $locale = $this->container->get('core.locale')->getRequestLocale();
-            $tag = $request->get('tag');
+            $tag    = $request->get('tag');
 
             $item = $this->get('api.service.tag')->getItemBy(sprintf(
                 'slug = "%s" and (locale = "%s" OR locale IS NULL)',
