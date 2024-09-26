@@ -23,8 +23,9 @@
          * @inheritdoc
          */
         $scope.item = {
-          description: '',
-          parent_id: null
+          description:  '',
+          seo_title:    '',
+          parent_id:    null
         };
 
         /**
