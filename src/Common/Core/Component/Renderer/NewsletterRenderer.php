@@ -95,10 +95,14 @@ class NewsletterRenderer
 
     private function updateTitle($newsletter, $content)
     {
+        // Check first and second block for a content title
+        $title  = $content[0]['items'][0]['title'] ?? $content[1]['items'][0]['title'] ?? null;
         $result = trim($newsletter->title);
-        if ($content[0] && $content[0]['items'][0]) {
-            $result .= " " . trim($content[0]['items'][0]['title']);
+
+        if ($title) {
+            $result .= " " . trim($title);
         }
+
         return $result;
     }
 
