@@ -212,17 +212,23 @@ class CategoryController extends FrontendController
      */
     protected function getItems($params)
     {
-        $service = $this->get('api.service.content');
-        $now     = date('Y-m-d H:i:s');
+        $service     = $this->get('api.service.content');
+        $now         = date('Y-m-d H:i:s');
+        $categoryIds = [$params['category']->id];
+
+        // If "showChildContent" is true, add child category IDs to the list.
+        if (($params['category']->params["showChildContent"] ?? false) == true) {
+            array_push($categoryIds, ...$this->get('api.service.category')->getChildIds($params['category']));
+        }
 
         $response = $service->getList(
             sprintf(
-                'content_status = 1 and in_litter = 0 and category_id = %d ' .
-                'and fk_content_type in [1,5,7,9] ' .
-                'and (starttime is null or starttime < "%s") ' .
-                'and (endtime is null or endtime > "%s") ' .
-                'order by starttime desc limit %d offset %d',
-                $params['category']->id,
+                'content_status = 1 and in_litter = 0 and category_id in [%s] ' .
+                    'and fk_content_type in [1,5,7,9] ' .
+                    'and (starttime is null or starttime < "%s") ' .
+                    'and (endtime is null or endtime > "%s") ' .
+                    'order by starttime desc limit %d offset %d',
+                implode(',', $categoryIds),
                 $now,
                 $now,
                 $params['epp'],

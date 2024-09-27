@@ -213,4 +213,47 @@ class CategoryService extends OrmService
             throw new ApiException($e->getMessage(), $e->getCode());
         }
     }
+
+    /**
+     * Retrieves all child category IDs for a given category, including nested descendants.
+     *
+     * This method queries the database for direct child categories of the provided category
+     * and recursively retrieves the IDs of all their descendants. It checks whether the
+     * child categories should be included based on the "showChildContent" parameter.
+     *
+     * @param Category $item The parent category from which to retrieve child IDs.
+     *
+     * @return array An array of IDs representing all child and descendant categories.
+     */
+    public function getChildIds($item)
+    {
+        try {
+            $childIds = [];
+
+            // Fetch direct child categories based on the parent ID
+            $response = $this->getList(sprintf(
+                'parent_id = %d',
+                $item->id
+            ));
+
+            // Extract the IDs of the direct child categories
+            $directChildIds = array_map(function ($child) {
+                return $child->id;
+            }, $response['items']);
+
+            // Merge the direct child IDs into the result array
+            $childIds = array_merge($childIds, $directChildIds);
+
+            // Recursively retrieve the IDs of each child's descendants if applicable
+            foreach ($response['items'] as $child) {
+                if (($child->params["showChildContent"] ?? false) === true) {
+                    $childIds = array_merge($childIds, $this->getChildIds($child));
+                }
+            }
+
+            return $childIds;
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
+    }
 }
