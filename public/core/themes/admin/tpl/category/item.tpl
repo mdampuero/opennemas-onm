@@ -84,11 +84,11 @@
         <div class="form-group no-margin">
           <div class="checkbox m-t-5">
             <input type="checkbox" id="showChildContent" ng-model="item.params.showChildContent" ng-true-value="'1'" ng-false-value="'0'">
-            <label for="showChildContent" class="form-label">{t}Show child content{/t}</label>
+            <label for="showChildContent" class="form-label">{t}Show content of child categories{/t}</label>
           </div>
           <span class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
             <i class="fa fa-info-circle m-r-5 text-info"></i>
-            {t}If enabled, the contents of the child categories will be displayed.{/t}
+            {t}If enabled, the contents of the child categories will be displayed{/t}
           </span>
         </div>
       </div>
