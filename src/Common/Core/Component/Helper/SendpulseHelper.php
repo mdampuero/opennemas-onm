@@ -255,10 +255,10 @@ class SendpulseHelper
     public function parseNotificationData($data)
     {
         return [
-            'send_count'  => $data['send'],
-            'impressions' => $data['delivered'],
-            'clicks'      => $data['redirect'],
-            'closed'      => $data['unsubscribed']
+            'send_count'  => $data['send'] ?? 0,
+            'impressions' => $data['delivered'] ?? 0,
+            'clicks'      => $data['redirect'] ?? 0,
+            'closed'      => $data['unsubscribed'] ?? 0
         ];
     }
 

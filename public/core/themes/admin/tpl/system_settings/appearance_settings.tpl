@@ -398,18 +398,6 @@
                   </div>
                 </div>
                 <h4>
-                  <i class="fa fa-internet-explorer"></i>
-                  {t}Browser update{/t}
-                </h4>
-                <div class="form-group">
-                  <div class="checkbox">
-                    <input class="form-control" id="browser-update" name="browser-update" ng-false-value="'0'" ng-model="settings.browser_update" ng-true-value="'1'"  type="checkbox"/>
-                    <label class="form-label" for="browser-update">
-                      {t}Notify users that they should update their browser{/t}
-                    </label>
-                  </div>
-                </div>
-                <h4>
                   <i class="fa fa-list"></i>
                   {t}Listing{/t}
                 </h4>
