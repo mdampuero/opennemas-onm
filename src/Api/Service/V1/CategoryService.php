@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -230,27 +231,25 @@ class CategoryService extends OrmService
         try {
             $childIds = [];
 
-            // Fetch direct child categories based on the parent ID
-            $response = $this->getList(sprintf(
+            // Retrieve the list of child categories based on the parent ID
+            $oql = sprintf(
                 'parent_id = %d',
                 $item->id
-            ));
+            );
+            $response = $this->getList($oql);
 
-            // Extract the IDs of the direct child categories
-            $directChildIds = array_map(function ($child) {
-                return $child->id;
-            }, $response['items']);
-
-            // Merge the direct child IDs into the result array
-            $childIds = array_merge($childIds, $directChildIds);
-
-            // Recursively retrieve the IDs of each child's descendants if applicable
+            // Iterate through each child category and collect their IDs
             foreach ($response['items'] as $child) {
-                if (($child->params["showChildContent"] ?? false) === true) {
+                // Add the current child's ID to the result array
+                $childIds[] = $child->id;
+
+                // If 'showChildContent' is enabled, recursively collect IDs of child categories
+                if (($child->params["showChildContent"] ?? false) == true) {
                     $childIds = array_merge($childIds, $this->getChildIds($child));
                 }
             }
 
+            // Return the array of collected child IDs
             return $childIds;
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), $e->getCode());
