@@ -232,7 +232,7 @@ class CategoryService extends OrmService
             $childIds = [];
 
             // Retrieve the list of child categories based on the parent ID
-            $oql = sprintf(
+            $oql      = sprintf(
                 'parent_id = %d',
                 $item->id
             );
