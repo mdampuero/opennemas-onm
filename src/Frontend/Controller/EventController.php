@@ -284,5 +284,8 @@ class EventController extends FrontendController
         }
 
         $params['contents'] = $items;
+
+        // TODO: Remove this hack and update variable in templates
+        $params['tag'] = $params['item']->name;
     }
 }
