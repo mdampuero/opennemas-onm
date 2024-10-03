@@ -4,7 +4,7 @@
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded' : expanded.seo }">
   <div class="form-group no-margin">
-      {include file="ui/component/input/text.tpl" iField="seo_title" iRequired=false iTitle="{t}Title for SEO{/t}" iValidation=false iHelp="{t}Write the SEO title for this article{/t}"}
-      {include file="ui/component/input/text.tpl" iField="seo_description" iRequired=false iTitle="{t}Description for SEO{/t}" iValidation=false iHelp="{t}Write the SEO description for this article{/t}" }
+      {include file="ui/component/input/text.tpl" iField="seo_title" iRequired=false iTitle="{t}Title for SEO{/t}" iValidation=false iHelp="{t}Write the SEO title for this content{/t}"}
+      {include file="ui/component/input/text.tpl" iField="seo_description" iRequired=false iTitle="{t}Description for SEO{/t}" iValidation=false iHelp="{t}Write the SEO description for this content{/t}" }
   </div>
 </div>
