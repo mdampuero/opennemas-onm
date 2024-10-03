@@ -216,10 +216,8 @@ class CategoryController extends FrontendController
         $now         = date('Y-m-d H:i:s');
         $categoryIds = [$params['category']->id];
 
-        // If "showChildContent" is true, add child category IDs to the list.
-        if (($params['category']->params["showChildContent"] ?? false) == true) {
-            array_push($categoryIds, ...$this->get('api.service.category')->getChildIds($params['category']));
-        }
+        // Retrieve and accumulate the IDs of all child categories and their descendants
+        array_push($categoryIds, ...$this->get('api.service.category')->getChildIds($params['category']));
 
         $response = $service->getList(
             sprintf(

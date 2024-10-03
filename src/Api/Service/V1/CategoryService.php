@@ -220,11 +220,17 @@ class CategoryService extends OrmService
      *
      * This method queries the database for direct child categories of the provided category
      * and recursively retrieves the IDs of all their descendants. It checks whether the
-     * child categories should be included based on the "showChildContent" parameter.
+     * child categories' content should be shown in the parent category based on the
+     * "showContentInParent" flag.
+     *
+     * If the "showContentInParent" flag is set to true for a child category, the method
+     * will include that category's ID and also recursively retrieve the IDs of its descendants.
+     * Otherwise, the category and its descendants will be skipped.
      *
      * @param Category $item The parent category from which to retrieve child IDs.
      *
-     * @return array An array of IDs representing all child and descendant categories.
+     * @return array An array of IDs representing all child and descendant categories that should
+     *               have their content displayed in the parent category.
      */
     public function getChildIds($item)
     {
@@ -240,12 +246,10 @@ class CategoryService extends OrmService
 
             // Iterate through each child category and collect their IDs
             foreach ($response['items'] as $child) {
-                // Add the current child's ID to the result array
-                $childIds[] = $child->id;
-
-                // If 'showChildContent' is enabled, recursively collect IDs of child categories
-                if (($child->params["showChildContent"] ?? false) == true) {
-                    $childIds = array_merge($childIds, $this->getChildIds($child));
+                if (($child->params["showContentInParent"] ?? false) == true) {
+                    // Add the current child's ID to the result array
+                    $childIds[] = $child->id;
+                    $childIds   = array_merge($childIds, $this->getChildIds($child));
                 }
             }
 
