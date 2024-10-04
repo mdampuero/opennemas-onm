@@ -81,7 +81,7 @@
             {t}If enabled, the category main page needs to be manually updated{/t}
           </span>
         </div>
-        <div class="form-group no-margin">
+        <div class="form-group no-margin" ng-if="item.parent_id">
           <div class="checkbox m-t-5">
             <input type="checkbox" id="showContentInParent" ng-model="item.params.showContentInParent" ng-true-value="'1'" ng-false-value="'0'">
             <label for="showContentInParent" class="form-label">{t}Show content in parent category{/t}</label>
