@@ -494,7 +494,7 @@ class OrmService implements Service
 
             $item = $this->getItem($id);
 
-            //Clone the item to check before persisting in case the cache needs to be cleared with outdated data
+            // Clone the item to check before persisting in case the cache needs to be cleared with outdated data
             $itemOldData = clone $item;
 
             // Store last changed date before update in order to find the item on sitemaps
