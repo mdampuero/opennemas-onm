@@ -205,7 +205,6 @@
           $scope.childs    = $scope.filterChilds($scope.parents);
           $scope.localizableDrag = angular.copy($scope.menuData);
           $scope.dragables = $scope.filterDragables($scope.localizableDrag);
-
           $scope.linkData  = [ Object.assign({}, $scope.defaultLink) ];
           $scope.last      = $scope.getLastIndex($scope.data.item.menu_items);
         };
@@ -684,6 +683,31 @@
           }
 
           $scope.dragables = $scope.filterDragables($scope.localizableDrag);
+        });
+
+        $scope.$watch('criteria.tag', function(newValue, oldValue) {
+          if (newValue && newValue.length > 0) {
+            // Tag demo
+            const tagDump = {
+              pk_item: null,
+              pk_menu: null,
+              title: 'megabanner',
+              type: 'tags',
+              link_name: 'megabanner',
+              pk_father: 0,
+              position: 0,
+              referenceId: newValue,
+              locale: 'es_ES'
+            };
+
+            // Agregar la etiqueta al array tags dentro de localizableDrag
+            if (!$scope.localizableDrag.tags) {
+              $scope.localizableDrag.tags = [];
+            }
+            $scope.localizableDrag.tags.push(tagDump);
+
+            $scope.dragables = $scope.filterDragables($scope.localizableDrag);
+          }
         });
 
         /**

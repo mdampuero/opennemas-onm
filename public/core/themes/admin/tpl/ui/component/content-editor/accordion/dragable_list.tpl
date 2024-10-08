@@ -11,6 +11,13 @@
     <input class="list_search_bar" ng-model="search['{$iType}']" type="search">
   </div>
 {/if}
+{if $iSearchTag}
+    <onm-tags-input class="hidden-xs ng-cloak m-r-10 quicklinks"
+      ng-model="criteria.tag" hide-generate="true" selection-only="true"
+      generate-from="false" ignoreLocale="false" max-results="5" max-tags="1"
+      filter="true" placeholder="{t}Search by tag{/t}"
+    />
+{/if}
   <div class="form-group no-margin menu-dragable-accordion">
     <div ng-if="{$iData}.length > 0" class="menu-items ng-cloak" ui-tree="treeOptions" data-clone-enabled="true" data-nodrop-enabled="true" data-max-depth="1">
       <ol ui-tree-nodes="" ng-model={$iData}>

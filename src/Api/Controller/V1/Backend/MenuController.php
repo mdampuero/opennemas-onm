@@ -125,7 +125,7 @@ class MenuController extends ApiController
             'internal'         => $this->getModulePages(),
             'static'           => $this->getStaticPages(),
             'syncBlogCategory' => $this->getSyncSites(),
-            'tags'             => $this->getTagsByOQL(),
+            'tags'             => [], // $this->getTagsByOQL(),
             'keys'             => $this->getL10nKeys(),
             'multilanguage'    => in_array(
                 'es.openhost.module.multilanguage',
@@ -141,7 +141,7 @@ class MenuController extends ApiController
         $oql = '';
 
         try {
-            $response = $this->get('api.service.tag')->getList($oql);
+            $response = $this->get('api.service.tag')->getList($oql); // +60.000 etiquetas
 
             return array_map(function ($a) {
                 return [
