@@ -492,7 +492,9 @@ class OrmService implements Service
             $data = $this->em->getConverter($this->entity)
                 ->objectify($data);
 
-            $item        = $this->getItem($id);
+            $item = $this->getItem($id);
+
+            //Clone the item to check before persisting in case the cache needs to be cleared with outdated data
             $itemOldData = clone $item;
 
             // Store last changed date before update in order to find the item on sitemaps
