@@ -214,10 +214,25 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeVarnishCacheForContent(Event $event)
     {
-        $item   = $event->getArgument('item');
-        $action = $event->getArgument('action');
+        $item        = $event->getArgument('item');
+        $itemOldData = $event->hasArgument('item_old_data') ? $event->getArgument('item_old_data') : null;
+        $action      = $event->getArgument('action');
 
         $items = !is_array($item) ? [ $item ] : $item;
+
+        // It checks if the category, author, or tags of a content are changed
+        if ($itemOldData &&
+            (
+                $items[0]->categories != $itemOldData->categories ||
+                $items[0]->fk_author != $itemOldData->fk_author ||
+                (
+                    count(array_diff($items[0]->tags, $itemOldData->tags)) ||
+                    count(array_diff($itemOldData->tags, $items[0]->tags))
+                )
+            )
+        ) {
+            $items[] = $itemOldData;
+        }
 
         foreach ($items as $item) {
             try {
@@ -673,7 +688,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $lastChanged = !is_array($lastChanged) ? [ $lastChanged ] : $lastChanged;
         $content     = !is_array($content) ? [ $content ] : $content;
 
-        foreach ($lastChanged as $key => $value) {
+        foreach ($lastChanged as $value) {
             if (empty($value)
             || !in_array($content[0]->content_type_name, $sh->getTypes($sh->getSettings(), ['tag']))
             || $now->format('Y-m') == $value->format('Y-m')) {

@@ -492,7 +492,8 @@ class OrmService implements Service
             $data = $this->em->getConverter($this->entity)
                 ->objectify($data);
 
-            $item = $this->getItem($id);
+            $item        = $this->getItem($id);
+            $itemOldData = clone $item;
 
             // Store last changed date before update in order to find the item on sitemaps
             $lastChanged = $item->changed;
@@ -502,10 +503,11 @@ class OrmService implements Service
             $this->em->persist($item, $item->getOrigin());
 
             $this->dispatcher->dispatch($this->getEventName('updateItem'), [
-                'action'       => __METHOD__,
-                'id'           => $id,
-                'item'         => $item,
-                'last_changed' => $lastChanged
+                'action'        => __METHOD__,
+                'id'            => $id,
+                'item'          => $item,
+                'item_old_data' => $itemOldData,
+                'last_changed'  => $lastChanged
             ]);
         } catch (\Exception $e) {
             throw new UpdateItemException($e->getMessage());
