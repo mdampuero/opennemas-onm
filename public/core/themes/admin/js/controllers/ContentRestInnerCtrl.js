@@ -2,9 +2,9 @@
  * Handle actions for article inner.
  */
 angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
-  '$controller', '$uibModal', '$scope', 'cleaner',
+  '$controller', '$uibModal', '$scope', 'cleaner', 'http',
   'messenger', 'routing', '$timeout', 'webStorage', '$window', 'translator',
-  function($controller, $uibModal, $scope, cleaner,
+  function($controller, $uibModal, $scope, cleaner, http,
       messenger, routing, $timeout, webStorage, $window, translator) {
     'use strict';
 
@@ -312,6 +312,103 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
           $scope.sendWPNotification(item, createNotification);
         }
       });
+    };
+
+    /**
+     * @function sendPressClipping
+     * @memberof ContentRestInnerCtrl
+     *
+     * @description
+     *  Send a PressClipping item for CEDRO
+     */
+    $scope.sendPressClipping = function(item) {
+      // Ensure pressclipping is defined as an array and hasn't been corrupted
+      if (!Array.isArray($scope.data.item.pressclipping)) {
+        $scope.data.item.pressclipping = [];
+      }
+
+      // Determine the appropriate publication date
+      var date = $scope.item.starttime < $window.moment().format('YYYY-MM-DD HH:mm:ss') ?
+        $window.moment().format('YYYY-MM-DD HH:mm:ss') :
+        $scope.item.starttime;
+
+      var featured = $scope.getFeaturedMedia($scope.item, 'featured_frontpage');
+
+      // Add the new press clipping to the array
+      $scope.data.item.pressclipping.push({
+        title: item.title,
+        subtitle: item.description,
+        author: item.fk_author,
+        pubDate: date,
+        body: item.body,
+        category: item.categories,
+        image: $scope.data.extra.base_url + '/' + featured.path,
+        articleID: item.pk_content,
+        articleURL: $scope.getFrontendUrl(item)
+      });
+
+      // Define the API route
+      var route = {
+        name: 'api_v1_backend_pressclipping_upload_data',
+      };
+
+      // Send the data to the API
+      var data = $scope.data.item.pressclipping;
+      var date = new Date();
+
+      http.post(route, data).then(
+        function() {
+          $scope.data.item.pressclipping_sended = $window.moment.utc($window.moment(date)).format('YYYY-MM-DD HH:mm:ss');
+          $scope.data.item.pressclipping_status = 'Sended';
+          $scope.save();
+        },
+        function() {
+          $scope.data.item.pressclipping_sended = $window.moment.utc($window.moment(date)).format('YYYY-MM-DD HH:mm:ss');
+          $scope.save();
+        }
+      );
+
+      delete $scope.data.item.pressclipping;
+    };
+
+    /**
+     * @function removePressClipping
+     * @memberof ContentRestInnerCtrl
+     *
+     * @description
+     *  Remove a PressClipping item for CEDRO
+     */
+    $scope.removePressClipping = function(articleID) {
+      // Ensure pressclipping is defined as an array and hasn't been corrupted
+      if (!Array.isArray($scope.data.item.pressclipping)) {
+        $scope.data.item.pressclipping = [];
+      }
+
+      // Add the new press clipping to the array
+      $scope.data.item.pressclipping.push({
+        articleID: articleID,
+      });
+
+      // Define the API route
+      var route = {
+        name: 'api_v1_backend_pressclipping_remove_data',
+      };
+
+      // Send the data to the API
+      var data = $scope.data.item.pressclipping;
+
+      http.post(route, data).then(
+        function() {
+          $scope.data.item.pressclipping_sended = null;
+          $scope.data.item.pressclipping_status = null;
+          $scope.save();
+        },
+        function() {
+          $scope.statusPressclipping = false;
+        }
+      );
+
+      delete $scope.data.item.pressclipping;
     };
 
     /**
