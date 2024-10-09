@@ -81,6 +81,16 @@
             {t}If enabled, the category main page needs to be manually updated{/t}
           </span>
         </div>
+        <div class="form-group no-margin" ng-if="item.parent_id">
+          <div class="checkbox m-t-5">
+            <input type="checkbox" id="showContentInParent" ng-model="item.params.showContentInParent" ng-true-value="'1'" ng-false-value="'0'">
+            <label for="showContentInParent" class="form-label">{t}Show contents in parent category{/t}</label>
+          </div>
+          <span class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
+            <i class="fa fa-info-circle m-r-5 text-info"></i>
+            {t}If enabled, the contents of this category will also be displayed in its parent category{/t}
+          </span>
+        </div>
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.category }" ng-click="expanded.category = !expanded.category">
         <i class="fa fa-bookmark m-r-10"></i>{t}Subsection of{/t}
