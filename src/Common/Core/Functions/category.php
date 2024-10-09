@@ -88,9 +88,9 @@ function get_category_cover($item = null) : ?\Common\Model\Entity\Content
  *
  * @return ?string The category name if present. Null otherwise.
  */
-function get_category_name($item = null) : ?string
+function get_category_name($item = null, $displayHeader1 = false) : ?string
 {
-    return getService('core.helper.category')->getCategoryName($item);
+    return getService('core.helper.category')->getCategoryName($item, $displayHeader1);
 }
 
 /**
