@@ -124,11 +124,13 @@ class CategoryController extends FrontendController
 
             // Get all contents for this frontpage
             list($pagination, $articles, $related) = unserialize(
-                utf8_decode(
+                mb_convert_encoding(
                     $cm->getUrlContent(
                         $wsUrl . '/ws/frontpages/allcontentblog/' . $slug . '/' . $page,
                         true
-                    )
+                    ),
+                    'ISO-8859-1',
+                    'UTF-8'
                 )
             );
 
