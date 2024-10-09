@@ -81,12 +81,13 @@ function get_category_cover($item = null) : ?\Common\Model\Entity\Content
 }
 
 /**
- * Returns the category name for the provided item.
+ * Returns the category name for the provided item, optionally displaying the header.
  *
- * @param Content $item The item to get category name for. If not provided, the
- *                      function will try to search the item in the template.
+ * @param Content|null $item The item to get the category name for. If not provided,
+ *                           the function will try to search the item in the template.
+ * @param bool $displayHeader1 Optional. If true, the header for the category will be displayed.
  *
- * @return ?string The category name if present. Null otherwise.
+ * @return ?string The category name if present; null otherwise.
  */
 function get_category_name($item = null, $displayHeader1 = false) : ?string
 {
