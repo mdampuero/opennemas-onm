@@ -89,6 +89,11 @@
           {include file="ui/component/content-editor/accordion/webpush.tpl"}
         {/if}
       {/is_module_activated}
+      {is_module_activated name="es.openhost.module.pressclipping"}
+        {if !empty({setting name=pressclipping_apikey})}
+          {include file="ui/component/content-editor/accordion/pressclipping.tpl"}
+        {/if}
+      {/is_module_activated}
     </div>
   </div>
   <div class="grid simple">
