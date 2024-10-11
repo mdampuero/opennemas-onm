@@ -37,7 +37,7 @@
             required:      '=',
             selectionOnly: '=',
             filter:        '=',
-            exclude: '='
+            exclude:       '='
           },
           template: function() {
             return '<div class="tags-input-buttons">' +
@@ -69,7 +69,7 @@
               '<span class="badge badge-default pull-right" ng-class="{ \'badge-danger\': !$parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] }" ng-show="!$parent.$parent.$parent.$parent.$parent.isNewTag(data)">' +
                 '<strong>[% $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] ? $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] : 0 %]</strong>' +
               '</span>' +
-            '</script';
+            '</script>';
           }
         };
       }
@@ -260,6 +260,7 @@
         $scope.list = function(query) {
           var criteria = {
             slug: query,
+            locale: $scope.locale,
             epp: $scope.maxResults,
             orderBy: { 'length(name)': 'asc', name: 'asc' },
             page: 1
