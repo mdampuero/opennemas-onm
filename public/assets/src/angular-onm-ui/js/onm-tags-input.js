@@ -260,11 +260,14 @@
         $scope.list = function(query) {
           var criteria = {
             slug: query,
-            locale: $scope.locale,
             epp: $scope.maxResults,
             orderBy: { 'length(name)': 'asc', name: 'asc' },
             page: 1
           };
+
+          if ($scope.locale) {
+            criteria.locale = $scope.locale;
+          }
 
           return http.get({
             name: 'api_v1_backend_tools_slug',
