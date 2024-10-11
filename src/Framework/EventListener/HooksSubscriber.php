@@ -220,24 +220,10 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $items = !is_array($item) ? [ $item ] : $item;
 
-        // It checks if the category, author, or tags of a content are changed
-        if ($itemOldData &&
-            (
-                $items[0]->categories != $itemOldData->categories ||
-                $items[0]->fk_author != $itemOldData->fk_author ||
-                (
-                    count(array_diff($items[0]->tags, $itemOldData->tags)) ||
-                    count(array_diff($itemOldData->tags, $items[0]->tags))
-                )
-            )
-        ) {
-            $items[] = $itemOldData;
-        }
-
         foreach ($items as $item) {
             try {
                 $this->container->get(sprintf('api.helper.cache.%s', $item->content_type_name))
-                    ->deleteItem($item, [ 'action' => $action ]);
+                    ->deleteItem($item, [ 'action' => $action, 'itemOldData' => $itemOldData ]);
             } catch (ServiceNotFoundException $e) {
                 $this->container->get(sprintf('api.helper.cache.content'))
                     ->deleteItem($item, [ 'action' => $action ]);
