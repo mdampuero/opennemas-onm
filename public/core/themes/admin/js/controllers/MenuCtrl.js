@@ -727,9 +727,15 @@
          */
         $scope.$watch('menu.tag', function(newValue, oldValue) {
           if (newValue && newValue.length > 0) {
-            const tagId = newValue;
+            var addedTags = newValue.filter(function(tagId) {
+              return !oldValue || oldValue.indexOf(tagId) === -1;
+            });
 
-            $scope.addTagToDragables(tagId);
+            if (addedTags.length > 0) {
+              const newTagId = addedTags[0];
+
+              $scope.addTagToDragables(newTagId);
+            }
           }
         });
 
