@@ -18,8 +18,8 @@
      *   Handle actions for article inner.
      */
     .controller('MenuCtrl', [
-      '$controller', '$scope', '$timeout',
-      function($controller, $scope, $timeout) {
+      '$controller', '$scope', '$timeout', 'http',
+      function($controller, $scope, $timeout, http) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
@@ -685,28 +685,51 @@
           $scope.dragables = $scope.filterDragables($scope.localizableDrag);
         });
 
-        $scope.$watch('criteria.tag', function(newValue, oldValue) {
-          if (newValue && newValue.length > 0) {
-            // Tag demo
-            const tagDump = {
-              pk_item: null,
-              pk_menu: null,
-              title: 'megabanner',
-              type: 'tags',
-              link_name: 'megabanner',
-              pk_father: 0,
-              position: 0,
-              referenceId: newValue,
-              locale: 'es_ES'
-            };
+        /**
+         * Fetches a tag by its ID and adds it to the dragables.tags array.
+         * @param {number} tagId - The ID of the tag to fetch.
+         */
+        $scope.addTagToDragables = function(tagId) {
+          http.get({
+            name: 'api_v1_backend_menu_get_tag',
+            params: { id: tagId }
+          }).then(function(response) {
+            $scope.loading = false;
 
-            // Agregar la etiqueta al array tags dentro de localizableDrag
-            if (!$scope.localizableDrag.tags) {
-              $scope.localizableDrag.tags = [];
+            if (response.data) {
+              const tagData = response.data;
+
+              if (Array.isArray(tagData) && tagData.length > 0) {
+                const tag = tagData[0];
+
+                $scope.dragables.tags.push({
+                  pk_item: null,
+                  pk_menu: null,
+                  title: tag.title,
+                  type: 'tags',
+                  link_name: tag.slug,
+                  pk_father: 0,
+                  position: 0,
+                  referenceId: tag.id,
+                  locale: tag.locale || null
+                });
+              }
             }
-            $scope.localizableDrag.tags.push(tagDump);
+          });
+        };
 
-            $scope.dragables = $scope.filterDragables($scope.localizableDrag);
+        /**
+         * Watches for changes in the menu.tag value and adds the corresponding
+         * tag to dragables.tags when a new value is set.
+         *
+         * @param {Array} newValue - The new value of the menu.tag, expected to be an array containing the tag ID(s).
+         * @param {Array} oldValue - The previous value of the menu.tag.
+         */
+        $scope.$watch('menu.tag', function(newValue, oldValue) {
+          if (newValue && newValue.length > 0) {
+            const tagId = newValue;
+
+            $scope.addTagToDragables(tagId);
           }
         });
 

@@ -26,7 +26,7 @@
       {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="blog-category" iIcon="fa fa-bookmark" iSearchModel="search_categories" iName="{t}Automatic categories{/t}" iData="dragables['blog-category']" iFilter=true}
       {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="static" iIcon="fa fa-file" iSearchModel="search_pages" iName="{t}Static pages{/t}" iData="dragables.static" iFilter=true}
       {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="false" iFilterData="filterData" iType="internal" iIcon="fa fa-cube" iSearchModel="search_modules" iName="{t}Modules{/t}" iData="dragables.internal" iFilter=true}
-      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="tags" iIcon="fa fa-tags" iName="{t}Tags{/t}" iData="tags" iSearchTag=true iFilter=true}
+      {include file="ui/component/content-editor/accordion/dragable_list.tpl" iShowSlug="true" iFilterData="filterData" iType="tags" iIcon="fa fa-tags" iName="{t}Tags{/t}" iData="dragables.tags" iSearchTag=true iFilter=true}
       {is_module_activated name="SYNC_MANAGER"}
         {include file="ui/component/content-editor/accordion/dragable_list.tpl" iFilterData="filterData" iType="syncBlogCategory" iIcon="fa fa-exchange" iSearchModel="search_sites" iName="{t}Synchronized sites{/t}" iFilter=false iData="dragables.syncBlogCategory"}
       {/is_module_activated}

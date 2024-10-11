@@ -11,6 +11,8 @@ namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 /**
  * Displays, saves, modifies and removes menus.
  */
@@ -125,7 +127,7 @@ class MenuController extends ApiController
             'internal'         => $this->getModulePages(),
             'static'           => $this->getStaticPages(),
             'syncBlogCategory' => $this->getSyncSites(),
-            'tags'             => [], // $this->getTagsByOQL(),
+            'tags'             => [],
             'keys'             => $this->getL10nKeys(),
             'multilanguage'    => in_array(
                 'es.openhost.module.multilanguage',
@@ -136,14 +138,24 @@ class MenuController extends ApiController
         return $params;
     }
 
-    private function getTagsByOQL()
+    /**
+     * Retrieves tags based on the provided ID using OQL.
+     *
+     * @param int $id The ID of the tag to retrieve.
+     * @return JsonResponse A JSON response containing the tag data or an empty JSON response on error.
+     * @throws InvalidArgumentException If the provided ID is empty.
+     */
+    public function getTagsByOQLAction($id)
     {
-        $oql = '';
-
         try {
-            $response = $this->get('api.service.tag')->getList($oql); // +60.000 etiquetas
+            if (empty($id)) {
+                throw new \InvalidArgumentException();
+            }
 
-            return array_map(function ($a) {
+            $oql = sprintf('id = %s', $id);
+            $response = $this->get('api.service.tag')->getList($oql);
+
+            $tags = array_map(function ($a) {
                 return [
                     'title' => $a->name,
                     'slug'  => $a->slug,
@@ -151,8 +163,10 @@ class MenuController extends ApiController
                     'id'    => $a->id,
                 ];
             }, $response['items']);
+
+            return new JsonResponse($tags);
         } catch (\Exception $e) {
-            return [];
+            return new JsonResponse([]);
         }
     }
 

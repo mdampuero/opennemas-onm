@@ -13,10 +13,9 @@
 {/if}
 {if $iSearchTag}
     <onm-tags-input class="hidden-xs ng-cloak m-r-10 quicklinks"
-      ng-model="criteria.tag" hide-generate="true" selection-only="true"
+      ng-model="menu.tag" hide-generate="true" selection-only="false"
       generate-from="false" ignoreLocale="false" max-results="5" max-tags="1"
-      filter="true" placeholder="{t}Search by tag{/t}"
-    />
+      filter="true" placeholder="{t}Search by tag{/t}"></onm-tags-input>
 {/if}
   <div class="form-group no-margin menu-dragable-accordion">
     <div ng-if="{$iData}.length > 0" class="menu-items ng-cloak" ui-tree="treeOptions" data-clone-enabled="true" data-nodrop-enabled="true" data-max-depth="1">
