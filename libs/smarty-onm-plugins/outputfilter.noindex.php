@@ -9,7 +9,7 @@
  */
 function smarty_outputfilter_noindex($output, $smarty)
 {
-    $pattern     = '/<meta\s+name="robots"\s+content="index,follow"\s*\/>/';
+    $pattern     = '/<meta\s+name="robots"\s+content="index,follow[^"]*"\s*\/?>/i';
     $replacement = '<meta name="robots" content="noindex" />';
 
     // Check for custom content with no-index

@@ -68,6 +68,9 @@
         <div class="m-t-5">
           {include file="ui/component/content-editor/accordion/checkbox.tpl" field="frontpage" title="{t}Suggested for frontpage{/t}"}
         </div>
+        <div class="m-t-5">
+          {include file="ui/component/content-editor/accordion/checkbox.tpl" field="noindex" title="{t}Mark this content to prevent indexing{/t}"}
+        </div>
       </div>
       {is_module_activated name="es.openhost.module.live_blog_posting"}
         {include file="ui/component/content-editor/accordion/live-blog-posting.tpl"}
@@ -86,6 +89,11 @@
           {include file="ui/component/content-editor/accordion/webpush.tpl"}
         {/if}
       {/is_module_activated}
+      {is_module_activated name="es.openhost.module.pressclipping"}
+        {if !empty({setting name=pressclipping_apikey})}
+          {include file="ui/component/content-editor/accordion/pressclipping.tpl"}
+        {/if}
+      {/is_module_activated}
     </div>
   </div>
   <div class="grid simple">
@@ -100,6 +108,8 @@
       {include file="common/component/related-contents/_featured-media.tpl" iRequired="item.showcase" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
       {include file="common/component/related-contents/_related-content.tpl" iName="relatedFrontpage" iTitle="{t}Related in frontpage{/t}"}
       {include file="common/component/related-contents/_related-content.tpl" iName="relatedInner" iTitle="{t}Related in inner{/t}"}
+      {include file="ui/component/content-editor/accordion/seo-input.tpl"}
+      {include file="ui/component/content-editor/accordion/canonical-url.tpl"}
       {include file="ui/component/content-editor/accordion/additional-data.tpl"}
     </div>
   </div>
