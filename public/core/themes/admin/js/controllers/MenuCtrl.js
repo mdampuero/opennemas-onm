@@ -725,7 +725,7 @@
          * @param {Array} newValue - The new value of the menu.tag, expected to be an array containing the tag ID(s).
          * @param {Array} oldValue - The previous value of the menu.tag.
          */
-        $scope.$watch('menu.tag', function(newValue, oldValue) {
+        $scope.$watch('criteria.tag', function(newValue, oldValue) {
           if (newValue && newValue.length > 0) {
             var addedTags = newValue.filter(function(tagId) {
               return !oldValue || oldValue.indexOf(tagId) === -1;
