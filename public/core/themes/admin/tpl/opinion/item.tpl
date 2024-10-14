@@ -71,12 +71,17 @@
         <div class="m-t-5">
           {include file="ui/component/content-editor/accordion/allow_comments.tpl"}
         </div>
+        <div class="m-t-5">
+          {include file="ui/component/content-editor/accordion/checkbox.tpl" field="noindex" title="{t}Mark this content to prevent indexing{/t}"}
+        </div>
       </div>
       {include file="ui/component/content-editor/accordion/author.tpl"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="params.bodyLink" icon="fa-external-link" title="{t}External link{/t}" iRoute="item.params.bodyLink"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
+      {include file="ui/component/content-editor/accordion/seo-input.tpl"}
+      {include file="ui/component/content-editor/accordion/canonical-url.tpl"}
     </div>
   </div>
   <div class="grid simple">

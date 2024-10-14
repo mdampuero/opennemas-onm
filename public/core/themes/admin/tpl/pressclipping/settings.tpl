@@ -10,7 +10,7 @@
               <h4>
                 <a class="no-padding" href="">
                   <i class="fa fa-cog m-r-10"></i>
-                  {t}Pressclipping notifications Configuration{/t}
+                  {t}Pressclipping Configuration{/t}
                 </a>
               </h4>
             </li>

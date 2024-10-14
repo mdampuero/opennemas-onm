@@ -38,14 +38,14 @@
                 ng-show="!item.pressclipping_sended"
                 ng-click="sendPressClipping(item)"
                 type="button">
-          <i class="fa fa-paper-plane m-r-5"></i>{t}SEND PRESSCLIPPING{/t}
+          <i class="fa fa-paper-plane m-r-5"></i>{t}Send to PressClipping{/t}
         </button>
 
         <button class="btn btn-mini btn-block ng-scope m-b-5 btn-danger"
                 ng-show="item.pressclipping_sended"
                 ng-click="removePressClipping(item.pk_content)"
                 type="button">
-          <i class="fa fa-paper-plane m-r-5"></i>{t}REMOVE PRESSCLIPPING{/t}
+          <i class="fa fa-paper-plane m-r-5"></i>{t}Remove from PressClipping{/t}
         </button>
       </div>
     </div>
