@@ -272,6 +272,18 @@
         </div>
       </div>
       <div class="form-group">
+        <label for="header_1" class="form-label">
+          {t}H1 Header{/t}
+        </label>
+        <div class="controls input-with-icon right">
+          <input class="form-control" id="header_1" name="header_1" ng-model="item.header_1">
+        </div>
+        <span class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
+          <i class="fa fa-info-circle m-r-5 text-info"></i>
+          {t}If this field is left empty, the default Title will be displayed.{/t}
+        </span>
+      </div>
+      <div class="form-group">
         <label for="title" class="form-label">
           {t}Seo title{/t}
         </label>

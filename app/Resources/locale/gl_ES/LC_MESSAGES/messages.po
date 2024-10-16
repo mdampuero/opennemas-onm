@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-10 13:43+0000\n"
-"PO-Revision-Date: 2024-10-10 15:53+0200\n"
+"POT-Creation-Date: 2024-10-14 13:06+0000\n"
+"PO-Revision-Date: 2024-10-14 15:08+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -4131,6 +4131,12 @@ msgstr ""
 
 msgid "Menu"
 msgstr "Menú"
+
+msgid "H1 Header"
+msgstr "Cabeceira H1"
+
+msgid "If this field is left empty, the default Title will be displayed."
+msgstr "Se este campo se deixa baleiro, amosarase o Título predeterminado."
 
 msgid "Only empty categories can be deleted"
 msgstr "Só se poden eliminar categorías sen contidos"
