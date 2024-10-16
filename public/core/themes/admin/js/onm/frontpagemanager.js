@@ -101,11 +101,37 @@ window.makeContentProviderAndPlaceholdersSortable = function() {
     connectWith: 'div.placeholder div.content',
     placeholder: 'placeholder-element',
     handle: '.description',
-    update: function() {
+    update: function(event, ui) {
       window.initializePopovers();
     },
-    stop: function() {
-      window.showMessage(window.frontpage_messages.remember_save_positions, 'info', 3, 1234);
+    start: function(event, ui) {
+      this.currentDraggedElement = ui.item[0];
+    },
+    stop: function(event, ui) {
+      var draggedElement = this.currentDraggedElement;
+
+      if (draggedElement) {
+        var actionButtons = jQuery(draggedElement).find('.content-action-buttons');
+
+        if (actionButtons.length) {
+          var dropdownMenu = actionButtons.find('.dropdown-menu');
+
+          if (dropdownMenu.length) {
+            var quickEditLink = dropdownMenu.find('a#quickedit');
+
+            if (quickEditLink.length) {
+              quickEditLink.addClass('disabled-link');
+            }
+          }
+        }
+
+        window.showMessage(
+          window.frontpage_messages.remember_save_positions,
+          'info',
+          3,
+          1234
+        );
+      }
     },
     tolerance: 'pointer'
   }).disableSelection();

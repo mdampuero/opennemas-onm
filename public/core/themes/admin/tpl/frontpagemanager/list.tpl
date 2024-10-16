@@ -401,6 +401,9 @@
 <script type="text/ng-template" id="modal-remove-frontpage">
   {include file="frontpagemanager/modals/_modal_remove_frontpage.tpl"}
 </script>
+<script type="text/ng-template" id="modal-widget-edit">
+  {include file="frontpagemanager/modals/_modal_widget_edit.tpl"}
+</script>
 {/block}
 
 

@@ -230,3 +230,34 @@ div.menu-categories {max-width:70%;}
 .ui-button .ui-icon-closethick, .ui-button:hover .ui-icon-closethick {background:url(/core/themes/admin/images/tb-close.png) top left no-repeat;}
 .ui-sortable-helper {z-index:9999 !important;}
 .ui-widget input {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px;}
+
+/**
+  * Quick Edit Modal
+*/
+
+.modal-lg.custom-height {
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+.modal-lg.custom-height .modal-content {
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+.modal-lg.custom-height .modal-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.modal-lg.custom-height .modal-footer {
+  flex-shrink: 0;
+}
+
+.disabled-link {
+  pointer-events: none;
+  opacity: 0.5;
+  color: gray;
+}
