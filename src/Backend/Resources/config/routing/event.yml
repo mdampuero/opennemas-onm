@@ -19,3 +19,7 @@ backend_events_list:
     defaults: { _controller: BackendBundle:Event:list }
     options:
         expose: true
+
+backend_events_config:
+    path:     /events/config/
+    defaults: { _controller: BackendBundle:Event:config }

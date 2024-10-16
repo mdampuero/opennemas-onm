@@ -17,14 +17,26 @@
 {/block}
 
 {block name="primaryActions"}
-  {acl isAllowed="EVENT_CREATE"}
-    <li class="quicklinks">
-      <a class="btn btn-loading btn-success text-uppercase" href="{url name=backend_event_create}">
-        <span class="fa fa-plus m-r-5"></span>
-        {t}Create{/t}
-      </a>
-    </li>
-  {/acl}
+  <div class="all-actions pull-right">
+    <ul class="nav quick-section">
+      {acl isAllowed="MASTER"}
+        <li class="quicklinks">
+          <a class="btn btn-link" href="{url name=backend_events_config}" class="admin_add" title="{t}Config event module{/t}">
+            <span class="fa fa-cog fa-lg"></span>
+          </a>
+        </li>
+        <li class="quicklinks"><span class="h-seperate"></span></li>
+      {/acl}
+      {acl isAllowed="ARTICLE_CREATE"}
+        <li class="quicklinks">
+            <a class="btn btn-success text-uppercase" href="{url name=backend_event_create}" title="{t}New article{/t}" id="create-button">
+              <i class="fa fa-plus"></i>
+              {t}Create{/t}
+            </a>
+        </li>
+      {/acl}
+    </ul>
+  </div>
 {/block}
 
 {block name="selectedActions"}

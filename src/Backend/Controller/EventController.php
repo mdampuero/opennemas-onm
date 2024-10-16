@@ -100,4 +100,17 @@ class EventController extends BackendController
         } catch (GetListException $e) {
         }
     }
+
+    /**
+     * Handles the configuration for the event manager.
+     *
+     * @return Response          The response object.
+     *
+     * @Security("hasExtension('es.openhost.module.events')
+     */
+    public function configAction()
+    {
+        exit("dsadas");
+        return $this->render('event/config.tpl');
+    }
 }
