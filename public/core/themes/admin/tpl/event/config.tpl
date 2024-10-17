@@ -54,7 +54,7 @@
               <label class="form-label" for="hide_current_events">
                 <span class="checkbox-title">{t}Hide ongoing events{/t}</span>
                 <div class="help">
-                  {t}If set, only events starting the day after the current date will be displayed.{/t}
+                  {t}If enabled, only events that start or end after the current date will be displayed.{/t}
                 </div>
               </label>
             </div>
