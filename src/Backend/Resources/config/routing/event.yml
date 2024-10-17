@@ -11,6 +11,8 @@ backend_event_create:
 backend_event_show:
     path:     /events/{id}/
     defaults: { _controller: BackendBundle:Event:show }
+    requirements:
+        id: \d+
     options:
         expose: true
 

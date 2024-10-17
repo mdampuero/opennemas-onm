@@ -64,4 +64,58 @@ class EventController extends ContentController
             ]
         ]);
     }
+
+    /**
+     * Get the event config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getConfigAction()
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
+
+        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+        $sh = $this->get('core.helper.setting');
+
+        $config = $ds->get('event_settings', []);
+
+        $config = $sh->toBoolean($config, ['hide_current_events']);
+
+        return new JsonResponse([
+            'config' => $config
+        ]);
+    }
+
+    /**
+     * Saves config for events.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveConfigAction(Request $request)
+    {
+        $msg = $this->get('core.messenger');
+        $ds  = $this->get('orm.manager')->getDataSet('Settings', 'instance');
+        $sh  = $this->get('core.helper.setting');
+
+        $config = $request->request->get('config', []);
+        $config = $sh->toBoolean($config, ['hide_current_events']);
+
+        try {
+            $ds->set('event_settings', $config);
+
+            $this->get('core.dispatcher')
+                ->dispatch('events.config');
+
+            $this->get('api.service.redis')->deleteItemByPattern('events-*');
+            $msg->add(_('Settings saved.'), 'success', 200);
+        } catch (\Exception $e) {
+            $msg->add(_('There was an error while saving the settings'), 'error', 400);
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
 }
