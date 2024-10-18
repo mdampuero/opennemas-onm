@@ -24,17 +24,13 @@ class ReplaceUrlFilter extends Filter
 
         preg_match_all($pattern, $str, $matches);
 
-        $tokens   = $matches['slug'] ?? [];
+        $tokens   = $matches['id'] ?? $matches['slug'] ?? [];
         $oldurls  = $matches['0'] ?? [];
-        $combined = array_combine($tokens, $oldurls);
+        $combined = array_unique(
+            array_combine($oldurls, $tokens)
+        );
 
-        if (array_key_exists('id', $matches)) {
-            $tokens = $matches['id'];
-        }
-
-        $tokens = array_unique($tokens);
-
-        foreach ($combined as $token => $oldurl) {
+        foreach ($combined as $oldurl => $token) {
             list($translation, $foundAt) =
                 $this->getTranslation($token);
 
