@@ -29,7 +29,7 @@
       {/acl}
       {acl isAllowed="EVENT_CREATE"}
         <li class="quicklinks">
-            <a class="btn btn-success text-uppercase" href="{url name=backend_event_create}" title="{t}New article{/t}" id="create-button">
+            <a class="btn btn-success text-uppercase" href="{url name=backend_event_create}" title="{t}Create{/t}" id="create-button">
               <i class="fa fa-plus"></i>
               {t}Create{/t}
             </a>
