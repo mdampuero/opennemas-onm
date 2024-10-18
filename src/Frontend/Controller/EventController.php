@@ -137,7 +137,10 @@ class EventController extends FrontendController
      */
     protected function hydrateList(array &$params = []) : void
     {
-        $date = gmdate('Y-m-d H:i:s');
+        $date          = gmdate('Y-m-d H:i:s');
+        $eventSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('event_settings', false);
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
@@ -146,23 +149,34 @@ class EventController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $response = $this->get('api.service.content')->getListBySql(sprintf(
+        $oql = sprintf(
             'select * from contents '
             . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
             . 'and cm1.meta_name = "event_start_date" '
             . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
             . 'and cm2.meta_name = "event_end_date" '
             . 'where content_type_name="event" and content_status=1 and in_litter=0 '
-            . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))'
+            . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s")) '
             . 'and (starttime is null or starttime < "%s") '
-            . 'and (endtime is null or endtime > "%s") '
-            . 'order by cm1.meta_value asc',
+            . 'and (endtime is null or endtime > "%s") ',
             gmdate('Y-m-d'),
             gmdate('Y-m-d'),
             gmdate('Y-m-d'),
             $date,
             $date
-        ));
+        );
+
+        if ($eventSettings["hide_current_events"] ?? false) {
+            $oql .= sprintf(
+                'and (cm1.meta_value > "%s" and cm2.meta_value > "%s") ',
+                gmdate('Y-m-d'),
+                gmdate('Y-m-d')
+            );
+        }
+
+        $oql .= 'order by cm1.meta_value asc';
+
+        $response = $this->get('api.service.content')->getListBySql($oql);
 
         $items = $response['items'];
         $total = count($items);
