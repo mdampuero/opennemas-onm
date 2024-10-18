@@ -27,7 +27,7 @@
         </li>
         <li class="quicklinks"><span class="h-seperate"></span></li>
       {/acl}
-      {acl isAllowed="ARTICLE_CREATE"}
+      {acl isAllowed="EVENT_CREATE"}
         <li class="quicklinks">
             <a class="btn btn-success text-uppercase" href="{url name=backend_event_create}" title="{t}New article{/t}" id="create-button">
               <i class="fa fa-plus"></i>
