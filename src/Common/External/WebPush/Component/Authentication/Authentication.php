@@ -102,7 +102,10 @@ class Authentication
 
 
         if ($this->configProvider->isTokenRequired()) {
-            $this->tokenProvider->setAccessToken($body['access_token'], $body['expires_in']);
+            // Send Pulse returns the expire_in value 3600 (1h)
+            // We need to reduce it to avoid unauthorized requests
+            // when running the webpush command
+            $this->tokenProvider->setAccessToken($body['access_token'], $body['expires_in'] * 0.9);
         }
 
         if (empty($body)) {
