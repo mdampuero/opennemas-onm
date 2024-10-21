@@ -16,22 +16,21 @@ class ReplaceUrlFilter extends Filter
     public function filter($str)
     {
         $pattern  = $this->getParameter('pattern');
-        $prefix   = $this->getParameter('prefix', '');
-        $sufix    = $this->getParameter('sufix', '');
+        $prefix   = $this->getParameter('prefix');
+        $sufix    = $this->getParameter('sufix');
+        $useUrl   = $this->getParameter('useUrl');
         $instance = $this->container->get('core.instance')->internal_name;
         $tokens   = [];
 
         preg_match_all($pattern, $str, $matches);
 
-        $tokens = array_key_exists('slug', $matches) ? $matches['slug'] : [];
+        $tokens   = $matches['id'] ?? $matches['slug'] ?? [];
+        $oldurls  = $matches['0'] ?? [];
+        $combined = array_unique(
+            array_combine($oldurls, $tokens)
+        );
 
-        if (array_key_exists('id', $matches)) {
-            $tokens = $matches['id'];
-        }
-
-        $tokens = array_unique($tokens);
-
-        foreach ($tokens as $token) {
+        foreach ($combined as $oldurl => $token) {
             list($translation, $foundAt) =
                 $this->getTranslation($token);
 
@@ -55,7 +54,9 @@ class ReplaceUrlFilter extends Filter
 
             $url = $this->container->get('core.decorator.url')->prefixUrl($url);
 
-            $str = str_replace($prefix . $token . $sufix, $url, $str);
+            $str = $useUrl
+                ? str_replace($oldurl, $url, $str)
+                : str_replace($prefix . $token . $sufix, $url, $str);
         }
 
         return $str;
