@@ -124,8 +124,8 @@ class MetaHelper
             'category_seo_name'    => $category->seo_title ?? '',
             'category_description' => $category->description,
             'tag_name'             => $content->name ?? '',
-            'tag_seo_name'         => $content->seo_title ?? '',
-            'tag_description'      => $content->description ?? '',
+            'tag_seo_name'         => htmlspecialchars(trim(strip_tags($content->seo_title))) ?? '',
+            'tag_description'      => htmlspecialchars(trim(strip_tags($content->description))) ?? '',
             'author_name'          => $ah->getAuthorName($content),
             'author_description'   => $ah->getAuthorBioSummary($content) ?? $ah->getAuthorBioBody($content),
         ];
