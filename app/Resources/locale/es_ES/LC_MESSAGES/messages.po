@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-14 13:06+0000\n"
-"PO-Revision-Date: 2024-10-14 15:08+0200\n"
+"POT-Creation-Date: 2024-10-21 09:54+0000\n"
+"PO-Revision-Date: 2024-10-21 11:55+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1615,7 +1615,7 @@ msgid "Twitter"
 msgstr "Twitter"
 
 msgid "Instagram"
-msgstr "Instragram"
+msgstr "Instagram"
 
 msgid "Whatsapp"
 msgstr "Whatsapp"
@@ -2201,9 +2201,6 @@ msgstr "Enlace"
 msgid "No author"
 msgstr "Sin autor"
 
-msgid "Canonical URL"
-msgstr "URL canónica"
-
 msgid "No sector"
 msgstr "Sin sector"
 
@@ -2291,6 +2288,12 @@ msgstr "Descripción para SEO"
 
 msgid "Write the SEO description for this content"
 msgstr "Escribe la descripción SEO para este contenido"
+
+msgid "Write the Canonincal URL for this content"
+msgstr "Escribe la URL canónica para este contenido"
+
+msgid "Mark this content to prevent indexing"
+msgstr "Marque este contenido para evitar la indexación"
 
 msgid "Webpush Notifications"
 msgstr "Notificaciones Webpush"
@@ -3558,6 +3561,12 @@ msgstr "Imagen de la izquierda"
 msgid "Default"
 msgstr "Por defecto"
 
+msgid "Edit Widget"
+msgstr "Editar widget"
+
+msgid "Close"
+msgstr "Cerrar"
+
 msgid "Please, remember save positions after finish."
 msgstr "Por favor, recuerda guardar posiciones antes de terminar."
 
@@ -3629,9 +3638,6 @@ msgstr "Cambiar la disposición para esta portada"
 
 msgid "Active"
 msgstr "Activo"
-
-msgid "Close"
-msgstr "Cerrar"
 
 msgid "Domain Mapping"
 msgstr "Redirección de dominio"
@@ -4018,9 +4024,6 @@ msgstr "Notas"
 
 msgid "Remove element from this frontpage"
 msgstr "Eliminar elemento de esta portada"
-
-msgid "Mark this content to prevent indexing"
-msgstr "Marque este contenido para evitar la indexación"
 
 msgid "Open"
 msgstr "Abierta"
@@ -6418,14 +6421,17 @@ msgstr "Imágenes"
 msgid "NewsStand"
 msgstr "Portadas de papel"
 
-msgid "IntelligentWidget"
-msgstr "IntelligentWidget"
+msgid "on new tab"
+msgstr "en nueva pestaña"
 
 msgid "Parameter name"
 msgstr "Nombre del parámetro"
 
 msgid "Parameter value"
 msgstr "Valor de parámetro"
+
+msgid "IntelligentWidget"
+msgstr "IntelligentWidget"
 
 msgid "HTML"
 msgstr "HTML"
@@ -8067,6 +8073,9 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
+
+#~ msgid "Canonical URL"
+#~ msgstr "URL canónica"
 
 #~ msgid "NEW"
 #~ msgstr "NUEVO"
