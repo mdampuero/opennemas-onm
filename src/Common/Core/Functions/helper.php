@@ -106,10 +106,11 @@ function webpack()
  * @param array $data An array that may contain strings or objects.
  *                    - Strings will be returned as the logo text.
  *                    - Objects will trigger a dynamic function call to retrieve their name.
+ * @param bool $displayHeader1 If true, the method will return the header_1.
  * @return string Returns the logo text if found (either from a string or by calling
  *                a function for the object). Returns an empty string if no valid text is found.
  */
-function get_logo_text($data = [])
+function get_logo_text($data = [], $displayHeader1 = false)
 {
     foreach ($data as $item) {
         if (empty($item)) {
@@ -125,7 +126,7 @@ function get_logo_text($data = [])
         if (is_object($item)) {
             $functionName = "get_" . getEntityName(get_class($item)) . "_name";
             if (function_exists($functionName)) {
-                return call_user_func($functionName, $item, true);
+                return call_user_func($functionName, $item, $displayHeader1);
             }
         }
     }
