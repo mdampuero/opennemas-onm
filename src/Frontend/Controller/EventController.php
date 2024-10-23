@@ -237,7 +237,8 @@ class EventController extends FrontendController
             return new RedirectResponse($expected, 301);
         }
 
-        $params = $this->getParameters($request, $item);
+        $params            = $this->getParameters($request, $item);
+        $params['x-tags'] .= ',event-frontpage-tag';
 
         $this->view->setConfig($this->getCacheConfiguration($action));
 
@@ -258,8 +259,11 @@ class EventController extends FrontendController
      */
     protected function hydrateListTag(array &$params = []) : void
     {
-        $currentDate = gmdate('Y-m-d');
-        $fullDate    = gmdate('Y-m-d H:i:s');
+        $currentDate   = gmdate('Y-m-d');
+        $fullDate      = gmdate('Y-m-d H: i: s');
+        $eventSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('event_settings', false);
 
         $oql = sprintf(
             'SELECT * FROM contents c
@@ -275,8 +279,7 @@ class EventController extends FrontendController
             AND (cm1.meta_value >= "%s" OR (cm1.meta_value < "%s" AND cm2.meta_value >= "%s"))
             AND (starttime IS NULL OR starttime < "%s")
             AND (endtime IS NULL OR endtime > "%s")
-            AND t.slug = "%s"
-            ORDER BY cm1.meta_value ASC',
+            AND t.slug = "%s"',
             $currentDate,
             $currentDate,
             $currentDate,
@@ -285,17 +288,25 @@ class EventController extends FrontendController
             $params['tag']
         );
 
+        if ($eventSettings["hide_current_events"] ?? false) {
+            $oql .= sprintf(
+                ' AND (cm1.meta_value > "%s" AND cm2.meta_value > "%s")',
+                gmdate('Y-m-d'),
+                gmdate('Y-m-d')
+            );
+        }
+
+        $oql .= ' ORDER BY cm1.meta_value ASC';
+
         $response = $this->get('api.service.content')->getListBySql($oql);
         $items    = $response['items'];
-
-        if (empty($items)) {
-            throw new ResourceNotFoundException();
-        }
 
         if ($expire = $this->get('core.helper.content')->getCacheExpireDate()) {
             $this->setViewExpireDate($expire);
             $params['x-cache-for'] = $expire;
         }
+
+
 
         $params['contents'] = $items;
 

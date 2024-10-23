@@ -319,7 +319,7 @@ class HooksSubscriber implements EventSubscriberInterface
 
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
-                sprintf('obj.http.x-tags ~ ^instance-%s.*event-frontpage', $instanceName)
+                sprintf('obj.http.x-tags ~ ^instance-%s.*event-frontpage*', $instanceName)
             ])
         );
     }
