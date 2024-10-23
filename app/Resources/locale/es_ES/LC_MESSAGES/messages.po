@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-17 15:25+0000\n"
-"PO-Revision-Date: 2024-10-17 17:36+0200\n"
+"POT-Creation-Date: 2024-10-21 09:54+0000\n"
+"PO-Revision-Date: 2024-10-21 11:55+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1616,7 +1616,7 @@ msgid "Twitter"
 msgstr "Twitter"
 
 msgid "Instagram"
-msgstr "Instragram"
+msgstr "Instagram"
 
 msgid "Whatsapp"
 msgstr "Whatsapp"
@@ -2168,11 +2168,17 @@ msgstr "Quitar de todas las portadas"
 msgid "Arquive"
 msgstr "Archivar"
 
-msgid "Send to trash"
-msgstr "Enviar a la papelera"
+msgid "Link"
+msgstr "Enlace"
 
-msgid "Config facebook module"
-msgstr "Configuración módulo «Facebook»"
+msgid "No author"
+msgstr "Sin autor"
+
+msgid "No sector"
+msgstr "Sin sector"
+
+msgid "Body complexity"
+msgstr "Complejidad del cuerpo"
 
 msgid "Your are using the external comment system \"%1\""
 msgstr "Ahora estás usando el sistema de comentarios externo «%1»."
@@ -2208,8 +2214,14 @@ msgstr "Rechazar"
 msgid "Accept"
 msgstr "Aceptar"
 
-msgid "Status"
-msgstr "Estado"
+msgid "Write the SEO description for this content"
+msgstr "Escribe la descripción SEO para este contenido"
+
+msgid "Write the Canonincal URL for this content"
+msgstr "Escribe la URL canónica para este contenido"
+
+msgid "Mark this content to prevent indexing"
+msgstr "Marque este contenido para evitar la indexación"
 
 msgid "Disqus"
 msgstr "Disqus"
@@ -2545,9 +2557,49 @@ msgstr ""
 "Necesias más? Comprueba nuestros packs y mejora tu periódico con "
 "funcionalidades adicionales para hacerlo el mejor."
 
-msgid ""
-"We offer a huge list of add-ons to improve your experience. Check our store "
-"and pay only for what you really want."
+msgid "Image wide"
+msgstr "Imagen amplia"
+
+msgid "Top right Image"
+msgstr "Imagen superior derecha"
+
+msgid "image-top-right"
+msgstr "imagen superior derecha"
+
+msgid "Top Left Image"
+msgstr "Imagen arriba a la izquierda"
+
+msgid "image-top-left"
+msgstr "imagen superior izquierda"
+
+msgid "Wide image"
+msgstr "Imagen amplia"
+
+msgid "image-middle-wide"
+msgstr "imagen en medio amplia"
+
+msgid "Right image"
+msgstr "Imagen de la derecha"
+
+msgid "image-middle-left"
+msgstr "imagen centro a la izquierda"
+
+msgid "Left image"
+msgstr "Imagen de la izquierda"
+
+msgid "Default"
+msgstr "Por defecto"
+
+msgid "Edit Widget"
+msgstr "Editar widget"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "Please, remember save positions after finish."
+msgstr "Por favor, recuerda guardar posiciones antes de terminar."
+
+msgid "Couldn't load this tab. We'll try to fix this as soon as possible."
 msgstr ""
 "Te ofrecemos una gran lista de añadidos con los que mejorar tu experiencia. "
 "Comprueba nuestra tienda y paga solo por lo que necesites."
@@ -2587,11 +2639,8 @@ msgstr "¡Bienvenido!"
 msgid "Terms & conditions"
 msgstr "Términos y condiciones"
 
-msgid "Ready!"
-msgstr "Listo!"
-
-msgid "You are leaving the current page."
-msgstr "Está saliendo de la página."
+msgid "Active"
+msgstr "Activo"
 
 msgid "Domain Mapping"
 msgstr "Redirección de dominio"
@@ -3318,11 +3367,8 @@ msgstr "Más"
 msgid "Disable"
 msgstr "Desactivar"
 
-msgid "Enable"
-msgstr "Activar"
-
-msgid "Disabled"
-msgstr "Desactivado"
+msgid "Remove element from this frontpage"
+msgstr "Eliminar elemento de esta portada"
 
 msgid "Do you want to move contents of user?"
 msgstr "¿Quieres mover los cotenidos del usuario?"
@@ -6735,14 +6781,17 @@ msgstr "como"
 msgid "Default author"
 msgstr "Autor por defecto"
 
-msgid "Author mapping"
-msgstr "Mapeo de autores"
+msgid "on new tab"
+msgstr "en nueva pestaña"
 
 msgid "Author name from source"
 msgstr "Nombre del autor en origen"
 
-msgid "Default category"
-msgstr "Categoría por defecto"
+msgid "Parameter value"
+msgstr "Valor de parámetro"
+
+msgid "IntelligentWidget"
+msgstr "IntelligentWidget"
 
 msgid "Category mapping"
 msgstr "Mapeo de categorias"
@@ -8087,8 +8136,21 @@ msgstr "No tiene permiso para acceder a este recurso."
 msgid "We seem to have lost you in the clouds."
 msgstr "Parece que te perdimos en las nubes."
 
-msgid "The page your looking for is not here"
-msgstr "La página que estas buscando no está aquí"
+msgid "Download report"
+msgstr "Descargar informe"
+
+msgid "Do you want to delete the user group?"
+msgstr "¿Estás seguro de que quieres eliminar el grupo de usuarios?"
+
+msgid "Do you want to delete the selected user groups?"
+msgstr ""
+"¿Estás seguro que quieres eliminar los grupos de usuarios seleccionados?"
+
+msgid "Group name"
+msgstr "Nombre del grupo"
+
+#~ msgid "Canonical URL"
+#~ msgstr "URL canónica"
 
 #~ msgid "NEW"
 #~ msgstr "NUEVO"
