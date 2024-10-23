@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 09:54+0000\n"
-"PO-Revision-Date: 2024-10-21 11:57+0200\n"
+"POT-Creation-Date: 2024-10-23 08:40+0000\n"
+"PO-Revision-Date: 2024-10-23 10:41+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -2159,17 +2159,11 @@ msgstr "Quitar de todas as portadas"
 msgid "Arquive"
 msgstr "Arquivar"
 
-msgid "Link"
-msgstr "Ligazón"
+msgid "Send to trash"
+msgstr "Enviar ao lixo"
 
-msgid "No author"
-msgstr "Sen autor"
-
-msgid "No sector"
-msgstr "Sen sector"
-
-msgid "Body complexity"
-msgstr "Complexidade do corpo"
+msgid "Config facebook module"
+msgstr "Configuración do módulo «Facebook»"
 
 msgid "Your are using the external comment system \"%1\""
 msgstr "Agora estás usando o sistema de comentario «%1»."
@@ -2205,14 +2199,8 @@ msgstr "Rexeitar"
 msgid "Accept"
 msgstr "Aceptar"
 
-msgid "Write the SEO description for this content"
-msgstr "Escribe o descrición de SEO para este contido"
-
-msgid "Write the Canonincal URL for this content"
-msgstr "Escribe a URL canónica deste contido"
-
-msgid "Mark this content to prevent indexing"
-msgstr "Marca este contido para evitar a indexación"
+msgid "Status"
+msgstr "Estado"
 
 msgid "Disqus"
 msgstr "Disqus"
@@ -2548,83 +2536,8 @@ msgid ""
 "We offer a huge list of add-ons to improve your experience. Check our store "
 "and pay only for what you really want."
 msgstr ""
-"Hai unha nova versión desta portada, se tenta gardar os seus cambios a nova "
-"versión sobrescribirase."
-
-msgid "Reload frontpage"
-msgstr "Recargar portada"
-
-msgid "Customize font and color style"
-msgstr "Personalizar estilo do tipo de letra e cor"
-
-msgid "Image disposition in frontpage"
-msgstr "Disposición da imaxe en portada"
-
-msgid "Background Color"
-msgstr "Color de fondo"
-
-msgid "Title font color"
-msgstr "Cor do tipo de letra do titulo"
-
-msgid "Title font family"
-msgstr "Tipo de letra para o titulo"
-
-msgid "Title font style"
-msgstr "Estilo do tipo de letra do titulo"
-
-msgid "Title font weight"
-msgstr "Peso do tipo de letra do titulo"
-
-msgid "Title font size"
-msgstr "Tamaño do tipo de letra do titulo"
-
-msgid "Top Wide Image"
-msgstr "Imaxe ancha superior"
-
-msgid "Image wide"
-msgstr "Imaxe ancha"
-
-msgid "Top right Image"
-msgstr "Imaxe arriba á dereita"
-
-msgid "image-top-right"
-msgstr "image-top-right"
-
-msgid "Top Left Image"
-msgstr "Imaxe arriba á esquerda"
-
-msgid "image-top-left"
-msgstr "image-top-left"
-
-msgid "Wide image"
-msgstr "Imaxe ancha"
-
-msgid "image-middle-wide"
-msgstr "image-middle-wide"
-
-msgid "Right image"
-msgstr "Imaxe á dereita"
-
-msgid "image-middle-left"
-msgstr "image-middle-left"
-
-msgid "Left image"
-msgstr "Imaxe á esquerda"
-
-msgid "Default"
-msgstr "Por defecto"
-
-msgid "Edit Widget"
-msgstr "Editar Widget"
-
-msgid "Close"
-msgstr "Pechar"
-
-msgid "Please, remember save positions after finish."
-msgstr "Lembra gardar as posicións despois de rematar."
-
-msgid "Couldn't load this tab. We'll try to fix this as soon as possible."
-msgstr "Non se puido cargar esta lapela. Tentaremos arranxalo canto antes."
+"Ofrecemos unha gran lista de engadidos para mellorar a túa experiencia. "
+"Comproba a nosa tenda e paga só polo que realmente queres."
 
 msgid ""
 "Make your own style. Choose a template or request a exclusive design to make "
@@ -2661,8 +2574,11 @@ msgstr "Benvido!"
 msgid "Terms & conditions"
 msgstr "Termos e condicións"
 
-msgid "Active"
-msgstr "Activado"
+msgid "Ready!"
+msgstr "Listo!"
+
+msgid "You are leaving the current page."
+msgstr "Está saíndo da páxina."
 
 msgid "Domain Mapping"
 msgstr "Redirección de dominios"
@@ -3079,6 +2995,12 @@ msgstr "Descrición para SEO"
 msgid "Write the SEO description for this content"
 msgstr "Escribe o descrición de SEO para este contido"
 
+msgid "Write the Canonincal URL for this content"
+msgstr "Escribe a URL canónica deste contido"
+
+msgid "Mark this content to prevent indexing"
+msgstr "Marca este contido para evitar a indexación"
+
 msgid "No author"
 msgstr "Sen autor"
 
@@ -3151,9 +3073,6 @@ msgstr "Inserir relacionado"
 
 msgid "No sector"
 msgstr "Sen sector"
-
-msgid "Canonical URL"
-msgstr "URL canónica"
 
 msgid "Body complexity"
 msgstr "Complexidade do corpo"
@@ -3488,8 +3407,17 @@ msgstr "Grupo de caché"
 msgid "Expire time"
 msgstr "Tempo de expiración"
 
-msgid "Remove element from this frontpage"
-msgstr "Eliminar elemento desta portada"
+msgid "Config opinion module"
+msgstr "Configuración do módulo de opinión"
+
+msgid "New opinion"
+msgstr "Nova opinión"
+
+msgid "In home"
+msgstr "En portada"
+
+msgid "Drop from home"
+msgstr "Sacar de portada"
 
 msgid "No item selected"
 msgstr "Non se seleccionaron elementos"
@@ -6775,17 +6703,14 @@ msgstr "como"
 msgid "Default author"
 msgstr "Autor defecto"
 
-msgid "on new tab"
-msgstr "nunha nova pestana"
+msgid "Author mapping"
+msgstr "Mapeamento de autores"
 
 msgid "Author name from source"
 msgstr "Nome do autor na orixe"
 
-msgid "Parameter value"
-msgstr "Valor de parámetros"
-
-msgid "IntelligentWidget"
-msgstr "IntelligentWidget"
+msgid "Default category"
+msgstr "Categoría por defecto"
 
 msgid "Category mapping"
 msgstr "Mapeamento de categorías"
@@ -7149,8 +7074,9 @@ msgstr ""
 msgid "Password confirmation"
 msgstr "Confirmación de contrasinal"
 
+#, fuzzy
 msgid "Config event module"
-msgstr "Configuración do módulo «Eventos»"
+msgstr "Configuración do módulo «Video»"
 
 msgid "Hide ongoing events"
 msgstr "Ocultar eventos en curso"
@@ -7316,9 +7242,8 @@ msgstr "Tes certeza que queres enviar ao lixo o seguinte elemento?"
 msgid "Are you sure you want to publish this frontpage now?"
 msgstr "Tes certeza que queres publicar esta portada agora?"
 
-#, fuzzy
 msgid "Edit Widget"
-msgstr "Editar imaxes"
+msgstr "Editar Widget"
 
 msgid "Archive this element"
 msgstr "Arquivar este elemento"
@@ -8115,11 +8040,8 @@ msgstr "Non tes permiso para acceder a este recurso."
 msgid "We seem to have lost you in the clouds."
 msgstr "Semella que te perdemos nas nubes."
 
-msgid "Do you want to delete the selected user groups?"
-msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
-
-msgid "Group name"
-msgstr "Nome do grupo"
+msgid "The page your looking for is not here"
+msgstr "A páxina que estás buscando non está aquí"
 
 #~ msgid "Canonical URL"
 #~ msgstr "URL canónica"
