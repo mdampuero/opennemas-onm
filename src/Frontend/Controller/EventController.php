@@ -237,8 +237,8 @@ class EventController extends FrontendController
             return new RedirectResponse($expected, 301);
         }
 
-        $params            = $this->getParameters($request, $item);
-        $params['x-tags'] .= ',event-frontpage-tag';
+        $params           = $this->getParameters($request, $item);
+        $params['x-tags'] = sprintf('%s,event-frontpage-tag', str_replace('event-', 'tag-', $params['x-tags']));
 
         $this->view->setConfig($this->getCacheConfiguration($action));
 
