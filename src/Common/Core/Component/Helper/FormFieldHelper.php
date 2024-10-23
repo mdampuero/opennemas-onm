@@ -177,6 +177,12 @@ class FormFieldHelper
                 'available' => [ 'article', 'opinion' ]
             ],
             [
+                'name' => 'organizer',
+                'title' => _('Organizer data'),
+                'module' => false,
+                'available' => [ 'event' ]
+            ],
+            [
                 'name' => 'when',
                 'title' => _('Event date'),
                 'module' => false,
