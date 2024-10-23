@@ -1515,86 +1515,86 @@ class PermissionHelper
             ],
             251 => [
                 'id'          => 251,
-                'name'        => 'EVENT_SETTINGS',
-                'description' => _('Manage module setting'),
-                'module'      => 'es.openhost.module.events',
-                'enabled'     => 1
-            ],
-            252 => [
-                'id'          => 252,
                 'name'        => 'NON_MEMBER_HIDE_ADVERTISEMENTS',
                 'description' => _('Hide advertisements'),
                 'module'      => 'FRONTEND',
                 'enabled'     => 1
             ],
-            253 => [
-                'id'          => 253,
+            252 => [
+                'id'          => 252,
                 'name'        => 'COMMENT_SETTINGS',
                 'description' => _('Manage module setting'),
                 'module'      => 'COMMENT_MANAGER',
                 'enabled'     => 1
             ],
-            254 => [
-                'id'          => 254,
+            253 => [
+                'id'          => 253,
                 'name'        => 'OBITUARY_ADMIN',
                 'description' => _('List'),
                 'module'      => 'es.openhost.module.obituaries',
                 'enabled'     => 1
             ],
-            255 => [
-                'id'          => 255,
+            254 => [
+                'id'          => 254,
                 'name'        => 'OBITUARY_UPDATE',
                 'description' => _('Edit'),
                 'module'      => 'es.openhost.module.obituaries',
                 'enabled'     => 1
             ],
-            256 => [
-                'id'          => 256,
+            255 => [
+                'id'          => 255,
                 'name'        => 'OBITUARY_DELETE',
                 'description' => _('Delete'),
                 'module'      => 'es.openhost.module.obituaries',
                 'enabled'     => 1
             ],
-            257 => [
-                'id'          => 257,
+            256 => [
+                'id'          => 256,
                 'name'        => 'OBITUARY_CREATE',
                 'description' => _('Create'),
                 'module'      => 'es.openhost.module.obituaries',
                 'enabled'     => 1
             ],
-            258 => [
-                'id'          => 258,
+            257 => [
+                'id'          => 257,
                 'name'        => 'COMPANY_ADMIN',
                 'description' => _('List'),
                 'module'      => 'es.openhost.module.companies',
                 'enabled'     => 1
             ],
-            259 => [
-                'id'          => 259,
+            258 => [
+                'id'          => 258,
                 'name'        => 'COMPANY_UPDATE',
                 'description' => _('Edit'),
                 'module'      => 'es.openhost.module.companies',
                 'enabled'     => 1
             ],
-            260 => [
-                'id'          => 260,
+            259 => [
+                'id'          => 259,
                 'name'        => 'COMPANY_DELETE',
                 'description' => _('Delete'),
                 'module'      => 'es.openhost.module.companies',
                 'enabled'     => 1
             ],
-            261 => [
-                'id'          => 261,
+            260 => [
+                'id'          => 260,
                 'name'        => 'COMPANY_CREATE',
                 'description' => _('Create'),
                 'module'      => 'es.openhost.module.companies',
                 'enabled'     => 1
             ],
-            262 => [
-                'id'          => 262,
+            261 => [
+                'id'          => 261,
                 'name'        => 'COMPANY_CONFIG',
                 'description' => _('Configuration'),
                 'module'      => 'es.openhost.module.companies',
+                'enabled'     => 1
+            ],
+            262 => [
+                'id'          => 262,
+                'name'        => 'EVENT_SETTINGS',
+                'description' => _('Manage module setting'),
+                'module'      => 'es.openhost.module.events',
                 'enabled'     => 1
             ]
         ];
