@@ -14,7 +14,36 @@ class FormFieldHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $this->FormFieldHelper = new FormFieldHelper();
+        $this->container = $this->getMockBuilder('Container')
+            ->setMethods([ 'get' ])
+            ->getMock();
+
+        $this->security = $this->getMockBuilder('Common\Core\Component\Security\Security')
+            ->setMethods([ 'hasExtension' ])
+            ->getMock();
+
+        $this->container->expects($this->any())->method('get')
+            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->FormFieldHelper = new FormFieldHelper($this->container);
+    }
+
+    /**
+     * Returns a mocked service based on the service name.
+     *
+     * @param string $name The service name.
+     *
+     * @return mixed The mocked service.
+     */
+    public function serviceContainerCallback($name)
+    {
+        switch ($name) {
+            case 'core.security':
+                return $this->security;
+
+            default:
+                return null;
+        }
     }
 
     /**
@@ -32,9 +61,10 @@ class FormFieldHelperTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals([
             [
-            'name' => 'subscriptions',
-            'title' => _('Lists'),
-            'available' => [ 'subscriber' ]
+                'name' => 'subscriptions',
+                'title' => _('Lists'),
+                'module' => false,
+                'available' => [ 'subscriber' ]
             ]
         ], $this->FormFieldHelper->filterFields('subscriber'));
     }
