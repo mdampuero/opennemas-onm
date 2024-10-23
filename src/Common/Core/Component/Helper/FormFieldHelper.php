@@ -44,7 +44,6 @@ class FormFieldHelper
                 'available' => [
                     'album',
                     'article',
-                    'company',
                     'event',
                     'obituary',
                     'opinion',
