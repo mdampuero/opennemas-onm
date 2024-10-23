@@ -441,7 +441,6 @@ class ApiController extends Controller
      */
     public function getFormSettings($moduleName = '')
     {
-        $ffh = $this->get('core.helper.form_field');
-        return $ffh->filterFields($moduleName);
+        return $this->get('core.helper.form_field')->filterFields($moduleName);
     }
 }

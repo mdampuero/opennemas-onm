@@ -90,6 +90,7 @@ services:
 
     core.helper.form_field:
         class:     Common\Core\Component\Helper\FormFieldHelper
+        arguments: [ '@service_container']
         public:    true
 
     core.helper.http_fetcher:
