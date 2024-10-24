@@ -306,8 +306,6 @@ class EventController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
-
-
         $params['contents'] = $items;
 
         // TODO: Remove this hack and update variable in templates
