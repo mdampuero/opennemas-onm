@@ -168,7 +168,7 @@ class EventController extends FrontendController
 
         if ($eventSettings["hide_current_events"] ?? false) {
             $oql .= sprintf(
-                'and (cm1.meta_value > "%s" and cm2.meta_value > "%s") ',
+                'and (cm1.meta_value >= "%s") ',
                 gmdate('Y-m-d'),
                 gmdate('Y-m-d')
             );
@@ -260,7 +260,7 @@ class EventController extends FrontendController
     protected function hydrateListTag(array &$params = []) : void
     {
         $currentDate   = gmdate('Y-m-d');
-        $fullDate      = gmdate('Y-m-d H: i: s');
+        $fullDate      = gmdate('Y-m-d H:i:s');
         $eventSettings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('event_settings', false);
@@ -290,7 +290,7 @@ class EventController extends FrontendController
 
         if ($eventSettings["hide_current_events"] ?? false) {
             $oql .= sprintf(
-                ' AND (cm1.meta_value > "%s" AND cm2.meta_value > "%s")',
+                ' AND (cm1.meta_value >= "%s")',
                 gmdate('Y-m-d'),
                 gmdate('Y-m-d')
             );
