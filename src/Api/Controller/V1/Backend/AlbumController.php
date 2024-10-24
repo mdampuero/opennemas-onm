@@ -118,6 +118,7 @@ class AlbumController extends ContentController
 
         try {
             $this->get('orm.manager')->getDataSet('Settings')->set($settings);
+            $this->get('core.dispatcher')->dispatch('albums.config');
             $msg->add(_('Item saved successfully'), 'success');
         } catch (\Exception $e) {
             $msg->add(_('Unable to save settings'), 'error');
