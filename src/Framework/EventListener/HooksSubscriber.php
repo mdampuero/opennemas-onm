@@ -57,7 +57,8 @@ class HooksSubscriber implements EventSubscriberInterface
             // Comments Config hooks
             'comments.config' => [
                 ['removeSmartyCacheAll', 15],
-                ['removeVarnishCacheForAllComments', 10]
+                ['removeVarnishCacheForAllComments', 10],
+                ['removeVarnishCacheForAllContentPages', 5],
             ],
             // Comments hooks
             'comment.createItem' => [
@@ -302,6 +303,28 @@ class HooksSubscriber implements EventSubscriberInterface
                 sprintf('obj.http.x-tags ~ ^instance-%s.*comments-*', $instanceName)
             ])
         );
+    }
+
+    /**
+     * Removes varnish cache for all content pages.
+     *
+     * @return null
+     */
+    public function removeVarnishCacheForAllContentPages()
+    {
+        $instanceName = $this->container->get('core.instance')->internal_name;
+        $types        = ['article', 'opinion', 'event', 'company', 'poll', 'video', 'album'];
+
+        $this->container->get('task.service.queue')
+            ->push(
+                new ServiceTask(
+                    'core.varnish',
+                    'ban',
+                    [
+                        sprintf('obj.http.x-tags ~ ^instance-%s.*((' . implode(')|(', $types) . '))', $instanceName)
+                    ]
+                )
+            );
     }
 
     /**
