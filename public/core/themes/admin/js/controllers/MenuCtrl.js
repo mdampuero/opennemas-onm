@@ -547,6 +547,7 @@
 
           item.menu_items = data.menu_items.map(function(item) {
             item.title = $scope.translateTitle(item, locale, defaultLocale);
+            item.link_name = $scope.translateLinkName(item, locale, defaultLocale);
 
             return item;
           });
@@ -590,6 +591,27 @@
           return item.title[locale] ?
             item.title[locale] :
             item.title[defaultLocale];
+        };
+
+        /**
+         * @param {Object} item          The item to translate.
+         * @param {string} locale        The locale to translate to.
+         * @param {string} defaultLocale The default locale.
+         *
+         * @returns The title translated to the locale.
+         */
+        $scope.translateLinkName = function(item, locale, defaultLocale) {
+          if (typeof item.link_name === 'string') {
+            return item.link_name;
+          }
+
+          if (!item.link_name || !item.link_name[locale] && !item.link_name[defaultLocale]) {
+            return '';
+          }
+
+          return item.link_name[locale] ?
+            item.link_name[locale] :
+            item.link_name[defaultLocale];
         };
 
         /**

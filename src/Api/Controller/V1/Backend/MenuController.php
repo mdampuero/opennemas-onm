@@ -12,6 +12,7 @@ namespace Api\Controller\V1\Backend;
 use Api\Controller\V1\ApiController;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Displays, saves, modifies and removes menus.
@@ -281,5 +282,35 @@ class MenuController extends ApiController
     protected function getItemId($item)
     {
         return $item->pk_menu;
+    }
+
+    /**
+     * Updates the item information given its id and the new information.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function updateItemAction(Request $request, $id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('update'));
+        $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', [$id]);
+
+        $data          = $request->request->all();
+        $localeService = $this->container->get('core.locale');
+        $defaultLocale = $localeService->getLocale('frontend');
+
+        foreach ($data['menu_items'] as &$item) {
+            if (empty($item['locale'])) {
+                $item['locale'] = $defaultLocale; // Establece el locale por defecto
+            }
+        }
+
+        $this->get($this->service)->updateItem($id, $data);
+
+        $msg = $this->get('core.messenger');
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 }

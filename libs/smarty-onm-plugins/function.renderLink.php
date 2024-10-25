@@ -33,8 +33,11 @@ function smarty_function_renderLink($params, &$smarty)
     }
 
     //Support old menu versions and items with no reference ID
-    $url = generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault);
-    return $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url);
+    $url = generateUrlForMenuItem($item, $multilanguage, $localelong, $localeDefault);
+
+    if ($url !== null) {
+        return $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url);
+    }
 }
 
 function generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault)
