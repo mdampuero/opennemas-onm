@@ -124,11 +124,13 @@ class CategoryController extends FrontendController
 
             // Get all contents for this frontpage
             list($pagination, $articles, $related) = unserialize(
-                utf8_decode(
+                mb_convert_encoding(
                     $cm->getUrlContent(
                         $wsUrl . '/ws/frontpages/allcontentblog/' . $slug . '/' . $page,
                         true
-                    )
+                    ),
+                    'ISO-8859-1',
+                    'UTF-8'
                 )
             );
 
@@ -212,17 +214,21 @@ class CategoryController extends FrontendController
      */
     protected function getItems($params)
     {
-        $service = $this->get('api.service.content');
-        $now     = date('Y-m-d H:i:s');
+        $service     = $this->get('api.service.content');
+        $now         = date('Y-m-d H:i:s');
+        $categoryIds = [$params['category']->id];
+
+        // Retrieve and accumulate the IDs of all child categories and their descendants
+        array_push($categoryIds, ...$this->get('api.service.category')->getChildIds($params['category']));
 
         $response = $service->getList(
             sprintf(
-                'content_status = 1 and in_litter = 0 and category_id = %d ' .
-                'and fk_content_type in [1,5,7,9] ' .
-                'and (starttime is null or starttime < "%s") ' .
-                'and (endtime is null or endtime > "%s") ' .
-                'order by starttime desc limit %d offset %d',
-                $params['category']->id,
+                'content_status = 1 and in_litter = 0 and category_id in [%s] ' .
+                    'and content_type_name in ["article","event","album","video"] ' .
+                    'and (starttime is null or starttime < "%s") ' .
+                    'and (endtime is null or endtime > "%s") ' .
+                    'order by starttime desc limit %d offset %d',
+                implode(',', $categoryIds),
                 $now,
                 $now,
                 $params['epp'],
@@ -241,13 +247,22 @@ class CategoryController extends FrontendController
      */
     protected function getParameters($request, $item = null)
     {
-        $action    = $this->get('core.globals')->getAction();
-        $extension = $this->get('core.globals')->getExtension();
-        $params    = array_merge($request->query->all(), [
+        $action      = $this->get('core.globals')->getAction();
+        $extension   = $this->get('core.globals')->getExtension();
+        $categoryIds = [$item->id];
+
+        // Retrieve and accumulate the IDs of all child categories and their descendants
+        array_push($categoryIds, ...$this->get('api.service.category')->getChildIds($item));
+
+        $categoriesWithPrefix = array_map(function ($category) use ($extension) {
+            return $extension . '-' . $category;
+        }, $categoryIds);
+
+        $params = array_merge($request->query->all(), [
             'category'   => $item,
             'time'       => time(),
             'o_category' => $item,
-            'x-tags'     => $extension . '-' . $item->id
+            'x-tags'     => implode(',', $categoriesWithPrefix)
         ]);
 
         if (!array_key_exists('page', $params)) {

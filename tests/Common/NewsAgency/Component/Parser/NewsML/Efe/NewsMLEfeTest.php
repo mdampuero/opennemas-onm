@@ -68,7 +68,7 @@ class NewsMLEfeTest extends TestCase
         );
 
         $this->assertEquals(
-            'CIENCIA-TECNOLOGIA,METEOROLOGIA',
+            'EL,TIEMPO,PREDICCIÓN',
             $this->parser->getTags($this->valid)
         );
     }
@@ -86,6 +86,6 @@ class NewsMLEfeTest extends TestCase
         $this->assertCount(1, $contents);
         $this->assertInstanceOf('Common\NewsAgency\Component\Resource\ExternalResource', $contents[0]);
         $this->assertEquals('Agencia EFE', $contents[0]->agency_name);
-        $this->assertEquals('CIENCIA-TECNOLOGIA,METEOROLOGIA', $contents[0]->tags);
+        $this->assertEquals('EL,TIEMPO,PREDICCIÓN', $contents[0]->tags);
     }
 }

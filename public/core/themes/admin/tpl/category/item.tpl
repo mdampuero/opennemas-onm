@@ -32,7 +32,7 @@
         </a>
       </li>
       <li class="quicklinks">
-        <button class="btn btn-loading btn-success text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="saveItem()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
           <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
           {t}Save{/t}
         </button>
@@ -79,6 +79,16 @@
           <span class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
             <i class="fa fa-info-circle m-r-5 text-info"></i>
             {t}If enabled, the category main page needs to be manually updated{/t}
+          </span>
+        </div>
+        <div class="form-group no-margin" ng-if="item.parent_id">
+          <div class="checkbox m-t-5">
+            <input type="checkbox" id="showContentInParent" ng-model="item.params.showContentInParent" ng-true-value="'1'" ng-false-value="'0'">
+            <label for="showContentInParent" class="form-label">{t}Show contents in parent category{/t}</label>
+          </div>
+          <span class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
+            <i class="fa fa-info-circle m-r-5 text-info"></i>
+            {t}If enabled, the contents of this category will also be displayed in its parent category{/t}
           </span>
         </div>
       </div>
@@ -260,6 +270,18 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="form-group">
+        <label for="header_1" class="form-label">
+          {t}H1 Header{/t}
+        </label>
+        <div class="controls input-with-icon right">
+          <input class="form-control" id="header_1" name="header_1" ng-model="item.header_1">
+        </div>
+        <span class="help m-l-3 m-t-5" ng-if="isHelpEnabled()">
+          <i class="fa fa-info-circle m-r-5 text-info"></i>
+          {t}If this field is left empty, the default Title will be displayed.{/t}
+        </span>
       </div>
       <div class="form-group">
         <label for="title" class="form-label">

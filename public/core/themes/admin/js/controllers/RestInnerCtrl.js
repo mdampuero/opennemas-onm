@@ -175,7 +175,6 @@
 
           http.get(route).then(function(response) {
             $scope.data = response.data;
-
             if (!response.data.item) {
               $scope.data.item = {};
             }
@@ -252,6 +251,30 @@
         };
 
         /**
+         * @function saveItem
+         * @memberOf RestInnerCtrl
+         *
+         * @description
+         *   Generate slug and, then, saves the item.
+         */
+        $scope.saveItem = function() {
+          $scope.flags.http.saving = true;
+
+          if (!$scope.item.slug) {
+            $scope.save();
+          } else {
+            // Force slug to be valid
+            $scope.getSlug($scope.item.slug, function(response) {
+              $scope.item.slug           = response.data.slug;
+              $scope.flags.generate.slug = false;
+              $scope.flags.block.slug    = true;
+
+              $scope.save();
+            });
+          }
+        };
+
+        /**
          * @function save
          * @memberOf RestInnerCtrl
          *
@@ -304,6 +327,10 @@
               webStorage.session.remove($scope.draftKey);
             }
             messenger.post(response.data);
+
+            if ($scope.dtm) {
+              $timeout.cancel($scope.dtm);
+            }
           };
 
           if ($scope.itemHasId()) {

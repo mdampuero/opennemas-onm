@@ -451,6 +451,7 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
               ).format('YYYY-MM-DD HH:mm:ss');
             $scope.versions.sort($scope.comparePublishDates);
             $scope.getReloadVersionStatus();
+            location.reload();
           }
 
           return null;
@@ -694,6 +695,20 @@ angular.module('BackendApp.controllers').controller('FrontpageCtrl', [
             return function(modalWindow) {
               modalWindow.close({ response: false, success: true });
             };
+          }
+        }
+      });
+    };
+    $scope.widgetEditModal = function($event) {
+      var id = $event.currentTarget.getAttribute('data-id');
+
+      $uibModal.open({
+        templateUrl: 'modal-widget-edit',
+        backdrop: true,
+        controller: 'ModalWidgetEditCtrl',
+        resolve: {
+          id: function() {
+            return id;
           }
         }
       });

@@ -503,7 +503,7 @@ CREATE TABLE `content_notifications` (
   KEY `status` (`status`),
   KEY `send_date` (`send_date`),
   CONSTRAINT `content_notifications_fk_content` FOREIGN KEY (`fk_content`) REFERENCES `contents` (`pk_content`) ON DELETE CASCADE,
-  CONSTRAINT `content_notifications_image` FOREIGN KEY (`image`) REFERENCES `contents` (`pk_content`)
+  CONSTRAINT `content_notifications_image` FOREIGN KEY (`image`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

@@ -78,13 +78,6 @@ class NewsletterRenderer
 
         $this->tpl->assign('ads_format', 'newsletter');
 
-        // Process public URL for images and links
-        $publicUrl = preg_replace(
-            '@^http[s]?://(.*?)/$@i',
-            'http://$1',
-            $this->container->get('core.globals')->getInstance()->getMainDomain()
-        );
-
         $time = new \DateTime(null, $this->container->get('core.locale')->getTimeZone());
 
         $newsletter->title = !empty($newsletter->params['append_title']) ?
@@ -96,16 +89,20 @@ class NewsletterRenderer
             'newsletterContent' => $newsletterContent,
             'menuFrontpage'     => $menuHelper->castToObjectFlat($menu->menu_items, false),
             'current_date'      => new \DateTime(),
-            'URL_PUBLIC'        => 'http://' . $publicUrl,
+            'URL_PUBLIC'        => $this->container->get('core.globals')->getInstance()->getBaseUrl(),
         ]);
     }
 
     private function updateTitle($newsletter, $content)
     {
+        // Check first and second block for a content title
+        $title  = $content[0]['items'][0]['title'] ?? $content[1]['items'][0]['title'] ?? null;
         $result = trim($newsletter->title);
-        if ($content[0] && $content[0]['items'][0]) {
-            $result .= " " . trim($content[0]['items'][0]['title']);
+
+        if ($title) {
+            $result .= " " . trim($title);
         }
+
         return $result;
     }
 
@@ -154,8 +151,10 @@ class NewsletterRenderer
             ]);
         }
 
-        if ($criteria['filter'] === 'most_viewed') {
-            $date->sub(new \DateInterval('P3D'));
+        if ($criteria['filter'] === 'most_viewed' || $criteria['filter'] === 'most_viewed_24') {
+            $criteria['filter'] === 'most_viewed_24'
+                ? $date->sub(new \DateInterval('P1D'))
+                : $date->sub(new \DateInterval('P3D'));
 
             $searchCriteria = array_merge($searchCriteria, [
                 'join' => [

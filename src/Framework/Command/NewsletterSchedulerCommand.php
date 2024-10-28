@@ -237,7 +237,9 @@ class NewsletterSchedulerCommand extends Command
             $output->writeln(sprintf("\t- <info>Rendering newsletter</info>", $template->id));
         }
 
-        $data = array_merge($template->getStored(), [
+        $storedData = $this->cleanEmptyData($template->getStored());
+
+        $data = array_merge($storedData, [
             'type'        => 0,
             'title'       => $template->title,
             'recipients'  => $template->recipients,
@@ -273,6 +275,27 @@ class NewsletterSchedulerCommand extends Command
         ));
 
         return $newsletter;
+    }
+
+    /**
+     * Cleans empty data from the stored data array
+     *
+     * @param array $data the data to be cleaned
+     * @return array the cleaned data
+     */
+    private function cleanEmptyData(array $data)
+    {
+        // Limpiar los datos vacíos en 'contents'
+        if (isset($data['contents']) && is_array($data['contents'])) {
+            $data['contents'] = array_filter($data['contents'], function ($content) {
+                return isset($content['items']) && is_array($content['items']) && !empty($content['items']);
+            });
+        }
+
+        // Limpiar los datos vacíos en otros campos si es necesario
+        return array_filter($data, function ($value) {
+            return !empty($value) || $value === 0 || $value === '0';
+        });
     }
 
     /**

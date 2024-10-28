@@ -272,25 +272,25 @@ $menuXml = [
     ],
 
     [
-        'id'          => 'webpush_notifications_mananger',
+        'id'          => 'webpush_notifications_manager',
         'title'       => _('Web Push'),
         'icon'        => 'fa fa-bell',
         'link'        => '#',
-        'privilege'   => 'ADMIN',
+        'privilege'   => 'WEBPUSH_ADMIN',
         'submenu' => [
             [
                 'id'          => 'webpush_notifications_dashboard_manager',
                 'title'       => _('Dashboard'),
                 'icon'        => 'fa fa-tachometer',
                 'link'        => url('backend_webpush_notifications_dashboard'),
-                'privilege'   => 'ADMIN'
+                'privilege'   => 'WEBPUSH_ADMIN'
             ],
             [
                 'id'          => 'webpush_notifications_history_manager',
                 'title'       => _('History'),
                 'icon'        => 'fa fa-history',
                 'link'        => url('backend_webpush_notifications_list'),
-                'privilege'   => 'ADMIN'
+                'privilege'   => 'WEBPUSH_ADMIN'
             ],
             [
                 'id'          => 'webpush_notifications_config_manager',
@@ -299,6 +299,32 @@ $menuXml = [
                 'link'        => url('backend_webpush_notifications_config'),
                 'module_name' => 'es.openhost.module.webpush_notifications',
                 'privilege'   => 'MASTER'
+            ],
+        ]
+    ],
+
+    // PressClipping
+
+    [
+        'id'          => 'pressclipping_manager',
+        'title'       => _('PressClipping'),
+        'icon'        => 'fa fa-paperclip',
+        'link'        => '#',
+        'module_name' => 'es.openhost.module.pressclipping',
+        'submenu' => [
+            [
+                'id'          => 'pressclipping_history_manager',
+                'title'       => _('History'),
+                'icon'        => 'fa fa-history',
+                'link'        => url('backend_pressclipping_dashboard'),
+                'privilege'   => 'PRESSCLIPPING_ADMIN'
+            ],
+            [
+                'id'          => 'pressclipping_config_manager',
+                'title'       => _('Configuration'),
+                'icon'        => 'fa fa-cog fa-lg',
+                'link'        => url('backend_pressclipping_settings'),
+                'privilege'   => 'PRESSCLIPPING_ADMIN'
             ],
         ]
     ],

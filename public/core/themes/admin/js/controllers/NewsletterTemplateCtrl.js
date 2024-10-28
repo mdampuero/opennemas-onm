@@ -122,28 +122,25 @@
           });
 
           if ($scope.item.contents) {
-            $scope.item.contents.map(function(item) {
-              item.items.map(function(e) {
-                if (e.e_type === 'list' &&
-                  (e.criteria.category === '' ||
-                    typeof e.criteria.category === 'undefined')) {
-                  e.criteria.category = [];
-                }
+            $scope.item.contents = $scope.item.contents.filter(function(item) {
+              if (Array.isArray(item.items) && item.items.length > 0) {
+                item.items = item.items.filter(function(e) {
+                  if (e.e_type === 'list') {
+                    if (!e.criteria || typeof e.criteria.category === 'undefined' || e.criteria.category === '') {
+                      e.criteria.category = [];
+                    }
 
-                if (e.e_type === 'list' &&
-                  typeof e.criteria.category === 'string') {
-                  e.criteria.category = [ parseInt(e.criteria.category) ];
-                }
+                    if (typeof e.criteria.category === 'string') {
+                      e.criteria.category = [parseInt(e.criteria.category)];
+                    }
 
-                // If the element is a list then convert its category criteria to numbers
-                if (e.e_type === 'list') {
-                  e.criteria.category = e.criteria.category.map(Number);
-                }
-
-                return e;
-              });
-
-              return item;
+                    e.criteria.category = e.criteria.category.map(Number);
+                  }
+                  return e;
+                });
+                return true;
+              }
+              return false;
             });
           }
         };
@@ -302,12 +299,37 @@
          *
          */
         $scope.saveVal = function() {
-          if (!($scope.item.contents instanceof Array) ||
-            $scope.item.contents.length === 0
-          ) {
+          if (!Array.isArray($scope.item.contents) || $scope.item.contents.length === 0) {
             messenger.post(newsletterTemplateTranslations.contenidosRequerido);
             return null;
           }
+
+          $scope.item.contents = $scope.item.contents.filter(function(item) {
+            if (Array.isArray(item.items) && item.items.length > 0) {
+              item.items = item.items.filter(function(e) {
+                if (e.e_type === 'list') {
+                  if (!e.criteria || typeof e.criteria.category === 'undefined' || e.criteria.category === '') {
+                    e.criteria.category = [];
+                  }
+
+                  if (typeof e.criteria.category === 'string') {
+                    e.criteria.category = [parseInt(e.criteria.category)];
+                  }
+
+                  e.criteria.category = e.criteria.category.map(Number);
+                }
+                return e;
+              });
+              return item.items.length > 0;
+            }
+            return false;
+          });
+
+          if ($scope.item.contents.length === 0) {
+            messenger.post(newsletterTemplateTranslations.contenidosRequerido);
+            return null;
+          }
+
           $scope.save();
           return null;
         };

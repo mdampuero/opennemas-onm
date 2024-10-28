@@ -86,6 +86,49 @@ class NewsletterController extends Controller
     }
 
     /**
+     * Handle the unsubscribe action for a user.
+     *
+     * @param Request $request The HTTP request object containing the unsubscribe data.
+     *
+     * @return RedirectResponse|Response Returns a redirect response to the front page if an error occurs
+     *                                   or if the user is not subscribed to the specified newsletter.
+     *                                   Otherwise, renders the unsubscribe completion page.
+     */
+    public function unsubscribeAction(Request $request)
+    {
+        try {
+            // Decode email hash and get the list ID from the request.
+            $email  = base64_decode($request->get('email_hash'));
+            $listId = $request->get('list_id');
+
+            // Get list and user.
+            $list = $this->get('api.service.subscription')->getItem($listId);
+            $user = $this->get('api.service.subscriber')->getItemby(sprintf('email = "%s"', $email));
+
+            // Check for empty user groups and newsletter list (permission 224)
+            if (empty($user->user_groups) || !in_array(224, $list->privileges)) {
+                return new RedirectResponse($this->get('router')->generate('frontend_frontpage'));
+            }
+
+            // Remove list from user groups
+            $user->user_groups = array_filter($user->user_groups, function ($a) use ($list) {
+                return $a['user_group_id'] != $list->pk_user_group;
+            });
+
+            // Update the user with the new groups
+            $this->get('api.service.subscriber')->patchItem($user->id, ['user_groups' => $user->user_groups]);
+
+            // Render the unsubscribe completion page
+            return $this->render('user/unsubscribe_completed.tpl', [
+                'email' => $email,
+                'lists' => $list->name
+            ]);
+        } catch (\Exception $e) {
+            return new RedirectResponse($this->get('router')->generate('frontend_frontpage'));
+        }
+    }
+
+    /**
      * Creates the new subscription given information by POST
      *
      * @param Request $request the request object

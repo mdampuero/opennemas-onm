@@ -55,7 +55,7 @@
         {t}Clicks{/t}
       </label>
     </div>
-    <div class="checkbox column-filters-checkbox">
+    <div class="checkbox column-filters-checkbox" ng-if="data.extra.service === 'webpushr'">
       <input id="closed" checklist-model="app.columns.selected" checklist-value="'closed'" type="checkbox">
       <label for="closed">
         {t}Closed{/t}
@@ -100,7 +100,7 @@
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br/>{t}clicked by the user{/t}'" tooltip-placement="bottom"></i>
       {t}Clicks{/t}
     </th>
-    <th class="text-center v-align-middle" ng-if="isColumnEnabled('closed')" width="120">
+    <th class="text-center v-align-middle" ng-if="isColumnEnabled('closed') && data.extra.service === 'webpushr'" width="120">
       <i class="fa fa-info-circle text-info" uib-tooltip-html="'{t}Times a notification was{/t}<br/>{t}closed by the user{/t}'" tooltip-placement="bottom"></i>
       {t}Closed{/t}
     </th>
@@ -171,7 +171,7 @@
       </strong>
     </span>
   </td>
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('closed')">
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('closed') && data.extra.service === 'webpushr'">
     <span>
       <strong>
         [% item.closed | number : 0 %]

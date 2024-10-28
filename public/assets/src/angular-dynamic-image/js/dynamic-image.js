@@ -490,8 +490,24 @@
                   }
                 }
 
-                $scope.src = DynamicImage.generateUrl(item, attrs.transform,
+                var imageUrl = DynamicImage.generateUrl(item, attrs.transform,
                   attrs.instance, attrs.property, attrs.raw, $scope.onlyImage);
+
+                var img = new Image();
+
+                img.src = imageUrl;
+
+                img.onerror = function() {
+                  $scope.$apply(function() {
+                    $scope.src = DynamicImage.brokenImage;
+                  });
+                };
+
+                img.onload = function() {
+                  $scope.$apply(function() {
+                    $scope.src = imageUrl;
+                  });
+                };
               });
             });
 

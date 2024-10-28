@@ -17,9 +17,12 @@
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu pull-right dropdown-menu-right no-padding">
-            <li>
-                <a title="{t 1=$content->title}Edit '%1'{/t}" href="{url name=backend_widget_show id=$content->id}">
+            <li style="display: flex;">
+                <a id="quickedit" title="Edit '{$content->title}'" ng-click="widgetEditModal($event)" data-id="{$content->id}" style="align-items: center; display: inline-flex; flex: 2 1;">
                     <i class="fa fa-pencil"></i> {t}Edit{/t}
+                </a>
+                <a class="btn btn-white" title="{t 1=$content->title}Edit '%1'{/t} {t}on new tab{/t}" href="{url name=backend_widget_show id=$content->id}" target="_blank" style="align-items: center; border: 1px solid #e5e9ec; display: inline-flex; padding: 0 0 0 10px;">
+                    <i class="fa fa-external-link"></i>
                 </a>
             </li>
             <li>

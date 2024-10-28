@@ -508,6 +508,13 @@
           }
         }
 
+        // Set link default protocol to https
+        $window.CKEDITOR.on('dialogDefinition', function(ev) {
+          if (ev.data.name === 'link') {
+            ev.data.definition.getContents('info').get('protocol').default = 'https://';
+          }
+        });
+
         $window.CKEDITOR.on('loaded', checkLoaded);
         $timeout(checkLoaded, 0);
       }

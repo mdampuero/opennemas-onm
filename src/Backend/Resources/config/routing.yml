@@ -271,3 +271,7 @@ backend_widget:
 backend_settings:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/setting.yml'
+
+backend_pressclipping:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/pressclipping.yml'

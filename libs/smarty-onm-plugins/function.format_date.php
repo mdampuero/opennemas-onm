@@ -24,7 +24,8 @@
  */
 function smarty_function_format_date($params, &$smarty)
 {
-    $date     = $params['date'] ?? null;
+    $date = $params['date'] ?? null;
+
     $defaults = [
         'format'   => null,
         'locale'   => $smarty->getContainer()->get('core.locale')->getLocale('frontend'),
