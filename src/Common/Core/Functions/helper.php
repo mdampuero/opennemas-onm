@@ -124,7 +124,7 @@ function get_logo_text($data = [], $displayHeader1 = false)
 
         // If the item is an object, call the corresponding function
         if (is_object($item)) {
-            $functionName = "get_" . getEntityName(get_class($item)) . "_name";
+            $functionName = "get_" . strtolower(str_replace('Common\\Model\\Entity\\', '', get_class($item))) . "_name";
             if (function_exists($functionName)) {
                 return call_user_func($functionName, $item, $displayHeader1);
             }
@@ -132,18 +132,4 @@ function get_logo_text($data = [], $displayHeader1 = false)
     }
 
     return '';
-}
-
-/**
- * Extracts the entity name from the full class name.
- *
- * This helper function removes the 'Common\Model\Entity\' namespace
- * from the full class name and converts it to lowercase.
- *
- * @param string $className The fully qualified class name.
- * @return string The extracted and lowercased entity name.
- */
-function getEntityName($className)
-{
-    return strtolower(str_replace('Common\\Model\\Entity\\', '', $className));
 }
