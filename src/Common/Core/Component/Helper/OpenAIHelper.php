@@ -85,6 +85,22 @@ class OpenAIHelper
 
     public function sendMessage($messages, $params = [])
     {
+        /*return array(
+            "message" => "La Segunda Guerra Mundial fue un conflicto que tuvo lugar entre 1939 y 1945, en el que se
+             enfrentaron dos bloques de países: las potencias del Eje, lideradas por Alemania, Italia",
+            "tokens" => array(
+                "prompt_tokens" => 14,
+                "completion_tokens" => 50,
+                "total_tokens" => 64,
+                "prompt_tokens_details" => array(
+                    "cached_tokens" => 0
+                ),
+                "completion_tokens_details" => array(
+                    "reasoning_tokens" => 0
+                )
+            )
+        );*/
+
         $data = array_merge($this->getConfig(), $params);
 
         if (empty($this->openaiApiKey)) {
@@ -178,6 +194,10 @@ class OpenAIHelper
         }
 
         foreach ($tokens as $tokenType => $tokenValue) {
+            if (!is_numeric($tokenValue)) {
+                continue;
+            }
+
             if (!array_key_exists($tokenType, $currenTokens[$model])) {
                 $currenTokens[$model][$tokenType] = 0;
             }

@@ -124,7 +124,7 @@ class OpenAIController extends ApiController
                 return new JsonResponse(['error' => $response['error']], JsonResponse::HTTP_REQUEST_TIMEOUT);
             }
 
-            if (array_key_exists('tokens', $response) && !empty($response['tokens'])) {
+            if ($response['tokens'] ?? false) {
                 $this->get($this->helper)->saveTokens($response['tokens']);
             }
 

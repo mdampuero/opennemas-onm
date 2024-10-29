@@ -31,7 +31,7 @@
 
         $scope.routes = {
           generateText: 'api_v1_backend_openai_generate',
-          saveTokens:   'api_v1_backend_openai_tokens',
+          saveTokens: 'api_v1_backend_openai_tokens',
         };
 
         $scope.last_token_usage = 0;
@@ -50,27 +50,44 @@
          */
         $scope.template = template;
 
+        /**
+         * @param {string} property - The name of the property on `$scope` to be shown/hidden.
+         * @param {number} [delay=3000] - The delay in milliseconds before the property is hidden.
+         * @returns {void}
+         */
+        $scope.hideAfterDelay = function(property, delay) {
+          $scope[property] = true;
+          setTimeout(function() {
+            $scope[property] = false;
+          }, delay || 3000);
+        };
+
+        /**
+         * Generates text based on the provided template, handling success and error responses.
+         *
+         * @returns {boolean} Returns `false` if the template is empty; otherwise, no explicit return value.
+         */
         $scope.generate = function() {
+          if (!$scope.template) {
+            return false;
+          }
+
           $scope.waiting = true;
 
           http.post($scope.routes.generateText, $scope.template)
             .then(function(response) {
-              // console.log(response.data);
-              $scope.template.response = response.data.message;
-              $scope.last_token_usage = response.data.tokens.total_tokens;
+              var data = response.data;
+
+              $scope.template.response = data.message;
+              $scope.last_token_usage  = data.tokens.total_tokens;
 
               $scope.showResult = true;
-              $scope.showTokens = true;
-              $scope.waiting = false;
+              $scope.waiting    = false;
 
-              setTimeout(function() {
-                $scope.showTokens = false;
-              }, 3000);
-            }, function(response) {
-              $scope.showError = true;
-              setTimeout(function() {
-                $scope.showError = false;
-              }, 3000);
+              $scope.hideAfterDelay('showTokens');
+            })
+            .catch(function() {
+              $scope.hideAfterDelay('showError');
               $scope.waiting = false;
             });
         };
