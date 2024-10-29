@@ -95,3 +95,41 @@ function webpack()
 
     return $html;
 }
+
+/**
+ * Retrieves the logo text from a given data array.
+ *
+ * This function iterates over the elements of the array. If an element is a string,
+ * it returns that string immediately. If an element is an object, it dynamically
+ * calls a function based on the object's class name to get the logo name.
+ *
+ * @param array $data An array that may contain strings or objects.
+ *                    - Strings will be returned as the logo text.
+ *                    - Objects will trigger a dynamic function call to retrieve their name.
+ * @param bool $displayHeader1 If true, the method will return the header_1.
+ * @return string Returns the logo text if found (either from a string or by calling
+ *                a function for the object). Returns an empty string if no valid text is found.
+ */
+function get_logo_text($data = [], $displayHeader1 = false)
+{
+    foreach ($data as $item) {
+        if (empty($item)) {
+            continue;
+        }
+
+        // Return if the item is a string
+        if (is_string($item)) {
+            return $item;
+        }
+
+        // If the item is an object, call the corresponding function
+        if (is_object($item)) {
+            $functionName = "get_" . strtolower(str_replace('Common\\Model\\Entity\\', '', get_class($item))) . "_name";
+            if (function_exists($functionName)) {
+                return call_user_func($functionName, $item, $displayHeader1);
+            }
+        }
+    }
+
+    return '';
+}
