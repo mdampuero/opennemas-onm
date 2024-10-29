@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 09:54+0000\n"
-"PO-Revision-Date: 2024-10-21 11:55+0200\n"
+"POT-Creation-Date: 2024-10-24 09:26+0000\n"
+"PO-Revision-Date: 2024-10-24 11:27+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -3795,6 +3795,16 @@ msgstr ""
 "Si necesitas más información para configurar tus dominios contacta con "
 "nuestro equipo de soporte"
 
+msgid "Hide ongoing events"
+msgstr "Ocultar los eventos en curso"
+
+msgid ""
+"If this option is enabled, only events that start or end on or after the "
+"current date will be displayed."
+msgstr ""
+"Si esta opción está habilitada, solo se mostrarán los eventos que comiencen "
+"o finalicen en la fecha actual o después."
+
 msgid "Edit '%1'"
 msgstr "Editar '%1'"
 
@@ -3836,6 +3846,9 @@ msgstr "Dirección del lugar"
 
 msgid "Website URL"
 msgstr "URL del sitio web"
+
+msgid "Config event module"
+msgstr "Configuración de módulo «Evento»"
 
 msgid "Start"
 msgstr "Inicio"
@@ -8833,9 +8846,6 @@ msgstr "Nombre del grupo"
 
 #~ msgid "Total number of videos to show per page in the frontpage"
 #~ msgstr "Número total de vídeos para mostrar por página en portada"
-
-#~ msgid "Config video module"
-#~ msgstr "Configuración de módulo «Vídeo»"
 
 #~ msgid "Add contents to groups by using the \"Add contents\" button"
 #~ msgstr "Añade contenidos a los grupos usando el botón «Añadir contenidos»"
