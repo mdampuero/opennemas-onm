@@ -181,10 +181,13 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeSmartyCacheAll', 15],
                 ['removeVarnishCacheCurrentInstance', 10],
             ],
-
             // Web Push notifications hooks
             'web_push_notifications.patchItem' => [
                 ['removeObjectCacheForWebPushNotifications', 20]
+            ],
+            // Albums Config hooks
+            'albums.config' => [
+                ['removeVarnishCacheForAlbums', 10]
             ],
         ];
     }
@@ -745,5 +748,21 @@ class HooksSubscriber implements EventSubscriberInterface
         foreach ($related as $content) {
             $cache->remove('content-' . $content->pk_content);
         }
+    }
+
+    /**
+     * Removes varnish cache for all comments snippets.
+     *
+     * @return null
+     */
+    public function removeVarnishCacheForAlbums()
+    {
+        $instanceName = $this->container->get('core.instance')->internal_name;
+
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ ^instance-%s.*album', $instanceName)
+            ])
+        );
     }
 }
