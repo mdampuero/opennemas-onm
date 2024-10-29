@@ -355,3 +355,8 @@ services:
         class:      Common\Core\Component\Helper\WidgetHelper
         arguments: [ '@service_container' ]
         public:     true
+
+    core.helper.tag:
+        class:      Common\Core\Component\Helper\TagHelper
+        arguments:  [ ]
+        public:     true

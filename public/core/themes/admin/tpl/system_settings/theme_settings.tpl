@@ -474,7 +474,21 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-md-6 m-b-15">
+                      <div class="col-xs-12 col-md-5 m-b-15">
+                        <label class="form-label" for="theme-option-author-photo-crop">
+                          <span class="help">
+                            {t}Author's photo crop{/t}
+                          </span>
+                        </label>
+                        <div class="controls">
+                          <div class="input-group">
+                            <select id="theme-option-author-photo-crop" name="theme-option-author-photo-crop" ng-model="settings.theme_options.content_author_photo_crop">
+                              <option value="[% content_author_photo_crop_name %]" ng-repeat="(content_author_photo_crop_name,content_author_photo_crop_value) in extra.theme_skins[settings.theme_skin].params.options.content_author_photo_crop.options" ng-selected="[% content_author_photo_crop_name === settings.theme_options.content_author_photo_crop %]">[% content_author_photo_crop_value %]</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-12 m-b-15">
                         <label class="form-label m-b-15" for="theme-option-content-imageratio-tiny">
                           <h4>
                             <i class="fa fa-code"></i>

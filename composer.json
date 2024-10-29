@@ -44,7 +44,8 @@
             "src/Common/Core/Functions/related.php",
             "src/Common/Core/Functions/sitemap.php",
             "src/Common/Core/Functions/video.php",
-            "src/Common/Core/Functions/widget.php"
+            "src/Common/Core/Functions/widget.php",
+            "src/Common/Core/Functions/tag.php"
         ]
     },
     "autoload-dev": {

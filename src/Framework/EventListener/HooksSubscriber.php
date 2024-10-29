@@ -73,6 +73,10 @@ class HooksSubscriber implements EventSubscriberInterface
             'comment.patchList'  => [
                 [ 'removeVarnishCacheForComments', 10 ]
             ],
+            // Events hooks
+            'event.config' => [
+                [ 'removeVarnishCacheForEventConfig', 10 ]
+            ],
             // Content hooks
             'content.update-set-num-views' => [
                 ['removeObjectCacheForContent', 20]
@@ -178,10 +182,13 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeSmartyCacheAll', 15],
                 ['removeVarnishCacheCurrentInstance', 10],
             ],
-
             // Web Push notifications hooks
             'web_push_notifications.patchItem' => [
                 ['removeObjectCacheForWebPushNotifications', 20]
+            ],
+            // Albums Config hooks
+            'albums.config' => [
+                ['removeVarnishCacheForAlbums', 10]
             ],
         ];
     }
@@ -315,16 +322,27 @@ class HooksSubscriber implements EventSubscriberInterface
         $instanceName = $this->container->get('core.instance')->internal_name;
         $types        = ['article', 'opinion', 'event', 'company', 'poll', 'video', 'album'];
 
-        $this->container->get('task.service.queue')
-            ->push(
-                new ServiceTask(
-                    'core.varnish',
-                    'ban',
-                    [
-                        sprintf('obj.http.x-tags ~ ^instance-%s.*((' . implode(')|(', $types) . '))', $instanceName)
-                    ]
-                )
-            );
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('core.varnish', 'ban', [
+                    sprintf('obj.http.x-tags ~ ^instance-%s.*((' . implode(')|(', $types) . '))', $instanceName)
+            ])
+        );
+    }
+
+    /**
+     * Removes the Varnish cache for event configurations.
+     *
+     * @return null
+     */
+    public function removeVarnishCacheForEventConfig()
+    {
+        $instanceName = $this->container->get('core.instance')->internal_name;
+
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ ^instance-%s.*event-frontpage*', $instanceName)
+            ])
+        );
     }
 
     /**
@@ -748,5 +766,21 @@ class HooksSubscriber implements EventSubscriberInterface
         foreach ($related as $content) {
             $cache->remove('content-' . $content->pk_content);
         }
+    }
+
+    /**
+     * Removes varnish cache for all comments snippets.
+     *
+     * @return null
+     */
+    public function removeVarnishCacheForAlbums()
+    {
+        $instanceName = $this->container->get('core.instance')->internal_name;
+
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ ^instance-%s.*album', $instanceName)
+            ])
+        );
     }
 }
