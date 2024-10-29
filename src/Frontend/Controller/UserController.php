@@ -669,7 +669,7 @@ class UserController extends Controller
         $body    = $this->get('core.template.frontend')
             ->render('user/emails/welcome.tpl', [
                 'name' => $user->name,
-                'url'  => $this->generatePrefixedUrl('frontend_paywall_showcase', [], true),
+                'url'  => $this->generatePrefixedUrl('frontend_frontpage', [], true),
             ]);
 
         $message = \Swift_Message::newInstance();
