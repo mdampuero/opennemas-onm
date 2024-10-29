@@ -320,7 +320,7 @@ class HooksSubscriber implements EventSubscriberInterface
     public function removeVarnishCacheForAllContentPages()
     {
         $instanceName = $this->container->get('core.instance')->internal_name;
-        $types        = ['article', 'opinion', 'event', 'company', 'poll', 'video', 'album'];
+        $types        = ['article', 'opinion', 'event', 'company', 'poll', 'video', 'album', 'letter'];
 
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
