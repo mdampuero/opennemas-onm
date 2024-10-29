@@ -50,6 +50,15 @@ class UserController extends Controller
             $this->get('session')->getFlashBag()
                 ->add('success', _('Your account is now activated'));
 
+            // Check subscription without password and redirect to frontpage with message
+            $isOnlyEmail = $this->get('orm.manager')
+                ->getDataSet('Settings')
+                ->get('newsletter_subscribe_email');
+
+            if ($isOnlyEmail) {
+                return $this->redirect($this->generatePrefixedUrl('frontend_frontpage'));
+            }
+
             return $this->redirect($this->generatePrefixedUrl('frontend_user_show'));
         } catch (GetItemException $e) {
             $this->get('application.log')->error(
@@ -669,7 +678,7 @@ class UserController extends Controller
         $body    = $this->get('core.template.frontend')
             ->render('user/emails/welcome.tpl', [
                 'name' => $user->name,
-                'url'  => $this->generatePrefixedUrl('frontend_paywall_showcase', [], true),
+                'url'  => $this->generatePrefixedUrl('frontend_frontpage', [], true),
             ]);
 
         $message = \Swift_Message::newInstance();
