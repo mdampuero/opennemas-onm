@@ -29,16 +29,17 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
     $contentHelper = $smarty->getContainer()->get('core.helper.content');
 
     if (!empty($content)) {
-        $summary = trim(\Onm\StringUtils::htmlAttribute($contentHelper->getSummary($content)));
+        $summary     = trim(\Onm\StringUtils::htmlAttribute($contentHelper->getSummary($content)));
+        $description = $content->social_description ?? $content->body;
         if (empty($summary)) {
             $summary = mb_substr(
-                trim(\Onm\StringUtils::htmlAttribute($content->body)),
+                trim(\Onm\StringUtils::htmlAttribute($description)),
                 0,
                 80
             ) . "...";
         }
 
-        $title = $content->title_int ?? $content->title;
+        $title = $content->social_title ?? $content->title_int ?? $content->title;
         $title = htmlspecialchars(
             html_entity_decode($title, ENT_COMPAT, 'UTF-8')
         );
