@@ -765,8 +765,9 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testUpdateItem()
     {
-        $item = new Entity([ 'name' => 'foobar' ]);
-        $data = [ 'name' => 'mumble' ];
+        $item        = new Entity([ 'name' => 'foobar' ]);
+        $itemOldData = clone $item;
+        $data        = [ 'name' => 'mumble' ];
 
         $this->converter->expects($this->once())->method('objectify')
             ->with($data)->willReturn($data);
@@ -783,10 +784,11 @@ class OrmServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->at(1))->method('dispatch')
             ->with('entity.updateItem', [
-                'action' => 'Api\Service\V1\OrmService::updateItem',
-                'id'     => 1,
-                'item'   => $item,
-                'last_changed' => ''
+                'action'        => 'Api\Service\V1\OrmService::updateItem',
+                'id'            => 1,
+                'item'          => $item,
+                'item_old_data' => $itemOldData,
+                'last_changed'  => ''
             ]);
 
         $this->service->updateItem(1, $data);

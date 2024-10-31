@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -233,6 +234,51 @@ class CategoryService extends OrmService
             }
 
             return true;
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * Retrieves all child category IDs for a given category, including nested descendants.
+     *
+     * This method queries the database for direct child categories of the provided category
+     * and recursively retrieves the IDs of all their descendants. It checks whether the
+     * child categories' content should be shown in the parent category based on the
+     * "showContentInParent" flag.
+     *
+     * If the "showContentInParent" flag is set to true for a child category, the method
+     * will include that category's ID and also recursively retrieve the IDs of its descendants.
+     * Otherwise, the category and its descendants will be skipped.
+     *
+     * @param Category $item The parent category from which to retrieve child IDs.
+     *
+     * @return array An array of IDs representing all child and descendant categories that should
+     *               have their content displayed in the parent category.
+     */
+    public function getChildIds($item)
+    {
+        try {
+            $childIds = [];
+
+            // Retrieve the list of child categories based on the parent ID
+            $oql      = sprintf(
+                'parent_id = %d',
+                $item->id
+            );
+            $response = $this->getList($oql);
+
+            // Iterate through each child category and collect their IDs
+            foreach ($response['items'] as $child) {
+                if (($child->params["showContentInParent"] ?? false) == true) {
+                    // Add the current child's ID to the result array
+                    $childIds[] = $child->id;
+                    $childIds   = array_merge($childIds, $this->getChildIds($child));
+                }
+            }
+
+            // Return the array of collected child IDs
+            return $childIds;
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), $e->getCode());
         }

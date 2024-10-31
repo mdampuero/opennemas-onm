@@ -205,18 +205,22 @@ class CategoryHelper
     }
 
     /**
-     * Returns the category name for the provided item.
+     * Returns the name of the category for the provided item, prioritizing the header if specified.
      *
-     * @param Content $item The item to get category name for. If not provided, the
-     *                      function will try to search the item in the template.
+     * @param Content $item The item for which to retrieve the category name. If not provided,
+     *                      the function will attempt to find the item in the template.
+     * @param bool $displayHeader1 If true, the method will return the category's header_1
+     *                             if it exists; otherwise, it returns the category's title.
      *
-     * @return ?string The category name if present. Null otherwise.
+     * @return ?string The category's header_1 or title if available, or null if the category is not found.
      */
-    public function getCategoryName($item = null) : ?string
+    public function getCategoryName($item = null, $displayHeader1 = false): ?string
     {
         $category = $this->getCategory($item);
 
-        return !empty($category) ? $category->title : null;
+        return !empty($category)
+            ? ($displayHeader1 && !empty($category->header_1) ? $category->header_1 : $category->title)
+            : null;
     }
 
     /**

@@ -1012,6 +1012,13 @@ class PermissionHelper
                 'module'      => 'POLL_MANAGER',
                 'enabled'     => 1
             ],
+            176 => [
+                'id'          => 176,
+                'name'        => 'PRESSCLIPPING_ADMIN',
+                'description' => _('Manage Pressclipping module'),
+                'module'      => 'es.openhost.module.pressclipping',
+                'enabled'     => 1
+            ],
             177 => [
                 'id'          => 177,
                 'name'        => 'IMPORT_NEWS_AGENCY_CONFIG',
@@ -1583,6 +1590,13 @@ class PermissionHelper
                 'module'      => 'es.openhost.module.companies',
                 'enabled'     => 1
             ],
+            262 => [
+                'id'          => 262,
+                'name'        => 'EVENT_SETTINGS',
+                'description' => _('Manage module setting'),
+                'module'      => 'es.openhost.module.events',
+                'enabled'     => 1
+            ]
         ];
     }
 }

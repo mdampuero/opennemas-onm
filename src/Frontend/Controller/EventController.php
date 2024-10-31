@@ -54,8 +54,9 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $routes = [
-        'list' => 'frontend_events',
-        'show' => 'frontend_event_show'
+        'list'    => 'frontend_events',
+        'tagList' => 'frontend_event_taglist',
+        'show'    => 'frontend_event_show'
     ];
 
     /**
@@ -67,8 +68,9 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $templates = [
-        'list' => 'event/list.tpl',
-        'show' => 'event/item.tpl'
+        'list'    => 'event/list.tpl',
+        'taglist' => 'event/list.tpl',
+        'show'    => 'event/item.tpl'
     ];
 
     /**
@@ -103,11 +105,42 @@ class EventController extends FrontendController
     }
 
     /**
+     * Retrieves a tag item based on the slug provided in the request and the current locale.
+     *
+     * @param Request $request The current HTTP request object, which contains the tag slug.
+     *
+     * @return array The tag item data.
+     *
+     * @throws ResourceNotFoundException If the tag item cannot be found or an error occurs while fetching the item.
+     */
+    protected function getItemTag(Request $request)
+    {
+        try {
+            $locale = $this->container->get('core.locale')->getRequestLocale();
+            $tag    = $request->get('tag');
+
+            $item = $this->get('api.service.tag')->getItemBy(sprintf(
+                'slug = "%s" and (locale = "%s" or locale is null)',
+                $tag,
+                $locale
+            ));
+        } catch (\Exception $e) {
+            throw new ResourceNotFoundException();
+        }
+
+
+        return $item;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function hydrateList(array &$params = []) : void
     {
-        $date = gmdate('Y-m-d H:i:s');
+        $date          = gmdate('Y-m-d H:i:s');
+        $eventSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('event_settings', false);
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
@@ -116,28 +149,39 @@ class EventController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $response = $this->get('api.service.content')->getListBySql(sprintf(
+        $oql = sprintf(
             'select * from contents '
             . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
             . 'and cm1.meta_name = "event_start_date" '
             . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
             . 'and cm2.meta_name = "event_end_date" '
             . 'where content_type_name="event" and content_status=1 and in_litter=0 '
-            . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))'
+            . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s")) '
             . 'and (starttime is null or starttime < "%s") '
-            . 'and (endtime is null or endtime > "%s") '
-            . 'order by cm1.meta_value asc',
+            . 'and (endtime is null or endtime > "%s") ',
             gmdate('Y-m-d'),
             gmdate('Y-m-d'),
             gmdate('Y-m-d'),
             $date,
-            $date,
-        ));
+            $date
+        );
+
+        if ($eventSettings["hide_current_events"] ?? false) {
+            $oql .= sprintf(
+                'and (cm1.meta_value >= "%s") ',
+                gmdate('Y-m-d'),
+                gmdate('Y-m-d')
+            );
+        }
+
+        $oql .= 'order by cm1.meta_value asc';
+
+        $response = $this->get('api.service.content')->getListBySql($oql);
 
         $items = $response['items'];
         $total = count($items);
-        $limit = ($params['epp'] * ($params['page'] - 1) + $params['epp']) > count($items)
-            ? (count($items) - ($params['epp'] * ($params['page'] - 1)))
+        $limit = ($params['epp'] * ($params['page'] - 1) + $params['epp']) > $total
+            ? ($total - ($params['epp'] * ($params['page'] - 1)))
             : $params['epp'];
 
         $items = array_slice(
@@ -155,7 +199,6 @@ class EventController extends FrontendController
 
         if (!empty($expire)) {
             $this->setViewExpireDate($expire);
-
             $params['x-cache-for'] = $expire;
         }
 
@@ -171,5 +214,101 @@ class EventController extends FrontendController
         ]);
 
         $params['tags'] = $this->getTags($items);
+    }
+
+    /**
+     * Handles the listing of tags and redirects if the request URI does not match the expected URI.
+     * @param Request $request The current HTTP request object.
+     * @return RedirectResponse|Response A redirect response if the URI is incorrect,
+     * otherwise renders the tag listing template.
+     * @throws SecurityException If the user does not have the required permissions.
+     */
+    public function tagListAction(Request $request)
+    {
+        $this->checkSecurity($this->extension);
+
+        $action = $this->get('core.globals')->getAction();
+        $params = $request->query->all();
+        $item   = $this->getItemTag($request);
+
+        $expected = $this->getExpectedUri($action, $params);
+
+        if ($request->getRequestUri() !== $expected) {
+            return new RedirectResponse($expected, 301);
+        }
+
+        $params           = $this->getParameters($request, $item);
+        $params['x-tags'] = sprintf('%s,event-frontpage-tag', str_replace('event-', 'tag-', $params['x-tags']));
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrateListTag($params);
+        }
+
+        return $this->render($this->getTemplate($action), $params);
+    }
+
+    /**
+     * Hydrates the list of tags by querying the database for content that matches specific criteria
+     * and updates the given parameters array with the resulting content.
+     *
+     * @param array $params The parameters array, passed by reference, to be populated with content data.
+     * @return void
+     * @throws ResourceNotFoundException If no content is found that matches the query.
+     */
+    protected function hydrateListTag(array &$params = []) : void
+    {
+        $currentDate   = gmdate('Y-m-d');
+        $fullDate      = gmdate('Y-m-d H:i:s');
+        $eventSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('event_settings', false);
+
+        $oql = sprintf(
+            'SELECT * FROM contents c
+            INNER JOIN contentmeta as cm1 ON c.pk_content = cm1.fk_content
+            AND cm1.meta_name = "event_start_date"
+            LEFT JOIN contentmeta as cm2 ON c.pk_content = cm2.fk_content
+            AND cm2.meta_name = "event_end_date"
+            JOIN contents_tags ct ON c.pk_content = ct.content_id
+            JOIN tags t ON ct.tag_id = t.id
+            WHERE content_type_name="event"
+            AND content_status=1
+            AND in_litter=0
+            AND (cm1.meta_value >= "%s" OR (cm1.meta_value < "%s" AND cm2.meta_value >= "%s"))
+            AND (starttime IS NULL OR starttime < "%s")
+            AND (endtime IS NULL OR endtime > "%s")
+            AND t.slug = "%s"',
+            $currentDate,
+            $currentDate,
+            $currentDate,
+            $fullDate,
+            $fullDate,
+            $params['tag']
+        );
+
+        if ($eventSettings["hide_current_events"] ?? false) {
+            $oql .= sprintf(
+                ' AND (cm1.meta_value >= "%s")',
+                gmdate('Y-m-d'),
+                gmdate('Y-m-d')
+            );
+        }
+
+        $oql .= ' ORDER BY cm1.meta_value ASC';
+
+        $response = $this->get('api.service.content')->getListBySql($oql);
+        $items    = $response['items'];
+
+        if ($expire = $this->get('core.helper.content')->getCacheExpireDate()) {
+            $this->setViewExpireDate($expire);
+            $params['x-cache-for'] = $expire;
+        }
+
+        $params['contents'] = $items;
+
+        // TODO: Remove this hack and update variable in templates
+        $params['tag'] = $params['item']->name;
     }
 }

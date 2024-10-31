@@ -52,7 +52,8 @@ class AppKernel extends Kernel
             new Common\Test\TestBundle(),
             new Common\Migration\MigrationBundle(),
             new Common\External\ActOn\ActOnBundle(),
-            new Common\External\WebPush\WebPushBundle()
+            new Common\External\WebPush\WebPushBundle(),
+            new Common\External\PressClipping\PressClippingBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

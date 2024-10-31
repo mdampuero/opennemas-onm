@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-20 09:53+0000\n"
-"PO-Revision-Date: 2024-08-20 11:55+0200\n"
+"POT-Creation-Date: 2024-10-24 09:26+0000\n"
+"PO-Revision-Date: 2024-10-24 11:27+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -308,14 +308,14 @@ msgstr "Boletíns de novas"
 msgid "Web Push"
 msgstr "Web Push"
 
-msgid "NEW"
-msgstr "NOVO"
-
 msgid "History"
 msgstr "Historial"
 
 msgid "Configuration"
 msgstr "Configuración"
+
+msgid "PressClipping"
+msgstr "PressClipping"
 
 msgid "Utilities"
 msgstr "Utilidades"
@@ -1383,6 +1383,28 @@ msgstr "Opinión"
 msgid "A minimum of 2 answers are required"
 msgstr "Requírese un mínimo de 2 respostas"
 
+msgid "Server connection success"
+msgstr "Conexión ao servidor realizada correctamente"
+
+#, php-format
+msgid "Error %d: %s"
+msgstr "Error %d: %s"
+
+msgid "Article remove successfully"
+msgstr "Artigo eliminado con éxito"
+
+msgid "Article uploaded successfully"
+msgstr "Artigo cargado correctamente"
+
+msgid "PressClipping Module is not activated"
+msgstr "O módulo PressClipping non está activado"
+
+msgid "Account data removed successfully"
+msgstr "Os datos da conta elimináronse correctamente"
+
+msgid "Unable to remove account data"
+msgstr "Non se poden eliminar os datos da conta"
+
 msgid "Activated"
 msgstr "Activado"
 
@@ -1430,9 +1452,6 @@ msgstr "Non se puido obter información do vídeo. Comproba o enderezo"
 
 msgid "Webpush Module is not activated"
 msgstr "O módulo Webpush non está activado"
-
-msgid "Account data removed successfully"
-msgstr "Os datos da conta elimináronse correctamente"
 
 msgid "Unexpected error"
 msgstr "Erro inesperado"
@@ -1588,7 +1607,7 @@ msgid "Twitter"
 msgstr "Twitter"
 
 msgid "Instagram"
-msgstr "Instragram"
+msgstr "Instagram"
 
 msgid "Whatsapp"
 msgstr "Whatsapp"
@@ -1757,6 +1776,9 @@ msgstr "Xestionar widget"
 
 msgid "Manage favourite flag"
 msgstr "Xestionar estado de favorito"
+
+msgid "Manage Pressclipping module"
+msgstr "Xestionar o módulo Pressclipping"
 
 msgid "Config News Agency importer"
 msgstr "Configurar o importador de novas de axencias"
@@ -2209,6 +2231,24 @@ msgstr "Permitir comentarios"
 msgid "Select a category"
 msgstr "Selecciona unha categoría"
 
+msgid "Check it as \"Published\" to send pressclipping."
+msgstr "Marca o contido como \"Publicado\" para enviar a PressClipping."
+
+msgid "Article sent"
+msgstr "Artigo enviado"
+
+msgid "Article deleted"
+msgstr "Artigo eliminado"
+
+msgid "Notification failed"
+msgstr "Notificación fallida"
+
+msgid "Send to PressClipping"
+msgstr "Enviar a PressClipping"
+
+msgid "Remove from PressClipping"
+msgstr "Eliminar de PressClipping"
+
 msgid "24 hours"
 msgstr "24 horas"
 
@@ -2223,6 +2263,27 @@ msgstr "Ata"
 
 msgid "Add schedule"
 msgstr "Engadir horario"
+
+msgid "Options for SEO"
+msgstr "Opcións para SEO"
+
+msgid "Title for SEO"
+msgstr "Título para SEO"
+
+msgid "Write the SEO title for this content"
+msgstr "Escribe o título de SEO para este contido"
+
+msgid "Description for SEO"
+msgstr "Descrición para SEO"
+
+msgid "Write the SEO description for this content"
+msgstr "Escribe o descrición de SEO para este contido"
+
+msgid "Write the Canonincal URL for this content"
+msgstr "Escribe a URL canónica deste contido"
+
+msgid "Mark this content to prevent indexing"
+msgstr "Marca este contido para evitar a indexación"
 
 msgid "Webpush Notifications"
 msgstr "Notificacións WebPush"
@@ -2254,9 +2315,6 @@ msgstr "Notificación programada"
 
 msgid "Notification sent"
 msgstr "Notificación enviada"
-
-msgid "Notification failed"
-msgstr "Notificación fallida"
 
 msgid "Standard"
 msgstr "Estándar"
@@ -3486,6 +3544,12 @@ msgstr "Imaxe á esquerda"
 msgid "Default"
 msgstr "Por defecto"
 
+msgid "Edit Widget"
+msgstr "Editar Widget"
+
+msgid "Close"
+msgstr "Pechar"
+
 msgid "Please, remember save positions after finish."
 msgstr "Lembra gardar as posicións despois de rematar."
 
@@ -3556,9 +3620,6 @@ msgstr "Cambiar a disposición para esta portada"
 
 msgid "Active"
 msgstr "Activado"
-
-msgid "Close"
-msgstr "Pechar"
 
 msgid "Domain Mapping"
 msgstr "Redirección de dominios"
@@ -3717,6 +3778,16 @@ msgstr ""
 "Se precisas axuda para configurar os teus dominios contacta co noso equipo "
 "de soporte"
 
+msgid "Hide ongoing events"
+msgstr "Ocultar eventos en curso"
+
+msgid ""
+"If this option is enabled, only events that start or end on or after the "
+"current date will be displayed."
+msgstr ""
+"Se esta opción está activada, só se mostrarán os eventos que comecen ou "
+"rematen na data actual ou despois da mesma."
+
 msgid "Edit '%1'"
 msgstr "Editar '%1'"
 
@@ -3758,6 +3829,9 @@ msgstr "Enderezo do lugar"
 
 msgid "Website URL"
 msgstr "URL do sitio web"
+
+msgid "Config event module"
+msgstr "Configuración do módulo «Evento»"
 
 msgid "Start"
 msgstr "Iniciar"
@@ -4061,8 +4135,24 @@ msgstr ""
 "Se está activado, a páxina principal da categoría debe actualizarse "
 "manualmente"
 
+msgid "Show contents in parent category"
+msgstr "Mostrar contidos na categoría pai"
+
+msgid ""
+"If enabled, the contents of this category will also be displayed in its "
+"parent category"
+msgstr ""
+"Se está activado, os contidos desta categoría tamén se mostrarán na súa "
+"categoría pai"
+
 msgid "Menu"
 msgstr "Menú"
+
+msgid "H1 Header"
+msgstr "Cabeceira H1"
+
+msgid "If this field is left empty, the default Title will be displayed."
+msgstr "Se este campo se deixa baleiro, amosarase o Título predeterminado."
 
 msgid "Only empty categories can be deleted"
 msgstr "Só se poden eliminar categorías sen contidos"
@@ -4574,32 +4664,17 @@ msgstr "Cor do bordo da cabeceira da sección"
 msgid "Section header icon color"
 msgstr "Cor da icona da cabeceira da sección"
 
-msgid "Topbar"
-msgstr "Barra superior"
-
-msgid "Set display of header's top bar"
-msgstr "Establecer a visualización da barra superior da cabeceira"
-
 msgid "Breadcrumb"
 msgstr "Miga de pan"
 
 msgid "Set display of routes"
 msgstr "Establecer a visualización de rutas"
 
-msgid "Progress bar"
-msgstr "Barra de progreso"
-
-msgid "Set display of scroll progress bar"
-msgstr "Establecer a visualización da barra de progreso"
-
-msgid "Header right widget"
-msgstr "Widget da cabeceira dereita"
+msgid "Pre-main widget"
+msgstr "Widget previo ó contido principal"
 
 msgid "Widget to show before main content"
 msgstr "Widget a mostrar antes do contido principal"
-
-msgid "Pre-main widget"
-msgstr "Widget previo ó contido principal"
 
 msgid "Pre-footer widget"
 msgstr "Widget previo ó pé de páxina"
@@ -4639,6 +4714,27 @@ msgstr "Cor do bordo da cabeceira principal"
 
 msgid "Choose header border bottom color"
 msgstr "Escolla a cor inferior do bordo da cabeceira"
+
+msgid "Topbar"
+msgstr "Barra superior"
+
+msgid "Set display of header's top bar"
+msgstr "Establecer a visualización da barra superior da cabeceira"
+
+msgid "Header date"
+msgstr "Data na cabeceira"
+
+msgid "Set display of date in header's topbar"
+msgstr "Establece a visualización da data na barra superior da cabeceira"
+
+msgid "Progress bar"
+msgstr "Barra de progreso"
+
+msgid "Set display of scroll progress bar"
+msgstr "Establecer a visualización da barra de progreso"
+
+msgid "Header right widget"
+msgstr "Widget da cabeceira dereita"
 
 msgid "Main menu background"
 msgstr "Fondo do menú principal"
@@ -5002,12 +5098,6 @@ msgstr "Dominio"
 
 msgid "Activation Key"
 msgstr "Activation Key"
-
-msgid "Browser update"
-msgstr "Actualización do navegador"
-
-msgid "Notify users that they should update their browser"
-msgstr "Notificar aos usuarios que deberían actualizar o seu navegador"
 
 msgid "Items per page"
 msgstr "Elementos por páxina"
@@ -6311,14 +6401,17 @@ msgstr "Imaxes"
 msgid "NewsStand"
 msgstr "Portadas de papel"
 
-msgid "IntelligentWidget"
-msgstr "IntelligentWidget"
+msgid "on new tab"
+msgstr "nunha nova pestana"
 
 msgid "Parameter name"
 msgstr "Nome do parámetro"
 
 msgid "Parameter value"
 msgstr "Valor de parámetros"
+
+msgid "IntelligentWidget"
+msgstr "IntelligentWidget"
 
 msgid "HTML"
 msgstr "HTML"
@@ -7087,6 +7180,30 @@ msgstr "Privilexios"
 
 msgid "Toggle all privileges"
 msgstr "Activar/desactivar todos os privilexios"
+
+msgid "Pressclipping Configuration"
+msgstr "Configuración de PressClipping"
+
+msgid "PressClipping service"
+msgstr "Servizo PressClipping"
+
+msgid "CEDRO"
+msgstr "CEDRO"
+
+msgid "The fields Publication ID or API Key are empty."
+msgstr "Os campos ID de publicación ou Clave API están baleiros."
+
+msgid "CEDRO service credentials"
+msgstr "Credenciais do servizo CEDRO"
+
+msgid "Publication ID"
+msgstr "ID de publicación"
+
+msgid "Can be found in your CEDRO Account"
+msgstr "Pódese atopar na túa conta CEDRO"
+
+msgid "Pressclipping data is updated every 15 minutes"
+msgstr "Os datos de PressClipping actualízanse cada 15 minutos"
 
 msgid "Exclusive"
 msgstr "Exclusivo"
@@ -7923,6 +8040,21 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 msgid "Group name"
 msgstr "Nome do grupo"
 
+#~ msgid "Canonical URL"
+#~ msgstr "URL canónica"
+
+#~ msgid "NEW"
+#~ msgstr "NOVO"
+
+#~ msgid "CANONICAL URL"
+#~ msgstr "URL canónica"
+
+#~ msgid "Browser update"
+#~ msgstr "Actualización do navegador"
+
+#~ msgid "Notify users that they should update their browser"
+#~ msgstr "Notificar aos usuarios que deberían actualizar o seu navegador"
+
 #~ msgid "Time zone: "
 #~ msgstr "Fuso horario:"
 
@@ -8512,9 +8644,6 @@ msgstr "Nome do grupo"
 #~ msgid "Unable to create the new article."
 #~ msgstr "Non se puido crear o novo artigo."
 
-#~ msgid "Article successfully created."
-#~ msgstr "Artigo creado correctamente."
-
 #~ msgid "Unable to update the article."
 #~ msgstr "Non se puido actualizar o artigo."
 
@@ -8660,9 +8789,6 @@ msgstr "Nome do grupo"
 
 #~ msgid "Total number of videos to show per page in the frontpage"
 #~ msgstr "Número máximo de vídeos para mostrar por páxina en portada"
-
-#~ msgid "Config video module"
-#~ msgstr "Configuración do módulo «Video»"
 
 #~ msgid "Add contents to groups by using the \"Add contents\" button"
 #~ msgstr "Engadir contidos a grupos usando o botón «Engadir contidos»"

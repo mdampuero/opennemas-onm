@@ -78,6 +78,7 @@
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
+      {include file="ui/component/content-editor/accordion/seo-input.tpl"}
     </div>
   </div>
   <div class="grid simple">

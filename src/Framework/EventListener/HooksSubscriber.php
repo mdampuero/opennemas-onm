@@ -72,6 +72,10 @@ class HooksSubscriber implements EventSubscriberInterface
             'comment.patchList'  => [
                 [ 'removeVarnishCacheForComments', 10 ]
             ],
+            // Events hooks
+            'event.config' => [
+                [ 'removeVarnishCacheForEventConfig', 10 ]
+            ],
             // Content hooks
             'content.update-set-num-views' => [
                 ['removeObjectCacheForContent', 20]
@@ -177,10 +181,13 @@ class HooksSubscriber implements EventSubscriberInterface
                 ['removeSmartyCacheAll', 15],
                 ['removeVarnishCacheCurrentInstance', 10],
             ],
-
             // Web Push notifications hooks
             'web_push_notifications.patchItem' => [
                 ['removeObjectCacheForWebPushNotifications', 20]
+            ],
+            // Albums Config hooks
+            'albums.config' => [
+                ['removeVarnishCacheForAlbums', 10]
             ],
         ];
     }
@@ -214,15 +221,16 @@ class HooksSubscriber implements EventSubscriberInterface
      */
     public function removeVarnishCacheForContent(Event $event)
     {
-        $item   = $event->getArgument('item');
-        $action = $event->getArgument('action');
+        $item        = $event->getArgument('item');
+        $itemOldData = $event->hasArgument('item_old_data') ? $event->getArgument('item_old_data') : null;
+        $action      = $event->getArgument('action');
 
         $items = !is_array($item) ? [ $item ] : $item;
 
         foreach ($items as $item) {
             try {
                 $this->container->get(sprintf('api.helper.cache.%s', $item->content_type_name))
-                    ->deleteItem($item, [ 'action' => $action ]);
+                    ->deleteItem($item, [ 'action' => $action, 'itemOldData' => $itemOldData ]);
             } catch (ServiceNotFoundException $e) {
                 $this->container->get(sprintf('api.helper.cache.content'))
                     ->deleteItem($item, [ 'action' => $action ]);
@@ -299,6 +307,22 @@ class HooksSubscriber implements EventSubscriberInterface
         $this->container->get('task.service.queue')->push(
             new ServiceTask('core.varnish', 'ban', [
                 sprintf('obj.http.x-tags ~ ^instance-%s.*comments-*', $instanceName)
+            ])
+        );
+    }
+
+    /**
+     * Removes the Varnish cache for event configurations.
+     *
+     * @return null
+     */
+    public function removeVarnishCacheForEventConfig()
+    {
+        $instanceName = $this->container->get('core.instance')->internal_name;
+
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ ^instance-%s.*event-frontpage*', $instanceName)
             ])
         );
     }
@@ -673,7 +697,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $lastChanged = !is_array($lastChanged) ? [ $lastChanged ] : $lastChanged;
         $content     = !is_array($content) ? [ $content ] : $content;
 
-        foreach ($lastChanged as $key => $value) {
+        foreach ($lastChanged as $value) {
             if (empty($value)
             || !in_array($content[0]->content_type_name, $sh->getTypes($sh->getSettings(), ['tag']))
             || $now->format('Y-m') == $value->format('Y-m')) {
@@ -724,5 +748,21 @@ class HooksSubscriber implements EventSubscriberInterface
         foreach ($related as $content) {
             $cache->remove('content-' . $content->pk_content);
         }
+    }
+
+    /**
+     * Removes varnish cache for all comments snippets.
+     *
+     * @return null
+     */
+    public function removeVarnishCacheForAlbums()
+    {
+        $instanceName = $this->container->get('core.instance')->internal_name;
+
+        $this->container->get('task.service.queue')->push(
+            new ServiceTask('core.varnish', 'ban', [
+                sprintf('obj.http.x-tags ~ ^instance-%s.*album', $instanceName)
+            ])
+        );
     }
 }

@@ -249,8 +249,9 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testUpdateItem()
     {
-        $item = new Content([ 'name' => 'foobar' ]);
-        $data = [ 'name' => 'flob', 'changed' => 'foo' ];
+        $item        = new Content([ 'name' => 'foobar' ]);
+        $itemOldData = clone $item;
+        $data        = [ 'name' => 'flob', 'changed' => 'foo' ];
 
         $this->service->expects($this->any())->method('assignUser')
             ->willReturn([ 'name' => 'mumble', 'changed' => 'foo', 'bar' => 1 ]);
@@ -267,10 +268,11 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
         $this->dispatcher->expects($this->at(0))->method('dispatch')
             ->with('content.updateItem', [
-                'action' => 'Api\Service\V1\OrmService::updateItem',
-                'id'     => 1,
-                'item'   => $item,
-                'last_changed' => ''
+                'action'        => 'Api\Service\V1\OrmService::updateItem',
+                'id'            => 1,
+                'item'          => $item,
+                'item_old_data' => $itemOldData,
+                'last_changed'  => ''
             ]);
 
         $this->service->updateItem(1, $data);

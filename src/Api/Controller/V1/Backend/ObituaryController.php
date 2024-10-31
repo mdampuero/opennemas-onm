@@ -36,7 +36,7 @@ class ObituaryController extends ContentController
     /**
      * {@inheritdoc}
      */
-    protected $module = 'obituaries';
+    protected $module = 'obituary';
 
     /**
      * {@inheritdoc}
@@ -54,7 +54,13 @@ class ObituaryController extends ContentController
     {
         $extra = parent::getExtraData($items);
 
-        return array_merge([ 'tags' => $this->getTags($items) ], $extra);
+        return array_merge([
+            'tags' => $this->getTags($items),
+            'formSettings'  => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ],
+        ], $extra);
     }
 
     /**
