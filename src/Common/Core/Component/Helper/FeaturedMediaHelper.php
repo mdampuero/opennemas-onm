@@ -88,8 +88,9 @@ class FeaturedMediaHelper
 
         $map = [
             'article' => [
-                'frontpage' => [ 'featured_frontpage' ],
-                'inner'     => [ 'featured_inner' ]
+                'frontpage'         => [ 'featured_frontpage' ],
+                'inner'             => [ 'featured_inner' ],
+                'relatedsocial'     => [ 'related_social' ],
             ], 'opinion' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => [ 'featured_inner' ]

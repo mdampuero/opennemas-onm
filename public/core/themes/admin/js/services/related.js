@@ -50,8 +50,8 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             name:   'relatedInner',
             simple: false
           },
-          related_seo: {
-            name:   'relatedSeo',
+          related_social: {
+            name:   'relatedSocial',
             simple: true
           },
         },

@@ -99,6 +99,24 @@ class ContentMediaHelper
         return $media;
     }
 
+    public function getRelatedMediaSocial($content)
+    {
+        $media = $this->getMediaObject($content, 'relatedsocial');
+
+        if (empty($media)) {
+            return null;
+        }
+
+        $media = $this->contentHelper->getContent($media, 'photo');
+
+        if (is_object($media)) {
+            $media->width  = $media->width ?? 700;
+            $media->height = $media->height ?? 450;
+        }
+
+        return $media;
+    }
+
     /**
      * Returns the media object.
      *
