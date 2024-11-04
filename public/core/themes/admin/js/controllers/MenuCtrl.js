@@ -414,7 +414,7 @@
               };
 
               if ($scope.hasMultilanguage()) {
-                if (transformedItem.type !== 'tags') {
+                if (transformedItem.type !== 'tags' && transformedItem.type !== 'internal') {
                   transformedItem.locale = item.locale || $scope.config.locale.default;
                 } else {
                   transformedItem.locale = item.locale || null;
@@ -525,10 +525,6 @@
           if (original.type === 'internal' && copy.type === 'internal') {
             return (original.locale === copy.locale || copy.locale === null) &&
               original.link_name === copy.link_name;
-          }
-
-          if (original.type === 'tags' && original.locale === null) {
-            return false;
           }
 
           return original.locale === copy.locale && original.type === copy.type &&
