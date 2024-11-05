@@ -4,9 +4,8 @@
 </div>
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded' : expanded.social }">
   <div class="form-group no-margin">
-      {include file="ui/component/input/text.tpl" iField="social_title" iRequired=false iTitle="{t}Title for Social Media Preview{/t}" iValidation=false iHelp="{t}Title shown when shared on social media.{/t}"}
-      {include file="ui/component/input/text.tpl" iField="social_description" iRequired=false iTitle="{t}Description for Social Media Preview{/t}" iValidation=false iHelp="{t}Description shown when shared on social media.{/t}" }
+      {include file="ui/component/input/text.tpl" iField="social_title" iRequired=false iTitle="{t}Title for Social Media{/t}" iValidation=false iHelp="{t}Title shown when shared on social media.{/t}"}
+      {include file="ui/component/input/text.tpl" iField="social_description" iRequired=false iTitle="{t}Description for Social Media{/t}" iValidation=false iHelp="{t}Description shown when shared on social media.{/t}" }
       {include file="ui/component/input/image.tpl" iName="relatedSocial" iCaption="false"}
-
   </div>
 </div>

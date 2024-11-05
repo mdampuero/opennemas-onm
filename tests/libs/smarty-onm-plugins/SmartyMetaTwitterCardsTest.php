@@ -75,7 +75,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->helper = $this->getMockBuilder('ContentMediaHelper')
-            ->setMethods([ 'getMedia', 'getRelatedMediaSocial' ])
+            ->setMethods([ 'getMedia' ])
             ->getMock();
 
         $this->fm->expects($this->any())->method('set')
@@ -186,7 +186,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(2))->method('get')->with('site_description')
             ->willReturn('Site description');
 
-        $this->helper->expects($this->once())->method('getRelatedMediaSocial')
+        $this->helper->expects($this->once())->method('getMedia')
             ->willReturn(null);
 
         $this->contentHelper->expects($this->once())->method('getSummary')
@@ -229,12 +229,12 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(2))->method('get')->with('site_description')
             ->willReturn('Site description');
 
-        $this->helper->expects($this->once())->method('getRelatedMediaSocial')
+        $this->helper->expects($this->once())->method('getMedia')
             ->willReturn(null);
 
         $output = "<meta name=\"twitter:card\" content=\"summary_large_image\">\n"
             . "<meta name=\"twitter:title\" content=\"This is the title\">\n"
-            . "<meta name=\"twitter:description\" content=\"This is the body...\">\n"
+            . "<meta name=\"twitter:description\" content=\"This is the body\">\n"
             . "<meta name=\"twitter:site\" content=\"@twtuser\">\n"
             . "<meta name=\"twitter:domain\" content=\"http://route/to/content.html\">";
 
@@ -274,7 +274,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
             ->with($content)
             ->willReturn($content->description);
 
-        $this->helper->expects($this->once())->method('getRelatedMediaSocial')
+        $this->helper->expects($this->once())->method('getMedia')
             ->willReturn(null);
 
         $output = "<meta name=\"twitter:card\" content=\"summary_large_image\">\n"
@@ -320,7 +320,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
         $photo->width  = 600;
         $photo->height = 400;
 
-        $this->helper->expects($this->once())->method('getRelatedMediaSocial')
+        $this->helper->expects($this->once())->method('getMedia')
             ->willReturn($photo);
 
         $this->contentHelper->expects($this->once())->method('getSummary')
@@ -378,7 +378,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
         $photo->height = 400;
         $photo->url    = 'http://route/to/file.name';
 
-        $this->helper->expects($this->once())->method('getRelatedMediaSocial')
+        $this->helper->expects($this->once())->method('getMedia')
             ->willReturn($photo);
 
         $this->contentHelper->expects($this->once())->method('getSummary')

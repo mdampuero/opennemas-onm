@@ -81,27 +81,9 @@ class ContentMediaHelper
      *
      * @return object $mediaObject An object with image/video information
      */
-    public function getMedia($content)
+    public function getMedia($content, $type = 'inner')
     {
-        $media = $this->getMediaObject($content, 'inner');
-
-        if (empty($media)) {
-            return null;
-        }
-
-        $media = $this->contentHelper->getContent($media, 'photo');
-
-        if (is_object($media)) {
-            $media->width  = $media->width ?? 700;
-            $media->height = $media->height ?? 450;
-        }
-
-        return $media;
-    }
-
-    public function getRelatedMediaSocial($content)
-    {
-        $media = $this->getMediaObject($content, 'relatedsocial');
+        $media = $this->getMediaObject($content, $type);
 
         if (empty($media)) {
             return null;

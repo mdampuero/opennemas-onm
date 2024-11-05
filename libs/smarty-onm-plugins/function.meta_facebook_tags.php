@@ -22,14 +22,14 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
     $contentHelper = $smarty->getContainer()->get('core.helper.content');
 
     if (!empty($content)) {
-        $summary     = trim(\Onm\StringUtils::htmlAttribute($contentHelper->getSummary($content)));
-        $description = $content->social_description ?? $content->body;
+        $summary = $content->social_description
+            ?? trim(\Onm\StringUtils::htmlAttribute($contentHelper->getSummary($content)));
+
         if (empty($summary)) {
-            $summary = mb_substr(
-                trim(\Onm\StringUtils::htmlAttribute($description)),
-                0,
-                80
-            ) . "...";
+            $bodyContent = trim(\Onm\StringUtils::htmlAttribute($content->body));
+            $summary     = (mb_strlen($bodyContent) > 80)
+                ? mb_substr($bodyContent, 0, 80) . "..."
+                : $bodyContent;
         }
 
         $title = $content->social_title ?? $content->title_int ?? $content->title;
@@ -46,7 +46,7 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
     $output[] = '<meta property="og:site_name" content="' . $ds->get('site_name') . '" />';
 
     $media = $smarty->getContainer()->get('core.helper.content_media')
-        ->getRelatedMediaSocial($content);
+        ->getMedia($content, 'featured_social');
 
     $photoHelper = $smarty->getContainer()->get('core.helper.photo');
 

@@ -90,7 +90,7 @@ class FeaturedMediaHelper
             'article' => [
                 'frontpage'         => [ 'featured_frontpage' ],
                 'inner'             => [ 'featured_inner' ],
-                'relatedsocial'     => [ 'related_social' ],
+                'relatedsocial'     => [ 'featured_social' ],
             ], 'opinion' => [
                 'frontpage' => [ 'featured_frontpage' ],
                 'inner'     => [ 'featured_inner' ]
