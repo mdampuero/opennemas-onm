@@ -37,6 +37,10 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             name:   'featuredInner',
             simple: true
           },
+          featured_social: {
+            name:   'featuredSocial',
+            simple: true
+          },
           photo: {
             name:   'photos',
             simple: false

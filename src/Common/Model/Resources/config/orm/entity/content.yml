@@ -63,10 +63,12 @@ orm:
                 pretitle:               l10n_string
                 pressclipping_status:   string
                 pressclipping_sended:   string
-                noindex:              integer
-                seo_title:            string
-                seo_description:      string
-                canonicalurl:         string
+                noindex:                integer
+                seo_title:              l10n_string
+                seo_description:        l10n_string
+                canonicalurl:           string
+                social_title:           l10n_string
+                social_description:     l10n_string
             converters:
                 default:
                     class:     Common\Model\Database\Data\Converter\ContentConverter
