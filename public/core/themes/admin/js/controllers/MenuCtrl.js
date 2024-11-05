@@ -527,6 +527,10 @@
               original.link_name === copy.link_name;
           }
 
+          if (original.type === 'tags' && original.locale === null) {
+            return false;
+          }
+
           return original.locale === copy.locale && original.type === copy.type &&
                  original.referenceId === copy.referenceId;
         };
