@@ -46,7 +46,7 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
     $output[] = '<meta property="og:site_name" content="' . $ds->get('site_name') . '" />';
 
     $media = $smarty->getContainer()->get('core.helper.content_media')
-        ->getMedia($content, 'featured_social');
+        ->getMedia($content, 'relatedsocial');
 
     $photoHelper = $smarty->getContainer()->get('core.helper.photo');
 
