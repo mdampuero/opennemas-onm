@@ -81,9 +81,9 @@ class ContentMediaHelper
      *
      * @return object $mediaObject An object with image/video information
      */
-    public function getMedia($content, $type = 'inner')
+    public function getMedia($content)
     {
-        $media = $this->getMediaObject($content, $type);
+        $media = $this->getMediaObject($content);
 
         if (empty($media)) {
             return null;
@@ -107,7 +107,7 @@ class ContentMediaHelper
      *
      * @return Content The media object for the specific content.
      */
-    protected function getMediaObject($content, $type)
+    protected function getMediaObject($content, $type = 'social')
     {
         if (!empty($content) && $content->content_type_name === 'photo') {
             return $content;
@@ -115,6 +115,12 @@ class ContentMediaHelper
 
         if ($this->featuredHelper->hasFeaturedMedia($content, $type)) {
             $featuredMedia = $this->featuredHelper->getFeaturedMedia($content, $type);
+
+            return $this->getMediaObject($featuredMedia, 'frontpage');
+        }
+
+        if ($this->featuredHelper->hasFeaturedMedia($content, 'inner')) {
+            $featuredMedia = $this->featuredHelper->getFeaturedMedia($content, 'inner');
 
             return $this->getMediaObject($featuredMedia, 'frontpage');
         }

@@ -184,18 +184,22 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->featuredHelper->expects($this->at(0))->method('hasFeaturedMedia')
+            ->with($content, 'social')
+            ->willReturn(false);
+
+        $this->featuredHelper->expects($this->at(1))->method('hasFeaturedMedia')
             ->with($content, 'inner')
             ->willReturn(true);
 
-        $this->featuredHelper->expects($this->at(1))->method('getFeaturedMedia')
+        $this->featuredHelper->expects($this->at(2))->method('getFeaturedMedia')
             ->with($content, 'inner')
             ->willReturn($video);
 
-        $this->featuredHelper->expects($this->at(2))->method('hasFeaturedMedia')
+        $this->featuredHelper->expects($this->at(3))->method('hasFeaturedMedia')
             ->with($video, 'frontpage')
             ->willReturn(true);
 
-        $this->featuredHelper->expects($this->at(3))->method('getFeaturedMedia')
+        $this->featuredHelper->expects($this->at(4))->method('getFeaturedMedia')
             ->with($video, 'frontpage')
             ->willReturn($photo);
 
@@ -225,7 +229,7 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $this->featuredHelper->expects($this->at(0))->method('hasFeaturedMedia')
-            ->with($content, 'inner')
+            ->with($content, 'social')
             ->willReturn(false);
 
         $this->contentHelper->expects($this->at(0))->method('getType')
@@ -267,8 +271,12 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->featuredHelper->expects($this->once())->method('hasFeaturedMedia')
+        $this->featuredHelper->expects($this->at(0))->method('hasFeaturedMedia')
             ->with($content)
+            ->willReturn(false);
+
+        $this->featuredHelper->expects($this->at(1))->method('hasFeaturedMedia')
+            ->with($content, 'inner')
             ->willReturn(false);
 
         $this->sh->expects($this->once())->method('hasLogo')

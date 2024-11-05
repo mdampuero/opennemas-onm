@@ -53,7 +53,7 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
     $output[] = '<meta name="twitter:domain" content="' . $url . '">';
 
     $media = $smarty->getContainer()->get('core.helper.content_media')
-        ->getMedia($content, 'social');
+        ->getMedia($content);
 
     $photoHelper = $smarty->getContainer()->get('core.helper.photo');
 
