@@ -1590,6 +1590,13 @@ class PermissionHelper
                 'module'      => 'es.openhost.module.companies',
                 'enabled'     => 1
             ],
+            262 => [
+                'id'          => 262,
+                'name'        => 'EVENT_SETTINGS',
+                'description' => _('Manage module setting'),
+                'module'      => 'es.openhost.module.events',
+                'enabled'     => 1
+            ]
         ];
     }
 }

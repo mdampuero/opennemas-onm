@@ -100,4 +100,17 @@ class EventController extends BackendController
         } catch (GetListException $e) {
         }
     }
+
+    /**
+     * Displays the configuration form for events.
+     *
+     * @return Response The response object.
+     *
+     * @Security("hasExtension('es.openhost.module.events')")
+     *
+     */
+    public function configAction()
+    {
+        return $this->render('event/config.tpl');
+    }
 }
