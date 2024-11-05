@@ -37,6 +37,10 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
             name:   'featuredInner',
             simple: true
           },
+          featured_social: {
+            name:   'featuredSocial',
+            simple: true
+          },
           photo: {
             name:   'photos',
             simple: false
@@ -49,10 +53,6 @@ angular.module('BackendApp.services', [ 'onm.localize' ])
           related_inner: {
             name:   'relatedInner',
             simple: false
-          },
-          featured_social: {
-            name:   'relatedSocial',
-            simple: true
           },
         },
         mirrored: {}
