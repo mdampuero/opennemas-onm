@@ -207,9 +207,11 @@ class AuthorController extends Controller
 
         $this->getAds();
 
+        $itemsCopy = unserialize(serialize($items));
+
         $xtags = [',authors-frontpage'];
 
-        foreach ($items as $item) {
+        foreach ($itemsCopy as $item) {
             $xtags[] = ',author-' . $item->id;
         }
 
