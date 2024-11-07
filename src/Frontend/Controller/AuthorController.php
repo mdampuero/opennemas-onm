@@ -184,15 +184,16 @@ class AuthorController extends Controller
             ->filter('mapify', [ 'key' => 'id' ])
             ->get();
 
-        foreach ($items as &$item) {
+        $authorUsers = [];
+        foreach ($items as $id => $item) {
             $author = $authors[$item['id']];
 
             $author->total_contents = $item['total'];
 
-            $item = $author;
+            $authorUsers[$id] = $author;
         }
 
-        $items = array_filter($items, function ($a) {
+        $items = array_filter($authorUsers, function ($a) {
             return !is_array($a);
         });
 
@@ -207,11 +208,9 @@ class AuthorController extends Controller
 
         $this->getAds();
 
-        $itemsCopy = unserialize(serialize($items));
-
         $xtags = [',authors-frontpage'];
 
-        foreach ($itemsCopy as $item) {
+        foreach ($items as $item) {
             $xtags[] = ',author-' . $item->id;
         }
 
