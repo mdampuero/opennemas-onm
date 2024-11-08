@@ -184,18 +184,12 @@ class AuthorController extends Controller
             ->filter('mapify', [ 'key' => 'id' ])
             ->get();
 
-        $authorUsers = [];
-        foreach ($items as $id => $item) {
-            $author = $authors[$item['id']];
-
+        $items = array_map(function ($item) use ($authors) {
+            $author                 = $authors[$item['id']];
             $author->total_contents = $item['total'];
 
-            $authorUsers[$id] = $author;
-        }
-
-        $items = array_filter($authorUsers, function ($a) {
-            return !is_array($a);
-        });
+            return $author;
+        }, $items);
 
         // Build the pagination
         $pagination = $this->get('paginator')->get([
