@@ -134,12 +134,16 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             'height'            => 1080
         ]);
 
-        $this->featuredHelper->expects($this->once())->method('hasFeaturedMedia')
-            ->with($content)
+        $this->featuredHelper->expects($this->at(0))->method('hasFeaturedMedia')
+            ->with($content, 'social')
+            ->willReturn(true);
+
+        $this->featuredHelper->expects($this->at(1))->method('hasFeaturedMedia')
+            ->with($content, 'social')
             ->willReturn(true);
 
         $this->featuredHelper->expects($this->once())->method('getFeaturedMedia')
-            ->with($content)
+            ->with($content, 'social')
             ->willReturn($photo);
 
         $this->contentHelper->expects($this->once())->method('getContent')
@@ -196,10 +200,14 @@ class ContentMediaHelperTest extends \PHPUnit\Framework\TestCase
             ->willReturn($video);
 
         $this->featuredHelper->expects($this->at(3))->method('hasFeaturedMedia')
+            ->with($video, 'social')
+            ->willReturn(false);
+
+        $this->featuredHelper->expects($this->at(4))->method('hasFeaturedMedia')
             ->with($video, 'frontpage')
             ->willReturn(true);
 
-        $this->featuredHelper->expects($this->at(4))->method('getFeaturedMedia')
+        $this->featuredHelper->expects($this->at(5))->method('getFeaturedMedia')
             ->with($video, 'frontpage')
             ->willReturn($photo);
 
