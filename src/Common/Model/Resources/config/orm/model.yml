@@ -39,6 +39,7 @@ imports:
     - { resource: entity/purchase.yml }
     - { resource: entity/settings.yml }
     - { resource: entity/tag.yml }
+    - { resource: entity/prompt.yml }
     - { resource: entity/theme.yml }
     - { resource: entity/url.yml }
     - { resource: entity/user.yml }

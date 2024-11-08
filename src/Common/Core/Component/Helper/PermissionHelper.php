@@ -1590,6 +1590,34 @@ class PermissionHelper
                 'module'      => 'es.openhost.module.companies',
                 'enabled'     => 1
             ],
+            262 => [
+                'id'          => 262,
+                'name'        => 'PROMPT_ADMIN',
+                'description' => _('List'),
+                'module'      => 'es.openhost.module.openai',
+                'enabled'     => 1
+            ],
+            263 => [
+                'id'          => 263,
+                'name'        => 'PROMPT_UPDATE',
+                'description' => _('Edit'),
+                'module'      => 'es.openhost.module.openai',
+                'enabled'     => 1
+            ],
+            264 => [
+                'id'          => 264,
+                'name'        => 'PROMPT_DELETE',
+                'description' => _('Delete'),
+                'module'      => 'es.openhost.module.openai',
+                'enabled'     => 1
+            ],
+            265 => [
+                'id'          => 265,
+                'name'        => 'PROMPT_CREATE',
+                'description' => _('Create'),
+                'module'      => 'es.openhost.module.openai',
+                'enabled'     => 1
+            ],
         ];
     }
 }

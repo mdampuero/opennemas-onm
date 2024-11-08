@@ -346,6 +346,14 @@ $menuXml = [
                 'privilege'   => 'MASTER'
             ],
             [
+                'id'          => 'openai_promts',
+                'title'       => _('Prompts'),
+                'icon'        => 'fa fa-terminal fa-lg',
+                'link'        => url('backend_openai_prompts_list'),
+                'module_name' => 'es.openhost.module.openai',
+                'privilege'   => 'ADMIN'
+            ],
+            [
                 'id'          => 'openai_usage',
                 'title'       => _('Usage'),
                 'icon'        => 'fa fa-line-chart',

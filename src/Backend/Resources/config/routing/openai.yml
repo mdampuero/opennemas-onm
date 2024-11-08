@@ -9,3 +9,23 @@ backend_openai_usage:
     defaults: { _controller: BackendBundle:OpenAI:usage }
     options:
         expose: true
+
+backend_openai_prompt_create:
+    path:     /openai/prompts/new/
+    defaults: { _controller: BackendBundle:Prompt:create }
+    options:
+        expose: true
+
+backend_openai_prompt_show:
+    path:     /openai/prompts/{id}/
+    defaults: { _controller: BackendBundle:Prompt:show }
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+backend_openai_prompts_list:
+    path:     /openai/prompts/
+    defaults: { _controller: BackendBundle:Prompt:list }
+    options:
+        expose: true

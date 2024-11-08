@@ -1,0 +1,49 @@
+orm:
+    metadata:
+        -
+            name:  Prompt
+            class: Common\Model\Entity\Prompt
+            properties:
+                description: string
+                id:          integer
+                name:        string
+                field:       string
+                context:     string
+            converters:
+                default:
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.prompt' ]
+            repositories:
+                instance:
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.prompt', '@cache.connection.instance' ]
+            persisters:
+                instance:
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.prompt', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: prompts
+                    columns:
+                        id:
+                            type: integer
+                            options: { default: null, unsigned: true, autoincrement: true }
+                        name:
+                            type: text
+                            options: { default: null, length: 1024, notnull: true }
+                        context:
+                            type: text
+                            options: { default: null, length: 1024, notnull: false }
+                        field:
+                            type: text
+                            options: { default: null, length: 32, notnull: false }
+                        description:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
+                    index:
+                        -
+                            name:    PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique:  true
+                            flags:   {}
