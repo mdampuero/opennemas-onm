@@ -83,7 +83,7 @@ class ContentMediaHelper
      */
     public function getMedia($content)
     {
-        $media = $this->getMediaObject($content);
+        $media = $this->getMediaObject($content, 'inner');
 
         if (empty($media)) {
             return null;
@@ -107,20 +107,17 @@ class ContentMediaHelper
      *
      * @return Content The media object for the specific content.
      */
-    protected function getMediaObject($content, $type = 'social')
+    protected function getMediaObject($content, $type)
     {
         if (!empty($content) && $content->content_type_name === 'photo') {
             return $content;
         }
 
+        // Check for social image
+        $type = $this->featuredHelper->hasFeaturedMedia($content, 'social') ? 'social' : $type;
+
         if ($this->featuredHelper->hasFeaturedMedia($content, $type)) {
             $featuredMedia = $this->featuredHelper->getFeaturedMedia($content, $type);
-
-            return $this->getMediaObject($featuredMedia, 'frontpage');
-        }
-
-        if ($this->featuredHelper->hasFeaturedMedia($content, 'inner')) {
-            $featuredMedia = $this->featuredHelper->getFeaturedMedia($content, 'inner');
 
             return $this->getMediaObject($featuredMedia, 'frontpage');
         }
