@@ -547,14 +547,26 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       return false;
     };
 
-    $scope.openIAModal = function(field) {
+    $scope.openIAModal = function(field, AIFieldType) {
+      const originalText = field in $scope ? $scope[field] : $scope.item[field];
+      const templateId = AIFieldType === 'FIELD_INTRODUCTION' || AIFieldType === 'FIELD_BODY' ? 'modal-openai-textarea' : 'modal-openai-input';
+
       $uibModal.open({
-        templateUrl: 'modal-openai',
+        templateUrl: templateId,
         backdrop: 'static',
+        windowClass: 'modal-openai',
         controller: 'OpenAIModalCtrl',
         resolve: {
           template: function() {
-            return null;
+            return {
+              step: 1,
+              AIFieldType,
+              user_prompt: '',
+              context_prompt: '',
+              promtSelected: '',
+              original_text: originalText,
+              suggested_text: ''
+            };
           },
           success: function() {
             return function(modal, template) {

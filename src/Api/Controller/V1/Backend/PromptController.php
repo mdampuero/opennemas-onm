@@ -43,6 +43,4 @@ class PromptController extends ApiController
      * {@inheritdoc}
      */
     protected $service = 'api.service.prompt';
-
-
 }

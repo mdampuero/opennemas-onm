@@ -30,5 +30,4 @@ class PromptController extends BackendController
      * {@inheritdoc}
      */
     protected $resource = 'prompt';
-
 }

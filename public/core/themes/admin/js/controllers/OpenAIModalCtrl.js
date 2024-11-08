@@ -12,82 +12,88 @@
      * @requires routing
      * @requires success
      * @requires template
+     * @requires timeout
      *
      * @description
      *   Controller for News Agency listing.
      */
     .controller('OpenAIModalCtrl', [
-      '$uibModalInstance', '$scope', '$q', 'routing', 'success', 'template', 'http',
-      function($uibModalInstance, $scope, $q, routing, success, template, http) {
-        /**
-         * @memberOf OpenAIModalCtrl
-         *
-         * @description
-         *   The routing service.
-         *
-         * @type {Object}
-         */
-        $scope.routing = routing;
-
+      '$uibModalInstance', '$scope', '$q', 'routing', 'success', 'template', 'http', '$timeout', 'oqlEncoder',
+      function($uibModalInstance, $scope, $q, routing, success, template, http, $timeout, oqlEncoder) {
         $scope.routes = {
           generateText: 'api_v1_backend_openai_generate',
           saveTokens: 'api_v1_backend_openai_tokens',
         };
 
         $scope.last_token_usage = 0;
-        $scope.showTokens = false;
-        $scope.showResult = false;
         $scope.waiting = false;
-
-        /**
-         * @memberOf OpenAIModalCtrl
-         *
-         * @description
-         *  The information provided by the controller which open the modal
-         *  window.
-         *
-         * @type {Object}
-         */
+        $scope.edit_context = false;
         $scope.template = template;
 
         /**
-         * @param {string} property - The name of the property on `$scope` to be shown/hidden.
-         * @param {number} [delay=3000] - The delay in milliseconds before the property is hidden.
-         * @returns {void}
+         * @function init
+         * @memberOf OpenAIModalCtrl
+         *
+         * @description
+         *   Initializes the modal with default criteria and fetches a list of prompts from the server.
          */
-        $scope.hideAfterDelay = function(property, delay) {
-          $scope[property] = true;
-          setTimeout(function() {
-            $scope[property] = false;
-          }, delay || 3000);
+        $scope.init = function() {
+          $scope.criteria = {
+            epp: 1000,
+            field: $scope.template.AIFieldType,
+            orderBy: { name: 'asc' },
+            page: 1,
+          };
+
+          $scope.waiting = true;
+          var oqlQuery = oqlEncoder.getOql($scope.criteria);
+
+          http.get({ name: 'api_v1_backend_openai_prompt_get_list', params: { oql: oqlQuery } })
+            .then(function(response) {
+              $scope.prompts = response.data.items;
+            })
+            .finally(function() {
+              $scope.waiting = false;
+            });
         };
 
         /**
-         * Generates text based on the provided template, handling success and error responses.
+         * @function continue
+         * @memberOf OpenAIModalCtrl
          *
-         * @returns {boolean} Returns `false` if the template is empty; otherwise, no explicit return value.
+         * @description
+         *   Proceeds to the next step in the modal's workflow by calling `generate` or `confirm`.
+         */
+        $scope.continue = function() {
+          if ($scope.template.step === 1) {
+            $scope.generate();
+          } else {
+            $scope.confirm();
+          }
+        };
+
+        /**
+         * @function generate
+         * @memberOf OpenAIModalCtrl
+         *
+         * @description
+         *   Sends a request to generate suggested text based on user input and updates the template with the result.
          */
         $scope.generate = function() {
           if (!$scope.template) {
-            return false;
+            return;
           }
 
           $scope.waiting = true;
 
           http.post($scope.routes.generateText, $scope.template)
             .then(function(response) {
-              var data = response.data;
-
-              $scope.template.response = data.message;
-              $scope.last_token_usage  = data.tokens.total_tokens;
-
-              $scope.showResult = true;
-              $scope.waiting    = false;
-
-              $scope.hideAfterDelay('showTokens');
+              $scope.template.suggested_text = response.data.message;
+              $scope.last_token_usage = response.data.tokens.total_tokens;
+              $scope.template.step = 2;
+              $scope.setActiveText('suggested');
             })
-            .catch(function() {
-              $scope.hideAfterDelay('showError');
+            .finally(function() {
               $scope.waiting = false;
             });
         };
@@ -97,14 +103,30 @@
          * @memberOf OpenAIModalCtrl
          *
          * @description
-         *   Closes the modal window returning the provided response to the
-         *   controller which opened the modal window.
+         *   Closes the modal, optionally returning a response.
          *
-         * @param {Object} response The response to return to the main
-         *                          controller.
+         * @param {Object} response - The response data to return when closing the modal.
          */
         $scope.close = function(response) {
           $uibModalInstance.close(response);
+        };
+
+        /**
+         * @function updateUserPrompt
+         * @memberOf OpenAIModalCtrl
+         *
+         * @description
+         *   Updates `user_prompt` and `context_prompt` in the template based on the selected prompt.
+         */
+        $scope.updateUserPrompt = function() {
+          var selectedPrompt = $scope.prompts[$scope.template.promtSelected];
+
+          if (selectedPrompt) {
+            $scope.template.user_prompt = selectedPrompt.name + ': "' + $scope.template.original_text + '"';
+            $scope.template.context_prompt = selectedPrompt.context;
+          } else {
+            $scope.template.user_prompt = '';
+          }
         };
 
         /**
@@ -112,39 +134,41 @@
          * @memberOf OpenAIModalCtrl
          *
          * @description
-         *   Executes the success callback and closes the window returning the
-         *   response from the callback.
+         *   Executes the `success` function (if provided), handles the response, and closes the modal.
          */
         $scope.confirm = function() {
-          $scope.loading = 1;
-
           if (!success || typeof success !== 'function') {
-            $uibModalInstance.close(true);
-            return;
+            return $scope.close(true);
           }
 
           $q.when(success($uibModalInstance, $scope.template))
             .then(function(response) {
               $scope.resolve(response, true);
-            }, function(response) {
-              $scope.resolve(response, false);
+            })
+            .catch(function() {
+              $uibModalInstance.dismiss('error');
             });
         };
 
+        /**
+         * @function resolve
+         * @memberOf OpenAIModalCtrl
+         *
+         * @description
+         *   Processes response data and closes the modal based on success status.
+         *
+         * @param {Object} response - The response data from the confirm step.
+         * @param {boolean} success - Indicates if the operation was successful.
+         */
         $scope.resolve = function(response, success) {
-          $scope.loading = 0;
-
-          if (!response || Object.keys(response) > 0) {
-            $uibModalInstance.close(success);
-            return;
-          }
-
-          $uibModalInstance.close({
+          var result = response && Object.keys(response).length > 0 ? {
             data: response.data,
             headers: response.headers,
             status: response.status,
             success: success
-          });
+          } : success;
+
+          $scope.close(result);
         };
 
         /**
@@ -152,22 +176,50 @@
          * @memberOf OpenAIModalCtrl
          *
          * @description
-         *   Closes the modal window without returning any response.
+         *   Dismisses the modal without returning any specific response.
          */
         $scope.dismiss = function() {
-          $uibModalInstance.dismiss();
+          $scope.close(true);
         };
 
-        // Changes step on client saved
-        $scope.$on('client-saved', function(event, args) {
-          $scope.client = args;
-          $scope.template.step = 2;
-        });
+        /**
+         * @function back
+         * @memberOf OpenAIModalCtrl
+         *
+         * @description
+         *   Returns to the first step in the modal workflow.
+         */
+        $scope.back = function() {
+          $scope.template.step = 1;
+        };
 
-        // Frees up memory before controller destroy event
+        /**
+         * @function $on('$destroy')
+         * @memberOf OpenAIModalCtrl
+         *
+         * @description
+         *   Cleans up the template data when the modal is destroyed.
+         */
         $scope.$on('$destroy', function() {
           $scope.template = null;
         });
+
+        /**
+         * @function setActiveText
+         * @memberOf OpenAIModalCtrl
+         *
+         * @description
+         *   Sets the active text type (e.g., "suggested") and updates the template's response with the selected text.
+         *
+         * @param {string} type - The type of text to activate and display.
+         */
+        $scope.setActiveText = function(type) {
+          $scope.activeText = type;
+          $scope.template.response = $scope.template[type + '_text'];
+        };
+
+        // Call init function automatically upon controller load
+        $scope.init();
       }
     ]);
 })();

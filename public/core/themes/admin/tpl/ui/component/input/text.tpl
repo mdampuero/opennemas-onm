@@ -24,8 +24,5 @@
         {$iHelp}
       </div>
     {/if}
-    {if $IA}
-        {include file="ui/component/button/ia_modal.tpl"}
-    {/if}
   </div>
 </div>

@@ -33,7 +33,7 @@ class OpenAIHelper
     protected $defautlParams = [
         'model'             => 'gpt-3.5-turbo',
         'max_tokens'        => 50,
-        'temperature'       => 1.1,
+        'temperature'       => 0.5,
         'frequency_penalty' => 0.9,
         'presence_penalty'  => 0.9,
     ];
@@ -85,22 +85,6 @@ class OpenAIHelper
 
     public function sendMessage($messages, $params = [])
     {
-        /*return array(
-            "message" => "La Segunda Guerra Mundial fue un conflicto que tuvo lugar entre 1939 y 1945, en el que se
-             enfrentaron dos bloques de países: las potencias del Eje, lideradas por Alemania, Italia",
-            "tokens" => array(
-                "prompt_tokens" => 14,
-                "completion_tokens" => 50,
-                "total_tokens" => 64,
-                "prompt_tokens_details" => array(
-                    "cached_tokens" => 0
-                ),
-                "completion_tokens_details" => array(
-                    "reasoning_tokens" => 0
-                )
-            )
-        );*/
-
         $data = array_merge($this->getConfig(), $params);
 
         if (empty($this->openaiApiKey)) {
@@ -139,7 +123,7 @@ class OpenAIHelper
             $response = json_decode($response->getBody(), true);
 
             $responseData['message'] = isset($response['choices'][0]['message']['content'])
-                ? $response['choices'][0]['message']['content']
+                ? $this->removeQuotesAndPeriod($response['choices'][0]['message']['content'])
                 : '';
 
             $responseData['tokens'] = array_key_exists('usage', $response) && !empty($response['usage'])
@@ -153,7 +137,6 @@ class OpenAIHelper
 
         return $responseData;
     }
-
 
     protected function saveAction($params, $response)
     {
@@ -336,5 +319,16 @@ class OpenAIHelper
         $total = round($total, 15);
 
         return $total;
+    }
+
+    public function removeQuotesAndPeriod($string)
+    {
+        $string = trim($string, '"');
+
+        if (substr($string, -1) === '.') {
+            $string = rtrim($string, '.');
+        }
+
+        return $string;
     }
 }

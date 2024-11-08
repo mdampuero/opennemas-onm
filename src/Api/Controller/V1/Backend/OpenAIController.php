@@ -115,7 +115,7 @@ class OpenAIController extends ApiController
         try {
             $message = [];
 
-            $message['system'] = $request->request->get('system_prompt', '');
+            $message['system'] = $request->request->get('context_prompt', '');
             $message['user']   = $request->request->get('user_prompt', '');
 
             $response = $this->get($this->helper)->sendMessage($message);
@@ -134,7 +134,6 @@ class OpenAIController extends ApiController
                 $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
 
     public function getPricingAction()
     {
