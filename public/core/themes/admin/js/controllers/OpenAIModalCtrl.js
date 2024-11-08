@@ -26,9 +26,9 @@
         };
 
         $scope.last_token_usage = 0;
-        $scope.waiting = false;
-        $scope.edit_context = false;
-        $scope.template = template;
+        $scope.waiting          = false;
+        $scope.edit_context     = false;
+        $scope.template         = template;
 
         /**
          * @function init
