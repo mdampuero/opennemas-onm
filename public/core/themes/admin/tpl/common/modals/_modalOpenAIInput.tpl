@@ -9,7 +9,7 @@
   </ng-container>
   <ng-container ng-show="!waiting && template.step == 1">
     <div class="form-group">
-      <label>{t}Original title{/t}</label>
+      <label>[% template.AIFieldTitle %]</label>
       <input type="text" class="form-control" ng-model="template.original_text" ng-change="updateUserPrompt()">
     </div>
     <div class="form-group">
@@ -66,9 +66,11 @@
     {t}Cancel{/t}
   </button>
   <button ng-if="template.step == 2" class="btn btn-default pull-left" ng-click="back()" type="button">
-    {t}Back{/t}
+    <i class="fa fa-chevron-left"></i>
+    {t}Edit prompt{/t}
   </button>
   <button type="button" class="btn btn-success btn-loading pull-right" ng-click="continue()" ng-disabled="waiting || !template.user_prompt || !template.original_text">
     {t}Continue{/t}
+    <i class="fa fa-chevron-right"></i>
   </button>
 </div>

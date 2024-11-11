@@ -28,7 +28,7 @@ class OpenAIController extends ApiController
      */
     protected $service = 'api.service.ai';
 
-            /**
+    /**
      * {@inheritdoc}
      */
     protected $helper = 'core.helper.openai';
@@ -115,8 +115,10 @@ class OpenAIController extends ApiController
         try {
             $message = [];
 
+            $originalText      = $request->request->get('original_text', '');
             $message['system'] = $request->request->get('context_prompt', '');
             $message['user']   = $request->request->get('user_prompt', '');
+            $message['user']  .= ($originalText ? ': "' . $originalText . '"' : '' );
 
             $response = $this->get($this->helper)->sendMessage($message);
 

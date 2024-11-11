@@ -122,8 +122,8 @@
           var selectedPrompt = $scope.prompts[$scope.template.promtSelected];
 
           if (selectedPrompt) {
-            $scope.template.user_prompt = selectedPrompt.name + ': "' + $scope.template.original_text + '"';
             $scope.template.context_prompt = selectedPrompt.context;
+            $scope.template.user_prompt    = selectedPrompt.name;
           } else {
             $scope.template.user_prompt = '';
           }
