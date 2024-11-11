@@ -549,10 +549,9 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
     $scope.openIAModal = function(field, AIFieldType, AIFieldTitle = '') {
       const originalText = field in $scope ? $scope[field] : $scope.item[field];
-      const templateId = AIFieldType === 'FIELD_INTRODUCTION' || AIFieldType === 'FIELD_BODY' ? 'modal-openai-textarea' : 'modal-openai-input';
 
       $uibModal.open({
-        templateUrl: templateId,
+        templateUrl: 'modal-openai',
         backdrop: 'static',
         windowClass: 'modal-openai',
         controller: 'OpenAIModalCtrl',

@@ -25,10 +25,12 @@
           saveTokens: 'api_v1_backend_openai_tokens',
         };
 
-        $scope.last_token_usage = 0;
-        $scope.waiting          = false;
-        $scope.edit_context     = false;
-        $scope.template         = template;
+        $scope.last_token_usage   = 0;
+        $scope.waiting            = false;
+        $scope.edit_context       = false;
+        $scope.edit_original_text = false;
+        $scope.template           = template;
+        $scope.displayMode        = $scope.template.AIFieldType === 'FIELD_INTRODUCTION' || $scope.template.AIFieldType === 'FIELD_BODY' ? 'textarea' : 'input';
 
         /**
          * @function init
