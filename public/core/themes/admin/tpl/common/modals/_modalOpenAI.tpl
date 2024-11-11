@@ -11,7 +11,7 @@
     <div class="form-group">
       <label>[% template.AIFieldTitle %]</label>
       <input ng-disabled="!edit_original_text" ng-if="displayMode == 'input'" type="text" class="form-control" ng-model="template.original_text" ng-change="updateUserPrompt()">
-      <div class="openai-wrapper-text" ng-bind-html="template.original_text"></div>
+      <div ng-if="displayMode == 'textarea'" class="openai-wrapper-text" ng-bind-html="template.original_text"></div>
     </div>
     <div class="form-group">
       <label>{t}Suggested prompts{/t}</label>
