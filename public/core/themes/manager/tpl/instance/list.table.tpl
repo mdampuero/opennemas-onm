@@ -14,6 +14,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-internal-name" checklist-model="columns.selected" checklist-value="'internal_name'" type="checkbox">
+    <label for="checkbox-internal-name">
+      {t}Internal name{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-domains" checklist-model="columns.selected" checklist-value="'domains'" type="checkbox">
     <label for="checkbox-domains">
       {t}Domains{/t}
@@ -175,6 +181,12 @@
       {t}Enabled{/t}
     </label>
   </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-tags" checklist-model="columns.selected" checklist-value="'tags'" type="checkbox">
+    <label for="checkbox-tags">
+      {t}Tags{/t}
+    </label>
+  </div>
 {/block}
 
 {block name="columnsHeader"}
@@ -186,9 +198,13 @@
     <i class="fa fa-globe" uib-tooltip="{t}Country{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('country') == 'asc', 'fa fa-caret-down': isOrderedBy('country') == 'desc'}"></i>
   </th>
-  <th class="pointer" ng-click="sort('name')" ng-show="isColumnEnabled('name')" width="400">
+  <th class="pointer" ng-click="sort('name')" ng-show="isColumnEnabled('name')" width="300">
     {t}Name{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
+  </th>
+  <th class="pointer" ng-click="sort('internal_name')" ng-show="isColumnEnabled('internal_name')" width="200">
+    {t}Internal name{/t}
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('internal_name') == 'asc', 'fa fa-caret-down': isOrderedBy('internal_name') == 'desc'}"></i>
   </th>
   <th class="pointer" ng-click="sort('domains')" ng-show="isColumnEnabled('domains')" width="300">
     {t}Domains{/t}
@@ -269,6 +285,10 @@
     <i class="fa fa-users" uib-tooltip="{t}Users{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('users') == 'asc', 'fa fa-caret-down': isOrderedBy('users') == 'desc'}"></i>
   </th>
+  <th class="text-center pointer" ng-click="sort('tags')" ng-show="isColumnEnabled('tags')" width="80">
+    <i class="fa fa-tags" uib-tooltip="{t}Tags{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('tags') == 'asc', 'fa fa-caret-down': isOrderedBy('tags') == 'desc'}"></i>
+  </th>
   <th class="text-center pointer" ng-click="sort('emails')" ng-show="isColumnEnabled('emails')" width="80">
     <i class="fa fa-mail-forward" uib-tooltip="{t}Emails{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('emails') == 'asc', 'fa fa-caret-down': isOrderedBy('emails') == 'desc'}"></i>
@@ -324,6 +344,11 @@
       </button>
     </div>
   </td>
+  <td class="v-align-middle" ng-show="isColumnEnabled('internal_name')">
+    <div class="table-text">
+      [% item.internal_name %]
+    </div>
+  </td>
   <td class="v-align-middle" ng-show="isColumnEnabled('domains')">
     <div class="domains">
       <small>
@@ -344,7 +369,7 @@
       </small>
     </div>
   </td>
-  <td class="text-center v-align-middle" ng-show="isColumnEnabled('contact_mail')">
+  <td class="v-align-middle table-text" ng-show="isColumnEnabled('contact_mail')">
     <a ng-href="mailto:[% item.contact_mail %]">
       [% item.contact_mail %]
     </a>
@@ -447,6 +472,11 @@
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('users')" title="{t}Users{/t}">
     <span class="badge text-bold">
       [% item.users %]
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('tags')" title="{t}Tags{/t}">
+    <span class="badge text-bold">
+      [% item.tags %]
     </span>
   </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('emails')" title="{t}Emails{/t}">
