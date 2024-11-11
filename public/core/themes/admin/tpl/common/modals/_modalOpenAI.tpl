@@ -11,7 +11,7 @@
     <div class="form-group">
       <label>[% template.AIFieldTitle %]</label>
       <input ng-disabled="!edit_original_text" ng-if="displayMode == 'input'" type="text" class="form-control" ng-model="template.original_text" ng-change="updateUserPrompt()">
-      <textarea ng-disabled="!edit_original_text" ng-if="displayMode == 'textarea'" type="text" class="form-control" ng-model="template.original_text" ng-change="updateUserPrompt()" rows="15"></textarea>
+      <div class="openai-wrapper-text" ng-bind-html="template.original_text"></div>
     </div>
     <div class="form-group">
       <label>{t}Suggested prompts{/t}</label>
@@ -62,9 +62,7 @@
         </button>
         <span class="m-t-10 badge badge-success pull-right">[% template.suggested_text.length %]</span>
         <div class="clearfix"></div>
-        <div class="openai-wrapper-text">
-          [% template.suggested_text %]
-        </div>
+        <div class="openai-wrapper-text" ng-bind-html="template.suggested_text"></div>
       </ng-container>
       <ng-container ng-if="activeText == 'original'">
         <label class="m-t-10 pull-left">{t}Original text{/t}</label>
@@ -74,9 +72,7 @@
         </button>
         <span class="m-t-10 badge badge-success pull-right">[% template.original_text.length %]</span>
         <div class="clearfix"></div>
-        <div class="openai-wrapper-text">
-          [% template.original_text %]
-        </div>
+        <div class="openai-wrapper-text" ng-bind-html="template.original_text"></div>
       </ng-container>
     </ng-container>
     <p>
