@@ -96,6 +96,26 @@
       </ui-select-choices>
     </ui-select>
   </li>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="activated = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
+    <ui-select name="activated" theme="select2" ng-model="criteria.activated">
+      <ui-select-match>
+        <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+      </ui-select-match>
+      <ui-select-choices repeat="item.value as item in activated  | filter: $select.search">
+        <div ng-bind-html="item.name | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>
+  </li>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="blocked = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Blocked{/t}', value: 1}]">
+    <ui-select name="blocked" theme="select2" ng-model="criteria.blocked">
+      <ui-select-match>
+        <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+      </ui-select-match>
+      <ui-select-choices repeat="item.value as item in blocked  | filter: $select.search">
+        <div ng-bind-html="item.name | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>
+  </li>
   <li class="m-r-10 quicklinks">
     <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
       <i class="fa fa-fire fa-lg m-l-5 m-r-5"></i>
