@@ -227,6 +227,20 @@
             $scope.items   = response.data.results;
             $scope.total   = response.data.total;
             $scope.extra   = response.data.extra;
+            $scope.themes  = $scope.themes || [];
+
+            $scope.items.forEach(function(item) {
+              var theme = item.settings.TEMPLATE_USER;
+              var themeName = theme.split('.').pop().replace('_', ' ');
+
+              var exists = $scope.themes.some(function(existingTheme) {
+                return existingTheme.value === theme;
+              });
+
+              if (!exists) {
+                $scope.themes.push({ value: theme, name: themeName });
+              }
+            });
 
             // Scroll top
             $('body').animate({ scrollTop: '0px' }, 1000);

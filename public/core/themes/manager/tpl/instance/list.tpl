@@ -116,6 +116,16 @@
       </ui-select-choices>
     </ui-select>
   </li>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-model="criteria.settings">
+    <ui-select name="themes" theme="select2" ng-model="criteria.themes">
+      <ui-select-match>
+        <strong>{t}Themes{/t}:</strong> [% $select.selected.name %]
+      </ui-select-match>
+      <ui-select-choices repeat="item.value as item in themes | filter: $select.search">
+        <div ng-bind-html="item.name | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>
+  </li>
   <li class="m-r-10 quicklinks">
     <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
       <i class="fa fa-fire fa-lg m-l-5 m-r-5"></i>
