@@ -392,12 +392,19 @@ class InstanceController extends Controller
                     throw new AccessDeniedException();
                 }
 
-                $old = $instance->activated;
+                if (isset($params['activated'])) {
+                    $old = $instance->activated;
+                }
+
+                if (isset($params['blocked'])) {
+                    $old = $instance->blocked;
+                }
+
                 $instance->merge($data);
                 $em->persist($instance);
                 $updated++;
 
-                if ($old !== $instance->activated) {
+                if ($old !== $instance->activated && $old !== $instance->blocked) {
                     $this->get('core.dispatcher')
                         ->dispatch('instance.update', [ 'instance' => $instance ]);
                 }

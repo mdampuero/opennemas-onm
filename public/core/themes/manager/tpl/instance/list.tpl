@@ -35,6 +35,19 @@
     <span class="h-seperate"></span>
   </li>
   <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_UPDATE')">
+    <button class="btn btn-link" ng-click="patchSelected('blocked', 1)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+      <i class="fa fa-lock fa-lg"></i>
+    </button>
+  </li>
+  <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_UPDATE')">
+    <button class="btn btn-link" ng-click="patchSelected('blocked', 0)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+      <i class="fa fa-unlock fa-lg"></i>
+    </button>
+  </li>
+  <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_UPDATE') && security.hasPermission('INSTANCE_DELETE')">
+    <span class="h-seperate"></span>
+  </li>
+  <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_UPDATE')">
     <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
       <i class="fa fa-times fa-lg"></i>
     </button>
