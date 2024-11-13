@@ -227,18 +227,14 @@
             $scope.items   = response.data.results;
             $scope.total   = response.data.total;
             $scope.extra   = response.data.extra;
-            $scope.themes  = $scope.themes || [];
+            $scope.themes = [];
 
             $scope.items.forEach(function(item) {
-              var theme = item.settings.TEMPLATE_USER;
+              var theme     = item.settings.TEMPLATE_USER;
               var themeName = theme.split('.').pop().replace('_', ' ');
 
-              var exists = $scope.themes.some(function(existingTheme) {
-                return existingTheme.value === theme;
-              });
-
-              if (!exists) {
-                $scope.themes.push({ value: theme, name: themeName });
+              if (!$scope.themes.includes(theme)) {
+                $scope.themes.push(theme);
               }
             });
 
@@ -344,12 +340,8 @@
         }
 
         oqlDecoder.configure({
-          ignore: [ 'internal_name', 'contact_mail', 'domains', 'settings' ]
+          ignore: [ 'internal_name', 'contact_mail', 'domains' ]
         });
-
-        if ($location.search().oql) {
-          $scope.criteria = oqlDecoder.decode($location.search().oql);
-        }
 
         $scope.list();
       }
