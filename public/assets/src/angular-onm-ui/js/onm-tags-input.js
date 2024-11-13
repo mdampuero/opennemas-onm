@@ -278,7 +278,7 @@
 
             oqlEncoder.configure({
               placeholder: {
-                slug: '[key] ~ "%[value]%"',
+                slug: 'name ~ "%[value]%" or [key] ~ "%[value]%"',
                 locale: '([key] is null or [key] = "[value]")'
               }
             });
