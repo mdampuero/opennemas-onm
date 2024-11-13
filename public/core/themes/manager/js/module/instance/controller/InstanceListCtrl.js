@@ -208,13 +208,14 @@
           oqlEncoder.configure({
             placeholder: {
               name: 'name ~ "[value]" or ' +
-                'internal_name ~ "[value]" or ' +
-                'contact_mail ~ "[value]" or ' +
-                'domains ~ "[value]" or settings ~ "[value]"'
+                    'internal_name ~ "[value]" or ' +
+                    'contact_mail ~ "[value]" or ' +
+                    'domains ~ "[value]" or settings ~ "[value]"'
             }
           });
 
-          var oql   = oqlEncoder.getOql($scope.criteria);
+          var oql = oqlEncoder.getOql($scope.criteria);
+
           var route = {
             name: 'manager_ws_instances_list',
             params: { oql: oql }
@@ -228,11 +229,17 @@
             $scope.total   = response.data.total;
             $scope.extra   = response.data.extra;
             $scope.themes = [];
+            $scope.subdirectories = [];
+            $scope.subdirectoryOptions = [
+              { name: 'Any', value: null },
+              { name: 'Tiene subdirectorios', value: '!= " " '}
+            ];
 
             $scope.items.forEach(function(item) {
-              var theme     = item.settings.TEMPLATE_USER;
+              var theme = item.settings.TEMPLATE_USER;
               var themeName = theme.split('.').pop().replace('_', ' ');
 
+              // Añadir el tema si no está presente
               if (!$scope.themes.includes(theme)) {
                 $scope.themes.push(theme);
               }

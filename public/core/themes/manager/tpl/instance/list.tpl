@@ -126,6 +126,16 @@
       </ui-select-choices>
     </ui-select>
   </li>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks">
+    <ui-select name="subdirectory" theme="select2" ng-model="criteria.subdirectory">
+      <ui-select-match>
+        <strong>{t}Subdirectory{/t}:</strong> [% $select.selected.name || 'Any' %]
+      </ui-select-match>
+      <ui-select-choices repeat="item.value as item in subdirectoryOptions | filter: $select.search">
+        <div ng-bind-html="item.name | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>
+  </li>
   <li class="m-r-10 quicklinks">
     <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
       <i class="fa fa-fire fa-lg m-l-5 m-r-5"></i>
