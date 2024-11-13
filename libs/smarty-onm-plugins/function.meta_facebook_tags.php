@@ -22,16 +22,17 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
     $contentHelper = $smarty->getContainer()->get('core.helper.content');
 
     if (!empty($content)) {
-        $summary = trim(\Onm\StringUtils::htmlAttribute($contentHelper->getSummary($content)));
+        $summary = $content->social_description
+            ?? trim(\Onm\StringUtils::htmlAttribute($contentHelper->getSummary($content)));
+
         if (empty($summary)) {
-            $summary = mb_substr(
-                trim(\Onm\StringUtils::htmlAttribute($content->body)),
-                0,
-                80
-            ) . "...";
+            $bodyContent = trim(\Onm\StringUtils::htmlAttribute($content->body));
+            $summary     = (mb_strlen($bodyContent) > 80)
+                ? mb_substr($bodyContent, 0, 80) . "..."
+                : $bodyContent;
         }
 
-        $title = $content->title_int ?? $content->title;
+        $title = $content->social_title ?? $content->title_int ?? $content->title;
         $title = htmlspecialchars(
             html_entity_decode($title, ENT_COMPAT, 'UTF-8')
         );

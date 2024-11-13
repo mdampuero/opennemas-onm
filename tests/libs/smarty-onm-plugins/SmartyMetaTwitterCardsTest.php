@@ -234,7 +234,7 @@ class SmartyMetaTwitterCardsTest extends \PHPUnit\Framework\TestCase
 
         $output = "<meta name=\"twitter:card\" content=\"summary_large_image\">\n"
             . "<meta name=\"twitter:title\" content=\"This is the title\">\n"
-            . "<meta name=\"twitter:description\" content=\"This is the body...\">\n"
+            . "<meta name=\"twitter:description\" content=\"This is the body\">\n"
             . "<meta name=\"twitter:site\" content=\"@twtuser\">\n"
             . "<meta name=\"twitter:domain\" content=\"http://route/to/content.html\">";
 

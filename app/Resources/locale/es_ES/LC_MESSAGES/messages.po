@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-24 09:26+0000\n"
-"PO-Revision-Date: 2024-10-24 11:27+0200\n"
+"POT-Creation-Date: 2024-11-05 11:08+0000\n"
+"PO-Revision-Date: 2024-11-05 12:10+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1545,6 +1545,12 @@ msgstr "Pagar con PayPal"
 msgid "There is no billing information."
 msgstr "No hay información de facturación."
 
+msgid "Live blog post"
+msgstr "Artículo en directo"
+
+msgid "Google News Showcase"
+msgstr "Google News Showcase"
+
 msgid "Author"
 msgstr "Autor"
 
@@ -1554,11 +1560,20 @@ msgstr "Enlace externo"
 msgid "Schedule"
 msgstr "Planificación"
 
+msgid "Options for SEO"
+msgstr "Opciones para SEO"
+
+msgid "Webpush Notifications"
+msgstr "Notificaciones Webpush"
+
 msgid "Vote end date"
 msgstr "Fecha de fin de votación"
 
 msgid "Date"
 msgstr "Fecha"
+
+msgid "Organizer data"
+msgstr "Datos del organizador"
 
 msgid "Event date"
 msgstr "Fecha del evento"
@@ -1584,6 +1599,27 @@ msgstr "Portada"
 msgid "Type"
 msgstr "Tipo"
 
+msgid "Company info"
+msgstr "Información de la empresa"
+
+msgid "Timetable"
+msgstr "Horario"
+
+msgid "Phone"
+msgstr "Teléfono"
+
+msgid "Google Maps"
+msgstr "Google Maps"
+
+msgid "Social network"
+msgstr "Redes sociales"
+
+msgid "Mortuary"
+msgstr "Funeraria"
+
+msgid "Google maps url"
+msgstr "Url de Google Maps"
+
 msgid "Visibility"
 msgstr "Visibilidad"
 
@@ -1607,39 +1643,6 @@ msgstr "Relacionados en interior"
 
 msgid "Agency"
 msgstr "Agencia"
-
-msgid "Facebook"
-msgstr "Facebook"
-
-msgid "Twitter"
-msgstr "Twitter"
-
-msgid "Instagram"
-msgstr "Instagram"
-
-msgid "Whatsapp"
-msgstr "Whatsapp"
-
-msgid "Phone"
-msgstr "Teléfono"
-
-msgid "Address"
-msgstr "Dirección"
-
-msgid "Google Maps"
-msgstr "Google Maps"
-
-msgid "Sector"
-msgstr "Sector"
-
-msgid "Timetable"
-msgstr "Horario"
-
-msgid "Google News Showcase"
-msgstr "Google News Showcase"
-
-msgid "Live blog post"
-msgstr "Artículo en directo"
 
 msgid "Max sents reached"
 msgstr "Has alcanzado el número máximo de envíos"
@@ -2140,6 +2143,15 @@ msgstr "Error"
 msgid "Add a tag..."
 msgstr "Añadir una etiqueta..."
 
+msgid "Are you sure?"
+msgstr "¿Estás seguro?"
+
+msgid "Select an element"
+msgstr "Selecciona un elemento"
+
+msgid "Caption"
+msgstr "Pie de foto"
+
 msgid "Reset"
 msgstr "Restablecer"
 
@@ -2160,15 +2172,6 @@ msgstr "Fecha de modificación"
 
 msgid "Featured image"
 msgstr "Imagen destacada"
-
-msgid "Are you sure?"
-msgstr "¿Estás seguro?"
-
-msgid "Select an element"
-msgstr "Selecciona un elemento"
-
-msgid "Caption"
-msgstr "Pie de foto"
 
 msgid "Body"
 msgstr "Cuerpo"
@@ -2200,6 +2203,9 @@ msgstr "Enlace"
 
 msgid "No author"
 msgstr "Sin autor"
+
+msgid "Sector"
+msgstr "Sector"
 
 msgid "No sector"
 msgstr "Sin sector"
@@ -2259,6 +2265,21 @@ msgstr "Enviar a PressClipping"
 msgid "Remove from PressClipping"
 msgstr "Eliminar de PressClipping"
 
+msgid "Options for Social Networks"
+msgstr "Opciones para redes sociales"
+
+msgid "Title for Social Networks"
+msgstr "Título para redes sociales"
+
+msgid "Title shown when sharing on social networks."
+msgstr "Título que se muestra al compartir en redes sociales."
+
+msgid "Description for Social Networks"
+msgstr "Descripción para redes sociales"
+
+msgid "Description shown when sharing on social networks."
+msgstr "Descripción que se muestra al compartir en redes sociales."
+
 msgid "24 hours"
 msgstr "24 horas"
 
@@ -2273,9 +2294,6 @@ msgstr "Hasta"
 
 msgid "Add schedule"
 msgstr "Añadir horario"
-
-msgid "Options for SEO"
-msgstr "Opciones para SEO"
 
 msgid "Title for SEO"
 msgstr "Título para SEO"
@@ -2294,9 +2312,6 @@ msgstr "Escribe la URL canónica para este contenido"
 
 msgid "Mark this content to prevent indexing"
 msgstr "Marque este contenido para evitar la indexación"
-
-msgid "Webpush Notifications"
-msgstr "Notificaciones Webpush"
 
 msgid "Check it as \"Published\" to send webpush notifications."
 msgstr ""
@@ -2435,6 +2450,12 @@ msgstr "Esta acción no se puede deshacer"
 msgid "Seo title"
 msgstr "Título Seo"
 
+msgid "H1 Header"
+msgstr "Encabezado H1"
+
+msgid "If this field is left empty, the default Title will be displayed."
+msgstr "Si este campo se deja vacío, se mostrará el título predeterminado."
+
 msgid "Seo description"
 msgstr "Descripción Seo"
 
@@ -2482,6 +2503,9 @@ msgstr "Número de identificación fiscal"
 
 msgid "What is a VAT identification number?"
 msgstr "¿Qué es un número de identificación fiscal?"
+
+msgid "Address"
+msgstr "Dirección"
 
 msgid "This is not a valid address"
 msgstr "Este no es una dirección válida"
@@ -2666,6 +2690,12 @@ msgstr ""
 
 msgid "Social Networks"
 msgstr "Redes sociales"
+
+msgid "Facebook"
+msgstr "Facebook"
+
+msgid "Twitter"
+msgstr "Twitter"
 
 msgid "Change"
 msgstr "Cambiar"
@@ -3817,9 +3847,6 @@ msgstr "Personalizar contenido"
 msgid "Remove from all frontpages"
 msgstr "Quitar de todas las portadas"
 
-msgid "Organizer data"
-msgstr "Datos del organizador"
-
 msgid "Organizer name"
 msgstr "Nombre del organizador"
 
@@ -4167,12 +4194,6 @@ msgstr ""
 
 msgid "Menu"
 msgstr "Menú"
-
-msgid "H1 Header"
-msgstr "Encabezado H1"
-
-msgid "If this field is left empty, the default Title will be displayed."
-msgstr "Si este campo se deja vacío, se mostrará el título predeterminado."
 
 msgid "Only empty categories can be deleted"
 msgstr "Solo se pueden eliminar categorías sin contenidos"
@@ -4718,6 +4739,9 @@ msgstr "Imágenes de listados de contenidos"
 
 msgid "Tiny contents images"
 msgstr "Imágenes de contenido diminuto"
+
+msgid "Author's photo crop"
+msgstr "Recorte de la foto del autor"
 
 msgid "This css will be added at the end of the original"
 msgstr "Este CSS se añadirá al final del original"
@@ -5442,6 +5466,9 @@ msgstr ""
 "Si tienes una <strong>página en Twitter</strong>, añade el nombre de perfíl "
 "en el formulario. Por defecto, se usará el de OpenNemas."
 
+msgid "Instagram"
+msgstr "Instagram"
+
 msgid "Instagram Page"
 msgstr "Página de Instagram"
 
@@ -5503,6 +5530,9 @@ msgid ""
 msgstr ""
 "Si ya tienes una <b>página de Telegram</b>, añade tu URL de la página en el "
 "formulario."
+
+msgid "Whatsapp"
+msgstr "Whatsapp"
 
 msgid "Whatsapp Page"
 msgstr "Página de Whatsapp"
@@ -6391,12 +6421,6 @@ msgstr "Resolución"
 msgid "Config photos module"
 msgstr "Configuración del módulo «Fotos»"
 
-msgid "Mortuary"
-msgstr "Funeraria"
-
-msgid "Google maps url"
-msgstr "Url de Google Maps"
-
 msgid "New obituary"
 msgstr "Nueva esquela"
 
@@ -6482,9 +6506,6 @@ msgstr "Añade un valor..."
 msgid "Remove field"
 msgstr "Eliminar campo"
 
-msgid "Company info"
-msgstr "Información de la empresa"
-
 msgid "There are some required fields inside"
 msgstr "Hay algunos campos requeridos en el interior"
 
@@ -6502,9 +6523,6 @@ msgstr "Selecciona una localidad"
 
 msgid "Company data"
 msgstr "Datos de la empresa"
-
-msgid "Social network"
-msgstr "Redes sociales"
 
 msgid "Linkedin"
 msgstr "LinkedIn"

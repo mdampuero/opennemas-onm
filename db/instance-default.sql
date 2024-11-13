@@ -156,7 +156,7 @@ CREATE TABLE `categorymeta` (
   `meta_value` text,
   PRIMARY KEY (`fk_category`,`meta_name`),
   KEY `fk_category` (`fk_category`),
-  CONSTRAINT `categorymeta_ibfk_1` FOREIGN KEY (`fk_category`) REFERENCES `category` (`id`)
+  CONSTRAINT `categorymeta_ibfk_1` FOREIGN KEY (`fk_category`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -907,7 +907,7 @@ CREATE TABLE `tagsmeta` (
   `meta_value` text,
   PRIMARY KEY (`fk_tags`,`meta_name`),
   KEY `fk_tags` (`fk_tags`),
-  CONSTRAINT `tagsmeta_ibfk_1` FOREIGN KEY (`fk_tags`) REFERENCES `tags` (`id`)
+  CONSTRAINT `tagsmeta_ibfk_1` FOREIGN KEY (`fk_tags`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
