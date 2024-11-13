@@ -232,7 +232,7 @@
             $scope.subdirectories = [];
             $scope.subdirectoryOptions = [
               { name: 'Any', value: null },
-              { name: 'Tiene subdirectorios', value: '!= " " '}
+              { name: 'Tiene subdirectorios', value: ''}
             ];
 
             $scope.items.forEach(function(item) {
