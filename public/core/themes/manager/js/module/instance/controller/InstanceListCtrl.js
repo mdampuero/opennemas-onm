@@ -54,6 +54,8 @@
          */
         $scope.criteria = { epp: 25, page: 1 };
 
+        $scope.subdirectory = false;
+
         /**
          * @function delete
          * @memberOf InstanceListCtrl

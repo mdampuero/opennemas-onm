@@ -119,7 +119,7 @@
   <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-model="criteria.settings">
     <ui-select name="themes" theme="select2" ng-model="criteria.settings.TEMPLATE_USER">
       <ui-select-match>
-        <strong>Themes:</strong> [% $select.selected.name %]
+        <strong>{t}Themes{/t}:</strong> [% $select.selected.name %]
       </ui-select-match>
       <ui-select-choices repeat="item.value as item in blocked  | filter: $select.search">
         <div ng-bind-html="item.name | highlight: $select.search"></div>

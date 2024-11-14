@@ -200,6 +200,14 @@ class UpdateInstanceCommand extends Command
             $this->writeStatus('info', $instance->last_login->format('(Y-m-d H:i:s)'), true);
         }
 
+        $this->writePad('- Counting comments');
+        $instance->comments = $helper->countComments($instance);
+        $this->writeStatus('success', 'DONE');
+        $this->writeStatus('info', sprintf(
+            ' (%s)',
+            $instance->comments
+        ), true);
+
         $this->writePad('- Counting tags');
         $instance->tags = $helper->countTags($instance);
         $this->writeStatus('success', 'DONE');
