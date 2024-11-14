@@ -210,7 +210,8 @@
               name: 'name ~ "[value]" or ' +
                     'internal_name ~ "[value]" or ' +
                     'contact_mail ~ "[value]" or ' +
-                    'domains ~ "[value]" or settings ~ "[value]"'
+                    'domains ~ "[value]" or settings ~ "[value]" or ' +
+                    'subdirectory !is null'
             }
           });
 
@@ -229,11 +230,6 @@
             $scope.total   = response.data.total;
             $scope.extra   = response.data.extra;
             $scope.themes = [];
-            $scope.subdirectories = [];
-            $scope.subdirectoryOptions = [
-              { name: 'Any', value: null },
-              { name: 'Tiene subdirectorios', value: ''}
-            ];
 
             $scope.items.forEach(function(item) {
               var theme = item.settings.TEMPLATE_USER;
@@ -336,6 +332,16 @@
             webStorage.local.set('instances-columns', $scope.columns);
           }
         }, true);
+
+        $scope.$watch('subdirectory', function(nv) {
+          if (nv && nv !== '') {
+            $scope.criteria.subdirectory = nv;
+          } else {
+            $scope.criteria.subdirectory = null;
+          }
+
+          $scope.list();
+        });
 
         // Get enabled columns from localStorage
         if (webStorage.local.get('instances-columns')) {

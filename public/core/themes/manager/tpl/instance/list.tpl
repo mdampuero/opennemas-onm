@@ -121,20 +121,16 @@
       <ui-select-match>
         <strong>Themes:</strong> [% $select.selected.name %]
       </ui-select-match>
-      <ui-select-choices repeat="theme in themes | filter: $select.search">
-        <div ng-bind-html="theme | highlight: $select.search"></div>
+      <ui-select-choices repeat="item.value as item in blocked  | filter: $select.search">
+        <div ng-bind-html="item.name | highlight: $select.search"></div>
       </ui-select-choices>
     </ui-select>
   </li>
   <li class="hidden-xs m-r-10 ng-cloak quicklinks">
-    <ui-select name="subdirectory" theme="select2" ng-model="criteria.subdirectory">
-      <ui-select-match>
-        <strong>{t}Subdirectory{/t}:</strong> [% $select.selected.name || 'Any' %]
-      </ui-select-match>
-      <ui-select-choices repeat="item.value as item in subdirectoryOptions | filter: $select.search">
-        <div ng-bind-html="item.name | highlight: $select.search"></div>
-      </ui-select-choices>
-    </ui-select>
+    <button class="btn btn-white" style="border:0;" ng-click="subdirectory = !subdirectory" uib-tooltip="{t}Subdirectory{/t}" tooltip-placement="bottom">
+      <i class="fa fa-square-o" aria-hidden="true" ng-if="!subdirectory"></i><i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="!subdirectory"></i>
+      <i class="fa fa-check-square-o text-primary" aria-hidden="true" ng-if="subdirectory"></i><i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="subdirectory"></i>
+    </button>
   </li>
   <li class="m-r-10 quicklinks">
     <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
