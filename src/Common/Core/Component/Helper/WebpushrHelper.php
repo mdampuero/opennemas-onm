@@ -182,7 +182,7 @@ class WebpushrHelper
         );
 
         $contentPath = $this->container->get('core.helper.url_generator')->getUrl($article, ['_absolute' => true]);
-        $image       = $this->container->get('core.helper.featured_media')->getFeaturedMedia($article, 'frontpage');
+        $image       = $this->container->get('core.helper.featured_media')->getFeaturedMedia($article, 'inner');
         $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
 
         $body = !empty($article->description)
