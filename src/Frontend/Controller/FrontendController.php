@@ -547,10 +547,10 @@ class FrontendController extends Controller
         $menuService = $this->container->get('api.service.menu');
 
         try {
-            $ampMenu = $menuService->getItemBy(' name = "amp" ');
+            $ampMenu = $menuService->getItemLocaleBy(' name = "amp" ');
         } catch (\Api\Exception\GetItemException $e) {
             try {
-                $ampMenu = $menuService->getItemBy(' name = "frontpage" ');
+                $ampMenu = $menuService->getItemLocaleBy(' name = "frontpage" ');
             } catch (\Exception $e) {
                 $ampMenu = [];
             }

@@ -115,7 +115,7 @@ class Categories
         $oql = ' name = "frontpage" ';
 
         try {
-            $menu       = $menuService->getItemBy($oql);
+            $menu       = $menuService->getItemLocaleBy($oql);
             $menuHelper = $this->container->get('core.helper.menu');
 
             $menuItemsObject = $menuHelper->castToObjectNested($menu->menu_items);
