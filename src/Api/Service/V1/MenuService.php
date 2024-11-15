@@ -21,14 +21,13 @@ class MenuService extends OrmService
      */
     protected function localizeItem($item)
     {
-        $locale         = $this->container->get('core.locale')->getRequestLocale();
         $localizedMenus = [];
 
-        if (!$item->menu_items || empty($item->menu_items)) {
+        if ($item->menu_items ?? null) {
             return $item;
         }
 
-        foreach ($item->menu_items as $menuItemKey => $menuItemValue) {
+        foreach ($item->menu_items as $menuItemValue) {
             array_push($localizedMenus, $this->localizeMenuItem($menuItemValue));
         }
 
@@ -68,21 +67,35 @@ class MenuService extends OrmService
         return $items;
     }
 
+    /**
+     * Returns a menu item localized if Multilanguage.
+     *
+     * @param string $oql The criteria.
+     *
+     * @return mixed The localized item.
+     *
+     * @throws GetItemException If the item was not found.
+     */
     public function getItemLocaleBy($oql)
     {
         try {
-            $locale = $this->container->get('core.locale')->getRequestLocale();
             $item   = $this->getItemBy($oql);
+            $locale = $this->container->get('core.instance')->hasMultilanguage()
+                ? $this->container->get('core.locale')->getRequestLocale()
+                : null;
 
-            if (isset($item->menu_items) && is_array($item->menu_items)) {
-                $filteredItems = array_filter($item->menu_items, function ($element) use ($locale) {
-                    return $element['locale'] === $locale;
+            if (!empty($locale)
+                && !empty($item->menu_items)
+                && is_array($item->menu_items)
+            ) {
+                $filteredItems = array_filter($item->menu_items, function ($e) use ($locale) {
+                    return $e['locale'] === $locale;
                 });
 
                 $item->menu_items = $filteredItems;
-
-                return $item;
             }
+
+            return $item;
         } catch (\Exception $e) {
             throw new GetItemException($e->getMessage(), $e->getCode());
         }
