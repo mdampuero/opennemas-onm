@@ -169,6 +169,14 @@
             <input type="text" required id="sender" name="newsletter_maillist[sender]" ng-model="settings.newsletter_maillist.sender" class="form-control" placeholder="noreply@your_domain_name.com"/>
           </div>
         </div>
+        <div class="form-group">
+          <label class="form-label" for="newsletter_footer">
+            {t}Newsletter footer text{/t}
+          </label>
+          <div class="controls">
+            <textarea class="form-control" id="newsletter_footer" name="newsletter_footer" ng-model="settings.newsletter_footer" onm-editor onm-editor-preset="simple"></textarea>
+          </div>
+        </div>
         {if $app.security->hasPermission('MASTER')}
           <div class="form-group">
             <input type="checkbox" id="subscribe-email" name="newsletter_subscribe_email" ng-false-value="'0'" ng-model="settings.newsletter_subscribe_email" ng-true-value="'1'" />
