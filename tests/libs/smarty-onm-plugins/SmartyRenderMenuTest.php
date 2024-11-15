@@ -42,7 +42,7 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->ms = $this->getMockBuilder('MenuService')
-            ->setMethods([ 'getItemBy', 'setCount' ])
+            ->setMethods([ 'getItemLocaleBy', 'setCount' ])
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
@@ -119,7 +119,7 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
      */
     public function testRenderMenuWhenMenuFound()
     {
-        $this->ms->expects($this->at(0))->method('getItemBy')
+        $this->ms->expects($this->at(0))->method('getItemLocaleBy')
             ->willReturn($this->fakeMenu);
 
         $this->assertEquals(
@@ -138,7 +138,7 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
      */
     public function testRenderMenuWhenMenuNotFound()
     {
-        $this->ms->expects($this->any())->method('getItemBy')
+        $this->ms->expects($this->any())->method('getItemLocaleBy')
             ->willReturn(null);
 
         $this->assertEmpty(smarty_function_render_menu([
