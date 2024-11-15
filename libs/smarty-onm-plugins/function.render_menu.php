@@ -45,7 +45,7 @@ function smarty_function_render_menu($params, &$smarty)
         $menuItemsObject = $menuHelper->castToObjectNested($menu->menu_items);
 
         $smarty->assign([
-            'menuItems'       => !empty($menuItemsObject) ? $menuItemsObject : [],
+            'menuItems'       => $menuItemsObject ?? [],
             'actual_category' => $params['actual_category'] ?? null
         ]);
 

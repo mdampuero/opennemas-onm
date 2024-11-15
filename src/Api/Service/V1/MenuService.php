@@ -23,7 +23,7 @@ class MenuService extends OrmService
     {
         $localizedMenus = [];
 
-        if ($item->menu_items ?? null) {
+        if (empty($item->menu_items)) {
             return $item;
         }
 
@@ -89,7 +89,7 @@ class MenuService extends OrmService
                 && is_array($item->menu_items)
             ) {
                 $filteredItems = array_filter($item->menu_items, function ($e) use ($locale) {
-                    return $e['locale'] === $locale;
+                    return $e['locale'] === $locale || empty($e['locale']);
                 });
 
                 $item->menu_items = $filteredItems;
