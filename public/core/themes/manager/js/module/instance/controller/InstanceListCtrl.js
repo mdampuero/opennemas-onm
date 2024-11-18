@@ -2,6 +2,7 @@
   'use strict';
 
   angular.module('ManagerApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  InstanceListCtrl
@@ -54,6 +55,14 @@
          */
         $scope.criteria = { epp: 25, page: 1 };
 
+        /**
+         * @memberOf InstanceListCtrl
+         *
+         * @description
+         *   If instance is a subdirectory
+         *
+         * @type {Boolean}
+         */
         $scope.subdirectory = false;
 
         /**
@@ -210,15 +219,14 @@
           oqlEncoder.configure({
             placeholder: {
               name: 'name ~ "[value]" or ' +
-                    'internal_name ~ "[value]" or ' +
-                    'contact_mail ~ "[value]" or ' +
-                    'domains ~ "[value]" or settings ~ "[value]" or ' +
-                    'subdirectory !is null'
+                'internal_name ~ "[value]" or ' +
+                'contact_mail ~ "[value]" or ' +
+                'domains ~ "[value]" or settings ~ "[value]" or ' +
+                'subdirectory !is null'
             }
           });
 
-          var oql = oqlEncoder.getOql($scope.criteria);
-
+          var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
             name: 'manager_ws_instances_list',
             params: { oql: oql }
