@@ -352,8 +352,12 @@
         }
 
         oqlDecoder.configure({
-          ignore: [ 'internal_name', 'contact_mail', 'domains' ]
+          ignore: [ 'internal_name', 'contact_mail', 'domains', 'settings' ]
         });
+
+        if ($location.search().oql) {
+          $scope.criteria = oqlDecoder.decode($location.search().oql);
+        }
 
         $scope.list();
       }
