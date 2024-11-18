@@ -329,7 +329,7 @@
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('country')">
     <i class="flag flag-[% item.country.toLowerCase() %]" uib-tooltip="[% getCountry(item.country) %]"></i>
   </td>
-  <td class="v-align-middle" ng-show="isColumnEnabled('name')">
+  <td class="v-align-middle" ng-show="isColumnEnabled('name')" title="[% item.name %]">
     <div class="table-text">
       [% item.name %]
     </div>
