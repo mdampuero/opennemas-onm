@@ -221,8 +221,8 @@
               name: 'name ~ "[value]" or ' +
                 'internal_name ~ "[value]" or ' +
                 'contact_mail ~ "[value]" or ' +
-                'domains ~ "[value]" or settings ~ "[value]" or ' +
-                'subdirectory !is null'
+                'domains ~ "[value]" or ' +
+                'settings ~ "[value]"'
             }
           });
 
@@ -239,17 +239,6 @@
             $scope.items   = response.data.results;
             $scope.total   = response.data.total;
             $scope.extra   = response.data.extra;
-            $scope.themes = [];
-
-            $scope.items.forEach(function(item) {
-              var theme = item.settings.TEMPLATE_USER;
-              var themeName = theme.split('.').pop().replace('_', ' ');
-
-              // Añadir el tema si no está presente
-              if (!$scope.themes.includes(theme)) {
-                $scope.themes.push(theme);
-              }
-            });
 
             // Scroll top
             $('body').animate({ scrollTop: '0px' }, 1000);
