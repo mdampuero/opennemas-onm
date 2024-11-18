@@ -198,7 +198,7 @@
     <i class="fa fa-globe" uib-tooltip="{t}Country{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('country') == 'asc', 'fa fa-caret-down': isOrderedBy('country') == 'desc'}"></i>
   </th>
-  <th class="pointer" ng-click="sort('name')" ng-show="isColumnEnabled('name')" width="300">
+  <th class="pointer" ng-click="sort('name')" ng-show="isColumnEnabled('name')" width="250">
     {t}Name{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
   </th>
