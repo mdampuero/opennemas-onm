@@ -106,30 +106,30 @@
       </ui-select-choices>
     </ui-select>
   </li>
-  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="blocked = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Blocked{/t}', value: 1}]">
-    <ui-select name="blocked" theme="select2" ng-model="criteria.blocked">
-      <ui-select-match>
-        <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
-      </ui-select-match>
-      <ui-select-choices repeat="item.value as item in blocked  | filter: $select.search">
-        <div ng-bind-html="item.name | highlight: $select.search"></div>
-      </ui-select-choices>
-    </ui-select>
-  </li>
-  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-model="criteria.settings">
-    <ui-select name="themes" theme="select2" ng-model="criteria.settings.TEMPLATE_USER">
-      <ui-select-match>
-        <strong>{t}Themes{/t}:</strong> [% $select.selected.name %]
-      </ui-select-match>
-      <ui-select-choices repeat="item.value as item in blocked  | filter: $select.search">
-        <div ng-bind-html="item.name | highlight: $select.search"></div>
-      </ui-select-choices>
-    </ui-select>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks">
+    <button
+      class="btn btn-white"
+      style="border:0;"
+      ng-click="criteria.blocked = criteria.blocked === 1 ? 0 : 1"
+      uib-tooltip="{t}Blocked{/t}"
+      tooltip-placement="bottom">
+      <i class="fa fa-square-o" aria-hidden="true" ng-if="!criteria.blocked"></i>
+      <i class="fa fa-unlock m-l-5" aria-hidden="true" ng-if="!criteria.blocked"></i>
+      <i class="fa fa-check-square-o text-primary" aria-hidden="true" ng-if="criteria.blocked === 1"></i>
+      <i class="fa fa-lock m-l-5" aria-hidden="true" ng-if="criteria.blocked === 1"></i>
+    </button>
   </li>
   <li class="hidden-xs m-r-10 ng-cloak quicklinks">
-    <button class="btn btn-white" style="border:0;" ng-click="subdirectory = !subdirectory" uib-tooltip="{t}Subdirectory{/t}" tooltip-placement="bottom">
-      <i class="fa fa-square-o" aria-hidden="true" ng-if="!subdirectory"></i><i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="!subdirectory"></i>
-      <i class="fa fa-check-square-o text-primary" aria-hidden="true" ng-if="subdirectory"></i><i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="subdirectory"></i>
+    <button
+      class="btn btn-white"
+      style="border:0;"
+      ng-click="criteria.subdirectory = criteria.subdirectory ? null : criteria.subdirectory"
+      uib-tooltip="{t}Blocked{/t}"
+      tooltip-placement="bottom">
+      <i class="fa fa-square-o" aria-hidden="true" ng-if="!criteria.subdirectory"></i>
+      <i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="!criteria.subdirectory"></i>
+      <i class="fa fa-check-square-o text-primary" aria-hidden="true" ng-if="criteria.subdirectory"></i>
+      <i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="criteria.subdirectory"></i>
     </button>
   </li>
   <li class="m-r-10 quicklinks">
