@@ -57,16 +57,14 @@
 
           http.get('api_v1_backend_newsletters_settings_list')
             .then(function(response) {
-              $scope.loading = false;
-
               if (response.data.settings) {
                 $scope.settings = response.data.settings;
               }
             }, function(response) {
-              $scope.loading = false;
-
               messenger.post(response.data);
             });
+
+          $scope.loading = false;
         };
 
         /**
