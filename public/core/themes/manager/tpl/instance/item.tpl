@@ -118,7 +118,7 @@
                 <div class="form-group">
                   <label class="form-label" for="country">{t}Country{/t}</label>
                   <div class="controls">
-                    <select class="form-control" id="country" name="country" ng-model="instance.country" placeholder="{t}Country{/t}" required>
+                    <select class="form-control" id="country" name="country" ng-model="instance.country" placeholder="{t}Country{/t}" ng-required="true">
                       <option value="">{t}Select a country{/t}...</option>
                       <option value="[% country.id %]" ng-repeat="country in template.countries" ng-selected="[% instance.country === country.id %]">[% country.name %]</option>
                     </select>

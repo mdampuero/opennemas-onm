@@ -204,6 +204,25 @@ class InstanceController extends Controller
     {
         $oql = $request->query->get('oql', '');
 
+        $ids      = $request->query->get('ids', '');
+        $idsArray = [];
+
+        if (!empty($ids)) {
+            $idsArray = array_map('intval', explode(',', $ids));
+
+            $idConditions = array_map(function ($id) {
+                return sprintf('id = %d', $id);
+            }, $idsArray);
+
+            $idsOql = implode(' or ', $idConditions);
+
+            if (!empty($oql)) {
+                $oql .= ' and ';
+            }
+
+            $oql .= $idsOql;
+        }
+
         if (!$this->get('core.security')->hasPermission('MASTER')
             && $this->get('core.security')->hasPermission('PARTNER')
         ) {
@@ -275,11 +294,14 @@ class InstanceController extends Controller
         $countries = $this->getCountries(true);
         array_unshift($countries, [ 'id' => null, 'name' => _('All') ]);
 
+        $themes = $this->getThemes();
+
         return new JsonResponse([
             'total'   => $total,
             'results' => $instances,
             'extra'   => [
                 'countries' => $countries,
+                'themes' => $themes,
                 'users'     => $this->getUsers()
             ]
         ]);

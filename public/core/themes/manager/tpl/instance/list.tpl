@@ -27,7 +27,7 @@
 
 {block name="selectedActions"}
   <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_REPORT')">
-    <a class="btn btn-link" ng-href="{url name=manager_ws_instances_csv}?ids=[% selected.instances.join(); %]&token=[% security.token %]" uib-tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
+    <a class="btn btn-link" ng-href="{url name=manager_ws_instances_csv}?ids=[% selected.items.join(); %]&token=[% security.token %]" uib-tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
       <i class="fa fa-download fa-lg text-white"></i>
     </a>
   </li>
@@ -93,6 +93,16 @@
       </ui-select-match>
       <ui-select-choices repeat="user.id as user in extra.users | filter: $select.search">
         <div ng-bind-html="user.name | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>
+  </li>
+  <li class="m-r-10 quicklinks" ng-model="criteria.settings">
+    <ui-select name="themes" theme="select2" ng-model="criteria.settings">
+      <ui-select-match>
+        <strong>{t}Themes{/t}:</strong> [% $select.selected.name %]
+      </ui-select-match>
+      <ui-select-choices repeat="themes.id as themes in extra.themes | filter: $select.search">
+        <div ng-bind-html="themes.uuid | highlight: $select.search"></div>
       </ui-select-choices>
     </ui-select>
   </li>
