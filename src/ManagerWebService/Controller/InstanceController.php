@@ -203,9 +203,7 @@ class InstanceController extends Controller
     public function exportAction(Request $request)
     {
         $oql = $request->query->get('oql', '');
-
-        $ids      = $request->query->get('ids', '');
-        $idsArray = [];
+        $ids = $request->query->get('ids', '');
 
         if (!empty($ids)) {
             $idConditions = array_map(function ($id) {
