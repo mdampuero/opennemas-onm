@@ -208,11 +208,9 @@ class InstanceController extends Controller
         $idsArray = [];
 
         if (!empty($ids)) {
-            $idsArray = array_map('intval', explode(',', $ids));
-
             $idConditions = array_map(function ($id) {
-                return sprintf('id = %d', $id);
-            }, $idsArray);
+                return sprintf('id = %d', intval($id));
+            }, explode(',', $ids));
 
             $idsOql = implode(' or ', $idConditions);
 
