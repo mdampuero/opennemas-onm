@@ -20,7 +20,7 @@
 
       var settings = $.extend({}, defaultOptions, options);
 
-      if ('content_id' in settings) {
+      if ('content_id' in settings && Number.isInteger(settings.content_id)) {
         $.ajax({
           url: settings.controller,
           method: 'GET',
