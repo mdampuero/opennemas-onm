@@ -332,16 +332,6 @@
           }
         }, true);
 
-        $scope.$watch('subdirectory', function(nv) {
-          if (nv && nv !== '') {
-            $scope.criteria.subdirectory = nv;
-          } else {
-            $scope.criteria.subdirectory = null;
-          }
-
-          $scope.list();
-        });
-
         // Get enabled columns from localStorage
         if (webStorage.local.get('instances-columns')) {
           $scope.columns = webStorage.local.get('instances-columns');
