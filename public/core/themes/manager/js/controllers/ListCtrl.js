@@ -14,8 +14,8 @@
      *   Generic controller for lists.
      */
     .controller('ListCtrl', [
-      '$location', '$scope', '$timeout', 'oqlDecoder',
-      function($location, $scope, $timeout, oqlDecoder) {
+      '$scope', '$timeout',
+      function($scope, $timeout) {
         /**
          * @memberOf ListCtrl
          *
@@ -276,19 +276,6 @@
           $scope.columns  = null;
           $scope.items    = null;
           $scope.selected = null;
-        });
-
-        // Update criteria when route changes
-        $scope.$on('$routeUpdate', function() {
-          if (!$location.search().oql) {
-            return;
-          }
-
-          var criteria = oqlDecoder.decode($location.search().oql);
-
-          if (!angular.equals(criteria, $scope.criteria)) {
-            $scope.criteria = criteria;
-          }
         });
 
         // Reloads the list when filters change.

@@ -102,7 +102,7 @@
         <strong>{t}Themes{/t}:</strong> [% $select.selected.name %]
       </ui-select-match>
       <ui-select-choices repeat="themes.id as themes in extra.themes | filter: $select.search">
-        <div ng-bind-html="themes.uuid | highlight: $select.search"></div>
+        <div ng-bind-html="themes.name | highlight: $select.search"></div>
       </ui-select-choices>
     </ui-select>
   </li>
@@ -134,7 +134,7 @@
       class="btn btn-white"
       style="border:0;"
       ng-click="criteria.subdirectory = criteria.subdirectory ? null : criteria.subdirectory"
-      uib-tooltip="{t}Blocked{/t}"
+      uib-tooltip="{t}Subdirectory{/t}"
       tooltip-placement="bottom">
       <i class="fa fa-square-o" aria-hidden="true" ng-if="!criteria.subdirectory"></i>
       <i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="!criteria.subdirectory"></i>
