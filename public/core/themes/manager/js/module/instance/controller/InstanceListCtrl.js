@@ -263,6 +263,8 @@
          */
         $scope.resetFilters = function() {
           $scope.criteria = { epp: 25, page: 1 };
+          $scope.subdirectory = false;
+          $scope.list();
         };
 
         /**
@@ -274,7 +276,6 @@
          * If no items have a subdirectory, it shows a message.
          */
         $scope.filterBySubdirectory = function() {
-          // Verificar si hay algún elemento con `subdirectory: true`
           var hasSubdirectory = $scope.items.some(function(item) {
             return item.subdirectory;
           });
@@ -284,7 +285,6 @@
             return;
           }
 
-          // Alternar el estado del filtro
           $scope.subdirectory = !$scope.subdirectory;
 
           if ($scope.subdirectory) {
