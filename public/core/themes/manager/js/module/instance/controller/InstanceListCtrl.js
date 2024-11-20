@@ -240,6 +240,15 @@
             $scope.total   = response.data.total;
             $scope.extra   = response.data.extra;
 
+            // Aplica el filtro de subdirectorio después de cargar los elementos
+            if ($scope.subdirectory) {
+              $scope.items = $scope.items.filter(function(item) {
+                return item.subdirectory;
+              });
+            } else {
+              $scope.filteredItems = $scope.items;
+            }
+
             // Scroll top
             $('body').animate({ scrollTop: '0px' }, 1000);
           });
@@ -254,6 +263,43 @@
          */
         $scope.resetFilters = function() {
           $scope.criteria = { epp: 25, page: 1 };
+        };
+
+        /**
+         * @function filterBySubdirectory
+         * @memberOf InstanceListCtrl
+         *
+         * @description
+         * Filters items to show only those with a subdirectory.
+         * If no items have a subdirectory, it shows a message.
+         */
+        $scope.filterBySubdirectory = function() {
+          // Verificar si hay algún elemento con `subdirectory: true`
+          var hasSubdirectory = $scope.items.some(function(item) {
+            return item.subdirectory;
+          });
+
+          if (!hasSubdirectory) {
+            messenger.post('No items contain a subdirectory.');
+            return;
+          }
+
+          // Alternar el estado del filtro
+          $scope.subdirectory = !$scope.subdirectory;
+
+          if ($scope.subdirectory) {
+            $scope.filteredItems = $scope.items.filter(function(item) {
+              return item.subdirectory;
+            });
+          } else {
+            $scope.filteredItems = $scope.items;
+          }
+
+          $scope.list();
+          // Forzar actualización de la vista si es necesario
+          if (!$scope.$$phase) {
+            $scope.$apply();
+          }
         };
 
         /**

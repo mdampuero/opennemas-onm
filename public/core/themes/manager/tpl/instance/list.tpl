@@ -133,13 +133,13 @@
     <button
       class="btn btn-white"
       style="border:0;"
-      ng-click="criteria.subdirectory = criteria.subdirectory ? null : criteria.subdirectory"
+      ng-click="filterBySubdirectory()"
       uib-tooltip="{t}Subdirectory{/t}"
       tooltip-placement="bottom">
-      <i class="fa fa-square-o" aria-hidden="true" ng-if="!criteria.subdirectory"></i>
-      <i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="!criteria.subdirectory"></i>
-      <i class="fa fa-check-square-o text-primary" aria-hidden="true" ng-if="criteria.subdirectory"></i>
-      <i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="criteria.subdirectory"></i>
+      <i class="fa fa-square-o" aria-hidden="true" ng-if="!subdirectory"></i>
+      <i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="!subdirectory"></i>
+      <i class="fa fa-check-square-o text-primary" aria-hidden="true" ng-if="subdirectory"></i>
+      <i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="subdirectory"></i>
     </button>
   </li>
   <li class="m-r-10 quicklinks">
