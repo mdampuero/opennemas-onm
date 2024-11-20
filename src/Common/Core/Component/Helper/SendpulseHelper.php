@@ -206,7 +206,7 @@ class SendpulseHelper
 
         $imageHelper = $this->container->get('core.helper.image');
         $contentPath = $this->container->get('core.helper.url_generator')->getUrl($article, ['_absolute' => true]);
-        $image       = $this->container->get('core.helper.featured_media')->getFeaturedMedia($article, 'inner');
+        $image       = $this->container->get('core.helper.featured_media')->getFeaturedMedia($article, 'frontpage');
         $favico      = $this->container->get('api.service.content')->getItem($this->ds->get('logo_favico'));
 
         $body = !empty($article->description)
