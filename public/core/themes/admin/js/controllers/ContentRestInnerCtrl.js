@@ -548,7 +548,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     };
 
     $scope.openIAModal = function(field, AIFieldType, AIFieldTitle = '') {
-      const originalText = field in $scope ? $scope[field] : $scope.item[field];
+      const input = field in $scope ? $scope[field] : $scope.item[field];
 
       $uibModal.open({
         templateUrl: 'modal-openai',
@@ -558,23 +558,24 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         resolve: {
           template: function() {
             return {
+              lastTemplate: $scope.lastTemplate,
               step: 1,
               AIFieldType,
               AIFieldTitle,
-              user_prompt: '',
-              context_prompt: '',
-              promtSelected: '',
-              original_text: originalText,
-              suggested_text: ''
+              input
             };
           },
           success: function() {
             return function(modal, template) {
+              $scope.lastTemplate = template;
               if (field in $scope) {
                 $scope[field] = template.response;
               } else {
                 $scope.item[field] = template.response;
               }
+              $timeout(function() {
+                $scope.flags.generate.slug = true;
+              }, 250);
             };
           }
         }

@@ -6,9 +6,11 @@ orm:
             properties:
                 description: string
                 id:          integer
+                mode:        string
                 name:        string
                 field:       string
-                context:     string
+                tone:        string
+                role:        string
             converters:
                 default:
                     class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
@@ -28,10 +30,16 @@ orm:
                         id:
                             type: integer
                             options: { default: null, unsigned: true, autoincrement: true }
+                        mode:
+                            type: text
+                            options: { default: null, length: 32, notnull: true }
                         name:
                             type: text
                             options: { default: null, length: 1024, notnull: true }
-                        context:
+                        tone:
+                            type: text
+                            options: { default: null, length: 1024, notnull: false }
+                        role:
                             type: text
                             options: { default: null, length: 1024, notnull: false }
                         field:

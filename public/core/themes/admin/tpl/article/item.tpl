@@ -123,7 +123,7 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true AI=true AIFieldType="FIELD_TITLE"}
+      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true AI=true AIFieldType="titles"}
       {include file="ui/component/input/text.tpl" iCounter=true iField="title_int" iRequired=true iSource="title" iTitle="{t}Inner title{/t}" iValidation=true }
       <div class="row">
         <div class="col-sm-6">
@@ -135,9 +135,9 @@
           </div>
         {/is_module_activated}
       </div>
-      {include file="ui/component/input/text.tpl" iCounter=true iField="pretitle" iTitle="{t}Pretitle{/t}" AI=true AIFieldType="FIELD_TITLE"}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true AI=true AIFieldType="FIELD_INTRODUCTION"}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true contentPicker=true AI=true AIFieldType="FIELD_BODY"}
+      {include file="ui/component/input/text.tpl" iCounter=true iField="pretitle" iTitle="{t}Pretitle{/t}" AI=true AIFieldType="titles"}
+      {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true AI=true AIFieldType="introductions"}
+      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true contentPicker=true AI=true AIFieldType="bodies"}
     </div>
   </div>
   {is_module_activated name="es.openhost.module.live_blog_posting"}

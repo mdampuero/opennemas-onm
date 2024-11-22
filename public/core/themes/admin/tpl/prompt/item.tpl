@@ -27,20 +27,53 @@
   <div class="grid simple">
     <div class="grid-body">
       <div class="row m-t-20">
-         <div class="col-sm-6 form-group">
-          <label>{t}Type field{/t}</label>
-          <select class="form-control" name="field" id="field" ng-model="item.field">
-            <option value="FIELD_TITLE">FIELD_TITLE</option>
-            <option value="FIELD_INTRODUCTION">FIELD_INTRODUCTION</option>
-            <option value="FIELD_BODY">FIELD_BODY</option>
-          </select>
+          <div class="col-md-4 col-sm-6 form-group">
+            <label>{t}Mode{/t}</label>
+            <ui-select name="mode" class="form-control" theme="select2" ng-model="item.mode" search-enabled="false" required>
+              <ui-select-match>
+                [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.key as item in data.extra.modes | filter: { name: $select.search }" position='down'>
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div class="col-md-4 col-sm-6 form-group">
+            <label>{t}Field{/t}</label>
+            <ui-select name="field" class="form-control" theme="select2" ng-model="item.field" search-enabled="false" required>
+              <ui-select-match>
+                [% $select.selected.name %]
+              </ui-select-match>
+              <ui-select-choices repeat="item.key as item in data.extra.inputTypes | filter: { name: $select.search }" position='down'>
+                <div ng-bind-html="item.name | highlight: $select.search"></div>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+         <div class="col-md-4 col-sm-6 form-group">
+          <label>{t}Default tono{/t}</label>
+          <ui-select name="tone" class="form-control" theme="select2" ng-model="item.tone" required>
+            <ui-select-match>
+              [% $select.selected.name %]
+            </ui-select-match>
+            <ui-select-choices repeat="item.name as item in data.extra.tones | filter: { name: $select.search }" position='down'>
+              <div ng-bind-html="item.name | highlight: $select.search"></div>
+            </ui-select-choices>
+          </ui-select>
          </div>
       </div>
       <div class="form-group">
-        {include file="ui/component/input/text.tpl" iField="name" iMessageField="name" iFlag="validating" iRequired=true iTitle="{t}Prompt{/t}" iValidation=true iPlaceholder="{t}Improve this text in terms of SEO...{/t}"}
+        <label>{t}Default role{/t}</label>
+        <ui-select name="role" class="form-control" theme="select2" ng-model="item.role" required>
+          <ui-select-match>
+            [% $select.selected.name %]
+          </ui-select-match>
+          <ui-select-choices repeat="item.name as item in data.extra.roles | filter: { name: $select.search }" position='down'>
+            <div ng-bind-html="item.name | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
       </div>
       <div class="form-group">
-        {include file="ui/component/input/text.tpl" iField="context" iMessageField="context" iFlag="validating" iTitle="{t}System or context{/t}" iPlaceholder="{t}You are an expert in SEO and SEO-optimized copywriting...{/t}"}
+        {include file="ui/component/input/text.tpl" iField="name" iMessageField="name" iFlag="validating" iRequired=true iTitle="{t}Prompt{/t}" iValidation=true iPlaceholder="{t}Improve this text in terms of SEO...{/t}"}
       </div>
     </div>
   </div>

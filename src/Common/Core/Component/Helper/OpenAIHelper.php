@@ -58,6 +58,12 @@ class OpenAIHelper
         ],
     ];
 
+    protected $instructions = [];
+
+    protected $newInstructions = [
+        "Responde en el mismo idioma que te pregunto"
+    ];
+
     /**
      * The service url.
      *
@@ -72,7 +78,7 @@ class OpenAIHelper
      */
     protected $openaiApiKey;
 
-     /**
+    /**
      * Initializes the Menu service.
      *
      * @param Container          $container The service container.
@@ -81,6 +87,62 @@ class OpenAIHelper
     {
         $this->container = $container;
         $this->client    = new Client();
+    }
+
+    public function getInstructions()
+    {
+        return $this->instructions;
+    }
+
+    public function addInstruction($instruction)
+    {
+        $instructions = $this->getInstructions();
+        array_push($instructions, $instruction);
+        $this->setInstructions($instructions);
+    }
+
+    public function setInstructions($instructions)
+    {
+        $this->instructions = $instructions;
+        return $this;
+    }
+
+    public function getInstructionsByFilter(array $filter = []): array
+    {
+        $instructions = $this->getInstructions();
+
+        return $filter
+            ? array_filter($instructions, function ($i) use ($filter) {
+                return in_array($i['type'], $filter);
+            })
+            : $instructions;
+    }
+
+    protected function insertInstructions($prompt = '', $instructions = [])
+    {
+        if (count($instructions)) {
+            return $prompt . sprintf(' (ten en cuenta estas instrucciones: %s)', implode(', ', array_map(
+                function ($item) {
+                    return $item['value'];
+                },
+                $instructions
+            )));
+        }
+        return $prompt;
+    }
+
+    public function generatePrompt($messages)
+    {
+        $prompt = $this->insertInstructions($messages['promptInput'], $this->getInstructionsByFilter([
+            'Both',
+            $messages['promptSelected']['mode']
+        ]));
+        if ($messages['promptSelected']['mode'] == 'New') {
+            $prompt .= ($messages["input"] ?? false) ? sprintf(', Tema: "%s"', $messages["input"]) : '';
+        } elseif ($messages['promptSelected']['mode'] == 'Edit') {
+            $prompt .= ($messages["input"] ?? false) ? sprintf(', Este es el texto: "%s"', $messages["input"]) : '';
+        }
+        return $prompt;
     }
 
     public function sendMessage($messages, $params = [])
@@ -93,25 +155,48 @@ class OpenAIHelper
             ];
         }
 
+        if ($messages["toneSelected"]["name"] ?? false) {
+            $this->addInstruction([
+                "type" => "Both",
+                "value" => sprintf('Utiliza un tono: "%s"', $messages["toneSelected"]["name"])
+            ]);
+        }
+
         $data['messages'] = [];
 
-        if (array_key_exists('system', $messages) && !empty($messages['system'])) {
+        if ($messages["roleSelected"]["prompt"] ?? false) {
             $data['messages'][] = [
                 'role' => 'system',
-                'content' => $messages['system']
+                'content' => $messages["roleSelected"]["prompt"]
             ];
         }
 
-        if (array_key_exists('user', $messages) && !empty($messages['user'])) {
+        if ($messages["input"] ?? false) {
             $data['messages'][] = [
                 'role' => 'user',
-                'content' => $messages['user']
+                'content' => $this->generatePrompt($messages)
             ];
         }
 
         $responseData = [];
 
         try {
+            // return array(
+            //     "request" => $messages,
+            //     "data" => $data,
+            //     "message" => "La Segunda Guerra Mundial: La Madre de Todas las Batallas (y de los Rankings)",
+            //     "tokens" => array(
+            //         "prompt_tokens" => 14,
+            //         "completion_tokens" => 50,
+            //         "total_tokens" => 64,
+            //         "prompt_tokens_details" => array(
+            //             "cached_tokens" => 0
+            //         ),
+            //         "completion_tokens_details" => array(
+            //             "reasoning_tokens" => 0
+            //         )
+            //     )
+            // );
             $response = $this->client->request('POST', $this->openaiEndpoint, [
                 'headers' => [
                     'Content-Type' => 'application/json',
@@ -119,7 +204,6 @@ class OpenAIHelper
                 ],
                 'json' => $data
             ]);
-
             $response = json_decode($response->getBody(), true);
 
             $responseData['message'] = isset($response['choices'][0]['message']['content'])
@@ -156,9 +240,9 @@ class OpenAIHelper
         $data = [
             'messages' => $messages,
             'response' => $responseData,
-            'tokens' => $tokens,
-            'params' => $params,
-            'date' => $date->format('Y-m-d H:i:s')
+            'tokens'   => $tokens,
+            'params'   => $params,
+            'date'     => $date->format('Y-m-d H: i: s')
         ];
 
         $this->container->get('api.service.ai')->createItem($data);
@@ -226,6 +310,10 @@ class OpenAIHelper
         $credentials = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('openai_credentials', []);
+
+        $this->setInstructions($this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_instructions', []));
 
         if ($provider === 'custom') {
             $this->openaiApiKey = $credentials['apikey'];
@@ -330,5 +418,65 @@ class OpenAIHelper
         }
 
         return $string;
+    }
+
+    public function getTones()
+    {
+        $tones = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_tones', []);
+
+        return $tones;
+    }
+
+    public function setTones($tones = [])
+    {
+        $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->set('openai_tones', $tones);
+        return $this;
+    }
+
+    public function getInputTypes()
+    {
+        $inputTypes = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_input_types', []);
+
+        return $inputTypes;
+    }
+
+    public function setInputTypes($inputTypes = [])
+    {
+        $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->set('openai_input_types', $inputTypes);
+        return $this;
+    }
+
+    public function getRoles()
+    {
+        $roles = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_roles', []);
+
+        return $roles;
+    }
+
+    public function getModes()
+    {
+        $modes = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_modes', []);
+
+        return $modes;
+    }
+
+    public function setRoles($roles = [])
+    {
+        $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->set('openai_roles', $roles);
+        return $this;
     }
 }

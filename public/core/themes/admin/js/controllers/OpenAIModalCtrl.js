@@ -25,12 +25,16 @@
           saveTokens: 'api_v1_backend_openai_tokens',
         };
 
-        $scope.last_token_usage   = 0;
-        $scope.waiting            = false;
-        $scope.edit_context       = false;
-        $scope.edit_original_text = false;
-        $scope.template           = template;
-        $scope.displayMode        = $scope.template.AIFieldType === 'FIELD_INTRODUCTION' || $scope.template.AIFieldType === 'FIELD_BODY' ? 'textarea' : 'input';
+        $scope.last_token_usage        = 0;
+        $scope.waiting                 = false;
+        $scope.edit_input              = false;
+        $scope.template                = template;
+        $scope.displayMode             = $scope.template.AIFieldType === 'introductions' || $scope.template.AIFieldType === 'bodies' ? 'textarea' : 'input';
+        $scope.template.roleSelected   = null;
+        $scope.template.promptSelected = null;
+        $scope.template.toneSelected   = null;
+        $scope.template.promptInput    = null;
+        $scope.mode                    = $scope.template.input && $scope.template.input.trim() !== '' ? 'Edit' : 'New';
 
         /**
          * @function init
@@ -40,6 +44,10 @@
          *   Initializes the modal with default criteria and fetches a list of prompts from the server.
          */
         $scope.init = function() {
+          if ($scope.mode === 'New' && typeof $scope.template.lastTemplate !== 'undefined') {
+            $scope.template.input = $scope.template.lastTemplate.input;
+          }
+
           $scope.criteria = {
             epp: 1000,
             field: $scope.template.AIFieldType,
@@ -48,11 +56,13 @@
           };
 
           $scope.waiting = true;
+
           var oqlQuery = oqlEncoder.getOql($scope.criteria);
 
           http.get({ name: 'api_v1_backend_openai_prompt_get_list', params: { oql: oqlQuery } })
             .then(function(response) {
               $scope.prompts = response.data.items;
+              $scope.extra   = response.data.extra;
             })
             .finally(function() {
               $scope.waiting = false;
@@ -91,6 +101,7 @@
           http.post($scope.routes.generateText, $scope.template)
             .then(function(response) {
               $scope.template.suggested_text = response.data.message;
+              $scope.template.original_text = $scope.template.input;
               $scope.last_token_usage = response.data.tokens.total_tokens;
               $scope.template.step = 2;
               $scope.setActiveText('suggested');
@@ -113,31 +124,24 @@
           $uibModalInstance.close(response);
         };
 
-        /**
-         * @function updateUserPrompt
-         * @memberOf OpenAIModalCtrl
-         *
-         * @description
-         *   Updates `user_prompt` and `context_prompt` in the template based on the selected prompt.
-         */
         $scope.updateUserPrompt = function() {
-          var selectedPrompt = $scope.prompts[$scope.template.promtSelected];
+          if ($scope.template.promptSelected) {
+            $scope.template.roleSelected = $scope.extra.roles.find(function(obj) {
+              return obj['name'] === $scope.template.promptSelected.role;
+            });
 
-          if (selectedPrompt) {
-            $scope.template.context_prompt = selectedPrompt.context;
-            $scope.template.user_prompt    = selectedPrompt.name;
+            $scope.template.toneSelected = $scope.extra.tones.find(function(obj) {
+              return obj['name'] === $scope.template.promptSelected.tone;
+            });
+
+            $scope.template.promptInput    = $scope.template.promptSelected.name;
           } else {
-            $scope.template.user_prompt = '';
+            $scope.template.roleSelected = null;
+            $scope.template.toneSelected = null;
+            $scope.template.promptInput  = null;
           }
         };
 
-        /**
-         * @function confirm
-         * @memberOf OpenAIModalCtrl
-         *
-         * @description
-         *   Executes the `success` function (if provided), handles the response, and closes the modal.
-         */
         $scope.confirm = function() {
           if (!success || typeof success !== 'function') {
             return $scope.close(true);
@@ -152,16 +156,6 @@
             });
         };
 
-        /**
-         * @function resolve
-         * @memberOf OpenAIModalCtrl
-         *
-         * @description
-         *   Processes response data and closes the modal based on success status.
-         *
-         * @param {Object} response - The response data from the confirm step.
-         * @param {boolean} success - Indicates if the operation was successful.
-         */
         $scope.resolve = function(response, success) {
           var result = response && Object.keys(response).length > 0 ? {
             data: response.data,
@@ -220,7 +214,15 @@
           $scope.template.response = $scope.template[type + '_text'];
         };
 
-        // Call init function automatically upon controller load
+        $scope.countWords = function(input) {
+          if (!input || typeof input !== 'string') {
+            return 0;
+          }
+          return input.trim().split(/\s+/).filter(function(word) {
+            return word.length > 0;
+          }).length;
+        };
+
         $scope.init();
       }
     ]);

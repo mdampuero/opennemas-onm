@@ -45,9 +45,7 @@
         $scope.init = function() {
           $scope.app.columns.selected = _.uniq([
             ... $scope.app.columns.selected,
-            'name',
-            'field',
-            'context'
+            'name', 'role', 'mode'
           ]);
 
           oqlEncoder.configure({ placeholder: {

@@ -15,22 +15,40 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-context" checklist-model="app.columns.selected" checklist-value="'context'" type="checkbox">
-    <label for="checkbox-context">
-      {t}Context{/t}
+    <input id="checkbox-mode" checklist-model="app.columns.selected" checklist-value="'mode'" type="checkbox">
+    <label for="checkbox-mode">
+      {t}Mode{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-tone" checklist-model="app.columns.selected" checklist-value="'tone'" type="checkbox">
+    <label for="checkbox-tone">
+      {t}Default tone{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-role" checklist-model="app.columns.selected" checklist-value="'role'" type="checkbox">
+    <label for="checkbox-role">
+      {t}Default role{/t}
     </label>
   </div>
 {/block}
 
 {block name="commonColumnsHeader"}
-  <th class="v-align-middle" ng-if="isColumnEnabled('name')">
+  <th class="v-align-middle" ng-if="isColumnEnabled('name')"  width="500">
     {t}Prompt{/t}
   </th>
-  <th class="v-align-middle" ng-if="isColumnEnabled('field')" width="200">
+  <th class="v-align-middle" ng-if="isColumnEnabled('field')">
     {t}Field{/t}
   </th>
-  <th class="v-align-middle" ng-if="isColumnEnabled('context')">
-    {t}Context{/t}
+  <th class="v-align-middle" ng-if="isColumnEnabled('mode')">
+    {t}Mode{/t}
+  </th>
+  <th class="v-align-middle" ng-if="isColumnEnabled('tone')">
+    {t}Default tone{/t}
+  </th>
+  <th class="v-align-middle" ng-if="isColumnEnabled('role')">
+    {t}Default role{/t}
   </th>
 {/block}
 
@@ -53,9 +71,19 @@
       [% item.field %]
     </div>
   </td>
-  <td class="v-align-middle" ng-if="isColumnEnabled('context')">
+  <td class="v-align-middle" ng-if="isColumnEnabled('mode')">
     <div class="table-text">
-      [% item.context %]
+      [% item.mode %]
+    </div>
+  </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('tone')">
+    <div class="table-text">
+      [% item.tone %]
+    </div>
+  </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('role')">
+    <div class="table-text">
+      [% item.role %]
     </div>
   </td>
 {/block}

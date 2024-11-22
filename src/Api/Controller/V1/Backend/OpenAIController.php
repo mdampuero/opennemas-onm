@@ -61,6 +61,18 @@ class OpenAIController extends ApiController
             ->getDataSet('Settings', 'instance')
             ->get('openai_credentials', []);
 
+        $roles = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_roles', []);
+
+        $tones = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_tones', []);
+
+        $openai_instructions = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_instructions', []);
+
         if (empty($settings)) {
             //TODO: Get config from manager
             $settings = $this->get($this->helper)->getDafaultParams();
@@ -73,9 +85,12 @@ class OpenAIController extends ApiController
         }
 
         return new JsonResponse([
-            'openai_service'     => $serviceName,
-            'openai_credentials' => $credentials,
-            'openai_config'      => $settings,
+            'openai_service'      => $serviceName,
+            'openai_credentials'  => $credentials,
+            'openai_config'       => $settings,
+            'openai_roles'        => $roles,
+            'openai_tones'        => $tones,
+            'openai_instructions' => $openai_instructions
         ]);
     }
 
@@ -113,14 +128,14 @@ class OpenAIController extends ApiController
         }
 
         try {
-            $message = [];
+            $messages                   = [];
+            $messages["input"]          = $request->request->get('input');
+            $messages["roleSelected"]   = $request->request->get('roleSelected');
+            $messages["toneSelected"]   = $request->request->get('toneSelected');
+            $messages["promptSelected"] = $request->request->get('promptSelected');
+            $messages["promptInput"]    = $request->request->get('promptInput');
 
-            $originalText      = $request->request->get('original_text', '');
-            $message['system'] = $request->request->get('context_prompt', '');
-            $message['user']   = $request->request->get('user_prompt', '');
-            $message['user']  .= ($originalText ? ': "' . $originalText . '"' : '' );
-
-            $response = $this->get($this->helper)->sendMessage($message);
+            $response = $this->get($this->helper)->sendMessage($messages);
 
             if (isset($response['error'])) {
                 return new JsonResponse(['error' => $response['error']], JsonResponse::HTTP_REQUEST_TIMEOUT);
@@ -142,6 +157,7 @@ class OpenAIController extends ApiController
         $tokens  = $this->get($this->helper)->getTokensMonthly();
         $pricing = $this->get($this->helper)->getPricing();
         $money   = $this->get($this->helper)->getSpentMoney();
+
 
         $agrupatedTokens = [];
 

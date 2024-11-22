@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
@@ -43,4 +45,23 @@ class PromptController extends ApiController
      * {@inheritdoc}
      */
     protected $service = 'api.service.prompt';
+
+    /**
+     * Returns a list of extra data.
+     *
+     * @param mixed $items The item when called in a single-item action or the
+     *                     array of items when called in a list-of-items action.
+     *
+     * @return array The extra data.
+     */
+    protected function getExtraData()
+    {
+        $helperOpenAI = $this->get('core.helper.openai');
+        return [
+            'inputTypes' => $helperOpenAI->getInputTypes(),
+            'tones' => $helperOpenAI->getTones(),
+            'roles' => $helperOpenAI->getRoles(),
+            'modes' => $helperOpenAI->getModes(),
+        ];
+    }
 }
