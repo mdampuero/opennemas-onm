@@ -222,7 +222,8 @@
                 'internal_name ~ "[value]" or ' +
                 'contact_mail ~ "[value]" or ' +
                 'domains ~ "[value]" or ' +
-                'settings ~ "[value]"'
+                'settings ~ "[value]"',
+              subdirectory: '[key] != ""'
             }
           });
 
@@ -265,41 +266,6 @@
           $scope.criteria = { epp: 25, page: 1 };
           $scope.subdirectory = false;
           $scope.list();
-        };
-
-        /**
-         * @function filterBySubdirectory
-         * @memberOf InstanceListCtrl
-         *
-         * @description
-         * Filters items to show only those with a subdirectory.
-         * If no items have a subdirectory, it shows a message.
-         */
-        $scope.filterBySubdirectory = function() {
-          var hasSubdirectory = $scope.items.some(function(item) {
-            return item.subdirectory;
-          });
-
-          if (!hasSubdirectory) {
-            messenger.post('No items contain a subdirectory.');
-            return;
-          }
-
-          $scope.subdirectory = !$scope.subdirectory;
-
-          if ($scope.subdirectory) {
-            $scope.filteredItems = $scope.items.filter(function(item) {
-              return item.subdirectory;
-            });
-          } else {
-            $scope.filteredItems = $scope.items;
-          }
-
-          $scope.list();
-          // Forzar actualización de la vista si es necesario
-          if (!$scope.$$phase) {
-            $scope.$apply();
-          }
         };
 
         /**
