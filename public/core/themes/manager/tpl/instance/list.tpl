@@ -96,13 +96,13 @@
       </ui-select-choices>
     </ui-select>
   </li>
-  <li class="m-r-10 quicklinks" ng-model="criteria.settings">
-    <ui-select name="themes" theme="select2" ng-model="criteria.settings">
+  <li class="m-r-10 quicklinks">
+    <ui-select name="theme" theme="select2" ng-model="criteria.settings">
       <ui-select-match>
         <strong>{t}Themes{/t}:</strong> [% $select.selected.name %]
       </ui-select-match>
-      <ui-select-choices repeat="themes.id as themes in extra.themes | filter: $select.search">
-        <div ng-bind-html="themes.name | highlight: $select.search"></div>
+      <ui-select-choices repeat="theme.uuid as theme in extra.themes | filter: $select.search">
+        <div ng-bind-html="theme.name | highlight: $select.search"></div>
       </ui-select-choices>
     </ui-select>
   </li>

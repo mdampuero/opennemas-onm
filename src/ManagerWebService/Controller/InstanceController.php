@@ -291,6 +291,7 @@ class InstanceController extends Controller
         array_unshift($countries, [ 'id' => null, 'name' => _('All') ]);
 
         $themes = $this->getThemes();
+        array_unshift($themes, [ 'uuid' => null, 'name' => _('All') ]);
 
         return new JsonResponse([
             'total'   => $total,
@@ -818,7 +819,7 @@ class InstanceController extends Controller
     {
         $lang   = $this->get('core.locale')->getLocaleShort();
         $themes = $this->get('orm.manager')->getRepository('theme')
-            ->findBy('uuid !in ["es.openhost.theme.admin", "es.openhost.theme.manager"]');
+            ->findBy('uuid !in ["es.openhost.theme.admin", "es.openhost.theme.manager"] order by uuid asc');
 
         // TODO: Replace with translation support in converters when merging
         //       feature/ONM-1661

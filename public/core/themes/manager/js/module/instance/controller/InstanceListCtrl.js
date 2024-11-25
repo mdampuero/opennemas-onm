@@ -56,16 +56,6 @@
         $scope.criteria = { epp: 25, page: 1 };
 
         /**
-         * @memberOf InstanceListCtrl
-         *
-         * @description
-         *   If instance is a subdirectory
-         *
-         * @type {Boolean}
-         */
-        $scope.subdirectory = false;
-
-        /**
          * @function delete
          * @memberOf InstanceListCtrl
          *
@@ -223,7 +213,8 @@
                 'contact_mail ~ "[value]" or ' +
                 'domains ~ "[value]" or ' +
                 'settings ~ "[value]"',
-              subdirectory: '[key] != ""'
+              subdirectory: '[key] != ""',
+              settings: '[key] ~ "[value]"'
             }
           });
 
@@ -241,14 +232,7 @@
             $scope.total   = response.data.total;
             $scope.extra   = response.data.extra;
 
-            // Aplica el filtro de subdirectorio después de cargar los elementos
-            if ($scope.subdirectory) {
-              $scope.items = $scope.items.filter(function(item) {
-                return item.subdirectory;
-              });
-            } else {
-              $scope.filteredItems = $scope.items;
-            }
+            $scope.filteredItems = $scope.items;
 
             // Scroll top
             $('body').animate({ scrollTop: '0px' }, 1000);
@@ -264,7 +248,6 @@
          */
         $scope.resetFilters = function() {
           $scope.criteria = { epp: 25, page: 1 };
-          $scope.subdirectory = false;
           $scope.list();
         };
 
