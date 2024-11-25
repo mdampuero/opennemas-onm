@@ -106,7 +106,7 @@
       </ui-select-choices>
     </ui-select>
   </li>
-  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="activated = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="activated = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: '0' } ]">
     <ui-select name="activated" theme="select2" ng-model="criteria.activated">
       <ui-select-match>
         <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
