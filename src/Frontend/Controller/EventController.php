@@ -23,16 +23,18 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $caches = [
-        'list' => 'articles',
-        'show' => 'articles'
+        'list'    => 'articles',
+        'show'    => 'articles',
+        'tagList' => 'articles'
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $groups = [
-        'list' => 'article_inner',
-        'show' => 'article_inner'
+        'list'    => 'article_inner',
+        'show'    => 'article_inner',
+        'tagList' => 'article_inner'
     ];
 
     /**
