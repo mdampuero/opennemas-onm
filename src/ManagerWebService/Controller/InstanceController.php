@@ -298,7 +298,7 @@ class InstanceController extends Controller
             'results' => $instances,
             'extra'   => [
                 'countries' => $countries,
-                'themes' => $themes,
+                'themes'    => $themes,
                 'users'     => $this->getUsers()
             ]
         ]);
