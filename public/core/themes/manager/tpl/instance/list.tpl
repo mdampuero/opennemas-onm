@@ -134,7 +134,7 @@
       class="btn btn-white"
       style="border:0;"
       ng-click="criteria.subdirectory = criteria.subdirectory === 'null' ? null : 'null'"
-      uib-tooltip="{t}Subdirectory{/t}"
+      uib-tooltip="{t}Subdirectory path{/t}"
       tooltip-placement="bottom">
       <i class="fa fa-square-o" aria-hidden="true" ng-if="!criteria.subdirectory"></i>
       <i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="!criteria.subdirectory"></i>
