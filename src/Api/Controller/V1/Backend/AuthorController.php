@@ -113,6 +113,7 @@ class AuthorController extends ApiController
 
         // Prepare contents for CSV
         $headers = [
+            _('ID'),
             _('Name'),
             _('Email'),
             _('Biography'),
@@ -124,6 +125,7 @@ class AuthorController extends ApiController
         $data = [];
         foreach ($authors as $author) {
             $data[] = [
+                $author['id'],
                 $author['name'],
                 $author['email'],
                 $author['bio_description'],

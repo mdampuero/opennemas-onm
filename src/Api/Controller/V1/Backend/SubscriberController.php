@@ -75,6 +75,7 @@ class SubscriberController extends ApiController
 
         // Prepare contents for CSV
         $headers = [
+            _('ID'),
             _('Email'),
             _('Name'),
             _('Activated'),
@@ -96,6 +97,7 @@ class SubscriberController extends ApiController
             }
 
             $userInfo = [
+                $user['id'],
                 $user['email'],
                 $user['name'],
                 ($user['activated']) ? _('Yes') : _('No'),
