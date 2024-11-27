@@ -40,7 +40,7 @@
     </button>
   </li>
   <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_UPDATE')">
-    <button class="btn btn-link" ng-click="patchSelected('blocked', 0)" uib-tooltip="{t}Unblocked{/t}" tooltip-placement="bottom" type="button">
+    <button class="btn btn-link" ng-click="patchSelected('blocked', 0)" uib-tooltip="{t}Unlocked{/t}" tooltip-placement="bottom" type="button">
       <i class="fa fa-unlock fa-lg"></i>
     </button>
   </li>
