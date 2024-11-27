@@ -97,6 +97,7 @@ class TagController extends ApiController
 
         // Prepare contents for CSV
         $headers = [
+            _('ID'),
             _('Name'),
             _('Slug'),
             _('Description'),
@@ -110,6 +111,7 @@ class TagController extends ApiController
         $data = [];
         foreach ($tags as $tag) {
             $tagInfo = [
+                $tag['id'],
                 $tag['name'],
                 $tag['slug'],
                 $tag['description'],
