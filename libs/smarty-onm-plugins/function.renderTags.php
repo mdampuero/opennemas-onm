@@ -35,7 +35,7 @@ function smarty_function_renderTags($params, &$smarty)
             : null;
 
         $oql = sprintf(
-            'id in [%s]',
+            'id in [%s] and (novisible != 1 or novisible is null or novisible = "")',
             implode(',', $ids)
         );
 

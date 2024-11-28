@@ -23,6 +23,23 @@
   </a>
 {/block}
 
+{block name="rightColumn"}
+  <div class="grid simple">
+    <div class="grid-body no-padding">
+      <div class="grid-collapse-title">
+        <div class="m-t-5">
+          <div class="checkbox">
+            <input class="form-control" id="novisible" name="novisible" ng-model="item.novisible" ng-true-value="1" type="checkbox"/>
+            <label class="form-label" for="novisible">
+              {t}Hide tag{/t}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{/block}
+
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
