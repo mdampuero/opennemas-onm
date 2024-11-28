@@ -49,6 +49,8 @@
           openai_instructionTypes: [],
         };
 
+        $scope.needCheckApiKey = false;
+
         /**
          * @function init
          * @memberOf OpenAIConfigCtrl
@@ -101,7 +103,7 @@
          *   Checks the connection to the server.
          */
         $scope.checkApiKey = function() {
-          if ($scope.settings.openai_service === 'custom') {
+          if ($scope.settings.openai_service === 'custom' && $scope.needCheckApiKey) {
             const apiKey = $scope.settings.openai_credentials.apikey;
 
             if (!apiKey) {
@@ -123,6 +125,8 @@
                   messenger.post($scope.message.errorApiKey, 'error');
                 });
             }
+          } else {
+            $scope.save();
           }
         };
 
@@ -164,6 +168,12 @@
         $scope.removeInstruction = function(index) {
           $scope.settings.openai_instructions.splice(index, 1);
         };
+
+        $scope.$watch('settings.openai_credentials.apikey', function(ov) {
+          if (typeof ov !== 'undefined') {
+            $scope.needCheckApiKey = true;
+          }
+        });
       }
     ]);
 })();
