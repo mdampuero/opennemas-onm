@@ -122,13 +122,11 @@ class OpenAIHelper
 
     public function getInstructionsByFilter(array $filter = []): array
     {
-        $instructions = $this->getInstructions();
-
         return $filter
-            ? array_filter($instructions, function ($i) use ($filter) {
+            ? array_filter($this->instructions, function ($i) use ($filter) {
                 return in_array($i['type'], $filter);
             })
-            : $instructions;
+            : $this->instructions;
     }
 
     protected function insertInstructions($prompt = '', $instructions = [])
@@ -171,7 +169,17 @@ class OpenAIHelper
         if ($messages["toneSelected"]["name"] ?? false) {
             $this->addInstruction([
                 "type" => "Both",
-                "value" => sprintf('Utiliza un tono: "%s"', $messages["toneSelected"]["name"])
+                "value" => sprintf('Utiliza un tono: "%s".', $messages["toneSelected"]["name"])
+            ]);
+        }
+
+        if ($messages["locale"] ?? false) {
+            $this->addInstruction([
+                "type" => "Both",
+                "value" => sprintf(
+                    'El idioma configurado es "%s". Responde usando este idioma y las convenciones culturales.',
+                    $messages["locale"]
+                )
             ]);
         }
 

@@ -128,6 +128,7 @@ class OpenAIController extends ApiController
             $messages["toneSelected"]   = $request->request->get('toneSelected');
             $messages["promptSelected"] = $request->request->get('promptSelected');
             $messages["promptInput"]    = $request->request->get('promptInput');
+            $messages["locale"]         = $request->request->get('locale');
 
             $response = $this->get($this->helper)->sendMessage($messages);
 

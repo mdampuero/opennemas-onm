@@ -549,6 +549,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
 
     $scope.openIAModal = function(field, AIFieldType, AIFieldTitle = '') {
       const input = field in $scope ? $scope[field] : $scope.item[field];
+      const locale = $scope.config.locale && $scope.config.locale.selected ? $scope.config.locale.selected : 'default';
 
       $uibModal.open({
         templateUrl: 'modal-openai',
@@ -562,7 +563,8 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
               step: 1,
               AIFieldType,
               AIFieldTitle,
-              input
+              input,
+              locale
             };
           },
           success: function() {
