@@ -18,8 +18,8 @@
      *   Controller for News Agency listing.
      */
     .controller('OpenAIModalCtrl', [
-      '$uibModalInstance', '$scope', '$q', 'routing', 'success', 'template', 'http', '$timeout', 'oqlEncoder',
-      function($uibModalInstance, $scope, $q, routing, success, template, http, $timeout, oqlEncoder) {
+      '$uibModalInstance', '$scope', '$q', 'routing', 'success', 'template', 'http', '$timeout', 'oqlEncoder', 'messenger',
+      function($uibModalInstance, $scope, $q, routing, success, template, http, $timeout, oqlEncoder, messenger) {
         $scope.routes = {
           generateText: 'api_v1_backend_openai_generate',
           saveTokens: 'api_v1_backend_openai_tokens',
@@ -62,7 +62,7 @@
           http.get({ name: 'api_v1_backend_openai_prompt_get_list', params: { oql: oqlQuery } })
             .then(function(response) {
               $scope.prompts = response.data.items;
-              $scope.extra   = response.data.extra;
+              $scope.extra = response.data.extra;
             })
             .finally(function() {
               $scope.waiting = false;
@@ -106,6 +106,9 @@
               $scope.template.step = 2;
               $scope.setActiveText('suggested');
             })
+            .catch(function(err) {
+              messenger.post(err.data.error, 'error');
+            })
             .finally(function() {
               $scope.waiting = false;
             });
@@ -134,11 +137,11 @@
               return obj['name'] === $scope.template.promptSelected.tone;
             });
 
-            $scope.template.promptInput    = $scope.template.promptSelected.name;
+            $scope.template.promptInput = $scope.template.promptSelected.name;
           } else {
             $scope.template.roleSelected = null;
             $scope.template.toneSelected = null;
-            $scope.template.promptInput  = null;
+            $scope.template.promptInput = null;
           }
         };
 

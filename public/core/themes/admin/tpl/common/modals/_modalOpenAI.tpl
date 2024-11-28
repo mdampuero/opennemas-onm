@@ -112,7 +112,7 @@
     <i class="fa fa-chevron-left"></i>
     {t}Edit prompt{/t}
   </button>
-  <button type="button" class="btn btn-success btn-loading pull-right" ng-click="continue()" ng-disabled="waiting || !template.promptInput || !template.input">
+  <button type="button" class="btn btn-success btn-loading pull-right" ng-click="continue()" ng-disabled="waiting || !template.promptInput || !template.input || !template.promptSelected">
     {t}Continue{/t}
     <i class="fa fa-chevron-right"></i>
   </button>

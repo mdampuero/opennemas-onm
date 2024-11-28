@@ -31,7 +31,7 @@
             <label>{t}Mode{/t}</label>
             <ui-select name="mode" class="form-control" theme="select2" ng-model="item.mode" search-enabled="false" required>
               <ui-select-match>
-                [% $select.selected.name %]
+                {t}[% $select.selected.name %]{/t}
               </ui-select-match>
               <ui-select-choices repeat="item.key as item in data.extra.modes | filter: { name: $select.search }" position='down'>
                 <div ng-bind-html="item.name | highlight: $select.search"></div>

@@ -18,7 +18,7 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               <li class="quicklinks">
-                <button class="btn btn-loading btn-success ng-cloak text-uppercase" ng-click="save()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+                <button class="btn btn-loading btn-success ng-cloak text-uppercase" ng-click="checkApiKey()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
                   <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
                   {t}Save{/t}
                 </button>
@@ -122,7 +122,7 @@
               <div class="row" ng-repeat="role in settings.openai_instructions track by $index">
                 <div class="col-lg-2 col-md-3 m-b-15">
                   <select class="form-control" ng-model="role.type">
-                    <option ng-repeat="type in instructionTypes" value="[% type %]">[% type %]</value>
+                    <option ng-repeat="type in settings.openai_instruction_types" value="[% type %]">[% type %]</value>
                   </select>
                 </div>
                 <div class="col-lg-9 col-md-7">

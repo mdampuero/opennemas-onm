@@ -16,8 +16,8 @@
      *   Provides actions to list notifications.
      */
     .controller('OpenAIConfigCtrl', [
-      '$controller', '$scope', 'http', 'messenger', 'routing',
-      function($controller, $scope, http, messenger, routing) {
+      '$controller', '$scope', 'http', 'messenger',
+      function($controller, $scope, http, messenger) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -30,25 +30,24 @@
          * @type {Object}
          */
         $scope.routes = {
-          checkServer: 'api_v1_backend_openai_check_server',
-          getConfig:   'api_v1_backend_openai_get_config',
-          saveConfig:  'api_v1_backend_openai_save_config',
+          checkApiKey: 'api_v1_backend_openai_check_apiKey',
+          getConfig: 'api_v1_backend_openai_get_config',
+          saveConfig: 'api_v1_backend_openai_save_config',
+        };
+
+        $scope.message = {
+          errorApiKey: 'Please enter a valid Secret Key'
         };
 
         $scope.settings = {
-          openai_service:      'custom',
-          openai_credentials:  [],
-          openai_config:       [],
-          openai_roles:        [],
-          openai_tones:        [],
-          openai_instructions: [],
+          openai_service:          'custom',
+          openai_credentials:      [],
+          openai_config:           [],
+          openai_roles:            [],
+          openai_tones:            [],
+          openai_instructions:     [],
+          openai_instructionTypes: [],
         };
-
-        $scope.instructionTypes = [
-          'Both',
-          'New',
-          'Edit'
-        ];
 
         /**
          * @function init
@@ -101,25 +100,30 @@
          * @description
          *   Checks the connection to the server.
          */
-        $scope.check = function() {
-          $scope.flags.http.checking = true;
+        $scope.checkApiKey = function() {
+          if ($scope.settings.openai_service === 'custom') {
+            const apiKey = $scope.settings.openai_credentials.apikey;
 
-          $scope.save()
-            .then(function() {
-              var route = {
-                name: $scope.routes.checkServer
-              };
-
-              http.get(route).then(function() {
-                $scope.disableFlags('http');
-                $scope.status = 'success';
-              }, function() {
-                $scope.disableFlags('http');
-                $scope.status = 'failure';
-              });
-            }, function() {
-              $scope.disableFlags('http');
-            });
+            if (!apiKey) {
+              messenger.post($scope.message.errorApiKey, 'error');
+            } else {
+              if (!$scope.flags.http.checking) {
+                $scope.flags.http.saving = true;
+              }
+              http.post($scope.routes.checkApiKey, { apiKey })
+                .then(function() {
+                  if (!$scope.flags.http.checking) {
+                    $scope.disableFlags('http');
+                  }
+                  $scope.save();
+                }, function() {
+                  if (!$scope.flags.http.checking) {
+                    $scope.disableFlags('http');
+                  }
+                  messenger.post($scope.message.errorApiKey, 'error');
+                });
+            }
+          }
         };
 
         $scope.addRole = function() {

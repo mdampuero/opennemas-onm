@@ -33,6 +33,13 @@ api_v1_backend_openai_generate:
     options:
         expose: true
 
+api_v1_backend_openai_check_apiKey:
+    path:     /openai/CheckApiKey
+    defaults: { _controller: ApiBundle:V1/Backend/OpenAI:CheckApiKey }
+    methods:  [ POST ]
+    options:
+        expose: true
+
 #PROMPTS ROUTES
 
 api_v1_backend_openai_prompt_create_item:

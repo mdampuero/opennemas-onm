@@ -60,16 +60,26 @@ class OpenAIHelper
 
     protected $instructions = [];
 
-    protected $newInstructions = [
-        "Responde en el mismo idioma que te pregunto"
-    ];
-
     /**
-     * The service url.
+     * The service url base.
      *
      * @var String
      */
-    protected $openaiEndpoint = 'https://api.openai.com/v1/chat/completions';
+    protected $openaiEndpointBase = 'https://api.openai.com';
+
+    /**
+     * The service url chat.
+     *
+     * @var String
+     */
+    protected $endpointChat = '/v1/chat/completions';
+
+    /**
+     * The service url models.
+     *
+     * @var String
+     */
+    protected $endpointModels = '/v1/models';
 
     /**
      * The service Key.
@@ -91,6 +101,9 @@ class OpenAIHelper
 
     public function getInstructions()
     {
+        $this->instructions = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_instructions', []);
         return $this->instructions;
     }
 
@@ -197,7 +210,7 @@ class OpenAIHelper
             //         )
             //     )
             // );
-            $response = $this->client->request('POST', $this->openaiEndpoint, [
+            $response = $this->client->request('POST', $this->openaiEndpointBase . $this->endpointChat, [
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->openaiApiKey
@@ -220,6 +233,17 @@ class OpenAIHelper
         }
 
         return $responseData;
+    }
+
+    public function checkApiKey($apiKey)
+    {
+        $this->client->request('GET', $this->openaiEndpointBase . $this->endpointModels, [
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . $apiKey
+            ]
+        ]);
+        return true;
     }
 
     protected function saveAction($params, $response)
@@ -318,7 +342,8 @@ class OpenAIHelper
         if ($provider === 'custom') {
             $this->openaiApiKey = $credentials['apikey'];
         } else {
-            $this->openaiApiKey = $this->container->getParameter('opennemas.openai.key');
+            // $this->openaiApiKey = $this->container->getParameter('opennemas.openai.key');
+            $this->openaiApiKey = '';
         }
 
         if (empty($settings)) {
@@ -463,6 +488,14 @@ class OpenAIHelper
         return $roles;
     }
 
+    public function setRoles($roles = [])
+    {
+        $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->set('openai_roles', $roles);
+        return $this;
+    }
+
     public function getModes()
     {
         $modes = $this->container->get('orm.manager')
@@ -472,11 +505,20 @@ class OpenAIHelper
         return $modes;
     }
 
-    public function setRoles($roles = [])
+    public function getInstructionTypes()
+    {
+        $instructionTypes = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_instruction_types', []);
+
+        return $instructionTypes;
+    }
+
+    public function setInstructionTypes($instructionTypes)
     {
         $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->set('openai_roles', $roles);
+            ->set('openai_instruction_types', $instructionTypes);
         return $this;
     }
 }
