@@ -12,6 +12,7 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Displays a tag or a list of tags.
@@ -175,16 +176,18 @@ class TagController extends FrontendController
         $slug = $request->get('slug', null);
 
         try {
-            $item = $this->get('api.service.tag')->getList(sprintf(
-                'slug = "%s"',
+            $oql = sprintf(
+                'slug = "%s" and (novisible != 1 or novisible is null or novisible = "")',
                 $slug
-            ))['items'];
+            );
+
+            $item = $this->get('api.service.tag')->getList($oql)['items'];
         } catch (\Exception $e) {
             throw new ResourceNotFoundException();
         }
 
         if (empty($item)) {
-            throw new ResourceNotFoundException();
+            throw new AccessDeniedException();
         }
 
         return $item;
