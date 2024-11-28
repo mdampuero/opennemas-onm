@@ -17,6 +17,20 @@
           </ul>
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
+              {acl isAllowed="MASTER"}
+                <li class="quicklinks">
+                  <a class="btn btn-white" ng-click="openImportModal()">
+                    <span class="fa fa-sign-in"></span>
+                    {t}Import{/t}
+                  </a>
+                </li>
+                <li class="quicklinks">
+                  <a class="btn btn-white" href="[% routing.generate('api_v1_backend_openai_download_config') %]">
+                    <span class="fa fa-download"></span>
+                    {t}Download{/t}
+                  </a>
+                </li>
+              {/acl}
               <li class="quicklinks">
                 <button class="btn btn-loading btn-success ng-cloak text-uppercase" ng-click="checkApiKey()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
                   <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>

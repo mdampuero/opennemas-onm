@@ -58,7 +58,13 @@ class OpenAIHelper
         ],
     ];
 
+    protected $service;
+
+    protected $credentials = [];
+
     protected $instructions = [];
+
+    protected $openaiConfig = [];
 
     /**
      * The service url base.
@@ -331,17 +337,11 @@ class OpenAIHelper
 
     public function getConfig()
     {
-        $settings = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('openai_config', []);
+        $settings = $this->getOpenaiConfig();
 
-        $provider = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('openai_service');
+        $provider = $this->getService();
 
-        $credentials = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('openai_credentials', []);
+        $credentials = $this->getCredentials();
 
         $this->setInstructions($this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
@@ -527,6 +527,84 @@ class OpenAIHelper
         $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->set('openai_instruction_types', $instructionTypes);
+        return $this;
+    }
+
+    public function getConfigAll()
+    {
+        return [
+            'openai_service'      => $this->getService(),
+            'openai_credentials'  => $this->getCredentials(),
+            'openai_roles'        => $this->getRoles(),
+            'openai_tones'        => $this->getTones(),
+            'openai_instructions' => $this->getInstructions(),
+            'openai_config'       => $this->getConfig()
+        ];
+    }
+
+    /**
+     * Get the value of service
+     */
+    public function getService()
+    {
+        return $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_service');
+    }
+
+    /**
+     * Set the value of service
+     *
+     * @return  self
+     */
+    public function setService($service)
+    {
+        $this->service = $service;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of credentials
+     */
+    public function getCredentials()
+    {
+        return $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_credentials', []);
+    }
+
+    /**
+     * Set the value of credentials
+     *
+     * @return  self
+     */
+    public function setCredentials($credentials)
+    {
+        $this->credentials = $credentials;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of openaiConfig
+     */
+    public function getOpenaiConfig()
+    {
+        return $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_config', []);
+    }
+
+    /**
+     * Set the value of openaiConfig
+     *
+     * @return  self
+     */
+    public function setOpenaiConfig($openaiConfig)
+    {
+        $this->openaiConfig = $openaiConfig;
+
         return $this;
     }
 }
