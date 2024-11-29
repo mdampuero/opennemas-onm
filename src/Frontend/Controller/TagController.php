@@ -176,7 +176,7 @@ class TagController extends FrontendController
 
         try {
             $oql = sprintf(
-                'slug = "%s" and (novisible != 1 or novisible is null or novisible = "")',
+                'slug = "%s"',
                 $slug
             );
 
@@ -185,7 +185,7 @@ class TagController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        if (empty($item)) {
+        if (empty($item) || $item[0]->novisible) {
             throw new ResourceNotFoundException();
         }
 

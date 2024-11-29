@@ -73,7 +73,7 @@
       </ui-select-choices>
     </ui-select>
   </li>
-  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="novisible = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="novisible = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1} ]">
     <ui-select name="novisible" theme="select2" ng-model="criteria.novisible">
       <ui-select-match>
         <strong>{t}Internal use{/t}:</strong> [% $select.selected.name %]

@@ -35,7 +35,7 @@ function smarty_function_renderTags($params, &$smarty)
             : null;
 
         $oql = sprintf(
-            'id in [%s] and (novisible != 1 or novisible is null or novisible = "")',
+            'id in [%s]',
             implode(',', $ids)
         );
 
@@ -66,12 +66,14 @@ function smarty_function_renderTags($params, &$smarty)
 
         $url = $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url);
 
-        $output .= sprintf(
-            '<a href="%s" class="tag-item">%s</a>%s',
-            $url,
-            $tag->name,
-            $separator
-        );
+        if (!$tag->novisible) {
+            $output .= sprintf(
+                '<a href="%s" class="tag-item">%s</a>%s',
+                $url,
+                $tag->name,
+                $separator
+            );
+        }
     }
 
     return $output;

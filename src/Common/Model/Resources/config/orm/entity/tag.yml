@@ -46,9 +46,6 @@ orm:
                         locale:
                             type: string
                             options: { default: null, length: 5, notnull: false  }
-                        novisible:
-                            type: integer
-                            options: { default: 0, length: 10, notnull: false}
                     index:
                         -
                             name:    PRIMARY

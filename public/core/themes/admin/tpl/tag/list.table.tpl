@@ -104,8 +104,8 @@
     </span>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('novisible')">
-    <button class="btn btn-white" ng-click="confirm('novisible', item.novisible != 1 ? 1 : 0, item)" type="button">
-      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.novisibleLoading, 'fa-check text-success' : !item.novisibleLoading && item.novisible == '1', 'fa-times text-error': !item.novisibleLoading && item.novisible == '0' }"></i>
+    <button class="btn btn-white" ng-click="confirm('novisible', item.novisible != 1 ? 1 : null, item)" type="button">
+      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.novisibleLoading, 'fa-check text-success' : !item.novisibleLoading && item.novisible == '1', 'fa-times text-error': !item.novisibleLoading && item.novisible == null }"></i>
     </button>
   </td>
 {/block}
