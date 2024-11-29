@@ -378,7 +378,7 @@ class VariablesExtractor
         $ids = $this->tpl->getValue('o_content')->tags ?? null;
 
         try {
-            $tags = $this->container->get('api.service.tag')->getListByIds($ids)['items'];
+            $tags = $this->container->get('api.service.tag')->getListByIds($ids, true)['items'];
         } catch (GetListException $e) {
             return null;
         }
