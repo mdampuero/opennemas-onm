@@ -11,12 +11,12 @@
     <div class="form-group">
       <label ng-if="mode == 'Edit'">[% template.AIFieldTitle %]</label>
       <label ng-if="mode == 'New'">{t}Enter a topic{/t}</label>
-      <input ng-if="displayMode == 'input' || mode == 'New'" ng-disabled="mode == 'Edit'" type="text" class="form-control" ng-model="template.input" ng-change="updateUserPrompt()" placeholder="{t}Ex: Benefits of AI-powered CMS{/t}">
-      <div ng-if="displayMode == 'textarea' && mode == 'Edit'" class="openai-wrapper-text" ng-bind-html="template.input"></div>
+      <input ng-if="displayMode == 'input' || mode == 'New'" ng-disabled="mode == 'Edit'" type="text" class="form-control input-lg" ng-model="template.input" ng-change="updateUserPrompt()" placeholder="{t}Ex: Benefits of AI-powered CMS{/t}">
+      <div ng-if="displayMode == 'textarea' && mode == 'Edit'" class="openai-wrapper-text input-lg" ng-bind-html="template.input"></div>
     </div>
     <div class="form-group">
       <label>{t}Suggested prompts{/t}</label>
-      <select name="field" id="field" class="form-control" ng-model="template.promptSelected" ng-change="updateUserPrompt()"  ng-options="item as item.name for item in prompts | filter: { mode }">
+      <select name="field" id="field" class="form-control input-lg" ng-model="template.promptSelected" ng-change="updateUserPrompt()"  ng-options="item as item.name for item in prompts | filter: { mode }">
         <option value="">{t}Select a prompt{/t}</option>
       </select>
     </div>
@@ -24,7 +24,7 @@
       <div class="col-sm-6">
         <div class="form-group">
           <label>{t}Suggested role{/t}  </label>
-          <select name="field" id="field" class="form-control" ng-model="template.roleSelected" ng-options="item as item.name for item in extra.roles">
+          <select name="field" id="field" class="form-control input-lg" ng-model="template.roleSelected" ng-options="item as item.name for item in extra.roles">
              <option value="">{t}Select a role{/t}</option>
           </select>
           <div class="help m-l-3 m-t-5" ng-show="template.roleSelected"> <i class="fa fa-info-circle m-r-5 text-info"></i> [% template.roleSelected.prompt %] </div>
@@ -33,16 +33,16 @@
       <div class="col-sm-6">
         <div class="form-group">
           <label>{t}Suggested tone{/t}</label>
-          <select name="field" id="field" class="form-control" ng-model="template.toneSelected" ng-options="item as item.name for item in extra.tones">
+          <select name="field" id="field" class="form-control input-lg" ng-model="template.toneSelected" ng-options="item as item.name for item in extra.tones">
             <option value="">{t}Select a tone{/t}</option>
           </select>
           <div class="help m-l-3 m-t-5" ng-show="template.toneSelected"> <i class="fa fa-info-circle m-r-5 text-info"></i> [% template.toneSelected.description %] </div>
         </div>
       </div>
     </div>
-    <div class="form-group">
+    <div class="form-group m-b-0">
       <label>{t}Prompt edit{/t}</label>
-      <textarea class="form-control" ng-model="template.promptInput" rows="5" placeholder=""></textarea>
+      <textarea class="form-control input-lg" ng-model="template.promptInput" rows="5" placeholder=""></textarea>
     </div>
   </ng-container>
 
@@ -50,8 +50,7 @@
     <ng-container ng-if="displayMode == 'input'">
       <ng-container ng-if="mode == 'Edit'">
         <label class="pull-left">{t}Original text{/t}</label>
-        <span class="badge badge-success pull-right m-l-5">[% template.input.length %] {t}characters{/t}</span>
-        <span class="badge badge-info pull-right">[% countWords(template.input) %] {t}words{/t}</span>
+        <span class="label label-info pull-right m-l-5">[% countWords(template.input) %] {t}words{/t}, [% template.input.length %] {t}characters{/t}</span>
         <div class="clearfix"></div>
         <div class="form-group over-bg-gray" ng-click="setActiveText('original')">
         <h2 class="pull-left m-r-10">[% template.input %]</h2>
@@ -62,8 +61,7 @@
         <hr >
       </ng-container>
       <label class="pull-left">{t}Generated text{/t}</label>
-      <span class="badge badge-success pull-right m-l-5">[% template.suggested_text.length %] {t}characters{/t}</span>
-      <span class="badge badge-info pull-right">[% countWords(template.suggested_text) %] {t}words{/t}</span>
+      <span class="label label-info pull-right m-l-5">[% countWords(template.suggested_text) %] {t}words{/t}, [% template.suggested_text.length %] {t}characters{/t}</span>
       <div class="clearfix"></div>
 
       <div class="form-group over-bg-gray" ng-click="setActiveText('suggested')">
@@ -80,8 +78,7 @@
           {t}See original text{/t}
           <i class="fa fa-eye"></i>
         </button>
-        <span class="m-t-10 badge badge-success pull-right m-l-5">[% template.suggested_text.length %] {t}characters{/t}</span>
-        <span class="m-t-10 badge badge-info pull-right">[% countWords(template.suggested_text) %] {t}words{/t}</span>
+        <span class="m-t-10 label label-info pull-right m-l-5">[% countWords(template.suggested_text) %] {t}words{/t}, [% template.suggested_text.length %] {t}characters{/t}</span>
         <div class="clearfix"></div>
         <div class="openai-wrapper-text" ng-bind-html="template.suggested_text"></div>
       </ng-container>
@@ -91,29 +88,27 @@
           {t}See generated text{/t}
           <i class="fa fa-eye"></i>
         </button>
-        <span class="m-t-10 badge badge-success pull-right m-l-5">[% template.input.length %] {t}characters{/t}</span>
-        <span class="m-t-10 badge badge-info pull-right">[% countWords(template.input) %] {t}words{/t}</span>
+        <span class="m-t-10 label label-info pull-right m-l-5">[% countWords(template.input) %] {t}words{/t}, [% template.input.length %] {t}characters{/t}</span>
         <div class="clearfix"></div>
         <div class="openai-wrapper-text" ng-bind-html="template.input"></div>
       </ng-container>
     </ng-container>
     <p>
-      <span class="pull-left">{t}Tokens used:{/t} [% last_token_usage %]</span>
+      <span class="label label-success pull-left"><strong>[% last_token_usage %]</strong> {t}Tokens used{/t}</span>
       <span class="pull-right text-pink pointer" ng-click="generate()">{t}Regenerate {/t} <i class="fa fa-refresh openai-text-degrade"></i></span>
     </p>
   </ng-container>
 </div>
-<hr>
-<div class="modal-footer">
-  <button ng-if="template.step == 1" class="btn btn-default pull-left" data-dismiss="modal" ng-click="dismiss()" type="button">
+<div class="modal-footer m-t-15 border-top">
+  <button ng-if="template.step == 1" class="btn btn-white btn-lg pull-left" data-dismiss="modal" ng-click="dismiss()" type="button">
     {t}Cancel{/t}
   </button>
-  <button ng-if="template.step == 2" class="btn btn-default pull-left" ng-click="back()" type="button">
-    <i class="fa fa-chevron-left"></i>
+  <button ng-if="template.step == 2" class="btn btn-white btn-lg pull-left" ng-click="back()" type="button">
+    <i class="fa fa-angle-left"></i>
     {t}Edit prompt{/t}
   </button>
-  <button type="button" class="btn btn-success btn-loading pull-right" ng-click="continue()" ng-disabled="waiting || !template.promptInput || !template.input || !template.promptSelected">
+  <button type="button" class="btn btn-success btn-loading btn-lg pull-right" ng-click="continue()" ng-disabled="waiting || !template.promptInput || !template.input || !template.promptSelected">
     {t}Continue{/t}
-    <i class="fa fa-chevron-right"></i>
+    <i class="fa fa-angle-right"></i>
   </button>
 </div>
