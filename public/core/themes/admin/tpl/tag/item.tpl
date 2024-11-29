@@ -33,6 +33,10 @@
             <label class="form-label" for="novisible">
               {t}Internal use{/t}
             </label>
+            <div class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+              <i class="fa fa-info-circle m-r-5 text-info"></i>
+              <small>{t}Mark this tag to prevent it from appearing in your content.{/t}</small>
+            </div>
           </div>
         </div>
       </div>
