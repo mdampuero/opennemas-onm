@@ -31,7 +31,7 @@
           <div class="checkbox">
             <input class="form-control" id="novisible" name="novisible" ng-model="item.novisible" ng-true-value="1" type="checkbox"/>
             <label class="form-label" for="novisible">
-              {t}Hide Tag{/t}
+              {t}Internal use{/t}
             </label>
           </div>
         </div>
