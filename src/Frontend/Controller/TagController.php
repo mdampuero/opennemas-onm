@@ -12,7 +12,6 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Displays a tag or a list of tags.
@@ -187,7 +186,7 @@ class TagController extends FrontendController
         }
 
         if (empty($item)) {
-            throw new AccessDeniedException();
+            throw new ResourceNotFoundException();
         }
 
         return $item;
