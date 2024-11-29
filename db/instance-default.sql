@@ -876,7 +876,6 @@ CREATE TABLE `tags` (
   `locale` varchar(5) DEFAULT NULL,
   `slug` varchar(60) NOT NULL,
   `description` text,
-  `novisible` int(10) DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `slug` (`slug`),
   KEY `locale` (`locale`)
