@@ -32,6 +32,12 @@
      {t}Contents{/t}
     </label>
   </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-novisible" checklist-model="app.columns.selected" checklist-value="'novisible'" type="checkbox">
+    <label for="checkbox-novisible">
+     {t}Internal use{/t}
+    </label>
+  </div>
 {/block}
 
 {block name="commonColumnsHeader"}
@@ -49,6 +55,9 @@
   </th>
   <th class="text-center v-align-middle" class="text-center" ng-if="isColumnEnabled('contents')" width="120">
     {t}Contents{/t}
+  </th>
+  <th class="text-center v-align-middle" class="text-center" ng-if="isColumnEnabled('novisible')" width="120">
+    {t}Internal use{/t}
   </th>
 {/block}
 
@@ -93,5 +102,10 @@
     <span class="badge badge-default text-bold" ng-class="{ 'badge-danger': !data.extra.stats[getItemId(item)] || data.extra.stats[getItemId(item)] == 0 }">
       [% data.extra.stats[getItemId(item)] ? data.extra.stats[getItemId(item)] : 0 %]
     </span>
+  </td>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('novisible')">
+    <button class="btn btn-white" ng-click="confirm('novisible', item.novisible != 1 ? 1 : 0, item)" type="button">
+      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.novisibleLoading, 'fa-check text-success' : !item.novisibleLoading && item.novisible == '1', 'fa-times text-error': !item.novisibleLoading && item.novisible == '0' }"></i>
+    </button>
   </td>
 {/block}

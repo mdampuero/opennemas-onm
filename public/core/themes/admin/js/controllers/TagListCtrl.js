@@ -36,6 +36,7 @@
           getList:    'api_v1_backend_tag_get_list',
           saveItem:   'api_v1_backend_tag_save_item',
           updateItem: 'api_v1_backend_tag_update_item',
+          patchItem:  'api_v1_backend_tag_patch_item',
           moveItem:   'api_v1_backend_tag_move_item',
         };
 
@@ -84,6 +85,21 @@
             $scope.toArray(data.extra.locales, 'id', 'name'));
 
           return data;
+        };
+
+        /**
+         * @function confirm
+         * @memberOf TagListCtrl
+         *
+         * @description
+         *   Confirm tag update.
+         */
+        $scope.confirm = function(property, value, item) {
+          if (item) {
+            $scope.patch(item, property, value);
+            return;
+          }
+          $scope.patchSelected(property, value);
         };
 
         /**

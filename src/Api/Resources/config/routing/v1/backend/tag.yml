@@ -84,6 +84,15 @@ api_v1_backend_tag_update_item:
     requirements:
         id: \d+
 
+api_v1_backend_tag_patch_item:
+    path:     /tags/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Tag:patchItem }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
 api_v1_backend_tag_validate_item:
     path:     /tags/validator
     defaults: { _controller: ApiBundle:V1/Backend/Tag:validateItem }
