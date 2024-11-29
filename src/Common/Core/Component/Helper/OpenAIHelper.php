@@ -38,6 +38,38 @@ class OpenAIHelper
         'presence_penalty'  => 0.9,
     ];
 
+    public $map = [
+        "openai_service" => "string",
+        "openai_credentials" => [
+            "apikey" => "string",
+        ],
+        "openai_roles" => [
+            [
+                "name" => "string",
+                "prompt" => "string",
+            ],
+        ],
+        "openai_tones" => [
+            [
+                "name" => "string",
+                "description" => "string",
+            ],
+        ],
+        "openai_instructions" => [
+            [
+                "type" => "string",
+                "value" => "string",
+            ],
+        ],
+        "openai_config" => [
+            "model" => "string",
+            "max_tokens" => "integer",
+            "temperature" => "float",
+            "frequency_penalty" => "float",
+            "presence_penalty" => "float",
+        ],
+    ];
+
     /**
      * The service pricing.
      *
@@ -208,22 +240,6 @@ class OpenAIHelper
         $responseData = [];
 
         try {
-            // return array(
-            //     "request" => $messages,
-            //     "data" => $data,
-            //     "message" => "La Segunda Guerra Mundial: La Madre de Todas las Batallas (y de los Rankings)",
-            //     "tokens" => array(
-            //         "prompt_tokens" => 14,
-            //         "completion_tokens" => 50,
-            //         "total_tokens" => 64,
-            //         "prompt_tokens_details" => array(
-            //             "cached_tokens" => 0
-            //         ),
-            //         "completion_tokens_details" => array(
-            //             "reasoning_tokens" => 0
-            //         )
-            //     )
-            // );
             $response = $this->client->request('POST', $this->openaiEndpointBase . $this->endpointChat, [
                 'headers' => [
                     'Content-Type' => 'application/json',
@@ -606,5 +622,102 @@ class OpenAIHelper
         $this->openaiConfig = $openaiConfig;
 
         return $this;
+    }
+
+    /**
+     * Validates if a given value matches a specified type.
+     *
+     * @param mixed $value The value to validate.
+     * @param string $type The expected type ("string", "integer", "float", or "boolean").
+     * @return bool True if the value matches the type, false otherwise.
+     */
+    protected function validateType($value, string $type): bool
+    {
+        switch ($type) {
+            case "string":
+                return is_string($value);
+            case "integer":
+                return is_int($value);
+            case "float":
+                return is_float($value) || is_int($value);
+            case "boolean":
+                return is_bool($value);
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks if all elements in an array are arrays.
+     *
+     * @param array $array The array to check.
+     * @return bool True if all elements are arrays, false otherwise.
+     */
+    protected function allAreArrays(array $array): bool
+    {
+        foreach ($array as $item) {
+            if (!is_array($item)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Validates the structure of a JSON object against a provided map.
+     *
+     * @param mixed $data The JSON data to validate.
+     * @param array $map The map defining the expected structure and types.
+     * @return bool True if the structure matches the map, false otherwise.
+     */
+    public function validateJsonStructure($data, array $map): bool
+    {
+        if (!$data) {
+            return false;
+        }
+
+        foreach ($map as $key => $type) {
+            if (!array_key_exists($key, $data)) {
+                return false;
+            }
+            if (is_array($type)) {
+                if (isset($type[0]) && is_array($type[0])) {
+                    if (!is_array($data[$key]) || !$this->allAreArrays($data[$key])) {
+                        return false;
+                    }
+                    foreach ($data[$key] as $item) {
+                        if (!$this->validateJsonStructure($item, $type[0])) {
+                            return false;
+                        }
+                    }
+                } else {
+                    if (!is_array($data[$key]) || !$this->validateJsonStructure($data[$key], $type)) {
+                        return false;
+                    }
+                }
+            } else {
+                if (!$this->validateType($data[$key], $type)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Replaces existing configuration values with new ones from a provided array.
+     *
+     * @param array $newConfig The new configuration values.
+     * @return array The updated configuration.
+     */
+    public function replaceConfig($newConfig)
+    {
+        $currentConfig = $this->getConfigAll();
+        foreach ($newConfig as $key => $item) {
+            if (key_exists($key, $currentConfig)) {
+                $currentConfig[$key] = $item;
+            }
+        }
+        return $currentConfig;
     }
 }

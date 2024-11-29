@@ -6,6 +6,8 @@ use Api\Controller\V1\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Common\Core\Annotation\Security;
+use Exception;
 
 class OpenAIController extends ApiController
 {
@@ -194,6 +196,16 @@ class OpenAIController extends ApiController
         return new JsonResponse($data);
     }
 
+    /**
+     * Import valid JSON as a theme settings
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasExtension('MASTER')
+     *     and hasPermission('MASTER')")
+     */
     public function downloadConfigAction()
     {
         $openaiConfig = $this->container->get($this->helper)->getConfigAll();
@@ -203,5 +215,38 @@ class OpenAIController extends ApiController
         $response->headers->set('Cache-Control', 'no-cache');
 
         return $response;
+    }
+
+    /**
+     * Import valid JSON as a theme settings
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasExtension('MASTER')
+     *     and hasPermission('MASTER')")
+     */
+    public function uploadConfigAction(Request $request)
+    {
+        $helperInstance = $this->container->get($this->helper);
+        $jsonSettings   = $request->request->get('openai_config', null);
+        $msg            = $this->get('core.messenger');
+
+        try {
+            $openaiConfigNew = json_decode($jsonSettings, true);
+
+            if (!$helperInstance->validateJsonStructure($openaiConfigNew, $helperInstance->map)) {
+                throw new Exception("INVALIDO");
+            }
+            $config = $helperInstance->replaceConfig($openaiConfigNew);
+            $this->get('orm.manager')->getDataSet('Settings')->set($config);
+            $msg->add(_('Item saved successfully'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to save settings'), 'error');
+            $this->get('error.log')->error($e->getMessage());
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 }

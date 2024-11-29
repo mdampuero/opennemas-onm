@@ -25,7 +25,7 @@
                   </a>
                 </li>
                 <li class="quicklinks">
-                  <a class="btn btn-white" href="[% routing.generate('api_v1_backend_openai_download_config') %]">
+                  <a class="btn btn-white" href="[% routing.generate(routes.downloadConfig) %]">
                     <span class="fa fa-download"></span>
                     {t}Download{/t}
                   </a>
@@ -213,4 +213,9 @@
       </div>
     </div>
   </form>
+{/block}
+{block name="modals"}
+  <script type="text/ng-template" id="modal-import-settings">
+    {include file="common/modals/_modalImportSettings.tpl"}
+  </script>
 {/block}

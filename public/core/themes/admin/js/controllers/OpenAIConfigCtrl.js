@@ -16,8 +16,8 @@
      *   Provides actions to list notifications.
      */
     .controller('OpenAIConfigCtrl', [
-      '$controller', '$scope', 'http', 'messenger',
-      function($controller, $scope, http, messenger) {
+      '$controller', '$scope', 'http', 'messenger', '$uibModal',
+      function($controller, $scope, http, messenger, $uibModal) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -33,6 +33,8 @@
           checkApiKey: 'api_v1_backend_openai_check_apiKey',
           getConfig: 'api_v1_backend_openai_get_config',
           saveConfig: 'api_v1_backend_openai_save_config',
+          uploadConfig: 'api_v1_backend_openai_upload_config',
+          downloadConfig: 'api_v1_backend_openai_download_config',
         };
 
         $scope.message = {
@@ -174,6 +176,50 @@
             $scope.needCheckApiKey = true;
           }
         });
+
+        /**
+         * @function openImportModal
+         * @memberOf ThemeSettingCtrl
+         *
+         * @description
+         *   Confirm import settings from JSON string.
+         */
+        $scope.openImportModal = function() {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-import-settings',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                };
+              },
+              success: function() {
+                return function(modal, template) {
+                  const reader = new FileReader();
+
+                  var route = {
+                    name: $scope.routes.uploadConfig,
+                  };
+
+                  if (template.file.type !== 'application/json') {
+                    return messenger.post('No es un fichero JSON Válido', 'error');
+                  }
+
+                  reader.readAsText(template.file);
+                  reader.onload = function() {
+                    var content = reader.result;
+
+                    return http.put(route, { openai_config: content }).then(function(response) {
+                      messenger.post(response.data);
+                      $scope.init();
+                    });
+                  };
+                };
+              }
+            }
+          });
+        };
       }
     ]);
 })();
