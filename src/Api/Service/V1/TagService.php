@@ -255,4 +255,40 @@ class TagService extends OrmService
             throw new GetListException($e->getMessage(), $e->getCode());
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getListByIds($ids, $internal = false)
+    {
+        if (!is_array($ids)) {
+            throw new GetListException('Invalid ids', 400);
+        }
+
+        if (empty($ids)) {
+            return ['items' => [], 'total' => 0];
+        }
+
+        $items = $this->em->getRepository($this->entity, $this->origin)->find($ids);
+
+        if ($internal) {
+            $filteredItems = [];
+            foreach ($items as $item) {
+                $novisible = $item->getStored()['novisible'] ?? null;
+                if ($novisible !== 1) {
+                    $filteredItems[] = $item;
+                }
+            }
+            $items = $filteredItems;
+        }
+
+        $this->localizeList($items);
+
+        $this->dispatcher->dispatch($this->getEventName('getListByIds'), [
+            'ids'   => $ids,
+            'items' => $items
+        ]);
+
+        return ['items' => $items, 'total' => count($items)];
+    }
 }

@@ -209,7 +209,7 @@ class StructuredData
      */
     protected function getTags($ids)
     {
-        $tags = $this->ts->getListByIds($ids);
+        $tags = $this->ts->getListByIds($ids, true);
 
         $names = array_map(function ($a) {
             return $a->name;

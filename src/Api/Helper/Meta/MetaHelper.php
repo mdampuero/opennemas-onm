@@ -169,7 +169,7 @@ class MetaHelper
         )))));
 
         if (is_array($content->tags) && !empty($content->tags)) {
-            $tags = $this->container->get('api.service.tag')->getListByIds($content->tags);
+            $tags = $this->container->get('api.service.tag')->getListByIds($content->tags, true);
 
             $tagsName = array_map(function ($tag) {
                 return strip_tags($tag->name);
