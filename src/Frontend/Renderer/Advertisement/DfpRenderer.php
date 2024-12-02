@@ -179,6 +179,7 @@ class DfpRenderer extends AdvertisementRenderer
     protected function getTargeting($category, $module, $contentId)
     {
         $options = $this->ds->get('dfp_options');
+        $tags    = 'tags';
 
         if (!is_array($options)) {
             return '';
@@ -195,13 +196,20 @@ class DfpRenderer extends AdvertisementRenderer
             $targetingMap[$options['module']] = $module;
         }
 
+        if (array_key_exists('tags', $options) && !empty($options['tags'])) {
+            // Dividimos las etiquetas en un array. 'tags' aquí es la clave dentro de $options.
+            $tagsArray = explode(', ', $options['tags']); // Divide las etiquetas separadas por coma y espacio.
+
+            // Asignamos el array de etiquetas a la clave correspondiente en $targetingMap.
+            $targetingMap['tags'] = $tagsArray; // 'tags' es la clave, y el valor es el array de etiquetas.
+        }
+
         if (array_key_exists('content_id', $options)
             && !empty($options['content_id'])
             && !empty($contentId)
         ) {
             $targetingMap[$options['content_id']] = $contentId;
         }
-
         return $targetingMap;
     }
 

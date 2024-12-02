@@ -302,6 +302,13 @@
                     <div class="help">{t}Set a key for targeting your ads by content ID. Note that the value for targeting will always be the current content ID{/t}</div>
                   </div>
                 </div>
+                <div class="form-group">
+                  <label for="dfp_options_tags" class="form-label">{t}Key for content ID targeting{/t}</label>
+                  <div class="controls">
+                    <input class="form-control" type="text" name="dfp_options_tags" value="{$configs['dfp_options']['tags']}">
+                    <div class="help">{t}Set a key for targeting your ads by content ID. Note that the value for targeting will always be the current content ID{/t}</div>
+                  </div>
+                </div>
                 {if $app.security->hasPermission('MASTER')}
                 <h4>{t}DFP custom code{/t}</h4>
                 <div class="form-group">
