@@ -52,6 +52,10 @@ class DfpRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->tagService = $this->getMockBuilder('TagService')
+            ->setMethods([ 'getListByIds' ])
+            ->getMock();
+
         $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
             ->disableOriginalConstructor()
             ->setMethods([ 'getDevice', 'getInstance' ])
@@ -83,6 +87,9 @@ class DfpRendererTest extends TestCase
             case 'core.globals':
                 return $this->globals;
 
+            case 'api.service.tag':
+                return $this->tagService;
+
             case 'entity_repository':
                 return $this->em;
 
@@ -112,9 +119,8 @@ class DfpRendererTest extends TestCase
         $content       = new \stdClass();
         $content->id   = 123;
         $content->tags = [
-            new Tag([ 'id' => 1]),
-            new Tag([ 'id' => 2]),
-            new Tag([ 'id' => 3]),
+            new Tag([ 'id' => 1 ]),
+            new Tag([ 'id' => 2 ]),
         ];
 
         $params = [
@@ -122,6 +128,9 @@ class DfpRendererTest extends TestCase
             'extension' => 'bar',
             'content' => $content
         ];
+
+        $this->tagService->expects($this->at(0))->method('getListByIds')
+            ->willReturn([ 'items' => $content->tags ]);
 
         $this->ds->expects($this->at(0))->method('get')
             ->with('dfp_options')
@@ -147,7 +156,7 @@ class DfpRendererTest extends TestCase
                 'sizes'     => '',
                 'width'     => 300,
                 'height'    => 300,
-                'targeting' => '{"targeting":{"cat":"foo","mod":"bar","id":123}}'
+                'targeting' => '{"targeting":{"cat":"foo","mod":"bar","id":123, "tags": "tag1, tag2"}}'
             ])
             ->willReturn($output);
 
