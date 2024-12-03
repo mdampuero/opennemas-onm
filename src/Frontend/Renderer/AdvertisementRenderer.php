@@ -629,10 +629,9 @@ class AdvertisementRenderer extends Renderer
         $tagList    = $tagService->getListByIds($tagIds)['items'];
 
         $tagNames = array_map(function ($tag) {
-            $storedData = $tag->getStored();
-            return $storedData['name'] ?? null;
+            return $tag->name;
         }, $tagList);
 
-        return array_filter($tagNames);
+        return $tagNames;
     }
 }

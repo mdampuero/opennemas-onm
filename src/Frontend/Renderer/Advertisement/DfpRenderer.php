@@ -179,7 +179,6 @@ class DfpRenderer extends AdvertisementRenderer
     protected function getTargeting($category, $module, $content)
     {
         $options = $this->ds->get('dfp_options');
-        $tagName = $this->fetchTagNamesFromIds($content->tags);
 
         if (!is_array($options)) {
             return '';
@@ -209,10 +208,11 @@ class DfpRenderer extends AdvertisementRenderer
         ) {
             $tagsString = implode("', '", array_map(function ($tag) {
                 return trim($tag);
-            }, $tagName));
+            }, $this->fetchTagNamesFromIds($content->tags)));
 
             $targetingMap[$options['tags']] = $tagsString;
         }
+
         return $targetingMap;
     }
 
