@@ -629,7 +629,7 @@ class AdvertisementRenderer extends Renderer
         $tagList    = $tagService->getListByIds($tagIds)['items'];
 
         $tagNames = array_map(function ($tag) {
-            return $tag->name;
+            return isset($tag->name) ? trim($tag->name) : '';
         }, $tagList);
 
         return $tagNames;

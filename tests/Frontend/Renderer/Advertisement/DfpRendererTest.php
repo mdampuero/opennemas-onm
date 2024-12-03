@@ -56,6 +56,10 @@ class DfpRendererTest extends TestCase
             ->setMethods([ 'getListByIds' ])
             ->getMock();
 
+        $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
+            ->setMethods([ 'getId' ])
+            ->getMock();
+
         $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
             ->disableOriginalConstructor()
             ->setMethods([ 'getDevice', 'getInstance' ])
@@ -72,7 +76,7 @@ class DfpRendererTest extends TestCase
 
         $this->adRenderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'getRendererClass' ])
+            ->setMethods([ 'getRendererClass', 'fetchTagNamesFromIds' ])
             ->getMock();
 
         $this->renderer = new DfpRenderer($this->container);
@@ -106,7 +110,7 @@ class DfpRendererTest extends TestCase
     public function testRenderAmp()
     {
         $ad         = new \Advertisement();
-        $ad->params = [ 'googledfp_unit_id' => 321 ];
+        $ad->params = ['googledfp_unit_id' => 321];
 
         $ad->params['sizes'] = [
             '0' => [
@@ -118,19 +122,23 @@ class DfpRendererTest extends TestCase
 
         $content       = new \stdClass();
         $content->id   = 123;
-        $content->tags = [
-            new Tag([ 'id' => 1 ]),
-            new Tag([ 'id' => 2 ]),
-        ];
+        $content->tags = [1, 2];
 
         $params = [
             'category'  => 'foo',
             'extension' => 'bar',
-            'content' => $content
+            'content'   => $content
         ];
 
-        $this->tagService->expects($this->at(0))->method('getListByIds')
-            ->willReturn([ 'items' => $content->tags ]);
+        $this->tagService->expects($this->any())
+            ->method('getListByIds')
+            ->with($content->tags)
+            ->willReturn([
+                'items' => [
+                    (object) ['name' => 'tag1'],
+                    (object) ['name' => 'tag2']
+                ]
+            ]);
 
         $this->ds->expects($this->at(0))->method('get')
             ->with('dfp_options')
@@ -140,6 +148,17 @@ class DfpRendererTest extends TestCase
                 'content_id' => 'id',
                 'tags'       => 'tags'
             ]);
+
+        $tags = implode("', '", ['tag1', 'tag2']);
+
+        $expectedTargeting = json_encode([
+            'targeting' => [
+                'cat'  => 'foo',
+                'mod'  => 'bar',
+                'id'   => 123,
+                'tags' => $tags
+            ]
+        ]);
 
         $output = '<amp-ad
             data-block-on-consent
@@ -156,7 +175,7 @@ class DfpRendererTest extends TestCase
                 'sizes'     => '',
                 'width'     => 300,
                 'height'    => 300,
-                'targeting' => '{"targeting":{"cat":"foo","mod":"bar","id":123, "tags": "tag1, tag2"}}'
+                'targeting' => $expectedTargeting
             ])
             ->willReturn($output);
 
@@ -341,13 +360,14 @@ class DfpRendererTest extends TestCase
             ]
         ];
 
-        $content     = new \stdClass();
-        $content->id = 123;
+        $content       = new \stdClass();
+        $content->id   = 123;
+        $content->tags = [ 1 , 2];
 
         $params = [
             'category'  => '',
             'extension' => '',
-            'contentId' => $content->id
+            'content' => $content->id
         ];
 
         $output = '<html>
@@ -525,7 +545,7 @@ class DfpRendererTest extends TestCase
         $output = [
             'cat'  => 'foo',
             'mod'  => 'bar',
-            'id'   => 'baz',
+            'id'   => 123,
             'tags' => ['la-vuelta', 'Alejandro Valverde']
         ];
 
