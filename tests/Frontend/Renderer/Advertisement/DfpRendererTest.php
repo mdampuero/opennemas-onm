@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Advertisement\DfpRenderer;
 use Api\Service\V1\TagService;
 use Common\Model\Entity\Tag;
+use stdClass;
 
 /**
  * Defines test cases for DfpRenderer class.
@@ -542,25 +543,42 @@ class DfpRendererTest extends TestCase
         $method = new \ReflectionMethod($this->renderer, 'getTargeting');
         $method->setAccessible(true);
 
+        $content = new stdClass();
+        $content->id = 123;
+        $content->tags = [1, 2];
+
+        // Asegúrate de que getListByIds devuelve las etiquetas correctas
+        $this->tagService->expects($this->any())
+            ->method('getListByIds')
+            ->with($content->tags)
+            ->willReturn([
+                'items' => [
+                    (object) ['name' => 'tag1'],
+                    (object) ['name' => 'tag2']
+                ]
+            ]);
+
         $output = [
             'cat'  => 'foo',
             'mod'  => 'bar',
             'id'   => 123,
-            'tags' => ['la-vuelta', 'Alejandro Valverde']
+            'tags' => "tag1', 'tag2"
         ];
 
+        // Verifica que el mapa de targeting se genera correctamente
         $this->assertEquals(
             $output,
-            $method->invokeArgs($this->renderer, [ 'foo', 'bar', 'baz' ])
+            $method->invokeArgs($this->renderer, ['foo', 'bar', $content])
         );
 
+        // Si dfp_options es nulo, debe retornar una cadena vacía
         $this->ds->expects($this->any())->method('get')
             ->with('dfp_options')
             ->willReturn(null);
 
         $this->assertEquals(
             '',
-            $method->invokeArgs($this->renderer, [ 'foo', 'bar', 'baz' ])
+            $method->invokeArgs($this->renderer, ['foo', 'bar', $content])
         );
     }
 
