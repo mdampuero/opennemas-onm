@@ -613,4 +613,26 @@ class AdvertisementRenderer extends Renderer
             ? $this->getRendererClass(4)->renderInlineHeader($advertisements, $params)
             : '';
     }
+
+    /**
+     * Retrieves the names of tags by their IDs from the API service.
+     *
+     * This function uses the tag service to fetch a list of tags and extracts the 'name' field
+     * for each tag. It returns an array of tag names, filtering out any null values.
+     *
+     * @param array $tagIds An array of tag IDs to fetch the names for.
+     * @return array An array of tag names.
+     */
+    protected function fetchTagNamesFromIds(array $tagIds)
+    {
+        $tagService = $this->container->get('api.service.tag');
+        $tagList    = $tagService->getListByIds($tagIds)['items'];
+
+        $tagNames = array_map(function ($tag) {
+            $storedData = $tag->getStored();
+            return $storedData['name'] ?? null;
+        }, $tagList);
+
+        return array_filter($tagNames);
+    }
 }

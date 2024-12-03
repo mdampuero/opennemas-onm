@@ -30,7 +30,7 @@ class DfpRenderer extends AdvertisementRenderer
         $targeting = $this->getTargeting(
             $params['category'],
             $params['extension'],
-            $params['content']->id
+            $params['content']
         );
 
         $content = $this->tpl->fetch('advertisement/helpers/amp/dfp.tpl', [
@@ -111,7 +111,7 @@ class DfpRenderer extends AdvertisementRenderer
             'targeting'  => $this->getTargeting(
                 $params['category'],
                 $params['extension'],
-                $params['contentId']
+                $params['content']
             )
         ];
 
@@ -146,7 +146,7 @@ class DfpRenderer extends AdvertisementRenderer
             'targeting'  => $this->getTargeting(
                 $params['category'],
                 $params['extension'],
-                $params['content']->id
+                $params['content']
             ),
         ]);
     }
@@ -176,10 +176,10 @@ class DfpRenderer extends AdvertisementRenderer
      *
      * @return string The targeting-related JS code.
      */
-    protected function getTargeting($category, $module, $contentId)
+    protected function getTargeting($category, $module, $content)
     {
         $options = $this->ds->get('dfp_options');
-        $tags    = 'tags';
+        $tagName = $this->fetchTagNamesFromIds($content->tags);
 
         if (!is_array($options)) {
             return '';
@@ -196,19 +196,22 @@ class DfpRenderer extends AdvertisementRenderer
             $targetingMap[$options['module']] = $module;
         }
 
-        if (array_key_exists('tags', $options) && !empty($options['tags'])) {
-            // Dividimos las etiquetas en un array. 'tags' aquí es la clave dentro de $options.
-            $tagsArray = explode(', ', $options['tags']); // Divide las etiquetas separadas por coma y espacio.
-
-            // Asignamos el array de etiquetas a la clave correspondiente en $targetingMap.
-            $targetingMap['tags'] = $tagsArray; // 'tags' es la clave, y el valor es el array de etiquetas.
-        }
-
         if (array_key_exists('content_id', $options)
             && !empty($options['content_id'])
-            && !empty($contentId)
+            && !empty($content)
         ) {
-            $targetingMap[$options['content_id']] = $contentId;
+            $targetingMap[$options['content_id']] = $content->id;
+        }
+
+        if (array_key_exists('tags', $options)
+            && !empty($options['tags'])
+            && !empty($content)
+        ) {
+            $tagsString = implode("', '", array_map(function ($tag) {
+                return trim($tag);
+            }, $tagName));
+
+            $targetingMap[$options['tags']] = $tagsString;
         }
         return $targetingMap;
     }

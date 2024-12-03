@@ -11,6 +11,8 @@ namespace Tests\Frontend\Renderer\Advertisement;
 
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Advertisement\DfpRenderer;
+use Api\Service\V1\TagService;
+use Common\Model\Entity\Tag;
 
 /**
  * Defines test cases for DfpRenderer class.
@@ -107,8 +109,13 @@ class DfpRendererTest extends TestCase
             ],
         ];
 
-        $content     = new \stdClass();
-        $content->id = 123;
+        $content       = new \stdClass();
+        $content->id   = 123;
+        $content->tags = [
+            new Tag([ 'id' => 1]),
+            new Tag([ 'id' => 2]),
+            new Tag([ 'id' => 3]),
+        ];
 
         $params = [
             'category'  => 'foo',
@@ -121,7 +128,8 @@ class DfpRendererTest extends TestCase
             ->willReturn([
                 'target'     => 'cat',
                 'module'     => 'mod',
-                'content_id' => 'id'
+                'content_id' => 'id',
+                'tags'       => 'tags'
             ]);
 
         $output = '<amp-ad
@@ -498,16 +506,18 @@ class DfpRendererTest extends TestCase
             ->willReturn([
                 'target'     => 'cat',
                 'module'     => 'mod',
-                'content_id' => 'id'
+                'content_id' => 'id',
+                'tags'       => 'tags'
             ]);
 
         $method = new \ReflectionMethod($this->renderer, 'getTargeting');
         $method->setAccessible(true);
 
         $output = [
-            'cat' => 'foo',
-            'mod' => 'bar',
-            'id'  => 'baz',
+            'cat'  => 'foo',
+            'mod'  => 'bar',
+            'id'   => 'baz',
+            'tags' => ['la-vuelta', 'Alejandro Valverde']
         ];
 
         $this->assertEquals(
