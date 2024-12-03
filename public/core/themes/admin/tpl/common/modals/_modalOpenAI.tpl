@@ -74,8 +74,8 @@
     <ng-container ng-if="displayMode == 'textarea'">
       <ng-container ng-if="activeText == 'suggested'">
         <label class="m-t-10 pull-left">{t}Generated text{/t}</label>
-        <button ng-if="mode == 'Edit'" type="button" class="btn btn-primary btn-loading pull-right m-l-20" ng-click="setActiveText('original')" >
-          {t}See original text{/t}
+        <button ng-if="mode == 'Edit'" type="button" class="btn btn-link btn-loading pull-right m-l-20" ng-click="setActiveText('original')" >
+          {t}View original{/t}
           <i class="fa fa-eye"></i>
         </button>
         <span class="m-t-10 label label-info pull-right m-l-5">[% countWords(template.suggested_text) %] {t}words{/t}, [% template.suggested_text.length %] {t}characters{/t}</span>
@@ -84,8 +84,8 @@
       </ng-container>
       <ng-container ng-if="activeText == 'original'">
         <label class="m-t-10 pull-left">{t}Original text{/t}</label>
-        <button type="button" class="btn btn-primary btn-loading pull-right m-l-20" ng-click="setActiveText('suggested')" >
-          {t}See generated text{/t}
+        <button type="button" class="btn btn-link pull-right m-l-20" ng-click="setActiveText('suggested')" >
+          {t}View generated{/t}
           <i class="fa fa-eye"></i>
         </button>
         <span class="m-t-10 label label-info pull-right m-l-5">[% countWords(template.input) %] {t}words{/t}, [% template.input.length %] {t}characters{/t}</span>
