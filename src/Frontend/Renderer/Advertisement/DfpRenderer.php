@@ -184,33 +184,26 @@ class DfpRenderer extends AdvertisementRenderer
             return '';
         }
 
-        $module = $module === 'frontpages' ? 'home' : $module;
-
+        $module       = $module === 'frontpages' ? 'home' : $module;
         $targetingMap = [];
-        if (array_key_exists('target', $options) && !empty($options['target'])) {
-            $targetingMap[$options['target']] = $category;
-        }
 
-        if (array_key_exists('module', $options) && !empty($options['module'])) {
-            $targetingMap[$options['module']] = $module;
-        }
+        $addToTargetingMap = function ($key, $value) use ($options, &$targetingMap) {
+            if (!empty($options[$key])) {
+                $targetingMap[$options[$key]] = $value;
+            }
+        };
 
-        if (array_key_exists('content_id', $options)
-            && !empty($options['content_id'])
-            && !empty($content)
-        ) {
-            $targetingMap[$options['content_id']] = $content->id;
-        }
+        $addToTargetingMap('target', $category);
+        $addToTargetingMap('module', $module);
 
-        if (array_key_exists('tags', $options)
-            && !empty($options['tags'])
-            && !empty($content)
-        ) {
-            $tagsString = implode("', '", array_map(function ($tag) {
-                return trim($tag);
-            }, $this->fetchTagNamesFromIds($content->tags)));
+        if (!empty($content)) {
+            $addToTargetingMap('content_id', $content->id);
 
-            $targetingMap[$options['tags']] = $tagsString;
+            if (!empty($content->tags)) {
+                $tags       = $this->fetchTagNamesFromIds($content->tags);
+                $tagsString = implode("', '", array_map('trim', $tags));
+                $addToTargetingMap('tags', $tagsString);
+            }
         }
 
         return $targetingMap;
