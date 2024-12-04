@@ -547,7 +547,6 @@ class DfpRendererTest extends TestCase
         $content->id = 123;
         $content->tags = [1, 2];
 
-        // Asegúrate de que getListByIds devuelve las etiquetas correctas
         $this->tagService->expects($this->any())
             ->method('getListByIds')
             ->with($content->tags)
@@ -565,13 +564,11 @@ class DfpRendererTest extends TestCase
             'tags' => "tag1', 'tag2"
         ];
 
-        // Verifica que el mapa de targeting se genera correctamente
         $this->assertEquals(
             $output,
             $method->invokeArgs($this->renderer, ['foo', 'bar', $content])
         );
 
-        // Si dfp_options es nulo, debe retornar una cadena vacía
         $this->ds->expects($this->any())->method('get')
             ->with('dfp_options')
             ->willReturn(null);
