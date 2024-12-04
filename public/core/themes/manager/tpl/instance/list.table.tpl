@@ -56,6 +56,18 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-users" checklist-model="columns.selected" checklist-value="'users'" type="checkbox">
+    <label for="checkbox-users">
+      {t}Users{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-webpush-subscribers" checklist-model="columns.selected" checklist-value="'webpush_subscribers'" type="checkbox">
+    <label for="checkbox-webpush-subscribers">
+      {t}Web Push subscribers{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-page-views" checklist-model="columns.selected" checklist-value="'page_views'" type="checkbox">
     <label for="checkbox-page-views">
       {t}Page views{/t}
@@ -68,18 +80,6 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-comments" checklist-model="columns.selected" checklist-value="'comments'" type="checkbox">
-    <label for="checkbox-comments">
-      {t}Comments{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-media-size" checklist-model="columns.selected" checklist-value="'media_size'" type="checkbox">
-    <label for="checkbox-media-size">
-      {t}Media size{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-contents" checklist-model="columns.selected" checklist-value="'contents'" type="checkbox">
     <label for="checkbox-contents">
       {t}Contents{/t}
@@ -89,6 +89,12 @@
     <input id="checkbox-articles" checklist-model="columns.selected" checklist-value="'articles'" type="checkbox">
     <label for="checkbox-articles">
       {t}Articles{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-comments" checklist-model="columns.selected" checklist-value="'comments'" type="checkbox">
+    <label for="checkbox-comments">
+      {t}Comments{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
@@ -128,6 +134,18 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-kioskos" checklist-model="columns.selected" checklist-value="'kioskos'" type="checkbox">
+    <label for="checkbox-kioskos">
+      {t}Kioskos{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-media-size" checklist-model="columns.selected" checklist-value="'media_size'" type="checkbox">
+    <label for="checkbox-media-size">
+      {t}Media size{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-advertisements" checklist-model="columns.selected" checklist-value="'advertisements'" type="checkbox">
     <label for="checkbox-advertisements">
       {t}Advertisements{/t}
@@ -155,24 +173,6 @@
     <input id="checkbox-tags" checklist-model="columns.selected" checklist-value="'tags'" type="checkbox">
     <label for="checkbox-tags">
       {t}Tags{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-users" checklist-model="columns.selected" checklist-value="'users'" type="checkbox">
-    <label for="checkbox-users">
-      {t}Users{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-kioskos" checklist-model="columns.selected" checklist-value="'kioskos'" type="checkbox">
-    <label for="checkbox-kioskos">
-      {t}Kioskos{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-webpush-subscribers" checklist-model="columns.selected" checklist-value="'webpush_subscribers'" type="checkbox">
-    <label for="checkbox-webpush-subscribers">
-      {t}Web Push subscribers{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
@@ -216,9 +216,8 @@
     {t}Domains{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('domains') == 'asc', 'fa fa-caret-down': isOrderedBy('domains') == 'desc'}"></i>
   </th>
-  <th class="pointer" ng-click="sort('subdirectory')" ng-show="isColumnEnabled('subdirectory')" width="150">
+  <th class="pointer" ng-show="isColumnEnabled('subdirectory')" width="150">
     {t}Subdirectory{/t}
-    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('subdirectory') == 'asc', 'fa fa-caret-down': isOrderedBy('subdirectory') == 'desc'}"></i>
   </th>
   <th class="text-center pointer" ng-click="sort('theme')" ng-show="isColumnEnabled('theme')" width="200">
     {t}Theme{/t}
@@ -236,6 +235,14 @@
     {t}Last activity{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('last_login') == 'asc', 'fa fa-caret-down': isOrderedBy('last_login') == 'desc'}"></i>
   </th>
+  <th class="text-center pointer" ng-click="sort('users')" ng-show="isColumnEnabled('users')" width="80">
+    <i class="fa fa-users" uib-tooltip="{t}Users{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('users') == 'asc', 'fa fa-caret-down': isOrderedBy('users') == 'desc'}"></i>
+  </th>
+  <th class="text-center pointer" ng-click="sort('webpush_subscribers')" ng-show="isColumnEnabled('webpush_subscribers')" width="80">
+    <i class="fa fa-bell" uib-tooltip="{t}Web Push{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('webpush_subscribers') == 'asc', 'fa fa-caret-down': isOrderedBy('webpush_subscribers') == 'desc'}"></i>
+  </th>
   <th class="text-center pointer" ng-click="sort('page_views')" ng-show="isColumnEnabled('page_views')" width="80">
     <i class="fa fa-eye" uib-tooltip="{t}Page views{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('page_views') == 'asc', 'fa fa-caret-down': isOrderedBy('page_views') == 'desc'}"></i>
@@ -244,14 +251,6 @@
     <i class="fa fa-mail-forward" uib-tooltip="{t}Emails{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('emails') == 'asc', 'fa fa-caret-down': isOrderedBy('emails') == 'desc'}"></i>
   </th>
-  <th class="text-center pointer" ng-click="sort('comments')" ng-show="isColumnEnabled('comments')" width="80">
-    <i class="fa fa-comments" uib-tooltip="{t}Comments{/t}" tooltip-placement="bottom"></i>
-    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('comments') == 'asc', 'fa fa-caret-down': isOrderedBy('comments') == 'desc'}"></i>
-  </th>
-  <th class="text-center pointer" ng-click="sort('media_size')" ng-show="isColumnEnabled('media_size')" width="80">
-    <i class="fa fa-database" uib-tooltip="{t}Media size{/t}" tooltip-placement="bottom"></i>
-    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('media_size') == 'asc', 'fa fa-caret-down': isOrderedBy('media_size') == 'desc'}"></i>
-  </th>
   <th class="text-center pointer" ng-click="sort('contents')" ng-show="isColumnEnabled('contents')" width="80">
     <i class="fa fa-folder-open-o" uib-tooltip="{t}Contents{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('contents') == 'asc', 'fa fa-caret-down': isOrderedBy('contents') == 'desc'}"></i>
@@ -259,6 +258,10 @@
   <th class="text-center pointer" ng-click="sort('articles')" ng-show="isColumnEnabled('articles')" width="80">
     <i class="fa fa-file-text" uib-tooltip="{t}Articles{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('articles') == 'asc', 'fa fa-caret-down': isOrderedBy('articles') == 'desc'}"></i>
+  </th>
+  <th class="text-center pointer" ng-click="sort('comments')" ng-show="isColumnEnabled('comments')" width="80">
+    <i class="fa fa-comments" uib-tooltip="{t}Comments{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('comments') == 'asc', 'fa fa-caret-down': isOrderedBy('comments') == 'desc'}"></i>
   </th>
   <th class="text-center pointer" ng-click="sort('opinions')" ng-show="isColumnEnabled('opinions')" width="80">
     <i class="fa fa-quote-right" uib-tooltip="{t}Opinions{/t}" tooltip-placement="bottom"></i>
@@ -284,6 +287,14 @@
     <i class="fa fa-paperclip" uib-tooltip="{t}Attachments{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('attachments') == 'asc', 'fa fa-caret-down': isOrderedBy('attachments') == 'desc'}"></i>
   </th>
+  <th class="text-center pointer" ng-click="sort('kioskos')" ng-show="isColumnEnabled('kioskos')" width="80">
+    <i class="fa fa-newspaper-o" uib-tooltip="{t}Kioskos{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('kioskos') == 'asc', 'fa fa-caret-down': isOrderedBy('kioskos') == 'desc'}"></i>
+  </th>
+  <th class="text-center pointer" ng-click="sort('media_size')" ng-show="isColumnEnabled('media_size')" width="80">
+    <i class="fa fa-database" uib-tooltip="{t}Media size{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('media_size') == 'asc', 'fa fa-caret-down': isOrderedBy('media_size') == 'desc'}"></i>
+  </th>
   <th class="text-center pointer" ng-click="sort('advertisements')" ng-show="isColumnEnabled('advertisements')" width="80">
     <i class="fa fa-bullhorn" uib-tooltip="{t}Advertisements{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('advertisements') == 'asc', 'fa fa-caret-down': isOrderedBy('advertisements') == 'desc'}"></i>
@@ -304,25 +315,12 @@
     <i class="fa fa-tags" uib-tooltip="{t}Tags{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('tags') == 'asc', 'fa fa-caret-down': isOrderedBy('tags') == 'desc'}"></i>
   </th>
-  <th class="text-center pointer" ng-click="sort('users')" ng-show="isColumnEnabled('users')" width="80">
-    <i class="fa fa-users" uib-tooltip="{t}Users{/t}" tooltip-placement="bottom"></i>
-    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('users') == 'asc', 'fa fa-caret-down': isOrderedBy('users') == 'desc'}"></i>
-  </th>
-  <th class="text-center pointer" ng-click="sort('kioskos')" ng-show="isColumnEnabled('kioskos')" width="80">
-    <i class="fa fa-newspaper-o" uib-tooltip="{t}Kioskos{/t}" tooltip-placement="bottom"></i>
-    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('kioskos') == 'asc', 'fa fa-caret-down': isOrderedBy('kioskos') == 'desc'}"></i>
-  </th>
-  <th class="text-center pointer" ng-click="sort('webpush_subscribers')" ng-show="isColumnEnabled('webpush_subscribers')" width="80">
-    <i class="fa fa-bell" uib-tooltip="{t}Web Push{/t}" tooltip-placement="bottom"></i>
-    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('webpush_subscribers') == 'asc', 'fa fa-caret-down': isOrderedBy('webpush_subscribers') == 'desc'}"></i>
-  </th>
   <th class="text-center pointer" ng-click="sort('widgets')" ng-show="isColumnEnabled('widgets')" width="80">
     <i class="fa fa-puzzle-piece" uib-tooltip="{t}Widgets{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('widgets') == 'asc', 'fa fa-caret-down': isOrderedBy('widgets') == 'desc'}"></i>
   </th>
-  <th class="text-center pointer" ng-show="isColumnEnabled('blocked')"  ng-click="sort('blocked')" width="60">
+  <th class="text-center pointer" ng-show="isColumnEnabled('blocked')" width="60">
     <i class="fa fa-lock" uib-tooltip="{t}Blocked{/t}" tooltip-placement="bottom"></i>
-    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('blocked') == 'asc', 'fa fa-caret-down': isOrderedBy('blocked') == 'desc'}"></i>
   </th>
   <th class="text-center pointer" ng-click="sort('activated')" ng-show="isColumnEnabled('activated')" width="60">
     <i class="fa fa-check" uib-tooltip="{t}Activated{/t}" tooltip-placement="bottom"></i>
@@ -377,9 +375,11 @@
       </small>
     </div>
   </td>
-  <td class="text-center v-align-middle" ng-show="isColumnEnabled('subdirectory')" title="{t}Subdirectory path{/t}">
-    <span class="label text-bold" ng-if="item.subdirectory.length >0">
-      [% item.subdirectory %]
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('subdirectory')" title="{t}Subdirectory{/t}">
+    <span class="label" ng-if="item.subdirectory.length > 0">
+      <a href="http://[% item.domains[item.main_domain - 1] %]/[% item.subdirectory %]" target="_blank">
+        [% item.subdirectory %]
+      </a>
     </span>
   </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('theme')">
@@ -412,6 +412,16 @@
       [% item.last_login | moment : 'HH:mm:ss' %]
     </small>
   </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('users')" title="{t}Users{/t}">
+    <span class="badge text-bold">
+      [% item.users %]
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('webpush_subscribers')" title="{t}Web Push{/t}">
+    <span class="badge text-bold">
+      [% item.webpush_subscribers %]
+    </span>
+  </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('page_views')" title="{t}Page views{/t}">
     <span class="badge text-bold">
       [% item.page_views %]
@@ -422,17 +432,6 @@
       [% item.emails %]
     </span>
   </td>
-  <td class="text-center v-align-middle" ng-show="isColumnEnabled('comments')" title="{t}Comments{/t}">
-    <span class="badge text-bold">
-      [% item.comments %]
-    </span>
-  </td>
-  <td class="text-center v-align-middle" ng-show="isColumnEnabled('media_size')" title="{t}Media size{/t}">
-    <span class="badge text-bold">
-      [% item.media_size / 1024 | number : 2 %]
-      MB
-    </span>
-  </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('contents')" title="{t}Contents{/t}">
     <span class="badge text-bold">
       [% item.contents %]
@@ -441,6 +440,11 @@
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('articles')" title="{t}Articles{/t}">
     <span class="badge text-bold">
       [% item.articles %]
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('comments')" title="{t}Comments{/t}">
+    <span class="badge text-bold">
+      [% item.comments %]
     </span>
   </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('opinions')" title="{t}Opinions{/t}">
@@ -473,6 +477,17 @@
       [% item.attachments %]
     </span>
   </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('kioskos')" title="{t}Kioskos{/t}">
+    <span class="badge text-bold">
+      [% item.kioskos %]
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('media_size')" title="{t}Media size{/t}">
+    <span class="badge text-bold">
+      [% item.media_size / 1024 | number : 2 %]
+      MB
+    </span>
+  </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('advertisements')" title="{t}Advertisements{/t}">
     <span class="badge text-bold">
       [% item.advertisements %]
@@ -496,21 +511,6 @@
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('tags')" title="{t}Tags{/t}">
     <span class="badge text-bold">
       [% item.tags %]
-    </span>
-  </td>
-  <td class="text-center v-align-middle" ng-show="isColumnEnabled('users')" title="{t}Users{/t}">
-    <span class="badge text-bold">
-      [% item.users %]
-    </span>
-  </td>
-  <td class="text-center v-align-middle" ng-show="isColumnEnabled('kioskos')" title="{t}Kioskos{/t}">
-    <span class="badge text-bold">
-      [% item.kioskos %]
-    </span>
-  </td>
-  <td class="text-center v-align-middle" ng-show="isColumnEnabled('webpush_subscribers')" title="{t}Web Push{/t}">
-    <span class="badge text-bold">
-      [% item.webpush_subscribers %]
     </span>
   </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('widgets')" title="{t}Widgets{/t}">
