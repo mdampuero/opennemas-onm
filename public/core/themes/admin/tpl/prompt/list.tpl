@@ -49,6 +49,18 @@
       </span>
     </div>
   </li>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" >
+    <ui-select name="mode" ng-change="onChangeRouteList()" class="form-control" theme="select2" ng-model="routes.getList" search-enabled="false" required
+      ng-init="options = [ { name: '{t}Own prompts{/t}', key: 'api_v1_backend_openai_prompt_get_list'}, { name: '{t}System prompts{/t}', key: 'api_v1_backend_openai_prompt_get_list_manager'} ]">
+      <ui-select-match>
+        [% $select.selected.name %]
+      </ui-select-match>
+      <ui-select-choices repeat="item.key as item in options | filter: $select.search">
+        <div ng-bind-html="item.name | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>
+  </li>
+
 {/block}
 
 {block name="list"}

@@ -1,0 +1,58 @@
+orm:
+    metadata:
+        -
+            name:  PromptManager
+            class: Common\Model\Entity\PromptManager
+            properties:
+                id:        integer
+                name:      string
+                instances: array
+                mode:      string
+                field:     string
+                tone:      string
+                role:      string
+
+            converters:
+                default:
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.promptManager' ]
+            repositories:
+                manager:
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.promptManager', '@cache.connection.manager' ]
+            persisters:
+                manager:
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.promptManager',  '@cache.connection.manager' ]
+            mapping:
+                database:
+                    table: prompt
+                    columns:
+                        id:
+                            type: integer
+                            options: { default: null, unsigned: true, autoincrement: true }
+                        name:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
+                        instances:
+                            type: text
+                            options: { default: null, length: 65532, notnull: true }
+                        mode:
+                            type: text
+                            options: { default: null, length: 32, notnull: true }
+                        tone:
+                            type: text
+                            options: { default: null, length: 1024, notnull: false }
+                        role:
+                            type: text
+                            options: { default: null, length: 1024, notnull: false }
+                        field:
+                            type: text
+                            options: { default: null, length: 32, notnull: false }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique: true
+                            flags: {  }

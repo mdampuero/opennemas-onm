@@ -54,6 +54,17 @@
 
           $scope.list();
         };
+
+        $scope.isSelectable = function() {
+          return $scope.routes.getList === 'api_v1_backend_openai_prompt_get_list';
+        };
+
+        $scope.$watch('routes.getList', function(nv, ov) {
+          if (!ov || nv === ov) {
+            return;
+          }
+          $scope.list();
+        });
       }
     ]);
 })();

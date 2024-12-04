@@ -12,6 +12,7 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Lists and displays prompts.
@@ -62,6 +63,27 @@ class PromptController extends ApiController
             'tones' => $helperOpenAI->getTones(),
             'roles' => $helperOpenAI->getRoles(),
             'modes' => $helperOpenAI->getModes(),
+        ];
+    }
+
+    /**
+     * Returns a list of items.
+     *
+     * @param Request $request The request object.
+     *
+     * @return array The list of items and all extra information.
+     */
+    public function getListManagerAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('list'));
+
+        $oql        = $request->query->get('oql', '');
+        $repository = $this->get('orm.manager')->getRepository('PromptManager');
+        $us         = $this->get($this->service);
+
+        return [
+            'items' => $us->responsify($repository->findBy($oql)),
+            'total' => $repository->countBy($oql),
         ];
     }
 }

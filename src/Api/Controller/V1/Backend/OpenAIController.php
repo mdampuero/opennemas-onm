@@ -66,7 +66,6 @@ class OpenAIController extends ApiController
         $openai_roles             = $this->get($this->helper)->getRoles();
         $openai_tones             = $this->get($this->helper)->getTones();
         $openai_instructions      = $this->get($this->helper)->getInstructions();
-        $openai_instruction_types = $this->get($this->helper)->getInstructionTypes();
 
         if (empty($settings)) {
             //TODO: Get config from manager
@@ -85,8 +84,7 @@ class OpenAIController extends ApiController
             'openai_config'           => $settings,
             'openai_roles'            => $openai_roles,
             'openai_tones'            => $openai_tones,
-            'openai_instructions'     => $openai_instructions,
-            'openai_instruction_types' => $openai_instruction_types
+            'openai_instructions'     => $openai_instructions
         ]);
     }
 

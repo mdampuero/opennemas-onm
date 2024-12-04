@@ -1,0 +1,61 @@
+manager_ws_prompt_list:
+    path:     /prompt
+    defaults: { _controller: ManagerWebServiceBundle:Prompt:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_prompt_new:
+    path:     /prompt/new
+    defaults: { _controller: ManagerWebServiceBundle:Prompt:new }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_prompt_show:
+    path:     /prompt/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Prompt:show }
+    methods:  [ GET ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ws_prompt_save:
+    path:     /prompt/save
+    defaults: { _controller: ManagerWebServiceBundle:Prompt:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+manager_ws_prompt_update:
+    path:     /prompt/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Prompt:update }
+    methods:  [ PUT ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ws_prompt_autocomplete:
+    path:     /prompt/autocomplete
+    defaults: { _controller: ManagerWebServiceBundle:Prompt:autocomplete }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_prompt_delete:
+    path:     /prompt/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Prompt:delete }
+    methods:  [ DELETE ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ws_prompt_batch_delete:
+    path:     /prompt
+    defaults: { _controller: ManagerWebServiceBundle:Prompt:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true

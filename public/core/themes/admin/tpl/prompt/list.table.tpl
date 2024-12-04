@@ -57,7 +57,7 @@
     <div class="table-text">
       [% item.name %]
     </div>
-    <div class="listing-inline-actions btn-group">
+    <div class="listing-inline-actions btn-group" ng-if="routes.getList === 'api_v1_backend_openai_prompt_get_list'">
       <a class="btn btn-white btn-small" href="[% routing.generate('backend_openai_prompt_show', { id: getItemId(item) }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
         <i class="fa fa-pencil text-success_"></i>
       </a>

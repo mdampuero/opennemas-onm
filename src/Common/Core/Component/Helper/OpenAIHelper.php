@@ -98,6 +98,8 @@ class OpenAIHelper
 
     protected $openaiConfig = [];
 
+    protected $userPrompt = '';
+
     /**
      * The service url base.
      *
@@ -167,31 +169,46 @@ class OpenAIHelper
             : $this->instructions;
     }
 
-    protected function insertInstructions($prompt = '', $instructions = [])
+    protected function insertInstructions($instructions = [])
     {
+        $instructionsString = '';
         if (count($instructions)) {
-            return $prompt . sprintf(' (ten en cuenta estas instrucciones: %s)', implode(', ', array_map(
-                function ($item) {
-                    return $item['value'];
+            $instructionList = implode("\n", array_map(
+                function ($index, $item) {
+                    return ($index + 1) . '. ' . $item['value'];
                 },
+                array_keys($instructions),
                 $instructions
-            )));
+            ));
+            $instructionsString = sprintf("### INSTRUCCIONES:\n%s", $instructionList);
         }
-        return $prompt;
+        $this->userPrompt .= $instructionsString;
+    }
+
+    protected function insertTone($messages = [])
+    {
+        if ($messages["toneSelected"]["name"] ?? false) {
+            $this->userPrompt .= sprintf("\n\n### TONO:\n%s", $messages["toneSelected"]["name"]);
+        }
     }
 
     public function generatePrompt($messages)
     {
-        $prompt = $this->insertInstructions($messages['promptInput'], $this->getInstructionsByFilter([
+        $this->insertInstructions($this->getInstructionsByFilter([
             'Both',
             $messages['promptSelected']['mode']
         ]));
+
         if ($messages['promptSelected']['mode'] == 'New') {
-            $prompt .= ($messages["input"] ?? false) ? sprintf(', Tema: "%s"', $messages["input"]) : '';
+            $this->userPrompt .= ($messages["input"] ?? false) ? sprintf("\n\n### TEMA:\n%s", $messages["input"]) : "";
         } elseif ($messages['promptSelected']['mode'] == 'Edit') {
-            $prompt .= ($messages["input"] ?? false) ? sprintf(', Este es el texto: "%s"', $messages["input"]) : '';
+            $this->userPrompt .= ($messages["input"] ?? false) ? sprintf("\n\n### TEXTO:\n%s", $messages["input"]) : '';
         }
-        return $prompt;
+        $this->insertTone($messages);
+
+        $this->userPrompt .= sprintf("\n\n### CONTENIDO:\n%s", $messages["promptInput"]);
+
+        return $this->userPrompt;
     }
 
     public function sendMessage($messages, $params = [])
@@ -202,13 +219,6 @@ class OpenAIHelper
             return [
                 'error' => 'API key is missing'
             ];
-        }
-
-        if ($messages["toneSelected"]["name"] ?? false) {
-            $this->addInstruction([
-                "type" => "Both",
-                "value" => sprintf('Utiliza un tono: "%s".', $messages["toneSelected"]["name"])
-            ]);
         }
 
         if ($messages["locale"] ?? false) {
@@ -248,6 +258,8 @@ class OpenAIHelper
                 'json' => $data
             ]);
             $response = json_decode($response->getBody(), true);
+
+            $responseData["request"] = $data;
 
             $responseData['message'] = isset($response['choices'][0]['message']['content'])
                 ? $this->removeQuotesAndPeriod($response['choices'][0]['message']['content'])
@@ -527,23 +539,6 @@ class OpenAIHelper
             ->get('openai_modes', []);
 
         return $modes;
-    }
-
-    public function getInstructionTypes()
-    {
-        $instructionTypes = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('openai_instruction_types', []);
-
-        return $instructionTypes;
-    }
-
-    public function setInstructionTypes($instructionTypes)
-    {
-        $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->set('openai_instruction_types', $instructionTypes);
-        return $this;
     }
 
     public function getConfigAll()

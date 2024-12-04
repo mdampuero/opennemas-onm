@@ -63,6 +63,13 @@
             .then(function(response) {
               $scope.prompts = response.data.items;
               $scope.extra = response.data.extra;
+              http.get({ name: 'api_v1_backend_openai_prompt_get_list_manager', params: { oql: oqlQuery } })
+                .then(function(response) {
+                  $scope.prompts = $scope.prompts.concat(response.data.items);
+                })
+                .finally(function() {
+                  $scope.waiting = false;
+                });
             })
             .finally(function() {
               $scope.waiting = false;

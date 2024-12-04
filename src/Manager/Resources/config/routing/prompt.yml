@@ -1,0 +1,16 @@
+manager_prompt_list:
+    path: /prompt
+    options:
+        expose: true
+
+manager_prompt_show:
+    path: /prompt/{id}
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_prompt_create:
+    path: /prompt/create
+    options:
+        expose: true

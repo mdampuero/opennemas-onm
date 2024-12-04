@@ -29,29 +29,29 @@
       <div class="row m-t-20">
           <div class="col-md-4 col-sm-6 form-group">
             <label>{t}Mode{/t}</label>
-            <ui-select name="mode" class="form-control" theme="select2" ng-model="item.mode" search-enabled="false" required>
+            <ui-select name="mode" class="form-control" theme="select2" ng-model="item.mode" search-enabled="false" required ng-init="options = [ { name: '{t}Create{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'} ]">
               <ui-select-match>
-                {t}[% $select.selected.name %]{/t}
+                [% $select.selected.name %]
               </ui-select-match>
-              <ui-select-choices repeat="item.key as item in data.extra.modes | filter: { name: $select.search }" position='down'>
+              <ui-select-choices repeat="item.key as item in options | filter: $select.search">
                 <div ng-bind-html="item.name | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
           </div>
-          <div class="col-md-4 col-sm-6 form-group">
+          <div class="col-md-4 col-sm-6 form-group" >
             <label>{t}Field{/t}</label>
-            <ui-select name="field" class="form-control" theme="select2" ng-model="item.field" search-enabled="false" required>
+            <ui-select name="mode" class="form-control" theme="select2" ng-model="item.field" search-enabled="false" required ng-init="options = [ { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Introductions{/t}', key: 'introductions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
               <ui-select-match>
                 [% $select.selected.name %]
               </ui-select-match>
-              <ui-select-choices repeat="item.key as item in data.extra.inputTypes | filter: { name: $select.search }" position='down'>
+              <ui-select-choices repeat="item.key as item in options | filter: $select.search">
                 <div ng-bind-html="item.name | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
           </div>
          <div class="col-md-4 col-sm-6 form-group">
           <label>{t}Default tono{/t}</label>
-          <ui-select name="tone" class="form-control" theme="select2" ng-model="item.tone" required>
+          <ui-select name="tone" class="form-control" theme="select2" ng-model="item.tone">
             <ui-select-match>
               [% $select.selected.name %]
             </ui-select-match>
@@ -63,7 +63,7 @@
       </div>
       <div class="form-group">
         <label>{t}Default role{/t}</label>
-        <ui-select name="role" class="form-control" theme="select2" ng-model="item.role" required>
+        <ui-select name="role" class="form-control" theme="select2" ng-model="item.role">
           <ui-select-match>
             [% $select.selected.name %]
           </ui-select-match>

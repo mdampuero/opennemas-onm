@@ -135,9 +135,14 @@
             <div class="controls">
               <div class="row" ng-repeat="role in settings.openai_instructions track by $index">
                 <div class="col-lg-2 col-md-3 m-b-15">
-                  <select class="form-control" ng-model="role.type">
-                    <option ng-repeat="type in settings.openai_instruction_types" value="[% type %]">[% type %]</value>
-                  </select>
+                  <ui-select name="mode" class="form-control" theme="select2" ng-model="role.type" search-enabled="false" required ng-init="options = [ { name: '{t}Both{/t}', key: 'Both'},{ name: '{t}Create{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'} ]">
+                    <ui-select-match>
+                      [% $select.selected.name %]
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.key as item in options | filter: $select.search">
+                      <div ng-bind-html="item.name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                  </ui-select>
                 </div>
                 <div class="col-lg-9 col-md-7">
                   <input class="form-control" ng-model="role.value" placeholder="{t}Instruction{/t}" type="text" required>
