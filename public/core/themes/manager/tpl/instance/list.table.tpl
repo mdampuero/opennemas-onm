@@ -26,6 +26,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-subdirectory" checklist-model="columns.selected" checklist-value="'subdirectory'" type="checkbox">
+    <label for="checkbox-subdirectory">
+      {t}Subdirectory path{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-contact" checklist-model="columns.selected" checklist-value="'contact_mail'" type="checkbox">
     <label for="checkbox-contact">
       {t}Contact{/t}
@@ -187,12 +193,6 @@
       {t}Tags{/t}
     </label>
   </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-subdirectory" checklist-model="columns.selected" checklist-value="'subdirectory'" type="checkbox">
-    <label for="checkbox-subdirectory">
-      {t}Subdirectory path{/t}
-    </label>
-  </div>
 {/block}
 
 {block name="columnsHeader"}
@@ -215,6 +215,10 @@
   <th class="pointer" ng-click="sort('domains')" ng-show="isColumnEnabled('domains')" width="300">
     {t}Domains{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('domains') == 'asc', 'fa fa-caret-down': isOrderedBy('domains') == 'desc'}"></i>
+  </th>
+  <th class="text-center pointer" ng-click="sort('subdirectory')" ng-show="isColumnEnabled('subdirectory')" width="60">
+    <i class="fa fa-folder" uib-tooltip="{t}Subdirectory path{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('subdirectory') == 'asc', 'fa fa-caret-down': isOrderedBy('subdirectory') == 'desc'}"></i>
   </th>
   <th class="pointer text-center" ng-click="sort('contact_email')" ng-show="isColumnEnabled('contact_mail')" width="200">
     {t}Contact{/t}
@@ -316,10 +320,6 @@
     <i class="fa fa-bell" uib-tooltip="{t}Web Push{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('webpush_subscribers') == 'asc', 'fa fa-caret-down': isOrderedBy('webpush_subscribers') == 'desc'}"></i>
   </th>
-  <th class="text-center pointer" ng-click="sort('subdirectory')" ng-show="isColumnEnabled('subdirectory')" width="60">
-    <i class="fa fa-folder" uib-tooltip="{t}Subdirectory path{/t}" tooltip-placement="bottom"></i>
-    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('subdirectory') == 'asc', 'fa fa-caret-down': isOrderedBy('subdirectory') == 'desc'}"></i>
-  </th>
   <th class="text-center pointer" ng-show="isColumnEnabled('blocked')"  ng-click="sort('blocked')" width="60">
     <i class="fa fa-lock" uib-tooltip="{t}Blocked{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('blocked') == 'asc', 'fa fa-caret-down': isOrderedBy('blocked') == 'desc'}"></i>
@@ -376,6 +376,11 @@
         </span>
       </small>
     </div>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('subdirectory')" title="{t}Subdirectory path{/t}">
+    <span class="label text-bold" ng-if="item.subdirectory.length >0">
+      [% item.subdirectory %]
+    </span>
   </td>
   <td class="v-align-middle table-text" ng-show="isColumnEnabled('contact_mail')">
     <a ng-href="mailto:[% item.contact_mail %]">
@@ -511,11 +516,6 @@
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('webpush_subscribers')" title="{t}Web Push{/t}">
     <span class="badge text-bold">
       [% item.webpush_subscribers %]
-    </span>
-  </td>
-  <td class="text-center v-align-middle" ng-show="isColumnEnabled('subdirectory')" title="{t}Subdirectory path{/t}">
-    <span class="label text-bold" ng-if="item.subdirectory.length >0">
-      [% item.subdirectory %]
     </span>
   </td>
   <td class="text-center" ng-show="isColumnEnabled('blocked')">
