@@ -236,7 +236,7 @@
     {t}Last activity{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('last_login') == 'asc', 'fa fa-caret-down': isOrderedBy('last_login') == 'desc'}"></i>
   </th>
-  <th class="text-center pointer" ng-click="sort('page_views')" ng-show="isColumnEnabled('page_views')" width="120">
+  <th class="text-center pointer" ng-click="sort('page_views')" ng-show="isColumnEnabled('page_views')" width="80">
     <i class="fa fa-eye" uib-tooltip="{t}Page views{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('page_views') == 'asc', 'fa fa-caret-down': isOrderedBy('page_views') == 'desc'}"></i>
   </th>
@@ -248,7 +248,7 @@
     <i class="fa fa-comments" uib-tooltip="{t}Comments{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('comments') == 'asc', 'fa fa-caret-down': isOrderedBy('comments') == 'desc'}"></i>
   </th>
-  <th class="text-center pointer" ng-click="sort('media_size')" ng-show="isColumnEnabled('media_size')" width="120">
+  <th class="text-center pointer" ng-click="sort('media_size')" ng-show="isColumnEnabled('media_size')" width="80">
     <i class="fa fa-database" uib-tooltip="{t}Media size{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('media_size') == 'asc', 'fa fa-caret-down': isOrderedBy('media_size') == 'desc'}"></i>
   </th>
@@ -312,7 +312,7 @@
     <i class="fa fa-newspaper-o" uib-tooltip="{t}Kioskos{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('kioskos') == 'asc', 'fa fa-caret-down': isOrderedBy('kioskos') == 'desc'}"></i>
   </th>
-  <th class="text-center pointer" ng-click="sort('webpush_subscribers')" ng-show="isColumnEnabled('webpush_subscribers')" width="120">
+  <th class="text-center pointer" ng-click="sort('webpush_subscribers')" ng-show="isColumnEnabled('webpush_subscribers')" width="80">
     <i class="fa fa-bell" uib-tooltip="{t}Web Push{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('webpush_subscribers') == 'asc', 'fa fa-caret-down': isOrderedBy('webpush_subscribers') == 'desc'}"></i>
   </th>
