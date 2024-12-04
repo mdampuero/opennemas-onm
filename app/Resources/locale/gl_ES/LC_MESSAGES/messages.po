@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 09:54+0000\n"
-"PO-Revision-Date: 2024-10-21 11:57+0200\n"
+"POT-Creation-Date: 2024-11-05 11:08+0000\n"
+"PO-Revision-Date: 2024-11-05 12:13+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1537,6 +1537,12 @@ msgstr "Pagar con PayPal"
 msgid "There is no billing information."
 msgstr "Non hai información de facturación."
 
+msgid "Live blog post"
+msgstr "Artigo en directo"
+
+msgid "Google News Showcase"
+msgstr "Google News Showcase"
+
 msgid "Author"
 msgstr "Autor"
 
@@ -1546,11 +1552,20 @@ msgstr "Engadir ligazón externa"
 msgid "Schedule"
 msgstr "Planificación"
 
+msgid "Options for SEO"
+msgstr "Opcións para SEO"
+
+msgid "Webpush Notifications"
+msgstr "Notificacións WebPush"
+
 msgid "Vote end date"
 msgstr "Data de fin de votación"
 
 msgid "Date"
 msgstr "Data"
+
+msgid "Organizer data"
+msgstr "Datos do organizador"
 
 msgid "Event date"
 msgstr "Data do evento"
@@ -1576,6 +1591,27 @@ msgstr "Portada"
 msgid "Type"
 msgstr "Tipo"
 
+msgid "Company info"
+msgstr "Información da empresa"
+
+msgid "Timetable"
+msgstr "Horario"
+
+msgid "Phone"
+msgstr "Teléfono"
+
+msgid "Google Maps"
+msgstr "Google Maps"
+
+msgid "Social network"
+msgstr "Redes sociais"
+
+msgid "Mortuary"
+msgstr "Funeraria"
+
+msgid "Google maps url"
+msgstr "Url de Google Maps"
+
 msgid "Visibility"
 msgstr "Visibilidade"
 
@@ -1599,39 +1635,6 @@ msgstr "Relacionado en interior"
 
 msgid "Agency"
 msgstr "Axencia"
-
-msgid "Facebook"
-msgstr "Facebook"
-
-msgid "Twitter"
-msgstr "Twitter"
-
-msgid "Instagram"
-msgstr "Instagram"
-
-msgid "Whatsapp"
-msgstr "Whatsapp"
-
-msgid "Phone"
-msgstr "Teléfono"
-
-msgid "Address"
-msgstr "Enderezo"
-
-msgid "Google Maps"
-msgstr "Google Maps"
-
-msgid "Sector"
-msgstr "Sector"
-
-msgid "Timetable"
-msgstr "Horario"
-
-msgid "Google News Showcase"
-msgstr "Google News Showcase"
-
-msgid "Live blog post"
-msgstr "Artigo en directo"
 
 msgid "Max sents reached"
 msgstr "Alcanzouse o número máximo de envios"
@@ -2131,6 +2134,15 @@ msgstr "Erro"
 msgid "Add a tag..."
 msgstr "Engadir unha etiqueta ..."
 
+msgid "Are you sure?"
+msgstr "Estas seguro?"
+
+msgid "Select an element"
+msgstr "Selecciona un elemento"
+
+msgid "Caption"
+msgstr "Pe de foto"
+
 msgid "Reset"
 msgstr "Restabelecer"
 
@@ -2151,15 +2163,6 @@ msgstr "Data de modificación"
 
 msgid "Featured image"
 msgstr "Imaxe destacada"
-
-msgid "Are you sure?"
-msgstr "Estas seguro?"
-
-msgid "Select an element"
-msgstr "Selecciona un elemento"
-
-msgid "Caption"
-msgstr "Pe de foto"
 
 msgid "Body"
 msgstr "Corpo"
@@ -2191,6 +2194,9 @@ msgstr "Ligazón"
 
 msgid "No author"
 msgstr "Sen autor"
+
+msgid "Sector"
+msgstr "Sector"
 
 msgid "No sector"
 msgstr "Sen sector"
@@ -2249,6 +2255,21 @@ msgstr "Enviar a PressClipping"
 msgid "Remove from PressClipping"
 msgstr "Eliminar de PressClipping"
 
+msgid "Options for Social Networks"
+msgstr "Opcións para as redes sociais"
+
+msgid "Title for Social Networks"
+msgstr "Título para Redes Sociais"
+
+msgid "Title shown when sharing on social networks."
+msgstr "Título que se mostra ao compartir nas redes sociais."
+
+msgid "Description for Social Networks"
+msgstr "Descrición para redes sociais"
+
+msgid "Description shown when sharing on social networks."
+msgstr "A descrición que se mostra ao compartir nas redes sociais."
+
 msgid "24 hours"
 msgstr "24 horas"
 
@@ -2263,9 +2284,6 @@ msgstr "Ata"
 
 msgid "Add schedule"
 msgstr "Engadir horario"
-
-msgid "Options for SEO"
-msgstr "Opcións para SEO"
 
 msgid "Title for SEO"
 msgstr "Título para SEO"
@@ -2284,9 +2302,6 @@ msgstr "Escribe a URL canónica deste contido"
 
 msgid "Mark this content to prevent indexing"
 msgstr "Marca este contido para evitar a indexación"
-
-msgid "Webpush Notifications"
-msgstr "Notificacións WebPush"
 
 msgid "Check it as \"Published\" to send webpush notifications."
 msgstr "Marca o contido como \"Publicado\" para enviar notificacións webpush."
@@ -2423,6 +2438,12 @@ msgstr "Esta acción non se pode desfacer"
 msgid "Seo title"
 msgstr "Titulo Seo"
 
+msgid "H1 Header"
+msgstr "Cabeceira H1"
+
+msgid "If this field is left empty, the default Title will be displayed."
+msgstr "Se este campo se deixa baleiro, amosarase o Título predeterminado."
+
 msgid "Seo description"
 msgstr "Descrición Seo"
 
@@ -2470,6 +2491,9 @@ msgstr "Número de identificación fiscal"
 
 msgid "What is a VAT identification number?"
 msgstr "Que é un número de identificación fiscal?"
+
+msgid "Address"
+msgstr "Enderezo"
 
 msgid "This is not a valid address"
 msgstr "Este non é un enderezo válido"
@@ -2653,6 +2677,12 @@ msgstr ""
 
 msgid "Social Networks"
 msgstr "Redes sociais"
+
+msgid "Facebook"
+msgstr "Facebook"
+
+msgid "Twitter"
+msgstr "Twitter"
 
 msgid "Change"
 msgstr "Cambiar"
@@ -3778,6 +3808,16 @@ msgstr ""
 "Se precisas axuda para configurar os teus dominios contacta co noso equipo "
 "de soporte"
 
+msgid "Hide ongoing events"
+msgstr "Ocultar eventos en curso"
+
+msgid ""
+"If this option is enabled, only events that start or end on or after the "
+"current date will be displayed."
+msgstr ""
+"Se esta opción está activada, só se mostrarán os eventos que comecen ou "
+"rematen na data actual ou despois da mesma."
+
 msgid "Edit '%1'"
 msgstr "Editar '%1'"
 
@@ -3789,9 +3829,6 @@ msgstr "Personalizar contido"
 
 msgid "Remove from all frontpages"
 msgstr "Quitar de todas as portadas"
-
-msgid "Organizer data"
-msgstr "Datos do organizador"
 
 msgid "Organizer name"
 msgstr "Nome do organizador"
@@ -3819,6 +3856,9 @@ msgstr "Enderezo do lugar"
 
 msgid "Website URL"
 msgstr "URL do sitio web"
+
+msgid "Config event module"
+msgstr "Configuración do módulo «Evento»"
 
 msgid "Start"
 msgstr "Iniciar"
@@ -4134,12 +4174,6 @@ msgstr ""
 
 msgid "Menu"
 msgstr "Menú"
-
-msgid "H1 Header"
-msgstr "Cabeceira H1"
-
-msgid "If this field is left empty, the default Title will be displayed."
-msgstr "Se este campo se deixa baleiro, amosarase o Título predeterminado."
 
 msgid "Only empty categories can be deleted"
 msgstr "Só se poden eliminar categorías sen contidos"
@@ -4680,6 +4714,9 @@ msgstr "Imaxes de contido de listas"
 
 msgid "Tiny contents images"
 msgstr "Imaxes de contido pequeno"
+
+msgid "Author's photo crop"
+msgstr "Recorte fotográfico do autor"
 
 msgid "This css will be added at the end of the original"
 msgstr "Este css engadirase ao final do orixinal"
@@ -5402,6 +5439,9 @@ msgstr ""
 "Se tes unha <strong>páxina en Twitter</strong>, engade o teu nome de perfil "
 "no formulario. Por defecto usarase o de OpenNeMas."
 
+msgid "Instagram"
+msgstr "Instagram"
+
 msgid "Instagram Page"
 msgstr "Páxina de Instagram"
 
@@ -5463,6 +5503,9 @@ msgid ""
 msgstr ""
 "Se xa tes unha <strong>páxina de Telegram</strong>, engade o teu "
 "identificador de páxina."
+
+msgid "Whatsapp"
+msgstr "Whatsapp"
 
 msgid "Whatsapp Page"
 msgstr "Páxina de Whatsapp"
@@ -6345,12 +6388,6 @@ msgstr "Resolución"
 msgid "Config photos module"
 msgstr "Configuración do módulo «Fotos»"
 
-msgid "Mortuary"
-msgstr "Funeraria"
-
-msgid "Google maps url"
-msgstr "Url de Google Maps"
-
 msgid "New obituary"
 msgstr "Nova necrolóxica"
 
@@ -6436,9 +6473,6 @@ msgstr "Engadir un valor"
 msgid "Remove field"
 msgstr "Eliminar campo"
 
-msgid "Company info"
-msgstr "Información da empresa"
-
 msgid "There are some required fields inside"
 msgstr "Hai campos requeridos dentro"
 
@@ -6456,9 +6490,6 @@ msgstr "Selecciona unha localidade"
 
 msgid "Company data"
 msgstr "Datos da empresa"
-
-msgid "Social network"
-msgstr "Redes sociais"
 
 msgid "Linkedin"
 msgstr "LinkedIn"
@@ -8776,9 +8807,6 @@ msgstr "Nome do grupo"
 
 #~ msgid "Total number of videos to show per page in the frontpage"
 #~ msgstr "Número máximo de vídeos para mostrar por páxina en portada"
-
-#~ msgid "Config video module"
-#~ msgstr "Configuración do módulo «Video»"
 
 #~ msgid "Add contents to groups by using the \"Add contents\" button"
 #~ msgstr "Engadir contidos a grupos usando o botón «Engadir contidos»"

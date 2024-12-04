@@ -26,9 +26,13 @@ class ReplaceUrlFilter extends Filter
 
         $tokens   = $matches['id'] ?? $matches['slug'] ?? [];
         $oldurls  = $matches['0'] ?? [];
-        $combined = array_unique(
-            array_combine($oldurls, $tokens)
-        );
+        $combined = [];
+
+        foreach ($tokens as $key => $value) {
+            if (isset($oldurls[$key])) {
+                $combined[$oldurls[$key]] = $value;
+            }
+        }
 
         foreach ($combined as $oldurl => $token) {
             list($translation, $foundAt) =

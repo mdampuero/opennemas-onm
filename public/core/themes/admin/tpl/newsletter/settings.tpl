@@ -41,19 +41,19 @@
     </div>
   </div>
   <div class="content">
-    <div class="listing-no-contents" ng-hide="!flags.loading">
+    <div class="listing-no-contents" ng-if="loading">
       <div class="text-center p-b-15 p-t-15">
         <i class="fa fa-4x fa-circle-o-notch fa-spin text-info"></i>
         <h3 class="spinner-text">{t}Loading{/t}...</h3>
       </div>
     </div>
-    <div class="listing-no-contents ng-cloak" ng-if="!flags.loading && items.length == 0">
+    <div class="listing-no-contents ng-cloak" ng-if="!loading && items.length == 0">
       <div class="text-center p-b-15 p-t-15">
         <i class="fa fa-4x fa-warning text-warning"></i>
         <h3>{t}Unable to find setting for newsletters.{/t}</h3>
       </div>
     </div>
-    <div class="grid simple ng-cloak" ng-if="!flags.loading && settings">
+    <div class="grid simple ng-cloak" ng-if="!loading && settings">
       <div class="grid-title">
         <h4>
           <i class="fa fa-envelope"></i>
@@ -147,7 +147,7 @@
         {/is_module_activated}
       </div>
     </div>
-    <div class="grid simple ng-cloak" ng-if="!flags.loading && settings">
+    <div class="grid simple ng-cloak" ng-if="!loading && settings">
       <div class="grid-title">
         <h4>
           <i class="fa fa-pencil"></i>
@@ -167,6 +167,14 @@
           <span class="help">{t escape=off}Email sender{/t} (From)</span>
           <div class="controls">
             <input type="text" required id="sender" name="newsletter_maillist[sender]" ng-model="settings.newsletter_maillist.sender" class="form-control" placeholder="noreply@your_domain_name.com"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="newsletter_footer">
+            {t}Added text to newsletter footer{/t}
+          </label>
+          <div class="controls">
+            <textarea class="form-control" id="newsletter_footer" name="newsletter_footer" ng-model="settings.newsletter_footer" onm-editor onm-editor-preset="simple"></textarea>
           </div>
         </div>
         {if $app.security->hasPermission('MASTER')}

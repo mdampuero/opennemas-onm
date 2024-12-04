@@ -182,7 +182,7 @@ class WebpushrHelper
         );
 
         $contentPath = $this->container->get('core.helper.url_generator')->getUrl($article, ['_absolute' => true]);
-        $image       = $this->container->get('core.helper.featured_media')->getFeaturedMedia($article, 'inner');
+        $image       = $this->container->get('core.helper.featured_media')->getFeaturedMedia($article, 'frontpage');
         $imagePath   = $photoHelper->getPhotoPath($image, null, [], true);
 
         $body = !empty($article->description)
@@ -218,10 +218,10 @@ class WebpushrHelper
     public function parseNotificationData($data)
     {
         return [
-            'send_count'  => $data['count']['successfully_sent'],
-            'impressions' => $data['count']['delivered'],
-            'clicks'      => $data['count']['clicked'],
-            'closed'      => $data['count']['closed']
+            'send_count'  => $data['count']['successfully_sent'] ?? 0,
+            'impressions' => $data['count']['delivered'] ?? 0,
+            'clicks'      => $data['count']['clicked'] ?? 0,
+            'closed'      => $data['count']['closed'] ?? 0
         ];
     }
 

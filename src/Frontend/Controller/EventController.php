@@ -23,16 +23,18 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $caches = [
-        'list' => 'articles',
-        'show' => 'articles'
+        'list'    => 'articles',
+        'show'    => 'articles',
+        'tagList' => 'articles'
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $groups = [
-        'list' => 'article_inner',
-        'show' => 'article_inner'
+        'list'    => 'article_inner',
+        'show'    => 'article_inner',
+        'tagList' => 'article_inner'
     ];
 
     /**
@@ -137,7 +139,10 @@ class EventController extends FrontendController
      */
     protected function hydrateList(array &$params = []) : void
     {
-        $date = gmdate('Y-m-d H:i:s');
+        $date          = gmdate('Y-m-d H:i:s');
+        $eventSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('event_settings', false);
 
         // Invalid page provided as parameter
         if ($params['page'] <= 0
@@ -146,23 +151,34 @@ class EventController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $response = $this->get('api.service.content')->getListBySql(sprintf(
+        $oql = sprintf(
             'select * from contents '
             . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
             . 'and cm1.meta_name = "event_start_date" '
             . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
             . 'and cm2.meta_name = "event_end_date" '
             . 'where content_type_name="event" and content_status=1 and in_litter=0 '
-            . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s"))'
+            . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s")) '
             . 'and (starttime is null or starttime < "%s") '
-            . 'and (endtime is null or endtime > "%s") '
-            . 'order by cm1.meta_value asc',
+            . 'and (endtime is null or endtime > "%s") ',
             gmdate('Y-m-d'),
             gmdate('Y-m-d'),
             gmdate('Y-m-d'),
             $date,
             $date
-        ));
+        );
+
+        if ($eventSettings["hide_current_events"] ?? false) {
+            $oql .= sprintf(
+                'and (cm1.meta_value >= "%s") ',
+                gmdate('Y-m-d'),
+                gmdate('Y-m-d')
+            );
+        }
+
+        $oql .= 'order by cm1.meta_value asc';
+
+        $response = $this->get('api.service.content')->getListBySql($oql);
 
         $items = $response['items'];
         $total = count($items);
@@ -223,7 +239,8 @@ class EventController extends FrontendController
             return new RedirectResponse($expected, 301);
         }
 
-        $params = $this->getParameters($request, $item);
+        $params           = $this->getParameters($request, $item);
+        $params['x-tags'] = sprintf('%s,event-frontpage-tag', str_replace('event-', 'tag-', $params['x-tags']));
 
         $this->view->setConfig($this->getCacheConfiguration($action));
 
@@ -244,8 +261,11 @@ class EventController extends FrontendController
      */
     protected function hydrateListTag(array &$params = []) : void
     {
-        $currentDate = gmdate('Y-m-d');
-        $fullDate    = gmdate('Y-m-d H:i:s');
+        $currentDate   = gmdate('Y-m-d');
+        $fullDate      = gmdate('Y-m-d H:i:s');
+        $eventSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('event_settings', false);
 
         $oql = sprintf(
             'SELECT * FROM contents c
@@ -261,8 +281,7 @@ class EventController extends FrontendController
             AND (cm1.meta_value >= "%s" OR (cm1.meta_value < "%s" AND cm2.meta_value >= "%s"))
             AND (starttime IS NULL OR starttime < "%s")
             AND (endtime IS NULL OR endtime > "%s")
-            AND t.slug = "%s"
-            ORDER BY cm1.meta_value ASC',
+            AND t.slug = "%s"',
             $currentDate,
             $currentDate,
             $currentDate,
@@ -271,12 +290,18 @@ class EventController extends FrontendController
             $params['tag']
         );
 
+        if ($eventSettings["hide_current_events"] ?? false) {
+            $oql .= sprintf(
+                ' AND (cm1.meta_value >= "%s")',
+                gmdate('Y-m-d'),
+                gmdate('Y-m-d')
+            );
+        }
+
+        $oql .= ' ORDER BY cm1.meta_value ASC';
+
         $response = $this->get('api.service.content')->getListBySql($oql);
         $items    = $response['items'];
-
-        if (empty($items)) {
-            throw new ResourceNotFoundException();
-        }
 
         if ($expire = $this->get('core.helper.content')->getCacheExpireDate()) {
             $this->setViewExpireDate($expire);

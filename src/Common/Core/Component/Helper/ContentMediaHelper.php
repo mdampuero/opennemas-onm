@@ -77,7 +77,7 @@ class ContentMediaHelper
      * Get image url for a given content
      *
      * @param object $content The content object.
-     * @param bool   $deep    A flag to search only for photos.
+     * @param string $type    The type of the featured media "frontpage"|"inner"|"social".
      *
      * @return object $mediaObject An object with image/video information
      */
@@ -103,7 +103,7 @@ class ContentMediaHelper
      * Returns the media object.
      *
      * @param Content $content The content object.
-     * @param String  $type    The type of the featured media "frontpage"|"inner".
+     * @param String  $type    The type of the featured media "frontpage"|"inner"|"social".
      *
      * @return Content The media object for the specific content.
      */
@@ -112,6 +112,9 @@ class ContentMediaHelper
         if (!empty($content) && $content->content_type_name === 'photo') {
             return $content;
         }
+
+        // Check for social image
+        $type = $this->featuredHelper->hasFeaturedMedia($content, 'social') ? 'social' : $type;
 
         if ($this->featuredHelper->hasFeaturedMedia($content, $type)) {
             $featuredMedia = $this->featuredHelper->getFeaturedMedia($content, $type);

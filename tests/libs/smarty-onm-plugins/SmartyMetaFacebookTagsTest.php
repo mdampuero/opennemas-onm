@@ -242,7 +242,7 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
 
         $output = "<meta property=\"og:type\" content=\"website\" />\n"
             . "<meta property=\"og:title\" content=\"This is the title\" />\n"
-            . "<meta property=\"og:description\" content=\"This is the body...\" />\n"
+            . "<meta property=\"og:description\" content=\"This is the body\" />\n"
             . "<meta property=\"og:url\" content=\"http://route/to/content.html\" />\n"
             . "<meta property=\"og:site_name\" content=\"Site Name\" />";
 

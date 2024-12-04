@@ -67,7 +67,7 @@ class ContentsController extends Controller
      */
     public function statsAction(Request $request)
     {
-        $contentId = $request->query->getDigits('content_id', 0);
+        $contentId = $request->query->getInt('content_id', 0);
 
         // Raise exception if content id is not provided
         if ($contentId <= 0) {

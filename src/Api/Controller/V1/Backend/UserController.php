@@ -141,6 +141,7 @@ class UserController extends ApiController
         }
         // Prepare contents for CSV
         $headers = [
+            _('ID'),
             _('Name'),
             _('Email'),
             _('Username'),
@@ -172,6 +173,7 @@ class UserController extends ApiController
             $socialInfoString = implode(', ', array_filter($socialInfo));
 
             $data[] = [
+                $user['id'],
                 $user['name'],
                 $user['email'],
                 $user['username'],

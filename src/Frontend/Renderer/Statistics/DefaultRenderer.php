@@ -21,7 +21,7 @@ class DefaultRenderer extends StatisticsRenderer
         return [
             'content' => $content,
             'params'  => [ 'common' => 1, 'src' => '/onm/jquery.onm-stats.js' ],
-            'id'    => $this->frontend->getValue('item')->pk_content
+            'id'      => (int) $this->frontend->getValue('item')->pk_content
         ];
     }
 

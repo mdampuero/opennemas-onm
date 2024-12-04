@@ -2,7 +2,7 @@
 <script type="application/json">
 {
   "requests": {
-    "pageview": "//{literal}${canonicalHost}{/literal}{url name=frontend_content_stats content_id=$id}&_=RANDOM"
+    "pageview": "{$app.instance->getBaseUrl()}{url name=frontend_content_stats content_id=$id}&_=RANDOM"
   },
   "triggers": {
     "trackPageview": {

@@ -1592,32 +1592,39 @@ class PermissionHelper
             ],
             262 => [
                 'id'          => 262,
+                'name'        => 'EVENT_SETTINGS',
+                'description' => _('Manage module setting'),
+                'module'      => 'es.openhost.module.events',
+                'enabled'     => 1
+            ],
+            263 => [
+                'id'          => 263,
                 'name'        => 'PROMPT_ADMIN',
                 'description' => _('List'),
                 'module'      => 'es.openhost.module.openai',
                 'enabled'     => 1
             ],
-            263 => [
-                'id'          => 263,
+            264 => [
+                'id'          => 264,
                 'name'        => 'PROMPT_UPDATE',
                 'description' => _('Edit'),
                 'module'      => 'es.openhost.module.openai',
                 'enabled'     => 1
             ],
-            264 => [
-                'id'          => 264,
+            265 => [
+                'id'          => 265,
                 'name'        => 'PROMPT_DELETE',
                 'description' => _('Delete'),
                 'module'      => 'es.openhost.module.openai',
                 'enabled'     => 1
             ],
-            265 => [
-                'id'          => 265,
+            266 => [
+                'id'          => 266,
                 'name'        => 'PROMPT_CREATE',
                 'description' => _('Create'),
                 'module'      => 'es.openhost.module.openai',
                 'enabled'     => 1
-            ],
+            ]
         ];
     }
 }

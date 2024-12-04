@@ -140,6 +140,12 @@ class FormFieldHelper
                 ]
             ],
             [
+                'name' => 'social',
+                'title' => _('Options for Social Networks'),
+                'module' => false,
+                'available' => [ 'article' ]
+            ],
+            [
                 'name' => 'webpush',
                 'title' => _('Webpush Notifications'),
                 'module' => 'es.openhost.module.webpush_notifications',
