@@ -31,7 +31,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-loading btn-success text-uppercase" ng-click="!item.id ? save() : update()" ng-disabled="adstxtForm.$invalid || saving">
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="!item.id ? save() : update()" ng-disabled="promptForm.$invalid || saving">
               <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
@@ -41,41 +41,41 @@
   </div>
 </div>
 <div class="content ng-hide" ng-show="extra">
-  <form name="adstxtForm" novalidate>
+  <form name="promptForm" novalidate>
     <div class="grid simple">
       <div class="grid-body adstxt-form">
         <div class="row">
-          <div class="col-sm-6 form-group">
+          <div class="col-sm-4 form-group">
             <label class="form-label">{t}Mode{/t}</label>
             <div class="controls">
-              <select name="mode" id="mode" class="form-control" ng-model="item.mode">
+              <select name="mode" id="mode" class="form-control" ng-model="item.mode" required>
                 <option value='New'>{t}Create{/t}</option>
                 <option value='Edit'>{t}Edit{/t}</option>
               </select>
             </div>
           </div>
-          <div class="col-sm-6 form-group" >
+          <div class="col-sm-4 form-group" >
             <label class="form-label">{t}Field{/t}</label>
             <div class="controls">
-              <select name="field" id="field" class="form-control" ng-model="item.field">
+              <select name="field" id="field" class="form-control" ng-model="item.field" required>
                 <option value='titles'>{t}Titles{/t}</option>
                 <option value='introductions'>{t}Introductions{/t}</option>
                 <option value='bodies'>{t}Bodies{/t}</option>
               </select>
             </div>
           </div>
-          <div class="form-group col-md-6">
-            <label class="form-label" for="name">{t}Name{/t}</label>
-            <div class="controls input-with-icon right">
-              <input class="form-control" id="name" name="name" ng-model="item.name" ng-maxlength="50" required type="text"/>
-            </div>
-          </div>
-          <div class="form-group col-md-6">
+          <div class="form-group col-sm-4">
             <label for="template" class="form-label">{t}Target{/t}</label>
             <div class="controls">
               <tags-input add-from-autocomplete-only="true" ng-model="item.instances" display-property="name">
                 <auto-complete debounce-delay="500" source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true" template="instance"></auto-complete>
               </tags-input>
+            </div>
+          </div>
+          <div class="form-group col-md-12">
+            <label class="form-label" for="name">{t}Prompt{/t}</label>
+            <div class="controls input-with-icon right">
+              <input class="form-control" id="name" name="name" ng-model="item.name" ng-maxlength="50" required type="text"/>
             </div>
           </div>
         </div>

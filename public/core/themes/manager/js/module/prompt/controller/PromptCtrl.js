@@ -30,7 +30,9 @@
          * @type {Object}
          */
         $scope.item = {
-          instances: []
+          field: 'titles',
+          mode: 'New',
+          instances: [ 'Todos' ]
         };
 
         /**
@@ -45,9 +47,13 @@
           var data = angular.copy($scope.item);
 
           if (data.instances) {
-            data.instances = data.instances.map(function(a) {
-              return a.name;
-            });
+            if (data.instances.length > 0) {
+              data.instances = data.instances.map(function(a) {
+                return a.name;
+              });
+            } else {
+              data.instances = [ 'Todos' ];
+            }
           }
           http.post('manager_ws_prompt_save', data)
             .then(function(response) {
@@ -97,9 +103,13 @@
           var data = angular.copy($scope.item);
 
           if (data.instances) {
-            data.instances = data.instances.map(function(a) {
-              return a.name;
-            });
+            if (data.instances.length > 0) {
+              data.instances = data.instances.map(function(a) {
+                return a.name;
+              });
+            } else {
+              data.instances = [ 'Todos' ];
+            }
           }
           var route = {
             name: 'manager_ws_prompt_update',
@@ -124,13 +134,13 @@
 
         if ($routeParams.id) {
           route = {
-            name:   'manager_ws_prompt_show',
-            params: { id:  $routeParams.id }
+            name: 'manager_ws_prompt_show',
+            params: { id: $routeParams.id }
           };
         }
 
         http.get(route).then(function(response) {
-          $scope.extra  = response.data.extra;
+          $scope.extra = response.data.extra;
           if (response.data.item) {
             $scope.item = response.data.item;
           }
