@@ -200,7 +200,7 @@ class DfpRenderer extends AdvertisementRenderer
             $addToTargetingMap('content_id', $content->id);
 
             if (!empty($content->tags)) {
-                $tags       = $this->fetchTagNamesFromIds($content->tags);
+                $tags       = $this->fetchTagsSlugFromIds($content->tags);
                 $tagsString = implode("', '", array_map('trim', $tags));
                 $addToTargetingMap('tags', $tagsString);
             }

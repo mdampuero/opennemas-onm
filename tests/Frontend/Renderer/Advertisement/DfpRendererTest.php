@@ -136,8 +136,8 @@ class DfpRendererTest extends TestCase
             ->with($content->tags)
             ->willReturn([
                 'items' => [
-                    (object) ['name' => 'tag1'],
-                    (object) ['name' => 'tag2']
+                    (object) ['slug' => 'tag1'],
+                    (object) ['slug' => 'tag2']
                 ]
             ]);
 
@@ -552,8 +552,8 @@ class DfpRendererTest extends TestCase
             ->with($content->tags)
             ->willReturn([
                 'items' => [
-                    (object) ['name' => 'tag1'],
-                    (object) ['name' => 'tag2']
+                    (object) ['slug' => 'tag1'],
+                    (object) ['slug' => 'tag2']
                 ]
             ]);
 
