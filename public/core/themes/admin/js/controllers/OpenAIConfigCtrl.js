@@ -114,7 +114,7 @@
               if (!$scope.flags.http.checking) {
                 $scope.flags.http.saving = true;
               }
-              http.post($scope.routes.checkApiKey, { apiKey })
+              http.post($scope.routes.checkApiKey, { apiKey: apiKey })
                 .then(function() {
                   if (!$scope.flags.http.checking) {
                     $scope.disableFlags('http');

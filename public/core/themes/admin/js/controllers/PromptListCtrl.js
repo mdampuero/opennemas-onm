@@ -44,7 +44,7 @@
          */
         $scope.init = function() {
           $scope.app.columns.selected = _.uniq(
-            $scope.app.columns.selected.concat(['name', 'role', 'mode'])
+            $scope.app.columns.selected.concat([ 'name', 'role', 'mode' ])
           );
 
           oqlEncoder.configure({ placeholder: {
