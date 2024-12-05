@@ -561,10 +561,10 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
             return {
               lastTemplate: $scope.lastTemplate,
               step: 1,
-              AIFieldType,
-              AIFieldTitle,
-              input,
-              locale
+              AIFieldType: AIFieldType,
+              AIFieldTitle: AIFieldTitle,
+              input: input,
+              locale: locale
             };
           },
           success: function() {
