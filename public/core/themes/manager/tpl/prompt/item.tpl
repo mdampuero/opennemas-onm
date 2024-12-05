@@ -75,7 +75,7 @@
           <div class="form-group col-md-12">
             <label class="form-label" for="name">{t}Prompt{/t}</label>
             <div class="controls input-with-icon right">
-              <input class="form-control" id="name" name="name" ng-model="item.name" ng-maxlength="50" required type="text"/>
+              <input class="form-control" id="name" name="name" ng-model="item.name" required type="text"/>
             </div>
           </div>
         </div>

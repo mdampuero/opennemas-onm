@@ -50,7 +50,7 @@
             </ui-select>
           </div>
          <div class="col-md-4 col-sm-6 form-group">
-          <label>{t}Default tono{/t}</label>
+          <label>{t}Default tone{/t}</label>
           <ui-select name="tone" class="form-control" theme="select2" ng-model="item.tone">
             <ui-select-match>
               [% $select.selected.name %]
