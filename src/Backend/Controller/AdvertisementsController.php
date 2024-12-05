@@ -387,6 +387,7 @@ class AdvertisementsController extends Controller
                 'target'     => $formValues->filter('dfp_options_target', '', FILTER_SANITIZE_STRING),
                 'module'     => $formValues->filter('dfp_options_module', '', FILTER_SANITIZE_STRING),
                 'content_id' => $formValues->filter('dfp_options_content_id', '', FILTER_SANITIZE_STRING),
+                'tags' => $formValues->filter('dfp_options_tags', '', FILTER_SANITIZE_STRING),
             ],
             'iadbox_id'        => $formValues->filter('iadbox_id', '', FILTER_SANITIZE_STRING),
             'smart_ad_server'  => [

@@ -613,4 +613,25 @@ class AdvertisementRenderer extends Renderer
             ? $this->getRendererClass(4)->renderInlineHeader($advertisements, $params)
             : '';
     }
+
+    /**
+     * Retrieves the slug of tags by their IDs from the API service.
+     *
+     * This function uses the tag service to fetch a list of tags and extracts the 'slug' field
+     * for each tag. It returns an array of tag slug, filtering out any null values.
+     *
+     * @param array $tagIds An array of tag IDs to fetch the slug for.
+     * @return array An array of tag slug.
+     */
+    protected function fetchTagsSlugFromIds(array $tagIds)
+    {
+        $tagsList = $this->container->get('api.service.tag')
+            ->getListByIds($tagIds)['items'];
+
+        $tagsSlug = array_map(function ($tag) {
+            return isset($tag->slug) ? trim($tag->slug) : '';
+        }, $tagsList);
+
+        return $tagsSlug;
+    }
 }

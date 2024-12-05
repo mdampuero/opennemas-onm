@@ -11,6 +11,9 @@ namespace Tests\Frontend\Renderer\Advertisement;
 
 use PHPUnit\Framework\TestCase;
 use Frontend\Renderer\Advertisement\DfpRenderer;
+use Api\Service\V1\TagService;
+use Common\Model\Entity\Tag;
+use stdClass;
 
 /**
  * Defines test cases for DfpRenderer class.
@@ -50,6 +53,14 @@ class DfpRendererTest extends TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->tagService = $this->getMockBuilder('TagService')
+            ->setMethods([ 'getListByIds' ])
+            ->getMock();
+
+        $this->metadata = $this->getMockBuilder('Metadata' . uniqid())
+            ->setMethods([ 'getId' ])
+            ->getMock();
+
         $this->globals = $this->getMockBuilder('Common\Core\Component\Core\GlobalVariables')
             ->disableOriginalConstructor()
             ->setMethods([ 'getDevice', 'getInstance' ])
@@ -66,7 +77,7 @@ class DfpRendererTest extends TestCase
 
         $this->adRenderer = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
-            ->setMethods([ 'getRendererClass' ])
+            ->setMethods([ 'getRendererClass', 'fetchTagNamesFromIds' ])
             ->getMock();
 
         $this->renderer = new DfpRenderer($this->container);
@@ -80,6 +91,9 @@ class DfpRendererTest extends TestCase
 
             case 'core.globals':
                 return $this->globals;
+
+            case 'api.service.tag':
+                return $this->tagService;
 
             case 'entity_repository':
                 return $this->em;
@@ -97,7 +111,7 @@ class DfpRendererTest extends TestCase
     public function testRenderAmp()
     {
         $ad         = new \Advertisement();
-        $ad->params = [ 'googledfp_unit_id' => 321 ];
+        $ad->params = ['googledfp_unit_id' => 321];
 
         $ad->params['sizes'] = [
             '0' => [
@@ -107,22 +121,45 @@ class DfpRendererTest extends TestCase
             ],
         ];
 
-        $content     = new \stdClass();
-        $content->id = 123;
+        $content       = new \stdClass();
+        $content->id   = 123;
+        $content->tags = [1, 2];
 
         $params = [
             'category'  => 'foo',
             'extension' => 'bar',
-            'content' => $content
+            'content'   => $content
         ];
+
+        $this->tagService->expects($this->any())
+            ->method('getListByIds')
+            ->with($content->tags)
+            ->willReturn([
+                'items' => [
+                    (object) ['slug' => 'tag1'],
+                    (object) ['slug' => 'tag2']
+                ]
+            ]);
 
         $this->ds->expects($this->at(0))->method('get')
             ->with('dfp_options')
             ->willReturn([
                 'target'     => 'cat',
                 'module'     => 'mod',
-                'content_id' => 'id'
+                'content_id' => 'id',
+                'tags'       => 'tags'
             ]);
+
+        $tags = implode("', '", ['tag1', 'tag2']);
+
+        $expectedTargeting = json_encode([
+            'targeting' => [
+                'cat'  => 'foo',
+                'mod'  => 'bar',
+                'id'   => 123,
+                'tags' => $tags
+            ]
+        ]);
 
         $output = '<amp-ad
             data-block-on-consent
@@ -139,7 +176,7 @@ class DfpRendererTest extends TestCase
                 'sizes'     => '',
                 'width'     => 300,
                 'height'    => 300,
-                'targeting' => '{"targeting":{"cat":"foo","mod":"bar","id":123}}'
+                'targeting' => $expectedTargeting
             ])
             ->willReturn($output);
 
@@ -324,13 +361,14 @@ class DfpRendererTest extends TestCase
             ]
         ];
 
-        $content     = new \stdClass();
-        $content->id = 123;
+        $content       = new \stdClass();
+        $content->id   = 123;
+        $content->tags = [ 1 , 2];
 
         $params = [
             'category'  => '',
             'extension' => '',
-            'contentId' => $content->id
+            'content' => $content->id
         ];
 
         $output = '<html>
@@ -498,21 +536,37 @@ class DfpRendererTest extends TestCase
             ->willReturn([
                 'target'     => 'cat',
                 'module'     => 'mod',
-                'content_id' => 'id'
+                'content_id' => 'id',
+                'tags'       => 'tags'
             ]);
 
         $method = new \ReflectionMethod($this->renderer, 'getTargeting');
         $method->setAccessible(true);
 
+        $content = new stdClass();
+        $content->id = 123;
+        $content->tags = [1, 2];
+
+        $this->tagService->expects($this->any())
+            ->method('getListByIds')
+            ->with($content->tags)
+            ->willReturn([
+                'items' => [
+                    (object) ['slug' => 'tag1'],
+                    (object) ['slug' => 'tag2']
+                ]
+            ]);
+
         $output = [
-            'cat' => 'foo',
-            'mod' => 'bar',
-            'id'  => 'baz',
+            'cat'  => 'foo',
+            'mod'  => 'bar',
+            'id'   => 123,
+            'tags' => "tag1', 'tag2"
         ];
 
         $this->assertEquals(
             $output,
-            $method->invokeArgs($this->renderer, [ 'foo', 'bar', 'baz' ])
+            $method->invokeArgs($this->renderer, ['foo', 'bar', $content])
         );
 
         $this->ds->expects($this->any())->method('get')
@@ -521,7 +575,7 @@ class DfpRendererTest extends TestCase
 
         $this->assertEquals(
             '',
-            $method->invokeArgs($this->renderer, [ 'foo', 'bar', 'baz' ])
+            $method->invokeArgs($this->renderer, ['foo', 'bar', $content])
         );
     }
 

@@ -30,7 +30,7 @@ class DfpRenderer extends AdvertisementRenderer
         $targeting = $this->getTargeting(
             $params['category'],
             $params['extension'],
-            $params['content']->id
+            $params['content']
         );
 
         $content = $this->tpl->fetch('advertisement/helpers/amp/dfp.tpl', [
@@ -111,7 +111,7 @@ class DfpRenderer extends AdvertisementRenderer
             'targeting'  => $this->getTargeting(
                 $params['category'],
                 $params['extension'],
-                $params['contentId']
+                $params['content']
             )
         ];
 
@@ -146,7 +146,7 @@ class DfpRenderer extends AdvertisementRenderer
             'targeting'  => $this->getTargeting(
                 $params['category'],
                 $params['extension'],
-                $params['content']->id
+                $params['content']
             ),
         ]);
     }
@@ -176,7 +176,7 @@ class DfpRenderer extends AdvertisementRenderer
      *
      * @return string The targeting-related JS code.
      */
-    protected function getTargeting($category, $module, $contentId)
+    protected function getTargeting($category, $module, $content)
     {
         $options = $this->ds->get('dfp_options');
 
@@ -184,22 +184,26 @@ class DfpRenderer extends AdvertisementRenderer
             return '';
         }
 
-        $module = $module === 'frontpages' ? 'home' : $module;
-
+        $module       = $module === 'frontpages' ? 'home' : $module;
         $targetingMap = [];
-        if (array_key_exists('target', $options) && !empty($options['target'])) {
-            $targetingMap[$options['target']] = $category;
-        }
 
-        if (array_key_exists('module', $options) && !empty($options['module'])) {
-            $targetingMap[$options['module']] = $module;
-        }
+        $addToTargetingMap = function ($key, $value) use ($options, &$targetingMap) {
+            if (!empty($options[$key])) {
+                $targetingMap[$options[$key]] = $value;
+            }
+        };
 
-        if (array_key_exists('content_id', $options)
-            && !empty($options['content_id'])
-            && !empty($contentId)
-        ) {
-            $targetingMap[$options['content_id']] = $contentId;
+        $addToTargetingMap('target', $category);
+        $addToTargetingMap('module', $module);
+
+        if (!empty($content)) {
+            $addToTargetingMap('content_id', $content->id);
+
+            if (!empty($content->tags)) {
+                $tags       = $this->fetchTagsSlugFromIds($content->tags);
+                $tagsString = implode("', '", array_map('trim', $tags));
+                $addToTargetingMap('tags', $tagsString);
+            }
         }
 
         return $targetingMap;
