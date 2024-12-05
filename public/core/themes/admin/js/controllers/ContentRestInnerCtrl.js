@@ -547,7 +547,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       return false;
     };
 
-    $scope.openIAModal = function(field, AIFieldType, AIFieldTitle = '') {
+    $scope.openIAModal = function(field, AIFieldType, AIFieldTitle) {
       const input = field in $scope ? $scope[field] : $scope.item[field];
       const locale = $scope.config.locale && $scope.config.locale.selected ? $scope.config.locale.selected : 'default';
 
@@ -562,7 +562,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
               lastTemplate: $scope.lastTemplate,
               step: 1,
               AIFieldType: AIFieldType,
-              AIFieldTitle: AIFieldTitle,
+              AIFieldTitle: AIFieldTitle || '',
               input: input,
               locale: locale
             };
