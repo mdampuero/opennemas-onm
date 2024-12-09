@@ -187,6 +187,16 @@ class Processor
     }
 
     /**
+     * Returns the quality of the image.
+     *
+     * @return integer Returns the quality the image.
+     */
+    public function getQuality() : int
+    {
+        return $this->image->getImagick()->getImageCompressionQuality();
+    }
+
+    /**
      * Initializes and opens the image to process with the manager.
      *
      * @param string $path The path to the image.
@@ -211,18 +221,25 @@ class Processor
 
     /**
      * Configures the optimization to apply when saving an image. If no
-     * optimization provided, the default optimization will be applied.
+     * optimization is provided, the default optimization will be applied.
      *
-     * @param array $optimization The optimization to apply.
+     * @param array $optimization Optimization settings to apply.
      *
-     * @return Processor The current Processor.
+     * @return self Fluent interface for chaining.
      */
-    public function optimize($optimization = [])
+    public function optimize(array $optimization = []): self
     {
         $this->optimization = $this->defaults;
 
-        if (!empty($optimization) && is_array($optimization)) {
-            $this->optimization = $optimization;
+        if ($this->getFormat() === 'gif') {
+            return $this;
+        }
+
+        if (!empty($optimization) && isset($optimization['quality'])) {
+            $currentQuality = $this->getQuality();
+            if ($optimization['quality'] >= $currentQuality) {
+                $this->optimization = $optimization;
+            }
         }
 
         return $this;

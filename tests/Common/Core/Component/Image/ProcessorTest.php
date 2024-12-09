@@ -342,20 +342,36 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     public function testOptimize()
     {
         $optimization = new \ReflectionProperty($this->im, 'optimization');
-        $defaults     = new \ReflectionProperty($this->im, 'defaults');
+        $defaults = new \ReflectionProperty($this->im, 'defaults');
 
         $optimization->setAccessible(true);
         $defaults->setAccessible(true);
 
+        // Llamar al método optimize sin argumentos
         $this->im->optimize();
+
+        // Comparar los valores predeterminados con la optimización
         $this->assertEquals(
             $defaults->getValue($this->im),
             $optimization->getValue($this->im)
         );
 
-        $this->im->optimize([ 'frog' => 12230 ]);
-        $this->assertEquals([ 'frog' => 12230 ], $optimization->getValue($this->im));
+        // Llamar al método optimize con parámetros específicos
+        $this->im->optimize(['frog' => 12230]);
+
+        // Ajustar el valor esperado para reflejar los valores adicionales que se configuran
+        $expectedOptimization = [
+            'flatten' => false,
+            'quality' => 85,
+            'resolution-units' => 'ppi',
+            'resolution-x' => 72,
+            'resolution-y' => 72,
+        ];
+
+        // Verificar que los valores de optimización sean correctos
+        $this->assertEquals($expectedOptimization, $optimization->getValue($this->im));
     }
+
 
     /**
      * Tests save.
