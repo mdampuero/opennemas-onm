@@ -377,7 +377,7 @@
   </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('subdirectory')" title="{t}Subdirectory{/t}">
     <span class="label" ng-if="item.subdirectory.length > 0">
-      <a href="http://[% item.domains[item.main_domain - 1] %]/[% item.subdirectory %]" target="_blank">
+      <a href="http://[% item.domains[item.main_domain - 1] %][% item.subdirectory %]" target="_blank">
         [% item.subdirectory %]
       </a>
     </span>
