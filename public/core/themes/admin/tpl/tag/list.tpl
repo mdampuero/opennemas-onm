@@ -74,7 +74,7 @@
     </ui-select>
   </li>
   <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="private = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Private{/t}', value: 1} ]">
-    <ui-select name="private" theme="select2" ng-model="criteria.novisible">
+    <ui-select name="private" theme="select2" ng-model="criteria.private">
       <ui-select-match>
         <strong>{t}Visibility{/t}:</strong> [% $select.selected.name %]
       </ui-select-match>
