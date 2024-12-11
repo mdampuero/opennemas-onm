@@ -483,11 +483,11 @@ class OpenAIHelper
 
     public function getTones()
     {
-        $tones = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('openai_tones', []);
+        $sm = $this->container->get('orm.manager')->getDataSet('Settings', 'manager');
+        $si = $this->container->get('orm.manager')->getDataSet('Settings', 'instance');
+        $rm = $this->addFlagReadOnly($sm->get('openai_tones', []));
 
-        return $tones;
+        return $this->sortByName(array_merge($rm, $si->get('openai_tones', [])));
     }
 
     public function setTones($tones = [])
@@ -517,11 +517,39 @@ class OpenAIHelper
 
     public function getRoles()
     {
-        $roles = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('openai_roles', []);
+        $sm = $this->container->get('orm.manager')->getDataSet('Settings', 'manager');
+        $si = $this->container->get('orm.manager')->getDataSet('Settings', 'instance');
+        $rm = $this->addFlagReadOnly($sm->get('openai_roles', []));
 
-        return $roles;
+        return $this->sortByName(array_merge($rm, $si->get('openai_roles', [])));
+    }
+
+    protected function sortByName($array)
+    {
+        usort($array, function ($a, $b) {
+            $nameA = trim(strtolower($a['name'] ?? ''));
+            $nameB = trim(strtolower($b['name'] ?? ''));
+            return strcmp($nameA, $nameB);
+        });
+        return $array;
+    }
+
+    protected function addFlagReadOnly($array)
+    {
+        return array_map(function ($item) {
+            $item['readOnly'] = true;
+            return $item;
+        }, $array);
+    }
+
+    public function deleteFlagReadOnly($array)
+    {
+        foreach ($array as $key => $item) {
+            if ($item['readOnly'] ?? false && $item['readOnly'] === true) {
+                unset($array[$key]);
+            }
+        }
+        return $array;
     }
 
     public function setRoles($roles = [])
@@ -552,6 +580,7 @@ class OpenAIHelper
             'openai_config'       => $this->getConfig()
         ];
     }
+
 
     /**
      * Get the value of service

@@ -35,8 +35,6 @@ class OpenAIController extends BackendController
         'list'   => 'OPENAI_ADMIN',
     ];
 
-
-
     /**
      * Configures the openAI notifications module
      */

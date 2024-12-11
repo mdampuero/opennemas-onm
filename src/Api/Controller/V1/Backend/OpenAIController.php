@@ -63,9 +63,8 @@ class OpenAIController extends ApiController
             ->getDataSet('Settings', 'instance')
             ->get('openai_credentials', []);
 
-        $openai_roles             = $this->get($this->helper)->getRoles();
-        $openai_tones             = $this->get($this->helper)->getTones();
-        $openai_instructions      = $this->get($this->helper)->getInstructions();
+        $openai_roles        = $this->get($this->helper)->getRoles();
+        $openai_tones        = $this->get($this->helper)->getTones();
 
         if (empty($settings)) {
             //TODO: Get config from manager
@@ -83,8 +82,7 @@ class OpenAIController extends ApiController
             'openai_credentials'      => $credentials,
             'openai_config'           => $settings,
             'openai_roles'            => $openai_roles,
-            'openai_tones'            => $openai_tones,
-            'openai_instructions'     => $openai_instructions
+            'openai_tones'            => $openai_tones
         ]);
     }
 
@@ -101,6 +99,9 @@ class OpenAIController extends ApiController
 
         $msg    = $this->get('core.messenger');
         $config = $request->request->all();
+
+        $config['openai_roles'] = $this->get($this->helper)->deleteFlagReadOnly($config['openai_roles']);
+        $config['openai_tones'] = $this->get($this->helper)->deleteFlagReadOnly($config['openai_tones']);
 
         try {
             $this->get('orm.manager')->getDataSet('Settings')->set($config);

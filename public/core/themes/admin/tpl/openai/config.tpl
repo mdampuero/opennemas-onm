@@ -46,24 +46,20 @@
       <div class="grid simple onm-shadow">
         <div class="grid-body ng-cloak">
           <div class="row">
-            <div class="col-xs-12">
-              <div class="row">
-                <div class="col-xs-6 col-md-3 ">
-                  <h4>{t}OpenAI service type{/t}</h4>
-                  <div class="controls">
-                    <select class="form-control-lg" ng-model="settings.openai_service">
-                      <option value="opennemas" selected>{t}Opennemas{/t}</option>
-                      <option value="custom">{t}Custom{/t}</option>
-                    </select>
-                  </div>
-                </div>
+            <div class="col-xs-6 col-md-3 ">
+              <h4>{t}OpenAI service type{/t}</h4>
+              <div class="controls">
+                <select class="form-control-lg" ng-model="settings.openai_service">
+                  <option value="opennemas" selected>{t}Opennemas{/t}</option>
+                  <option value="custom">{t}Custom{/t}</option>
+                </select>
               </div>
-              <div class="row m-t-50" ng-if="settings.openai_service === 'custom'">
-                <div class="controls col-xs-12 col-md-4 m-b-10">
-                  <label>{t}OpenAI Secret Key{/t}</label>
-                  <input class="form-control" ng-model="settings.openai_credentials.apikey" type="text">
-                </div>
-              </div>
+            </div>
+          </div>
+          <div class="row m-t-20" ng-if="settings.openai_service === 'custom'">
+            <div class="controls col-xs-12 col-md-4 m-b-10">
+              <label>{t}OpenAI Secret Key{/t}</label>
+              <input class="form-control" ng-model="settings.openai_credentials.apikey" type="text">
             </div>
           </div>
         </div>
@@ -75,13 +71,13 @@
             <div class="controls">
               <div class="row" ng-repeat="role in settings.openai_roles track by $index">
                 <div class="col-lg-4 col-md-3">
-                  <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required>
+                  <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required ng-disabled="role.readOnly">
                 </div>
                 <div class="col-lg-7 col-md-7">
-                  <input class="form-control" ng-model="role.prompt" placeholder="{t}Prompt{/t}" type="text" required>
+                  <input class="form-control" ng-model="role.prompt" placeholder="{t}Prompt{/t}" type="text" required ng-disabled="role.readOnly">
                 </div>
                 <div class="col-lg-1 col-md-2 m-b-15">
-                  <button class="btn btn-block btn-danger ng-cloak" ng-click="removeRole($index)" type="button">
+                  <button class="btn btn-block btn-danger ng-cloak" ng-click="removeRole($index)" type="button" ng-disabled="role.readOnly">
                     <i class="fa fa-trash-o"></i>
                   </button>
                 </div>
@@ -105,13 +101,13 @@
             <div class="controls">
               <div class="row" ng-repeat="role in settings.openai_tones track by $index">
                 <div class="col-lg-4 col-md-3">
-                  <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required>
+                  <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required ng-disabled="role.readOnly">
                 </div>
                 <div class="col-lg-7 col-md-7">
-                  <input class="form-control" ng-model="role.description" placeholder="{t}Description{/t}" type="text" required>
+                  <input class="form-control" ng-model="role.description" placeholder="{t}Description{/t}" type="text" required ng-disabled="role.readOnly">
                 </div>
                 <div class="col-lg-1 col-md-2 m-b-15">
-                  <button class="btn btn-block btn-danger ng-cloak" ng-click="removeTone($index)" type="button">
+                  <button class="btn btn-block btn-danger ng-cloak" ng-click="removeTone($index)" type="button" ng-disabled="role.readOnly">
                     <i class="fa fa-trash-o"></i>
                   </button>
                 </div>
@@ -121,43 +117,6 @@
           <div class="row">
             <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
               <button class="btn btn-block btn-default" ng-click="addTone()" type="button">
-                <i class="fa fa-plus"></i>
-                {t}Add{/t}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="grid simple onm-shadow">
-        <div class="grid-body ng-cloak">
-          <h4>{t}Instructions{/t}</h4>
-          <div class="form-group">
-            <div class="controls">
-              <div class="row" ng-repeat="role in settings.openai_instructions track by $index">
-                <div class="col-lg-2 col-md-3 m-b-15">
-                  <ui-select name="mode" class="form-control" theme="select2" ng-model="role.type" search-enabled="false" required ng-init="options = [ { name: '{t}Both{/t}', key: 'Both'},{ name: '{t}Create{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'} ]">
-                    <ui-select-match>
-                      [% $select.selected.name %]
-                    </ui-select-match>
-                    <ui-select-choices repeat="item.key as item in options | filter: $select.search">
-                      <div ng-bind-html="item.name | highlight: $select.search"></div>
-                    </ui-select-choices>
-                  </ui-select>
-                </div>
-                <div class="col-lg-9 col-md-7">
-                  <input class="form-control" ng-model="role.value" placeholder="{t}Instruction{/t}" type="text" required>
-                </div>
-                <div class="col-lg-1 col-md-2 m-b-15">
-                  <button class="btn btn-block btn-danger ng-cloak" ng-click="removeInstruction($index)" type="button">
-                    <i class="fa fa-trash-o"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-              <button class="btn btn-block btn-default" ng-click="addInstruction()" type="button">
                 <i class="fa fa-plus"></i>
                 {t}Add{/t}
               </button>
