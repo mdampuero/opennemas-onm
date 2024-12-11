@@ -44,6 +44,11 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
             ->getMock();
 
+
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'hasMultilanguage' ])
+            ->getMock();
+
         $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
             ->disableOriginalConstructor()
             ->setMethods(['filter', 'get', 'set'])
@@ -106,6 +111,9 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
             case 'data.manager.filter':
                 return $this->fm;
+
+            case 'core.instance':
+                return $this->instance;
         }
 
         return null;
@@ -142,6 +150,9 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemBySlugAndContentType()
     {
+        $this->instance->expects($this->once())->method('hasMultilanguage')
+            ->willReturn(true);
+
         $content = new Content([
             'pk_content' => 1,
             'fk_content_type' => 'opinion'
