@@ -72,10 +72,6 @@ class Processor
      */
     public function apply($method, $params)
     {
-        if ($this->getFormat() === 'gif') {
-            return $this;
-        }
-
         if (!method_exists($this, $method)) {
             throw new \InvalidArgumentException('Invalid method');
         }
@@ -197,6 +193,34 @@ class Processor
     }
 
     /**
+     * Retrieves the number of animation iterations for the image.
+     *
+     * This method returns the number of times an image animation
+     * (such as an animated GIF) should repeat. A value of 0 means
+     * the animation will loop indefinitely.
+     *
+     * @return int Number of animation iterations.
+     */
+    public function getInterations() : int
+    {
+        return $this->image->getImagick()->getImageIterations();
+    }
+
+    /**
+     * Retrieves the delay time between animation frames.
+     *
+     * This method returns the delay in centiseconds between each frame
+     * of an animated image (e.g., an animated GIF).
+     *
+     * @return int Delay time in centiseconds between animation frames.
+     */
+    public function getDelay() : int
+    {
+        return $this->image->getImagick()->getImageDelay();
+    }
+
+
+    /**
      * Initializes and opens the image to process with the manager.
      *
      * @param string $path The path to the image.
@@ -231,15 +255,20 @@ class Processor
     {
         $this->optimization = $this->defaults;
 
-        if ($this->getFormat() === 'gif') {
-            return $this;
-        }
-
-        if (!empty($optimization) && isset($optimization['quality'])) {
+        if ($this->getFormat() === 'jpg' && !empty($optimization['quality'])) {
             $currentQuality = $this->getQuality();
             if ($optimization['quality'] >= $currentQuality) {
                 $this->optimization = $optimization;
             }
+        }
+
+        if ($this->getFormat() === 'gif') {
+            $this->optimization = [
+                'flatten' => false,
+                'animated' => true,
+                'animated.loops' => $this->getInterations(),
+                'animated.delay' => $this->getDelay()
+            ];
         }
 
         return $this;

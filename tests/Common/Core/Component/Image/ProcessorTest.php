@@ -74,16 +74,13 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setConstructorArgs([])
-            ->setMethods([ 'glorp', 'getFormat' ])
+            ->setMethods(['glorp'])
             ->getMock();
 
-        $this->im->expects($this->once())->method('getFormat')
-            ->willReturn('foo');
-
         $this->im->expects($this->once())->method('glorp')
-            ->with([ 'flob', 22474 ]);
+            ->with(['flob', 22474]);
 
-        $this->im->apply('glorp', [ 'flob', 22474 ]);
+        $this->im->apply('glorp', ['flob', 22474]);
     }
 
     /**
@@ -93,13 +90,13 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setConstructorArgs([])
-            ->setMethods([ 'getFormat' ])
+            ->setMethods(['glorp'])
             ->getMock();
 
-        $this->im->expects($this->once())->method('getFormat')
-            ->willReturn('gif');
+        $this->im->expects($this->once())->method('glorp')
+            ->with(['flob', 22474]);
 
-        $this->im->apply('glorp', [ 'flob', 22474 ]);
+        $this->im->apply('glorp', ['flob', 22474]);
     }
 
     /**
