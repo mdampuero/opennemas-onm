@@ -185,7 +185,7 @@ class TagController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        if (empty($item) || $item[0]->novisible) {
+        if (empty($item) || $item[0]->private) {
             throw new ResourceNotFoundException();
         }
 

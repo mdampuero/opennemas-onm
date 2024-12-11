@@ -274,8 +274,8 @@ class TagService extends OrmService
         if ($internal) {
             $filteredItems = [];
             foreach ($items as $item) {
-                $novisible = $item->getStored()['novisible'] ?? null;
-                if ($novisible !== 1) {
+                $private = $item->getStored()['private'] ?? null;
+                if ($private !== 1) {
                     $filteredItems[] = $item;
                 }
             }

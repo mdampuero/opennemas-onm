@@ -33,8 +33,8 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-novisible" checklist-model="app.columns.selected" checklist-value="'novisible'" type="checkbox">
-    <label for="checkbox-novisible">
+    <input id="checkbox-private" checklist-model="app.columns.selected" checklist-value="'private'" type="checkbox">
+    <label for="checkbox-private">
      {t}Visibility{/t}
     </label>
   </div>
@@ -56,7 +56,7 @@
   <th class="text-center v-align-middle" class="text-center" ng-if="isColumnEnabled('contents')" width="120">
     {t}Contents{/t}
   </th>
-  <th class="text-center v-align-middle" class="text-center" ng-if="isColumnEnabled('novisible')" width="120">
+  <th class="text-center v-align-middle" class="text-center" ng-if="isColumnEnabled('private')" width="120">
     {t}Visibility{/t}
   </th>
 {/block}
@@ -103,9 +103,9 @@
       [% data.extra.stats[getItemId(item)] ? data.extra.stats[getItemId(item)] : 0 %]
     </span>
   </td>
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('novisible')">
-    <button class="btn btn-white" ng-click="confirm('novisible', item.novisible != 1 ? 1 : null, item)" type="button">
-      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.privateLoading, 'fa-eye-slash text-error' : !item.privateLoading && item.novisible == 1, 'fa-eye text-success': !item.privateLoading && item.novisible == null }"></i>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('private')">
+    <button class="btn btn-white" ng-click="confirm('private', item.private != 1 ? 1 : null, item)" type="button">
+      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.privateLoading, 'fa-eye-slash text-error' : !item.privateLoading && item.private == 1, 'fa-eye text-success': !item.privateLoading && item.private == null }"></i>
     </button>
   </td>
 {/block}
