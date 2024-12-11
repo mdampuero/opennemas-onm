@@ -14,3 +14,8 @@ manager_prompt_create:
     path: /prompt/create
     options:
         expose: true
+
+manager_prompt_config:
+    path: /prompt/config
+    options:
+        expose: true

@@ -16,6 +16,11 @@
             controller: 'PromptCtrl',
             reloadOnSearch: false
           })
+          .when(routingProvider.ngGenerateShort('manager_prompt_config'), {
+            templateUrl: '/managerws/template/prompt:config.' + appVersion + '.tpl',
+            controller: 'PromptConfigCtrl',
+            reloadOnSearch: false
+          })
           .when(routingProvider.ngGenerateShort('manager_prompt_show', { id: ':id' }), {
             templateUrl: '/managerws/template/prompt:item.' + appVersion + '.tpl',
             controller: 'PromptCtrl',

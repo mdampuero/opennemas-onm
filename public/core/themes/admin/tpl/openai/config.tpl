@@ -108,7 +108,7 @@
                   <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required>
                 </div>
                 <div class="col-lg-7 col-md-7">
-                  <input class="form-control" ng-model="role.description" placeholder="{t}Prompt{/t}" type="text" required>
+                  <input class="form-control" ng-model="role.description" placeholder="{t}Description{/t}" type="text" required>
                 </div>
                 <div class="col-lg-1 col-md-2 m-b-15">
                   <button class="btn btn-block btn-danger ng-cloak" ng-click="removeTone($index)" type="button">

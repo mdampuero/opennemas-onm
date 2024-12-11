@@ -13,6 +13,12 @@
       </ul>
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
+          <li class="quicklinks">
+            <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_prompt_config') %]" class="admin_add" title="{t}Config prompt module{/t}">
+              <span class="fa fa-cog fa-lg"></span>
+            </a>
+          </li>
+          <li class="quicklinks"><span class="h-seperate"></span></li>
           <li class="quicklinks" ng-if="security.hasPermission('PROMPT_CREATE')">
             <a class="btn btn-success text-uppercase text-white" ng-href="[% routing.ngGenerate('manager_prompt_create') %]">
               <i class="fa fa-plus m-r-5"></i>
@@ -98,6 +104,24 @@
             {t}Name{/t}
           </label>
         </div>
+      </div>
+      <div class="col-md-3">
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-mode" checklist-model="columns.selected" checklist-value="'mode'" type="checkbox">
+          <label for="checkbox-mode">
+            {t}Mode{/t}
+          </label>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="checkbox check-default p-b-5">
+          <input id="checkbox-field" checklist-model="columns.selected" checklist-value="'field'" type="checkbox">
+          <label for="checkbox-field">
+            {t}Field{/t}
+          </label>
+        </div>
+      </div>
+      <div class="col-md-3">
         <div class="checkbox check-default p-b-5">
           <input id="checkbox-email" checklist-model="columns.selected" checklist-value="'instances'" type="checkbox">
           <label for="checkbox-email">
@@ -128,6 +152,12 @@
                 {t}Name{/t}
                 <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
               </th>
+              <th ng-show="isColumnEnabled('mode')">
+                {t}Mode{/t}
+              </th>
+              <th ng-show="isColumnEnabled('field')">
+                {t}Field{/t}
+              </th>
               <th class="text-center" ng-show="isColumnEnabled('instances')" width="300">
                 {t}Instances{/t}
               </th>
@@ -151,6 +181,12 @@
                     <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
                   </button>
                 </div>
+              </td>
+              <td ng-show="isColumnEnabled('mode')">
+                [% item.mode %]
+              </td>
+              <td ng-show="isColumnEnabled('field')">
+                [% item.field %]
               </td>
               <td class="text-left" ng-show="isColumnEnabled('instances')">
                 <div class="inline m-r-5 m-t-5 ng-scope" ng-repeat="instance in item.instances">

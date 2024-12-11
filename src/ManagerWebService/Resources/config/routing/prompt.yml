@@ -12,6 +12,20 @@ manager_ws_prompt_new:
     options:
         expose: true
 
+manager_ws_prompt_config:
+    path:     /prompt/config
+    defaults: { _controller: ManagerWebServiceBundle:Prompt:config }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_prompt_config_save:
+    path:     /prompt/configSave
+    defaults: { _controller: ManagerWebServiceBundle:Prompt:configSave }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
 manager_ws_prompt_show:
     path:     /prompt/{id}
     defaults: { _controller: ManagerWebServiceBundle:Prompt:show }

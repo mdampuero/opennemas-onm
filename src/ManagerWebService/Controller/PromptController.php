@@ -219,7 +219,13 @@ class PromptController extends Controller
      */
     private function getExtraData()
     {
-        return [];
+        $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
+        $settingOpenai  = [
+            'openai_roles'        => $serviceManager->get('openai_roles') ?? [],
+            'openai_tones'        => $serviceManager->get('openai_tones') ?? [],
+            'openai_instructions' => $serviceManager->get('openai_instructions') ?? []
+        ];
+        return $settingOpenai;
     }
 
     /**
@@ -273,5 +279,48 @@ class PromptController extends Controller
         }
 
         return new JsonResponse([ 'target' => $target ]);
+    }
+
+    /**
+     * Get prompt Setting
+     *
+     * @return JsonResponse The response object.
+     */
+    public function configAction()
+    {
+        $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
+        $settingOpenai  = [
+            'openai_roles'        => $serviceManager->get('openai_roles') ?? [],
+            'openai_tones'        => $serviceManager->get('openai_tones') ?? [],
+            'openai_instructions' => $serviceManager->get('openai_instructions') ?? []
+        ];
+
+        $response = new Response();
+        $response->setContent(json_encode($settingOpenai));
+
+        return $response;
+    }
+
+    /**
+     * Save prompt settings
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     */
+    public function configSaveAction(Request $request)
+    {
+        $request = $request->request->all();
+
+        $msg = $this->get('core.messenger');
+
+        $this->get('orm.manager')
+            ->getDataSet('Settings', 'manager')
+            ->set($request);
+
+        $msg->add(_('Prompt saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 }
