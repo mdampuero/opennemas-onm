@@ -93,23 +93,6 @@ class ContentService extends OrmService
     }
 
     /**
-     * Returns a content basing on a slug.
-     *
-     * @param string $slug The category slug.
-     *
-     * @return Content The content.
-     */
-    public function getItemBySlug($slug)
-    {
-        $oql = sprintf(
-            'slug regexp "(.+\"|^)%s(\".+|$)" and in_litter=0 and content_status=1',
-            $slug
-        );
-
-        return $this->getItemBy($oql);
-    }
-
-    /**
      * Returns a content basing on a slug and content type.
      *
      * @param string $slug        The category slug.

@@ -140,22 +140,6 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests emptyItem when the item was not found.
      */
-    public function testGetItemBySlug()
-    {
-        $content = new Content([
-            'pk_content' => 1,
-        ]);
-
-        $this->service->expects($this->once())->method('getItemBy')
-            ->with('slug regexp "(.+\"|^)content_slug(\".+|$)" and in_litter=0 and content_status=1')
-            ->willReturn($content);
-
-        $this->assertEquals($this->service->getItemBySlug('content_slug'), $content);
-    }
-
-    /**
-     * Tests emptyItem when the item was not found.
-     */
     public function testGetItemBySlugAndContentType()
     {
         $content = new Content([
