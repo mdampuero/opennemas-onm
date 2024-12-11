@@ -89,7 +89,7 @@ class CategoryService extends OrmService
             $oql = sprintf('name regexp "(.+\"|^)%s(\".+|$)"', $slug);
         } else {
             $oql = sprintf(
-                'slug = "%s"',
+                'name = "%s"',
                 $slug
             );
         }
