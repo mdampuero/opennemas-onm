@@ -66,7 +66,7 @@ function smarty_function_renderTags($params, &$smarty)
 
         $url = $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url);
 
-        if (!$tag->novisible) {
+        if (!$tag->private) {
             $output .= sprintf(
                 '<a href="%s" class="tag-item">%s</a>%s',
                 $url,
