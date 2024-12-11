@@ -30,6 +30,10 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'dispatch' ])
             ->getMock();
 
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'hasMultilanguage' ])
+            ->getMock();
+
         $this->em = $this->getMockBuilder('EntityManager' . uniqid())
             ->setMethods([ 'getRepository' ])->getMock();
 
@@ -58,6 +62,9 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
 
             case 'orm.manager':
                 return $this->em;
+
+            case 'core.instance':
+                return $this->instance;
         }
 
         return null;
@@ -171,6 +178,9 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemBySlug()
     {
+        $this->instance->expects($this->once())->method('hasMultilanguage')
+            ->willReturn(true);
+
         $this->service->expects($this->once())->method('getItemBy')
             ->with('name regexp "(.+\"|^)flob(\".+|$)"')
             ->willReturn(new Category([ 'name' => 'flob' ]));

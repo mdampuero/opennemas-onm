@@ -44,7 +44,6 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
             ->getMock();
 
-
         $this->instance = $this->getMockBuilder('Instance')
             ->setMethods([ 'hasMultilanguage' ])
             ->getMock();

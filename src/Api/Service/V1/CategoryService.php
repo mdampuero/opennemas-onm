@@ -83,7 +83,16 @@ class CategoryService extends OrmService
      */
     public function getItemBySlug($slug)
     {
-        $oql = sprintf('name regexp "(.+\"|^)%s(\".+|$)"', $slug);
+        $multilanguage = $this->container->get('core.instance')->hasMultilanguage();
+
+        if ($multilanguage) {
+            $oql = sprintf('name regexp "(.+\"|^)%s(\".+|$)"', $slug);
+        } else {
+            $oql = sprintf(
+                'slug = "%s"',
+                $slug
+            );
+        }
 
         return $this->getItemBy($oql);
     }
