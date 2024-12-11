@@ -35,7 +35,7 @@
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-novisible" checklist-model="app.columns.selected" checklist-value="'novisible'" type="checkbox">
     <label for="checkbox-novisible">
-     {t}Internal use{/t}
+     {t}Visibility{/t}
     </label>
   </div>
 {/block}
@@ -57,7 +57,7 @@
     {t}Contents{/t}
   </th>
   <th class="text-center v-align-middle" class="text-center" ng-if="isColumnEnabled('novisible')" width="120">
-    {t}Internal use{/t}
+    {t}Visibility{/t}
   </th>
 {/block}
 
@@ -105,7 +105,7 @@
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('novisible')">
     <button class="btn btn-white" ng-click="confirm('novisible', item.novisible != 1 ? 1 : null, item)" type="button">
-      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.novisibleLoading, 'fa-check text-success' : !item.novisibleLoading && item.novisible == '1', 'fa-times text-error': !item.novisibleLoading && item.novisible == null }"></i>
+      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.privateLoading, 'fa-eye-slash text-error' : !item.privateLoading && item.novisible == 1, 'fa-eye text-success': !item.privateLoading && item.novisible == null }"></i>
     </button>
   </td>
 {/block}
