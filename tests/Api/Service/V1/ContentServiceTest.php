@@ -147,7 +147,26 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests emptyItem when the item was not found.
      */
-    public function testGetItemBySlugAndContentType()
+    public function testGetItemBySlugAndContentTypeWithoutMultilanguage()
+    {
+        $this->instance->expects($this->once())->method('hasMultilanguage')
+            ->willReturn(false);
+
+        $content = new Content([
+            'pk_content' => 1,
+            'fk_content_type' => 'opinion'
+        ]);
+
+        $this->service->expects($this->once())->method('getItemBy')
+            ->with(
+                'slug = "content_slug" and fk_content_type=2 and in_litter=0 and content_status=1'
+            )
+            ->willReturn($content);
+
+        $this->assertEquals($this->service->getItemBySlugAndContentType('content_slug', 2), $content);
+    }
+
+    public function testGetItemBySlugAndContentTypeWithMultilanguage()
     {
         $this->instance->expects($this->once())->method('hasMultilanguage')
             ->willReturn(true);

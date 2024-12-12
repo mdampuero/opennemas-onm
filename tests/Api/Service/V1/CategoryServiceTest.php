@@ -176,7 +176,24 @@ class CategoryServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests getItemBySlug.
      */
-    public function testGetItemBySlug()
+    public function testGetItemBySlugWithoutMultilanguage()
+    {
+        $this->instance->expects($this->once())->method('hasMultilanguage')
+            ->willReturn(false);
+
+        $this->service->expects($this->once())->method('getItemBy')
+            ->with('name = "flob"')
+            ->willReturn(new Category([ 'name' => 'flob' ]));
+
+        $item = $this->service->getItemBySlug('flob');
+
+        $this->assertEquals('flob', $item->name);
+    }
+
+    /**
+     * Tests getItemBySlug.
+     */
+    public function testGetItemBySlugWithMultilanguage()
     {
         $this->instance->expects($this->once())->method('hasMultilanguage')
             ->willReturn(true);
