@@ -63,9 +63,6 @@ class OpenAIController extends ApiController
             ->getDataSet('Settings', 'instance')
             ->get('openai_credentials', []);
 
-        $openai_roles        = $this->get($this->helper)->getRoles();
-        $openai_tones        = $this->get($this->helper)->getTones();
-
         if (empty($settings)) {
             //TODO: Get config from manager
             $settings = $this->get($this->helper)->getDafaultParams();
@@ -81,8 +78,9 @@ class OpenAIController extends ApiController
             'openai_service'          => $serviceName,
             'openai_credentials'      => $credentials,
             'openai_config'           => $settings,
-            'openai_roles'            => $openai_roles,
-            'openai_tones'            => $openai_tones
+            'openai_roles'            => $this->get($this->helper)->getRoles(),
+            'openai_tones'            => $this->get($this->helper)->getTones(),
+            'openai_models'           => $this->get($this->helper)->getModels(),
         ]);
     }
 

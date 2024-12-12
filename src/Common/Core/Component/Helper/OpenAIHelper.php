@@ -3,6 +3,7 @@
 namespace Common\Core\Component\Helper;
 
 use DateTime;
+use Exception;
 use GuzzleHttp\Client;
 use SebastianBergmann\Environment\Console;
 
@@ -215,12 +216,6 @@ class OpenAIHelper
     {
         $data = array_merge($this->getConfig(), $params);
 
-        if (empty($this->openaiApiKey)) {
-            return [
-                'error' => 'API key is missing'
-            ];
-        }
-
         if ($messages["locale"] ?? false) {
             $this->addInstruction([
                 "type" => "Both",
@@ -253,7 +248,7 @@ class OpenAIHelper
             $response = $this->client->request('POST', $this->openaiEndpointBase . $this->endpointChat, [
                 'headers' => [
                     'Content-Type' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->openaiApiKey
+                    'Authorization' => 'Bearer ' . $this->getApiKey()
                 ],
                 'json' => $data
             ]);
@@ -286,6 +281,28 @@ class OpenAIHelper
             ]
         ]);
         return true;
+    }
+
+    public function getModels()
+    {
+        try {
+            $response = $this->client->request('GET', $this->openaiEndpointBase . $this->endpointModels, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->getApiKey()
+                ]
+            ]);
+
+            $body   = $response->getBody()->getContents();
+            $models = json_decode($body, true);
+
+            $textModels = array_filter($models["data"], function ($model) {
+                return preg_match('/^(gpt-)/', $model['id']);
+            });
+            return array_values($textModels);
+        } catch (Exception $e) {
+            return [ [ 'id' => 'gpt-4o-mini' ]];
+        }
     }
 
     protected function saveAction($params, $response)
@@ -363,17 +380,10 @@ class OpenAIHelper
         return $this->defautlParams;
     }
 
-    public function getConfig()
+    protected function getApiKey()
     {
-        $settings = $this->getOpenaiConfig();
-
-        $provider = $this->getService();
-
         $credentials = $this->getCredentials();
-
-        $this->setInstructions($this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('openai_instructions', []));
+        $provider    = $this->getService();
 
         if ($provider === 'custom') {
             $this->openaiApiKey = $credentials['apikey'];
@@ -381,6 +391,16 @@ class OpenAIHelper
             // $this->openaiApiKey = $this->container->getParameter('opennemas.openai.key');
             $this->openaiApiKey = '';
         }
+        return $this->openaiApiKey;
+    }
+
+    public function getConfig()
+    {
+        $settings = $this->getOpenaiConfig();
+
+        $this->setInstructions($this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('openai_instructions', []));
 
         if (empty($settings)) {
             $settings = $this->defautlParams;

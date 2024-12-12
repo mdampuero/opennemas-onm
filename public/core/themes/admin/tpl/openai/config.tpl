@@ -138,9 +138,7 @@
                   <div class="controls">
                     <label>{t}OpenAI module{/t}</label>
                     <select class="form-control-lg" ng-model="settings.openai_config.model">
-                      <option value="gpt-3.5-turbo" selected>{t}GPT 3.5 Turbo{/t}</option>
-                      <option value="gpt-4o" selected>{t}GPT 4o{/t}</option>
-                      <option value="gpt-4-turbo" selected>{t}GPT 4 Turbo{/t}</option>
+                      <option value="[% item.id %]"  ng-repeat="item in settings.openai_models">[% item.id %]</option>
                     </select>
                   </div>
                 </div>
