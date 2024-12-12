@@ -44,7 +44,7 @@
             </div>
             <div class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
               <i class="fa fa-info-circle m-r-5 text-info"></i>
-              {t}Mark this tag to prevent it from appearing in your content.{/t}
+              {t}Check this option to prevent the tag from appearing in your content. Additionally, the page for this tag will not be available.{/t}
               </div>
           </div>
         </div>
