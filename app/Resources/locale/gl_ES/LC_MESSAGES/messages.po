@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-12 12:22+0000\n"
-"PO-Revision-Date: 2024-12-12 13:27+0100\n"
+"POT-Creation-Date: 2024-12-04 14:14+0000\n"
+"PO-Revision-Date: 2024-12-05 08:25+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1061,9 +1061,6 @@ msgstr "Elemento gardado correctamente"
 #, php-format
 msgid "%s items deleted successfully"
 msgstr "%s elementos eliminados correctamente"
-
-msgid "Prompt saved successfully"
-msgstr "Prompt gardado correctamente"
 
 msgid "Purchase deleted successfully"
 msgstr "Compra eliminada correctamente"
@@ -5391,14 +5388,29 @@ msgstr "Roles"
 msgid "Tones"
 msgstr "Tonos"
 
+msgid "Instructions"
+msgstr "Instrucións"
+
+msgid "Both"
+msgstr "Ambos"
+
+msgid "Instruction"
+msgstr "Instrución"
+
 msgid "OpenAI configuration"
 msgstr "Configuración de OpenAI"
 
-msgid "New"
-msgstr "Crear"
-
 msgid "OpenAI module"
 msgstr "Módulo de OpenAI"
+
+msgid "GPT 3.5 Turbo"
+msgstr "GPT 3.5 Turbo"
+
+msgid "GPT 4o"
+msgstr "GPT 4o"
+
+msgid "GPT 4 Turbo"
+msgstr "GPT 4 Turbo"
 
 msgid "AI 'Temperature' param"
 msgstr "Parámetro 'Temperature' da IA"
@@ -7710,21 +7722,6 @@ msgstr "Idioma do usuario"
 msgid "Used for displayed messages, interface and measures in your page."
 msgstr "Usado para os mensaxes, interface e medidas na súa páxina web."
 
-msgid "Config prompt module"
-msgstr "Configuración de prompts"
-
-msgid "Configs"
-msgstr "Configuración"
-
-msgid "Instructions"
-msgstr "Instrucións"
-
-msgid "Both"
-msgstr "Ambos"
-
-msgid "Instruction"
-msgstr "Instrución"
-
 msgid "New prompt"
 msgstr "Novo prompt"
 
@@ -8303,15 +8300,6 @@ msgstr "Semella que te perdemos nas nubes."
 msgid "The page your looking for is not here"
 msgstr "A páxina que estás buscando non está aquí"
 
-#~ msgid "GPT 3.5 Turbo"
-#~ msgstr "GPT 3.5 Turbo"
-
-#~ msgid "GPT 4o"
-#~ msgstr "GPT 4o"
-
-#~ msgid "GPT 4 Turbo"
-#~ msgstr "GPT 4 Turbo"
-
 #, fuzzy
 #~ msgid "Default tono"
 #~ msgstr "Autor defecto"
@@ -8525,6 +8513,9 @@ msgstr "A páxina que estás buscando non está aquí"
 
 #~ msgid "Advanced"
 #~ msgstr "Avanzado"
+
+#~ msgid "Config"
+#~ msgstr "Configurar"
 
 #~ msgid "[% element.key.name %]"
 #~ msgstr "[% element.key.name %]"
