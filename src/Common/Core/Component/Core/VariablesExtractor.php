@@ -378,7 +378,9 @@ class VariablesExtractor
         $ids = $this->tpl->getValue('o_content')->tags ?? null;
 
         try {
-            $tags = $this->container->get('api.service.tag')->getListByIds($ids, true)['items'];
+            // Set private flag to false and get only public tags
+            $tags = $this->container->get('api.service.tag')
+                ->getListByIds($ids, false)['items'];
         } catch (GetListException $e) {
             return null;
         }
@@ -400,7 +402,9 @@ class VariablesExtractor
         $ids = $this->tpl->getValue('o_content')->tags ?? null;
 
         try {
-            $tags = $this->container->get('api.service.tag')->getListByIds($ids)['items'];
+            // Set private flag to false and get only public tags
+            $tags = $this->container->get('api.service.tag')
+                ->getListByIds($ids, false)['items'];
         } catch (GetListException $e) {
             return null;
         }

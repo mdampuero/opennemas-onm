@@ -259,7 +259,7 @@ class TagService extends OrmService
     /**
      * {@inheritdoc}
      */
-    public function getListByIds($ids, $internal = false)
+    public function getListByIds($ids, $private = true)
     {
         if (!is_array($ids)) {
             throw new GetListException('Invalid ids', 400);
@@ -271,15 +271,10 @@ class TagService extends OrmService
 
         $items = $this->em->getRepository($this->entity, $this->origin)->find($ids);
 
-        if ($internal) {
-            $filteredItems = [];
-            foreach ($items as $item) {
-                $private = $item->getStored()['private'] ?? null;
-                if ($private !== 1) {
-                    $filteredItems[] = $item;
-                }
-            }
-            $items = $filteredItems;
+        if (!$private) {
+            $items = array_filter($items, function ($item) {
+                return $item->private !== 1;
+            });
         }
 
         $this->localizeList($items);
