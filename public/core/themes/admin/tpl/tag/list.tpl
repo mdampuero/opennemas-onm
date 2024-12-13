@@ -42,6 +42,18 @@
 {/block}
 
 {block name="selectedActions"}
+  {acl isAllowed="TAG_UPDATE"}
+    <li class="quicklinks">
+      <button class="btn btn-link" href="#" ng-click="patchSelected('private', 0)" uib-tooltip="{t escape="off"}Public{/t}" tooltip-placement="bottom">
+        <i class="fa fa-eye fa-lg"></i>
+      </button>
+    </li>
+    <li class="quicklinks">
+      <button class="btn btn-link" href="#" ng-click="patchSelected('private', 1)" uib-tooltip="{t escape="off"}Private{/t}" tooltip-placement="bottom">
+        <i class="fa fa-eye-slash fa-lg"></i>
+      </button>
+    </li>
+  {/acl}
   {acl isAllowed="TAG_DELETE"}
     <li class="quicklinks">
       <button class="btn btn-link" href="#" ng-click="deleteSelected('backend_ws_tag_delete')">

@@ -37,6 +37,7 @@
           saveItem:   'api_v1_backend_tag_save_item',
           updateItem: 'api_v1_backend_tag_update_item',
           patchItem:  'api_v1_backend_tag_patch_item',
+          patchList:  'api_v1_backend_tag_patch_list',
           moveItem:   'api_v1_backend_tag_move_item',
         };
 
