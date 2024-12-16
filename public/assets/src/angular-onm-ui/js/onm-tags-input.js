@@ -54,7 +54,7 @@
               '</span>' +
             '</div>' +
             '<div class="tags-input-wrapper">' +
-              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="tagsInLocale" on-tag-removing="remove($tag, filter)" on-tag-adding="add($tag, filter)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag), \'badge-warning\': $tag.private }">' +
+              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="tagsInLocale" on-tag-removing="remove($tag, filter)" on-tag-adding="add($tag, filter)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag), \'badge-success\': $tag.private }">' +
                 '<auto-complete ng-if="!filter" debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="true" source="list($query)" template="tag"></auto-complete>' +
                 '<auto-complete ng-if="filter" debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)"></auto-complete>' +
               '</tags-input>' +
@@ -65,7 +65,7 @@
               '<span class="tag-item-text" ng-bind-html="$highlight($getDisplayText())"></span>' +
               '<span class="badge badge-success pull-right text-uppercase" ng-if="$parent.$parent.$parent.$parent.$parent.isNewTag(data)"><strong> ' +
               $window.strings.tags.newItem + '</strong></span>' +
-              '<span class="badge badge-warning pull-right text-uppercase m-l-10" ng-if="data.private"><strong> ' + $window.strings.private + ' </strong></span>' +
+              '<span class="badge badge-success pull-right text-uppercase m-l-10" ng-if="data.private"><strong> ' + $window.strings.tags.private + ' </strong></span>' +
               '<span class="badge badge-default pull-right" ng-class="{ \'badge-danger\': !$parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] }" ng-show="!$parent.$parent.$parent.$parent.$parent.isNewTag(data)"><strong>{{ $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] ? $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] : 0 }}</strong></span>' +
             '</script>';
           }
