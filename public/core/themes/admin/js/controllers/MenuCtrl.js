@@ -480,7 +480,7 @@
          * @returns {boolean} true if the menu item is already in the menu, false otherwise.
          */
         $scope.isAlreadyInMenu = function(draggable) {
-          if (draggable.type === 'external') {
+          if (draggable.type === 'external' || draggable.type === 'internal') {
             return false;
           }
 
