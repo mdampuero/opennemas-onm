@@ -111,7 +111,7 @@ class NewsletterController extends Controller
         $oql = ' name = "frontpage" ';
 
         try {
-            $menu            = $menuService->getItemBy($oql);
+            $menu            = $menuService->getItemLocaleBy($oql);
             $menuItems       = $menuHelper->castToObjectFlat($menu->menu_items);
             $sortedMenuItems = $menuHelper->sortSubmenus($menuItems);
 

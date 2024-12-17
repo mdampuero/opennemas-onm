@@ -2,6 +2,8 @@
 
 namespace Api\Service\V1;
 
+use Api\Exception\GetItemException;
+
 class MenuService extends OrmService
 {
     protected $keys = [
@@ -21,11 +23,11 @@ class MenuService extends OrmService
     {
         $localizedMenus = [];
 
-        if (!$item->menu_items || empty($item->menu_items)) {
+        if (empty($item->menu_items)) {
             return $item;
         }
 
-        foreach ($item->menu_items as $menuItemKey => $menuItemValue) {
+        foreach ($item->menu_items as $menuItemValue) {
             array_push($localizedMenus, $this->localizeMenuItem($menuItemValue));
         }
 
@@ -63,5 +65,39 @@ class MenuService extends OrmService
         }
 
         return $items;
+    }
+
+    /**
+     * Returns a menu item localized if Multilanguage.
+     *
+     * @param string $oql The criteria.
+     *
+     * @return mixed The localized item.
+     *
+     * @throws GetItemException If the item was not found.
+     */
+    public function getItemLocaleBy($oql)
+    {
+        try {
+            $item   = $this->getItemBy($oql);
+            $locale = $this->container->get('core.instance')->hasMultilanguage()
+                ? $this->container->get('core.locale')->getRequestLocale()
+                : null;
+
+            if (!empty($locale)
+                && !empty($item->menu_items)
+                && is_array($item->menu_items)
+            ) {
+                $filteredItems = array_filter($item->menu_items, function ($e) use ($locale) {
+                    return $e['locale'] === $locale || empty($e['locale']);
+                });
+
+                $item->menu_items = $filteredItems;
+            }
+
+            return $item;
+        } catch (\Exception $e) {
+            throw new GetItemException($e->getMessage(), $e->getCode());
+        }
     }
 }

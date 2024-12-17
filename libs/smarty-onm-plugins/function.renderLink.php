@@ -9,70 +9,58 @@
  */
 function smarty_function_renderLink($params, &$smarty)
 {
-    $item     = $params['item'];
-    $nameMenu = $params['name'];
-    $nameUrl  = 'seccion';
-    if (isset($nameMenu) && !empty($nameMenu)) {
-        if ($nameMenu == 'video') {
-            $nameUrl = 'video';
-        } elseif ($nameMenu == 'album') {
-            $nameUrl = 'album';
-        } elseif ($nameMenu == 'special') {
-            $nameUrl = 'especiales';
-        } elseif ($nameMenu == 'encuesta') {
-            $nameUrl = 'encuesta';
-        }
+    $item = $params['item'];
+
+    $multilanguage = $smarty->getContainer()->get('core.instance')->hasMultilanguage();
+    $localeDefault = $smarty->getContainer()->get('core.locale')->getLocaleShort('frontend');
+    $locale        = $multilanguage ? $smarty->getContainer()->get('core.locale')->getRequestLocaleShort() : null;
+    $localelong    = $multilanguage ? $smarty->getContainer()->get('core.locale')->getRequestLocale() : null;
+
+    $serviceMap = [
+        'tags' => 'api.service.tag',
+        'blog-category' => 'api.service.category',
+        'category' => 'api.service.category',
+        'static' => 'api.service.content',
+    ];
+
+    if (!empty($item->referenceId) && array_key_exists($item->type, $serviceMap)) {
+        $relatedItem = $smarty->getContainer()->get($serviceMap[$item->type])->getItem($item->referenceId);
+        return $smarty->getContainer()->get('core.helper.url_generator')->generate($relatedItem, [
+            'locale' => $localelong,
+            'alternative_url' => $item->type === 'category',
+            'absolute' => true
+        ]);
     }
+
+    //Support old menu versions and items with no reference ID
+    $url = generateUrlForMenuItem($item, $multilanguage, $localelong, $localeDefault);
+
+    if ($url !== null) {
+        return $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url);
+    }
+}
+
+function generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault)
+{
+    $mapUrl = [
+        'category'      => "/seccion/" . $item->link . "/",
+        'videoCategory' => "/video/" . $item->link . "/",
+        'albumCategory' => "/album/" . $item->link . "/",
+        'pollCategory'  => "/encuesta/" . $item->link . "/",
+        'static'        => "/" . STATIC_PAGE_PATH . "/" . $item->link . ".html",
+        'blog-category' => "/blog/section/" . $item->link . "/",
+        'tags'          => "/tags/" . $item->link . "/",
+    ];
 
     switch ($item->type) {
-        case 'category':
-            $link = "/$nameUrl/$item->link/";
-            break;
-        case 'videoCategory':
-            $link = "/video/$item->link/";
-            break;
-        case 'albumCategory':
-            $link = "/album/$item->link/";
-            break;
-        case 'pollCategory':
-            $link = "/encuesta/$item->link/";
-            break;
-        case 'static':
-            $link = "/" . STATIC_PAGE_PATH . "/$item->link.html";
-            break;
         case 'internal':
-            if ($item->link == '/') {
-                $link = '';
-            } elseif ($item->link == 'empresa') {
-                $link = "/$item->link";
-            } else {
-                $link = "/$item->link/";
-            }
-
-            $link = str_replace('//', '/', $link);
-
-            break;
+            $formatLink = ltrim($item->link, '/');
+            return $multilanguage
+                ? ($locale === $localeDefault ? '/' . $formatLink : '/' . $locale . '/' . $formatLink)
+                : '/' . $formatLink;
         case 'external':
-            $link = "$item->link";
-            break;
-        case 'syncBlogCategory':
-            $link = "/ext$nameUrl/blog/$item->link/";
-            break;
-        case 'blog-category':
-            $link = "/blog/section/$item->link/";
-            break;
+            return $item->link;
         default:
-            $link = "/$item->link/";
-            break;
+            return $mapUrl[$item->type] ?? "/$item->link/";
     }
-
-    if (array_key_exists('noslash', $params) && !empty($params['noslash'])) {
-        $link = substr($link, 1);
-    }
-
-    if ($item->type !== 'external') {
-        $link = $smarty->getContainer()->get('core.decorator.url')->prefixUrl($link);
-    }
-
-    return $link;
 }
