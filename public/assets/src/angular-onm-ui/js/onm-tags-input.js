@@ -265,7 +265,7 @@
             page: 1
           };
 
-          if ($scope.locale) {
+          if ($scope.locale && $scope.locale.multilanguage) {
             criteria.locale = $scope.locale;
           }
 
