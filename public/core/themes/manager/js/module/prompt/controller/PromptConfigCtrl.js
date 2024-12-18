@@ -19,12 +19,19 @@
      *   Handles actions for instance edition form
      */
     .controller('PromptConfigCtrl', [
-      '$scope', 'http', 'messenger',
-      function($scope, http, messenger) {
+      '$scope', 'http', 'messenger', '$uibModal',
+      function($scope, http, messenger, $uibModal) {
+        $scope.routes = {
+          configGet:    'manager_ws_prompt_config',
+          configSave:   'manager_ws_prompt_config_save',
+          configUpload: 'manager_ws_prompt_config_upload',
+          list:         'manager_prompt_list'
+        };
+
         $scope.save = function() {
           var data = $scope.settings;
 
-          return http.put('manager_ws_prompt_config_save', data)
+          return http.put($scope.routes.configSave, data)
             .then(function(response) {
               messenger.post(response.data);
             }, function(response) {
@@ -67,6 +74,7 @@
         $scope.addInstruction = function() {
           const instruction = {
             type: 'Both',
+            field: 'all',
             value: ''
           };
 
@@ -79,13 +87,58 @@
 
         $scope.init = function() {
           var route = {
-            name: 'manager_ws_prompt_config'
+            name: $scope.routes.configGet
           };
 
           return http.get(route).then(function(response) {
             $scope.settings = response.data;
           }, function() {
             $scope.item = {};
+          });
+        };
+
+        /**
+         * @function openImportModal
+         * @memberOf ThemeSettingCtrl
+         *
+         * @description
+         *   Confirm import settings from JSON string.
+         */
+        $scope.openImportModal = function() {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-import-settings',
+            backdrop: 'static',
+            controller: 'ModalImportCtrl',
+            resolve: {
+              template: function() {
+                return {
+                };
+              },
+              success: function() {
+                return function(modal, template) {
+                  const reader = new FileReader();
+
+                  var route = {
+                    name: $scope.routes.configUpload,
+                  };
+
+                  if (template.file.type !== 'application/json') {
+                    return messenger.post('No es un fichero JSON Válido', 'error');
+                  }
+
+                  reader.readAsText(template.file);
+                  reader.onload = function() {
+                    var content = reader.result;
+
+                    return http.put(route, { config: content }).then(function(response) {
+                      modal.close();
+                      messenger.post(response.data);
+                      $scope.init();
+                    });
+                  };
+                };
+              }
+            }
           });
         };
 

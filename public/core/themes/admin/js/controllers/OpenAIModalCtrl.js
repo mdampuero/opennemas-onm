@@ -144,11 +144,14 @@
               return obj['name'] === $scope.template.promptSelected.tone;
             });
 
-            $scope.template.promptInput = $scope.template.promptSelected.name;
+            $scope.template.promptSelected = $scope.prompts.find(function(obj) {
+              return obj === $scope.template.promptSelected;
+            });
+            $scope.template.promptInput = $scope.template.promptSelected.prompt;
           } else {
             $scope.template.roleSelected = null;
             $scope.template.toneSelected = null;
-            $scope.template.promptInput = null;
+            $scope.template.promptInput  = null;
           }
         };
 

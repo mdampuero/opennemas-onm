@@ -83,7 +83,7 @@ class PromptController extends ApiController
         $response     = $us->getList($oql);
 
         return [
-            'items'      => $us->responsify($response['items']), ['mode', 'field'],
+            'items'      => $helperLocale->translateAttributes($us->responsify($response['items']), ['mode', 'field']),
             'total'      => $response['total'],
             'extra'      => $this->getExtraData($response['items']),
             'o-filename' => $this->filename,
@@ -108,7 +108,7 @@ class PromptController extends ApiController
         $items        = $us->responsify($repository->findBy($oql));
 
         return [
-            'items' => $items, ['mode', 'field'],
+            'items' => $helperLocale->translateAttributes($items, ['mode', 'field']),
             'total' => $repository->countBy($oql)
         ];
     }

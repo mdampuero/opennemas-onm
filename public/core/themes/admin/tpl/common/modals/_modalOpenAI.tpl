@@ -16,7 +16,7 @@
     </div>
     <div class="form-group">
       <label>{t}Suggested prompts{/t}</label>
-      <select name="field" id="field" class="form-control input-lg" ng-model="template.promptSelected" ng-change="updateUserPrompt()"  ng-options="item as item.name for item in prompts | filter: { mode }">
+      <select name="field" id="field" class="form-control input-lg" ng-model="template.promptSelected" ng-change="updateUserPrompt()"  ng-options="item as item.name for item in prompts | filter: { mode_or: mode }">
         <option value="">{t}Select a prompt{/t}</option>
       </select>
     </div>

@@ -56,12 +56,6 @@ class OpenAIHelper
                 "description" => "string",
             ],
         ],
-        "openai_instructions" => [
-            [
-                "type" => "string",
-                "value" => "string",
-            ],
-        ],
         "openai_config" => [
             "model" => "string",
             "max_tokens" => "integer",
@@ -143,7 +137,7 @@ class OpenAIHelper
     public function getInstructions()
     {
         $this->instructions = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
+            ->getDataSet('Settings', 'manager')
             ->get('openai_instructions', []);
         return $this->instructions;
     }
@@ -165,7 +159,7 @@ class OpenAIHelper
     {
         return $filter
             ? array_filter($this->instructions, function ($i) use ($filter) {
-                return in_array($i['type'], $filter);
+                return in_array($i['type'], $filter['type']) && in_array($i['field'], $filter['field']);
             })
             : $this->instructions;
     }
@@ -195,14 +189,16 @@ class OpenAIHelper
 
     public function generatePrompt($messages)
     {
-        $this->insertInstructions($this->getInstructionsByFilter([
-            'Both',
-            $messages['promptSelected']['mode']
-        ]));
+        $this->insertInstructions($this->getInstructionsByFilter(
+            [
+                'type'  => ['Both', $messages['promptSelected']['mode']],
+                'field' => ['all', $messages['promptSelected']['field_or']],
+            ]
+        ));
 
-        if ($messages['promptSelected']['mode'] == 'New') {
+        if ($messages['promptSelected']['mode_or'] == 'New') {
             $this->userPrompt .= ($messages["input"] ?? false) ? sprintf("\n\n### TEMA:\n%s", $messages["input"]) : "";
-        } elseif ($messages['promptSelected']['mode'] == 'Edit') {
+        } elseif ($messages['promptSelected']['mode_or'] == 'Edit') {
             $this->userPrompt .= ($messages["input"] ?? false) ? sprintf("\n\n### TEXTO:\n%s", $messages["input"]) : '';
         }
         $this->insertTone($messages);
@@ -218,10 +214,11 @@ class OpenAIHelper
 
         if ($messages["locale"] ?? false) {
             $this->addInstruction([
-                "type" => "Both",
-                "value" => sprintf(
+                'type' => 'Both',
+                'field' => 'all',
+                'value' => sprintf(
                     'El idioma configurado es "%s". Responde usando este idioma y las convenciones culturales.',
-                    $messages["locale"]
+                    $messages['locale']
                 )
             ]);
         }
@@ -301,7 +298,7 @@ class OpenAIHelper
             });
             return array_values($textModels);
         } catch (Exception $e) {
-            return [ [ 'id' => 'gpt-4o-mini' ]];
+            return [['id' => 'gpt-4o-mini']];
         }
     }
 
@@ -399,7 +396,7 @@ class OpenAIHelper
         $settings = $this->getOpenaiConfig();
 
         $this->setInstructions($this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
+            ->getDataSet('Settings', 'manager')
             ->get('openai_instructions', []));
 
         if (empty($settings)) {
@@ -501,13 +498,16 @@ class OpenAIHelper
         return $string;
     }
 
-    public function getTones()
+    public function getTones($showManager = true)
     {
-        $sm = $this->container->get('orm.manager')->getDataSet('Settings', 'manager');
         $si = $this->container->get('orm.manager')->getDataSet('Settings', 'instance');
-        $rm = $this->addFlagReadOnly($sm->get('openai_tones', []));
+        $tm = [];
+        if ($showManager) {
+            $sm = $this->container->get('orm.manager')->getDataSet('Settings', 'manager');
+            $tm = $this->addFlagReadOnly($sm->get('openai_tones', []));
+        }
 
-        return $this->sortByName(array_merge($rm, $si->get('openai_tones', [])));
+        return $this->sortByName(array_merge($tm, $si->get('openai_tones', [])));
     }
 
     public function setTones($tones = [])
@@ -535,11 +535,14 @@ class OpenAIHelper
         return $this;
     }
 
-    public function getRoles()
+    public function getRoles($showManager = true)
     {
-        $sm = $this->container->get('orm.manager')->getDataSet('Settings', 'manager');
         $si = $this->container->get('orm.manager')->getDataSet('Settings', 'instance');
-        $rm = $this->addFlagReadOnly($sm->get('openai_roles', []));
+        $rm = [];
+        if ($showManager) {
+            $sm = $this->container->get('orm.manager')->getDataSet('Settings', 'manager');
+            $rm = $this->addFlagReadOnly($sm->get('openai_roles', []));
+        }
 
         return $this->sortByName(array_merge($rm, $si->get('openai_roles', [])));
     }
@@ -594,9 +597,8 @@ class OpenAIHelper
         return [
             'openai_service'      => $this->getService(),
             'openai_credentials'  => $this->getCredentials(),
-            'openai_roles'        => $this->getRoles(),
-            'openai_tones'        => $this->getTones(),
-            'openai_instructions' => $this->getInstructions(),
+            'openai_roles'        => $this->getRoles(false),
+            'openai_tones'        => $this->getTones(false),
             'openai_config'       => $this->getConfig()
         ];
     }

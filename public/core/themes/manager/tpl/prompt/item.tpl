@@ -45,7 +45,21 @@
     <div class="grid simple">
       <div class="grid-body adstxt-form">
         <div class="row">
-          <div class="col-md-3 col-sm-6 form-group">
+          <div class="form-group col-md-8">
+            <label class="form-label" for="name">{t}Title{/t}</label>
+            <div class="input-with-icon right">
+              <input class="form-control" id="name" name="name" ng-model="item.name" required type="text"/>
+            </div>
+          </div>
+          <div class="col-sm-4 form-group">
+            <label for="template" >{t}Target{/t}</label>
+            <div >
+              <tags-input add-from-autocomplete-only="true" ng-model="item.instances" display-property="name">
+                <auto-complete debounce-delay="500" source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true" template="instance"></auto-complete>
+              </tags-input>
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-6 form-group">
             <label>{t}Mode{/t}</label>
             <ui-select name="mode" class="form-control" theme="select2" ng-model="item.mode" search-enabled="false" required ng-init="options = [ { name: '{t}Create{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'} ]">
               <ui-select-match>
@@ -78,17 +92,8 @@
               </ui-select-choices>
             </ui-select>
           </div>
-          <div class="col-sm-3 form-group">
-            <label for="template" >{t}Target{/t}</label>
-            <div >
-              <tags-input add-from-autocomplete-only="true" ng-model="item.instances" display-property="name">
-                <auto-complete debounce-delay="500" source="autocomplete($query)" min-length="0" load-on-focus="true" load-on-empty="true" template="instance"></auto-complete>
-              </tags-input>
-            </div>
-          </div>
-          <div class="col-sm-12">
-            <div class="form-group">
-              <label>{t}Default role{/t}</label>
+          <div class="col-md-4 col-sm-6 form-group">
+            <label>{t}Default role{/t}</label>
               <ui-select name="role" class="form-control" theme="select2" ng-model="item.role">
                 <ui-select-match>
                   [% $select.selected.name %]
@@ -97,13 +102,10 @@
                   <div ng-bind-html="item.name | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
-            </div>
           </div>
           <div class="form-group col-md-12">
             <label class="form-label" for="name">{t}Prompt{/t}</label>
-            <div class="controls input-with-icon right">
-              <input class="form-control" id="name" name="name" ng-model="item.name" required type="text"/>
-            </div>
+            <textarea name="prompt" id="prompt" ng-model="item.prompt" class="form-control" rows="5" required></textarea>
           </div>
         </div>
       </div>

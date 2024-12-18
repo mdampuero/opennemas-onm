@@ -4,7 +4,7 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
-            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_prompt_list') %]">
+            <a class="no-padding" ng-href="[% routing.ngGenerate(routes.list) %]">
               <i class="fa fa-file-o"></i>
               {t}Prompts{/t}
             </a>
@@ -22,12 +22,24 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_prompt_list') %]">
+            <a class="btn btn-link" ng-href="[% routing.ngGenerate(routes.list) %]">
               <i class="fa fa-reply"></i>
             </a>
           </li>
           <li class="quicklinks">
             <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks m-r-10">
+            <a class="btn btn-white" ng-click="openImportModal()">
+              <span class="fa fa-sign-in"></span>
+              {t}Import{/t}
+            </a>
+          </li>
+          <li class="quicklinks m-r-10">
+            <a class="btn btn-white" ng-href="{url name=manager_ws_prompt_config_download}?token=[% security.token %]">
+              <span class="fa fa-download"></span>
+              {t}Download{/t}
+            </a>
           </li>
           <li class="quicklinks">
             <button class="btn btn-loading btn-success text-uppercase" ng-click="!item.id ? save() : update()" ng-disabled="promptForm.$invalid || saving">
@@ -116,7 +128,17 @@
                 </ui-select-choices>
               </ui-select>
             </div>
-            <div class="col-lg-9 col-md-7">
+            <div class="col-lg-2 col-md-3 m-b-15">
+              <ui-select name="field" class="form-control" theme="select2" ng-model="role.field" search-enabled="false" required ng-init="options = [ { name: '{t}All{/t}', key: 'all'}, { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Introductions{/t}', key: 'introductions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
+                <ui-select-match>
+                  [% $select.selected.name %]
+                </ui-select-match>
+                <ui-select-choices repeat="item.key as item in options | filter: $select.search">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div class="col-lg-7 col-md-7">
               <input class="form-control" ng-model="role.value" placeholder="{t}Instruction{/t}" type="text" required>
             </div>
             <div class="col-lg-1 col-md-2 m-b-15">
@@ -141,4 +163,7 @@
 <script type="text/ng-template" id="instance">
   <span ng-bind-html="$highlight($getDisplayText())"></span>
   </div>
+</script>
+<script type="text/ng-template" id="modal-import-settings">
+  {include file="common/modalImportSettings.tpl"}
 </script>

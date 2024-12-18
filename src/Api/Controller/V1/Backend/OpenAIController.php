@@ -206,7 +206,8 @@ class OpenAIController extends ApiController
     public function downloadConfigAction()
     {
         $openaiConfig = $this->container->get($this->helper)->getConfigAll();
-        $response = new JsonResponse($openaiConfig);
+        $response     = new JsonResponse($openaiConfig);
+
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Content-Disposition', 'attachment; filename=openai_settings.json');
         $response->headers->set('Cache-Control', 'no-cache');

@@ -11,7 +11,7 @@ orm:
                 field:     string
                 tone:      string
                 role:      string
-
+                prompt:    string
             converters:
                 default:
                     class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
@@ -33,7 +33,7 @@ orm:
                             options: { default: null, unsigned: true, autoincrement: true }
                         name:
                             type: text
-                            options: { default: null, length: 65532, notnull: false }
+                            options: { default: null, length: 64, notnull: true }
                         instances:
                             type: text
                             options: { default: null, length: 65532, notnull: true }
@@ -49,6 +49,9 @@ orm:
                         field:
                             type: text
                             options: { default: null, length: 32, notnull: false }
+                        prompt:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
                     index:
                         -
                             name: PRIMARY

@@ -18,13 +18,13 @@
           <div class="all-actions pull-right">
             <ul class="nav quick-section">
               {acl isAllowed="MASTER"}
-                <li class="quicklinks">
+                <li class="quicklinks m-r-10">
                   <a class="btn btn-white" ng-click="openImportModal()">
                     <span class="fa fa-sign-in"></span>
                     {t}Import{/t}
                   </a>
                 </li>
-                <li class="quicklinks">
+                <li class="quicklinks m-r-10">
                   <a class="btn btn-white" href="[% routing.generate(routes.downloadConfig) %]">
                     <span class="fa fa-download"></span>
                     {t}Download{/t}

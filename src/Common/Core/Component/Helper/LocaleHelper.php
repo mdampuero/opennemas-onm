@@ -166,7 +166,8 @@ class LocaleHelper
         foreach ($items as &$item) {
             foreach ($attributes as $attr) {
                 if (isset($item[$attr])) {
-                    $item[$attr] = _(ucwords($item[$attr]));
+                    $item[$attr . "_or"] = $item[$attr];
+                    $item[$attr]         = _(ucwords($item[$attr]));
                 }
             }
         }

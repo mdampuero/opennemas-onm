@@ -5,7 +5,7 @@
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-name" checklist-model="app.columns.selected" checklist-value="'name'" type="checkbox">
     <label for="checkbox-name">
-      {t}Prompt{/t}
+      {t}Title{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
@@ -36,7 +36,7 @@
 
 {block name="commonColumnsHeader"}
   <th class="v-align-middle" ng-if="isColumnEnabled('name')"  width="500">
-    {t}Prompt{/t}
+    {t}Title{/t}
   </th>
   <th class="v-align-middle" ng-if="isColumnEnabled('field')">
     {t}Field{/t}

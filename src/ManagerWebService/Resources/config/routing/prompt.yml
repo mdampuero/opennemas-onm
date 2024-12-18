@@ -73,3 +73,17 @@ manager_ws_prompt_batch_delete:
     methods:  [ DELETE ]
     options:
         expose: true
+
+manager_ws_prompt_config_download:
+    path:     /prompt/configDownload
+    defaults: { _controller: ManagerWebServiceBundle:Prompt:configDownload }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_prompt_config_upload:
+    path:     /prompt/configUpload
+    defaults: { _controller: ManagerWebServiceBundle:Prompt:configUpload }
+    methods:  [ PUT ]
+    options:
+        expose: true
