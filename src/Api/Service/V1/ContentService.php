@@ -102,14 +102,13 @@ class ContentService extends OrmService
      */
     public function getItemBySlugAndContentType($slug, $contentType)
     {
-        $oql = $this->container->get('core.instance')->hasMultilanguage()
-        ? sprintf(
-            'slug regexp "(.+\"|^)%s(\".+|$)" and fk_content_type=%d and in_litter=0 and content_status=1',
-            $slug,
-            $contentType
-        )
-        : sprintf(
-            'slug = "%s" and fk_content_type=%d and in_litter=0 and content_status=1',
+        $part = 'slug = "%s"';
+        if ($this->container->get('core.instance')->hasMultilanguage()) {
+            $part = 'slug regexp "(.+\"|^)%s(\".+|$)"';
+        }
+
+        $oql = sprintf(
+            $part . ' and content_type_name="%s" and in_litter=0 and content_status=1',
             $slug,
             $contentType
         );
