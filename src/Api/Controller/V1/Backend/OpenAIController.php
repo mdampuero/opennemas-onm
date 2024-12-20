@@ -98,8 +98,8 @@ class OpenAIController extends ApiController
         $msg    = $this->get('core.messenger');
         $config = $request->request->all();
 
-        $config['openai_roles'] = $this->get($this->helper)->deleteFlagReadOnly($config['openai_roles']);
-        $config['openai_tones'] = $this->get($this->helper)->deleteFlagReadOnly($config['openai_tones']);
+        $config['openai_roles'] = $this->get($this->helper)->preSave($config['openai_roles']);
+        $config['openai_tones'] = $this->get($this->helper)->preSave($config['openai_tones']);
 
         try {
             $this->get('orm.manager')->getDataSet('Settings')->set($config);

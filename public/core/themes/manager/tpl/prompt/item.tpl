@@ -48,7 +48,7 @@
           <div class="form-group col-md-8">
             <label class="form-label" for="name">{t}Title{/t}</label>
             <div class="input-with-icon right">
-              <input class="form-control" id="name" name="name" ng-model="item.name" required type="text"/>
+              <input class="form-control" id="name" name="name" ng-model="item.name" required type="text" maxlength="64"/>
             </div>
           </div>
           <div class="col-sm-4 form-group">
@@ -105,7 +105,7 @@
           </div>
           <div class="form-group col-md-12">
             <label class="form-label" for="name">{t}Prompt{/t}</label>
-            <textarea name="prompt" id="prompt" ng-model="item.prompt" class="form-control" rows="5" required></textarea>
+            <textarea name="prompt" id="prompt" ng-model="item.prompt" class="form-control" rows="5" required maxlength="2048"></textarea>
           </div>
         </div>
       </div>

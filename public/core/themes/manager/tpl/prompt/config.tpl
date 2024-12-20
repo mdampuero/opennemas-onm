@@ -59,10 +59,10 @@
         <div class="controls">
           <div class="row" ng-repeat="role in settings.openai_roles track by $index">
             <div class="col-lg-4 col-md-3">
-              <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required>
+              <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required maxlength="64">
             </div>
             <div class="col-lg-7 col-md-7">
-              <input class="form-control" ng-model="role.prompt" placeholder="{t}Prompt{/t}" type="text" required>
+              <input class="form-control" ng-model="role.prompt" placeholder="{t}Prompt{/t}" type="text" required maxlength="2048">
             </div>
             <div class="col-lg-1 col-md-2 m-b-15">
               <button class="btn btn-block btn-danger ng-cloak" ng-click="removeRole($index)" type="button">
@@ -89,10 +89,10 @@
         <div class="controls">
           <div class="row" ng-repeat="role in settings.openai_tones track by $index">
             <div class="col-lg-4 col-md-3">
-              <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required>
+              <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required maxlength="64">
             </div>
             <div class="col-lg-7 col-md-7">
-              <input class="form-control" ng-model="role.description" placeholder="{t}Description{/t}" type="text" required>
+              <input class="form-control" ng-model="role.description" placeholder="{t}Description{/t}" type="text" required maxlength="2048">
             </div>
             <div class="col-lg-1 col-md-2 m-b-15">
               <button class="btn btn-block btn-danger ng-cloak" ng-click="removeTone($index)" type="button">
@@ -139,7 +139,7 @@
               </ui-select>
             </div>
             <div class="col-lg-7 col-md-7">
-              <input class="form-control" ng-model="role.value" placeholder="{t}Instruction{/t}" type="text" required>
+              <input class="form-control" ng-model="role.value" placeholder="{t}Instruction{/t}" type="text" required maxlength="2048">
             </div>
             <div class="col-lg-1 col-md-2 m-b-15">
               <button class="btn btn-block btn-danger ng-cloak" ng-click="removeInstruction($index)" type="button">

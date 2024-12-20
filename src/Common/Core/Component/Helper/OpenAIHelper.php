@@ -565,11 +565,18 @@ class OpenAIHelper
         }, $array);
     }
 
-    public function deleteFlagReadOnly($array)
+    public function preSave($array)
     {
         foreach ($array as $key => $item) {
             if ($item['readOnly'] ?? false && $item['readOnly'] === true) {
                 unset($array[$key]);
+                continue;
+            }
+            if ($item["name"] ?? false) {
+                $array[$key]["name"] = substr($item["name"], 0, 64);
+            }
+            if ($item["prompt"] ?? false) {
+                $array[$key]["prompt"] = substr($item["prompt"], 0, 2048);
             }
         }
         return $array;
