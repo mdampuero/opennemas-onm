@@ -72,7 +72,7 @@ class KeywordServiceTest extends \PHPUnit\Framework\TestCase
             '<a href="/tag/foo" target="_blank">dolor sit amet</a>, consectetur adipiscing elit. ' .
             '<a href="glorp" target="_blank">Lorem</a> dolor ' .
             '<a href="mailto:link_sit" target="_blank">sit</a>, consectetur adipiscing ' .
-            '<a href="mailto:link_sit" target="_blank">sit</a>';
+            'sit';
 
         $actual = $this->service->replaceTerms($newText, $keywords);
 
