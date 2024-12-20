@@ -120,18 +120,15 @@ class MenuHelper
      */
     protected function castMenuItemToObject(array $item)
     {
-        $menuItemObject            = new \stdClass();
-        $menuItemObject->pk_father = $item['pk_father'] ?? 0;
-        $menuItemObject->pk_item   = $item['pk_item'] ?? null;
-        $menuItemObject->title     = $item['title'] ?? '';
-        $menuItemObject->position  = $item['position'] ?? null;
-        $menuItemObject->type      = $item['type'] ?? null;
-        $menuItemObject->link      = $item['link_name'] ?? '';
+        $menuItemObject = new \stdClass();
+
+        foreach ($item as $key => $value) {
+            $property                  = $key === 'link_name' ? 'link' : $key;
+            $menuItemObject->$property = $value;
+        }
 
         if (!empty($item['submenu'])) {
-            $menuItemObject->submenu = array_map(function ($submenu) {
-                return $this->castMenuItemToObject($submenu);
-            }, $item['submenu']);
+            $menuItemObject->submenu = array_map([$this, 'castMenuItemToObject'], $item['submenu']);
         }
 
         return $menuItemObject;

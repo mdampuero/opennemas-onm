@@ -31,10 +31,18 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-loading btn-success text-uppercase" ng-click="save();" ng-disabled="saving" ng-if="!instance.id">
+            <button
+              class="btn btn-loading btn-success text-uppercase"
+              ng-click="save();"
+              ng-disabled="saving || !instance.country"
+              ng-if="!instance.id">
               <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
-            <button class="btn btn-loading btn-success text-uppercase" ng-click="update();" ng-disabled="saving" ng-if="instance.id">
+            <button
+              class="btn btn-loading btn-success text-uppercase"
+              ng-click="update();"
+              ng-disabled="saving || !instance.country"
+              ng-if="instance.id">
               <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
@@ -118,7 +126,7 @@
                 <div class="form-group">
                   <label class="form-label" for="country">{t}Country{/t}</label>
                   <div class="controls">
-                    <select class="form-control" id="country" name="country" ng-model="instance.country" placeholder="{t}Country{/t}" required>
+                    <select class="form-control" id="country" name="country" ng-model="instance.country" placeholder="{t}Country{/t}" ng-required="true">
                       <option value="">{t}Select a country{/t}...</option>
                       <option value="[% country.id %]" ng-repeat="country in template.countries" ng-selected="[% instance.country === country.id %]">[% country.name %]</option>
                     </select>

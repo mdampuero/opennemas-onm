@@ -29,6 +29,7 @@
             generateFrom:  '=',
             hideGenerate:  '=',
             ignoreLocale:  '=',
+            ignorePrivate: '=',
             locale:        '=',
             maxTags:       '=',
             maxResults:    '=',
@@ -37,7 +38,7 @@
             required:      '=',
             selectionOnly: '=',
             filter:        '=',
-            exclude: '='
+            exclude:       '='
           },
           template: function() {
             return '<div class="tags-input-buttons">' +
@@ -63,8 +64,8 @@
             '</div>' +
             '<script type="text/ng-template" id="tag">' +
               '<span class="tag-item-text" ng-bind-html="$highlight($getDisplayText())"></span>' +
-              '<span class="badge badge-success pull-right text-uppercase" ng-if="$parent.$parent.$parent.$parent.$parent.isNewTag(data)"><strong> ' +
-              $window.strings.tags.newItem + '</strong></span>' +
+              '<span class="badge badge-success pull-right text-uppercase" ng-if="$parent.$parent.$parent.$parent.$parent.isNewTag(data)">' +
+              '<strong> ' + $window.strings.tags.newItem + '</strong></span>' +
               '<span class="badge badge-success pull-right text-uppercase m-l-10" ng-if="data.private"><strong> ' + $window.strings.tags.private + ' </strong></span>' +
               '<span class="badge badge-default pull-right" ng-class="{ \'badge-danger\': !$parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] }" ng-show="!$parent.$parent.$parent.$parent.$parent.isNewTag(data)"><strong>{{ $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] ? $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] : 0 }}</strong></span>' +
             '</script>';
@@ -207,7 +208,7 @@
             if ($scope.locale && $scope.locale.multilanguage) {
               $scope.tagsInLocale = $scope.tags.filter(function(e) {
                 return !$scope.locale || !e.locale ||
-                  e.locale === $scope.locale.selected;
+                  e.locale === $scope.$parent.config.locale.selected;
               });
             }
           }, function() {
@@ -263,6 +264,10 @@
             page: 1
           };
 
+          if ($scope.locale && $scope.locale.multilanguage) {
+            criteria.locale = $scope.locale;
+          }
+
           return http.get({
             name: 'api_v1_backend_tools_slug',
             params: { slug: query }
@@ -271,7 +276,7 @@
 
             if (!$scope.ignoreLocale && $scope.locale &&
               $scope.locale.multilanguage) {
-              criteria.locale = $scope.locale.selected;
+              criteria.locale = $scope.$parent.config.locale.selected;
             }
 
             oqlEncoder.configure({
@@ -291,6 +296,12 @@
 
               var items = response.data.items;
 
+              if ($scope.ignorePrivate) {
+                items = items.filter(function(item) {
+                  return item.private !== 1;
+                });
+              }
+
               if ($scope.exclude && $scope.exclude.length) {
                 items = items.filter(function(item) {
                   return $scope.exclude.indexOf(item.id) === -1;
@@ -309,7 +320,7 @@
                   };
 
                   if ($scope.locale && $scope.locale.multilanguage) {
-                    item.locale = $scope.locale.selected;
+                    item.locale = $scope.$parent.config.locale.selected;
                   }
 
                   items.push(item);
@@ -465,7 +476,7 @@
               if ($scope.locale && $scope.locale.multilanguage) {
                 $scope.tagsInLocale = $scope.tags.filter(function(e) {
                   return !$scope.locale || !e.locale ||
-                    e.locale === $scope.locale.selected;
+                    e.locale === $scope.$parent.config.locale.selected;
                 });
               }
             }
@@ -494,7 +505,7 @@
             ovIds = ov.filter(function(e) {
               // Only delete tags for any or current locale
               return !$scope.locale || !e.locale ||
-                e.locale === $scope.locale.selected;
+                e.locale === $scope.$parent.config.locale.selected;
             }).map(function(e) {
               return e.id;
             });
@@ -527,7 +538,7 @@
                 $scope.ngModel.indexOf(e.id) === -1;
             }));
 
-            $scope.$parent.data.extra.tags[$scope.locale.selected] = $scope.tagsInLocale;
+            $scope.$parent.data.extra.tags[$scope.$parent.config.locale.selected] = $scope.tagsInLocale;
           }
         }, true);
       }
