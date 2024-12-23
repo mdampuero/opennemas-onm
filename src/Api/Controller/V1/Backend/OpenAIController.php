@@ -162,7 +162,6 @@ class OpenAIController extends ApiController
         $pricing = $this->get($this->helper)->getPricing();
         $money   = $this->get($this->helper)->getSpentMoney();
 
-
         $agrupatedTokens = [];
 
         foreach ($tokens['items'] as $item) {

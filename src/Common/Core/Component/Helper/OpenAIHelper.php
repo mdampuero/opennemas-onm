@@ -32,7 +32,7 @@ class OpenAIHelper
      * @var Array
      */
     protected $defautlParams = [
-        'model'             => 'gpt-3.5-turbo',
+        'model'             => 'gpt-4o-mini',
         'max_tokens'        => 50,
         'temperature'       => 0.5,
         'frequency_penalty' => 0.9,
@@ -71,18 +71,14 @@ class OpenAIHelper
      * @var Array
      */
     protected $pricing = [
-        'gpt-3.5-turbo' => [
-            'input'  => 0.50,
-            'output' => 1.50
+        'gpt-4o-mini' => [
+            'input'  => 0.15,
+            'output' => 0.60
         ],
         'gpt-4-turbo' => [
             'input'  => 10.00,
             'output' => 30.00
-        ],
-        'gpt-4o' => [
-            'input'  => 5.00,
-            'output' => 15.00
-        ],
+        ]
     ];
 
     protected $service;
@@ -168,13 +164,17 @@ class OpenAIHelper
     {
         $instructionsString = '';
         if (count($instructions)) {
+            $counter = 0;
+
             $instructionList = implode("\n", array_map(
-                function ($index, $item) {
-                    return ($index + 1) . '. ' . $item['value'];
+                function ($index, $item) use (&$counter) {
+                    $counter++;
+                    return $counter . '. ' . $item['value'];
                 },
                 array_keys($instructions),
                 $instructions
             ));
+
             $instructionsString = sprintf("### INSTRUCCIONES:\n%s", $instructionList);
         }
         $this->userPrompt .= $instructionsString;
@@ -283,6 +283,22 @@ class OpenAIHelper
     public function getModels()
     {
         try {
+            $models = $this->pricing;
+            $data   = [];
+            foreach ($models as $key => $model) {
+                $data[] = [
+                    'id' => $key
+                ];
+            }
+            return $data;
+        } catch (Exception $e) {
+            return [['id' => 'gpt-4o-mini']];
+        }
+    }
+
+    public function getModelsFromApi()
+    {
+        try {
             $response = $this->client->request('GET', $this->openaiEndpointBase . $this->endpointModels, [
                 'headers' => [
                     'Content-Type' => 'application/json',
@@ -322,7 +338,7 @@ class OpenAIHelper
             'response' => $responseData,
             'tokens'   => $tokens,
             'params'   => $params,
-            'date'     => $date->format('Y-m-d H: i: s')
+            'date'     => $date->format('Y-m-d H:i:s')
         ];
 
         $this->container->get('api.service.ai')->createItem($data);
