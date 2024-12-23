@@ -61,7 +61,7 @@ class StaticPageController extends FrontendController
             $item = $this->get('api.service.content')
                 ->getItemBySlugAndContentType(
                     $request->get('slug'),
-                    \ContentManager::getContentTypeIdFromName('static_page')
+                    'static_page'
                 );
         } catch (\Exception $e) {
             throw new ResourceNotFoundException();

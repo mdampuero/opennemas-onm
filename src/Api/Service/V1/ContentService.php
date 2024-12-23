@@ -94,23 +94,6 @@ class ContentService extends OrmService
     }
 
     /**
-     * Returns a content basing on a slug.
-     *
-     * @param string $slug The category slug.
-     *
-     * @return Content The content.
-     */
-    public function getItemBySlug($slug)
-    {
-        $oql = sprintf(
-            'slug regexp "(.+\"|^)%s(\".+|$)" and in_litter=0 and content_status=1',
-            $slug
-        );
-
-        return $this->getItemBy($oql);
-    }
-
-    /**
      * Returns a content basing on a slug and content type.
      *
      * @param string $slug        The category slug.
@@ -120,8 +103,13 @@ class ContentService extends OrmService
      */
     public function getItemBySlugAndContentType($slug, $contentType)
     {
+        $part = 'slug = "%s"';
+        if ($this->container->get('core.instance')->hasMultilanguage()) {
+            $part = 'slug regexp "(.+\"|^)%s(\".+|$)"';
+        }
+
         $oql = sprintf(
-            'slug regexp "(.+\"|^)%s(\".+|$)" and fk_content_type=%d and in_litter=0 and content_status=1',
+            $part . ' and content_type_name="%s" and in_litter=0 and content_status=1',
             $slug,
             $contentType
         );
