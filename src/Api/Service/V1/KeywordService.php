@@ -78,7 +78,7 @@ class KeywordService extends OrmService
     {
         $placeholderMap    = [];
         $replacedKeywords  = [];
-        $processedKeywords = []; // Array para seguir el rastro de las palabras procesadas
+        $processedKeywords = [];
 
         foreach ($keywordsSorted as $keyword) {
             if (array_key_exists($keyword->type, $types)) {
@@ -95,7 +95,6 @@ class KeywordService extends OrmService
 
                 $placeholderMap[$placeholder] = $replacement;
 
-                // Reemplazamos la palabra clave con el placeholder
                 $text = $this->replaceKeywordInText(
                     $text,
                     preg_quote($keyword->keyword, '@'),
