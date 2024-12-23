@@ -946,6 +946,32 @@
                   </div>
                 </div>
               </div>
+              <div class="panel-group" id="panel-group-flickr" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-flickr" data-toggle="collapse" href="#flickr">
+                        <i class="fa fa-flickr"></i>{t}Flickr{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="flickr">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="flickr-page">
+                          {t}Flickr Page{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="flickr-page" name="flickr-page" ng-model="settings.flickr_page" type="text">
+                          <span class="help">
+                            {t escape=off}If you also have a <strong>flickr page</strong>, add your page url on the form.{/t}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="panel-group" id="panel-group-vimeo" data-toggle="collapse">
                 <div class="panel panel-default">
                   <div class="panel-heading collapsed">

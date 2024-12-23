@@ -65,6 +65,7 @@ class ExternalSettingController extends SettingController
         'bluesky_page',
         'vimeo_page',
         'youtube_page',
+        'flickr_page',
     ];
 
     /**
