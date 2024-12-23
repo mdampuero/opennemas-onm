@@ -37,23 +37,19 @@ function smarty_function_render_menu($params, &$smarty)
 
         $menuService->setCount(0);
 
-        $menu = $menuService->getItemBy($oql);
-        if (empty($menu) || !$menu->menu_items) {
+        $menu = $menuService->getItemLocaleBy($oql);
+        if (empty($menu) || empty($menu->menu_items)) {
             return '';
         }
 
         $menuItemsObject = $menuHelper->castToObjectNested($menu->menu_items);
 
         $smarty->assign([
-            'menuItems'       => !empty($menuItemsObject) ? $menuItemsObject : [],
+            'menuItems'       => $menuItemsObject ?? [],
             'actual_category' => $params['actual_category'] ?? null
         ]);
 
-        // Don't cache this template
-        $caching         = $smarty->caching;
-        $smarty->caching = 0;
-        $output          = $smarty->fetch($tpl);
-        $smarty->caching = $caching;
+        $output = $smarty->fetch($tpl);
 
         return $output;
     } catch (\Api\Exception\GetItemException $e) {

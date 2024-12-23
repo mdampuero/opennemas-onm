@@ -37,7 +37,7 @@
             required:      '=',
             selectionOnly: '=',
             filter:        '=',
-            exclude: '='
+            exclude:       '='
           },
           template: function() {
             return '<div class="tags-input-buttons">' +
@@ -69,7 +69,7 @@
               '<span class="badge badge-default pull-right" ng-class="{ \'badge-danger\': !$parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] }" ng-show="!$parent.$parent.$parent.$parent.$parent.isNewTag(data)">' +
                 '<strong>[% $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] ? $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] : 0 %]</strong>' +
               '</span>' +
-            '</script';
+            '</script>';
           }
         };
       }
@@ -209,7 +209,7 @@
             if ($scope.locale && $scope.locale.multilanguage) {
               $scope.tagsInLocale = $scope.tags.filter(function(e) {
                 return !$scope.locale || !e.locale ||
-                  e.locale === $scope.locale.selected;
+                  e.locale === $scope.$parent.config.locale.selected;
               });
             }
           }, function() {
@@ -265,6 +265,10 @@
             page: 1
           };
 
+          if ($scope.locale && $scope.locale.multilanguage) {
+            criteria.locale = $scope.locale;
+          }
+
           return http.get({
             name: 'api_v1_backend_tools_slug',
             params: { slug: query }
@@ -273,7 +277,7 @@
 
             if (!$scope.ignoreLocale && $scope.locale &&
               $scope.locale.multilanguage) {
-              criteria.locale = $scope.locale.selected;
+              criteria.locale = $scope.$parent.config.locale.selected;
             }
 
             oqlEncoder.configure({
@@ -307,7 +311,7 @@
                   var item = { id: query, name: query };
 
                   if ($scope.locale && $scope.locale.multilanguage) {
-                    item.locale = $scope.locale.selected;
+                    item.locale = $scope.$parent.config.locale.selected;
                   }
 
                   items.push(item);
@@ -463,7 +467,7 @@
               if ($scope.locale && $scope.locale.multilanguage) {
                 $scope.tagsInLocale = $scope.tags.filter(function(e) {
                   return !$scope.locale || !e.locale ||
-                    e.locale === $scope.locale.selected;
+                    e.locale === $scope.$parent.config.locale.selected;
                 });
               }
             }
@@ -492,7 +496,7 @@
             ovIds = ov.filter(function(e) {
               // Only delete tags for any or current locale
               return !$scope.locale || !e.locale ||
-                e.locale === $scope.locale.selected;
+                e.locale === $scope.$parent.config.locale.selected;
             }).map(function(e) {
               return e.id;
             });
@@ -525,7 +529,7 @@
                 $scope.ngModel.indexOf(e.id) === -1;
             }));
 
-            $scope.$parent.data.extra.tags[$scope.locale.selected] = $scope.tagsInLocale;
+            $scope.$parent.data.extra.tags[$scope.$parent.config.locale.selected] = $scope.tagsInLocale;
           }
         }, true);
       }

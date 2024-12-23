@@ -164,9 +164,9 @@ class MenuPersister extends BasePersister
         $menuItems = $this->converter->databasifyMenuItems($menuItems);
 
         $sql = "insert into menu_items"
-            . "(pk_item, pk_menu, title, link_name, type, position, pk_father) values "
+            . "(pk_item, pk_menu, title, link_name, type, position, pk_father, locale, referenceId) values "
             . str_repeat(
-                '(?,?,?,?,?,?,?),',
+                '(?,?,?,?,?,?,?,?,?),',
                 count($menuItems)
             );
 
@@ -181,7 +181,9 @@ class MenuPersister extends BasePersister
                 $value['link_name'] ?? '',
                 $value['type'],
                 (int) $value['position'],
-                (int) $value['pk_father']
+                (int) $value['pk_father'],
+                $value['locale'] ?? null,
+                !empty($value['referenceId']) ? (int) $value['referenceId'] : null,
             ]);
 
             $types = array_merge($types, [
@@ -191,7 +193,9 @@ class MenuPersister extends BasePersister
                 \PDO::PARAM_STR,
                 \PDO::PARAM_STR,
                 \PDO::PARAM_INT,
-                \PDO::PARAM_INT
+                \PDO::PARAM_INT,
+                \PDO::PARAM_STR,
+                \PDO::PARAM_INT,
             ]);
         }
         $this->conn->executeQuery($sql, $params, $types);

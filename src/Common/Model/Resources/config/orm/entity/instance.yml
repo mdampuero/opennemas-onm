@@ -45,6 +45,7 @@ orm:
                 widgets:             integer
                 webpush_subscribers: integer
                 ai_spent:            float
+                tags:                integer
             converters:
                 default:
                     class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
@@ -173,6 +174,9 @@ orm:
                         ai_spent:
                             type:    float
                             options: { default: 0, unsigned: true, notnull: false }
+                        tags:
+                            type:    integer
+                            options: { default: 0, notnull: true }
                     index:
                         -
                             name:    PRIMARY

@@ -25,6 +25,14 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
+        $this->locale = $this->getMockBuilder('Common\Core\Component\Locale\Locale')
+            ->disableOriginalConstructor()->setMethods([ 'getRequestLocale' ])
+            ->getMock();
+
+        $this->instance = $this->getMockBuilder('Common\Model\Entity\Instance')
+            ->disableOriginalConstructor()->setMethods([ 'hasMultilanguage' ])
+            ->getMock();
+
         $this->menu = $this->getMockBuilder('Menu')
             ->setMethods([ 'getRawItems', 'localize' ])
             ->getMock();
@@ -34,7 +42,7 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->ms = $this->getMockBuilder('MenuService')
-            ->setMethods([ 'getItemBy', 'setCount' ])
+            ->setMethods([ 'getItemLocaleBy', 'setCount' ])
             ->getMock();
 
         $this->smarty = $this->getMockBuilder('Smarty')
@@ -46,6 +54,12 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
 
         $this->container->expects($this->any())->method('get')
             ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+
+        $this->locale->expects($this->any())->method('getRequestLocale')
+            ->willReturn('es_ES');
+
+        $this->instance->expects($this->any())->method('hasMultilanguage')
+            ->willReturn('es.openhost.module.multilanguage');
 
         $menu = new \stdClass();
         $menu->menu_items = [];
@@ -69,6 +83,10 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
                 return $this->ms;
             case 'core.helper.menu':
                 return $this->mh;
+            case 'core.locale':
+                return $this->locale;
+            case 'core.instance':
+                return $this->instance;
             default:
                 return null;
         }
@@ -101,7 +119,7 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
      */
     public function testRenderMenuWhenMenuFound()
     {
-        $this->ms->expects($this->at(0))->method('getItemBy')
+        $this->ms->expects($this->at(0))->method('getItemLocaleBy')
             ->willReturn($this->fakeMenu);
 
         $this->assertEquals(
@@ -120,7 +138,7 @@ class SmartyRenderMenu extends \PHPUnit\Framework\TestCase
      */
     public function testRenderMenuWhenMenuNotFound()
     {
-        $this->ms->expects($this->any())->method('getItemBy')
+        $this->ms->expects($this->any())->method('getItemLocaleBy')
             ->willReturn(null);
 
         $this->assertEmpty(smarty_function_render_menu([

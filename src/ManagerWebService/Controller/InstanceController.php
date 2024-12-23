@@ -203,6 +203,21 @@ class InstanceController extends Controller
     public function exportAction(Request $request)
     {
         $oql = $request->query->get('oql', '');
+        $ids = $request->query->get('ids', '');
+
+        if (!empty($ids)) {
+            $idConditions = array_map(function ($id) {
+                return sprintf('id = %d', intval($id));
+            }, explode(',', $ids));
+
+            $idsOql = implode(' or ', $idConditions);
+
+            if (!empty($oql)) {
+                $oql .= ' and ';
+            }
+
+            $oql .= $idsOql;
+        }
 
         if (!$this->get('core.security')->hasPermission('MASTER')
             && $this->get('core.security')->hasPermission('PARTNER')
@@ -275,11 +290,15 @@ class InstanceController extends Controller
         $countries = $this->getCountries(true);
         array_unshift($countries, [ 'id' => null, 'name' => _('All') ]);
 
+        $themes = $this->getThemes();
+        array_unshift($themes, [ 'uuid' => null, 'name' => _('All') ]);
+
         return new JsonResponse([
             'total'   => $total,
             'results' => $instances,
             'extra'   => [
                 'countries' => $countries,
+                'themes'    => $themes,
                 'users'     => $this->getUsers()
             ]
         ]);
@@ -392,12 +411,19 @@ class InstanceController extends Controller
                     throw new AccessDeniedException();
                 }
 
-                $old = $instance->activated;
+                if (isset($params['activated'])) {
+                    $old = $instance->activated;
+                }
+
+                if (isset($params['blocked'])) {
+                    $old = $instance->blocked;
+                }
+
                 $instance->merge($data);
                 $em->persist($instance);
                 $updated++;
 
-                if ($old !== $instance->activated) {
+                if ($old !== $instance->activated && $old !== $instance->blocked) {
                     $this->get('core.dispatcher')
                         ->dispatch('instance.update', [ 'instance' => $instance ]);
                 }
@@ -793,7 +819,7 @@ class InstanceController extends Controller
     {
         $lang   = $this->get('core.locale')->getLocaleShort();
         $themes = $this->get('orm.manager')->getRepository('theme')
-            ->findBy('uuid !in ["es.openhost.theme.admin", "es.openhost.theme.manager"]');
+            ->findBy('uuid !in ["es.openhost.theme.admin", "es.openhost.theme.manager"] order by uuid asc');
 
         // TODO: Replace with translation support in converters when merging
         //       feature/ONM-1661

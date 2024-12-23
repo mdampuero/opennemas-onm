@@ -2,6 +2,7 @@
   'use strict';
 
   angular.module('ManagerApp.controllers')
+
     /**
      * @ngdoc controller
      * @name  InstanceListCtrl
@@ -210,7 +211,10 @@
               name: 'name ~ "[value]" or ' +
                 'internal_name ~ "[value]" or ' +
                 'contact_mail ~ "[value]" or ' +
-                'domains ~ "[value]" or settings ~ "[value]"'
+                'domains ~ "[value]" or ' +
+                'settings ~ "[value]"',
+              subdirectory: '[key] != ""',
+              settings: '[key] ~ "[value]"'
             }
           });
 
@@ -228,6 +232,8 @@
             $scope.total   = response.data.total;
             $scope.extra   = response.data.extra;
 
+            $scope.filteredItems = $scope.items;
+
             // Scroll top
             $('body').animate({ scrollTop: '0px' }, 1000);
           });
@@ -242,6 +248,7 @@
          */
         $scope.resetFilters = function() {
           $scope.criteria = { epp: 25, page: 1 };
+          $scope.list();
         };
 
         /**

@@ -11,6 +11,9 @@ namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Displays, saves, modifies and removes menus.
  */
@@ -125,6 +128,7 @@ class MenuController extends ApiController
             'internal'         => $this->getModulePages(),
             'static'           => $this->getStaticPages(),
             'syncBlogCategory' => $this->getSyncSites(),
+            'tags'             => [],
             'keys'             => $this->getL10nKeys(),
             'multilanguage'    => in_array(
                 'es.openhost.module.multilanguage',
@@ -133,6 +137,38 @@ class MenuController extends ApiController
         ];
 
         return $params;
+    }
+
+    /**
+     * Retrieves tags based on the provided ID using OQL.
+     *
+     * @param int $id The ID of the tag to retrieve.
+     * @return JsonResponse A JSON response containing the tag data or an empty JSON response on error.
+     * @throws InvalidArgumentException If the provided ID is empty.
+     */
+    public function getTagsByOQLAction($id)
+    {
+        try {
+            if (empty($id)) {
+                throw new \InvalidArgumentException();
+            }
+
+            $oql = sprintf('id = %s', $id);
+            $response = $this->get('api.service.tag')->getList($oql);
+
+            $tags = array_map(function ($a) {
+                return [
+                    'title' => $a->name,
+                    'slug'  => $a->slug,
+                    'locale' => $a->locale,
+                    'id'    => $a->id,
+                ];
+            }, $response['items']);
+
+            return new JsonResponse($tags);
+        } catch (\Exception $e) {
+            return new JsonResponse([]);
+        }
     }
 
     /**
@@ -148,7 +184,7 @@ class MenuController extends ApiController
         $oql = 'content_type_name = "static_page" and in_litter = 0 and content_status = 1 '
            . ' order by created desc';
 
-        $response = $this->get('api.service.content')->getList($oql);
+        $response = $this->get('api.service.content')->getListWithoutLocalizer($oql);
         $this->get('core.locale')->setContext($context);
 
         return array_map(function ($a) {
@@ -186,7 +222,7 @@ class MenuController extends ApiController
         $oql = 'visible = 1 and enabled = 1'
         . ' order by title asc';
 
-        $categories = $this->get('api.service.category')->getList($oql);
+        $categories = $this->get('api.service.category')->getListWithoutLocalizer($oql);
         $this->get('core.locale')->setContext($context);
 
         return $this->get('api.service.category')
@@ -246,5 +282,35 @@ class MenuController extends ApiController
     protected function getItemId($item)
     {
         return $item->pk_menu;
+    }
+
+    /**
+     * Updates the item information given its id and the new information.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function updateItemAction(Request $request, $id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('update'));
+        $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', [$id]);
+
+        $data          = $request->request->all();
+        $localeService = $this->container->get('core.locale');
+        $defaultLocale = $localeService->getLocale('frontend');
+
+        foreach ($data['menu_items'] as &$item) {
+            if (empty($item['locale'])) {
+                $item['locale'] = $defaultLocale; // Establece el locale por defecto
+            }
+        }
+
+        $this->get($this->service)->updateItem($id, $data);
+
+        $msg = $this->get('core.messenger');
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 }

@@ -18,8 +18,8 @@
      *   Handle actions for article inner.
      */
     .controller('MenuCtrl', [
-      '$controller', '$scope', '$timeout',
-      function($controller, $scope, $timeout) {
+      '$controller', '$scope', '$timeout', 'http',
+      function($controller, $scope, $timeout, http) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
@@ -35,7 +35,7 @@
           pk_menu:    null,
           name:       '',
           menu_items: [],
-          position:   ''
+          position:   '',
         };
 
         /**
@@ -54,6 +54,8 @@
           link_name: '/',
           pk_father: 0,
           position: 0,
+          locale: null,
+          referenceId: null
         };
 
         /**
@@ -80,12 +82,19 @@
           },
           static: {
             link_name: 'slug',
+            referenceId: 'pk_content',
+          },
+          tags: {
+            link_name: 'slug',
+            referenceId: 'id',
           },
           'blog-category': {
-            link_name: 'name'
+            link_name: 'name',
+            referenceId: 'id',
           },
           category: {
-            link_name: 'name'
+            link_name: 'name',
+            referenceId: 'id',
           }
         };
 
@@ -108,10 +117,26 @@
          * @type {Object}
          */
         $scope.treeOptions = {
-          // Generate a unique pk_item for the new element dropped
+          beforeDrop: function() {
+            if ($scope.hasMultilanguage()) {
+              if ($scope.config && $scope.config.locale) {
+                $scope.defaultLink.locale = $scope.config.locale.selected;
+
+                if ($scope.linkData && $scope.linkData.length > 0) {
+                  $scope.linkData[0].locale = $scope.config.locale.selected;
+                }
+              }
+            }
+          },
           dropped: function(e) {
             if (e.source.cloneModel) {
-              e.source.cloneModel.pk_item = ++$scope.last;
+              var element = e.source.cloneModel;
+
+              element.pk_item = ++$scope.last;
+
+              if ($scope.hasMultilanguage()) {
+                element.locale = $scope.config.locale.selected;
+              }
             }
           }
         };
@@ -175,9 +200,11 @@
           $scope.data.extra['blog-category'] = angular.copy($scope.data.extra.category);
 
           $scope.menuData  = $scope.transformExtraData($scope.data.extra);
+
           $scope.parents   = $scope.filterParents();
           $scope.childs    = $scope.filterChilds($scope.parents);
-          $scope.dragables = $scope.filterDragables($scope.menuData);
+          $scope.localizableDrag = angular.copy($scope.menuData);
+          $scope.dragables = $scope.filterDragables($scope.localizableDrag);
           $scope.linkData  = [ Object.assign({}, $scope.defaultLink) ];
           $scope.last      = $scope.getLastIndex($scope.data.item.menu_items);
         };
@@ -222,7 +249,7 @@
           var object = {};
 
           Object.keys(dragables).forEach(function(type) {
-            object[type] = $scope.filterItems($scope.menuData[type]);
+            object[type] = $scope.filterItems(angular.copy(dragables[type]));
           });
 
           return object;
@@ -235,8 +262,20 @@
          */
         $scope.filterItems = function(dragables) {
           return dragables.filter(function(dragable) {
+            if (typeof dragable.title === 'object') {
+              var titleString = $scope.getTranslatedProperty(dragable.title,
+                $scope.config.locale.selected, $scope.config.locale.default);
+
+              var linkString = $scope.getTranslatedProperty(dragable.link_name,
+                $scope.config.locale.selected, $scope.config.locale.default);
+
+              dragable.title = titleString;
+              dragable.link_name = linkString;
+              dragable.locale = $scope.config.locale.selected;
+            }
+
             var valid = !$scope.search[dragable.type] ||
-              dragable.title.toLowerCase().indexOf($scope.search[dragable.type].toLowerCase()) !== -1;
+                dragable.title.toLowerCase().indexOf($scope.search[dragable.type].toLowerCase()) !== -1;
 
             return valid && !$scope.isAlreadyInMenu(dragable);
           });
@@ -285,11 +324,8 @@
 
           $scope.parents = $scope.parents.map(function(parent, index) {
             if ($scope.hasMultilanguage()) {
-              parent.title = $scope.getL10nTitle(parent, selectedLocale);
-
               originals[index + 1] = parent.title;
             }
-
             map[index + 1]   = parent.pk_item;
             parent.pk_menu   = $scope.data.item.pk_menu;
             parent.position  = index;
@@ -312,8 +348,6 @@
               var item = $scope.childs[parent][child];
 
               if ($scope.hasMultilanguage()) {
-                item.title = $scope.getL10nTitle(item, selectedLocale);
-
                 originals[menuItems.length + 1] = item.title;
               }
 
@@ -357,8 +391,8 @@
         /**
          * Adapt the extra data to the format of a menu item.
          *
-         * @param {array} data The array of the extra data.
-         * @returns The extra data unified with menu item.
+         * @param {Object} data The object containing the extra data.
+         * @returns {Object} The extra data unified with menu items.
          */
         $scope.transformExtraData = function(data) {
           var object = {};
@@ -367,7 +401,7 @@
             object[key] = [];
 
             data[key].forEach(function(item) {
-              object[key].push({
+              var transformedItem = {
                 pk_item: null,
                 pk_menu: null,
                 title: item.title,
@@ -375,7 +409,19 @@
                 link_name: item[$scope.replacements[key].link_name],
                 pk_father: 0,
                 position: 0,
-              });
+                referenceId: item[$scope.replacements[key].referenceId],
+                locale: null
+              };
+
+              if ($scope.hasMultilanguage()) {
+                if (transformedItem.type !== 'tags' && transformedItem.type !== 'internal') {
+                  transformedItem.locale = item.locale || $scope.config.locale.default;
+                } else {
+                  transformedItem.locale = item.locale || null;
+                }
+              }
+
+              object[key].push(transformedItem);
             });
           });
 
@@ -385,18 +431,20 @@
             if (!data.syncBlogCategory[site].categories) {
               return;
             }
+
             data.syncBlogCategory[site].categories.forEach(function(category) {
-              object.syncBlogCategory.push(
-                {
-                  pk_item: null,
-                  pk_menu: null,
-                  title: category,
-                  type: 'syncBlogCategory',
-                  link_name: category,
-                  pk_father: 0,
-                  position: 0,
-                }
-              );
+              var transformedCategory = {
+                pk_item: null,
+                pk_menu: null,
+                title: category,
+                type: 'syncBlogCategory',
+                link_name: category,
+                pk_father: 0,
+                position: 0,
+                locale: null
+              };
+
+              object.syncBlogCategory.push(transformedCategory);
             });
           });
 
@@ -426,29 +474,33 @@
         };
 
         /**
-         * @param {Object} dragable A menu item object.
+         * Checks if a menu item is already present in the menu.
          *
-         * @returns true if the menu item is already in the menu, false otherwise.
+         * @param {Object} draggable A menu item object to be checked.
+         * @returns {boolean} true if the menu item is already in the menu, false otherwise.
          */
-        $scope.isAlreadyInMenu = function(dragable) {
-          if (dragable.type === 'external') {
+        $scope.isAlreadyInMenu = function(draggable) {
+          if (draggable.type === 'external' || draggable.type === 'internal') {
             return false;
           }
 
-          for (var parent in $scope.parents) {
-            var item = $scope.parents[parent];
+          for (var parentKey in $scope.parents) {
+            var parentItem = $scope.parents[parentKey];
 
-            if ($scope.isEqual(item, dragable)) {
+            if ($scope.isEqual(parentItem, draggable)) {
               return true;
             }
+          }
 
-            for (var child in $scope.childs[item.pk_item]) {
-              if ($scope.isEqual($scope.childs[item.pk_item][child], dragable)) {
+          for (var parent in $scope.childs) {
+            for (var child in $scope.childs[parent]) {
+              var item = $scope.childs[parent][child];
+
+              if ($scope.isEqual(item, draggable)) {
                 return true;
               }
             }
           }
-
           return false;
         };
 
@@ -459,7 +511,28 @@
          * @returns true if the objects are equal, false otherwise.
          */
         $scope.isEqual = function(original, copy) {
-          return original.type === copy.type && original.link_name === copy.link_name;
+          if (!$scope.hasMultilanguage()) {
+            if (original.type === 'internal' && copy.type === 'internal') {
+              return original.type === copy.type && original.link_name === copy.link_name;
+            }
+
+            if (original.referenceId !== null) {
+              return original.referenceId === copy.referenceId && original.type === copy.type;
+            }
+            return original.link_name === copy.link_name && original.type === copy.type;
+          }
+
+          if (original.type === 'internal' && copy.type === 'internal') {
+            return (original.locale === copy.locale || copy.locale === null) &&
+              original.link_name === copy.link_name;
+          }
+
+          if (original.type === 'tags' && original.locale === null) {
+            return false;
+          }
+
+          return original.locale === copy.locale && original.type === copy.type &&
+                 original.referenceId === copy.referenceId;
         };
 
         /**
@@ -474,11 +547,29 @@
 
           item.menu_items = data.menu_items.map(function(item) {
             item.title = $scope.translateTitle(item, locale, defaultLocale);
+            item.link_name = $scope.translateLinkName(item, locale, defaultLocale);
 
             return item;
           });
 
           return Object.assign(data, item);
+        };
+
+        /**
+         * Translates a data item to the specified locale.
+         * @param {Object} data - The data item to translate.
+         * @param {string} locale - The locale to translate to.
+         * @param {string} defaultLocale - The default locale.
+         * @returns {Object} The object translated to the selected locale.
+         */
+        $scope.getTranslatedProperty = function(data, locale, defaultLocale) {
+          if (typeof data === 'object') {
+            if (data.hasOwnProperty(locale)) {
+              return data[locale];
+            }
+            return data[defaultLocale];
+          }
+          return data;
         };
 
         /**
@@ -503,6 +594,48 @@
         };
 
         /**
+         * @param {Object} item          The item to translate.
+         * @param {string} locale        The locale to translate to.
+         * @param {string} defaultLocale The default locale.
+         *
+         * @returns The title translated to the locale.
+         */
+        $scope.translateLinkName = function(item, locale, defaultLocale) {
+          if (typeof item.link_name === 'string') {
+            return item.link_name;
+          }
+
+          if (!item.link_name || !item.link_name[locale] && !item.link_name[defaultLocale]) {
+            return '';
+          }
+
+          return item.link_name[locale] ?
+            item.link_name[locale] :
+            item.link_name[defaultLocale];
+        };
+
+        /**
+         * Determines if an item is visible based on certain criteria.
+         * @param {Object} item - The item to evaluate.
+         * @param {boolean} filterParents - Indicates if parent items should be filtered.
+         * @returns {boolean} Returns true if the item is visible, otherwise returns false.
+         */
+        $scope.visible = function(item, filterParents) {
+          if (!$scope.hasMultilanguage()) {
+            if (filterParents && $scope.isAlreadyInMenu(item)) {
+              return false;
+            }
+            return true;
+          }
+
+          if (filterParents && $scope.isAlreadyInMenu(item)) {
+            return false;
+          }
+
+          return item.locale === null || item.locale === $scope.config.locale.selected;
+        };
+
+        /**
          * Watcher to generate the array of childs for the new parents.
          */
         $scope.$watch(function() {
@@ -514,7 +647,7 @@
             return parent.pk_item;
           }).join(',');
         }, function(nv, ov) {
-          if (!nv && !ov) {
+          if (!nv && !ov || nv === ov || !ov) {
             return;
           }
 
@@ -523,8 +656,6 @@
           var newKey = nv.split(',').filter(function(key) {
             return !oldKeys.includes(key);
           });
-
-          $scope.dragables = $scope.filterDragables($scope.menuData);
 
           if (!newKey || newKey.length === 0) {
             return;
@@ -540,17 +671,107 @@
         });
 
         /**
-         * Watcher to refresh the dragable items when something changes in search or childs.
+         * Watcher to refresh the draggable items when the children or parents change.
          */
         $scope.$watch(function() {
-          return JSON.stringify($scope.childs) + JSON.stringify($scope.search);
+          return JSON.stringify($scope.childs) + JSON.stringify($scope.parents);
         }, function(nv, ov) {
-          if (nv === ov) {
+          if (nv === ov || !ov) {
+            return;
+          }
+          $scope.dragables = $scope.filterDragables($scope.localizableDrag);
+        });
+
+        /**
+         * Watcher to refresh the draggable items when the search changes.
+         */
+        $scope.$watch(function() {
+          return JSON.stringify($scope.search);
+        }, function(nv, ov) {
+          if (nv === ov || !ov) {
+            return;
+          }
+          $scope.dragables = $scope.filterDragables($scope.localizableDrag);
+        });
+
+        /**
+         * Watches for changes in the selected locale and updates titles accordingly.
+         *
+         * @param {Object} $scope - The scope object.
+         */
+        $scope.$watch('config.locale.selected', function(nv, ov) {
+          if (nv === ov || !ov) {
             return;
           }
 
-          $scope.dragables = $scope.filterDragables($scope.menuData);
+          $scope.dragables = $scope.filterDragables($scope.localizableDrag);
         });
+
+        /**
+         * Fetches a tag by its ID and adds it to the dragables.tags array.
+         * @param {number} tagId - The ID of the tag to fetch.
+         */
+        $scope.addTagToDragables = function(tagId) {
+          http.get({
+            name: 'api_v1_backend_menu_get_tag',
+            params: { id: tagId }
+          }).then(function(response) {
+            $scope.loading = false;
+
+            if (response.data) {
+              const tagData = response.data;
+
+              if (Array.isArray(tagData) && tagData.length > 0) {
+                const tag = tagData[0];
+
+                $scope.dragables.tags.push({
+                  pk_item: null,
+                  pk_menu: null,
+                  title: tag.title,
+                  type: 'tags',
+                  link_name: tag.slug,
+                  pk_father: 0,
+                  position: 0,
+                  referenceId: tag.id,
+                  locale: tag.locale || null
+                });
+              }
+            }
+          });
+        };
+
+        /**
+         * Watches for changes in the menu.tag value and adds the corresponding
+         * tag to dragables.tags when a new value is set.
+         *
+         * @param {Array} newValue - The new value of the menu.tag, expected to be an array containing the tag ID(s).
+         * @param {Array} oldValue - The previous value of the menu.tag.
+         */
+        $scope.$watch('criteria.tag', function(newValue, oldValue) {
+          if (newValue && newValue.length > 0) {
+            var addedTags = newValue.filter(function(tagId) {
+              return !oldValue || oldValue.indexOf(tagId) === -1;
+            });
+
+            if (addedTags.length > 0) {
+              const newTagId = addedTags[0];
+
+              $scope.addTagToDragables(newTagId);
+            }
+          }
+        });
+
+        /**
+         * Filters elements based on the specified locale.
+         *
+         * @param {string} locale - The locale to filter by.
+         * @returns {Function} A function that checks if an element matches the specified locale.
+         */
+        $scope.filterLocale = function(locale) {
+          return function(element) {
+            return !element.locale || element.locale === locale;
+          };
+        };
       }
     ]);
 })();

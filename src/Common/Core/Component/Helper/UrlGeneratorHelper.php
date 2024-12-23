@@ -128,6 +128,9 @@ class UrlGeneratorHelper
         if (!$content instanceof \Content) {
             $reflect = new \ReflectionClass($content);
             $method  = 'getUriFor' . $reflect->getShortName();
+            $method  = array_key_exists('alternative_url', $params) && $params['alternative_url']
+                    ? $method . "Alt"
+                    : $method;
         }
 
         if (method_exists($this, $method)) {
@@ -181,6 +184,7 @@ class UrlGeneratorHelper
         $params = array_filter($params, function ($a) {
             return strpos($a, '_') !== 0;
         }, ARRAY_FILTER_USE_KEY);
+
         try {
             $url = is_string($item)
                 ? $this->router->generate(
@@ -350,6 +354,29 @@ class UrlGeneratorHelper
 
         $uri = $this->container->get('router')->generate('category_frontpage', [
             'category_slug' => $category->name
+        ]);
+
+        return ltrim($uri, '/');
+    }
+
+    /**
+     * Returns the ALt URI for a Category.
+     *
+     * @param Category $category The category object.
+     *
+     * @return string The category URI.
+     */
+    protected function getUriForCategoryAlt($category, $locale = null)
+    {
+        $category = $this->container->get('data.manager.filter')->set($category)
+            ->filter('localize', [
+                'keys'   => [ 'name' ],
+                'locale' => $locale
+            ])
+            ->get();
+
+        $uri = $this->container->get('router')->generate('frontend_frontpage_category', [
+            'category' => $category->name
         ]);
 
         return ltrim($uri, '/');

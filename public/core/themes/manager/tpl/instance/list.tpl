@@ -27,12 +27,22 @@
 
 {block name="selectedActions"}
   <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_REPORT')">
-    <a class="btn btn-link" ng-href="{url name=manager_ws_instances_csv}?ids=[% selected.instances.join(); %]&token=[% security.token %]" uib-tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
+    <a class="btn btn-link" ng-href="{url name=manager_ws_instances_csv}?ids=[% selected.items.join(); %]&token=[% security.token %]" uib-tooltip="{t}Download CSV of selected{/t}" tooltip-placement="bottom">
       <i class="fa fa-download fa-lg text-white"></i>
     </a>
   </li>
   <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_REPORT') && (security.hasPermission('INSTANCE_UPDATE') || security.hasPermission('INSTANCE_DELETE'))">
     <span class="h-seperate"></span>
+  </li>
+  <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_UPDATE')">
+    <button class="btn btn-link" ng-click="patchSelected('blocked', 1)" uib-tooltip="{t}Blocked{/t}" tooltip-placement="bottom" type="button">
+      <i class="fa fa-lock fa-lg"></i>
+    </button>
+  </li>
+  <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_UPDATE')">
+    <button class="btn btn-link" ng-click="patchSelected('blocked', 0)" uib-tooltip="{t}Unlocked{/t}" tooltip-placement="bottom" type="button">
+      <i class="fa fa-unlock fa-lg"></i>
+    </button>
   </li>
   <li class="quicklinks" ng-if="security.hasPermission('INSTANCE_UPDATE')">
     <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
@@ -85,6 +95,52 @@
         <div ng-bind-html="user.name | highlight: $select.search"></div>
       </ui-select-choices>
     </ui-select>
+  </li>
+  <li class="m-r-10 quicklinks">
+    <ui-select name="theme" theme="select2" ng-model="criteria.settings">
+      <ui-select-match>
+        <strong>{t}Themes{/t}:</strong> [% $select.selected.name %]
+      </ui-select-match>
+      <ui-select-choices repeat="theme.uuid as theme in extra.themes | filter: $select.search">
+        <div ng-bind-html="theme.name | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>
+  </li>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="activated = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: '0' } ]">
+    <ui-select name="activated" theme="select2" ng-model="criteria.activated">
+      <ui-select-match>
+        <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+      </ui-select-match>
+      <ui-select-choices repeat="item.value as item in activated | filter: $select.search">
+        <div ng-bind-html="item.name | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>
+  </li>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks">
+    <button
+      class="btn btn-white"
+      style="border:0;"
+      ng-click="criteria.blocked = criteria.blocked === 1 ? 0 : 1"
+      uib-tooltip="{t}Blocked{/t}"
+      tooltip-placement="bottom">
+      <i class="fa fa-square-o" aria-hidden="true" ng-if="!criteria.blocked"></i>
+      <i class="fa fa-unlock m-l-5" aria-hidden="true" ng-if="!criteria.blocked"></i>
+      <i class="fa fa-check-square-o text-primary" aria-hidden="true" ng-if="criteria.blocked === 1"></i>
+      <i class="fa fa-lock m-l-5" aria-hidden="true" ng-if="criteria.blocked === 1"></i>
+    </button>
+  </li>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks">
+    <button
+      class="btn btn-white"
+      style="border:0;"
+      ng-click="criteria.subdirectory = criteria.subdirectory === 'null' ? null : 'null'"
+      uib-tooltip="{t}Subdirectory path{/t}"
+      tooltip-placement="bottom">
+      <i class="fa fa-square-o" aria-hidden="true" ng-if="!criteria.subdirectory"></i>
+      <i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="!criteria.subdirectory"></i>
+      <i class="fa fa-check-square-o text-primary" aria-hidden="true" ng-if="criteria.subdirectory === 'null'"></i>
+      <i class="fa fa-folder m-l-5" aria-hidden="true" ng-if="criteria.subdirectory === 'null'"></i>
+    </button>
   </li>
   <li class="m-r-10 quicklinks">
     <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">

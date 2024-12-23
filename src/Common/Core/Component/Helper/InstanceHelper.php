@@ -174,6 +174,28 @@ class InstanceHelper
     }
 
     /**
+     * Returns the number of enabled backend users.
+     *
+     * @param Instance $instance The instance.
+     *
+     * @return array The number of enabled backend users.
+     */
+    public function countTags(Instance $instance) : int
+    {
+        try {
+            $this->conn->selectDatabase($instance->getDatabaseName());
+
+            $sql = 'select count(*) as total from tags';
+
+            $tags = $this->conn->fetchAssoc($sql);
+
+            return $tags['total'];
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+
+    /**
      * Fetches the date of creation of the instance
      *
      * @param Instance $i The instance to get stats from
