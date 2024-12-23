@@ -62,6 +62,7 @@ class ExternalSettingController extends SettingController
         'prometeo',
         'recaptcha',
         'twitter_page',
+        'bluesky_page',
         'vimeo_page',
         'youtube_page',
     ];

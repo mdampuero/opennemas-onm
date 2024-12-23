@@ -868,6 +868,32 @@
                   </div>
                 </div>
               </div>
+              <div class="panel-group" id="panel-group-bluesky" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-bluesky" data-toggle="collapse" href="#bluesky">
+                        <i class="fa fa-bluesky"></i>{t}Bluesky{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="bluesky">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="bluesky-page">
+                          {t}Bluesky Page{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="bluesky-page" name="bluesky-page" ng-model="settings.bluesky_page" type="text">
+                          <span class="help">
+                            {t escape=off}If you also have a <strong>Bluesky page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="panel-group" id="panel-group-instagram" data-toggle="collapse">
                 <div class="panel panel-default">
                   <div class="panel-heading collapsed">
