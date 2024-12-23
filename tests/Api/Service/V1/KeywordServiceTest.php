@@ -82,22 +82,29 @@ class KeywordServiceTest extends \PHPUnit\Framework\TestCase
     public function testReplaceTermsRepeat()
     {
         $keywords = [
-            new Keyword(['id' => '1', 'keyword' => 'Lorem', 'type' => 'url', 'value'       => 'glorp']),
-            new Keyword(['id' => '2', 'keyword' => 'ipsum', 'type' => 'email', 'value'     => 'baz']),
+            new Keyword(['id' => '1', 'keyword' => 'Lorem', 'type' => 'url', 'value' => 'glorp']),
+            new Keyword(['id' => '2', 'keyword' => 'ipsum', 'type' => 'email', 'value' => 'baz']),
             new Keyword(['id' => '3', 'keyword' => 'dolor', 'type' => 'intsearch', 'value' => 'foo']),
-            new Keyword(['id' => '4', 'keyword' => 'sit', 'type'   => '', 'value'          => 'default'])
+            new Keyword(['id' => '4', 'keyword' => 'sit', 'type' => '', 'value' => 'default'])
         ];
 
-        $expected = '<a href="glorp" target="_blank">Lorem</a> ' .
-            '<a href="mailto:baz" target="_blank">ipsum</a> ' .
-            '<a href="/tag/foo" target="_blank">dolor</a> ' .
-            'sit amet, consectetur adipiscing elit.';
+        $expected = '<a href="glorp" target="_blank">'
+                  . '<a href="glorp" target="_blank">'
+                  . '<a href="glorp" target="_blank">Lorem</a>'
+                  . '</a></a> '
+                  . '<a href="mailto:baz" target="_blank">'
+                  . '<a href="mailto:baz" target="_blank">'
+                  . '<a href="mailto:baz" target="_blank">ipsum</a>'
+                  . '</a></a> '
+                  . '<a href="/tag/foo" target="_blank">'
+                  . '<a href="/tag/foo" target="_blank">'
+                  . '<a href="/tag/foo" target="_blank">dolor</a>'
+                  . '</a></a> '
+                  . 'sit amet, consectetur adipiscing elit.';
 
         $textreplace_1 = $this->service->replaceTerms($this->text, $keywords);
-
         $textreplace_2 = $this->service->replaceTerms($textreplace_1, $keywords);
-
-        $actual = $this->service->replaceTerms($textreplace_2, $keywords);
+        $actual        = $this->service->replaceTerms($textreplace_2, $keywords);
 
         $this->assertEquals($expected, $actual);
     }

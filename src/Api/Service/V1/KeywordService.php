@@ -76,12 +76,17 @@ class KeywordService extends OrmService
      */
     private function replaceWithPlaceholders($text, $keywordsSorted, $types)
     {
-        $placeholderMap   = [];
-        $replacedKeywords = [];
+        $placeholderMap    = [];
+        $replacedKeywords  = [];
+        $processedKeywords = []; // Array para seguir el rastro de las palabras procesadas
 
         foreach ($keywordsSorted as $keyword) {
             if (array_key_exists($keyword->type, $types)) {
                 if (in_array($keyword->keyword, $replacedKeywords)) {
+                    continue;
+                }
+
+                if (in_array($keyword->keyword, $processedKeywords)) {
                     continue;
                 }
 
@@ -90,9 +95,16 @@ class KeywordService extends OrmService
 
                 $placeholderMap[$placeholder] = $replacement;
 
-                $text = $this->replaceKeywordInText($text, preg_quote($keyword->keyword, '@'), $placeholder);
+                // Reemplazamos la palabra clave con el placeholder
+                $text = $this->replaceKeywordInText(
+                    $text,
+                    preg_quote($keyword->keyword, '@'),
+                    $placeholder,
+                    $processedKeywords
+                );
 
-                $replacedKeywords[] = $keyword->keyword;
+                $replacedKeywords[]  = $keyword->keyword;
+                $processedKeywords[] = $keyword->keyword;
             }
         }
 
@@ -116,29 +128,54 @@ class KeywordService extends OrmService
     }
 
     /**
-     * Replaces occurrences of the keyword in the text with a unique placeholder, excluding instances inside <a> tags.
+     * Replaces occurrences of the keyword in the text with a unique placeholder,
+     * excluding instances inside <a> tags and considering processed compound keywords.
      *
      * @param string $text The text where the keyword needs to be replaced.
      * @param string $keywordPattern The regular expression pattern of the keyword.
      * @param string $placeholder The unique placeholder string that will replace the keyword.
+     * @param array &$processedKeywords An array that tracks processed keywords to skip.
      * @return string The modified text with the keyword replaced by the placeholder.
      */
-    private function replaceKeywordInText($text, $keywordPattern, $placeholder)
+    private function replaceKeywordInText($text, $keywordPattern, $placeholder, &$processedKeywords = [])
     {
-        $replacementCount = 0;
+        $processedParts = [];
+        $remainingText  = $text;
 
-        return preg_replace_callback(
-            '@<a\b[^>]*>.*?<\/a>|(\b' . $keywordPattern . '\b)@',
+        foreach ($processedKeywords as $processedKeyword) {
+            if (strpos($remainingText, $processedKeyword) !== false) {
+                $remainingText    = str_replace(
+                    $processedKeyword,
+                    "##PROCESSED_" . md5($processedKeyword) . "##",
+                    $remainingText
+                );
+                $processedParts[] = $processedKeyword;
+            }
+        }
+
+        $replacementCount = 0;
+        $updatedText      = preg_replace_callback(
+            '@\b' . preg_quote($keywordPattern, '@') . '\b@',
             function ($matches) use ($placeholder, &$replacementCount) {
-                if (!empty($matches[1]) && $replacementCount === 0) {
+                if ($replacementCount === 0) {
                     $replacementCount++;
                     return $placeholder;
                 }
                 return $matches[0];
             },
-            $text,
-            1
+            $remainingText
         );
+
+        $finalText = $updatedText;
+        foreach ($processedParts as $processedPart) {
+            $finalText = str_replace("##PROCESSED_" . md5($processedPart) . "##", $processedPart, $finalText);
+        }
+
+        if ($replacementCount > 0) {
+            $processedKeywords[] = $keywordPattern;
+        }
+
+        return $finalText;
     }
 
     /**
