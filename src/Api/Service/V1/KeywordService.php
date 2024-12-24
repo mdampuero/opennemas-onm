@@ -85,10 +85,6 @@ class KeywordService extends OrmService
         foreach ($keywordsSorted as $keyword) {
             if (array_key_exists($keyword->type, $types)) {
                 $placeholder = "##KEYWORD_ONM_PLACEHOLDER_" . $keyword->id . "##";
-                if (key_exists($placeholder, $this->replacedKeywords)) {
-                    continue;
-                }
-
                 $replacement = $this->createReplacementLink($keyword, $types[$keyword->type]);
 
                 $placeholderMap[$placeholder] = $replacement;
@@ -126,7 +122,7 @@ class KeywordService extends OrmService
      */
     private function replaceKeywordInText($text, $keywordPattern, $placeholder)
     {
-        $result = preg_replace_callback(
+        return preg_replace_callback(
             '@<a\b[^>]*>.*?<\/a>|(\b' . $keywordPattern . '\b)@',
             function ($matches) use ($placeholder) {
                 if (!empty($matches[1])) {
@@ -141,7 +137,6 @@ class KeywordService extends OrmService
             },
             $text
         );
-        return $result;
     }
 
     /**

@@ -28,14 +28,14 @@ class KeywordServiceTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->container = $this->getMockBuilder('ServiceContainer')
-            ->setMethods(['get'])
+            ->setMethods([ 'get' ])
             ->getMock();
 
         $this->text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
 
         $this->service = $this->getMockBuilder('Api\Service\V1\KeywordService')
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->setMethods([ 'get' ])
             ->getMock();
     }
 
