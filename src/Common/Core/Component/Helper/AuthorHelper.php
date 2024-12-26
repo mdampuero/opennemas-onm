@@ -279,7 +279,14 @@ class AuthorHelper
     {
         $author = $this->getAuthor($item);
 
-        return !empty($author->facebook) ? ("https://www.facebook.com/" . $author->facebook) : null;
+        if (!empty($author->facebook)) {
+            if (preg_match('/^https?:\/\//', $author->facebook)) {
+                return $author->facebook;
+            }
+            return "https://www.facebook.com/" . $author->facebook;
+        }
+
+        return null;
     }
 
     /**
@@ -294,7 +301,14 @@ class AuthorHelper
     {
         $author = $this->getAuthor($item);
 
-        return !empty($author->twitter) ? ("https://www.twitter.com/" . $author->twitter) : null;
+        if (!empty($author->twitter)) {
+            if (preg_match('/^https?:\/\//', $author->twitter)) {
+                return $author->twitter;
+            }
+            return "https://www.twitter.com/" . $author->twitter;
+        }
+
+        return null;
     }
 
     /**
@@ -309,7 +323,14 @@ class AuthorHelper
     {
         $author = $this->getAuthor($item);
 
-        return !empty($author->instagram) ? ("https://www.instagram.com/" . $author->instagram) : null;
+        if (!empty($author->instagram)) {
+            if (preg_match('/^https?:\/\//', $author->instagram)) {
+                return $author->instagram;
+            }
+            return "https://www.instagram.com/" . $author->instagram;
+        }
+
+        return null;
     }
 
     /**
@@ -324,7 +345,14 @@ class AuthorHelper
     {
         $author = $this->getAuthor($item);
 
-        return !empty($author->linkedin) ? ("https://www.linkedin.com/in/" . $author->linkedin) : null;
+        if (!empty($author->linkedin)) {
+            if (preg_match('/^https?:\/\//', $author->linkedin)) {
+                return $author->linkedin;
+            }
+            return "https://www.linkedin.com/in/" . $author->linkedin;
+        }
+
+        return null;
     }
 
     /**
