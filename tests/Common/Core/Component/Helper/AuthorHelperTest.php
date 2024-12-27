@@ -71,6 +71,7 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
 
         return null;
     }
+
     /**
      * Tests getAuthor when a author is already provided as parameter.
      */
