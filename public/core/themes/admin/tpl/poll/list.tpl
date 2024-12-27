@@ -88,7 +88,7 @@
     </div>
   </li>
   <li>
-    <onm-tags-input class="hidden-xs ng-cloak m-r-10 quicklinks" ng-model="criteria.tag" hide-generate="true" selection-only="true" generate-from="false" ignoreLocale="true" max-results="5" max-tags="1" filter="true" placeholder="{t}Search by tag{/t}"/>
+    <onm-tags-input class="hidden-xs ng-cloak m-r-10 quicklinks" ng-model="criteria.tag" hide-generate="true" selection-only="true" generate-from="false" ignore-locale="true" max-results="5" max-tags="1" filter="true" placeholder="{t}Search by tag{/t}"/>
   </li>
   <li class="hidden-xs m-r-10 ng-cloak quicklinks"  ng-init="categories = {json_encode($categories)|clear_json}">
     <onm-category-selector default-value-text="{t}Any{/t}" label-text="{t}Category{/t}" locale="config.locale.selected" ng-model="criteria.category_id" placeholder="{t}Any{/t}"></onm-category-selector>
