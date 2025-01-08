@@ -229,6 +229,20 @@ class InstanceCreator
     }
 
     /**
+     * Deletes an internal folder within the application.
+     *
+     * @param string $name The name of the folder to delete.
+     *
+     * @return void
+     */
+    public function deleteInstanceFolder($name)
+    {
+        $target = APPLICATION_PATH . DS . 'tmp' . DS . 'instances' . DS . $name;
+
+        $this->fs->remove($target);
+    }
+
+    /**
      * Deletes the backup directory.
      *
      * @param string $path The path to the directory
