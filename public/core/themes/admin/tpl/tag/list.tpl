@@ -42,6 +42,18 @@
 {/block}
 
 {block name="selectedActions"}
+  {acl isAllowed="TAG_UPDATE"}
+    <li class="quicklinks">
+      <button class="btn btn-link" href="#" ng-click="patchSelected('private', 0)" uib-tooltip="{t escape="off"}Public{/t}" tooltip-placement="bottom">
+        <i class="fa fa-eye fa-lg"></i>
+      </button>
+    </li>
+    <li class="quicklinks">
+      <button class="btn btn-link" href="#" ng-click="patchSelected('private', 1)" uib-tooltip="{t escape="off"}Private{/t}" tooltip-placement="bottom">
+        <i class="fa fa-eye-slash fa-lg"></i>
+      </button>
+    </li>
+  {/acl}
   {acl isAllowed="TAG_DELETE"}
     <li class="quicklinks">
       <button class="btn btn-link" href="#" ng-click="deleteSelected('backend_ws_tag_delete')">
@@ -70,6 +82,16 @@
       </ui-select-match>
       <ui-select-choices repeat="locale.id as locale in config.locale.available | filter: { name: $select.search }">
         <div ng-bind-html="locale.name"></div>
+      </ui-select-choices>
+    </ui-select>
+  </li>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="private = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Private{/t}', value: 1} ]">
+    <ui-select name="private" theme="select2" ng-model="criteria.private">
+      <ui-select-match>
+        <strong>{t}Visibility{/t}:</strong> [% $select.selected.name %]
+      </ui-select-match>
+      <ui-select-choices repeat="item.value as item in private  | filter: $select.search">
+        <div ng-bind-html="item.name | highlight: $select.search"></div>
       </ui-select-choices>
     </ui-select>
   </li>

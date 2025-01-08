@@ -23,6 +23,36 @@
   </a>
 {/block}
 
+{block name="rightColumn"}
+  <div class="grid simple">
+    <div class="grid-body no-padding">
+        <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.visibility }" ng-click="expanded.visibility = !expanded.visibility">
+          <i class="fa fa-eye m-r-10"></i>{t}Visibility{/t}
+          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.visibility }"></i>
+          <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.visibility">
+            <span ng-show="item.private">{t}Private{/t}</span>
+            <span ng-show="!item.private">{t}Public{/t}</span>
+          </span>
+        </div>
+        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.visibility }">
+          <div class="form-group no-margin">
+            <div class="checkbox">
+              <input class="form-control" id="private" name="private" ng-false-value="0" ng-model="item.private" ng-true-value="1" type="checkbox">
+              <label for="private" class="form-label">
+                {t}Private{/t}
+              </label>
+            </div>
+            <div class="help m-l-3 m-t-5" ng-show="isHelpEnabled()">
+              <i class="fa fa-info-circle m-r-5 text-info"></i>
+              {t}Check this option to prevent the tag from appearing in your content. Additionally, the page for this tag will not be available.{/t}
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{/block}
+
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">

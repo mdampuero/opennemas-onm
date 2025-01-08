@@ -19,7 +19,9 @@ function smarty_function_renderMetaKeywords($params, &$smarty)
     $ids     = !empty($content->tags) ? $content->tags : [];
 
     try {
-        $tags = $smarty->getContainer()->get('api.service.tag')->getListByIds($ids)['items'];
+        // Set private flag to false
+        $tags = $smarty->getContainer()->get('api.service.tag')
+            ->getListByIds($ids, false)['items'];
     } catch (GetListException $e) {
         return '';
     }
