@@ -19,7 +19,7 @@
     <div class="col-xs-6 form-group" ng-class="{ 'col-xs-12': template.selected }">
       <label class="form-label semi-bold" for="tag">{t}Target{/t}</label>
       <div class="controls">
-        <onm-tags-input class="block" label-text="{t}Tag{/t}" exclude="template.exclude" ng-model="template.target" selection-only="true" generate-from="false" ignoreLocale="true" max-results="5" max-tags="1" filter="true" placeholder="{t}Search by tag{/t}" required></onm-tags-input>
+        <onm-tags-input class="block" label-text="{t}Tag{/t}" exclude="template.exclude" ng-model="template.target" selection-only="true" generate-from="false" ignore-locale="true" max-results="5" max-tags="1" filter="true" placeholder="{t}Search by tag{/t}" required></onm-tags-input>
       </div>
     </div>
   </div>
