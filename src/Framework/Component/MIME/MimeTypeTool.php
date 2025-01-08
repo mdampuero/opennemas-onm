@@ -27,6 +27,7 @@ class MimeTypeTool
         'jpg'  => 'image/jpeg',
         'jpe'  => 'image/jpeg',
         'jpeg' => 'image/jpeg',
+        'webp' => 'image/webp',
         'gif'  => 'image/gif',
         'bmp'  => 'image/bmp',
         'ico'  => 'image/vnd.microsoft.icon',
