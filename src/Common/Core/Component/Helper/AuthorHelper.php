@@ -268,6 +268,37 @@ class AuthorHelper
     }
 
     /**
+     * Checks if a given URL matches common social media patterns and returns the URL without the matched part.
+     *
+     * @param string|null $item The input URL to check. Can be null or an empty string.
+     *
+     * @return string|null Returns the modified URL if a match is found, null if the input is empty,
+     *                     or the original URL if no match is found.
+     */
+    public function checkSocialUrls($item) : ?string
+    {
+        if (empty($item)) {
+            return null;
+        }
+
+        $patterns = [
+            '/^(https?:\/\/)?(www\.)?twitter\.com\//i',
+            '/^(https?:\/\/)?(www\.)?linkedin\.com\/in\//i',
+            '/^(https?:\/\/)?(www\.)?linkedin\.com\//i',
+            '/^(https?:\/\/)?(www\.)?facebook\.com\//i',
+            '/^(https?:\/\/)?(www\.)?instagram\.com\//i'
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $item)) {
+                return preg_replace($pattern, '', $item);
+            }
+        }
+
+        return $item;
+    }
+
+    /**
      * Returns the author twitter url for the provided item.
      *
      * @param Content $item The item to get author facebook url for. If not provided, the
@@ -279,7 +310,13 @@ class AuthorHelper
     {
         $author = $this->getAuthor($item);
 
-        return !empty($author->facebook) ? ("https://www.facebook.com/" . $author->facebook) : null;
+        if (empty($author->facebook)) {
+            return null;
+        }
+
+        $facebookUser = $this->checkSocialUrls($author->facebook);
+
+        return "https://www.facebook.com/" . $facebookUser;
     }
 
     /**
@@ -294,7 +331,13 @@ class AuthorHelper
     {
         $author = $this->getAuthor($item);
 
-        return !empty($author->twitter) ? ("https://www.twitter.com/" . $author->twitter) : null;
+        if (empty($author->twitter)) {
+            return null;
+        }
+
+        $twitterUser = $this->checkSocialUrls($author->twitter);
+
+        return "https://www.twitter.com/" . $twitterUser;
     }
 
     /**
@@ -309,7 +352,13 @@ class AuthorHelper
     {
         $author = $this->getAuthor($item);
 
-        return !empty($author->instagram) ? ("https://www.instagram.com/" . $author->instagram) : null;
+        if (empty($author->instagram)) {
+            return null;
+        }
+
+        $instagramUser = $this->checkSocialUrls($author->instagram);
+
+        return "https://www.instagram.com/" . $instagramUser;
     }
 
     /**
@@ -324,7 +373,13 @@ class AuthorHelper
     {
         $author = $this->getAuthor($item);
 
-        return !empty($author->linkedin) ? ("https://www.linkedin.com/in/" . $author->linkedin) : null;
+        if (empty($author->linkedin)) {
+            return null;
+        }
+
+        $linkedinUser = $this->checkSocialUrls($author->linkedin);
+
+        return "https://www.linkedin.com/in/" . $linkedinUser;
     }
 
     /**
