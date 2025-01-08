@@ -244,6 +244,21 @@ class UpdateInstanceCommand extends Command
             ), true);
         }
 
+        if (in_array("es.openhost.module.openai", $instance->activated_modules)) {
+            $this->writePad('- Counting active spent money in 27th');
+            $helperAI = $this->getContainer()->get('core.helper.openai');
+
+            $getAIActions       = $helper->getSpentAI($instance);
+            $totalSpent         = $helperAI->getSpentMoney($getAIActions);
+            $instance->ai_spent = floatval($totalSpent);
+
+            $this->writeStatus('success', 'DONE');
+            $this->writeStatus('info', sprintf(
+                ' (%s)',
+                $instance->ai_spent
+            ), true);
+        }
+
         $this->writePad('- Counting contents');
         $contents = $helper->countContents($instance);
 

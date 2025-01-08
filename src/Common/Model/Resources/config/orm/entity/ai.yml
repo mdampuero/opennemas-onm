@@ -1,0 +1,53 @@
+orm:
+    metadata:
+        -
+            name:  Ai
+            class: Common\Model\Entity\Ai
+            properties:
+                id:                  integer
+                messages:            array
+                response:            string
+                tokens:              array
+                params:              array
+                date:                datetime
+            converters:
+                default:
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.ai' ]
+            repositories:
+                instance:
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.ai', '@cache.connection.instance' ]
+            persisters:
+                instance:
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.instance', '@orm.metadata.ai', '@cache.connection.instance' ]
+            mapping:
+                database:
+                    table: ai_actions
+                    columns:
+                        id:
+                            type: integer
+                            options: { default: 0, unsigned: true, autoincrement: true, notnull: true}
+                        messages:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false}
+                        response:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
+                        tokens:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
+                        params:
+                            type: text
+                            options: { default: null, length: 65532, notnull: false }
+                        date:
+                            type: datetimetz
+                            options: { default: null, notnull: false }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [id]
+                            primary: true
+                            unique: true
+                            flags: {}

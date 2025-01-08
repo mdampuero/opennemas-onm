@@ -10,6 +10,7 @@
 namespace Common\Core\Component\Helper;
 
 use Common\Model\Entity\Instance;
+use DateTime;
 use GuzzleHttp\Client;
 use Opennemas\Data\Serialize\Serializer\PhpSerializer;
 use Opennemas\Orm\Core\Connection;
@@ -319,6 +320,49 @@ class InstanceHelper
             return null;
         }
     }
+
+        /**
+     * Returns the amount of current Web Push subscirbers
+     *
+     * @param Instance $instance The current instance.
+     *
+     * @return int The amount of current Web Push subscirbers
+     */
+    public function getSpentAI(Instance $instance)
+    {
+        try {
+            $this->conn->selectDatabase($instance->getDatabaseName());
+
+            $date       = new DateTime();
+            $currentDay = (int) $date->format('d');
+
+            $startDate = new DateTime();
+
+            if ($currentDay < 27) {
+                $startDate->modify('first day of last month')
+                    ->setDate($date->format('Y'), $date->format('m') - 1, 27)
+                    ->setTime(0, 0, 0);
+            } else {
+                $startDate->setDate($date->format('Y'), $date->format('m'), 27)
+                    ->setTime(0, 0, 0);
+            }
+
+            $startDateStr = $startDate->format('Y-m-d H:i:s');
+
+            $sql = "SELECT params, tokens FROM ai_actions WHERE date >= '$startDateStr'";
+
+            $results = $this->conn->fetchAll($sql);
+
+            if (empty($results)) {
+                return null;
+            }
+
+            return $results;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
 
     /**
      * Returns the created date of the last created content.

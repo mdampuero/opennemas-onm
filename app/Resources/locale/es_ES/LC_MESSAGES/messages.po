@@ -320,6 +320,18 @@ msgstr "Configuración"
 msgid "PressClipping"
 msgstr "PressClipping"
 
+msgid "OpenAI"
+msgstr "OpenAI"
+
+msgid "NEW"
+msgstr "NUEVO"
+
+msgid "Prompts"
+msgstr "Prompts"
+
+msgid "Usage"
+msgstr "Usado"
+
 msgid "Utilities"
 msgstr "Utilidades"
 
@@ -1048,6 +1060,13 @@ msgstr "Ayuda"
 msgid "Information"
 msgstr "Información"
 
+msgid "Item saved successfully"
+msgstr "Elemento guardado correctamente"
+
+#, php-format
+msgid "%s items deleted successfully"
+msgstr "%s elementos eliminados correctamente"
+
 msgid "Purchase deleted successfully"
 msgstr "Compra eliminada correctamente"
 
@@ -1144,9 +1163,6 @@ msgstr "%s usuarios eliminados correctamente"
 msgid "%s items could not be deleted successfully"
 msgstr "%s elementos no se han podido eliminar correctamente"
 
-msgid "Item saved successfully"
-msgstr "Elemento guardado correctamente"
-
 #, php-format
 msgid "%s items updated successfully"
 msgstr "%s elementos actualizados correctamente"
@@ -1181,10 +1197,6 @@ msgstr "Tu periódico ya está en línea"
 
 msgid "Error when creating a new instance"
 msgstr "Error al crear una nueva instancia"
-
-#, php-format
-msgid "%s items deleted successfully"
-msgstr "%s elementos eliminados correctamente"
 
 msgid "No file provided"
 msgstr "No se proporcionó ningún archivo"
@@ -1389,6 +1401,9 @@ msgstr "Más vistos 3 días"
 msgid "Opinion"
 msgstr "Opinión"
 
+msgid "Webpush Module is not activated"
+msgstr "El módulo Webpush no está activado"
+
 msgid "A minimum of 2 answers are required"
 msgstr "Se requiere un mínimo de 2 respuestas"
 
@@ -1458,9 +1473,6 @@ msgstr "Comprueba la dirección del vídeo, parece ser incorrecta"
 
 msgid "Can't get video information. Check the url"
 msgstr "No es posible obtener la información del vídeo. Comprueba la dirección"
-
-msgid "Webpush Module is not activated"
-msgstr "El módulo Webpush no está activado"
 
 msgid "Unexpected error"
 msgstr "Error inesperado"
@@ -4311,8 +4323,8 @@ msgid "Are you sure that do you want to archive the next element?"
 msgstr "¿Estás seguro de que quieres archivar los siguientes elementos?"
 
 msgid ""
-"This will remove this content from <strong>ALL FRONTPAGES</strong> but it "
-"will remain available for read."
+"Now you will be able to publish your own news, articles and take part of the "
+"information around everyone."
 msgstr ""
 "Esto quitará este contenido de <strong>TODAS LAS PORTADAS</strong> pero "
 "estará disponible para su lectura."
@@ -4404,11 +4416,8 @@ msgstr ""
 "No se pudo cargar esta pestaña. Intentaremos solucionarlo cuanto antes."
 
 msgid ""
-"You have reached the maximum number of elements (%number%). To add new "
-"contents remove the older."
-msgstr ""
-"Has alcanzado el número máximo de elementos en la portada (%number%). Para "
-"añadir nuevos contenidos elimina los mas antiguos."
+"In order to use Opennemas you must accept the Legal notice & Terms of use"
+msgstr "Para usar Opennemas debes aceptar el Aviso legal y Condiciones de uso"
 
 msgid "Last editor"
 msgstr "Último editor"
@@ -4429,26 +4438,46 @@ msgid "Add contents"
 msgstr "Añadir contenidos"
 
 msgid ""
-"The frontpage manager is currently <strong>unavaible for your screen size</"
-"strong>"
+"You can read and learn how to use your Opennemas by using our online "
+"documentation and videos.\n"
+"          Take a look around and you will find it."
 msgstr ""
-"El gestor de portadas no está <strong>disponible para tu tamaño de pantalla</"
-"strong> actualmente"
+"Puedes leer y aprender como usar Opennemas usando nuestra documentación y "
+"vídeos en línea.\n"
+"Echa un vistazo y los encontrarás."
 
-msgid "Available contents"
-msgstr "Contenidos disponibles"
+msgid ""
+"Our <a href=\"http://help.opennemas.com/\" target=\"_blank\">knownledge "
+"base</a> has manuals and howtos about how to create contents and improve "
+"your newspaper."
+msgstr ""
+"Nuestra <a href=\"http://help.opennemas.com/\" target=\"_blank\">base de "
+"conocimientos</a> cuenta con manuales y guías sobre como crear contenidos y "
+"mejoras en tu periódico."
 
-msgid "Suggested"
-msgstr "Sugeridos"
+msgid ""
+"See our <a href=\"http://www.youtube.com/user/OpennemasPublishing\" "
+"target=\"_blank\">video tutorials</a> for getting step-by-step guidance."
+msgstr ""
+"Echa un vistazo a nuestros <a href=\"http://www.youtube.com/user/"
+"OpennemasPublishing\" target=\"_blank\">tutoriales en vídeo</a> para obtener "
+"guías paso a paso."
 
-msgid "Others in category"
-msgstr "Otros en la categoría"
+msgid ""
+"If you need further information you can always contact us by using the <span "
+"class=\"fa fa-support\"></span> Help button in the upper right corner."
+msgstr ""
+"Si necesitas más información siempre siempre puedes contactar con nosotros "
+"usando el botón de Ayuda <span class=\"fa fa-support fa-2x\"></span> de la "
+"esquina superior derecha."
 
-msgid "Latest articles"
-msgstr "Últimos artículos"
+msgid "Opennemas Store"
+msgstr "Tienda de Opennemas"
 
-msgid "Change the layout of this frontpage"
-msgstr "Cambiar la disposición para esta portada"
+msgid "Find and try new add-ons and take your newspaper to the next level."
+msgstr ""
+"Busca y encuentra nuevos añadidos para llevar tu periódico al siguiente "
+"nivel."
 
 msgid "Config event module"
 msgstr "Configuración de módulo «Evento»"
@@ -4789,8 +4818,8 @@ msgstr "Última actualización"
 msgid "Unfavorite"
 msgstr "No Favorito"
 
-msgid "New keyword"
-msgstr "Nueva palabra clave"
+msgid "Letters to the Editor"
+msgstr "Cartas al editor"
 
 msgid "Value"
 msgstr "Valor"
@@ -4798,11 +4827,11 @@ msgstr "Valor"
 msgid "External link to"
 msgstr "Enlace externo a"
 
-msgid "Internal search to keyword"
-msgstr "Búsqueda interna a una palabra clave"
+msgid "Global search"
+msgstr "Búsqueda global"
 
-msgid "Link to send email to"
-msgstr "Enlace para correo electrónico a"
+msgid "Content type"
+msgstr "Tipo de contenido"
 
 msgid "Web Push notifications"
 msgstr "Notificaciones Web Push"
@@ -6056,6 +6085,9 @@ msgstr "Compartir herramientas"
 msgid "Choose where to display"
 msgstr "Elige dónde mostrar"
 
+msgid "Related contents"
+msgstr "Contenidos relacionados"
+
 msgid "Automatic related contents"
 msgstr "Contenidos relacionados automáticos"
 
@@ -6137,6 +6169,9 @@ msgstr "Imagen por defecto para redes sociales"
 msgid "Cookies agreement"
 msgstr "Aceptación de cookies"
 
+msgid "None"
+msgstr "Ninguno"
+
 msgid "Basic cookies advise"
 msgstr "Aviso de cookies básico"
 
@@ -6212,6 +6247,9 @@ msgstr "Didomi noticeId para AMP"
 msgid "Activation Key"
 msgstr "Activation Key"
 
+msgid "Listing"
+msgstr "Listado"
+
 msgid "Items per page"
 msgstr "Elementos por página"
 
@@ -6221,11 +6259,32 @@ msgstr "Elementos por página de blog"
 msgid "Items in RSS"
 msgstr "Elementos en el RSS"
 
-msgid "Form Module"
-msgstr "Módulo de formularios"
+msgid "Indicates the elements that will be displayed in each sitemap."
+msgstr "Indica los elementos que se mostrarán en cada sitemap."
 
-msgid "Contact email"
-msgstr "Email de contacto"
+msgid "Total sitemap news elements"
+msgstr "Noticias totales para el sitemap"
+
+msgid "Elements per page"
+msgstr "Elementos por página"
+
+msgid "Sitemaps enabled"
+msgstr "Sitemaps activados"
+
+msgid "Activate the elements that you want to appear in the sitemap."
+msgstr "Activa los elementos que quieres que aparezcan en el sitemap."
+
+msgid "Newsstand"
+msgstr "Portadas de papel"
+
+msgid "Sitemaps disk cache"
+msgstr "Caché de disco del sitemap"
+
+msgid "This section allows to remove the sitemaps saved on disk."
+msgstr "Esta sección permite eliminar los sitemaps guardados en disco."
+
+msgid "Search for a sitemap by year, month and page"
+msgstr "Busca un sitemap por año, mes y página"
 
 msgid "Control Panel Language"
 msgstr "Idioma del panel de control"
@@ -6501,29 +6560,29 @@ msgstr "Configurar módulo de empresas"
 msgid "New company"
 msgstr "Nueva empresa"
 
-msgid "Search Fields"
-msgstr "Campos de búsqueda"
+msgid "Generated text"
+msgstr "Generar texto"
 
-msgid "Add fields in order to filter on company list page"
-msgstr "Añade campos para filtrar en la página de listado de empresas"
+msgid "View original"
+msgstr "Ver texto original"
 
-msgid "Add field"
-msgstr "Añadir campo"
+msgid "View generated"
+msgstr "Ver texto generado"
 
-msgid "Field name"
-msgstr "Nombre del campo"
+msgid "Tokens used"
+msgstr "Uso de tokens"
 
-msgid "Name displayed in form"
-msgstr "Nombre mostrado en el formulario"
+msgid "Regenerate "
+msgstr "Regenerar"
 
-msgid "Field values"
-msgstr "Valores del campo"
+msgid "Cancel"
+msgstr "Cancelar"
 
-msgid "Words suggested by the form input"
-msgstr "Palabras sugeridas por el campo en el formulario"
+msgid "Edit prompt"
+msgstr "Editar prompt"
 
-msgid "Add a value..."
-msgstr "Añade un valor..."
+msgid "Continue"
+msgstr "Continuar"
 
 msgid "Remove field"
 msgstr "Eliminar campo"
@@ -6897,56 +6956,56 @@ msgstr "ejemplo@ejemplo.es"
 msgid "Go back to login"
 msgstr "Volver al inicio de sesión"
 
-msgid "Link video from other services"
-msgstr "Enlazar vídeo desde otros servicios"
+msgid "Live post"
+msgstr "Contenido en directo"
 
-msgid "Use HTML code"
-msgstr "Usar código HTML"
+msgid "Showcase"
+msgstr "Showcase"
 
-msgid "Use file video URLs"
-msgstr "Usar URLs a ficheros de vídeo"
+msgid "SEO Score"
+msgstr "Puntuación SEO"
 
-msgid "Video URL"
-msgstr "URL del vídeo"
+msgid "No SEO information"
+msgstr "Sin información SEO"
 
-msgid "Get information"
-msgstr "Obtener información"
+msgid "Duplicate"
+msgstr "Duplicar"
 
-msgid "MP4 format"
-msgstr "Formato MP4"
+msgid "Send notification"
+msgstr "Enviar notificación"
 
-msgid "http://www.example.com/path/to/file.mp4"
-msgstr "http://www.ejemplo.es/ruta/al/archivo.mp4"
+msgid "Suggested for frontpage"
+msgstr "Sugerir en portada principal"
 
-msgid "Ogg format"
-msgstr "Formato Ogg"
+msgid "Inner title"
+msgstr "Título interior"
 
-msgid "http://www.example.com/path/to/file.ogg"
-msgstr "http://www.ejemplo.es/ruta/al/archivo.ogg"
+msgid "Signature"
+msgstr "Firma"
 
-msgid "WebM format"
-msgstr "Formato WebM"
+msgid "Newsletter Signature"
+msgstr "Firma del boletín"
 
-msgid "http://www.example.com/path/to/file.webm"
-msgstr "http://www.ejemplo.es/ruta/al/archivo.webm"
+msgid "Alternative signature for newsletter"
+msgstr "Firma alternativa para boletín"
 
-msgid "Write HTML code"
-msgstr "Escriba el código HTML"
+msgid "Test"
+msgstr "Probar"
 
-msgid "Loading video information"
-msgstr "Cargando información de vídeo"
+msgid "Regex"
+msgstr "Regex"
 
-msgid "Video preview"
-msgstr "Previsualización de vídeo"
+msgid "HTTP code"
+msgstr "Código HTTP"
 
-msgid "Original Title"
-msgstr "Título original"
+msgid "If enabled, this rule redirects to a valid opennemas URL"
+msgstr "Si está habilitada, esta regla redirige a una URL válida de opennemas"
 
-msgid "Embed Url"
-msgstr "URL de embebido"
+msgid "Migrations only"
+msgstr "Solo migraciones"
 
-msgid "Thumbnail"
-msgstr "Miniatura"
+msgid "Redirects a content id to another content id"
+msgstr "Redirige un ID de contenido a otro ID de contenido"
 
 msgid "Config tag module"
 msgstr "Configuración del módulo «Etiquetas»"
@@ -7606,8 +7665,102 @@ msgstr "eliminarlos"
 msgid "Welcome to OpenNeMas manager"
 msgstr "Bienvenido al Gestor de Opennemas"
 
-msgid "Use the right sidebar to explore the available information."
-msgstr "Usa la barra lateral derecha para explorar la información disponible."
+msgid "Unfixed"
+msgstr "No fija"
+
+msgid "Fixed"
+msgstr "Fija"
+
+msgid "Unforced"
+msgstr "No forzada"
+
+msgid "Forced"
+msgstr "Forzado"
+
+msgid "L10n"
+msgstr "L10n"
+
+msgid "Read"
+msgstr "Leídas"
+
+msgid "Clicked"
+msgstr "Clicks"
+
+msgid "Opened"
+msgstr "Abiertas"
+
+msgid "Download report"
+msgstr "Descargar informe"
+
+msgid "Translations completed"
+msgstr "Traducciones completadas"
+
+msgid "translations left"
+msgstr "traducciones que faltan"
+
+msgid "Do you want to delete the notification?"
+msgstr "¿Estás seguro de que quieres eliminar la notificación?"
+
+msgid "Do you want to delete the selected notifications?"
+msgstr ""
+"¿Estás seguro de que quieres eliminar las notificaciones seleccionadas?"
+
+msgid "New notification"
+msgstr "Nueva notificación"
+
+msgid "Edit notification"
+msgstr "Editar notificación"
+
+msgid "Icon"
+msgstr "Icono"
+
+msgid "Pick an icon..."
+msgstr "Selecciona un icono…"
+
+msgid "No icon"
+msgstr "Sin icono"
+
+msgid "Background"
+msgstr "Fondo"
+
+msgid "Font color"
+msgstr "Color de la fuente"
+
+msgid "Notification always visible in dropdown"
+msgstr "Notificación siempre visible en el desplegable"
+
+msgid "Notification always visible before content"
+msgstr "Notificación siempre visible antes del contenido"
+
+msgid "Starts"
+msgstr "Comienza"
+
+msgid "Click to set date"
+msgstr "Pulsa para establecer una fecha"
+
+msgid "Ends"
+msgstr "Finaliza"
+
+msgid "Show only for admins"
+msgstr "Mostrar solo a administradores"
+
+msgid "Instance, domain or theme name"
+msgstr "Instancia, dominio o nombre de tema"
+
+msgid "UUID"
+msgstr "UUID"
+
+msgid "Translations"
+msgstr "Traducciones"
+
+msgid "Price"
+msgstr "Precio"
+
+msgid "Pack"
+msgstr "Pack"
+
+msgid "Partner"
+msgstr "Socio"
 
 msgid "New Ads.txt container"
 msgstr "Nuevo contenedor de Ads.txt"
@@ -7930,6 +8083,65 @@ msgstr ""
 "También disponemos de un articulo de \"Primeros Pasos en Opennemas\" que "
 "podría ayudarte"
 
+msgid "A new instance has been created"
+msgstr "Se ha creado una nueva instancia"
+
+msgid "You can access your newspaper with the information bellow"
+msgstr "Puedes acceder al periódico con la información de abajo"
+
+msgid "Newspaper URL"
+msgstr "URL del periódico"
+
+msgid "Plan"
+msgstr "Plan"
+
+msgid "Sincerely"
+msgstr "Atentamente"
+
+msgid "There was an error while creating an instance with the following data:"
+msgstr ""
+"Se ha producido un error al actualizar una instancia con los siguientes "
+"datos:"
+
+msgid "Instance internal_name"
+msgstr "Nombre interno de la instancia"
+
+msgid "Instance contact_mail"
+msgstr "Email de contacto de la instancia"
+
+msgid "Instance domains"
+msgstr "Dominios de la instancia"
+
+msgid "Contact"
+msgstr "Contacto"
+
+msgid "Last activity"
+msgstr "Última actividad"
+
+msgid "Attachments"
+msgstr "Adjuntos"
+
+msgid "Kioskos"
+msgstr "Kioskos"
+
+msgid "Emails"
+msgstr "Emails"
+
+msgid "Media size"
+msgstr "Tamaño del media"
+
+msgid "Page views"
+msgstr "Páginas vistas"
+
+msgid "Web Push subscribers"
+msgstr "Suscriptores Web Push"
+
+msgid "AI Spent"
+msgstr "Gastos en AI"
+
+msgid "Blocked"
+msgstr "Bloqueada"
+
 msgid "New instance"
 msgstr "Nueva instancia"
 
@@ -7941,9 +8153,6 @@ msgstr "Creado en"
 
 msgid "Created from"
 msgstr "Creado el"
-
-msgid "Media size"
-msgstr "Tamaño del media"
 
 msgid "(Human readable name)"
 msgstr "(Nombre legible por personas)"
@@ -8009,29 +8218,83 @@ msgstr "Número máximo de emails enviados al mes"
 msgid "Contact"
 msgstr "Contacto"
 
-msgid "Last activity"
-msgstr "Última actividad"
+msgid "Ads.txt lines"
+msgstr "Lineas de Ads.txt"
 
-msgid "Attachments"
-msgstr "Adjuntos"
+msgid "Welcome to OpenNeMas manager"
+msgstr "Bienvenido al Gestor de Opennemas"
 
-msgid "Kioskos"
-msgstr "Kioskos"
+msgid "Use the right sidebar to explore the available information."
+msgstr "Usa la barra lateral derecha para explorar la información disponible."
 
-msgid "Emails"
-msgstr "Emails"
+msgid "Completed purchases"
+msgstr "Compras completadas"
 
-msgid "Page views"
-msgstr "Páginas vistas"
+msgid "Uncompleted purchases"
+msgstr "Compras no completadas"
 
-msgid "Web Push subscribers"
-msgstr "Suscriptores Web Push"
+msgid "Search by client"
+msgstr "Buscar por cliente"
+
+msgid "Step"
+msgstr "Paso"
+
+msgid "Client ID"
+msgstr "ID de cliente"
+
+msgid "Payment ID"
+msgstr "ID de pago"
+
+msgid "Invoice ID"
+msgstr "ID de factura"
+
+msgid "Instance"
+msgstr "Instancia"
+
+msgid "No information"
+msgstr "Sin información"
 
 msgid "Do you want to delete the purchase?"
 msgstr "Quieres eliminar esta compra?"
 
 msgid "Do you want to delete the selected purchases?"
 msgstr "¿Estás seguro de que quieres eliminar las compras seleccionadas?"
+
+msgid "New purchase"
+msgstr "Nueva compra"
+
+msgid "Edit purchase"
+msgstr "Editar compra"
+
+msgid "Client"
+msgstr "Cliente"
+
+msgid "No client data available"
+msgstr "No hay datos del cliente"
+
+msgid "No payment data availble"
+msgstr "No hay datos de pago disponibles"
+
+msgid "Invoice"
+msgstr "Factura"
+
+msgid "No invoice data availble"
+msgstr "No hay datos de facturación disponibles"
+
+msgid "Quantity"
+msgstr "Cantidad"
+
+msgid "Cost"
+msgstr "Precio"
+
+msgid "Subtotal"
+msgstr "Subtotal"
+
+msgid "Do you want to delete the purchase?"
+msgstr "Quieres eliminar esta compra?"
+
+msgid "Initializing"
+msgstr "Iniciando"
 
 msgid "Completed purchases"
 msgstr "Compras completadas"
@@ -8060,14 +8323,20 @@ msgstr "Sin información"
 msgid "New purchase"
 msgstr "Nueva compra"
 
-msgid "Edit purchase"
-msgstr "Editar compra"
+msgid ""
+"Your browser was unable to load all of Opennemas's resources. They may have "
+"been blocked by your firewall, proxy or browser configuration."
+msgstr ""
+"Tu navegador no permite cargar todos los recursos de Opennemas. Es posible "
+"que fueran bloqueados por la configuración de tu firewall, proxy o navegador."
 
-msgid "ID"
-msgstr "ID"
+msgid "Press Ctrl+F5 or Ctrl+Shift+R to have your browser try again."
+msgstr ""
+"Pulsa Ctrl+F5 o Ctrl+Mayús+R para hacer que tu navegador recargue la "
+"aplicación."
 
-msgid "No client data available"
-msgstr "No hay datos del cliente"
+msgid "Notification"
+msgstr "Notificación"
 
 msgid "No payment data availble"
 msgstr "No hay datos de pago disponibles"
@@ -8113,9 +8382,6 @@ msgstr "Nombre del grupo"
 #~ msgid "Canonical URL"
 #~ msgstr "URL canónica"
 
-#~ msgid "NEW"
-#~ msgstr "NUEVO"
-
 #~ msgid "CANONICAL URL"
 #~ msgstr "URL canónica"
 
@@ -8158,9 +8424,6 @@ msgstr "Nombre del grupo"
 
 #~ msgid "Successfully sent"
 #~ msgstr "Enviado con éxito"
-
-#~ msgid "Edit content"
-#~ msgstr "Editar contenido"
 
 #~ msgid "Won't take effect on manual sending"
 #~ msgstr "No tendrá efecto para el envío manual"
@@ -8345,9 +8608,6 @@ msgstr "Nombre del grupo"
 
 #~ msgid "Comerce"
 #~ msgstr "Comercio"
-
-#~ msgid "Construction"
-#~ msgstr "Construcción"
 
 #~ msgid "Advertising and marketing"
 #~ msgstr "Publicidad y Marketing"
@@ -8797,9 +9057,6 @@ msgstr "Nombre del grupo"
 
 #~ msgid "Pick a video"
 #~ msgstr "Escoja un vídeo"
-
-#~ msgid "Creation date"
-#~ msgstr "Fecha de creación"
 
 #~ msgid "Footer text for inner video:"
 #~ msgstr "Pie para el vídeo interior:"

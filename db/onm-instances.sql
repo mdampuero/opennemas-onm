@@ -206,6 +206,7 @@ CREATE TABLE `instances` (
   `kioskos` int(10) unsigned NOT NULL DEFAULT '0',
   `events` int(10) unsigned NOT NULL DEFAULT '0',
   `webpush_subscribers` int(10) unsigned NOT NULL DEFAULT '0',
+  `ai_spent` int(10) unsigned NOT NULL DEFAULT '0',
   `tags` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `owner_id` (`owner_id`),
@@ -220,7 +221,7 @@ CREATE TABLE `instances` (
 
 LOCK TABLES `instances` WRITE;
 /*!40000 ALTER TABLE `instances` DISABLE KEYS */;
-INSERT INTO `instances` VALUES (1,'opennemas','Opennemas Default instance','opennemas.local.opennemas.com','','a:7:{s:13:\"TEMPLATE_USER\";s:23:\"es.openhost.theme.basic\";s:9:\"MEDIA_URL\";s:7:\"/media/\";s:7:\"BD_TYPE\";s:6:\"mysqli\";s:7:\"BD_HOST\";s:9:\"localhost\";s:11:\"BD_DATABASE\";i:1;s:7:\"BD_USER\";s:4:\"root\";s:7:\"BD_PASS\";s:4:\"root\";}',1,'devs@opennemas.com',NULL,'2016-09-06 07:00:00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'a:21:{i:0;s:12:"SUPPORT_NONE";i:1;s:15:"ADVANCED_SEARCH";i:2;s:15:"ARTICLE_MANAGER";i:3;s:16:"CATEGORY_MANAGER";i:4;s:15:"COMMENT_MANAGER";i:5;s:12:"FILE_MANAGER";i:6;s:17:"FRONTPAGE_MANAGER";i:7;s:13:"IMAGE_MANAGER";i:8;s:15:"KEYWORD_MANAGER";i:9;s:12:"MENU_MANAGER";i:10;s:15:"OPINION_MANAGER";i:11;s:16:"SETTINGS_MANAGER";i:12;s:20:"STATIC_PAGES_MANAGER";i:13;s:13:"TRASH_MANAGER";i:14;s:17:"USERVOICE_SUPPORT";i:15;s:14:"WIDGET_MANAGER";i:16;s:12:"USER_MANAGER";i:17;s:18:"USER_GROUP_MANAGER";i:18;s:23:"es.openhost.module.tags";i:19;s:10:"AMP_MODULE";i:20;s:30:"es.openhost.module.frontendSsl";}','ES',NULL,9,1,0,0,0);
+INSERT INTO `instances` VALUES (1,'opennemas','Opennemas Default instance','opennemas.local.opennemas.com','','a:7:{s:13:\"TEMPLATE_USER\";s:23:\"es.openhost.theme.basic\";s:9:\"MEDIA_URL\";s:7:\"/media/\";s:7:\"BD_TYPE\";s:6:\"mysqli\";s:7:\"BD_HOST\";s:9:\"localhost\";s:11:\"BD_DATABASE\";i:1;s:7:\"BD_USER\";s:4:\"root\";s:7:\"BD_PASS\";s:4:\"root\";}',1,'devs@opennemas.com',NULL,'2016-09-06 07:00:00',NULL,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'a:21:{i:0;s:12:"SUPPORT_NONE";i:1;s:15:"ADVANCED_SEARCH";i:2;s:15:"ARTICLE_MANAGER";i:3;s:16:"CATEGORY_MANAGER";i:4;s:15:"COMMENT_MANAGER";i:5;s:12:"FILE_MANAGER";i:6;s:17:"FRONTPAGE_MANAGER";i:7;s:13:"IMAGE_MANAGER";i:8;s:15:"KEYWORD_MANAGER";i:9;s:12:"MENU_MANAGER";i:10;s:15:"OPINION_MANAGER";i:11;s:16:"SETTINGS_MANAGER";i:12;s:20:"STATIC_PAGES_MANAGER";i:13;s:13:"TRASH_MANAGER";i:14;s:17:"USERVOICE_SUPPORT";i:15;s:14:"WIDGET_MANAGER";i:16;s:12:"USER_MANAGER";i:17;s:18:"USER_GROUP_MANAGER";i:18;s:23:"es.openhost.module.tags";i:19;s:10:"AMP_MODULE";i:20;s:30:"es.openhost.module.frontendSsl";}','ES',NULL,9,1,0,0,0,0);
 /*!40000 ALTER TABLE `instances` ENABLE KEYS */;
 UNLOCK TABLES;
 

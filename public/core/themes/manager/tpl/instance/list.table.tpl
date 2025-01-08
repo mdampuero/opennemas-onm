@@ -182,6 +182,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-ai-spent" checklist-model="columns.selected" checklist-value="'ai_spent'" type="checkbox">
+    <label for="checkbox-ai-spent">
+      {t}AI Spent{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-blocked" checklist-model="columns.selected" checklist-value="'blocked'" type="checkbox">
     <label for="checkbox-blocked">
       {t}Blocked{/t}
@@ -516,6 +522,11 @@
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('widgets')" title="{t}Widgets{/t}">
     <span class="badge text-bold">
       [% item.widgets %]
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('ai_spent')" title="{t}AI Spent{/t}">
+    <span class="badge text-bold">
+      [% item.ai_spent %]
     </span>
   </td>
   <td class="text-center" ng-show="isColumnEnabled('blocked')">

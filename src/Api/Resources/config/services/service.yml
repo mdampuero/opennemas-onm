@@ -24,6 +24,11 @@ services:
         arguments: [ '@service_container', 'Common\Model\Entity\Category', '@api.validator.category' ]
         public:    true
 
+    api.service.ai:
+        class:     Api\Service\V1\AIService
+        arguments: [ '@service_container', 'Common\Model\Entity\Ai' ]
+        public:    true
+
     api.service.company:
         class:     Api\Service\V1\CompanyService
         arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
@@ -187,4 +192,9 @@ services:
     api.service.widget:
         class:     Api\Service\V1\WidgetService
         arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.prompt:
+        class:     Api\Service\V1\PromptService
+        arguments: [ '@service_container', 'Common\Model\Entity\Prompt' ]
         public:    true

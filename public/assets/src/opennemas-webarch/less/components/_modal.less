@@ -2,8 +2,8 @@
   height: auto !important;
 
   .modal-subtitle{
-    padding: 15px 15px 0px 15px;
     margin-bottom: 0;
+    padding: 15px 15px 0px 15px;
   }
 }
 
@@ -125,12 +125,120 @@
 .modal.fade.modal-photo-editor  {
   .modal-dialog {
     display: inline-block;
-    width: 800px;
-    top: 50%;
     left: 50%;
+    top: 50%;
     -ms-transform: translate(50%, 50%); /* IE 9 */
     transform: translate(-50%, -50%);
     transition: transform 0;
+    width: 800px;
+  }
+}
+
+.modal.fade.modal-openai {
+  .modal-dialog {
+    display: inline-block;
+    left: 50%;
+    top: 50%;
+    -ms-transform: translate(50%, 50%);
+    transform: translate(-50%, -50%);
+    transition: transform 0;
+    width: 800px;
+  }
+  .modal-header{
+    height: auto;
+  }
+}
+
+.modal.modal-openai .modal-dialog {
+  --color-ai-1: #18FAF3;
+  --color-ai-2: #C918FF;
+
+  animation: rotdeg 2s ease infinite;
+  animation-direction: alternate;
+  background-image: linear-gradient(30deg, #18FAF3 0%, #C918FF 50%, #18FAF3 100%);
+  background-position: 0% 100%;
+  background-size: 200% 200%;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 4px;
+
+  .modal-content {
+    border-radius: 8px;
+    box-shadow: none;
+
+    .input-lg {
+      border-radius: 8px !important;
+      height: auto!important;
+      padding: 12px 16px!important;
+      text-overflow: ellipsis;
+
+      &[disabled] {
+        background-color: transparent;
+        border: none;
+        border-bottom: 3px solid #C918FF;
+        border-radius: 0!important;
+        font-size: 1.5em!important;
+        padding-left: 0!important;
+        padding-right: 0!important;
+      }
+    }
+    .btn.btn-lg {
+      font-size: 1.125rem;
+      padding: 1rem;
+    }
+    .btn-success,
+    .btn-success:hover {
+      background-color: var(--color-ai-2) !important;
+      border: none !important;
+    }
+    .btn-success:hover {
+      opacity: .8;
+    }
+    .label-success,
+    .badge-success {
+      background-color: var(--color-ai-2) !important;
+    }
+    .openai-wrapper-text {
+      background-color: transparent;
+      border: 1px #DDD solid;
+      border: none;
+      border-bottom: 3px solid #C918FF;
+      border-radius: 0 0 0 0!important;
+      box-shadow: inset 0 16px 16px -16px rgba(0,0,0,25%), inset 0 -16px 16px -16px rgba(0,0,0,25%);
+      font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
+      font-size: 14px!important;
+      height: 33dvh!important;
+      line-height: 1.4;
+      margin-left: -15px;
+      margin-right: -15px;
+      max-height: ~"calc(100dvh - 740px)";
+      min-height: 120px;
+      overflow: auto;
+      padding: 24px 32px !important;
+      text-overflow: ellipsis;
+
+      &:not(.input-lg) {
+        &[ng-bind-html*='suggested_text'],
+        &[ng-bind-html*='template.input']{
+          min-height: 50dvh;
+        }
+        &[ng-bind-html*='template.input'] {
+          background-color: rgba(0, 0, 0, 5%);
+        }
+        &[ng-bind-html*='suggested_text'] {
+          background-color: rgba(201, 25, 255, 5%);
+          min-height: 50dvh;
+        }
+      }
+    }
+  }
+}
+@keyframes rotdeg {
+  0% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 100% 0%;
   }
 }
 

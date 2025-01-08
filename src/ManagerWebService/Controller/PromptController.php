@@ -1,0 +1,449 @@
+<?php
+
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace ManagerWebService\Controller;
+
+use Common\Core\Annotation\Security;
+use Common\Model\Entity\PromptManager;
+use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Exception;
+
+class PromptController extends Controller
+{
+    protected $entity = 'PromptManager';
+    protected $map    = [
+        "openai_roles" => [
+            [
+                "name" => "string",
+                "prompt" => "string",
+            ],
+        ],
+        "openai_tones" => [
+            [
+                "name" => "string",
+                "description" => "string",
+            ],
+        ],
+        "openai_instructions" => [
+            [
+                "type" => "string",
+                "value" => "string",
+                "field" => "string"
+            ],
+        ]
+    ];
+
+    /**
+     * Returns the list of prompts as JSON.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('PROMPT_LIST')")
+     */
+    public function listAction(Request $request)
+    {
+        $oql          = $request->query->get('oql', '');
+        $repository   = $this->get('orm.manager')->getRepository($this->entity);
+        $converter    = $this->get('orm.manager')->getConverter($this->entity);
+        $helperLocale = $this->get('core.helper.locale');
+
+        $ids   = [];
+        $total = $repository->countBy($oql);
+        $items = $repository->findBy($oql);
+
+        $items = array_map(function ($a) use ($converter, &$ids) {
+            $ids[] = $a->id;
+            return $converter->responsify($a);
+        }, $items);
+
+        return new JsonResponse([
+            'results' => $helperLocale->translateAttributes($items, ['mode', 'field']),
+            'items'   => $items,
+            'total'   => $total,
+        ]);
+    }
+
+    /**
+     * Returns the data to create a new prompt container.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('PROMPT_CREATE')")
+     */
+    public function newAction()
+    {
+        return new JsonResponse([
+            'extra'  => $this->getExtraData()
+        ]);
+    }
+
+    /**
+     * Creates a new prompt container from the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object.
+     *
+     * @Security("hasPermission('PROMPT_CREATE')")
+     */
+    public function saveAction(Request $request)
+    {
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter($this->entity)->objectify($request->request->all());
+
+        $prompt = new PromptManager($data);
+        $em->persist($prompt);
+        $msg->add(_('Item saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+        $response->headers->set(
+            'Location',
+            $this->generateUrl('manager_ws_prompt_list')
+        );
+
+        return $response;
+    }
+
+    /**
+     * Returns an prompt instance as JSON.
+     *
+     * @param integer  $id The instance id.
+     *
+     * @return Response The response object.
+     *
+     * @Security("hasPermission('PROMPT_UPDATE')")
+     */
+    public function showAction($id)
+    {
+        $em        = $this->get('orm.manager');
+        $converter = $em->getConverter($this->entity);
+        $item      = $em->getRepository($this->entity)->find($id);
+        $extra     = $this->getExtraData();
+
+        return new JsonResponse([
+            'extra' => $extra,
+            'item'  => $converter->responsify($item->getData())
+        ]);
+    }
+
+    /**
+     * Deletes a prompt container.
+     *
+     * @param integer $id The prompt id.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('PROMPT_DELETE')")
+     */
+    public function deleteAction($id)
+    {
+        $em  = $this->get('orm.manager');
+        $msg = $this->get('core.messenger');
+
+        $em->remove($em->getRepository($this->entity)->find($id));
+        $msg->add(_('Item deleted successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Deletes the selected prompts.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('PROMPT_DELETE')")
+     */
+    public function deleteSelectedAction(Request $request)
+    {
+        $ids = $request->request->get('ids', []);
+        $msg = $this->get('core.messenger');
+
+        if (!is_array($ids) || empty($ids)) {
+            $msg->add(_('Bad request'), 'error', 400);
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
+        }
+
+        $em  = $this->get('orm.manager');
+        $oql = sprintf('id in [%s]', implode(',', $ids));
+
+        $prompts = $em->getRepository($this->entity)->findBy($oql);
+
+        $instancesToBan = [];
+
+        $deleted = 0;
+        foreach ($prompts as $container) {
+            try {
+                $em->remove($container);
+                $deleted++;
+            } catch (\Exception $e) {
+                $msg->add($e->getMessage(), 'error');
+            }
+            foreach ($container->instances as $instanceName) {
+                $instancesToBan[] = $instanceName;
+            }
+        }
+
+
+        if ($deleted > 0) {
+            $msg->add(
+                sprintf(_('%s items deleted successfully'), $deleted),
+                'success'
+            );
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Updates the instance information gives its id
+     *
+     * @param  Request  $request The request object.
+     * @param  integer  $id      The instance id.
+     *
+     * @return Response          The response object.
+     *
+     * @Security("hasPermission('PROMPT_UPDATE')")
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $em   = $this->get('orm.manager');
+        $msg  = $this->get('core.messenger');
+        $data = $em->getConverter($this->entity)->objectify($request->request->all());
+        $item = $em->getRepository($this->entity)->find($id);
+
+        $item->merge($data);
+
+        $em->persist($item);
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Returns a list of parameters for the template.
+     *
+     * @return array Array of template parameters.
+     */
+    private function getExtraData()
+    {
+        $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
+        $settingOpenai  = [
+            'openai_roles'        => $serviceManager->get('openai_roles') ?? [],
+            'openai_tones'        => $serviceManager->get('openai_tones') ?? [],
+            'openai_instructions' => $serviceManager->get('openai_instructions') ?? []
+        ];
+        return $settingOpenai;
+    }
+
+    /**
+     * Returns a list of targets basing on the request.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('PROMPT_CREATE')")
+     */
+    public function autocompleteAction(Request $request)
+    {
+        $target   = [];
+        $query    = strtolower($request->query->get('query'));
+        $security = $this->get('core.security');
+
+        if ($security->hasPermission('MASTER')
+            && (empty($query)
+                || strpos(strtolower(_('All')), strtolower($query)) !== false)
+        ) {
+            $target[] = ['id' => 'all', 'name' => _('All')];
+        }
+
+        $oql = '';
+        if (!$security->hasPermission('MASTER')
+            && $security->hasPermission('PARTNER')
+        ) {
+            $oql = sprintf('owner_id = "%s" ', $this->get('core.user')->id);
+        }
+
+        if (!empty($query)) {
+            if (!empty($oql)) {
+                $oql .= 'and ';
+            }
+
+            $oql .= '(internal_name ~ "%s" or name ~ "%s" or domains ~ "%s") ';
+            $oql  = sprintf($oql, $query, $query, $query);
+        }
+
+        $oql .= 'order by internal_name asc limit 10';
+
+        $instances = $this->get('orm.manager')->getRepository('instance')
+            ->findBy($oql);
+
+        foreach ($instances as $instance) {
+            $target[] = [
+                'id'      => $instance->internal_name,
+                'name'    => $instance->internal_name,
+            ];
+        }
+
+        return new JsonResponse(['target' => $target]);
+    }
+
+    /**
+     * Get prompt Setting
+     *
+     * @return JsonResponse The response object.
+     */
+    public function configAction()
+    {
+        $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
+        $settingOpenai  = [
+            'openai_roles'        => $serviceManager->get('openai_roles') ?? [],
+            'openai_tones'        => $serviceManager->get('openai_tones') ?? [],
+            'openai_instructions' => $serviceManager->get('openai_instructions') ?? []
+        ];
+
+        $response = new Response();
+        $response->setContent(json_encode($settingOpenai));
+
+        return $response;
+    }
+
+    /**
+     * Save prompt settings
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     */
+    public function configSaveAction(Request $request)
+    {
+        $request = $request->request->all();
+
+        $msg = $this->get('core.messenger');
+
+        $this->get('orm.manager')
+            ->getDataSet('Settings', 'manager')
+            ->set($request);
+
+        $msg->add(_('Prompt saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Import valid JSON as a theme settings
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('PROMPT_LIST')")
+     */
+    public function configDownloadAction()
+    {
+        $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
+        $repository     = $this->get('orm.manager')->getRepository($this->entity);
+        $converter      = $this->get('orm.manager')->getConverter($this->entity);
+
+        $items = array_map(function ($a) use ($converter) {
+            $item = $converter->responsify($a);
+            unset($item['id']);
+            return $item;
+        }, $repository->findBy(null, null, 1000));
+
+        $settingOpenai = [
+            'openai_roles'        => $serviceManager->get('openai_roles') ?? [],
+            'openai_tones'        => $serviceManager->get('openai_tones') ?? [],
+            'openai_instructions' => $serviceManager->get('openai_instructions') ?? [],
+            'prompts'             => $items
+        ];
+
+        $response = new JsonResponse($settingOpenai);
+
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Content-Disposition', 'attachment; filename=openai_settings_manager.json');
+        $response->headers->set('Cache-Control', 'no-cache');
+
+        return $response;
+    }
+
+    /**
+     * Import valid JSON as a theme settings
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('PROMPT_CREATE')")
+     */
+    public function configUploadAction(Request $request)
+    {
+        $em             = $this->get('orm.manager');
+        $repository     = $em->getRepository($this->entity);
+        $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
+        $helperOpenAI   = $this->container->get('core.helper.openai');
+        $jsonSettings   = $request->request->get('config', null);
+        $msg            = $this->get('core.messenger');
+
+
+        $promptConfigCurrent = [
+            'openai_roles'        => $serviceManager->get('openai_roles') ?? [],
+            'openai_tones'        => $serviceManager->get('openai_tones') ?? [],
+            'openai_instructions' => $serviceManager->get('openai_instructions') ?? []
+        ];
+
+        $promptsCurrent = $repository->findBy(null, null, 1000);
+
+        try {
+            $promptConfigNew = json_decode($jsonSettings, true);
+            $promptsNew      = $promptConfigNew["prompts"];
+            unset($promptConfigNew["prompts"]);
+
+            if (!$helperOpenAI->validateJsonStructure($promptConfigNew, $this->map)) {
+                throw new Exception("INVALIDO");
+            }
+
+            foreach ($promptConfigNew as $key => $item) {
+                if (key_exists($key, $promptConfigCurrent)) {
+                    $promptConfigCurrent[$key] = $item;
+                }
+            }
+
+            $this->get('orm.manager')->getDataSet('Settings', 'manager')
+                ->set($promptConfigNew);
+
+            foreach ($promptsCurrent as $prompt) {
+                $em->remove($prompt);
+            }
+
+            foreach ($promptsNew as $p) {
+                $prompt = new PromptManager($em->getConverter($this->entity)->objectify($p));
+                $em->persist($prompt);
+            }
+
+            $msg->add(_('Prompt saved successfully'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to save settings'), 'error');
+            $this->get('error.log')->error($e->getMessage());
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+}

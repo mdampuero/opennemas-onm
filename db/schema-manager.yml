@@ -105,6 +105,8 @@ instances:
         webpush_subscribers:
             type: integer
             options: { default: 0, unsigned: true }
+        ai_spent:
+            type: float
         tags:
             type: integer
             options: { default: 0, unsigned: true }
