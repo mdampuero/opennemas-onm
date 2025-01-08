@@ -175,15 +175,17 @@ class TagController extends FrontendController
         $slug = $request->get('slug', null);
 
         try {
-            $item = $this->get('api.service.tag')->getList(sprintf(
+            $oql = sprintf(
                 'slug = "%s"',
                 $slug
-            ))['items'];
+            );
+
+            $item = $this->get('api.service.tag')->getList($oql)['items'];
         } catch (\Exception $e) {
             throw new ResourceNotFoundException();
         }
 
-        if (empty($item)) {
+        if (empty($item) || $item[0]->private) {
             throw new ResourceNotFoundException();
         }
 

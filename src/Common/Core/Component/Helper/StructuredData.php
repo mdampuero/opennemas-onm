@@ -209,7 +209,8 @@ class StructuredData
      */
     protected function getTags($ids)
     {
-        $tags = $this->ts->getListByIds($ids);
+        // Set private flag to false and get only public tags
+        $tags = $this->ts->getListByIds($ids, false);
 
         $names = array_map(function ($a) {
             return $a->name;

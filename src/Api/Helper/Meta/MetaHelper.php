@@ -169,7 +169,9 @@ class MetaHelper
         )))));
 
         if (is_array($content->tags) && !empty($content->tags)) {
-            $tags = $this->container->get('api.service.tag')->getListByIds($content->tags);
+            // Set private flag to false and get only public tags
+            $tags = $this->container->get('api.service.tag')
+                ->getListByIds($content->tags, false);
 
             $tagsName = array_map(function ($tag) {
                 return strip_tags($tag->name);
