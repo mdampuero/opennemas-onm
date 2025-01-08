@@ -14,7 +14,7 @@
 {if $iSearchTag}
     <onm-tags-input class="hidden-xs ng-cloak m-r-10 quicklinks"
       ng-model="criteria.tag" hide-generate="true" selection-only="true"
-      ignore-locale="false" max-results="5" max-tags="1" locale="config.locale.selected"
+      ignoreLocale="false" max-results="5" max-tags="1" locale="config.locale.selected"
       filter="true" placeholder="{t}Search by tag{/t}"></onm-tags-input>
 {/if}
   <div class="form-group no-margin menu-dragable-accordion">
