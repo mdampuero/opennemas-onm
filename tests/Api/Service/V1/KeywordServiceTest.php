@@ -48,9 +48,9 @@ class KeywordServiceTest extends \PHPUnit\Framework\TestCase
             new Keyword(['id' => '4', 'keyword' => 'sit', 'type'   => '', 'value'          => 'default'])
         ];
 
-        $expected = '<a href="glorp" target="_blank">Lorem</a> ' .
-            '<a href="mailto:baz" target="_blank">ipsum</a> ' .
-            '<a href="/tag/foo" target="_blank">dolor</a> ' .
+        $expected = '<a href="glorp" target="_blank" data-generated="auto">Lorem</a> ' .
+            '<a href="mailto:baz" target="_blank" data-generated="auto">ipsum</a> ' .
+            '<a href="/tag/foo" target="_blank" data-generated="auto">dolor</a> ' .
             'sit amet, consectetur adipiscing elit.';
 
         $this->assertEquals($expected, $this->service->replaceTerms($this->text, $keywords));
@@ -68,11 +68,12 @@ class KeywordServiceTest extends \PHPUnit\Framework\TestCase
 
         $newText = $this->text . ' Lorem dolor sit, consectetur adipiscing sit';
 
-        $expected = '<a href="mailto:link_lorem_ipsum" target="_blank">Lorem ipsum</a> ' .
-            '<a href="/tag/foo" target="_blank">dolor sit amet</a>, consectetur adipiscing elit. ' .
-            '<a href="glorp" target="_blank">Lorem</a> dolor ' .
-            '<a href="mailto:link_sit" target="_blank">sit</a>, consectetur adipiscing ' .
-            '<a href="mailto:link_sit" target="_blank">sit</a>';
+        $expected = '<a href="mailto:link_lorem_ipsum" target="_blank" data-generated="auto">Lorem ipsum</a> ' .
+            '<a href="/tag/foo" target="_blank" data-generated="auto">dolor sit amet</a>, ' .
+            'consectetur adipiscing elit. ' .
+            '<a href="glorp" target="_blank" data-generated="auto">Lorem</a> dolor ' .
+            '<a href="mailto:link_sit" target="_blank" data-generated="auto">sit</a>, consectetur adipiscing ' .
+            'sit';
 
         $actual = $this->service->replaceTerms($newText, $keywords);
 
@@ -88,10 +89,7 @@ class KeywordServiceTest extends \PHPUnit\Framework\TestCase
             new Keyword(['id' => '4', 'keyword' => 'sit', 'type'   => '', 'value'          => 'default'])
         ];
 
-        $expected = '<a href="glorp" target="_blank">Lorem</a> ' .
-            '<a href="mailto:baz" target="_blank">ipsum</a> ' .
-            '<a href="/tag/foo" target="_blank">dolor</a> ' .
-            'sit amet, consectetur adipiscing elit.';
+        $expected = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
 
         $textreplace_1 = $this->service->replaceTerms($this->text, $keywords);
 
