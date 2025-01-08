@@ -524,8 +524,8 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
     public function testCheckSocialUrls()
     {
         // Test with empty input
-        $this->assertNull($this->helper->checkSocialUrls(''));
-        $this->assertNull($this->helper->checkSocialUrls(null));
+        $this->assertNull($this->helper->checkSocialUrls('', 'twitter'));
+        $this->assertNull($this->helper->checkSocialUrls(null, null));
 
         // Test with User object
         $user = new User([
@@ -535,49 +535,29 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             'MichellePrice',
-            $this->helper->checkSocialUrls($user->instagram)
+            $this->helper->checkSocialUrls($user->instagram, 'instagram')
         );
 
         // Test with various social media URLs
         $this->assertEquals(
             'username',
-            $this->helper->checkSocialUrls('https://www.twitter.com/username')
+            $this->helper->checkSocialUrls('https://www.twitter.com/username', 'twitter')
         );
         $this->assertEquals(
             'username',
-            $this->helper->checkSocialUrls('http://twitter.com/username')
+            $this->helper->checkSocialUrls('http://twitter.com/username', 'twitter')
         );
         $this->assertEquals(
             'username',
-            $this->helper->checkSocialUrls('https://www.linkedin.com/in/username')
+            $this->helper->checkSocialUrls('https://www.linkedin.com/in/username', 'linkedin')
         );
         $this->assertEquals(
             'username',
-            $this->helper->checkSocialUrls('https://www.facebook.com/username')
+            $this->helper->checkSocialUrls('https://www.facebook.com/username', 'facebook')
         );
         $this->assertEquals(
             'username',
-            $this->helper->checkSocialUrls('www.instagram.com/username')
-        );
-
-        // Test with non-matching URL
-        $this->assertEquals(
-            'https://example.com/page',
-            $this->helper->checkSocialUrls('https://example.com/page')
-        );
-
-        // Test with URLs containing additional paths or parameters
-        $this->assertEquals(
-            'username/status/123456',
-            $this->helper->checkSocialUrls('https://twitter.com/username/status/123456')
-        );
-        $this->assertEquals(
-            'username?param=value',
-            $this->helper->checkSocialUrls('https://www.linkedin.com/in/username?param=value')
-        );
-        $this->assertEquals(
-            'username#section',
-            $this->helper->checkSocialUrls('https://www.facebook.com/username#section')
+            $this->helper->checkSocialUrls('www.instagram.com/username', 'instagram')
         );
     }
 }

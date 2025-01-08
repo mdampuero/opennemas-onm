@@ -271,30 +271,35 @@ class AuthorHelper
      * Checks if a given URL matches common social media patterns and returns the URL without the matched part.
      *
      * @param string|null $item The input URL to check. Can be null or an empty string.
+     * @param string|null $platform The social media platform to check for. Can be null or an empty string.
      *
      * @return string|null Returns the modified URL if a match is found, null if the input is empty,
      *                     or the original URL if no match is found.
      */
-    public function checkSocialUrls($item) : ?string
+    public function checkSocialUrls($item, $platform) : ?string
     {
+        // Return null if the item is empty
         if (empty($item)) {
             return null;
         }
 
         $patterns = [
-            '/^(https?:\/\/)?(www\.)?twitter\.com\//i',
-            '/^(https?:\/\/)?(www\.)?linkedin\.com\/in\//i',
-            '/^(https?:\/\/)?(www\.)?linkedin\.com\//i',
-            '/^(https?:\/\/)?(www\.)?facebook\.com\//i',
-            '/^(https?:\/\/)?(www\.)?instagram\.com\//i'
+            'twitter'   => '/^(https?:\/\/)?(www\.)?(twitter\.com|x\.com)\//i',
+            'linkedin'  => '/^(https?:\/\/)?(www\.)?linkedin\.com\/(in\/)?/i',
+            'facebook'  => '/^(https?:\/\/)?(www\.)?facebook\.com\//i',
+            'instagram' => '/^(https?:\/\/)?(www\.)?instagram\.com\//i'
         ];
 
-        foreach ($patterns as $pattern) {
-            if (preg_match($pattern, $item)) {
-                return preg_replace($pattern, '', $item);
-            }
+        if (isset($patterns[$platform]) && preg_match($patterns[$platform], $item)) {
+            return preg_replace($patterns[$platform], '', $item);
         }
 
+        // If it's not a valid URL but looks like a domain (e.g., www.example.com), return null
+        if (preg_match('/^https?:\/\//i', $item) || preg_match('/^[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}.*$/', $item)) {
+            return null;
+        }
+
+        // Return the original item if no conditions matched
         return $item;
     }
 
@@ -314,7 +319,11 @@ class AuthorHelper
             return null;
         }
 
-        $facebookUser = $this->checkSocialUrls($author->facebook);
+        $facebookUser = $this->checkSocialUrls($author->facebook, 'facebook');
+
+        if (empty($facebookUser)) {
+            return null;
+        }
 
         return "https://www.facebook.com/" . $facebookUser;
     }
@@ -335,7 +344,11 @@ class AuthorHelper
             return null;
         }
 
-        $twitterUser = $this->checkSocialUrls($author->twitter);
+        $twitterUser = $this->checkSocialUrls($author->twitter, 'twitter');
+
+        if (empty($twitterUser)) {
+            return null;
+        }
 
         return "https://www.twitter.com/" . $twitterUser;
     }
@@ -356,7 +369,11 @@ class AuthorHelper
             return null;
         }
 
-        $instagramUser = $this->checkSocialUrls($author->instagram);
+        $instagramUser = $this->checkSocialUrls($author->instagram, 'instagram');
+
+        if (empty($instagramUser)) {
+            return null;
+        }
 
         return "https://www.instagram.com/" . $instagramUser;
     }
@@ -377,7 +394,11 @@ class AuthorHelper
             return null;
         }
 
-        $linkedinUser = $this->checkSocialUrls($author->linkedin);
+        $linkedinUser = $this->checkSocialUrls($author->linkedin, 'linkedin');
+
+        if (empty($linkedinUser)) {
+            return null;
+        }
 
         return "https://www.linkedin.com/in/" . $linkedinUser;
     }
