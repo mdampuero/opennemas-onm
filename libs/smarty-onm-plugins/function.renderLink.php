@@ -25,7 +25,7 @@ function smarty_function_renderLink($params, &$smarty)
 
     if (!empty($item->referenceId) && array_key_exists($item->type, $serviceMap)) {
         $relatedItem = $smarty->getContainer()->get($serviceMap[$item->type])->getItem($item->referenceId);
-        $url         = $smarty->getContainer()->get('core.helper.url_generator')->generate($relatedItem, [
+        return $smarty->getContainer()->get('core.helper.url_generator')->generate($relatedItem, [
             'locale' => $localelong,
             'alternative_url' => $item->type === 'category',
             'absolute' => true
