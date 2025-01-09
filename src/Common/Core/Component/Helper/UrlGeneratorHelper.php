@@ -105,9 +105,11 @@ class UrlGeneratorHelper
             && $params['absolute']
         ) {
             // Absolute URL basing on the current instance
-            $uri = $this->forceHttp
+            $baseUri = $this->forceHttp
                 ? 'http://' . $this->instance->getMainDomain()
-                : $this->instance->getbaseUrl();
+                : $this->instance->getBaseUrl();
+
+            $uri = $baseUri . ($this->instance->getSubdirectory() ?? '');
         }
 
         // Force frontend context for multilanguage

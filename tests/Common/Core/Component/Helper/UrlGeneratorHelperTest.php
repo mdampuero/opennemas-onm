@@ -44,7 +44,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
-            ->setMethods([ 'getBaseUrl', 'getMainDomain', 'hasMultilanguage' ])
+            ->setMethods([ 'getBaseUrl', 'getMainDomain', 'hasMultilanguage', 'getSubdirectory' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
