@@ -339,7 +339,7 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
         $user = new User([ 'name'    => 'Michelle Price', 'twitter' => '@MichellePrice']);
 
         $this->assertNull($this->helper->getAuthorSocialTwitterUrl(131));
-        $this->assertEquals('https://www.twitter.com/@MichellePrice', $this->helper->getAuthorSocialTwitterUrl($user));
+        $this->assertEquals('https://x.com/@MichellePrice', $this->helper->getAuthorSocialTwitterUrl($user));
     }
 
     /**
