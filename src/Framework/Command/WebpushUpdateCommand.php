@@ -150,7 +150,7 @@ class WebpushUpdateCommand extends Command
 
                     $incomingActiveSubscribers = array_key_exists('active_subscribers', $subscriberData)
                         ? $subscriberData['active_subscribers']
-                        : $subscriberData['total'];
+                        : $subscriberData['total_subscribers'];
 
                     if ($oldActiveSubscribers) {
                         if (count($oldActiveSubscribers) == 32) {
