@@ -350,7 +350,7 @@ class AuthorHelper
             return null;
         }
 
-        return "https://www.twitter.com/" . $twitterUser;
+        return "https://x.com/" . $twitterUser;
     }
 
     /**
