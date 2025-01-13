@@ -26,6 +26,7 @@
         };
 
         $scope.last_token_usage        = 0;
+        $scope.last_words_generated    = 0;
         $scope.waiting                 = false;
         $scope.edit_input              = false;
         $scope.template                = template;
@@ -108,9 +109,10 @@
           http.post($scope.routes.generateText, $scope.template)
             .then(function(response) {
               $scope.template.suggested_text = response.data.message;
-              $scope.template.original_text = $scope.template.input;
-              $scope.last_token_usage = response.data.tokens.total_tokens;
-              $scope.template.step = 2;
+              $scope.template.original_text  = $scope.template.input;
+              $scope.last_token_usage        = response.data.tokens.total_tokens;
+              $scope.last_words_generated    = response.data.tokens.words;
+              $scope.template.step           = 2;
               $scope.setActiveText('suggested');
             })
             .catch(function(err) {

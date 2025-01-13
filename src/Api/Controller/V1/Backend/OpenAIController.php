@@ -156,40 +156,11 @@ class OpenAIController extends ApiController
         }
     }
 
-    public function getPricingAction()
+    public function getUsageAction(Request $request)
     {
-        $tokens  = $this->get($this->helper)->getTokensMonthly();
-        $pricing = $this->get($this->helper)->getPricing();
-        $money   = $this->get($this->helper)->getSpentMoney();
-
-        $agrupatedTokens = [];
-
-        foreach ($tokens['items'] as $item) {
-            $model            = $item->getData()['params']['model'];
-            $promptTokens     = $item->getData()['tokens']['prompt_tokens'];
-            $completionTokens = $item->getData()['tokens']['completion_tokens'];
-            $totalTokens      = $item->getData()['tokens']['total_tokens'];
-
-            if (isset($agrupatedTokens[$model])) {
-                $agrupatedTokens[$model]['prompt_tokens']     += $promptTokens;
-                $agrupatedTokens[$model]['completion_tokens'] += $completionTokens;
-                $agrupatedTokens[$model]['total_tokens']      += $totalTokens;
-            } else {
-                $agrupatedTokens[$model] = [
-                    'prompt_tokens' => $promptTokens,
-                    'completion_tokens' => $completionTokens,
-                    'total_tokens' => $totalTokens
-                ];
-            }
-        }
-
-        $data = [
-            'tokens' => $agrupatedTokens,
-            'prices' => $pricing,
-            'total' => $money
-        ];
-
-        return new JsonResponse($data);
+        $year  = $request->query->get('year', date('Y'));
+        $month = $request->query->get('month', date('m'));
+        return new JsonResponse($this->get($this->helper)->getStats($month, $year));
     }
 
     /**

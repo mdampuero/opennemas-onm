@@ -94,7 +94,7 @@
       </ng-container>
     </ng-container>
     <p>
-      <span class="label label-success pull-left"><strong>[% last_token_usage %]</strong> {t}Tokens used{/t}</span>
+      <span class="label label-success pull-left"><strong>[% last_words_generated %]</strong> {t}words generated{/t}</span>
       <span class="pull-right text-pink pointer" ng-click="generate()">{t}Regenerate {/t} <i class="fa fa-refresh openai-text-degrade"></i></span>
     </p>
   </ng-container>

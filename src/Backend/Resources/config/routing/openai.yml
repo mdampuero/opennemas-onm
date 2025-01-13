@@ -4,6 +4,12 @@ backend_openai_config:
     options:
         expose: true
 
+backend_openai_dashboard:
+    path:     /openai/dashboard/
+    defaults: { _controller: BackendBundle:OpenAI:dashboard }
+    options:
+        expose: true
+
 backend_openai_usage:
     path:     /openai/usage/
     defaults: { _controller: BackendBundle:OpenAI:usage }

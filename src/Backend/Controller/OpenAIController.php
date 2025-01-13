@@ -43,12 +43,11 @@ class OpenAIController extends BackendController
         return $this->render('openai/config.tpl');
     }
 
-
     /**
-     * Configures the OpenAI notifications module
+     * Dashboard OpenAI
      */
-    public function usageAction()
+    public function dashboardAction()
     {
-        return $this->render('openai/usage.tpl');
+        return $this->render('openai/dashboard.tpl');
     }
 }
