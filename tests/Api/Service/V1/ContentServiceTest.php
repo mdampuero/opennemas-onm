@@ -44,6 +44,10 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'getId', 'getIdKeys', 'getL10nKeys' ])
             ->getMock();
 
+        $this->instance = $this->getMockBuilder('Instance')
+            ->setMethods([ 'hasMultilanguage' ])
+            ->getMock();
+
         $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
             ->disableOriginalConstructor()
             ->setMethods(['filter', 'get', 'set'])
@@ -106,6 +110,9 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
 
             case 'data.manager.filter':
                 return $this->fm;
+
+            case 'core.instance':
+                return $this->instance;
         }
 
         return null;
@@ -140,36 +147,40 @@ class ContentServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests emptyItem when the item was not found.
      */
-    public function testGetItemBySlug()
+    public function testGetItemBySlugAndContentTypeWithoutMultilanguage()
     {
+        $this->instance->expects($this->once())->method('hasMultilanguage')
+            ->willReturn(false);
+
         $content = new Content([
             'pk_content' => 1,
-        ]);
-
-        $this->service->expects($this->once())->method('getItemBy')
-            ->with('slug regexp "(.+\"|^)content_slug(\".+|$)" and in_litter=0 and content_status=1')
-            ->willReturn($content);
-
-        $this->assertEquals($this->service->getItemBySlug('content_slug'), $content);
-    }
-
-    /**
-     * Tests emptyItem when the item was not found.
-     */
-    public function testGetItemBySlugAndContentType()
-    {
-        $content = new Content([
-            'pk_content' => 1,
-            'fk_content_type' => 'opinion'
+            'content_type_name' => 'opinion'
         ]);
 
         $this->service->expects($this->once())->method('getItemBy')
             ->with(
-                'slug regexp "(.+\"|^)content_slug(\".+|$)" and fk_content_type=2 and in_litter=0 and content_status=1'
+                'slug = "c_slug" and content_type_name="opinion" and in_litter=0 and content_status=1'
             )
             ->willReturn($content);
 
-        $this->assertEquals($this->service->getItemBySlugAndContentType('content_slug', 2), $content);
+        $this->assertEquals($this->service->getItemBySlugAndContentType('c_slug', 'opinion'), $content);
+    }
+
+    public function testGetItemBySlugAndContentTypeWithMultilanguage()
+    {
+        $this->instance->expects($this->once())->method('hasMultilanguage')
+            ->willReturn(true);
+
+        $content = new Content([
+            'pk_content' => 1,
+            'content_type_name' => 'opinion'
+        ]);
+
+        $this->service->expects($this->once())->method('getItemBy')->with(
+            'slug regexp "(.+\"|^)c_slug(\".+|$)" and content_type_name="opinion" and in_litter=0 and content_status=1'
+        )->willReturn($content);
+
+        $this->assertEquals($this->service->getItemBySlugAndContentType('c_slug', 'opinion'), $content);
     }
 
     /**

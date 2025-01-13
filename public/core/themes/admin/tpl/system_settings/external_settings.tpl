@@ -868,6 +868,34 @@
                   </div>
                 </div>
               </div>
+              <div class="panel-group" id="panel-group-bluesky" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-bluesky" data-toggle="collapse" href="#bluesky">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -3.268 64 68.414" width="14.86" height="16">
+                          <path d="M13.873 3.805C21.21 9.332 29.103 20.537 32 26.55v15.882c0-.338-.13.044-.41.867-1.512 4.456-7.418 21.847-20.923 7.944-7.111-7.32-3.819-14.64 9.125-16.85-7.405 1.264-15.73-.825-18.014-9.015C1.12 23.022 0 8.51 0 6.55 0-3.268 8.579-.182 13.873 3.805zm36.254 0C42.79 9.332 34.897 20.537 32 26.55v15.882c0-.338.13.044.41.867 1.512 4.456 7.418 21.847 20.923 7.944 7.111-7.32 3.819-14.64-9.125-16.85 7.405 1.264 15.73-.825 18.014-9.015C62.88 23.022 64 8.51 64 6.55c0-9.818-8.578-6.732-13.873-2.745z"/>
+                        </svg> {t}Bluesky{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="bluesky">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="bluesky-page">
+                          {t}Bluesky Page{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="bluesky-page" name="bluesky-page" ng-model="settings.bluesky_page" type="text">
+                          <span class="help">
+                            {t escape=off}If you also have a <strong>Bluesky page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="panel-group" id="panel-group-instagram" data-toggle="collapse">
                 <div class="panel panel-default">
                   <div class="panel-heading collapsed">
@@ -913,6 +941,32 @@
                           <input class="form-control" id="pinterest-page" name="pinterest-page" ng-model="settings.pinterest_page" type="text">
                           <span class="help">
                             {t escape=off}If you also have a <strong>Pinterest page</strong>, add your page url on the form.{/t}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-group" id="panel-group-flickr" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-flickr" data-toggle="collapse" href="#flickr">
+                        <i class="fa fa-flickr"></i>{t}Flickr{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="flickr">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="flickr-page">
+                          {t}Flickr Page{/t}
+                        </label>
+                        <div class="controls">
+                          <input class="form-control" id="flickr-page" name="flickr-page" ng-model="settings.flickr_page" type="text">
+                          <span class="help">
+                            {t escape=off}If you also have a <strong>flickr page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>

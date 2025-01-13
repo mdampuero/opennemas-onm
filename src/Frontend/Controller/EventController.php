@@ -93,7 +93,7 @@ class EventController extends FrontendController
             $item = $this->get('api.service.content')
                 ->getItemBySlugAndContentType(
                     $request->get('slug'),
-                    \ContentManager::getContentTypeIdFromName('event')
+                    'event'
                 );
         } catch (\Exception $e) {
             throw new ResourceNotFoundException();

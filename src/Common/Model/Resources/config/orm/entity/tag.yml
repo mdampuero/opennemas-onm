@@ -9,6 +9,7 @@ orm:
                 locale:      string
                 name:        string
                 slug:        string
+                private:     integer
             converters:
                 default:
                     class:     Opennemas\Orm\Database\Data\Converter\BaseConverter

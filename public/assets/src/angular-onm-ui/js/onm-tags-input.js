@@ -29,6 +29,7 @@
             generateFrom:  '=',
             hideGenerate:  '=',
             ignoreLocale:  '=',
+            ignorePrivate: '=',
             locale:        '=',
             maxTags:       '=',
             maxResults:    '=',
@@ -54,7 +55,7 @@
               '</span>' +
             '</div>' +
             '<div class="tags-input-wrapper">' +
-              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="tagsInLocale" on-tag-removing="remove($tag, filter)" on-tag-adding="add($tag, filter)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag) }">' +
+              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="tagsInLocale" on-tag-removing="remove($tag, filter)" on-tag-adding="add($tag, filter)" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewTag($tag), \'tag-item-new\': isNewTag($tag), \'tag-item-private\': $tag.private }">' +
                 '<auto-complete ng-if="!filter" debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="true" source="list($query)" template="tag"></auto-complete>' +
                 '<auto-complete ng-if="filter" debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="false" source="list($query)"></auto-complete>' +
               '</tags-input>' +
@@ -64,11 +65,9 @@
             '<script type="text/ng-template" id="tag">' +
               '<span class="tag-item-text" ng-bind-html="$highlight($getDisplayText())"></span>' +
               '<span class="badge badge-success pull-right text-uppercase" ng-if="$parent.$parent.$parent.$parent.$parent.isNewTag(data)">' +
-                '<strong>' + $window.strings.tags.newItem + '</strong>' +
-              '</span>' +
-              '<span class="badge badge-default pull-right" ng-class="{ \'badge-danger\': !$parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] }" ng-show="!$parent.$parent.$parent.$parent.$parent.isNewTag(data)">' +
-                '<strong>[% $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] ? $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] : 0 %]</strong>' +
-              '</span>' +
+              '<strong> ' + $window.strings.tags.newItem + '</strong></span>' +
+              '<span class="badge badge-private pull-right text-uppercase m-l-10" ng-if="data.private"><strong> ' + $window.strings.tags.private + ' </strong></span>' +
+              '<span class="badge badge-default pull-right" ng-class="{ \'badge-danger\': !$parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] }" ng-show="!$parent.$parent.$parent.$parent.$parent.isNewTag(data)"><strong>{{ $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] ? $parent.$parent.$parent.$parent.$parent.data.extra.stats[data.id] : 0 }}</strong></span>' +
             '</script>';
           }
         };
@@ -297,6 +296,12 @@
 
               var items = response.data.items;
 
+              if ($scope.ignorePrivate) {
+                items = items.filter(function(item) {
+                  return item.private !== 1;
+                });
+              }
+
               if ($scope.exclude && $scope.exclude.length) {
                 items = items.filter(function(item) {
                   return $scope.exclude.indexOf(item.id) === -1;
@@ -308,7 +313,11 @@
                 });
 
                 if (found.length === 0) {
-                  var item = { id: query, name: query };
+                  var item = {
+                    id: query,
+                    name: query,
+                    private: false
+                  };
 
                   if ($scope.locale && $scope.locale.multilanguage) {
                     item.locale = $scope.$parent.config.locale.selected;
@@ -535,3 +544,4 @@
       }
     ]);
 })();
+
