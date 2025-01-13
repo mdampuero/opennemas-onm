@@ -23,13 +23,16 @@
       <NewsItemType FormalName="News" />
       <FirstCreated>{format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}</FirstCreated>
       <FirstPublished>{format_date date=$content->starttime type="custom" format="yMMdd'T'HHmmssxxx"}</FirstPublished>
+      {if !empty($content->endtime)}
+      <EndPublished>{format_date date=$content->endtime type="custom" format="yMMdd'T'HHmmssxxx"}</EndPublished>
+      {/if}
       <ThisRevisionCreated>{format_date date=$content->changed type="custom" format="yMMdd'T'HHmmssxxx"}</ThisRevisionCreated>
-      <Status FormalName="{if $content->in_litter}Canceled{else}{if $content->content_status == 1}Usable{else}Withheld{/if}{/if}" />
+      <Status FormalName="{if $content->in_litter}Canceled{else}{if $content->content_status == 1}Usable{elseif $content->content_status == 2}Pending{else}Withheld{/if}{/if}" />
       <Urgency FormalName="5" />
     </NewsManagement>
     <NewsComponent Duid="multimedia_{$content->id}.multimedia">
       <NewsLines>
-        <HeadLine><![CDATA[{$content->title}]]></HeadLine>
+        <HeadLine><![CDATA[{$content->title_int|default:$content->title}]]></HeadLine>
         <SubHeadLine><![CDATA[{$content->pretitle}]]></SubHeadLine>
       </NewsLines>
       <AdministrativeMetadata>
@@ -46,7 +49,7 @@
         <NewsComponent Duid="multimedia_{$content->id}.multimedia.texts.{$content->id}" Euid="{$content->id}">
           <Role FormalName="Main" />
           <NewsLines>
-            <HeadLine><![CDATA[{$content->title}]]></HeadLine>
+            <HeadLine><![CDATA[{$content->title_int|default:$content->title}]]></HeadLine>
             <SubHeadLine><![CDATA[{$content->pretitle}]]></SubHeadLine>
           </NewsLines>
           <DescriptiveMetadata>
@@ -62,7 +65,7 @@
             <DataContent>
               <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
                 <head>
-                  <title><![CDATA[{$content->title}]]></title>
+                  <title><![CDATA[{$content->title_int|default:$content->title}]]></title>
                   <docdata management-status="usable">
                     <doc.rights agent="Opennemas"/>
                     <doc-id id-string="{$content->id}" />
@@ -83,7 +86,7 @@
                 <body>
                   <body.head>
                     <hedline>
-                      <hl1><![CDATA[{$content->title}]]></hl1>
+                      <hl1><![CDATA[{$content->title_int|default:$content->title}]]></hl1>
                       <hl2><![CDATA[{$content->pretitle}]]></hl2>
                     </hedline>
                     <rights>
@@ -168,7 +171,7 @@
               <NewsComponent Duid="multimedia_{$content->id}.multimedia.photos.{$featuredMediaContent->pk_content}" Euid="{$featuredMediaContent->pk_content}">
                 <NewsLines>
                   <HeadLine>
-                    <![CDATA[{$content->title}]]>
+                    <![CDATA[{$content->title_int|default:$content->title}]]>
                   </HeadLine>
                 </NewsLines>
                 <AdministrativeMetadata>
@@ -354,7 +357,7 @@
               <NewsComponent Duid="multimedia_{$content->pk_content}.multimedia.photos.{get_id($photo)}" Euid="{get_id($photo)}">
                 <NewsLines>
                   <HeadLine>
-                    <![CDATA[{$content->title}]]>
+                    <![CDATA[{$content->title_int|default:$content->title}]]>
                   </HeadLine>
                 </NewsLines>
                 <AdministrativeMetadata>
@@ -392,7 +395,7 @@
                       <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
                         <head>
                           <title>
-                            <![CDATA[{$content->title}]]>
+                            <![CDATA[{$content->title_int|default:$content->title}]]>
                           </title>
                           <docdata management-status="usable">
                             <doc-id id-string="{get_id($photo)}" />
@@ -402,7 +405,7 @@
                           <body.head>
                             <hedline>
                               <hl1>
-                                <![CDATA[{$content->title}]]>
+                                <![CDATA[{$content->title_int|default:$content->title}]]>
                               </hl1>
                             </hedline>
                             <dateline>
