@@ -294,12 +294,11 @@ class AuthorHelper
             return preg_replace($patterns[$platform], '', $item);
         }
 
-        // If it's not a valid URL but looks like a domain (e.g., www.example.com), return null
-        if (preg_match('/^https?:\/\//i', $item) || preg_match('/^[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}.*$/', $item)) {
+        // If it's not a valid URL
+        if (preg_match('/^https?:\/\//i', $item)) {
             return null;
         }
 
-        // Return the original item if no conditions matched
         return $item;
     }
 
