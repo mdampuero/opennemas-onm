@@ -548,33 +548,18 @@ class OpenAIHelper
 
     public function getStats($month, $year)
     {
-        if ($first = $this->container->get('api.service.ai')->getItemBy('order by date asc limit 1')) {
-            $dateStart = $first->date;
-        } else {
-            $dateStart = new DateTime();
+        $sql   = 'SELECT * FROM ai_actions'
+            . ' WHERE date IS NOT NULL'
+            . ' ORDER BY date ASC LIMIT 1';
+        $list  = $this->container->get('api.service.ai')->getListBySql($sql);
+
+        $first = null;
+
+        if ($list['items'][0] ?? false) {
+            $first = $list['items'][0];
         }
 
-        $months = $this->generateMonths($dateStart);
-        $tokens = $this->getTokensByMonth($month, $year);
-        $days   = $this->generateDateRangeArray($month, $year);
-
-        $pricing = $this->getPricing();
-
-        foreach ($tokens['items'] as $item) {
-            $day         = $item->getData()['date']->format('d');
-            $model       = $item->getData()['params']['model'];
-            $priceInput  = $pricing[$model]['input'];
-            $priceOutput = $pricing[$model]['output'];
-            $totalTokens = $item->getData()['tokens']['total_tokens'];
-            $totalInput  = ($item->getData()['tokens']['prompt_tokens'] / $this->conversion * $priceInput);
-            $totalOutput = ($item->getData()['tokens']['completion_tokens'] / $this->conversion * $priceOutput);
-            $totalPrice  = $totalInput + $totalOutput;
-
-            $days[$day]['words']['total'] += $this->calcWords($totalTokens);
-            $days[$day]['price']['total'] += $totalPrice;
-            $days[$day]['usage']['total']++;
-        }
-
+        $months   = ($first) ? $this->generateMonths($first->date) : $this->generateMonths(new DateTime());
         $response = [
             'words'   => ['total' => 0],
             'price'   => ['total' => 0],
@@ -582,14 +567,37 @@ class OpenAIHelper
             'filters' => $months
         ];
 
-        foreach ($days as $key => $day) {
-            $response['labels'][]         = $key;
-            $response['words']['total']  += $day['words']['total'];
-            $response['price']['total']  += $day['price']['total'];
-            $response['usage']['total']  += $day['usage']['total'];
-            $response['words']['items'][] = $day['words']['total'];
-            $response['price']['items'][] = round($day['price']['total'], 4);
-            $response['usage']['items'][] = $day['usage']['total'];
+        if ($first) {
+            $tokens  = $this->getTokensByMonth($month, $year);
+            $days    = $this->generateDateRangeArray($month, $year);
+            $pricing = $this->getPricing();
+
+            foreach ($tokens['items'] as $item) {
+                $day         = $item->getData()['date']->format('d');
+                $model       = $item->getData()['params']['model'];
+                $priceInput  = $pricing[$model]['input'];
+                $priceOutput = $pricing[$model]['output'];
+                $totalTokens = $item->getData()['tokens']['total_tokens'];
+                $totalInput  = ($item->getData()['tokens']['prompt_tokens'] / $this->conversion * $priceInput);
+                $totalOutput = ($item->getData()['tokens']['completion_tokens'] / $this->conversion * $priceOutput);
+                $totalPrice  = $totalInput + $totalOutput;
+
+                $days[$day]['words']['total'] += $this->calcWords($totalTokens);
+                $days[$day]['price']['total'] += $totalPrice;
+                $days[$day]['usage']['total']++;
+            }
+
+            $response['filters'] = $months;
+
+            foreach ($days as $key => $day) {
+                $response['labels'][]         = $key;
+                $response['words']['total']  += $day['words']['total'];
+                $response['price']['total']  += $day['price']['total'];
+                $response['usage']['total']  += $day['usage']['total'];
+                $response['words']['items'][] = $day['words']['total'];
+                $response['price']['items'][] = round($day['price']['total'], 4);
+                $response['usage']['items'][] = $day['usage']['total'];
+            }
         }
 
         return $response;
