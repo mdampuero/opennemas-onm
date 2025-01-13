@@ -71,6 +71,7 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
 
         return null;
     }
+
     /**
      * Tests getAuthor when a author is already provided as parameter.
      */
@@ -227,6 +228,15 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->helper->getAuthorUrl(131));
 
         $this->assertEquals('/author/gorp', $this->helper->getAuthorUrl($author));
+
+        $this->assertNull($this->helper->getAuthorUrl(131));
+
+        $authorWithoutSlug = new User([
+            'name' => 'no slug',
+        ]);
+        $this->assertNull($this->helper->getAuthorUrl($authorWithoutSlug));
+
+        $this->assertNull($this->helper->getAuthorUrl(null));
     }
 
     /**
@@ -329,7 +339,7 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
         $user = new User([ 'name'    => 'Michelle Price', 'twitter' => '@MichellePrice']);
 
         $this->assertNull($this->helper->getAuthorSocialTwitterUrl(131));
-        $this->assertEquals('https://www.twitter.com/@MichellePrice', $this->helper->getAuthorSocialTwitterUrl($user));
+        $this->assertEquals('https://x.com/@MichellePrice', $this->helper->getAuthorSocialTwitterUrl($user));
     }
 
     /**
@@ -491,5 +501,63 @@ class AuthorHelperTest extends \PHPUnit\Framework\TestCase
             'name'     => 'Michelle Price',
             'facebook' => 'MichellePrice'
         ])));
+    }
+
+    public function testHasAuthorLinkedinUrl()
+    {
+        $this->assertFalse($this->helper->hasAuthorSocialLinkedinUrl(131));
+        $this->assertTrue($this->helper->hasAuthorSocialLinkedinUrl(new User([
+            'name'     => 'Michelle Price',
+            'linkedin' => 'MichellePrice'
+        ])));
+    }
+
+    public function testHasAuthorInstagramUrl()
+    {
+        $this->assertFalse($this->helper->hasAuthorSocialInstagramUrl(131));
+        $this->assertTrue($this->helper->hasAuthorSocialInstagramUrl(new User([
+            'name'     => 'Michelle Price',
+            'instagram' => 'MichellePrice'
+        ])));
+    }
+
+    public function testCheckSocialUrls()
+    {
+        // Test with empty input
+        $this->assertNull($this->helper->checkSocialUrls('', 'twitter'));
+        $this->assertNull($this->helper->checkSocialUrls(null, null));
+
+        // Test with User object
+        $user = new User([
+            'name'     => 'Michelle Price',
+            'instagram' => 'MichellePrice'
+        ]);
+
+        $this->assertEquals(
+            'MichellePrice',
+            $this->helper->checkSocialUrls($user->instagram, 'instagram')
+        );
+
+        // Test with various social media URLs
+        $this->assertEquals(
+            'username',
+            $this->helper->checkSocialUrls('https://www.twitter.com/username', 'twitter')
+        );
+        $this->assertEquals(
+            'username',
+            $this->helper->checkSocialUrls('http://twitter.com/username', 'twitter')
+        );
+        $this->assertEquals(
+            'username',
+            $this->helper->checkSocialUrls('https://www.linkedin.com/in/username', 'linkedin')
+        );
+        $this->assertEquals(
+            'username',
+            $this->helper->checkSocialUrls('https://www.facebook.com/username', 'facebook')
+        );
+        $this->assertEquals(
+            'username',
+            $this->helper->checkSocialUrls('www.instagram.com/username', 'instagram')
+        );
     }
 }
