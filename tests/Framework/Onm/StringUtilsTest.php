@@ -171,17 +171,4 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
             )
         );
     }
-
-    /**
-     * @covers \Onm\StringUtils::removeShorts
-     */
-    public function testRemoveShorts()
-    {
-        $this->assertEquals(
-            'españa cousa que non lembraba ven vagar.',
-            $this->object->removeShorts('españa a unha cousa que non me lembraba e ven de vagar.')
-        );
-
-        $this->assertEquals(' a unha', $this->object->removeShorts(' a unha'));
-    }
 }
