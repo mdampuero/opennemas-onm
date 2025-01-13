@@ -47,18 +47,16 @@
         <div class="grid-body ng-cloak">
           <div class="row">
             <div class="col-xs-6 col-md-3 ">
-              <h4>{t}OpenAI service type{/t}</h4>
+              <h4>{t}Service type{/t}</h4>
               <div class="controls">
-                <select class="form-control-lg" ng-model="settings.openai_service">
-                  <option value="opennemas" selected>{t}Opennemas{/t}</option>
-                  <option value="custom">{t}Custom{/t}</option>
+                <select class="form-control " ng-model="settings.openai_service">
+                  <option value="opennemas" selected>{t}Opennemas AI{/t}</option>
+                  <option value="custom">{t}Open AI{/t}</option>
                 </select>
               </div>
             </div>
-          </div>
-          <div class="row m-t-20" ng-if="settings.openai_service === 'custom'">
-            <div class="controls col-xs-12 col-md-4 m-b-10">
-              <label>{t}OpenAI Secret Key{/t}</label>
+            <div class="col-xs-6 col-md-9" ng-if="settings.openai_service === 'custom'">
+              <h4>{t}OpenAI Secret Key{/t}</h4>
               <input class="form-control" ng-model="settings.openai_credentials.apikey" type="text">
             </div>
           </div>
@@ -124,6 +122,7 @@
           </div>
         </div>
       </div>
+      {acl isAllowed="MASTER"}
       <div class="grid simple onm-shadow">
         <div class="grid-body ng-cloak">
           <div class="row">
@@ -173,6 +172,7 @@
           </div>
         </div>
       </div>
+      {/acl}
     </div>
   </form>
 {/block}

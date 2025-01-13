@@ -39,6 +39,10 @@ class OpenAIHelper
         'presence_penalty'  => 0.9,
     ];
 
+    public $conversion = 1000000;
+
+    public $relationTokenWord = 1.5;
+
     public $map = [
         "openai_service" => "string",
         "openai_credentials" => [
@@ -78,6 +82,10 @@ class OpenAIHelper
         'gpt-4-turbo' => [
             'input'  => 10.00,
             'output' => 30.00
+        ],
+        'gpt-3.5-turbo' => [
+            'input'  => 2.00,
+            'output' => 4.00
         ]
     ];
 
@@ -260,6 +268,11 @@ class OpenAIHelper
             $responseData['tokens'] = array_key_exists('usage', $response) && !empty($response['usage'])
                 ? $response['usage']
                 : [];
+
+            $responseData['tokens']['words'] =
+                ($response['usage']['total_tokens'] ?? false) ?
+                $this->calcWords($response['usage']['total_tokens'])
+                : 0;
 
             $this->saveAction($data, $response);
         } catch (\Exception $e) {
@@ -470,6 +483,135 @@ class OpenAIHelper
         return $result;
     }
 
+    public function getTokensByMonth($month, $year)
+    {
+        $dates = $this->getDates($month, $year);
+
+        $oql = sprintf(
+            "date >= '%s' and date < '%s'",
+            $dates['start_date']->format('Y-m-d H:i:s'),
+            $dates['end_date']->format('Y-m-d H:i:s')
+        );
+
+        $result = $this->container->get('api.service.ai')->getList($oql);
+
+        return $result;
+    }
+
+    public function generateDateRangeArray($month, $year)
+    {
+        $dates       = $this->getDates($month, $year);
+        $dateArray   = [];
+        $currentDate = $dates['start_date'];
+        $endDate     = $dates['end_date'];
+
+        while ($currentDate <= $endDate) {
+            $formattedIndex = $currentDate->format('d');
+            $dateArray[$formattedIndex] = [
+                'words' => [
+                    'total' => 0,
+                    'items' => []
+                ],
+                'price' => [
+                    'total' => 0,
+                    'items' => []
+                ],
+                'usage' => [
+                    'total' => 0,
+                    'items' => []
+                ]
+            ];
+            $currentDate->modify('+1 day');
+        }
+
+        return $dateArray;
+    }
+
+    public function generateMonths($startDate)
+    {
+        $currentDate = new DateTime();
+        $startDate->modify('first day of this month');
+        $months = [];
+
+        while ($startDate < $currentDate) {
+            $months[] = [
+                'label' => _($startDate->format('F')),
+                'year' => (int) $startDate->format('Y'),
+                'month' => (int) $startDate->format('m')
+            ];
+            $startDate->modify('+1 month');
+        }
+
+        return array_reverse($months);
+    }
+
+
+    public function getStats($month, $year)
+    {
+        if ($first = $this->container->get('api.service.ai')->getItemBy('order by date asc limit 1')) {
+            $dateStart = $first->date;
+        } else {
+            $dateStart = new DateTime();
+        }
+
+        $months = $this->generateMonths($dateStart);
+        $tokens = $this->getTokensByMonth($month, $year);
+        $days   = $this->generateDateRangeArray($month, $year);
+
+        $pricing = $this->getPricing();
+
+        foreach ($tokens['items'] as $item) {
+            $day         = $item->getData()['date']->format('d');
+            $model       = $item->getData()['params']['model'];
+            $priceInput  = $pricing[$model]['input'];
+            $priceOutput = $pricing[$model]['output'];
+            $totalTokens = $item->getData()['tokens']['total_tokens'];
+            $totalInput  = ($item->getData()['tokens']['prompt_tokens'] / $this->conversion * $priceInput);
+            $totalOutput = ($item->getData()['tokens']['completion_tokens'] / $this->conversion * $priceOutput);
+            $totalPrice  = $totalInput + $totalOutput;
+
+            $days[$day]['words']['total'] += $this->calcWords($totalTokens);
+            $days[$day]['price']['total'] += $totalPrice;
+            $days[$day]['usage']['total']++;
+        }
+
+        $response = [
+            'words'   => ['total' => 0],
+            'price'   => ['total' => 0],
+            'usage'   => ['total' => 0],
+            'filters' => $months
+        ];
+
+        foreach ($days as $key => $day) {
+            $response['labels'][]         = $key;
+            $response['words']['total']  += $day['words']['total'];
+            $response['price']['total']  += $day['price']['total'];
+            $response['usage']['total']  += $day['usage']['total'];
+            $response['words']['items'][] = $day['words']['total'];
+            $response['price']['items'][] = round($day['price']['total'], 4);
+            $response['usage']['items'][] = $day['usage']['total'];
+        }
+
+        return $response;
+    }
+
+    public function calcWords($tokens)
+    {
+        return (int) ($tokens / $this->relationTokenWord);
+    }
+
+    public function getDates($month, $year)
+    {
+        $startDate = DateTime::createFromFormat('Y-m-d', "$year-$month-01");
+
+        $endDate = clone $startDate;
+        $endDate->modify('last day of this month');
+        return [
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ];
+    }
+
 
     public function getPricing()
     {
@@ -478,8 +620,6 @@ class OpenAIHelper
 
     public function getSpentMoney()
     {
-        $conversion = 1000000;
-
         $tokens  = $this->getTokensMonthly();
         $pricing = $this->getPricing();
 
@@ -494,7 +634,7 @@ class OpenAIHelper
                 $inputPrice  = isset($pricing[$model]['input']) ? $pricing[$model]['input'] : 0;
                 $outputPrice = isset($pricing[$model]['output']) ? $pricing[$model]['output'] : 0;
 
-                $total += ($promptTokens * $inputPrice + $completionTokens * $outputPrice) / $conversion;
+                $total += ($promptTokens * $inputPrice + $completionTokens * $outputPrice) / $this->conversion;
             }
         }
 

@@ -330,7 +330,7 @@ $menuXml = [
     ],
     [
         'id'          => 'openai',
-        'title'       => _('OpenAI'),
+        'title'       => _('ONM AI'),
         'badge'       => '<span class="badge badge-primary pull-left m-t-10 m-r-5">' . _('NEW') . '</span> ',
         'icon'        => 'fa fa-bell',
         'link'        => '#',
@@ -338,12 +338,12 @@ $menuXml = [
         'privilege'   => 'ADMIN',
         'submenu' => [
             [
-                'id'          => 'openai_config',
-                'title'       => _('Configuration'),
-                'icon'        => 'fa fa-cog fa-lg',
-                'link'        => url('backend_openai_config'),
+                'id'          => 'openai_dashboard',
+                'title'       => _('Dashboard'),
+                'icon'        => 'fa fa-tachometer',
+                'link'        => url('backend_openai_dashboard'),
                 'module_name' => 'es.openhost.module.openai',
-                'privilege'   => 'MASTER'
+                'privilege'   => 'ADMIN'
             ],
             [
                 'id'          => 'openai_promts',
@@ -354,13 +354,13 @@ $menuXml = [
                 'privilege'   => 'ADMIN'
             ],
             [
-                'id'          => 'openai_usage',
-                'title'       => _('Usage'),
-                'icon'        => 'fa fa-line-chart',
-                'link'        => url('backend_openai_usage'),
+                'id'          => 'openai_config',
+                'title'       => _('Configuration'),
+                'icon'        => 'fa fa-cog fa-lg',
+                'link'        => url('backend_openai_config'),
                 'module_name' => 'es.openhost.module.openai',
                 'privilege'   => 'ADMIN'
-            ],
+            ]
         ]
     ],
     // Utils menu
