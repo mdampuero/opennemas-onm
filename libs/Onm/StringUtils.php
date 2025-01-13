@@ -10,6 +10,7 @@
 namespace Onm;
 
 use Common\Model\Entity\Content;
+use Opennemas\Data\Type\Str;
 
 /**
  * The StringUtils class provides methods to transform strings.
@@ -534,7 +535,8 @@ class StringUtils
 
         // Remove stop list
         if ($useStopList) {
-            $newString = self::removeShorts($string);
+            $stringLower = mb_strtolower($string);
+            $newString   = Str::removeShortWords($stringLower);
 
             if (mb_strlen($newString) > 20) {
                 $string = $newString;
