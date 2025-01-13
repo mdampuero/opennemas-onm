@@ -269,7 +269,10 @@ class OpenAIHelper
                 ? $response['usage']
                 : [];
 
-            $responseData['tokens']['words'] = ($response['usage']['total_tokens'] ?? false) ? $this->calcWords($response['usage']['total_tokens']) : 0;
+            $responseData['tokens']['words'] =
+                ($response['usage']['total_tokens'] ?? false) ?
+                $this->calcWords($response['usage']['total_tokens'])
+                : 0;
 
             $this->saveAction($data, $response);
         } catch (\Exception $e) {
