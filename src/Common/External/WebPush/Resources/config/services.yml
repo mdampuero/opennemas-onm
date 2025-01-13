@@ -69,7 +69,7 @@ parameters:
                 config:
                     actions:
                         get_subscribers:
-                            path: '/push/websites/{id}/subscriptions/total'
+                            path: '/push/websites/info/{id}/'
             code_snippet:
                 class: 'Common\External\WebPush\Component\Endpoint\CodeSnippetEndpoint'
                 config:
