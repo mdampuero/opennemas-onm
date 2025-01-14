@@ -266,8 +266,6 @@ class Processor
             $this->optimization = [
                 'flatten' => false,
                 'animated' => true,
-                'animated.loops' => $this->getInterations(),
-                'animated.delay' => $this->getDelay()
             ];
         }
 
