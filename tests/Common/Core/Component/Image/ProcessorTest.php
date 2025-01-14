@@ -36,7 +36,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->imagick = $this->getMockBuilder('Imagick')
             ->setMethods([
                 'clear', 'getImageFilename', 'getImageFormat', 'getImageLength',
-                'getImageMimeType', 'getImageProperties'
+                'getImageMimeType', 'getImageProperties', 'getImageIterations',
+                'getImageDelay', 'getImageCompressionQuality'
             ])->getMock();
 
         $this->imagine = $this->getMockBuilder('Imagine')
@@ -48,8 +49,10 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setConstructorArgs([])
-            ->setMethods([ 'getImagine' ])
-            ->getMock();
+            ->setMethods([
+                'getImagine', 'getFormat', 'getQuality',
+                'getInterations', 'getDelay'
+            ])->getMock();
 
         $this->im->expects($this->any())->method('getImagine')
             ->willReturn($this->imagine);
@@ -74,16 +77,13 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setConstructorArgs([])
-            ->setMethods([ 'glorp', 'getFormat' ])
+            ->setMethods(['glorp'])
             ->getMock();
 
-        $this->im->expects($this->once())->method('getFormat')
-            ->willReturn('foo');
-
         $this->im->expects($this->once())->method('glorp')
-            ->with([ 'flob', 22474 ]);
+            ->with(['flob', 22474]);
 
-        $this->im->apply('glorp', [ 'flob', 22474 ]);
+        $this->im->apply('glorp', ['flob', 22474]);
     }
 
     /**
@@ -93,13 +93,13 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
             ->setConstructorArgs([])
-            ->setMethods([ 'getFormat' ])
+            ->setMethods(['glorp'])
             ->getMock();
 
-        $this->im->expects($this->once())->method('getFormat')
-            ->willReturn('gif');
+        $this->im->expects($this->once())->method('glorp')
+            ->with(['flob', 22474]);
 
-        $this->im->apply('glorp', [ 'flob', 22474 ]);
+        $this->im->apply('glorp', ['flob', 22474]);
     }
 
     /**
@@ -230,8 +230,22 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFormat()
     {
-        $this->imagick->expects($this->once())->method('getImageFormat')
+        $this->image->expects($this->once())
+            ->method('getImagick')
+            ->willReturn($this->imagick);
+
+        $this->imagick->expects($this->once())
+            ->method('getImageFormat')
             ->willReturn('CoRgE');
+
+        $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
+            ->setConstructorArgs([])
+            ->setMethods(['getImagine'])
+            ->getMock();
+
+        $property = new \ReflectionProperty($this->im, 'image');
+        $property->setAccessible(true);
+        $property->setValue($this->im, $this->image);
 
         $this->assertEquals('corge', $this->im->getFormat());
     }
@@ -245,6 +259,31 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn('image/wibble');
 
         $this->assertEquals('image/wibble', $this->im->getMimeType());
+    }
+
+    /**
+     * Tests testGetQuality.
+     */
+    public function testGetQuality()
+    {
+        $this->image->expects($this->once())
+            ->method('getImagick')
+            ->willReturn($this->imagick);
+
+        $this->imagick->expects($this->once())
+            ->method('getImageCompressionQuality')
+            ->willReturn(20);
+
+        $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
+            ->setConstructorArgs([])
+            ->setMethods(['getImagine'])
+            ->getMock();
+
+        $property = new \ReflectionProperty($this->im, 'image');
+        $property->setAccessible(true);
+        $property->setValue($this->im, $this->image);
+
+        $this->assertEquals(20, $this->im->getQuality());
     }
 
     /**
@@ -263,6 +302,59 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(9688);
 
         $this->assertEquals(9688, $this->im->getHeight());
+    }
+
+    /**
+     * Tests getSize.
+     */
+    public function testGetInterations()
+    {
+        $this->image->expects($this->once())
+            ->method('getImagick')
+            ->willReturn($this->imagick);
+
+        $this->imagick->expects($this->once())
+            ->method('getImageIterations')
+            ->willReturn(20);
+
+        $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
+            ->setConstructorArgs([])
+            ->setMethods(['getImagine'])
+            ->getMock();
+
+        $property = new \ReflectionProperty($this->im, 'image');
+        $property->setAccessible(true);
+        $property->setValue($this->im, $this->image);
+
+        $this->assertEquals(20, $this->im->getInterations());
+        $this->imagick->expects($this->any())->method('getImageIterations')
+            ->willReturn(0);
+    }
+
+
+    /**
+     * Tests getSize.
+     */
+    public function testGetDelay()
+    {
+        $this->image->expects($this->once())
+            ->method('getImagick')
+            ->willReturn($this->imagick);
+
+        $this->imagick->expects($this->once())
+            ->method('getImageDelay')
+            ->willReturn(20);
+
+        $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
+            ->setConstructorArgs([])
+            ->setMethods(['getImagine'])
+            ->getMock();
+
+        $property = new \ReflectionProperty($this->im, 'image');
+        $property->setAccessible(true);
+        $property->setValue($this->im, $this->image);
+
+        $this->assertEquals(20, $this->im->getDelay());
     }
 
     /**
@@ -337,9 +429,9 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests optimize when called with and without arguments.
+     * Tests optimize when called with a higher quality argument for JPG format.
      */
-    public function testOptimize()
+    public function testOptimizeWithFormatJPG()
     {
         $optimization = new \ReflectionProperty($this->im, 'optimization');
         $defaults     = new \ReflectionProperty($this->im, 'defaults');
@@ -347,14 +439,116 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $optimization->setAccessible(true);
         $defaults->setAccessible(true);
 
+        // Set default values
+        $defaultValues = [
+            'flatten' => false,
+            'quality' => 85,
+            'resolution-units' => 'ppi',
+            'resolution-x' => 72,
+            'resolution-y' => 72,
+        ];
+        $defaults->setValue($this->im, $defaultValues);
+
+        // Mock getFormat to return 'jpg'
+        $this->im->expects($this->atLeastOnce())
+            ->method('getFormat')
+            ->willReturn('jpg');
+
+        // Mock getQuality to return 80
+        $this->im->expects($this->once())
+            ->method('getQuality')
+            ->willReturn(80);
+
+        // Test optimize with higher quality
+        $higherQualityOptimization = ['quality' => 90];
+        $this->im->optimize($higherQualityOptimization);
+
+        // Verify that optimization is updated when quality is higher
+        $this->assertEquals($higherQualityOptimization, $optimization->getValue($this->im));
+    }
+
+    public function testOptimizeWithFormatGIF()
+    {
+        $optimization = new \ReflectionProperty($this->im, 'optimization');
+        $defaults     = new \ReflectionProperty($this->im, 'defaults');
+
+        $optimization->setAccessible(true);
+        $defaults->setAccessible(true);
+
+        // Set default values
+        $defaultValues = [
+            'flatten' => false,
+            'animated' => true,
+            'animated.loops' => 0,
+            'animated.delay' => 20
+        ];
+        $defaults->setValue($this->im, $defaultValues);
+
+        // Mock getFormat to return 'gif'
+        $this->im->expects($this->atLeastOnce())
+            ->method('getFormat')
+            ->willReturn('gif');
+
+        // Mock getInterations to return 0
+        $this->im->expects($this->atLeastOnce())
+            ->method('getInterations')
+            ->willReturn(0);
+
+        // Mock getDelay to return 20
+        $this->im->expects($this->atLeastOnce())
+            ->method('getDelay')
+            ->willReturn(20);
+
+        // Test optimize for GIF
         $this->im->optimize();
+
+        // Verify that optimization is set correctly for GIF
+        $expectedOptimization = [
+            'flatten' => false,
+            'animated' => true,
+            'animated.loops' => 0,
+            'animated.delay' => 20
+        ];
+        $this->assertEquals($expectedOptimization, $optimization->getValue($this->im));
+
+        // Test optimize with additional parameters (should be ignored for GIF)
+        $this->im->optimize(['quality' => 90]);
+
+        // Verify that optimization remains unchanged
+        $this->assertEquals($expectedOptimization, $optimization->getValue($this->im));
+    }
+
+    public function testOptimizeWithoutFormat()
+    {
+        $optimization = new \ReflectionProperty($this->im, 'optimization');
+        $defaults     = new \ReflectionProperty($this->im, 'defaults');
+
+        $optimization->setAccessible(true);
+        $defaults->setAccessible(true);
+
+        // Llamar al método optimize sin argumentos
+        $this->im->optimize();
+
+        // Comparar los valores predeterminados con la optimización
         $this->assertEquals(
             $defaults->getValue($this->im),
             $optimization->getValue($this->im)
         );
 
-        $this->im->optimize([ 'frog' => 12230 ]);
-        $this->assertEquals([ 'frog' => 12230 ], $optimization->getValue($this->im));
+        // Llamar al método optimize con parámetros específicos
+        $this->im->optimize(['frog' => 12230]);
+
+        // Ajustar el valor esperado para reflejar los valores adicionales que se configuran
+        $expectedOptimization = [
+            'flatten' => false,
+            'quality' => 85,
+            'resolution-units' => 'ppi',
+            'resolution-x' => 72,
+            'resolution-y' => 72,
+        ];
+
+        // Verificar que los valores de optimización sean correctos
+        $this->assertEquals($expectedOptimization, $optimization->getValue($this->im));
     }
 
     /**

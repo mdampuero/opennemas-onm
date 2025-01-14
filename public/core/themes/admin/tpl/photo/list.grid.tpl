@@ -97,7 +97,7 @@
                 {t}Size{/t}
               </label>
               <span class="badge badge-default m-l-10 text-bold">
-                [% selected.lastSelected.size %] KB
+                [% selected.lastSelected.size | number : 2 %] KB
               </span>
             </div>
           </div>
