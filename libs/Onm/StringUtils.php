@@ -10,6 +10,7 @@
 namespace Onm;
 
 use Common\Model\Entity\Content;
+use Opennemas\Data\Type\Str;
 
 /**
  * The StringUtils class provides methods to transform strings.
@@ -391,116 +392,6 @@ class StringUtils
     ];
 
     /**
-     * List of spanish words that could be removed from a phrase while
-     * generating slugs.
-     *
-     * @var array
-     */
-    protected static $shortWords = [
-        'a',
-        'al',
-        'ante',
-        'ante',
-        'aquel',
-        'aquela',
-        'aquella',
-        'aquellas',
-        'aquello',
-        'aquellos',
-        'aquelo',
-        'as',
-        'aunque',
-        'bajo',
-        'bien',
-        'cabe',
-        'cinco',
-        'con',
-        'conmigo',
-        'contra',
-        'cuatro',
-        'cun',
-        'cunha',
-        'de',
-        'del',
-        'dela',
-        'desde',
-        'dos',
-        'durante',
-        'e',
-        'el',
-        'elas',
-        'eles',
-        'en',
-        'entre',
-        'esa',
-        'esas',
-        'ese',
-        'eso',
-        'esos',
-        'esta',
-        'estas',
-        'este',
-        'esto',
-        'estos',
-        'excepto',
-        'hacia',
-        'hasta',
-        'hay',
-        'la',
-        'las',
-        'le',
-        'les',
-        'lo',
-        'los',
-        'me',
-        'mediante',
-        'mi',
-        'na',
-        'no',
-        'nosotras',
-        'nosotros',
-        'nove',
-        'nueve',
-        'o',
-        'ocho',
-        'oito',
-        'os',
-        'otro',
-        'ou',
-        'outro',
-        'para',
-        'pero',
-        'por',
-        'salvo',
-        'se',
-        'segun',
-        'seis',
-        'sen',
-        'sete',
-        'si',
-        'siete',
-        'sin',
-        'sino',
-        'sobre',
-        'su',
-        'sus',
-        'te',
-        'tras',
-        'tres',
-        'tu',
-        'un',
-        'una',
-        'unas',
-        'unha',
-        'unhas',
-        'uno',
-        'unos',
-        'y',
-        'ya',
-        'yo',
-    ];
-
-    /**
      * Clean the special chars and add - for separate words
      *
      * @param  mixed  $string the string to transform
@@ -534,7 +425,8 @@ class StringUtils
 
         // Remove stop list
         if ($useStopList) {
-            $newString = self::removeShorts($string);
+            $stringLower = mb_strtolower($string);
+            $newString   = Str::removeShortWords($stringLower);
 
             if (mb_strlen($newString) > 20) {
                 $string = $newString;
@@ -622,35 +514,6 @@ class StringUtils
         }
 
         return $url . $urlParams;
-    }
-
-    /**
-     * Removes some short spanish words.
-     *
-     * @param string $string The string to clean.
-     *
-     * @return string The cleaned string.
-     */
-    public static function removeShorts($str)
-    {
-        $parsed = $str;
-
-        foreach (self::$shortWords as $word) {
-            $parsed = preg_replace(
-                "/(^|[\s\.\,]+)$word($|[\s\.\,]+)/i",
-                ' ',
-                $parsed
-            );
-        }
-
-        // Remove duplicated whitespaces
-        $parsed = trim(preg_replace('/\s+/', ' ', $parsed));
-
-        if (!empty($parsed)) {
-            return $parsed;
-        }
-
-        return $str;
     }
 
     /**
