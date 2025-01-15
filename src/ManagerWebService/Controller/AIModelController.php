@@ -62,6 +62,4 @@ class AIModelController extends Controller
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
-
-
 }
