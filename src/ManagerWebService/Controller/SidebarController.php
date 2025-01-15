@@ -159,13 +159,19 @@ class SidebarController extends Controller
                     ],
                 ],
                 [
-                    'name'     => _('OpenAI'),
+                    'name'     => _('ONM AI'),
                     'icon'     => 'fa fa-bell',
                     'items' => [
                         [
                             'name'     => _('Prompts'),
                             'icon'     => 'fa fa-terminal fa-lg',
                             'route'    => 'manager_prompt_list',
+                            'click'    => true,
+                        ],
+                        [
+                            'name'     => _('Configs'),
+                            'icon'     => 'fa fa-cog fa-lg',
+                            'route'    => 'manager_aimodel_list',
                             'click'    => true,
                         ],
                     ]

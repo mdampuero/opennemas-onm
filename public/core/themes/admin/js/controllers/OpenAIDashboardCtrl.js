@@ -43,6 +43,7 @@
           year: null,
           month: null
         };
+        $scope.panelSelected = 'words';
 
         /**
          * @function init
@@ -68,7 +69,7 @@
                 $scope.indexFilter = 0;
                 $scope.setFilter();
               }
-              $scope.generateStats('words');
+              $scope.generateStats($scope.panelSelected);
               $scope.disableFlags('http');
             }, function() {
               $scope.disableFlags('http');

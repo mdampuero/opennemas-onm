@@ -10,6 +10,7 @@ orm:
                 tokens:              array
                 params:              array
                 date:                datetime
+                service:             string
             converters:
                 default:
                     class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
@@ -44,6 +45,9 @@ orm:
                         date:
                             type: datetimetz
                             options: { default: null, notnull: false }
+                        service:
+                            type: text
+                            options: { default: null, length: 64, notnull: false }
                     index:
                         -
                             name: PRIMARY

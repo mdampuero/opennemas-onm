@@ -41,16 +41,6 @@
           errorApiKey: 'Please enter a valid Secret Key'
         };
 
-        $scope.settings = {
-          openai_service:          'custom',
-          openai_credentials:      [],
-          openai_config:           [ 'gpt-4o-mini' ],
-          openai_roles:            [],
-          openai_tones:            [],
-          openai_instructions:     [],
-          openai_instructionTypes: [],
-        };
-
         $scope.needCheckApiKey = false;
 
         /**

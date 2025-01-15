@@ -26,19 +26,6 @@ class OpenAIHelper
      */
     protected $container;
 
-    /**
-     * The service Key.
-     *
-     * @var Array
-     */
-    protected $defautlParams = [
-        'model'             => 'gpt-4o-mini',
-        'max_tokens'        => 50,
-        'temperature'       => 0.5,
-        'frequency_penalty' => 0.9,
-        'presence_penalty'  => 0.9,
-    ];
-
     public $conversion = 1000000;
 
     public $relationTokenWord = 1.5;
@@ -67,26 +54,6 @@ class OpenAIHelper
             "frequency_penalty" => "float",
             "presence_penalty" => "float",
         ],
-    ];
-
-    /**
-     * The service pricing.
-     *
-     * @var Array
-     */
-    protected $pricing = [
-        'gpt-4o-mini' => [
-            'input'  => 0.15,
-            'output' => 0.60
-        ],
-        'gpt-4-turbo' => [
-            'input'  => 10.00,
-            'output' => 30.00
-        ],
-        'gpt-3.5-turbo' => [
-            'input'  => 2.00,
-            'output' => 4.00
-        ]
     ];
 
     protected $service;
@@ -219,7 +186,6 @@ class OpenAIHelper
     public function sendMessage($messages, $params = [])
     {
         $data = array_merge($this->getConfig(), $params);
-
         if ($messages["locale"] ?? false) {
             $this->addInstruction([
                 'type' => 'Both',
@@ -250,24 +216,24 @@ class OpenAIHelper
         $responseData = [];
 
         try {
+            $payload = $data;
+            unset($payload['meta']);
             $response = $this->client->request('POST', $this->openaiEndpointBase . $this->endpointChat, [
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->getApiKey()
                 ],
-                'json' => $data
+                'json' => $payload
             ]);
             $response = json_decode($response->getBody(), true);
 
+            $response['meta'] = $data['meta'];
+
             $responseData["request"] = $data;
 
-            $responseData['message'] = isset($response['choices'][0]['message']['content'])
-                ? $this->removeQuotesAndPeriod($response['choices'][0]['message']['content'])
-                : '';
+            $responseData['message'] = $response['choices'][0]['message']['content'] ?? '';
 
-            $responseData['tokens'] = array_key_exists('usage', $response) && !empty($response['usage'])
-                ? $response['usage']
-                : [];
+            $responseData['tokens'] = $response['usage'] ?? [];
 
             $responseData['tokens']['words'] =
                 ($response['usage']['total_tokens'] ?? false) ?
@@ -295,18 +261,7 @@ class OpenAIHelper
 
     public function getModels()
     {
-        try {
-            $models = $this->pricing;
-            $data   = [];
-            foreach ($models as $key => $model) {
-                $data[] = [
-                    'id' => $key
-                ];
-            }
-            return $data;
-        } catch (Exception $e) {
-            return [['id' => 'gpt-4o-mini']];
-        }
+        return getService('orm.manager')->getDataSet('Settings', 'manager')->get('openai_models') ?? [];
     }
 
     public function getModelsFromApi()
@@ -315,43 +270,55 @@ class OpenAIHelper
             $response = $this->client->request('GET', $this->openaiEndpointBase . $this->endpointModels, [
                 'headers' => [
                     'Content-Type' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->getApiKey()
+                    'Authorization' => 'Bearer ' . $this->container->getParameter('opennemas.openai.key')
                 ]
             ]);
 
             $body   = $response->getBody()->getContents();
             $models = json_decode($body, true);
 
+            /** Filter only GPT */
             $textModels = array_filter($models["data"], function ($model) {
                 return preg_match('/^(gpt-)/', $model['id']);
             });
-            return array_values($textModels);
+
+            /** Order */
+            usort($textModels, function ($a, $b) {
+                return $b['created'] <=> $a['created'];
+            });
+
+            /** Fromat date */
+            $textModels = array_map(function ($model) {
+                $model['formatted_date']     = date('Y-m-d', $model['created']);
+                $model['active']             = false;
+                $model['default']            = false;
+                $model['cost_input_tokens']  = 0;
+                $model['sale_input_tokens']  = 0;
+                $model['cost_output_tokens'] = 0;
+                $model['sale_output_tokens'] = 0;
+                return $model;
+            }, $textModels);
+
+            return $textModels;
         } catch (Exception $e) {
-            return [['id' => 'gpt-4o-mini']];
+            return [];
         }
     }
 
     protected function saveAction($params, $response)
     {
-        $messages     = $params['messages'] ?? [];
-        $responseData = isset($response['choices'][0]['message']['content'])
-            ? $response['choices'][0]['message']['content']
-            : '';
-
-        $tokens = array_key_exists('usage', $response) && !empty($response['usage'])
-            ? $response['usage']
-            : [];
-
-        $date = new DateTime('now');
+        $messages = $params['messages'] ?? [];
+        $date     = new DateTime('now');
 
         unset($params['messages']);
 
         $data = [
             'messages' => $messages,
-            'response' => $responseData,
-            'tokens'   => $tokens,
+            'response' => $response['choices'][0]['message']['content'] ?? '',
+            'tokens'   => $response['usage'] ?? [],
             'params'   => $params,
-            'date'     => $date->format('Y-m-d H:i:s')
+            'date'     => $date->format('Y-m-d H:i:s'),
+            'service'  => $this->getService()
         ];
 
         $this->container->get('api.service.ai')->createItem($data);
@@ -390,22 +357,6 @@ class OpenAIHelper
             ->set('openai_tokens', $currenTokens);
     }
 
-    public function setDefaultParams($data)
-    {
-        foreach ($this->defautlParams as $key => $value) {
-            if (array_key_exists($key, $data) && !empty($data[$key])) {
-                $this->defautlParams[$key] = $data[$key];
-            }
-        }
-
-        return $this;
-    }
-
-    public function getDafaultParams()
-    {
-        return $this->defautlParams;
-    }
-
     protected function getApiKey()
     {
         $credentials = $this->getCredentials();
@@ -414,8 +365,7 @@ class OpenAIHelper
         if ($provider === 'custom') {
             $this->openaiApiKey = $credentials['apikey'];
         } else {
-            // $this->openaiApiKey = $this->container->getParameter('opennemas.openai.key');
-            $this->openaiApiKey = '';
+            $this->openaiApiKey = $this->container->getParameter('opennemas.openai.key');
         }
         return $this->openaiApiKey;
     }
@@ -427,10 +377,6 @@ class OpenAIHelper
         $this->setInstructions($this->container->get('orm.manager')
             ->getDataSet('Settings', 'manager')
             ->get('openai_instructions', []));
-
-        if (empty($settings)) {
-            $settings = $this->defautlParams;
-        }
 
         foreach ($settings as $key => $value) {
             if (is_numeric($value)) {
@@ -545,22 +491,22 @@ class OpenAIHelper
         return array_reverse($months);
     }
 
+    public function getFirstAction()
+    {
+        $sql  = 'SELECT * FROM ai_actions'
+            . ' WHERE date IS NOT NULL'
+            . ' ORDER BY date ASC LIMIT 1';
+        $list = $this->container->get('api.service.ai')->getListBySql($sql);
+
+        return $list['items'][0] ?? null;
+    }
 
     public function getStats($month, $year)
     {
-        $sql   = 'SELECT * FROM ai_actions'
-            . ' WHERE date IS NOT NULL'
-            . ' ORDER BY date ASC LIMIT 1';
-        $list  = $this->container->get('api.service.ai')->getListBySql($sql);
-
-        $first = null;
-
-        if ($list['items'][0] ?? false) {
-            $first = $list['items'][0];
-        }
-
+        $first    = $this->getFirstAction();
         $months   = ($first) ? $this->generateMonths($first->date) : $this->generateMonths(new DateTime());
         $response = [
+            'labels'  => [],
             'words'   => ['total' => 0],
             'price'   => ['total' => 0],
             'usage'   => ['total' => 0],
@@ -568,39 +514,69 @@ class OpenAIHelper
         ];
 
         if ($first) {
-            $tokens  = $this->getTokensByMonth($month, $year);
-            $days    = $this->generateDateRangeArray($month, $year);
-            $pricing = $this->getPricing();
+            $tokens = $this->getTokensByMonth($month, $year);
+            $days   = $this->generateDateRangeArray($month, $year);
 
-            foreach ($tokens['items'] as $item) {
-                $day         = $item->getData()['date']->format('d');
-                $model       = $item->getData()['params']['model'];
-                $priceInput  = $pricing[$model]['input'];
-                $priceOutput = $pricing[$model]['output'];
-                $totalTokens = $item->getData()['tokens']['total_tokens'];
-                $totalInput  = ($item->getData()['tokens']['prompt_tokens'] / $this->conversion * $priceInput);
-                $totalOutput = ($item->getData()['tokens']['completion_tokens'] / $this->conversion * $priceOutput);
-                $totalPrice  = $totalInput + $totalOutput;
+            $this->groupByDays($tokens, $days);
 
-                $days[$day]['words']['total'] += $this->calcWords($totalTokens);
-                $days[$day]['price']['total'] += $totalPrice;
-                $days[$day]['usage']['total']++;
-            }
-
-            $response['filters'] = $months;
-
-            foreach ($days as $key => $day) {
-                $response['labels'][]         = $key;
-                $response['words']['total']  += $day['words']['total'];
-                $response['price']['total']  += $day['price']['total'];
-                $response['usage']['total']  += $day['usage']['total'];
-                $response['words']['items'][] = $day['words']['total'];
-                $response['price']['items'][] = round($day['price']['total'], 4);
-                $response['usage']['items'][] = $day['usage']['total'];
-            }
+            $response = $this->generateResponseStats($response, $days);
         }
 
         return $response;
+    }
+
+    public function generateResponseStats($response, $days)
+    {
+        foreach ($days as $key => $day) {
+            $response['labels'][]         = $key;
+            $response['words']['total']  += $day['words']['total'];
+            $response['price']['total']  += $day['price']['total'];
+            $response['usage']['total']  += $day['usage']['total'];
+            $response['words']['items'][] = $day['words']['total'];
+            $response['price']['items'][] = round($day['price']['total'], 4);
+            $response['usage']['items'][] = $day['usage']['total'];
+        }
+
+        return $response;
+    }
+
+    public function groupByDays($tokens, &$days)
+    {
+        foreach ($tokens['items'] as $item) {
+            $price = $this->getPrices($item);
+
+            $day         = $item->getData()['date']->format('d');
+            $totalTokens = $item->getData()['tokens']['total_tokens'];
+            $totalInput  = ($item->getData()['tokens']['prompt_tokens'] / $this->conversion * $price['i']);
+            $totalOutput = ($item->getData()['tokens']['completion_tokens'] / $this->conversion * $price['o']);
+            $totalPrice  = $totalInput + $totalOutput;
+
+            $days[$day]['words']['total'] += $this->calcWords($totalTokens);
+            $days[$day]['price']['total'] += $totalPrice;
+            $days[$day]['usage']['total']++;
+        }
+    }
+
+    public function getPrices($item)
+    {
+        $priceInput  = 0;
+        $priceOutput = 0;
+
+        if ($item->getData()['params']['meta'] ?? false) {
+            $meta = $item->getData()['params']['meta'];
+            if ($item->service != 'custom') {
+                $priceInput  = $meta['sale_input_tokens'];
+                $priceOutput = $meta['sale_output_tokens'];
+            } else {
+                $priceInput  = $meta['cost_input_tokens'];
+                $priceOutput = $meta['cost_output_tokens'];
+            }
+        }
+
+        return [
+            'i' => $priceInput,
+            'o' => $priceOutput,
+        ];
     }
 
     public function calcWords($tokens)
@@ -620,46 +596,14 @@ class OpenAIHelper
         ];
     }
 
-
-    public function getPricing()
-    {
-        return $this->pricing;
-    }
-
     public function getSpentMoney()
     {
         $tokens  = $this->getTokensMonthly();
-        $pricing = $this->getPricing();
+        $pricing = [];
 
         $total = 0;
-
-        foreach ($tokens['items'] as $tokenInfo) {
-            $model            = $tokenInfo->getData()['params']['model'];
-            $promptTokens     = $tokenInfo->getData()['tokens']['prompt_tokens'];
-            $completionTokens = $tokenInfo->getData()['tokens']['completion_tokens'];
-
-            if (isset($pricing[$model])) {
-                $inputPrice  = isset($pricing[$model]['input']) ? $pricing[$model]['input'] : 0;
-                $outputPrice = isset($pricing[$model]['output']) ? $pricing[$model]['output'] : 0;
-
-                $total += ($promptTokens * $inputPrice + $completionTokens * $outputPrice) / $this->conversion;
-            }
-        }
-
         $total = round($total, 15);
-
         return $total;
-    }
-
-    public function removeQuotesAndPeriod($string)
-    {
-        $string = trim($string, '"');
-
-        if (substr($string, -1) === '.') {
-            $string = rtrim($string, '.');
-        }
-
-        return $string;
     }
 
     public function getTones($showManager = true)
@@ -819,14 +763,56 @@ class OpenAIHelper
         return $this;
     }
 
+    public function getDefaultfModel($models = [])
+    {
+        $result = array_filter($models, function ($item) {
+            return isset($item['default']) && $item['default'] == "true";
+        });
+        return reset($result);
+    }
+    /* public function getCurrentModel(){
+
+    }*/
     /**
      * Get the value of openaiConfig
      */
     public function getOpenaiConfig()
     {
-        return $this->container->get('orm.manager')
+        $settingsInstance = getService('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('openai_config', []);
+        $settingsManager  = getService('orm.manager')
+            ->getDataSet('Settings', 'manager')
+            ->get('openai_settings');
+
+        $models = $this->getModels();
+        if (!empty($settingsInstance['model'])) {
+            $filter = array_filter($models, function ($item) {
+                return $item['id'] === 'gpt-';
+            });
+            $model  = reset($filter);
+        } else {
+            $model = $this->getDefaultfModel($models);
+        }
+
+        $config = [
+            'temperature' => !empty($settingsInstance['temperature'])
+                ? $settingsInstance['temperature']
+                : $settingsManager['temperature'],
+            'max_tokens' => !empty($settingsInstance['max_tokens'])
+                ? $settingsInstance['max_tokens']
+                : $settingsManager['max_tokens'],
+            'frequency_penalty' => !empty($settingsInstance['frequency_penalty'])
+                ? $settingsInstance['frequency_penalty']
+                : $settingsManager['frequency_penalty'],
+            'presence_penalty' => !empty($settingsInstance['presence_penalty'])
+                ? $settingsInstance['presence_penalty']
+                : $settingsManager['presence_penalty'],
+        ];
+
+        $config['meta']  = $model;
+        $config['model'] = $config['meta']['id'];
+        return $config;
     }
 
     /**

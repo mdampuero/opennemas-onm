@@ -137,7 +137,8 @@
                   <div class="controls">
                     <label>{t}OpenAI module{/t}</label>
                     <select class="form-control-lg" ng-model="settings.openai_config.model">
-                      <option value="[% item.id %]"  ng-repeat="item in settings.openai_models">[% item.id %]</option>
+                      <option value="">[% settings.openai_model_default.id %] [Manager]</option>
+                      <option value="[% item.id %]" ng-repeat="item in settings.openai_models">[% item.id %]</option>
                     </select>
                   </div>
                 </div>
@@ -145,25 +146,25 @@
               <div class="row m-t-50">
                 <div class="controls col-xs-12 col-md-3 m-b-10">
                   <label>{t}AI 'Temperature' param{/t}</label>
-                  <input class="form-control" ng-model="settings.openai_config.temperature" type="number" min="0" max="2" step="0.1" ng-change="validate()">
+                  <input class="form-control" ng-model="settings.openai_config.temperature" placeholder="[% settings.openai_config_manager.temperature %] [Manager]" type="text">
                   <i class="fa fa-info-circle text-info"></i>
                   <small class="text-muted">{t}Numeric valuer between 0 and 2. Higher values like 1.2 will make the output more random, while lower values like 0.2 will make it more focused and deterministic{/t}</small>
                 </div>
                 <div class="controls col-xs-12 col-md-3 m-b-10">
                   <label>{t}Max tokens{/t}</label>
-                  <input class="form-control" ng-model="settings.openai_config.max_tokens" type="number" min="5" max="99999" step="5">
+                  <input class="form-control" ng-model="settings.openai_config.max_tokens" placeholder="[% settings.openai_config_manager.max_tokens %] [Manager]" type="text">
                   <i class="fa fa-info-circle text-info"></i>
                   <small class="text-muted">{t}The maximum number of tokens that can be generated in the chat completion. (Completion tokens){/t}</small>
                 </div>
                 <div class="controls col-xs-12 col-md-3 m-b-10">
                   <label>{t}Frequency penalty{/t}</label>
-                  <input class="form-control" ng-model="settings.openai_config.frequency_penalty" type="number" min="-2" max="2" step="0.1">
+                  <input class="form-control" ng-model="settings.openai_config.frequency_penalty" placeholder="[% settings.openai_config_manager.frequency_penalty %] [Manager]" type="text">
                   <i class="fa fa-info-circle text-info"></i>
                   <small class="text-muted">{t}Number between -2.0 and 2.0{/t}.{t}Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.{/t}</small>
                 </div>
                 <div class="controls col-xs-12 col-md-3 m-b-10">
                   <label>{t}Presence penalty{/t}</label>
-                  <input class="form-control" ng-model="settings.openai_config.presence_penalty" type="number" min="-2" max="2" step="0.1">
+                  <input class="form-control" ng-model="settings.openai_config.presence_penalty" placeholder="[% settings.openai_config_manager.presence_penalty %] [Manager]" type="text">
                   <i class="fa fa-info-circle text-info"></i>
                   <small class="text-muted">{t}Number between -2.0 and 2.0{/t}.{t}Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.{/t}</small>
                 </div>

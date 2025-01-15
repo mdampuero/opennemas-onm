@@ -1,0 +1,4 @@
+manager_aimodel_list:
+    path: /aimodel
+    options:
+        expose: true

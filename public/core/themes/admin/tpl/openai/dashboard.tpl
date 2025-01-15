@@ -57,10 +57,10 @@
             </div>
             <div class="col-xs-4">
               <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-b-0 p-15 cursor-pointer" ng-class="{ 'bg-white': panelSelected == 'price' }" ng-click="generateStats('price')">
-                <label class="form-label">{t}Total US${/t}</label>
+                <label class="form-label">{t}Total €{/t}</label>
                 <div class="form-status text-left">
                   <p class="onm-score text-left lead m-b-0">
-                    <strong ng-if="totals.price">[% totals.price.total | number : 4 %] US$</strong>
+                    <strong ng-if="totals.price">[% totals.price.total | number : 4 %] €</strong>
                     <strong ng-if="!totals.price">0</strong>
                   </p>
                 </div>
@@ -75,7 +75,7 @@
                     <div class="col-xs-6">
                       <div class="lead" ng-if="panelSelected == 'words'">{t}Total words generated{/t}</div>
                       <div class="lead" ng-if="panelSelected == 'usage'">{t}Total interactions{/t}</div>
-                      <div class="lead" ng-if="panelSelected == 'price'">{t}Total US${/t}</div>
+                      <div class="lead" ng-if="panelSelected == 'price'">{t}Total €{/t}</div>
                     </div>
                     <div class="col-xs-6 text-right">
                       <div class="btn-group" role="group">

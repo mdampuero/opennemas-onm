@@ -63,21 +63,21 @@ class OpenAIController extends ApiController
             ->getDataSet('Settings', 'instance')
             ->get('openai_credentials', []);
 
-        if (empty($settings)) {
-            //TODO: Get config from manager
-            $settings = $this->get($this->helper)->getDafaultParams();
-        }
-
         foreach ($settings as $key => $value) {
             if (is_numeric($value)) {
                 $settings[$key] = (float) $value;
             }
         }
 
+        $models = $this->get($this->helper)->getModels();
+
         return new JsonResponse([
             'openai_service'          => $serviceName,
             'openai_credentials'      => $credentials,
             'openai_config'           => $settings,
+            'openai_config_manager'   => $this->get($this->helper)->getConfig(),
+            'openai_models_manager'   => $models,
+            'openai_model_default'    => $this->get($this->helper)->getDefaultfModel($models),
             'openai_roles'            => $this->get($this->helper)->getRoles(),
             'openai_tones'            => $this->get($this->helper)->getTones(),
             'openai_models'           => $this->get($this->helper)->getModels(),

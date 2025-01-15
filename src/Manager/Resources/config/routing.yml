@@ -55,3 +55,7 @@ manager_user_group:
 manager_prompt:
     prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/prompt.yml'
+
+manager_aimodel:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/aimodel.yml'

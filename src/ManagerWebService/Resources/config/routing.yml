@@ -67,3 +67,7 @@ manager_ws_prompt:
     resource: '@ManagerWebServiceBundle/Resources/config/routing/prompt.yml'
     prefix:   /
 
+manager_ws_aimodel:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/aimodel.yml'
+    prefix:   /
+

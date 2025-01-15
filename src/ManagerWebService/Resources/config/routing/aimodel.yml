@@ -1,0 +1,14 @@
+manager_ws_aimodel_list:
+    path:     /aimodel
+    defaults: { _controller: ManagerWebServiceBundle:AIModel:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_aimodel_save:
+    path:     /aimodel/save
+    defaults: { _controller: ManagerWebServiceBundle:AIModel:save }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
