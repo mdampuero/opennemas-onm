@@ -478,9 +478,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         // Set default values
         $defaultValues = [
             'flatten' => false,
-            'animated' => true,
-            'animated.loops' => 0,
-            'animated.delay' => 20
+            'animated' => true
         ];
         $defaults->setValue($this->im, $defaultValues);
 
@@ -489,25 +487,13 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getFormat')
             ->willReturn('gif');
 
-        // Mock getInterations to return 0
-        $this->im->expects($this->atLeastOnce())
-            ->method('getInterations')
-            ->willReturn(0);
-
-        // Mock getDelay to return 20
-        $this->im->expects($this->atLeastOnce())
-            ->method('getDelay')
-            ->willReturn(20);
-
         // Test optimize for GIF
         $this->im->optimize();
 
         // Verify that optimization is set correctly for GIF
         $expectedOptimization = [
             'flatten' => false,
-            'animated' => true,
-            'animated.loops' => 0,
-            'animated.delay' => 20
+            'animated' => true
         ];
         $this->assertEquals($expectedOptimization, $optimization->getValue($this->im));
 
