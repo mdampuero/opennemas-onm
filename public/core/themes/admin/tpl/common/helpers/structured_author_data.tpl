@@ -78,6 +78,7 @@
         "interactionType": "https://schema.org/WriteAction",
         "userInteractionCount": {$total}
       }
+    }
   }
 ]
 </script>
