@@ -100,6 +100,12 @@ class SettingController extends Controller
             ->getDataSet('Settings', 'instance')
             ->get($keys);
 
+        if (empty($settings) || is_null($settings['sitemap'])) {
+            $settings = $this->get('orm.manager')
+                ->getDataSet('Settings', 'manager')
+                ->get($keys);
+        }
+
         // Decode scripts
         foreach ($this->base64Encoded as $key) {
             if (array_key_exists($key, $settings)) {
