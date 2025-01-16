@@ -76,7 +76,7 @@
       "agentInteractionStatistic": {
         "@type": "InteractionCounter",
         "interactionType": "https://schema.org/WriteAction",
-        "userInteractionCount": 2346
+        "userInteractionCount": {$total}
       }
   }
 ]

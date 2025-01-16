@@ -12,6 +12,10 @@ function smarty_function_structured_data_tags($params, &$smarty)
             ->getCurrentRequest()->getUri(),
     ];
 
+    if (!empty($data['author'])) {
+        $data['total'] = $smarty->getValue('total');
+    }
+
     // Do not use AMP url for structured data
     $data['url'] = str_replace('.amp.html', '.html', $data['url']);
 
