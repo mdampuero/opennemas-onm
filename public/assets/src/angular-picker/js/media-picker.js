@@ -550,7 +550,7 @@
         $scope.criteria = {
           content_type_name: 'photo',
           epp: $scope.epp,
-          in_litter: 0,
+          in_litter: null,
           orderBy: { created:  'desc' },
           page: $scope.page
         };
@@ -797,13 +797,14 @@
             $scope.searchLoading = true;
           }
 
-          $scope.criteria.epp               = $scope.epp;
-          $scope.criteria.page              = $scope.page;
-
-          $scope.criteria.category_id = $scope.category && $scope.criteria.content_type_name !== 'photo' ? $scope.category : null;
+          $scope.criteria.epp         = $scope.epp;
+          $scope.criteria.page        = $scope.page;
+          $scope.criteria.category_id = $scope.category &&
+            $scope.criteria.content_type_name !== 'photo' ? $scope.category : null;
 
           if ($scope.criteria.content_type_name !== 'photo') {
-            $scope.criteria.created = null;
+            $scope.criteria.created   = null;
+            $scope.criteria.in_litter = 0;
           }
 
           oqlEncoder.configure({
@@ -1171,7 +1172,7 @@
           $scope.tm = $timeout(function() {
             $scope.page = 1;
             $scope.list(true);
-          }, 250);
+          }, 1000);
         }, true);
       }
     ]);
