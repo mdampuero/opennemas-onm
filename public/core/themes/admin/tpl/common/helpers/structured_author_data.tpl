@@ -72,7 +72,7 @@
       "name": "{get_author_name($author)}",
       "alternateName": "{get_author_slug($author)}",
       "identifier": "{get_author_id($author)}",
-      "description": "{get_author_bio_summary($author)}",
+      "description": "{get_author_bio_body($author)|default:get_author_bio_summary($author)}",
       "image": "{get_photo_path(get_author_avatar($author), '', [], true)}",
       "agentInteractionStatistic": {
         "@type": "InteractionCounter",

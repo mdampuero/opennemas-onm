@@ -103,13 +103,12 @@ class StructuredData
                 $template = 'common/helpers/structured_'
                     . $params['content']->content_type_name . '_data.tpl';
             }
-        } elseif (array_key_exists('author', $data)) {
+        } elseif (array_key_exists('author', $data) && !empty($data['author'])) {
             $template = 'common/helpers/structured_author_data.tpl';
         }
 
         return $this->tpl->fetch($template, $params);
     }
-
     /**
      * Method to retrieve the author information.
      *
