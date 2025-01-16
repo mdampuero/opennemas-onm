@@ -76,6 +76,27 @@
                           </div>
                         </div>
                       </div>
+                      <div class="col-md-6">
+                        <select class="form-control" ng-model="criteria.contentyear" name="contentyear">
+                            <option value="">{t}All{/t}</option>
+                            <option ng-repeat="year in extra.sitemaps.years" value="[% year %]">
+                              [% year %]
+                            </option>
+                        </select>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label" for="sitemap-perpage">
+                            {t}Elements per page{/t}
+                          </label>
+                          <span class="help ">
+                              (min. 100, máx. 1000)
+                          </span>
+                          <div class="controls">
+                            <input class="form-control" id="sitemap-perpage" name="sitemap-perpage" ng-model="settings.sitemap.perpage" type="number" min="100" max="1000">
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
