@@ -85,6 +85,7 @@ class AuthorController extends Controller
             $this->view->assign([
                 'contents'   => $contents,
                 'author'     => $user,
+                'total'      => $contentsCount,
                 'pagination' => $pagination,
                 'page'       => $page,
             ]);
