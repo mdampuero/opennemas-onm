@@ -432,7 +432,6 @@ class OpenAIHelper
 
     public function getTokensByMonth($month, $year)
     {
-
         $dates = $this->getDates($month, $year);
 
         $oql = sprintf(

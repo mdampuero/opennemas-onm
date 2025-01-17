@@ -45,7 +45,6 @@
         };
         $scope.panelSelected = 'words';
 
-
         /**
          * @function init
          * @memberOf OpenAIDashboardCtrl
