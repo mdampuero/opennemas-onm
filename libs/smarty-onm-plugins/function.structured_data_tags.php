@@ -8,7 +8,7 @@ function smarty_function_structured_data_tags($params, &$smarty)
         'category' => $smarty->getValue('o_category'),
         'tag'      => $smarty->getValue('tag'),
         'author'   => $smarty->getValue('author'),
-        'total'    => !empty($smarty->getValue('author')) ? $smarty->getValue('total') : null,
+        'total'    => $smarty->getValue('total'),
         'url'      => $smarty->getContainer()->get('request_stack')
             ->getCurrentRequest()->getUri(),
     ];
