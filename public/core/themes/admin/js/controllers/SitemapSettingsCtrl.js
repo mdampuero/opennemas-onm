@@ -17,6 +17,7 @@
         $.extend(this, $controller('SettingsCtrl', { $scope: $scope }));
         $scope.sitemap = {
           perpage: 500,
+          contentyear: '',
           total: 100,
           album: 0,
           article: 0,

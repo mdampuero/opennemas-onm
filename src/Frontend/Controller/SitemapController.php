@@ -192,14 +192,14 @@ class SitemapController extends Controller
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
                 ],
-                'starttime'         => [
+                'starttime' => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [
                         'value' => sprintf(
-                            'DATE_ADD("%s", INTERVAL -2 DAY) AND "%s"',
-                            gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s'))),
-                            gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')))
+                            'DATE_ADD("%s-01-01 00:00:00", INTERVAL -2 DAY) AND "%s"',
+                            $settings['contentyear'], // Año de $settings['contentyear']
+                            gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s'))) // Fecha actual
                         ),
                         'field' => true,
                         'operator' => 'BETWEEN'
