@@ -173,9 +173,13 @@ class SitemapController extends Controller
     public function newsAction($format)
     {
         $cacheId = $this->view->getCacheId('sitemap', 'news');
-
         if (!$this->isCached('news', $cacheId)) {
             $settings = $this->get('core.helper.sitemap')->getSettings();
+
+            $startDate = !empty($settings['contentyear'])
+                ? "{$settings['contentyear']}-01-01 00:00:00"
+                : gmdate('Y-m-d H:i:s');
+
             $filters  = [
                 'content_type_name' => [
                     [ 'value' => [ 'article', 'opinion', 'video', 'album' ], 'operator' => 'IN' ]
@@ -197,9 +201,9 @@ class SitemapController extends Controller
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [
                         'value' => sprintf(
-                            'DATE_ADD("%s-01-01 00:00:00", INTERVAL -2 DAY) AND "%s"',
-                            $settings['contentyear'], // Año de $settings['contentyear']
-                            gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s'))) // Fecha actual
+                            'DATE_ADD("%s", INTERVAL -2 DAY) AND "%s"',
+                            $startDate,
+                            gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')))
                         ),
                         'field' => true,
                         'operator' => 'BETWEEN'
