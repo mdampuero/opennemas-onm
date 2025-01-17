@@ -87,6 +87,17 @@
                             </option>
                         </select>
                       </div>
+                      <div class="col-md-6">
+                        <label class="form-label" for="sitemap-limithours">
+                          {t}Limit per hours{/t}
+                        </label>
+                        <select class="form-control" ng-model="settings.sitemap.limithours" id="sitemap-limithours" name="sitemap-limithours">
+                            <option value="">{t}All{/t}</option>
+                            <option ng-repeat="hours in ['24','48','72','96']" value="[% hours %]">
+                              [% hours %]
+                            </option>
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
