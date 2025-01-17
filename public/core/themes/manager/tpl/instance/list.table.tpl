@@ -325,6 +325,10 @@
     <i class="fa fa-puzzle-piece" uib-tooltip="{t}Widgets{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('widgets') == 'asc', 'fa fa-caret-down': isOrderedBy('widgets') == 'desc'}"></i>
   </th>
+  <th class="text-center pointer" ng-click="sort('ai_spent')" ng-show="isColumnEnabled('ai_spent')" width="120">
+    <i class="fa fa-puzzle-piece" uib-tooltip="{t}AI Spent{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('ai_spent') == 'asc', 'fa fa-caret-down': isOrderedBy('ai_spent') == 'desc'}"></i>
+  </th>
   <th class="text-center pointer" ng-show="isColumnEnabled('blocked')" width="60">
     <i class="fa fa-lock" uib-tooltip="{t}Blocked{/t}" tooltip-placement="bottom"></i>
   </th>
@@ -525,8 +529,8 @@
     </span>
   </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('ai_spent')" title="{t}AI Spent{/t}">
-    <span class="badge text-bold">
-      [% item.ai_spent %]
+    <span class="badge badge-info">
+      € [% item.ai_spent | number: 2 %]
     </span>
   </td>
   <td class="text-center" ng-show="isColumnEnabled('blocked')">

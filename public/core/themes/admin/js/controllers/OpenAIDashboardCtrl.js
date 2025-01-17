@@ -45,6 +45,7 @@
         };
         $scope.panelSelected = 'words';
 
+
         /**
          * @function init
          * @memberOf OpenAIDashboardCtrl
@@ -53,6 +54,7 @@
          *   Initializes the form.
          */
         $scope.init = function() {
+          $scope.service       = '';
           http.get(
             {
               name: $scope.routes.getUsage,
@@ -65,6 +67,7 @@
               $scope.labels = response.data.labels;
               $scope.totals = response.data;
               $scope.filters = response.data.filters;
+              $scope.service = response.data.service;
               if (!$scope.filterSelected.year) {
                 $scope.indexFilter = 0;
                 $scope.setFilter();

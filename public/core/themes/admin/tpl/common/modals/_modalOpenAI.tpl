@@ -2,6 +2,9 @@
   <h3 class="modal-title">{t}opennemas AI{/t}</h3>
 </div>
 <div class="modal-body">
+  <div class="alert alert-danger" ng-show="error">
+    An error has occurred, please try again later.
+  </div>
   <ng-container ng-show="waiting">
     <div class="loading-container">
       <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
@@ -63,7 +66,6 @@
       <label class="pull-left">{t}Generated text{/t}</label>
       <span class="label label-info pull-right m-l-5">[% countWords(template.suggested_text) %] {t}words{/t}, [% template.suggested_text.length %] {t}characters{/t}</span>
       <div class="clearfix"></div>
-
       <div class="form-group over-bg-gray" ng-click="setActiveText('suggested')">
         <h2 class="pull-left m-r-10">[% template.suggested_text %]</h2>
         <h3 class="pull-right" ng-if="mode == 'Edit'">
@@ -94,7 +96,7 @@
       </ng-container>
     </ng-container>
     <p>
-      <span class="label label-success pull-left"><strong>[% last_words_generated %]</strong> {t}words generated{/t}</span>
+      <span class="label label-success pull-left"><strong>[% last_words_generated %]</strong> {t}words managed{/t}</span>
       <span class="pull-right text-pink pointer" ng-click="generate()">{t}Regenerate {/t} <i class="fa fa-refresh openai-text-degrade"></i></span>
     </p>
   </ng-container>

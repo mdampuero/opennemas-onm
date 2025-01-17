@@ -36,6 +36,7 @@
         $scope.template.toneSelected   = null;
         $scope.template.promptInput    = null;
         $scope.mode                    = $scope.template.input && $scope.template.input.trim() !== '' ? 'Edit' : 'New';
+        $scope.error                   = false;
 
         /**
          * @function init
@@ -100,6 +101,7 @@
          *   Sends a request to generate suggested text based on user input and updates the template with the result.
          */
         $scope.generate = function() {
+          $scope.error = false;
           if (!$scope.template) {
             return;
           }
@@ -116,6 +118,7 @@
               $scope.setActiveText('suggested');
             })
             .catch(function(err) {
+              $scope.error = true;
               messenger.post(err.data.error, 'error');
             })
             .finally(function() {

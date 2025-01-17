@@ -102,7 +102,9 @@ class OpenAIHelper
     public function __construct($container)
     {
         $this->container = $container;
-        $this->client    = new Client();
+        $this->client    = new Client([
+            'timeout' => 120,
+        ]);
     }
 
     public function getInstructions()
@@ -396,7 +398,7 @@ class OpenAIHelper
         return $tokens;
     }
 
-    public function getTokensMonthly()
+    public function getUsageMonthly($service = 'opennemas')
     {
         $date       = new DateTime();
         $currentDay = (int) $date->format('d');
@@ -419,24 +421,25 @@ class OpenAIHelper
         }
 
         $oql = sprintf(
-            "date >= '%s' and date < '%s'",
+            "date >= '%s' and date < '%s' and service = '%s'",
             $startDate->format('Y-m-d H:i:s'),
-            $endDate->format('Y-m-d H:i:s')
+            $endDate->format('Y-m-d H:i:s'),
+            $service
         );
 
-        $result = $this->container->get('api.service.ai')->getList($oql);
-
-        return $result;
+        return $this->container->get('api.service.ai')->getList($oql);
     }
 
     public function getTokensByMonth($month, $year)
     {
+
         $dates = $this->getDates($month, $year);
 
         $oql = sprintf(
-            "date >= '%s' and date < '%s'",
+            "date >= '%s' and date < '%s' and service = '%s'",
             $dates['start_date']->format('Y-m-d H:i:s'),
-            $dates['end_date']->format('Y-m-d H:i:s')
+            $dates['end_date']->format('Y-m-d H:i:s'),
+            $this->getService()
         );
 
         $result = $this->container->get('api.service.ai')->getList($oql);
@@ -456,10 +459,14 @@ class OpenAIHelper
             $dateArray[$formattedIndex] = [
                 'words' => [
                     'total' => 0,
+                    'input' => 0,
+                    'output' => 0,
                     'items' => []
                 ],
                 'price' => [
                     'total' => 0,
+                    'input' => 0,
+                    'output' => 0,
                     'items' => []
                 ],
                 'usage' => [
@@ -507,10 +514,11 @@ class OpenAIHelper
         $months   = ($first) ? $this->generateMonths($first->date) : $this->generateMonths(new DateTime());
         $response = [
             'labels'  => [],
-            'words'   => ['total' => 0],
-            'price'   => ['total' => 0],
+            'words'   => ['total' => 0, 'input' => 0, 'output' => 0],
+            'price'   => ['total' => 0, 'input' => 0, 'output' => 0],
             'usage'   => ['total' => 0],
-            'filters' => $months
+            'filters' => $months,
+            'service' => $this->getService()
         ];
 
         if ($first) {
@@ -530,7 +538,11 @@ class OpenAIHelper
         foreach ($days as $key => $day) {
             $response['labels'][]         = $key;
             $response['words']['total']  += $day['words']['total'];
+            $response['words']['input']  += $day['words']['input'];
+            $response['words']['output'] += $day['words']['output'];
             $response['price']['total']  += $day['price']['total'];
+            $response['price']['input']  += $day['price']['input'];
+            $response['price']['output'] += $day['price']['output'];
             $response['usage']['total']  += $day['usage']['total'];
             $response['words']['items'][] = $day['words']['total'];
             $response['price']['items'][] = round($day['price']['total'], 4);
@@ -545,14 +557,20 @@ class OpenAIHelper
         foreach ($tokens['items'] as $item) {
             $price = $this->getPrices($item);
 
-            $day         = $item->getData()['date']->format('d');
-            $totalTokens = $item->getData()['tokens']['total_tokens'];
-            $totalInput  = ($item->getData()['tokens']['prompt_tokens'] / $this->conversion * $price['i']);
-            $totalOutput = ($item->getData()['tokens']['completion_tokens'] / $this->conversion * $price['o']);
-            $totalPrice  = $totalInput + $totalOutput;
+            $day               = $item->getData()['date']->format('d');
+            $totalTokens       = $item->getData()['tokens']['total_tokens'];
+            $totalTokensInput  = $item->getData()['tokens']['prompt_tokens'];
+            $totalTokensOutput = $item->getData()['tokens']['completion_tokens'];
+            $totalInputPrice   = ($item->getData()['tokens']['prompt_tokens'] / $this->conversion * $price['i']);
+            $totalOutputPrice  = ($item->getData()['tokens']['completion_tokens'] / $this->conversion * $price['o']);
+            $totalPrice        = $totalInputPrice + $totalOutputPrice;
 
-            $days[$day]['words']['total'] += $this->calcWords($totalTokens);
-            $days[$day]['price']['total'] += $totalPrice;
+            $days[$day]['words']['input']  += $this->calcWords($totalTokensInput);
+            $days[$day]['words']['output'] += $this->calcWords($totalTokensOutput);
+            $days[$day]['words']['total']  += $this->calcWords($totalTokens);
+            $days[$day]['price']['total']  += $totalPrice;
+            $days[$day]['price']['input']  += $totalInputPrice;
+            $days[$day]['price']['output'] += $totalOutputPrice;
             $days[$day]['usage']['total']++;
         }
     }
@@ -565,11 +583,11 @@ class OpenAIHelper
         if ($item->getData()['params']['meta'] ?? false) {
             $meta = $item->getData()['params']['meta'];
             if ($item->service != 'custom') {
-                $priceInput  = $meta['sale_input_tokens'];
-                $priceOutput = $meta['sale_output_tokens'];
+                $priceInput  = $meta['sale_input_tokens'] / $this->relationTokenWord;
+                $priceOutput = $meta['sale_output_tokens'] / $this->relationTokenWord;
             } else {
-                $priceInput  = $meta['cost_input_tokens'];
-                $priceOutput = $meta['cost_output_tokens'];
+                $priceInput  = $meta['cost_input_tokens'] / $this->relationTokenWord;
+                $priceOutput = $meta['cost_output_tokens'] / $this->relationTokenWord;
             }
         }
 
@@ -598,12 +616,17 @@ class OpenAIHelper
 
     public function getSpentMoney()
     {
-        $tokens  = $this->getTokensMonthly();
-        $pricing = [];
+        $total   = 0;
+        $results = $this->getUsageMonthly();
 
-        $total = 0;
-        $total = round($total, 15);
-        return $total;
+        foreach ($results['items'] as $item) {
+            $price   = $this->getPrices($item);
+            $tokensI = ($item->tokens['prompt_tokens'] ?? 0) / $this->conversion * $price['i'];
+            $tokensO = ($item->tokens['completion_tokens'] ?? 0) / $this->conversion * $price['o'];
+            $total  += $tokensI + $tokensO;
+        }
+
+        return round($total, 15);
     }
 
     public function getTones($showManager = true)

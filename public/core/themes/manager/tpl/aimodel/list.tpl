@@ -14,14 +14,6 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a class="btn-link" target="_blank" href="https://openai.com/api/pricing/" class="admin_add" title="{t}Open AI pricing{/t}">
-              <span class="fa fa-external-link-square fa-lg"></span>
-            </a>
-          </li>
-          <li class="quicklinks">
-            <span class="h-seperate"></span>
-          </li>
-          <li class="quicklinks">
             <button class="btn btn-loading btn-success text-uppercase" ng-click="saveActiveItems()" ng-disabled="promptForm.$invalid || saving">
               <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
@@ -65,8 +57,18 @@
   </div>
   <div class="grid simple bg-white onm-shadow">
   <div class="grid-body">
-    <h4 class="m-b-20">{t}Models and prices{/t}</h4>
-    <div class="grid simple bg-white onm-shadow" ng-repeat="item in items">
+    <h4>
+      {t}Models and prices{/t}
+    </h4>
+    <p>
+      <i class="fa fa-info-circle text-info"></i>
+      <small class="text-muted">{t}The prices are expressed per million words, with one word approximately equivalent to 1.5 tokens. You can check the price table here.{/t}
+      <a class="btn-link" target="_blank" href="https://openai.com/api/pricing/" class="admin_add" title="{t}Open AI pricing{/t}">
+        <span class="fa fa-external-link"></span>
+      </a>
+      </small>
+    </p>
+    <div class="grid simple bg-white onm-shadow m-t-30" ng-repeat="item in items">
       <div class="grid-body ng-cloak">
         <h4 class="form-label m-b-20">
           [% item.id %]
@@ -90,10 +92,10 @@
           <div class="col-sm-6">
             <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel m-t-5 p-15 bg-light">
               <div class="form-status text-left">
-                <label class="m-b-10"><b>{t}Cost price{/t} (1M)</b></label>
+                <label class="m-b-10"><b>{t}Cost price per 1 million words{/t}</b></label>
                 <div class="row">
                   <div class="col-xs-6 form-group">
-                    <label class="form-label" for="name">{t}Input tokens{/t}</label>
+                    <label class="form-label" for="name">{t}Input words{/t}</label>
                     <div class="input-group">
                       <span class="input-group-addon">€</span>
                       <input
@@ -104,7 +106,7 @@
                     </div>
                   </div>
                   <div class="col-xs-6 form-group">
-                    <label class="form-label" for="name">{t}Output tokens{/t}</label>
+                    <label class="form-label" for="name">{t}Output words{/t}</label>
                     <div class="input-group">
                       <span class="input-group-addon">€</span>
                       <input
@@ -121,10 +123,10 @@
           <div class="col-sm-6">
             <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel m-t-5 p-15 bg-light">
               <div class="form-status text-left">
-                <label class="m-b-10"><b>{t}Sale price{/t} (1M)</b></label>
+                <label class="m-b-10"><b>{t}Sale price per 1 million words{/t}</b></label>
                 <div class="row">
                   <div class="col-xs-6 form-group">
-                    <label class="form-label" for="name">{t}Input tokens{/t}</label>
+                    <label class="form-label" for="name">{t}Input words{/t}</label>
                     <div class="input-group">
                       <span class="input-group-addon">€</span>
                       <input
@@ -135,7 +137,7 @@
                     </div>
                   </div>
                   <div class="col-xs-6 form-group">
-                    <label class="form-label" for="name">{t}Output tokens{/t}</label>
+                    <label class="form-label" for="name">{t}Output words{/t}</label>
                     <div class="input-group">
                       <span class="input-group-addon">€</span>
                       <input
