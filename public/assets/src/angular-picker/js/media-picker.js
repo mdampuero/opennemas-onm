@@ -551,7 +551,7 @@
           content_type_name: 'photo',
           epp: $scope.epp,
           in_litter: null,
-          orderBy: { created:  'desc' },
+          orderBy: { pk_content: 'desc' },
           page: $scope.page
         };
 
