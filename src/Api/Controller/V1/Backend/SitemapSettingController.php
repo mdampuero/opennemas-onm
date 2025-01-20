@@ -64,6 +64,10 @@ class SitemapSettingController extends SettingController
             $remove = false;
             $config = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('sitemap');
 
+            if (!isset($config) || !is_array($config)) {
+                $config = [];
+            }
+
             foreach ($settings['sitemap'] as $key => $value) {
                 if (!array_key_exists($key, $config) || $value === $config[$key]) {
                     continue;

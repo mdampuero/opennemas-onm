@@ -65,6 +65,26 @@
               </div>
             </div>
           </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="form-label" for="sitemap-perpage">
+                {t}Content per year{/t}
+              </label>
+              <div class="controls">
+                <input class="form-control" id="sitemap-contentyear" name="sitemap-contentyear" ng-model="item.contentyear" type="number">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="form-label" for="sitemap-limitdays">
+                {t}Limit per days{/t}
+              </label>
+              <div class="controls">
+                <input class="form-control" id="sitemap-limitdays" name="sitemap-limitdays" ng-model="item.limitdays" type="number" min="1" max="4">
+              </div>
+            </div>
+          </div>
         </div>
         <div class="col-md-6">
           <h4>

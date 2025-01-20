@@ -77,24 +77,27 @@
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <label class="form-label" for="sitemap-perpage">
+                        <label class="form-label" for="sitemap-contentyear">
                           {t}Content per year{/t}
                         </label>
                         <select class="form-control" ng-model="settings.sitemap.contentyear" id="sitemap-contentyear" name="sitemap-contentyear">
                             <option value="">{t}All{/t}</option>
-                            <option ng-repeat="year in extra.sitemaps.years" value="[% year %]">
+                            <option ng-repeat="year in generateYears()" value="[% year %]">
                               [% year %]
                             </option>
                         </select>
                       </div>
                       <div class="col-md-6">
-                        <label class="form-label" for="sitemap-limithours">
-                          {t}Limit per hours{/t}
+                        <label class="form-label" for="sitemap-limitdays">
+                          {t}Limit per days{/t}
                         </label>
-                        <select class="form-control" ng-model="settings.sitemap.limithours" id="sitemap-limithours" name="sitemap-limithours">
+                        <select class="form-control" ng-model="settings.sitemap.limitdays" id="sitemap-limitdays" name="sitemap-limitdays">
                             <option value="">{t}All{/t}</option>
-                            <option ng-repeat="hours in ['24','48','72','96']" value="[% hours %]">
-                              [% hours %]
+                            <option
+                                ng-repeat="days in [1,2,3,4]"
+                                value="[% days %]"
+                                ng-selected="[% settings.sitemap.limitdays === days %]">
+                                [% days %]
                             </option>
                         </select>
                       </div>
