@@ -17,7 +17,7 @@ function smarty_modifier_improve_images($html)
 
     preg_match_all(
         '@<img[^>]*(?(?=width)width="([0-9]+)"|(?!.*width="))[^>]*(?(?=height)height="([0-9]+)"|(?!.*height="))[^>]' .
-            '*src="((?!.*\://)(?!.*zoomcrop)[^"]+)"[^>]+>@mU',
+            '*src="((?!.*\://)(?!.*zoomcrop)[^"]+)"[^>]*>@mU',
         $html,
         $out,
         PREG_OFFSET_CAPTURE
