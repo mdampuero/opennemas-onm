@@ -6,7 +6,7 @@
  *
  * @return string
  */
-function smarty_modifier_improve_images($html)
+function smarty_modifier_improve_images($html, $lazy = true)
 {
     // Add class to identify ckeditor and width to the figure in the html.
     $html = preg_replace(
@@ -15,9 +15,24 @@ function smarty_modifier_improve_images($html)
         $html
     );
 
+    $regex = '@<img[^>]*(?(?=width)width="([0-9]+)"|(?!.*width="))[^>]*(?(?=height)height="([0-9]+)"|' .
+        '(?!.*height="))[^>]*src="((?!.*\://)(?!.*zoomcrop)[^"]+)"[^>]*>@mU';
+
+    if ($lazy) {
+        // Use data-src instead of src on images in order to apply lazyload.
+        $html = preg_replace('@<img(.*)(src|data-src)=@U', '<img$1data-src=', $html);
+        $html = preg_replace('@<img(.*)class="([^"]+)"@U', '<img$1class="$2 lazyload"', $html);
+
+        // Add the lazy load to the leftovers.
+        $html = preg_replace('@<img(((?!class=).)*)/?>@U', '<img$1 class="lazyload">', $html);
+
+
+        $regex = '@<img[^>]*(?(?=width)width="([0-9]+)"|(?!.*width="))[^>]*(?(?=height)height="([0-9]+)"|' .
+            '(?!.*height="))[^>]*data-src="((?!.*\://)(?!.*zoomcrop)[^"]+)"[^>]*>@mU';
+    }
+
     preg_match_all(
-        '@<img[^>]*(?(?=width)width="([0-9]+)"|(?!.*width="))[^>]*(?(?=height)height="([0-9]+)"|(?!.*height="))[^>]' .
-            '*src="((?!.*\://)(?!.*zoomcrop)[^"]+)"[^>]*>@mU',
+        $regex,
         $html,
         $out,
         PREG_OFFSET_CAPTURE
