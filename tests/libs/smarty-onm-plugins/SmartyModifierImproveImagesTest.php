@@ -75,7 +75,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
         $img = '<img width="10" src="mercury" >';
 
         $this->assertEquals(
-            '<img width="10" src="mercury"  data-srcset="' .
+            '<img width="10" src="mercury"  loading="lazy" srcset="' .
             '/asset/thumbnail,480,270,center,center//media/opennemas/images/2018/10/02/2018100212424091861.jpg 480w" ' .
             'sizes="480px">',
             smarty_modifier_improve_images($img, false)
@@ -137,7 +137,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
         $img = '<img src="mercury" >';
 
         $this->assertEquals(
-            '<img src="mercury"  data-srcset="' .
+            '<img src="mercury"  loading="lazy" srcset="' .
             '/asset/thumbnail,480,270,center,center//media/opennemas/images/2018/10/02/2018100216271084045.jpg ' .
             '480w, /asset/thumbnail,768,432,center,center//media/opennemas/images/2018/10/02/' .
             '2018100216271084045.jpg 768w, /asset/thumbnail,992,558,center,center//media/opennemas/images' .
@@ -203,7 +203,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
         $img = '<img src="mercury" class="camazot">';
 
         $this->assertEquals(
-            '<img src="mercury" class="camazot" data-srcset="' .
+            '<img src="mercury" class="camazot" loading="lazy" srcset="' .
             '/asset/thumbnail,480,270,center,center//media/opennemas/images/2018/10/02/2018100216271084045.jpg ' .
             '480w, /asset/thumbnail,768,432,center,center//media/opennemas/images/2018/10/02/' .
             '2018100216271084045.jpg 768w, /asset/thumbnail,992,558,center,center//media/opennemas/images' .
@@ -261,7 +261,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
         $result = '<figure class="image image-inbody-left ckeditor-image" ' .
             'style="max-width: 100%; width: 340px;" data-random="foo">' .
             '<img width="340" height="340" src="baz" ' .
-            'data-srcset="/asset/thumbnail,480,270,center,center' .
+            'loading="lazy" srcset="/asset/thumbnail,480,270,center,center' .
             '//media/opennemas/images/2018/10/02/2018100216271084045.jpg 480w" sizes="480px">' .
             '</figure>';
 
