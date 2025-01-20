@@ -83,9 +83,15 @@
               <label class="form-label" for="sitemap-limitdays">
                 {t}Limit per days{/t}
               </label>
-              <div class="controls">
-                <input class="form-control" id="sitemap-limitdays" name="sitemap-limitdays" ng-model="item.limitdays" type="number" min="1" max="4">
-              </div>
+              <select class="form-control" ng-model="settings.sitemap.limitdays" id="sitemap-limitdays" name="sitemap-limitdays">
+                  <option value="">{t}All{/t}</option>
+                  <option
+                      ng-repeat="days in [1,2,3,4]"
+                      value="[% days %]"
+                      ng-selected="[% settings.sitemap.limitdays === days %]">
+                      [% days %]
+                  </option>
+              </select>
             </div>
           </div>
         </div>
