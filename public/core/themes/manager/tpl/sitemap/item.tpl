@@ -67,12 +67,15 @@
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label class="form-label" for="sitemap-perpage">
+              <label class="form-label" for="sitemap-contentyear">
                 {t}Content per year{/t}
               </label>
-              <div class="controls">
-                <input class="form-control" id="sitemap-contentyear" name="sitemap-contentyear" ng-model="item.contentyear" type="number">
-              </div>
+              <select class="form-control" ng-model="settings.sitemap.contentyear" id="sitemap-contentyear" name="sitemap-contentyear">
+                  <option value="">{t}All{/t}</option>
+                  <option ng-repeat="year in generateYears()" value="[% year %]">
+                    [% year %]
+                  </option>
+              </select>
             </div>
           </div>
           <div class="col-md-6">

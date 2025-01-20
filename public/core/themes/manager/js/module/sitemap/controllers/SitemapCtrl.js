@@ -17,6 +17,27 @@
     .controller('SitemapCtrl', [
       '$scope', '$uibModal', 'http', 'messenger',
       function($scope, $uibModal, http, messenger) {
+        /**
+         * @memberOf SettingsCtrl
+         * @function generateYears
+         *
+         * @description
+         * Generates an array of years starting from the current year and going back 10 years.
+         *
+         * @returns {Array}
+         */
+        $scope.generateYears = function() {
+          var currentYear     = (new Date()).getFullYear();
+          var years           = [];
+          var yearsToGenerate = 11;
+
+          for (var i = 0; i < yearsToGenerate; i++) {
+            years.push(currentYear - i);
+          }
+
+          return years;
+        };
+
         $scope.save = function() {
           var modal = $uibModal.open(
             {
