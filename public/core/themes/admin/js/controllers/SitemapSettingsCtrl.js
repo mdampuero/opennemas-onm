@@ -123,8 +123,13 @@
         $scope.generateYears = function() {
           var currentYear     = (new Date()).getFullYear();
           var yearsToGenerate = 11;
+          var years           = [];
 
-          return Array.from({ length: yearsToGenerate }, (_, i) => currentYear - i);
+          for (var i = 0; i < yearsToGenerate; i++) {
+            years.push(currentYear - i);
+          }
+
+          return years;
         };
 
         // Update sitemap values from default
