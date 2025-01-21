@@ -813,16 +813,19 @@ class OpenAIHelper
         $settingsInstance = getService('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('openai_config', []);
+
         $settingsManager  = getService('orm.manager')
             ->getDataSet('Settings', 'manager')
             ->get('openai_settings');
 
         $models = $this->getModels();
         if (!empty($settingsInstance['model'])) {
-            $filter = array_filter($models, function ($item) {
-                return $item['id'] === 'gpt-';
-            });
-            $model  = reset($filter);
+            foreach ($models as $item) {
+                if ($item['id'] === $settingsInstance['model']) {
+                    $model = $item;
+                    break;
+                }
+            }
         } else {
             $model = $this->getDefaultModel($models);
         }
