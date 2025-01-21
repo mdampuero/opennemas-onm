@@ -81,9 +81,9 @@
                           {t}Content per year{/t}
                         </label>
                         <select class="form-control" ng-model="settings.sitemap.contentyear" id="sitemap-contentyear" name="sitemap-contentyear">
-                            <option ng-repeat="year in generateYears()" ng-value="year">
-                              [% year %]
-                            </option>
+                          <option ng-repeat="year in generateYears()" ng-value="year">
+                            [% year %]
+                          </option>
                         </select>
                       </div>
                       <div class="col-md-6">
@@ -91,7 +91,9 @@
                           {t}Limit per days{/t}
                         </label>
                         <select class="form-control-lg" ng-model="settings.sitemap.limitdays">
-                          <option ng-value="item" ng-repeat="item in [1, 2, 3, 4]">[% item %]</option>
+                          <option ng-value="item" ng-repeat="item in [1, 2, 3, 4]">
+                            [% item %]
+                          </option>
                         </select>
                       </div>
                     </div>

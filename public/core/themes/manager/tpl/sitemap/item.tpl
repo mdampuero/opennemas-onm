@@ -83,10 +83,8 @@
                 {t}Limit per days{/t}
               </label>
               <select class="form-control" ng-model="item.limitdays" id="sitemap-limitdays" name="sitemap-limitdays">
-                  <option
-                      ng-repeat="days in [1,2,3,4]"
-                      ng-value="days">
-                      [% days %]
+                  <option ng-repeat="days in [1,2,3,4]" ng-value="days">
+                    [% days %]
                   </option>
               </select>
             </div>
