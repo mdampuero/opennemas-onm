@@ -87,8 +87,7 @@
                   <option value="">[% days %]</option>
                   <option
                       ng-repeat="days in [1,2,3,4]"
-                      ng-value="days"
-                      ng-selected="[% item.limitdays === days %]">
+                      ng-value="days">
                       [% days %]
                   </option>
               </select>
