@@ -72,7 +72,7 @@
               </label>
               <select class="form-control" ng-model="item.contentyear" id="sitemap-contentyear" name="sitemap-contentyear">
                   <option value="">{t}All{/t}</option>
-                  <option ng-repeat="year in generateYears()" value="[% year %]">
+                  <option ng-repeat="year in generateYears()" ng-value="year">
                     [% year %]
                   </option>
               </select>
@@ -87,7 +87,7 @@
                   <option value="">[% days %]</option>
                   <option
                       ng-repeat="days in [1,2,3,4]"
-                      value="[% days %]"
+                      ng-value="days"
                       ng-selected="[% item.limitdays === days %]">
                       [% days %]
                   </option>
