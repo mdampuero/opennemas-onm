@@ -6,7 +6,7 @@
  *
  * @return string
  */
-function smarty_modifier_improve_images($html)
+function smarty_modifier_improve_images($html, $lazyjs = true)
 {
     // Add class to identify ckeditor and width to the figure in the html.
     $html = preg_replace(
@@ -15,16 +15,26 @@ function smarty_modifier_improve_images($html)
         $html
     );
 
-    // Use data-src instead of src on images in order to apply lazyload.
-    $html = preg_replace('@<img(.*)(src|data-src)=@U', '<img$1data-src=', $html);
-    $html = preg_replace('@<img(.*)class="([^"]+)"@U', '<img$1class="$2 lazyload"', $html);
+    $regex = '@<img[^>]*(?(?=width)width="([0-9]+)"|(?!.*width="))[^>]*(?(?=height)height="([0-9]+)"|' .
+        '(?!.*height="))[^>]*src="((?!.*\://)(?!.*zoomcrop)[^"]+)"[^>]*>@mU';
 
-    // Add the lazy load to the leftovers.
-    $html = preg_replace('@<img(((?!class=).)*)/?>@U', '<img$1 class="lazyload">', $html);
+    if ($lazyjs) {
+        // Use data-src instead of src on images in order to apply lazyload.
+        $html = preg_replace('@<img(.*)(src|data-src)=@U', '<img$1data-src=', $html);
+        $html = preg_replace('@<img(.*)class="([^"]+)"@U', '<img$1class="$2 lazyload"', $html);
+
+        // Add the lazy load to the leftovers.
+        $html = preg_replace('@<img(((?!class=).)*)/?>@U', '<img$1 class="lazyload">', $html);
+
+
+        $regex = '@<img[^>]*(?(?=width)width="([0-9]+)"|(?!.*width="))[^>]*(?(?=height)height="([0-9]+)"|' .
+            '(?!.*height="))[^>]*data-src="((?!.*\://)(?!.*zoomcrop)[^"]+)"[^>]*>@mU';
+    } else {
+        $html = preg_replace('@<img(.*)>@U', '<img$1 loading="lazy">', $html);
+    }
 
     preg_match_all(
-        '@<img[^>]*(?(?=width)width="([0-9]+)"|(?!.*width="))[^>]*(?(?=height)height="([0-9]+)"|(?!.*height="))[^>]' .
-            '*data-src="((?!.*\://)(?!.*zoomcrop)[^"]+)"[^>]+>@mU',
+        $regex,
         $html,
         $out,
         PREG_OFFSET_CAPTURE
@@ -48,9 +58,10 @@ function smarty_modifier_improve_images($html)
             }
             $result = $ph->getSrcSetAndSizesFromImagePath($out[3][$matchKey][0], $width);
 
-            $html = preg_replace(
+            $srcsetAttr = $lazyjs ? 'data-srcset' : 'srcset';
+            $html       = preg_replace(
                 '@<img((?:(?!srcset).)*src="' . $out[3][$matchKey][0] . '".*)>@U',
-                '<img$1 data-srcset="' . $result['srcset'] . '" sizes="' . $result['sizes'] . '">',
+                '<img$1 ' . $srcsetAttr . '="' . $result['srcset'] . '" sizes="' . $result['sizes'] . '">',
                 $html
             );
         }
