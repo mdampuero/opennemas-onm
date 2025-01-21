@@ -28,14 +28,9 @@
          */
         $scope.generateYears = function() {
           var currentYear     = (new Date()).getFullYear();
-          var years           = [];
           var yearsToGenerate = 11;
 
-          for (var i = 0; i < yearsToGenerate; i++) {
-            years.push(currentYear - i);
-          }
-
-          return years;
+          return Array.from({ length: yearsToGenerate }, (_, i) => currentYear - i);
         };
 
         $scope.save = function() {
