@@ -32,14 +32,6 @@
       {/if}
       <div class="grid simple p-t-0">
         <div class="grid-body bg-transparent ng-cloak ">
-          <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-b-15 p-15 bg-white cursor-pointer" ng-class="{ 'bg-white': panelSelected == 'words' }" ng-click="generateStats('words')">
-            <div class="form-status text-left">
-              <h3>
-                <span ng-if="service == 'opennemas'">{t}Use of{/t} {t}Opennemas AI{/t}</span>
-                <span ng-if="service == 'custom'">{t}Use of{/t} {t}Open AI{/t}</span>
-              </h3>
-            </div>
-          </div>
           <div class="row">
             <div class="col-sm-4">
               <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-b-0 p-15 bg-white cursor-pointer" ng-class="{ 'bg-white': panelSelected == 'words' }" ng-click="generateStats('words')">
@@ -81,7 +73,7 @@
                 </div>
                 <div class="form-status text-left">
                   <p class="onm-score text-left lead m-b-0">
-                    <strong ng-if="totals.price">[% totals.price.total | number : 4 %] €</strong>
+                    <strong ng-if="totals.price">[% totals.price.total | number : 2 %] €</strong>
                     <strong ng-if="!totals.price">0</strong>
                   </p>
                 </div>

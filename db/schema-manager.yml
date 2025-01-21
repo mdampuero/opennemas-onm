@@ -107,6 +107,9 @@ instances:
             options: { default: 0, unsigned: true }
         ai_spent:
             type: float
+        ai_config:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
         tags:
             type: integer
             options: { default: 0, unsigned: true }

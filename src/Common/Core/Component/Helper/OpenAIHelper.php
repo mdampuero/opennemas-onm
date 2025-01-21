@@ -435,10 +435,9 @@ class OpenAIHelper
         $dates = $this->getDates($month, $year);
 
         $oql = sprintf(
-            "date >= '%s' and date < '%s' and service = '%s'",
+            "date >= '%s' and date < '%s'",
             $dates['start_date']->format('Y-m-d H:i:s'),
-            $dates['end_date']->format('Y-m-d H:i:s'),
-            $this->getService()
+            $dates['end_date']->format('Y-m-d H:i:s')
         );
 
         $result = $this->container->get('api.service.ai')->getList($oql);
@@ -558,8 +557,8 @@ class OpenAIHelper
 
             $day               = $item->getData()['date']->format('d');
             $totalTokens       = $item->getData()['tokens']['total_tokens'];
-            $totalTokensInput  = $item->getData()['tokens']['prompt_tokens'];
-            $totalTokensOutput = $item->getData()['tokens']['completion_tokens'];
+            $totalTokensInput  = ($item->service != 'custom') ? $item->getData()['tokens']['prompt_tokens'] : 0;
+            $totalTokensOutput = ($item->service != 'custom') ? $item->getData()['tokens']['completion_tokens'] : 0;
             $totalInputPrice   = ($item->getData()['tokens']['prompt_tokens'] / $this->conversion * $price['i']);
             $totalOutputPrice  = ($item->getData()['tokens']['completion_tokens'] / $this->conversion * $price['o']);
             $totalPrice        = $totalInputPrice + $totalOutputPrice;
@@ -584,9 +583,6 @@ class OpenAIHelper
             if ($item->service != 'custom') {
                 $priceInput  = $meta['sale_input_tokens'] / $this->relationTokenWord;
                 $priceOutput = $meta['sale_output_tokens'] / $this->relationTokenWord;
-            } else {
-                $priceInput  = $meta['cost_input_tokens'] / $this->relationTokenWord;
-                $priceOutput = $meta['cost_output_tokens'] / $this->relationTokenWord;
             }
         }
 
@@ -785,16 +781,30 @@ class OpenAIHelper
         return $this;
     }
 
-    public function getDefaultfModel($models = [])
+    public function getModelIdDefault()
+    {
+        $model = $this->getDefaultModel($this->getModels()) ?? ['id' => ''];
+        return $model['id'];
+    }
+
+    public function compareConfigAI($settingInstance)
+    {
+        if (!$settingInstance || empty(array_filter($settingInstance))) {
+            $settingInstance['default'] = true;
+        } else {
+            $settingInstance['default'] = false;
+        }
+        return $settingInstance;
+    }
+
+    public function getDefaultModel($models = [])
     {
         $result = array_filter($models, function ($item) {
             return isset($item['default']) && $item['default'] == "true";
         });
         return reset($result);
     }
-    /* public function getCurrentModel(){
 
-    }*/
     /**
      * Get the value of openaiConfig
      */
@@ -814,7 +824,7 @@ class OpenAIHelper
             });
             $model  = reset($filter);
         } else {
-            $model = $this->getDefaultfModel($models);
+            $model = $this->getDefaultModel($models);
         }
 
         $config = [

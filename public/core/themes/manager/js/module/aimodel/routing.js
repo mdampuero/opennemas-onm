@@ -10,6 +10,11 @@
             templateUrl: '/managerws/template/aimodel:list.' + appVersion + '.tpl',
             controller: 'AimodelListCtrl',
             reloadOnSearch: false
+          })
+          .when(routingProvider.ngGenerateShort('manager_aimodel_config'), {
+            templateUrl: '/managerws/template/aimodel:config.' + appVersion + '.tpl',
+            controller: 'AimodelConfigCtrl',
+            reloadOnSearch: false
           });
       }
     ]);

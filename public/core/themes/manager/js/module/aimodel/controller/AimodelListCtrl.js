@@ -12,103 +12,126 @@
      * @requires $timeout
      * @requires http
      * @requires messenger
+     * @requires oqlEncoder
      *
      * @description
      *   Handles all actions in prompt.txt listing.
      */
     .controller('AimodelListCtrl', [
-      '$controller', '$scope', '$timeout', 'http', 'messenger',
-      function($controller, $scope, $timeout, http, messenger) {
+      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
+      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
-          $scope: $scope,
+          $scope:   $scope,
           $timeout: $timeout
         }));
 
-        $scope.openai_settings = {
-          temperature: 0.5,
-          max_tokens: 1000,
-          frequency_penalty: 1,
-          presence_penalty: 1
+        /**
+         * @memberOf InstanceListCtrl
+         *
+         * @description
+         *   The visible table columns.
+         *
+         * @type {Object}
+         */
+        $scope.columns = {
+          collapsed: 1,
+          selected: [
+            'name',
+            'default',
+            'model',
+            'temperature',
+            'tokens',
+            'frequency',
+            'presence'
+          ]
         };
 
-        $scope.saveActiveItems = function() {
-          const openaiModels = $scope.items.filter(function(item) {
-            return item.active;
-          }).map(function(item) {
-            return {
-              id: item.id,
-              default: item.default,
-              cost_input_tokens: item.cost_input_tokens,
-              cost_output_tokens: item.cost_output_tokens,
-              sale_input_tokens: item.sale_input_tokens,
-              sale_output_tokens: item.sale_output_tokens
-            };
-          });
-
-          return http.put('manager_ws_aimodel_save', {
-            openai_models: openaiModels,
-            openai_settings: $scope.openai_settings
-          })
-            .then(function(response) {
-              messenger.post(response.data);
-            }, function(response) {
-              messenger.post(response.data);
-            });
+        /**
+         * @memberOf InstanceListCtrl
+         *
+         * @description
+         *   The criteria to search.
+         *
+         * @type {Object}
+         */
+        $scope.criteria = {
+          epp: 25,
+          page: 1,
+          activated_modules: 'es.openhost.module.openai'
         };
 
         /**
          * @function list
-         * @memberOf AimodelListCtrl
+         * @memberOf InstanceListCtrl
          *
+         * @description
+         *   Reloads the list.
          */
         $scope.list = function() {
           $scope.loading = 1;
-          var route = {
-            name: 'manager_ws_aimodel_list'
-          };
 
-          http.get(route).then(function(response) {
-            $scope.loading = 0;
-            $scope.items = response.data.items;
-            $scope.openai_models = response.data.openai_models;
-            $scope.openai_settings = response.data.openai_settings;
-
-            $scope.loadPersistedData();
-          });
-        };
-
-        $scope.setDefaultItem = function(item) {
-          $scope.items.forEach(function(i) {
-            i.default = false;
-          });
-
-          item.default = true;
-          $scope.defaultItem = item;
-        };
-
-        $scope.loadPersistedData = function() {
-          $scope.openai_models.forEach(function(persistedItem) {
-            var item = $scope.items.find(function(i) {
-              return i.id === persistedItem.id;
-            });
-
-            if (item) {
-              item.active = true;
-              item.cost_input_tokens = persistedItem.cost_input_tokens;
-              item.cost_output_tokens = persistedItem.cost_output_tokens;
-              item.default = JSON.parse(persistedItem.default);
-              item.sale_input_tokens = persistedItem.sale_input_tokens;
-              item.sale_output_tokens = persistedItem.sale_output_tokens;
+          oqlEncoder.configure({
+            placeholder: {
+              name: 'name ~ "[value]" or ' +
+                'internal_name ~ "[value]" or ' +
+                'contact_mail ~ "[value]" or ' +
+                'domains ~ "[value]" or ' +
+                'settings ~ "[value]"',
+              activated_modules: '[key] ~ "[value]"'
             }
           });
 
-          $scope.items.sort(function(a, b) {
-            return (b.active === true) - (a.active === true);
+          var oql   = oqlEncoder.getOql($scope.criteria);
+          var route = {
+            name: 'manager_ws_aimodel_list',
+            params: { oql: oql }
+          };
+
+          $location.search('oql', oql);
+
+          return http.get(route).then(function(response) {
+            $scope.loading = 0;
+            $scope.items   = response.data.results;
+            $scope.total   = response.data.total;
+            $scope.extra   = response.data.extra;
+
+            $scope.filteredItems = $scope.items;
+
+            // Scroll top
+            $('body').animate({ scrollTop: '0px' }, 1000);
           });
         };
+
+        /**
+         * @function resetFilters
+         * @memberOf PurchaseListCtrl
+         *
+         * @description
+         *   Resets all filters to the initial value.
+         */
+        $scope.resetFilters = function() {
+          $scope.criteria = { epp: 25, page: 1 };
+          $scope.list();
+        };
+
+        // Updates the columns stored in localStorage.
+        $scope.$watch('columns', function(newValues, oldValues) {
+          if (newValues !== oldValues) {
+            webStorage.local.set('instances-columns', $scope.columns);
+          }
+        }, true);
+
+        // Get enabled columns from localStorage
+        if (webStorage.local.get('instances-columns')) {
+          $scope.columns = webStorage.local.get('instances-columns');
+        }
+
+        oqlDecoder.configure({
+          ignore: [ 'internal_name', 'contact_mail', 'domains', 'settings' ]
+        });
+
         $scope.list();
       }
     ]);
 })();
-

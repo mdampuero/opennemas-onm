@@ -77,7 +77,7 @@ class OpenAIController extends ApiController
             'openai_config'           => $settings,
             'openai_config_manager'   => $this->get($this->helper)->getConfig(),
             'openai_models_manager'   => $models,
-            'openai_model_default'    => $this->get($this->helper)->getDefaultfModel($models),
+            'openai_model_default'    => $this->get($this->helper)->getDefaultModel($models),
             'openai_roles'            => $this->get($this->helper)->getRoles(),
             'openai_tones'            => $this->get($this->helper)->getTones(),
             'openai_models'           => $this->get($this->helper)->getModels(),

@@ -169,9 +169,15 @@ class SidebarController extends Controller
                             'click'    => true,
                         ],
                         [
+                            'name'     => _('Instances'),
+                            'icon'     => 'fa fa-cubes fa-lg',
+                            'route'    => 'manager_aimodel_list',
+                            'click'    => true,
+                        ],
+                        [
                             'name'     => _('Configs'),
                             'icon'     => 'fa fa-cog fa-lg',
-                            'route'    => 'manager_aimodel_list',
+                            'route'    => 'manager_aimodel_config',
                             'click'    => true,
                         ],
                     ]

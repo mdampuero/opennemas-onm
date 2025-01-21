@@ -29,7 +29,7 @@ class AIModelController extends Controller
      *
      * @Security("hasPermission('PROMPT_LIST')")
      */
-    public function listAction()
+    public function configAction()
     {
         $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
         $models = $this->get($this->helper)->getModelsFromApi();
@@ -38,6 +38,52 @@ class AIModelController extends Controller
             'openai_models'   => $serviceManager->get('openai_models') ?? [],
             'openai_settings' => $serviceManager->get('openai_settings') ?? [],
             'total'           => count($models)
+        ]);
+    }
+
+    /**
+     * Returns the list of prompts as JSON.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('PROMPT_LIST')")
+     */
+    public function listAction(Request $request)
+    {
+        $oql     = $request->query->get('oql', '');
+        $helpeAI = $this->get('core.helper.openai');
+
+        // Fix OQL for Non-MASTER users
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
+            $condition = sprintf('owner_id = %s ', $this->get('core.user')->id);
+
+            $oql = $this->get('orm.oql.fixer')->fix($oql)
+                ->addCondition($condition)->getOql();
+        }
+        ///$oql = 'ai_config != "" and' . $oql;
+
+        $repository = $this->get('orm.manager')->getRepository('Instance');
+        $converter  = $this->get('orm.manager')->getConverter('Instance');
+
+        $instances = $repository->findBy($oql);
+        $total     = $repository->countBy($oql);
+
+        $instances = array_map(function ($a) use ($converter) {
+            return $converter->responsify($a->getData());
+        }, $instances);
+
+        $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
+
+        $extra          = $serviceManager->get('openai_settings') ?? [];
+        $extra['model'] = $helpeAI->getModelIdDefault();
+
+        return new JsonResponse([
+            'total'   => $total,
+            'results' => $instances,
+            'extra'  => $extra,
+            'oql' => $oql
         ]);
     }
 

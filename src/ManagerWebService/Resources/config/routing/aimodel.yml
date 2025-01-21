@@ -1,5 +1,12 @@
+manager_ws_aimodel_config:
+    path:     /aimodel/config
+    defaults: { _controller: ManagerWebServiceBundle:AIModel:config }
+    methods:  [ GET ]
+    options:
+        expose: true
+
 manager_ws_aimodel_list:
-    path:     /aimodel
+    path:     /aimodel/list
     defaults: { _controller: ManagerWebServiceBundle:AIModel:list }
     methods:  [ GET ]
     options:

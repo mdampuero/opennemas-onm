@@ -363,6 +363,33 @@ class InstanceHelper
         }
     }
 
+    /**
+     * Returns the amount of current Web Push subscirbers
+     *
+     * @param Instance $instance The current instance.
+     *
+     * @return int The amount of current Web Push subscirbers
+     */
+    public function getOpenAISettings(Instance $instance)
+    {
+        try {
+            $this->conn->selectDatabase($instance->getDatabaseName());
+
+            $sql = "select name, value from settings where name = 'openai_config'";
+
+            $fetchAssoc   = $this->conn->fetchAssoc($sql);
+            $openaiConfig = PhpSerializer::unserialize($fetchAssoc['value']);
+
+            if (empty($openaiConfig)) {
+                return null;
+            }
+
+            return $openaiConfig;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
 
     /**
      * Returns the created date of the last created content.
