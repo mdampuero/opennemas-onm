@@ -67,7 +67,7 @@ function smarty_modifier_improve_images($html, $lazyjs = true)
             $srcsetAttr = $lazyjs ? 'data-srcset' : 'srcset';
             $html       = preg_replace(
                 '@<img((?:(?!srcset).)*src="' . $out[3][$matchKey] . '".*)>@U',
-                '<img$1 ' . $srcsetAttr . '="' . $result['srcset'] . '" sizes="' . $result['sizes'] . '">',
+                '<img$1 ' . $srcsetAttr . '="' . $result['srcset'] . '" sizes="auto">',
                 $html
             );
         }
