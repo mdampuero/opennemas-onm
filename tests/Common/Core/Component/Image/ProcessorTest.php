@@ -30,7 +30,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->image = $this->getMockBuilder('Image')
             ->setMethods([
                 'crop', 'get', 'getHeight','getImagick', 'getSize', 'getWidth',
-                'metadata', 'resize', 'save', 'strip', 'thumbnail', 'rotate'
+                'metadata', 'resize', 'save', 'strip', 'thumbnail', 'rotate',
+                'setWebpFormat'
             ])->getMock();
 
         $this->imagick = $this->getMockBuilder('Imagick')
@@ -129,7 +130,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $params = [ 'quality' => 75 ];
 
-        $this->imagick->expects($this->once())->method('getImageFormat')
+        $this->imagick->expects($this->once())->method('setWebpFormat')
             ->willReturn('glorp');
         $this->image->expects($this->once())->method('get')
             ->with('glorp', $params)->willReturn('quux mumble');

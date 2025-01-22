@@ -103,9 +103,30 @@ class Processor
         $params = !empty($params) ? $params : $this->defaults;
 
         return $this->image->get(
-            $this->image->getImagick()->getImageFormat(),
+            $this->setWebpFormat(),
             $params
         );
+    }
+
+    /**
+     * Sets the image format to WebP.
+     *
+     * This method configures the image processor to use the WebP format for the output image.
+     *
+     * @return void
+     */
+    public function setWebpFormat()
+    {
+        if ($this->image->getImagick()->getImageFormat() === 'PNG') {
+            $this->image->getImagick()->setOption('webp:lossless', 'true');
+            $this->image->getImagick()->setImageAlphaChannel(false);
+        }
+
+        if (in_array($this->image->getImagick()->getImageFormat(), ['JPEG', 'PNG', 'BMP', 'TIFF'])) {
+            $this->image->getImagick()->setImageFormat('webp');
+        } else {
+            return $this->image->getImagick()->getImageFormat();
+        }
     }
 
     /**
