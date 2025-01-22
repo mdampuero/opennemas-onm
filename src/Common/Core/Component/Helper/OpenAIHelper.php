@@ -30,6 +30,10 @@ class OpenAIHelper
 
     public $relationTokenWord = 1.5;
 
+    public $maxRetries = 3;
+
+    public $retryDelay = 2;
+
     public $map = [
         "openai_service" => "string",
         "openai_credentials" => [
@@ -220,29 +224,40 @@ class OpenAIHelper
         try {
             $payload = $data;
             unset($payload['meta']);
-            $response = $this->client->request('POST', $this->openaiEndpointBase . $this->endpointChat, [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->getApiKey()
-                ],
-                'json' => $payload
-            ]);
-            $response = json_decode($response->getBody(), true);
 
-            $response['meta'] = $data['meta'];
+            for ($i = 0; $i < $this->maxRetries; $i++) {
+                try {
+                    $response = $this->client->request('POST', $this->openaiEndpointBase . $this->endpointChat, [
+                        'headers' => [
+                            'Content-Type' => 'application/json',
+                            'Authorization' => 'Bearer ' . $this->getApiKey()
+                        ],
+                        'json' => $payload
+                    ]);
 
-            $responseData["request"] = $data;
+                    $response = json_decode($response->getBody(), true);
 
-            $responseData['message'] = $response['choices'][0]['message']['content'] ?? '';
+                    $response['meta']        = $data['meta'];
+                    $responseData["request"] = $data;
+                    $responseData['message'] = $response['choices'][0]['message']['content'] ?? '';
+                    $responseData['tokens']  = $response['usage'] ?? [];
 
-            $responseData['tokens'] = $response['usage'] ?? [];
+                    $responseData['tokens']['words'] =
+                        ($response['usage']['total_tokens'] ?? false) ?
+                        $this->calcWords($response['usage']['total_tokens'])
+                        : 0;
 
-            $responseData['tokens']['words'] =
-                ($response['usage']['total_tokens'] ?? false) ?
-                $this->calcWords($response['usage']['total_tokens'])
-                : 0;
+                    $this->saveAction($data, $response);
 
-            $this->saveAction($data, $response);
+                    break;
+                } catch (\Exception $e) {
+                    if ($i === $this->maxRetries - 1) {
+                        throw $e;
+                    }
+
+                    sleep($this->retryDelay);
+                }
+            }
         } catch (\Exception $e) {
             $responseData['error'] = $e->getMessage();
         }
