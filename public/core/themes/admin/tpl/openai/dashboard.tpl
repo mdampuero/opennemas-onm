@@ -63,11 +63,11 @@
                   </label>
                   <label class="form-label pull-right">
                     <span class="" uib-tooltip="{t}Average price per 1 million words sent{/t}" tooltip-placement="left">
-                      <i class="fa fa-arrow-up text-info"></i> &asymp; {t} [% (totals.price.input / totals.words.input * 1000000) | number : 4 %] €/M{/t}
+                      <i class="fa fa-arrow-up text-info"></i> &asymp; [% (totals.price.input / totals.words.input * 1000000) | number : 4 %] €/M
                     </span>
                     &nbsp;
                     <span class="" uib-tooltip="{t}Average price per 1 million words received{/t}" tooltip-placement="left">
-                      <i class="fa fa-arrow-down text-success"></i> &asymp; {t}[% (totals.price.output / totals.words.output * 1000000) | number : 4 %] €/M{/t}
+                      <i class="fa fa-arrow-down text-success"></i> &asymp; [% (totals.price.output / totals.words.output * 1000000) | number : 4 %] €/M
                     </span>
                   </label>
                 </div>

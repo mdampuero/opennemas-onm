@@ -83,7 +83,11 @@
       [% item.name %]
     </div>
     <div class="listing-inline-actions">
-      <a class="btn btn-default btn-small" target="_blank" href="http://[% item.domains[item.main_domain -1] %]/admin/openai/config/" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')" title="{t}Edit{/t}">
+      <a ng-if="item.domains.length > 1" class="btn btn-default btn-small" target="_blank" href="http://[% item.domains[item.main_domain - 1] %]/admin/openai/config/" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')" title="{t}Edit{/t}">
+        <i class="fa fa-cog m-r-5"></i>
+        {t}Configuration{/t}
+      </a>
+      <a ng-if="item.domains.length <= 1" class="btn btn-default btn-small" target="_blank" href="http://[% item.domains[item.main_domain] %]/admin/openai/config/" ng-if="security.hasInstance(item.internal_name) && security.hasPermission('INSTANCE_UPDATE')" title="{t}Edit{/t}">
         <i class="fa fa-cog m-r-5"></i>
         {t}Configuration{/t}
       </a>

@@ -111,20 +111,20 @@
          *   Resets all filters to the initial value.
          */
         $scope.resetFilters = function() {
-          $scope.criteria = { epp: 25, page: 1 };
+          $scope.criteria = { epp: 25, page: 1, activated_modules: 'es.openhost.module.openai' };
           $scope.list();
         };
 
         // Updates the columns stored in localStorage.
         $scope.$watch('columns', function(newValues, oldValues) {
           if (newValues !== oldValues) {
-            webStorage.local.set('instances-columns', $scope.columns);
+            webStorage.local.set('openai-instances-columns', $scope.columns);
           }
         }, true);
 
         // Get enabled columns from localStorage
-        if (webStorage.local.get('instances-columns')) {
-          $scope.columns = webStorage.local.get('instances-columns');
+        if (webStorage.local.get('openai-instances-columns')) {
+          $scope.columns = webStorage.local.get('openai-instances-columns');
         }
 
         oqlDecoder.configure({
