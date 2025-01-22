@@ -54,7 +54,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             '<img width="10" data-src="mercury"  class="lazyload" data-srcset="' .
             '/asset/thumbnail,480,270,center,center//media/opennemas/images/2018/10/02/2018100212424091861.jpg 480w" ' .
-            'sizes="auto">',
+            'data-sizes="auto">',
             smarty_modifier_improve_images($img)
         );
     }
@@ -110,7 +110,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
             '2018100216271084045.jpg 768w, /asset/thumbnail,992,558,center,center//media/opennemas/images' .
             '/2018/10/02/2018100216271084045.jpg 992w, /asset/thumbnail,1280,720,center,center//media/opennemas' .
             '/images/2018/10/02/2018100216271084045.jpg 1280w" ' .
-            'sizes="auto">',
+            'data-sizes="auto">',
             smarty_modifier_improve_images($img)
         );
     }
@@ -176,7 +176,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
             '2018100216271084045.jpg 768w, /asset/thumbnail,992,558,center,center//media/opennemas/images' .
             '/2018/10/02/2018100216271084045.jpg 992w, /asset/thumbnail,1280,720,center,center//media/opennemas' .
             '/images/2018/10/02/2018100216271084045.jpg 1280w" ' .
-            'sizes="auto">',
+            'data-sizes="auto">',
             smarty_modifier_improve_images($img)
         );
     }
@@ -235,7 +235,7 @@ class SmartyModifierImproveImages extends \PHPUnit\Framework\TestCase
             'style="max-width: 100%; width: 340px;" data-random="foo">' .
             '<img width="340" height="340" data-src="baz" ' .
             'class="lazyload" data-srcset="/asset/thumbnail,480,270,center,center' .
-            '//media/opennemas/images/2018/10/02/2018100216271084045.jpg 480w" sizes="auto">' .
+            '//media/opennemas/images/2018/10/02/2018100216271084045.jpg 480w" data-sizes="auto">' .
             '</figure>';
 
         $this->assertEquals($result, smarty_modifier_improve_images($figure));
