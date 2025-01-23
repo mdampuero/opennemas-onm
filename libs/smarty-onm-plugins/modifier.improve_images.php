@@ -65,10 +65,10 @@ function smarty_modifier_improve_images($html, $lazyjs = true)
             $result = $ph->getSrcSetAndSizesFromImagePath($out[3][$matchKey], $width);
 
             $srcsetAttr = $lazyjs ? 'data-srcset' : 'srcset';
-            $sizestAttr = $lazyjs ? 'data-sizes' : 'sizes';
+            $sizestAttr = $lazyjs ? '' : 'sizes="auto"';
             $html       = preg_replace(
                 '@<img((?:(?!srcset).)*src="' . $out[3][$matchKey] . '".*)>@U',
-                '<img$1 ' . $srcsetAttr . '="' . $result['srcset'] . '" ' . $sizestAttr . '="auto">',
+                '<img$1 ' . $srcsetAttr . '="' . $result['srcset'] . '" ' . $sizestAttr . '>',
                 $html
             );
         }
