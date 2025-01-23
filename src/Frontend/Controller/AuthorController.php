@@ -93,6 +93,17 @@ class AuthorController extends Controller
 
         $this->getAds();
 
+        // Remove all parameters that are not `page`
+        $url = preg_replace('/([&?])(?!page=)[^&]*/', '', $request->getUri());
+        // Remove duplicate `page` parameters
+        $url = preg_replace('/([&?])page=[^&]*(?=.*page=[^&]*)/', '', $url);
+
+        // Ensure the URL has the correct `?page=x` format
+         // Remove any trailing `?` or `&`
+        $url = preg_replace('/([&?])$/', '', $url);
+        // Add `?page=` or `&page=` depending on existing parameters
+        $url .= (strpos($url, '?') === false ? '?page=' : '&page=') . $page;
+
         return $this->render('user/author_frontpage.tpl', [
             'cache_id'    => $cacheID,
             'x-tags'      => sprintf('content-author-%d-frontpage', $user->id),
