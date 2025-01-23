@@ -174,7 +174,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $property->setValue($this->im, $this->image);
 
         $this->imagick->expects($this->once())
-            ->method('setImageFormat')
+            ->method('setWebpFormat')
             ->willReturn('webp');
 
         $this->assertEquals('webp', $this->im->setWebpFormat());
@@ -186,7 +186,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getImagick')
             ->willReturn($this->imagick);
 
-        $this->imagick->expects($this->exactly(2))
+        $this->imagick->expects($this->exactly(3))
             ->method('getImageFormat')
             ->willReturn('JPEG');
 
@@ -200,7 +200,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $property->setValue($this->im, $this->image);
 
         $this->imagick->expects($this->once())
-            ->method('setImageFormat')
+            ->method('setWebpFormat')
             ->willReturn('webp');
 
         $this->assertEquals('webp', $this->im->setWebpFormat());
@@ -213,7 +213,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->imagick);
 
         $this->imagick->expects($this->any())
-            ->method('getImageFormat')
+            ->method('setWebpFormat')
             ->willReturn('GIF');
 
         $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')

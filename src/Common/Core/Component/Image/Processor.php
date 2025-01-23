@@ -123,7 +123,7 @@ class Processor
         }
 
         if (in_array($this->image->getImagick()->getImageFormat(), ['JPEG', 'PNG', 'BMP', 'TIFF'])) {
-            return $this->image->getImagick()->setImageFormat('webp');
+            $this->image->getImagick()->setImageFormat('webp');
         }
 
         return $this->image->getImagick()->getImageFormat();
