@@ -9,7 +9,7 @@ frontend_author_frontpage:
 
 frontend_frontpage_authors:
     path: /authors/
-    defaults: { _controller: FrontendBundle:Author:frontpageAuthors }
+    defaults: { _controller: FrontendBundle:Author:list }
     options:
         l10n: true
         subdirectory: true
