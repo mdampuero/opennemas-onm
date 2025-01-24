@@ -69,10 +69,10 @@
     "@type": "ProfilePage",
     "mainEntity": {
       "@type": "Person",
-      "name": "{get_author_name($author)}",
+      "name": "{get_author_name($author)|replace:'\\':''|escape:'htmlall'}",
       "alternateName": "{get_author_slug($author)}",
       "identifier": "{get_author_id($author)}",
-      "description": "{get_author_bio_body($author)|default:get_author_bio_summary($author)}",
+      "description": "{get_author_bio_body($author)|default:get_author_bio_summary($author)|replace:'\\':''|escape:'htmlall'}",
       "image": "{get_photo_path(get_author_avatar($author), '', [], true)}",
       "agentInteractionStatistic": {
         "@type": "InteractionCounter",
