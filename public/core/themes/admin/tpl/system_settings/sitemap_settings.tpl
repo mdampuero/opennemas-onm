@@ -77,24 +77,33 @@
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <label class="form-label" for="sitemap-contentyear">
-                          {t}Content per year{/t}
-                        </label>
-                        <select class="form-control" ng-model="settings.sitemap.contentyear" id="sitemap-contentyear" name="sitemap-contentyear">
-                          <option ng-repeat="year in generateYears()" ng-value="year">
-                            [% year %]
-                          </option>
-                        </select>
+                        <div class="form-group">
+                          <label class="form-label" for="sitemap-contentyear">
+                            {t}Limit contents sitemap per year{/t}
+                          </label>
+                          <select class="form-control" ng-model="item.contentyear" id="sitemap-contentyear" name="sitemap-contentyear">
+                            <option value="">{t}No limit{/t}</option>
+                            <option ng-repeat="year in generateYears()" ng-value="year">
+                              [% year %]
+                            </option>
+                          </select>
+                        </div>
                       </div>
                       <div class="col-md-6">
-                        <label class="form-label" for="sitemap-limitdays">
-                          {t}Limit per days{/t}
-                        </label>
-                        <select class="form-control-lg" ng-model="settings.sitemap.limitdays">
-                          <option ng-value="item" ng-repeat="item in [1, 2, 3, 4]">
-                            [% item %]
-                          </option>
-                        </select>
+                        <div class="form-group">
+                          <label class="form-label" for="sitemap-limitdays">
+                            {t}Sitemap news days{/t}
+                            <span class="help ">
+                              {t}Default{/t} 2
+                            </span>
+                          </label>
+                          <select class="form-control" ng-model="item.limitdays" id="sitemap-limitdays" name="sitemap-limitdays">
+                            <option value="">{t}Default{/t}</option>
+                            <option ng-repeat="days in [1,2,3,4]" ng-value="days">
+                              [% days %]
+                            </option>
+                          </select>
+                        </div>
                       </div>
                     </div>
                   </div>
