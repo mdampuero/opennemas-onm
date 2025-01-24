@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Core\Controller\Controller;
+use Doctrine\ORM\Query\Expr\Func;
 
 class AuthorController extends FrontendController
 {
@@ -38,7 +39,8 @@ class AuthorController extends FrontendController
      * @var array
      */
     protected $queries = [
-        'list' => [ 'page' ]
+        'list' => [ 'page' ],
+        'show' => [ 'page', 'slug' ]
     ];
 
     /**
@@ -47,7 +49,8 @@ class AuthorController extends FrontendController
      * @var array
      */
     protected $routes = [
-        'list' => 'frontend_frontpage_authors'
+        'list' => 'frontend_frontpage_authors',
+        'show' => 'frontend_author_frontpage'
     ];
 
     /**
@@ -56,7 +59,8 @@ class AuthorController extends FrontendController
      * @var array
      */
     protected $templates = [
-        'list'    => 'user/frontpage_authors.tpl'
+        'list'    => 'user/frontpage_authors.tpl',
+        'show'    => 'user/author_frontpage.tpl'
     ];
 
     /**
@@ -74,7 +78,84 @@ class AuthorController extends FrontendController
      */
     public function showAction(Request $request)
     {
-        return parent::showAction($request);
+        $action       = $this->get('core.globals')->getAction();
+        $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
+        $page         = (int) $request->get('page', 1);
+        $itemsPerPage = 12;
+
+        try {
+            $user = $this->container->get('api.service.author')
+                ->getItemBy("username = '$slug' or slug = '$slug'");
+        } catch (GetItemException $e) {
+            throw new ResourceNotFoundException();
+        }
+
+        $expected = $this->get('router')
+            ->generate('frontend_author_frontpage', [ 'author_slug' => $user->slug ]);
+        $expected = $this->get('core.decorator.url')->prefixUrl($expected);
+
+        if (strpos($request->getRequestUri(), $expected) === false) {
+            return new RedirectResponse($expected);
+        }
+
+        // Setup templating cache layer
+        $this->view->setConfig('articles');
+        $cacheID = $this->view->getCacheId('frontpage', 'author', $user->id, $page);
+
+        if (($this->view->getCaching() === 0)
+           || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
+        ) {
+            if ($page <= 0 || $page > $this->getParameter('core.max_page')) {
+                throw new ResourceNotFoundException();
+            }
+
+            $criteria = [
+                'fk_author'       => [[ 'value' => $user->id ]],
+                'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
+                'content_status'  => [[ 'value' => 1 ]],
+                'in_litter'       => [[ 'value' => 0 ]],
+                'starttime'       => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'         => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
+            ];
+
+            $er            = $this->get('entity_repository');
+            $contentsCount = $er->countBy($criteria);
+            $contents      = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
+
+            // Build the pagination
+            $pagination = $this->get('paginator')->get([
+                'directional' => true,
+                'epp'         => $itemsPerPage,
+                'page'        => $page,
+                'total'       => $contentsCount,
+                'route'       => [
+                    'name'   => 'frontend_author_frontpage',
+                    'params' => [ 'author_slug' => $slug, ]
+                ],
+            ]);
+
+            $this->view->assign([
+                'contents'   => $contents,
+                'author'     => $user,
+                'total'      => $contentsCount,
+                'pagination' => $pagination,
+                'page'       => $page,
+            ]);
+        }
+
+        return $this->render('user/author_frontpage.tpl', [
+            'cache_id'    => $cacheID,
+            'x-tags'      => sprintf('content-author-%d-frontpage', $user->id),
+            'x-cacheable' => true,
+        ]);
     }
 
     protected function getParameters($request, $item = null)
@@ -90,7 +171,6 @@ class AuthorController extends FrontendController
             'o_canonical' => $this->getCanonicalUrl($action, $params),
         ]);
     }
-
 
     protected function getItems($params)
     {

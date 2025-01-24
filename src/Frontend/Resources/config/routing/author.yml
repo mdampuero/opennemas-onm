@@ -1,6 +1,6 @@
 frontend_author_frontpage:
     path: /author/{author_slug}/
-    defaults: { _controller: FrontendBundle:Author:authorFrontpage }
+    defaults: { _controller: FrontendBundle:Author:show }
     requirements:
         slug: '[^/]+'
     options:
