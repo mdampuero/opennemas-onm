@@ -76,11 +76,27 @@ class AuthorController extends FrontendController
      */
     public function listAction(Request $request)
     {
-        $this->checkSecurity('es.openhost.module.tagsIndex');
+        $action = $this->get('core.globals')->getAction();
+        $params = $request->query->all();
 
-        $this->getAdvertisements();
+        $expected = $this->getExpectedUri($action, $params);
 
-        return parent::listAction($request);
+        if (strpos($request->getRequestUri(), $expected) === false) {
+            return new RedirectResponse($expected, 301);
+        }
+
+        $params = $this->getParameters($request);
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrateList($params);
+        }
+
+        return $this->render(
+            $this->getTemplate($action),
+            $params
+        );
     }
 
     /**
@@ -163,8 +179,6 @@ class AuthorController extends FrontendController
 
         $params['x-tags'] .= implode(',', array_unique($xtags));
 
-        $this->getAdvertisements();
-
         return $this->render(
             $this->getTemplate($action),
             array_merge($params, ['author_slug' => $slug])
@@ -206,6 +220,8 @@ class AuthorController extends FrontendController
 
         unset($params['o_content']);
         unset($params['content']);
+
+        $this->getAdvertisements();
 
         return array_merge($params, [
             'author' => $item[0],
