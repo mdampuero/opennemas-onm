@@ -130,11 +130,11 @@ class AuthorController extends FrontendController
             );
 
             $contentList   = $this->get('api.service.content')
-                ->getList($oql)['items'];
-            $totalContents = count($contentList);
+                ->getList($oql);
+            $totalContents = $contentList['total'];
 
             $contents = array_slice(
-                $contentList,
+                $contentList['items'],
                 $itemsPerPage * ($params['page'] - 1),
                 $itemsPerPage
             );
