@@ -18,7 +18,7 @@
       '$scope', '$uibModal', 'http', 'messenger',
       function($scope, $uibModal, http, messenger) {
         /**
-         * @memberOf SettingsCtrl
+         * @memberOf SitemapCtrl
          * @function generateYears
          *
          * @description
@@ -27,7 +27,7 @@
          * @returns {Array}
          */
         $scope.generateYears = function() {
-          var currentYear     = (new Date()).getFullYear();
+          var currentYear     = new Date().getFullYear();
           var years = [];
           var yearsToGenerate = 11;
 

@@ -71,7 +71,7 @@
                 {t}Limit contents sitemap per year{/t}
               </label>
               <select class="form-control" ng-model="item.contentyear" id="sitemap-contentyear" name="sitemap-contentyear">
-                <option value="">{t}No limit{/t}</option>
+                <option ng-value="">{t}No limit{/t}</option>
                 <option ng-repeat="year in generateYears()" ng-value="year">
                   [% year %]
                 </option>
@@ -82,12 +82,8 @@
             <div class="form-group">
               <label class="form-label" for="sitemap-limitdays">
                 {t}Sitemap news days{/t}
-                <span class="help ">
-                  {t}Default{/t} 2
-                </span>
               </label>
               <select class="form-control" ng-model="item.limitdays" id="sitemap-limitdays" name="sitemap-limitdays">
-                <option value="">{t}Default{/t}</option>
                 <option ng-repeat="days in [1,2,3,4]" ng-value="days">
                   [% days %]
                 </option>

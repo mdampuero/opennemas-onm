@@ -17,8 +17,8 @@
         $.extend(this, $controller('SettingsCtrl', { $scope: $scope }));
         $scope.sitemap = {
           perpage: 500,
-          contentyear: '',
           total: 100,
+          limitdays: 2,
           album: 0,
           article: 0,
           event: 0,
@@ -29,7 +29,6 @@
           poll: 0,
           tag: 0,
           video: 0,
-          limitdays: 0,
         };
 
         /**
@@ -121,7 +120,7 @@
          * @returns {Array}
          */
         $scope.generateYears = function() {
-          var currentYear     = (new Date()).getFullYear();
+          var currentYear     = new Date().getFullYear();
           var yearsToGenerate = 11;
           var years           = [];
 
