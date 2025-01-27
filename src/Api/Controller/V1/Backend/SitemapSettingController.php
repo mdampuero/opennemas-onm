@@ -96,9 +96,13 @@ class SitemapSettingController extends SettingController
      */
     public function listAction(Request $request)
     {
+        $ss['settings']['sitemap'] = array_map(function ($e) {
+            return (int) $e;
+        }, $this->get('core.helper.sitemap')->getSettings());
+
         return new JsonResponse(
             array_merge_recursive(
-                parent::listAction($request),
+                $ss,
                 [
                     'extra' => [
                         'sitemaps' => $this->get('core.helper.sitemap')->getSitemapsInfo(),
