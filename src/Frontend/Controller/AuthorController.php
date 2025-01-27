@@ -282,6 +282,18 @@ class AuthorController extends FrontendController
         ]);
     }
 
+    /**
+     * Retrieves and configures advertisements for the specified category and action.
+     *
+     * This method fetches advertisement positions based on the current action,
+     * combines them with additional predefined positions, and retrieves the
+     * corresponding advertisements from the repository. These advertisements
+     * are then configured for rendering on the frontend.
+     *
+     * @param object|null $category The category object to filter advertisements by, or null for no filtering.
+     * @param string|null $token An optional token for additional advertisement context (currently unused).
+     * @return void
+     */
     protected function getAdvertisements($category = null, $token = null)
     {
         $categoryId = empty($category) ? 0 : $category->id;
