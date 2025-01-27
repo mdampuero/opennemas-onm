@@ -92,19 +92,12 @@ class SettingController extends Controller
      */
     public function listAction(Request $request)
     {
-        $locale = $this->get('core.locale');
         $params = $request->get('params');
         $keys   = is_array($params) && !empty($params) ? array_keys($params) : $this->keys;
 
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get($keys);
-
-        if (empty($settings) || is_null($settings['sitemap'])) {
-            $settings = $this->get('orm.manager')
-                ->getDataSet('Settings', 'manager')
-                ->get($keys);
-        }
 
         // Decode scripts
         foreach ($this->base64Encoded as $key) {
