@@ -92,6 +92,13 @@ class SitemapController extends Controller
                 return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters ]);
             }
 
+            // Limit sitemap for contents if set
+            if (!empty($settings['contentyear'])) {
+                $dates = array_filter($dates, function ($e) use ($settings) {
+                    return $e > $settings['contentyear'];
+                });
+            }
+
             foreach ($dates as $date) {
                 if (empty($date)) {
                     continue;
