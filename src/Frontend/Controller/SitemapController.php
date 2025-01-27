@@ -175,12 +175,6 @@ class SitemapController extends Controller
         $cacheId = $this->view->getCacheId('sitemap', 'news');
         if (!$this->isCached('news', $cacheId)) {
             $settings = $this->get('core.helper.sitemap')->getSettings();
-
-            $startDate = !empty($settings['contentyear'])
-                ? "{$settings['contentyear']}-01-01 00:00:00"
-                : gmdate('Y-m-d H:i:s');
-            $days      = !empty($settings['limitdays']) ? $settings['limitdays'] : '3';
-
             $filters  = [
                 'content_type_name' => [
                     [ 'value' => [ 'article', 'opinion', 'video', 'album' ], 'operator' => 'IN' ]
@@ -197,14 +191,14 @@ class SitemapController extends Controller
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
                 ],
-                'starttime' => [
+                'starttime'         => [
                     'union' => 'OR',
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [
                         'value' => sprintf(
                             'DATE_ADD("%s", INTERVAL -%s DAY) AND "%s"',
-                            $startDate,
-                            $days,
+                            gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s'))),
+                            $settings['limitdays'] ?? '2',
                             gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')))
                         ),
                         'field' => true,
