@@ -256,17 +256,6 @@ class SitemapHelper
     {
         $em = $this->container->get('entity_repository');
 
-        $settings = $this->getSettings();
-
-        $yearFromDate = substr($date, 0, 4);
-        $contentYear  = $settings['contentyear'];
-
-        // Compare the years: If the input year is less than or equal to the content year
-        // Throw a NotFoundHttpException if the condition is met
-        if ($yearFromDate <= $contentYear) {
-            throw new NotFoundHttpException('The date is earlier than the allowed content year.');
-        }
-
         $filters = [
             'content_type_name' => [[ 'value' => $types, 'operator' => 'IN' ]],
             'content_status'    => [[ 'value' => 1 ]],

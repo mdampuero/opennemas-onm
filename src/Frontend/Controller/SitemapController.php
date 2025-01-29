@@ -12,6 +12,7 @@ namespace Frontend\Controller;
 use Api\Exception\GetListException;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Displays contents as sitemaps.
@@ -266,6 +267,12 @@ class SitemapController extends Controller
             $page               = ceil(
                 $helper->getContents($last, $helper->getTypes($settings)) / $settings['perpage']
             );
+        }
+
+        // Compare the years: If the input year is less than or equal to the content year
+        // Throw a NotFoundHttpException if the condition is met
+        if ((int) $year < (int) $settings['contentyear']) {
+            throw new NotFoundHttpException();
         }
 
         $cacheId = $this->view->getCacheId('sitemap', 'contents', $year, $month, $page);
