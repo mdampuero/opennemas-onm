@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  PromptCtrl
+     * @name  OnmAiPromptCtrl
      *
      * @requires $filter
      * @requires $location
@@ -18,11 +18,11 @@
      * @description
      *   Handles actions for instance edition form
      */
-    .controller('PromptCtrl', [
+    .controller('OnmAiPromptCtrl', [
       '$location', '$routeParams', '$scope', 'http', 'routing', 'messenger',
       function($location, $routeParams, $scope, http, routing, messenger) {
         /**
-         * @memberOf PromptCtrl
+         * @memberOf OnmAiPromptCtrl
          *
          * @description
          *  The client object.
@@ -37,7 +37,7 @@
 
         /**
          * @function save
-         * @memberOf PromptCtrl
+         * @memberOf OnmAiPromptCtrl
          *
          * @description
          *   Saves the client.
@@ -55,7 +55,7 @@
               data.instances = [ 'Todos' ];
             }
           }
-          http.post('manager_ws_prompt_save', data)
+          http.post('manager_ws_onmai_prompt_save', data)
             .then(function(response) {
               messenger.post(response.data);
 
@@ -81,7 +81,7 @@
          */
         $scope.autocomplete = function(query) {
           var route = {
-            name: 'manager_ws_prompt_autocomplete',
+            name: 'manager_ws_onmai_prompt_autocomplete',
             params: { query: query }
           };
 
@@ -112,7 +112,7 @@
             }
           }
           var route = {
-            name: 'manager_ws_prompt_update',
+            name: 'manager_ws_onmai_prompt_update',
             params: { id: $scope.item.id }
           };
 
@@ -130,11 +130,11 @@
           $scope.item = null;
         });
 
-        var route = 'manager_ws_prompt_new';
+        var route = 'manager_ws_onmai_prompt_new';
 
         if ($routeParams.id) {
           route = {
-            name: 'manager_ws_prompt_show',
+            name: 'manager_ws_onmai_prompt_show',
             params: { id: $routeParams.id }
           };
         }

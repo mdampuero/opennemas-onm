@@ -110,10 +110,10 @@
 
           http.post($scope.routes.generateText, $scope.template)
             .then(function(response) {
-              $scope.template.suggested_text = response.data.message;
+              $scope.template.suggested_text = response.data.result;
               $scope.template.original_text  = $scope.template.input;
-              $scope.last_token_usage        = response.data.tokens.total_tokens;
-              $scope.last_words_generated    = response.data.tokens.words;
+              $scope.last_token_usage        = response.data.tokens.total;
+              $scope.last_words_generated    = response.data.words.total;
               $scope.template.step           = 2;
               $scope.setActiveText('suggested');
             })

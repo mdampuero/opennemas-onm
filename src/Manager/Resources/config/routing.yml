@@ -52,10 +52,6 @@ manager_user_group:
     prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/user_group.yml'
 
-manager_prompt:
+manager_onmai:
     prefix:   /manager
-    resource: '@ManagerBundle/Resources/config/routing/prompt.yml'
-
-manager_aimodel:
-    prefix:   /manager
-    resource: '@ManagerBundle/Resources/config/routing/aimodel.yml'
+    resource: '@ManagerBundle/Resources/config/routing/onmai.yml'

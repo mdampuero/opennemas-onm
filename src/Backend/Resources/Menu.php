@@ -329,7 +329,7 @@ $menuXml = [
         ]
     ],
     [
-        'id'          => 'openai',
+        'id'          => 'onmai',
         'title'       => _('ONM AI'),
         'badge'       => '<span class="badge badge-primary pull-left m-t-10 m-r-5">' . _('NEW') . '</span> ',
         'icon'        => 'fa fa-bell',

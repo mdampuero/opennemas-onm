@@ -33,7 +33,7 @@ class OpenAIController extends ApiController
     /**
      * {@inheritdoc}
      */
-    protected $helper = 'core.helper.openai';
+    protected $helper = 'core.helper.ai';
 
     /**
      * Get the Web Push notifications configuration
@@ -78,8 +78,8 @@ class OpenAIController extends ApiController
             'openai_config_manager'   => $this->get($this->helper)->getConfig(),
             'openai_models_manager'   => $models,
             'openai_model_default'    => $this->get($this->helper)->getDefaultModel($models),
-            'openai_roles'            => $this->get($this->helper)->getRoles(),
-            'openai_tones'            => $this->get($this->helper)->getTones(),
+            'onmai_roles'            => $this->get($this->helper)->getRoles(),
+            'onmai_tones'            => $this->get($this->helper)->getTones(),
             'openai_models'           => $this->get($this->helper)->getModels(),
         ]);
     }
@@ -98,8 +98,8 @@ class OpenAIController extends ApiController
         $msg    = $this->get('core.messenger');
         $config = $request->request->all();
 
-        $config['openai_roles'] = $this->get($this->helper)->preSave($config['openai_roles']);
-        $config['openai_tones'] = $this->get($this->helper)->preSave($config['openai_tones']);
+        $config['onmai_roles'] = $this->get($this->helper)->preSave($config['onmai_roles']);
+        $config['onmai_tones'] = $this->get($this->helper)->preSave($config['onmai_tones']);
 
         try {
             $this->get('orm.manager')->getDataSet('Settings')->set($config);
@@ -133,10 +133,6 @@ class OpenAIController extends ApiController
 
             if (isset($response['error'])) {
                 return new JsonResponse(['error' => $response['error']], JsonResponse::HTTP_REQUEST_TIMEOUT);
-            }
-
-            if ($response['tokens'] ?? false) {
-                $this->get($this->helper)->saveTokens($response['tokens']);
             }
 
             return new JsonResponse($response);

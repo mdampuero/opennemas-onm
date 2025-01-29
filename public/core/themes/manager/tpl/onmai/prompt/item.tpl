@@ -4,7 +4,7 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
-            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_prompt_list') %]">
+            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_onmai_prompt_list') %]">
               <i class="fa fa-file-o"></i>
               {t}Prompts{/t}
             </a>
@@ -23,7 +23,7 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_prompt_list') %]">
+            <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_onmai_prompt_list') %]">
               <i class="fa fa-reply"></i>
             </a>
           </li>
@@ -87,7 +87,7 @@
               <ui-select-match>
                 [% $select.selected.name %]
               </ui-select-match>
-              <ui-select-choices repeat="item.name as item in extra.openai_tones | filter: { name: $select.search }" position='down'>
+              <ui-select-choices repeat="item.name as item in extra.onmai_tones | filter: { name: $select.search }" position='down'>
                 <div ng-bind-html="item.name | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
@@ -98,7 +98,7 @@
                 <ui-select-match>
                   [% $select.selected.name %]
                 </ui-select-match>
-                <ui-select-choices repeat="item.name as item in extra.openai_roles | filter: { name: $select.search }" position='down'>
+                <ui-select-choices repeat="item.name as item in extra.onmai_roles | filter: { name: $select.search }" position='down'>
                   <div ng-bind-html="item.name | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>

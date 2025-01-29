@@ -4,8 +4,8 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
-            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_prompt_list') %]">
-              <i class="fa fa-file-o"></i>
+            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_onmai_prompt_list') %]">
+              <i class="fa fa-terminal"></i>
               {t}Prompts{/t}
             </a>
           </h4>
@@ -14,13 +14,13 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_prompt_config') %]" class="admin_add" title="{t}Config prompt module{/t}">
+            <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_onmai_prompt_config') %]" class="admin_add" title="{t}Config prompt module{/t}">
               <span class="fa fa-cog fa-lg"></span>
             </a>
           </li>
           <li class="quicklinks"><span class="h-seperate"></span></li>
           <li class="quicklinks" ng-if="security.hasPermission('PROMPT_CREATE')">
-            <a class="btn btn-success text-uppercase text-white" ng-href="[% routing.ngGenerate('manager_prompt_create') %]">
+            <a class="btn btn-success text-uppercase text-white" ng-href="[% routing.ngGenerate('manager_onmai_prompt_create') %]">
               <i class="fa fa-plus m-r-5"></i>
               {t}Create{/t}
             </a>
@@ -174,7 +174,7 @@
               <td ng-show="isColumnEnabled('name')">
                 [% item.name %]
                 <div class="listing-inline-actions">
-                  <a class="btn btn-default btn-small" ng-href="[% routing.ngGenerate('manager_prompt_show', { id: item.id }) %]" ng-if="security.hasPermission('PROMPT_UPDATE')" title="{t}Edit{/t}">
+                  <a class="btn btn-default btn-small" ng-href="[% routing.ngGenerate('manager_onmai_prompt_show', { id: item.id }) %]" ng-if="security.hasPermission('PROMPT_UPDATE')" title="{t}Edit{/t}">
                     <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
                   </a>
                   <button class="btn btn-danger btn-small" ng-click="delete(item)" ng-if="security.hasPermission('PROMPT_DELETE')" type="button">

@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  AimodelListCtrl
+     * @name  OnmAiInstancesCtrl
      *
      * @requires $controller
      * @requires $scope
@@ -17,7 +17,7 @@
      * @description
      *   Handles all actions in prompt.txt listing.
      */
-    .controller('AimodelListCtrl', [
+    .controller('OnmAiInstancesCtrl', [
       '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
       function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
@@ -84,7 +84,7 @@
 
           var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
-            name: 'manager_ws_aimodel_list',
+            name: 'manager_ws_onmai_instances',
             params: { oql: oql }
           };
 

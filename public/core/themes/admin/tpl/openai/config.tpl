@@ -67,7 +67,7 @@
           <h4>{t}Roles{/t}</h4>
           <div class="form-group">
             <div class="controls">
-              <div class="row" ng-repeat="role in settings.openai_roles track by $index">
+              <div class="row" ng-repeat="role in settings.onmai_roles track by $index">
                 <div class="col-lg-4 col-md-3">
                   <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required ng-disabled="role.readOnly" maxlength="64">
                 </div>
@@ -97,7 +97,7 @@
           <h4>{t}Tones{/t}</h4>
           <div class="form-group">
             <div class="controls">
-              <div class="row" ng-repeat="role in settings.openai_tones track by $index">
+              <div class="row" ng-repeat="role in settings.onmai_tones track by $index">
                 <div class="col-lg-4 col-md-3">
                   <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required ng-disabled="role.readOnly" maxlength="64">
                 </div>

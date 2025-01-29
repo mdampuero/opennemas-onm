@@ -36,7 +36,7 @@
             </a>
           </li>
           <li class="quicklinks m-r-10">
-            <a class="btn btn-white" ng-href="{url name=manager_ws_prompt_config_download}?token=[% security.token %]">
+            <a class="btn btn-white" ng-href="{url name=manager_ws_onmai_prompt_config_download}?token=[% security.token %]">
               <span class="fa fa-download"></span>
               {t}Download{/t}
             </a>
@@ -57,7 +57,7 @@
       <h4>{t}Roles{/t}</h4>
       <div class="form-group">
         <div class="controls">
-          <div class="row" ng-repeat="role in settings.openai_roles track by $index">
+          <div class="row" ng-repeat="role in settings.onmai_roles track by $index">
             <div class="col-lg-4 col-md-3">
               <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required maxlength="64">
             </div>
@@ -87,7 +87,7 @@
       <h4>{t}Tones{/t}</h4>
       <div class="form-group">
         <div class="controls">
-          <div class="row" ng-repeat="role in settings.openai_tones track by $index">
+          <div class="row" ng-repeat="role in settings.onmai_tones track by $index">
             <div class="col-lg-4 col-md-3">
               <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required maxlength="64">
             </div>
@@ -117,7 +117,7 @@
       <h4>{t}Instructions{/t}</h4>
       <div class="form-group">
         <div class="controls">
-          <div class="row" ng-repeat="role in settings.openai_instructions track by $index">
+          <div class="row" ng-repeat="role in settings.onmai_instructions track by $index">
             <div class="col-lg-2 col-md-3 m-b-15">
               <ui-select name="mode" class="form-control" theme="select2" ng-model="role.type" search-enabled="false" required ng-init="options = [ { name: '{t}Both{/t}', key: 'Both'},{ name: '{t}Create{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'} ]">
                 <ui-select-match>

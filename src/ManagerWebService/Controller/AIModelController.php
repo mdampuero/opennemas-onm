@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AIModelController extends Controller
 {
-    protected $helper = 'core.helper.openai';
+    protected $helper = 'core.helper.ai';
 
     /**
      * Returns the list of prompts as JSON.
@@ -53,7 +53,7 @@ class AIModelController extends Controller
     public function listAction(Request $request)
     {
         $oql     = $request->query->get('oql', '');
-        $helpeAI = $this->get('core.helper.openai');
+        $helpeAI = $this->get('core.helper.ai');
 
         // Fix OQL for Non-MASTER users
         if (!$this->get('core.security')->hasPermission('MASTER')) {

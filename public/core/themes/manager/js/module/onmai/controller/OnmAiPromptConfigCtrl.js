@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  PromptConfigCtrl
+     * @name  OnmAiPromptConfigCtrl
      *
      * @requires $filter
      * @requires $location
@@ -18,14 +18,14 @@
      * @description
      *   Handles actions for instance edition form
      */
-    .controller('PromptConfigCtrl', [
+    .controller('OnmAiPromptConfigCtrl', [
       '$scope', 'http', 'messenger', '$uibModal',
       function($scope, http, messenger, $uibModal) {
         $scope.routes = {
-          configGet:    'manager_ws_prompt_config',
-          configSave:   'manager_ws_prompt_config_save',
-          configUpload: 'manager_ws_prompt_config_upload',
-          list:         'manager_prompt_list'
+          configGet:    'manager_ws_onmai_prompt_config',
+          configSave:   'manager_ws_onmai_prompt_config_save',
+          configUpload: 'manager_ws_onmai_prompt_config_upload',
+          list:         'manager_onmai_prompt_list'
         };
 
         $scope.save = function() {
@@ -40,9 +40,9 @@
         };
 
         $scope.settings = {
-          openai_roles: [],
-          openai_tones: [],
-          openai_instructions: []
+          onmai_roles: [],
+          onmai_tones: [],
+          onmai_instructions: []
         };
 
         $scope.addRole = function() {
@@ -51,11 +51,11 @@
             prompt: ''
           };
 
-          $scope.settings.openai_roles.push(role);
+          $scope.settings.onmai_roles.push(role);
         };
 
         $scope.removeRole = function(index) {
-          $scope.settings.openai_roles.splice(index, 1);
+          $scope.settings.onmai_roles.splice(index, 1);
         };
 
         $scope.addTone = function() {
@@ -64,11 +64,11 @@
             description: ''
           };
 
-          $scope.settings.openai_tones.push(tone);
+          $scope.settings.onmai_tones.push(tone);
         };
 
         $scope.removeTone = function(index) {
-          $scope.settings.openai_tones.splice(index, 1);
+          $scope.settings.onmai_tones.splice(index, 1);
         };
 
         $scope.addInstruction = function() {
@@ -78,11 +78,11 @@
             value: ''
           };
 
-          $scope.settings.openai_instructions.push(instruction);
+          $scope.settings.onmai_instructions.push(instruction);
         };
 
         $scope.removeInstruction = function(index) {
-          $scope.settings.openai_instructions.splice(index, 1);
+          $scope.settings.onmai_instructions.splice(index, 1);
         };
 
         $scope.init = function() {

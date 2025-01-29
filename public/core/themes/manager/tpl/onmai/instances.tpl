@@ -23,5 +23,5 @@
 {/block}
 
 {block name="list"}
-  {include file="aimodel/list.table.tpl"}
+  {include file="onmai/instances.table.tpl"}
 {/block}

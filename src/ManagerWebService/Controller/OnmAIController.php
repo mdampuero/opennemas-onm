@@ -12,30 +12,31 @@
 namespace ManagerWebService\Controller;
 
 use Common\Core\Annotation\Security;
-use Common\Model\Entity\PromptManager;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Common\Model\Entity\PromptManager;
 use Symfony\Component\HttpFoundation\Response;
 use Exception;
 
-class PromptController extends Controller
+class OnmAIController extends Controller
 {
-    protected $entity = 'PromptManager';
+
+    protected $helper = 'core.helper.ai';
     protected $map    = [
-        "openai_roles" => [
+        "onmai_roles" => [
             [
                 "name" => "string",
                 "prompt" => "string",
             ],
         ],
-        "openai_tones" => [
+        "onmai_tones" => [
             [
                 "name" => "string",
                 "description" => "string",
             ],
         ],
-        "openai_instructions" => [
+        "onmai_instructions" => [
             [
                 "type" => "string",
                 "value" => "string",
@@ -51,13 +52,117 @@ class PromptController extends Controller
      *
      * @return JsonResponse The response object.
      *
+     */
+    public function configAction()
+    {
+        return new JsonResponse([
+            'onmai_settings'  => $this->get($this->helper)->getManagerSettings()
+        ]);
+    }
+
+    /**
+     * Save prompt settings
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     */
+    public function configSaveAction(Request $request)
+    {
+        $request = $request->request->all();
+        $msg     = $this->get('core.messenger');
+
+        $this->get('orm.manager')
+            ->getDataSet('Settings', 'manager')
+            ->set($request);
+
+        $msg->add(_('Prompt saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Returns the list of prompts as JSON.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
      * @Security("hasPermission('PROMPT_LIST')")
      */
-    public function listAction(Request $request)
+    public function instancesAction(Request $request)
+    {
+        $oql     = $request->query->get('oql', '');
+        $helpeAI = $this->get('core.helper.ai');
+
+        // Fix OQL for Non-MASTER users
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
+            $condition = sprintf('owner_id = %s ', $this->get('core.user')->id);
+
+            $oql = $this->get('orm.oql.fixer')->fix($oql)
+                ->addCondition($condition)->getOql();
+        }
+        ///$oql = 'ai_config != "" and' . $oql;
+        $repository = $this->get('orm.manager')->getRepository('Instance');
+        $converter  = $this->get('orm.manager')->getConverter('Instance');
+
+        $instances = $repository->findBy($oql);
+        $total     = $repository->countBy($oql);
+
+        $instances = array_map(function ($a) use ($converter) {
+            return $converter->responsify($a->getData());
+        }, $instances);
+
+        $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
+
+        $extra          = $serviceManager->get('openai_settings') ?? [];
+        $extra['model'] = $helpeAI->getModelIdDefault();
+
+        return new JsonResponse([
+            'total'   => $total,
+            'results' => $instances,
+            'extra'  => $extra,
+            'oql' => $oql
+        ]);
+    }
+
+    /**
+     * Save prompt settings
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     */
+    public function saveAction(Request $request)
+    {
+        $request = $request->request->all();
+        $msg     = $this->get('core.messenger');
+
+        $this->get('orm.manager')
+            ->getDataSet('Settings', 'manager')
+            ->set($request);
+
+        $msg->add(_('Prompt saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Returns the list of prompts as JSON.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @Security("hasPermission('PROMPT_LIST')")
+     */
+    public function promptListAction(Request $request)
     {
         $oql          = $request->query->get('oql', '');
-        $repository   = $this->get('orm.manager')->getRepository($this->entity);
-        $converter    = $this->get('orm.manager')->getConverter($this->entity);
+        $repository   = $this->get('orm.manager')->getRepository('PromptManager');
+        $converter    = $this->get('orm.manager')->getConverter('PromptManager');
         $helperLocale = $this->get('core.helper.locale');
 
         $ids   = [];
@@ -83,10 +188,10 @@ class PromptController extends Controller
      *
      * @Security("hasPermission('PROMPT_CREATE')")
      */
-    public function newAction()
+    public function promptNewAction()
     {
         return new JsonResponse([
-            'extra'  => $this->getExtraData()
+            'extra'  => $this->promptGetExtraData()
         ]);
     }
 
@@ -99,11 +204,11 @@ class PromptController extends Controller
      *
      * @Security("hasPermission('PROMPT_CREATE')")
      */
-    public function saveAction(Request $request)
+    public function promptSaveAction(Request $request)
     {
         $em   = $this->get('orm.manager');
         $msg  = $this->get('core.messenger');
-        $data = $em->getConverter($this->entity)->objectify($request->request->all());
+        $data = $em->getConverter('PromptManager')->objectify($request->request->all());
 
         $prompt = new PromptManager($data);
         $em->persist($prompt);
@@ -112,7 +217,7 @@ class PromptController extends Controller
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
         $response->headers->set(
             'Location',
-            $this->generateUrl('manager_ws_prompt_list')
+            $this->generateUrl('manager_ws_onmai_prompt_list')
         );
 
         return $response;
@@ -127,12 +232,12 @@ class PromptController extends Controller
      *
      * @Security("hasPermission('PROMPT_UPDATE')")
      */
-    public function showAction($id)
+    public function promptShowAction($id)
     {
         $em        = $this->get('orm.manager');
-        $converter = $em->getConverter($this->entity);
-        $item      = $em->getRepository($this->entity)->find($id);
-        $extra     = $this->getExtraData();
+        $converter = $em->getConverter('PromptManager');
+        $item      = $em->getRepository('PromptManager')->find($id);
+        $extra     = $this->promptGetExtraData();
 
         return new JsonResponse([
             'extra' => $extra,
@@ -149,12 +254,12 @@ class PromptController extends Controller
      *
      * @Security("hasPermission('PROMPT_DELETE')")
      */
-    public function deleteAction($id)
+    public function promptDeleteAction($id)
     {
         $em  = $this->get('orm.manager');
         $msg = $this->get('core.messenger');
 
-        $em->remove($em->getRepository($this->entity)->find($id));
+        $em->remove($em->getRepository('PromptManager')->find($id));
         $msg->add(_('Item deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
@@ -169,7 +274,7 @@ class PromptController extends Controller
      *
      * @Security("hasPermission('PROMPT_DELETE')")
      */
-    public function deleteSelectedAction(Request $request)
+    public function promptDeleteSelectedAction(Request $request)
     {
         $ids = $request->request->get('ids', []);
         $msg = $this->get('core.messenger');
@@ -182,7 +287,7 @@ class PromptController extends Controller
         $em  = $this->get('orm.manager');
         $oql = sprintf('id in [%s]', implode(',', $ids));
 
-        $prompts = $em->getRepository($this->entity)->findBy($oql);
+        $prompts = $em->getRepository('PromptManager')->findBy($oql);
 
         $instancesToBan = [];
 
@@ -220,12 +325,12 @@ class PromptController extends Controller
      *
      * @Security("hasPermission('PROMPT_UPDATE')")
      */
-    public function updateAction(Request $request, $id)
+    public function promptUpdateAction(Request $request, $id)
     {
         $em   = $this->get('orm.manager');
         $msg  = $this->get('core.messenger');
-        $data = $em->getConverter($this->entity)->objectify($request->request->all());
-        $item = $em->getRepository($this->entity)->find($id);
+        $data = $em->getConverter('PromptManager')->objectify($request->request->all());
+        $item = $em->getRepository('PromptManager')->find($id);
 
         $item->merge($data);
 
@@ -240,13 +345,13 @@ class PromptController extends Controller
      *
      * @return array Array of template parameters.
      */
-    private function getExtraData()
+    private function promptGetExtraData()
     {
         $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
         $settingOpenai  = [
-            'openai_roles'        => $serviceManager->get('openai_roles') ?? [],
-            'openai_tones'        => $serviceManager->get('openai_tones') ?? [],
-            'openai_instructions' => $serviceManager->get('openai_instructions') ?? []
+            'onmai_roles'        => $serviceManager->get('onmai_roles') ?? [],
+            'onmai_tones'        => $serviceManager->get('onmai_tones') ?? [],
+            'onmai_instructions' => $serviceManager->get('onmai_instructions') ?? []
         ];
         return $settingOpenai;
     }
@@ -260,7 +365,7 @@ class PromptController extends Controller
      *
      * @Security("hasPermission('PROMPT_CREATE')")
      */
-    public function autocompleteAction(Request $request)
+    public function promptAutocompleteAction(Request $request)
     {
         $target   = [];
         $query    = strtolower($request->query->get('query'));
@@ -309,13 +414,13 @@ class PromptController extends Controller
      *
      * @return JsonResponse The response object.
      */
-    public function configAction()
+    public function promptConfigAction()
     {
         $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
         $settingOpenai  = [
-            'openai_roles'        => $serviceManager->get('openai_roles') ?? [],
-            'openai_tones'        => $serviceManager->get('openai_tones') ?? [],
-            'openai_instructions' => $serviceManager->get('openai_instructions') ?? []
+            'onmai_roles'        => $serviceManager->get('onmai_roles') ?? [],
+            'onmai_tones'        => $serviceManager->get('onmai_tones') ?? [],
+            'onmai_instructions' => $serviceManager->get('onmai_instructions') ?? []
         ];
 
         $response = new Response();
@@ -332,7 +437,7 @@ class PromptController extends Controller
      * @return JsonResponse The response object.
      *
      */
-    public function configSaveAction(Request $request)
+    public function promptConfigSaveAction(Request $request)
     {
         $request = $request->request->all();
 
@@ -356,11 +461,11 @@ class PromptController extends Controller
      *
      * @Security("hasPermission('PROMPT_LIST')")
      */
-    public function configDownloadAction()
+    public function promptConfigDownloadAction()
     {
         $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
-        $repository     = $this->get('orm.manager')->getRepository($this->entity);
-        $converter      = $this->get('orm.manager')->getConverter($this->entity);
+        $repository     = $this->get('orm.manager')->getRepository('PromptManager');
+        $converter      = $this->get('orm.manager')->getConverter('PromptManager');
 
         $items = array_map(function ($a) use ($converter) {
             $item = $converter->responsify($a);
@@ -369,16 +474,16 @@ class PromptController extends Controller
         }, $repository->findBy(null, null, 1000));
 
         $settingOpenai = [
-            'openai_roles'        => $serviceManager->get('openai_roles') ?? [],
-            'openai_tones'        => $serviceManager->get('openai_tones') ?? [],
-            'openai_instructions' => $serviceManager->get('openai_instructions') ?? [],
+            'onmai_roles'        => $serviceManager->get('onmai_roles') ?? [],
+            'onmai_tones'        => $serviceManager->get('onmai_tones') ?? [],
+            'onmai_instructions' => $serviceManager->get('onmai_instructions') ?? [],
             'prompts'             => $items
         ];
 
         $response = new JsonResponse($settingOpenai);
 
         $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Content-Disposition', 'attachment; filename=openai_settings_manager.json');
+        $response->headers->set('Content-Disposition', 'attachment; filename=onmai_settings_manager.json');
         $response->headers->set('Cache-Control', 'no-cache');
 
         return $response;
@@ -393,20 +498,19 @@ class PromptController extends Controller
      *
      * @Security("hasPermission('PROMPT_CREATE')")
      */
-    public function configUploadAction(Request $request)
+    public function promptConfigUploadAction(Request $request)
     {
         $em             = $this->get('orm.manager');
-        $repository     = $em->getRepository($this->entity);
+        $repository     = $em->getRepository('PromptManager');
         $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
-        $helperOpenAI   = $this->container->get('core.helper.openai');
+        $helperAI       = $this->container->get('core.helper.ai');
         $jsonSettings   = $request->request->get('config', null);
         $msg            = $this->get('core.messenger');
 
-
         $promptConfigCurrent = [
-            'openai_roles'        => $serviceManager->get('openai_roles') ?? [],
-            'openai_tones'        => $serviceManager->get('openai_tones') ?? [],
-            'openai_instructions' => $serviceManager->get('openai_instructions') ?? []
+            'onmai_roles'        => $serviceManager->get('onmai_roles') ?? [],
+            'onmai_tones'        => $serviceManager->get('onmai_tones') ?? [],
+            'onmai_instructions' => $serviceManager->get('onmai_instructions') ?? []
         ];
 
         $promptsCurrent = $repository->findBy(null, null, 1000);
@@ -416,7 +520,7 @@ class PromptController extends Controller
             $promptsNew      = $promptConfigNew["prompts"];
             unset($promptConfigNew["prompts"]);
 
-            if (!$helperOpenAI->validateJsonStructure($promptConfigNew, $this->map)) {
+            if (!$helperAI->validateJsonStructure($promptConfigNew, $this->map)) {
                 throw new Exception("INVALIDO");
             }
 
@@ -434,7 +538,7 @@ class PromptController extends Controller
             }
 
             foreach ($promptsNew as $p) {
-                $prompt = new PromptManager($em->getConverter($this->entity)->objectify($p));
+                $prompt = new PromptManager($em->getConverter('PromptManager')->objectify($p));
                 $em->persist($prompt);
             }
 

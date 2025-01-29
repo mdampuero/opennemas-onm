@@ -63,11 +63,7 @@ manager_ws_user_group:
     resource: '@ManagerWebServiceBundle/Resources/config/routing/user_group.yml'
     prefix:   /
 
-manager_ws_prompt:
-    resource: '@ManagerWebServiceBundle/Resources/config/routing/prompt.yml'
-    prefix:   /
-
-manager_ws_aimodel:
-    resource: '@ManagerWebServiceBundle/Resources/config/routing/aimodel.yml'
+manager_ws_onmai:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/onmai.yml'
     prefix:   /
 

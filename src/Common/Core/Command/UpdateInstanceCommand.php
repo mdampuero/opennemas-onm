@@ -248,7 +248,7 @@ class UpdateInstanceCommand extends Command
 
         if (in_array("es.openhost.module.openai", $instance->activated_modules)) {
             $this->writePad('- Counting active spent money in 27th');
-            $helperAI   = $this->getContainer()->get('core.helper.openai');
+            $helperAI   = $this->getContainer()->get('core.helper.ai');
             $totalSpent = $helperAI->getSpentMoney();
 
             $instance->ai_spent  = floatval($totalSpent);

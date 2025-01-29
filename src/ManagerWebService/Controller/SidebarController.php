@@ -165,19 +165,19 @@ class SidebarController extends Controller
                         [
                             'name'     => _('Prompts'),
                             'icon'     => 'fa fa-terminal fa-lg',
-                            'route'    => 'manager_prompt_list',
+                            'route'    => 'manager_onmai_prompt_list',
                             'click'    => true,
                         ],
                         [
                             'name'     => _('Instances'),
                             'icon'     => 'fa fa-cubes fa-lg',
-                            'route'    => 'manager_aimodel_list',
+                            'route'    => 'manager_onmai_instances',
                             'click'    => true,
                         ],
                         [
                             'name'     => _('Configs'),
                             'icon'     => 'fa fa-cog fa-lg',
-                            'route'    => 'manager_aimodel_config',
+                            'route'    => 'manager_onmai_config',
                             'click'    => true,
                         ],
                     ]

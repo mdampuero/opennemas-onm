@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  PromptListCtrl
+     * @name  OnmAiPromptListCtrl
      *
      * @requires $controller
      * @requires $location
@@ -20,7 +20,7 @@
      * @description
      *   Handles all actions in prompt.txt listing.
      */
-    .controller('PromptListCtrl', [
+    .controller('OnmAiPromptListCtrl', [
       '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
       function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
@@ -30,7 +30,7 @@
         }));
 
         /**
-         * @memberOf PromptListCtrl
+         * @memberOf OnmAiPromptListCtrl
          *
          * @description
          *   The visible table columns.
@@ -43,7 +43,7 @@
         };
 
         /**
-         * @memberOf PromptListCtrl
+         * @memberOf OnmAiPromptListCtrl
          *
          * @description
          *   The criteria to search.
@@ -54,7 +54,7 @@
 
         /**
          * @function delete
-         * @memberOf PromptListCtrl
+         * @memberOf OnmAiPromptListCtrl
          *
          * @description
          *   Confirm delete action.
@@ -63,7 +63,7 @@
          */
         $scope.delete = function(item) {
           var modal = $uibModal.open({
-            templateUrl: '/managerws/template/prompt:modal.' + appVersion + '.tpl',
+            templateUrl: '/managerws/template/onmai:prompt:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
@@ -73,7 +73,7 @@
               success: function() {
                 return function(modalWindow) {
                   var route = {
-                    name: 'manager_ws_prompt_delete',
+                    name: 'manager_ws_onmai_prompt_delete',
                     params: { id: item.id }
                   };
 
@@ -98,14 +98,14 @@
 
         /**
          * @function deleteSelected
-         * @memberOf PromptListCtrl
+         * @memberOf OnmAiPromptListCtrl
          *
          * @description
          *   Confirm delete action.
          */
         $scope.deleteSelected = function() {
           var modal = $uibModal.open({
-            templateUrl: '/managerws/template/prompt:modal.' + appVersion + '.tpl',
+            templateUrl: '/managerws/template/onmai:prompt:modal.' + appVersion + '.tpl',
             backdrop: 'static',
             controller: 'modalCtrl',
             resolve: {
@@ -114,7 +114,7 @@
               },
               success: function() {
                 return function(modalWindow) {
-                  var route = 'manager_ws_prompt_batch_delete';
+                  var route = 'manager_ws_onmai_prompt_batch_delete';
                   var data  = { ids: $scope.selected.items };
 
                   http.delete(route, data).then(function(response) {
@@ -139,7 +139,7 @@
 
         /**
          * @function refresh
-         * @memberOf PromptListCtrl
+         * @memberOf OnmAiPromptListCtrl
          *
          * @description
          *   Reloprompt the list.
@@ -155,7 +155,7 @@
 
           var oql   = oqlEncoder.getOql($scope.criteria);
           var route = {
-            name: 'manager_ws_prompt_list',
+            name: 'manager_ws_onmai_prompt_list',
             params: { oql: oql }
           };
 
@@ -174,7 +174,7 @@
 
         /**
          * @function resetFilters
-         * @memberOf PromptListCtrl
+         * @memberOf OnmAiPromptListCtrl
          *
          * @description
          *   Resets all filters to the initial value.

@@ -128,11 +128,11 @@
             prompt: ''
           };
 
-          $scope.settings.openai_roles.push(role);
+          $scope.settings.onmai_roles.push(role);
         };
 
         $scope.removeRole = function(index) {
-          $scope.settings.openai_roles.splice(index, 1);
+          $scope.settings.onmai_roles.splice(index, 1);
         };
 
         $scope.addTone = function() {
@@ -141,11 +141,11 @@
             description: ''
           };
 
-          $scope.settings.openai_tones.push(tone);
+          $scope.settings.onmai_tones.push(tone);
         };
 
         $scope.removeTone = function(index) {
-          $scope.settings.openai_tones.splice(index, 1);
+          $scope.settings.onmai_tones.splice(index, 1);
         };
 
         $scope.addInstruction = function() {
@@ -154,11 +154,11 @@
             value: ''
           };
 
-          $scope.settings.openai_instructions.push(instruction);
+          $scope.settings.onmai_instructions.push(instruction);
         };
 
         $scope.removeInstruction = function(index) {
-          $scope.settings.openai_instructions.splice(index, 1);
+          $scope.settings.onmai_instructions.splice(index, 1);
         };
 
         $scope.$watch('settings.openai_credentials.apikey', function(ov) {

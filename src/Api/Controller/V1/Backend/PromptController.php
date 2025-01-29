@@ -57,7 +57,7 @@ class PromptController extends ApiController
      */
     protected function getExtraData()
     {
-        $helperOpenAI = $this->get('core.helper.openai');
+        $helperOpenAI = $this->get('core.helper.ai');
         return [
             'inputTypes' => $helperOpenAI->getInputTypes(),
             'tones' => $helperOpenAI->getTones(),

@@ -271,8 +271,18 @@ services:
         arguments: [ '@service_container' ]
         public:     true
 
+    core.helper.ai:
+        class:     Common\Core\Component\Helper\AIHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.helper.openai:
         class:     Common\Core\Component\Helper\OpenAIHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.gemini:
+        class:     Common\Core\Component\Helper\GeminiHelper
         arguments: [ '@service_container' ]
         public:    true
 
