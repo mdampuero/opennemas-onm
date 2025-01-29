@@ -17,6 +17,22 @@
     .controller('SitemapCtrl', [
       '$scope', '$uibModal', 'http', 'messenger',
       function($scope, $uibModal, http, messenger) {
+        $scope.item = {
+          perpage: 500,
+          total: 100,
+          limitdays: 2,
+          album: 0,
+          article: 0,
+          event: 0,
+          photo: 0,
+          kiosko: 0,
+          letter: 0,
+          opinion: 0,
+          poll: 0,
+          tag: 0,
+          video: 0,
+        };
+
         /**
          * @memberOf SitemapCtrl
          * @function generateYears
@@ -76,7 +92,7 @@
         };
 
         return http.get(route).then(function(response) {
-          $scope.item = response.data;
+          $scope.item = Object.assign({}, $scope.item, response.data);
         }, function() {
           $scope.item = {};
         });
