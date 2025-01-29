@@ -32,6 +32,11 @@ class TagValidator extends Validator
         $locales = $this->container->get('core.locale')
             ->getAvailableLocales('frontend');
 
+        // Tag to long
+        if (strlen($item->slug) > 60 || strlen($item->name) > 60) {
+            throw new InvalidArgumentException(_('Tag is too long. Maximum 60 characters.'), 400);
+        }
+
         // Locale invalid
         if (!empty($item->locale)
             && !in_array($item->locale, array_keys($locales))

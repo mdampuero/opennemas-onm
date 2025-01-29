@@ -171,7 +171,7 @@
         </div>
         <div class="form-group">
           <label class="form-label" for="newsletter_footer">
-            {t}Added text to newsletter footer{/t}
+            {t}Text to add to the newsletter footer{/t}
           </label>
           <div class="controls">
             <textarea class="form-control" id="newsletter_footer" name="newsletter_footer" ng-model="settings.newsletter_footer" onm-editor onm-editor-preset="simple"></textarea>
