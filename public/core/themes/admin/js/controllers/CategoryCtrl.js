@@ -25,6 +25,7 @@
         $scope.item = {
           description:  '',
           seo_title:    '',
+          header_1:     '',
           parent_id:    null
         };
 
