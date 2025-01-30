@@ -85,23 +85,7 @@
       {t}Contents{/t}
     </label>
   </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-articles" checklist-model="columns.selected" checklist-value="'articles'" type="checkbox">
-    <label for="checkbox-articles">
-      {t}Articles{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-comments" checklist-model="columns.selected" checklist-value="'comments'" type="checkbox">
-    <label for="checkbox-comments">
-      {t}Comments{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-opinions" checklist-model="columns.selected" checklist-value="'opinions'" type="checkbox">
-    <label for="checkbox-opinions">
-      {t}Opinions{/t}
-    </label>
+  <div class="checkbox column-filters-checkbox">cog
   </div>
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-static-pages" checklist-model="columns.selected" checklist-value="'static_pages'" type="checkbox">

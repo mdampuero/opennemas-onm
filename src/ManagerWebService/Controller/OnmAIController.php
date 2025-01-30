@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Common\Model\Entity\PromptManager;
 use Symfony\Component\HttpFoundation\Response;
 use Exception;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class OnmAIController extends Controller
 {
@@ -119,11 +120,47 @@ class OnmAIController extends Controller
             'results' => $instances,
             'extra'  => [
                 'model'   => $helpeAI->getModelDefault(),
+                'models'  => $helpeAI->getModels(),
                 'service' => 'onmai'
             ],
             'oql' => $oql
         ]);
     }
+
+    public function instancesSaveAction(Request $request)
+    {
+        $request = $request->query->all();
+        $msg     = $this->get('core.messenger');
+
+        $id       = $request['id'] ?? 0;
+        $model    = $request['template']['onmai_config']['model'] ?? '';
+        $em       = $this->get('orm.manager');
+        $instance = $em->getRepository('Instance')->find($id);
+
+        /**
+         * SAVE MANAGER
+         */
+        $aiConfig            = $instance->ai_config;
+        $aiConfig['model']   = $model;
+        $instance->ai_config = $aiConfig;
+        $em->persist($instance);
+
+        /**
+         * SAVE INSTANCE SETTINGS
+         */
+        if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+            throw new AccessDeniedException();
+        }
+        $this->get('core.loader')->configureInstance($instance);
+        $onmai_settings = $em->getDataSet('Settings', 'instance')->get('onmai_onmai_settings', []);
+        $onmai_settings['model'] = $model;
+        $em->getDataSet('Settings', 'instance')->set('onmai_settings', $onmai_settings);
+
+        $msg->add(_('Prompt saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
 
     /**
      * Save prompt settings

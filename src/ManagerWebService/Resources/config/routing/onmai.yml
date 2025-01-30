@@ -19,6 +19,13 @@ manager_ws_onmai_instances:
     options:
         expose: true
 
+manager_ws_onmai_instances_save:
+    path:     /onmai/intances/save
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:instancesSave }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
 manager_ws_onmai_prompt_list:
     path:     /onmai/prompt
     defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptList }

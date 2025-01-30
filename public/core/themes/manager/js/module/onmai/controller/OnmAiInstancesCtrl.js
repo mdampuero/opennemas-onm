@@ -22,7 +22,7 @@
       function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
-          $scope:   $scope,
+          $scope: $scope,
           $timeout: $timeout
         }));
 
@@ -79,7 +79,7 @@
             }
           });
 
-          var oql   = oqlEncoder.getOql($scope.criteria);
+          var oql = oqlEncoder.getOql($scope.criteria);
           var route = {
             name: 'manager_ws_onmai_instances',
             params: { oql: oql }
@@ -89,9 +89,9 @@
 
           return http.get(route).then(function(response) {
             $scope.loading = 0;
-            $scope.items   = response.data.results;
-            $scope.total   = response.data.total;
-            $scope.extra   = response.data.extra;
+            $scope.items = response.data.results;
+            $scope.total = response.data.total;
+            $scope.extra = response.data.extra;
 
             $scope.filteredItems = $scope.items;
 
@@ -125,9 +125,57 @@
         }
 
         oqlDecoder.configure({
-          ignore: [ 'internal_name', 'contact_mail', 'domains', 'settings' ]
+          ignore: ['internal_name', 'contact_mail', 'domains', 'settings']
         });
 
+        $scope.openOnmAISettings = function(item) {
+          let currentModel = '';
+
+          if (typeof item.ai_config.model !== 'undefined') {
+            currentModel = item.ai_config.model;
+          }
+          var modal = $uibModal.open({
+            templateUrl: '/managerws/template/onmai:modalOnmAISettings.' + appVersion + '.tpl',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  onmai_config: {
+                    model: currentModel
+                  },
+                  models: $scope.extra.models,
+                  model: $scope.extra.model,
+                };
+              },
+              success: function() {
+                return function(modalWindow, template) {
+                  var route = {
+                    name: 'manager_ws_onmai_instances_save',
+                    params: {
+                      id: item.id,
+                      template: template
+                    }
+                  };
+
+                  http.put(route).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            messenger.post(response.data);
+
+            if (response.success) {
+              $scope.list();
+            }
+          });
+        };
         $scope.list();
       }
     ]);

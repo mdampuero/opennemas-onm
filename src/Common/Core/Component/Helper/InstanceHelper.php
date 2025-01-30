@@ -379,7 +379,6 @@ class InstanceHelper
 
             $fetchAssoc    = $this->conn->fetchAssoc($sql);
             $onmaiSettings = PhpSerializer::unserialize($fetchAssoc['value']);
-
             return [
                 'model'   => $onmaiSettings['model'] ?? '',
                 'service' => $onmaiSettings['service'] ?? 'onmai',
