@@ -334,7 +334,7 @@ $menuXml = [
         'badge'       => '<span class="badge badge-primary pull-left m-t-10 m-r-5">' . _('NEW') . '</span> ',
         'icon'        => 'fa fa-bell',
         'link'        => '#',
-        'module_name' => 'es.openhost.module.openai',
+        'module_name' => 'es.openhost.module.onmai',
         'privilege'   => 'ADMIN',
         'submenu' => [
             [
@@ -342,7 +342,7 @@ $menuXml = [
                 'title'       => _('Dashboard'),
                 'icon'        => 'fa fa-tachometer',
                 'link'        => url('backend_onmai_dashboard'),
-                'module_name' => 'es.openhost.module.openai',
+                'module_name' => 'es.openhost.module.onmai',
                 'privilege'   => 'ADMIN'
             ],
             [
@@ -350,7 +350,7 @@ $menuXml = [
                 'title'       => _('Prompts'),
                 'icon'        => 'fa fa-terminal fa-lg',
                 'link'        => url('backend_onmai_prompts_list'),
-                'module_name' => 'es.openhost.module.openai',
+                'module_name' => 'es.openhost.module.onmai',
                 'privilege'   => 'ADMIN'
             ],
             [
@@ -358,7 +358,7 @@ $menuXml = [
                 'title'       => _('Configuration'),
                 'icon'        => 'fa fa-cog fa-lg',
                 'link'        => url('backend_onmai_config'),
-                'module_name' => 'es.openhost.module.openai',
+                'module_name' => 'es.openhost.module.onmai',
                 'privilege'   => 'ADMIN'
             ]
         ]

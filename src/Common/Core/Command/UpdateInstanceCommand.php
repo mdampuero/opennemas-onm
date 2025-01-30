@@ -246,7 +246,7 @@ class UpdateInstanceCommand extends Command
             ), true);
         }
 
-        if (in_array("es.openhost.module.openai", $instance->activated_modules)) {
+        if (in_array("es.openhost.module.onmai", $instance->activated_modules)) {
             $this->writePad('- Counting active spent money in 27th');
             $helperAI   = $this->getContainer()->get('core.helper.ai');
             $totalSpent = $helperAI->getSpentMoney();

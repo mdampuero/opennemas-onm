@@ -24,7 +24,7 @@ class OnmAIController extends BackendController
      *
      * @var string
      */
-    protected $extension = 'es.openhost.module.openai';
+    protected $extension = 'es.openhost.module.onmai';
 
     /**
      * The list of permissions for every action.

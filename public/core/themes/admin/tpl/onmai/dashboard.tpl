@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="content">
-      {if !in_array("es.openhost.module.openai", $app.instance->activated_modules)}
+      {if !in_array("es.openhost.module.onmai", $app.instance->activated_modules)}
         <div class="grid simple m-b-2">
           <div class="grid-body bg-transparent">
             <div class="bg-white onm-shadow p-15">

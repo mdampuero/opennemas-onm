@@ -55,7 +55,7 @@
         $scope.criteria = {
           epp: 25,
           page: 1,
-          activated_modules: 'es.openhost.module.openai'
+          activated_modules: 'es.openhost.module.onmai'
         };
 
         /**
@@ -108,7 +108,7 @@
          *   Resets all filters to the initial value.
          */
         $scope.resetFilters = function() {
-          $scope.criteria = { epp: 25, page: 1, activated_modules: 'es.openhost.module.openai' };
+          $scope.criteria = { epp: 25, page: 1, activated_modules: 'es.openhost.module.onmai' };
           $scope.list();
         };
 

@@ -22,7 +22,7 @@ class PromptController extends ApiController
     /**
      * {@inheritdoc}
      */
-    protected $extension = 'es.openhost.module.openai';
+    protected $extension = 'es.openhost.module.onmai';
 
     /**
      * {@inheritdoc}

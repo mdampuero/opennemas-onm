@@ -3,7 +3,7 @@
     <div class="pull-left">{$title}</div>
   </label>
   {if $AI}
-    {is_module_activated name="es.openhost.module.openai"}
+    {is_module_activated name="es.openhost.module.onmai"}
       <div class="pull-right m-l-5 m-r-5">
         <span class="onmai-icon-textarea pointer" ng-click="onmIAModal('{$field}','{$AIFieldType}','{$title}')">
         {include file="common/component/icon/ai.tpl" }
