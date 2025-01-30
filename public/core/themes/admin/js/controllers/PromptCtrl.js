@@ -24,12 +24,12 @@
          * @inheritdoc
          */
         $scope.routes = {
-          createItem:   'api_v1_backend_openai_prompt_create_item',
-          getItem:      'api_v1_backend_openai_prompt_get_item',
-          list:         'backend_openai_prompts_list',
-          redirect:     'backend_openai_prompts_list',
-          saveItem:     'api_v1_backend_openai_prompt_save_item',
-          updateItem:   'api_v1_backend_openai_prompt_update_item'
+          createItem:   'api_v1_backend_onmai_prompt_create_item',
+          getItem:      'api_v1_backend_onmai_prompt_get_item',
+          list:         'backend_onmai_prompts_list',
+          redirect:     'backend_onmai_prompts_list',
+          saveItem:     'api_v1_backend_onmai_prompt_save_item',
+          updateItem:   'api_v1_backend_onmai_prompt_update_item'
         };
       }
     ]);

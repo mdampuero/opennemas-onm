@@ -19,7 +19,7 @@
 {block name="primaryActions"}
   {acl isAllowed="PROMPT_CREATE"}
     <li class="quicklinks">
-      <a class="btn btn-loading btn-success text-uppercase" href="[% routing.generate('backend_openai_prompt_create') %]">
+      <a class="btn btn-loading btn-success text-uppercase" href="[% routing.generate('backend_onmai_prompt_create') %]">
         <i class="fa fa-plus m-r-5"></i>
         {t}Create{/t}
       </a>
@@ -51,7 +51,7 @@
   </li>
   <li class="hidden-xs m-r-10 ng-cloak quicklinks" >
     <ui-select name="mode" ng-change="onChangeRouteList()" class="form-control" theme="select2" ng-model="routes.getList" search-enabled="false" required
-      ng-init="options = [ { name: '{t}Own prompts{/t}', key: 'api_v1_backend_openai_prompt_get_list'}, { name: '{t}System prompts{/t}', key: 'api_v1_backend_openai_prompt_get_list_manager'} ]">
+      ng-init="options = [ { name: '{t}Own prompts{/t}', key: 'api_v1_backend_onmai_prompt_get_list'}, { name: '{t}System prompts{/t}', key: 'api_v1_backend_onmai_prompt_get_list_manager'} ]">
       <ui-select-match>
         [% $select.selected.name %]
       </ui-select-match>

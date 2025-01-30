@@ -114,15 +114,13 @@ class OnmAIController extends Controller
             return $converter->responsify($a->getData());
         }, $instances);
 
-        $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
-
-        $extra          = $serviceManager->get('openai_settings') ?? [];
-        $extra['model'] = $helpeAI->getModelIdDefault();
-
         return new JsonResponse([
             'total'   => $total,
             'results' => $instances,
-            'extra'  => $extra,
+            'extra'  => [
+                'model'   => $helpeAI->getModelDefault(),
+                'service' => 'onmai'
+            ],
             'oql' => $oql
         ]);
     }

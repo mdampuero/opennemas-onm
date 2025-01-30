@@ -15,7 +15,7 @@
       <label ng-if="mode == 'Edit'">[% template.AIFieldTitle %]</label>
       <label ng-if="mode == 'New'">{t}Enter a topic{/t}</label>
       <input ng-if="displayMode == 'input' || mode == 'New'" ng-disabled="mode == 'Edit'" type="text" class="form-control input-lg" ng-model="template.input" ng-change="updateUserPrompt()" placeholder="{t}Ex: Benefits of AI-powered CMS{/t}">
-      <div ng-if="displayMode == 'textarea' && mode == 'Edit'" class="openai-wrapper-text input-lg" ng-bind-html="template.input"></div>
+      <div ng-if="displayMode == 'textarea' && mode == 'Edit'" class="onmai-wrapper-text input-lg" ng-bind-html="template.input"></div>
     </div>
     <div class="form-group">
       <label>{t}Suggested prompts{/t}</label>
@@ -82,7 +82,7 @@
         </button>
         <span class="m-t-10 label label-info pull-right m-l-5">[% countWords(template.suggested_text) %] {t}words{/t}, [% template.suggested_text.length %] {t}characters{/t}</span>
         <div class="clearfix"></div>
-        <div class="openai-wrapper-text" ng-bind-html="template.suggested_text"></div>
+        <div class="onmai-wrapper-text" ng-bind-html="template.suggested_text"></div>
       </ng-container>
       <ng-container ng-if="activeText == 'original'">
         <label class="m-t-10 pull-left">{t}Original text{/t}</label>
@@ -92,7 +92,7 @@
         </button>
         <span class="m-t-10 label label-info pull-right m-l-5">[% countWords(template.input) %] {t}words{/t}, [% template.input.length %] {t}characters{/t}</span>
         <div class="clearfix"></div>
-        <div class="openai-wrapper-text" ng-bind-html="template.input"></div>
+        <div class="onmai-wrapper-text" ng-bind-html="template.input"></div>
       </ng-container>
     </ng-container>
     <p>

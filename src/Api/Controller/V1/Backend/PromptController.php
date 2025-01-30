@@ -27,7 +27,7 @@ class PromptController extends ApiController
     /**
      * {@inheritdoc}
      */
-    protected $getItemRoute = 'api_v1_backend_openai_prompt_get_item';
+    protected $getItemRoute = 'api_v1_backend_onmai_prompt_get_item';
 
     /**
      * {@inheritdoc}
@@ -57,12 +57,10 @@ class PromptController extends ApiController
      */
     protected function getExtraData()
     {
-        $helperOpenAI = $this->get('core.helper.ai');
+        $helperAI = $this->get('core.helper.ai');
         return [
-            'inputTypes' => $helperOpenAI->getInputTypes(),
-            'tones' => $helperOpenAI->getTones(),
-            'roles' => $helperOpenAI->getRoles(),
-            'modes' => $helperOpenAI->getModes(),
+            'tones' => $helperAI->getTones(),
+            'roles' => $helperAI->getRoles(),
         ];
     }
 

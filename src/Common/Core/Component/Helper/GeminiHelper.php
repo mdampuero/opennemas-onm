@@ -2,71 +2,62 @@
 
 namespace Common\Core\Component\Helper;
 
+use Exception;
 use GuzzleHttp\Client;
 
-/**
- * Helper class to retrieve AI data and manage Gemini-related configurations.
- */
 class GeminiHelper
 {
     /**
-     * The HTTP client for making API requests.
+     * HTTP client instance for making API requests.
      *
      * @var Client
      */
     protected $client;
 
     /**
-     * The service container for dependency injection.
+     * Dependency injection container.
      *
-     * @var ServiceContainer
+     * @var mixed
      */
     protected $container;
 
     /**
-     * Maximum number of retries for API requests.
+     * Maximum number of retry attempts in case of failure.
      *
      * @var int
      */
     protected $maxRetries = 3;
 
     /**
-     * Delay in seconds between retries.
+     * Delay (in seconds) between retry attempts.
      *
      * @var int
      */
     protected $retryDelay = 2;
 
     /**
-     * Request timeout in seconds.
+     * Request timeout (in seconds).
      *
      * @var int
      */
     protected $timeout = 120;
 
     /**
-     * The base endpoint URL for the Gemini API.
+     * Base endpoint for the API.
      *
      * @var string
      */
     protected $baseEndpoint = 'https://generativelanguage.googleapis.com/';
 
     /**
-     * The chat endpoint path for the Gemini API.
+     * Chat model endpoint for API requests.
      *
      * @var string
      */
     protected $endpointChat = 'v1beta/models/';
 
     /**
-     * The API key for authentication with the Gemini service.
-     *
-     * @var string
-     */
-    protected $apiKey = 'AIzaSyDO2jmiEYuYz69oGMRroaFdzlfPMl2o064';
-
-    /**
-     * Safety settings configuration for the API.
+     * Safety settings configuration for content moderation.
      *
      * @var array
      */
@@ -90,21 +81,21 @@ class GeminiHelper
     ];
 
     /**
-     * Default settings for the API requests.
+     * Default settings for text generation.
      *
      * @var array
      */
     protected $defaultSettings = [
         'temperature'       => 1,
-        'max_tokens'        => 1000,
+        'max_tokens'        => 10000,
         'frequency_penalty' => 0.9,
         'presence_penalty'  => 0.9
     ];
 
     /**
-     * Initializes the GeminiHelper service.
+     * Constructor to initialize the helper with a dependency container.
      *
-     * @param Container $container The service container.
+     * @param mixed $container Dependency injection container.
      */
     public function __construct($container)
     {
@@ -115,9 +106,9 @@ class GeminiHelper
     }
 
     /**
-     * Get the safety settings configuration.
+     * Retrieves the safety settings for content moderation.
      *
-     * @return array The safety settings.
+     * @return array Safety settings.
      */
     public function getSafetySetting()
     {
@@ -125,11 +116,11 @@ class GeminiHelper
     }
 
     /**
-     * Sends a message to the Gemini API.
+     * Sends a message request to the API and handles retries in case of failures.
      *
-     * @param array $data The data to be sent.
-     * @param array $struct The structure to normalize the response.
-     * @return array The normalized response.
+     * @param array $data Request data including model and API key.
+     * @param array $struct Structure to store the response.
+     * @return array Response structure including results or error details.
      */
     public function sendMessage($data, $struct)
     {
@@ -163,20 +154,10 @@ class GeminiHelper
     }
 
     /**
-     * Generates the payload structure for an API request.
+     * Generates the payload structure for the API request.
      *
-     * This method creates a structured payload array based on the provided data.
-     * It includes the contents to send, generation configuration settings, and safety settings.
-     *
-     * @param array $data The input data containing:
-     *  - `messages` (array): An array where the message content is extracted from index 1.
-     *  - `settings` (array): Contains configuration options like:
-     *      - `temperature` (float): Determines the randomness of the generation.
-     *      - `max_tokens` (int): The maximum number of tokens to generate.
-     *  - `top_p` (float|null): The nucleus sampling parameter (default: 0.9).
-     *  - `top_k` (int|null): The top-k sampling parameter (default: 1).
-     *
-     * @return array The payload array structured for the API request.
+     * @param array $data Request parameters including messages and settings.
+     * @return array Structured payload for API request.
      */
     public function generatePayload($data = [])
     {
@@ -193,7 +174,7 @@ class GeminiHelper
             'generationConfig' => [
                 'temperature' => (float) $data['settings']['temperature'],
                 'top_p' => $data['top_p'] ?? 0.9,
-                'top_k' => $data['top_k'] ?? 1,
+                'top_k' => $data['top_k'] ?? 60,
                 'maxOutputTokens' => (int) $data['settings']['max_tokens'],
             ],
             'safetySettings' => $this->getSafetySetting()
@@ -201,11 +182,11 @@ class GeminiHelper
     }
 
     /**
-     * Normalizes the API response.
+     * Normalizes the API response to extract relevant information.
      *
-     * @param array $originalResponse The original API response.
-     * @param array $struct The structure to populate with normalized data.
-     * @return array The normalized response.
+     * @param array $originalResponse Raw API response.
+     * @param array $struct Structure to store the normalized response.
+     * @return array Normalized response structure.
      */
     public function normalizeResponse($originalResponse, $struct)
     {
@@ -227,9 +208,9 @@ class GeminiHelper
     }
 
     /**
-     * Get the default settings for API requests.
+     * Retrieves the default settings for text generation.
      *
-     * @return array The default settings.
+     * @return array Default generation settings.
      */
     public function getDefaultSettings()
     {
@@ -237,21 +218,9 @@ class GeminiHelper
     }
 
     /**
-     * Set the default settings for API requests.
+     * Retrieves the maximum number of retry attempts.
      *
-     * @param array $defaultSettings The new default settings.
-     * @return self
-     */
-    public function setDefaultSettings($defaultSettings)
-    {
-        $this->defaultSettings = $defaultSettings;
-        return $this;
-    }
-
-    /**
-     * Get the maximum number of retries for API requests.
-     *
-     * @return int The maximum retries.
+     * @return int Maximum retry count.
      */
     public function getMaxRetries()
     {
@@ -259,9 +228,9 @@ class GeminiHelper
     }
 
     /**
-     * Get the timeout value for API requests.
+     * Retrieves the request timeout duration.
      *
-     * @return int The timeout in seconds.
+     * @return int Timeout in seconds.
      */
     public function getTimeout()
     {

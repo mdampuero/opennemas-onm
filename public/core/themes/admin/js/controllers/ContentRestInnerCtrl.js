@@ -547,15 +547,15 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       return false;
     };
 
-    $scope.openIAModal = function(field, AIFieldType, AIFieldTitle) {
+    $scope.onmIAModal = function(field, AIFieldType, AIFieldTitle) {
       const input = field in $scope ? $scope[field] : $scope.item[field];
       const locale = $scope.config.locale && $scope.config.locale.selected ? $scope.config.locale.slugs[$scope.config.locale.selected] : 'default';
 
       $uibModal.open({
-        templateUrl: 'modal-openai',
+        templateUrl: 'modal-onmai',
         backdrop: 'static',
-        windowClass: 'modal-openai',
-        controller: 'OpenAIModalCtrl',
+        windowClass: 'modal-onmai',
+        controller: 'OnmAIModalCtrl',
         resolve: {
           template: function() {
             return {

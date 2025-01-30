@@ -28,11 +28,11 @@
          * @type {Object}
          */
         $scope.routes = {
-          deleteItem: 'api_v1_backend_openai_prompt_delete_item',
-          deleteList: 'api_v1_backend_openai_prompt_delete_list',
-          getList:    'api_v1_backend_openai_prompt_get_list',
-          saveItem:   'api_v1_backend_openai_prompt_save_item',
-          updateItem: 'api_v1_backend_openai_prompt_update_item',
+          deleteItem: 'api_v1_backend_onmai_prompt_delete_item',
+          deleteList: 'api_v1_backend_onmai_prompt_delete_list',
+          getList:    'api_v1_backend_onmai_prompt_get_list',
+          saveItem:   'api_v1_backend_onmai_prompt_save_item',
+          updateItem: 'api_v1_backend_onmai_prompt_update_item',
         };
 
         /**
@@ -55,7 +55,7 @@
         };
 
         $scope.isSelectable = function() {
-          return $scope.routes.getList === 'api_v1_backend_openai_prompt_get_list';
+          return $scope.routes.getList === 'api_v1_backend_onmai_prompt_get_list';
         };
 
         $scope.$watch('routes.getList', function(nv, ov) {

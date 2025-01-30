@@ -24,7 +24,7 @@
   {/if}
   {if $AI}
     {is_module_activated name="es.openhost.module.openai"}
-      <span class="form-status-item pointer" ng-click="openIAModal('{$iField}','{$AIFieldType}','{$iTitle}')">
+      <span class="form-status-item pointer" ng-click="onmIAModal('{$iField}','{$AIFieldType}','{$iTitle}')">
         {include file="common/component/icon/ai.tpl" }
       </span>
     {/is_module_activated}

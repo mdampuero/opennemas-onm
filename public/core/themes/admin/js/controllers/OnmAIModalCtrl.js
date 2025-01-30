@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  OpenAIModalCtrl
+     * @name  OnmAIModalCtrl.js
      *
      * @requires $uibModalInstance
      * @requires $scope
@@ -17,12 +17,12 @@
      * @description
      *   Controller for News Agency listing.
      */
-    .controller('OpenAIModalCtrl', [
+    .controller('OnmAIModalCtrl', [
       '$uibModalInstance', '$scope', '$q', 'routing', 'success', 'template', 'http', '$timeout', 'oqlEncoder', 'messenger',
       function($uibModalInstance, $scope, $q, routing, success, template, http, $timeout, oqlEncoder, messenger) {
         $scope.routes = {
-          generateText: 'api_v1_backend_openai_generate',
-          saveTokens: 'api_v1_backend_openai_tokens',
+          generateText: 'api_v1_backend_onmai_generate',
+          saveTokens: 'api_v1_backend_onmai_tokens',
         };
 
         $scope.last_token_usage        = 0;
@@ -40,7 +40,7 @@
 
         /**
          * @function init
-         * @memberOf OpenAIModalCtrl
+         * @memberOf OnmAIModalCtrl.js
          *
          * @description
          *   Initializes the modal with default criteria and fetches a list of prompts from the server.
@@ -61,11 +61,11 @@
 
           var oqlQuery = oqlEncoder.getOql($scope.criteria);
 
-          http.get({ name: 'api_v1_backend_openai_prompt_get_list', params: { oql: oqlQuery } })
+          http.get({ name: 'api_v1_backend_onmai_prompt_get_list', params: { oql: oqlQuery } })
             .then(function(response) {
               $scope.prompts = response.data.items;
               $scope.extra = response.data.extra;
-              http.get({ name: 'api_v1_backend_openai_prompt_get_list_manager', params: { oql: oqlQuery } })
+              http.get({ name: 'api_v1_backend_onmai_prompt_get_list_manager', params: { oql: oqlQuery } })
                 .then(function(response) {
                   $scope.prompts = $scope.prompts.concat(response.data.items);
                 })
@@ -80,7 +80,7 @@
 
         /**
          * @function continue
-         * @memberOf OpenAIModalCtrl
+         * @memberOf OnmAIModalCtrl.js
          *
          * @description
          *   Proceeds to the next step in the modal's workflow by calling `generate` or `confirm`.
@@ -95,7 +95,7 @@
 
         /**
          * @function generate
-         * @memberOf OpenAIModalCtrl
+         * @memberOf OnmAIModalCtrl.js
          *
          * @description
          *   Sends a request to generate suggested text based on user input and updates the template with the result.
@@ -128,7 +128,7 @@
 
         /**
          * @function close
-         * @memberOf OpenAIModalCtrl
+         * @memberOf OnmAIModalCtrl.js
          *
          * @description
          *   Closes the modal, optionally returning a response.
@@ -187,7 +187,7 @@
 
         /**
          * @function dismiss
-         * @memberOf OpenAIModalCtrl
+         * @memberOf OnmAIModalCtrl.js
          *
          * @description
          *   Dismisses the modal without returning any specific response.
@@ -198,7 +198,7 @@
 
         /**
          * @function back
-         * @memberOf OpenAIModalCtrl
+         * @memberOf OnmAIModalCtrl.js
          *
          * @description
          *   Returns to the first step in the modal workflow.
@@ -209,7 +209,7 @@
 
         /**
          * @function $on('$destroy')
-         * @memberOf OpenAIModalCtrl
+         * @memberOf OnmAIModalCtrl.js
          *
          * @description
          *   Cleans up the template data when the modal is destroyed.
@@ -220,7 +220,7 @@
 
         /**
          * @function setActiveText
-         * @memberOf OpenAIModalCtrl
+         * @memberOf OnmAIModalCtrl.js
          *
          * @description
          *   Sets the active text type (e.g., "suggested") and updates the template's response with the selected text.

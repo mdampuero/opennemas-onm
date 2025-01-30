@@ -338,26 +338,26 @@ $menuXml = [
         'privilege'   => 'ADMIN',
         'submenu' => [
             [
-                'id'          => 'openai_dashboard',
+                'id'          => 'onmai_dashboard',
                 'title'       => _('Dashboard'),
                 'icon'        => 'fa fa-tachometer',
-                'link'        => url('backend_openai_dashboard'),
+                'link'        => url('backend_onmai_dashboard'),
                 'module_name' => 'es.openhost.module.openai',
                 'privilege'   => 'ADMIN'
             ],
             [
-                'id'          => 'openai_promts',
+                'id'          => 'onmai_promts',
                 'title'       => _('Prompts'),
                 'icon'        => 'fa fa-terminal fa-lg',
-                'link'        => url('backend_openai_prompts_list'),
+                'link'        => url('backend_onmai_prompts_list'),
                 'module_name' => 'es.openhost.module.openai',
                 'privilege'   => 'ADMIN'
             ],
             [
-                'id'          => 'openai_config',
+                'id'          => 'onmai_config',
                 'title'       => _('Configuration'),
                 'icon'        => 'fa fa-cog fa-lg',
-                'link'        => url('backend_openai_config'),
+                'link'        => url('backend_onmai_config'),
                 'module_name' => 'es.openhost.module.openai',
                 'privilege'   => 'ADMIN'
             ]

@@ -291,5 +291,130 @@
         </div>
       </ng-container>
     </uib-tab>
+    <uib-tab heading="{t}DeepSeek{/t}" ng-click="selectTab('deepseek')">
+      <ng-container>
+        <h4>{t}API Key{/t}</h4>
+        <div class="row m-t-15">
+          <div class="controls col-md-12 m-b-10">
+            <input class="form-control" ng-model="onmai_settings.engines.deepseek.apiKey" type="text">
+          </div>
+        </div>
+        <h4>{t}Settings{/t}</h4>
+        <div class="row m-t-15">
+          <div class="controls col-xs-12 col-md-3 m-b-10">
+            <label>{t}AI 'Temperature' param{/t}  <i class="fa fa-info-circle text-info" uib-tooltip="{t}Numeric valuer between 0 and 2.{/t}"></i></label>
+            <input class="form-control" ng-model="onmai_settings.engines.deepseek.settings.temperature" type="text">
+          </div>
+          <div class="controls col-xs-12 col-md-3 m-b-10">
+            <label>{t}Max tokens{/t} <i class="fa fa-info-circle text-info" uib-tooltip="{t}The maximum number of tokens that can be generated.{/t}"></i></label>
+            <input class="form-control" ng-model="onmai_settings.engines.deepseek.settings.max_tokens" type="text">
+          </div>
+          <div class="controls col-xs-12 col-md-3 m-b-10">
+            <label>{t}Frequency penalty{/t} <i class="fa fa-info-circle text-info" uib-tooltip="{t}Number between -2.0 and 2.0{/t}"></i> </label>
+            <input class="form-control" ng-model="onmai_settings.engines.deepseek.settings.frequency_penalty" type="text">
+          </div>
+          <div class="controls col-xs-12 col-md-3 m-b-10">
+            <label>{t}Presence penalty{/t} <i class="fa fa-info-circle text-info" uib-tooltip="{t}Number between -2.0 and 2.0{/t}"></i></label>
+            <input class="form-control" ng-model="onmai_settings.engines.deepseek.settings.presence_penalty" type="text">
+          </div>
+        </div>
+        <h4>{t}Models and prices{/t}</h4>
+        <p>
+          <i class="fa fa-info-circle text-info"></i>
+          <small class="text-muted">{t}The selling prices are expressed per million words, with one word approximately equivalent to 1.5 tokens. You can check the price table here.{/t}
+            <a class="btn-link" target="_blank" href="https://api-docs.deepseek.com/quick_start/pricing" class="admin_add" title="{t}DeepSeek Pricing{/t}">
+              <span class="fa fa-external-link"></span>
+            </a>
+          </small>
+        </p>
+        <div class="grid simple bg-white onm-shadow m-t-30" ng-repeat="item in onmai_settings.engines.deepseek.models">
+          <div class="grid-body ng-cloak">
+            <h4 class="form-label m-b-20">
+              <div class="row">
+                <div class="col-md-6">
+                  <input type="text" class="form-control"  ng-model="item.id">
+                </div>
+                <div class="col-md-6">
+                  <div class="checkbox pull-right">
+                    <button class="btn btn-block btn-danger ng-cloak" ng-click="removeModel($index)" type="button">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </h4>
+            <hr>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel m-t-5 p-15 bg-light">
+                  <div class="form-status text-left">
+                    <label class="m-b-10"><b>{t}Cost price per 1 million tokens{/t}</b></label>
+                    <div class="row">
+                      <div class="col-xs-6 form-group">
+                        <label class="form-label" for="name">{t}Input tokens{/t}</label>
+                        <div class="input-group">
+                          <span class="input-group-addon">€</span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            ng-model="item.cost_input_tokens">
+                        </div>
+                      </div>
+                      <div class="col-xs-6 form-group">
+                        <label class="form-label" for="name">{t}Output tokens{/t}</label>
+                        <div class="input-group">
+                          <span class="input-group-addon">€</span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            ng-model="item.cost_output_tokens">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel m-t-5 p-15 bg-light">
+                  <div class="form-status text-left">
+                    <label class="m-b-10"><b>{t}Sale price per 1 million words{/t}</b></label>
+                    <div class="row">
+                      <div class="col-xs-6 form-group">
+                        <label class="form-label" for="name">{t}Input words{/t}</label>
+                        <div class="input-group">
+                          <span class="input-group-addon">€</span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            ng-model="item.sale_input_tokens">
+                        </div>
+                      </div>
+                      <div class="col-xs-6 form-group">
+                        <label class="form-label" for="name">{t}Output words{/t}</label>
+                        <div class="input-group">
+                          <span class="input-group-addon">€</span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            ng-model="item.sale_output_tokens">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 m-t-20">
+            <button class="btn btn-block btn-default" ng-click="addModel()" type="button">
+              <i class="fa fa-plus"></i>
+              {t}Add{/t}
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </uib-tab>
   </uib-tabset>
 </div>

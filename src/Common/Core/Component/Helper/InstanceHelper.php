@@ -370,21 +370,20 @@ class InstanceHelper
      *
      * @return int The amount of current Web Push subscirbers
      */
-    public function getOpenAISettings(Instance $instance)
+    public function getOnmAISettings(Instance $instance)
     {
         try {
             $this->conn->selectDatabase($instance->getDatabaseName());
 
-            $sql = "select name, value from settings where name = 'openai_config'";
+            $sql = "select name, value from settings where name = 'onmai_settings'";
 
-            $fetchAssoc   = $this->conn->fetchAssoc($sql);
-            $openaiConfig = PhpSerializer::unserialize($fetchAssoc['value']);
+            $fetchAssoc    = $this->conn->fetchAssoc($sql);
+            $onmaiSettings = PhpSerializer::unserialize($fetchAssoc['value']);
 
-            if (empty($openaiConfig)) {
-                return null;
-            }
-
-            return $openaiConfig;
+            return [
+                'model'   => $onmaiSettings['model'] ?? '',
+                'service' => $onmaiSettings['service'] ?? 'onmai',
+            ];
         } catch (\Exception $e) {
             return null;
         }

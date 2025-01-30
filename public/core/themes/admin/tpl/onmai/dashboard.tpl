@@ -1,14 +1,14 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-  <form ng-controller="OpenAIDashboardCtrl" ng-init="init()">
+  <form ng-controller="OnmAIDashboardCtrl" ng-init="init()">
     <div class="page-navbar actions-navbar">
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav quick-section">
             <li class="quicklinks">
               <h4>
-                <a class="no-padding" href="[% routing.generate('backend_openai_config') %]">
+                <a class="no-padding" href="[% routing.generate('backend_onmai_config') %]">
                   <i class="fa fa-tachometer m-r-10"></i>
                   {t}Dashboard{/t}
                 </a>

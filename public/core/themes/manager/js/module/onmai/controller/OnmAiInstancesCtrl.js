@@ -40,10 +40,7 @@
             'name',
             'default',
             'model',
-            'temperature',
-            'tokens',
-            'frequency',
-            'presence'
+            'service'
           ]
         };
 

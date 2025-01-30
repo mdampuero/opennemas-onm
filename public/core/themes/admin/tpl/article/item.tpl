@@ -170,8 +170,8 @@
   <script type="text/ng-template" id="modal-webpush">
     {include file="common/modals/_modalWebpush.tpl"}
   </script>
-  <script type="text/ng-template" id="modal-openai">
-    {include file="common/modals/_modalOpenAI.tpl"}
+  <script type="text/ng-template" id="modal-onmai">
+    {include file="common/modals/_modalOnmAI.tpl"}
   </script>
 {/block}
 

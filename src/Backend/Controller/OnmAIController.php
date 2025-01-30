@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Handles the actions for managing notifications
  */
-class OpenAIController extends BackendController
+class OnmAIController extends BackendController
 {
     /**
      * The extension name required by this controller.
@@ -36,18 +36,18 @@ class OpenAIController extends BackendController
     ];
 
     /**
-     * Configures the openAI notifications module
+     * Configures the OnmAI notifications module
      */
     public function configAction()
     {
-        return $this->render('openai/config.tpl');
+        return $this->render('onmai/config.tpl');
     }
 
     /**
-     * Dashboard OpenAI
+     * Dashboard OnmAI
      */
     public function dashboardAction()
     {
-        return $this->render('openai/dashboard.tpl');
+        return $this->render('onmai/dashboard.tpl');
     }
 }

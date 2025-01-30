@@ -78,8 +78,8 @@ api_v1_backend_obituary:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/obituary.yml'
     prefix:   /backend
 
-api_v1_backend_openai:
-    resource: '@ApiBundle/Resources/config/routing/v1/backend/openai.yml'
+api_v1_backend_onmai:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/onmai.yml'
     prefix:   /backend
 
 api_v1_backend_opinion:

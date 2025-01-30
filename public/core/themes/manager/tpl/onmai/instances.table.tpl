@@ -8,9 +8,15 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-service" checklist-model="columns.selected" checklist-value="'service'" type="checkbox">
+    <label for="checkbox-service">
+      {t}Service{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-default" checklist-model="columns.selected" checklist-value="'default'" type="checkbox">
     <label for="checkbox-default">
-      {t}Default setting{/t}
+      {t}Default model{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
@@ -19,30 +25,7 @@
       {t}Model{/t}
     </label>
   </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-temperature" checklist-model="columns.selected" checklist-value="'temperature'" type="checkbox">
-    <label for="checkbox-temperature">
-      {t}Temperature{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-tokens" checklist-model="columns.selected" checklist-value="'tokens'" type="checkbox">
-    <label for="checkbox-tokens">
-      {t}Max tokens{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-frequency" checklist-model="columns.selected" checklist-value="'frequency'" type="checkbox">
-    <label for="checkbox-frequency">
-      {t}Frequency penalty{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-presence" checklist-model="columns.selected" checklist-value="'presence'" type="checkbox">
-    <label for="checkbox-presence">
-      {t}Presence penalty{/t}
-    </label>
-  </div>
+
 {/block}
 
 {block name="columnsHeader"}
@@ -54,23 +37,14 @@
     {t}Name{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
   </th>
+  <th class="text-center" ng-show="isColumnEnabled('service')">
+    {t}Service{/t}
+  </th>
   <th class="text-center" ng-show="isColumnEnabled('default')">
-    {t}Default setting{/t}
+    {t}Default model{/t}
   </th>
   <th class="text-center" ng-show="isColumnEnabled('model')">
     {t}Model{/t}
-  </th>
-  <th class="text-center" ng-show="isColumnEnabled('temperature')">
-    {t}Temperature{/t}
-  </th>
-  <th class="text-center" ng-show="isColumnEnabled('tokens')">
-    {t}Max tokens{/t}
-  </th>
-  <th class="text-center" ng-show="isColumnEnabled('frequency')">
-    {t}Frequency penalty{/t}
-  </th>
-  <th class="text-center" ng-show="isColumnEnabled('presence')">
-    {t}Presence penalty{/t}
   </th>
 {/block}
 
@@ -93,52 +67,28 @@
       </a>
     </div>
   </td>
-  <td class="text-center v-align-middle" title="{t}Default setting{/t}" ng-show="isColumnEnabled('default')">
-    <span class="badge badge-danger" ng-if="item.ai_config.setting.default != true">
+  <td class="text-center v-align-middle" title="{t}Service{/t}" ng-show="isColumnEnabled('service')">
+    <span class="badge text-capitalize" ng-class="{ 'badge-primary': item.ai_config.service === 'onmai', 'badge-danger': item.ai_config.service !== 'onmai' }" >
+      [% item.ai_config.service %]
+    </span>
+  </td>
+  <td class="text-center v-align-middle" title="{t}Default model{/t}" ng-show="isColumnEnabled('default')">
+    <span class="badge badge-danger" ng-if="item.ai_config.model && item.ai_config.service === 'onmai'">
       {t}No{/t}
     </span>
-    <span class="badge badge-success" ng-if="item.ai_config.setting.default == true">
+    <span class="badge badge-success" ng-if="!item.ai_config.model && item.ai_config.service === 'onmai'">
       {t}Yes{/t}
+    </span>
+    <span class="badge" ng-if="item.ai_config.service !== 'onmai'">
+      {t}N/A{/t}
     </span>
   </td>
   <td class="text-center v-align-middle" title="{t}Model{/t}" ng-show="isColumnEnabled('model')">
-    <span class="badge" ng-if="!item.ai_config.setting.model">
+    <span class="badge badge-info" ng-if="item.ai_config.model">
+      [% item.ai_config.model %]
+    </span>
+    <span class="badge" ng-if="!item.ai_config.model" >
       [% extra.model %]
-    </span>
-    <span class="badge badge-info" ng-if="item.ai_config.setting.model" >
-      [% item.ai_config.setting.model %]
-    </span>
-  </td>
-  <td class="text-center v-align-middle" title="{t}Temperature{/t}" ng-show="isColumnEnabled('temperature')">
-    <span class="badge" ng-if="!item.ai_config.setting.temperature">
-      [% extra.temperature %]
-    </span>
-    <span class="badge badge-info" ng-if="item.ai_config.setting.temperature" >
-      [% item.ai_config.setting.temperature %]
-    </span>
-  </td>
-  <td class="text-center v-align-middle" title="{t}Max tokens{/t}" ng-show="isColumnEnabled('tokens')">
-    <span class="badge" ng-if="!item.ai_config.setting.max_tokens">
-      [% extra.max_tokens %]
-    </span>
-    <span class="badge badge-info" ng-if="item.ai_config.setting.max_tokens" >
-      [% item.ai_config.setting.max_tokens %]
-    </span>
-  </td>
-  <td class="text-center v-align-middle" title="{t}Frequency penalty{/t}" ng-show="isColumnEnabled('frequency')">
-    <span class="badge" ng-if="!item.ai_config.setting.frequency_penalty">
-      [% extra.frequency_penalty %]
-    </span>
-    <span class="badge badge-info" ng-if="item.ai_config.setting.frequency_penalty" >
-      [% item.ai_config.setting.frequency_penalty %]
-    </span>
-  </td>
-  <td class="text-center v-align-middle" title="{t}Presence penalty{/t}" ng-show="isColumnEnabled('presence')">
-    <span class="badge" ng-if="!item.ai_config.setting.presence_penalty">
-      [% extra.presence_penalty %]
-    </span>
-    <span class="badge badge-info" ng-if="item.ai_config.setting.presence_penalty" >
-      [% item.ai_config.setting.presence_penalty %]
     </span>
   </td>
 {/block}

@@ -18,7 +18,7 @@
 {/block}
 
 {block name="title"}
-  <a class="no-padding" href="[% routing.generate('backend_openai_prompts_list') %]">
+  <a class="no-padding" href="[% routing.generate('backend_onmai_prompts_list') %]">
     {t}Prompts{/t}
   </a>
 {/block}

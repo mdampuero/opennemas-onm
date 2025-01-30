@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc controller
-     * @name  OpenAIDashboardCtrl
+     * @name  OnmAIDashboardCtrl
      *
      * @requires $controller
      * @requires $scope
@@ -15,14 +15,14 @@
      * @description
      *   Provides actions to list notifications.
      */
-    .controller('OpenAIDashboardCtrl', [
+    .controller('OnmAIDashboardCtrl', [
       '$controller', '$scope', 'http',
       function($controller, $scope, http) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
         /**
-         * @memberOf OpenAIDashboardCtrl
+         * @memberOf OnmAIDashboardCtrl
          *
          * @description
          *  The list of routes for the controller.
@@ -30,8 +30,8 @@
          * @type {Object}
          */
         $scope.routes = {
-          getPricing: 'api_v1_backend_openai_get_pricing',
-          getUsage: 'api_v1_backend_openai_get_usage',
+          getPricing: 'api_v1_backend_onmai_get_pricing',
+          getUsage: 'api_v1_backend_onmai_get_usage',
         };
 
         $scope.totals = {
@@ -47,7 +47,7 @@
 
         /**
          * @function init
-         * @memberOf OpenAIDashboardCtrl
+         * @memberOf OnmAIDashboardCtrl
          *
          * @description
          *   Initializes the form.

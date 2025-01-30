@@ -5,7 +5,7 @@ namespace Common\Core\Component\Helper;
 use Exception;
 use GuzzleHttp\Client;
 
-class OpenAIHelper
+class DeepSeekHelper
 {
     // HTTP client instance for making requests
     protected $client;
@@ -22,22 +22,22 @@ class OpenAIHelper
     // Maximum timeout for a request in seconds
     protected $timeout = 120;
 
-    // Base URL for the OpenAI API
-    protected $baseEndpoint = 'https://api.openai.com';
+    // Base URL for the DeepSeek API
+    protected $baseEndpoint = 'https://api.deepseek.com';
 
-    // Specific endpoint for chat completions
-    protected $endpointChat = '/v1/chat/completions';
+    // Endpoint for chat completions in the DeepSeek API
+    protected $endpointChat = '/chat/completions';
 
-    // Default settings for the OpenAI API
+    // Default settings for the DeepSeek API
     protected $defaultSettings = [
         'temperature'       => 1,
-        'max_tokens'        => 1000,
+        'max_tokens'        => 10000,
         'frequency_penalty' => 0.9,
         'presence_penalty'  => 0.9
     ];
 
     /**
-     * Constructor for the OpenAIHelper class.
+     * Constructor for the DeepSeekHelper class.
      * Initializes the container and HTTP client.
      *
      * @param mixed $container Container with necessary dependencies.
@@ -51,7 +51,7 @@ class OpenAIHelper
     }
 
     /**
-     * Sends a message to the OpenAI API.
+     * Sends a message to the DeepSeek API.
      *
      * @param array $data Data required to send to the API, such as the message and API key.
      * @param array $struct Response structure to store the result.
@@ -73,7 +73,7 @@ class OpenAIHelper
                         'presence_penalty'  => (float) $data['settings']['presence_penalty'],
                     ];
 
-                    // Make the POST request to the OpenAI API
+                    // Make the POST request to the DeepSeek API
                     $response = $this->client->request('POST', $this->baseEndpoint . $this->endpointChat, [
                         'headers' => [
                             'Content-Type' => 'application/json',
@@ -87,7 +87,7 @@ class OpenAIHelper
                     //$response = $this->simulResponse();
 
                     return $this->normalizeResponse($response, $struct);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     // If it's the last retry, throw the exception
                     if ($i === $this->getMaxRetries() - 1) {
                         throw $e;
@@ -97,7 +97,7 @@ class OpenAIHelper
                     sleep($this->retryDelay);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Handle errors
             $struct['error'] = $e->getMessage();
             return $struct;
@@ -107,13 +107,13 @@ class OpenAIHelper
     /**
      * Normalizes the response from the API to fit the expected structure.
      *
-     * @param array $originalResponse The original response from the OpenAI API.
+     * @param array $originalResponse The original response from the DeepSeek API.
      * @param array $struct The structure that will store the results.
      * @return array Normalized structure with the result and token usage.
      */
     public function normalizeResponse($originalResponse, $struct)
     {
-        // Extract the message content from the OpenAI response
+        // Extract the message content from the DeepSeek response
         if (isset($originalResponse['choices'][0]['message']['content'])) {
             $struct['result'] = $originalResponse['choices'][0]['message']['content'] ?? '';
             unset($originalResponse['choices'][0]['message']['content']);
@@ -154,7 +154,7 @@ class OpenAIHelper
     }
 
     /**
-     * Gets the base endpoint for the OpenAI API.
+     * Gets the base endpoint for the DeepSeek API.
      *
      * @return string Base URL for the API.
      */
@@ -164,7 +164,7 @@ class OpenAIHelper
     }
 
     /**
-     * Gets the chat endpoint for the OpenAI API.
+     * Gets the chat endpoint for the DeepSeek API.
      *
      * @return string Chat completion endpoint.
      */
@@ -184,7 +184,7 @@ class OpenAIHelper
     }
 
     /**
-     * Gets the default settings for the OpenAI API.
+     * Gets the default settings for the DeepSeek API.
      *
      * @return array Default settings.
      */
@@ -194,7 +194,7 @@ class OpenAIHelper
     }
 
     /**
-     * Simulates a response from the OpenAI API for testing purposes.
+     * Simulates a response from the DeepSeek API for testing purposes.
      *
      * @return array Simulated response.
      */

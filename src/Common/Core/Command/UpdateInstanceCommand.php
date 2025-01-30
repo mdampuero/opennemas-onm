@@ -252,7 +252,7 @@ class UpdateInstanceCommand extends Command
             $totalSpent = $helperAI->getSpentMoney();
 
             $instance->ai_spent  = floatval($totalSpent);
-            $instance->ai_config = [ 'setting' => $helperAI->compareConfigAI($helper->getOpenAISettings($instance)) ];
+            $instance->ai_config = $helper->getOnmAISettings($instance);
 
             $this->writeStatus('success', 'DONE');
             $this->writeStatus('info', sprintf(

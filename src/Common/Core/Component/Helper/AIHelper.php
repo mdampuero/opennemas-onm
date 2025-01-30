@@ -12,12 +12,6 @@ use SebastianBergmann\Environment\Console;
  */
 class AIHelper
 {
-    /**
-     * The HTTP client.
-     *
-     * @var Client
-     */
-    protected $client;
 
     /**
      * The service container.
@@ -62,41 +56,9 @@ class AIHelper
 
     protected $service;
 
-    protected $credentials = [];
-
     protected $instructions = [];
 
-    protected $openaiConfig = [];
-
     protected $userPrompt = '';
-
-    /**
-     * The service url base.
-     *
-     * @var String
-     */
-    protected $openaiEndpointBase = 'https://api.openai.com';
-
-    /**
-     * The service url chat.
-     *
-     * @var String
-     */
-    protected $endpointChat = '/v1/chat/completions';
-
-    /**
-     * The service url models.
-     *
-     * @var String
-     */
-    protected $endpointModels = '/v1/models';
-
-    /**
-     * The service Key.
-     *
-     * @var String
-     */
-    protected $openaiApiKey;
 
     protected $structureResponse = [
         'error' => null,
@@ -110,16 +72,23 @@ class AIHelper
     ];
 
     protected $engines = [
-        'openai' => 'Open AI',
-        'gemini' => 'Gemini'
+        'openai'   => 'Open AI',
+        'gemini'   => 'Gemini',
+        'deepseek' => 'DeepSeek'
     ];
+
+    /**
+     * Initializes the Menu service.
+     *
+     * @param Container          $container The service container.
+     */
+    public function __construct($container)
+    {
+        $this->container = $container;
+    }
 
     public function getManagerSettings()
     {
-        // $this->container->get('orm.manager')
-        //     ->getDataSet('Settings', 'manager')
-        //     ->set('onmai_settings', []);
-
         $managerOnmaiSettings = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'manager')
             ->get('onmai_settings', []);
@@ -140,9 +109,23 @@ class AIHelper
 
     public function getInstanceSettings()
     {
-        return $this->container->get('orm.manager')
+        $setting = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('onmai_settings', []);
+
+        $setting['service'] = ($setting['service'] ?? false) ? $setting['service'] : 'onmai';
+        $setting['model']   = ($setting['model'] ?? false) ? $setting['model'] : '';
+        $setting['roles']   = ($setting['roles'] ?? false) ? $setting['roles'] : [];
+        $setting['tones']   = ($setting['tones'] ?? false) ? $setting['tones'] : [];
+
+        return $setting;
+    }
+
+    public function setInstanceSettings($settings)
+    {
+        return $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->set('onmai_settings', $settings);
     }
 
     public function getCurrentSettings()
@@ -166,7 +149,12 @@ class AIHelper
 
         unset($managerSettings['engines'][$engineAndModel['engine']]['models']);
 
-        $currentSettings           = $managerSettings['engines'][$engineAndModel['engine']];
+        $currentSettings = $managerSettings['engines'][$engineAndModel['engine']];
+
+        if (!empty($instanceSettings['service']) && $instanceSettings['service'] != 'onmai') {
+            $currentSettings['apiKey'] = $instanceSettings[$engineAndModel['engine']]['apiKey'];
+        }
+
         $currentSettings['meta']   = $meta;
         $currentSettings['model']  = $currentSettings['meta']['id'];
         $currentSettings['engine'] = $engineAndModel['engine'];
@@ -190,19 +178,6 @@ class AIHelper
             'engine' => $engine,
             'model_id' => $model_id,
         ];
-    }
-
-    /**
-     * Initializes the Menu service.
-     *
-     * @param Container          $container The service container.
-     */
-    public function __construct($container)
-    {
-        $this->container = $container;
-        $this->client    = new Client([
-            'timeout' => 120,
-        ]);
     }
 
     protected function maskApiKey($apiKey)
@@ -290,6 +265,7 @@ class AIHelper
         } elseif ($messages['promptSelected']['mode_or'] == 'Edit') {
             $this->userPrompt .= ($messages["input"] ?? false) ? sprintf("\n\n### TEXTO:\n%s", $messages["input"]) : '';
         }
+
         $this->insertTone($messages);
 
         $this->userPrompt .= sprintf("\n\n### CONTENIDO:\n%s", $messages["promptInput"]);
@@ -352,63 +328,6 @@ class AIHelper
         $response['words']['total']  = $this->calcWords($response['tokens']['total']);
     }
 
-    public function checkApiKey($apiKey)
-    {
-        $this->client->request('GET', $this->openaiEndpointBase . $this->endpointModels, [
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $apiKey
-            ]
-        ]);
-        return true;
-    }
-
-    public function getModels()
-    {
-        return getService('orm.manager')->getDataSet('Settings', 'manager')->get('openai_models') ?? [];
-    }
-
-    public function getModelsFromApi()
-    {
-        try {
-            $response = $this->client->request('GET', $this->openaiEndpointBase . $this->endpointModels, [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->container->getParameter('opennemas.openai.key')
-                ]
-            ]);
-
-            $body   = $response->getBody()->getContents();
-            $models = json_decode($body, true);
-
-            /** Filter only GPT */
-            $textModels = array_filter($models["data"], function ($model) {
-                return preg_match('/^(gpt-)/', $model['id']);
-            });
-
-            /** Order */
-            usort($textModels, function ($a, $b) {
-                return $b['created'] <=> $a['created'];
-            });
-
-            /** Fromat date */
-            $textModels = array_map(function ($model) {
-                $model['formatted_date']     = date('Y-m-d', $model['created']);
-                $model['active']             = false;
-                $model['default']            = false;
-                $model['cost_input_tokens']  = 0;
-                $model['sale_input_tokens']  = 0;
-                $model['cost_output_tokens'] = 0;
-                $model['sale_output_tokens'] = 0;
-                return $model;
-            }, $textModels);
-
-            return $textModels;
-        } catch (Exception $e) {
-            return [];
-        }
-    }
-
     protected function saveAction($params, $response)
     {
         $messages = $params['messages'] ?? [];
@@ -439,31 +358,7 @@ class AIHelper
         $this->container->get('api.service.ai')->createItem($data);
     }
 
-    protected function getApiKey()
-    {
-        $credentials = $this->getCredentials();
-        $provider    = $this->getService();
-
-        if ($provider === 'custom') {
-            $this->openaiApiKey = $credentials['apikey'];
-        } else {
-            $this->openaiApiKey = $this->container->getParameter('opennemas.openai.key');
-        }
-        return $this->openaiApiKey;
-    }
-
-
-
-    public function getTokens()
-    {
-        $tokens = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('openai_tokens', []);
-
-        return $tokens;
-    }
-
-    public function getUsageMonthly($service = 'opennemas')
+    public function getUsageMonthly($service = 'onmai')
     {
         $date       = new DateTime();
         $currentDay = (int) $date->format('d');
@@ -545,17 +440,19 @@ class AIHelper
 
     public function generateMonths($startDate)
     {
-        $currentDate = new DateTime();
-        $startDate->modify('first day of this month');
+        $currentDate    = new DateTime();
+        $cloneStartDate = clone $startDate;
+
+        $cloneStartDate->modify('first day of this month');
         $months = [];
 
-        while ($startDate < $currentDate) {
+        while ($cloneStartDate < $currentDate) {
             $months[] = [
-                'label' => _($startDate->format('F')),
-                'year' => (int) $startDate->format('Y'),
-                'month' => (int) $startDate->format('m')
+                'label' => _($cloneStartDate->format('F')),
+                'year' => (int) $cloneStartDate->format('Y'),
+                'month' => (int) $cloneStartDate->format('m')
             ];
-            $startDate->modify('+1 month');
+            $cloneStartDate->modify('+1 month');
         }
 
         return array_reverse($months);
@@ -641,7 +538,7 @@ class AIHelper
 
         if ($item->getData()['params']['meta'] ?? false) {
             $meta = $item->getData()['params']['meta'];
-            if ($item->service != 'custom') {
+            if ($item->service == 'onmai') {
                 $priceInput  = $meta['sale_input_tokens'] / $this->relationTokenWord;
                 $priceOutput = $meta['sale_output_tokens'] / $this->relationTokenWord;
             }
@@ -674,11 +571,10 @@ class AIHelper
     {
         $total   = 0;
         $results = $this->getUsageMonthly();
-
         foreach ($results['items'] as $item) {
             $price   = $this->getPrices($item);
-            $tokensI = ($item->tokens['prompt_tokens'] ?? 0) / $this->conversion * $price['i'];
-            $tokensO = ($item->tokens['completion_tokens'] ?? 0) / $this->conversion * $price['o'];
+            $tokensI = ($item->tokens['tokens']['input'] ?? 0) / $this->conversion * $price['i'];
+            $tokensO = ($item->tokens['tokens']['output'] ?? 0) / $this->conversion * $price['o'];
             $total  += $tokensI + $tokensO;
         }
 
@@ -687,14 +583,15 @@ class AIHelper
 
     public function getTones($showManager = true)
     {
-        $si = $this->container->get('orm.manager')->getDataSet('Settings', 'instance');
+        $is = $this->getInstanceSettings();
+        $ti = $is['tones'] ?? [];
         $tm = [];
         if ($showManager) {
             $sm = $this->container->get('orm.manager')->getDataSet('Settings', 'manager');
             $tm = $this->addFlagReadOnly($sm->get('onmai_tones', []));
         }
 
-        return $this->sortByName(array_merge($tm, $si->get('onmai_tones', [])));
+        return $this->sortByName(array_merge($tm, $ti));
     }
 
     public function setTones($tones = [])
@@ -705,33 +602,17 @@ class AIHelper
         return $this;
     }
 
-    public function getInputTypes()
-    {
-        $inputTypes = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('openai_input_types', []);
-
-        return $inputTypes;
-    }
-
-    public function setInputTypes($inputTypes = [])
-    {
-        $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->set('openai_input_types', $inputTypes);
-        return $this;
-    }
-
     public function getRoles($showManager = true)
     {
-        $si = $this->container->get('orm.manager')->getDataSet('Settings', 'instance');
+        $is = $this->getInstanceSettings();
+        $ri = $is['roles'] ?? [];
         $rm = [];
         if ($showManager) {
             $sm = $this->container->get('orm.manager')->getDataSet('Settings', 'manager');
             $rm = $this->addFlagReadOnly($sm->get('onmai_roles', []));
         }
 
-        return $this->sortByName(array_merge($rm, $si->get('onmai_roles', [])));
+        return $this->sortByName(array_merge($rm, $ri));
     }
 
     protected function sortByName($array)
@@ -777,35 +658,15 @@ class AIHelper
         return $this;
     }
 
-    public function getModes()
-    {
-        $modes = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('openai_modes', []);
-
-        return $modes;
-    }
-
-    public function getConfigAll()
-    {
-        return [
-            'openai_service'      => $this->getService(),
-            'openai_credentials'  => $this->getCredentials(),
-            'onmai_roles'        => $this->getRoles(false),
-            'onmai_tones'        => $this->getTones(false),
-            'openai_config'       => $this->getConfig()
-        ];
-    }
-
-
     /**
      * Get the value of service
      */
     public function getService()
     {
-        return $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('openai_service');
+        $instanceSettings = $this->getInstanceSettings();
+        return !empty($instanceSettings['service'])
+            ? $instanceSettings['service']
+            : 'onmai';
     }
 
     /**
@@ -820,107 +681,29 @@ class AIHelper
         return $this;
     }
 
-    /**
-     * Get the value of credentials
-     */
-    public function getCredentials()
+    public function getModelDefault()
     {
-        return $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('openai_credentials', []);
+        $managerSettings = $this->getManagerSettings();
+        return $managerSettings['model'] ?? '';
     }
 
-    /**
-     * Set the value of credentials
-     *
-     * @return  self
-     */
-    public function setCredentials($credentials)
+    public function getModels()
     {
-        $this->credentials = $credentials;
+        $managerSettings = $this->getManagerSettings();
+        $models          = [];
 
-        return $this;
-    }
-
-    public function getModelIdDefault()
-    {
-        $model = $this->getDefaultModel($this->getModels()) ?? ['id' => ''];
-        return $model['id'];
-    }
-
-    public function compareConfigAI($settingInstance)
-    {
-        if (!$settingInstance || empty(array_filter($settingInstance))) {
-            $settingInstance['default'] = true;
-        } else {
-            $settingInstance['default'] = false;
-        }
-        return $settingInstance;
-    }
-
-    public function getDefaultModel($models = [])
-    {
-        $result = array_filter($models, function ($item) {
-            return isset($item['default']) && $item['default'] == "true";
-        });
-        return reset($result);
-    }
-
-    /**
-     * Get the value of openaiConfig
-     */
-    public function getOpenaiConfig()
-    {
-        $settingsInstance = getService('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('openai_config', []);
-
-        $settingsManager  = getService('orm.manager')
-            ->getDataSet('Settings', 'manager')
-            ->get('openai_settings');
-
-        $models = $this->getModels();
-        if (!empty($settingsInstance['model'])) {
-            foreach ($models as $item) {
-                if ($item['id'] === $settingsInstance['model']) {
-                    $model = $item;
-                    break;
-                }
+        foreach ($managerSettings['engines'] as $key => $engine) {
+            $title = $engine["title"];
+            foreach ($engine["models"] as $model) {
+                $modelId  = $model["id"];
+                $models[] = [
+                    'id'    => "{$key}_{$modelId}",
+                    'title' => "{$title} - {$modelId}"
+                ];
             }
-        } else {
-            $model = $this->getDefaultModel($models);
         }
 
-        $config = [
-            'temperature' => !empty($settingsInstance['temperature'])
-                ? $settingsInstance['temperature']
-                : $settingsManager['temperature'],
-            'max_tokens' => !empty($settingsInstance['max_tokens'])
-                ? $settingsInstance['max_tokens']
-                : $settingsManager['max_tokens'],
-            'frequency_penalty' => !empty($settingsInstance['frequency_penalty'])
-                ? $settingsInstance['frequency_penalty']
-                : $settingsManager['frequency_penalty'],
-            'presence_penalty' => !empty($settingsInstance['presence_penalty'])
-                ? $settingsInstance['presence_penalty']
-                : $settingsManager['presence_penalty'],
-        ];
-
-        $config['meta']  = $model;
-        $config['model'] = $config['meta']['id'];
-        return $config;
-    }
-
-    /**
-     * Set the value of openaiConfig
-     *
-     * @return  self
-     */
-    public function setOpenaiConfig($openaiConfig)
-    {
-        $this->openaiConfig = $openaiConfig;
-
-        return $this;
+        return $models;
     }
 
     /**
@@ -1001,23 +784,6 @@ class AIHelper
             }
         }
         return true;
-    }
-
-    /**
-     * Replaces existing configuration values with new ones from a provided array.
-     *
-     * @param array $newConfig The new configuration values.
-     * @return array The updated configuration.
-     */
-    public function replaceConfig($newConfig)
-    {
-        $currentConfig = $this->getConfigAll();
-        foreach ($newConfig as $key => $item) {
-            if (key_exists($key, $currentConfig)) {
-                $currentConfig[$key] = $item;
-            }
-        }
-        return $currentConfig;
     }
 
     /**
