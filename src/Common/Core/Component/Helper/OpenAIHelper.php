@@ -64,14 +64,18 @@ class OpenAIHelper
             for ($i = 0; $i < $this->getMaxRetries(); $i++) {
                 try {
                     // Build the data to send
+
                     $payload = [
                         'messages'          => $data['messages'],
                         'model'             => $data['model'],
-                        'temperature'       => (float) $data['settings']['temperature'],
-                        'max_tokens'        => (int) $data['settings']['max_tokens'],
-                        'frequency_penalty' => (float) $data['settings']['frequency_penalty'],
-                        'presence_penalty'  => (float) $data['settings']['presence_penalty'],
+                        'temperature'       => (float) $data['settings']['temperature']
                     ];
+
+                    if (strpos($data['model'], 'o1') === false) {
+                        $payload ['max_tokens']        = (int) $data['settings']['max_tokens'];
+                        $payload ['frequency_penalty'] = (int) $data['settings']['frequency_penalty'];
+                        $payload ['presence_penalty']  = (int) $data['settings']['presence_penalty'];
+                    }
 
                     // Make the POST request to the OpenAI API
                     $response = $this->client->request('POST', $this->baseEndpoint . $this->endpointChat, [
