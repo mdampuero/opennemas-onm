@@ -224,9 +224,9 @@ class AIHelper
             : $this->instructions;
     }
 
-    protected function insertInstructions($instructions = [])
+    protected function insertInstructions($instructions = [], $role = '')
     {
-        $instructionsString = '';
+        $instructionsString = sprintf("### INSTRUCCIONES IMPORTANTES:\n%s", $role);
         if (count($instructions)) {
             $counter = 0;
 
@@ -239,7 +239,8 @@ class AIHelper
                 $instructions
             ));
 
-            $instructionsString = sprintf("### INSTRUCCIONES:\n%s", $instructionList);
+
+            $instructionsString .= sprintf(". Sigue estas reglas estrictamente:\n%s", $instructionList);
         }
         $this->userPrompt .= $instructionsString;
     }
@@ -258,7 +259,7 @@ class AIHelper
                 'type'  => ['Both', $messages['promptSelected']['mode']],
                 'field' => ['all', $messages['promptSelected']['field_or']],
             ]
-        ));
+        ), $messages['roleSelected']['prompt'] ?? '');
 
         if ($messages['promptSelected']['mode_or'] == 'New') {
             $this->userPrompt .= ($messages["input"] ?? false) ? sprintf("\n\n### TEMA:\n%s", $messages["input"]) : "";
@@ -268,7 +269,7 @@ class AIHelper
 
         $this->insertTone($messages);
 
-        $this->userPrompt .= sprintf("\n\n### CONTENIDO:\n%s", $messages["promptInput"]);
+        $this->userPrompt .= sprintf("\n\n### OBJETIVO:\n%s", $messages["promptInput"]);
 
         return $this->userPrompt;
     }
@@ -290,12 +291,12 @@ class AIHelper
 
         $data['messages'] = [];
 
-        if ($messages["roleSelected"]["prompt"] ?? false) {
+        /*if ($messages["roleSelected"]["prompt"] ?? false) {
             $data['messages'][] = [
                 'role' => 'system',
                 'content' => $messages["roleSelected"]["prompt"]
             ];
-        }
+        }*/
 
         if ($messages["input"] ?? false) {
             $data['messages'][] = [
