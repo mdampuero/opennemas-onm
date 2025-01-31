@@ -129,7 +129,7 @@
         });
 
         $scope.openOnmAISettings = function(item) {
-          let currentModel = '';
+          var currentModel = '';
 
           if (typeof item.ai_config.model !== 'undefined') {
             currentModel = item.ai_config.model;
