@@ -166,7 +166,7 @@ class GeminiHelper
                 [
                     'parts' => [
                         [
-                            'text' => $data['messages'][1]['content']
+                            'text' => $data['messages'][0]['content']
                         ]
                     ]
                 ]
