@@ -10,7 +10,6 @@
 namespace Frontend\Controller;
 
 use Common\Core\Controller\Controller;
-use Imagine\Image\ImageInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,9 +50,12 @@ class AssetController extends Controller
             return new RedirectResponse($expectedUri, 301);
         }
 
-        $path      = $this->getParameter('core.paths.public') . '/' . $path;
-        $params    = explode(',', $params);
-        $transform = array_shift($params);
+        $path       = $this->getParameter('core.paths.public') . '/' . $path;
+        $params     = explode(',', $params);
+        $transform  = array_shift($params);
+        $imgOptions = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('photo_settings', []);
 
         try {
             $content = $this->get('core.image.processor')
@@ -61,7 +63,7 @@ class AssetController extends Controller
                 ->strip()
                 ->apply($transform, $params)
                 ->setImageRotation()
-                ->getContent();
+                ->getContent([], $imgOptions);
         } catch (\Exception $e) {
             throw new ResourceNotFoundException();
         }

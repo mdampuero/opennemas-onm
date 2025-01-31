@@ -34,6 +34,13 @@ class Processor
     ];
 
     /**
+     * The filesystem manager.
+     *
+     * @var Filesystem
+     */
+    protected $fs;
+
+    /**
      * The image to parse.
      *
      * @var ImageInterface
@@ -46,6 +53,7 @@ class Processor
      * @var Imagine
      */
     protected $imagine;
+
     /**
      * The list of optimizations to apply on save.
      *
@@ -98,35 +106,14 @@ class Processor
      *
      * @return string The image content.
      */
-    public function getContent(array $params = []) : string
+    public function getContent(array $params = [], array $options = []) : string
     {
         $params = !empty($params) ? $params : $this->defaults;
 
         return $this->image->get(
-            $this->setWebpFormat(),
+            $this->setImageFormat($options),
             $params
         );
-    }
-
-    /**
-     * Sets the image format to WebP.
-     *
-     * This method configures the image processor to use the WebP format for the output image.
-     *
-     * @return void
-     */
-    public function setWebpFormat()
-    {
-        if ($this->image->getImagick()->getImageFormat() === 'PNG') {
-            $this->image->getImagick()->setOption('webp:lossless', 'true');
-            $this->image->getImagick()->setImageAlphaChannel(false);
-        }
-
-        if (in_array($this->image->getImagick()->getImageFormat(), ['JPEG', 'PNG', 'BMP', 'TIFF'])) {
-            $this->image->getImagick()->setImageFormat('webp');
-        }
-
-        return $this->image->getImagick()->getImageFormat();
     }
 
     /**
@@ -333,6 +320,41 @@ class Processor
         }
 
         return $this;
+    }
+
+    /**
+     * Configures the image processor to use the WebP format for the image.
+     *
+     * @param array $options The image options.
+     *
+     * @return string The image format based on the options
+     */
+    public function setImageFormat(array $options = []) :string
+    {
+        $activateTransform = $options['image_transform'] ?? true;
+
+        // If not activated
+        if ($activateTransform === 'false') {
+            return $this->image->getImagick()->getImageFormat();
+        }
+
+        // Check format, default webp
+        $imageFormat = $options['image_format'] ?? 'webp';
+
+        // Apply transformation to all JPEG formats
+        if (in_array($this->image->getImagick()->getImageFormat(), ['JPE', 'JPG', 'JPEG'])) {
+            $this->image->getImagick()->setImageFormat($imageFormat);
+        }
+
+        // Check for PNG format
+        $transformPng = $options['transform_png'] ?? false;
+        if ($transformPng === 'true'
+            && $this->image->getImagick()->getImageFormat() === 'PNG'
+        ) {
+            $this->image->getImagick()->setImageFormat($imageFormat);
+        }
+
+        return $this->image->getImagick()->getImageFormat();
     }
 
     /**
