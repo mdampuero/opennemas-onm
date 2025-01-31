@@ -107,7 +107,7 @@ class UrlGeneratorHelper
             // Absolute URL basing on the current instance
             $uri = $this->forceHttp
                 ? 'http://' . $this->instance->getMainDomain()
-                : $this->instance->getbaseUrl();
+                : $this->instance->getBaseUrl();
         }
 
         // Force frontend context for multilanguage
@@ -155,7 +155,7 @@ class UrlGeneratorHelper
         }
 
 
-        return $uri;
+        return $this->container->get('core.decorator.url')->prefixUrl($uri);
     }
 
     /**

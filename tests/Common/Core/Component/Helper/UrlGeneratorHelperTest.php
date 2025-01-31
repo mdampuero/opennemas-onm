@@ -34,6 +34,11 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'find' ])
             ->getMock();
 
+        $this->decorator = $this->getMockBuilder('Common\Core\Component\Url\UrlDecorator')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'prefixUrl' ])
+            ->getMock();
+
         $this->fm = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
             ->disableOriginalConstructor()
             ->setMethods([ 'filter', 'get', 'set' ])
@@ -44,7 +49,7 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->instance = $this->getMockBuilder('Instance')
-            ->setMethods([ 'getBaseUrl', 'getMainDomain', 'hasMultilanguage' ])
+            ->setMethods([ 'getBaseUrl', 'getMainDomain', 'hasMultilanguage', 'getSubdirectory' ])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
@@ -70,6 +75,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->fm);
         $this->fm->expects($this->any())->method('filter')
             ->willReturn($this->fm);
+
+        $this->decorator->expects($this->any())->method('prefixUrl')
+            ->will($this->returnArgument(0));
 
         $this->globals->expects($this->any())->method('getInstance')
             ->willReturn($this->instance);
@@ -108,6 +116,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'user_repository':
                 return $this->um;
+
+            case 'core.decorator.url':
+                return $this->decorator;
 
             case 'core.globals':
                 return $this->globals;

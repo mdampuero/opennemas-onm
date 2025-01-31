@@ -93,10 +93,13 @@ class AuthorController extends Controller
 
         $this->getAds();
 
+        $pager = $page > 1 ? '?page=' . $page : '';
+
         return $this->render('user/author_frontpage.tpl', [
             'cache_id'    => $cacheID,
             'x-tags'      => sprintf('content-author-%d-frontpage', $user->id),
             'x-cacheable' => true,
+            'o_canonical' => $request->getSchemeAndHttpHost() . $request->getPathInfo() . $pager
         ]);
     }
 
