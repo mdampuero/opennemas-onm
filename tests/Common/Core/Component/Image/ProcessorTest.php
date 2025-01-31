@@ -52,7 +52,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([])
             ->setMethods([
                 'getImagine', 'getFormat', 'getQuality',
-                'getInterations', 'getDelay', 'setWebpFormat'
+                'getInterations', 'getDelay', 'setImageFormat'
             ])->getMock();
 
         $this->im->expects($this->any())->method('getImagine')
@@ -130,102 +130,12 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $params = [ 'quality' => 75 ];
 
-        $this->im->expects($this->once())->method('setWebpFormat')
+        $this->im->expects($this->once())->method('setImageFormat')
             ->willReturn('glorp');
         $this->image->expects($this->once())->method('get')
             ->with('glorp', $params)->willReturn('quux mumble');
 
         $this->assertEquals('quux mumble', $this->im->getContent($params));
-    }
-
-    public function testSetWebpformat()
-    {
-        $this->im->expects($this->once())->method('setWebpFormat')
-            ->willReturn('glorp');
-
-        $this->assertEquals('glorp', $this->im->setWebpFormat());
-    }
-
-    public function testSetWebpformatPNG()
-    {
-        $this->image->expects($this->any())
-            ->method('getImagick')
-            ->willReturn($this->imagick);
-
-        $this->imagick->expects($this->any())
-            ->method('getImageFormat')
-            ->willReturn('PNG');
-
-        $this->imagick->expects($this->once())
-            ->method('setOption')
-            ->willReturn(true);
-
-        $this->imagick->expects($this->once())
-            ->method('setImageAlphaChannel')
-            ->willReturn(false);
-
-        $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
-            ->setConstructorArgs([])
-            ->setMethods(['getImagine'])
-            ->getMock();
-
-        $property = new \ReflectionProperty($this->im, 'image');
-        $property->setAccessible(true);
-        $property->setValue($this->im, $this->image);
-
-        $this->imagick->expects($this->once())
-            ->method('setWebpFormat')
-            ->willReturn('webp');
-
-        $this->assertEquals('webp', $this->im->setWebpFormat());
-    }
-
-    public function testSetWebpformatJPEG()
-    {
-        $this->image->expects($this->any())
-            ->method('getImagick')
-            ->willReturn($this->imagick);
-
-        $this->imagick->expects($this->exactly(3))
-            ->method('getImageFormat')
-            ->willReturn('JPEG');
-
-        $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
-            ->setConstructorArgs([])
-            ->setMethods(['getImagine'])
-            ->getMock();
-
-        $property = new \ReflectionProperty($this->im, 'image');
-        $property->setAccessible(true);
-        $property->setValue($this->im, $this->image);
-
-        $this->imagick->expects($this->once())
-            ->method('setWebpFormat')
-            ->willReturn('webp');
-
-        $this->assertEquals('webp', $this->im->setWebpFormat());
-    }
-
-    public function testSetWebpformatInvalid()
-    {
-        $this->image->expects($this->any())
-            ->method('getImagick')
-            ->willReturn($this->imagick);
-
-        $this->imagick->expects($this->any())
-            ->method('setWebpFormat')
-            ->willReturn('GIF');
-
-        $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
-            ->setConstructorArgs([])
-            ->setMethods(['getImagine'])
-            ->getMock();
-
-        $property = new \ReflectionProperty($this->im, 'image');
-        $property->setAccessible(true);
-        $property->setValue($this->im, $this->image);
-
-        $this->assertEquals('GIF', $this->im->setWebpFormat());
     }
 
     /**
