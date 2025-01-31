@@ -71,8 +71,8 @@
                 var model = angular.copy(engine.models[i]);
 
                 $scope.allModels.push({
-                  id: `${engineKey}_${model.id}`,
-                  name: `${engineKey} - ${model.id}`
+                  id: engineKey + '_' + model.id,
+                  name: engineKey + ' - ' + model.id
                 });
               }
             }
