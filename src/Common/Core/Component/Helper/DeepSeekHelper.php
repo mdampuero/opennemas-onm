@@ -28,14 +28,6 @@ class DeepSeekHelper
     // Endpoint for chat completions in the DeepSeek API
     protected $endpointChat = '/chat/completions';
 
-    // Default settings for the DeepSeek API
-    protected $defaultSettings = [
-        'temperature'       => 1,
-        'max_tokens'        => 10000,
-        'frequency_penalty' => 0.9,
-        'presence_penalty'  => 0.9
-    ];
-
     /**
      * Constructor for the DeepSeekHelper class.
      * Initializes the container and HTTP client.
@@ -183,16 +175,6 @@ class DeepSeekHelper
     public function getTimeout()
     {
         return $this->timeout;
-    }
-
-    /**
-     * Gets the default settings for the DeepSeek API.
-     *
-     * @return array Default settings.
-     */
-    public function getDefaultSettings()
-    {
-        return $this->defaultSettings;
     }
 
     /**

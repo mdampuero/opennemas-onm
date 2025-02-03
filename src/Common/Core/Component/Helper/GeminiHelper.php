@@ -81,18 +81,6 @@ class GeminiHelper
     ];
 
     /**
-     * Default settings for text generation.
-     *
-     * @var array
-     */
-    protected $defaultSettings = [
-        'temperature'       => 1,
-        'max_tokens'        => 10000,
-        'frequency_penalty' => 0.9,
-        'presence_penalty'  => 0.9
-    ];
-
-    /**
      * Constructor to initialize the helper with a dependency container.
      *
      * @param mixed $container Dependency injection container.
@@ -208,16 +196,6 @@ class GeminiHelper
         $struct['original'] = $originalResponse;
 
         return $struct;
-    }
-
-    /**
-     * Retrieves the default settings for text generation.
-     *
-     * @return array Default generation settings.
-     */
-    public function getDefaultSettings()
-    {
-        return $this->defaultSettings;
     }
 
     /**

@@ -74,7 +74,8 @@ class AIHelper
     protected $engines = [
         'openai'   => 'Open AI',
         'gemini'   => 'Gemini',
-        'deepseek' => 'DeepSeek'
+        'deepseek' => 'DeepSeek',
+        'mistralai' => 'Mistral AI',
     ];
 
     /**
@@ -98,7 +99,6 @@ class AIHelper
                 $managerOnmaiSettings['engines'][$key] = [
                     'title'    => $engine,
                     'apiKey'   => '',
-                    'settings' => $this->container->get('core.helper.' . $key)->getDefaultSettings(),
                     'models'   => []
                 ];
             }

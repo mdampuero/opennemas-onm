@@ -286,6 +286,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.helper.mistralai:
+        class:     Common\Core\Component\Helper\MistralAIHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.helper.deepseek:
         class:     Common\Core\Component\Helper\DeepSeekHelper
         arguments: [ '@service_container' ]
