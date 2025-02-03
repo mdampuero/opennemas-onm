@@ -66,12 +66,14 @@ class DeepSeekHelper
                     // Build the data to send
                     $payload = [
                         'messages'          => $data['messages'],
-                        'model'             => $data['model'],
-                        'temperature'       => (float) $data['settings']['temperature'],
-                        'max_tokens'        => (int) $data['settings']['max_tokens'],
-                        'frequency_penalty' => (float) $data['settings']['frequency_penalty'],
-                        'presence_penalty'  => (float) $data['settings']['presence_penalty'],
+                        'model'             => $data['model']
                     ];
+
+                    if ($data['meta']['params'] ?? false) {
+                        foreach ($data['meta']['params'] as $param) {
+                            $payload[$param['key']] = $param['value'];
+                        }
+                    }
 
                     // Make the POST request to the DeepSeek API
                     $response = $this->client->request('POST', $this->baseEndpoint . $this->endpointChat, [

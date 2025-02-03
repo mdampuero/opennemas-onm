@@ -161,7 +161,7 @@ class GeminiHelper
      */
     public function generatePayload($data = [])
     {
-        return [
+        $payload = [
             'contents' => [
                 [
                     'parts' => [
@@ -171,14 +171,17 @@ class GeminiHelper
                     ]
                 ]
             ],
-            'generationConfig' => [
-                'temperature' => (float) $data['settings']['temperature'],
-                'top_p' => $data['top_p'] ?? 0.9,
-                'top_k' => $data['top_k'] ?? 60,
-                'maxOutputTokens' => (int) $data['settings']['max_tokens'],
-            ],
+            'generationConfig' => [],
             'safetySettings' => $this->getSafetySetting()
         ];
+
+        if ($data['meta']['params'] ?? false) {
+            foreach ($data['meta']['params'] as $param) {
+                $payload['generationConfig'][$param['key']] = $param['value'];
+            }
+        }
+
+        return $payload;
     }
 
     /**

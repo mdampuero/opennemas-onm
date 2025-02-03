@@ -142,6 +142,12 @@ class AIHelper
 
         foreach ($managerSettings['engines'][$engineAndModel['engine']]['models'] as $item) {
             if ($item['id'] === $engineAndModel['model_id']) {
+                if ($item['params'] ?? false) {
+                    foreach ($item['params'] as $key => $param) {
+                        $item['params'][$key]['value'] = $this->castValue($param['value']);
+                    }
+                }
+
                 $meta = $item;
                 break;
             }
@@ -160,6 +166,30 @@ class AIHelper
         $currentSettings['engine'] = $engineAndModel['engine'];
 
         return $currentSettings;
+    }
+
+    public function castValue($value)
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if (filter_var($value, FILTER_VALIDATE_INT) !== false) {
+            return (int) $value;
+        }
+
+        if (is_numeric($value) && strpos($value, '.') !== false) {
+            return (float) $value;
+        }
+
+        if (strtolower($value) === 'true') {
+            return true;
+        }
+        if (strtolower($value) === 'false') {
+            return false;
+        }
+
+        return $value;
     }
 
     /**
@@ -290,13 +320,6 @@ class AIHelper
         }
 
         $data['messages'] = [];
-
-        /*if ($messages["roleSelected"]["prompt"] ?? false) {
-            $data['messages'][] = [
-                'role' => 'system',
-                'content' => $messages["roleSelected"]["prompt"]
-            ];
-        }*/
 
         if ($messages["input"] ?? false) {
             $data['messages'][] = [

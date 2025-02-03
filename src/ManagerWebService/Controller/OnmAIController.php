@@ -83,6 +83,47 @@ class OnmAIController extends Controller
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
+    public function configDownloadAction()
+    {
+        $response = new JsonResponse([
+            'onmai_settings'  => $this->get($this->helper)->getManagerSettings()
+        ]);
+
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Content-Disposition', 'attachment; filename=onmai_settings_manager.json');
+        $response->headers->set('Cache-Control', 'no-cache');
+
+        return $response;
+    }
+
+    public function configUploadAction(Request $request)
+    {
+        $jsonSettings = $request->request->get('config', null);
+        $msg          = $this->get('core.messenger');
+
+        try {
+            $configNew     = json_decode($jsonSettings, true);
+            $configCurrent = ['onmai_settings' => $this->get($this->helper)->getManagerSettings()];
+
+            foreach ($configNew as $key => $item) {
+                if (key_exists($key, $configCurrent)) {
+                    $configCurrent[$key] = $item;
+                }
+            }
+
+            $this->get('orm.manager')
+                ->getDataSet('Settings', 'manager')
+                ->set($configCurrent);
+
+            $msg->add(_('Prompt saved successfully'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to save settings'), 'error');
+            $this->get('error.log')->error($e->getMessage());
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
     /**
      * Returns the list of prompts as JSON.
      *
@@ -518,7 +559,7 @@ class OnmAIController extends Controller
         $response = new JsonResponse($settingOpenai);
 
         $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Content-Disposition', 'attachment; filename=onmai_settings_manager.json');
+        $response->headers->set('Content-Disposition', 'attachment; filename=onmai_prompt_settings_manager.json');
         $response->headers->set('Cache-Control', 'no-cache');
 
         return $response;

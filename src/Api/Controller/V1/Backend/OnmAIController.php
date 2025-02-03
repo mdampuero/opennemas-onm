@@ -94,6 +94,8 @@ class OnmAIController extends ApiController
 
             $response = $this->get($this->helper)->sendMessage($messages);
 
+            unset($response['original']);
+
             if (isset($response['error'])) {
                 return new JsonResponse(['error' => $response['error']], JsonResponse::HTTP_REQUEST_TIMEOUT);
             }

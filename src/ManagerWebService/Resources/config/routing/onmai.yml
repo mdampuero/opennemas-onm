@@ -12,6 +12,20 @@ manager_ws_onmai_config_save:
     options:
         expose: true
 
+manager_ws_onmai_config_download:
+    path:     /onmai/config/download
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:configDownload }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_onmai_config_upload:
+    path:     /onmai/config/upload
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:configUpload }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
 manager_ws_onmai_instances:
     path:     /onmai/intances
     defaults: { _controller: ManagerWebServiceBundle:OnmAI:instances }

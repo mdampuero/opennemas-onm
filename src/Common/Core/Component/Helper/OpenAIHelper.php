@@ -67,14 +67,13 @@ class OpenAIHelper
 
                     $payload = [
                         'messages'          => $data['messages'],
-                        'model'             => $data['model'],
-                        'temperature'       => (float) $data['settings']['temperature']
+                        'model'             => $data['model']
                     ];
 
-                    if (strpos($data['model'], 'o1') === false) {
-                        $payload ['max_tokens']        = (int) $data['settings']['max_tokens'];
-                        $payload ['frequency_penalty'] = (int) $data['settings']['frequency_penalty'];
-                        $payload ['presence_penalty']  = (int) $data['settings']['presence_penalty'];
+                    if ($data['meta']['params'] ?? false) {
+                        foreach ($data['meta']['params'] as $param) {
+                            $payload[$param['key']] = $param['value'];
+                        }
                     }
 
                     // Make the POST request to the OpenAI API

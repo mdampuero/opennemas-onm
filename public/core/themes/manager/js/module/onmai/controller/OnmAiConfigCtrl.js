@@ -17,8 +17,8 @@
      *   Handles all actions in prompt.txt listing.
      */
     .controller('OnmAiConfigCtrl', [
-      '$controller', '$scope', '$timeout', 'http', 'messenger',
-      function($controller, $scope, $timeout, http, messenger) {
+      '$controller', '$scope', '$timeout', 'http', 'messenger', '$uibModal',
+      function($controller, $scope, $timeout, http, messenger, $uibModal) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ListCtrl', {
           $scope: $scope,
@@ -37,7 +37,8 @@
             cost_output_tokens: 0,
             id: '',
             sale_input_tokens: 0,
-            sale_output_tokens: 0
+            sale_output_tokens: 0,
+            params: []
           });
         };
 
@@ -77,6 +78,58 @@
               }
             }
           }
+        };
+
+        $scope.addParam = function(item) {
+          if (typeof item.params === 'undefined' || item.params === '') {
+            item.params = [];
+          }
+          item.params.push({
+            key: '',
+            value: ''
+          });
+        };
+
+        $scope.removeParam = function(item, indexToRemove) {
+          item.params.splice(indexToRemove, 1);
+        };
+
+        $scope.openImportModal = function() {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-import-settings',
+            backdrop: 'static',
+            controller: 'ModalImportCtrl',
+            resolve: {
+              template: function() {
+                return {
+                };
+              },
+              success: function() {
+                return function(modal, template) {
+                  const reader = new FileReader();
+
+                  var route = {
+                    name: 'manager_ws_onmai_config_upload',
+                  };
+
+                  if (template.file.type !== 'application/json') {
+                    return messenger.post('No es un fichero JSON Válido', 'error');
+                  }
+
+                  reader.readAsText(template.file);
+                  reader.onload = function() {
+                    var content = reader.result;
+
+                    return http.put(route, { config: content }).then(function(response) {
+                      modal.close();
+                      messenger.post(response.data);
+                      $scope.init();
+                    });
+                  };
+                };
+              }
+            }
+          });
         };
 
         $scope.init = function() {
