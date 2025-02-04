@@ -37,7 +37,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->setMethods([
                 'clear', 'getImageFilename', 'getImageFormat', 'getImageLength',
                 'getImageMimeType', 'getImageProperties', 'getImageIterations',
-                'getImageDelay', 'getImageCompressionQuality'
+                'getImageDelay', 'getImageCompressionQuality', 'setImageFormat',
+                'setImageAlphaChannel', 'setOption'
             ])->getMock();
 
         $this->imagine = $this->getMockBuilder('Imagine')
@@ -51,7 +52,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([])
             ->setMethods([
                 'getImagine', 'getFormat', 'getQuality',
-                'getInterations', 'getDelay'
+                'getInterations', 'getDelay', 'setImageFormat'
             ])->getMock();
 
         $this->im->expects($this->any())->method('getImagine')
@@ -129,7 +130,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $params = [ 'quality' => 75 ];
 
-        $this->imagick->expects($this->once())->method('getImageFormat')
+        $this->im->expects($this->once())->method('setImageFormat')
             ->willReturn('glorp');
         $this->image->expects($this->once())->method('get')
             ->with('glorp', $params)->willReturn('quux mumble');
