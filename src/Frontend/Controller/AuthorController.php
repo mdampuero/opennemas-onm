@@ -240,29 +240,56 @@ class AuthorController extends FrontendController
      */
     protected function getItems($params, $epp)
     {
+        $offset = ($params['page'] - 1) * $epp;
+
         $oql = sprintf(
-            'select SQL_CALC_FOUND_ROWS contents.fk_author as id, count(pk_content) as total from contents' .
-            ' where contents.fk_author in (select users.id from users)' .
-            ' and fk_content_type in (1, 4, 7, 9) and content_status = 1 and in_litter != 1' .
-            ' group by contents.fk_author order by total desc',
+            'SELECT SQL_CALC_FOUND_ROWS contents.fk_author as id, count(pk_content) as total_content
+            FROM contents
+            WHERE contents.fk_author IN (SELECT users.id FROM users)
+            AND fk_content_type IN (1, 4, 7, 9)
+            AND content_status = 1
+            AND in_litter != 1
+            GROUP BY contents.fk_author
+            ORDER BY total_content DESC
+            LIMIT %d OFFSET %d',
+            $epp,
+            $offset
         );
 
-        $response = $this->get('api.service.author')->getListBySql($oql);
+        $items = $this->get('dbal_connection')->fetchAll($oql);
 
-        $items = $response['items'];
-        $total = count($items);
+        // Obtener el total de elementos sin paginación
+        $totalQuery = 'SELECT FOUND_ROWS()';
+        $total = $this->get('dbal_connection')->fetchAssoc($totalQuery);
+        $total = array_pop($total);
 
-        $items = array_slice(
-            $items,
-            $epp * ($params['page'] - 1),
-            $epp
-        );
+        // Obtener información de los autores
+        $authorIds = array_column($items, 'id');
+        $response = $this->get('api.service.author')->getListByIds($authorIds);
+
+        $authors = $this->get('data.manager.filter')
+            ->set($response['items'])
+            ->filter('mapify', ['key' => 'id'])
+            ->get();
+
+        // Agregar total_contents a cada autor
+        $items = array_map(function ($item) use ($authors) {
+            if (isset($authors[$item['id']])) {
+                $author = $authors[$item['id']];
+                $author->total_contents = $item['total_content'];
+                return $author;
+            }
+            return null;
+        }, $items);
+
+        $items = array_filter($items); // Eliminar autores nulos
 
         return [
             $items,
             $total
         ];
     }
+
 
     /**
      * Hydrates the list of authors for display on the frontpage.
@@ -288,7 +315,7 @@ class AuthorController extends FrontendController
         }
 
         $params['authors_contents'] = $items;
-        $params['total']            = $total;
+        $params['total_contents'] = $total;
         $params['pagination']       = $this->get('paginator')->get([
             'directional' => true,
             'epp'         => $itemsPerPage,
