@@ -137,30 +137,33 @@ class AuthorController extends FrontendController
                 throw new ResourceNotFoundException();
             }
 
-            $oql = sprintf(
-                'fk_author = %d and fk_content_type in [1, 4, 7, 9] and content_status = 1 and in_litter = 0 ' .
-                'and ((starttime is null or starttime <= "%s") and (endtime is null or endtime > "%s"))',
-                $item[0]->id,
-                gmdate('Y-m-d H:i:s'),
-                gmdate('Y-m-d H:i:s')
-            );
+            $criteria = [
+                'fk_author'       => [[ 'value' => $item[0]->id ]],
+                'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
+                'content_status'  => [[ 'value' => 1 ]],
+                'in_litter'       => [[ 'value' => 0 ]],
+                'starttime'       => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
+                ],
+                'endtime'         => [
+                    'union' => 'OR',
+                    [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
+                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
+                ]
+            ];
 
-            $contentList   = $this->get('api.service.content')
-                ->getList($oql);
-            $totalContents = $contentList['total'];
-
-            $contents = array_slice(
-                $contentList['items'],
-                $itemsPerPage * ($params['page'] - 1),
-                $itemsPerPage
-            );
+            $er            = $this->get('entity_repository');
+            $contentsCount = $er->countBy($criteria);
+            $contents      = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
 
             // Build the pagination
             $pagination = $this->get('paginator')->get([
                 'directional' => true,
                 'epp'         => $itemsPerPage,
                 'page'        => $page,
-                'total'       => $totalContents,
+                'total'       => $contentsCount,
                 'route'       => [
                     'name'   => 'frontend_author_frontpage',
                     'params' => [ 'author_slug' => $slug, ]
@@ -170,7 +173,7 @@ class AuthorController extends FrontendController
             $this->view->assign([
                 'contents'   => $contents,
                 'author'     => $item,
-                'total'      => $totalContents,
+                'total'      => $contentsCount,
                 'pagination' => $pagination,
                 'page'       => $page,
             ]);
@@ -260,12 +263,12 @@ class AuthorController extends FrontendController
 
         // Obtener el total de elementos sin paginación
         $totalQuery = 'SELECT FOUND_ROWS()';
-        $total = $this->get('dbal_connection')->fetchAssoc($totalQuery);
-        $total = array_pop($total);
+        $total      = $this->get('dbal_connection')->fetchAssoc($totalQuery);
+        $total      = array_pop($total);
 
         // Obtener información de los autores
         $authorIds = array_column($items, 'id');
-        $response = $this->get('api.service.author')->getListByIds($authorIds);
+        $response  = $this->get('api.service.author')->getListByIds($authorIds);
 
         $authors = $this->get('data.manager.filter')
             ->set($response['items'])
@@ -275,7 +278,7 @@ class AuthorController extends FrontendController
         // Agregar total_contents a cada autor
         $items = array_map(function ($item) use ($authors) {
             if (isset($authors[$item['id']])) {
-                $author = $authors[$item['id']];
+                $author                 = $authors[$item['id']];
                 $author->total_contents = $item['total_content'];
                 return $author;
             }
