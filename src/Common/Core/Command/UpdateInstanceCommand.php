@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Common\Core\Command;
 
 use Common\Model\Entity\Instance;
@@ -79,7 +81,7 @@ class UpdateInstanceCommand extends Command
 
             $this->writeStep("Updating instance $instance->internal_name", true, 2);
 
-            foreach ([ 'stats', 'media' ] as $stage) {
+            foreach (['stats', 'media'] as $stage) {
                 $method = 'get' . $stage;
 
                 if (!method_exists($this, $method) || empty($$stage)) {
@@ -114,7 +116,7 @@ class UpdateInstanceCommand extends Command
      *
      * @return array The list of instance ids.
      */
-    protected function getInstances(?array $names = []) : array
+    protected function getInstances(?array $names = []): array
     {
         $sql = 'select id from instances';
 
@@ -137,7 +139,7 @@ class UpdateInstanceCommand extends Command
      *
      * @param Instance $instance The instance to update.
      */
-    protected function getMedia(Instance &$instance) : void
+    protected function getMedia(Instance &$instance): void
     {
         $this->writePad('- Calculating media folder size');
 
@@ -157,7 +159,7 @@ class UpdateInstanceCommand extends Command
      *
      * @return array The list of parameters.
      */
-    protected function getParameters() : array
+    protected function getParameters(): array
     {
         $media = $this->input->getOption('media');
         $stats = $this->input->getOption('stats');
@@ -174,7 +176,7 @@ class UpdateInstanceCommand extends Command
 
         $instances = $this->getInstances($instances);
 
-        return [ $instances, $media, $stats ];
+        return [$instances, $media, $stats];
     }
 
     /**
@@ -182,7 +184,7 @@ class UpdateInstanceCommand extends Command
      *
      * @param Instance $instance The instance to update.
      */
-    protected function getStats(Instance &$instance) : void
+    protected function getStats(Instance &$instance): void
     {
         $helper = $this->getContainer()->get('core.helper.instance');
 
@@ -242,6 +244,23 @@ class UpdateInstanceCommand extends Command
                 ' (%s)',
                 $instance->webpush_subscribers
             ), true);
+        }
+
+        if (in_array("es.openhost.module.onmai", $instance->activated_modules)) {
+            $this->writePad('- Counting active spent money in 27th');
+            $helperAI   = $this->getContainer()->get('core.helper.ai');
+            $totalSpent = $helperAI->getSpentMoney();
+
+            $instance->ai_spent  = floatval($totalSpent);
+            $instance->ai_config = $helper->getOnmAISettings($instance);
+
+            $this->writeStatus('success', 'DONE');
+            $this->writeStatus('info', sprintf(
+                ' (%s)',
+                $instance->ai_spent
+            ), true);
+        } else {
+            $instance->ai_config = null;
         }
 
         $this->writePad('- Counting contents');

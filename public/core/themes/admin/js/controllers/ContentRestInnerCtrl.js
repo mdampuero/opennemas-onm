@@ -547,6 +547,43 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       return false;
     };
 
+    $scope.onmIAModal = function(field, AIFieldType, AIFieldTitle) {
+      const input = field in $scope ? $scope[field] : $scope.item[field];
+      const locale = $scope.config.locale && $scope.config.locale.selected ? $scope.config.locale.slugs[$scope.config.locale.selected] : 'default';
+
+      $uibModal.open({
+        templateUrl: 'modal-onmai',
+        backdrop: 'static',
+        windowClass: 'modal-onmai',
+        controller: 'OnmAIModalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              lastTemplate: $scope.lastTemplate,
+              step: 1,
+              AIFieldType: AIFieldType,
+              AIFieldTitle: AIFieldTitle || '',
+              input: input,
+              locale: locale
+            };
+          },
+          success: function() {
+            return function(modal, template) {
+              $scope.lastTemplate = template;
+              if (field in $scope) {
+                $scope[field] = template.response;
+              } else {
+                $scope.item[field] = template.response;
+              }
+              $timeout(function() {
+                $scope.flags.generate.slug = true;
+              }, 250);
+            };
+          }
+        }
+      });
+    };
+
     /**
      * @function validate
      * @memberOf ContentRestInnerCtrl

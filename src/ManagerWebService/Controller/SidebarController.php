@@ -159,6 +159,30 @@ class SidebarController extends Controller
                     ],
                 ],
                 [
+                    'name'     => _('ONM AI'),
+                    'icon'     => 'fa fa-bell',
+                    'items' => [
+                        [
+                            'name'     => _('Prompts'),
+                            'icon'     => 'fa fa-terminal fa-lg',
+                            'route'    => 'manager_onmai_prompt_list',
+                            'click'    => true,
+                        ],
+                        [
+                            'name'     => _('Instances'),
+                            'icon'     => 'fa fa-cubes fa-lg',
+                            'route'    => 'manager_onmai_instances',
+                            'click'    => true,
+                        ],
+                        [
+                            'name'     => _('Configs'),
+                            'icon'     => 'fa fa-cog fa-lg',
+                            'route'    => 'manager_onmai_config',
+                            'click'    => true,
+                        ],
+                    ]
+                    ],
+                [
                     'name'     => _('System'),
                     'icon'     => 'fa-gears',
                     'items' => [

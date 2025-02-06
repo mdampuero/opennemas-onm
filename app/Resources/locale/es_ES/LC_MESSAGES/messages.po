@@ -320,6 +320,15 @@ msgstr "Configuración"
 msgid "PressClipping"
 msgstr "PressClipping"
 
+msgid "ONM AI"
+msgstr "ONM AI"
+
+msgid "NEW"
+msgstr "NUEVO"
+
+msgid "Prompts"
+msgstr "Prompts"
+
 msgid "Utilities"
 msgstr "Utilidades"
 
@@ -933,6 +942,9 @@ msgstr "Arrancando la imprenta…"
 msgid "Reinventing Gutenberg machine..."
 msgstr "Reinventando la máquina de Gutenberg…"
 
+msgid "Prompt saved successfully"
+msgstr "Prompt guardado correctamente"
+
 msgid "Ads.txt container saved successfully"
 msgstr "Contenedor de Ads.txt guardado correctamente"
 
@@ -1047,6 +1059,16 @@ msgstr "Ayuda"
 msgid "Information"
 msgstr "Información"
 
+msgid "Item saved successfully"
+msgstr "Elemento guardado correctamente"
+
+#, php-format
+msgid "%s items deleted successfully"
+msgstr "%s elementos eliminados correctamente"
+
+msgid "Unable to save settings"
+msgstr "No se pudo guardar la configuración"
+
 msgid "Purchase deleted successfully"
 msgstr "Compra eliminada correctamente"
 
@@ -1117,6 +1139,9 @@ msgstr "Estado de Opcache"
 msgid "Ads.txt"
 msgstr "Ads.txt"
 
+msgid "Configs"
+msgstr "Configuración"
+
 msgid "System"
 msgstr "Sistema"
 
@@ -1142,9 +1167,6 @@ msgstr "%s usuarios eliminados correctamente"
 #, php-format
 msgid "%s items could not be deleted successfully"
 msgstr "%s elementos no se han podido eliminar correctamente"
-
-msgid "Item saved successfully"
-msgstr "Elemento guardado correctamente"
 
 #, php-format
 msgid "%s items updated successfully"
@@ -1180,10 +1202,6 @@ msgstr "Tu periódico ya está en línea"
 
 msgid "Error when creating a new instance"
 msgstr "Error al crear una nueva instancia"
-
-#, php-format
-msgid "%s items deleted successfully"
-msgstr "%s elementos eliminados correctamente"
 
 msgid "No file provided"
 msgstr "No se proporcionó ningún archivo"
@@ -1245,9 +1263,6 @@ msgstr "Siguiente"
 msgid "Previous"
 msgstr "Anterior"
 
-msgid "Unable to save settings"
-msgstr "No se pudo guardar la configuración"
-
 #, php-format
 msgid "The minimun size for the %s is 200x200. Please adjust your image size."
 msgstr ""
@@ -1260,6 +1275,9 @@ msgid ""
 msgstr ""
 "Notificación planificada con éxito. Para más detalles, pincha <a href="
 "\"webpush_notifications/history\">aquí</a>"
+
+msgid "ID"
+msgstr "ID"
 
 msgid "ID"
 msgstr "ID"
@@ -1394,6 +1412,9 @@ msgstr "Más vistos 3 días"
 msgid "Opinion"
 msgstr "Opinión"
 
+msgid "Webpush Module is not activated"
+msgstr "El módulo Webpush no está activado"
+
 msgid "A minimum of 2 answers are required"
 msgstr "Se requiere un mínimo de 2 respuestas"
 
@@ -1463,9 +1484,6 @@ msgstr "Comprueba la dirección del vídeo, parece ser incorrecta"
 
 msgid "Can't get video information. Check the url"
 msgstr "No es posible obtener la información del vídeo. Comprueba la dirección"
-
-msgid "Webpush Module is not activated"
-msgstr "El módulo Webpush no está activado"
 
 msgid "Unexpected error"
 msgstr "Error inesperado"
@@ -3515,8 +3533,8 @@ msgid "Are you sure that do you want to send to trash the next element?"
 msgstr ""
 "¿Estás seguro de que quieres enviar a la papelera el siguiente elemento?"
 
-msgid "Keep"
-msgstr "Mantener"
+msgid "Config company module"
+msgstr "Configurar módulo de empresas"
 
 msgid "Are you sure you want to remove this frontpage?"
 msgstr "¿Estás seguro de que quieres eliminar esta portada?"
@@ -3610,25 +3628,30 @@ msgstr "Imagen de la izquierda"
 msgid "Default"
 msgstr "Por defecto"
 
-msgid "Edit Widget"
-msgstr "Editar widget"
+msgid "H1 Header"
+msgstr "Encabezado H1"
 
-msgid "Close"
-msgstr "Cerrar"
+msgid "If this field is left empty, the default Title will be displayed."
+msgstr "Si este campo se deja vacío, se mostrará el título predeterminado."
 
 msgid "Please, remember save positions after finish."
 msgstr "Por favor, recuerda guardar posiciones antes de terminar."
 
-msgid "Couldn't load this tab. We'll try to fix this as soon as possible."
-msgstr ""
-"No se pudo cargar esta pestaña. Intentaremos solucionarlo cuanto antes."
+msgid "Images"
+msgstr "Imágenes"
+
+msgid "Do you want to empty the trash?"
+msgstr "¿Quieres vaciar la papelera?"
+
+msgid "Delete all trashed contents"
+msgstr "Eliminar todos los contenidos en la papelera"
 
 msgid ""
-"You have reached the maximum number of elements (%number%). To add new "
-"contents remove the older."
+"Are you sure you want to remove permanently all the contents inside the "
+"trash?"
 msgstr ""
-"Has alcanzado el número máximo de elementos en la portada (%number%). Para "
-"añadir nuevos contenidos elimina los mas antiguos."
+"¿Estás seguro de que quieres eliminar de forma permanente todos los "
+"contenidos de la papelera?"
 
 msgid "Views"
 msgstr "Vistas"
@@ -3645,11 +3668,11 @@ msgstr "Portadas"
 msgid "LIVE"
 msgstr "ACTUAL"
 
-msgid "Save this version"
-msgstr "Guardar esta versión"
+msgid "Do you want to restore the selected items?"
+msgstr "¿Quieres recuperar los elementos seleccionados?"
 
-msgid "Live now"
-msgstr "Publicar ahora"
+msgid "Letter"
+msgstr "Carta"
 
 msgid "Clear selection"
 msgstr "Limpiar selección"
@@ -3660,30 +3683,202 @@ msgstr "Eliminar de esta portada"
 msgid "Go live on"
 msgstr "Publicar en"
 
-msgid "Add contents"
-msgstr "Añadir contenidos"
+msgid "NewsStand"
+msgstr "Portadas de papel"
+
+msgid "Improve your manager"
+msgstr "Mejora tu gestor"
+
+msgid "Contact with us to enjoy this feature."
+msgstr "Contacta con nosotros para disfrutar de esta función."
+
+msgid "I want this module"
+msgstr "Quiero este módulo"
+
+msgid "Mosaic"
+msgstr "Mosaico"
+
+msgid "Reload"
+msgstr "Recargar"
+
+msgid "Pressclipping data is updated every 15 minutes"
+msgstr "Los datos de PressClipping se actualizan cada 15 minutos"
+
+msgid "Pressclipping Configuration"
+msgstr "Configuración de PressClipping"
+
+msgid "PressClipping service"
+msgstr "Servicio de PressClipping"
+
+msgid "CEDRO"
+msgstr "CEDRO"
+
+msgid "The fields Publication ID or API Key are empty."
+msgstr "Los campos ID de publicación o Clave API están vacíos."
+
+msgid "CEDRO service credentials"
+msgstr "Credenciales del servicio de CEDRO"
+
+msgid "Publication ID"
+msgstr "ID de publicación"
+
+msgid "Can be found in your CEDRO Account"
+msgstr "Se puede encontrar en su cuenta CEDRO"
+
+msgid "Connect"
+msgstr "Conectar"
+
+msgid "Remove account data"
+msgstr "Eliminar datos de la cuenta"
+
+msgid "Send date"
+msgstr "Fecha de envío"
+
+msgid "Not sent"
+msgstr "No enviado"
+
+msgid "Own prompts"
+msgstr "Mis prompts"
+
+msgid "System prompts"
+msgstr "Prompts del sistema"
+
+msgid "Field"
+msgstr "Campo"
+
+msgid "Mode"
+msgstr "Modo"
+
+msgid "Default tone"
+msgstr "Tono por defecto"
+
+msgid "Default role"
+msgstr "Rol por defecto"
+
+msgid "Titles"
+msgstr "Titulares"
+
+msgid "Introductions"
+msgstr "Introducciones"
+
+msgid "Bodies"
+msgstr "Cuerpos"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Config article module"
+msgstr "Configuración del módulo «Artículos»"
+
+msgid "Link video from other services"
+msgstr "Enlazar vídeo desde otros servicios"
+
+msgid "Use HTML code"
+msgstr "Usar código HTML"
+
+msgid "Use file video URLs"
+msgstr "Usar URLs a ficheros de vídeo"
+
+msgid "Video URL"
+msgstr "URL del vídeo"
+
+msgid "Get information"
+msgstr "Obtener información"
+
+msgid "MP4 format"
+msgstr "Formato MP4"
+
+msgid "http://www.example.com/path/to/file.mp4"
+msgstr "http://www.ejemplo.es/ruta/al/archivo.mp4"
+
+msgid "Ogg format"
+msgstr "Formato Ogg"
+
+msgid "http://www.example.com/path/to/file.ogg"
+msgstr "http://www.ejemplo.es/ruta/al/archivo.ogg"
+
+msgid "WebM format"
+msgstr "Formato WebM"
+
+msgid "http://www.example.com/path/to/file.webm"
+msgstr "http://www.ejemplo.es/ruta/al/archivo.webm"
+
+msgid "Write HTML code"
+msgstr "Escriba el código HTML"
+
+msgid "Loading video information"
+msgstr "Cargando información de vídeo"
+
+msgid "Video preview"
+msgstr "Previsualización de vídeo"
+
+msgid "Original Title"
+msgstr "Título original"
+
+msgid "Service"
+msgstr "Servicio"
+
+msgid "Embed Url"
+msgstr "URL de embebido"
+
+msgid "Thumbnail"
+msgstr "Miniatura"
+
+msgid "No biography"
+msgstr "Sin biografía"
+
+msgid "Show in RSS"
+msgstr "Mostrar en el RSS"
+
+msgid "If this option is activated this author will be showed in rss"
+msgstr "Si esta opción está activada este autor se mostrará en el RSS"
+
+msgid "View as Blog"
+msgstr "Ver como Blog"
+
+msgid "If this option is activated page author will be showed as blog"
+msgstr ""
+"Si esta opción está activada la página del autor se mostrará como un blog"
+
+msgid "Twitter user"
+msgstr "Usuario en twitter"
+
+msgid "Facebook user"
+msgstr "Usuario de Facebook"
+
+msgid "Instagram user"
+msgstr "Usuario de Instagram"
+
+msgid "LinkedIn user"
+msgstr "Usuario de LinkedIn"
+
+msgid "Config album module"
+msgstr "Configuración del módulo «Álbum»"
+
+msgid "Slider"
+msgstr "Slider"
 
 msgid ""
-"The frontpage manager is currently <strong>unavaible for your screen size</"
-"strong>"
+"You have reached the maximum number of [% data.extra.max_photos %] photos. "
+"To add new photos remove the older or create a new album."
 msgstr ""
-"El gestor de portadas no está <strong>disponible para tu tamaño de pantalla</"
-"strong> actualmente"
+"Has alcanzado el número máximo de [% data.extra.max_photos %] fotos. Para "
+"agregar nuevas fotos, elimine las antiguas o cree un nuevo álbum."
 
-msgid "Available contents"
-msgstr "Contenidos disponibles"
+msgid "Logged in users"
+msgstr "Usuarios conectados"
 
-msgid "Suggested"
-msgstr "Sugeridos"
+msgid "Welcome"
+msgstr "Bienvenido"
 
-msgid "Others in category"
-msgstr "Otros en la categoría"
+msgid "Redirect your domain"
+msgstr "Redirige tu dominio"
 
-msgid "Latest articles"
-msgstr "Últimos artículos"
+msgid "Add contents to your site"
+msgstr "Añadir contenidos a tu sitio"
 
-msgid "Change the layout of this frontpage"
-msgstr "Cambiar la disposición para esta portada"
+msgid "New article"
+msgstr "Nuevo artículo"
 
 msgid "Active"
 msgstr "Activo"
@@ -4921,6 +5116,9 @@ msgstr "Compartir herramientas"
 msgid "Choose where to display"
 msgstr "Elige dónde mostrar"
 
+msgid "Related contents"
+msgstr "Contenidos relacionados"
+
 msgid "Automatic related contents"
 msgstr "Contenidos relacionados automáticos"
 
@@ -5090,6 +5288,9 @@ msgstr "Imagen por defecto para redes sociales"
 msgid "Cookies agreement"
 msgstr "Aceptación de cookies"
 
+msgid "None"
+msgstr "Ninguno"
+
 msgid "Basic cookies advise"
 msgstr "Aviso de cookies básico"
 
@@ -5168,6 +5369,9 @@ msgstr "Dominio"
 msgid "Activation Key"
 msgstr "Activation Key"
 
+msgid "Listing"
+msgstr "Listado"
+
 msgid "Items per page"
 msgstr "Elementos por página"
 
@@ -5177,11 +5381,460 @@ msgstr "Elementos por página de blog"
 msgid "Items in RSS"
 msgstr "Elementos en el RSS"
 
-msgid "Form Module"
-msgstr "Módulo de formularios"
+msgid "Indicates the elements that will be displayed in each sitemap."
+msgstr "Indica los elementos que se mostrarán en cada sitemap."
 
-msgid "Contact email"
-msgstr "Email de contacto"
+msgid "Total sitemap news elements"
+msgstr "Noticias totales para el sitemap"
+
+msgid "Elements per page"
+msgstr "Elementos por página"
+
+msgid "Sitemaps enabled"
+msgstr "Sitemaps activados"
+
+msgid "Activate the elements that you want to appear in the sitemap."
+msgstr "Activa los elementos que quieres que aparezcan en el sitemap."
+
+msgid "Newsstand"
+msgstr "Portadas de papel"
+
+msgid "Sitemaps disk cache"
+msgstr "Caché de disco del sitemap"
+
+msgid "This section allows to remove the sitemaps saved on disk."
+msgstr "Esta sección permite eliminar los sitemaps guardados en disco."
+
+msgid "Search for a sitemap by year, month and page"
+msgstr "Busca un sitemap por año, mes y página"
+
+msgid "Analytic system integration"
+msgstr "Integración con sistemas de analíticas"
+
+msgid "Google Analytics API key"
+msgstr "Llave de la API de Google Analytics"
+
+msgid ""
+"You can get your Google Analytics Site ID from <a class=\"external-link\" "
+"href=\"https://www.google.com/analytics/\" target=\"_blank\" ng-"
+"click=\"$event.stopPropagation();\">GAnalytics site</a> under the General "
+"Overview list (should be something like UA-546457-3)."
+msgstr ""
+"Puedes obtener tu ID de sitio web de Google Analytics desde <a "
+"class=\"external-link\" href=\"https://www.google.com/analytics/\" "
+"target=\"_blank\" ng-click=\"$event.stopPropagation();\">el sitio web de "
+"GAnalytics</a> bajo la lista de la Vista previa (debería ser algo semejante "
+"a UA-546457-3)."
+
+msgid "We are not responsible of the stats or of any third party services"
+msgstr "No somos responsables de las estadísticas de servicios de terceros"
+
+msgid "ComScore Statistics"
+msgstr "Estadísticas de comScore"
+
+msgid "comScore Page ID"
+msgstr "Identificador de página comScore"
+
+msgid ""
+"If you also have a <strong>comScore statistics service</strong>, add your "
+"page id"
+msgstr ""
+"Si ya tienes el <strong>servicio de estadísticas de comScore</strong>, añade "
+"tu identificador de página"
+
+msgid "OJD Statistics"
+msgstr "Estadísticas de OJD"
+
+msgid "OJD Page ID"
+msgstr "Identificador del sitio en OJD"
+
+msgid ""
+"If you also have a <strong>OJD statistics service</strong>, add your page id"
+msgstr ""
+"Si ya tienes el <strong>servicio de estadísticas de OJD</strong>, añade tu "
+"identificador de página"
+
+msgid "Chartbeat"
+msgstr "Chartbeat"
+
+msgid "Chartbeat Account ID"
+msgstr "ID de cuenta de Chartbeat"
+
+msgid ""
+"If you also have a <strong>Charbeat statistics service</strong>, add your "
+"account id"
+msgstr ""
+"Si ya tienes el <strong>servicio de estadísticas de Chartbeat</strong>, "
+"añade tu identificador de cuenta"
+
+msgid "Chartbeat Domain"
+msgstr "Dominio de Chartbeat"
+
+msgid "Marfeel Compass"
+msgstr "Marfeel Compass"
+
+msgid "Marfeel Compass ID"
+msgstr "Marfeel Compass ID"
+
+msgid "Marfeel Pass"
+msgstr "Marfeel Pass"
+
+msgid "Marfeel Pass EXPERIENCE ID"
+msgstr "Marfeel Pass EXPERIENCE ID"
+
+msgid "Use Marfeel Pass CMP notice"
+msgstr "Usar el aviso de CMP de Marfeel Pass"
+
+msgid "GFK Media ID"
+msgstr "GFK Media ID"
+
+msgid "GFK Domain"
+msgstr "GFK Domain"
+
+msgid "GFK Region ID"
+msgstr "GFK Region ID"
+
+msgid "Default will be set with \"es\""
+msgstr "Por defecto será establecido a \"es\""
+
+msgid "GFK Content ID"
+msgstr "GFK Content ID"
+
+msgid "Default will be set with \"default\""
+msgstr "Por defecto será establecido a \"default\""
+
+msgid "Prometeo"
+msgstr "Prometeo"
+
+msgid "Prometeo Media ID"
+msgstr "Prometeo Media ID"
+
+msgid "Adobe analytics"
+msgstr "Adobe Analytics"
+
+msgid "Adobe analytics Base File"
+msgstr "Archivo base para Adobe Analytics"
+
+msgid "Google Analytics (Native)"
+msgstr "Google Analytics (Native)"
+
+msgid "Google analytics ID"
+msgstr "Google analytics ID"
+
+msgid "Google analytics config File"
+msgstr "Archivo de configuración de Google Analytics"
+
+msgid "Internal settings"
+msgstr "Preferencias internas"
+
+msgid "Global Payments"
+msgstr "Global Payments"
+
+msgid "Merchant id"
+msgstr "Merchant id"
+
+msgid "Shared secret"
+msgstr "Shared secret"
+
+msgid "Amount"
+msgstr "Cantidad"
+
+msgid "Google Recaptcha"
+msgstr "Google Recaptcha"
+
+msgid "Public key"
+msgstr "Llave pública"
+
+msgid "Private key"
+msgstr "Llave privada"
+
+msgid ""
+"Get your reCaptcha key from <a class=\"external-link\" href=\"https://www."
+"google.com/recaptcha/admin#whyrecaptcha\" target=\"_blank\" ng-"
+"click=\"$event.stopPropagation();\">this page</a>."
+msgstr ""
+"Puedes obtener tus llaves de reCAPTCHA desde <a class=\"external-link\" "
+"href=\"https://www.google.com/recaptcha/admin#whyrecaptcha\"\" "
+"target=\"_blank\" ng-click=\"$event.stopPropagation();\">esta página</a>."
+
+msgid "Used when we want to test if the user is an human and not a robot."
+msgstr ""
+"Usado cuando quieress comprobar si un usuario es un humano y no un robot."
+
+msgid "Google Search"
+msgstr "Búsqueda de Google"
+
+msgid "Google Search API key"
+msgstr "Llave de la API de Google Search"
+
+msgid ""
+"You can get your Google <strong>Search</strong> API Key from <a "
+"class=\"external-link\" href=\"http://www.google.com/cse/manage/create\" "
+"target=\"_blank\" ng-click=\"$event.stopPropagation();\">Google Search sign "
+"up website</a>."
+msgstr ""
+"Puedes obtener tus llaves de Google <strong>Search</strong> desde <a "
+"href=\"http://www.google.com/cse/manage/create\" target=\"_blank\" "
+"class=\"external-link\" ng-click=\"$event.stopPropagation();\">el sitio web "
+"Google Search sign up</a>."
+
+msgid "Google News"
+msgstr "Google News"
+
+msgid "Publication name in Google News"
+msgstr "Nombre de la publicación en Google News"
+
+msgid "Google Maps API key"
+msgstr "Llave de la API de Google Maps"
+
+msgid ""
+"You can get your Google <strong>Maps</strong> API Key from <a "
+"class=\"external-link\" href=\"http://code.google.com/apis/maps/signup."
+"html\" target=\"_blank\" ng-click=\"$event.stopPropagation();\">Google maps "
+"sign up website</a>."
+msgstr ""
+"Puedes obtener tuss llaves de Google <strong>Maps</strong> desde <a "
+"class=\"external-link\" href=\"http://code.google.com/apis/maps/signup."
+"html\" target=\"_blank\" ng-click=\"$event.stopPropagation();\">el sitio web "
+"Google Maps sign up</a>."
+
+msgid "Google Tag Manager"
+msgstr "Google Tag Manager"
+
+msgid "Google Tag Manager container Id"
+msgstr "Id de contenedor de Google Tag Manager"
+
+msgid "Google Tag Manager container Id for AMP"
+msgstr "Id de contenedor de Google Tag Manager para AMP"
+
+msgid ""
+"You can get your Google <strong>Tags</strong> container Id from <a "
+"class=\"external-link\" href=\"https://tagmanager.google.com/#/home\" "
+"target=\"_blank\" ng-click=\"$event.stopPropagation();\">Google tags sign up "
+"website</a>."
+msgstr ""
+"Puedes obtener el id de contenedor de Google <strong>Tags</strong> desde <a "
+"class=\"external-link\" href=\"https://tagmanager.google.com/#/home\" "
+"target=\"_blank\" ng-click=\"$event.stopPropagation();\">el sitio web de "
+"Google Tags</a>."
+
+msgid "Data Layer"
+msgstr "Data Layer"
+
+msgid "Variable key"
+msgstr "Clave de variable"
+
+msgid "Select a value..."
+msgstr "Selecciona un valor…"
+
+msgid "Use Marfeel meta tags"
+msgstr "Usar meta tags de Marfeel"
+
+msgid "Act-On"
+msgstr "Act-On"
+
+msgid "Act-On user name"
+msgstr "Nombre de usuario de Act-On"
+
+msgid "Act-On password"
+msgstr "Contraseña de Act-On"
+
+msgid "Act-On client_id"
+msgstr "Client_id de Act-On"
+
+msgid "Act-On secret"
+msgstr "Secreto de Act-On"
+
+msgid ""
+"You can get your <strong>Act-On</strong> auth codes from your <a "
+"class=\"external-link\" href=\"http://act-on.com\" target=\"_blank\" ng-"
+"click=\"$event.stopPropagation();\">the Act-On account</a>."
+msgstr ""
+"Puedes obtener los códigos de autenticación de <strong>Act-On</strong> desde "
+"su <a class=\"external-link\" href=\"http://act-on.com\" target=\"_blank\" "
+"ng-click=\"$event.stopPropagation();\">cuenta de Act-On</a>."
+
+msgid "Social network integration"
+msgstr "Integración con redes sociales"
+
+msgid "YouTube"
+msgstr "YouTube"
+
+msgid "YouTube Page Url"
+msgstr "Url de la página de Youtube"
+
+msgid ""
+"If you have a <strong>Youtube page</strong>, please complete the form with "
+"your youtube page url."
+msgstr ""
+"Si tienes un a <strong>página en Youtube</strong>, completa el formulario "
+"con la URL de la página de Youtube."
+
+msgid "Facebook Page Url"
+msgstr "Url de la página de Facebook"
+
+msgid ""
+"If you have a <strong>facebook page</strong>, please complete the form with "
+"your facebook page url and Id."
+msgstr ""
+"Si tienes una <b>página en Facebook</b>, completa el formulario con la URL "
+"de la página de Facebook y el Id."
+
+msgid "Facebook Id"
+msgstr "Id de Facebook"
+
+msgid "APP key"
+msgstr "Llave de la aplicación"
+
+msgid ""
+"You can get your Facebook App Keys from <a class=\"external-link\" "
+"href=\"https://developers.facebook.com/apps\" target=\"_blank\" ng-"
+"click=\"$event.stopPropagation();\">Facebook Developers website</a>."
+msgstr ""
+"Puedes obtener tus llaves de aplicación de Facebook desde <a href=\"https://"
+"developers.facebook.com/apps\" target=\"_blank\" ng-click=\"$event."
+"stopPropagation();\">el sitio web Facebook Developers</a>."
+
+msgid "Secret key"
+msgstr "Llave secreta"
+
+msgid "Instant Articles (fb:pages meta tag)"
+msgstr "Instant Articles (etiqueta meta fb:pages)"
+
+msgid "Twitter Page"
+msgstr "Página en Twitter"
+
+msgid ""
+"If you also have a <strong>Twitter page</strong>, add your page url on the "
+"form. Default will be set with Opennemas."
+msgstr ""
+"Si tienes una <strong>página en Twitter</strong>, añade el nombre de perfíl "
+"en el formulario. Por defecto, se usará el de OpenNemas."
+
+msgid "Bluesky"
+msgstr ""
+
+msgid "Bluesky Page"
+msgstr ""
+
+#, fuzzy
+msgid ""
+"If you also have a <strong>Bluesky page</strong>, add your page url on the "
+"form. Default will be set with Opennemas."
+msgstr ""
+"Si tienes una <strong>página en Twitter</strong>, añade el nombre de perfíl "
+"en el formulario. Por defecto, se usará el de OpenNemas."
+
+msgid "Instagram Page"
+msgstr "Página de Instagram"
+
+msgid ""
+"If you also have a <strong>Instagram page</strong>, add your page url on the "
+"form."
+msgstr ""
+"Si ya tienes una <b>página de Instagram</b>, añade tu URL de la página en el "
+"formulario."
+
+msgid "Pinterest"
+msgstr "Pinterest"
+
+msgid "Pinterest Page"
+msgstr "Página en Pinterest"
+
+msgid ""
+"If you also have a <strong>Pinterest page</strong>, add your page url on the "
+"form."
+msgstr ""
+"Si ya tienes una <b>página de Pinterest</b>, añade tu URL de la página en el "
+"formulario."
+
+#, fuzzy
+msgid "Flickr"
+msgstr "Clicks"
+
+#, fuzzy
+msgid "Flickr Page"
+msgstr "Página estática"
+
+#, fuzzy
+msgid ""
+"If you also have a <strong>flickr page</strong>, add your page url on the "
+"form."
+msgstr ""
+"Si ya tienes una <b>página de TikTok</b>, añade tu URL de la página en el "
+"formulario."
+
+msgid "Vimeo"
+msgstr "Vimeo"
+
+msgid "Vimeo Page"
+msgstr "Página de Vimeo"
+
+msgid ""
+"If you also have a <strong>Vimeo page</strong>, add your page url on the "
+"form."
+msgstr ""
+"Si ya tienes una <b>página de Vimeo</b>, añade tu URL de la página en el "
+"formulario."
+
+msgid "LinkedIn"
+msgstr "LinkedIn"
+
+msgid "LinkedIn Page"
+msgstr "Página de LinkedIn"
+
+msgid ""
+"If you also have a <strong>LinkedIn page</strong>, add your page url on the "
+"form. Default will be set with Opennemas."
+msgstr ""
+"Si tienes una <strong>página en LinkedIn</strong>, añade el nombre de perfíl "
+"en el formulario. Por defecto, se usará el de OpenNemas."
+
+msgid "Telegram"
+msgstr "Telegram"
+
+msgid "Telegram Page"
+msgstr "Página de Telegram"
+
+msgid ""
+"If you also have a <strong>Telegram page</strong>, add your page url on the "
+"form."
+msgstr ""
+"Si ya tienes una <b>página de Telegram</b>, añade tu URL de la página en el "
+"formulario."
+
+msgid "Whatsapp Page"
+msgstr "Página de Whatsapp"
+
+msgid ""
+"If you also have a <strong>Whatsapp page</strong>, add your page url on the "
+"form."
+msgstr ""
+"Si ya tienes una <b>página de Whatsapp</b>, añade tu URL de la página en el "
+"formulario."
+
+msgid "TikTok Page"
+msgstr "Página de TikTok"
+
+msgid ""
+"If you also have a <strong>TikTok page</strong>, add your page url on the "
+"form."
+msgstr ""
+"Si ya tienes una <b>página de TikTok</b>, añade tu URL de la página en el "
+"formulario."
+
+msgid "Dailymotion"
+msgstr "Dailymotion"
+
+msgid "Dailymotion Page"
+msgstr "Página de Dailymotion"
+
+msgid ""
+"If you also have a <strong>Dailymotion page</strong>, add your page url on "
+"the form."
+msgstr ""
+"Si ya tienes una <b>página de Dailymotion</b>, añade tu URL de la página en "
+"el formulario."
 
 msgid "Analytic system integration"
 msgstr "Integración con sistemas de analíticas"
@@ -6521,65 +7174,1111 @@ msgstr "No seleccionado"
 msgid "Unfavorite"
 msgstr "No Favorito"
 
-msgid "Search Fields"
-msgstr "Campos de búsqueda"
+msgid "You can change your payment method following the steps below."
+msgstr "Puedes cambiar tu método de pago siguiente los pasos debajo."
 
-msgid "Add fields in order to filter on company list page"
-msgstr "Añade campos para filtrar en la página de listado de empresas"
+msgid ""
+"If you want to delete a payment method, please <a href=\"mailto:"
+"sales@openhost.es\">contact us</a>."
+msgstr ""
+"Si necesitas eliminar un método de pago, por favor <a href=\"mailto:"
+"sales@openhost.es\">contactanos</a>."
 
-msgid "Add field"
-msgstr "Añadir campo"
+msgid "Change your payment method"
+msgstr "Cambiar tu método de pago"
 
-msgid "Field name"
-msgstr "Nombre del campo"
+msgid "Click on 'Change payment method'."
+msgstr "Pulsa en «Change payment method»."
 
-msgid "Name displayed in form"
-msgstr "Nombre mostrado en el formulario"
+msgid "A list with all payment method used will appear."
+msgstr "Aparecerá una lista de métodos de pago usados."
 
-msgid "Field values"
-msgstr "Valores del campo"
+msgid "Select one of the listed payment methods or add a new payment method."
+msgstr ""
+"Selecciona uno de los métodos de pago mostrados o añade un nuevo método de "
+"pago."
 
-msgid "Words suggested by the form input"
-msgstr "Palabras sugeridas por el campo en el formulario"
+msgid "Total words managed"
+msgstr "Total de palabras gestionadas."
 
-msgid "Add a value..."
-msgstr "Añade un valor..."
+msgid "Total interactions"
+msgstr "Total de interacciones"
 
-msgid "Remove field"
-msgstr "Eliminar campo"
+msgid "Average price per 1 million words sent"
+msgstr "Precio promedio por cada 1 millón de palabras enviadas."
 
-msgid "There are some required fields inside"
-msgstr "Hay algunos campos requeridos en el interior"
+msgid "Average price per 1 million words received"
+msgstr "Precio promedio por cada 1 millón de palabras recibidas."
 
-msgid "CIF"
-msgstr "CIF"
+msgid "Day"
+msgstr "Día"
 
-msgid "Province"
-msgstr "Provincia"
+msgid "OpenAI Module Configuration"
+msgstr "Configuración del módulo OpenAI"
 
 msgid "Locality"
 msgstr "Localidad"
 
-msgid "Select a locality"
-msgstr "Selecciona una localidad"
+msgid "Open AI"
+msgstr "Open AI"
 
-msgid "Company data"
-msgstr "Datos de la empresa"
+msgid "OpenAI Secret Key"
+msgstr "Clave secreta OpenAI"
 
-msgid "Linkedin"
-msgstr "LinkedIn"
+msgid "Roles"
+msgstr "Roles"
 
-msgid "Youtube"
-msgstr "YouTube"
+msgid "Tones"
+msgstr "Tonos"
 
-msgid "Add an element..."
-msgstr "Añade un elemento..."
+msgid "OpenAI configuration"
+msgstr "Configuración Open AI"
 
-msgid "Company Name"
-msgstr "Nombre de la empresa"
+msgid "OpenAI module"
+msgstr "Módulo OpenAI"
 
-msgid "Products"
-msgstr "Productos"
+msgid "AI 'Temperature' param"
+msgstr "AI 'Temperatura' parámetro"
+
+msgid ""
+"Numeric valuer between 0 and 2. Higher values like 1.2 will make the output "
+"more random, while lower values like 0.2 will make it more focused and "
+"deterministic"
+msgstr ""
+"Valor numérico entre 0 y 2. Valores más altos, como 1.2, harán que el "
+"resultado sea más aleatorio, mientras que valores más bajos, como 0.2, lo "
+"harán más enfocado y determinista."
+
+msgid "Max tokens"
+msgstr "Tokens máximos"
+
+msgid ""
+"The maximum number of tokens that can be generated in the chat completion. "
+"(Completion tokens)"
+msgstr ""
+"El número máximo de tokens que se pueden generar en la finalización del "
+"chat. (Tokens de finalización)"
+
+msgid "Frequency penalty"
+msgstr "Penalización por frecuencia"
+
+msgid "Number between -2.0 and 2.0"
+msgstr "Número entre -2.0 y 2.0."
+
+msgid ""
+"Positive values penalize new tokens based on their existing frequency in the "
+"text so far, decreasing the model's likelihood to repeat the same line "
+"verbatim."
+msgstr ""
+"Los valores positivos penalizan los nuevos tokens según su frecuencia "
+"existente en el texto hasta el momento, disminuyendo la probabilidad de que "
+"el modelo repita la misma línea literalmente."
+
+msgid "Presence penalty"
+msgstr "Penalización por presencia"
+
+msgid ""
+"Positive values penalize new tokens based on whether they appear in the text "
+"so far, increasing the model's likelihood to talk about new topics."
+msgstr ""
+"Los valores positivos penalizan los nuevos tokens según si aparecen en el "
+"texto hasta el momento, aumentando la probabilidad de que el modelo hable "
+"sobre nuevos temas."
+
+msgid "There is nothing to see here, kid."
+msgstr "Nada que ver aquí, chaval."
+
+msgid "Go back"
+msgstr "Atrás"
+
+msgid "Your invoice is currently unavailable."
+msgstr "Tu factura no está disponible actualmente."
+
+msgid ""
+"Please, contact our <a href=\"javascript:UserVoice.showPopupWidget();"
+"\">support team</a>."
+msgstr ""
+"Por favor, contacta con nuestro <a href=\"javascript:UserVoice."
+"showPopupWidget();\">equipo de soporte</a>."
+
+msgid "Web Push notifications Dashboard"
+msgstr "Panel de control de notificaciones Web Push"
+
+msgid "Active Subscribers"
+msgstr "Subscriptores activos"
+
+msgid "Impressions"
+msgstr "Visualizaciones"
+
+msgid "Monthly"
+msgstr "Mensual"
+
+msgid "Times a notification was"
+msgstr "Veces que una notificación fue"
+
+msgid "displayed to the user"
+msgstr "mostrada al usuario"
+
+msgid "Interactions"
+msgstr "Interacciones"
+
+msgid "clicked or closed"
+msgstr "clicada o cerrada"
+
+msgid "CTR"
+msgstr "CTR"
+
+msgid "Interactions (Clicks + Closed)"
+msgstr "Interacciones (Clicks + Cerradas)"
+
+msgid "divided by Impressions"
+msgstr "dividido por Visualizaciones"
+
+msgid "New Active Subscribers"
+msgstr "Nuevos Suscriptores Activos"
+
+msgid "Web Push notifications"
+msgstr "Notificaciones Web Push"
+
+msgid "Web Push notifications History"
+msgstr "Historial de notificaciones Web Push"
+
+msgid "Notifications data is updated every 15 minutes"
+msgstr "Los datos de las notificaciones se actualizan cada 15 minutos"
+
+msgid "Identificator"
+msgstr "Identificador"
+
+msgid "Total Sent"
+msgstr "Total enviado"
+
+msgid "Clicks"
+msgstr "Clicks"
+
+msgid "Transaction Id"
+msgstr "Identificador de transacción"
+
+msgid "Total notification sending attempts"
+msgstr "Total de intentos de envío de notificación"
+
+msgid "clicked by the user"
+msgstr "clicada por el usuario"
+
+msgid "closed by the user"
+msgstr "cerrada por el usuario"
+
+msgid "Clicks + Closed"
+msgstr "Clicks + Cerradas"
+
+msgid "Web Push notifications Configuration"
+msgstr "Configuración del módulo Web Push"
+
+msgid "Web Push service"
+msgstr "Servicio Web Push"
+
+msgid "Webpushr"
+msgstr "Webpushr"
+
+msgid "SendPulse"
+msgstr "SendPulse"
+
+msgid "Automatic sent"
+msgstr "Envío automático"
+
+msgid "Will be sent when content is published"
+msgstr "Será enviada cuando el contenido esté publicado"
+
+msgid "Notifications delay time"
+msgstr "Tiempo de retraso en notificaciones"
+
+msgid "Restricted hours"
+msgstr "Horas restringidas"
+
+msgid "Add an hour"
+msgstr "Añadir una hora"
+
+msgid "Time zone:"
+msgstr "Zona horaria:"
+
+msgid "Stop subscribers collection"
+msgstr "Detener la recopilación de suscriptores"
+
+msgid "Stop asking to subscribe"
+msgstr "Dejar de preguntar para suscribirte"
+
+msgid "Users will not be able to subscribe to your notifications"
+msgstr "Los usuarios no podrán suscribirse a sus notificaciones"
+
+msgid "Webpushr service credentials"
+msgstr "Credenciales del servicio Webpushr"
+
+msgid "Can be found in Webpushr APP"
+msgstr "Puede encontrarse en la APP de Webpushr"
+
+msgid "Authentication token"
+msgstr "Token de autenticación"
+
+msgid "SendPulse service credentials"
+msgstr "Credenciales del servicio SendPulse"
+
+msgid "API ID"
+msgstr "API ID"
+
+msgid "Can be found in SendPulse Account Settings"
+msgstr "Se puede encontrar en Configuración de la cuenta SendPulse"
+
+msgid "API Secret"
+msgstr "API Secret"
+
+msgid "AI"
+msgstr "AI"
+
+msgid "Attachment"
+msgstr "Adjuntos"
+
+msgid "Do you want to send the item to trash?"
+msgstr "¿Deseas enviar el elemento a la papelera?"
+
+msgid "Do you want to send the selected items to trash?"
+msgstr "¿Quieres eliminar los elementos seleccionados a la papelera?"
+
+msgid "Clear selection"
+msgstr "Limpiar selección"
+
+msgid "Unable to find any item or you don't have permission to see the list."
+msgstr ""
+"No se han encontrado elementos que coincidan con tu búsqueda o no tienes "
+"permisos para ver la lista."
+
+msgid ""
+"Maybe changing any filter could help or add one using the \"Create\" button "
+"above."
+msgstr ""
+"Puede que cambiando los filtros ayude o tambien puede usar el botón «Crear» "
+"de arriba."
+
+msgid "Columns"
+msgstr "Columnas"
+
+msgid "Updated"
+msgstr "Actualizado"
+
+msgid "Start date"
+msgstr "Fecha de inicio"
+
+msgid "End date"
+msgstr "Fecha de fin"
+
+msgid "Views"
+msgstr "Vistas"
+
+msgid "No category"
+msgstr "Sin categoría"
+
+msgid "No tags"
+msgstr "Sin etiquetas"
+
+msgid "Do you want to duplicate the item?"
+msgstr "¿Quieres duplicar el elemento?"
+
+msgid "The item doesn't exists or you don't have permission to see it."
+msgstr "El contenido no existe o no tienes permiso para verlo."
+
+msgid "Click here to return to the list"
+msgstr "Pincha aquí para volver al listado"
+
+msgid ""
+"All the latest information about %1 in %2. News, events, reports and opinion "
+"articles."
+msgstr ""
+"Toda la información de %1 en %2 Noticias, eventos, reportajes y artículos de "
+"opinión."
+
+msgid "No available translators for \"%1&rarr;%2\""
+msgstr "No hay ningún traductor disponible para «%1&rarr;%2»"
+
+msgid "Translating selected contents into \"%1\""
+msgstr "Traduciendo los contenidos seleccionados a «%1»"
+
+msgid "%1 contents propertly translated into \"%2\"."
+msgstr "%1 contenidos traducidos con éxito al «%2»."
+
+msgid "Ok"
+msgstr "Aceptar"
+
+msgid "Restore item"
+msgstr "Restaurar elemento"
+
+msgid "Are you sure that do you want restore from trash \"%1\"?"
+msgstr "¿Estás seguro de que quieres restaurar de la papelera \"%1\"?"
+
+msgid "Yes, restore"
+msgstr "Si, restaurar"
+
+msgid "Arquive these elements"
+msgstr "Archivar estos elementos"
+
+msgid ""
+"Are you sure that do you want to arquive the selected elements from this "
+"frontpage?"
+msgstr ""
+"¿Estás seguro de que quieres archivar los elementos seleccionados de esta "
+"portada?"
+
+msgid ""
+"This will remove selected elements from <strong>ALL FRONTPAGES</strong> but "
+"they will remain available for read."
+msgstr ""
+"Esto quitará los contenidos seleccionados de <strong>TODAS LAS PORTADAS</"
+"strong> pero seguirán disponibles para su lectura."
+
+msgid "Keep"
+msgstr "Mantener"
+
+msgid "Drop these elements"
+msgstr "Quitar estos elementos"
+
+msgid ""
+"Are you sure that do you want to delete the selected elements from this "
+"frontpage?"
+msgstr ""
+"¿Estás seguro de que quieres eliminar los elementos seleccionados de esta "
+"portada?"
+
+msgid ""
+"This will temporary remove all the contents but after that you have to save "
+"the frontpage."
+msgstr ""
+"Esta acción quitará temporalmente los contenidos, para hacerlo permanente "
+"debes guardar la portada."
+
+msgid "Drop"
+msgstr "Eliminar"
+
+msgid "Permanently remove item"
+msgstr "Eliminar de forma permanente el elemento"
+
+msgid "Are you sure that do you want remove permanently from trash \"%1\"?"
+msgstr "¿Estás seguro de que quieres eliminar de forma permanente \"%1\"?"
+
+msgid "You will not be able to restore it back."
+msgstr "No podrás restaurarlos."
+
+msgid "Yes, remove"
+msgstr "Si, eliminar"
+
+msgid "There is a new version of this content that was saved as a draft."
+msgstr ""
+"Hay una nueva versión de este contenido que fue guardado como borrador."
+
+msgid "Discard it"
+msgstr "Descartar"
+
+msgid "Resume editing"
+msgstr "Continuar edición"
+
+msgid "Delete advertisements"
+msgstr "Eliminar publicidad"
+
+msgid "Delete selected items"
+msgstr "Eliminar elementos seleccionados"
+
+msgid "Are you sure you want to delete %1 item(s)?"
+msgstr "¿Estás seguro de que quieres eliminar %1 elemento(s)?"
+
+msgid "Deleting"
+msgstr "Eliminando"
+
+msgid "Yes, delete all"
+msgstr "Si, eliminarlos todos"
+
+msgid "opennemas AI"
+msgstr "Opennemas AI"
+
+msgid "Enter a topic"
+msgstr "Ingrese un tema"
+
+msgid "Ex: Benefits of AI-powered CMS"
+msgstr "Beneficios de los CMS con IA"
+
+msgid "Suggested prompts"
+msgstr "Prompt sugeridos"
+
+msgid "Select a prompt"
+msgstr "Seleccione un prompt"
+
+msgid "Suggested role"
+msgstr "Rol sugerido"
+
+msgid "Select a role"
+msgstr "Seleccione un rol"
+
+msgid "Suggested tone"
+msgstr "Tono sugerido"
+
+msgid "Select a tone"
+msgstr "Seleccione un tono"
+
+msgid "Prompt edit"
+msgstr "Editar prompt"
+
+msgid "Original text"
+msgstr "Texto original"
+
+msgid "words"
+msgstr "palabras"
+
+msgid "characters"
+msgstr "caracteres"
+
+msgid "Generated text"
+msgstr "Generar texto"
+
+msgid "View original"
+msgstr "Ver texto original"
+
+msgid "View generated"
+msgstr "Ver texto generado"
+
+msgid "words managed"
+msgstr "palabras gestionadas"
+
+msgid "Regenerate "
+msgstr "Regenerar"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Edit prompt"
+msgstr "Editar prompt"
+
+msgid "Continue"
+msgstr "Continuar"
+
+msgid "Do you want to restore the Theme Settings to default values?"
+msgstr ""
+"¿Quieres restaurar la configuración del tema a los valores predeterminados?"
+
+msgid "Are you sure that do you want send to the trash \"%1\"?"
+msgstr "¿Estás seguro de que quieres enviar a la papelera \"%1\"?"
+
+msgid "Remove permanently selected items"
+msgstr "Eliminar de forma permanente los elementos seleccionados"
+
+msgid "Are you sure you want to remove permanently %1 item(s)?"
+msgstr ""
+"¿Está seguro de que quiere eliminar de forma permanente %1 elemento(s)?"
+
+msgid "You will not be able to restore them back."
+msgstr "No podrás restaurarlos."
+
+msgid "Yes, remove them all"
+msgstr "Si, eliminarlos todos"
+
+msgid "Import Settings"
+msgstr "Importar ajustes"
+
+msgid "Insert a valid JSON"
+msgstr "Insertar un JSON válido"
+
+msgid "Default expanded fields"
+msgstr "Campos expandidos por defecto"
+
+msgid "Selected fields will be automatically expanded when the form loads"
+msgstr ""
+"Los campos seleccionados se expandirán automáticamente cuando se cargue el "
+"formulario"
+
+msgid "Do you want to translate to \"%1\"?"
+msgstr "¿Quieres traducir automáticamente a \"%1\"?"
+
+msgid "Translating content into \"%1\""
+msgstr "Traduciendo contenido al «%1»"
+
+msgid "Content translated properly into \"%1\"."
+msgstr "Contenido traducido con éxito al «%1»."
+
+msgid "You are going to send a push notification to all your subscribers"
+msgstr "Vas a enviar una notificación push a todos tus subscriptores"
+
+msgid "You are going to create or update a scheduled push notification"
+msgstr "Vas a crear o actualizar una notificación push planificada"
+
+msgid "Update selected items"
+msgstr "Actualizar los elementos seleccionados"
+
+msgid "Are you sure you want to unpublish %1 item(s)?"
+msgstr "¿Estás seguro de que quieres despublicar %1 elemento(s)?"
+
+msgid "Are you sure you want to publish %1 item(s)?"
+msgstr "¿Estás seguro de que quieres publicar %1 elemento(s)?"
+
+msgid "Are you sure you want to disable %1 item(s)?"
+msgstr "¿Estás seguro de que quieres desactivar %1 elemento(s)?"
+
+msgid "Are you sure you want to enable %1 item(s)?"
+msgstr "¿Estás seguro de que quieres activar %1 elemento(s)?"
+
+msgid "Are you sure you want to reject %1 item(s)?"
+msgstr "¿Estás seguro de que quieres rechazar %1 elemento(s)?"
+
+msgid "Are you sure you want to accept %1 item(s)?"
+msgstr "¿Estás seguro de que quieres aceptar %1 elemento(s)?"
+
+msgid "Are you sure you want to drop from home %1 item(s)?"
+msgstr "¿Está seguro de que quiere quitar de la portada %1 elemento(s)?"
+
+msgid "Are you sure you want to add to home %1 item(s)?"
+msgstr "¿Estás seguro de que quieres añadir a la portada %1 elemento(s)?"
+
+msgid "Yes, update all"
+msgstr "Si, actualizar todos"
+
+msgid "Restore selected items"
+msgstr "Restaurar elementos seleccionados"
+
+msgid "Are you sure you want to restore %1 item(s)?"
+msgstr "¿Estás seguro de que quieres restaurar %1 elemento(s)?"
+
+msgid "Yes, restore them all"
+msgstr "Si, restaurarlos todos"
+
+msgid "No available contents"
+msgstr "No hay contenidos disponibles"
+
+msgid "Themes"
+msgstr "Temas"
+
+msgid "Available"
+msgstr "Disponible"
+
+msgid "Exclusive"
+msgstr "Exclusivo"
+
+msgid "My themes"
+msgstr "Mis temas"
+
+msgid "Addons"
+msgstr "Añadidos"
+
+msgid "No themes available"
+msgstr "No hay temas disponibles"
+
+msgid "Delivery time"
+msgstr "Tiempo de entrega"
+
+msgid "Immediately"
+msgstr "Inmediatamente"
+
+msgid "Demo"
+msgstr "Demo"
+
+msgid "In cart"
+msgstr "En el carrito"
+
+msgid "Active"
+msgstr "Activo"
+
+msgid "Enabling"
+msgstr "Activando"
+
+msgid "Custom"
+msgstr "Personalizar"
+
+msgid "Download the style guide for this theme"
+msgstr "Descargar la guía de estilo para este tema"
+
+msgid "Download style guide"
+msgstr "Descargar guía de estilo"
+
+msgid "weeks"
+msgstr "semanas"
+
+msgid "months"
+msgstr "meses"
+
+msgid "standard"
+msgstr "estándar"
+
+msgid "widget"
+msgstr "widget"
+
+msgid "If enabled, this user group will not be visible in some circunstances"
+msgstr ""
+"Si está activado, este grupo de usuarios no será visible en algunas "
+"circunstancias"
+
+msgid "Privileges"
+msgstr "Privilegios"
+
+msgid "Toggle all privileges"
+msgstr "Activar/desactivar todos los privilegios"
+
+msgid "Advertisement without name"
+msgstr "Publicidad sin nomber"
+
+msgid "Floating ads (for drop them into columns)"
+msgstr "Publicidades flotantes (para arrastrar en columnas)"
+
+msgid "Ads"
+msgstr "Publicidades"
+
+msgid "Position"
+msgstr "Posición"
+
+msgid "Unable to find any advertisement that matches your search."
+msgstr "No se pudieron encontrar publicidades que coincidan con tu búsqueda."
+
+msgid "Media element (jpg, png, gif)"
+msgstr "Elemento multimedia (jpg, png gif)"
+
+msgid "Media flash element (swf)"
+msgstr "Elemento multimedia Flash (swf)"
+
+msgid "Available from"
+msgstr "Disponible desde"
+
+msgid "to"
+msgstr "hasta"
+
+msgid "%1 positions"
+msgstr "%1 posición"
+
+msgid "No positions assigned"
+msgstr "Sin posiciones asignadas"
+
+msgid "No clicks"
+msgstr "Sin clics"
+
+msgid "%1 clicks"
+msgstr "%1 clics"
+
+msgid "And %1 more…"
+msgstr "Y %1 más…"
+
+msgid "Ad block detected"
+msgstr "Bloqueador de publicidad detectado"
+
+msgid "Please, disable it to work with Opennemas"
+msgstr "Por favor, desactívelo para trabajar correctamente con Opennemas"
+
+msgid "Entering on the requested page"
+msgstr "Entrando en la página solicitada"
+
+msgid "Skip advertisement"
+msgstr "Saltar publicidad"
+
+msgid ""
+"A Google DFP advertisement has been detected in your HTML/javascript "
+"advertisement but Opennemas already supports this type of advertisements."
+msgstr ""
+"Se ha detectado una publicidad de Google DFP en tu publicidad HTML/"
+"javascript. Opennemas se puede integrar con este tipo de publicidades."
+
+msgid ""
+"Would you like to auto-correct this advertisement to use our Google DFP "
+"integration?"
+msgstr ""
+"¿Quieres que se autocorrija esta publicidad para usar la integración de "
+"Google DFP?"
+
+msgid "Google DFP unit"
+msgstr "Unidad de Google DFP"
+
+msgid "Width"
+msgstr "Ancho"
+
+msgid "Height"
+msgstr "Alto"
+
+msgid "Creating banner"
+msgstr "Creando publicidad"
+
+msgid "Editing banner"
+msgstr "Editando publicidad"
+
+msgid "HTML or Javascript code"
+msgstr "Código HTML o Javascript"
+
+msgid "OpenX zone id"
+msgstr "Id de zona de OpenX"
+
+msgid ""
+"OpenX/Revive Ad server uses an id to identify an advertisement. Please fill "
+"the zone id from your OpenX/Revive server %1"
+msgstr ""
+"El servidor de publicidad OpenX/Revive usa un identificador para distinguir "
+"una publicidad. Completa el identificador de zona desde tu servidor de OpenX/"
+"Revive %1"
+
+msgid "Google DFP unit id"
+msgstr "Id de unidad de Google DFP"
+
+msgid ""
+"Google DFP uses an unit ID to identify an advertisement. Please fill the "
+"zone id from your Google DFP panel"
+msgstr ""
+"Google DFP usa un identificador de unidad para identificar una publicidad. "
+"Completa el id de zona desde tu panel de Google DFP"
+
+msgid "Format ID"
+msgstr "Format ID"
+
+msgid "Smart Ad server uses format ID to identify the advertisement format"
+msgstr ""
+"Smart Ad server usa un identificador de formato para identificar el formato "
+"de anuncio"
+
+msgid "Url"
+msgstr "Url"
+
+msgid "Mark"
+msgstr "Marca"
+
+msgid "Top"
+msgstr "Encima"
+
+msgid "Right"
+msgstr "Derecha"
+
+msgid "Bottom"
+msgstr "Debajo"
+
+msgid "Left"
+msgstr "Izquierda"
+
+msgid "Write here your custom mark. Default is \"%1\""
+msgstr "Escribe aquí tu marca personalizada. Por defecto es \"%1\""
+
+msgid ""
+"Defines the orientation for the word that marks the advertisement position"
+msgstr "Define la orientación de la palabra que marca el espacio de publicidad"
+
+msgid "Desktop"
+msgstr "Escritorio"
+
+msgid "Tablet"
+msgstr "Tablet"
+
+msgid "Display the advertisement only on the selected devices"
+msgstr "Mostrar la publicidad solo en los dispositivos seleccionados"
+
+msgid "Dimensions"
+msgstr "Dimensiones"
+
+msgid "One or more dimensions are invalid"
+msgstr "Una o más dimensiones son inválidas"
+
+msgid "Date range"
+msgstr "Rango de fechas"
+
+msgid "End"
+msgstr "Fin"
+
+msgid "Start"
+msgstr "Inicio"
+
+msgid "Display the advertisement if current date is in range"
+msgstr "Mostrar la publicidad si la fecha actual está dentro del rango"
+
+msgid "Select all"
+msgstr "Seleccionar todo"
+
+msgid ""
+"Display the advertisement if user belongs to one or more of the selected "
+"user groups"
+msgstr ""
+"Mostrar la publicidad si el usuario pertenece a uno o más grupos "
+"seleccionados"
+
+msgid "Duration"
+msgstr "Duración"
+
+msgid "Display the advertisement for a limited time (intersticials only)"
+msgstr "Mostrar la publicidad durante un tiempo limitado (solo intersticiales)"
+
+msgid "Show in all categories"
+msgstr "Mostrar en todas las categorías"
+
+msgid "Display the advertisement only in the selected categories"
+msgstr "Mostrar la publicidad solo en las categorías seleccionadas"
+
+msgid "Select/deselect all"
+msgstr "Seleccionar/deseleccionar todo"
+
+msgid ""
+"We recommend you to use the \"Show in all categories\" mark to avoid "
+"unchecked future created categories"
+msgstr ""
+"Recomendamos usar la opción \"Mostrar en todas las categorías\" para evitar "
+"que categorías futuras queden sin desmarcar"
+
+msgid "No positions selected, mark those you want on the form below."
+msgstr "No se seleccionó ninguna posición, marca las que quieras justo debajo."
+
+msgid "Show less…"
+msgstr "Mostrar menos…"
+
+msgid "Frontpages"
+msgstr "Portadas"
+
+msgid "Article: inner"
+msgstr "Articulo: interior"
+
+msgid "Video: frontpages"
+msgstr "Vídeo: portadas"
+
+msgid "Video: inner"
+msgstr "Vídeo: interior"
+
+msgid "Album: frontpages"
+msgstr "Álbum: portadas"
+
+msgid "Album: inner"
+msgstr "Álbum: interior"
+
+msgid "Opinion: frontpage"
+msgstr "Opinión: portada"
+
+msgid "Opinion: inner"
+msgstr "Opinión: interior"
+
+msgid "Obituary: frontpage"
+msgstr "Esquela: portada"
+
+msgid "Obituary: inner"
+msgstr "Esquela: interior"
+
+msgid "Company: frontpage"
+msgstr "Empresa: portada"
+
+msgid "Company: inner"
+msgstr "Empresa: interior"
+
+msgid "Poll: frontpage"
+msgstr "Encuesta: portada"
+
+msgid "Poll: inner"
+msgstr "Encuesta: interior"
+
+msgid "Newsletter"
+msgstr "Boletín de noticias"
+
+msgid "Google AMP"
+msgstr "Google AMP"
+
+msgid "Facebook Instant Articles"
+msgstr "Facebook Instant Articles"
+
+msgid "Others"
+msgstr "Otros"
+
+msgid "Cookie lifetime for intersticials"
+msgstr "Tiempo de vida de la cookie para intersticiales"
+
+msgid ""
+"This setting indicates how long will take to re-display the interstitial in "
+"frontpage."
+msgstr ""
+"Esta opción indica cuanto tiempo debe pasar para volver a mostrar el "
+"intersticial en portada."
+
+msgid "(in minutes)"
+msgstr "(en minutos)"
+
+msgid "Default mark shown indicating an advertisement"
+msgstr "Marca por defecto mostrada para indicar una publicidad"
+
+msgid ""
+"This is the text shown near advertisements. If you don't fill this field, "
+"the default value \"%1\" will be shown."
+msgstr ""
+"Este es el texto que se muestra al lado de las publicidades. Si no completa "
+"este campo, se mostrará el valor por defecto \"%1\"."
+
+msgid "Allow generic advertisement"
+msgstr "Permitir publicidad genérica"
+
+msgid "This settings allow printing home ads when ads in category are empty."
+msgstr ""
+"Estos ajustes permiten imprimir anuncios de portada cuando los anuncios en "
+"la categoría están vacíos."
+
+msgid "SafeFrame by default"
+msgstr "SafeFrame por defecto"
+
+msgid "Recommended"
+msgstr "Recomendado"
+
+msgid ""
+"This feature displays advertisements inside iframes. It improves the user "
+"experience and has a better performance."
+msgstr ""
+"Esta característica mustra las publicidades dentro de «iframes». Mejora la "
+"experiencia de usuario y tiene mejor rendimiento."
+
+msgid "Limit ads between paragraphs"
+msgstr "Limitar publicidad entre párrafos"
+
+msgid ""
+"This settings limits ads between paragraphs to the total number of "
+"paragraphs."
+msgstr ""
+"Este ajuste limita la publicidad entre párrafos al número total de párrafos."
+
+msgid "AdSense integration"
+msgstr "Integración con AdSense"
+
+msgid "AdSense ID"
+msgstr "ID de AdSense"
+
+msgid "The AdSense ID (i.e. ca-pub-0000000000000000)"
+msgstr "El identificador de AdSense (ej. ca-pub-0000000000000000)"
+
+msgid "OpenX/Revive Ad server integration"
+msgstr "Integración con servidor de publicidad OpenX/Revive"
+
+msgid "Ad server base url"
+msgstr "Url base del servidor de publicidad"
+
+msgid "The ad server URL (i.e. http://ad.serverexample.net/)."
+msgstr ""
+"La URL del servidor de publicidad (p.ej. http://ad.servidorejemplo.net/)."
+
+msgid "Smart Ad server integration"
+msgstr "Integración con servidor de publicidad Smart"
+
+msgid "The ad server Domain (i.e. https://www8.smartadserver.com/)."
+msgstr ""
+"El dominio del servidor de publicidad (p.ej. https://www8.smartadserver."
+"com/)."
+
+msgid "Tags format"
+msgstr "Formato de tags"
+
+msgid "Network ID"
+msgstr "Network ID"
+
+msgid "The ad server network ID"
+msgstr "El identificador de red del Ad server"
+
+msgid "Site ID"
+msgstr "Site ID"
+
+msgid "The ad server site ID"
+msgstr "El identificador de sitio del Ad server"
+
+msgid "Page ID"
+msgstr "Page ID"
+
+msgid "The ad server pages ID"
+msgstr "El identificador de páginas del Ad server"
+
+msgid "Header Bidding"
+msgstr "Header Bidding"
+
+msgid "Use header bidding"
+msgstr "Usar header bidding"
+
+msgid "Managed Holistic+"
+msgstr "Holística+ gestionada"
+
+msgid "Targeting"
+msgstr "Segmentación"
+
+msgid "Module"
+msgstr "Módulo"
+
+msgid "Custom code"
+msgstr "Código personalizado"
+
+msgid "DFP targeting"
+msgstr "Segmentación DFP"
+
+msgid "Key for category targeting"
+msgstr "Clave para segmentación DFP por categoría"
+
+msgid ""
+"Set a key for targeting your ads by category. Note that the value for "
+"targeting will always be the current category internal name"
+msgstr ""
+"Establecer una clave para la segmentación de los anuncios por categorías. "
+"Tenga en cuenta que el valor para la segmentación será siempre el nombre "
+"interno de la categoría actual"
+
+msgid "Key for module targeting"
+msgstr "Clave para segmentación DFP por módulo"
+
+msgid ""
+"Set a key for targeting your ads by module. Note that the value for "
+"targeting will always be the current module name"
+msgstr ""
+"Establecer una clave para la segmentación de los anuncios por módulos. Tenga "
+"en cuenta que el valor para la segmentación será siempre el nombre interno "
+"del módulo actual"
+
+msgid "Key for content ID targeting"
+msgstr "Clave para segmentación DFP por ID de contenido"
+
+msgid ""
+"Set a key for targeting your ads by content ID. Note that the value for "
+"targeting will always be the current content ID"
+msgstr ""
+"Establecer una clave para la segmentación de los anuncios por ID de "
+"contenido. Tenga en cuenta que el valor para la segmentación será siempre el "
+"ID delcontenido actual"
+
+#, fuzzy
+msgid "Key for content tags targeting"
+msgstr "Clave para segmentación DFP por ID de contenido"
+
+#, fuzzy
+msgid ""
+"Set a key for targeting your ads by content tags. Note that the value for "
+"targeting will always be the current content tags"
+msgstr ""
+"Establecer una clave para la segmentación de los anuncios por ID de "
+"contenido. Tenga en cuenta que el valor para la segmentación será siempre el "
+"ID delcontenido actual"
+
+msgid "DFP custom code"
+msgstr "Código DFP personalizado"
+
+msgid "Custom code at the end of DFP tags"
+msgstr "Código personalizado al final de los tags de DFP"
+
+msgid "Tradedoubler integration"
+msgstr "Integración con Tradedoubler"
+
+msgid "Tradedoubler ID"
+msgstr "Tradedoubler ID"
+
+msgid "Only the ID from Tradedoubler validation tag"
+msgstr "Sólo el ID de la etiqueta de validación de TradeDoubler"
+
+msgid "Iadbox integration"
+msgstr "Integración con Iadbox"
+
+msgid "Iadbox ID"
+msgstr "ID de iadbox"
+
+msgid "Iadbox affiliate ID"
+msgstr "ID de afiliado de Iadbox"
+
+msgid "Authorized Digital Sellers from inheritance"
+msgstr "Authorized Digital Sellers desde herencia"
+
+msgid "Authorized Digital Sellers"
+msgstr "Authorized Digital Sellers"
+
+msgid "This will be the content of the file ads.txt on your root domain"
+msgstr "Este será el contenido del archivo ads.txt en la raíz de tu dominio"
+
+msgid "Restricted URLs"
+msgstr "URLs restringidas"
+
+msgid "List of advertisement free URLs"
+msgstr "Listado de urls libres de publicidad"
 
 msgid "Config company module"
 msgstr "Configurar módulo de empresas"
@@ -7550,14 +9249,8 @@ msgstr ""
 "Pulsa Ctrl+F5 o Ctrl+Mayús+R para hacer que tu navegador recargue la "
 "aplicación."
 
-msgid "Instance"
-msgstr "Instancia"
-
 msgid "Notification"
 msgstr "Notificación"
-
-msgid "Client"
-msgstr "Cliente"
 
 msgid "Group"
 msgstr "Grupo"
@@ -8145,15 +9838,85 @@ msgstr "Abiertas"
 msgid "Download report"
 msgstr "Descargar informe"
 
-msgid "Do you want to delete the user group?"
-msgstr "¿Estás seguro de que quieres eliminar el grupo de usuarios?"
+msgid "We seem to have lost you in the clouds."
+msgstr "Parece que te perdimos en las nubes."
 
-msgid "Do you want to delete the selected user groups?"
-msgstr ""
-"¿Estás seguro que quieres eliminar los grupos de usuarios seleccionados?"
+msgid "The page your looking for is not here"
+msgstr "La página que estas buscando no está aquí"
 
-msgid "Group name"
-msgstr "Nombre del grupo"
+#~ msgid "OpenAI"
+#~ msgstr "OpenAI"
+
+#, fuzzy
+#~ msgid "Total US$"
+#~ msgstr "Total enviado"
+
+#~ msgid "Usage"
+#~ msgstr "Usado"
+
+#~ msgid "Improve this text in terms of SEO..."
+#~ msgstr "Mejorar este texto en términos de SEO..."
+
+#~ msgid "OpenAI Module Usage"
+#~ msgstr "Uso del módulo de OpenAI"
+
+#~ msgid "Tokens used per model"
+#~ msgstr "Tokens utilizados por modelo"
+
+#~ msgid "Related to the input fields length (Input)"
+#~ msgstr "Relacionado con la longitud de los campos de entrada (Entrada)"
+
+#~ msgid "Completion tokens"
+#~ msgstr "Tokens de finalización"
+
+#~ msgid "Related to the text returned by the AI (Output)"
+#~ msgstr "Relacionado con el texto devuelto por la IA (Salida)"
+
+#~ msgid "Total tokens"
+#~ msgstr "Tokens totales"
+
+#~ msgid "Pricing"
+#~ msgstr "Precio"
+
+#~ msgid "All prices are in US$"
+#~ msgstr "Todos los precios están en US$."
+
+#~ msgid "Input"
+#~ msgstr "Entrada"
+
+#~ msgid "Total Spent"
+#~ msgstr "Total enviado"
+
+#~ msgid "OpenAI service type"
+#~ msgstr "Tipo de Servicio OpenAI"
+
+#~ msgid "Opennemas"
+#~ msgstr "Opennemas"
+
+#~ msgid "New"
+#~ msgstr "Crear"
+
+#~ msgid "Tokens used"
+#~ msgstr "Uso de tokens"
+
+#~ msgid "Manual category"
+#~ msgstr "Categoría manual"
+
+#~ msgid "Automatic category"
+#~ msgstr "Categoría automática"
+
+#~ msgid "GPT 3.5 Turbo"
+#~ msgstr "GPT 3.5 Turbo"
+
+#~ msgid "GPT 4o"
+#~ msgstr "GPT 4o"
+
+#~ msgid "GPT 4 Turbo"
+#~ msgstr "GPT 4o"
+
+#, fuzzy
+#~ msgid "Default tono"
+#~ msgstr "Autor por defecto"
 
 #~ msgid "Manual category"
 #~ msgstr "Categoría manual"
@@ -8163,9 +9926,6 @@ msgstr "Nombre del grupo"
 
 #~ msgid "Canonical URL"
 #~ msgstr "URL canónica"
-
-#~ msgid "NEW"
-#~ msgstr "NUEVO"
 
 #~ msgid "CANONICAL URL"
 #~ msgstr "URL canónica"
@@ -8209,9 +9969,6 @@ msgstr "Nombre del grupo"
 
 #~ msgid "Successfully sent"
 #~ msgstr "Enviado con éxito"
-
-#~ msgid "Edit content"
-#~ msgstr "Editar contenido"
 
 #~ msgid "Won't take effect on manual sending"
 #~ msgstr "No tendrá efecto para el envío manual"
@@ -8379,9 +10136,6 @@ msgstr "Nombre del grupo"
 #~ msgid "Advanced"
 #~ msgstr "Avanzado"
 
-#~ msgid "Config"
-#~ msgstr "Configurar"
-
 #~ msgid "[% element.key.name %]"
 #~ msgstr "[% element.key.name %]"
 
@@ -8396,9 +10150,6 @@ msgstr "Nombre del grupo"
 
 #~ msgid "Comerce"
 #~ msgstr "Comercio"
-
-#~ msgid "Construction"
-#~ msgstr "Construcción"
 
 #~ msgid "Advertising and marketing"
 #~ msgstr "Publicidad y Marketing"
@@ -8846,9 +10597,6 @@ msgstr "Nombre del grupo"
 #~ msgid "Pick a video"
 #~ msgstr "Escoja un vídeo"
 
-#~ msgid "Creation date"
-#~ msgstr "Fecha de creación"
-
 #~ msgid "Footer text for inner video:"
 #~ msgstr "Pie para el vídeo interior:"
 
@@ -8998,9 +10746,6 @@ msgstr "Nombre del grupo"
 
 #~ msgid "Use Consent Management Platform (CMP)"
 #~ msgstr "Utilizar Plataforma de gestión de consentimiento (CMP)"
-
-#~ msgid "Day"
-#~ msgstr "Día"
 
 #~ msgid "Week"
 #~ msgstr "Semana"
@@ -9286,9 +11031,6 @@ msgstr "Nombre del grupo"
 #~ msgstr ""
 #~ "Lea y acepte los <a href=\"http://help.opennemas.com/\" target=\"_blank"
 #~ "\"> términos de pago </a> de Opennemas"
-
-#~ msgid "Set a price"
-#~ msgstr "Establecer el precio"
 
 #~ msgid "We value your privacy"
 #~ msgstr "Tu privacidad es importante para nosotros"
