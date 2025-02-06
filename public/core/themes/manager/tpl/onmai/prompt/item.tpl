@@ -16,7 +16,7 @@
         <li class="quicklinks">
           <h5>
             <span ng-if="!item.id">{t}New prompt{/t}</span>
-            <span ng-if="item.id">{t}Edit prompt{/t}</span>
+            <span ng-if="item.id">{t}Prompt edit{/t}</span>
           </h5>
         </li>
       </ul>

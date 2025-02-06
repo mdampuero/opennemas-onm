@@ -14,7 +14,7 @@
       <div class="all-actions pull-right">
         <ul class="nav quick-section">
           <li class="quicklinks">
-            <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_onmai_prompt_config') %]" class="admin_add" title="{t}Config prompt module{/t}">
+            <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_onmai_prompt_config') %]" class="admin_add" title="{t}Config prompts{/t}">
               <span class="fa fa-cog fa-lg"></span>
             </a>
           </li>

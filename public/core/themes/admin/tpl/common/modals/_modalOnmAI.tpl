@@ -1,5 +1,5 @@
 <div class="modal-header text-left">
-  <h3 class="modal-title">{t}opennemas AI{/t}</h3>
+  <h3 class="modal-title">{t}Opennemas AI{/t}</h3>
 </div>
 <div class="modal-body">
   <div class="alert alert-danger" ng-show="error">
@@ -107,7 +107,7 @@
   </button>
   <button ng-if="template.step == 2" class="btn btn-white btn-lg pull-left" ng-click="back()" type="button">
     <i class="fa fa-angle-left"></i>
-    {t}Edit prompt{/t}
+    {t}Prompt edit{/t}
   </button>
   <button type="button" class="btn btn-success btn-loading btn-lg pull-right" ng-click="continue()" ng-disabled="waiting || !template.promptInput || !template.input || !template.promptSelected">
     {t}Continue{/t}
