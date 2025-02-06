@@ -5,6 +5,8 @@ namespace Common\Core\Component\Helper;
 use Common\Model\Entity\Instance;
 use Framework\Component\MIME\MimeTypeTool;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Router;
 
 /**
@@ -92,7 +94,7 @@ class PhotoHelper
             return null;
         }
 
-        $url = $this->ugh->generate($item);
+        $url = $this->ugh->generate($item); // media path (relative)
 
         // Do not transform if empty or external photo
         if (empty($transform) || preg_match('/^https?.*/', $url)) {
@@ -103,14 +105,19 @@ class PhotoHelper
             return $url;
         }
 
-        $absolute = $absolute
-            ? UrlGeneratorInterface::ABSOLUTE_URL
-            : UrlGeneratorInterface::ABSOLUTE_PATH;
+        if ($absolute) {
+            $this->router->setContext(
+                (new RequestContext())->setBaseUrl($this->instance->getBaseUrl())
+            );
+        }
 
-        return $this->router->generate('asset_image', [
-            'params' => implode(',', array_merge([ $transform ], $params)),
-            'path'   => ltrim($url, '/')
-        ], $absolute);
+        return $this->router->generate(
+            'asset_image',
+            [
+                'params' => implode(',', array_merge([$transform], $params)),
+                'path'   => ltrim($url, '/')
+            ]
+        );
     }
 
     /**
