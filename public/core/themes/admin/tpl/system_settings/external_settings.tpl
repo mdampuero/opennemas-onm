@@ -1078,7 +1078,7 @@
                   </div>
                 </div>
               </div>
-              <div class="panel-group" id="panel-group-dailymotion" data-toggle="collapse">
+              <div class="panel-group" id="panel-group-tiktok" data-toggle="collapse">
                 <div class="panel panel-default">
                   <div class="panel-heading collapsed">
                     <h4 class="panel-title">
@@ -1104,7 +1104,7 @@
                   </div>
                 </div>
               </div>
-               <div class="panel-group" id="panel-group-dailymotion" data-toggle="collapse">
+              <div class="panel-group" id="panel-group-dailymotion" data-toggle="collapse">
                 <div class="panel panel-default">
                   <div class="panel-heading collapsed">
                     <h4 class="panel-title">
@@ -1124,6 +1124,40 @@
                           <span class="help">
                             {t escape=off}If you also have a <strong>Dailymotion page</strong>, add your page url on the form.{/t}
                           </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h4>
+                <i class="fa fa-thumbs-up"></i>
+                {t}Trafective integration{/t}
+              </h4>
+              <div class="panel-group" id="panel-group-trafective" data-toggle="collapse">
+                <div class="panel panel-default">
+                  <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                      <a class="collapsed" data-parent="#panel-group-trafective" data-toggle="collapse" href="#trafective">
+                        <i class="fa fa-dailymotion"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="12" height="12" fill="var(--second-color)"><path d="M298.93,267a48.4,48.4,0,0,0-24.36-6.21q-19.83,0-33.44,13.27t-13.61,33.42q0,21.16,13.28,34.6t33.43,13.44q20.5,0,34.11-13.78T322,307.47A47.13,47.13,0,0,0,315.9,284,44.13,44.13,0,0,0,298.93,267ZM0,32V480H448V32ZM374.71,405.26h-53.1V381.37h-.67q-15.79,26.2-55.78,26.2-27.56,0-48.89-13.1a88.29,88.29,0,0,1-32.94-35.77q-11.6-22.68-11.59-50.89,0-27.56,11.76-50.22a89.9,89.9,0,0,1,32.93-35.78q21.18-13.09,47.72-13.1a80.87,80.87,0,0,1,29.74,5.21q13.28,5.21,25,17V153l55.79-12.09Z"></path></svg></i>{t}Trafective settings{/t}
+                      </a>
+                    </h4>
+                  </div>
+                  <div class="panel-collapse collapse" id="trafective">
+                    <div class="panel-body">
+                      <div class="form-group">
+                        <label class="form-label" for="trafective-page">
+                          {t}Trafective{/t}
+                        </label>
+                        <div class="controls">
+                          <div class="form-group no-margin">
+                            <div class="checkbox">
+                              <input id="content-status" ng-false-value="0" ng-model="settings.trafective_activated" ng-true-value="1" type="checkbox">
+                              <label for="content-status">{t}Activated{/t}</label>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
