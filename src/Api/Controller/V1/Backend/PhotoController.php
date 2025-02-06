@@ -88,22 +88,25 @@ class PhotoController extends ContentController
     /**
      * Returns photos configuration
      *
-     *
      * @return JsonResponse The response object.
      */
     public function getConfigAction()
     {
-        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
-        $sh = $this->get('core.helper.setting');
+        $photoSettings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('photo_settings');
 
-        $config = $ds->get('photo_settings', []);
-        $config = $sh->toBoolean($config, ['optimize_images', 'convert_png']);
+        $config = $this->get('core.helper.setting')->toBoolean(
+            $photoSettings ?? [],
+            ['optimize_images', 'convert_png', 'image_transform', 'transform_png']
+        );
 
+        $config['image_format']     = $config['image_format'] ?? 'webp';
+        $config['image_transform']  = $config['image_transform'] ?? true;
         $config['image_quality']    = $config['image_quality'] ?? '65';
         $config['image_resolution'] = $config['image_resolution'] ?? '1920x1080';
-        return new JsonResponse([
-            'config' => $config
-        ]);
+
+        return new JsonResponse([ 'config' => $config ]);
     }
 
     /**
@@ -119,9 +122,10 @@ class PhotoController extends ContentController
         $ds  = $this->get('orm.manager')->getDataSet('Settings', 'instance');
         $sh  = $this->get('core.helper.setting');
 
-        $config = $request->request->get('config', []);
-
-        $config = $sh->toInt($config, ['number_elements']);
+        $config = $sh->toBoolean(
+            $request->request->get('config', []),
+            ['optimize_images', 'convert_png', 'image_transform', 'transform_png']
+        );
 
         try {
             $ds->set('photo_settings', $config);

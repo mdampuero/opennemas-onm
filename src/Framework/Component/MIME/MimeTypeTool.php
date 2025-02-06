@@ -23,6 +23,7 @@ class MimeTypeTool
         'swf'  => 'application/x-shockwave-flash',
         'flv'  => 'video/x-flv',
         // images
+        'avif' => 'image/avif',
         'png'  => 'image/png',
         'jpg'  => 'image/jpeg',
         'jpe'  => 'image/jpeg',
