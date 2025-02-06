@@ -8,12 +8,11 @@ function smarty_function_trafective_tags($params, &$smarty)
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance');
 
-    $content = $smarty->getValue('content');
-
     $data = [
         'category' => (null !== $smarty->getValue('o_category'))
                       ? $smarty->getValue('o_category')->getData()['name'] ?? 'homepage'
                       : 'homepage',
+        'pagetype' => $smarty->getContainer()->get('core.globals')->getExtension(),
         'url'      => $smarty->getContainer()->get('request_stack')
             ->getCurrentRequest()->getUri(),
     ];
@@ -24,7 +23,7 @@ function smarty_function_trafective_tags($params, &$smarty)
         data-traffectiveConf=\'{
             "targeting": [
                 {"key":"zone","values":null,"value":"' . $data['category'] . '"},
-                {"key":"pagetype","values":null,"value":"' . 'default_pagetype' . '"},
+                {"key":"pagetype","values":null,"value":"' . $data['pagetype'] . '"},
                 {"key":"programmatic_ads","values":null,"value":"' . 'true' . '"},
                 {"key":"ads","values":null,"value":"' . 'true' . '"}
             ]
