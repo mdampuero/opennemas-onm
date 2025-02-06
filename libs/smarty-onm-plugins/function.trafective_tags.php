@@ -8,6 +8,12 @@ function smarty_function_trafective_tags($params, &$smarty)
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance');
 
+    $trafectiveEnabled = $ds->get('trafective_enabled') ?? 0;
+
+    if (!$trafectiveEnabled) {
+        return null;
+    }
+
     $data = [
         'category' => (null !== $smarty->getValue('o_category'))
                       ? $smarty->getValue('o_category')->getData()['name'] ?? 'homepage'

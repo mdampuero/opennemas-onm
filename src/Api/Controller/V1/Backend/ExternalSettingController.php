@@ -66,6 +66,7 @@ class ExternalSettingController extends SettingController
         'vimeo_page',
         'youtube_page',
         'flickr_page',
+        'trafective_enabled',
     ];
 
     /**
