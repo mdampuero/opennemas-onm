@@ -1136,7 +1136,7 @@
                 <i class="fa fa-thumbs-up"></i>
                 {t}Trafective integration{/t}
               </h4>
-              <div class="panel-group" id="panel-group-trafective" data-toggle="collapse">
+              <div class="panel-group" id="panel-group-trafective">
                 <div class="panel panel-default">
                   <div class="panel-heading collapsed">
                     <h4 class="panel-title">
