@@ -113,79 +113,110 @@ class AuthorController extends FrontendController
             ->getDataSet('Settings', 'instance')
             ->get('items_in_blog', 10);
         $item         = $this->getItem($request, $itemsPerPage);
-        $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
-        $page         = (int) $request->get('page', 1);
         $params       = $request->query->all();
         $xtags        = [];
+        $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         $expected = $this->getExpectedUri($action, $params);
 
         if (strpos($request->getRequestUri(), $expected) === false) {
-            return new RedirectResponse($expected);
+            return new RedirectResponse($expected, 301);
         }
 
-        $params = $this->getParameters($request, $item);
+        $params                   = $this->getParameters($request, $item);
+        $params['item_id']        = $item[0]->id;
+        $params['items_per_page'] = $itemsPerPage;
+        $params['slug']           = $slug;
 
-        // Setup templating cache layer
         $this->view->setConfig('articles');
-        $cacheID = $this->view->getCacheId('frontpage', 'author', $item[0]->id, $page);
 
-        if (($this->view->getCaching() === 0)
-           || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
-        ) {
-            if ($page <= 0 || $page > $this->getParameter('core.max_page')) {
-                throw new ResourceNotFoundException();
-            }
-
-            $criteria = [
-                'fk_author'       => [[ 'value' => $item[0]->id ]],
-                'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
-                'content_status'  => [[ 'value' => 1 ]],
-                'in_litter'       => [[ 'value' => 0 ]],
-                'starttime'       => [
-                    'union' => 'OR',
-                    [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
-                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
-                ],
-                'endtime'         => [
-                    'union' => 'OR',
-                    [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
-                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
-                ]
-            ];
-
-            $er            = $this->get('entity_repository');
-            $contentsCount = $er->countBy($criteria);
-            $contents      = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
-
-            // Build the pagination
-            $pagination = $this->get('paginator')->get([
-                'directional' => true,
-                'epp'         => $itemsPerPage,
-                'page'        => $page,
-                'total'       => $contentsCount,
-                'route'       => [
-                    'name'   => 'frontend_author_frontpage',
-                    'params' => [ 'author_slug' => $slug, ]
-                ],
-            ]);
-
-            $this->view->assign([
-                'contents'   => $contents,
-                'author'     => $item,
-                'total'      => $contentsCount,
-                'pagination' => $pagination,
-                'page'       => $page,
-            ]);
+        if (!$this->isCached($params)) {
+            $this->hydrateShow($params);
         }
-
 
         $params['x-tags'] .= implode(',', array_unique($xtags));
 
         return $this->render(
             $this->getTemplate($action),
-            array_merge($params, ['author_slug' => $slug])
+            $params
         );
+    }
+
+    protected function hydrateShow(array &$params = []) : void
+    {
+        $params['epp'] = $params['items_per_page'];
+
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
+            throw new ResourceNotFoundException();
+        }
+
+        $service = $this->get('api.service.content');
+
+        $response = $service->getList(
+            sprintf(
+                'fk_author = %d and fk_content_type in [1, 4, 7, 9] and content_status = 1 and in_litter = 0 ' .
+                'and ((starttime is null or starttime <= "%s") and (endtime is null or endtime > "%s"))' .
+                'limit %d offset %d',
+                $params['item_id'],
+                gmdate('Y-m-d H:i:s'),
+                gmdate('Y-m-d H:i:s'),
+                $params['epp'],
+                $params['epp'] * ($params['page'] - 1)
+            )
+        );
+
+        $contents = $response['items'];
+        $total    = $response['total'];
+
+        // No first page and no contents
+        if ($params['page'] > 1 && empty($contents)) {
+            throw new ResourceNotFoundException();
+        }
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
+
+        $params = array_merge($params, [
+            'contents'   => $contents,
+            'total'      => $total,
+            'tag'        => $params['item'],
+            'pagination' => $this->get('paginator')->get([
+                'directional' => true,
+                'epp'         => $params['epp'],
+                'maxLinks'    => 5,
+                'page'        => $params['page'],
+                'total'       => $total,
+                'route'       => [
+                    'name'   => 'frontend_author_frontpage',
+                    'params' => [ 'author_slug' => $params['slug']]
+                ]
+            ])
+        ]);
+    }
+
+    /**
+     * Checks if the response for the current request is already cached basing
+     * on all parameters provided.
+     *
+     * @param array $params The list of parameters.
+     *
+     * @return boolean True if the response is already cached. False otherwise.
+     */
+    protected function isCached($params)
+    {
+        return array_key_exists('cache_id', $params)
+            && !empty($this->view->getCaching())
+            && $this->view->isCached(
+                $this->getTemplate($this->get('core.globals')->getAction()),
+                $params['cache_id']
+            );
     }
 
     /**
