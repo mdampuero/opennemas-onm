@@ -1148,13 +1148,15 @@
                   <div class="panel-collapse collapse" id="trafective">
                     <div class="panel-body">
                       <div class="form-group">
-                        <label class="form-label" for="">
+                        <label class="form-label" for="trafective">
                           {t}Trafective{/t}
                         </label>
                         <div class="controls">
                           <div class="checkbox">
-                            <input id="settings.trafective_enabled" ng-false-value="0" ng-model="settings.trafective_enabled" ng-true-value="1" type="checkbox">
-                            <label for="settings.trafective_enabled">{t}Activate{/t}</label>
+                            <input class="form-control" id="trafective-enabled" name="trafective-enabled" ng-false-value="'0'" ng-model="settings.trafective_enabled" ng-true-value="'1'" type="checkbox"/>
+                            <label class="form-label" for="trafective-enabled">
+                              {t}Enable{/t}
+                            </label>
                           </div>
                         </div>
                       </div>
