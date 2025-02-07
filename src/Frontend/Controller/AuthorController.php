@@ -190,7 +190,6 @@ class AuthorController extends FrontendController
             'pagination' => $this->get('paginator')->get([
                 'directional' => true,
                 'epp'         => $params['epp'],
-                'maxLinks'    => 5,
                 'page'        => $params['page'],
                 'total'       => $total,
                 'route'       => [
