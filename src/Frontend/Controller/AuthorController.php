@@ -186,7 +186,7 @@ class AuthorController extends FrontendController
         $params = array_merge($params, [
             'contents'   => $contents,
             'total'      => $total,
-            'tag'        => $params['item'],
+            'author'     => $params['item'],
             'pagination' => $this->get('paginator')->get([
                 'directional' => true,
                 'epp'         => $params['epp'],
