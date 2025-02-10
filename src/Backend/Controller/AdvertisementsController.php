@@ -362,7 +362,7 @@ class AdvertisementsController extends Controller
             $keys = [
                 'adsense_id', 'ads_settings', 'ads_txt', 'restricted_urls', 'dfp_custom_code',
                 'dfp_options', 'iadbox_id', 'revive_ad_server',
-                'smart_ad_server', 'smart_custom_code', 'tradedoubler_id',
+                'smart_ad_server', 'smart_custom_code', 'tradedoubler_id', 'traffective'
             ];
 
             return $this->render('advertisement/config.tpl', [
@@ -421,6 +421,7 @@ class AdvertisementsController extends Controller
                 'url'     => $formValues->filter('revive_ad_server_url', '', FILTER_SANITIZE_STRING),
                 'site_id' => $formValues->getDigits('revive_ad_server_site_id'),
             ],
+            'traffective'     => empty($formValues->get('traffective')) ? 0 : 1,
             'tradedoubler_id'  => $formValues->getDigits('tradedoubler_id'),
             'restricted_urls' => $formValues->filter('restricted_urls', '')
         ];
