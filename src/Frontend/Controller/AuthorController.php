@@ -158,7 +158,7 @@ class AuthorController extends FrontendController
             sprintf(
                 'fk_author = %d and fk_content_type in [1, 4, 7, 9] and content_status = 1 and in_litter = 0 ' .
                 'and ((starttime is null or starttime <= "%s") and (endtime is null or endtime > "%s"))' .
-                'limit %d offset %d',
+                'order by starttime desc limit %d offset %d',
                 $params['item_id'],
                 gmdate('Y-m-d H:i:s'),
                 gmdate('Y-m-d H:i:s'),
@@ -169,6 +169,15 @@ class AuthorController extends FrontendController
 
         $contents = $response['items'];
         $total    = $response['total'];
+
+        $contents = array_map(function ($content) {
+            if (isset($content->related_contents) && is_array($content->related_contents)) {
+                $content->related_contents = array_values(array_filter($content->related_contents, function ($related) {
+                    return isset($related['content_type_name']) && $related['content_type_name'] === 'photo';
+                }));
+            }
+            return $content;
+        }, $contents);
 
         // No first page and no contents
         if ($params['page'] > 1 && empty($contents)) {
