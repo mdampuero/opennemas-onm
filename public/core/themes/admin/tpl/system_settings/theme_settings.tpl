@@ -976,6 +976,24 @@
                             </div>
                           </div>
                         </div>
+                        <div class="col-xs-12 col-md-4 m-b-15">
+                          <label class="form-label m-b-15" for="theme-option-archive-secondary-menu">
+                            <h4>
+                              <i class="fa fa-navicon"></i>
+                              {t}Secondary menu{/t}
+                            </h4>
+                          </label>
+                          <div class="controls">
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-archive-secondary-menu" name="theme-option-archive-secondary-menu" ng-model="settings.theme_options.archive_secondary_menu" ng-checked="[% settings.theme_options.archive_secondary_menu == 'true' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label class="form-label m-b-15" for="theme-option-archive-secondary-menu">
+                                <span class="help">
+                                  {t}Display subcategories menu if exists{/t}
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
                         <div class="col-xs-12 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-archive-info">
                             <h4>
