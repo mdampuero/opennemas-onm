@@ -318,6 +318,15 @@
                   </div>
                 </div>
                 {/if}
+                <h4 class="m-t-30">{t}Traffective integration{/t}</h4>
+                <div class="form-group">
+                  <div class="controls">
+                    <div class="checkbox">
+                      <input {if $configs['traffective'] == 1}checked{/if} id="traffective" name="traffective" type="checkbox">
+                      <label for="traffective" class="form-label">{t}Enable{/t}</label>
+                    </div>
+                  </div>
+                </div>
                 <h4 class="m-t-30">{t}Tradedoubler integration{/t}</h4>
                 <div class="form-group">
                   <label for="tradedoubler_id" class="form-label">{t}Tradedoubler ID{/t}</label>
