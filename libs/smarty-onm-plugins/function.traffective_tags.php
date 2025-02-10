@@ -1,6 +1,6 @@
 <?php
 
-function smarty_function_trafective_tags($params, &$smarty)
+function smarty_function_traffective_tags($params, &$smarty)
 {
     $output = [];
 
@@ -8,7 +8,7 @@ function smarty_function_trafective_tags($params, &$smarty)
         ->get('orm.manager')
         ->getDataSet('Settings', 'instance');
 
-    $trafectiveEnabled = $ds->get('trafective_enabled') ?? 0;
+    $trafectiveEnabled = $ds->get('traffective') ?? 0;
 
     if (!$trafectiveEnabled) {
         return null;
