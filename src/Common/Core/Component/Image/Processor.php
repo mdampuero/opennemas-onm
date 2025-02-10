@@ -334,7 +334,7 @@ class Processor
         $activateTransform = $options['image_transform'] ?? true;
 
         // If not activated
-        if ($activateTransform === 'false') {
+        if (empty($activateTransform)) {
             return $this->image->getImagick()->getImageFormat();
         }
 
@@ -348,7 +348,7 @@ class Processor
 
         // Check for PNG format
         $transformPng = $options['transform_png'] ?? false;
-        if ($transformPng === 'true'
+        if ($transformPng === true
             && $this->image->getImagick()->getImageFormat() === 'PNG'
         ) {
             $this->image->getImagick()->setImageFormat($imageFormat);
