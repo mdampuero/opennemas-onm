@@ -6,6 +6,7 @@ use Common\Core\Component\Helper\ContentHelper;
 use Common\Core\Component\Helper\PhotoHelper;
 use Common\Model\Entity\Content;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RequestContext;
 
 /**
  * Defines test cases for photo helper.
@@ -37,7 +38,7 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->router = $this->getMockBuilder('Router')
             ->disableOriginalConstructor()
-            ->setMethods([ 'generate' ])
+            ->setMethods([ 'generate', 'setContext' ])
             ->getMock();
 
         $this->frontend = $this->getMockBuilder('Common\Core\Component\Template\Template')
@@ -207,15 +208,30 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
             ->with($photo)
             ->willReturn('/glorp/xyzzy/foobar.jpg');
 
-        $this->router->expects($this->once())->method('generate')
+        // Mock instance
+        $this->instance->expects($this->once())
+            ->method('getBaseUrl')
+            ->willReturn('http://example.com');
+
+        // Mock router
+        $this->router->expects($this->once())
+            ->method('setContext')
+            ->with($this->callback(function ($context) {
+                return $context instanceof RequestContext
+                    && $context->getBaseUrl() === 'http://example.com';
+            }));
+
+        $this->router->expects($this->once())
+            ->method('generate')
             ->with('asset_image', [
                 'params' => 'grault',
                 'path'   => 'glorp/xyzzy/foobar.jpg'
-            ], UrlGeneratorInterface::ABSOLUTE_URL)->willReturn(
-                'glorp/xyzzy/foobar.jpg'
-            );
+            ])
+            ->willReturn('http://example.com/asset/grault/glorp/xyzzy/foobar.jpg');
 
-        $this->assertEquals('glorp/xyzzy/foobar.jpg', $this->helper->getPhotoPath($photo, 'grault', [], true));
+        $result = $this->helper->getPhotoPath($photo, 'grault', [], true);
+
+        $this->assertEquals('http://example.com/asset/grault/glorp/xyzzy/foobar.jpg', $result);
     }
 
     /**
