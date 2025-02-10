@@ -142,10 +142,20 @@ class AuthorController extends FrontendController
         );
     }
 
+    /**
+     * Hydrates the "show" view parameters with content list and pagination data.
+     *
+     * @param array $params Reference to the parameters array.
+     *
+     * @throws ResourceNotFoundException If the page number is invalid or there are no results for a non-first page.
+     *
+     * @return void
+     */
     protected function hydrateShow(array &$params = []) : void
     {
         $params['epp'] = $params['items_per_page'];
 
+        // Validate the page number against defined limits
         if ($params['page'] <= 0
             || $params['page'] > $this->getParameter('core.max_page')
         ) {
@@ -170,6 +180,7 @@ class AuthorController extends FrontendController
         $contents = $response['items'];
         $total    = $response['total'];
 
+        // Filter related contents to include only those of type "photo"
         $contents = array_map(function ($content) {
             if (isset($content->related_contents) && is_array($content->related_contents)) {
                 $content->related_contents = array_values(array_filter($content->related_contents, function ($related) {
@@ -179,13 +190,14 @@ class AuthorController extends FrontendController
             return $content;
         }, $contents);
 
-        // No first page and no contents
+        // If no content is found on a non-first page, throw an exception
         if ($params['page'] > 1 && empty($contents)) {
             throw new ResourceNotFoundException();
         }
 
         $expire = $this->get('core.helper.content')->getCacheExpireDate();
 
+        // Set cache expiration if available
         if (!empty($expire)) {
             $this->setViewExpireDate($expire);
 
