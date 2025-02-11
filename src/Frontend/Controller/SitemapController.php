@@ -366,6 +366,13 @@ class SitemapController extends Controller
      */
     public function tagAction($letter, $format)
     {
+        $helper   = $this->get('core.helper.sitemap');
+        $settings = $helper->getSettings();
+
+        if (empty($settings['tag'])) {
+            throw new NotFoundHttpException();
+        }
+
         $letter = html_entity_decode($letter, ENT_XML1, 'UTF-8');
 
         $cacheId = $this->view->getCacheId('sitemap', 'tag', $letter);
