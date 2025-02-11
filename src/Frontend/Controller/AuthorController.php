@@ -177,16 +177,6 @@ class AuthorController extends FrontendController
         $contents = $response['items'];
         $total    = $response['total'];
 
-        // Filter related contents to include only those of type "photo"
-        $contents = array_map(function ($content) {
-            if (isset($content->related_contents) && is_array($content->related_contents)) {
-                $content->related_contents = array_values(array_filter($content->related_contents, function ($related) {
-                    return isset($related['content_type_name']) && $related['content_type_name'] === 'photo';
-                }));
-            }
-            return $content;
-        }, $contents);
-
         // If no content is found on a non-first page, throw an exception
         if ($params['page'] > 1 && empty($contents)) {
             throw new ResourceNotFoundException();
