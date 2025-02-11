@@ -12,6 +12,7 @@ namespace Frontend\Controller;
 use Api\Exception\GetListException;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Displays contents as sitemaps.
@@ -90,6 +91,13 @@ class SitemapController extends Controller
 
             if (empty($dates)) {
                 return $this->getResponse($format, $cacheId, 'index', [ 'letters' => $letters ]);
+            }
+
+            // Limit sitemap for contents if set
+            if (!empty($settings['contentyear'])) {
+                $dates = array_filter($dates, function ($e) use ($settings) {
+                    return $e > $settings['contentyear'];
+                });
             }
 
             foreach ($dates as $date) {
@@ -173,7 +181,6 @@ class SitemapController extends Controller
     public function newsAction($format)
     {
         $cacheId = $this->view->getCacheId('sitemap', 'news');
-
         if (!$this->isCached('news', $cacheId)) {
             $settings = $this->get('core.helper.sitemap')->getSettings();
             $filters  = [
@@ -197,8 +204,9 @@ class SitemapController extends Controller
                     [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [
                         'value' => sprintf(
-                            'DATE_ADD("%s", INTERVAL -2 DAY) AND "%s"',
+                            'DATE_ADD("%s", INTERVAL -%s DAY) AND "%s"',
                             gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s'))),
+                            $settings['limitdays'] ?? '2',
                             gmdate('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')))
                         ),
                         'field' => true,
@@ -259,6 +267,12 @@ class SitemapController extends Controller
             $page               = ceil(
                 $helper->getContents($last, $helper->getTypes($settings)) / $settings['perpage']
             );
+        }
+
+        // Compare the years: If the input year is less than or equal to the content year
+        // Throw a NotFoundHttpException if the condition is met
+        if ((int) $year < (int) $settings['contentyear']) {
+            throw new NotFoundHttpException();
         }
 
         $cacheId = $this->view->getCacheId('sitemap', 'contents', $year, $month, $page);
@@ -352,6 +366,13 @@ class SitemapController extends Controller
      */
     public function tagAction($letter, $format)
     {
+        $helper   = $this->get('core.helper.sitemap');
+        $settings = $helper->getSettings();
+
+        if (empty($settings['tag'])) {
+            throw new NotFoundHttpException();
+        }
+
         $letter = html_entity_decode($letter, ENT_XML1, 'UTF-8');
 
         $cacheId = $this->view->getCacheId('sitemap', 'tag', $letter);
