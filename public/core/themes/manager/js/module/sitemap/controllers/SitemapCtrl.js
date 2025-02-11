@@ -21,6 +21,7 @@
           perpage: 500,
           total: 100,
           limitdays: 2,
+          contentyear: 0,
           album: 0,
           article: 0,
           event: 0,
