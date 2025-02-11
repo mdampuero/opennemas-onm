@@ -7,9 +7,6 @@ use Api\Exception\GetListException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
-use Doctrine\ORM\Query\Expr\Func;
-use SebastianBergmann\Environment\Console;
 
 /**
  * Class AuthorController
@@ -219,24 +216,6 @@ class AuthorController extends FrontendController
                 ]
             ])
         ]);
-    }
-
-    /**
-     * Checks if the response for the current request is already cached basing
-     * on all parameters provided.
-     *
-     * @param array $params The list of parameters.
-     *
-     * @return boolean True if the response is already cached. False otherwise.
-     */
-    protected function isCached($params)
-    {
-        return array_key_exists('cache_id', $params)
-            && !empty($this->view->getCaching())
-            && $this->view->isCached(
-                $this->getTemplate($this->get('core.globals')->getAction()),
-                $params['cache_id']
-            );
     }
 
     /**
