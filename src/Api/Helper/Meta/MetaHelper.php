@@ -139,7 +139,40 @@ class MetaHelper
             $data = array_merge($data, $this->getContentData($content));
         }
 
+        if ($content && ($content instanceof \Common\Model\Entity\Tag ||
+        $content instanceof \Common\Model\Entity\Category)) {
+            $data = array_merge($data, $this->getLastContent($content));
+        }
+
         return $data;
+    }
+
+    /**
+     * Return last content
+     *
+     * @param Content $content The Content object.
+     *
+     * @return Array  $data    The last content data.
+     */
+    protected function getLastContent($content)
+    {
+        $response = $this->container->get('api.service.content')->getList(
+            sprintf(
+                'content_status = 1 and in_litter = 0 and (tag_id = %d or category_id = %d) ' .
+                'and fk_content_type in [1, 4, 5, 7, 9, 11, 18, 19] ' .
+                'order by starttime desc limit 1',
+                $content->id,
+                $content->id
+            )
+        );
+
+        if (empty($response['items'])) {
+            return [];
+        }
+
+        return [
+            'lastcontent_title'       => $response['items'][0]->title,
+        ];
     }
 
     /**
