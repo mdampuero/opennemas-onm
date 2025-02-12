@@ -28,12 +28,7 @@ function smarty_function_dynamic_image($params, &$smarty)
         return '';
     }
 
-    $baseUrl = array_key_exists('base_url', $params)
-        ? $params['base_url'] . DS
-        : get_instance_media() . DS;
-
-    $resource = $baseUrl . $params['src'];
-    $resource = preg_replace('@(?<!:)//@', '/', $resource);
+    $resource = preg_replace('@(?<!:)//@', '/', get_instance_media() . DS . $params['src']);
 
     if (array_key_exists('transform', $params)) {
         try {
@@ -46,10 +41,6 @@ function smarty_function_dynamic_image($params, &$smarty)
             $resource = '#failed';
             $smarty->getContainer()->get('error.log')->error($e->getMessage());
         }
-    }
-
-    if (array_key_exists('site_url', $params)) {
-        $resource = $params['site_url'] . $resource;
     }
 
     $lazyload = array_key_exists('data-src', $params)
