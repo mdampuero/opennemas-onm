@@ -105,14 +105,9 @@ class AuthorController extends FrontendController
      */
     public function showAction(Request $request)
     {
-        $action       = $this->get('core.globals')->getAction();
-        $itemsPerPage = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_in_blog', 10);
-        $item         = $this->getItem($request, $itemsPerPage);
-        $params       = $request->query->all();
-        $xtags        = [];
-        $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $action = $this->get('core.globals')->getAction();
+        $item   = $this->getItem($request);
+        $params = $request->query->all();
 
         $expected = $this->getExpectedUri($action, $params);
 
@@ -120,18 +115,13 @@ class AuthorController extends FrontendController
             return new RedirectResponse($expected, 301);
         }
 
-        $params                   = $this->getParameters($request, $item);
-        $params['item_id']        = $item[0]->id;
-        $params['items_per_page'] = $itemsPerPage;
-        $params['slug']           = $slug;
+        $params = $this->getParameters($request, $item);
 
         $this->view->setConfig('articles');
 
         if (!$this->isCached($params)) {
             $this->hydrateShow($params);
         }
-
-        $params['x-tags'] .= implode(',', array_unique($xtags));
 
         return $this->render(
             $this->getTemplate($action),
@@ -150,7 +140,9 @@ class AuthorController extends FrontendController
      */
     protected function hydrateShow(array &$params = []) : void
     {
-        $params['epp'] = $params['items_per_page'];
+        $params['epp'] = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_in_blog', 10);
 
         // Validate the page number against defined limits
         if ($params['page'] <= 0
@@ -159,14 +151,13 @@ class AuthorController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $service = $this->get('api.service.content');
-
-        $response = $service->getList(
+        $response = $this->get('api.service.content')->getList(
             sprintf(
-                'fk_author = %d and fk_content_type in [1, 4, 7, 9] and content_status = 1 and in_litter = 0 ' .
-                'and ((starttime is null or starttime <= "%s") and (endtime is null or endtime > "%s"))' .
+                'fk_author = %d and content_type_name in ["article","opinion","album","video"] ' .
+                'and content_status = 1 and in_litter = 0 ' .
+                'and ((starttime is null or starttime <= "%s") and (endtime is null or endtime > "%s")) ' .
                 'order by starttime desc limit %d offset %d',
-                $params['item_id'],
+                $params['item']->id,
                 gmdate('Y-m-d H:i:s'),
                 gmdate('Y-m-d H:i:s'),
                 $params['epp'],
@@ -202,7 +193,7 @@ class AuthorController extends FrontendController
                 'total'       => $total,
                 'route'       => [
                     'name'   => 'frontend_author_frontpage',
-                    'params' => [ 'author_slug' => $params['slug']]
+                    'params' => [ 'author_slug' => $params['author_slug']]
                 ]
             ])
         ]);
@@ -221,7 +212,7 @@ class AuthorController extends FrontendController
 
         try {
             $item = $this->get('api.service.author')
-                ->getItemBy("username = '$slug' or slug = '$slug'");
+                ->getItemBy("slug = '$slug'");
         } catch (GetItemException $e) {
             throw new ResourceNotFoundException();
         }
