@@ -24,7 +24,7 @@
       </select>
     </div>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-5">
         <div class="form-group">
           <label>{t}Suggested role{/t}  </label>
           <select name="field" id="field" class="form-control input-lg" ng-model="template.roleSelected" ng-options="item as item.name for item in extra.roles">
@@ -33,13 +33,25 @@
           <div class="help m-l-3 m-t-5" ng-show="template.roleSelected"> <i class="fa fa-info-circle m-r-5 text-info"></i> [% template.roleSelected.prompt %] </div>
         </div>
       </div>
-      <div class="col-sm-6">
+      <div class="col-sm-4">
         <div class="form-group">
           <label>{t}Suggested tone{/t}</label>
           <select name="field" id="field" class="form-control input-lg" ng-model="template.toneSelected" ng-options="item as item.name for item in extra.tones">
             <option value="">{t}Select a tone{/t}</option>
           </select>
           <div class="help m-l-3 m-t-5" ng-show="template.toneSelected"> <i class="fa fa-info-circle m-r-5 text-info"></i> [% template.toneSelected.description %] </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="form-group">
+          <label>{t}Response language{/t}</label>
+          <select
+            name="language"
+            id="language"
+            class="form-control input-lg"
+            ng-model="template.locale"
+            ng-options="item.code as item.name for item in extra.languages">
+        </select>
         </div>
       </div>
     </div>

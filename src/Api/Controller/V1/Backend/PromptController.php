@@ -107,7 +107,10 @@ class PromptController extends ApiController
 
         return [
             'items' => $helperLocale->translateAttributes($items, ['mode', 'field']),
-            'total' => $repository->countBy($oql)
+            'total' => $repository->countBy($oql),
+            'extras' => [
+                'languages' => $this->get('core.helper.ai')->getLanguages()
+            ]
         ];
     }
 }

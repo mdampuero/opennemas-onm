@@ -548,8 +548,8 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
     };
 
     $scope.onmIAModal = function(field, AIFieldType, AIFieldTitle) {
-      const input = field in $scope ? $scope[field] : $scope.item[field];
-      const locale = $scope.config.locale && $scope.config.locale.selected ? $scope.config.locale.slugs[$scope.config.locale.selected] : 'default';
+      const input  = field in $scope ? $scope[field] : $scope.item[field];
+      const locale = $scope.config.locale.selected ? $scope.config.locale.selected : 'es_ES';
 
       $uibModal.open({
         templateUrl: 'modal-onmai',
