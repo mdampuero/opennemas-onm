@@ -1078,7 +1078,7 @@
                   </div>
                 </div>
               </div>
-              <div class="panel-group" id="panel-group-dailymotion" data-toggle="collapse">
+              <div class="panel-group" id="panel-group-tiktok" data-toggle="collapse">
                 <div class="panel panel-default">
                   <div class="panel-heading collapsed">
                     <h4 class="panel-title">
@@ -1104,7 +1104,7 @@
                   </div>
                 </div>
               </div>
-               <div class="panel-group" id="panel-group-dailymotion" data-toggle="collapse">
+              <div class="panel-group" id="panel-group-dailymotion" data-toggle="collapse">
                 <div class="panel panel-default">
                   <div class="panel-heading collapsed">
                     <h4 class="panel-title">

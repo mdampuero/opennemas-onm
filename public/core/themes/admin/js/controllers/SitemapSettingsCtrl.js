@@ -18,6 +18,8 @@
         $scope.sitemap = {
           perpage: 500,
           total: 100,
+          limitdays: 2,
+          contentyear: 0,
           album: 0,
           article: 0,
           event: 0,
@@ -27,7 +29,7 @@
           opinion: 0,
           poll: 0,
           tag: 0,
-          video: 0
+          video: 0,
         };
 
         /**
@@ -107,6 +109,27 @@
             }, function(response) {
               messenger.post(response.data.message);
             });
+        };
+
+        /**
+         * @memberOf SettingsCtrl
+         * @function generateYears
+         *
+         * @description
+         * Generates an array of years starting from the current year and going back 10 years.
+         *
+         * @returns {Array}
+         */
+        $scope.generateYears = function() {
+          var currentYear     = new Date().getFullYear();
+          var yearsToGenerate = 11;
+          var years           = [];
+
+          for (var i = 0; i < yearsToGenerate; i++) {
+            years.push(currentYear - i);
+          }
+
+          return years;
         };
 
         // Update sitemap values from default
