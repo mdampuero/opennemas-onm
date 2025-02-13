@@ -229,8 +229,9 @@ class AuthorController extends FrontendController
      */
     protected function getParameters($request, $item = null)
     {
-        $action = $this->get('core.globals')->getAction();
-        $params = parent::getParameters($request, $item[0]);
+        $action    = $this->get('core.globals')->getAction();
+        $extension = $this->get('core.globals')->getExtension();
+        $params    = parent::getParameters($request, $item[0]);
 
         unset($params['o_content']);
         unset($params['content']);
@@ -241,6 +242,7 @@ class AuthorController extends FrontendController
             'author' => $item[0],
             'authors' => $item,
             'o_canonical' => $this->getCanonicalUrl($action, $params),
+            // 'x-tags' => implode(',', ['author-' . $item[0]->id]),
         ]);
     }
 
@@ -261,11 +263,11 @@ class AuthorController extends FrontendController
             'limit %d offset %d',
             $params['epp'],
             $params['epp'] * ($params['page'] - 1)
-        ))['items'];
+        ));
 
         $authorIds = array_map(function ($user) {
             return $user->id;
-        }, $author);
+        }, $author['items']);
 
         $content = $cs->getList(sprintf(
             'fk_author in [%d] and content_type_name in ["article","opinion","album","video"] ' .
@@ -276,8 +278,8 @@ class AuthorController extends FrontendController
             $params['epp'] * ($params['page'] - 1)
         ));
 
-        $items = $author;
-        $total = $content['total'];
+        $items = $author['items'];
+        $total = $author['total'];
 
         return [
             $items,
