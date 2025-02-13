@@ -68,6 +68,8 @@
               http.get({ name: 'api_v1_backend_onmai_prompt_get_list_manager', params: { oql: oqlQuery } })
                 .then(function(response) {
                   $scope.prompts = $scope.prompts.concat(response.data.items);
+                  $scope.extra.languages = response.data.extras.languages;
+                  $scope.setLocale();
                 })
                 .finally(function() {
                   $scope.waiting = false;
@@ -76,6 +78,14 @@
             .finally(function() {
               $scope.waiting = false;
             });
+        };
+
+        $scope.setLocale = function() {
+          var exists = $scope.extra.languages.some(function(lang) {
+            return lang.code === $scope.template.locale;
+          });
+
+          $scope.template.locale = exists ? $scope.template.locale : 'es_ES';
         };
 
         /**

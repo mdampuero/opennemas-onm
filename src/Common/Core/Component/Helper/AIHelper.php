@@ -54,6 +54,19 @@ class AIHelper
         ],
     ];
 
+    protected $languages = [
+        ['code' => 'es_ES', 'name' => 'Español'],
+        ['code' => 'gl_ES', 'name' => 'Gallego'],
+        ['code' => 'ca_ES', 'name' => 'Catalán'],
+        ['code' => 'en_GB', 'name' => 'Inglés'],
+        ['code' => 'fr_FR', 'name' => 'Francés'],
+        ['code' => 'de_DE', 'name' => 'Alemán'],
+        ['code' => 'pt_PT', 'name' => 'Portugués'],
+        ['code' => 'pt_BR', 'name' => 'Portugués-BR'],
+        ['code' => 'hi_IN', 'name' => 'Hindi'],
+        ['code' => 'zh_CN', 'name' => 'Chino Mandarín']
+    ];
+
     protected $service;
 
     protected $instructions = [];
@@ -282,6 +295,13 @@ class AIHelper
         }
     }
 
+    protected function insertLanguage($messages = [])
+    {
+        if ($messages["toneSelected"]["name"] ?? false) {
+            $this->userPrompt .= sprintf("\n\n### IDIOMA DE LA RESPUESTA:\n%s", $messages["toneSelected"]["name"]);
+        }
+    }
+
     public function generatePrompt($messages)
     {
         $this->insertInstructions($this->getInstructionsByFilter(
@@ -290,6 +310,14 @@ class AIHelper
                 'field' => ['all', $messages['promptSelected']['field_or']],
             ]
         ), $messages['roleSelected']['prompt'] ?? '');
+
+        if ($messages["locale"] ?? false) {
+            $this->userPrompt .= ($messages["locale"] ?? false) ?
+                sprintf("\n\n### IDIOMA DE LA RESPUESTA:\n%s", sprintf(
+                    'El idioma configurado es "%s". Responde usando este idioma y las convenciones culturales.',
+                    $messages['locale']
+                )) : "";
+        }
 
         if ($messages['promptSelected']['mode_or'] == 'New') {
             $this->userPrompt .= ($messages["input"] ?? false) ? sprintf("\n\n### TEMA:\n%s", $messages["input"]) : "";
@@ -308,17 +336,6 @@ class AIHelper
     {
         $data = $this->getCurrentSettings();
 
-        if ($messages["locale"] ?? false) {
-            $this->addInstruction([
-                'type' => 'Both',
-                'field' => 'all',
-                'value' => sprintf(
-                    'El idioma configurado es "%s". Responde usando este idioma y las convenciones culturales.',
-                    $messages['locale']
-                )
-            ]);
-        }
-
         $data['messages'] = [];
 
         if ($messages["input"] ?? false) {
@@ -333,6 +350,8 @@ class AIHelper
                 $data,
                 $this->getStructureResponse()
             );
+
+            $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
         } else {
             $response['error'] = 'Error';
         }
@@ -343,6 +362,11 @@ class AIHelper
         }
 
         return $response;
+    }
+
+    public function removeHtmlCodeBlocks($input)
+    {
+        return preg_replace('/```html\n(.*?)\n```/s', '$1', $input);
     }
 
     public function generateWords(&$response)
@@ -828,5 +852,13 @@ class AIHelper
         $this->engines = $engines;
 
         return $this;
+    }
+
+    /**
+     * Get the value of languages
+     */
+    public function getLanguages()
+    {
+        return $this->languages;
     }
 }
