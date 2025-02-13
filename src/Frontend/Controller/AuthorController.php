@@ -212,7 +212,7 @@ class AuthorController extends FrontendController
 
         try {
             $item = $this->get('api.service.author')
-                ->getItemBy("slug = '$slug'");
+                ->getItemBy("name = '$slug' or slug = '$slug'");
         } catch (GetItemException $e) {
             throw new ResourceNotFoundException();
         }
@@ -252,58 +252,38 @@ class AuthorController extends FrontendController
      * @return array An array containing the paginated items and total count.
      * @throws ResourceNotFoundException If the list cannot be retrieved.
      */
-    protected function getItems($params, $epp)
+    protected function getItems($params)
     {
-        $offset = ($params['page'] - 1) * $epp;
+        $cs = $this->get('api.service.content');
+        $as = $this->get('api.service.author');
 
-        $oql = sprintf(
-            'SELECT SQL_CALC_FOUND_ROWS contents.fk_author as id, count(pk_content) as total_content
-            FROM contents
-            WHERE contents.fk_author IN (SELECT users.id FROM users)
-            AND fk_content_type IN (1, 4, 7, 9)
-            AND content_status = 1
-            AND in_litter != 1
-            GROUP BY contents.fk_author
-            ORDER BY total_content DESC
-            LIMIT %d OFFSET %d',
-            $epp,
-            $offset
-        );
+        $author = $as->getList(sprintf(
+            'limit %d offset %d',
+            $params['epp'],
+            $params['epp'] * ($params['page'] - 1)
+        ))['items'];
 
-        $items = $this->get('dbal_connection')->fetchAll($oql);
+        $authorIds = array_map(function ($user) {
+            return $user->id;
+        }, $author);
 
-        // Obtener el total de elementos sin paginación
-        $totalQuery = 'SELECT FOUND_ROWS()';
-        $total      = $this->get('dbal_connection')->fetchAssoc($totalQuery);
-        $total      = array_pop($total);
+        $content = $cs->getList(sprintf(
+            'fk_author in [%d] and content_type_name in ["article","opinion","album","video"] ' .
+            'and content_status = 1 and in_litter = 0 ' .
+            'order by starttime desc limit %d offset %d',
+            implode(',', $authorIds),
+            $params['epp'],
+            $params['epp'] * ($params['page'] - 1)
+        ));
 
-        // Obtener información de los autores
-        $authorIds = array_column($items, 'id');
-        $response  = $this->get('api.service.author')->getListByIds($authorIds);
-
-        $authors = $this->get('data.manager.filter')
-            ->set($response['items'])
-            ->filter('mapify', ['key' => 'id'])
-            ->get();
-
-        // Agregar total_contents a cada autor
-        $items = array_map(function ($item) use ($authors) {
-            if (isset($authors[$item['id']])) {
-                $author                 = $authors[$item['id']];
-                $author->total_contents = $item['total_content'];
-                return $author;
-            }
-            return null;
-        }, $items);
-
-        $items = array_filter($items); // Eliminar autores nulos
+        $items = $author;
+        $total = $content['total'];
 
         return [
             $items,
             $total
         ];
     }
-
 
     /**
      * Hydrates the list of authors for display on the frontpage.
@@ -329,7 +309,7 @@ class AuthorController extends FrontendController
         }
 
         $params['authors_contents'] = $items;
-        $params['total_contents'] = $total;
+        $params['total_contents']   = $total;
         $params['pagination']       = $this->get('paginator')->get([
             'directional' => true,
             'epp'         => $itemsPerPage,
