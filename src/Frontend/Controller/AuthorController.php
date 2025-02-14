@@ -259,27 +259,21 @@ class AuthorController extends FrontendController
         $cs = $this->get('api.service.content');
         $as = $this->get('api.service.author');
 
-        $author = $as->getList(sprintf(
-            'limit %d offset %d',
+        $authors = $as->getList(sprintf(
+            ' limit %d offset %d',
             $params['epp'],
             $params['epp'] * ($params['page'] - 1)
         ));
 
-        $authorIds = array_map(function ($user) {
-            return $user->id;
-        }, $author['items']);
+        $items         = $authors['items'];
+        $totalContents = $as->getStats($items);
+        $total         = $authors['total'];
 
-        $content = $cs->getList(sprintf(
-            'fk_author in [%d] and content_type_name in ["article","opinion","album","video"] ' .
-            'and content_status = 1 and in_litter = 0 ' .
-            'order by starttime desc limit %d offset %d',
-            implode(',', $authorIds),
-            $params['epp'],
-            $params['epp'] * ($params['page'] - 1)
-        ));
-
-        $items = $author['items'];
-        $total = $author['total'];
+        // Asociamos el total de contenidos a cada autor en $items
+        foreach ($items as &$author) {
+            $authorId               = $author->id; // Asegúrate de que el ID sea correcto
+            $author->total_contents = $totalContents[$authorId] ?? 0; // Si no está, asignamos 0
+        }
 
         return [
             $items,
@@ -305,7 +299,7 @@ class AuthorController extends FrontendController
         }
 
         try {
-            list($items, $total) = $this->getItems($params, $itemsPerPage);
+            list($items, $total) = $this->getItems($params);
         } catch (GetListException $e) {
             throw new ResourceNotFoundException();
         }

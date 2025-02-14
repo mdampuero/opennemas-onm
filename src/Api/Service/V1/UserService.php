@@ -341,6 +341,29 @@ class UserService extends OrmService
         }
     }
 
+    public function getStats($items)
+    {
+        if (empty($items)) {
+            return [];
+        }
+
+        if (!is_array($items)) {
+            $items = [ $items ];
+        }
+
+        $ids = array_map(function ($a) {
+            return $a->id;
+        }, $items);
+
+        try {
+            return $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->countContents($ids);
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
+    }
+
     /**
      * Get all the users for report.
      *

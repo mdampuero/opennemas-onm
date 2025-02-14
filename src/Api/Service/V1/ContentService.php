@@ -12,6 +12,7 @@ namespace Api\Service\V1;
 use Api\Exception\DeleteItemException;
 use Api\Exception\DeleteListException;
 use Api\Exception\GetListException;
+use Api\Exception\ApiException;
 
 class ContentService extends OrmService
 {
