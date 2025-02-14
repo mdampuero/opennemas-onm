@@ -269,11 +269,14 @@ class AuthorController extends FrontendController
         $totalContents = $as->getStats($items);
         $total         = $authors['total'];
 
-        // Asociamos el total de contenidos a cada autor en $items
         foreach ($items as &$author) {
-            $authorId               = $author->id; // Asegúrate de que el ID sea correcto
-            $author->total_contents = $totalContents[$authorId] ?? 0; // Si no está, asignamos 0
+            $authorId               = $author->id;
+            $author->total_contents = $totalContents[$authorId] ?? 0;
         }
+
+        usort($items, function ($a, $b) {
+            return $b->total_contents <=> $a->total_contents; // Orden descendente
+        });
 
         return [
             $items,
