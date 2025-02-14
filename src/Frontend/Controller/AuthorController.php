@@ -242,7 +242,6 @@ class AuthorController extends FrontendController
             'author' => $item[0],
             'authors' => $item,
             'o_canonical' => $this->getCanonicalUrl($action, $params),
-            // 'x-tags' => implode(',', ['author-' . $item[0]->id]),
         ]);
     }
 

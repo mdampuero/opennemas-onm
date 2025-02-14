@@ -52,6 +52,20 @@ class UserCacheHelper extends CacheHelper
         return $this;
     }
 
+    public function deleteList() : void
+    {
+        $this->queue->push(new ServiceTask('cache', 'delete', [
+            [ 'author', 'list' ]
+        ]));
+
+        $this->queue->push(new ServiceTask('core.varnish', 'ban', [
+            sprintf(
+                'obj.http.x-tags ~ ^instance-%s,.*,author,list',
+                $this->instance->internal_name
+            )
+        ]));
+    }
+
     /**
      * Removes caches for a user.
      *
