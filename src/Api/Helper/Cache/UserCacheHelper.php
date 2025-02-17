@@ -32,57 +32,24 @@ class UserCacheHelper extends CacheHelper
 
     /**
      * TODO: Remove when using new ORM for users
-     * Removes a user from the old Redis cache.
      *
-     * This method removes the specified user from the cache and, if the user
-     * belongs to a specific user group (ID 3), it also clears related template
-     * and Varnish cache entries.
+     * Removes users from old redis cache.
      *
      * @param User $item The user to remove from cache.
      *
-     * @return void
+     * @return CacheHelper The current helper for method chaining.
      */
-    public function deleteItem(User $item) : void
+    public function deleteItem(User $item) : CacheHelper
     {
         $this->queue->push(new ServiceTask('cache', 'delete', [
             sprintf('user-%s', $item->id)
         ]));
 
         if (array_search(3, array_column($item->user_groups, 'user_group_id')) !== false) {
-            $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
-                [ 'author', 'show', $item->id ]
-            ]));
-
-            $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-                sprintf(
-                    'obj.http.x-tags ~ ^instance-%s,.*,author,show,author-%s',
-                    $this->instance->internal_name,
-                    $item->id
-                )
-            ]));
+            $this->cache->remove(sprintf('author-%s', $item->id));
         }
-    }
 
-    /**
-     * Removes the author list cache.
-     *
-     * This method clears the cache related to the author list and
-     * also invalidates the Varnish cache for the list of authors.
-     *
-     * @return void
-     */
-    public function deleteList() : void
-    {
-        $this->queue->push(new ServiceTask('cache', 'delete', [
-            [ 'author', 'list' ]
-        ]));
-
-        $this->queue->push(new ServiceTask('core.varnish', 'ban', [
-            sprintf(
-                'obj.http.x-tags ~ ^instance-%s,.*,author,list',
-                $this->instance->internal_name
-            )
-        ]));
+        return $this;
     }
 
     /**
@@ -98,6 +65,7 @@ class UserCacheHelper extends CacheHelper
 
         $varnishKeys = [
             'author-' . $user->id . '(,|$)',
+            'authors-frontpage',
             'author-widget-' . $user->id . '(,|$)',
             'content-author-' . $user->id . '-frontpage',
             'opinion-author-' . $user->id . '-frontpage',

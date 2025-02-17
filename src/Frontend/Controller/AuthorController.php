@@ -186,6 +186,7 @@ class AuthorController extends FrontendController
             'contents'   => $contents,
             'total'      => $total,
             'author'     => $params['item'],
+            'x-tags'     => sprintf('content-author-%d-frontpage', $params['item']->id),
             'pagination' => $this->get('paginator')->get([
                 'directional' => true,
                 'epp'         => $params['epp'],
@@ -232,9 +233,6 @@ class AuthorController extends FrontendController
         $action = $this->get('core.globals')->getAction();
         $params = parent::getParameters($request, $item[0]);
 
-        unset($params['o_content']);
-        unset($params['content']);
-
         $this->getAdvertisements();
 
         return array_merge($params, [
@@ -263,7 +261,8 @@ class AuthorController extends FrontendController
 
         // Assign total_contents
         $items = array_map(function ($author) use ($totalContents) {
-            $author->total_contents = isset($totalContents[$author->id]) ? $totalContents[$author->id] : 0;
+            $author->total_contents = isset($totalContents[$author->id]) ?
+            $totalContents[$author->id] : 0;
             return $author;
         }, $items);
 
@@ -305,6 +304,13 @@ class AuthorController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
+        $xtags = [',authors-frontpage'];
+
+        foreach ($items as $item) {
+            $xtags[] = ',author-' . $item->id;
+        }
+
+        $params['x-tags']           = implode(',', array_unique($xtags));
         $params['authors_contents'] = $items;
         $params['total_contents']   = $total;
         $params['pagination']       = $this->get('paginator')->get([
