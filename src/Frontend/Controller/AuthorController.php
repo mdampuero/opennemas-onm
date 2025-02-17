@@ -254,26 +254,28 @@ class AuthorController extends FrontendController
     {
         $as = $this->get('api.service.author');
 
-        $authors       = $as->getList();
-        $items         = $authors['items'];
-        $total         = $authors['total'];
+        // Retrieve the list of authors and their content statistics
+        $authors = $as->getList();
+        $items = $authors['items'];
         $totalContents = $as->getStats($items);
 
-        // Assign total_contents
-        $items = array_map(function ($author) use ($totalContents) {
-            $author->total_contents = isset($totalContents[$author->id]) ?
-            $totalContents[$author->id] : 0;
-            return $author;
-        }, $items);
+        // Assign total_contents to each author and filter out those with zero content
+        $items = array_filter($items, function ($author) use ($totalContents) {
+            $author->total_contents = isset($totalContents[$author->id]) ? $totalContents[$author->id] : 0;
+            return $author->total_contents > 0;
+        });
 
-        // Sort all items before pagination
+        // Sort authors by total_contents in descending order
         usort($items, function ($a, $b) {
             return $b->total_contents <=> $a->total_contents;
         });
 
-        // Apply pagination after sorting
+        // Get total number of authors after filtering
+        $total = count($items);
+
+        // Apply pagination to limit the number of results per page
         $items = array_slice(
-            $items,
+            array_values($items),
             $params['epp'] * ($params['page'] - 1),
             $params['epp']
         );
