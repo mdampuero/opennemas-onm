@@ -229,9 +229,8 @@ class AuthorController extends FrontendController
      */
     protected function getParameters($request, $item = null)
     {
-        $action    = $this->get('core.globals')->getAction();
-        $extension = $this->get('core.globals')->getExtension();
-        $params    = parent::getParameters($request, $item[0]);
+        $action = $this->get('core.globals')->getAction();
+        $params = parent::getParameters($request, $item[0]);
 
         unset($params['o_content']);
         unset($params['content']);
