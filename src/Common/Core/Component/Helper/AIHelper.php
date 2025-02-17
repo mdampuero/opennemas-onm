@@ -55,16 +55,16 @@ class AIHelper
     ];
 
     protected $languages = [
-        ['code' => 'es_ES', 'name' => 'Español'],
-        ['code' => 'gl_ES', 'name' => 'Gallego'],
-        ['code' => 'ca_ES', 'name' => 'Catalán'],
-        ['code' => 'en_GB', 'name' => 'Inglés'],
-        ['code' => 'fr_FR', 'name' => 'Francés'],
-        ['code' => 'de_DE', 'name' => 'Alemán'],
-        ['code' => 'pt_PT', 'name' => 'Portugués'],
-        ['code' => 'pt_BR', 'name' => 'Portugués-BR'],
-        ['code' => 'hi_IN', 'name' => 'Hindi'],
-        ['code' => 'zh_CN', 'name' => 'Chino Mandarín']
+        ['code' => 'Español (España)', 'name' => 'Español (España)'],
+        ['code' => 'Gallego (España)', 'name' => 'Gallego (España)'],
+        ['code' => 'Catalán (España)', 'name' => 'Catalán'],
+        ['code' => 'Inglés (Reino Unido)', 'name' => 'Inglés'],
+        ['code' => 'Francés (Guayana Francesa)', 'name' => 'Francés'],
+        ['code' => 'Alemán (Alemania) (de_DE)', 'name' => 'Alemán'],
+        ['code' => 'Portugués (Portugal)', 'name' => 'Portugués'],
+        ['code' => 'Portugués (Brasil)', 'name' => 'Portugués-BR'],
+        ['code' => 'Hindi (India)', 'name' => 'Hindi'],
+        ['code' => 'Chino Mandarín', 'name' => 'Chino Mandarín']
     ];
 
     protected $service;
@@ -366,7 +366,10 @@ class AIHelper
 
     public function removeHtmlCodeBlocks($input)
     {
-        return preg_replace('/```html\n(.*?)\n```/s', '$1', $input);
+        $output = preg_replace('/```html\n(.*?)\n```/s', '$1', $input);
+        $output = preg_replace('/^\*\*(.*?)\*\*$/s', '$1', $output);
+
+        return $output;
     }
 
     public function generateWords(&$response)
