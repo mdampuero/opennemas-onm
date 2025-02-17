@@ -32,26 +32,45 @@ class UserCacheHelper extends CacheHelper
 
     /**
      * TODO: Remove when using new ORM for users
+     * Removes a user from the old Redis cache.
      *
-     * Removes users from old redis cache.
+     * This method removes the specified user from the cache and, if the user
+     * belongs to a specific user group (ID 3), it also clears related template
+     * and Varnish cache entries.
      *
      * @param User $item The user to remove from cache.
      *
-     * @return CacheHelper The current helper for method chaining.
+     * @return void
      */
-    public function deleteItem(User $item) : CacheHelper
+    public function deleteItem(User $item) : void
     {
         $this->queue->push(new ServiceTask('cache', 'delete', [
             sprintf('user-%s', $item->id)
         ]));
 
         if (array_search(3, array_column($item->user_groups, 'user_group_id')) !== false) {
-            $this->cache->remove(sprintf('author-%s', $item->id));
-        }
+            $this->queue->push(new ServiceTask('core.template.cache', 'delete', [
+                [ 'author', 'show', $item->id ]
+            ]));
 
-        return $this;
+            $this->queue->push(new ServiceTask('core.varnish', 'ban', [
+                sprintf(
+                    'obj.http.x-tags ~ ^instance-%s,.*,author,show,author-%s',
+                    $this->instance->internal_name,
+                    $item->id
+                )
+            ]));
+        }
     }
 
+    /**
+     * Removes the author list cache.
+     *
+     * This method clears the cache related to the author list and
+     * also invalidates the Varnish cache for the list of authors.
+     *
+     * @return void
+     */
     public function deleteList() : void
     {
         $this->queue->push(new ServiceTask('cache', 'delete', [
