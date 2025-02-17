@@ -257,27 +257,28 @@ class AuthorController extends FrontendController
     {
         $as = $this->get('api.service.author');
 
-        $authors = $as->getList(sprintf(
-            ' limit %d offset %d',
-            $params['epp'],
-            $params['epp'] * ($params['page'] - 1)
-        ));
-
+        $authors       = $as->getList();
         $items         = $authors['items'];
-        $totalContents = $as->getStats($items);
         $total         = $authors['total'];
+        $totalContents = $as->getStats($items);
 
         // Assign total_contents
         $items = array_map(function ($author) use ($totalContents) {
-            $author->total_contents = isset($totalContents[$author->id]) ?
-                $totalContents[$author->id] : 0;
+            $author->total_contents = isset($totalContents[$author->id]) ? $totalContents[$author->id] : 0;
             return $author;
         }, $items);
 
-        // Sort items in descending order based on total_contents
+        // Sort all items before pagination
         usort($items, function ($a, $b) {
-            return ($b->total_contents ?? 0) <=> ($a->total_contents ?? 0);
+            return $b->total_contents <=> $a->total_contents;
         });
+
+        // Apply pagination after sorting
+        $items = array_slice(
+            $items,
+            $params['epp'] * ($params['page'] - 1),
+            $params['epp']
+        );
 
         return [$items, $total];
     }
