@@ -70,13 +70,13 @@
         <div class="col-xs-5 m-b-10">
           <input
             type="text"
-            class="form-control"
+            class="form-control l-h-16"
             ng-model="param.key">
         </div>
         <div class="col-xs-5 m-b-10">
           <input
             type="text"
-            class="form-control"
+            class="form-control l-h-16"
             ng-model="param.value">
         </div>
         <div class="col-xs-2 text-center p-t-10">

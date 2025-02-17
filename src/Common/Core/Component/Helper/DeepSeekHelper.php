@@ -4,6 +4,8 @@ namespace Common\Core\Component\Helper;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ClientException;
 
 class DeepSeekHelper
 {
@@ -27,6 +29,12 @@ class DeepSeekHelper
 
     // Endpoint for chat completions in the DeepSeek API
     protected $endpointChat = '/chat/completions';
+
+    // Specific endpoint for list models
+    protected $endpointModels = '/v1/models';
+
+    // Array for models
+    protected $suggestedModels = [];
 
     /**
      * Constructor for the DeepSeekHelper class.
@@ -81,8 +89,21 @@ class DeepSeekHelper
                     //$response = $this->simulResponse();
 
                     return $this->normalizeResponse($response, $struct);
-                } catch (Exception $e) {
-                    // If it's the last retry, throw the exception
+                } catch (ClientException $e) {
+                    if ($i === $this->getMaxRetries() - 1) {
+                        throw $e;
+                    }
+
+                    // Wait between retries
+                    sleep($this->retryDelay);
+                } catch (RequestException $e) {
+                    if ($i === $this->getMaxRetries() - 1) {
+                        throw $e;
+                    }
+
+                    // Wait between retries
+                    sleep($this->retryDelay);
+                } catch (\Exception $e) {
                     if ($i === $this->getMaxRetries() - 1) {
                         throw $e;
                     }
@@ -207,5 +228,35 @@ class DeepSeekHelper
                 'total_tokens' => 520
             ]
         ];
+    }
+
+    /**
+     * Get the value of suggestedModels
+     */
+    public function getSuggestedModels($data)
+    {
+        try {
+            $response = $this->client->request('GET', $this->baseEndpoint . $this->endpointModels, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $data['apiKey']
+                ]
+            ]);
+
+            $models = json_decode($response->getBody(), true);
+
+            $ids = array_column($models['data'] ?? [], 'id');
+
+            sort($ids);
+
+            return $ids;
+        } catch (ClientException $e) {
+            $this->suggestedModels = [];
+        } catch (RequestException $e) {
+            $this->suggestedModels = [];
+        } catch (\Exception $e) {
+            $this->suggestedModels = [];
+        }
+        return $this->suggestedModels;
     }
 }

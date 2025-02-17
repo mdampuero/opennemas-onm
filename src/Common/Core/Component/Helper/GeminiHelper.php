@@ -4,6 +4,8 @@ namespace Common\Core\Component\Helper;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ClientException;
 
 class GeminiHelper
 {
@@ -55,6 +57,12 @@ class GeminiHelper
      * @var string
      */
     protected $endpointChat = 'v1beta/models/';
+
+    // Specific endpoint for list models
+    protected $endpointModels = '/v1/models';
+
+    // Array for models
+    protected $suggestedModels = [];
 
     /**
      * Safety settings configuration for content moderation.
@@ -216,5 +224,13 @@ class GeminiHelper
     public function getTimeout()
     {
         return $this->timeout;
+    }
+
+    /**
+     * Get the value of suggestedModels
+     */
+    public function getSuggestedModels($data)
+    {
+        return [];
     }
 }

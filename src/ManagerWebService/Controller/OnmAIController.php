@@ -54,6 +54,29 @@ class OnmAIController extends Controller
      * @return JsonResponse The response object.
      *
      */
+    public function modelsSuggestedAction()
+    {
+        $onmai_settings = $this->get($this->helper)->getManagerSettings();
+        $models         = [];
+        $engines        = $this->get($this->helper)->getEngines();
+
+        foreach (array_keys($engines) as $id) {
+            $models[$id] = $this->container->get('core.helper.' . $id)->getSuggestedModels([
+                'apiKey' => $onmai_settings['engines'][$id]['apiKey'] ?? ''
+            ]);
+        }
+
+        return new JsonResponse($models);
+    }
+
+    /**
+     * Returns the list of prompts as JSON.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     */
     public function configAction()
     {
         return new JsonResponse([
