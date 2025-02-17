@@ -341,6 +341,14 @@ class UserService extends OrmService
         }
     }
 
+    /**
+     * Retrieves the statistics for a given list of items.
+     *
+     * @param array|object $items The items to retrieve statistics for.
+     * If a single object is provided, it will be wrapped in an array.
+     * @return array An associative array containing the statistics for the given items.
+     * @throws ApiException If an error occurs while fetching the statistics.
+     */
     public function getStats($items)
     {
         if (empty($items)) {
