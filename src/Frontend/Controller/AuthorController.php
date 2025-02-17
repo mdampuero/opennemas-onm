@@ -255,8 +255,8 @@ class AuthorController extends FrontendController
         $as = $this->get('api.service.author');
 
         // Retrieve the list of authors and their content statistics
-        $authors = $as->getList();
-        $items = $authors['items'];
+        $authors       = $as->getList();
+        $items         = $authors['items'];
         $totalContents = $as->getStats($items);
 
         // Assign total_contents to each author and filter out those with zero content
