@@ -255,7 +255,6 @@ class AuthorController extends FrontendController
      */
     protected function getItems($params)
     {
-        $cs = $this->get('api.service.content');
         $as = $this->get('api.service.author');
 
         $authors = $as->getList(sprintf(
@@ -268,19 +267,19 @@ class AuthorController extends FrontendController
         $totalContents = $as->getStats($items);
         $total         = $authors['total'];
 
-        foreach ($items as &$author) {
-            $authorId               = $author->id;
-            $author->total_contents = $totalContents[$authorId] ?? 0;
-        }
+        // Assign total_contents
+        $items = array_map(function ($author) use ($totalContents) {
+            $author->total_contents = isset($totalContents[$author->id]) ?
+                $totalContents[$author->id] : 0;
+            return $author;
+        }, $items);
 
+        // Sort items in descending order based on total_contents
         usort($items, function ($a, $b) {
-            return $b->total_contents <=> $a->total_contents; // Orden descendente
+            return ($b->total_contents ?? 0) <=> ($a->total_contents ?? 0);
         });
 
-        return [
-            $items,
-            $total
-        ];
+        return [$items, $total];
     }
 
     /**
