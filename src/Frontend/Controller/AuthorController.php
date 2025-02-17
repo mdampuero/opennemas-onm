@@ -233,6 +233,9 @@ class AuthorController extends FrontendController
         $action = $this->get('core.globals')->getAction();
         $params = parent::getParameters($request, $item[0]);
 
+        unset($params['o_content']);
+        unset($params['content']);
+
         $this->getAdvertisements();
 
         return array_merge($params, [
