@@ -28,6 +28,12 @@
           list:         'manager_onmai_prompt_list'
         };
 
+        $scope.settings = {
+          onmai_roles: [],
+          onmai_tones: [],
+          onmai_instructions: []
+        };
+
         $scope.save = function() {
           var data = $scope.settings;
 
@@ -37,12 +43,6 @@
             }, function(response) {
               messenger.post(response.data);
             });
-        };
-
-        $scope.settings = {
-          onmai_roles: [],
-          onmai_tones: [],
-          onmai_instructions: []
         };
 
         $scope.addRole = function() {
