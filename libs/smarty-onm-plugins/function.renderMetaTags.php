@@ -16,6 +16,17 @@ function smarty_function_renderMetaTags($params, &$smarty)
         $smarty->getValue('tag') ??
         $smarty->getValue('category');
 
+
+    if ($content && ($content instanceof \Common\Model\Entity\Tag ||
+    $content instanceof \Common\Model\Entity\Category)) {
+        $data = $smarty->getValue('contents') ??
+        $smarty->getValue('articles') ??
+        $smarty->getValue('column') ?? [];
+
+        $firstData          = array_shift($data) ?: null;
+        $content->firstData = $firstData;
+    }
+
     $page      = $smarty->getValue('page') ?? null;
     $extension = $smarty->getContainer()->get('core.globals')->getExtension();
     $action    = $smarty->getContainer()->get('core.globals')->getAction();
