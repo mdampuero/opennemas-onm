@@ -85,9 +85,9 @@ class AIHelper
     ];
 
     protected $engines = [
-        'openai'   => 'Open AI',
-        'gemini'   => 'Gemini',
-        'deepseek' => 'DeepSeek',
+        'openai'    => 'Open AI',
+        'gemini'    => 'Gemini',
+        'deepseek'  => 'DeepSeek',
         'mistralai' => 'Mistral AI',
     ];
 

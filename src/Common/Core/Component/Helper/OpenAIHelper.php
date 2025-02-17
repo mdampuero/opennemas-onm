@@ -4,6 +4,8 @@ namespace Common\Core\Component\Helper;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ClientException;
 
 class OpenAIHelper
 {
@@ -27,6 +29,12 @@ class OpenAIHelper
 
     // Specific endpoint for chat completions
     protected $endpointChat = '/v1/chat/completions';
+
+    // Specific endpoint for list models
+    protected $endpointModels = '/v1/models';
+
+    // Array for models
+    protected $suggestedModels = [];
 
     /**
      * Constructor for the OpenAIHelper class.
@@ -208,5 +216,36 @@ class OpenAIHelper
                 'total_tokens' => 520
             ]
         ];
+    }
+
+    /**
+     * Get the value of suggestedModels
+     */
+    public function getSuggestedModels($data)
+    {
+        try {
+            $response = $this->client->request('GET', $this->baseEndpoint . $this->endpointModels, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $data['apiKey']
+                ]
+            ]);
+
+            $models = json_decode($response->getBody(), true);
+
+            $ids = array_column($models['data'] ?? [], 'id');
+
+            sort($ids);
+
+            return $ids;
+        } catch (ClientException $e) {
+            $this->suggestedModels = [];
+        } catch (RequestException $e) {
+            $this->suggestedModels = [];
+        } catch (\Exception $e) {
+            $this->suggestedModels = [];
+        }
+
+        return $this->suggestedModels;
     }
 }

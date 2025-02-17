@@ -5,6 +5,13 @@ manager_ws_onmai_config:
     options:
         expose: true
 
+manager_ws_onmai_modelsSuggested:
+    path:     /onmai/modelsSuggested
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:modelsSuggested }
+    methods:  [ GET ]
+    options:
+        expose: true
+
 manager_ws_onmai_config_save:
     path:     /onmai/config
     defaults: { _controller: ManagerWebServiceBundle:OnmAI:configSave }

@@ -27,6 +27,12 @@
 
         $scope.currentTab = 'openai';
         $scope.allModels = [];
+        $scope.modelsSuggested = {
+          openai: [],
+          deepseek: [],
+          gemini: [],
+          mistralai: [],
+        };
 
         $scope.addModel = function() {
           if ($scope.onmai_settings.engines[$scope.currentTab].models == '') {
@@ -142,6 +148,14 @@
             $scope.onmai_settings = response.data.onmai_settings;
             $scope.loading = 0;
             $scope.getModels();
+          });
+
+          var route = {
+            name: 'manager_ws_onmai_modelsSuggested'
+          };
+
+          http.get(route).then(function(response) {
+            $scope.modelsSuggested = response.data;
           });
         };
         $scope.init();

@@ -16,11 +16,6 @@
             controller: 'OnmAiPromptCtrl',
             reloadOnSearch: false
           })
-          .when(routingProvider.ngGenerateShort('manager_onmai_prompt_config'), {
-            templateUrl: '/managerws/template/onmai:prompt:config.' + appVersion + '.tpl',
-            controller: 'OnmAiPromptConfigCtrl',
-            reloadOnSearch: false
-          })
           .when(routingProvider.ngGenerateShort('manager_onmai_prompt_show', { id: ':id' }), {
             templateUrl: '/managerws/template/onmai:prompt:item.' + appVersion + '.tpl',
             controller: 'OnmAiPromptCtrl',

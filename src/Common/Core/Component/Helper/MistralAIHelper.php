@@ -4,6 +4,8 @@ namespace Common\Core\Component\Helper;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ClientException;
 
 class MistralAIHelper
 {
@@ -27,6 +29,12 @@ class MistralAIHelper
 
     // Specific endpoint for chat completions
     protected $endpointChat = '/v1/chat/completions';
+
+     // Specific endpoint for list models
+    protected $endpointModels = '/v1/models';
+
+     // Array for models
+    protected $suggestedModels = [];
 
     /**
      * Constructor for the MistralAIHelper class.
@@ -208,5 +216,34 @@ class MistralAIHelper
                 'total_tokens' => 520
             ]
         ];
+    }
+
+    /**
+     * Get the value of suggestedModels
+     */
+    public function getSuggestedModels($data)
+    {
+        try {
+            $response = $this->client->request('GET', $this->baseEndpoint . $this->endpointModels, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $data['apiKey']
+                ]
+            ]);
+
+            $models = json_decode($response->getBody(), true);
+
+            $ids = array_column($models['data'] ?? [], 'id');
+
+            sort($ids);
+
+            return $ids;
+        } catch (ClientException $e) {
+            return [];
+        } catch (RequestException $e) {
+            return [];
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }

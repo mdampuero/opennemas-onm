@@ -58,7 +58,7 @@
         <h4>{t}API Key{/t}</h4>
         <div class="row m-t-15">
           <div class="controls col-md-12 m-b-10">
-            <input class="form-control" ng-model="onmai_settings.engines.openai.apiKey" type="text">
+            <input class="form-control l-h-16" ng-model="onmai_settings.engines.openai.apiKey" type="text">
           </div>
         </div>
         <h4>{t}Models and prices{/t}</h4>
@@ -75,7 +75,10 @@
             <h4 class="form-label m-b-20">
               <div class="row">
                 <div class="col-md-4">
-                  <input type="text" class="form-control"  ng-model="item.id">
+                  <select class="form-control" ng-model="item.id" ng-if="modelsSuggested.openai.length > 0">
+                    <option value="[% model %]" ng-repeat="model in modelsSuggested.openai">[% model %]</option>
+                  </select>
+                  <input type="text" class="form-control"  ng-model="item.id" ng-if="modelsSuggested.openai.length == 0">
                 </div>
                 <div class="col-md-8">
                   <div class="checkbox pull-right">
@@ -105,7 +108,7 @@
         <h4>{t}API Key{/t}</h4>
         <div class="row m-t-15">
           <div class="controls col-md-12 m-b-10">
-            <input class="form-control" ng-model="onmai_settings.engines.gemini.apiKey" type="text">
+            <input class="form-control l-h-16" ng-model="onmai_settings.engines.gemini.apiKey" type="text">
           </div>
         </div>
         <h4>{t}Models and prices{/t}</h4>
@@ -122,7 +125,10 @@
             <h4 class="form-label m-b-20">
               <div class="row">
                 <div class="col-md-6">
-                  <input type="text" class="form-control"  ng-model="item.id">
+                  <select class="form-control" ng-model="item.id" ng-if="modelsSuggested.gemini.length > 0">
+                    <option value="[% model %]" ng-repeat="model in modelsSuggested.gemini">[% model %]</option>
+                  </select>
+                  <input type="text" class="form-control"  ng-model="item.id" ng-if="modelsSuggested.gemini.length == 0">
                 </div>
                 <div class="col-md-6">
                   <div class="checkbox pull-right">
@@ -152,7 +158,7 @@
         <h4>{t}API Key{/t}</h4>
         <div class="row m-t-15">
           <div class="controls col-md-12 m-b-10">
-            <input class="form-control" ng-model="onmai_settings.engines.deepseek.apiKey" type="text">
+            <input class="form-control l-h-16" ng-model="onmai_settings.engines.deepseek.apiKey" type="text">
           </div>
         </div>
         <h4>{t}Models and prices{/t}</h4>
@@ -169,7 +175,10 @@
             <h4 class="form-label m-b-20">
               <div class="row">
                 <div class="col-md-6">
-                  <input type="text" class="form-control"  ng-model="item.id">
+                  <select class="form-control" ng-model="item.id" ng-if="modelsSuggested.deepseek.length > 0">
+                    <option value="[% model %]" ng-repeat="model in modelsSuggested.deepseek">[% model %]</option>
+                  </select>
+                  <input type="text" class="form-control"  ng-model="item.id" ng-if="modelsSuggested.deepseek.length == 0">
                 </div>
                 <div class="col-md-6">
                   <div class="checkbox pull-right">
@@ -199,7 +208,7 @@
         <h4>{t}API Key{/t}</h4>
         <div class="row m-t-15">
           <div class="controls col-md-12 m-b-10">
-            <input class="form-control" ng-model="onmai_settings.engines.mistralai.apiKey" type="text">
+            <input class="form-control l-h-16" ng-model="onmai_settings.engines.mistralai.apiKey" type="text">
           </div>
         </div>
         <h4>{t}Models and prices{/t}</h4>
@@ -216,7 +225,10 @@
             <h4 class="form-label m-b-20">
               <div class="row">
                 <div class="col-md-6">
-                  <input type="text" class="form-control"  ng-model="item.id">
+                  <select class="form-control" ng-model="item.id" ng-if="modelsSuggested.mistralai.length > 0">
+                    <option value="[% model %]" ng-repeat="model in modelsSuggested.mistralai">[% model %]</option>
+                  </select>
+                  <input type="text" class="form-control"  ng-model="item.id" ng-if="modelsSuggested.mistralai.length == 0">
                 </div>
                 <div class="col-md-6">
                   <div class="checkbox pull-right">
