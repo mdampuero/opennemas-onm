@@ -9,8 +9,8 @@
             <li class="quicklinks">
               <h4>
                 <a class="no-padding" href="[% routing.generate('backend_onmai_config') %]">
-                  <i class="fa fa-cog m-r-10"></i>
-                  {t}Configuration{/t}
+                  <i class="fa fa-cogs m-r-10"></i>
+                  {t}Models{/t}
                 </a>
               </h4>
             </li>
@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <div class="content">
+    <div class="content ng-cloak">
       <div class="grid simple onm-shadow">
         <div class="grid-body ng-cloak">
           <div class="row">
@@ -62,66 +62,6 @@
             <div class="col-xs-12 col-md-6" ng-if="settings.onmai_config.service === 'deepseek'">
               <h4>{t}DeepSeek API Key{/t}</h4>
               <input class="form-control" ng-model="settings.onmai_config.deepseek.apiKey" type="text">
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="grid simple onm-shadow">
-        <div class="grid-body ng-cloak">
-          <h4>{t}Roles{/t}</h4>
-          <div class="form-group">
-            <div class="controls">
-              <div class="row" ng-repeat="role in settings.onmai_config.roles track by $index">
-                <div class="col-lg-4 col-md-3">
-                  <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required ng-disabled="role.readOnly" maxlength="64">
-                </div>
-                <div class="col-lg-7 col-md-7">
-                  <input class="form-control" ng-model="role.prompt" placeholder="{t}Prompt{/t}" type="text" required ng-disabled="role.readOnly" maxlength="2048">
-                </div>
-                <div class="col-lg-1 col-md-2 m-b-15">
-                  <button class="btn btn-block btn-danger ng-cloak" ng-click="removeRole($index)" type="button" ng-disabled="role.readOnly">
-                    <i class="fa fa-trash-o"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-              <button class="btn btn-block btn-default" ng-click="addRole()" type="button">
-                <i class="fa fa-plus"></i>
-                {t}Add{/t}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="grid simple onm-shadow">
-        <div class="grid-body ng-cloak">
-          <h4>{t}Tones{/t}</h4>
-          <div class="form-group">
-            <div class="controls">
-              <div class="row" ng-repeat="role in settings.onmai_config.tones track by $index">
-                <div class="col-lg-4 col-md-3">
-                  <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required ng-disabled="role.readOnly" maxlength="64">
-                </div>
-                <div class="col-lg-7 col-md-7">
-                  <input class="form-control" ng-model="role.description" placeholder="{t}Description{/t}" type="text" required ng-disabled="role.readOnly" maxlength="2048">
-                </div>
-                <div class="col-lg-1 col-md-2 m-b-15">
-                  <button class="btn btn-block btn-danger ng-cloak" ng-click="removeTone($index)" type="button" ng-disabled="role.readOnly">
-                    <i class="fa fa-trash-o"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-              <button class="btn btn-block btn-default" ng-click="addTone()" type="button">
-                <i class="fa fa-plus"></i>
-                {t}Add{/t}
-              </button>
             </div>
           </div>
         </div>
