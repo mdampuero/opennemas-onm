@@ -61,11 +61,22 @@ class OnmAIController extends ApiController
     {
         $this->checkSecurity($this->extension, 'ADMIN');
 
-        $msg    = $this->get('core.messenger');
-        $config = $request->request->all();
+        $msg     = $this->get('core.messenger');
+        $request = $request->request->all();
+        $config  = $this->get($this->helper)->getInstanceSettings();
+
+        foreach (['roles', 'tones'] as $key) {
+            if (isset($request[$key])) {
+                $config[$key] = $this->get($this->helper)->preSave($request[$key]);
+            }
+        }
+
+        if (isset($request['onmai_config'])) {
+            $config = $request['onmai_config'];
+        }
 
         try {
-            $this->get($this->helper)->setInstanceSettings($config['onmai_config']);
+            $this->get($this->helper)->setInstanceSettings($config);
             $msg->add(_('Item saved successfully'), 'success');
         } catch (AccessDeniedException $e) {
             $msg->add(_('Webpush Module is not activated'), 'info');

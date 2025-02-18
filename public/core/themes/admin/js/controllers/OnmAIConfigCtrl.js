@@ -83,32 +83,6 @@
             });
         };
 
-        $scope.addRole = function() {
-          const role = {
-            name: '',
-            prompt: ''
-          };
-
-          $scope.settings.onmai_config.roles.push(role);
-        };
-
-        $scope.removeRole = function(index) {
-          $scope.settings.onmai_config.roles.splice(index, 1);
-        };
-
-        $scope.addTone = function() {
-          const tone = {
-            name: '',
-            description: ''
-          };
-
-          $scope.settings.onmai_config.tones.push(tone);
-        };
-
-        $scope.removeTone = function(index) {
-          $scope.settings.onmai_config.tones.splice(index, 1);
-        };
-
         $scope.filterModels = function() {
           $scope.models = $scope.settings.models.filter(function(model) {
             return model.id.indexOf($scope.settings.onmai_config.service) === 0;

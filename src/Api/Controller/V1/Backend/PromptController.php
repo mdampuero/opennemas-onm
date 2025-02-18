@@ -78,10 +78,12 @@ class PromptController extends ApiController
         $us           = $this->get($this->service);
         $oql          = $request->query->get('oql', '');
         $helperLocale = $this->get('core.helper.locale');
+        $repository   = $this->get('orm.manager')->getRepository('PromptManager');
         $response     = $us->getList($oql);
-
+        $itemsManager = $us->responsify($repository->findBy($oql));
+        $items        = $helperLocale->translateAttributes($us->responsify($response['items']), ['mode', 'field']);
         return [
-            'items'      => $helperLocale->translateAttributes($us->responsify($response['items']), ['mode', 'field']),
+            'items'      => array_merge($items, $itemsManager),
             'total'      => $response['total'],
             'extra'      => $this->getExtraData($response['items']),
             'o-filename' => $this->filename,

@@ -1,4 +1,7 @@
 <div class="modal-header text-left">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="dismiss()" style="font-size: 2rem;">
+    <span aria-hidden="true"><b>&times;</b></span>
+  </button>
   <h3 class="modal-title">{t}Opennemas AI{/t}</h3>
 </div>
 <div class="modal-body">

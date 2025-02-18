@@ -139,39 +139,36 @@
     </uib-tab>
     <uib-tab heading="{t}Roles{/t}" ng-click="selectTab('roles')">
       <ng-container>
-        <div class="grid simple onm-shadow">
-          <div class="grid-body ng-cloak">
-            <div>
-                <h4 class="pull-left">{t}Roles{/t}</h4>
-                <button class="btn btn-loading btn-success text-uppercase pull-right" ng-click="save()" ng-disabled="promptForm.$invalid || saving">
-                    <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
-                </button>
-                <div class="clearfix"></div>
-            </div>
-            <div class="form-group">
-              <div class="controls">
-                <div class="row" ng-repeat="role in settings.onmai_roles track by $index">
-                  <div class="col-lg-4 col-md-3">
-                    <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required maxlength="64">
-                  </div>
-                  <div class="col-lg-7 col-md-7">
-                    <input class="form-control" ng-model="role.prompt" placeholder="{t}Prompt{/t}" type="text" required maxlength="2048">
-                  </div>
-                  <div class="col-lg-1 col-md-2 m-b-15">
-                    <button class="btn btn-block btn-danger ng-cloak" ng-click="removeRole($index)" type="button">
-                      <i class="fa fa-trash-o"></i>
-                    </button>
-                  </div>
+        <div class="ng-cloak">
+          <div class="m-b-20">
+              <button class="btn btn-loading btn-success text-uppercase pull-right" ng-click="save()" ng-disabled="promptForm.$invalid || saving">
+                  <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+              </button>
+              <div class="clearfix"></div>
+          </div>
+          <div class="form-group">
+            <div class="controls">
+              <div class="row" ng-repeat="role in settings.onmai_roles track by $index">
+                <div class="col-lg-4 col-md-3">
+                  <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required maxlength="64">
+                </div>
+                <div class="col-lg-7 col-md-7">
+                  <input class="form-control" ng-model="role.prompt" placeholder="{t}Prompt{/t}" type="text" required maxlength="2048">
+                </div>
+                <div class="col-lg-1 col-md-2 m-b-15">
+                  <button class="btn btn-block btn-danger ng-cloak" ng-click="removeRole($index)" type="button">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-                <button class="btn btn-block btn-default" ng-click="addRole()" type="button">
-                  <i class="fa fa-plus"></i>
-                  {t}Add{/t}
-                </button>
-              </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+              <button class="btn btn-block btn-default" ng-click="addRole()" type="button">
+                <i class="fa fa-plus"></i>
+                {t}Add{/t}
+              </button>
             </div>
           </div>
         </div>
@@ -179,39 +176,36 @@
     </uib-tab>
     <uib-tab heading="{t}Tones{/t}" ng-click="selectTab('tones')">
       <ng-container>
-        <div class="grid simple onm-shadow">
-          <div class="grid-body ng-cloak">
-            <div>
-                <h4 class="pull-left">{t}Tones{/t}</h4>
-                <button class="btn btn-loading btn-success text-uppercase pull-right" ng-click="save()" ng-disabled="promptForm.$invalid || saving">
-                    <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
-                </button>
-                <div class="clearfix"></div>
-            </div>
-            <div class="form-group">
-              <div class="controls">
-                <div class="row" ng-repeat="role in settings.onmai_tones track by $index">
-                  <div class="col-lg-4 col-md-3">
-                    <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required maxlength="64">
-                  </div>
-                  <div class="col-lg-7 col-md-7">
-                    <input class="form-control" ng-model="role.description" placeholder="{t}Description{/t}" type="text" required maxlength="2048">
-                  </div>
-                  <div class="col-lg-1 col-md-2 m-b-15">
-                    <button class="btn btn-block btn-danger ng-cloak" ng-click="removeTone($index)" type="button">
-                      <i class="fa fa-trash-o"></i>
-                    </button>
-                  </div>
+        <div class="ng-cloak">
+          <div class="m-b-20">
+              <button class="btn btn-loading btn-success text-uppercase pull-right" ng-click="save()" ng-disabled="promptForm.$invalid || saving">
+                  <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+              </button>
+              <div class="clearfix"></div>
+          </div>
+          <div class="form-group">
+            <div class="controls">
+              <div class="row" ng-repeat="role in settings.onmai_tones track by $index">
+                <div class="col-lg-4 col-md-3">
+                  <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required maxlength="64">
+                </div>
+                <div class="col-lg-7 col-md-7">
+                  <input class="form-control" ng-model="role.description" placeholder="{t}Description{/t}" type="text" required maxlength="2048">
+                </div>
+                <div class="col-lg-1 col-md-2 m-b-15">
+                  <button class="btn btn-block btn-danger ng-cloak" ng-click="removeTone($index)" type="button">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-                <button class="btn btn-block btn-default" ng-click="addTone()" type="button">
-                  <i class="fa fa-plus"></i>
-                  {t}Add{/t}
-                </button>
-              </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+              <button class="btn btn-block btn-default" ng-click="addTone()" type="button">
+                <i class="fa fa-plus"></i>
+                {t}Add{/t}
+              </button>
             </div>
           </div>
         </div>
@@ -219,56 +213,53 @@
     </uib-tab>
     <uib-tab heading="{t}Instructions{/t}" ng-click="selectTab('instructions')">
       <ng-container>
-        <div class="grid simple onm-shadow m-b-0">
-          <div class="grid-body ng-cloak">
-            <div>
-                <h4 class="pull-left">{t}Instructions{/t}</h4>
-                <button class="btn btn-loading btn-success text-uppercase pull-right" ng-click="save()" ng-disabled="promptForm.$invalid || saving">
-                    <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
-                </button>
-                <div class="clearfix"></div>
-            </div>
-            <div class="form-group">
-              <div class="controls">
-                <div class="row" ng-repeat="role in settings.onmai_instructions track by $index">
-                  <div class="col-lg-2 col-md-3 m-b-15">
-                    <ui-select name="mode" class="form-control" theme="select2" ng-model="role.type" search-enabled="false" required ng-init="options = [ { name: '{t}Both{/t}', key: 'Both'},{ name: '{t}Create{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'} ]">
-                      <ui-select-match>
-                        [% $select.selected.name %]
-                      </ui-select-match>
-                      <ui-select-choices repeat="item.key as item in options | filter: $select.search">
-                        <div ng-bind-html="item.name | highlight: $select.search"></div>
-                      </ui-select-choices>
-                    </ui-select>
-                  </div>
-                  <div class="col-lg-2 col-md-3 m-b-15">
-                    <ui-select name="field" class="form-control" theme="select2" ng-model="role.field" search-enabled="false" required ng-init="options = [ { name: '{t}All{/t}', key: 'all'}, { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Introductions{/t}', key: 'introductions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
-                      <ui-select-match>
-                        [% $select.selected.name %]
-                      </ui-select-match>
-                      <ui-select-choices repeat="item.key as item in options | filter: $select.search">
-                        <div ng-bind-html="item.name | highlight: $select.search"></div>
-                      </ui-select-choices>
-                    </ui-select>
-                  </div>
-                  <div class="col-lg-7 col-md-7">
-                    <input class="form-control" ng-model="role.value" placeholder="{t}Instruction{/t}" type="text" required maxlength="2048">
-                  </div>
-                  <div class="col-lg-1 col-md-2 m-b-15">
-                    <button class="btn btn-block btn-danger ng-cloak" ng-click="removeInstruction($index)" type="button">
-                      <i class="fa fa-trash-o"></i>
-                    </button>
-                  </div>
+        <div class="ng-cloak">
+          <div class="m-b-20">
+              <button class="btn btn-loading btn-success text-uppercase pull-right" ng-click="save()" ng-disabled="promptForm.$invalid || saving">
+                  <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
+              </button>
+              <div class="clearfix"></div>
+          </div>
+          <div class="form-group">
+            <div class="controls">
+              <div class="row" ng-repeat="role in settings.onmai_instructions track by $index">
+                <div class="col-lg-2 col-md-3 m-b-15">
+                  <ui-select name="mode" class="form-control" theme="select2" ng-model="role.type" search-enabled="false" required ng-init="options = [ { name: '{t}Both{/t}', key: 'Both'},{ name: '{t}Create{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'} ]">
+                    <ui-select-match>
+                      [% $select.selected.name %]
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.key as item in options | filter: $select.search">
+                      <div ng-bind-html="item.name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+                <div class="col-lg-2 col-md-3 m-b-15">
+                  <ui-select name="field" class="form-control" theme="select2" ng-model="role.field" search-enabled="false" required ng-init="options = [ { name: '{t}All{/t}', key: 'all'}, { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Introductions{/t}', key: 'introductions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
+                    <ui-select-match>
+                      [% $select.selected.name %]
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.key as item in options | filter: $select.search">
+                      <div ng-bind-html="item.name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                  </ui-select>
+                </div>
+                <div class="col-lg-7 col-md-7">
+                  <input class="form-control" ng-model="role.value" placeholder="{t}Instruction{/t}" type="text" required maxlength="2048">
+                </div>
+                <div class="col-lg-1 col-md-2 m-b-15">
+                  <button class="btn btn-block btn-danger ng-cloak" ng-click="removeInstruction($index)" type="button">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-                <button class="btn btn-block btn-default" ng-click="addInstruction()" type="button">
-                  <i class="fa fa-plus"></i>
-                  {t}Add{/t}
-                </button>
-              </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+              <button class="btn btn-block btn-default" ng-click="addInstruction()" type="button">
+                <i class="fa fa-plus"></i>
+                {t}Add{/t}
+              </button>
             </div>
           </div>
         </div>

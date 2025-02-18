@@ -355,8 +355,8 @@ $menuXml = [
             ],
             [
                 'id'          => 'onmai_config',
-                'title'       => _('Configuration'),
-                'icon'        => 'fa fa-cog fa-lg',
+                'title'       => _('Models'),
+                'icon'        => 'fa fa-cogs fa-lg',
                 'link'        => url('backend_onmai_config'),
                 'module_name' => 'es.openhost.module.onmai',
                 'privilege'   => 'ADMIN'
