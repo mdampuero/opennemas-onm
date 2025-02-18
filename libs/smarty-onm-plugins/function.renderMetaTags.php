@@ -16,15 +16,17 @@ function smarty_function_renderMetaTags($params, &$smarty)
         $smarty->getValue('tag') ??
         $smarty->getValue('category');
 
-
     if ($content && ($content instanceof \Common\Model\Entity\Tag ||
     $content instanceof \Common\Model\Entity\Category)) {
         $data = $smarty->getValue('contents') ??
         $smarty->getValue('articles') ??
         $smarty->getValue('column') ?? [];
 
-        $firstData          = array_shift($data) ?: null;
-        $content->firstData = $firstData;
+        usort($data, function ($a, $b) {
+            return $a->starttime <=> $b->starttime;
+        });
+
+        $content->firstData = end($data) ?: null; // Tomamos el último elemento después de ordenar
     }
 
     $page      = $smarty->getValue('page') ?? null;
