@@ -65,7 +65,6 @@ class UserCacheHelper extends CacheHelper
 
         $varnishKeys = [
             'author-' . $user->id . '(,|$)',
-            'authors-frontpage',
             'author-widget-' . $user->id . '(,|$)',
             'content-author-' . $user->id . '-frontpage',
             'opinion-author-' . $user->id . '-frontpage',
