@@ -26,7 +26,7 @@ function smarty_function_renderMetaTags($params, &$smarty)
             return $a->starttime <=> $b->starttime;
         });
 
-        $content->firstData = end($data) ?: null; // Tomamos el último elemento después de ordenar
+        $content->firstData = end($data) ?: null;
     }
 
     $page      = $smarty->getValue('page') ?? null;
