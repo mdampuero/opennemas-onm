@@ -69,6 +69,7 @@ class AuthorController extends FrontendController
      * Displays a list of authors.
      *
      * @param Request $request The HTTP request object.
+     *
      * @return mixed The response object from the parent class.
      */
     public function listAction(Request $request)
@@ -100,7 +101,9 @@ class AuthorController extends FrontendController
      * Displays the content associated with a specific author.
      *
      * @param Request $request The HTTP request object.
+     *
      * @return RedirectResponse|mixed The rendered template or a redirect response.
+     *
      * @throws ResourceNotFoundException If the page or author cannot be found.
      */
     public function showAction(Request $request)
@@ -117,7 +120,7 @@ class AuthorController extends FrontendController
 
         $params = $this->getParameters($request, $item);
 
-        $this->view->setConfig('articles');
+        $this->view->setConfig($this->getCacheConfiguration($action));
 
         if (!$this->isCached($params)) {
             $this->hydrateShow($params);
@@ -134,9 +137,9 @@ class AuthorController extends FrontendController
      *
      * @param array $params Reference to the parameters array.
      *
-     * @throws ResourceNotFoundException If the page number is invalid or there are no results for a non-first page.
-     *
      * @return void
+     *
+     * @throws ResourceNotFoundException If the page number is invalid or there are no results for a non-first page.
      */
     protected function hydrateShow(array &$params = []) : void
     {
@@ -204,7 +207,9 @@ class AuthorController extends FrontendController
      * Retrieves the author item based on the provided slug.
      *
      * @param Request $request The HTTP request object.
+     *
      * @return array The retrieved author item.
+     *
      * @throws ResourceNotFoundException If the author cannot be found.
      */
     protected function getItem(Request $request)
@@ -224,8 +229,9 @@ class AuthorController extends FrontendController
     /**
      * Retrieves and merges parameters for the specified action.
      *
-     * @param Request $request The HTTP request object.
-     * @param mixed|null $item The associated author item (if any).
+     * @param Request    $request The HTTP request object.
+     * @param mixed|null $item    The associated author item (if any).
+     *
      * @return array The merged parameters.
      */
     protected function getParameters($request, $item = null)
@@ -249,8 +255,10 @@ class AuthorController extends FrontendController
      * Retrieves a list of author items with pagination.
      *
      * @param array $params The query parameters.
-     * @param int $epp The number of items per page.
+     * @param int   $epp    The number of items per page.
+     *
      * @return array An array containing the paginated items and total count.
+     *
      * @throws ResourceNotFoundException If the list cannot be retrieved.
      */
     protected function getItems($params)
@@ -290,7 +298,9 @@ class AuthorController extends FrontendController
      * Hydrates the list of authors for display on the frontpage.
      *
      * @param array $params Query parameters for fetching authors.
+     *
      * @return void
+     *
      * @throws ResourceNotFoundException If the authors or page are invalid.
      */
     protected function hydrateList(array &$params = []) : void
@@ -336,7 +346,8 @@ class AuthorController extends FrontendController
      * are then configured for rendering on the frontend.
      *
      * @param object|null $category The category object to filter advertisements by, or null for no filtering.
-     * @param string|null $token An optional token for additional advertisement context (currently unused).
+     * @param string|null $token    An optional token for additional advertisement context (currently unused).
+     *
      * @return void
      */
     protected function getAdvertisements($category = null, $token = null)
