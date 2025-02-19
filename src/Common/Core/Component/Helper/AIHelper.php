@@ -334,6 +334,8 @@ class AIHelper
 
     public function sendMessage($messages)
     {
+        $this->getInstructions();
+
         $data = $this->getCurrentSettings();
 
         $data['messages'] = [];
