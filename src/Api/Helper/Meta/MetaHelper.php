@@ -128,8 +128,7 @@ class MetaHelper
             'tag_description'      => htmlspecialchars(trim(strip_tags($content->description))) ?? '',
             'author_name'          => $ah->getAuthorName($content),
             'author_description'   => $ah->getAuthorBioSummary($content) ?? $ah->getAuthorBioBody($content),
-            'content_title'        => $content->firstData->title ?? '',
-            'content_description'  => $content->firstData->description ?? '',
+            'content_title'  => $content->firstData->title ?? '',
         ];
 
         // On static page routes, $page is Content entity

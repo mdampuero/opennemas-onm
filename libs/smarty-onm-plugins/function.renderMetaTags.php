@@ -16,30 +16,19 @@ function smarty_function_renderMetaTags($params, &$smarty)
         $smarty->getValue('tag') ??
         $smarty->getValue('category');
 
-    if ($content && ($content instanceof \Common\Model\Entity\Tag ||
-    $content instanceof \Common\Model\Entity\Category)) {
+    // Fetch first content of tag|category listing
+    if ($content instanceof \Common\Model\Entity\Tag
+        || $content instanceof \Common\Model\Entity\Category
+    ) {
         $data = $smarty->getValue('contents') ??
-        $smarty->getValue('articles') ??
-        $smarty->getValue('column') ?? [];
+            $smarty->getValue('articles') ?? [];
 
-        usort($data, function ($a, $b) {
-            return $a->starttime <=> $b->starttime;
-        });
-
-        $content->firstData = end($data) ?: null;
+        $content->firstData = array_shift($data);
     }
 
     $page      = $smarty->getValue('page') ?? null;
     $extension = $smarty->getContainer()->get('core.globals')->getExtension();
     $action    = $smarty->getContainer()->get('core.globals')->getAction();
-    $exception = '';
-
-    // Code with some weird errors
-    try {
-        $exception = getService('request_stack')->getCurrentRequest()->attributes->get('exception') ?? '';
-    } catch (\Exception $e) {
-        $exception = '';
-    }
 
     try {
         $output = $smarty->getContainer()
