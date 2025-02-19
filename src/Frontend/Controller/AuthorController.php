@@ -289,10 +289,11 @@ class AuthorController extends FrontendController
 
         $countSql = sprintf(
             'SELECT count(DISTINCT contents.fk_author) AS total ' .
-            'FROM contents ',
+            'FROM contents WHERE contents.content_type_name in ("article","opinion","album","video") ' .
+            'AND contents.content_status = 1 AND contents.in_litter = 0 ',
         );
-        $total    = $this->get('orm.manager')->getConnection('instance')->executeQuery($countSql)->fetchAll();
-        $total    = $total[0]['total'];
+
+        $total = $this->get('orm.manager')->getConnection('instance')->executeQuery($countSql)->fetchAll()[0]['total'];
 
         return [
             $items,
