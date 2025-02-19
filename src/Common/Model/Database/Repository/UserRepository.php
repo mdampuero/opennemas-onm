@@ -80,6 +80,35 @@ class UserRepository extends BaseRepository
         return $contents;
     }
 
+    public function countContentsAuthors($ids)
+    {
+        if (empty($ids)) {
+            throw new \InvalidArgumentException();
+        }
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+        $sql = 'SELECT fk_author AS "id", COUNT(1) AS "contents" '
+            . 'FROM contents '
+            . 'WHERE fk_author IN (?) '
+            . 'AND content_type_name IN ("article", "opinion", "album",
+                "video", "company", "event", "obituary", "poll") '
+            . 'GROUP BY fk_author';
+
+        $data = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        $contents = [];
+        foreach ($data as $value) {
+            $contents[$value['id']] = $value['contents'];
+        }
+
+        return $contents;
+    }
+
     /**
      * Moves all contents assigned to users basing on a user id
      *

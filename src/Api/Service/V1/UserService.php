@@ -366,7 +366,7 @@ class UserService extends OrmService
         try {
             return $this->container->get('orm.manager')
                 ->getRepository($this->entity, $this->origin)
-                ->countContents($ids);
+                ->countContentsAuthors($ids);
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage(), $e->getCode());
         }
