@@ -257,8 +257,19 @@ class AuthorController extends FrontendController
     {
         $as = $this->get('api.service.author');
 
+        $sql = sprintf(
+            'SELECT users.*, count(contents.fk_author) AS total_contents ' .
+            'FROM contents ' .
+            'INNER JOIN users ON users.id = contents.fk_author ' .
+            'GROUP BY contents.fk_author ' .
+            'ORDER BY total_contents DESC ' .
+            'LIMIT %d OFFSET %d',
+            $params['epp'],
+            $params['epp'] * ($params['page'] - 1)
+        );
+
         // Retrieve the list of authors and their content statistics
-        $authors       = $as->getList();
+        $authors       = $as->getListBySql($sql);
         $items         = $authors['items'];
         $totalContents = $as->getStats($items);
 
@@ -268,22 +279,17 @@ class AuthorController extends FrontendController
             return $author->total_contents > 0;
         });
 
-        // Sort authors by total_contents in descending order
-        usort($items, function ($a, $b) {
-            return $b->total_contents <=> $a->total_contents;
-        });
-
-        // Get total number of authors after filtering
-        $total = count($items);
-
-        // Apply pagination to limit the number of results per page
-        $items = array_slice(
-            array_values($items),
-            $params['epp'] * ($params['page'] - 1),
-            $params['epp']
+        $countSql = sprintf(
+            'SELECT count(DISTINCT contents.fk_author) AS total ' .
+            'FROM contents ',
         );
+        $total    = $this->get('orm.manager')->getConnection('instance')->executeQuery($countSql)->fetchAll();
+        $total    = $total[0]['total'];
 
-        return [$items, $total];
+        return [
+            $items,
+            $total
+        ];
     }
 
     /**
