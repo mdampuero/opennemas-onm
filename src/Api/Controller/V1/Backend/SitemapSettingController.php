@@ -64,8 +64,12 @@ class SitemapSettingController extends SettingController
             $remove = false;
             $config = $this->get('orm.manager')->getDataSet('Settings', 'instance')->get('sitemap');
 
+            if (!isset($config) || !is_array($config)) {
+                $config = [];
+            }
+
             foreach ($settings['sitemap'] as $key => $value) {
-                if ($key === 'total' || $value === $config[$key]) {
+                if (!array_key_exists($key, $config) || $value === $config[$key]) {
                     continue;
                 }
 
@@ -92,9 +96,13 @@ class SitemapSettingController extends SettingController
      */
     public function listAction(Request $request)
     {
+        $ss['settings']['sitemap'] = array_map(function ($e) {
+            return (int) $e;
+        }, $this->get('core.helper.sitemap')->getSettings());
+
         return new JsonResponse(
             array_merge_recursive(
-                parent::listAction($request),
+                $ss,
                 [
                     'extra' => [
                         'sitemaps' => $this->get('core.helper.sitemap')->getSitemapsInfo(),

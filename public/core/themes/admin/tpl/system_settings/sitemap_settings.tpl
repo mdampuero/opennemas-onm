@@ -76,6 +76,31 @@
                           </div>
                         </div>
                       </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label" for="sitemap-contentyear">
+                            {t}Limit contents sitemap per year{/t}
+                          </label>
+                          <select class="form-control" ng-model="settings.sitemap.contentyear" id="sitemap-contentyear" name="sitemap-contentyear">
+                            <option value="0" ng-value="0">{t}No limit{/t}</option>
+                            <option ng-repeat="year in generateYears()" ng-value="year">
+                              [% year %]
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label" for="sitemap-limitdays">
+                            {t}Sitemap news days{/t}
+                          </label>
+                          <select class="form-control" ng-model="settings.sitemap.limitdays" id="sitemap-limitdays" name="sitemap-limitdays">
+                            <option ng-repeat="days in [1,2,3,4]" ng-value="days">
+                              [% days %]
+                            </option>
+                          </select>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

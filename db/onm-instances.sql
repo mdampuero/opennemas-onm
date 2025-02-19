@@ -314,7 +314,7 @@ CREATE TABLE `settings` (
 
 LOCK TABLES `settings` WRITE;
 /*!40000 ALTER TABLE `settings` DISABLE KEYS */;
-INSERT INTO `settings` VALUES ('locale','a:2:{s:7:\"backend\";a:2:{s:8:\"language\";a:1:{s:8:\"selected\";s:5:\"es_ES\";}s:8:\"timezone\";s:3:\"UTC\";}s:8:\"frontend\";a:2:{s:8:\"language\";a:1:{s:8:\"selected\";s:5:\"es_ES\";}s:8:\"timezone\";s:3:\"UTC\";}}'),('sitemap','a:12:{s:6:\"kiosko\";s:1:\"1\";s:7:\"perpage\";s:3:\"500\";s:5:\"total\";s:3:\"300\";s:5:\"photo\";s:1:\"1\";s:5:\"event\";s:1:\"1\";s:5:\"album\";s:1:\"1\";s:7:\"article\";s:1:\"1\";s:3:\"tag\";s:1:\"1\";s:5:\"video\";s:1:\"1\";s:4:\"poll\";s:1:\"1\";s:7:\"opinion\";s:1:\"1\";s:6:\"letter\";s:1:\"1\";}');
+INSERT INTO `settings` VALUES ('locale','a:2:{s:7:\"backend\";a:2:{s:8:\"language\";a:1:{s:8:\"selected\";s:5:\"es_ES\";}s:8:\"timezone\";s:3:\"UTC\";}s:8:\"frontend\";a:2:{s:8:\"language\";a:1:{s:8:\"selected\";s:5:\"es_ES\";}s:8:\"timezone\";s:3:\"UTC\";}}'),('sitemap','a:13:{s:6:"kiosko";s:1:"1";s:7:"perpage";s:3:"500";s:5:"total";s:3:"300";s:5:"photo";s:1:"1";s:5:"event";s:1:"1";s:5:"album";s:1:"1";s:7:"article";s:1:"1";s:3:"tag";s:1:"1";s:5:"video";s:1:"1";s:4:"poll";s:1:"1";s:7:"opinion";s:1:"1";s:6:"letter";s:1:"1";s:9:"limitdays";s:1:"2";}');
 /*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 UNLOCK TABLES;
 

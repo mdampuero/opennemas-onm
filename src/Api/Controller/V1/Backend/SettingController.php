@@ -92,7 +92,6 @@ class SettingController extends Controller
      */
     public function listAction(Request $request)
     {
-        $locale = $this->get('core.locale');
         $params = $request->get('params');
         $keys   = is_array($params) && !empty($params) ? array_keys($params) : $this->keys;
 
