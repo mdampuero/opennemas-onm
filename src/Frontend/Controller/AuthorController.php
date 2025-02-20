@@ -157,7 +157,8 @@ class AuthorController extends FrontendController
         $response = $this->get('api.service.content')->getList(
             sprintf(
                 'fk_author = %d ' .
-                'and content_type_name in ["article","opinion","album","video","company","event","obituary","poll"] ' .
+                'and content_type_name in ["article","opinion","album","video", ' .
+                '"company","event","obituary","poll"] ' .
                 'and content_status = 1 and in_litter = 0 ' .
                 'and ((starttime is null or starttime <= "%s") and (endtime is null or endtime > "%s")) ' .
                 'order by starttime desc limit %d offset %d',
@@ -270,8 +271,8 @@ class AuthorController extends FrontendController
             'SELECT users.*, count(contents.fk_author) AS total_contents ' .
             'FROM contents ' .
             'INNER JOIN users ON users.id = contents.fk_author ' .
-            'WHERE contents.content_type_name IN ("article", "opinion", "album", "video", "company", "event", ' .
-            '"obituary", "poll") ' .
+            'WHERE contents.content_type_name IN ("article", "opinion", "album", ' .
+            '"video", "company", "event", "obituary", "poll") ' .
             'AND contents.content_status = 1 ' .
             'AND contents.in_litter = 0 ' .
             'GROUP BY contents.fk_author ' .
@@ -295,8 +296,8 @@ class AuthorController extends FrontendController
         $countSql = sprintf(
             'SELECT count(DISTINCT contents.fk_author) AS total ' .
             'FROM contents ' .
-            'WHERE contents.content_type_name IN ("article", "opinion", "album", "video", "company", "event", ' .
-            '"obituary", "poll") ' .
+            'WHERE contents.content_type_name IN ("article", "opinion", "album", ' .
+            '"video", "company", "event", "obituary", "poll") ' .
             'AND contents.content_status = 1 ' .
             'AND contents.in_litter = 0'
         );
