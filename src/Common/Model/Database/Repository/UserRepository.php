@@ -80,6 +80,23 @@ class UserRepository extends BaseRepository
         return $contents;
     }
 
+    /**
+     * Counts the number of contents authored by given authors.
+     *
+     * This method fetches the number of contents authored by the provided
+     * author IDs from the database, considering only active and non-littered
+     * contents of specific types (article, opinion, album, video, company,
+     * event, obituary, poll).
+     *
+     * @param mixed $ids The author IDs to filter the content count. Can be an
+     * array or a single ID.
+     *
+     * @throws \InvalidArgumentException If the provided $ids is empty or not an
+     * array or a valid ID.
+     *
+     * @return array An associative array where the key is the author ID, and
+     * the value is the count of their contents.
+     */
     public function countContentsAuthors($ids)
     {
         if (empty($ids)) {
