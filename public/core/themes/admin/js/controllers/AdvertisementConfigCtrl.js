@@ -26,6 +26,8 @@
          */
         $scope.smart = {};
 
+        $scope.traffective = {};
+
         /**
          * The available smart tags format
          *
@@ -45,13 +47,15 @@
          * @param {String} domain The configured domain
          * @param {String} tagsFormat The configured tags format
          */
-        $scope.init = function(domain, tagsFormat) {
+        $scope.init = function(domain, tagsFormat, traffectiveDomain) {
           if ($scope.smartAvailableTagsFormats.indexOf(tagsFormat) < 0) {
             tagsFormat = 'onecall_async';
           }
 
           $scope.smart.domain     = domain;
           $scope.smart.tagsFormat = tagsFormat;
+
+          $scope.traffective.domain = traffectiveDomain;
         };
       }
     ]);

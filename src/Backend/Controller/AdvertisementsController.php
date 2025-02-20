@@ -362,7 +362,7 @@ class AdvertisementsController extends Controller
             $keys = [
                 'adsense_id', 'ads_settings', 'ads_txt', 'restricted_urls', 'dfp_custom_code',
                 'dfp_options', 'iadbox_id', 'revive_ad_server',
-                'smart_ad_server', 'smart_custom_code', 'tradedoubler_id', 'traffective'
+                'smart_ad_server', 'smart_custom_code', 'tradedoubler_id', 'traffective_config'
             ];
 
             return $this->render('advertisement/config.tpl', [
@@ -421,7 +421,11 @@ class AdvertisementsController extends Controller
                 'url'     => $formValues->filter('revive_ad_server_url', '', FILTER_SANITIZE_STRING),
                 'site_id' => $formValues->getDigits('revive_ad_server_site_id'),
             ],
-            'traffective'     => empty($formValues->get('traffective')) ? 0 : 1,
+            'traffective_config'  => [
+                'domain'       => $formValues->filter('traffective_config_domain', '', FILTER_SANITIZE_STRING),
+                'client_alias' => $formValues->filter('traffective_config_client_alias', '', FILTER_SANITIZE_STRING),
+                'dfpUrl'       => $formValues->filter('traffective_config_dfpUrl', '', FILTER_SANITIZE_STRING),
+            ],
             'tradedoubler_id'  => $formValues->getDigits('tradedoubler_id'),
             'restricted_urls' => $formValues->filter('restricted_urls', '')
         ];
@@ -461,7 +465,7 @@ class AdvertisementsController extends Controller
         $renderer     = $this->container->get('frontend.renderer.advertisement');
         $settings     = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get([ 'revive_ad_server', 'smart_ad_server' ]);
+            ->get([ 'revive_ad_server', 'smart_ad_server', 'traffective_config' ]);
 
         // OpenX
         $openxServerUrl = '';
@@ -483,6 +487,16 @@ class AdvertisementsController extends Controller
             $smartServerUrl = $settings['smart_ad_server']['domain'];
         }
 
+        $traffectiveDomain = '';
+        if (!empty($settings['traffective_config'])
+        && is_array($settings['traffective_config'])
+        && array_key_exists('domain', $settings['traffective_config'])
+        && array_key_exists('client_alias', $settings['traffective_config'])
+        && array_key_exists('dfpUrl', $settings['traffective_config'])
+        ) {
+            $traffectiveDomain = $settings['traffective_config']['domain'];
+        }
+
         return [
             'ads_positions_manager' => $adsPositions,
             'extra'                 => [
@@ -492,6 +506,7 @@ class AdvertisementsController extends Controller
                 'categories'                => $this->getCategories(),
                 'openx_server_url'          => $openxServerUrl,
                 'smart_server_url'          => $smartServerUrl,
+                'traffective_domain'        => $traffectiveDomain,
                 'user_groups'               => $this->getSubscriptions(),
                 'default_mark'              => $renderer->getMark(),
             ],
