@@ -47,7 +47,7 @@
          * @param {String} domain The configured domain
          * @param {String} tagsFormat The configured tags format
          */
-        $scope.init = function(domain, tagsFormat, traffectiveDomain) {
+        $scope.init = function(domain, tagsFormat, traffective) {
           if ($scope.smartAvailableTagsFormats.indexOf(tagsFormat) < 0) {
             tagsFormat = 'onecall_async';
           }
@@ -55,7 +55,9 @@
           $scope.smart.domain     = domain;
           $scope.smart.tagsFormat = tagsFormat;
 
-          $scope.traffective.domain = traffectiveDomain;
+          $scope.traffective.domain       = traffective['domain'];
+          $scope.traffective.clienteAlias = traffective['client_alias'];
+          $scope.traffective.dfpUrl       = traffective['dfpUrl'];
         };
       }
     ]);
