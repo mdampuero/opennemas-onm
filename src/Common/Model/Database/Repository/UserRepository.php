@@ -93,6 +93,7 @@ class UserRepository extends BaseRepository
             . 'WHERE fk_author IN (?) '
             . 'AND content_type_name IN ("article", "opinion", "album",
                 "video", "company", "event", "obituary", "poll") '
+            . 'AND content_status = 1 AND in_litter = 0 '
             . 'GROUP BY fk_author';
 
         $data = $this->conn->fetchAll(
