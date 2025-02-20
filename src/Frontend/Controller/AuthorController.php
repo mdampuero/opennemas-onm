@@ -265,48 +265,51 @@ class AuthorController extends FrontendController
      */
     protected function getItems($params)
     {
-        $as = $this->get('api.service.author');
+        $limit  = $params['epp'];
+        $offset = $params['epp'] * ($params['page'] - 1);
 
-        $sql = sprintf(
-            'SELECT users.*, count(contents.fk_author) AS total_contents ' .
-            'FROM contents ' .
-            'INNER JOIN users ON users.id = contents.fk_author ' .
-            'WHERE contents.content_type_name IN ("article", "opinion", "album", ' .
-            '"video", "company", "event", "obituary", "poll") ' .
-            'AND contents.content_status = 1 ' .
-            'AND contents.in_litter = 0 ' .
-            'GROUP BY contents.fk_author ' .
-            'ORDER BY total_contents DESC ' .
-            'LIMIT %d OFFSET %d',
-            $params['epp'],
-            $params['epp'] * ($params['page'] - 1)
-        );
+        // Get paginated authors with total contents count
+        $sql = "SELECT SQL_CALC_FOUND_ROWS contents.fk_author as id, count(pk_content) as total FROM contents "
+            . "WHERE contents.fk_author IN (SELECT users.id FROM users "
+            . "INNER JOIN user_user_group ON users.id = user_user_group.user_id WHERE type != 1 "
+            . "AND user_group_id = 3) AND contents.content_type_name IN "
+            . "('article', 'opinion', 'album', 'video', 'company', 'event', 'obituary', 'poll') "
+            . "AND content_status = 1 AND in_litter != 1 "
+            . "GROUP BY contents.fk_author ORDER BY total DESC "
+            . "LIMIT $limit OFFSET $offset";
 
-        // Retrieve the list of authors and their content statistics
-        $authors       = $as->getListBySql($sql);
-        $items         = $authors['items'];
-        $totalContents = $as->getStats($items);
+        $items = $this->get('dbal_connection')->fetchAll($sql);
 
-        // Assign total_contents to each author and filter out those with zero content
-        $items = array_filter($items, function ($author) use ($totalContents) {
-            $author->total_contents = isset($totalContents[$author->id]) ? $totalContents[$author->id] : 0;
-            return $author->total_contents > 0;
-        });
+        // Get all authors
+        $sql = 'SELECT FOUND_ROWS()';
 
-        $countSql = sprintf(
-            'SELECT count(DISTINCT contents.fk_author) AS total ' .
-            'FROM contents ' .
-            'WHERE contents.content_type_name IN ("article", "opinion", "album", ' .
-            '"video", "company", "event", "obituary", "poll") ' .
-            'AND contents.content_status = 1 ' .
-            'AND contents.in_litter = 0'
-        );
+        $total = $this->get('dbal_connection')->fetchAssoc($sql);
 
-        $total = $this->get('orm.manager')->getConnection('instance')->executeQuery($countSql)->fetchAll()[0]['total'];
+        // Use id as array key
+        $items = $this->get('data.manager.filter')
+            ->set($items)
+            ->filter('mapify', [ 'key' => 'id' ])
+            ->get();
+
+        // Fetch authors object by ID
+        $response = $this->get('api.service.author')->getListByIds(array_keys($items));
+
+        // Use id as array key
+        $authors = $this->get('data.manager.filter')
+            ->set($response['items'])
+            ->filter('mapify', [ 'key' => 'id' ])
+            ->get();
+
+        // Map authors with total contents count
+        $items = array_map(function ($item) use ($authors) {
+            $authors[$item['id']]->total_contents = $item['total'];
+
+            return $authors[$item['id']];
+        }, $items);
 
         return [
             $items,
-            $total
+            array_pop($total)
         ];
     }
 
