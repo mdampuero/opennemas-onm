@@ -119,6 +119,10 @@ class TranslatorFactoryTest extends \PHPUnit\Framework\TestCase
             [
                 'translator' => 'foo',
                 'parameters' => [ 'xyzzy' => 'mumble' ]
+            ],
+            [
+                'translator' => 'onmai',
+                'parameters' => []
             ]
         ], $factory->getTranslatorsData());
     }

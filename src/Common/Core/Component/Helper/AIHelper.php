@@ -373,6 +373,10 @@ class AIHelper
 
     public function translate($text, $lang)
     {
+        if ($text == null || $lang == null || $text == '') {
+            return ['error' => 'Empty text or language', 'result' => ''];
+        }
+
         $this->userPrompt = "### OBJETIVO:\nTraduce el siguiente texto al idioma seleccionado " .
             " siguiente estrictamente las instrucciones.\n";
 
@@ -445,7 +449,7 @@ class AIHelper
             'response' => $response['original'] ?? ''
         ];
 
-        $date     = new DateTime('now');
+        $date = new DateTime('now');
 
         unset($params['messages']);
 
