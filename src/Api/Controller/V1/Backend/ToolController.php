@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Api\Controller\V1\Backend;
 
 use Common\Core\Annotation\Security;
@@ -105,18 +107,29 @@ class ToolController extends Controller
             return new JsonResponse('No translators', 404);
         }
 
-        $translator = $this->get('core.factory.translator')->get(
-            $translator['translator'],
-            $translator['from'],
-            $translator['to'],
-            $translator['config']
-        );
+        if ($translator['translator'] === 'onmai') {
+            foreach ($data as $key => $value) {
+                $result = $this->get('core.helper.ai')->translate($value, $to);
+                if (!empty($result['result'])) {
+                    $data[$key] = $result['result'];
+                } else {
+                    $data[$key] = $value;
+                }
+            }
+        } else {
+            $translator = $this->get('core.factory.translator')->get(
+                $translator['translator'],
+                $translator['from'],
+                $translator['to'],
+                $translator['config']
+            );
 
-        $data = array_map(function ($a) use ($translator) {
-            return !empty($a)
-                ? mb_convert_encoding(html_entity_decode($translator->translate(htmlentities($a))), 'UTF-8')
-                : null;
-        }, $data);
+            $data = array_map(function ($a) use ($translator) {
+                return !empty($a)
+                    ? mb_convert_encoding(html_entity_decode($translator->translate(htmlentities($a))), 'UTF-8')
+                    : null;
+            }, $data);
+        }
 
         return new JsonResponse($data);
     }

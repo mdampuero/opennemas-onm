@@ -239,9 +239,14 @@ class AIHelper
 
     public function getInstructions()
     {
-        $this->instructions = $this->container->get('orm.manager')
+        $instructions = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'manager')
             ->get('onmai_instructions', []);
+
+        $this->instructions = array_filter($instructions, function ($item) {
+            return !isset($item['disabled']) || $item['disabled'] != 1;
+        });
+
         return $this->instructions;
     }
 
@@ -366,6 +371,60 @@ class AIHelper
         return $response;
     }
 
+    public function translate($text, $lang)
+    {
+        if ($text == null || $lang == null || $text == '') {
+            return ['error' => 'Empty text or language', 'result' => ''];
+        }
+
+        $this->userPrompt = "### OBJETIVO:\nTraduce el siguiente texto al idioma seleccionado " .
+            " siguiente estrictamente las instrucciones.\n";
+
+        $this->userPrompt .= "### TEXTO:\n" . $text . "\n";
+        $this->userPrompt .= "### IDIOMA SELECCIONADO:\n" . $lang . "\n";
+        $this->insertInstructions([
+            ['value' => 'Debes mantener el tono y el estilo del texto original.'],
+            ['value' => 'No debes añadir información adicional.'],
+            ['value' => 'No debes cambiar el sentido del texto original.'],
+            ['value' => 'Debes mantener la estructura del texto original.'],
+            ['value' => 'Debes mantener la longitud del texto original.'],
+            ['value' => 'Debes mantener la terminología del texto original.'],
+            ['value' => 'Debes mantener la puntuación del texto original.'],
+            ['value' => 'Debes mantener la gramática del texto original.'],
+            ['value' => 'Debes mantener la ortografía del texto original.'],
+            ['value' => 'Debes mantener la coherencia del texto original.'],
+            ['value' => 'Debes mantener el formato del texto original.'],
+            ['value' => 'No debes decorarlo con otro formato que no esté en el texto original.'],
+        ]);
+
+        $data = $this->getCurrentSettings();
+
+        $data['messages'] = [];
+
+        $data['messages'][] = [
+            'role' => 'user',
+            'content' => $this->userPrompt
+        ];
+
+        if ($data['engine'] ?? false) {
+            $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
+                $data,
+                $this->getStructureResponse()
+            );
+
+            $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
+        } else {
+            $response['error'] = 'Error';
+        }
+
+        if (empty($response['error'])) {
+            $this->generateWords($response);
+            $this->saveAction($data, $response);
+        }
+
+        return $response;
+    }
+
     public function removeHtmlCodeBlocks($input)
     {
         $output = preg_replace('/```html\n(.*?)\n```/s', '$1', $input);
@@ -390,7 +449,7 @@ class AIHelper
             'response' => $response['original'] ?? ''
         ];
 
-        $date     = new DateTime('now');
+        $date = new DateTime('now');
 
         unset($params['messages']);
 

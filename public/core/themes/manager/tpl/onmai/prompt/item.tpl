@@ -5,7 +5,7 @@
         <li class="quicklinks">
           <h4>
             <a class="no-padding" ng-href="[% routing.ngGenerate('manager_onmai_prompt_list') %]">
-              <i class="fa fa-file-o"></i>
+              <i class="fa fa-terminal"></i>
               {t}Prompts{/t}
             </a>
           </h4>

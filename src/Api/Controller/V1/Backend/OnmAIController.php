@@ -118,6 +118,29 @@ class OnmAIController extends ApiController
         }
     }
 
+    public function translateAction(Request $request)
+    {
+        if (!$this->get('core.security')->hasExtension($this->extension)) {
+            return new JsonResponse(['error' => 'Access denied.'], JsonResponse::HTTP_FORBIDDEN);
+        }
+
+        try {
+            $text = $request->request->get('text');
+            $lang = $request->request->get('lang');
+
+            $response = $this->get($this->helper)->translate($text, $lang);
+
+            if (isset($response['error'])) {
+                return new JsonResponse(['error' => $response['error']], JsonResponse::HTTP_REQUEST_TIMEOUT);
+            }
+
+            return new JsonResponse($response);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'An error occurred: ' .
+                $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public function getUsageAction(Request $request)
     {
         $year  = $request->query->get('year', date('Y'));

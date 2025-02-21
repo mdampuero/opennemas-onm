@@ -4,7 +4,7 @@
       <ul class="nav quick-section">
         <li class="quicklinks">
           <h4>
-            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_onmai_config') %]">
+            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_onmai_prompt_list') %]">
               <i class="fa fa-terminal"></i>
               {t}Prompts{/t}
             </a>
@@ -88,15 +88,21 @@
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
-                    <th class="pointer" ng-click="sort('name')" width="300">
+                    <th width="300">
                       {t}Name{/t}
                       <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
                     </th>
-                    <th >
+                    <th>
                       {t}Mode{/t}
                     </th>
                     <th>
                       {t}Field{/t}
+                    </th>
+                    <th>
+                      {t}Tone{/t}
+                    </th>
+                    <th>
+                      {t}Role{/t}
                     </th>
                     <th class="text-center" width="300">
                       {t}Instances{/t}
@@ -121,6 +127,12 @@
                     </td>
                     <td>
                       [% item.field %]
+                    </td>
+                    <td>
+                      [% item.tone %]
+                    </td>
+                    <td>
+                      [% item.role %]
                     </td>
                     <td class="text-center">
                       <div class="inline m-r-5 m-t-5 ng-scope" ng-repeat="instance in item.instances">
@@ -222,9 +234,9 @@
           </div>
           <div class="form-group">
             <div class="controls">
-              <div class="row" ng-repeat="role in settings.onmai_instructions track by $index">
+              <div class="row" ng-repeat="item in settings.onmai_instructions track by $index">
                 <div class="col-lg-2 col-md-3 m-b-15">
-                  <ui-select name="mode" class="form-control" theme="select2" ng-model="role.type" search-enabled="false" required ng-init="options = [ { name: '{t}Both{/t}', key: 'Both'},{ name: '{t}Create{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'} ]">
+                  <ui-select name="mode" class="form-control" theme="select2" ng-model="item.type" search-enabled="false" required ng-init="options = [ { name: '{t}Both{/t}', key: 'Both'},{ name: '{t}Create{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'} ]">
                     <ui-select-match>
                       [% $select.selected.name %]
                     </ui-select-match>
@@ -234,7 +246,7 @@
                   </ui-select>
                 </div>
                 <div class="col-lg-2 col-md-3 m-b-15">
-                  <ui-select name="field" class="form-control" theme="select2" ng-model="role.field" search-enabled="false" required ng-init="options = [ { name: '{t}All{/t}', key: 'all'}, { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Introductions{/t}', key: 'introductions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
+                  <ui-select name="field" class="form-control" theme="select2" ng-model="item.field" search-enabled="false" required ng-init="options = [ { name: '{t}All{/t}', key: 'all'}, { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Introductions{/t}', key: 'introductions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
                     <ui-select-match>
                       [% $select.selected.name %]
                     </ui-select-match>
@@ -244,12 +256,21 @@
                   </ui-select>
                 </div>
                 <div class="col-lg-7 col-md-7">
-                  <input class="form-control" ng-model="role.value" placeholder="{t}Instruction{/t}" type="text" required maxlength="2048">
+                  <input class="form-control" ng-model="item.value" placeholder="{t}Instruction{/t}" type="text" required maxlength="2048">
                 </div>
-                <div class="col-lg-1 col-md-2 m-b-15">
-                  <button class="btn btn-block btn-danger ng-cloak" ng-click="removeInstruction($index)" type="button">
+                <div class="col-lg-1 col-md-2 m-b-15 text-center">
+                  <button class="btn btn-white" ng-click="activeInstruction($index)" type="button">
+                      <i class="fa" ng-class="{
+                          'fa-times text-danger': item.disabled == 1 && item.disabled != undefined,
+                          'fa-check text-success': item.disabled != 1 || item.disabled == undefined
+                      }"></i>
+                  </button>
+                  <button class="btn btn-danger ng-cloak" ng-click="removeInstruction($index)" type="button">
                     <i class="fa fa-trash-o"></i>
                   </button>
+                  {* <button class="btn btn-danger ng-cloak" ng-click="removeInstruction($index)" type="button">
+                    <i class="fa fa-trash-o"></i>
+                  </button> *}
                 </div>
               </div>
             </div>

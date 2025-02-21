@@ -222,7 +222,8 @@
           const instruction = {
             type: 'Both',
             field: 'all',
-            value: ''
+            value: '',
+            disabled: 1
           };
 
           $scope.settings.onmai_instructions.push(instruction);
@@ -230,6 +231,10 @@
 
         $scope.removeInstruction = function(index) {
           $scope.settings.onmai_instructions.splice(index, 1);
+        };
+
+        $scope.activeInstruction = function(index) {
+          $scope.settings.onmai_instructions[index].disabled = $scope.settings.onmai_instructions[index].disabled == 1 ? 0 : 1;
         };
 
         $scope.init = function() {
