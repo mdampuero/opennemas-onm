@@ -22,6 +22,7 @@
       function($uibModalInstance, $scope, $q, routing, success, template, http, $timeout, oqlEncoder, messenger) {
         $scope.routes = {
           generateText: 'api_v1_backend_onmai_generate',
+          translate: 'api_v1_backend_onmai_translate',
           saveTokens: 'api_v1_backend_onmai_tokens',
         };
 
@@ -119,6 +120,35 @@
           $scope.waiting = true;
 
           http.post($scope.routes.generateText, $scope.template)
+            .then(function(response) {
+              $scope.template.suggested_text = response.data.result;
+              $scope.template.original_text  = $scope.template.input;
+              $scope.last_token_usage        = response.data.tokens.total;
+              $scope.last_words_generated    = response.data.words.total;
+              $scope.template.step           = 2;
+              $scope.setActiveText('suggested');
+            })
+            .catch(function(err) {
+              $scope.error = true;
+              messenger.post(err.data.error, 'error');
+            })
+            .finally(function() {
+              $scope.waiting = false;
+            });
+        };
+
+        $scope.translate = function() {
+          $scope.error = false;
+          if (!$scope.template) {
+            return;
+          }
+
+          $scope.waiting = true;
+
+          http.post($scope.routes.translate, {
+            text: $scope.template.input,
+            lang: $scope.template.locale
+          })
             .then(function(response) {
               $scope.template.suggested_text = response.data.result;
               $scope.template.original_text  = $scope.template.input;

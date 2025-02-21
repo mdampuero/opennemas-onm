@@ -73,10 +73,10 @@
                         {t}Title{/t}
                       </th>
                       <th class="v-align-middle">
-                        {t}Field{/t}
+                        {t}Mode{/t}
                       </th>
                       <th class="v-align-middle">
-                        {t}Mode{/t}
+                        {t}Field{/t}
                       </th>
                       <th class="v-align-middle">
                         {t}Default tone{/t}
@@ -106,12 +106,12 @@
                       </td>
                       <td class="v-align-middle">
                         <div class="table-text">
-                          [% item.field %]
+                          [% item.mode %]
                         </div>
                       </td>
                       <td class="v-align-middle">
                         <div class="table-text">
-                          [% item.mode %]
+                          [% item.field %]
                         </div>
                       </td>
                       <td class="v-align-middle">
@@ -190,7 +190,6 @@
                       <button class="btn btn-block btn-danger ng-cloak" ng-click="removeTone($index)" type="button" ng-disabled="role.readOnly">
                         <i class="fa fa-trash-o"></i>
                       </button>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -209,7 +208,6 @@
   </div>
 </ng-container>
 {/block}
-
 {block name="modals"}
   <script type="text/ng-template" id="modal-delete">
     {include file="common/extension/modal.delete.tpl"}
