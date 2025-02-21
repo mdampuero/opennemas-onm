@@ -49,7 +49,7 @@ class AdvertisementRenderer extends Renderer
      *
      * @var array
      */
-    protected $types = [ 'Image', 'Html', 'Revive', 'Dfp', 'Smart' ];
+    protected $types = [ 'Image', 'Html', 'Revive', 'Dfp', 'Smart', 'Traffective' ];
 
     /**
      * Initializes the AdvertisementRenderer
