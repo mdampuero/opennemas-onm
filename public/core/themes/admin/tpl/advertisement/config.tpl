@@ -329,14 +329,14 @@
                 <div class="form-group">
                   <label for="traffective_config_client_alias" class="form-label">{t}Client Alias{/t}</label>
                   <div class="controls">
-                    <input class="form-control" type="text" name="traffective_config_client_alias" ng-model="traffective.clientAlias" value="{$configs['traffective_config']['client_alias']}">
+                    <input class="form-control" type="text" name="traffective_config_client_alias" ng-required="traffective.domain" ng-model="traffective.clientAlias" value="{$configs['traffective_config']['client_alias']}">
                     <div class="help">{t}The main Domain (i.e. ).{/t}</div>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="traffective_config_dfpUrl" class="form-label">{t}DFP Url{/t}</label>
                   <div class="controls">
-                    <input class="form-control" type="text" name="traffective_config_dfpUrl" ng-model="traffective.dfpUrl" value="{$configs['traffective_config']['dfpUrl']}">
+                    <input class="form-control" type="text" name="traffective_config_dfpUrl" ng-required="traffective.domain" ng-model="traffective.dfpUrl" value="{$configs['traffective_config']['dfpUrl']}">
                     <div class="help">{t}The main Domain (i.e. ).{/t}</div>
                   </div>
                 </div>

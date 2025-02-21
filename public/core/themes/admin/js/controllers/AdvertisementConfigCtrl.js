@@ -26,6 +26,13 @@
          */
         $scope.smart = {};
 
+        /**
+         * Traffective config object.
+         * @type {Object}
+         * @property {String} domain
+         * @property {String} clientAlias
+         * @property {String} dfpUrl
+         */
         $scope.traffective = {};
 
         /**
@@ -52,9 +59,8 @@
             tagsFormat = 'onecall_async';
           }
 
-          $scope.smart.domain     = domain;
-          $scope.smart.tagsFormat = tagsFormat;
-
+          $scope.smart.domain             = domain;
+          $scope.smart.tagsFormat         = tagsFormat;
           $scope.traffective.domain       = traffective.domain;
           $scope.traffective.clientAlias  = traffective.client_alias;
           $scope.traffective.dfpUrl       = traffective.dfpUrl;
