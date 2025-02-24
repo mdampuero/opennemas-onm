@@ -340,6 +340,13 @@
                     <div class="help">{t}The main Domain (i.e. ).{/t}</div>
                   </div>
                 </div>
+                <div class="form-group">
+                  <label for="traffective_config_srcUrl" class="form-label">{t}SRC Url{/t}</label>
+                  <div class="controls">
+                    <input class="form-control" type="text" name="traffective_config_srcUrl" ng-required="traffective.domain" ng-model="traffective.srcUrl" value="{$configs['traffective_config']['srcUrl']}">
+                    <div class="help">{t}The main Domain (i.e. ).{/t}</div>
+                  </div>
+                </div>
                 <h4 class="m-t-30">{t}Tradedoubler integration{/t}</h4>
                 <div class="form-group">
                   <label for="tradedoubler_id" class="form-label">{t}Tradedoubler ID{/t}</label>
