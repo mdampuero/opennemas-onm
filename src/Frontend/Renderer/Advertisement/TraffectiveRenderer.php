@@ -25,12 +25,40 @@ class TraffectiveRenderer extends AdvertisementRenderer
      *
      * @return string The HTML code to include in header.
      */
-    public function renderInlineHeader($params)
+    public function renderInlineHeader($ads, $params)
     {
         $config = $this->ds->get('traffective_config');
 
         return $this->tpl->fetch('advertisement/helpers/inline/traffective.tpl', [
             'config' => $config,
+            'targeting' => $this->getTargeting(
+                $params['category'],
+                $params['extension']
+            ),
         ]);
+    }
+
+    /**
+     * Returns the targeting-related JS code for google DFP.
+     *
+     * @param string  $category  The current category.
+     * @param string  $module    The current module.
+     *
+     * @return string The targeting-related JS code.
+     */
+    protected function getTargeting($category, $extension)
+    {
+        $targeting = [];
+
+        if (!empty($category)) {
+            $targeting['category'] = ($category === 'home') ?
+                'homepage' : $category;
+        }
+
+        if (!empty($extension)) {
+            $targeting['extension'] = $extension;
+        }
+
+        return $targeting;
     }
 }

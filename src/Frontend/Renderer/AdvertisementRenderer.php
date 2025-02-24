@@ -556,19 +556,6 @@ class AdvertisementRenderer extends Renderer
             : '';
     }
 
-        /**
-     * Returns the HTML header section for the DFP advertisements.
-     *
-     * @param array $advertisements    The list of advertisements.
-     * @param array $params The list of parameters to render the advertisement header.
-     *
-     * @return string HTML for the DFP header.
-     */
-    protected function renderTraffectiveHeaders($advertisements, $params)
-    {
-        return $this->getRendererClass(5)->renderInlineHeader($advertisements, $params);
-    }
-
     /**
      * Returns the HTML header section for the Revive advertisements.
      *
@@ -625,6 +612,19 @@ class AdvertisementRenderer extends Renderer
         return !empty($advertisements)
             ? $this->getRendererClass(4)->renderInlineHeader($advertisements, $params)
             : '';
+    }
+
+    /**
+     * Returns the HTML header section for the DFP advertisements.
+     *
+     * @param array $advertisements    The list of advertisements.
+     * @param array $params The list of parameters to render the advertisement header.
+     *
+     * @return string HTML for the DFP header.
+     */
+    protected function renderTraffectiveHeaders($advertisements, $params)
+    {
+        return $this->getRendererClass(5)->renderInlineHeader($advertisements, $params);
     }
 
     /**

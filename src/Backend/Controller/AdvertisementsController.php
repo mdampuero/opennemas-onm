@@ -425,6 +425,7 @@ class AdvertisementsController extends Controller
                 'domain'       => $formValues->filter('traffective_config_domain', '', FILTER_SANITIZE_STRING),
                 'client_alias' => $formValues->filter('traffective_config_client_alias', '', FILTER_SANITIZE_STRING),
                 'dfpUrl'       => $formValues->filter('traffective_config_dfpUrl', '', FILTER_SANITIZE_STRING),
+                'srcUrl'       => $formValues->filter('traffective_config_srcUrl', '', FILTER_SANITIZE_STRING),
             ],
             'tradedoubler_id'  => $formValues->getDigits('tradedoubler_id'),
             'restricted_urls' => $formValues->filter('restricted_urls', '')
