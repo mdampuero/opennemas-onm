@@ -362,7 +362,7 @@ class AdvertisementRenderer extends Renderer
         }
 
         $headers = '';
-        foreach (array_slice($this->types, -3) as $type) {
+        foreach (array_slice($this->types, -4) as $type) {
             $method   = 'render' . $type . 'Headers';
             $headers .= $this->{$method}($advertisements, $params);
         }
@@ -624,7 +624,9 @@ class AdvertisementRenderer extends Renderer
      */
     protected function renderTraffectiveHeaders($advertisements, $params)
     {
-        return $this->getRendererClass(5)->renderInlineHeader($advertisements, $params);
+        return !empty($advertisements)
+            ? $this->getRendererClass(5)->renderInlineHeader($advertisements, $params)
+            : '';
     }
 
     /**

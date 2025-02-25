@@ -29,6 +29,10 @@ class TraffectiveRenderer extends AdvertisementRenderer
     {
         $config = $this->ds->get('traffective_config');
 
+        if (empty($config['domain'])) {
+            return '';
+        }
+
         return $this->tpl->fetch('advertisement/helpers/inline/traffective.tpl', [
             'config' => $config,
             'targeting' => $this->getTargeting(
@@ -46,7 +50,7 @@ class TraffectiveRenderer extends AdvertisementRenderer
      *
      * @return string The targeting-related JS code.
      */
-    protected function getTargeting($category, $extension)
+    protected function getTargeting($category, $module)
     {
         $targeting = [];
 
@@ -55,8 +59,8 @@ class TraffectiveRenderer extends AdvertisementRenderer
                 'homepage' : $category;
         }
 
-        if (!empty($extension)) {
-            $targeting['extension'] = $extension;
+        if (!empty($module)) {
+            $targeting['extension'] = $module;
         }
 
         return $targeting;
