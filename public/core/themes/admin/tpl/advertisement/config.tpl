@@ -337,14 +337,14 @@
                   <label for="traffective_config_dfpUrl" class="form-label">{t}DFP Url{/t}</label>
                   <div class="controls">
                     <input class="form-control" type="text" name="traffective_config_dfpUrl" ng-required="traffective.domain" ng-model="traffective.dfpUrl" value="{$configs['traffective_config']['dfpUrl']}">
-                    <div class="help">{t}The URL for accessing the ad content from the ad server (i.e. /307308315,23204994682/domain.tld).{/t}</div>
+                    <div class="help">{t}The URL for accessing the ad content from the ad server.{/t}</div>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="traffective_config_srcUrl" class="form-label">{t}SRC Url{/t}</label>
                   <div class="controls">
                     <input class="form-control" type="text" name="traffective_config_srcUrl" ng-required="traffective.domain" ng-model="traffective.srcUrl" value="{$configs['traffective_config']['srcUrl']}">
-                    <div class="help">{t}The URL of the external script that loads the ad content (i.e. //cdntrf.com/preloader/17720.js).{/t}</div>
+                    <div class="help">{t}The URL of the external script that loads the ad content.{/t}</div>
                   </div>
                 </div>
                 <h4 class="m-t-30">{t}Tradedoubler integration{/t}</h4>
