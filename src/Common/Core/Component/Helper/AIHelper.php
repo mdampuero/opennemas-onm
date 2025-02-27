@@ -371,50 +371,44 @@ class AIHelper
         return $response;
     }
 
-    public function translate($text, $lang)
+    public function translate($text, $lang, $params = [])
     {
-        if ($text == null || $lang == null || $text == '') {
+        if (empty($text) || empty($lang)) {
             return ['error' => 'Empty text or language', 'result' => ''];
         }
 
-        $this->userPrompt = "### OBJETIVO:\nTraduce el siguiente texto al idioma seleccionado " .
-            " siguiente estrictamente las instrucciones.\n";
+        $this->userPrompt = "### OBJETIVO:\n" .
+            "Traduce el siguiente texto al idioma seleccionado siguiendo estrictamente las instrucciones.\n";
+        $this->userPrompt .= "### TEXTO:\n{$text}\n";
+        $this->userPrompt .= "### IDIOMA SELECCIONADO:\n{$lang}\n";
 
-        $this->userPrompt .= "### TEXTO:\n" . $text . "\n";
-        $this->userPrompt .= "### IDIOMA SELECCIONADO:\n" . $lang . "\n";
-        $this->insertInstructions([
-            ['value' => 'Debes mantener el tono y el estilo del texto original.'],
-            ['value' => 'No debes añadir información adicional.'],
-            ['value' => 'No debes cambiar el sentido del texto original.'],
-            ['value' => 'Debes mantener la estructura del texto original.'],
-            ['value' => 'Debes mantener la longitud del texto original.'],
-            ['value' => 'Debes mantener la terminología del texto original.'],
-            ['value' => 'Debes mantener la puntuación del texto original.'],
-            ['value' => 'Debes mantener la gramática del texto original.'],
-            ['value' => 'Debes mantener la ortografía del texto original.'],
-            ['value' => 'Debes mantener la coherencia del texto original.'],
-            ['value' => 'Debes mantener el formato del texto original.'],
-            ['value' => 'No debes decorarlo con otro formato que no esté en el texto original.'],
-        ]);
-
-        $data = $this->getCurrentSettings();
-
-        $data['messages'] = [];
-
-        $data['messages'][] = [
-            'role' => 'user',
-            'content' => $this->userPrompt
+        $instructions = [
+            ['value' => 'Debes mantener el estilo del texto original.'],
+            ['value' => 'No debes añadir información adicional ni modificar el significado del texto.'],
+            ['value' => 'Debes respetar la estructura y longitud del texto.'],
+            ['value' => 'Mantén la terminología, puntuación, gramática y ortografía del original.'],
+            ['value' => 'No alteres el formato original del texto.']
         ];
 
-        if ($data['engine'] ?? false) {
+        if (!empty($params['tone']['name'] ?? false)) {
+            $instructions[] = ['value' => "Adopta un tono {$params['tone']['name']} en la traducción."];
+        } else {
+            $instructions[] = ['value' => "Debes mantener el tono del texto original."];
+        }
+
+        $this->insertInstructions($instructions);
+
+        $data = $this->getCurrentSettings();
+        $data['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
+
+        if (!empty($data['engine'])) {
             $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
                 $data,
                 $this->getStructureResponse()
             );
-
             $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
         } else {
-            $response['error'] = 'Error';
+            return ['error' => 'Error'];
         }
 
         if (empty($response['error'])) {
@@ -923,6 +917,20 @@ class AIHelper
      */
     public function getLanguages()
     {
+        $locale = $this->container->get('core.helper.locale')->getConfiguration();
+        if (isset($locale['multilanguage']) && $locale['multilanguage'] == true) {
+            $languages = [];
+            foreach ($locale['available'] as $value) {
+                $languages[] = [
+                    'code' => $value,
+                    'name' => $value
+                ];
+            }
+        }
+        if (!empty($languages)) {
+            $this->languages = $languages;
+        }
+
         return $this->languages;
     }
 }

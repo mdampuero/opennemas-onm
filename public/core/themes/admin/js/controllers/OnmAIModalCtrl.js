@@ -146,8 +146,9 @@
           $scope.waiting = true;
 
           http.post($scope.routes.translate, {
-            text: $scope.template.input,
-            lang: $scope.template.locale
+            text: $scope.template.orVal,
+            lang: $scope.template.locale,
+            tone: $scope.template.toneSelected
           })
             .then(function(response) {
               $scope.template.suggested_text = response.data.result;

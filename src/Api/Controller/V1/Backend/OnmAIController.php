@@ -127,8 +127,9 @@ class OnmAIController extends ApiController
         try {
             $text = $request->request->get('text');
             $lang = $request->request->get('lang');
+            $tone = $request->request->get('tone') ?? null;
 
-            $response = $this->get($this->helper)->translate($text, $lang);
+            $response = $this->get($this->helper)->translate($text, $lang, [ 'tone' => $tone ]);
 
             if (isset($response['error'])) {
                 return new JsonResponse(['error' => $response['error']], JsonResponse::HTTP_REQUEST_TIMEOUT);
