@@ -99,8 +99,26 @@ class ToolController extends Controller
             ->getDataSet('Settings', 'instance')
             ->get('translators');
 
+        $settingsDefault = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('translatorsDefault') ?? ['translator' => '' ];
+
         if (is_array($settings) && array_key_exists($translator, $settings)) {
             $translator = $settings[(int) $translator];
+        }
+
+        if (is_array($translator) && $translator['to'] !== $to || $translator['from'] !== $from) {
+            $translator = null;
+        }
+
+        if (empty($translator) && !empty($settingsDefault['translator'])) {
+            $translator = [
+                'from'       => $from,
+                'to'         => $to,
+                'translator' => $settingsDefault['translator'],
+                'default'    => true,
+                'config'     => $settingsDefault['config']
+            ];
         }
 
         if (!is_array($translator)) {

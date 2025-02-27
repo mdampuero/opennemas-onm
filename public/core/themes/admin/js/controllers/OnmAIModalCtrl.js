@@ -22,8 +22,8 @@
       function($uibModalInstance, $scope, $q, routing, success, template, http, $timeout, oqlEncoder, messenger) {
         $scope.routes = {
           generateText: 'api_v1_backend_onmai_generate',
-          translate: 'api_v1_backend_onmai_translate',
-          saveTokens: 'api_v1_backend_onmai_tokens',
+          translate:    'api_v1_backend_onmai_translate',
+          saveTokens:   'api_v1_backend_onmai_tokens',
         };
 
         $scope.last_token_usage        = 0;
@@ -38,6 +38,7 @@
         $scope.template.promptInput    = null;
         $scope.mode                    = $scope.template.input && $scope.template.input.trim() !== '' ? 'Edit' : 'New';
         $scope.error                   = false;
+        $scope.showPrompt              = true;
 
         /**
          * @function init
@@ -146,8 +147,9 @@
           $scope.waiting = true;
 
           http.post($scope.routes.translate, {
-            text: $scope.template.input,
-            lang: $scope.template.locale
+            text: $scope.template.orVal,
+            lang: $scope.template.locale,
+            tone: $scope.template.toneSelected
           })
             .then(function(response) {
               $scope.template.suggested_text = response.data.result;
@@ -193,10 +195,14 @@
               return obj === $scope.template.promptSelected;
             });
             $scope.template.promptInput = $scope.template.promptSelected.prompt;
+            if ($scope.template && $scope.template.promptSelected.hasOwnProperty('instances')) {
+              $scope.showPrompt = false;
+            }
           } else {
             $scope.template.roleSelected = null;
             $scope.template.toneSelected = null;
             $scope.template.promptInput  = null;
+            $scope.showPrompt            = true;
           }
         };
 

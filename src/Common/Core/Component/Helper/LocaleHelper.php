@@ -79,12 +79,13 @@ class LocaleHelper
     public function getConfiguration()
     {
         return [
-            'available'     => $this->locale->getAvailableLocales('frontend'),
-            'default'       => $this->locale->getLocale('frontend'),
-            'multilanguage' => $this->hasMultilanguage(),
-            'selected'      => $this->getSelectedLocale(),
-            'slugs'         => $this->locale->getSlugs('frontend'),
-            'translators'   => $this->getTranslators($this->locale->getLocale('frontend'))
+            'available'          => $this->locale->getAvailableLocales('frontend'),
+            'default'            => $this->locale->getLocale('frontend'),
+            'multilanguage'      => $this->hasMultilanguage(),
+            'selected'           => $this->getSelectedLocale(),
+            'slugs'              => $this->locale->getSlugs('frontend'),
+            'translators'        => $this->getTranslators($this->locale->getLocale('frontend')),
+            'translatorsDefault' => $this->getTranslatorsDefault()
         ];
     }
 
@@ -147,6 +148,22 @@ class LocaleHelper
         }));
 
         return array_values($translators);
+    }
+
+    /**
+     * Returns the list of default translators.
+     * This list is used when no specific translator is selected.
+     * @return array The list of default translators.
+     */
+    public function getTranslatorsDefault()
+    {
+        if (!$this->security->hasExtension('es.openhost.module.translation')) {
+            return [];
+        }
+
+        return $this->em
+            ->getDataSet('Settings', 'instance')
+            ->get('translatorsDefault') ?? [];
     }
 
     /**

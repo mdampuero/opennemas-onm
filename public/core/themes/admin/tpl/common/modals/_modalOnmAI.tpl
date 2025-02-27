@@ -13,7 +13,7 @@
       <i class="fa fa-circle-o-notch fa-spin fa-3x"></i>
     </div>
   </ng-container>
-  <ng-container ng-show="!waiting && template.step == 1">
+  <ng-container ng-show="!waiting && template.step == 1 && !template.translationHelper">
     <div class="form-group">
       <label ng-if="mode == 'Edit'">[% template.AIFieldTitle %]</label>
       <label ng-if="mode == 'New'">{t}Enter a topic{/t}</label>
@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group m-b-0">
+    <div class="form-group m-b-0" ng-if="showPrompt">
       <label>{t}Prompt edit{/t}</label>
       <textarea class="form-control input-lg" ng-model="template.promptInput" rows="5" placeholder=""></textarea>
     </div>
@@ -110,22 +110,67 @@
         <div class="onmai-wrapper-text" ng-bind-html="template.input"></div>
       </ng-container>
     </ng-container>
-    <p>
-      <span class="label label-success pull-left"><strong>[% last_words_generated %]</strong> {t}words managed{/t}</span>
+    <p ng-if="!template.translationHelper">
       <span class="pull-right text-pink pointer" ng-click="generate()">{t}Regenerate {/t} <i class="fa fa-refresh openai-text-degrade"></i></span>
     </p>
   </ng-container>
+
+  <ng-container ng-show="!waiting && template.step != 2 && template.translationHelper">
+    <div class="form-group">
+      <label ng-if="mode == 'New'">{t}Original{/t}</label>
+      <input ng-if="displayMode == 'input'" type="text" class="form-control input-lg" ng-model="template.orVal">
+      <div ng-if="displayMode == 'textarea'" class="onmai-wrapper-text input-lg" ng-bind-html="template.orVal"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label>{t}Tone{/t}</label>
+          <select name="field" id="field" class="form-control input-lg" ng-model="template.toneSelected" ng-options="item as item.name for item in extra.tones">
+            <option value="">{t}Select a tone{/t}</option>
+          </select>
+          <div class="help m-l-3 m-t-5" ng-show="template.toneSelected"> <i class="fa fa-info-circle m-r-5 text-info"></i> [% template.toneSelected.description %] </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label>{t}Translate to{/t}</label>
+          <select
+            name="language"
+            id="language"
+            class="form-control input-lg"
+            ng-model="template.locale"
+            ng-options="item.code as item.name for item in extra.languages">
+        </select>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>
 <div class="modal-footer m-t-15 border-top">
-  <button ng-if="template.step == 1" class="btn btn-white btn-lg pull-left" data-dismiss="modal" ng-click="dismiss()" type="button">
-    {t}Cancel{/t}
-  </button>
-  <button ng-if="template.step == 2" class="btn btn-white btn-lg pull-left" ng-click="back()" type="button">
-    <i class="fa fa-angle-left"></i>
-    {t}Prompt edit{/t}
-  </button>
-  <button type="button" class="btn btn-success btn-loading btn-lg pull-right" ng-click="continue()" ng-disabled="waiting || !template.promptInput || !template.input || !template.promptSelected">
-    {t}Continue{/t}
-    <i class="fa fa-angle-right"></i>
-  </button>
+  <ng-container ng-if="!template.translationHelper">
+    <button ng-if="template.step == 1" class="btn btn-white btn-lg pull-left" data-dismiss="modal" ng-click="dismiss()" type="button">
+      {t}Cancel{/t}
+    </button>
+    <button ng-if="template.step == 2" class="btn btn-white btn-lg pull-left" ng-click="back()" type="button">
+      <i class="fa fa-angle-left"></i>
+      {t}Prompt edit{/t}
+    </button>
+    <button type="button" class="btn btn-success btn-loading btn-lg pull-right" ng-click="continue()" ng-disabled="waiting || !template.promptInput || !template.input || !template.promptSelected">
+      {t}Continue{/t}
+      <i class="fa fa-angle-right"></i>
+    </button>
+  </ng-container>
+  <ng-container ng-if="template.translationHelper">
+    <button class="btn btn-white btn-lg pull-left" data-dismiss="modal" ng-click="dismiss()" type="button">
+      {t}Cancel{/t}
+    </button>
+    <button ng-if="template.step == 1" type="button" class="btn btn-success btn-loading btn-lg pull-right" ng-click="translate()" ng-disabled="waiting || !template.orVal">
+      {t}Translate{/t}
+      <i class="fa fa-angle-right"></i>
+    </button>
+    <button ng-if="template.step == 2" type="button" class="btn btn-success btn-loading btn-lg pull-right" ng-click="continue()" ng-disabled="waiting">
+      {t}Continue{/t}
+      <i class="fa fa-angle-right"></i>
+    </button>
+  </ng-container>
 </div>
