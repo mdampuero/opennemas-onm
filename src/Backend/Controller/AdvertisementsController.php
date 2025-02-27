@@ -436,6 +436,7 @@ class AdvertisementsController extends Controller
             $settings['dfp_custom_code']            = base64_encode($formValues->get('dfp_custom_code'));
             $settings['smart_custom_code']          = base64_encode($formValues->get('smart_custom_code'));
         }
+
         try {
             $ds->set($settings);
 
@@ -490,10 +491,10 @@ class AdvertisementsController extends Controller
 
         $traffectiveDomain = '';
         if (!empty($settings['traffective_config'])
-        && is_array($settings['traffective_config'])
-        && array_key_exists('domain', $settings['traffective_config'])
-        && array_key_exists('client_alias', $settings['traffective_config'])
-        && array_key_exists('dfpUrl', $settings['traffective_config'])
+            && is_array($settings['traffective_config'])
+            && array_key_exists('domain', $settings['traffective_config'])
+            && array_key_exists('client_alias', $settings['traffective_config'])
+            && array_key_exists('dfpUrl', $settings['traffective_config'])
         ) {
             $traffectiveDomain = $settings['traffective_config']['domain'];
         }
