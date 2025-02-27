@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_ads_config}" method="POST" ng-controller="AdvertisementConfigCtrl" ng-init="init({json_encode($configs['smart_ad_server']['domain'])|clear_json}, {json_encode($configs['smart_ad_server']['tags_format'])|clear_json});">
+<form action="{url name=admin_ads_config}" method="POST" ng-controller="AdvertisementConfigCtrl" ng-init="init({json_encode($configs['smart_ad_server']['domain'])|clear_json}, {json_encode($configs['smart_ad_server']['tags_format'])|clear_json}, {json_encode($configs['traffective_config'])|clear_json});">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -320,11 +320,31 @@
                 {/if}
                 <h4 class="m-t-30">{t}Traffective integration{/t}</h4>
                 <div class="form-group">
+                  <label for="traffective_config_domain" class="form-label">{t}Domain{/t}</label>
                   <div class="controls">
-                    <div class="checkbox">
-                      <input {if $configs['traffective'] == 1}checked{/if} id="traffective" name="traffective" type="checkbox">
-                      <label for="traffective" class="form-label">{t}Enable{/t}</label>
-                    </div>
+                    <input class="form-control" type="text" name="traffective_config_domain" ng-model="traffective.domain" value="{$configs['traffective_config']['domain']}">
+                    <div class="help">{t}The main Domain (i.e. example.tld).{/t}</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="traffective_config_client_alias" class="form-label">{t}Client Alias{/t}</label>
+                  <div class="controls">
+                    <input class="form-control" type="text" name="traffective_config_client_alias" ng-required="traffective.domain" ng-model="traffective.clientAlias" value="{$configs['traffective_config']['client_alias']}">
+                    <div class="help">{t}A unique identifier for the client or website.{/t}</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="traffective_config_dfpUrl" class="form-label">{t}DFP Url{/t}</label>
+                  <div class="controls">
+                    <input class="form-control" type="text" name="traffective_config_dfpUrl" ng-required="traffective.domain" ng-model="traffective.dfpUrl" value="{$configs['traffective_config']['dfpUrl']}">
+                    <div class="help">{t}The URL for accessing the ad content from the ad server.{/t}</div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="traffective_config_srcUrl" class="form-label">{t}SRC Url{/t}</label>
+                  <div class="controls">
+                    <input class="form-control" type="text" name="traffective_config_srcUrl" ng-required="traffective.domain" ng-model="traffective.srcUrl" value="{$configs['traffective_config']['srcUrl']}">
+                    <div class="help">{t}The URL of the external script that loads the ad content.{/t}</div>
                   </div>
                 </div>
                 <h4 class="m-t-30">{t}Tradedoubler integration{/t}</h4>
