@@ -529,8 +529,7 @@ class AdvertisementRendererTest extends TestCase
      */
     public function testRenderInlineHeaders()
     {
-        $ad         = new \Advertisement();
-        $ad->params = [ 'category' => 'home', 'extension' => 'article' ];
+        $ad = new \Advertisement();
 
         $rendererDfp = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
             ->setConstructorArgs([ $this->container ])
