@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group m-b-0">
+    <div class="form-group m-b-0" ng-if="showPrompt">
       <label>{t}Prompt edit{/t}</label>
       <textarea class="form-control input-lg" ng-model="template.promptInput" rows="5" placeholder=""></textarea>
     </div>
