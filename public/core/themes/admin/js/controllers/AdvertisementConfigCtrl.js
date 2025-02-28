@@ -65,6 +65,8 @@
           $scope.traffective.clientAlias  = traffective.client_alias;
           $scope.traffective.dfpUrl       = traffective.dfpUrl;
           $scope.traffective.srcUrl       = traffective.srcUrl;
+          $scope.traffective.ads          = traffective.ads;
+          $scope.traffective.progAds      = traffective.progAds;
         };
       }
     ]);

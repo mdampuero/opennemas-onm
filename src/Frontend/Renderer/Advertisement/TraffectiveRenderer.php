@@ -29,6 +29,9 @@ class TraffectiveRenderer extends AdvertisementRenderer
     {
         $config = $this->ds->get('traffective_config');
 
+        $config['ads']     = !empty($config['ads']) && $config['ads'] == 1;
+        $config['progAds'] = !empty($config['progAds']) && $config['progAds'] == 1;
+
         if (empty($config['domain'])) {
             return '';
         }

@@ -347,6 +347,30 @@
                     <div class="help">{t}The URL of the external script that loads the ad content.{/t}</div>
                   </div>
                 </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="controls">
+                        <div class="checkbox">
+                          <input {if $configs['traffective_config']['ads'] == 1}checked{/if} id="traffective_config_ads" name="traffective_config_ads" type="checkbox">
+                          <label for="traffective_config_ads">
+                            {t}Enabled feature ads{/t}
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="controls">
+                        <div class="checkbox">
+                          <input {if $configs['traffective_config']['progAds'] == 1}checked{/if} id="traffective_config_progAds" name="traffective_config_progAds" type="checkbox">
+                          <label for="traffective_config_progAds">
+                            {t}Enabled feature programmatic ads{/t}
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <h4 class="m-t-30">{t}Tradedoubler integration{/t}</h4>
                 <div class="form-group">
                   <label for="tradedoubler_id" class="form-label">{t}Tradedoubler ID{/t}</label>
