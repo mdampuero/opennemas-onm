@@ -53,6 +53,7 @@
          *
          * @param {String} domain The configured domain
          * @param {String} tagsFormat The configured tags format
+         * @param {Object} traffective The traffective config object
          */
         $scope.init = function(domain, tagsFormat, traffective) {
           if ($scope.smartAvailableTagsFormats.indexOf(tagsFormat) < 0) {
