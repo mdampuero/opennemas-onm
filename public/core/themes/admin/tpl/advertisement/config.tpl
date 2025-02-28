@@ -354,7 +354,7 @@
                         <div class="checkbox">
                           <input {if $configs['traffective_config']['ads'] == 1}checked{/if} id="traffective_config_ads" name="traffective_config_ads" type="checkbox">
                           <label for="traffective_config_ads">
-                            {t}Enabled feature ads{/t}
+                            {t}Disable ads{/t}
                           </label>
                         </div>
                       </div>
@@ -364,7 +364,7 @@
                         <div class="checkbox">
                           <input {if $configs['traffective_config']['progAds'] == 1}checked{/if} id="traffective_config_progAds" name="traffective_config_progAds" type="checkbox">
                           <label for="traffective_config_progAds">
-                            {t}Enabled feature programmatic ads{/t}
+                            {t}Disable programmatic ads{/t}
                           </label>
                         </div>
                       </div>
