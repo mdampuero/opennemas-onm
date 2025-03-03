@@ -168,6 +168,8 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
                   </div>
                 </th>
                 <th class="">{t}Title{/t}</th>
+                <th class="hidden-xs hidden-sm">{t}Available from{/t}</th>
+                <th class="hidden-xs hidden-sm">{t}to{/t}</th>
                 <th class="hidden-xs hidden-sm " style="width: 33%;">{t}Position{/t}</th>
                 <th class="hidden-xs text-center"><i class="fa fa-mouse-pointer"></i></th>
                 <th class="hidden-xs hidden-sm text-center">{t}Type{/t}</th>
@@ -195,15 +197,6 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
                   </span>
                   [% content.title %]
                   <div class="small-text">
-                    <span ng-if="content.starttime">
-                      <strong>{t}Available from{/t} </strong>
-                      [% content.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
-                    </span>
-                    <span ng-if="content.endtime">
-                      <strong>{t}to{/t} </strong> [% content.endtime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
-                    </span>
-                  </div>
-                  <div class="small-text">
                     <span class="hidden-lg">
                       <span ng-show="content.positions.length > 1" tooltip-class="text-left" {* uib-tooltip-template="'ad_position_template'" *} tooltip-placement="bottom-left">{t 1="[% content.positions.length %]"}%1 positions{/t},</span>
                       <span ng-show="content.positions.length == 1"><span ng-repeat="value in content.positions | limitTo:1">[% map[value].name %]</span>,</span>
@@ -223,6 +216,16 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
                       <i class="fa fa-trash-o text-danger"></i>
                     </button>
                     {/acl}
+                  </div>
+                </td>
+                <td class="hidden-xs hidden-sm small-text">
+                  <div ng-if="content.starttime">
+                    [% content.starttime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                  </div>
+                </td>
+                <td class="hidden-xs hidden-sm small-text">
+                  <div ng-if="content.endtime">
+                    [% content.endtime | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                   </div>
                 </td>
                 <td class="hidden-xs hidden-sm small-text">
