@@ -164,7 +164,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
                         <span class="input-group-addon add-on">
                             <i class="fa fa-calendar m-r-5"></i> Start
                         </span>
-                        <input class="input-min-45 input-300" type="datetime" id="starttime" name="starttime" datetime-picker ng-model="criteria.starttime" />
+                        <input class="input-min-45 input-300" type="datetime" id="starttime" autocomplete="off" name="starttime" datetime-picker ng-model="criteria.starttime" />
                       </div>
                     </div>
                     <div class="form-group">
@@ -172,7 +172,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
                         <span class="input-group-addon add-on">
                             <i class="fa fa-calendar m-r-5"></i> End
                         </span>
-                        <input class="input-min-45 input-300" type="datetime" id="endtime" name="endtime" datetime-picker ng-model="criteria.endtime" />
+                        <input class="input-min-45 input-300" type="datetime" id="endtime" autocomplete="off" name="endtime" datetime-picker ng-model="criteria.endtime" />
                       </div>
                     </div>
                 </div>
