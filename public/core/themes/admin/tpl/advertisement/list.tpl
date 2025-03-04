@@ -1,5 +1,18 @@
 {extends file="base/admin.tpl"}
 
+{block name="footer-js" append}
+{javascripts}
+<script>
+jQuery(document).ready(function($) {
+  $('#starttime, #endtime').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:ss',
+    useCurrent: false,
+  });
+});
+</script>
+{/javascripts}
+{/block}
+
 {block name="content"}
 <div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('advertisement', 'backend_ws_advertisements_list');
 advertisement_positions = {json_encode($advertisement_positions)|clear_json}; type = {json_encode($types)|clear_json};
@@ -134,6 +147,34 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
                 <div ng-bind-html="item.name | highlight: $select.search"></div>
               </ui-select-choices>
             </ui-select>
+          </li>
+          <li class="quicklinks ng-cloak">
+            <!-- Botón para abrir el dropdown -->
+            <a class="dropdown-toggle" type="button" data-toggle="dropdown">
+                <strong>{t} Time Range {/t} </strong> <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.dates }">
+                    <div class="form-group">
+                      <div class="input-group">
+                        <span class="input-group-addon add-on">
+                            <i class="fa fa-calendar m-r-5"></i> Start
+                        </span>
+                        <input class="input-min-45 input-300" type="datetime" id="starttime" name="starttime" value="" autocomplete="off" datetime-picker ng-model="criteria.starttime" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <span class="input-group-addon add-on">
+                            <i class="fa fa-calendar m-r-5"></i> End
+                        </span>
+                        <input class="input-min-45 input-300" type="datetime" id="endtime" name="endtime" value="" datetime-picker ng-model="criteria.endtime" />
+                      </div>
+                    </div>
+                </div>
+              </li>
+            </ul>
           </li>
         </ul>
         <ul class="nav quick-section quick-section-fixed ng-cloak" ng-if="contents.length > 0">

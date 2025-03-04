@@ -131,7 +131,9 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         placeholder: {
           title: 'title ~ "%[value]%"',
           fk_content_categories: 'fk_content_categories regexp' +
-            '"^[value]($|,)|,[value],|(^|,)[value]$"'
+            '"^[value]($|,)|,[value],|(^|,)[value]$"',
+          starttime: 'starttime >= "[value]"',
+          endtime: '(endtime <= "[value]" or endtime is null)',
         }
       });
 
