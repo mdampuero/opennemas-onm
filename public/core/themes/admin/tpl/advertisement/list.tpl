@@ -158,7 +158,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
             </a>
             <ul class="dropdown-menu">
               <li>
-                <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.dates }">
+                <div class="grid-collapse-body ng-cloak">
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon add-on">
