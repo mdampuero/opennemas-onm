@@ -133,7 +133,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
           fk_content_categories: 'fk_content_categories regexp' +
             '"^[value]($|,)|,[value],|(^|,)[value]$"',
           starttime: 'starttime >= "[value]"',
-          endtime: '(endtime <= "[value]" or endtime is null)',
+          endtime: 'endtime <= "[value]"',
         }
       });
 
