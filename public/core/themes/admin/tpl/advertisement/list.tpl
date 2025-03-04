@@ -150,7 +150,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
           </li>
           <li class="quicklinks ng-cloak">
             <a class="dropdown-toggle" type="button" data-toggle="dropdown">
-                <strong>{t}Time Range{/t} </strong>
+                <strong>{t}Time Range{/t}</strong>
                   [% criteria.starttime %]
                   <span ng-if="criteria.starttime && criteria.endtime"> - </span>
                   [% criteria.endtime %]
@@ -162,7 +162,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon add-on">
-                            <i class="fa fa-calendar m-r-5"></i> Start
+                            <i class="fa fa-calendar m-r-5"></i> {t}Start date{/t}
                         </span>
                         <input class="input-min-45 input-300" type="datetime" id="starttime" autocomplete="off" name="starttime" datetime-picker ng-model="criteria.starttime" />
                       </div>
@@ -170,7 +170,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
                     <div class="form-group">
                       <div class="input-group">
                         <span class="input-group-addon add-on">
-                            <i class="fa fa-calendar m-r-5"></i> End
+                            <i class="fa fa-calendar m-r-5"></i> {t}End date{/t}
                         </span>
                         <input class="input-min-45 input-300" type="datetime" id="endtime" autocomplete="off" name="endtime" datetime-picker ng-model="criteria.endtime" />
                       </div>
