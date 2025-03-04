@@ -127,6 +127,23 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         $scope.selected = { all: false, contents: [] };
       }
 
+      if (!$scope.criteria.starttime && $scope.criteria.endtime) {
+        const endDate   = new Date($scope.criteria.endtime);
+        const startDate = new Date(
+          Date.UTC(
+            endDate.getFullYear() - 1,
+            11,
+            31,
+            0,
+            0,
+            0
+          )
+        );
+        const starttimeFormatted = startDate.toISOString().slice(0, 19).replace('T', ' ');
+
+        $scope.criteria.starttime = starttimeFormatted;
+      }
+
       oqlEncoder.configure({
         placeholder: {
           title: 'title ~ "%[value]%"',
