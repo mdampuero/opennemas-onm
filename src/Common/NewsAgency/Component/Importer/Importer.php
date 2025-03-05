@@ -369,6 +369,9 @@ class Importer
             'href'                => $resource->href,
         ]);
 
+        // OnmAI transform
+        $data = $this->container->get('core.helper.ai')->transform($data);
+
         // Force some properties for photos
         if ($resource->type === 'photo') {
             $data['content_type_name'] = 'photo';

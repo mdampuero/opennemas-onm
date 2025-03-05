@@ -58,6 +58,33 @@
       </div>
     </div>
   </div>
+  <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-t-10">
+      <div class="row">
+        <div class="col-sm-12">
+      <h4>
+        {t}Transform with ONM AI{/t}
+      </h4>
+      <hr class="m-t-0 m-b-10">
+      </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <select name="field" id="field" class="form-control" ng-model="template.promptSelected" ng-options="item as item.name for item in template.onmai_prompts">
+              <option value="">{t}No, keep the original content{/t}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <select name="field" id="field" class="form-control" ng-model="template.toneSelected" ng-if="template.promptSelected" ng-options="item as item.name for item in template.onmai_extras.tones">
+              <option value="">{t}Select a tone{/t}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="modal-footer row">
   <div class="m-t-15" ng-class="{ 'col-sm-2': template.isEditable(template), 'col-sm-6': !template.isEditable(template) }">
