@@ -126,7 +126,8 @@
                       [% item.mode %]
                     </td>
                     <td>
-                      [% item.field %]
+                      <ng-container ng-if="item.mode == 'Transformation'"></ng-container>
+                      <ng-container ng-if="item.mode != 'Transformation'">[% item.field %]</ng-container>
                     </td>
                     <td>
                       [% item.tone %]

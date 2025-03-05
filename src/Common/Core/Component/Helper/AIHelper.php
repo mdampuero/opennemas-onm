@@ -419,6 +419,55 @@ class AIHelper
         return $response;
     }
 
+    public function transform($originalContent = [], $fieldToTransform = ['title', 'description', 'body'], $tone = [])
+    {
+        if (empty($originalContent) || empty($fieldToTransform) || (!$originalContent["prompt"] ?? false)) {
+            return $originalContent;
+        }
+
+        foreach ($fieldToTransform as $field) {
+            $this->userPrompt = sprintf("\n\n### OBJETIVO:\n%s", $originalContent["prompt"]);
+            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$originalContent[$field]}\n";
+
+            $instructions = [
+                ['value' => 'Utiliza el mismo tema.'],
+                ['value' => 'Intenta conservar la misma cantidad de palabras.'],
+                ['value' => 'Responde directamente con el texto transformado.'],
+                ['value' => 'Si el texto original tiene formato html, debes mantenerlo.']
+            ];
+
+            if (!empty($originalContent['tone'] ?? false)) {
+                $instructions[] = ['value' => "Adopta un tono {$originalContent['tone']}
+                    en la transformación."];
+            } else {
+                $instructions[] = ['value' => "Debes mantener el tono del texto original."];
+            }
+
+            $this->insertInstructions($instructions);
+
+            $data             = $this->getCurrentSettings();
+            $data['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
+
+            if (!empty($data['engine'])) {
+                $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
+                    $data,
+                    $this->getStructureResponse()
+                );
+
+                $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
+            } else {
+                return $originalContent;
+            }
+
+            if (empty($response['error']) && !empty($response['result'])) {
+                $this->generateWords($response);
+                $this->saveAction($data, $response);
+                $originalContent[$field] = $response['result'];
+            }
+        }
+        return $originalContent;
+    }
+
     public function removeHtmlCodeBlocks($input)
     {
         $output = preg_replace('/```html\n(.*?)\n```/s', '$1', $input);

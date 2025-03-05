@@ -104,7 +104,9 @@
                   isEditable:        $scope.isEditable,
                   items:             [ item ],
                   related:           $scope.data.extra.related,
-                  content_type_name: item.type === 'photo' ? 'photo' : 'article'
+                  content_type_name: item.type === 'photo' ? 'photo' : 'article',
+                  onmai_prompts:     $scope.onmai_prompts,
+                  onmai_extras:      $scope.onmai_extras,
                 };
               },
               success: function() {
@@ -215,6 +217,8 @@
           }
 
           $scope.list();
+
+          $scope.getOnmAIPrompts();
         };
 
         /**
@@ -319,6 +323,8 @@
               template.fk_content_category : null,
             content_status: template.content_status,
             content_type_name: template.content_type_name,
+            prompt: template.promptSelected ? template.promptSelected.prompt : null,
+            tone: template.toneSelected ? template.toneSelected.name : null
           };
 
           return http.put(route, data);
@@ -347,6 +353,8 @@
               template.fk_content_category : null,
             content_status: template.content_status,
             content_type_name: template.content_type_name,
+            prompt: template.promptSelected ? template.promptSelected.prompt : null,
+            tone: template.toneSelected ? template.toneSelected.name : null
           };
 
           return http.post($scope.routes.importList, data);
@@ -446,6 +454,27 @@
           $scope.selected.related = _.concat(_.difference(
             $scope.selected.related, relatedToDelete), relatedToAdd);
         }, true);
+
+        $scope.getOnmAIPrompts = function() {
+          $scope.criteria = {
+            epp: 1000,
+            mode: 'Transformation',
+            orderBy: { name: 'asc' },
+            page: 1,
+          };
+
+          $scope.waiting = true;
+
+          var oqlQuery = oqlEncoder.getOql($scope.criteria);
+
+          http.get({ name: 'api_v1_backend_onmai_prompt_get_list', params: { oql: oqlQuery } })
+            .then(function(response) {
+              $scope.onmai_prompts = response.data.items;
+              $scope.onmai_extras = response.data.extra;
+            }).finally(function() {
+              $scope.waiting = false;
+            });
+        };
       }
     ]);
 })();
