@@ -456,16 +456,13 @@
         }, true);
 
         $scope.getOnmAIPrompts = function() {
-          $scope.criteria = {
+          $scope.waiting = true;
+          var oqlQuery   = oqlEncoder.getOql({
             epp: 1000,
             mode: 'Transformation',
             orderBy: { name: 'asc' },
             page: 1,
-          };
-
-          $scope.waiting = true;
-
-          var oqlQuery = oqlEncoder.getOql($scope.criteria);
+          });
 
           http.get({ name: 'api_v1_backend_onmai_prompt_get_list', params: { oql: oqlQuery } })
             .then(function(response) {
