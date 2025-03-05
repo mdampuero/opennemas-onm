@@ -16,8 +16,8 @@
      *   Controller for server list in news agency.
      */
     .controller('NewsAgencyServerCtrl', [
-      '$controller', '$scope', 'http',
-      function($controller, $scope, http) {
+      '$controller', '$scope', 'http', 'oqlEncoder',
+      function($controller, $scope, http, oqlEncoder) {
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
         $scope.item = {
@@ -230,6 +230,25 @@
             $scope.item.external = 'redirect';
           }
         }, true);
+
+        $scope.getOnmAIPrompts = function() {
+          $scope.waiting = true;
+          var oqlQuery   = oqlEncoder.getOql({
+            epp: 1000,
+            mode: 'Transformation',
+            orderBy: { name: 'asc' },
+            page: 1,
+          });
+
+          http.get({ name: 'api_v1_backend_onmai_prompt_get_list', params: { oql: oqlQuery } })
+            .then(function(response) {
+              $scope.onmai_prompts = response.data.items;
+              $scope.onmai_extras = response.data.extra;
+            }).finally(function() {
+              $scope.waiting = false;
+            });
+        };
+        $scope.getOnmAIPrompts();
       }
     ]);
 })();

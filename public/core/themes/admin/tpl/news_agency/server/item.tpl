@@ -166,6 +166,31 @@
             </div>
           </div>
         </div>
+
+        <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.onmai }" ng-click="expanded.onmai = !expanded.onmai">
+          <i class="fa fa-refresh m-r-10"></i>
+          {t}Transform with ONM AI{/t}
+          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.onmai }"></i>
+        </div>
+        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.onmai }">
+            <div class="form-group">
+              <select name="field" id="field" class="form-control"
+                  ng-model="item.promptSelected"
+                  ng-options="prompt as prompt.name for prompt in onmai_prompts track by prompt.id">
+                <option value="">{t}No, keep the original content{/t}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>
+              <select name="field" id="field" class="form-control"
+                  ng-model="item.toneSelected"
+                  ng-if="item.promptSelected"
+                  ng-options="tone as tone.name for tone in onmai_extras.tones track by tone.name">
+                <option value="">{t}Select a tone{/t}</option>
+              </select>
+            </div>
+        </div>
+
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.author }" ng-click="expanded.author = !expanded.author">
           <i class="fa fa-edit m-r-10"></i>{t}Author{/t}
           <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.author }"></i>
