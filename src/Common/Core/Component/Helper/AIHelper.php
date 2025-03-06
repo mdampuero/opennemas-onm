@@ -419,25 +419,35 @@ class AIHelper
         return $response;
     }
 
-    public function transform($originalContent = [], $fieldToTransform = ['title', 'description', 'body'], $tone = [])
+    public function transform($or = [], $fields = ['title', 'title_int', 'description', 'body'], $tone = [])
     {
-        if (empty($originalContent) || empty($fieldToTransform) || (!$originalContent["prompt"] ?? false)) {
-            return $originalContent;
+        if (empty($or) || empty($fields) || empty($or['prompt'])) {
+            return $or;
         }
 
-        foreach ($fieldToTransform as $field) {
-            $this->userPrompt = sprintf("\n\n### OBJETIVO:\n%s", $originalContent["prompt"]);
-            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$originalContent[$field]}\n";
+        foreach ($fields as $field) {
+            if (!key_exists($field, $or)) {
+                continue;
+            }
+
+            $cleanContent = trim(strip_tags($or[$field]));
+
+            if ($cleanContent === '') {
+                return $or[$field];
+            }
+
+            $this->userPrompt = sprintf("\n\n### OBJETIVO:\n%s", $or["prompt"]);
+            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$or[$field]}\n";
 
             $instructions = [
-                ['value' => 'Utiliza el mismo tema.'],
+                ['value' => 'Utiliza el mismo tema del texto original.'],
                 ['value' => 'Intenta conservar la misma cantidad de palabras.'],
                 ['value' => 'Responde directamente con el texto transformado.'],
                 ['value' => 'Si el texto original tiene formato html, debes mantenerlo.']
             ];
 
-            if (!empty($originalContent['tone'] ?? false)) {
-                $instructions[] = ['value' => "Adopta un tono {$originalContent['tone']}
+            if (!empty($or['tone'] ?? false)) {
+                $instructions[] = ['value' => "Adopta un tono {$or['tone']}
                     en la transformación."];
             } else {
                 $instructions[] = ['value' => "Debes mantener el tono del texto original."];
@@ -456,16 +466,16 @@ class AIHelper
 
                 $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
             } else {
-                return $originalContent;
+                return $or[$field];
             }
 
             if (empty($response['error']) && !empty($response['result'])) {
                 $this->generateWords($response);
                 $this->saveAction($data, $response);
-                $originalContent[$field] = $response['result'];
+                $or[$field] = $response['result'];
             }
         }
-        return $originalContent;
+        return $or;
     }
 
     public function removeHtmlCodeBlocks($input)

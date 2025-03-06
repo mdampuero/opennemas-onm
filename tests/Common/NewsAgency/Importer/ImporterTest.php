@@ -526,7 +526,9 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
             'fk_user_last_editor' => 2,
             'in_home'             => 0,
             'tags'                => [],
-            'frontpage'           => 0
+            'frontpage'           => 0,
+            'prompt'              => null,
+            'tone'                => null
         ];
 
         $this->ts->expects($this->any())->method('getListByString')
