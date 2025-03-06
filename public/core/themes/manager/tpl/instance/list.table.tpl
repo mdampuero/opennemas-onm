@@ -385,7 +385,7 @@
       </small>
     </div>
   </td>
-  <td class="text-center v-align-middle" ng-show="isColumnEnabled('last_login')">
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('domain_expire')">
     <div>
       <span ng-if="item.domain_expire">
         <i class="fa fa-calendar"></i> [% item.domain_expire | moment : 'YYYY-MM-DD' %]
