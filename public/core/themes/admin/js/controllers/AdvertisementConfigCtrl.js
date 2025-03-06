@@ -53,6 +53,7 @@
          *
          * @param {String} domain The configured domain
          * @param {String} tagsFormat The configured tags format
+         * @param {Object} traffective The traffective config object
          */
         $scope.init = function(domain, tagsFormat, traffective) {
           if ($scope.smartAvailableTagsFormats.indexOf(tagsFormat) < 0) {
@@ -65,6 +66,8 @@
           $scope.traffective.clientAlias  = traffective.client_alias;
           $scope.traffective.dfpUrl       = traffective.dfpUrl;
           $scope.traffective.srcUrl       = traffective.srcUrl;
+          $scope.traffective.ads          = traffective.ads;
+          $scope.traffective.progAds      = traffective.progAds;
         };
       }
     ]);
