@@ -340,6 +340,48 @@ class Importer
     }
 
     /**
+     * Returns the prompt based on the provided data or the default configuration.
+     *
+     * @param array $data The data containing the prompt information.
+     *
+     * @return ?string The prompt if available in the data or, if auto-import is enabled,
+     *                 the default prompt from the configuration. Returns null if no prompt is found.
+     */
+    protected function getPrompt(array $data): ?string
+    {
+        if (!array_key_exists('prompt', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['promptSelected']['prompt'] ?? null) : null;
+        }
+
+        if (!empty($data['prompt'])) {
+            return $data['prompt'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the tone based on the provided data or the default configuration.
+     *
+     * @param array $data The data containing the tone information.
+     *
+     * @return ?string The tone if available in the data or, if auto-import is enabled,
+     *                 the default tone from the configuration. Returns null if no tone is found.
+     */
+    protected function getTone(array $data): ?string
+    {
+        if (!array_key_exists('tone', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['toneSelected']['name'] ?? null) : null;
+        }
+
+        if (!empty($data['tone'])) {
+            return $data['tone'];
+        }
+
+        return null;
+    }
+
+    /**
      * Returns the content data from the resource.
      *
      * @param Resource $resource The resource to import.
@@ -367,10 +409,9 @@ class Importer
             'urn_source'          => $resource->urn,
             'body'                => $resource->body,
             'href'                => $resource->href,
+            'prompt'              => $this->getPrompt($data),
+            'tone'                => $this->getTone($data),
         ]);
-
-        // OnmAI transform
-        $data = $this->container->get('core.helper.ai')->transform($data);
 
         // Force some properties for photos
         if ($resource->type === 'photo') {
@@ -400,6 +441,8 @@ class Importer
             $data = $this->{$method}($resource, $data);
         }
 
+        // OnmAI transform
+        $data = $this->container->get('core.helper.ai')->transform($data);
         return $data;
     }
 

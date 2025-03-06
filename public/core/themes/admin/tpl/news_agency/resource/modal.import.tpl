@@ -58,6 +58,7 @@
       </div>
     </div>
   </div>
+  {if in_array("es.openhost.module.onmai", $app.instance->activated_modules)}
   <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-t-10">
       <div class="row">
         <div class="col-sm-12">
@@ -85,6 +86,7 @@
       </div>
     </div>
   </div>
+  {/if}
 </div>
 <div class="modal-footer row">
   <div class="m-t-15" ng-class="{ 'col-sm-2': template.isEditable(template), 'col-sm-6': !template.isEditable(template) }">
