@@ -200,8 +200,6 @@ class SitemapController extends Controller
                     [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
                 ],
                 'starttime'         => [
-                    'union' => 'OR',
-                    [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                     [
                         'value' => sprintf(
                             'DATE_ADD("%s", INTERVAL -%s DAY) AND "%s"',
