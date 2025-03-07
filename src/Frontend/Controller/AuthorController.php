@@ -3,178 +3,287 @@
 namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Common\Core\Controller\Controller;
 
-class AuthorController extends Controller
+/**
+ * Class AuthorController
+ *
+ * Handles the display and management of authors and their associated content on the frontend.
+ */
+class AuthorController extends FrontendController
 {
     /**
-     * Shows the author frontpage.
+     * Cache configuration per action.
      *
-     * @param Request $request The request object.
-     *
-     * @return Response The response object.
+     * @var array
      */
-    public function authorFrontpageAction(Request $request)
-    {
-        $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
-        $page         = (int) $request->get('page', 1);
-        $itemsPerPage = 12;
+    protected $caches = [
+        'list' => 'frontpages',
+        'show' => 'frontpages'
+    ];
 
-        try {
-            $user = $this->container->get('api.service.author')
-                ->getItemBy("username = '$slug' or slug = '$slug'");
-        } catch (GetItemException $e) {
+    /**
+     * Positions configuration per action.
+     *
+     * @var array
+     */
+    protected $positions = [
+        'list' => [ 7, 9 ],
+        'show' => [ 7, 9 ]
+    ];
+
+    /**
+     * Valid query parameters for each action.
+     *
+     * @var array
+     */
+    protected $queries = [
+        'list' => [ 'page' ],
+        'show' => [ 'page', 'author_slug' ]
+    ];
+
+    /**
+     * Route configuration per action.
+     *
+     * @var array
+     */
+    protected $routes = [
+        'list' => 'frontend_frontpage_authors',
+        'show' => 'frontend_author_frontpage'
+    ];
+
+    /**
+     * The list of templates per action.
+     *
+     * @var array
+     */
+    protected $templates = [
+        'list'    => 'user/frontpage_authors.tpl',
+        'show'    => 'user/author_frontpage.tpl'
+    ];
+
+    /**
+     * Displays a list of authors.
+     *
+     * @param Request $request The HTTP request object.
+     *
+     * @return mixed The response object from the parent class.
+     */
+    public function listAction(Request $request)
+    {
+        $action = $this->get('core.globals')->getAction();
+        $params = $request->query->all();
+
+        $expected = $this->getExpectedUri($action, $params);
+
+        if (strpos($request->getRequestUri(), $expected) === false) {
+            return new RedirectResponse($expected, 301);
+        }
+
+        $params = $this->getParameters($request);
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrateList($params);
+        }
+
+        return $this->render(
+            $this->getTemplate($action),
+            $params
+        );
+    }
+
+    /**
+     * Displays the content associated with a specific author.
+     *
+     * @param Request $request The HTTP request object.
+     *
+     * @return RedirectResponse|mixed The rendered template or a redirect response.
+     *
+     * @throws ResourceNotFoundException If the page or author cannot be found.
+     */
+    public function showAction(Request $request)
+    {
+        $action = $this->get('core.globals')->getAction();
+        $item   = $this->getItem($request);
+        $params = $request->query->all();
+
+        $expected = $this->getExpectedUri($action, $params);
+
+        if (strpos($request->getRequestUri(), $expected) === false) {
+            return new RedirectResponse($expected, 301);
+        }
+
+        $params = $this->getParameters($request, $item);
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrateShow($params);
+        }
+
+        return $this->render(
+            $this->getTemplate($action),
+            $params
+        );
+    }
+
+    /**
+     * Hydrates the "show" view parameters with content list and pagination data.
+     *
+     * @param array $params Reference to the parameters array.
+     *
+     * @return void
+     *
+     * @throws ResourceNotFoundException If the page number is invalid or there are no results for a non-first page.
+     */
+    protected function hydrateShow(array &$params = []) : void
+    {
+        $params['epp'] = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_in_blog', 10);
+
+        // Validate the page number against defined limits
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
             throw new ResourceNotFoundException();
         }
 
-        $expected = $this->get('router')
-            ->generate('frontend_author_frontpage', [ 'author_slug' => $user->slug ]);
-        $expected = $this->get('core.decorator.url')->prefixUrl($expected);
+        $response = $this->get('api.service.content')->getList(
+            sprintf(
+                'fk_author = %d ' .
+                'and content_type_name in ["article","opinion","album","video", ' .
+                '"company","event","obituary","poll"] ' .
+                'and content_status = 1 and in_litter = 0 ' .
+                'and ((starttime is null or starttime <= "%s") and (endtime is null or endtime > "%s")) ' .
+                'order by starttime desc limit %d offset %d',
+                $params['item']->id,
+                date('Y-m-d H:i:s'),
+                date('Y-m-d H:i:s'),
+                $params['epp'],
+                $params['epp'] * ($params['page'] - 1)
+            )
+        );
 
-        if (strpos($request->getRequestUri(), $expected) === false) {
-            return new RedirectResponse($expected);
+        $contents = $response['items'];
+        $total    = $response['total'];
+
+        // If no content is found on a non-first page, throw an exception
+        if ($params['page'] > 1 && empty($contents)) {
+            throw new ResourceNotFoundException();
         }
 
-        // Setup templating cache layer
-        $this->view->setConfig('articles');
-        $cacheID = $this->view->getCacheId('frontpage', 'author', $user->id, $page);
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
 
-        if (($this->view->getCaching() === 0)
-           || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
-        ) {
-            if ($page <= 0 || $page > $this->getParameter('core.max_page')) {
-                throw new ResourceNotFoundException();
-            }
+        // Set cache expiration if available
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
 
-            $criteria = [
-                'fk_author'       => [[ 'value' => $user->id ]],
-                'fk_content_type' => [[ 'value' => [1, 4, 7, 9], 'operator' => 'IN' ]],
-                'content_status'  => [[ 'value' => 1 ]],
-                'in_litter'       => [[ 'value' => 0 ]],
-                'starttime'       => [
-                    'union' => 'OR',
-                    [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
-                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
-                ],
-                'endtime'         => [
-                    'union' => 'OR',
-                    [ 'value' => null, 'operator'  => 'IS', 'field' => true ],
-                    [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
-                ]
-            ];
+            $params['x-cache-for'] = $expire;
+        }
 
-            $er            = $this->get('entity_repository');
-            $contentsCount = $er->countBy($criteria);
-            $contents      = $er->findBy($criteria, 'starttime DESC', $itemsPerPage, $page);
-
-            // Build the pagination
-            $pagination = $this->get('paginator')->get([
+        $params = array_merge($params, [
+            'contents'   => $contents,
+            'total'      => $total,
+            'author'     => $params['item'],
+            'x-tags'     => sprintf('content-author-%d-frontpage', $params['item']->id),
+            'pagination' => $this->get('paginator')->get([
                 'directional' => true,
-                'epp'         => $itemsPerPage,
-                'page'        => $page,
-                'total'       => $contentsCount,
+                'epp'         => $params['epp'],
+                'page'        => $params['page'],
+                'total'       => $total,
                 'route'       => [
                     'name'   => 'frontend_author_frontpage',
-                    'params' => [ 'author_slug' => $slug, ]
-                ],
-            ]);
-
-            $this->view->assign([
-                'contents'   => $contents,
-                'author'     => $user,
-                'total'      => $contentsCount,
-                'pagination' => $pagination,
-                'page'       => $page,
-            ]);
-        }
-
-        $this->getAds();
-
-        $pager = $page > 1 ? '?page=' . $page : '';
-
-        return $this->render('user/author_frontpage.tpl', [
-            'cache_id'    => $cacheID,
-            'x-tags'      => sprintf('content-author-%d-frontpage', $user->id),
-            'x-cacheable' => true,
-            'o_canonical' => $request->getSchemeAndHttpHost() . $request->getPathInfo() . $pager
+                    'params' => [ 'author_slug' => $params['author_slug']]
+                ]
+            ])
         ]);
     }
 
     /**
-     * Redirects to the author frontpage in the external site.
+     * Retrieves the author item based on the provided slug.
      *
-     * @param Request $request The request object.
+     * @param Request $request The HTTP request object.
      *
-     * @return Response The response object.
+     * @return array The retrieved author item.
+     *
+     * @throws ResourceNotFoundException If the author cannot be found.
      */
-    public function extAuthorFrontpageAction(Request $request)
+    protected function getItem(Request $request)
     {
-        $categoryName = $request->query->filter('category_slug', '', FILTER_SANITIZE_STRING);
-        $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
+        $slug = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
 
-        // Get sync params
-        $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($categoryName);
-        if (empty($wsUrl)) {
+        try {
+            $item = $this->get('api.service.author')
+                ->getItemBy("name = '$slug' or slug = '$slug'");
+        } catch (GetItemException $e) {
             throw new ResourceNotFoundException();
         }
 
-        return $this->redirect($wsUrl . '/author/' . $slug);
+        return [ $item ];
     }
 
     /**
-     * Shows the author frontpage.
+     * Retrieves and merges parameters for the specified action.
      *
-     * @param Request $request The request object.
+     * @param Request    $request The HTTP request object.
+     * @param mixed|null $item    The associated author item (if any).
      *
-     * @return Response The response object.
+     * @return array The merged parameters.
      */
-    public function frontpageAuthorsAction(Request $request)
+    protected function getParameters($request, $item = null)
     {
-        $page         = (int) $request->get('page', 1);
-        $itemsPerPage = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('items_in_blog', 10);
+        $action = $this->get('core.globals')->getAction();
+        $params = parent::getParameters($request, $item[0]);
 
-        $offset = ($page - 1) * $itemsPerPage;
+        unset($params['o_content']);
+        unset($params['content']);
 
-        if ($page <= 0 || $page > $this->getParameter('core.max_page')) {
-            throw new ResourceNotFoundException();
-        }
+        $this->getAdvertisements();
 
-        // Redirect to first page
-        if ($page < 1) {
-            return $this->redirectToRoute('frontend_frontpage_authors', [
-                'page' => 1
-            ]);
-        }
+        return array_merge($params, [
+            'author' => $item[0],
+            'authors' => $item,
+            'o_canonical' => $this->getCanonicalUrl($action, $params),
+        ]);
+    }
 
-        // Setup templating cache layer
-        $this->view->setConfig('articles');
+    /**
+     * Retrieves a list of author items with pagination.
+     *
+     * @param array $params The query parameters.
+     * @param int   $epp    The number of items per page.
+     *
+     * @return array An array containing the paginated items and total count.
+     *
+     * @throws ResourceNotFoundException If the list cannot be retrieved.
+     */
+    protected function getItems($params)
+    {
+        $limit  = $params['epp'];
+        $offset = $params['epp'] * ($params['page'] - 1);
 
-        $sql = "SELECT SQL_CALC_FOUND_ROWS contents.fk_author as id, count(pk_content) as total FROM contents"
-            . " WHERE contents.fk_author IN (SELECT users.id FROM users)"
-            . " AND fk_content_type IN (1, 4, 7, 9)  AND content_status = 1 AND in_litter!= 1"
-            . " GROUP BY contents.fk_author ORDER BY total DESC"
-            . " LIMIT $itemsPerPage OFFSET $offset";
+        // Get paginated authors with total contents count
+        $sql = "SELECT SQL_CALC_FOUND_ROWS contents.fk_author as id, count(pk_content) as total FROM contents "
+            . "WHERE contents.fk_author IN (SELECT users.id FROM users "
+            . "INNER JOIN user_user_group ON users.id = user_user_group.user_id WHERE type != 1 "
+            . "AND user_group_id = 3) AND contents.content_type_name IN "
+            . "('article', 'opinion', 'album', 'video', 'company', 'event', 'obituary', 'poll') "
+            . "AND content_status = 1 AND in_litter != 1 "
+            . "GROUP BY contents.fk_author ORDER BY total DESC "
+            . "LIMIT $limit OFFSET $offset";
 
         $items = $this->get('dbal_connection')->fetchAll($sql);
 
+        // Get all authors
         $sql = 'SELECT FOUND_ROWS()';
 
         $total = $this->get('dbal_connection')->fetchAssoc($sql);
-        $total = array_pop($total);
-
-        // Redirect to last page
-        if (ceil($total / $itemsPerPage) < $page) {
-            $page = ceil($total / $itemsPerPage);
-
-            return $this->redirectToRoute('frontend_frontpage_authors', [
-                'page' => $page
-            ]);
-        }
 
         // Use id as array key
         $items = $this->get('data.manager.filter')
@@ -182,29 +291,52 @@ class AuthorController extends Controller
             ->filter('mapify', [ 'key' => 'id' ])
             ->get();
 
+        // Fetch authors object by ID
         $response = $this->get('api.service.author')->getListByIds(array_keys($items));
-        $authors  = $this->get('data.manager.filter')
+
+        // Use id as array key
+        $authors = $this->get('data.manager.filter')
             ->set($response['items'])
             ->filter('mapify', [ 'key' => 'id' ])
             ->get();
 
+        // Map authors with total contents count
         $items = array_map(function ($item) use ($authors) {
-            $author                 = $authors[$item['id']];
-            $author->total_contents = $item['total'];
+            $authors[$item['id']]->total_contents = $item['total'];
 
-            return $author;
+            return $authors[$item['id']];
         }, $items);
 
-        // Build the pagination
-        $pagination = $this->get('paginator')->get([
-            'directional' => true,
-            'epp'         => $itemsPerPage,
-            'page'        => $page,
-            'total'       => $total,
-            'route'       => 'frontend_frontpage_authors'
-        ]);
+        return [
+            $items,
+            array_pop($total)
+        ];
+    }
 
-        $this->getAds();
+    /**
+     * Hydrates the list of authors for display on the frontpage.
+     *
+     * @param array $params Query parameters for fetching authors.
+     *
+     * @return void
+     *
+     * @throws ResourceNotFoundException If the authors or page are invalid.
+     */
+    protected function hydrateList(array &$params = []) : void
+    {
+        $itemsPerPage = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_in_blog', 10);
+
+        if ($params['page'] <= 0 || $params['page'] > $this->getParameter('core.max_page')) {
+            throw new ResourceNotFoundException();
+        }
+
+        try {
+            list($items, $total) = $this->getItems($params);
+        } catch (GetListException $e) {
+            throw new ResourceNotFoundException();
+        }
 
         $xtags = [',authors-frontpage'];
 
@@ -212,24 +344,46 @@ class AuthorController extends Controller
             $xtags[] = ',author-' . $item->id;
         }
 
-        return $this->render('user/frontpage_authors.tpl', [
-            'authors_contents' => $items,
-            'pagination'       => $pagination,
-            'page'             => $page,
-            'x-tags'           => implode(',', array_unique($xtags)),
-            'x-cacheable'      => true,
+        $params['x-tags']           = implode(',', array_unique($xtags));
+        $params['authors_contents'] = $items;
+        $params['total_contents']   = $total;
+        $params['pagination']       = $this->get('paginator')->get([
+            'directional' => true,
+            'epp'         => $itemsPerPage,
+            'page'        => $params['page'],
+            'total'       => $total,
+            'route'       => 'frontend_frontpage_authors',
         ]);
     }
 
     /**
-     * Loads the list of positions and advertisements on renderer service.
+     * Retrieves and configures advertisements for the specified category and action.
+     *
+     * This method fetches advertisement positions based on the current action,
+     * combines them with additional predefined positions, and retrieves the
+     * corresponding advertisements from the repository. These advertisements
+     * are then configured for rendering on the frontend.
+     *
+     * @param object|null $category The category object to filter advertisements by, or null for no filtering.
+     * @param string|null $token    An optional token for additional advertisement context (currently unused).
+     *
+     * @return void
      */
-    public function getAds()
+    protected function getAdvertisements($category = null, $token = null)
     {
-        $positionManager = $this->get('core.helper.advertisement');
-        $positions       = $positionManager->getPositionsForGroup('article_inner');
-        $advertisements  = $this->get('advertisement_repository')
-            ->findByPositionsAndCategory($positions);
+        $categoryId = empty($category) ? 0 : $category->id;
+        $action     = $this->get('core.globals')->getAction();
+        $group      = $this->getAdvertisementGroup($action);
+
+        $positions = array_merge(
+            $this->get('core.helper.advertisement')->getPositionsForGroup('all'),
+            $this->get('core.helper.advertisement')->getPositionsForGroup($group),
+            $this->get('core.helper.advertisement')->getPositionsForGroup('article_inner'),
+            $this->getAdvertisementPositions($group)
+        );
+
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $categoryId);
 
         $this->get('frontend.renderer.advertisement')
             ->setPositions($positions)

@@ -81,6 +81,53 @@ class UserRepository extends BaseRepository
     }
 
     /**
+     * Counts the number of contents authored by given authors.
+     *
+     * This method fetches the number of contents authored by the provided
+     * author IDs from the database, considering only active and non-littered
+     * contents of specific types (article, opinion, album, video, company,
+     * event, obituary, poll).
+     *
+     * @param mixed $ids The author IDs to filter the content count. Can be an
+     * array or a single ID.
+     *
+     * @throws \InvalidArgumentException If the provided $ids is empty or not an
+     * array or a valid ID.
+     *
+     * @return array An associative array where the key is the author ID, and
+     * the value is the count of their contents.
+     */
+    public function countContentsAuthors($ids)
+    {
+        if (empty($ids)) {
+            throw new \InvalidArgumentException();
+        }
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+        $sql = 'SELECT fk_author AS "id", COUNT(1) AS "contents" '
+            . 'FROM contents '
+            . 'WHERE fk_author IN (?) '
+            . 'AND content_type_name IN ("article", "opinion", "album",
+                "video", "company", "event", "obituary", "poll") '
+            . 'AND content_status = 1 AND in_litter = 0 '
+            . 'GROUP BY fk_author';
+
+        $data = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        $contents = [];
+        foreach ($data as $value) {
+            $contents[$value['id']] = $value['contents'];
+        }
+
+        return $contents;
+    }
+
+    /**
      * Moves all contents assigned to users basing on a user id
      *
      * @param integer $id     The user id

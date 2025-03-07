@@ -26,6 +26,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-domain_expire" checklist-model="columns.selected" checklist-value="'domain_expire'" type="checkbox">
+    <label for="checkbox-domain_expire">
+      {t}Domain expire date{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-subdirectory" checklist-model="columns.selected" checklist-value="'subdirectory'" type="checkbox">
     <label for="checkbox-subdirectory">
       {t}Subdirectory{/t}
@@ -206,6 +212,10 @@
     {t}Domains{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('domains') == 'asc', 'fa fa-caret-down': isOrderedBy('domains') == 'desc'}"></i>
   </th>
+  <th class="text-center pointer" ng-click="sort('domain_expire')" ng-show="isColumnEnabled('domain_expire')" width="300">
+    {t}Domain expire date{/t}
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('domain_expire') == 'asc', 'fa fa-caret-down': isOrderedBy('domain_expire') == 'desc'}"></i>
+  </th>
   <th class="pointer" ng-show="isColumnEnabled('subdirectory')" width="150">
     {t}Subdirectory{/t}
   </th>
@@ -367,6 +377,16 @@
           </span>
         </span>
       </small>
+    </div>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('domain_expire')">
+    <div>
+      <span ng-if="item.domain_expire">
+        <i class="fa fa-calendar"></i> [% item.domain_expire | moment : 'YYYY-MM-DD' %]
+      </span>
+      <span ng-if="item.domain_expire === null">
+        -
+      </span>
     </div>
   </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('subdirectory')" title="{t}Subdirectory{/t}">
