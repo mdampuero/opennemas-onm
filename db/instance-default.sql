@@ -1103,6 +1103,33 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES (1,'editorial','a5d0bc6537be17bf937c9fd3fc4b30a4','','',NULL,'editorial@opennemas.com','Editorial','editorial',0,NULL,0),(2,'director','a5d0bc6537be17bf937c9fd3fc4b30a4','','',NULL,'director@opennemas.com','Director','director',0,NULL,0),(8,'xabier-r-blanco','a5d0bc6537be17bf937c9fd3fc4b30a4','','',636,'xabi.blanco@opennemas.com','Xabier R. Blanco','xabier-r-blanco',0,NULL,0),(9,'jose-luis-gomez','2d434b078be9d75b50325508fafe1f90','','Editor de Mundiario. Comentarista de Europa Press, TVG, RG y La RegiÃ³n. ',641,'joseluis@opennemas.com','Jose Luis Gomez','jose-luis-gomez',0,NULL,0),(10,'joaquin-vidal','57f671569ad7c429203371a9fd1a2881','','Director de Estrella Digital',643,'jvidal@estrelladigital.es','JoaquÃ­n Vidal','joaquin-vidal',0,NULL,0),(11,'alberto-j-rey','7cae6b5e96239c2d38b78de6395da31d','','Socio-director de wecom Consultora de ComunicaciÃ³n y Relaciones PÃºblicas',642,'alberto.rey@opennemas.com','Alberto J. Rey','alberto-j-rey',0,NULL,0),(12,'javier-fumero',NULL,' ','La EspaÃ±a Profunda',652,'javier.fumero@openhost.es','Javier Fumero','javier-fumero',0,NULL,0),(13,'juan-mendez',NULL,' ',' ',661,'juan-mendez@openhost.es','Juan MÃ©ndez','juan-mendez',0,NULL,0),(14,'lorenzo-sentenac',NULL,' ',' ',739,'lorenzo.sentenac@openhost.es','Lorenzo Sentenac','lorenzo-sentenac',0,NULL,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `ai_actions`;
+--
+-- Table structure for table `ai_actions`
+--
+
+CREATE TABLE `ai_actions` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `messages` longtext,
+  `response` longtext,
+  `tokens` longtext,
+  `params` longtext,
+  `date` datetime DEFAULT NULL,
+  `service` varchar(64) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `prompts`;
+CREATE TABLE `prompts` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `mode` varchar(32) NOT NULL,
+  `name` text NOT NULL,
+  `role` text,
+  `field` varchar(32) DEFAULT NULL,
+  `tone` text,
+  `prompt` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
