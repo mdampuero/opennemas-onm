@@ -143,13 +143,23 @@
             <div class="form-group">
               <div class="controls">
                 <div class="row" ng-repeat="role in data.extra.roles track by $index">
-                  <div class="col-lg-4 col-md-3">
+                  <div class="ccol-lg-3 col-md-3">
                     <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required ng-disabled="role.readOnly" maxlength="64">
                   </div>
-                  <div class="col-lg-7 col-md-7">
+                  <div class="col-lg-2 col-md-3">
+                    <ui-select name="mode" class="form-control" ng-disabled="role.readOnly"  theme="select2" ng-model="role.field" search-enabled="false" required ng-init="options = [ { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Introductions{/t}', key: 'introductions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
+                      <ui-select-match>
+                        [% $select.selected.name %]
+                      </ui-select-match>
+                      <ui-select-choices repeat="item.key as item in options | filter: $select.search">
+                        <div ng-bind-html="item.name | highlight: $select.search"></div>
+                      </ui-select-choices>
+                    </ui-select>
+                  </div>
+                  <div class="col-lg-6 col-md-6">
                     <input class="form-control" ng-model="role.prompt" placeholder="{t}Prompt{/t}" type="text" required ng-disabled="role.readOnly" maxlength="2048">
                   </div>
-                  <div class="col-lg-1 col-md-2 m-b-15">
+                  <div class="col-lg-1 col-md-1 m-b-15">
                     <button class="btn btn-block btn-danger ng-cloak" ng-click="removeRole($index)" type="button" ng-disabled="role.readOnly">
                       <i class="fa fa-trash-o"></i>
                     </button>

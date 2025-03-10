@@ -767,7 +767,7 @@ class AIHelper
         return $this;
     }
 
-    public function getRoles($showManager = true)
+    public function getRoles($showManager = true, $filter = [])
     {
         $is = $this->getInstanceSettings();
         $ri = $is['roles'] ?? [];
@@ -777,11 +777,19 @@ class AIHelper
             $rm = $this->addFlagReadOnly($sm->get('onmai_roles', []));
         }
 
-        return $this->sortByName(array_merge($rm, $ri));
+        return $this->sortByName(array_merge($rm, $ri), $filter);
     }
 
-    protected function sortByName($array)
+    protected function sortByName($array, $filter = [])
     {
+        $fieldValue = $filter['field'] ?? null;
+
+        if (!empty($fieldValue)) {
+            $array = array_filter($array, function ($item) use ($fieldValue) {
+                return isset($item['field']) && $item['field'] === $fieldValue;
+            });
+        }
+
         usort($array, function ($a, $b) {
             $nameA = trim(strtolower($a['name'] ?? ''));
             $nameB = trim(strtolower($b['name'] ?? ''));

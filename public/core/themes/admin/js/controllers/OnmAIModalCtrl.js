@@ -63,7 +63,7 @@
 
           var oqlQuery = oqlEncoder.getOql($scope.criteria);
 
-          http.get({ name: 'api_v1_backend_onmai_prompt_get_list', params: { oql: oqlQuery } })
+          http.get({ name: 'api_v1_backend_onmai_prompt_get_list', params: { oql: oqlQuery, field: $scope.template.AIFieldType } })
             .then(function(response) {
               $scope.prompts = response.data.items;
               $scope.extra = response.data.extra;
@@ -285,6 +285,10 @@
           return input.trim().split(/\s+/).filter(function(word) {
             return word.length > 0;
           }).length;
+        };
+
+        $scope.filtroDinamico = function(item) {
+          return item[item.field] === 'titles';
         };
 
         $scope.init();
