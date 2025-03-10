@@ -11,7 +11,7 @@
       {ldelim}"key": "ads", "values": null, "value": "{if ($config['ads'])}false{else}true{/if}"{rdelim}
     ],
     "dfpAdUrl": "{$config['dfpUrl']}",
-    "clientAlias": "{$config['client_alias']}",
+    "clientAlias": "{$config['client_alias']}"
   }'
   src="{$config['srcUrl']}">
 </script>
