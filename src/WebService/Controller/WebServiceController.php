@@ -48,7 +48,6 @@ class WebServiceController extends Controller
         $r->addAPIClass('WebService\Handlers\Images');
         $r->addAPIClass('WebService\Handlers\Opinions');
         $r->addAPIClass('WebService\Handlers\Videos');
-        $r->addAPIClass('WebService\Handlers\Prompt');
 
         $r->addAuthenticationClass('Onm\Restler\OnmAuth');
 
