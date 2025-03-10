@@ -37,10 +37,10 @@
       </NewsLines>
       <AdministrativeMetadata>
         <Provider>
-          <Party FormalName="{setting name=site_name}" />
+          <Party {if $extSource}FormalName="{$extSource}"{else}FormalName="{setting name=site_name}"{/if}/>
         </Provider>
         <Creator>
-          <Party FormalName="{setting name=site_name}" />
+          <Party {if $extSource}FormalName="{$extSource}"{else}FormalName="{setting name=site_name}"{/if}/>
         </Creator>
       </AdministrativeMetadata>
       <!--Text collection.-->
@@ -55,7 +55,7 @@
           <DescriptiveMetadata>
             <Language FormalName="es" />
             <DateLineDate>{format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}</DateLineDate>
-            <Property FormalName="Tesauro" Value="{get_category_slug($content)}"/>
+          <Property FormalName="Tesauro" Value="{if $extCategory}{$extCategory}{else}{get_category_slug($content)}{/if}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$content->id}" />
           </DescriptiveMetadata>
           <ContentItem Href="{get_url item=$content absolute=true}">
@@ -75,10 +75,18 @@
                     {if $content->content_type_name == 'event'}
                       <identified-content>
                         <event start-date="{format_date date=$content->event_start_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_start_hour|default:'00:00' type='custom' format="HHmmssxxx"}" end-date="{format_date date=$content->event_end_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_end_hour|default:'00:00' type='custom' format="HHmmssxxx"}"></event>
-                        <location>{$content->event_place}</location>
+                        <location>
+                          <location.place>{$content->event_place}</location.place>
+                          <location.address>{$content->event_address}</location.address>
+                        </location>
                         {if $content->event_website}
                         <virtloc value="{$content->event_website}"></virtloc>
                         {/if}
+                        <organizer>
+                          <organizer.name>{$content->event_organizer_name}</organizer.name>
+                          <organizer.url>{$content->event_organizer_url}</organizer.url>
+                        </organizer>
+                        <price min="{$content->event_minprice}" url="{$content->event_minprice_url}"></price>
                       </identified-content>
                     {/if}
                   </docdata>
