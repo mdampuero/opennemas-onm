@@ -151,6 +151,17 @@
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.where }">
         {include file="ui/component/input/text.tpl" iField="event_place" iRequired=true iTitle="{t}Place name{/t}" iValidation=true}
         {include file="ui/component/input/text.tpl" iField="event_address" iTitle="{t}Place address{/t}" }
+        {include file="ui/component/input/text.tpl" iField="event_latitude" iTitle="{t}Latitude{/t}" }
+        {include file="ui/component/input/text.tpl" iField="event_longitude" iTitle="{t}Longitude{/t}" }
+      </div>
+      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.ticket = !expanded.ticket">
+        <i class="fa fa-user m-r-10"></i>
+        {t}Ticket data{/t}
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.ticket }"></i>
+      </div>
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.ticket }">
+        {include file="ui/component/input/text.tpl" iField="event_ticket_selling" iRequired=true iTitle="{t}Ticket Selling URL{/t}"}
+        {include file="ui/component/input/text.tpl" iField="event_ticket_price" iTitle="{t}Ticket Price{/t}"}
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.external_website = !expanded.external_website">
         <i class="fa fa-external-link m-r-10"></i>
