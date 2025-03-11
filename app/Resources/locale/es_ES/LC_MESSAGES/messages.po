@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-06 10:39+0000\n"
-"PO-Revision-Date: 2025-02-06 11:41+0100\n"
+"POT-Creation-Date: 2025-03-11 15:02+0000\n"
+"PO-Revision-Date: 2025-03-11 16:09+0100\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -328,6 +328,9 @@ msgstr "NUEVO"
 
 msgid "Prompts"
 msgstr "Prompts"
+
+msgid "Models"
+msgstr "Modelos"
 
 msgid "Utilities"
 msgstr "Utilidades"
@@ -3808,23 +3811,26 @@ msgstr "Fecha de envío"
 msgid "Not sent"
 msgstr "No enviado"
 
-msgid "Own prompts"
-msgstr "Prompts propios"
-
-msgid "System prompts"
-msgstr "Prompts del sistema"
-
-msgid "Field"
-msgstr "Campo"
+msgid "Reset filters"
+msgstr "Reiniciar filtros"
 
 msgid "Mode"
 msgstr "Modo"
+
+msgid "Field"
+msgstr "Campo"
 
 msgid "Default tone"
 msgstr "Tono por defecto"
 
 msgid "Default role"
 msgstr "Rol por defecto"
+
+msgid "System prompts"
+msgstr "Prompts del sistema"
+
+msgid "Roles"
+msgstr "Roles"
 
 msgid "Titles"
 msgstr "Títulos"
@@ -3837,6 +3843,12 @@ msgstr "Cuerpos"
 
 msgid "Prompt"
 msgstr "Prompt"
+
+msgid "Tones"
+msgstr "Tonos"
+
+msgid "Transformation"
+msgstr "Transformación"
 
 msgid "Config article module"
 msgstr "Configuración del módulo «Artículos»"
@@ -4300,6 +4312,13 @@ msgstr "Portada de categoría"
 msgid "Show category cover (if exists)"
 msgstr "Mostrar portada de categoría (si existe)"
 
+#, fuzzy
+msgid "Secondary menu"
+msgstr "Peso de fuente secundaria"
+
+msgid "Display subcategories menu if exists"
+msgstr ""
+
 msgid "Sidebar widgets"
 msgstr "Widgets de la barra lateral"
 
@@ -4679,6 +4698,14 @@ msgstr "Noticias totales para el sitemap"
 
 msgid "Elements per page"
 msgstr "Elementos por página"
+
+#, fuzzy
+msgid "Limit contents sitemap per year"
+msgstr "Imágenes de listados de contenidos"
+
+#, fuzzy
+msgid "Sitemap news days"
+msgstr "Sitemaps activados"
 
 msgid "Sitemaps enabled"
 msgstr "Sitemaps activados"
@@ -5176,6 +5203,12 @@ msgstr "Servicios para la traducción automática"
 msgid "Services to translate your contents to a especific language."
 msgstr "Servicios para traducir tus contenidos para un idioma específico."
 
+msgid "Default service"
+msgstr "Servicio por defecto"
+
+msgid "Select a service..."
+msgstr "Selecciona un servicio…"
+
 msgid "Not defined"
 msgstr "No definido"
 
@@ -5193,9 +5226,6 @@ msgstr "Selecciona un idioma"
 
 msgid "Required params for Service"
 msgstr "Parámetros requeridos para el servicio"
-
-msgid "Select a service..."
-msgstr "Selecciona un servicio…"
 
 msgid "Default translator for \"%1\""
 msgstr "Traductor por omisión para «%1»"
@@ -5238,12 +5268,6 @@ msgstr "Clave de la API de Gemini"
 
 msgid "DeepSeek API Key"
 msgstr "Clave de la API de DeppSeek"
-
-msgid "Roles"
-msgstr "Roles"
-
-msgid "Tones"
-msgstr "Tonos"
 
 msgid "Config tag module"
 msgstr "Configuración del módulo «Etiquetas»"
@@ -5788,6 +5812,9 @@ msgstr "Tono sugerido"
 msgid "Select a tone"
 msgstr "Seleccione un tono"
 
+msgid "Response language"
+msgstr "Idioma de la respuesta"
+
 msgid "Prompt edit"
 msgstr "Editar prompt"
 
@@ -5809,17 +5836,20 @@ msgstr "Ver original"
 msgid "View generated"
 msgstr "Ver generado"
 
-msgid "words managed"
-msgstr "palabras gestionadas"
-
 msgid "Regenerate "
 msgstr "Regenerar"
+
+msgid "Tone"
+msgstr "Tono"
 
 msgid "Cancel"
 msgstr "Cancelar"
 
 msgid "Continue"
 msgstr "Continuar"
+
+msgid "Translate"
+msgstr "Traducir"
 
 msgid "Are you sure that do you want send to the trash \"%1\"?"
 msgstr "¿Estás seguro de que quieres enviar a la papelera \"%1\"?"
@@ -6407,6 +6437,40 @@ msgstr "Código DFP personalizado"
 msgid "Custom code at the end of DFP tags"
 msgstr "Código personalizado al final de los tags de DFP"
 
+#, fuzzy
+msgid "Traffective integration"
+msgstr "Integración con Tradedoubler"
+
+msgid "The main Domain (i.e. example.tld)."
+msgstr ""
+
+#, fuzzy
+msgid "Client Alias"
+msgstr "Clientes"
+
+msgid "A unique identifier for the client or website."
+msgstr ""
+
+msgid "DFP Url"
+msgstr ""
+
+msgid "The URL for accessing the ad content from the ad server."
+msgstr ""
+
+#, fuzzy
+msgid "SRC Url"
+msgstr "URL del sitio"
+
+msgid "The URL of the external script that loads the ad content."
+msgstr ""
+
+#, fuzzy
+msgid "Disable ads"
+msgstr "Desactivado"
+
+msgid "Disable programmatic ads"
+msgstr ""
+
 msgid "Tradedoubler integration"
 msgstr "Integración con Tradedoubler"
 
@@ -6964,6 +7028,12 @@ msgstr "Importación automática"
 
 msgid "as"
 msgstr "como"
+
+msgid "Transform with ONM AI"
+msgstr "Transformar con ONM AI"
+
+msgid "No, keep the original content"
+msgstr "No, mantén el contenido original"
 
 msgid "Default author"
 msgstr "Autor por defecto"
@@ -7653,9 +7723,6 @@ msgstr "¿Quieres cerrar la sesión?"
 msgid "Login"
 msgstr "Iniciar sesión"
 
-msgid "Reset filters"
-msgstr "Reiniciar filtros"
-
 msgid "Vat number"
 msgstr "Número fiscal"
 
@@ -7959,6 +8026,10 @@ msgstr "Email de contacto de la instancia"
 msgid "Instance domains"
 msgstr "Dominios de la instancia"
 
+#, fuzzy
+msgid "Domain expire date"
+msgstr "Tiempo de expiración de dominio:"
+
 msgid "Subdirectory"
 msgstr "Subdirectorio"
 
@@ -8071,8 +8142,8 @@ msgstr "Editar contenedor de Ads.txt"
 msgid "Ads.txt lines"
 msgstr "Lineas de Ads.txt"
 
-msgid "Config prompts"
-msgstr "Configuración prompts"
+msgid "Role"
+msgstr "Rol"
 
 msgid "Instructions"
 msgstr "Instrucciones"
@@ -8398,6 +8469,15 @@ msgstr "Parece que te perdimos en las nubes."
 
 msgid "The page your looking for is not here"
 msgstr "La página que estas buscando no está aquí"
+
+#~ msgid "Own prompts"
+#~ msgstr "Prompts propios"
+
+#~ msgid "words managed"
+#~ msgstr "palabras gestionadas"
+
+#~ msgid "Config prompts"
+#~ msgstr "Configuración prompts"
 
 #~ msgid "opennemas AI"
 #~ msgstr "opennemas AI"
