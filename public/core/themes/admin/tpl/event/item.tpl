@@ -140,6 +140,19 @@
           </span>
         </div>
       </div>
+      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.type = !expanded.type">
+        <i class="fa fa-info m-r-10"></i>
+        {t}Event type{/t}
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.type }"></i>
+      </div>
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.type }">
+        <div class="controls">
+          <select class="block" id="event_type" name="event_type" ng-model="item.event_type">
+            <option value="1">Música</option>
+            <option value="2">Formativo</option>
+          </select>
+        </div>
+      </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.where = !expanded.where">
         <i class="fa fa-map-marker m-r-10"></i>
         {t}Event location{/t}
@@ -155,7 +168,7 @@
         {include file="ui/component/input/text.tpl" iField="event_map_longitude" iTitle="{t}Longitude{/t}" }
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.ticket = !expanded.ticket">
-        <i class="fa fa-user m-r-10"></i>
+        <i class="fa fa-ticket m-r-10"></i>
         {t}Ticket data{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.ticket }"></i>
       </div>
