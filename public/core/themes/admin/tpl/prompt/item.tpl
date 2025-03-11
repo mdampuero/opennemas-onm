@@ -70,7 +70,7 @@
             <ui-select-match>
               [% $select.selected.name %]
             </ui-select-match>
-            <ui-select-choices repeat="item.name as item in data.extra.roles | filter: { name: $select.search }" position='down'>
+            <ui-select-choices repeat="item.name as item in data.extra.roles | filter: { name: $select.search, field: item.field }" position='down'>
               <div ng-bind-html="item.name | highlight: $select.search"></div>
             </ui-select-choices>
           </ui-select>
