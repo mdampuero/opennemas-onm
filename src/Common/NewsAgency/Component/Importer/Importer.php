@@ -63,6 +63,14 @@ class Importer
     protected $repository;
 
     /**
+     * The current instance.
+     *
+     * @var Instance
+     *
+     */
+    public $instance;
+
+    /**
      * Initializes the Importer.
      *
      * @param array $config The importer configuration.
@@ -71,9 +79,10 @@ class Importer
     {
         $this->container  = $container;
         $this->repository = new LocalRepository();
+        $this->instance   = $this->container->get('core.instance');
 
         $this->configure($config);
-        $this->setInstance($container->get('core.instance'));
+        $this->setInstance($this->instance);
     }
 
     /**
@@ -442,7 +451,9 @@ class Importer
         }
 
         // OnmAI transform
-        $data = $this->container->get('core.helper.ai')->transform($data);
+        if (in_array('es.openhost.module.onmai', $this->instance->activated_modules)) {
+            $data = $this->container->get('core.helper.ai')->transform($data);
+        }
         return $data;
     }
 

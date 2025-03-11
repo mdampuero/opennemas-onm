@@ -478,6 +478,14 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetData()
     {
+        $instanceMock = $this->getMockBuilder(\stdClass::class)
+            ->setMethods(['transform'])
+            ->getMock();
+
+        $instanceMock->activated_modules = ['es.openhost.module.onmai', 'otro.modulo']; // Configurar activated_modules
+
+        $this->importer->instance = $instanceMock;
+
         $this->ai->expects($this->any())
             ->method('transform')
             ->willReturnCallback(function ($data) {
