@@ -6,7 +6,6 @@ use Api\Controller\V1\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Common\Core\Annotation\Security;
 use Exception;
 
 class OnmAIController extends ApiController
@@ -57,6 +56,13 @@ class OnmAIController extends ApiController
         ]);
     }
 
+    /**
+     * Save instance configuration.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
     public function saveConfigAction(Request $request)
     {
         $this->checkSecurity($this->extension, 'ADMIN');
@@ -88,6 +94,13 @@ class OnmAIController extends ApiController
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
+    /**
+     * Generate a response using the AI helper based on the request data.
+     *
+     * @param Request $request The request object containing input, role, tone, prompt, and locale information.
+     *
+     * @return JsonResponse The JSON response containing the generated content or an error message.
+     */
     public function generateAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension($this->extension)) {
@@ -118,6 +131,13 @@ class OnmAIController extends ApiController
         }
     }
 
+    /**
+     * Translate text using the AI helper.
+     *
+     * @param Request $request The request object containing the text, target language, and optional tone.
+     *
+     * @return JsonResponse The JSON response containing the translated text or an error message.
+     */
     public function translateAction(Request $request)
     {
         if (!$this->get('core.security')->hasExtension($this->extension)) {
@@ -142,6 +162,13 @@ class OnmAIController extends ApiController
         }
     }
 
+    /**
+     * Get usage statistics for the AI helper.
+     *
+     * @param Request $request The request object containing optional year and month parameters.
+     *
+     * @return JsonResponse The JSON response containing the usage statistics.
+     */
     public function getUsageAction(Request $request)
     {
         $year  = $request->query->get('year', date('Y'));

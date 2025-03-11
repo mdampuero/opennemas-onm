@@ -106,6 +106,11 @@ class OnmAIController extends Controller
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
+    /**
+     * Download the current configuration as a JSON file.
+     *
+     * @return JsonResponse The JSON response containing the configuration.
+     */
     public function configDownloadAction()
     {
         $response = new JsonResponse([
@@ -119,6 +124,13 @@ class OnmAIController extends Controller
         return $response;
     }
 
+    /**
+     * Upload and save a new configuration from a JSON file.
+     *
+     * @param Request $request The request object containing the JSON configuration.
+     *
+     * @return JsonResponse The response object indicating success or failure.
+     */
     public function configUploadAction(Request $request)
     {
         $jsonSettings = $request->request->get('config', null);
@@ -191,6 +203,15 @@ class OnmAIController extends Controller
         ]);
     }
 
+    /**
+     * Save instance settings.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     * @throws AccessDeniedException If the user does not have access to the instance.
+     */
     public function instancesSaveAction(Request $request)
     {
         $request = $request->query->all();
@@ -216,7 +237,7 @@ class OnmAIController extends Controller
             throw new AccessDeniedException();
         }
         $this->get('core.loader')->configureInstance($instance);
-        $onmai_settings = $em->getDataSet('Settings', 'instance')->get('onmai_onmai_settings', []);
+        $onmai_settings          = $em->getDataSet('Settings', 'instance')->get('onmai_settings', []);
         $onmai_settings['model'] = $model;
         $em->getDataSet('Settings', 'instance')->set('onmai_settings', $onmai_settings);
 

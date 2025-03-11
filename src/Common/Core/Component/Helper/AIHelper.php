@@ -20,14 +20,29 @@ class AIHelper
      */
     protected $container;
 
+    /**
+     * Conversion factor used in calculations.
+     */
     public $conversion = 1000000;
 
+    /**
+     * Relation between tokens and words for estimation.
+     */
     public $relationTokenWord = 1.5;
 
+    /**
+     * Maximum number of retry attempts for a failed request.
+     */
     public $maxRetries = 3;
 
+    /**
+     * Delay in seconds before retrying a failed request.
+     */
     public $retryDelay = 2;
 
+    /**
+     * Mapping of configuration keys to their expected data types.
+     */
     public $map = [
         "onmai_service" => "string",
         "onmai_credentials" => [
@@ -54,6 +69,9 @@ class AIHelper
         ],
     ];
 
+    /**
+     * List of supported languages with their codes and display names.
+     */
     protected $languages = [
         ['code' => 'Español (España)', 'name' => 'Español (España)'],
         ['code' => 'Gallego (España)', 'name' => 'Gallego (España)'],
@@ -67,12 +85,24 @@ class AIHelper
         ['code' => 'Chino Mandarín', 'name' => 'Chino Mandarín']
     ];
 
+    /**
+     * The service instance used for processing.
+     */
     protected $service;
 
+    /**
+     * Array storing predefined instructions.
+     */
     protected $instructions = [];
 
+    /**
+     * The user-generated prompt for requests.
+     */
     protected $userPrompt = '';
 
+    /**
+     * Default structure for API response handling.
+     */
     protected $structureResponse = [
         'error' => null,
         'result' => '',
@@ -84,12 +114,16 @@ class AIHelper
         'original' => [],
     ];
 
+    /**
+     * Supported AI engines with their display names.
+     */
     protected $engines = [
         'openai'    => 'Open AI',
         'gemini'    => 'Gemini',
         'deepseek'  => 'DeepSeek',
         'mistralai' => 'Mistral AI',
     ];
+
 
     /**
      * Initializes the Menu service.
@@ -101,6 +135,11 @@ class AIHelper
         $this->container = $container;
     }
 
+    /**
+     * Retrieves the Onmai settings for the manager.
+     *
+     * @return array The manager's Onmai settings with default engines if missing.
+     */
     public function getManagerSettings()
     {
         $managerOnmaiSettings = $this->container->get('orm.manager')
@@ -120,6 +159,11 @@ class AIHelper
         return $managerOnmaiSettings;
     }
 
+    /**
+     * Retrieves the Onmai settings for the current instance, ensuring default values if missing.
+     *
+     * @return array The instance's Onmai settings with predefined defaults.
+     */
     public function getInstanceSettings()
     {
         $setting = $this->container->get('orm.manager')
@@ -134,6 +178,12 @@ class AIHelper
         return $setting;
     }
 
+    /**
+     * Updates the Onmai settings for the current instance.
+     *
+     * @param array $settings The settings to be saved.
+     * @return mixed The result of the settings update operation.
+     */
     public function setInstanceSettings($settings)
     {
         return $this->container->get('orm.manager')
@@ -141,6 +191,11 @@ class AIHelper
             ->set('onmai_settings', $settings);
     }
 
+    /**
+     * Retrieves the current Onmai settings by merging instance and manager settings.
+     *
+     * @return array The current settings including engine, model, and associated parameters.
+     */
     public function getCurrentSettings()
     {
         $managerSettings  = $this->getManagerSettings();
@@ -181,6 +236,12 @@ class AIHelper
         return $currentSettings;
     }
 
+    /**
+     * Casts a value to its appropriate type (int, float, bool, or string).
+     *
+     * @param mixed $value The value to be cast.
+     * @return mixed The casted value, type can be int, float, bool, or string.
+     */
     public function castValue($value)
     {
         if ($value === null) {
@@ -223,6 +284,12 @@ class AIHelper
         ];
     }
 
+    /**
+     * Masks an API key by showing only the first 3 and last 4 characters, hiding the middle.
+     *
+     * @param string $apiKey The API key to be masked.
+     * @return string The masked API key.
+     */
     protected function maskApiKey($apiKey)
     {
         if (strlen($apiKey) > 7) {
@@ -232,11 +299,21 @@ class AIHelper
         return $apiKey;
     }
 
+    /**
+     * Retrieves the structure response.
+     *
+     * @return array The structure response array.
+     */
     public function getStructureResponse()
     {
         return $this->structureResponse;
     }
 
+    /**
+     * Retrieves and filters instructions from the manager settings, excluding disabled ones.
+     *
+     * @return array The filtered list of instructions.
+     */
     public function getInstructions()
     {
         $instructions = $this->container->get('orm.manager')
@@ -250,6 +327,11 @@ class AIHelper
         return $this->instructions;
     }
 
+    /**
+     * Adds a new instruction to the existing list of instructions.
+     *
+     * @param array $instruction The instruction to be added.
+     */
     public function addInstruction($instruction)
     {
         $instructions = $this->getInstructions();
@@ -257,12 +339,24 @@ class AIHelper
         $this->setInstructions($instructions);
     }
 
+    /**
+     * Sets the list of instructions.
+     *
+     * @param array $instructions The instructions to be set.
+     * @return $this The current instance for method chaining.
+     */
     public function setInstructions($instructions)
     {
         $this->instructions = $instructions;
         return $this;
     }
 
+    /**
+     * Retrieves instructions filtered by the given criteria.
+     *
+     * @param array $filter An associative array containing 'type' and 'field' filters.
+     * @return array The filtered list of instructions.
+     */
     public function getInstructionsByFilter(array $filter = []): array
     {
         return $filter
@@ -272,6 +366,12 @@ class AIHelper
             : $this->instructions;
     }
 
+    /**
+     * Inserts the given instructions into the user prompt with an optional role description.
+     *
+     * @param array $instructions The list of instructions to insert.
+     * @param string $role The role description to be included in the instructions.
+     */
     protected function insertInstructions($instructions = [], $role = '')
     {
         $instructionsString = sprintf("### INSTRUCCIONES IMPORTANTES:\n%s", $role);
@@ -279,20 +379,23 @@ class AIHelper
             $counter = 0;
 
             $instructionList = implode("\n", array_map(
-                function ($index, $item) use (&$counter) {
+                function ($item) use (&$counter) {
                     $counter++;
                     return $counter . '. ' . $item['value'];
                 },
-                array_keys($instructions),
                 $instructions
             ));
-
 
             $instructionsString .= sprintf(". Sigue estas reglas estrictamente:\n%s", $instructionList);
         }
         $this->userPrompt .= $instructionsString;
     }
 
+    /**
+     * Adds the selected tone to the `userPrompt` if it's present in the messages.
+     *
+     * @param array $messages The array containing the selected tone information.
+     */
     protected function insertTone($messages = [])
     {
         if ($messages["toneSelected"]["name"] ?? false) {
@@ -300,6 +403,11 @@ class AIHelper
         }
     }
 
+    /**
+     * Adds the selected language to the `userPrompt` if it's present in the messages.
+     *
+     * @param array $messages The array containing the selected language information.
+     */
     protected function insertLanguage($messages = [])
     {
         if ($messages["toneSelected"]["name"] ?? false) {
@@ -307,6 +415,13 @@ class AIHelper
         }
     }
 
+    /**
+     * Generates a prompt from messages with instructions, tone, language, and other fields.
+     *
+     * @param array $messages Contains prompt details such as mode, field, role, locale, and input.
+     *
+     * @return string The generated prompt.
+     */
     public function generatePrompt($messages)
     {
         $this->insertInstructions($this->getInstructionsByFilter(
@@ -337,6 +452,13 @@ class AIHelper
         return $this->userPrompt;
     }
 
+    /**
+     * Sends a message by preparing settings, generating a prompt, and calling the appropriate engine.
+     *
+     * @param array $messages Contains the user's input and other necessary information for the prompt.
+     *
+     * @return array The response from the engine, including the result or error if any.
+     */
     public function sendMessage($messages)
     {
         $this->getInstructions();
@@ -371,13 +493,22 @@ class AIHelper
         return $response;
     }
 
+    /**
+     * Transforms the given fields of text based on specific instructions and tone.
+     *
+     * @param array $or The array containing the text fields to be transformed.
+     * @param array $fields The specific fields of text to transform (e.g., 'title', 'description').
+     * @param array $tone The tone to be used in the transformation.
+     *
+     * @return array The array with transformed text fields or the original array if no transformation occurs.
+     */
     public function translate($text, $lang, $params = [])
     {
         if (empty($text) || empty($lang)) {
             return ['error' => 'Empty text or language', 'result' => ''];
         }
 
-        $this->userPrompt = "### OBJETIVO:\n" .
+        $this->userPrompt  = "### OBJETIVO:\n" .
             "Traduce el siguiente texto al idioma seleccionado siguiendo estrictamente las instrucciones.\n";
         $this->userPrompt .= "### TEXTO:\n{$text}\n";
         $this->userPrompt .= "### IDIOMA SELECCIONADO:\n{$lang}\n";
@@ -399,6 +530,7 @@ class AIHelper
         $this->insertInstructions($instructions);
 
         $data = $this->getCurrentSettings();
+
         $data['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
 
         if (!empty($data['engine'])) {
@@ -406,6 +538,7 @@ class AIHelper
                 $data,
                 $this->getStructureResponse()
             );
+
             $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
         } else {
             return ['error' => 'Error'];
@@ -419,7 +552,16 @@ class AIHelper
         return $response;
     }
 
-    public function transform($or = [], $fields = ['title', 'title_int', 'description', 'body'], $tone = [])
+    /**
+     * Transforms the given fields of text based on specific instructions and tone.
+     *
+     * @param array $or The array containing the text fields to be transformed.
+     * @param array $fields The specific fields of text to transform (e.g., 'title', 'description').
+     * @param array $tone The tone to be used in the transformation.
+     *
+     * @return array The array with transformed text fields or the original array if no transformation occurs.
+     */
+    public function transform($or = [], $fields = ['title', 'title_int', 'description', 'body'])
     {
         if (empty($or) || empty($fields) || empty($or['prompt'])) {
             return $or;
@@ -436,7 +578,7 @@ class AIHelper
                 return $or[$field];
             }
 
-            $this->userPrompt = sprintf("\n\n### OBJETIVO:\n%s", $or["prompt"]);
+            $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $or["prompt"]);
             $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$or[$field]}\n";
 
             $instructions = [
@@ -478,6 +620,13 @@ class AIHelper
         return $or;
     }
 
+    /**
+     * Removes HTML code blocks and bold markdown formatting from the input string.
+     *
+     * @param string $input The input string containing HTML code blocks and markdown.
+     *
+     * @return string The cleaned input with HTML code blocks and bold markdown removed.
+     */
     public function removeHtmlCodeBlocks($input)
     {
         $output = preg_replace('/```html\n(.*?)\n```/s', '$1', $input);
@@ -486,6 +635,13 @@ class AIHelper
         return $output;
     }
 
+    /**
+     * Generates word counts for the input, output, and total tokens in the response.
+     *
+     * @param array $response The response array containing token counts.
+     *
+     * @return void The method updates the response array with the word counts for input, output, and total.
+     */
     public function generateWords(&$response)
     {
         $response['words']['input']  = $this->calcWords($response['tokens']['input']);
@@ -493,6 +649,16 @@ class AIHelper
         $response['words']['total']  = $this->calcWords($response['tokens']['total']);
     }
 
+    /**
+     * Saves the action data, including request/response messages, token counts, and additional parameters.
+     *
+     * Prepares the data, formats the required information, and calls an external service to create a new item.
+     *
+     * @param array $params The parameters containing messages and other relevant data.
+     * @param array $response The response data, including the result, token counts, and original response.
+     *
+     * @return void This method does not return anything. It performs a save operation via an external service.
+     */
     protected function saveAction($params, $response)
     {
         $messages = $params['messages'] ?? [];
@@ -523,6 +689,17 @@ class AIHelper
         $this->container->get('api.service.ai')->createItem($data);
     }
 
+    /**
+     * Retrieves the monthly usage data for a given service, starting from the 27th of the previous month
+     * to the 27th of the current or next month.
+     *
+     * This method calculates the start and end dates based on the current date and the given service,
+     * then generates an OQL query to fetch the usage data.
+     *
+     * @param string $service The name of the service for which usage data is retrieved (default is 'onmai').
+     *
+     * @return array The list of usage data retrieved based on the OQL query.
+     */
     public function getUsageMonthly($service = 'onmai')
     {
         $date       = new DateTime();
@@ -555,6 +732,18 @@ class AIHelper
         return $this->container->get('api.service.ai')->getList($oql);
     }
 
+    /**
+     * Retrieves tokens data for a specific month and year by generating an OQL query
+     * that filters records based on the start and end dates of the provided month and year.
+     *
+     * The method uses the `getDates` method to calculate the date range, then builds an OQL query
+     * to fetch data from the API service.
+     *
+     * @param int $month The month (1-12) for which the tokens data is retrieved.
+     * @param int $year The year for which tokens data is retrieved.
+     *
+     * @return array The list of tokens data retrieved based on the OQL query.
+     */
     public function getTokensByMonth($month, $year)
     {
         $dates = $this->getDates($month, $year);
@@ -570,6 +759,20 @@ class AIHelper
         return $result;
     }
 
+    /**
+     * Generates an array representing a date range, where each day in the range is represented
+     * as an index, and the values for words, price, and usage are initialized to zero.
+     *
+     * The method uses the `getDates` method to calculate the start and end dates for the provided
+     * month and year. It then iterates through each day in the date range and creates a structure
+     * for tracking total, input, and output values for words, price, and usage.
+     *
+     * @param int $month The month (1-12) for which the date range is generated.
+     * @param int $year The year for which the date range is generated.
+     *
+     * @return array An array with dates as keys (formatted as 'd'), and values containing
+     *               initialized data for words, price, and usage.
+     */
     public function generateDateRangeArray($month, $year)
     {
         $dates       = $this->getDates($month, $year);
@@ -578,7 +781,7 @@ class AIHelper
         $endDate     = $dates['end_date'];
 
         while ($currentDate <= $endDate) {
-            $formattedIndex = $currentDate->format('d');
+            $formattedIndex             = $currentDate->format('d');
             $dateArray[$formattedIndex] = [
                 'words' => [
                     'total' => 0,
@@ -603,6 +806,17 @@ class AIHelper
         return $dateArray;
     }
 
+    /**
+     * Generates an array of months from the provided start date up until the current month.
+     *
+     * The method iterates through each month starting from the provided `startDate` and generates
+     * an array containing the month labels, year, and month number, while ensuring the months are
+     * in reverse order, with the most recent month appearing first.
+     *
+     * @param DateTime $startDate The start date from which the months will be generated.
+     *
+     * @return array An array of months with each month containing a label (month name), year, and month number.
+     */
     public function generateMonths($startDate)
     {
         $currentDate    = new DateTime();
@@ -623,6 +837,15 @@ class AIHelper
         return array_reverse($months);
     }
 
+    /**
+     * Retrieves the first action from the database.
+     *
+     * This method queries the `ai_actions` table to find the first record where the `date` field
+     * is not null, ordering the results by date in ascending order. It returns the first item
+     * in the list of results, or `null` if no actions are found.
+     *
+     * @return array|null The first action in the list, or `null` if no actions are found.
+     */
     public function getFirstAction()
     {
         $sql  = 'SELECT * FROM ai_actions'
@@ -633,6 +856,19 @@ class AIHelper
         return $list['items'][0] ?? null;
     }
 
+    /**
+     * Retrieves the statistics for a given month and year.
+     *
+     * This method fetches the first action from the database and generates a list of months
+     * starting from that action's date. It then calculates statistics such as word counts,
+     * pricing, and usage for the specified month and year, grouping the data by day.
+     * The result is returned in a structured response with labels, words, price, and usage statistics.
+     *
+     * @param int $month The month for which the statistics are to be retrieved.
+     * @param int $year The year for which the statistics are to be retrieved.
+     *
+     * @return array An array containing the statistics for the given month and year.
+     */
     public function getStats($month, $year)
     {
         $first    = $this->getFirstAction();
@@ -658,6 +894,19 @@ class AIHelper
         return $response;
     }
 
+    /**
+     * Generates the statistics response based on the daily data.
+     *
+     * This method iterates through the given days and aggregates the statistics such as total
+     * words (input, output), price, and usage for each day. The statistics are accumulated
+     * into the provided response structure, which includes labels, total values, and items for
+     * each category (words, price, usage).
+     *
+     * @param array $response The response array to be updated with the calculated statistics.
+     * @param array $days An array of daily data containing words, price, and usage statistics.
+     *
+     * @return array The updated response array with the aggregated statistics.
+     */
     public function generateResponseStats($response, $days)
     {
         foreach ($days as $key => $day) {
@@ -677,6 +926,19 @@ class AIHelper
         return $response;
     }
 
+    /**
+     * Groups the tokens by day and aggregates statistics such as words, price, and usage.
+     *
+     * This method processes each token in the given `$tokens` array, extracts relevant data,
+     * and groups it by day. The statistics for words (input, output, total), price (input,
+     * output, total), and usage are accumulated for each day in the `$days` array. The price
+     * is calculated based on the token input/output and a conversion factor.
+     *
+     * @param array $tokens The array of tokens containing the necessary data (words, price, etc.).
+     * @param array &$days The array to store aggregated data by day, updated by reference.
+     *
+     * @return void
+     */
     public function groupByDays($tokens, &$days)
     {
         foreach ($tokens['items'] as $item) {
@@ -696,6 +958,18 @@ class AIHelper
         }
     }
 
+    /**
+     * Retrieves the price for input and output tokens based on the provided item data.
+     *
+     * This method calculates the price for input and output tokens by retrieving relevant
+     * metadata from the item's parameters. If the item's service is "onmai", it calculates
+     * the price using specific parameters (`sale_input_tokens` and `sale_output_tokens`)
+     * and a relation factor (`relationTokenWord`).
+     *
+     * @param object $item The item object containing data such as service and metadata.
+     *
+     * @return array An associative array containing the prices for input ('i') and output ('o') tokens.
+     */
     public function getPrices($item)
     {
         $priceInput  = 0;
@@ -715,11 +989,34 @@ class AIHelper
         ];
     }
 
+    /**
+     * Calculates the number of words based on the given tokens.
+     *
+     * This method converts a number of tokens into words using a predefined relation factor
+     * (`relationTokenWord`). The result is cast to an integer to represent the calculated word count.
+     *
+     * @param int $tokens The number of tokens to convert into words.
+     *
+     * @return int The calculated number of words based on the relation factor.
+     */
     public function calcWords($tokens)
     {
         return (int) ($tokens / $this->relationTokenWord);
     }
 
+    /**
+     * Gets the start and end dates for a given month and year.
+     *
+     * This method creates a start date for the first day of the specified month and year,
+     * and calculates the end date as the last day of the same month. The start and end dates
+     * are returned as `DateTime` objects.
+     *
+     * @param int $month The month for which to calculate the date range (1-12).
+     * @param int $year The year for which to calculate the date range.
+     *
+     * @return array An associative array with two keys: 'start_date' and 'end_date',
+     *               each containing a `DateTime` object representing the start and end dates, respectively.
+     */
     public function getDates($month, $year)
     {
         $startDate = DateTime::createFromFormat('Y-m-d', "$year-$month-01");
@@ -732,6 +1029,16 @@ class AIHelper
         ];
     }
 
+    /**
+     * Calculates the total amount of money spent based on input and output tokens usage.
+     *
+     * This method retrieves the monthly usage data and calculates the cost based on the
+     * input and output tokens for each usage item. The cost is determined by multiplying
+     * the tokens by their respective prices, which are fetched using the `getPrices` method.
+     * The total cost is then calculated and returned rounded to 15 decimal places.
+     *
+     * @return float The total amount of money spent, rounded to 15 decimal places.
+     */
     public function getSpentMoney()
     {
         $total   = 0;
@@ -746,6 +1053,12 @@ class AIHelper
         return round($total, 15);
     }
 
+    /**
+     * Retrieves and merges tone settings, optionally including manager tones.
+     *
+     * @param bool $showManager Whether to include manager tones. Default is true.
+     * @return array The sorted list of tones.
+     */
     public function getTones($showManager = true)
     {
         $is = $this->getInstanceSettings();
@@ -759,6 +1072,12 @@ class AIHelper
         return $this->sortByName(array_merge($tm, $ti));
     }
 
+    /**
+     * Sets the tones in the instance settings.
+     *
+     * @param array $tones List of tones to be set.
+     * @return $this The current instance for method chaining.
+     */
     public function setTones($tones = [])
     {
         $this->container->get('orm.manager')
@@ -767,6 +1086,13 @@ class AIHelper
         return $this;
     }
 
+    /**
+     * Retrieves roles, optionally merging with manager settings.
+     *
+     * @param bool $showManager Whether to include manager settings in the result. Defaults to true.
+     * @param array $filter Optional filter to apply to the roles.
+     * @return array Sorted list of roles based on the specified filter.
+     */
     public function getRoles($showManager = true, $filter = [])
     {
         $is = $this->getInstanceSettings();
@@ -780,6 +1106,13 @@ class AIHelper
         return $this->sortByName(array_merge($rm, $ri), $filter);
     }
 
+    /**
+     * Sorts an array of items by their 'name' field, optionally filtering by a specific field value.
+     *
+     * @param array $array The array of items to be sorted.
+     * @param array $filter Optional filter to apply based on a specific field value.
+     * @return array Sorted and filtered array.
+     */
     protected function sortByName($array, $filter = [])
     {
         $fieldValue = $filter['field'] ?? null;
@@ -798,6 +1131,12 @@ class AIHelper
         return $array;
     }
 
+    /**
+     * Adds a 'readOnly' flag with a value of true to each item in the array.
+     *
+     * @param array $array The array of items to modify.
+     * @return array The modified array with 'readOnly' flag added.
+     */
     protected function addFlagReadOnly($array)
     {
         return array_map(function ($item) {
@@ -806,6 +1145,13 @@ class AIHelper
         }, $array);
     }
 
+    /**
+     * Prepares the items in the array before saving by truncating certain fields
+     * and removing read-only items.
+     *
+     * @param array $array The array of items to process.
+     * @return array The modified array with adjustments made.
+     */
     public function preSave($array)
     {
         foreach ($array as $key => $item) {
@@ -823,6 +1169,12 @@ class AIHelper
         return $array;
     }
 
+    /**
+     * Sets the roles in the instance settings.
+     *
+     * @param array $roles The roles to set.
+     * @return $this The current instance for method chaining.
+     */
     public function setRoles($roles = [])
     {
         $this->container->get('orm.manager')
@@ -854,12 +1206,22 @@ class AIHelper
         return $this;
     }
 
+    /**
+     * Gets the default model from manager settings.
+     *
+     * @return string The default model name or an empty string if not set.
+     */
     public function getModelDefault()
     {
         $managerSettings = $this->getManagerSettings();
         return $managerSettings['model'] ?? '';
     }
 
+    /**
+     * Retrieves a list of models from manager settings, including engine title and model ID.
+     *
+     * @return array An array of models with 'id' and 'title' fields.
+     */
     public function getModels()
     {
         $managerSettings = $this->getManagerSettings();
