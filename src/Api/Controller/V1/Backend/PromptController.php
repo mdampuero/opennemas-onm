@@ -29,6 +29,8 @@ class PromptController extends ApiController
      */
     protected $getItemRoute = 'api_v1_backend_onmai_prompt_get_item';
 
+    protected $roleFilters = [];
+
     /**
      * {@inheritdoc}
      */
@@ -55,13 +57,13 @@ class PromptController extends ApiController
      *
      * @return array The extra data.
      */
-    protected function getExtra(Request $request)
+    protected function getExtraData()
     {
-        $field = $request->query->get('field', '');
         $helperAI = $this->get('core.helper.ai');
+
         return [
             'tones' => $helperAI->getTones(),
-            'roles' => $helperAI->getRoles(true, [ 'field' => $field ]),
+            'roles' => $helperAI->getRoles(true, $this->roleFilters),
         ];
     }
 
@@ -83,10 +85,13 @@ class PromptController extends ApiController
         $response     = $us->getList($oql);
         $itemsManager = $us->responsify($repository->findBy($oql));
         $items        = $helperLocale->translateAttributes($us->responsify($response['items']), ['mode', 'field']);
+
+        $this->roleFilters = ($request->query->get('field')) ? [ 'field' => $request->query->get('field') ] : null;
+
         return [
             'items'      => array_merge($items, $itemsManager),
             'total'      => $response['total'],
-            'extra'      => $this->getExtra($request),
+            'extra'      => $this->getExtraData(),
             'o-filename' => $this->filename,
         ];
     }
@@ -115,5 +120,25 @@ class PromptController extends ApiController
                 'languages' => $this->get('core.helper.ai')->getLanguages()
             ]
         ];
+    }
+
+    /**
+     * Get the value of roleFilters
+     */
+    public function getRoleFilters()
+    {
+        return $this->roleFilters;
+    }
+
+    /**
+     * Set the value of roleFilters
+     *
+     * @return  self
+     */
+    public function setRoleFilters($roleFilters)
+    {
+        $this->roleFilters = $roleFilters;
+
+        return $this;
     }
 }
