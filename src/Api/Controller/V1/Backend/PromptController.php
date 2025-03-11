@@ -55,12 +55,13 @@ class PromptController extends ApiController
      *
      * @return array The extra data.
      */
-    protected function getExtraData()
+    protected function getExtra(Request $request)
     {
+        $field = $request->query->get('field', '');
         $helperAI = $this->get('core.helper.ai');
         return [
             'tones' => $helperAI->getTones(),
-            'roles' => $helperAI->getRoles(),
+            'roles' => $helperAI->getRoles(true, [ 'field' => $field ]),
         ];
     }
 
@@ -85,7 +86,7 @@ class PromptController extends ApiController
         return [
             'items'      => array_merge($items, $itemsManager),
             'total'      => $response['total'],
-            'extra'      => $this->getExtraData($response['items']),
+            'extra'      => $this->getExtra($request),
             'o-filename' => $this->filename,
         ];
     }
