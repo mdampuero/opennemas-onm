@@ -179,7 +179,7 @@
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.ticket }"></i>
       </div>
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.ticket }">
-        {include file="ui/component/input/text.tpl" iField="event_tickets_link" iRequired=true iTitle="{t}Ticket Selling URL{/t}"}
+        {include file="ui/component/input/text.tpl" iField="event_tickets_link" iTitle="{t}Ticket Selling URL{/t}"}
         {include file="ui/component/input/text.tpl" iField="event_tickets_price" iTitle="{t}Ticket Price{/t}"}
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.external_website = !expanded.external_website">
