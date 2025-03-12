@@ -161,7 +161,10 @@
             return;
           }
 
-          var iframeRegex = /<iframe[^>]+src=["'](https?:\/\/(www\.)?(maps\.google\.com|openstreetmap\.org)[^"']+)["'][^>]*><\/iframe>/;
+          var iframeRegex = new RegExp(
+            '<iframe[^>]+src=["\'](https?:\\/\\/(www\\.)?' +
+            '(maps\\.google\\.com|google\\.com\\/maps|openstreetmap\\.org)[^"\']+)[^>]*><\\/iframe>'
+          );
 
           $scope.isInvalidIframe = !iframeRegex.test(newValue);
         });
