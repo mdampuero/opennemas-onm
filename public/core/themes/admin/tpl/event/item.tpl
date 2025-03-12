@@ -40,7 +40,7 @@
         </a>
       </li>
       <li class="quicklinks">
-        <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving || isInvalidIframe" type="button">
           <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
           {t}Save{/t}
         </button>
@@ -166,6 +166,12 @@
         {include file="ui/component/input/text.tpl" iField="event_address" iTitle="{t}Place address{/t}" }
         {include file="ui/component/input/text.tpl" iField="event_map_latitude" iTitle="{t}Latitude{/t}" }
         {include file="ui/component/input/text.tpl" iField="event_map_longitude" iTitle="{t}Longitude{/t}" }
+        <div class="controls">
+          <label class="form-label" for="event_end_hour">{t}Event iframe map{/t}</label>
+          <textarea name="event-map-iframe" id="event-map-iframe" ng-model="item.event_map_iframe" class="form-control"
+            rows="15">
+          </textarea>
+        </div>
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.ticket = !expanded.ticket">
         <i class="fa fa-ticket m-r-10"></i>

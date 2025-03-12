@@ -80,6 +80,15 @@
 
         /**
          * @memberOf EventCtrl
+         * @type {Boolean}
+         * @description
+         * State of the iframe validity
+         * @default false
+         */
+        $scope.isInvalidIframe = false;
+
+        /**
+         * @memberOf EventCtrl
          *
          * @description
          *  The list of routes for the controller.
@@ -136,6 +145,26 @@
             })
           );
         };
+
+        /**
+         * @name $scope.$watch
+         * @description
+         * Watches for changes in `item.event_map_iframe` and validates whether the content
+         * is an `<iframe>` with a `src` from Google Maps or OpenStreetMap.
+         * If invalid, it disables the save button.
+         *
+         * @param {string} newValue The new value of `item.event_map_iframe`.
+         */
+        $scope.$watch('item.event_map_iframe', function(newValue) {
+          if (!newValue || newValue.trim() === '') {
+            $scope.isInvalidIframe = false;
+            return;
+          }
+
+          var iframeRegex = /<iframe[^>]+src=["'](https?:\/\/(www\.)?(maps\.google\.com|openstreetmap\.org)[^"']+)["'][^>]*><\/iframe>/;
+
+          $scope.isInvalidIframe = !iframeRegex.test(newValue);
+        });
       }
     ]);
 })();
