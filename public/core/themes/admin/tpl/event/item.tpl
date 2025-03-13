@@ -148,8 +148,8 @@
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.type }">
         <div class="controls">
           <select class="block" id="event_type" name="event_type" ng-model="item.event_type">
-            <option value="1">Música</option>
-            <option value="2">Formativo</option>
+            <option value="Música">Música</option>
+            <option value="Formativo">Formativo</option>
           </select>
         </div>
       </div>
