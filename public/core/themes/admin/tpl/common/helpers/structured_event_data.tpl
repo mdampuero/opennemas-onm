@@ -41,6 +41,17 @@
   "description": "{$content->description|replace:'\\':''|escape:'htmlall'}",
   "eventStatus": "https://schema.org/EventScheduled",
   "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  {assign var="clean_price" value=$content->event_tickets_price|regex_replace:'/[^\d,.]/':''}
+  {if $content->event_tickets_link}
+  "offers": {
+    "@type": "Offer",
+    "url": "{$content->event_tickets_link}",
+    "price": "{$clean_price|default:'0'}",
+    "priceCurrency": "EUR",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "{format_date date=$content->event_start_date format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}"
+  },
+  {/if}
   "location": {
     "@type": "Place",
     "name": "{($content->event_place) ? "{$content->event_place|escape:'htmlall'}" : ""}",
