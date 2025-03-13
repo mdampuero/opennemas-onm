@@ -46,6 +46,8 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      */
     $scope.incomplete = true;
 
+    $scope.translationHelper = false;
+
     /**
      * @function checkDraft
      * @memberOf ContentRestInnerCtrl
@@ -547,6 +549,58 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       return false;
     };
 
+    $scope.onmIAModal = function(field, AIFieldType, AIFieldTitle) {
+      const input  = field in $scope ? $scope[field] : $scope.item[field];
+      const locale = $scope.config.locale.selected ? $scope.config.locale.available[$scope.config.locale.selected] : 'Español (España)';
+      var orVal = '';
+
+      switch (AIFieldType) {
+        case 'introductions':
+          orVal = $scope.config.linkers.item.original.description[$scope.config.linkers.item.defaultKey];
+          break;
+        case 'bodies':
+          orVal = $scope.config.linkers.item.original.body[$scope.config.linkers.item.defaultKey];
+          break;
+        default:
+          orVal = $scope.config.linkers.item.original.title[$scope.config.linkers.item.defaultKey];
+          break;
+      }
+
+      $uibModal.open({
+        templateUrl: 'modal-onmai',
+        backdrop: 'static',
+        windowClass: 'modal-onmai',
+        controller: 'OnmAIModalCtrl',
+        resolve: {
+          template: function() {
+            return {
+              orVal: orVal,
+              lastTemplate: $scope.lastTemplate,
+              step: 1,
+              AIFieldType: AIFieldType,
+              AIFieldTitle: AIFieldTitle || '',
+              input: input,
+              locale: locale,
+              translationHelper: $scope.translationHelper
+            };
+          },
+          success: function() {
+            return function(modal, template) {
+              $scope.lastTemplate = template;
+              if (field in $scope) {
+                $scope[field] = template.response;
+              } else {
+                $scope.item[field] = template.response;
+              }
+              $timeout(function() {
+                $scope.flags.generate.slug = true;
+              }, 250);
+            };
+          }
+        }
+      });
+    };
+
     /**
      * @function validate
      * @memberOf ContentRestInnerCtrl
@@ -624,6 +678,7 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       }
 
       if (translator.isTranslatable(ov, nv)) {
+        $scope.translationHelper = true;
         // Raise a modal to indicate that background translation is being executed
         $uibModal.open({
           backdrop: 'static',
@@ -647,6 +702,8 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
             }
           }
         });
+      } else {
+        $scope.translationHelper = false;
       }
     }, true);
 

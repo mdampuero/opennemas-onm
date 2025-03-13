@@ -1,0 +1,138 @@
+manager_ws_onmai_config:
+    path:     /onmai/config
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:config }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_onmai_modelsSuggested:
+    path:     /onmai/modelsSuggested
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:modelsSuggested }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_onmai_config_save:
+    path:     /onmai/config
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:configSave }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+manager_ws_onmai_config_download:
+    path:     /onmai/config/download
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:configDownload }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_onmai_config_upload:
+    path:     /onmai/config/upload
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:configUpload }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+manager_ws_onmai_instances:
+    path:     /onmai/intances
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:instances }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_onmai_instances_save:
+    path:     /onmai/intances/save
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:instancesSave }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+manager_ws_onmai_prompt_list:
+    path:     /onmai/prompt
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptList }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_onmai_prompt_new:
+    path:     /onmai/prompt/new
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptNew }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_onmai_prompt_config:
+    path:     /onmai/prompt/config
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptConfig }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_onmai_prompt_config_save:
+    path:     /onmai/prompt/configSave
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptConfigSave }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+manager_ws_onmai_prompt_show:
+    path:     /onmai/prompt/{id}
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptShow }
+    methods:  [ GET ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ws_onmai_prompt_save:
+    path:     /onmai/prompt/save
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptSave }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+manager_ws_onmai_prompt_update:
+    path:     /onmai/prompt/{id}
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptUpdate }
+    methods:  [ PUT ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ws_onmai_prompt_autocomplete:
+    path:     /onmai/prompt/autocomplete
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptAutocomplete }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_onmai_prompt_delete:
+    path:     /onmai/prompt/{id}
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptDelete }
+    methods:  [ DELETE ]
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_ws_onmai_prompt_batch_delete:
+    path:     /onmai/prompt
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptDeleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_onmai_prompt_config_download:
+    path:     /onmai/prompt/configDownload
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptConfigDownload }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_onmai_prompt_config_upload:
+    path:     /onmai/prompt/configUpload
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptConfigUpload }
+    methods:  [ PUT ]
+    options:
+        expose: true

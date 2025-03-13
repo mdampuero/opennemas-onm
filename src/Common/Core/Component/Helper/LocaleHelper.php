@@ -79,12 +79,13 @@ class LocaleHelper
     public function getConfiguration()
     {
         return [
-            'available'     => $this->locale->getAvailableLocales('frontend'),
-            'default'       => $this->locale->getLocale('frontend'),
-            'multilanguage' => $this->hasMultilanguage(),
-            'selected'      => $this->getSelectedLocale(),
-            'slugs'         => $this->locale->getSlugs('frontend'),
-            'translators'   => $this->getTranslators($this->locale->getLocale('frontend'))
+            'available'          => $this->locale->getAvailableLocales('frontend'),
+            'default'            => $this->locale->getLocale('frontend'),
+            'multilanguage'      => $this->hasMultilanguage(),
+            'selected'           => $this->getSelectedLocale(),
+            'slugs'              => $this->locale->getSlugs('frontend'),
+            'translators'        => $this->getTranslators($this->locale->getLocale('frontend')),
+            'translatorsDefault' => $this->getTranslatorsDefault()
         ];
     }
 
@@ -147,5 +148,46 @@ class LocaleHelper
         }));
 
         return array_values($translators);
+    }
+
+    /**
+     * Returns the list of default translators.
+     * This list is used when no specific translator is selected.
+     * @return array The list of default translators.
+     */
+    public function getTranslatorsDefault()
+    {
+        if (!$this->security->hasExtension('es.openhost.module.translation')) {
+            return [];
+        }
+
+        return $this->em
+            ->getDataSet('Settings', 'instance')
+            ->get('translatorsDefault') ?? [];
+    }
+
+    /**
+     * Translates specific attributes in an array of items.
+     *
+     * This function iterates over each item in the array and applies the translation function
+     * to the specified attributes. It updates the values of those attributes by capitalizing
+     * the first letter of each word and translating them using the translation function.
+     *
+     * @param array $items The array of items to be processed. Each item is an associative array.
+     * @param array $attributes The list of attributes within each item to be translated.
+     *
+     * @return array The modified array of items with translated attributes.
+     */
+    public function translateAttributes(array $items, array $attributes)
+    {
+        foreach ($items as &$item) {
+            foreach ($attributes as $attr) {
+                if (isset($item[$attr])) {
+                    $item[$attr . "_or"] = $item[$attr];
+                    $item[$attr]         = _(ucwords($item[$attr]));
+                }
+            }
+        }
+        return $items;
     }
 }

@@ -1,0 +1,127 @@
+api_v1_backend_onmai_get_list:
+    path:    /onmai
+    defaults: { _controller: ApiBundle:V1/Backend/OnmAI:getList, format: '.json'  }
+    methods: [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_onmai_get_config:
+    path:     /onmai/config
+    defaults: { _controller: ApiBundle:V1/Backend/OnmAI:getConfig }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_onmai_get_usage:
+    path:     /onmai/usage
+    defaults: { _controller: ApiBundle:V1/Backend/OnmAI:getUsage }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_onmai_save_config:
+    path:     /onmai/config
+    defaults: { _controller: ApiBundle:V1/Backend/OnmAI:saveConfig }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_onmai_download_config:
+    path:     /onmai/config/download
+    defaults: { _controller: ApiBundle:V1/Backend/OnmAI:downloadConfig }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_onmai_upload_config:
+    path:     /onmai/config/upload
+    defaults: { _controller: ApiBundle:V1/Backend/OnmAI:uploadConfig }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+api_v1_backend_onmai_generate:
+    path:     /onmai/generate
+    defaults: { _controller: ApiBundle:V1/Backend/OnmAI:generate }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_onmai_translate:
+    path:     /onmai/translate
+    defaults: { _controller: ApiBundle:V1/Backend/OnmAI:translate }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_onmai_check_apiKey:
+    path:     /onmai/CheckApiKey
+    defaults: { _controller: ApiBundle:V1/Backend/OnmAI:CheckApiKey }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+#PROMPTS ROUTES
+
+api_v1_backend_onmai_prompt_create_item:
+    path:     /onmai/prompts/new
+    defaults: { _controller: ApiBundle:V1/Backend/Prompt:createItem }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_onmai_prompt_delete_item:
+    path:     /onmai/prompts/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Prompt:deleteItem }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_onmai_prompt_delete_list:
+    path:     /onmai/prompts
+    defaults: { _controller: ApiBundle:V1/Backend/Prompt:deleteList }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_onmai_prompt_get_item:
+    path:     /onmai/prompts/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Prompt:getItem }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_onmai_prompt_get_list:
+    path:     /onmai/prompts
+    defaults: { _controller: ApiBundle:V1/Backend/Prompt:getList, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_onmai_prompt_get_list_manager:
+    path:     /onmai/prompts/manager
+    defaults: { _controller: ApiBundle:V1/Backend/Prompt:getListManager, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_onmai_prompt_save_item:
+    path:     /onmai/prompts
+    defaults: { _controller: ApiBundle:V1/Backend/Prompt:saveItem }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_onmai_prompt_update_item:
+    path:     /onmai/prompts/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Prompt:updateItem }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
