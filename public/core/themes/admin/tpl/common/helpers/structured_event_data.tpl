@@ -41,8 +41,8 @@
   "description": "{$content->description|replace:'\\':''|escape:'htmlall'}",
   "eventStatus": "https://schema.org/EventScheduled",
   "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-  {assign var="clean_price" value=$content->event_tickets_price|regex_replace:'/[^\d,.]/':''}
   {if $content->event_tickets_link}
+  {assign var="clean_price" value=$content->event_tickets_price|regex_replace:'/[^\d,.]/':''}
   "offers": {
     "@type": "Offer",
     "url": "{$content->event_tickets_link}",
