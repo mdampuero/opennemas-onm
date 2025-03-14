@@ -166,7 +166,7 @@ class OnmAIController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('PROMPT_LIST')")
+     * @Security("hasPermission('ONMAI_ADMIN')")
      */
     public function instancesAction(Request $request)
     {
@@ -276,7 +276,7 @@ class OnmAIController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('PROMPT_LIST')")
+     * @Security("hasPermission('ONMAI_ADMIN')")
      */
     public function promptListAction(Request $request)
     {
@@ -306,7 +306,7 @@ class OnmAIController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('PROMPT_CREATE')")
+     * @Security("hasPermission('ONMAI_ADMIN')")
      */
     public function promptNewAction()
     {
@@ -322,7 +322,7 @@ class OnmAIController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("hasPermission('PROMPT_CREATE')")
+     * @Security("hasPermission('ONMAI_ADMIN')")
      */
     public function promptSaveAction(Request $request)
     {
@@ -350,7 +350,7 @@ class OnmAIController extends Controller
      *
      * @return Response The response object.
      *
-     * @Security("hasPermission('PROMPT_UPDATE')")
+     * @Security("hasPermission('ONMAI_ADMIN')")
      */
     public function promptShowAction($id)
     {
@@ -372,7 +372,7 @@ class OnmAIController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('PROMPT_DELETE')")
+     * @Security("hasPermission('ONMAI_ADMIN')")
      */
     public function promptDeleteAction($id)
     {
@@ -392,7 +392,7 @@ class OnmAIController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('PROMPT_DELETE')")
+     * @Security("hasPermission('ONMAI_ADMIN')")
      */
     public function promptDeleteSelectedAction(Request $request)
     {
@@ -443,7 +443,7 @@ class OnmAIController extends Controller
      *
      * @return Response          The response object.
      *
-     * @Security("hasPermission('PROMPT_UPDATE')")
+     * @Security("hasPermission('ONMAI_ADMIN')")
      */
     public function promptUpdateAction(Request $request, $id)
     {
@@ -483,7 +483,7 @@ class OnmAIController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('PROMPT_CREATE')")
+     * @Security("hasPermission('ONMAI_ADMIN')")
      */
     public function promptAutocompleteAction(Request $request)
     {
@@ -579,7 +579,7 @@ class OnmAIController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('PROMPT_LIST')")
+     * @Security("hasPermission('ONMAI_ADMIN')")
      */
     public function promptConfigDownloadAction()
     {
@@ -616,7 +616,7 @@ class OnmAIController extends Controller
      *
      * @return JsonResponse The response object.
      *
-     * @Security("hasPermission('PROMPT_CREATE')")
+     * @Security("hasPermission('ONMAI_ADMIN')")
      */
     public function promptConfigUploadAction(Request $request)
     {

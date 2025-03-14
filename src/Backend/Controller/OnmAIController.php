@@ -37,6 +37,8 @@ class OnmAIController extends BackendController
 
     /**
      * Configures the OnmAI notifications module
+     * @Security("hasExtension('es.openhost.module.onmai')
+     *     and hasPermission('ONMAI_ADMIN')")
      */
     public function configAction()
     {
@@ -45,6 +47,8 @@ class OnmAIController extends BackendController
 
     /**
      * Dashboard OnmAI
+     * @Security("hasExtension('es.openhost.module.onmai')
+     *     and hasPermission('ONMAI_ADMIN')")
      */
     public function dashboardAction()
     {

@@ -35,13 +35,7 @@ class PromptController extends ApiController
      * {@inheritdoc}
      */
     protected $permissions = [
-        'create' => 'PROMPT_CREATE',
-        'delete' => 'PROMPT_DELETE',
-        'list'   => 'PROMPT_ADMIN',
-        'patch'  => 'PROMPT_UPDATE',
-        'save'   => 'PROMPT_CREATE',
-        'show'   => 'PROMPT_UPDATE',
-        'update' => 'PROMPT_UPDATE',
+        'list'   => 'ONMAI_ADMIN'
     ];
 
     /**
