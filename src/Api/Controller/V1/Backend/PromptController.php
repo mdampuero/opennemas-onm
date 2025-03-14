@@ -79,6 +79,7 @@ class PromptController extends ApiController
         $response     = $us->getList($oql);
         $itemsManager = $us->responsify($repository->findBy($oql));
         $items        = $helperLocale->translateAttributes($us->responsify($response['items']), ['mode', 'field']);
+        $itemsManager = $helperLocale->translateAttributes($us->responsify($itemsManager), ['mode', 'field']);
 
         $this->roleFilters = ($request->query->get('field')) ? [ 'field' => $request->query->get('field') ] : null;
 
