@@ -32,7 +32,7 @@ class OnmAIController extends BackendController
      * @var type
      */
     protected $permissions = [
-        'list'   => 'OPENAI_ADMIN',
+        'list' => 'ONMAI_ADMIN',
     ];
 
     /**
