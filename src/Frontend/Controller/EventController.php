@@ -47,7 +47,7 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $queries = [
-        'list' => [ 'page' ]
+        'list' => [ 'page', 'category', 'tag' ]
     ];
 
     /**
@@ -149,11 +149,11 @@ class EventController extends FrontendController
 
         // Base de la consulta con INNER JOINs esenciales
         $oql = sprintf(
-            'SELECT * FROM contents '
-            . 'INNER JOIN contentmeta AS cm1 ON contents.pk_content = cm1.fk_content '
-            . 'AND cm1.meta_name = "event_start_date" '
-            . 'LEFT JOIN contentmeta AS cm2 ON contents.pk_content = cm2.fk_content '
-            . 'AND cm2.meta_name = "event_end_date" '
+            'select * from contents '
+            . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
+            . 'and cm1.meta_name = "event_start_date" '
+            . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
+            . 'and cm2.meta_name = "event_end_date" '
         );
 
         // Check if the category is not empty.
@@ -164,15 +164,15 @@ class EventController extends FrontendController
             // If it's a Category entity, join the content_category table.
             if ($matchCategory instanceof \Common\Model\Entity\Category) {
                 $oql .= sprintf(
-                    'JOIN content_category cc ON contents.pk_content = cc.content_id '
-                    . 'AND cc.category_id = %d ',
+                    'join content_category cc ob contents.pk_content = cc.content_id '
+                    . 'and cc.category_id = %d ',
                     $matchCategory->id
                 );
             // If it's a Tag entity, join the contents_tags table.
             } elseif ($matchCategory instanceof \Common\Model\Entity\Tag) {
                 $oql .= sprintf(
-                    'JOIN contents_tags ct ON contents.pk_content = ct.content_id '
-                    . 'AND ct.tag_id = %d ',
+                    'join contents_tags ct on contents.pk_content = ct.content_id '
+                    . 'and ct.tag_id = %d ',
                     $matchCategory->id
                 );
             }
@@ -195,18 +195,18 @@ class EventController extends FrontendController
             // If there are matched tags, construct the SQL query with the IN clause
             if ($tagIds) {
                 $oql .= sprintf(
-                    'JOIN contents_tags ct ON contents.pk_content = ct.content_id '
-                    . 'AND ct.tag_id IN (%s) ',
+                    'join contents_tags ct on contents.pk_content = ct.content_id '
+                    . 'and ct.tag_id in (%s) ',
                     implode(',', $tagIds)
                 );
             }
         }
 
         $oql .= sprintf(
-            'WHERE content_type_name="event" AND content_status=1 AND in_litter=0 '
-            . 'AND (cm1.meta_value >= "%s" OR (cm1.meta_value < "%s" AND cm2.meta_value >= "%s")) '
-            . 'AND (starttime IS NULL OR starttime < "%s") '
-            . 'AND (endtime IS NULL OR endtime > "%s") ',
+            'where content_type_name="event" and content_status=1 and in_litter=0 '
+            . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s")) '
+            . 'and (starttime is null or starttime < "%s") '
+            . 'and (endtime is null or endtime > "%s") ',
             gmdate('Y-m-d'),
             gmdate('Y-m-d'),
             gmdate('Y-m-d'),
