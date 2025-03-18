@@ -159,7 +159,7 @@ class EventController extends FrontendController
         // Check if the category is not empty.
         if (!empty($category)) {
             // Match the category using the provided slug.
-            $matchCategory = $this->matchCategory($params['category']);
+            $matchCategory = $this->matchCategory($category);
 
             // If it's a Category entity, join the content_category table.
             if ($matchCategory instanceof \Common\Model\Entity\Category) {
@@ -181,7 +181,7 @@ class EventController extends FrontendController
         // Check if tags are not empty.
         if (!empty($tags)) {
             // Match the tags using the provided slug.
-            $matchTags = $this->matchTag($params['tags']);
+            $matchTags = $this->matchTag($tags);
 
             // Join the contents_tags table using the matched tag's ID.
             $oql .= sprintf(
