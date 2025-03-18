@@ -256,6 +256,17 @@ class EventController extends FrontendController
         $params['tags'] = $this->getTags($items);
     }
 
+    /**
+     * Matches a category by its slug.
+     *
+     * This method checks if the category name matches the given slug, considering
+     * whether multilanguage support is enabled. If no category is found, it falls back
+     * to matching tags.
+     *
+     * @param string $slug The slug to match.
+     *
+     * @return mixed|null The matched category, or null if not found.
+     */
     protected function matchCategory(string $slug)
     {
         $coreInstance    = $this->container->get('core.instance');
@@ -274,6 +285,16 @@ class EventController extends FrontendController
         }
     }
 
+    /**
+     * Matches a tag by its slug.
+     *
+     * This method attempts to find a tag based on the given slug.
+     * If no tag is found, the method returns null.
+     *
+     * @param string $slug The slug to match.
+     *
+     * @return mixed|null The matched tags, or null if not found.
+     */
     protected function matchTag(string $slug)
     {
         $oql = sprintf('slug in ["%s"]', $slug);
