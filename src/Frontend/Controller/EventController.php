@@ -156,16 +156,19 @@ class EventController extends FrontendController
             . 'AND cm2.meta_name = "event_end_date" '
         );
 
+        // Check if the category is not empty.
         if (!empty($category)) {
+            // Match the category using the provided slug.
             $matchCategory = $this->matchCategory($params['category']);
 
-            if ($matchCategory instanceof \Common\Model\Entity\Category
-            ) {
+            // If it's a Category entity, join the content_category table.
+            if ($matchCategory instanceof \Common\Model\Entity\Category) {
                 $oql .= sprintf(
                     'JOIN content_category cc ON contents.pk_content = cc.content_id '
                     . 'AND cc.category_id = %d ',
                     $matchCategory->id
                 );
+            // If it's a Tag entity, join the contents_tags table.
             } elseif ($matchCategory instanceof \Common\Model\Entity\Tag) {
                 $oql .= sprintf(
                     'JOIN contents_tags ct ON contents.pk_content = ct.content_id '
@@ -175,16 +178,18 @@ class EventController extends FrontendController
             }
         }
 
+        // Check if tags are not empty.
         if (!empty($tags)) {
+            // Match the tags using the provided slug.
             $matchTags = $this->matchTag($params['tags']);
 
+            // Join the contents_tags table using the matched tag's ID.
             $oql .= sprintf(
                 'JOIN contents_tags ct ON contents.pk_content = ct.content_id '
                 . 'AND ct.tag_id IN [%d] ',
                 $matchTags->id
             );
         }
-
 
         $oql .= sprintf(
             'WHERE content_type_name="event" AND content_status=1 AND in_litter=0 '
