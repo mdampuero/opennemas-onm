@@ -180,15 +180,26 @@ class EventController extends FrontendController
 
         // Check if tags are not empty.
         if (!empty($tags)) {
-            // Match the tags using the provided slug.
-            $matchTags = $this->matchTag($tags);
+            $tagsArray = explode(',', $tags);
+            $tagIds    = [];
 
-            // Join the contents_tags table using the matched tag's ID.
-            $oql .= sprintf(
-                'JOIN contents_tags ct ON contents.pk_content = ct.content_id '
-                . 'AND ct.tag_id IN [%d] ',
-                $matchTags->id
-            );
+            // Loop through each tag and attempt to match them
+            foreach ($tagsArray as $tag) {
+                $matchTags = $this->matchTag($tag);
+
+                if ($matchTags) {
+                    $tagIds[] = $matchTags->id;
+                }
+            }
+
+            // If there are matched tags, construct the SQL query with the IN clause
+            if ($tagIds) {
+                $oql .= sprintf(
+                    'JOIN contents_tags ct ON contents.pk_content = ct.content_id '
+                    . 'AND ct.tag_id IN (%s) ',
+                    implode(',', $tagIds)
+                );
+            }
         }
 
         $oql .= sprintf(
