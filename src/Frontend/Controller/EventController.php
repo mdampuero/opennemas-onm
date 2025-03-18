@@ -9,7 +9,7 @@
  */
 namespace Frontend\Controller;
 
-use Common\Core\Controller\Controller;
+use Api\Exception\GetItemException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,7 +57,7 @@ class EventController extends FrontendController
      */
     protected $routes = [
         'list'    => 'frontend_events',
-        'tagList' => 'frontend_event_taglist',
+        'listSearch'    => 'frontend_events_list',
         'show'    => 'frontend_event_show'
     ];
 
@@ -137,30 +137,62 @@ class EventController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function hydrateList(array &$params = []) : void
+    protected function hydrateList(array &$params = []): void
     {
-        $date          = gmdate('Y-m-d H:i:s');
-        $eventSettings = $this->get('orm.manager')
+        $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('event_settings', false);
+        $date     = gmdate('Y-m-d H:i:s');
 
-        // Invalid page provided as parameter
         if ($params['page'] <= 0
-            || $params['page'] > $this->getParameter('core.max_page')
-        ) {
+            || $params['page'] > $this->getParameter('core.max_page')) {
             throw new ResourceNotFoundException();
         }
 
+        // Base de la consulta con INNER JOINs esenciales
         $oql = sprintf(
-            'select * from contents '
-            . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
-            . 'and cm1.meta_name = "event_start_date" '
-            . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
-            . 'and cm2.meta_name = "event_end_date" '
-            . 'where content_type_name="event" and content_status=1 and in_litter=0 '
-            . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s")) '
-            . 'and (starttime is null or starttime < "%s") '
-            . 'and (endtime is null or endtime > "%s") ',
+            'SELECT * FROM contents '
+            . 'INNER JOIN contentmeta AS cm1 ON contents.pk_content = cm1.fk_content '
+            . 'AND cm1.meta_name = "event_start_date" '
+            . 'LEFT JOIN contentmeta AS cm2 ON contents.pk_content = cm2.fk_content '
+            . 'AND cm2.meta_name = "event_end_date" '
+        );
+
+        if (!empty($params['category'])) {
+            $category = $this->matchCategory($params['category']);
+
+            if ($category instanceof \Common\Model\Entity\Category
+            ) {
+                $oql .= sprintf(
+                    'JOIN content_category cc ON contents.pk_content = cc.content_id '
+                    . 'AND cc.category_id = %d ',
+                    $category->id
+                );
+            } elseif ($category instanceof \Common\Model\Entity\Tag) {
+                $oql .= sprintf(
+                    'JOIN contents_tags ct ON contents.pk_content = ct.content_id '
+                    . 'AND ct.tag_id = %d ',
+                    $category->id
+                );
+            }
+        }
+
+        if (!empty($params['tags'])) {
+            $tags = $this->matchTag($params['tags']);
+
+            $oql .= sprintf(
+                'JOIN contents_tags ct ON contents.pk_content = ct.content_id '
+                . 'AND ct.tag_id = %d ',
+                $tags->id
+            );
+        }
+
+
+        $oql .= sprintf(
+            'WHERE content_type_name="event" AND content_status=1 AND in_litter=0 '
+            . 'AND (cm1.meta_value >= "%s" OR (cm1.meta_value < "%s" AND cm2.meta_value >= "%s")) '
+            . 'AND (starttime IS NULL OR starttime < "%s") '
+            . 'AND (endtime IS NULL OR endtime > "%s") ',
             gmdate('Y-m-d'),
             gmdate('Y-m-d'),
             gmdate('Y-m-d'),
@@ -168,7 +200,7 @@ class EventController extends FrontendController
             $date
         );
 
-        if ($eventSettings["hide_current_events"] ?? false) {
+        if ($settings["hide_current_events"] ?? false) {
             $oql .= sprintf(
                 'and (cm1.meta_value >= "%s") ',
                 gmdate('Y-m-d'),
@@ -204,6 +236,14 @@ class EventController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
+        $route = [
+            'name' => 'frontend_events',
+            'params' => [
+                'category' => $params['category'] ?? null,
+                'tag' => $params['tag'] ?? null
+            ]
+        ];
+
         $params['x-tags'] .= ',event-frontpage';
 
         $params['contents']   = $items;
@@ -212,10 +252,41 @@ class EventController extends FrontendController
             'epp'         => $params['epp'],
             'page'        => $params['page'],
             'total'       => $total,
-            'route'       => 'frontend_events'
+            'route'       => $route
         ]);
 
         $params['tags'] = $this->getTags($items);
+    }
+
+    protected function matchCategory(string $slug)
+    {
+        $coreInstance    = $this->container->get('core.instance');
+        $categoryService = $this->get('api.service.category');
+
+        $oql = $coreInstance->hasMultilanguage()
+            ? sprintf('name regexp "(.+\"|^)%s(\".+|$)"', $slug)
+            : sprintf('name = "%s"', $slug);
+
+        try {
+            $category = $categoryService->getItemBy($oql);
+
+            return $category;
+        } catch (GetItemException $e) {
+            return $this->matchTag($slug);
+        }
+    }
+
+    protected function matchTag(string $slug)
+    {
+        $oql = sprintf('slug = "%s"', $slug);
+
+        try {
+            $tags = $this->get('api.service.tag')->getItemBy($oql);
+
+            return $tags;
+        } catch (GetItemException $e) {
+            return;
+        }
     }
 
     /**
