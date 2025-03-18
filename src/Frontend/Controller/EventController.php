@@ -139,6 +139,8 @@ class EventController extends FrontendController
             ->getDataSet('Settings', 'instance')
             ->get('event_settings', false);
         $date     = gmdate('Y-m-d H:i:s');
+        $category = isset($params['category']) ? $params['category'] : null;
+        $tags     = isset($params['tag']) ? $params['tag'] : null;
 
         if ($params['page'] <= 0
             || $params['page'] > $this->getParameter('core.max_page')) {
@@ -154,32 +156,32 @@ class EventController extends FrontendController
             . 'AND cm2.meta_name = "event_end_date" '
         );
 
-        if (!empty($params['category'])) {
-            $category = $this->matchCategory($params['category']);
+        if (!empty($category)) {
+            $matchCategory = $this->matchCategory($params['category']);
 
-            if ($category instanceof \Common\Model\Entity\Category
+            if ($matchCategory instanceof \Common\Model\Entity\Category
             ) {
                 $oql .= sprintf(
                     'JOIN content_category cc ON contents.pk_content = cc.content_id '
                     . 'AND cc.category_id = %d ',
-                    $category->id
+                    $matchCategory->id
                 );
-            } elseif ($category instanceof \Common\Model\Entity\Tag) {
+            } elseif ($matchCategory instanceof \Common\Model\Entity\Tag) {
                 $oql .= sprintf(
                     'JOIN contents_tags ct ON contents.pk_content = ct.content_id '
                     . 'AND ct.tag_id = %d ',
-                    $category->id
+                    $matchCategory->id
                 );
             }
         }
 
-        if (!empty($params['tags'])) {
-            $tags = $this->matchTag($params['tags']);
+        if (!empty($tags)) {
+            $matchTags = $this->matchTag($params['tags']);
 
             $oql .= sprintf(
                 'JOIN contents_tags ct ON contents.pk_content = ct.content_id '
                 . 'AND ct.tag_id IN [%d] ',
-                $tags->id
+                $matchTags->id
             );
         }
 
