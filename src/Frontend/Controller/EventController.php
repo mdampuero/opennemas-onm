@@ -164,7 +164,7 @@ class EventController extends FrontendController
             // If it's a Category entity, join the content_category table.
             if ($matchCategory instanceof \Common\Model\Entity\Category) {
                 $oql .= sprintf(
-                    'join content_category cc ob contents.pk_content = cc.content_id '
+                    'join content_category cc on contents.pk_content = cc.content_id '
                     . 'and cc.category_id = %d ',
                     $matchCategory->id
                 );
@@ -322,5 +322,16 @@ class EventController extends FrontendController
         } catch (GetItemException $e) {
             return;
         }
+    }
+
+    protected function isValidResource($searchParam, $placeParam, $search, $place)
+    {
+        if (empty($search) && empty($place) && (!empty($searchParam) || !empty($placeParam))) {
+            return false;
+        }
+        if (!empty($searchParam) && !empty($placeParam) && (empty($search) || empty($place))) {
+            return false;
+        }
+        return true;
     }
 }

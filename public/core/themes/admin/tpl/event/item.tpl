@@ -149,7 +149,6 @@
         <div class="controls">
           <select class="block" id="event_type" name="event_type" ng-model="item.event_type">
             <option value="" disabled selected>Selecciona un tipo de evento</option>
-            <!-- Eventos Corporativos y Empresariales -->
             <optgroup label="Eventos Corporativos y Empresariales">
               <option value="conferencias">Conferencias</option>
               <option value="seminarios">Seminarios</option>
@@ -162,8 +161,6 @@
               <option value="eventos-de-team-building">Eventos de team building</option>
               <option value="cumbres-y-foros">Cumbres y foros</option>
             </optgroup>
-
-            <!-- Eventos Sociales -->
             <optgroup label="Eventos Sociales">
               <option value="bodas">Bodas</option>
               <option value="bautizos">Bautizos</option>
@@ -174,8 +171,6 @@
               <option value="baby-showers">Baby showers</option>
               <option value="reuniones-familiares">Reuniones familiares</option>
             </optgroup>
-
-            <!-- Eventos Culturales y Artísticos -->
             <optgroup label="Eventos Culturales y Artísticos">
               <option value="conciertos">Conciertos</option>
               <option value="obras-de-teatro">Obras de teatro</option>
@@ -184,8 +179,6 @@
               <option value="festivales-culturales">Festivales culturales</option>
               <option value="proyecciones-de-cine">Proyecciones de cine</option>
             </optgroup>
-
-            <!-- Eventos Deportivos -->
             <optgroup label="Eventos Deportivos">
               <option value="maratones-y-carreras">Maratones y carreras</option>
               <option value="torneos-y-campeonatos">Torneos y campeonatos</option>
@@ -193,8 +186,6 @@
               <option value="clases-y-entrenamientos-abiertos">Clases y entrenamientos abiertos</option>
               <option value="esports">Esports (competencias de videojuegos)</option>
             </optgroup>
-
-            <!-- Eventos Educativos -->
             <optgroup label="Eventos Educativos">
               <option value="clases-y-cursos">Clases y cursos</option>
               <option value="conferencias-academicas">Conferencias académicas</option>
@@ -202,16 +193,12 @@
               <option value="debates-y-mesas-redondas">Debates y mesas redondas</option>
               <option value="talleres-practicos">Talleres prácticos</option>
             </optgroup>
-
-            <!-- Eventos Religiosos -->
             <optgroup label="Eventos Religiosos">
               <option value="misas-y-cultos">Misas y cultos</option>
               <option value="peregrinaciones">Peregrinaciones</option>
               <option value="retiros-espirituales">Retiros espirituales</option>
               <option value="festividades-religiosas">Festividades religiosas</option>
             </optgroup>
-
-            <!-- Eventos Benéficos y Comunitarios -->
             <optgroup label="Eventos Benéficos y Comunitarios">
               <option value="galas-beneficas">Galas benéficas</option>
               <option value="subastas-solidarias">Subastas solidarias</option>
@@ -219,7 +206,6 @@
               <option value="voluntariados">Voluntariados</option>
               <option value="eventos-de-concienciacion">Eventos de concienciación</option>
             </optgroup>
-
           </select>
         </div>
       </div>
