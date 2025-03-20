@@ -163,14 +163,17 @@ class EventController extends FrontendController
                     $oql .= sprintf(
                         'inner join contentmeta as cm3 on contents.pk_content = cm3.fk_content '
                         . 'AND cm3.meta_name = "event_type" AND cm3.meta_value = "%s" ',
-                        addslashes($type)
+                        $type
                     );
                 } elseif ($this->matchCategory($type)) {
                     $oql .= $this->buildCategoryJoin($type);
                 } elseif (empty($tags)) {
-                    // Solo si no hay tags, se trata como una etiqueta.
                     $oql .= $this->buildTagJoin($type);
                 }
+            }
+
+            if (!empty($tags)) {
+                $oql .= $this->buildTagJoin($tags);
             }
         }
 
@@ -344,9 +347,9 @@ class EventController extends FrontendController
         $oql = sprintf('slug in ["%s"]', $slug);
 
         try {
-            $tags = $this->get('api.service.tag')->getList($oql);
+            $tags = $this->get('api.service.tag')->getItemBy($oql);
 
-            return !empty($tags['items']);
+            return !empty($tags) ? $tags : null;
         } catch (GetItemException $e) {
             return false;
         }
