@@ -93,6 +93,9 @@
                       <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
                     </th>
                     <th>
+                      {t}Model{/t}
+                    </th>
+                    <th>
                       {t}Mode{/t}
                     </th>
                     <th>
@@ -123,11 +126,15 @@
                       </div>
                     </td>
                     <td>
+                      <ng-container ng-if="item.model == null"><i>{t}Default model{/t}</i></ng-container>
+                      <ng-container ng-if="item.model != null">[% item.model %]</ng-container>
+                    </td>
+                    <td>
                       [% item.mode %]
                     </td>
                     <td>
-                      <ng-container ng-if="item.mode == 'Transformation'"></ng-container>
-                      <ng-container ng-if="item.mode != 'Transformation'">[% item.field %]</ng-container>
+                      <ng-container ng-if="item.mode == 'Agency'"></ng-container>
+                      <ng-container ng-if="item.mode != 'Agency'">[% item.field %]</ng-container>
                     </td>
                     <td>
                       [% item.tone %]
@@ -152,7 +159,7 @@
     </uib-tab>
     <uib-tab heading="{t}Roles{/t}" ng-click="selectTab('roles')">
       <ng-container>
-        <div class="ng-cloak">
+        <div class="ng-cloak p-b-50">
           <div class="m-b-20">
               <button class="btn btn-loading btn-success text-uppercase pull-right" ng-click="save()" ng-disabled="promptForm.$invalid || saving">
                   <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
@@ -166,7 +173,7 @@
                   <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required maxlength="64">
                 </div>
                 <div class="col-lg-2 col-md-3">
-                  <ui-select name="mode" class="form-control" theme="select2" ng-model="role.field" search-enabled="false" required ng-init="options = [ { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Introductions{/t}', key: 'introductions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
+                  <ui-select name="mode" class="form-control" theme="select2" ng-model="role.field" search-enabled="false" required ng-init="options = [ { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Descriptions{/t}', key: 'descriptions'}, { name: '{t}Bodies{/t}', key: 'bodies' }, { name: '{t}Agency{/t}', key: 'Agency' } ]">
                     <ui-select-match>
                       [% $select.selected.name %]
                     </ui-select-match>
@@ -199,7 +206,7 @@
     </uib-tab>
     <uib-tab heading="{t}Tones{/t}" ng-click="selectTab('tones')">
       <ng-container>
-        <div class="ng-cloak">
+        <div class="ng-cloak p-b-50">
           <div class="m-b-20">
               <button class="btn btn-loading btn-success text-uppercase pull-right" ng-click="save()" ng-disabled="promptForm.$invalid || saving">
                   <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
@@ -236,7 +243,7 @@
     </uib-tab>
     <uib-tab heading="{t}Instructions{/t}" ng-click="selectTab('instructions')">
       <ng-container>
-        <div class="ng-cloak">
+        <div class="ng-cloak p-b-50">
           <div class="m-b-20">
               <button class="btn btn-loading btn-success text-uppercase pull-right" ng-click="save()" ng-disabled="promptForm.$invalid || saving">
                   <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
@@ -257,7 +264,7 @@
                   </ui-select>
                 </div>
                 <div class="col-lg-2 col-md-3 m-b-15">
-                  <ui-select name="field" class="form-control" theme="select2" ng-model="item.field" search-enabled="false" required ng-init="options = [ { name: '{t}All{/t}', key: 'all'}, { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Introductions{/t}', key: 'introductions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
+                  <ui-select name="field" class="form-control" theme="select2" ng-model="item.field" search-enabled="false" required ng-init="options = [ { name: '{t}All{/t}', key: 'all'}, { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Descriptions{/t}', key: 'description'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
                     <ui-select-match>
                       [% $select.selected.name %]
                     </ui-select-match>

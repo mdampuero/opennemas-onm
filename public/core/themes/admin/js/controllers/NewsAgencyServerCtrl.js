@@ -235,7 +235,7 @@
           $scope.waiting = true;
           var oqlQuery   = oqlEncoder.getOql({
             epp: 1000,
-            mode: 'Transformation',
+            mode: 'Agency',
             orderBy: { name: 'asc' },
             page: 1,
           });

@@ -196,14 +196,18 @@ class AIHelper
      *
      * @return array The current settings including engine, model, and associated parameters.
      */
-    public function getCurrentSettings()
+    public function getCurrentSettings($model = null)
     {
         $managerSettings  = $this->getManagerSettings();
         $instanceSettings = $this->getInstanceSettings();
 
-        $engine = !empty($instanceSettings['model'])
-            ? $instanceSettings['model']
-            : $managerSettings['model'];
+        if ($model) {
+            $engine = $model;
+        } else {
+            $engine = !empty($instanceSettings['model'])
+                ? $instanceSettings['model']
+                : $managerSettings['model'];
+        }
 
         $engineAndModel  = $this->splitEngineAndModel($engine);
         $currentSettings = [];
@@ -463,7 +467,7 @@ class AIHelper
     {
         $this->getInstructions();
 
-        $data = $this->getCurrentSettings();
+        $data = $this->getCurrentSettings($messages['promptSelected']['model'] ?? null);
 
         $data['messages'] = [];
 

@@ -471,7 +471,8 @@ class OnmAIController extends Controller
         $settingOpenai  = [
             'onmai_roles'        => $serviceManager->get('onmai_roles') ?? [],
             'onmai_tones'        => $serviceManager->get('onmai_tones') ?? [],
-            'onmai_instructions' => $serviceManager->get('onmai_instructions') ?? []
+            'onmai_instructions' => $serviceManager->get('onmai_instructions') ?? [],
+            'onmai_models'       => $this->get($this->helper)->getModels()
         ];
         return $settingOpenai;
     }

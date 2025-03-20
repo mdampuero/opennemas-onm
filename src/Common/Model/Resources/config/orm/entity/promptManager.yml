@@ -12,6 +12,7 @@ orm:
                 tone:      string
                 role:      string
                 prompt:    string
+                model:     string
             converters:
                 default:
                     class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
@@ -52,6 +53,9 @@ orm:
                         prompt:
                             type: text
                             options: { default: null, length: 65532, notnull: false }
+                        model:
+                            type: text
+                            options: { default: null, length: 255, notnull: false }
                     index:
                         -
                             name: PRIMARY

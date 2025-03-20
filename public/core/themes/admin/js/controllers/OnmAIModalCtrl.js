@@ -31,7 +31,7 @@
         $scope.waiting                 = false;
         $scope.edit_input              = false;
         $scope.template                = template;
-        $scope.displayMode             = $scope.template.AIFieldType === 'introductions' || $scope.template.AIFieldType === 'bodies' ? 'textarea' : 'input';
+        $scope.displayMode             = $scope.template.AIFieldType === 'descriptions' || $scope.template.AIFieldType === 'bodies' ? 'textarea' : 'input';
         $scope.template.roleSelected   = null;
         $scope.template.promptSelected = null;
         $scope.template.toneSelected   = null;
@@ -67,15 +67,7 @@
             .then(function(response) {
               $scope.prompts = response.data.items;
               $scope.extra = response.data.extra;
-              http.get({ name: 'api_v1_backend_onmai_prompt_get_list_manager', params: { oql: oqlQuery } })
-                .then(function(response) {
-                  $scope.prompts = $scope.prompts.concat(response.data.items);
-                  $scope.extra.languages = response.data.extras.languages;
-                  $scope.setLocale();
-                })
-                .finally(function() {
-                  $scope.waiting = false;
-                });
+              $scope.setLocale();
             })
             .finally(function() {
               $scope.waiting = false;

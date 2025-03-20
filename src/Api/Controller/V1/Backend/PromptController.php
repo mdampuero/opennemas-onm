@@ -58,6 +58,7 @@ class PromptController extends ApiController
         return [
             'tones' => $helperAI->getTones(),
             'roles' => $helperAI->getRoles(true, $this->roleFilters),
+            'languages' => $this->get('core.helper.ai')->getLanguages()
         ];
     }
 
@@ -77,12 +78,13 @@ class PromptController extends ApiController
         $helperLocale = $this->get('core.helper.locale');
         $repository   = $this->get('orm.manager')->getRepository('PromptManager');
         $response     = $us->getList($oql);
-        $itemsManager = $us->responsify($repository->findBy($oql));
         $items        = $helperLocale->translateAttributes($us->responsify($response['items']), ['mode', 'field']);
-        $itemsManager = $helperLocale->translateAttributes($us->responsify($itemsManager), ['mode', 'field']);
+        $itemsManager = $helperLocale->translateAttributes($us->responsify($repository->findBy($oql)), [
+            'mode',
+            'field'
+        ]);
 
-        $this->roleFilters = ($request->query->get('field')) ? [ 'field' => $request->query->get('field') ] : null;
-
+        $this->roleFilters = ($request->query->get('field')) ? ['field' => $request->query->get('field')] : null;
         return [
             'items'      => array_merge($items, $itemsManager),
             'total'      => $response['total'],
@@ -115,25 +117,5 @@ class PromptController extends ApiController
                 'languages' => $this->get('core.helper.ai')->getLanguages()
             ]
         ];
-    }
-
-    /**
-     * Get the value of roleFilters
-     */
-    public function getRoleFilters()
-    {
-        return $this->roleFilters;
-    }
-
-    /**
-     * Set the value of roleFilters
-     *
-     * @return  self
-     */
-    public function setRoleFilters($roleFilters)
-    {
-        $this->roleFilters = $roleFilters;
-
-        return $this;
     }
 }
