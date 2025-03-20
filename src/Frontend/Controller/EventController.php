@@ -10,6 +10,7 @@
 namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
+use Doctrine\ORM\Query\Expr\Func;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,14 +48,14 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $queries = [
-        'list' => [ 'page', 'category', 'tag' ]
+        'list' => [ 'page', 'type', 'tag' ]
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $routes = [
-        'list'    => 'frontend_events',
+        'list'    => 'frontend_events_list',
         'show'    => 'frontend_event_show'
     ];
 
@@ -139,7 +140,7 @@ class EventController extends FrontendController
             ->getDataSet('Settings', 'instance')
             ->get('event_settings', false);
         $date     = gmdate('Y-m-d H:i:s');
-        $category = isset($params['category']) ? $params['category'] : null;
+        $type     = isset($params['type']) ? $params['type'] : null;
         $tags     = isset($params['tag']) ? $params['tag'] : null;
 
         if ($params['page'] <= 0
@@ -156,49 +157,20 @@ class EventController extends FrontendController
             . 'and cm2.meta_name = "event_end_date" '
         );
 
-        // Check if the category is not empty.
-        if (!empty($category)) {
-            // Match the category using the provided slug.
-            $matchCategory = $this->matchCategory($category);
-
-            // If it's a Category entity, join the content_category table.
-            if ($matchCategory instanceof \Common\Model\Entity\Category) {
-                $oql .= sprintf(
-                    'join content_category cc on contents.pk_content = cc.content_id '
-                    . 'and cc.category_id = %d ',
-                    $matchCategory->id
-                );
-            // If it's a Tag entity, join the contents_tags table.
-            } elseif ($matchCategory instanceof \Common\Model\Entity\Tag) {
-                $oql .= sprintf(
-                    'join contents_tags ct on contents.pk_content = ct.content_id '
-                    . 'and ct.tag_id = %d ',
-                    $matchCategory->id
-                );
-            }
-        }
-
-        // Check if tags are not empty.
-        if (!empty($tags)) {
-            $tagsArray = explode(',', $tags);
-            $tagIds    = [];
-
-            // Loop through each tag and attempt to match them
-            foreach ($tagsArray as $tag) {
-                $matchTags = $this->matchTag($tag);
-
-                if ($matchTags) {
-                    $tagIds[] = $matchTags->id;
+        if (!empty($type) || !empty($tags)) {
+            if (!empty($type)) {
+                if ($this->matchEventType($type)) {
+                    $oql .= sprintf(
+                        'inner join contentmeta as cm3 on contents.pk_content = cm3.fk_content '
+                        . 'AND cm3.meta_name = "event_type" AND cm3.meta_value = "%s" ',
+                        addslashes($type) // Protección contra SQL Injection
+                    );
+                } elseif ($this->matchCategory($type)) {
+                    $oql .= $this->buildCategoryJoin($type);
+                } elseif (empty($tags)) {
+                    // Solo si no hay tags, se trata como una etiqueta.
+                    $oql .= $this->buildTagJoin($type);
                 }
-            }
-
-            // If there are matched tags, construct the SQL query with the IN clause
-            if ($tagIds) {
-                $oql .= sprintf(
-                    'join contents_tags ct on contents.pk_content = ct.content_id '
-                    . 'and ct.tag_id in (%s) ',
-                    implode(',', $tagIds)
-                );
             }
         }
 
@@ -250,14 +222,19 @@ class EventController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
+        $routeType = $type ?? '';
+        $routeTag  = $tags ?? '';
+
         $route = [
-            'name' => 'frontend_events',
+            'name' => 'frontend_events_list',
             'params' => [
-                'category' => $params['category'] ?? null,
-                'tag' => $params['tag'] ?? null
+                'type' => $routeType, // even-type, category or tag
+                'tag'  => $routeTag // tag
             ]
         ];
 
+        /// local.domain/event/lugo (category)/tag --> correcta
+        /// local.domain/event/tag (tag)/lugo/ --> incorrecta (2 parametros) -> no tag
         $params['x-tags'] .= ',event-frontpage';
 
         $params['contents']   = $items;
@@ -271,6 +248,55 @@ class EventController extends FrontendController
 
         $params['tags'] = $this->getTags($items);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function buildCategoryJoin($type)
+    {
+        return sprintf(
+            'join content_category cc on contents.pk_content = cc.content_id '
+            . 'and cc.category_id = %d ',
+            $matchCategory->id
+        );
+    }
+
+    protected function buildTagJoin($tags)
+    {
+        $tagsArray = explode(',', $tags);
+        $tagIds    = array_filter(array_map(function ($tag) {
+            $matchTags = $this->matchTag($tag);
+            return $matchTags ? $matchTags->id : null;
+        }, $tagsArray));
+
+        if ($tagIds) {
+            return sprintf(
+                'join contents_tags ct on contents.pk_content = ct.content_id '
+                . 'and ct.tag_id in (%s) ',
+                implode(',', $tagIds)
+            );
+        }
+        return '';
+    }
+
+    protected function matchEventType(string $slug): bool
+    {
+        $coreInstance = $this->container->get('core.instance');
+        $eventService = $this->get('api.service.event');
+
+        $oql = $coreInstance->hasMultilanguage()
+            ? sprintf('event_type regexp "(.+\"|^)%s(\".+|$)"', $slug)
+            : sprintf('event_type = "%s"', $slug);
+
+        try {
+            $event = $eventService->getList($oql);
+
+            return !empty($event['items']);
+        } catch (GetItemException $e) {
+            return false;
+        }
+    }
+
 
     /**
      * Matches a category by its slug.
@@ -293,11 +319,11 @@ class EventController extends FrontendController
             : sprintf('name = "%s"', $slug);
 
         try {
-            $category = $categoryService->getItemBy($oql);
+            $category = $categoryService->getList($oql);
 
-            return $category;
+            return !empty($category['items']);
         } catch (GetItemException $e) {
-            return $this->matchTag($slug);
+            return false;
         }
     }
 
@@ -316,20 +342,20 @@ class EventController extends FrontendController
         $oql = sprintf('slug in ["%s"]', $slug);
 
         try {
-            $tags = $this->get('api.service.tag')->getItemBy($oql);
+            $tags = $this->get('api.service.tag')->getList($oql);
 
-            return $tags;
+            return !empty($tags['items']);
         } catch (GetItemException $e) {
-            return;
+            return false;
         }
     }
 
-    protected function isValidResource($searchParam, $placeParam, $search, $place)
+    protected function isValidResource($categoryParam, $tagsParam, $category, $tags)
     {
-        if (empty($search) && empty($place) && (!empty($searchParam) || !empty($placeParam))) {
+        if (empty($category) && empty($tags) && (!empty($categoryParam) || !empty($tagsParam))) {
             return false;
         }
-        if (!empty($searchParam) && !empty($placeParam) && (empty($search) || empty($place))) {
+        if (!empty($categoryParam) && !empty($tagsParam) && (empty($category) || empty($tags))) {
             return false;
         }
         return true;

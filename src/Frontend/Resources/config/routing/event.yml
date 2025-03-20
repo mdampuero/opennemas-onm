@@ -1,8 +1,8 @@
 frontend_events_list:
-    path: /events/{category}/{tag}
-    defaults: { _controller: FrontendBundle:Event:list, category: null, tag: null }
+    path: /events/{type}/{tag}
+    defaults: { _controller: FrontendBundle:Event:list, type: null, tag: null }
     requirements:
-        category:  '[^/]+'
+        type:  '[^/]+'
         tag: '[^/]+'
     options:
         l10n: true
