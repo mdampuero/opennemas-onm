@@ -163,7 +163,7 @@ class EventController extends FrontendController
                     $oql .= sprintf(
                         'inner join contentmeta as cm3 on contents.pk_content = cm3.fk_content '
                         . 'AND cm3.meta_name = "event_type" AND cm3.meta_value = "%s" ',
-                        addslashes($type) // Protección contra SQL Injection
+                        addslashes($type)
                     );
                 } elseif ($this->matchCategory($type)) {
                     $oql .= $this->buildCategoryJoin($type);
@@ -254,6 +254,8 @@ class EventController extends FrontendController
      */
     private function buildCategoryJoin($type)
     {
+        $matchCategory = $this->matchCategory($type);
+
         return sprintf(
             'join content_category cc on contents.pk_content = cc.content_id '
             . 'and cc.category_id = %d ',
@@ -319,9 +321,9 @@ class EventController extends FrontendController
             : sprintf('name = "%s"', $slug);
 
         try {
-            $category = $categoryService->getList($oql);
+            $category = $categoryService->getItemBy($oql);
 
-            return !empty($category['items']);
+            return !empty($category) ? $category : null;
         } catch (GetItemException $e) {
             return false;
         }
