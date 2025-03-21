@@ -12,6 +12,7 @@
 namespace Common\Core\Component\Helper;
 
 use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -809,5 +810,21 @@ class ContentHelper
         $now = new \DateTime(null, $timezone);
 
         return $now->getTimeStamp() >= $startTime->getTimeStamp() && $now->getTimeStamp() <= $endTime->getTimeStamp();
+    }
+
+    public function matchEventType(string $type): bool
+    {
+        $coreInstance = $this->container->get('core.instance');
+        $eventService = $coreInstance->get('api.service.event');
+
+        $oql = sprintf('event_type = "%s"', $type);
+
+        try {
+            $event = $eventService->getList($oql);
+
+            return !empty($event['items']);
+        } catch (GetListException $e) {
+            return false;
+        }
     }
 }

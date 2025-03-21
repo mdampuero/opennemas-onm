@@ -10,6 +10,7 @@
 namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
 use Doctrine\ORM\Query\Expr\Func;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
@@ -142,6 +143,7 @@ class EventController extends FrontendController
         $date     = gmdate('Y-m-d H:i:s');
         $type     = isset($params['type']) ? $params['type'] : null;
         $tags     = isset($params['tag']) ? $params['tag'] : null;
+        $ch       = $this->get('core.helper.content');
 
         if ($params['page'] <= 0
             || $params['page'] > $this->getParameter('core.max_page')) {
@@ -157,24 +159,22 @@ class EventController extends FrontendController
             . 'and cm2.meta_name = "event_end_date" '
         );
 
-        if (!empty($type) || !empty($tags)) {
-            if (!empty($type)) {
-                if ($this->matchEventType($type)) {
-                    $oql .= sprintf(
-                        'inner join contentmeta as cm3 on contents.pk_content = cm3.fk_content '
-                        . 'AND cm3.meta_name = "event_type" AND cm3.meta_value = "%s" ',
-                        $type
-                    );
-                } elseif ($this->matchCategory($type)) {
-                    $oql .= $this->buildCategoryJoin($type);
-                } elseif (empty($tags)) {
-                    $oql .= $this->buildTagJoin($type);
-                }
+        if (!empty($type)) {
+            if ($ch->matchEventType($type)) {
+                $oql .= sprintf(
+                    'join contentmeta as cm3 on contents.pk_content = cm3.fk_content '
+                    . 'AND cm3.meta_name = "event_type" AND cm3.meta_value = "%s" ',
+                    $type
+                );
+            } elseif ($this->matchCategory($type)) {
+                $oql .= $this->buildCategoryJoin($type);
+            } elseif (empty($tags)) {
+                $oql .= $this->buildTagJoin($type);
             }
+        }
 
-            if (!empty($tags)) {
-                $oql .= $this->buildTagJoin($tags);
-            }
+        if (!empty($tags)) {
+            $oql .= $this->buildTagJoin($tags);
         }
 
         $oql .= sprintf(
@@ -225,19 +225,14 @@ class EventController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
-        $routeType = $type ?? '';
-        $routeTag  = $tags ?? '';
-
         $route = [
             'name' => 'frontend_events_list',
             'params' => [
-                'type' => $routeType, // even-type, category or tag
-                'tag'  => $routeTag // tag
+                'type' => $type,
+                'tag'  => $tags
             ]
         ];
 
-        /// local.domain/event/lugo (category)/tag --> correcta
-        /// local.domain/event/tag (tag)/lugo/ --> incorrecta (2 parametros) -> no tag
         $params['x-tags'] .= ',event-frontpage';
 
         $params['contents']   = $items;
@@ -255,7 +250,7 @@ class EventController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    private function buildCategoryJoin($type)
+    protected function buildCategoryJoin($type)
     {
         $matchCategory = $this->matchCategory($type);
 
@@ -266,6 +261,9 @@ class EventController extends FrontendController
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function buildTagJoin($tags)
     {
         $tagsArray = explode(',', $tags);
@@ -283,25 +281,6 @@ class EventController extends FrontendController
         }
         return '';
     }
-
-    protected function matchEventType(string $slug): bool
-    {
-        $coreInstance = $this->container->get('core.instance');
-        $eventService = $this->get('api.service.event');
-
-        $oql = $coreInstance->hasMultilanguage()
-            ? sprintf('event_type regexp "(.+\"|^)%s(\".+|$)"', $slug)
-            : sprintf('event_type = "%s"', $slug);
-
-        try {
-            $event = $eventService->getList($oql);
-
-            return !empty($event['items']);
-        } catch (GetItemException $e) {
-            return false;
-        }
-    }
-
 
     /**
      * Matches a category by its slug.
@@ -353,16 +332,5 @@ class EventController extends FrontendController
         } catch (GetItemException $e) {
             return false;
         }
-    }
-
-    protected function isValidResource($categoryParam, $tagsParam, $category, $tags)
-    {
-        if (empty($category) && empty($tags) && (!empty($categoryParam) || !empty($tagsParam))) {
-            return false;
-        }
-        if (!empty($categoryParam) && !empty($tagsParam) && (empty($category) || empty($tags))) {
-            return false;
-        }
-        return true;
     }
 }
