@@ -244,7 +244,7 @@ class EventController extends FrontendController
             'route'       => $route
         ]);
 
-        $params['tags'] = $this->getTags($items);
+        $params['tag'] = $this->matchTag($tags)->name ?? null;
     }
 
     /**
