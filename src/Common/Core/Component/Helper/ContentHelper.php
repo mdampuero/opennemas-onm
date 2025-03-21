@@ -77,6 +77,13 @@ class ContentHelper
     protected $subscriptionHelper;
 
     /**
+     * The locale core.
+     *
+     * @var Locale
+     */
+    protected $locale;
+
+    /**
      * Initializes the ContentHelper.
      *
      * @param Container $container The service container.
