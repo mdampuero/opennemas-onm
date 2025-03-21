@@ -34,7 +34,8 @@
           mode: 'New',
           instances: [ 'Todos' ]
         };
-        $scope.filterRole = '';
+
+        $scope.filterRole = $scope.item.field;
 
         /**
          * @function save
