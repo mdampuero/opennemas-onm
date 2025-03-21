@@ -63,6 +63,13 @@ class ContentHelper
     protected $tagService;
 
     /**
+     * The Event service.
+     *
+     * @var eventService
+     */
+    protected $eventService;
+
+    /**
      * The subscriptions helper.
      *
      * @var SubscriptionHelper
@@ -84,6 +91,7 @@ class ContentHelper
         $this->tagService         = $this->container->get('api.service.tag');
         $this->subscriptionHelper = $this->container->get('core.helper.subscription');
         $this->locale             = $this->container->get('core.locale');
+        $this->eventService       = $this->container->get('api.service.event');
     }
 
     /**
@@ -814,13 +822,10 @@ class ContentHelper
 
     public function matchEventType(string $type): bool
     {
-        $coreInstance = $this->container->get('core.instance');
-        $eventService = $coreInstance->get('api.service.event');
-
         $oql = sprintf('event_type = "%s"', $type);
 
         try {
-            $event = $eventService->getList($oql);
+            $event = $this->eventService->getList($oql);
 
             return !empty($event['items']);
         } catch (GetListException $e) {
