@@ -303,9 +303,9 @@ class EventController extends FrontendController
             : sprintf('name = "%s"', $slug);
 
         try {
-            $category = $categoryService->getItemBy($oql);
+            $category = $categoryService->getList($oql);
 
-            return !empty($category) ? $category : null;
+            return !empty($category['items']) ? $category['items'][0] : null;
         } catch (GetItemException $e) {
             return false;
         }
