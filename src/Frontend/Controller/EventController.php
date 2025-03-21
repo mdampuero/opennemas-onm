@@ -170,11 +170,15 @@ class EventController extends FrontendController
                 $oql .= $this->buildCategoryJoin($type);
             } elseif (empty($tags)) {
                 $oql .= $this->buildTagJoin($type);
+
+                $tagsName = $this->matchTag($type)->name;
             }
         }
 
         if (!empty($tags)) {
             $oql .= $this->buildTagJoin($tags);
+
+            $tagsName = $this->matchTag($tags)->name;
         }
 
         $oql .= sprintf(
@@ -244,7 +248,7 @@ class EventController extends FrontendController
             'route'       => $route
         ]);
 
-        $params['tag'] = $this->matchTag($tags)->name ?? null;
+        $params['tag'] = $tagsName ?? null;
     }
 
     /**
