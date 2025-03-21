@@ -189,6 +189,18 @@
                 <option value="">{t}Select a tone{/t}</option>
               </select>
             </div>
+            {if !in_array("es.openhost.module.multilanguage", $app.instance->activated_modules)}
+              <div class="form-group">
+                <label>
+                <select name="field" id="field" class="form-control"
+                  ng-model="item.languageSelected"
+                  ng-if="item.promptSelected"
+                  ng-options="item as item.name for item in onmai_extras.languages"
+                  >
+                  <option value="">{t}Select a language{/t}</option>
+                </select>
+              </div>
+            {/if}
         </div>
         {/if}
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.author }" ng-click="expanded.author = !expanded.author">

@@ -324,7 +324,8 @@
             content_status: template.content_status,
             content_type_name: template.content_type_name,
             prompt: template.promptSelected ? template.promptSelected.prompt : null,
-            tone: template.toneSelected ? template.toneSelected.name : null
+            tone: template.toneSelected ? template.toneSelected.name : null,
+            language: template.languageSelected ? template.languageSelected.code : null,
           };
 
           return http.put(route, data);

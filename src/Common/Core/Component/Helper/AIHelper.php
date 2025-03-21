@@ -599,6 +599,10 @@ class AIHelper
                 $instructions[] = ['value' => "Debes mantener el tono del texto original."];
             }
 
+            if (!empty($or['language'] ?? false)) {
+                $instructions[] = ['value' => "La respuesta debe ser en el idioma {$or['language']}."];
+            }
+
             $this->insertInstructions($instructions);
 
             $data             = $this->getCurrentSettings();
