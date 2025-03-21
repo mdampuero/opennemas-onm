@@ -40,7 +40,9 @@ class TraffectiveRenderer extends AdvertisementRenderer
             'config' => $config,
             'targeting' => $this->getTargeting(
                 $params['category'],
-                $params['extension']
+                $params['extension'],
+                $params['zone'],
+                $params['pagetype'],
             ),
         ]);
     }
@@ -53,17 +55,30 @@ class TraffectiveRenderer extends AdvertisementRenderer
      *
      * @return string The targeting-related JS code.
      */
-    protected function getTargeting($category, $module)
+    protected function getTargeting($category, $module, $content)
     {
         $targeting = [];
 
         if (!empty($category)) {
-            $targeting['category'] = ($category === 'home') ?
-                'homepage' : $category;
+            $targeting['category'] = $category;
         }
 
         if (!empty($module)) {
             $targeting['extension'] = $module;
+        }
+
+        $targeting['zone'] = 'localnews';
+        if ($category == 'home' && $module == 'frontpages') {
+            $targeting['zone'] = 'homepage';
+        }
+
+        $targeting['pagetype'] = 'ressort';
+        if ($targeting['zone'] == 'homepage') {
+            $targeting['pagetype'] = 'homepage';
+        }
+
+        if ($content) {
+            $targeting['pagetype'] = 'article';
         }
 
         return $targeting;
