@@ -85,6 +85,7 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true);
+          $scope.data.item = $scope.parseData($scope.data.item);
           $scope.expandFields();
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'static-page-' + $scope.data.item.pk_content + '-draft';
@@ -111,6 +112,15 @@
               slug: item.slug,
             })
           );
+        };
+
+        $scope.parseData = function(data, preview) {
+          var bodyComplexity = $scope.getTextComplexity(data.body);
+
+          data.text_complexity = bodyComplexity.textComplexity;
+          data.word_count = bodyComplexity.wordsCount;
+
+          return data;
         };
       }
     ]);
