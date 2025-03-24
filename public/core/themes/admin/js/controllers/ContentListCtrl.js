@@ -776,5 +776,16 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
 
       return lz.localize($scope.contents, keys, $scope.extra.options.default);
     };
+
+    $scope.applyFilter = function() {
+      $scope.criteria = angular.copy($scope.tempCriteria);
+    };
+
+    $scope.cancelFilter = function() {
+      $scope.tempCriteria.starttime = null;
+      $scope.tempCriteria.endtime = null;
+
+      $scope.criteria = angular.copy($scope.tempCriteria);
+    };
   }
 ]);

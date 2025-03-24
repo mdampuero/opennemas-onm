@@ -148,33 +148,37 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks ng-cloak">
+          <li class="quicklinks ng-cloak dropdown">
             <a class="dropdown-toggle" type="button" data-toggle="dropdown">
-                <strong>{t}Time Range{/t}</strong>
-                  [% criteria.starttime %]
-                  <span ng-if="criteria.starttime && criteria.endtime"> - </span>
-                  [% criteria.endtime %]
-                  <span class="caret"></span>
+              <strong>{t}Time Range{/t}</strong>
+              [% criteria.starttime %]
+              <span ng-if="criteria.starttime && criteria.endtime"> - </span>
+              [% criteria.endtime %]
+              <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" ng-click="$event.stopPropagation()">
               <li>
                 <div class="grid-collapse-body ng-cloak">
-                    <div class="form-group">
-                      <div class="input-group">
-                        <span class="input-group-addon add-on">
-                            <i class="fa fa-calendar m-r-5"></i> {t}Start date{/t}
-                        </span>
-                        <input class="input-min-45 input-300" type="datetime" id="starttime" autocomplete="off" name="starttime" datetime-picker ng-model="criteria.starttime" />
-                      </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <span class="input-group-addon add-on" onclick="document.getElementById('starttime').focus();">
+                          <i class="fa fa-calendar m-r-5"></i> {t}Start date{/t}
+                      </span>
+                      <input class="input-min-45 input-300" type="datetime" id="starttime" autocomplete="off" name="starttime" datetime-picker ng-model="tempCriteria.starttime" />
                     </div>
-                    <div class="form-group">
-                      <div class="input-group">
-                        <span class="input-group-addon add-on">
-                            <i class="fa fa-calendar m-r-5"></i> {t}End date{/t}
-                        </span>
-                        <input class="input-min-45 input-300" type="datetime" id="endtime" autocomplete="off" name="endtime" datetime-picker ng-model="criteria.endtime" />
-                      </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <span class="input-group-addon add-on" onclick="document.getElementById('endtime').focus();">
+                        <i class="fa fa-calendar m-r-5"></i> {t}End date{/t}
+                      </span>
+                      <input class="input-min-45 input-300" type="datetime" id="endtime" autocomplete="off" name="endtime" datetime-picker ng-model="tempCriteria.endtime" />
                     </div>
+                  </div>
+                  <div class="form-group text-right">
+                    <button class="btn btn-default" ng-click="cancelFilter()">Cancelar</button>
+                    <button class="btn btn-primary" ng-click="applyFilter()">Confirmar</button>
+                  </div>
                 </div>
               </li>
             </ul>
