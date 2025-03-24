@@ -430,7 +430,7 @@ class AIHelper
     {
         $this->insertInstructions($this->getInstructionsByFilter(
             [
-                'type'  => ['Both', $messages['promptSelected']['mode']],
+                'type'  => ['Both', $messages['promptSelected']['mode_or']],
                 'field' => ['all', $messages['promptSelected']['field_or']],
             ]
         ), $messages['roleSelected']['prompt'] ?? '');
