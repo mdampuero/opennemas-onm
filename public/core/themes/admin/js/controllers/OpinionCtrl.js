@@ -121,6 +121,8 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
         });
       }
 
+      item = $scope.parseData(item, true);
+
       var data = {
         item: JSON.stringify(cleaner.clean(item)),
         locale: $scope.config.locale.selected
@@ -176,6 +178,15 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
           slug: item.slug
         })
       );
+    };
+
+    $scope.parseData = function(data, preview) {
+      var bodyComplexity = $scope.getTextComplexity(data.body);
+
+      data.text_complexity = bodyComplexity.textComplexity;
+      data.word_count = bodyComplexity.wordsCount;
+
+      return data;
     };
   }
 ]);
