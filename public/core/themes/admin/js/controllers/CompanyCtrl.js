@@ -316,6 +316,11 @@
          * @inheritdoc
          */
         $scope.parseData = function(data) {
+          var bodyComplexity = $scope.getTextComplexity(data.body);
+
+          data.text_complexity = bodyComplexity.textComplexity;
+          data.word_count = bodyComplexity.wordsCount;
+
           if ($scope.extraFields) {
             $scope.extraFields.forEach(function(element) {
               if (data[element.key.value] && typeof data[element.key.value] !== 'string') {
@@ -329,6 +334,7 @@
           if (data.locality && data.locality.nm && typeof data.locality !== 'string') {
             data.locality = data.locality.nm;
           }
+
           return data;
         };
 
@@ -446,6 +452,7 @@
               }
             });
           }
+
           var data = {
             item: JSON.stringify(cleaner.clean(item)),
             locale: $scope.config.locale.selected
