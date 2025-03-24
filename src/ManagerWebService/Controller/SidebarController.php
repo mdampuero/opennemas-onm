@@ -160,7 +160,7 @@ class SidebarController extends Controller
                 ],
                 [
                     'name'     => _('ONM AI'),
-                    'icon'     => 'fa fa-bell',
+                    'icon'     => 'fa fa-bell fa-onm-ai',
                     'items' => [
                         [
                             'name'     => _('Prompts'),
