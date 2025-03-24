@@ -125,6 +125,8 @@
             });
           }
 
+          item = $scope.parseData(item, true);
+
           var data = {
             item: JSON.stringify(cleaner.clean(item)),
             locale: $scope.config.locale.selected
@@ -235,6 +237,15 @@
           }
 
           return true;
+        };
+
+        $scope.parseData = function(data, preview) {
+          var bodyComplexity = $scope.getTextComplexity(data.body);
+
+          data.text_complexity = bodyComplexity.textComplexity;
+          data.word_count = bodyComplexity.wordsCount;
+
+          return data;
         };
       }
     ]);
