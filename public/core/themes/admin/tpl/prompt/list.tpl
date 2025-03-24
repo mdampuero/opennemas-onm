@@ -147,7 +147,7 @@
                     <input class="form-control" ng-model="role.name" placeholder="{t}Name{/t}" type="text" required ng-disabled="role.readOnly" maxlength="64">
                   </div>
                   <div class="col-lg-2 col-md-3">
-                    <ui-select name="mode" class="form-control" ng-disabled="role.readOnly"  theme="select2" ng-model="role.field" search-enabled="false" required ng-init="options = [ { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Introductions{/t}', key: 'introductions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
+                    <ui-select name="mode" class="form-control" ng-disabled="role.readOnly"  theme="select2" ng-model="role.field" search-enabled="false" required ng-init="options = [ { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Descriptions{/t}', key: 'descriptions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
                       <ui-select-match>
                         [% $select.selected.name %]
                       </ui-select-match>

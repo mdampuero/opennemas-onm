@@ -33,7 +33,7 @@
         </div>
         <div class="col-md-3 col-sm-6 form-group">
           <label>{t}Mode{/t}</label>
-          <ui-select name="mode" class="form-control" theme="select2" ng-model="item.mode" search-enabled="false" required ng-init="options = [ { name: '{t}Create{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'}, { name: '{t}Transformation{/t}', key: 'Transformation'} ]">
+          <ui-select name="mode" class="form-control" theme="select2" ng-model="item.mode" search-enabled="false" required ng-init="options = [ { name: '{t}New{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'}, { name: '{t}Agency{/t}', key: 'Agency'} ]">
             <ui-select-match>
               [% $select.selected.name %]
             </ui-select-match>
@@ -42,9 +42,9 @@
             </ui-select-choices>
           </ui-select>
         </div>
-        <div class="col-md-3 col-sm-6 form-group" ng-if="item.mode != 'Transformation'">
+        <div class="col-md-3 col-sm-6 form-group" ng-if="item.mode != 'Agency'">
           <label>{t}Field{/t}</label>
-          <ui-select name="mode" class="form-control" theme="select2" ng-model="item.field" search-enabled="false" required ng-init="options = [ { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Introductions{/t}', key: 'introductions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
+          <ui-select name="mode" class="form-control" theme="select2" ng-model="item.field" search-enabled="false" required ng-init="options = [ { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Descriptions{/t}', key: 'descriptions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
             <ui-select-match>
               [% $select.selected.name %]
             </ui-select-match>

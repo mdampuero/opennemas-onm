@@ -35,6 +35,8 @@
           instances: [ 'Todos' ]
         };
 
+        $scope.filterRole = $scope.item.field;
+
         /**
          * @function save
          * @memberOf OnmAiPromptCtrl
@@ -145,6 +147,24 @@
             $scope.item = response.data.item;
           }
         });
+
+        $scope.$watch('item.mode', function(nv, ov) {
+          if (!nv || nv === ov) {
+            return;
+          }
+          if (nv === 'Agency') {
+            $scope.filterRole = nv;
+          } else {
+            $scope.filterRole = $scope.item.field;
+          }
+        }, true);
+
+        $scope.$watch('item.field', function(nv, ov) {
+          if (!nv || nv === ov) {
+            return;
+          }
+          $scope.filterRole = $scope.item.field;
+        }, true);
       }
     ]);
 })();

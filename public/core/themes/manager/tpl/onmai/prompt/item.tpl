@@ -45,10 +45,19 @@
     <div class="grid simple">
       <div class="grid-body adstxt-form">
         <div class="row">
-          <div class="form-group col-md-8">
+          <div class="form-group col-md-5">
             <label class="form-label" for="name">{t}Title{/t}</label>
             <div class="input-with-icon right">
               <input class="form-control" id="name" name="name" ng-model="item.name" required type="text" maxlength="64"/>
+            </div>
+          </div>
+          <div class="form-group col-md-3">
+            <label class="form-label" for="name">{t}Model{/t}</label>
+            <div class="">
+              <select class="form-control form-control-lg" ng-model="item.model">
+                <option value="">{t}Default model{/t}</option>
+                <option value="[% item.id %]" ng-repeat="item in extra.onmai_models">[% item.title %]</option>
+              </select>
             </div>
           </div>
           <div class="col-sm-4 form-group">
@@ -61,7 +70,7 @@
           </div>
           <div class="col-md-2 col-sm-6 form-group">
             <label>{t}Mode{/t}</label>
-            <ui-select name="mode" class="form-control" theme="select2" ng-model="item.mode" search-enabled="false" required ng-init="options = [ { name: '{t}Create{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'}, { name: '{t}Transformation{/t}', key: 'Transformation'}]">
+            <ui-select name="mode" class="form-control" theme="select2" ng-model="item.mode" search-enabled="false" required ng-init="options = [ { name: '{t}New{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'}, { name: '{t}Agency{/t}', key: 'Agency'}]">
               <ui-select-match>
                 [% $select.selected.name %]
               </ui-select-match>
@@ -70,9 +79,9 @@
               </ui-select-choices>
             </ui-select>
           </div>
-          <div class="col-md-3 col-sm-6 form-group" ng-if="item.mode != 'Transformation'">
+          <div class="col-md-3 col-sm-6 form-group" ng-if="item.mode != 'Agency'">
             <label>{t}Field{/t}</label>
-            <ui-select name="mode" class="form-control" theme="select2" ng-model="item.field" search-enabled="false" required ng-init="options = [ { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Introductions{/t}', key: 'introductions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
+            <ui-select name="mode" class="form-control" theme="select2" ng-model="item.field" search-enabled="false" required ng-init="options = [ { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Descriptions{/t}', key: 'descriptions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
               <ui-select-match>
                 [% $select.selected.name %]
               </ui-select-match>
@@ -98,7 +107,7 @@
                 <ui-select-match>
                   [% $select.selected.name %]
                 </ui-select-match>
-                <ui-select-choices repeat="item.name as item in extra.onmai_roles | filter: { name: $select.search, field: item.field }" position='down'>
+                <ui-select-choices repeat="item.name as item in extra.onmai_roles | filter: { name: $select.search, field: filterRole }" position='down'>
                   <div ng-bind-html="item.name | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>

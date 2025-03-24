@@ -555,14 +555,14 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
       var orVal = '';
 
       switch (AIFieldType) {
-        case 'introductions':
-          orVal = $scope.config.linkers.item.original.description[$scope.config.linkers.item.defaultKey];
+        case 'descriptions':
+          orVal = $scope.config.linkers.item.original.description ? $scope.config.linkers.item.original.description[$scope.config.linkers.item.defaultKey] : '';
           break;
         case 'bodies':
-          orVal = $scope.config.linkers.item.original.body[$scope.config.linkers.item.defaultKey];
+          orVal = $scope.config.linkers.item.original.body ? $scope.config.linkers.item.original.body[$scope.config.linkers.item.defaultKey] : '';
           break;
         default:
-          orVal = $scope.config.linkers.item.original.title[$scope.config.linkers.item.defaultKey];
+          orVal = $scope.config.linkers.item.original.title ? $scope.config.linkers.item.original.title[$scope.config.linkers.item.defaultKey] : '';
           break;
       }
 

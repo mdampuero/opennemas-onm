@@ -196,14 +196,18 @@ class AIHelper
      *
      * @return array The current settings including engine, model, and associated parameters.
      */
-    public function getCurrentSettings()
+    public function getCurrentSettings($model = null)
     {
         $managerSettings  = $this->getManagerSettings();
         $instanceSettings = $this->getInstanceSettings();
 
-        $engine = !empty($instanceSettings['model'])
-            ? $instanceSettings['model']
-            : $managerSettings['model'];
+        if ($model) {
+            $engine = $model;
+        } else {
+            $engine = !empty($instanceSettings['model'])
+                ? $instanceSettings['model']
+                : $managerSettings['model'];
+        }
 
         $engineAndModel  = $this->splitEngineAndModel($engine);
         $currentSettings = [];
@@ -426,7 +430,7 @@ class AIHelper
     {
         $this->insertInstructions($this->getInstructionsByFilter(
             [
-                'type'  => ['Both', $messages['promptSelected']['mode']],
+                'type'  => ['Both', $messages['promptSelected']['mode_or']],
                 'field' => ['all', $messages['promptSelected']['field_or']],
             ]
         ), $messages['roleSelected']['prompt'] ?? '');
@@ -463,7 +467,7 @@ class AIHelper
     {
         $this->getInstructions();
 
-        $data = $this->getCurrentSettings();
+        $data = $this->getCurrentSettings($messages['promptSelected']['model'] ?? null);
 
         $data['messages'] = [];
 
@@ -593,6 +597,10 @@ class AIHelper
                     en la transformación."];
             } else {
                 $instructions[] = ['value' => "Debes mantener el tono del texto original."];
+            }
+
+            if (!empty($or['language'] ?? false)) {
+                $instructions[] = ['value' => "La respuesta debe ser en el idioma {$or['language']}."];
             }
 
             $this->insertInstructions($instructions);
