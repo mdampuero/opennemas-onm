@@ -21,9 +21,6 @@ admin_welcome:
     path:     /admin
     defaults: { _controller: BackendBundle:Welcome:default }
 
-frontend:
-    resource: '@FrontendBundle/Resources/config/routing.yml'
-    prefix:   /
 
 manager:
     resource: '@ManagerBundle/Resources/config/routing.yml'
@@ -41,5 +38,8 @@ webservice:
     resource: '@WebServiceBundle/Resources/config/routing.yml'
     prefix:   /ws
 
-# Don't move this or infinite redirect at /admin
+frontend:
+    resource: '@FrontendBundle/Resources/config/routing.yml'
+    prefix:   /
+
 
