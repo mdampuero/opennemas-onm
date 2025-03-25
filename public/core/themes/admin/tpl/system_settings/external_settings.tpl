@@ -104,7 +104,7 @@
                         </div>
                         {if $app.security->hasPermission('MASTER')}
                         <div class="col-xs-12 col-sm-6 col-sm-offset-3 form-group text-center" ng-show="settings.google_analytics.length > 0 && settings.google_analytics[0].api_key">
-                          <button class="btn btn-block btn-white" ng-click="addGanalytics(true)" type="button">
+                          <button class="btn btn-block btn-white" ng-click="addGanalytics('true')" type="button">
                             <i class="fa fa-plus"></i>
                             {t}Add Master{/t}
                           </button>
