@@ -41,8 +41,7 @@ class TraffectiveRenderer extends AdvertisementRenderer
             'targeting' => $this->getTargeting(
                 $params['category'],
                 $params['extension'],
-                $params['zone'],
-                $params['pagetype'],
+                $params['content'],
             ),
         ]);
     }
@@ -52,6 +51,7 @@ class TraffectiveRenderer extends AdvertisementRenderer
      *
      * @param string  $category  The current category.
      * @param string  $module    The current module.
+     * @param Content $content   The content object if exists.
      *
      * @return string The targeting-related JS code.
      */
@@ -67,13 +67,10 @@ class TraffectiveRenderer extends AdvertisementRenderer
             $targeting['extension'] = $module;
         }
 
-        $targeting['zone'] = 'localnews';
-        if ($category == 'home' && $module == 'frontpages') {
-            $targeting['zone'] = 'homepage';
-        }
-
+        $targeting['zone']     = 'localnews';
         $targeting['pagetype'] = 'ressort';
-        if ($targeting['zone'] == 'homepage') {
+        if ($category == 'home' && $module == 'frontpages') {
+            $targeting['zone']     = 'homepage';
             $targeting['pagetype'] = 'homepage';
         }
 
