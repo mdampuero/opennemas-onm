@@ -1,5 +1,5 @@
 category_frontpage:
-    path:     /blog/section/{category_slug}/
+    path:     /{category_slug}/
     defaults: { _controller: FrontendBundle:Category:list }
     requirements:
         category: '[^/]+'

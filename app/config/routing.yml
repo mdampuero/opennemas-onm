@@ -17,6 +17,10 @@ core:
 fos_js_routing:
     resource: '@FOSJsRoutingBundle/Resources/config/routing/routing.xml'
 
+admin_welcome:
+    path:     /admin
+    defaults: { _controller: BackendBundle:Welcome:default }
+
 frontend:
     resource: '@FrontendBundle/Resources/config/routing.yml'
     prefix:   /
@@ -38,6 +42,4 @@ webservice:
     prefix:   /ws
 
 # Don't move this or infinite redirect at /admin
-admin_welcome:
-    path:     /admin
-    defaults: { _controller: BackendBundle:Welcome:default }
+
