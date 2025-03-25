@@ -39,9 +39,9 @@
          * @description
          *   Add new input for ga tracking code.
          */
-        $scope.addGanalytics = function() {
+        $scope.addGanalytics = function(master) {
           $scope.settings.google_analytics
-            .push({ api_key: '' });
+            .push({ api_key: '', master: master || false });
         };
 
         /**

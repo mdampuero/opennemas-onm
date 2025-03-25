@@ -53,27 +53,48 @@
                   <div class="panel-collapse collapse" id="goggle-analytics">
                     <div class="panel-body">
                       <div ng-repeat="code in settings.google_analytics track by $index">
-                        <div class="row" ng-model="settings.google_analytics[$index]">
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label class="form-label">
-                                {t}Google Analytics API key{/t}
-                              </label>
-                              <div class="controls">
-                                <input class="form-control" id="google-analytics-[% $index %]-api-key" name="google-analytics-[% $index %]-api-key" ng-model="code.api_key" type="text">
-                              </div>
+                        <div class="row" ng-model="settings.google_analytics[$index]" ng-if="!code.master || code.master === 'false'">
+                          <div class="form-group">
+                            <label class="form-label">
+                              {t}Google Analytics API key{/t}
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" id="google-analytics-[% $index %]-api-key" name="google-analytics-[% $index %]-api-key" ng-model="code.api_key" type="text">
                             </div>
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-xs-12 col-sm-6 col-sm-offset-3 m-b-30" ng-if="settings.google_analytics.length > 1 && $index !== 0">
+                          <div class="col-xs-12 col-sm-6 col-sm-offset-3 m-b-30" ng-if="settings.google_analytics.length > 1 && $index !== 0 && (code.master === 'false' || empty(code.master))">
                             <button class="btn btn-block btn-danger" ng-click="removeGanalytics($index)" type="button">
                               <i class="fa fa-trash-o"></i>
                               {t}Delete{/t}
                             </button>
                           </div>
                         </div>
+                        {if $app.security->hasPermission('MASTER')}
+                        <div ng-if="code.master === 'true'">
+                          <div class="row" ng-model="settings.google_analytics[$index]">
+                            <div class="form-group">
+                              <label class="form-label">
+                                {t}Google Analytics API key {/t} (MASTER)
+                              </label>
+                              <div class="controls">
+                                <input class="form-control" id="google-analytics-[% $index %]-api-key" name="google-analytics-[% $index %]-api-key" ng-model="code.api_key" type="text">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-sm-offset-3 m-b-30" ng-if="settings.google_analytics.length > 1 && $index !== 0 && code.master === 'true'">
+                              <button class="btn btn-block btn-danger" ng-click="removeGanalytics($index)" type="button">
+                                <i class="fa fa-trash-o"></i>
+                                {t}Delete{/t}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        {/if}
                       </div>
+
                       <div class="row">
                         <div class="col-xs-12 col-sm-6 col-sm-offset-3 form-group text-center" ng-show="settings.google_analytics.length > 0 && settings.google_analytics[0].api_key">
                           <button class="btn btn-block btn-white" ng-click="addGanalytics()" type="button">
@@ -81,6 +102,14 @@
                             {t}Add{/t}
                           </button>
                         </div>
+                        {if $app.security->hasPermission('MASTER')}
+                        <div class="col-xs-12 col-sm-6 col-sm-offset-3 form-group text-center" ng-show="settings.google_analytics.length > 0 && settings.google_analytics[0].api_key">
+                          <button class="btn btn-block btn-white" ng-click="addGanalytics(true)" type="button">
+                            <i class="fa fa-plus"></i>
+                            {t}Add Master{/t}
+                          </button>
+                        </div>
+                        {/if}
                       </div>
                       <p>{t escape=off}You can get your Google Analytics Site ID from <a class="external-link" href="https://www.google.com/analytics/" target="_blank" ng-click="$event.stopPropagation();">GAnalytics site</a> under the General Overview list (should be something like UA-546457-3).{/t}</p>
                       <small class="help">
@@ -89,6 +118,7 @@
                       </small>
                     </div>
                   </div>
+
                 </div>
               </div>
               <div class="panel-group" data-toggle="collapse" id="panel-group-comscore">
