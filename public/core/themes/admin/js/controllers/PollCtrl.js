@@ -115,6 +115,7 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true, [ 'items', 'related_contents' ]);
+          $scope.data.item = $scope.parseData($scope.data.item);
           $scope.expandFields();
           // Check if item is new (created) or existing for use default value or not
           if (!$scope.data.item.pk_content) {
@@ -237,6 +238,15 @@
             element.pk_item = index;
             return element;
           });
+        };
+
+        $scope.parseData = function(data, preview) {
+          var bodyComplexity = $scope.getTextComplexity(data.description);
+
+          data.text_complexity = bodyComplexity.textComplexity;
+          data.word_count = bodyComplexity.wordsCount;
+
+          return data;
         };
       }
     ]);
