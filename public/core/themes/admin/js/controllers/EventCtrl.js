@@ -147,6 +147,23 @@
         };
 
         /**
+         * Parses the provided data and calculates its text complexity and word count.
+         * Updates the input data with the calculated values.
+         *
+         * @param {Object} data - The data object to parse, which contains a `body` property with the text to analyze.
+         * @param {boolean} preview - A flag that may control whether the data is in preview mode
+         * (this parameter isn't used in the function but could be useful for future extensions).
+         * @returns {Object} The modified data object, including the `text_complexity` and `word_count` properties.
+         */
+        $scope.parseData = function(data, preview) {
+          var bodyComplexity = $scope.getTextComplexity(data.body);
+
+          data.text_complexity = bodyComplexity.textComplexity;
+          data.word_count = bodyComplexity.wordsCount;
+          return data;
+        };
+
+        /**
          * @name $scope.$watch
          * @description
          * Watches for changes in `item.event_map_iframe` and validates whether the content
