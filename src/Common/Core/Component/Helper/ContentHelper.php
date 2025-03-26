@@ -63,13 +63,6 @@ class ContentHelper
     protected $tagService;
 
     /**
-     * The Event service.
-     *
-     * @var eventService
-     */
-    protected $eventService;
-
-    /**
      * The subscriptions helper.
      *
      * @var SubscriptionHelper
@@ -82,6 +75,65 @@ class ContentHelper
      * @var Locale
      */
     protected $locale;
+
+    /**
+     * Array events types
+     *
+     * @var array
+     */
+    protected $eventTypes = [
+        0 => ['name' => 'Eventos Corporativos y Empresariales', 'slug' => 'corporate'],
+        1 => ['name' => 'Conferencias', 'slug' => 'conferencias'],
+        2 => ['name' => 'Seminarios', 'slug' => 'seminarios'],
+        3 => ['name' => 'Webinars', 'slug' => 'webinars'],
+        4 => ['name' => 'Ferias y exposiciones', 'slug' => 'ferias-exposiciones'],
+        5 => ['name' => 'Ruedas de prensa', 'slug' => 'ruedas-de-prensa'],
+        6 => ['name' => 'Talleres y capacitaciones', 'slug' => 'talleres-capacitaciones'],
+        7 => ['name' => 'Lanzamientos de productos', 'slug' => 'lanzamientos-productos'],
+        8 => ['name' => 'Reuniones de networking', 'slug' => 'reuniones-networking'],
+        9 => ['name' => 'Eventos de team building', 'slug' => 'team-building'],
+        10 => ['name' => 'Cumbres y foros', 'slug' => 'cumbres-foros'],
+        11 => ['name' => 'Eventos Sociales', 'slug' => 'social'],
+        12 => ['name' => 'Bodas', 'slug' => 'bodas'],
+        13 => ['name' => 'Bautizos', 'slug' => 'bautizos'],
+        14 => ['name' => 'Comuniones', 'slug' => 'comuniones'],
+        15 => ['name' => 'Aniversarios', 'slug' => 'aniversarios'],
+        16 => ['name' => 'Fiestas de cumpleaños', 'slug' => 'fiestas-cumpleanos'],
+        17 => ['name' => 'Despedidas de soltero/a', 'slug' => 'despedidas-soltero'],
+        18 => ['name' => 'Baby showers', 'slug' => 'baby-showers'],
+        19 => ['name' => 'Reuniones familiares', 'slug' => 'reuniones-familiares'],
+        20 => ['name' => 'Eventos Culturales y Artísticos', 'slug' => 'cultural'],
+        21 => ['name' => 'Conciertos', 'slug' => 'conciertos'],
+        22 => ['name' => 'Obras de teatro', 'slug' => 'obras-teatro'],
+        23 => ['name' => 'Exposiciones de arte', 'slug' => 'exposiciones-arte'],
+        24 => ['name' => 'Presentaciones de libros', 'slug' => 'presentaciones-libros'],
+        25 => ['name' => 'Festivales culturales', 'slug' => 'festivales-culturales'],
+        26 => ['name' => 'Proyecciones de cine', 'slug' => 'proyecciones-cine'],
+        27 => ['name' => 'Eventos Deportivos', 'slug' => 'sports'],
+        28 => ['name' => 'Maratones y carreras', 'slug' => 'maratones-carreras'],
+        29 => ['name' => 'Torneos y campeonatos', 'slug' => 'torneos-campeonatos'],
+        30 => ['name' => 'Exhibiciones deportivas', 'slug' => 'exhibiciones-deportivas'],
+        31 => ['name' => 'Clases y entrenamientos abiertos', 'slug' => 'clases-entrenamientos'],
+        32 => ['name' => 'Esports (competencias de videojuegos)', 'slug' => 'esports'],
+        33 => ['name' => 'Eventos Educativos', 'slug' => 'educational'],
+        34 => ['name' => 'Clases y cursos', 'slug' => 'clases-cursos'],
+        35 => ['name' => 'Conferencias académicas', 'slug' => 'conferencias-academicas'],
+        36 => ['name' => 'Simposios', 'slug' => 'simposios'],
+        37 => ['name' => 'Debates y mesas redondas', 'slug' => 'debates-mesas-redondas'],
+        38 => ['name' => 'Talleres prácticos', 'slug' => 'talleres-practicos'],
+        39 => ['name' => 'Eventos Religiosos', 'slug' => 'religious'],
+        40 => ['name' => 'Misas y cultos', 'slug' => 'misas-cultos'],
+        41 => ['name' => 'Peregrinaciones', 'slug' => 'peregrinaciones'],
+        42 => ['name' => 'Retiros espirituales', 'slug' => 'retiros-espirituales'],
+        43 => ['name' => 'Festividades religiosas', 'slug' => 'festividades-religiosas'],
+        44 => ['name' => 'Eventos Benéficos y Comunitarios', 'slug' => 'charity'],
+        45 => ['name' => 'Galas benéficas', 'slug' => 'galas-beneficas'],
+        46 => ['name' => 'Subastas solidarias', 'slug' => 'subastas-solidarias'],
+        47 => ['name' => 'Campañas de recolección de donaciones', 'slug' => 'campanas-donaciones'],
+        48 => ['name' => 'Voluntariados', 'slug' => 'voluntariados'],
+        49 => ['name' => 'Eventos de concienciación', 'slug' => 'eventos-concienciacion'],
+    ];
+
 
     /**
      * Initializes the ContentHelper.
@@ -98,7 +150,6 @@ class ContentHelper
         $this->tagService         = $this->container->get('api.service.tag');
         $this->subscriptionHelper = $this->container->get('core.helper.subscription');
         $this->locale             = $this->container->get('core.locale');
-        $this->eventService       = $this->container->get('api.service.event');
     }
 
     /**
@@ -188,6 +239,20 @@ class ContentHelper
             ? $end->endtime->format('Y-m-d H:i:s') : null;
 
         return min(array_filter([ $starttime, $endtime ]));
+    }
+
+    public function getEventTypes()
+    {
+        $eventTypesFormatted = [];
+
+        foreach ($this->eventTypes as $key => $event) {
+            $eventTypesFormatted[] = [
+                'name' => _($event['name']),
+                'slug' => $event['slug'],
+            ];
+        }
+
+        return $eventTypesFormatted;
     }
 
     public function getFirstItemDate($contentTypeName = 'article')
@@ -832,7 +897,7 @@ class ContentHelper
         $oql = sprintf('event_type = "%s"', $type);
 
         try {
-            $event = $this->eventService->getList($oql);
+            $event = $this->service->getList($oql);
 
             return !empty($event['items']);
         } catch (GetListException $e) {

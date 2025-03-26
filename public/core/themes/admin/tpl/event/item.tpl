@@ -140,75 +140,7 @@
           </span>
         </div>
       </div>
-      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.type = !expanded.type">
-        <i class="fa fa-folder m-r-10"></i>
-        {t}Event type{/t}
-        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.type }"></i>
-      </div>
-      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.type }">
-        <div class="controls">
-          <select class="block" id="event_type" name="event_type" ng-model="item.event_type">
-            <option value="" disabled selected>Selecciona un tipo de evento</option>
-            <optgroup label="Eventos Corporativos y Empresariales">
-              <option value="conferencias">Conferencias</option>
-              <option value="seminarios">Seminarios</option>
-              <option value="webinars">Webinars</option>
-              <option value="ferias-y-exposiciones">Ferias y exposiciones</option>
-              <option value="ruedas-de-prensa">Ruedas de prensa</option>
-              <option value="talleres-y-capacitaciones">Talleres y capacitaciones</option>
-              <option value="lanzamientos-de-productos">Lanzamientos de productos</option>
-              <option value="reuniones-de-networking">Reuniones de networking</option>
-              <option value="eventos-de-team-building">Eventos de team building</option>
-              <option value="cumbres-y-foros">Cumbres y foros</option>
-            </optgroup>
-            <optgroup label="Eventos Sociales">
-              <option value="bodas">Bodas</option>
-              <option value="bautizos">Bautizos</option>
-              <option value="comuniones">Comuniones</option>
-              <option value="aniversarios">Aniversarios</option>
-              <option value="fiestas-de-cumpleanos">Fiestas de cumpleaños</option>
-              <option value="despedidas-de-soltero-a">Despedidas de soltero/a</option>
-              <option value="baby-showers">Baby showers</option>
-              <option value="reuniones-familiares">Reuniones familiares</option>
-            </optgroup>
-            <optgroup label="Eventos Culturales y Artísticos">
-              <option value="conciertos">Conciertos</option>
-              <option value="obras-de-teatro">Obras de teatro</option>
-              <option value="exposiciones-de-arte">Exposiciones de arte</option>
-              <option value="presentaciones-de-libros">Presentaciones de libros</option>
-              <option value="festivales-culturales">Festivales culturales</option>
-              <option value="proyecciones-de-cine">Proyecciones de cine</option>
-            </optgroup>
-            <optgroup label="Eventos Deportivos">
-              <option value="maratones-y-carreras">Maratones y carreras</option>
-              <option value="torneos-y-campeonatos">Torneos y campeonatos</option>
-              <option value="exhibiciones-deportivas">Exhibiciones deportivas</option>
-              <option value="clases-y-entrenamientos-abiertos">Clases y entrenamientos abiertos</option>
-              <option value="esports">Esports (competencias de videojuegos)</option>
-            </optgroup>
-            <optgroup label="Eventos Educativos">
-              <option value="clases-y-cursos">Clases y cursos</option>
-              <option value="conferencias-academicas">Conferencias académicas</option>
-              <option value="simposios">Simposios</option>
-              <option value="debates-y-mesas-redondas">Debates y mesas redondas</option>
-              <option value="talleres-practicos">Talleres prácticos</option>
-            </optgroup>
-            <optgroup label="Eventos Religiosos">
-              <option value="misas-y-cultos">Misas y cultos</option>
-              <option value="peregrinaciones">Peregrinaciones</option>
-              <option value="retiros-espirituales">Retiros espirituales</option>
-              <option value="festividades-religiosas">Festividades religiosas</option>
-            </optgroup>
-            <optgroup label="Eventos Benéficos y Comunitarios">
-              <option value="galas-beneficas">Galas benéficas</option>
-              <option value="subastas-solidarias">Subastas solidarias</option>
-              <option value="campanas-de-recoleccion-de-donaciones">Campañas de recolección de donaciones</option>
-              <option value="voluntariados">Voluntariados</option>
-              <option value="eventos-de-concienciacion">Eventos de concienciación</option>
-            </optgroup>
-          </select>
-        </div>
-      </div>
+      {include file="ui/component/content-editor/accordion/event.tpl"}
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.where = !expanded.where">
         <i class="fa fa-map-marker m-r-10"></i>
         {t}Event location{/t}
