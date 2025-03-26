@@ -242,6 +242,11 @@ class ContentHelper
         return min(array_filter([ $starttime, $endtime ]));
     }
 
+    /**
+     * Retrieves a list of event types slugs.
+     *
+     * @return string[] An array of event type slugs.
+     */
     public function getEventTypes()
     {
         $eventTypesFormatted = [];
@@ -256,6 +261,16 @@ class ContentHelper
         return $eventTypesFormatted;
     }
 
+    /**
+     * Retrieves the creation date of the first item of a given content type.
+     *
+     * This method queries the service to get the first item of the specified content type that was created after
+     * January 1, 2000, and that is not in litter (i.e., `in_litter` is 0). It returns the creation date of the item.
+     *
+     * @param string $contentTypeName The content type name to search for (default is 'article').
+     *
+     * @return string|null The creation date of the first item found, or null if no item matches the criteria.
+     */
     public function getFirstItemDate($contentTypeName = 'article')
     {
         $oql = sprintf(
@@ -893,7 +908,16 @@ class ContentHelper
         return $now->getTimeStamp() >= $startTime->getTimeStamp() && $now->getTimeStamp() <= $endTime->getTimeStamp();
     }
 
-
+    /**
+     * Matches the given event type with the event types list.
+     *
+     * This method checks if the provided event type exists in the list of available event types.
+     * It first looks for a matching slug in the pre-defined list, and if not found, it queries an external service.
+     *
+     * @param string $type The event type slug to match.
+     *
+     * @return bool True if the event type exists, false otherwise.
+     */
     public function matchEventType(string $type): bool
     {
         $slugs = array_column($this->eventTypes, 'slug');
