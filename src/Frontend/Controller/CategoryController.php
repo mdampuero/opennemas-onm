@@ -70,7 +70,9 @@ class CategoryController extends FrontendController
          * If the category is manual, we redirect to the frontpage.
          */
         if (($item->params['manual'] ?? 0) == 1) {
-            return $this->forward('Frontend\Controller\FrontpagesController::showAction');
+            return $this->forward('Frontend\Controller\FrontpagesController::showAction', [
+                'categorySlug' => $item->name
+            ]);
         }
 
         $params = $request->query->all();
