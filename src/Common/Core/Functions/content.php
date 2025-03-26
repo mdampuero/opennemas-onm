@@ -325,3 +325,17 @@ function get_last_live_update_date($item) : ?string
 {
     return getService('core.helper.content')->getLastLiveUpdate($item);
 }
+
+/**
+ * Retrieves the event name based on the provided event slug.
+ *
+ * This function calls a service to get the event name corresponding to the provided slug.
+ *
+ * @param string $item The slug of the event type.
+ *
+ * @return string|null The name of the event type, or null if not found.
+ */
+function get_event_type_name($item) : ?string
+{
+    return getService('core.helper.content')->getEventTypeNameBySlug($item);
+}

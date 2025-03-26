@@ -262,6 +262,24 @@ class ContentHelper
     }
 
     /**
+     * Retrieves the event name by slug.
+     *
+     * @param string $slug The slug to search for in the eventTypes.
+     *
+     * @return string|null The name of the event type or null if not found.
+     */
+    public function getEventTypeNameBySlug(string $slug): ?string
+    {
+        foreach ($this->eventTypes as $event) {
+            if ($event['slug'] === $slug) {
+                return _($event['name']);
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Retrieves the creation date of the first item of a given content type.
      *
      * This method queries the service to get the first item of the specified content type that was created after
@@ -920,9 +938,7 @@ class ContentHelper
      */
     public function matchEventType(string $type): bool
     {
-        $slugs = array_column($this->eventTypes, 'slug');
-
-        if (in_array($type, $slugs, true)) {
+        if ($this->getEventTypeNameBySlug($type)) {
             return true;
         }
 
