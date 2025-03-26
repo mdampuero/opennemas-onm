@@ -180,6 +180,14 @@ angular.module('BackendApp.controllers').controller('OpinionCtrl', [
       );
     };
 
+    /**
+     * Parses the data and calculates text complexity.
+     *
+     * @param {Object} data - Object containing the text information.
+     * @param {string} data.body - The body of the text to analyze.
+     * @param {boolean} preview - Indicates if it's a preview (not used in the function).
+     * @returns {Object} - The input object with added `text_complexity` and `word_count` properties.
+     */
     $scope.parseData = function(data, preview) {
       var bodyComplexity = $scope.getTextComplexity(data.body);
 
