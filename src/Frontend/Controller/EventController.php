@@ -10,10 +10,7 @@
 namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
-use Api\Exception\GetListException;
-use Doctrine\ORM\Query\Expr\Func;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -137,13 +134,13 @@ class EventController extends FrontendController
      */
     protected function hydrateList(array &$params = []): void
     {
+        $date     = gmdate('Y-m-d H:i:s');
+        $type     = $params['type'] ?? null;
+        $tags     = $params['tag'] ?? null;
+        $ch       = $this->get('core.helper.content');
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('event_settings', false);
-        $date     = gmdate('Y-m-d H:i:s');
-        $type     = isset($params['type']) ? $params['type'] : null;
-        $tags     = isset($params['tag']) ? $params['tag'] : null;
-        $ch       = $this->get('core.helper.content');
 
         if ($params['page'] <= 0
             || $params['page'] > $this->getParameter('core.max_page')) {

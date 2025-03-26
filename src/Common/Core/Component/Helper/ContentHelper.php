@@ -519,7 +519,7 @@ class ContentHelper
         $value = $this->getProperty($item, 'content_type_name', $unpublished);
 
         return !empty($value)
-            ? !$readable ? $value : _(ucfirst(implode(' ', explode('_', $value))))
+            ? (!$readable ? $value : _(ucfirst(implode(' ', explode('_', $value)))))
             : null;
     }
 
