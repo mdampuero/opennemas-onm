@@ -65,6 +65,14 @@ class CategoryController extends FrontendController
     {
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
+
+        /**
+         * If the category is manual, we redirect to the frontpage.
+         */
+        if (($item->params['manual'] ?? 0) == 1) {
+            return $this->forward('Frontend\Controller\FrontpagesController::showAction');
+        }
+
         $params = $request->query->all();
 
         // Fix category_slug from query basing on item
