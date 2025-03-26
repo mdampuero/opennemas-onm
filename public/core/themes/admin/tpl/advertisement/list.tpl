@@ -148,40 +148,42 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
               </ui-select-choices>
             </ui-select>
           </li>
-          <li class="quicklinks ng-cloak dropdown">
-            <a class="dropdown-toggle" type="button" data-toggle="dropdown">
-              <strong>{t}Time Range{/t}</strong>
-              [% criteria.starttime %]
-              <span ng-if="criteria.starttime && criteria.endtime"> - </span>
-              [% criteria.endtime %]
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu" ng-click="$event.stopPropagation()">
-              <li>
-                <div class="grid-collapse-body ng-cloak">
-                  <div class="form-group">
-                    <div class="input-group">
-                      <span class="input-group-addon add-on" onclick="document.getElementById('starttime').focus();">
-                          <i class="fa fa-calendar m-r-5"></i> {t}Start date{/t}
-                      </span>
-                      <input class="input-min-45 input-300" type="datetime" id="starttime" autocomplete="off" name="starttime" datetime-picker ng-model="tempCriteria.starttime" />
+          <li class="quicklinks ng-cloak dropdown visible-lg">
+            <div class="ui-select-container select2 select2-container">
+              <a class="select2-choice dropdown-toggle" type="button" data-toggle="dropdown">
+                <strong>{t}Time Range{/t}</strong>
+                [% criteria.starttime %]
+                <span ng-if="criteria.starttime && criteria.endtime"> - </span>
+                [% criteria.endtime %]
+                <span class="caret"></span>
+              </a>
+              <ul class="ui-select-dropdown dropdown-menu p-10" ng-click="$event.stopPropagation()">
+                <li>
+                  <div class="grid-collapse-body ng-cloak">
+                    <div class="form-group">
+                      <div class="input-group">
+                        <span class="input-group-addon add-on" onclick="document.getElementById('starttime').focus();">
+                            <i class="fa fa-calendar m-r-5"></i> {t}Start date{/t}
+                        </span>
+                        <input class="input-min-45 input-300" type="datetime" id="starttime" autocomplete="off" name="starttime" datetime-picker ng-model="tempCriteria.starttime" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <span class="input-group-addon add-on" onclick="document.getElementById('endtime').focus();">
+                          <i class="fa fa-calendar m-r-5"></i> {t}End date{/t}
+                        </span>
+                        <input class="input-min-45 input-300" type="datetime" id="endtime" autocomplete="off" name="endtime" datetime-picker ng-model="tempCriteria.endtime" />
+                      </div>
+                    </div>
+                    <div class="form-group text-right m-b-0">
+                      <button class="btn btn-default pull-left" ng-click="cancelFilter()">Cancelar</button>
+                      <button class="btn btn-primary" ng-click="applyFilter()">Confirmar</button>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <span class="input-group-addon add-on" onclick="document.getElementById('endtime').focus();">
-                        <i class="fa fa-calendar m-r-5"></i> {t}End date{/t}
-                      </span>
-                      <input class="input-min-45 input-300" type="datetime" id="endtime" autocomplete="off" name="endtime" datetime-picker ng-model="tempCriteria.endtime" />
-                    </div>
-                  </div>
-                  <div class="form-group text-right">
-                    <button class="btn btn-default" ng-click="cancelFilter()">Cancelar</button>
-                    <button class="btn btn-primary" ng-click="applyFilter()">Confirmar</button>
-                  </div>
-                </div>
-              </li>
-            </ul>
+                </li>
+              </ul>
+            </div>
           </li>
         </ul>
         <ul class="nav quick-section quick-section-fixed ng-cloak" ng-if="contents.length > 0">
@@ -216,8 +218,8 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
                   </div>
                 </th>
                 <th class="">{t}Title{/t}</th>
-                <th class="hidden-xs hidden-sm">{t}Available from{/t}</th>
-                <th class="hidden-xs hidden-sm">{t}to{/t}</th>
+                <th class="hidden-xs hidden-sm">{t}Start date{/t}</th>
+                <th class="hidden-xs hidden-sm">{t}End date{/t}</th>
                 <th class="hidden-xs hidden-sm " style="width: 33%;">{t}Position{/t}</th>
                 <th class="hidden-xs text-center"><i class="fa fa-mouse-pointer"></i></th>
                 <th class="hidden-xs hidden-sm text-center">{t}Type{/t}</th>
