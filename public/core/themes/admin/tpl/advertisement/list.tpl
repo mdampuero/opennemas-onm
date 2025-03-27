@@ -149,7 +149,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
             </ui-select>
           </li>
           <li class="quicklinks ng-cloak dropdown visible-lg">
-            <div class="ui-select-container select2 select2-container">
+            <div class="select2-container">
               <a class="select2-choice dropdown-toggle" type="button" data-toggle="dropdown">
                 <strong>{t}Time Range{/t}</strong>
                 [% criteria.starttime %]
