@@ -10,6 +10,7 @@
 namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -168,14 +169,16 @@ class EventController extends FrontendController
             } elseif (empty($tags)) {
                 $oql .= $this->buildTagJoin($type);
 
-                $tagsName = $this->matchTag($type)->name;
+                $matchedTag = $this->matchTag($type);
+                $tagsName   = $matchedTag ? $matchedTag->name : null;
             }
         }
 
         if (!empty($tags)) {
             $oql .= $this->buildTagJoin($tags);
 
-            $tagsName = $this->matchTag($tags)->name;
+            $matchedTag = $this->matchTag($tags);
+            $tagsName   = $matchedTag ? $matchedTag->name : null;
         }
 
         $oql .= sprintf(
@@ -280,7 +283,7 @@ class EventController extends FrontendController
                 implode(',', $tagIds)
             );
         }
-        return '';
+        return false;
     }
 
     /**
@@ -296,17 +299,12 @@ class EventController extends FrontendController
      */
     protected function matchCategory(string $slug)
     {
-        $coreInstance    = $this->container->get('core.instance');
         $categoryService = $this->get('api.service.category');
 
-        $oql = $coreInstance->hasMultilanguage()
-            ? sprintf('name regexp "(.+\"|^)%s(\".+|$)"', $slug)
-            : sprintf('name = "%s"', $slug);
-
         try {
-            $category = $categoryService->getList($oql);
+            $category = $categoryService->getItemBySlug($slug);
 
-            return !empty($category['items']) ? $category['items'][0] : null;
+            return !empty($category) ? $category : null;
         } catch (GetItemException $e) {
             return false;
         }
@@ -324,13 +322,11 @@ class EventController extends FrontendController
      */
     protected function matchTag(string $slug)
     {
-        $oql = sprintf('slug in ["%s"]', $slug);
-
         try {
-            $tags = $this->get('api.service.tag')->getItemBy($oql);
+            $tags = $this->get('api.service.tag')->getListBySlugs([ $slug ]);
 
-            return !empty($tags) ? $tags : null;
-        } catch (GetItemException $e) {
+            return !empty($tags['items'][0]) ? $tags['items'][0] : null;
+        } catch (GetListException $e) {
             return false;
         }
     }
