@@ -77,66 +77,6 @@ class ContentHelper
     protected $locale;
 
     /**
-     * Array events types
-     *
-     * @var array
-     */
-    protected $eventTypes = [
-        ['name' => 'Eventos Corporativos y Empresariales', 'slug' => 'corporate'],
-        ['name' => 'Conferencias', 'slug' => 'conferencias'],
-        ['name' => 'Seminarios', 'slug' => 'seminarios'],
-        ['name' => 'Webinars', 'slug' => 'webinars'],
-        ['name' => 'Ferias y exposiciones', 'slug' => 'ferias-exposiciones'],
-        ['name' => 'Ruedas de prensa', 'slug' => 'ruedas-de-prensa'],
-        ['name' => 'Talleres y capacitaciones', 'slug' => 'talleres-capacitaciones'],
-        ['name' => 'Lanzamientos de productos', 'slug' => 'lanzamientos-productos'],
-        ['name' => 'Reuniones de networking', 'slug' => 'reuniones-networking'],
-        ['name' => 'Eventos de team building', 'slug' => 'team-building'],
-        ['name' => 'Cumbres y foros', 'slug' => 'cumbres-foros'],
-        ['name' => 'Eventos Sociales', 'slug' => 'social'],
-        ['name' => 'Bodas', 'slug' => 'bodas'],
-        ['name' => 'Bautizos', 'slug' => 'bautizos'],
-        ['name' => 'Comuniones', 'slug' => 'comuniones'],
-        ['name' => 'Aniversarios', 'slug' => 'aniversarios'],
-        ['name' => 'Fiestas de cumpleaños', 'slug' => 'fiestas-cumpleanos'],
-        ['name' => 'Despedidas de soltero/a', 'slug' => 'despedidas-soltero'],
-        ['name' => 'Baby showers', 'slug' => 'baby-showers'],
-        ['name' => 'Reuniones familiares', 'slug' => 'reuniones-familiares'],
-        ['name' => 'Eventos Culturales y Artísticos', 'slug' => 'cultural'],
-        ['name' => 'Conciertos', 'slug' => 'conciertos'],
-        ['name' => 'Obras de teatro', 'slug' => 'obras-teatro'],
-        ['name' => 'Exposiciones de arte', 'slug' => 'exposiciones-arte'],
-        ['name' => 'Presentaciones de libros', 'slug' => 'presentaciones-libros'],
-        ['name' => 'Festivales culturales', 'slug' => 'festivales-culturales'],
-        ['name' => 'Proyecciones de cine', 'slug' => 'proyecciones-cine'],
-        ['name' => 'Eventos Deportivos', 'slug' => 'sports'],
-        ['name' => 'Maratones y carreras', 'slug' => 'maratones-carreras'],
-        ['name' => 'Torneos y campeonatos', 'slug' => 'torneos-campeonatos'],
-        ['name' => 'Exhibiciones deportivas', 'slug' => 'exhibiciones-deportivas'],
-        ['name' => 'Clases y entrenamientos abiertos', 'slug' => 'clases-entrenamientos'],
-        ['name' => 'Esports (competencias de videojuegos)', 'slug' => 'esports'],
-        ['name' => 'Eventos Educativos', 'slug' => 'educational'],
-        ['name' => 'Clases y cursos', 'slug' => 'clases-cursos'],
-        ['name' => 'Conferencias académicas', 'slug' => 'conferencias-academicas'],
-        ['name' => 'Simposios', 'slug' => 'simposios'],
-        ['name' => 'Debates y mesas redondas', 'slug' => 'debates-mesas-redondas'],
-        ['name' => 'Talleres prácticos', 'slug' => 'talleres-practicos'],
-        ['name' => 'Eventos Religiosos', 'slug' => 'religious'],
-        ['name' => 'Misas y cultos', 'slug' => 'misas-cultos'],
-        ['name' => 'Peregrinaciones', 'slug' => 'peregrinaciones'],
-        ['name' => 'Retiros espirituales', 'slug' => 'retiros-espirituales'],
-        ['name' => 'Festividades religiosas', 'slug' => 'festividades-religiosas'],
-        ['name' => 'Eventos Benéficos y Comunitarios', 'slug' => 'charity'],
-        ['name' => 'Galas benéficas', 'slug' => 'galas-beneficas'],
-        ['name' => 'Subastas solidarias', 'slug' => 'subastas-solidarias'],
-        ['name' => 'Campañas de recolección de donaciones', 'slug' => 'campanas-donaciones'],
-        ['name' => 'Voluntariados', 'slug' => 'voluntariados'],
-        ['name' => 'Eventos de concienciación', 'slug' => 'eventos-concienciacion'],
-    ];
-
-
-
-    /**
      * Initializes the ContentHelper.
      *
      * @param Container $container The service container.
@@ -604,20 +544,23 @@ class ContentHelper
     }
 
     /**
-     * Retrieves the event name by slug.
+     * Retrieves the name of an event type based on its slug.
      *
-     * @param string $slug The slug to search for in the eventTypes.
-     *
-     * @return string|null The name of the event type or null if not found.
+     * @param string $slug The slug of the event type.
+     * @return string|null The name of the event type or null if the slug doesn't exist.
      */
-    public function getEventTypeNameBySlug(string $slug): ?string
+    public function getEventTypeNameBySlug($slug)
     {
-        foreach ($this->eventTypes as $event) {
-            if ($event['slug'] === $slug) {
-                return _($event['name']);
+        $eventTypes = $this->getEventTypes();
+
+        // Recorremos el array de eventTypes para encontrar el slug
+        foreach ($eventTypes as $eventType) {
+            if ($eventType['slug'] === $slug) {
+                return $eventType['name']; // Devolvemos el nombre si encontramos el slug
             }
         }
 
+        // Si no se encuentra el slug, devolvemos null
         return null;
     }
 
