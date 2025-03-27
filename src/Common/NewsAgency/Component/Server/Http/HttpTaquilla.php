@@ -202,12 +202,14 @@ class HttpTaquilla extends Http
         $content->extCategory          = $data['entity']['type'];
         $content->tags                 = [];
 
-        $featureContent['inner'] = new \StdClass();
+        if (!empty($data['entity']['img_urls'])) {
+            $featureContent['inner'] = new \StdClass();
 
-        $featureContent['inner']->content_type_name = 'photo';
-        $featureContent['inner']->pk_content        = 'photo_' . $data['event_id'];
-        $featureContent['inner']->created           = $now;
-        $featureContent['inner']->external_uri      = $data['entity']['img_urls']['full_size'];
+            $featureContent['inner']->content_type_name = 'photo';
+            $featureContent['inner']->pk_content        = 'photo_' . $data['event_id'];
+            $featureContent['inner']->created           = $now;
+            $featureContent['inner']->external_uri      = $data['entity']['img_urls']['full_size'];
+        }
 
         return $content;
     }
