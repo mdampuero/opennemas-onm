@@ -159,6 +159,12 @@
           <textarea name="event-map-iframe" id="event-map-iframe" ng-model="item.event_map_iframe" class="form-control"
             rows="4">
           </textarea>
+          <div ng-show="isInvalidIframe" class="alert alert-danger">
+            <i class="fa fa-exclamation-triangle"></i>
+            <small>
+              {t}The iframe is invalid. Please check the iframe code.{/t}
+            </small>
+          </div>
         </div>
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.ticket = !expanded.ticket">
