@@ -162,6 +162,13 @@
           return data;
         };
 
+        /**
+         * Retrieves the name of an event based on its slug.
+         *
+         * @function
+         * @param {string} slug - The slug of the event to find.
+         * @returns {string|null} The name of the event if found, or null if no event with the given slug exists.
+         */
         $scope.getEventName = function(slug) {
           var event = Object.values($scope.data.extra.events).find(function(event) {
             return event.slug === slug;
