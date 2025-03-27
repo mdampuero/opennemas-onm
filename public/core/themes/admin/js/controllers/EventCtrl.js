@@ -120,7 +120,6 @@
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'event-' + $scope.data.item.pk_content + '-draft';
           }
-
           $scope.checkDraft();
           related.init($scope);
           related.watch();
@@ -161,6 +160,14 @@
           data.text_complexity = bodyComplexity.textComplexity;
           data.word_count = bodyComplexity.wordsCount;
           return data;
+        };
+
+        $scope.getEventName = function(slug) {
+          var event = Object.values($scope.data.extra.events).find(function(event) {
+            return event.slug === slug;
+          });
+
+          return event ? event.name : null;
         };
 
         /**
