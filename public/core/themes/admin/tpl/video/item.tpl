@@ -86,6 +86,15 @@
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired="item.type == 'script' || item.type == 'external'" iTitle="{t}Featured in frontpage{/t}" types="photo"}
       {include file="ui/component/content-editor/accordion/additional-data.tpl"}
     </div>
+    {if !empty({setting name=seo_information})}
+      <div class="grid simple" ng-if="!hasMultilanguage()">
+        <div class="grid-body no-padding">
+          <div class="grid-collapse-title">
+            <i class="fa fa-search m-r-10"></i> {t}SEO Information{/t}
+          </div>
+          {include file="ui/component/content-editor/accordion/seo_info.tpl"}
+      </div>
+    {/if}
   </div>
 {/block}
 
