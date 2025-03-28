@@ -15,6 +15,6 @@
 
 <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.eventType, 'event-slug-class': item.event_type && (data.extra.events.slug | filter : { slug: item.event_type } : true)[0].slug === 'desired-slug' }">
   <div class="form-group no-margin">
-    {include file="ui/component/select/events.tpl" class="form-control" ngModel="item.event_type" select=true required=$required}
+    {include file="ui/component/select/events.tpl" class="form-control" ngModel="item.event_type"}
   </div>
 </div>

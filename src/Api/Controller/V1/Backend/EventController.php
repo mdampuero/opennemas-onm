@@ -55,7 +55,7 @@ class EventController extends ContentController
             $this->get('api.service.category')->getList()['items']
         );
 
-        $events = $this->get('core.helper.event')->getEventTypes();
+        $events = $this->get('core.helper.event')->getEventsGroupedByCategory();
 
         return array_merge(parent::getExtraData($items), [
             'categories' => $categories,

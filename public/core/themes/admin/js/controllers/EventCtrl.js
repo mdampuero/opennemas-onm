@@ -170,6 +170,10 @@
          * @returns {string|null} The name of the event if found, or null if no event with the given slug exists.
          */
         $scope.getEventName = function(slug) {
+          if (!$scope.data || !$scope.data.extra || !$scope.data.extra.events) {
+            return null;
+          }
+
           var event = Object.values($scope.data.extra.events).find(function(event) {
             return event.slug === slug;
           });

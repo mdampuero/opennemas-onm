@@ -405,6 +405,62 @@ class EventHelper
     }
 
     /**
+     * Retrieves events grouped by their parent category.
+     *
+     * This function fetches all event types, organizes them into categories,
+     * and returns a flattened list where each event is associated with its group.
+     *
+     * @return array An array of events with their respective categories.
+     */
+    public function getEventsGroupedByCategory()
+    {
+        $events        = $this->getEventTypes();
+        $groupedEvents = [];
+        $eventById     = [];
+
+        // Index events by their ID for faster lookup
+        foreach ($events as $event) {
+            $eventById[$event['id']] = $event;
+        }
+
+        foreach ($events as $event) {
+            // If the event is a category, create a group but don't add it as an event
+            if ($event['category']) {
+                $groupedEvents[$event['slug']] = [
+                    'name'     => $event['name'],
+                    'slug'     => $event['slug'],
+                    'group'    => $event['name'],
+                    'children' => [],
+                ];
+                continue;
+            }
+
+            // Assign event to its parent category if it exists
+            $parentId = $event['parent'];
+
+            if (isset($eventById[$parentId])) {
+                $parent = $eventById[$parentId];
+                $groupedEvents[$parent['slug']]['children'][] = [
+                    'name'  => $event['name'],
+                    'slug'  => $event['slug'],
+                    'group' => $parent['name'],
+                ];
+            }
+        }
+
+        // Flatten grouped events into a final result array
+        $result = [];
+
+        foreach ($groupedEvents as $group) {
+            foreach ($group['children'] as $child) {
+                $result[] = $child;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Retrieves the name of an event type based on its slug.
      *
      * @param string $slug The slug of the event type.
