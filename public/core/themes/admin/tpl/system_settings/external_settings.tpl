@@ -64,7 +64,7 @@
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-xs-12 col-sm-6 col-sm-offset-3 m-b-30" ng-if="settings.google_analytics.length > 1 && $index !== 0 && (!code.master || code.master === 'false')">
+                          <div class="col-xs-12 col-sm-6 col-sm-offset-3 m-b-30" ng-if="settings.google_analytics.length > 1 && (!code.master || code.master === 'false')">
                             <button class="btn btn-block btn-danger" ng-click="removeGanalytics($index)" type="button">
                               <i class="fa fa-trash-o"></i>
                               {t}Delete{/t}
@@ -84,7 +84,7 @@
                             </div>
                           </div>
                           <div class="row">
-                            <div class="col-xs-12 col-sm-6 col-sm-offset-3 m-b-30" ng-if="settings.google_analytics.length > 1 && $index !== 0 && code.master === 'true'">
+                            <div class="col-xs-12 col-sm-6 col-sm-offset-3 m-b-30" ng-if="settings.google_analytics.length > 1 && code.master === 'true'">
                               <button class="btn btn-block btn-danger" ng-click="removeGanalytics($index)" type="button">
                                 <i class="fa fa-trash-o"></i>
                                 {t}Delete{/t}
