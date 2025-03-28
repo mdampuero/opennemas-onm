@@ -29,6 +29,11 @@ services:
         arguments:  [ '@service_container', '@api.service.author', '@router', '@core.template.frontend', '@core.helper.url_generator' ]
         public:     true
 
+    core.helper.event:
+        class:      Common\Core\Component\Helper\EventHelper
+        arguments:  [ '@service_container', '@api.service.content', '@router', '@core.template.frontend', '@core.helper.url_generator' ]
+        public:     true
+
     core.helper.category:
         class:      Common\Core\Component\Helper\CategoryHelper
         arguments:  [ '@service_container', '@core.instance', '@core.template.frontend', '@core.helper.url_generator' ]

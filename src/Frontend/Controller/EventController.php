@@ -138,7 +138,7 @@ class EventController extends FrontendController
         $date     = gmdate('Y-m-d H:i:s');
         $type     = $params['type'] ?? null;
         $tags     = $params['tag'] ?? null;
-        $ch       = $this->get('core.helper.content');
+        $ch       = $this->get('core.helper.event');
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('event_settings', false);
@@ -148,26 +148,25 @@ class EventController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        // Base de la consulta con INNER JOINs esenciales
-        $oql = sprintf(
-            'select * from contents '
-            . 'inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
-            . 'and cm1.meta_name = "event_start_date" '
-            . 'left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
-            . 'and cm2.meta_name = "event_end_date" '
+        $baseOql = sprintf(
+            'FROM contents'
+            . ' inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
+            . ' and cm1.meta_name = "event_start_date" '
+            . ' left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
+            . ' and cm2.meta_name = "event_end_date" '
         );
 
         if (!empty($type)) {
             if ($ch->matchEventType($type)) {
-                $oql .= sprintf(
+                $baseOql .= sprintf(
                     'join contentmeta as cm3 on contents.pk_content = cm3.fk_content '
                     . 'AND cm3.meta_name = "event_type" AND cm3.meta_value = "%s" ',
                     $type
                 );
             } elseif ($this->matchCategory($type)) {
-                $oql .= $this->buildCategoryJoin($type);
+                $baseOql .= $this->buildCategoryJoin($type);
             } elseif (empty($tags)) {
-                $oql .= $this->buildTagJoin($type);
+                $baseOql .= $this->buildTagJoin($type);
 
                 $matchedTag = $this->matchTag($type);
                 $tagsName   = $matchedTag ? $matchedTag->name : null;
@@ -175,13 +174,13 @@ class EventController extends FrontendController
         }
 
         if (!empty($tags)) {
-            $oql .= $this->buildTagJoin($tags);
+            $baseOql .= $this->buildTagJoin($tags);
 
             $matchedTag = $this->matchTag($tags);
             $tagsName   = $matchedTag ? $matchedTag->name : null;
         }
 
-        $oql .= sprintf(
+        $baseOql .= sprintf(
             'where content_type_name="event" and content_status=1 and in_litter=0 '
             . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s")) '
             . 'and (starttime is null or starttime < "%s") '
@@ -194,28 +193,30 @@ class EventController extends FrontendController
         );
 
         if ($settings["hide_current_events"] ?? false) {
-            $oql .= sprintf(
+            $baseOql .= sprintf(
                 'and (cm1.meta_value >= "%s") ',
                 gmdate('Y-m-d'),
                 gmdate('Y-m-d')
             );
         }
 
-        $oql .= 'order by cm1.meta_value asc';
+        $pagination = sprintf(
+            'order by cm1.meta_value asc limit %d offset %d',
+            $params['epp'],
+            $params['epp'] * ($params['page'] - 1)
+        );
 
-        $response = $this->get('api.service.content')->getListBySql($oql);
+        $dataOql = sprintf(
+            'SELECT * ' . $baseOql . ' %s',
+            $pagination
+        );
+
+        $countOql = 'SELECT COUNT(*) AS total ' . $baseOql . ' order by cm1.meta_value asc';
+        $total    = $this->get('orm.manager')->getConnection('instance')->executeQuery($countOql)->fetchAll();
+
+        $response = $this->get('api.service.content')->getListBySql($dataOql);
 
         $items = $response['items'];
-        $total = count($items);
-        $limit = ($params['epp'] * ($params['page'] - 1) + $params['epp']) > $total
-            ? ($total - ($params['epp'] * ($params['page'] - 1)))
-            : $params['epp'];
-
-        $items = array_slice(
-            $items,
-            $params['epp'] * ($params['page'] - 1),
-            $limit
-        );
 
         // No first page and no contents
         if ($params['page'] > 1 && empty($items)) {
@@ -244,7 +245,7 @@ class EventController extends FrontendController
             'directional' => true,
             'epp'         => $params['epp'],
             'page'        => $params['page'],
-            'total'       => $total,
+            'total'       => $total[0]['total'],
             'route'       => $route
         ]);
 
