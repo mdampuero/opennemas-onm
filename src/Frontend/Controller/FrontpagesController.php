@@ -35,16 +35,15 @@ class FrontpagesController extends Controller
      *
      * @throws ResourceNotFoundException If the frontpage doesn't exist.
      */
-    public function showAction(Request $request, $categorySlug = null)
+    public function showAction(Request $request)
     {
         $categoryName = $request->query->get('category', 'home');
         $category     = null;
         $categoryId   = 0;
 
-        if (!empty($categoryName) && $categoryName !== 'home' || $categorySlug !== null) {
+        if (!empty($categoryName) && $categoryName !== 'home') {
             try {
-                $categoryName = $categorySlug ?: $categoryName;
-                $category     = $this->get('api.service.category')
+                $category = $this->get('api.service.category')
                     ->getItemBySlug($categoryName);
             } catch (\Exception $e) {
                 throw new ResourceNotFoundException();
