@@ -40,7 +40,7 @@
         </a>
       </li>
       <li class="quicklinks">
-        <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving || isInvalidIframe" type="button">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
           <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
           {t}Save{/t}
         </button>
@@ -159,12 +159,6 @@
           <textarea name="event-map-iframe" id="event-map-iframe" ng-model="item.event_map_iframe" class="form-control"
             rows="4">
           </textarea>
-          <div ng-show="isInvalidIframe" class="alert alert-danger">
-            <i class="fa fa-exclamation-triangle"></i>
-            <small>
-              {t}The iframe is invalid. Please check the iframe code.{/t}
-            </small>
-          </div>
         </div>
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.ticket = !expanded.ticket">

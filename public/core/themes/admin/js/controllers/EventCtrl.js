@@ -15,8 +15,8 @@
      *   Check billing information when saving user.
      */
     .controller('EventCtrl', [
-      '$controller', '$scope', 'related', 'routing', 'translator',
-      function($controller, $scope, related, routing, translator) {
+      '$controller', '$scope', 'related', 'routing', 'translator', 'messenger',
+      function($controller, $scope, related, routing, translator, messenger) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -212,7 +212,6 @@
 
           if (textarea) {
             textarea.style.border = $scope.isInvalidIframe ? '2px solid red' : '';
-            textarea.style.backgroundColor = $scope.isInvalidIframe ? '#f8d7da' : '';
             textarea.style.color = $scope.isInvalidIframe ? '#721c24' : '';
           }
         });
