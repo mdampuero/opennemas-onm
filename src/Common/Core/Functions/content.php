@@ -337,5 +337,5 @@ function get_last_live_update_date($item) : ?string
  */
 function get_event_type_name($item) : ?string
 {
-    return getService('core.helper.content')->getEventTypeNameBySlug($item);
+    return getService('core.helper.event')->getEventTypeNameBySlug($item);
 }

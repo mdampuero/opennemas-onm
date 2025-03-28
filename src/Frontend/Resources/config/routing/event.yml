@@ -17,7 +17,7 @@ frontend_events:
 
 frontend_event_show:
     path: /event/{slug}/
-    defaults: { _controller: FrontendBundle:Event:show }
+    defaults: { _controller: FrontendBundle:Event:show, _format: html }
     requirements:
         slug : '[^/.]+'
     options:
