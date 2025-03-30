@@ -93,6 +93,7 @@
         forms: {
           'not_valid' : '{t}The form has some missing or invalid fields, please review it.{/t}',
           'not_locale' : '{t}You must have at least 1 languages ​​set for the frontend{/t}',
+          'not_valid_iframe' : '{t}The provided iframe is not valid. Please check the field and try again.{/t}',
         }
       };
     </script>

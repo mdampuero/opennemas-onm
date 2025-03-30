@@ -15,8 +15,8 @@
      *   Check billing information when saving user.
      */
     .controller('EventCtrl', [
-      '$controller', '$scope', 'related', 'routing', 'translator', 'messenger',
-      function($controller, $scope, related, routing, translator, messenger) {
+      '$controller', '$scope', 'related', 'routing', 'translator',
+      function($controller, $scope, related, routing, translator) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**

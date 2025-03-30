@@ -236,8 +236,13 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
      *   Saves tags, generate slug and, then, saves the item.
      */
     $scope.saveItem = function() {
-      if (!$scope.validate() || $scope.isInvalidIframe) {
+      if (!$scope.validate()) {
         messenger.post(window.strings.forms.not_valid, 'error');
+        return;
+      }
+
+      if ($scope.isInvalidIframe) {
+        messenger.post(window.strings.forms.not_valid_iframe, 'error');
         return;
       }
 
