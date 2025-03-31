@@ -3,7 +3,7 @@
   <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.eventType }"></i>
   <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.eventType">
     <span ng-show="!item.event_type">
-      <strong>{t}No event type selected{/t}</strong>
+      <strong>{t}No type{/t}</strong>
     </span>
     <span ng-show="item.event_type">
       <strong>
