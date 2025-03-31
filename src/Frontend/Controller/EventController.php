@@ -165,11 +165,13 @@ class EventController extends FrontendController
                 );
             } elseif ($this->matchCategory($type)) {
                 $baseOql .= $this->buildCategoryJoin($type);
-            } elseif (empty($tags)) {
+            } elseif (empty($tags) && $this->matchTag($type)) {
                 $baseOql .= $this->buildTagJoin($type);
 
                 $matchedTag = $this->matchTag($type);
                 $tagsName   = $matchedTag ? $matchedTag->name : null;
+            } else {
+                throw new ResourceNotFoundException();
             }
         }
 
