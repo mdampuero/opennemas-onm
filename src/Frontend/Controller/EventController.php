@@ -179,7 +179,12 @@ class EventController extends FrontendController
             $baseOql .= $this->buildTagJoin($tags);
 
             $matchedTag = $this->matchTag($tags);
-            $tagsName   = $matchedTag ? $matchedTag->name : null;
+
+            if (empty($matchedTag)) {
+                throw new ResourceNotFoundException();
+            }
+
+            $tagsName = $matchedTag ? $matchedTag->name : null;
         }
 
         $baseOql .= sprintf(
