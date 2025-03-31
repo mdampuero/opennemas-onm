@@ -156,15 +156,20 @@ class EventController extends FrontendController
             . ' and cm2.meta_name = "event_end_date" '
         );
 
+        // Check for event type, category or tag on first url parameter
         if (!empty($type)) {
-            if ($ch->matchEventType($type)) {
+            if ($ch->matchType($type)) {
                 $baseOql .= sprintf(
                     'join contentmeta as cm3 on contents.pk_content = cm3.fk_content '
                     . 'AND cm3.meta_name = "event_type" AND cm3.meta_value = "%s" ',
                     $type
                 );
-            } elseif ($this->matchCategory($type)) {
-                $baseOql .= $this->buildCategoryJoin($type);
+            } elseif ($category = $this->matchCategory($type)) {
+                $baseOql .= sprintf(
+                    'join content_category cc on contents.pk_content = cc.content_id '
+                    . 'and cc.category_id = %d ',
+                    $category->id
+                );
             } elseif (empty($tags) && $this->matchTag($type)) {
                 $baseOql .= $this->buildTagJoin($type);
 
@@ -176,9 +181,9 @@ class EventController extends FrontendController
         }
 
         if (!empty($tags)) {
-            $baseOql .= $this->buildTagJoin($tags);
-
             $matchedTag = $this->matchTag($tags);
+
+            $baseOql .= $this->buildTagJoin($tags);
 
             if (empty($matchedTag)) {
                 throw new ResourceNotFoundException();
@@ -262,20 +267,6 @@ class EventController extends FrontendController
     /**
      * {@inheritdoc}
      */
-    protected function buildCategoryJoin($type)
-    {
-        $matchCategory = $this->matchCategory($type);
-
-        return sprintf(
-            'join content_category cc on contents.pk_content = cc.content_id '
-            . 'and cc.category_id = %d ',
-            $matchCategory->id
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function buildTagJoin($tags)
     {
         $tagsArray = explode(',', $tags);
@@ -307,14 +298,12 @@ class EventController extends FrontendController
      */
     protected function matchCategory(string $slug)
     {
-        $categoryService = $this->get('api.service.category');
-
         try {
-            $category = $categoryService->getItemBySlug($slug);
+            $category = $this->get('api.service.category')->getItemBySlug($slug);
 
             return !empty($category) ? $category : null;
         } catch (GetItemException $e) {
-            return false;
+            return null;
         }
     }
 
@@ -335,7 +324,7 @@ class EventController extends FrontendController
 
             return !empty($tags['items'][0]) ? $tags['items'][0] : null;
         } catch (GetListException $e) {
-            return false;
+            return null;
         }
     }
 }

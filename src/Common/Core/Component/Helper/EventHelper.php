@@ -405,14 +405,14 @@ class EventHelper
     }
 
     /**
-     * Retrieves events grouped by their parent category.
+     * Retrieves events grouped by their parent type.
      *
      * This function fetches all event types, organizes them into categories,
      * and returns a flattened list where each event is associated with its group.
      *
      * @return array An array of events with their respective categories.
      */
-    public function getEventsGroupedByCategory()
+    public function getEventsGroupedByType()
     {
         $events        = $this->getEventTypes();
         $groupedEvents = [];
@@ -440,6 +440,7 @@ class EventHelper
 
             if (isset($eventById[$parentId])) {
                 $parent = $eventById[$parentId];
+
                 $groupedEvents[$parent['slug']]['children'][] = [
                     'name'  => $event['name'],
                     'slug'  => $event['slug'],
@@ -491,7 +492,7 @@ class EventHelper
      *
      * @return bool True if the event type exists, false otherwise.
      */
-    public function matchEventType(string $type): bool
+    public function matchType(string $type): bool
     {
         if ($this->getEventTypeNameBySlug($type)) {
             return true;
