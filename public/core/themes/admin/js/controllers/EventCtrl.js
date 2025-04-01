@@ -186,20 +186,13 @@
          * @description
          * Watches for changes in `item.event_map_iframe` and validates whether the content
          * is an `<iframe>` with a `src` from Google Maps or OpenStreetMap.
-         * If invalid, it disables the save button.
          *
          * @param {string} newValue The new value of `item.event_map_iframe`.
          */
         $scope.$watch('item.event_map_iframe', function(newValue) {
-          var textarea = document.getElementById('event-map-iframe');
-
           if (!newValue || newValue.trim() === '') {
             $scope.isInvalidIframe = false;
-            if (textarea) {
-              textarea.style.border = '';
-              textarea.style.backgroundColor = '';
-              textarea.style.color = '';
-            }
+
             return;
           }
 
@@ -209,11 +202,6 @@
           );
 
           $scope.isInvalidIframe = !iframeRegex.test(newValue);
-
-          if (textarea) {
-            textarea.style.border = $scope.isInvalidIframe ? '2px solid red' : '';
-            textarea.style.color = $scope.isInvalidIframe ? '#721c24' : '';
-          }
         });
       }
     ]);
