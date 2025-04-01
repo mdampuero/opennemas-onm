@@ -9,7 +9,8 @@
  */
 function smarty_function_renderLink($params, &$smarty)
 {
-    $item = $params['item'];
+    $item     = $params['item'];
+    $absolute = $params['absolute'] ?? true;
 
     $multilanguage = $smarty->getContainer()->get('core.instance')->hasMultilanguage();
     $localeDefault = $smarty->getContainer()->get('core.locale')->getLocaleShort('frontend');
@@ -28,7 +29,7 @@ function smarty_function_renderLink($params, &$smarty)
         return $smarty->getContainer()->get('core.helper.url_generator')->generate($relatedItem, [
             'locale' => $localelong,
             'alternative_url' => $item->type === 'category',
-            'absolute' => true
+            'absolute' => $absolute
         ]);
     }
 
