@@ -3,7 +3,7 @@
 
 {block name="commonColumns"}
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-name" checklist-model="app.columns.selected" checklist-value="'name'" type="checkbox">
+    <input id="checkbox-name" checklist-model="app.columns.selected" checklist-value="'name'" type="checkbox" disabled="true">
     <label for="checkbox-name">
       {t}Name{/t}
     </label>
@@ -50,6 +50,12 @@
      {t}RSS{/t}
     </label>
   </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-manual" checklist-model="app.columns.selected" checklist-value="'manual'" type="checkbox">
+    <label for="checkbox-manual">
+     {t}Manual{/t}
+    </label>
+  </div>
 {/block}
 
 {block name="commonColumnsHeader"}
@@ -76,6 +82,9 @@
   </th>
   <th class="text-center v-align-middle" width="100" ng-if="isColumnEnabled('rss')">
     {t}RSS{/t}
+  </th>
+  <th class="text-center v-align-middle" width="100" ng-if="isColumnEnabled('manual')">
+    {t}Manual{/t}
   </th>
 {/block}
 
@@ -136,5 +145,8 @@
     <button class="btn btn-white" ng-click="patch(item, 'rss', item.rss != 1 ? 1 : 0)" type="button">
       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.rssLoading, 'fa-check text-success' : !item.rssLoading && item.rss == '1', 'fa-times text-error': !item.rssLoading && item.rss == '0' }"></i>
     </button>
+  </td>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('manual')">
+    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.manualLoading, 'fa-check text-success' : !item.manualLoading && item.params.manual == '1', 'fa-times text-error': !item.manualLoading && item.params.manual != '1' }"></i>
   </td>
 {/block}
