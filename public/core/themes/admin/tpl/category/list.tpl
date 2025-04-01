@@ -5,7 +5,7 @@
 {/block}
 
 {block name="ngInit"}
-  ng-controller="CategoryListCtrl" ng-init="forcedLocale = '{$locale}'; init()"
+  ng-controller="CategoryListCtrl" ng-init="init()"
 {/block}
 
 {block name="icon"}
@@ -82,21 +82,35 @@
       </span>
     </div>
   </li>
-  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="activated = [ { name: '{t}Any{/t}', value: null}, { name: '{t}Enabled{/t}', value: 1}, { name: '{t}Disabled{/t}', value: 0 } ]">
-    <ui-select name="activated" theme="select2" ng-model="criteria.enabled">
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="activated = [ { name: '{t}All{/t}', value: null}, { name: '{t}Yes{/t}', value: 1}, { name: '{t}No{/t}', value: 0 } ]">
+    <ui-select name="activated" theme="select2" ng-model="criteria.visible">
       <ui-select-match>
-        <strong>{t}Status{/t}:</strong> [% $select.selected.name %]
+        <strong>{t}Visible{/t}:</strong> [% $select.selected.name %]
       </ui-select-match>
       <ui-select-choices repeat="item.value as item in activated | filter: $select.search">
         <div ng-bind-html="item.name | highlight: $select.search"></div>
       </ui-select-choices>
     </ui-select>
   </li>
-{/block}
-
-{block name="rightFilters"}
-  <li class="quicklinks">
-    <onm-pagination ng-model="criteria.page" readonly total-items="data.total"></onm-pagination>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="activated = [ { name: '{t}All{/t}', value: null}, { name: '{t}Yes{/t}', value: 1}, { name: '{t}No{/t}', value: 0 } ]">
+    <ui-select name="activated" theme="select2" ng-model="criteria.enabled">
+      <ui-select-match>
+        <strong>{t}Enabled{/t}:</strong> [% $select.selected.name %]
+      </ui-select-match>
+      <ui-select-choices repeat="item.value as item in activated | filter: $select.search">
+        <div ng-bind-html="item.name | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>
+  </li>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="activated = [ { name: '{t}All{/t}', value: null}, { name: '{t}Yes{/t}', value: 1}, { name: '{t}No{/t}', value: 0 } ]">
+    <ui-select name="activated" theme="select2" ng-model="criteria.rss">
+      <ui-select-match>
+        <strong>{t}RSS{/t}:</strong> [% $select.selected.name %]
+      </ui-select-match>
+      <ui-select-choices repeat="item.value as item in activated | filter: $select.search">
+        <div ng-bind-html="item.name | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>
   </li>
 {/block}
 
@@ -108,10 +122,7 @@
   <script type="text/ng-template" id="modal-delete">
     {include file="common/extension/modal.delete.tpl"}
   </script>
-  <script type="text/ng-template" id="modal-empty">
-    {include file="category/modal.empty.tpl"}
-  </script>
   <script type="text/ng-template" id="modal-move">
-    {include file="category/modal.move.tpl"}
+    {include file="tag/modal.move.tpl"}
   </script>
 {/block}
