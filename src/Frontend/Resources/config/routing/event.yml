@@ -1,16 +1,25 @@
-frontend_events_list:
-    path: /events/{type}/{tag}
-    defaults: { _controller: FrontendBundle:Event:list, type: null, tag: null }
-    requirements:
-        type:  '[^/]+'
-        tag: '[^/]+'
+frontend_events:
+    path: /events/
+    defaults: { _controller: FrontendBundle:Event:list }
     options:
         l10n: true
         subdirectory: true
 
-frontend_events:
-    path: /events/
-    defaults: { _controller: FrontendBundle:Event:list }
+frontend_events_list:
+    path: /events/{type}/
+    defaults: { _controller: FrontendBundle:Event:typeList }
+    requirements:
+        type: '[^/]+'
+    options:
+        l10n: true
+        subdirectory: true
+
+frontend_events_tag_list:
+    path: /events/{type}/{tag}/
+    defaults: { _controller: FrontendBundle:Event:tagList }
+    requirements:
+        type: '[^/]+'
+        tag: '[^/]+'
     options:
         l10n: true
         subdirectory: true
