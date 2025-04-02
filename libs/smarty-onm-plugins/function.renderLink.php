@@ -27,7 +27,6 @@ function smarty_function_renderLink($params, &$smarty)
         $relatedItem = $smarty->getContainer()->get($serviceMap[$item->type])->getItem($item->referenceId);
         return $smarty->getContainer()->get('core.helper.url_generator')->generate($relatedItem, [
             'locale' => $localelong,
-            'alternative_url' => $item->type === 'category',
             'absolute' => true
         ]);
     }
@@ -45,12 +44,11 @@ function smarty_function_renderLink($params, &$smarty)
 function generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault)
 {
     $mapUrl = [
-        'category'      => "/seccion/" . $item->link . "/",
+        'category'      => "/" . $item->link . "/",
         'videoCategory' => "/video/" . $item->link . "/",
         'albumCategory' => "/album/" . $item->link . "/",
         'pollCategory'  => "/encuesta/" . $item->link . "/",
         'static'        => "/" . STATIC_PAGE_PATH . "/" . $item->link . ".html",
-        'blog-category' => "/blog/section/" . $item->link . "/",
         'tags'          => "/tags/" . $item->link . "/",
     ];
 

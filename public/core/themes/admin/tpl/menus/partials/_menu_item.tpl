@@ -3,8 +3,7 @@
     <span class="angular-ui-tree-icon"></span>
   </span>
   <span class="menu-item-type-icon fa fa-cube" ng-if="item.type == 'internal'" tooltip-placement="right" uib-tooltip="{t}Module{/t}"></span>
-  <span class="menu-item-type-icon fa fa-newspaper-o" ng-if="item.type == 'category'" tooltip-placement="right" uib-tooltip="{t}Manual categories{/t} - [% item.title %]"></span>
-  <span class="menu-item-type-icon fa fa-bookmark" ng-if="item.type == 'blog-category'" tooltip-placement="right" uib-tooltip="{t}Automatic categories{/t} - [% item.title %]"></span>
+  <span class="menu-item-type-icon fa fa-bookmark" ng-if="item.type == 'category'" tooltip-placement="right" uib-tooltip="{t}Categories{/t} - [% item.title %]"></span>
   <span class="menu-item-type-icon fa fa-file" ng-if="item.type == 'static'" tooltip-placement="right" uib-tooltip="{t}Static Pages{/t} - [% item.title %]"></span>
   <span class="menu-item-type-icon fa fa-tag" ng-if="item.type == 'tags'" tooltip-placement="right" uib-tooltip="{t}Tags{/t} - [% item.title %]"></span>
   <span class="menu-item-type-icon fa fa-exchange" ng-if="item.type == 'syncBlogCategory'" tooltip-placement="right" uib-tooltip="{t}Synchronized instances{/t}"></span>

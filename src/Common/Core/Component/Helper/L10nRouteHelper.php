@@ -92,7 +92,6 @@ class L10nRouteHelper
             'frontend_participa_frontpage',
             'frontend_participa_form',
             'frontend_frontpage',
-            'frontend_frontpage_category',
             'frontend_letter_frontpage',
             'frontend_letter_form',
             'frontend_letter_show',

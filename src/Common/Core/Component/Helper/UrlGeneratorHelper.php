@@ -360,29 +360,6 @@ class UrlGeneratorHelper
     }
 
     /**
-     * Returns the ALt URI for a Category.
-     *
-     * @param Category $category The category object.
-     *
-     * @return string The category URI.
-     */
-    protected function getUriForCategoryAlt($category, $locale = null)
-    {
-        $category = $this->container->get('data.manager.filter')->set($category)
-            ->filter('localize', [
-                'keys'   => [ 'name' ],
-                'locale' => $locale
-            ])
-            ->get();
-
-        $uri = $this->container->get('router')->generate('frontend_frontpage_category', [
-            'category' => $category->name
-        ]);
-
-        return ltrim($uri, '/');
-    }
-
-    /**
      * Returns the Uri for a given content.
      *
      * @param mixed The content to generate URI for.
