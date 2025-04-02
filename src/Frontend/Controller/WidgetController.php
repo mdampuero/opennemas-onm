@@ -70,7 +70,9 @@ class WidgetController extends Controller
 
             $oql = array_key_exists('widget_id', $params)
                 ? sprintf('pk_content = "%s" ', $params['widget_id'])
-                : sprintf('class = "%s" ', $params['widget_name']);
+                : (array_key_exists('widget_name', $params)
+                    ? sprintf('class = "%s" ', $params['widget_name'])
+                    : sprintf('title = "%s" ', $params['widget_title']));
 
             $oql .= 'and content_type_name="widget" ' .
                 'and content_status=1 ' .
