@@ -88,6 +88,8 @@ class L10nRouteHelper
             'frontend_companies',
             'frontend_content_print',
             'frontend_events',
+            'frontend_events_list',
+            'frontend_events_tag_list',
             'frontend_event_show',
             'frontend_participa_frontpage',
             'frontend_participa_form',
