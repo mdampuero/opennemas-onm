@@ -11,8 +11,6 @@
 
 namespace Common\Core\Component\Helper;
 
-use Api\Exception\GetItemException;
-use Api\Exception\GetListException;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -498,13 +496,6 @@ class EventHelper
             return true;
         }
 
-        $oql = sprintf('event_type = "%s"', $type);
-
-        try {
-            $event = $this->service->getList($oql);
-            return !empty($event['items']);
-        } catch (GetListException $e) {
-            return false;
-        }
+        return false;
     }
 }
