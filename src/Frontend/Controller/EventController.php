@@ -23,16 +23,20 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $caches = [
-        'list'    => 'articles',
-        'show'    => 'articles'
+        'list' => 'articles',
+        'taglist' => 'articles',
+        'typelist' => 'articles',
+        'show' => 'articles'
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $groups = [
-        'list'    => 'article_inner',
-        'show'    => 'article_inner'
+        'list' => 'article_inner',
+        'taglist' => 'article_inner',
+        'typelist' => 'article_inner',
+        'show' => 'article_inner'
     ];
 
     /**
@@ -40,6 +44,8 @@ class EventController extends FrontendController
      */
     protected $positions = [
         'list' => [ 1, 2, 5, 6, 7 ],
+        'taglist' => [ 1, 2, 5, 6, 7 ],
+        'typelist' => [ 1, 2, 5, 6, 7 ],
         'show' => [ 1, 2, 5, 6, 7 ]
     ];
 
@@ -47,15 +53,19 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $queries = [
-        'list' => [ 'page', 'type', 'tag' ]
+        'list' => [ 'page' ],
+        'taglist'  => [ 'page', 'type', 'tag' ],
+        'typelist' => [ 'page', 'type' ]
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $routes = [
-        'list'    => 'frontend_events_list',
-        'show'    => 'frontend_event_show'
+        'list'      => 'frontend_events',
+        'taglist'  => 'frontend_events_tag_list',
+        'typelist' => 'frontend_events_list',
+        'show'      => 'frontend_event_show'
     ];
 
     /**
@@ -67,14 +77,32 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $templates = [
-        'list'    => 'event/list.tpl',
-        'show'    => 'event/item.tpl'
+        'list' => 'event/list.tpl',
+        'taglist'  => 'event/list.tpl',
+        'typelist' => 'event/list.tpl',
+        'show' => 'event/item.tpl'
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $extension = 'es.openhost.module.events';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function tagListAction(Request $request)
+    {
+        return parent::listAction($request);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function typeListAction(Request $request)
+    {
+        return parent::listAction($request);
+    }
 
     /**
      * Returns the list of items basing on a list of parameters.
@@ -103,41 +131,13 @@ class EventController extends FrontendController
     }
 
     /**
-     * Retrieves a tag item based on the slug provided in the request and the current locale.
-     *
-     * @param Request $request The current HTTP request object, which contains the tag slug.
-     *
-     * @return array The tag item data.
-     *
-     * @throws ResourceNotFoundException If the tag item cannot be found or an error occurs while fetching the item.
-     */
-    protected function getItemTag(Request $request)
-    {
-        try {
-            $locale = $this->container->get('core.locale')->getRequestLocale();
-            $tag    = $request->get('tag');
-
-            $item = $this->get('api.service.tag')->getItemBy(sprintf(
-                'slug = "%s" and (locale = "%s" or locale is null)',
-                $tag,
-                $locale
-            ));
-        } catch (\Exception $e) {
-            throw new ResourceNotFoundException();
-        }
-
-
-        return $item;
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function hydrateList(array &$params = []): void
     {
         $date     = gmdate('Y-m-d H:i:s');
         $type     = $params['type'] ?? null;
-        $tags     = $params['tag'] ?? null;
+        $tag      = $params['tag'] ?? null;
         $ch       = $this->get('core.helper.event');
         $settings = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
@@ -170,26 +170,16 @@ class EventController extends FrontendController
                     . 'and cc.category_id = %d ',
                     $category->id
                 );
-            } elseif (empty($tags) && $this->matchTag($type)) {
-                $baseOql .= $this->buildTagJoin($type);
-
-                $matchedTag = $this->matchTag($type);
-                $tagsName   = $matchedTag ? $matchedTag->name : null;
+            } elseif (empty($tag) && $tagItem = $this->matchTag($type)) {
+                $baseOql .= $this->buildTagJoin($tagItem);
             } else {
                 throw new ResourceNotFoundException();
             }
         }
 
-        if (!empty($tags)) {
-            $matchedTag = $this->matchTag($tags);
-
-            $baseOql .= $this->buildTagJoin($tags);
-
-            if (empty($matchedTag)) {
-                throw new ResourceNotFoundException();
-            }
-
-            $tagsName = $matchedTag ? $matchedTag->name : null;
+        // Check for tag when second parameter
+        if (!empty($tag) && $tagItem = $this->matchTag($tag)) {
+            $baseOql .= $this->buildTagJoin($tagItem);
         }
 
         $baseOql .= sprintf(
@@ -223,12 +213,9 @@ class EventController extends FrontendController
             $pagination
         );
 
-        $countOql = 'SELECT COUNT(*) AS total ' . $baseOql . ' order by cm1.meta_value asc';
-        $total    = $this->get('orm.manager')->getConnection('instance')->executeQuery($countOql)->fetchAll();
-
-        $response = $this->get('api.service.content')->getListBySql($dataOql);
-
-        $items = $response['items'];
+        $count = 'SELECT COUNT(*) AS total ' . $baseOql . ' order by cm1.meta_value asc';
+        $total = $this->get('orm.manager')->getConnection('instance')->executeQuery($count)->fetchAll();
+        $items = $this->get('api.service.content')->getListBySql($dataOql)['items'];
 
         // No first page and no contents
         if ($params['page'] > 1 && empty($items)) {
@@ -242,47 +229,31 @@ class EventController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
-        $route = [
-            'name' => 'frontend_events_list',
-            'params' => [
-                'type' => $type,
-                'tag'  => $tags
-            ]
-        ];
-
-        $params['x-tags'] .= ',event-frontpage';
-
+        $params['tag']        = $tagItem->name ?? null;
+        $params['x-tags']    .= ',event-frontpage';
         $params['contents']   = $items;
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
             'epp'         => $params['epp'],
             'page'        => $params['page'],
             'total'       => $total[0]['total'],
-            'route'       => $route
+            'route'       => [
+                'name' => 'frontend_events_list',
+                'params' => [ 'type' => $type, 'tag'  => $tag ]
+            ]
         ]);
-
-        $params['tag'] = $tagsName ?? null;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function buildTagJoin($tags)
+    protected function buildTagJoin($tagItem)
     {
-        $tagsArray = explode(',', $tags);
-        $tagIds    = array_filter(array_map(function ($tag) {
-            $matchTags = $this->matchTag($tag);
-            return $matchTags ? $matchTags->id : null;
-        }, $tagsArray));
-
-        if ($tagIds) {
-            return sprintf(
-                'join contents_tags ct on contents.pk_content = ct.content_id '
-                . 'and ct.tag_id in (%s) ',
-                implode(',', $tagIds)
-            );
-        }
-        return false;
+        return sprintf(
+            'join contents_tags ct on contents.pk_content = ct.content_id '
+            . 'and ct.tag_id in (%s) ',
+            $tagItem->id
+        );
     }
 
     /**
@@ -320,9 +291,11 @@ class EventController extends FrontendController
     protected function matchTag(string $slug)
     {
         try {
-            $tags = $this->get('api.service.tag')->getListBySlugs([ $slug ]);
+            $oql = sprintf('slug = "%s"', $slug);
 
-            return !empty($tags['items'][0]) ? $tags['items'][0] : null;
+            $tag = $this->get('api.service.tag')->getList($oql)['items'];
+
+            return !empty($tag) ? $tag[0] : null;
         } catch (GetListException $e) {
             return null;
         }
