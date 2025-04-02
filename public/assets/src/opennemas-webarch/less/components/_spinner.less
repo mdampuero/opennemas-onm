@@ -32,7 +32,67 @@
   -o-animation: nprogress-spinner 400ms linear infinite;
   animation: nprogress-spinner 400ms linear infinite;
 }
-
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  width: 100%;
+  text-align: center;
+  z-index: 1050;
+}
+.loading-container i {
+  margin-bottom: 10px;
+}
+.loading-container p {
+  margin-top: 10px;
+  font-size: 16px;
+}
+.loading-container {
+  .onm-ai-spinner-wrap {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25%;
+  }
+  #onm-ai-spinner {
+    opacity: 0;
+    animation: spinFadeIn 400ms 200ms forwards;
+  }
+  #rect-third {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    animation: spinRectThird 12s linear infinite;
+  }
+  #rect-second {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    animation: spinRectSecond 16s linear infinite;
+  }
+  #rect-main {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    animation: spinOscillate 10s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+  }
+  @keyframes spinFadeIn {
+    to { opacity: 1; }
+  }
+  @keyframes spinRectThird {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(-360deg); }
+  }
+  @keyframes spinRectSecond {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  @keyframes spinOscillate {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(30deg); }
+    100% { transform: rotate(0deg); }
+  }
+}
 @-webkit-keyframes nprogress-spinner {
   0%   { -webkit-transform: rotate(0deg);   transform: rotate(0deg); }
   100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }

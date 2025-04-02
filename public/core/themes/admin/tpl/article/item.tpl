@@ -124,8 +124,8 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-      {include file="ui/component/input/text.tpl" iCounter=true iField="title_int" iRequired=true iSource="title" iTitle="{t}Inner title{/t}" iValidation=true}
+      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true AI=true AIFieldType="titles"}
+      {include file="ui/component/input/text.tpl" iCounter=true iField="title_int" iRequired=true iSource="title" iTitle="{t}Inner title{/t}" iValidation=true }
       <div class="row">
         <div class="col-sm-6">
           {include file="ui/component/input/text.tpl" iCounter=true iField="agency" iTitle="{t}Signature{/t}"}
@@ -137,8 +137,8 @@
         {/is_module_activated}
       </div>
       {include file="ui/component/input/text.tpl" iCounter=true iField="pretitle" iTitle="{t}Pretitle{/t}"}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true contentPicker=true}
+      {include file="ui/component/content-editor/textarea.tpl" title="{t}Summary{/t}" field="description" rows=5 imagepicker=true AI=true AIFieldType="descriptions"}
+      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=15 imagepicker=true contentPicker=true AI=true AIFieldType="bodies"}
     </div>
   </div>
   {is_module_activated name="es.openhost.module.live_blog_posting"}
@@ -169,6 +169,9 @@
   </script>
   <script type="text/ng-template" id="modal-webpush">
     {include file="common/modals/_modalWebpush.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-onmai">
+    {include file="common/modals/_modalOnmAI.tpl"}
   </script>
 {/block}
 

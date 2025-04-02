@@ -63,6 +63,14 @@ class Importer
     protected $repository;
 
     /**
+     * The current instance.
+     *
+     * @var Instance
+     *
+     */
+    public $instance;
+
+    /**
      * Initializes the Importer.
      *
      * @param array $config The importer configuration.
@@ -71,9 +79,10 @@ class Importer
     {
         $this->container  = $container;
         $this->repository = new LocalRepository();
+        $this->instance   = $this->container->get('core.instance');
 
         $this->configure($config);
-        $this->setInstance($container->get('core.instance'));
+        $this->setInstance($this->instance);
     }
 
     /**
@@ -340,6 +349,48 @@ class Importer
     }
 
     /**
+     * Returns the prompt based on the provided data or the default configuration.
+     *
+     * @param array $data The data containing the prompt information.
+     *
+     * @return ?string The prompt if available in the data or, if auto-import is enabled,
+     *                 the default prompt from the configuration. Returns null if no prompt is found.
+     */
+    protected function getPrompt(array $data): ?string
+    {
+        if (!array_key_exists('prompt', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['promptSelected']['prompt'] ?? null) : null;
+        }
+
+        if (!empty($data['prompt'])) {
+            return $data['prompt'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the tone based on the provided data or the default configuration.
+     *
+     * @param array $data The data containing the tone information.
+     *
+     * @return ?string The tone if available in the data or, if auto-import is enabled,
+     *                 the default tone from the configuration. Returns null if no tone is found.
+     */
+    protected function getTone(array $data): ?string
+    {
+        if (!array_key_exists('tone', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['toneSelected']['name'] ?? null) : null;
+        }
+
+        if (!empty($data['tone'])) {
+            return $data['tone'];
+        }
+
+        return null;
+    }
+
+    /**
      * Returns the content data from the resource.
      *
      * @param Resource $resource The resource to import.
@@ -367,6 +418,8 @@ class Importer
             'urn_source'          => $resource->urn,
             'body'                => $resource->body,
             'href'                => $resource->href,
+            'prompt'              => $this->getPrompt($data),
+            'tone'                => $this->getTone($data),
         ]);
 
         // Force some properties for photos
@@ -397,6 +450,10 @@ class Importer
             $data = $this->{$method}($resource, $data);
         }
 
+        // OnmAI transform
+        if (in_array('es.openhost.module.onmai', $this->instance->activated_modules)) {
+            $data = $this->container->get('core.helper.ai')->transform($data);
+        }
         return $data;
     }
 

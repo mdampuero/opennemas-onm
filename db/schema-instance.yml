@@ -1396,3 +1396,63 @@ user_user_group:
             target_table: user_groups
             target_field: [ pk_user_group ]
             restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+prompts:
+    columns:
+        id:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        mode:
+            type: text
+            options: { default: null, length: 32, notnull: true }
+        name:
+            type: text
+            options: { default: null, length: 64, notnull: true }
+        tone:
+            type: text
+            options: { default: null, length: 1024, notnull: false }
+        role:
+            type: text
+            options: { default: null, length: 1024, notnull: false }
+        field:
+            type: text
+            options: { default: null, length: 32, notnull: false }
+        prompt:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+    index:
+        -
+            name:    PRIMARY
+            columns: [ id ]
+            primary: true
+            unique:  true
+            flags:   {}
+ai_actions:
+    columns:
+        id:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        messages:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        response:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        tokens:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        params:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        date:
+            type: datetime
+            options: { default: null, notnull: false }
+        service:
+            type: text
+            options: { default: null, length: 64, notnull: false }
+    index:
+        -
+            name:    PRIMARY
+            columns: [ id ]
+            primary: true
+            unique:  true
+            flags:   {}

@@ -1,0 +1,31 @@
+backend_onmai_config:
+    path:     /onmai/config/
+    defaults: { _controller: BackendBundle:OnmAI:config }
+    options:
+        expose: true
+
+backend_onmai_dashboard:
+    path:     /onmai/dashboard/
+    defaults: { _controller: BackendBundle:OnmAI:dashboard }
+    options:
+        expose: true
+
+backend_onmai_prompt_create:
+    path:     /onmai/prompts/new/
+    defaults: { _controller: BackendBundle:Prompt:create }
+    options:
+        expose: true
+
+backend_onmai_prompt_show:
+    path:     /onmai/prompts/{id}/
+    defaults: { _controller: BackendBundle:Prompt:show }
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+backend_onmai_prompts_list:
+    path:     /onmai/prompts/
+    defaults: { _controller: BackendBundle:Prompt:list }
+    options:
+        expose: true

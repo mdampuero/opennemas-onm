@@ -88,16 +88,17 @@ class LocaleHelperTest extends \PHPUnit\Framework\TestCase
             ->with('frontend')->willReturn('quux');
 
 
-        $this->security->expects($this->once())->method('hasExtension')
+        $this->security->expects($this->exactly(2))->method('hasExtension')
             ->with('es.openhost.module.translation')->willReturn(false);
 
         $this->assertEquals([
-            'available'     => 'wibble',
-            'default'       => 'flob',
-            'multilanguage' => true,
-            'selected'      => 'flob',
-            'slugs'         => 'quux',
-            'translators'   => []
+            'available'          => 'wibble',
+            'default'            => 'flob',
+            'multilanguage'      => true,
+            'selected'           => 'flob',
+            'slugs'              => 'quux',
+            'translators'        => [],
+            'translatorsDefault' => []
         ], $this->helper->getConfiguration());
     }
 

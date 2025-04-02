@@ -53,7 +53,12 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
         $this->em->expects($this->any())->method('getDataSet')
             ->with('Settings', 'instance')->willReturn($this->ds);
 
-        $this->instance = new Instance([ 'internal_name' => 'flob' ]);
+        $this->ai = $this->getMockBuilder('AIHelper')
+            ->disableOriginalConstructor()
+            ->setMethods(['transform'])
+            ->getMock();
+
+        $this->instance = new Instance(['internal_name' => 'flob']);
         $this->importer = new Importer($this->container, []);
         $this->config   = [
             'content_status'    => 1,
@@ -66,6 +71,9 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
         switch ($name) {
             case 'api.service.content':
                 return $this->service;
+
+            case 'core.helper.ai':
+                return $this->ai;
 
             case 'api.service.photo':
                 return $this->ps;
@@ -470,6 +478,23 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetData()
     {
+        $instanceMock = $this->getMockBuilder(\stdClass::class)
+            ->setMethods(['transform'])
+            ->getMock();
+
+        $instanceMock->activated_modules = ['es.openhost.module.onmai', 'otro.modulo']; // Configurar activated_modules
+
+        $this->importer->instance = $instanceMock;
+
+        $this->ai->expects($this->any())
+            ->method('transform')
+            ->willReturnCallback(function ($data) {
+                if (!isset($data['content_type_name'])) {
+                    $data['content_type_name'] = 'article';
+                }
+                return $data;
+            });
+
         $resource = new ExternalResource(
             [
                 'summary' => 'Lorem ipsum dolor sit amet consectetur.',
@@ -509,7 +534,9 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
             'fk_user_last_editor' => 2,
             'in_home'             => 0,
             'tags'                => [],
-            'frontpage'           => 0
+            'frontpage'           => 0,
+            'prompt'              => null,
+            'tone'                => null
         ];
 
         $this->ts->expects($this->any())->method('getListByString')

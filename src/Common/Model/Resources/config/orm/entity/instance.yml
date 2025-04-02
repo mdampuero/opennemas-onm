@@ -44,6 +44,8 @@ orm:
                 videos:              integer
                 widgets:             integer
                 webpush_subscribers: integer
+                ai_spent:            float
+                ai_config:           array
                 tags:                integer
             converters:
                 default:
@@ -170,6 +172,12 @@ orm:
                         webpush_subscribers:
                             type:    integer
                             options: { default: 0, unsigned: true, notnull: false }
+                        ai_spent:
+                            type:    float
+                            options: { default: 0, unsigned: true, notnull: false }
+                        ai_config:
+                            type:    text
+                            options: { default: null, length: 65532, notnull: false }
                         tags:
                             type:    integer
                             options: { default: 0, notnull: true }
