@@ -105,18 +105,19 @@ class PhotoHelper
             return $url;
         }
 
-        $absolute = $absolute ?
-         \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL :
-         \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH;
-
-        return $this->router->generate(
+        $resource = $this->router->generate(
             'asset_image',
             [
                 'params' => implode(',', array_merge([ $transform ], $params)),
                 'path'   => ltrim($url, '/')
-            ],
-            $absolute
+            ]
         );
+
+        if (!$absolute) {
+            return $resource;
+        }
+
+        return $this->instance->getBaseUrl() . $resource;
     }
 
     /**
