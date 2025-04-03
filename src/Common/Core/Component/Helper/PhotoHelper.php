@@ -105,6 +105,7 @@ class PhotoHelper
             return $url;
         }
 
+        // Generate the path on relative.
         $resource = $this->router->generate(
             'asset_image',
             [
@@ -113,6 +114,7 @@ class PhotoHelper
             ]
         );
 
+        // Generate the path on absolute or return to relative patch.
         return $absolute
             ? $this->instance->getBaseUrl() . $resource
             : $resource;
