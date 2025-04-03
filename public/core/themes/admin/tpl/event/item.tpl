@@ -64,6 +64,7 @@
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
+      {include file="ui/component/content-editor/accordion/seo-input.tpl"}
     </div>
   </div>
   <div class="grid simple">
@@ -185,7 +186,6 @@
       </div>
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iTitle="{t}Featured in frontpage{/t}" types="photo,video,album"}
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
-      {include file="ui/component/content-editor/accordion/seo-input.tpl"}
     </div>
   </div>
   {if !empty({setting name=seo_information})}

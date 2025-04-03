@@ -137,6 +137,7 @@ class FormFieldHelper
                     'opinion',
                     'poll',
                     'video',
+                    'event',
                 ]
             ],
             [
@@ -194,8 +195,20 @@ class FormFieldHelper
                 'available' => [ 'event' ]
             ],
             [
+                'name' => 'eventType',
+                'title' => _('Event Type'),
+                'module' => false,
+                'available' => [ 'event' ]
+            ],
+            [
                 'name' => 'where',
                 'title' => _('Event location'),
+                'module' => false,
+                'available' => [ 'event' ]
+            ],
+            [
+                'name' => 'ticket',
+                'title' => _('Tickets'),
                 'module' => false,
                 'available' => [ 'event' ]
             ],
