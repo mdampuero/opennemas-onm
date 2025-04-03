@@ -77,7 +77,7 @@ class PhotoHelper
      *
      * @return string The URL for the image.
      */
-    public function getPhotoPath($item, ?string $transform = null, array $params = [], $absolute = false)
+    public function getPhotoPath($item, ?string $transform = null, array $params = [], bool $absolute = false)
     {
         if (is_string($item) || empty($item)) {
             return $item;
@@ -113,11 +113,9 @@ class PhotoHelper
             ]
         );
 
-        if (!$absolute) {
-            return $resource;
-        }
-
-        return $this->instance->getBaseUrl() . $resource;
+        return $absolute
+            ? $this->instance->getBaseUrl() . $resource
+            : $resource;
     }
 
     /**
