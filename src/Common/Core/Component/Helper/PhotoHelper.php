@@ -77,7 +77,7 @@ class PhotoHelper
      *
      * @return string The URL for the image.
      */
-    public function getPhotoPath($item, string $transform = null, array $params = [], $absolute = false)
+    public function getPhotoPath($item, ?string $transform = null, array $params = [], $absolute = false)
     {
         if (is_string($item) || empty($item)) {
             return $item;
