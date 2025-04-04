@@ -42,7 +42,7 @@ class CategoryController extends FrontendController
      * {@inheritdoc}
      */
     protected $queries = [
-        'list' => [ 'category_slug', 'page' ],
+        'list'     => [ 'category_slug', 'page' ],
         'homepage' => [ 'category_slug', 'page' ]
     ];
 
