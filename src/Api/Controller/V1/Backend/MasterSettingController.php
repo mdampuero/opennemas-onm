@@ -53,6 +53,7 @@ class MasterSettingController extends SettingController
         'lazy_referer',
         'fonts_preload',
         'redirection',
+        'merge_category_url',
         'robots_txt_rules',
         'theme_font',
         'theme_font_secondary',
@@ -88,6 +89,7 @@ class MasterSettingController extends SettingController
         'header_script',
         'header_script_amp',
         'redirection',
+        'merge_category_url',
         'robots_txt_rules',
         'seo_information',
     ];

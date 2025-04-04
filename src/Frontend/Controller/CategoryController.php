@@ -10,6 +10,7 @@
 namespace Frontend\Controller;
 
 use Api\Exception\GetListException;
+use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -41,7 +42,8 @@ class CategoryController extends FrontendController
      * {@inheritdoc}
      */
     protected $queries = [
-        'list' => [ 'category_slug', 'page' ]
+        'list' => [ 'category_slug', 'page' ],
+        'homepage' => [ 'category_slug', 'page' ]
     ];
 
     /**
@@ -63,19 +65,16 @@ class CategoryController extends FrontendController
      */
     public function listAction(Request $request)
     {
-        $action = $this->get('core.globals')->getAction();
-        $item   = $this->getItem($request);
+        $params = $request->query->all();
 
-        /**
-         * If the category is manual, we redirect to the frontpage.
-         */
-        if (($item->params['manual'] ?? 0) == 1) {
-            return $this->forward('Frontend\Controller\FrontpagesController::showAction', [], [
-                'category' => $item->name
-            ]);
+        $mergeCategoryUrl = (bool) $this->get('orm.manager')->getDataSet('Settings')
+            ->get('merge_category_url', 0);
+        if ($mergeCategoryUrl) {
+            return new RedirectResponse($this->generateUrl('category_category_homepage', $params), 301);
         }
 
-        $params = $request->query->all();
+        $action = $this->get('core.globals')->getAction();
+        $item   = $this->getItem($request);
 
         // Fix category_slug from query basing on item
         $params['category_slug'] = $item->name;
@@ -95,6 +94,39 @@ class CategoryController extends FrontendController
         }
 
         return $this->render($this->getTemplate($action), $params);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function homepageAction(Request $request)
+    {
+        $action = $this->get('core.globals')->getAction();
+        $item   = $this->getItem($request);
+
+        /**
+         * If the category is manual, we redirect to the frontpage.
+         */
+        if (($item->params['manual'] ?? 0) == 1) {
+            return $this->forward('Frontend\Controller\FrontpagesController::showAction', [], [
+                'category' => $item->name,
+                'noredirect' => true
+            ]);
+        }
+
+        $params = $request->query->all();
+
+        // Fix category_slug from query basing on item
+        $params['category_slug'] = $item->name;
+
+        $params = $this->getParameters($request, $item);
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrateList($params);
+        }
+        return $this->render($this->getTemplate('list'), $params);
     }
 
     /**
@@ -169,6 +201,7 @@ class CategoryController extends FrontendController
      */
     protected function getAdvertisements($category = null, $token = null)
     {
+        $token      = $token;
         $categoryId = empty($category) ? 0 : $category->id;
         $action     = $this->get('core.globals')->getAction();
         $group      = $this->getAdvertisementGroup($action);

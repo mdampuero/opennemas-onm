@@ -145,6 +145,18 @@
                       </div>
                     </div>
                     <h4>
+                      <i class="fa fa-compress"></i>
+                      {t}Merge category URLs{/t}
+                    </h4>
+                    <div class="form-group">
+                      <div class="checkbox">
+                        <input {if $configs['merge_category_url'] eq "1"}checked{/if} id="merge_category_url" name="merge_category_url" ng-false-value="0" ng-model="settings.merge_category_url" ng-true-value="'1'" type="checkbox">
+                        <label for="merge_category_url">
+                          {t}If you enable this option, the URLs '/seccion/category/' and '/blog/section/category/' will be redirected to '/category/'.{/t}
+                        </label>
+                      </div>
+                    </div>
+                    <h4>
                       <i class="fa fa-google"></i>
                       {t}Google Analytics{/t}
                     </h4>
