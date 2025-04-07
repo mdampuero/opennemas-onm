@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-14 10:44+0000\n"
-"PO-Revision-Date: 2025-03-14 11:15+0100\n"
+"POT-Creation-Date: 2025-04-07 06:33+0000\n"
+"PO-Revision-Date: 2025-04-07 08:37+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -3640,6 +3640,9 @@ msgstr "Baleiro"
 msgid "Delete contents"
 msgstr "Eliminar contidos"
 
+msgid "Visible"
+msgstr "Visible"
+
 msgid "Do you want to move contents in category?"
 msgstr "¿Queres mover os contidos na categoría?"
 
@@ -3652,8 +3655,8 @@ msgstr "¿Queres eliminar os contenidos na categoría?"
 msgid "Do you want to delete contents in selected categories?"
 msgstr "¿Queres eliminar os contidos nas categorías seleccionadas?"
 
-msgid "Visible"
-msgstr "Visible"
+msgid "Manual"
+msgstr "Manual"
 
 msgid "Only empty categories can be deleted"
 msgstr "Só se poden eliminar categorías sen contidos"
@@ -3818,8 +3821,8 @@ msgstr "Roles"
 msgid "Titles"
 msgstr "Títulos"
 
-msgid "Introductions"
-msgstr "Introduccións"
+msgid "Descriptions"
+msgstr "Descricións"
 
 msgid "Bodies"
 msgstr "Corpos"
@@ -3832,9 +3835,6 @@ msgstr "Tons"
 
 msgid "New"
 msgstr "Crear"
-
-msgid "Transformation"
-msgstr "Transformación"
 
 msgid "Config article module"
 msgstr "Configuración do módulo «Artigo»"
@@ -4438,6 +4438,16 @@ msgstr "Tipo de letra secundario (corpo, resumo...)"
 
 msgid "Redirect to frontpage non-migrated contents"
 msgstr "Redirixir a portada contidos non migrados"
+
+msgid "Merge category URLs"
+msgstr "Unificar os URLs das categorías"
+
+msgid ""
+"If you enable this option, the URLs '/seccion/category/' and '/blog/section/"
+"category/' will be redirected to '/category/'."
+msgstr ""
+"Se activas esta opción, os URLs '/seccion/category/' e '/blog/section/"
+"category/' redirixiranse a '/category/'."
 
 msgid "Google Analytics"
 msgstr "Google Analytics"
@@ -5598,9 +5608,6 @@ msgstr "Pódese atopar na configuración da conta de SendPulse"
 
 msgid "API Secret"
 msgstr "API Secret"
-
-msgid "AI"
-msgstr "IA"
 
 msgid "Attachment"
 msgstr "Anexos"
@@ -6999,6 +7006,9 @@ msgstr "Transforma con ONM IA"
 msgid "No, keep the original content"
 msgstr "No, mantén o contido orixinal"
 
+msgid "Select a language"
+msgstr "Selecciona un idioma"
+
 msgid "Default author"
 msgstr "Autor defecto"
 
@@ -7071,12 +7081,6 @@ msgstr "Si, importar e editar"
 msgid "View"
 msgstr "Ver"
 
-msgid "Manual categories"
-msgstr "Categorías manuais"
-
-msgid "Automatic categories"
-msgstr "Categorías automáticas"
-
 msgid "Synchronized instances"
 msgstr "Instacias sincronizadas"
 
@@ -7119,9 +7123,6 @@ msgstr "Respostas"
 
 msgid "No votes"
 msgstr "Sen votos"
-
-msgid "Manual"
-msgstr "Manual"
 
 msgid ""
 "If enabled, subscribers will not see this subscription while registering or "
@@ -8097,6 +8098,9 @@ msgstr "Lineas de Ads.txt"
 msgid "Role"
 msgstr "Rol"
 
+msgid "Default model"
+msgstr "Modelo predeterminado"
+
 msgid "Instructions"
 msgstr "Instrucións"
 
@@ -8132,9 +8136,6 @@ msgstr "Eliminar parámetro"
 
 msgid "Add param"
 msgstr "Engadir parámetro"
-
-msgid "Default model"
-msgstr "Modelo predeterminado"
 
 msgid "Change model"
 msgstr "Cambiar modelo"
@@ -8417,6 +8418,21 @@ msgstr "Semella que te perdemos nas nubes."
 
 msgid "The page your looking for is not here"
 msgstr "A páxina que estás buscando non está aquí"
+
+#~ msgid "Introductions"
+#~ msgstr "Introduccións"
+
+#~ msgid "Transformation"
+#~ msgstr "Transformación"
+
+#~ msgid "AI"
+#~ msgstr "IA"
+
+#~ msgid "Manual categories"
+#~ msgstr "Categorías manuais"
+
+#~ msgid "Automatic categories"
+#~ msgstr "Categorías automáticas"
 
 #~ msgid "Own prompts"
 #~ msgstr "Propmts propios"
