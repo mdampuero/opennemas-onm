@@ -19,23 +19,21 @@ function smarty_function_meta_facebook_tags($params, &$smarty)
     $title   = $ds->get('site_title');
     $summary = $ds->get('site_description');
 
-    $contentHelper = $smarty->getContainer()->get('core.helper.content');
-
     if (!empty($content)) {
-        $summary = $content->social_description
-            ?? trim(\Onm\StringUtils::htmlAttribute($contentHelper->getSummary($content)));
-
-        if (empty($summary)) {
-            $bodyContent = trim(\Onm\StringUtils::htmlAttribute($content->body));
-            $summary     = (mb_strlen($bodyContent) > 80)
-                ? mb_substr($bodyContent, 0, 80) . "..."
-                : $bodyContent;
-        }
-
         $title = $content->social_title ?? $content->title_int ?? $content->title;
         $title = htmlspecialchars(
             html_entity_decode($title, ENT_COMPAT, 'UTF-8')
         );
+
+        $summary = htmlspecialchars(trim(preg_replace('/\s+/', ' ', (strip_tags(
+            current(array_filter([
+                $content->social_description,
+                $content->summary,
+                $content->description,
+                mb_substr($content->body, 0, 160),
+                $title
+            ]))
+        )))));
     }
 
     // Generate tags
