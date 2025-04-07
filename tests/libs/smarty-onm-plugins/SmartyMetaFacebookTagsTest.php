@@ -34,11 +34,6 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'get' ])
             ->getMock();
 
-        $this->contentHelper = $this->getMockBuilder('ContentHelper')
-            ->disableOriginalConstructor()
-            ->setMethods([ 'getSummary' ])
-            ->getMock();
-
         $this->ds = $this->getMockBuilder('DataSet')
             ->setMethods([ 'get' ])
             ->getMock();
@@ -201,10 +196,6 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
         $this->helper->expects($this->once())->method('getMedia')
             ->willReturn(null);
 
-        $this->contentHelper->expects($this->once())->method('getSummary')
-            ->with($content)
-            ->willReturn($content->summary);
-
         $output = "<meta property=\"og:type\" content=\"website\" />\n"
             . "<meta property=\"og:title\" content=\"This is the title\" />\n"
             . "<meta property=\"og:description\" content=\"This is the summary\" />\n"
@@ -275,16 +266,12 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
         $this->ds->expects($this->at(2))->method('get')->with('site_name')
             ->willReturn('Site Name');
 
-        $this->contentHelper->expects($this->once())->method('getSummary')
-            ->with($content)
-            ->willReturn($content->description);
-
         $this->helper->expects($this->once())->method('getMedia')
             ->willReturn(null);
 
         $output = "<meta property=\"og:type\" content=\"website\" />\n"
             . "<meta property=\"og:title\" content=\"This is the title\" />\n"
-            . "<meta property=\"og:description\" content=\"This is the description\" />\n"
+            . "<meta property=\"og:description\" content=\"This is the summary\" />\n"
             . "<meta property=\"og:url\" content=\"http://route/to/content.html\" />\n"
             . "<meta property=\"og:site_name\" content=\"Site Name\" />";
 
@@ -324,9 +311,6 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
 
         $this->helper->expects($this->once())->method('getMedia')
             ->willReturn($photo);
-
-        $this->contentHelper->expects($this->once())->method('getSummary')
-            ->willReturn($content->summary);
 
         $this->photoHelper->expects($this->once())->method('hasPhotoPath')
             ->with($photo)
@@ -380,10 +364,6 @@ class SmartyMetaFacebookTagsTest extends \PHPUnit\Framework\TestCase
 
         $this->helper->expects($this->once())->method('getMedia')
             ->willReturn($photo);
-
-        $this->contentHelper->expects($this->once())->method('getSummary')
-            ->with($content)
-            ->willReturn($content->summary);
 
         $this->photoHelper->expects($this->once())->method('hasPhotoPath')
             ->willReturn(true);
