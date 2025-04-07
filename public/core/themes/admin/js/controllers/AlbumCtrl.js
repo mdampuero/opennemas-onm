@@ -140,6 +140,8 @@
               $scope.data.extra.comments_enabled ? 1 : 0;
           }
 
+          $scope.data.item = $scope.parsedata($scope.data.item);
+
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'album-' + $scope.data.item.pk_content + '-draft';
           }
@@ -222,6 +224,18 @@
           }
 
           return true;
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parsedata = function(data) {
+          var bodyComplexity = $scope.getTextComplexity(data.description);
+
+          data.text_complexity = bodyComplexity.textComplexity;
+          data.word_count = bodyComplexity.wordsCount;
+
+          return data;
         };
       }
     ]);
