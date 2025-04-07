@@ -78,11 +78,28 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <select name="field" id="field" class="form-control" ng-model="template.toneSelected" ng-if="template.promptSelected" ng-options="item as item.name for item in template.onmai_extras.tones">
+            <select name="field" id="field" class="form-control"
+              ng-model="template.toneSelected"
+              ng-if="template.promptSelected"
+              ng-options="item as item.name for item in template.onmai_extras.tones"
+              >
               <option value="">{t}Select a tone{/t}</option>
             </select>
           </div>
         </div>
+        {if !in_array("es.openhost.module.multilanguage", $app.instance->activated_modules)}
+          <div class="col-sm-6">
+            <div class="form-group">
+              <select name="field" id="field" class="form-control"
+                ng-model="template.languageSelected"
+                ng-if="template.promptSelected"
+                ng-options="item as item.name for item in template.onmai_extras.languages"
+                >
+                <option value="">{t}Select a language{/t}</option>
+              </select>
+            </div>
+          </div>
+        {/if}
       </div>
     </div>
   </div>

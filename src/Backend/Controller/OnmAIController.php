@@ -32,11 +32,13 @@ class OnmAIController extends BackendController
      * @var type
      */
     protected $permissions = [
-        'list'   => 'OPENAI_ADMIN',
+        'list' => 'ONMAI_ADMIN',
     ];
 
     /**
      * Configures the OnmAI notifications module
+     * @Security("hasExtension('es.openhost.module.onmai')
+     *     and hasPermission('ONMAI_ADMIN')")
      */
     public function configAction()
     {
@@ -45,6 +47,8 @@ class OnmAIController extends BackendController
 
     /**
      * Dashboard OnmAI
+     * @Security("hasExtension('es.openhost.module.onmai')
+     *     and hasPermission('ONMAI_ADMIN')")
      */
     public function dashboardAction()
     {

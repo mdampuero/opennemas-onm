@@ -167,7 +167,7 @@
         }
 
         oqlDecoder.configure({
-          ignore: ['prompt_lines', 'instances'],
+          ignore: [ 'prompt_lines', 'instances' ],
           map: { name: 'name' }
         });
 
@@ -235,18 +235,6 @@
 
         $scope.activeInstruction = function(index) {
           $scope.settings.onmai_instructions[index].disabled = $scope.settings.onmai_instructions[index].disabled == 1 ? 0 : 1;
-        };
-
-        $scope.init = function() {
-          var route = {
-            name: $scope.routes.configGet
-          };
-
-          return http.get(route).then(function(response) {
-            $scope.settings = response.data;
-          }, function() {
-            $scope.item = {};
-          });
         };
 
         $scope.save = function() {

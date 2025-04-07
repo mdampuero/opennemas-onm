@@ -1,2 +1,1 @@
-<span class="fa fa-circle-o onmai-icon-container"></span>
-<span class="onmai-icon">{t}AI{/t}</span>
+<span class="fa fa-bell fa-onm-ai fa-onm-ai-color onmai-icon-container"></span>

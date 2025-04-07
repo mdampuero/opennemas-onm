@@ -1599,29 +1599,7 @@ class PermissionHelper
             ],
             263 => [
                 'id'          => 263,
-                'name'        => 'PROMPT_ADMIN',
-                'description' => _('List'),
-                'module'      => 'es.openhost.module.onmai',
-                'enabled'     => 1
-            ],
-            264 => [
-                'id'          => 264,
-                'name'        => 'PROMPT_UPDATE',
-                'description' => _('Edit'),
-                'module'      => 'es.openhost.module.onmai',
-                'enabled'     => 1
-            ],
-            265 => [
-                'id'          => 265,
-                'name'        => 'PROMPT_DELETE',
-                'description' => _('Delete'),
-                'module'      => 'es.openhost.module.onmai',
-                'enabled'     => 1
-            ],
-            266 => [
-                'id'          => 266,
-                'name'        => 'PROMPT_CREATE',
-                'description' => _('Create'),
+                'name'        => 'ONMAI_ADMIN',
                 'module'      => 'es.openhost.module.onmai',
                 'enabled'     => 1
             ]
