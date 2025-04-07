@@ -76,7 +76,7 @@
                           <div class="row" ng-model="settings.google_analytics[$index]">
                             <div class="form-group">
                               <label class="form-label">
-                                {t}Google Analytics API key {/t} (MASTER)
+                                {t}Google Analytics API key{/t} (MASTER)
                               </label>
                               <div class="controls">
                                 <input class="form-control" id="google-analytics-[% $index %]-api-key" name="google-analytics-[% $index %]-api-key" ng-model="code.api_key" type="text">
