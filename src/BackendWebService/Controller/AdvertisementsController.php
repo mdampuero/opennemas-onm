@@ -37,7 +37,7 @@ class AdvertisementsController extends ContentController
 
         return new JsonResponse([
             'map'     => $map,
-            'results' => $results,
+            'items' => $results,
             'total'   => $total
         ]);
     }

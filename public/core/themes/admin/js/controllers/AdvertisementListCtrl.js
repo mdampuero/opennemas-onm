@@ -78,12 +78,13 @@
           $location.search('oql', oql);
 
           return http.get(route).then(function(response) {
-            $scope.data = response.data;
+            $scope.data  = response.data;
+            $scope.total = parseInt(response.data.total);
 
             if ($scope.mode === 'grid') {
-              $scope.contents = $scope.contents.concat(response.data.results);
+              $scope.contents = $scope.contents.concat(response.data.items);
             } else {
-              $scope.contents = response.data.results;
+              $scope.contents = response.data.items;
             }
 
             $scope.items = $scope.getContentsLocalizeTitle($scope.contents);
