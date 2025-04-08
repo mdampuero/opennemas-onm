@@ -58,9 +58,13 @@ class HttpTaquilla extends Http
 
         foreach ($files as $file) {
             $localFile = $path . DS . $file['filename'];
-
+            // If no content on file, download it (is an image)
             if (!file_exists($localFile)) {
-                $this->generateNewsML($localFile, $file['content']);
+                $content = $file['content'] ?? null;
+                !is_null($content)
+                  ? $this->generateNewsML($localFile, $file['content'])
+                  : file_put_contents($localFile, $this->getContentFromUrl($file['url']));
+
                 $this->downloaded++;
             }
 
@@ -116,10 +120,11 @@ class HttpTaquilla extends Http
         $content = $this->parseArray($data);
 
         $newsML = $this->tpl->fetch('news_agency/newsml_templates/base.tpl', [
-            'content'     => $content,
-            'extSource'   => "Taquilla.com",
-            'extCategory' => $content->extCategory,
-            'tags'        => []
+            'content'       => $content,
+            'featuredMedia' => $content->featureContent,
+            'extSource'     => "Taquilla.com",
+            'extCategory'   => $content->extCategory,
+            'tags'          => []
         ]);
 
         file_put_contents($path, $newsML);
@@ -205,11 +210,23 @@ class HttpTaquilla extends Http
         if (!empty($data['entity']['img_urls'])) {
             $featureContent['inner'] = new \StdClass();
 
+            $img     = $data['entity']['img_urls']['full_size'];
+            $imgData = @getimagesize($img);
+
+            $featureContent['inner']->title             = $data['entity']['name'];
             $featureContent['inner']->content_type_name = 'photo';
             $featureContent['inner']->pk_content        = 'photo_' . $data['event_id'];
             $featureContent['inner']->created           = $now;
             $featureContent['inner']->external_uri      = $data['entity']['img_urls']['full_size'];
+            $featureContent['inner']->image_data        = [
+                'filename' => basename($img),
+                'mimetype' => $imgData['mime'],
+                'width'    => $imgData[0],
+                'height'   => $imgData[1]
+            ];
         }
+
+        $content->featureContent = $featureContent ?? null;
 
         return $content;
     }
