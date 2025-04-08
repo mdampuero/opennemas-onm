@@ -14,13 +14,14 @@
      * @requires $location
      * @requires http
      * @requires messenger
+     * @requires localizer
      *
      * @description
      *   Handles all actions in user groups list.
      */
     .controller('AdvertisementListCtrl', [
-      '$controller', '$scope', 'oqlEncoder', 'routing', '$location', 'http', 'messenger',
-      function($controller, $scope, oqlEncoder, routing, $location, http, messenger) {
+      '$controller', '$scope', 'oqlEncoder', 'routing', '$location', 'http', 'messenger', 'localizer',
+      function($controller, $scope, oqlEncoder, routing, $location, http, messenger, localizer) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
