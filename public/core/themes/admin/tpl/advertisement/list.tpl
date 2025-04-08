@@ -120,8 +120,8 @@ status = [
               </div>
             </div>
             <div class="form-group text-right m-b-0">
-              <button class="btn btn-default pull-left" ng-click="cancelFilter()">Cancelar</button>
-              <button class="btn btn-primary" ng-click="applyFilter()">Confirmar</button>
+              <button class="btn btn-default pull-left" ng-click="cancelFilter()">{t}Cancel{/t}</button>
+              <button class="btn btn-primary" ng-click="applyFilter()">{t}Confirm{/t}</button>
             </div>
           </div>
         </li>

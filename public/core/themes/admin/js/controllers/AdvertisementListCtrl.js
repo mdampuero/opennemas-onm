@@ -1,18 +1,23 @@
 (function() {
-   'use strict';
+  'use strict';
 
-   angular.module('BackendApp.controllers')
+  angular.module('BackendApp.controllers')
 
-   /**
-    * @ngdoc controller
-    * @name  AdvertisementListCtrl
-    *
-    * @requires $controller
-    * @requires $scope
-    *
-    * @description
-    *   Controller for advertisement list.
-    */
+    /**
+     * @ngdoc controller
+     * @name  AdvertisementListCtrl
+     *
+     * @requires $controller
+     * @requires $scope
+     * @requires oqlEncoder
+     * @requires routing
+     * @requires $location
+     * @requires http
+     * @requires messenger
+     *
+     * @description
+     *   Handles all actions in user groups list.
+     */
     .controller('AdvertisementListCtrl', [
       '$controller', '$scope', 'oqlEncoder', 'routing', '$location', 'http', 'messenger',
       function($controller, $scope, oqlEncoder, routing, $location, http, messenger) {
