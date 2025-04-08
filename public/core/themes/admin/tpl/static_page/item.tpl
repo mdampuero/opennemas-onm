@@ -54,8 +54,18 @@
         </div>
       {/acl}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
+      {include file="ui/component/content-editor/accordion/seo-input.tpl"}
     </div>
   </div>
+  {if !empty({setting name=seo_information})}
+    <div class="grid simple" ng-if="!hasMultilanguage()">
+      <div class="grid-body no-padding">
+        <div class="grid-collapse-title">
+          <i class="fa fa-search m-r-10"></i> {t}SEO Information{/t}
+        </div>
+        {include file="ui/component/content-editor/accordion/seo_info.tpl"}
+    </div>
+  {/if}
 {/block}
 
 {block name="leftColumn"}

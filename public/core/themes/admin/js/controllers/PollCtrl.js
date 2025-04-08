@@ -115,6 +115,7 @@
          */
         $scope.buildScope = function() {
           $scope.localize($scope.data.item, 'item', true, [ 'items', 'related_contents' ]);
+          $scope.data.item = $scope.parseData($scope.data.item);
           $scope.expandFields();
           // Check if item is new (created) or existing for use default value or not
           if (!$scope.data.item.pk_content) {
@@ -237,6 +238,23 @@
             element.pk_item = index;
             return element;
           });
+        };
+
+        /**
+         * Parses the data and calculates text complexity.
+         *
+         * @param {Object} data - Object containing the text information.
+         * @param {string} data.body - The body of the text to analyze.
+         * @param {boolean} preview - Indicates if it's a preview (not used in the function).
+         * @returns {Object} - The input object with added `text_complexity` and `word_count` properties.
+         */
+        $scope.parseData = function(data, preview) {
+          var bodyComplexity = $scope.getTextComplexity(data.description);
+
+          data.text_complexity = bodyComplexity.textComplexity;
+          data.word_count = bodyComplexity.wordsCount;
+
+          return data;
         };
       }
     ]);
