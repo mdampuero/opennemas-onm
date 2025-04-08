@@ -1,5 +1,44 @@
 {extends file="common/extension/list.table.tpl"}
 
+{block name="commonColumns"}
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-featured-title" checklist-model="app.columns.selected" checklist-value="'title'" type="checkbox">
+    <label for="checkbox-featured-title">
+      {t}Title{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-featured-starttime" checklist-model="app.columns.selected" checklist-value="'starttime'" type="checkbox">
+    <label for="checkbox-featured-starttime">
+      {t}Start date{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-featured-endtime" checklist-model="app.columns.selected" checklist-value="'endtime'" type="checkbox">
+    <label for="checkbox-featured-endtime">
+      {t}End date{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-featured-position" checklist-model="app.columns.selected" checklist-value="'position'" type="checkbox">
+    <label for="checkbox-featured-position">
+      {t}Position{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-featured-type" checklist-model="app.columns.selected" checklist-value="'type'" type="checkbox">
+    <label for="checkbox-featured-type">
+      {t}Type{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-featured-published" checklist-model="app.columns.selected" checklist-value="'published'" type="checkbox">
+    <label for="checkbox-featured-published">
+      {t}Published{/t}
+    </label>
+  </div>
+{/block}
+
 {block name="commonColumnsHeader"}
   <th class="v-align-middle" ng-if="isColumnEnabled('title')" width="400">
     {t}Title{/t}
@@ -16,7 +55,7 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('type')" width="80">
     {t}Type{/t}
   </th>
-  <th class="v-align-middle" width="150">
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('published')" width="150">
     {t}Published{/t}
   </th>
 {/block}
@@ -86,7 +125,7 @@
     <i class="fa fa-plus-square fa-lg m-r-5 text-warning" ng-if="item.with_script == 4" title="Smart Adserver"></i>
   </td>
   {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
-  <td class="text-center v-align-middle">
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('published')">
     <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_content_set_content_status', 'content_status', item.content_status != 1 ? 1 : 0, 'loading')" type="button">
       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading, 'fa-check text-success' : !item.loading && item.content_status == '1', 'fa-times text-error': !item.loading && item.content_status == '0' }"></i>
     </button>
