@@ -125,6 +125,9 @@ status = [
             </div>
           </div>
         </li>
+      </ul>
+    </div>
+  </li>
 {/block}
 
 {block name="list"}
