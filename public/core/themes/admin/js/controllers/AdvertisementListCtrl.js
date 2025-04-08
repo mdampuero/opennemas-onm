@@ -113,10 +113,24 @@
           return lz.localize($scope.contents, keys, $scope.extra.options.default);
         };
 
+        /**
+         * @fucntion applyFilter
+         * @memberOf AdvertisementListCtrl
+         *
+         * @description
+         *  Apply the filter to the list of advertisement
+         */
         $scope.applyFilter = function() {
           $scope.criteria = angular.copy($scope.tempCriteria);
         };
 
+        /**
+         * @function cancelFilter
+         * @memberOf AdvertisementListCtrl
+         *
+         * @description
+         *   Cancel the filter and reset the criteria.
+         */
         $scope.cancelFilter = function() {
           $scope.tempCriteria.starttime = null;
           $scope.tempCriteria.endtime = null;
