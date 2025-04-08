@@ -86,7 +86,7 @@
                           <organizer.name>{$content->event_organizer_name}</organizer.name>
                           <organizer.url>{$content->event_organizer_url}</organizer.url>
                         </organizer>
-                        <price min="{$content->event_minprice}" url="{$content->event_minprice_url}"></price>
+                        <price min="{$content->event_minprice}" url="{$content->event_minprice_url|escape:'html'}"></price>
                       </identified-content>
                     {/if}
                   </docdata>
@@ -197,7 +197,7 @@
                   <!-- The link to download image -->
                   <ContentItem Href="{if !empty($featuredMediaContent->external_uri)}{$featuredMediaContent->external_uri}{else}{$app.instance->getBaseUrl()}{get_photo_path($featuredMediaContent)}{/if}">
                     <MediaType FormalName="PhotoFront" />
-                    <MimeType FormalName="{get_photo_mime_type($featuredMediaContent)}" />
+                    <MimeType FormalName="{if !empty($featuredMediaContent->image_data)}{$featuredMediaContent->image_data['mimetype']}{else}{get_photo_mime_type($featuredMediaContent)}{/if}" />
                     {if empty($featuredMediaContent->external_uri)}
                     <Characteristics>
                       <SizeInBytes>{get_photo_size($featuredMediaContent) * 1024}</SizeInBytes>
@@ -206,6 +206,13 @@
                       <Property FormalName="PixelDepth" Value="24" />
                       <Property FormalName="Width" Value="{get_photo_width($featuredMediaContent)}" />
                     </Characteristics>
+                    {elseif !empty($featuredMediaContent->image_data)}
+                      <Characteristics>
+                        <Property FormalName="Onm_Filename" Value="{$featuredMediaContent->image_data['filename']}" />
+                        <Property FormalName="Height" Value="{$featuredMediaContent->image_data['height']}" />
+                        <Property FormalName="PixelDepth" Value="24" />
+                        <Property FormalName="Width" Value="{$featuredMediaContent->image_data['width']}" />
+                      </Characteristics>
                     {/if}
                   </ContentItem>
                 </NewsComponent>
