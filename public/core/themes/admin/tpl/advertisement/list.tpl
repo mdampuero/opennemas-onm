@@ -5,8 +5,8 @@
 {/block}
 
 {block name="ngInit"}
-ng-controller="AdBlockCtrl"
-ng-init="ContentListCtrl; init('advertisement', 'backend_ws_advertisements_list');
+ng-controller="AdvertisementListCtrl"
+ng-init="init();
 advertisement_positions = {json_encode($advertisement_positions)|clear_json};
 type = {json_encode($types)|clear_json};
 status = [
