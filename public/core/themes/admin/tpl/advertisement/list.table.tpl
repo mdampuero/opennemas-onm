@@ -99,7 +99,17 @@
       </span>
     </div>
     <div class="listing-inline-actions m-t-10 btn-group">
-      {block name="itemActions"}{/block}
+      {acl isAllowed="ADVERTISEMENT_UPDATE"}
+        <a class="btn btn-white btn-small" href="[% routing.generate('admin_advertisement_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
+          <i class="fa fa-pencil"></i>
+        </a>
+        <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_advertisement_show', { id: getItemId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" ng-class="{ 'dropup': $index >= data.items.length - 1 }" class="btn-group" options="data.extra.locale" text="{t}Edit{/t}"></translator>
+      {/acl}
+      {acl isAllowed="ADVERTISEMENT_DELETE"}
+        <button class="btn btn-white btn-small" ng-click="sendToTrash(item)" type="button" uib-tooltip="{t}Remove{/t}" tooltip-placement="top">
+          <i class="fa fa-trash-o text-danger"></i>
+        </button>
+      {/acl}
     </div>
   </td>
   <td class="v-align-middle" ng-if="isColumnEnabled('category')">
