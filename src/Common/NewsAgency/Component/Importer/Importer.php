@@ -535,6 +535,67 @@ class Importer
     }
 
     /**
+     * Returns the required information to import the resource as event.
+     *
+     * @param ExternalResource $resource The resource to import.
+     * @param array            $data     The information extracted from the
+     *                                   resource regardless of the target
+     *                                   content type.
+     *
+     * @return array The information to import the resource as event.
+     */
+    protected function getDataForEvent(ExternalResource $resource, array $data) : array
+    {
+        $date = new \DateTime();
+
+        $data = array_merge($data, [
+            'created'         => $date->format('Y-m-d H:i:s'),
+            'fk_content_type' => 5,
+            'categories'      => [ $this->getCategory($resource, $data) ],
+            'agency'          => !empty($resource->signature)
+                ? $resource->signature
+                : (array_key_exists('agency_string', $this->config)
+                    ? $this->config['agency_string']
+                    : null),
+            'description'     => $resource->summary,
+            'title_int'       => $resource->title,
+            'slug'            => $this->container->get('data.manager.filter')
+                ->set($resource->title)
+                ->filter('slug')
+                ->get()
+        ]);
+
+        if (empty($resource->related)) {
+            return $data;
+        }
+
+        $resources = $this->repository->find($resource->related);
+        $urns      = array_map(function ($a) {
+            return $a->urn;
+        }, $resources);
+
+        $contents = !$this->propagation
+            ? $this->getImported($urns)
+            : array_map(function ($a) use ($data) {
+                return $this->setPropagation(false)->import($a, $data);
+            }, $resources);
+
+        $this->setPropagation(true);
+
+        $data['related_contents'] = [];
+        foreach ($contents as $content) {
+            if ($content->content_type_name === 'photo') {
+                $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
+                    $content,
+                    [ 'featured_frontpage', 'featured_inner' ]
+                );
+            }
+        }
+
+        return $data;
+    }
+
+    /**
      * Returns the required information to import the resource as opinion.
      *
      * @param ExternalResource $resource The resource to import.
