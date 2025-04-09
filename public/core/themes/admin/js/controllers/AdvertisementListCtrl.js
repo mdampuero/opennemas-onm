@@ -123,6 +123,8 @@
          *  Apply the filter to the list of advertisement
          */
         $scope.applyFilter = function() {
+          $scope.tempCriteria.epp = $scope.criteria.epp;
+
           $scope.criteria = angular.copy($scope.tempCriteria);
         };
 
