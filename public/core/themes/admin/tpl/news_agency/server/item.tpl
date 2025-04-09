@@ -161,12 +161,16 @@
                 <option value="">{t}Select a type{/t}…</option>
                 <option value="article">{t}Article{/t}</option>
                 <option value="opinion">{t}Opinion{/t}</option>
+                {is_module_activated name="es.openhost.module.onmai"}
+                  <option value="event">{t}Event{/t}</option>
+                {/is_module_activated}
               </select>
               {include file="common/component/icon/status.tpl" iClass="form-status-absolute" iForm="form.target" iNgModel="item.target" iRequired=true iValidation=true}
             </div>
           </div>
         </div>
-        {if in_array("es.openhost.module.onmai", $app.instance->activated_modules)}
+
+        {is_module_activated name="es.openhost.module.onmai"}
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.onmai }" ng-click="expanded.onmai = !expanded.onmai">
           <i class="fa fa-refresh m-r-10"></i>
           {t}Transform with ONM AI{/t}
@@ -189,7 +193,7 @@
                 <option value="">{t}Select a tone{/t}</option>
               </select>
             </div>
-            {if !in_array("es.openhost.module.multilanguage", $app.instance->activated_modules)}
+            {is_module_activated name="es.openhost.module.onmai"}
               <div class="form-group">
                 <label>
                 <select name="field" id="field" class="form-control"
@@ -200,9 +204,9 @@
                   <option value="">{t}Select a language...{/t}</option>
                 </select>
               </div>
-            {/if}
+            {/is_module_activated}
         </div>
-        {/if}
+        {/is_module_activated}
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.author }" ng-click="expanded.author = !expanded.author">
           <i class="fa fa-edit m-r-10"></i>{t}Author{/t}
           <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.author }"></i>

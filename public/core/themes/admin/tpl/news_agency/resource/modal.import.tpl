@@ -36,6 +36,10 @@
           {is_module_activated name="OPINION_MANAGER"}
             <option value="opinion">{t}Opinion{/t}</option>
           {/is_module_activated}
+          {is_module_activated name="es.openhost.module.events"}
+            <option value="event">{t}Event{/t}</option>
+          {/is_module_activated}
+        </select>
         </select>
       </div>
     </div>
@@ -49,7 +53,7 @@
         <onm-author-selector class="block" default-value-text="{t}Select an author{/t}…" ng-model="template.fk_author" placeholder="{t}Select an author{/t}…" required></onm-author-selector>
       </div>
     </div>
-    <div class="col-sm-6 form-group" ng-show="template.content_type_name === 'article'">
+    <div class="col-sm-6 form-group" ng-show="template.content_type_name !== 'opinion'">
       <label class="form-label text-capitalize">
         {t}in{/t}
       </label>
