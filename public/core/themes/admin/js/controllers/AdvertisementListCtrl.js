@@ -44,8 +44,15 @@
          */
         $scope.routes = {
           getList: 'backend_ws_advertisements_list',
+          patchItem: 'backend_ws_content_set_content_status',
+          patchList: 'backend_ws_advertisements_update_batch',
         };
 
+        /**
+         * @memberOf AdvertisementListCtrl
+         * @description
+         *  Initialize the criteria for the filter
+         */
         $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
           $scope.app.columns.hidden = [];
@@ -57,12 +64,20 @@
                 '"^[value]($|,)|,[value],|(^|,)[value]$"',
               starttime: 'starttime >= "[value]"',
               endtime: 'endtime <= "[value]"',
+              size: 'params regexp \'"devices"\\s*:\\s*{[^}]*"[value]"\\s*:\\s*1\''
             }
           });
 
           $scope.list();
         };
 
+        /**
+         * @function list
+         * @memberOf AdvertisementListCtrl
+         *
+         * @description
+         *  Get the list of advertisement
+         */
         $scope.list = function() {
           if (!$scope.isModeSupported() || $scope.app.mode === 'list') {
             $scope.flags.http.loading = 1;
@@ -99,6 +114,48 @@
             $scope.data  = {};
             $scope.items = [];
           });
+        };
+
+        /**
+         * Updates an item.
+         *
+         * @param int    index   Index of the item to update in contents.
+         * @param int    id      Id of the item to update.
+         * @param string route   Route name.
+         * @param string name    Name of the property to update.
+         * @param mixed  value   New value.
+         * @param string loading Name of the property used to show work-in-progress.
+         */
+        $scope.patchItem = function(index, id, route, name, value, loading, reload) {
+          // Load shared variable
+          var contents = $scope.contents;
+
+          // Enable spinner
+          contents[index][loading] = 1;
+
+          var route = {
+            name:   $scope.routes.patchItem,
+            params: {
+              content_type_name: 'advertisement',
+              id: id
+            }
+          };
+
+          http.post(route, { value: value }).then(function(response) {
+            contents[index][loading] = 0;
+            contents[index][name] = response.data[name];
+            messenger.post(response.data.messages);
+
+            if (reload) {
+              $scope.list($scope.route);
+            }
+          }, function(response) {
+            contents[index][loading] = 0;
+            messenger.post(response.data.messages);
+          });
+
+          // Updated shared variable
+          $scope.contents = contents;
         };
 
         /**

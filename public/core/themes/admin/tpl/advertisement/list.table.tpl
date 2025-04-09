@@ -8,6 +8,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-featured-category" checklist-model="app.columns.selected" checklist-value="'category'" type="checkbox">
+    <label for="checkbox-featured-category">
+      {t}Category{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-featured-starttime" checklist-model="app.columns.selected" checklist-value="'starttime'" type="checkbox">
     <label for="checkbox-featured-starttime">
       {t}Start date{/t}
@@ -17,6 +23,12 @@
     <input id="checkbox-featured-endtime" checklist-model="app.columns.selected" checklist-value="'endtime'" type="checkbox">
     <label for="checkbox-featured-endtime">
       {t}End date{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-featured-devices" checklist-model="app.columns.selected" checklist-value="'devices'" type="checkbox">
+    <label for="checkbox-featured-devices">
+      {t}Devices{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
@@ -43,11 +55,17 @@
   <th class="v-align-middle" ng-if="isColumnEnabled('title')" width="400">
     {t}Title{/t}
   </th>
+  <th class="v-align-middle" ng-if="isColumnEnabled('category')" width="150">
+    {t}Category{/t}
+  </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('starttime')" width="150">
     {t}Start date{/t}
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('endtime')" width="150">
     {t}End date{/t}
+  </th>
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('devices')" width="150">
+    {t}Devices{/t}
   </th>
   <th class="v-align-middle" ng-if="isColumnEnabled('position')" width="150">
     {t}Position{/t}
@@ -84,6 +102,19 @@
       {block name="itemActions"}{/block}
     </div>
   </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('category')">
+    {block name="categoryColumn"}
+      <small class="text-italic" ng-if="!item.fk_content_categories">
+        {t}All{/t}
+      </small>
+      <div class="table-text">
+      [% categories %]
+        <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.fk_content_categories }) %]" ng-if="item.fk_content_categories">
+          [% (categories | filter: { id: item.fk_content_categories } : true).title %]
+        </a>
+      </div>
+    {/block}
+  </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('starttime')">
     <span class="text-bold" ng-if="!item.starttime">
       ∞
@@ -110,6 +141,19 @@
       [% item.endtime | moment : 'HH:mm:ss' %]
     </small>
   </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('devices')">
+    <small class="text-italic">
+      <span ng-if="item.params.devices.desktop" class="d-block">
+        <i class="fa fa-desktop" title="Desktop"></i> Desktop
+      </span>
+      <span ng-if="item.params.devices.tablet" class="d-block">
+        <i class="fa fa-tablet" title="Tablet"></i> Tablet
+      </span>
+      <span ng-if="item.params.devices.phone" class="d-block">
+        <i class="fa fa-mobile" title="Phone"></i> Phone
+      </span>
+    </small>
+  </td>
   <td class="v-align-middle" ng-if="isColumnEnabled('position')">
     <span ng-repeat="value in item.positions | limitTo:3">
       [% map[value].name %]
@@ -126,7 +170,7 @@
   </td>
   {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('published')">
-    <button class="btn btn-white" ng-click="updateItem($index, item.id, 'backend_ws_content_set_content_status', 'content_status', item.content_status != 1 ? 1 : 0, 'loading')" type="button">
+    <button class="btn btn-white" ng-click="patchItem($index, item.id, 'backend_ws_content_set_content_status', 'content_status', item.content_status != 1 ? 1 : 0, 'loading')" type="button">
       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.loading, 'fa-check text-success' : !item.loading && item.content_status == '1', 'fa-times text-error': !item.loading && item.content_status == '0' }"></i>
     </button>
   </td>

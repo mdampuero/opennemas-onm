@@ -91,6 +91,21 @@ status = [
       </ui-select-choices>
     </ui-select>
   </li>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="size = [
+    { name: '{t}Any{/t}', value: null },
+    { name: '{t}Desktop{/t}', value: 'desktop' },
+    { name: '{t}Mobile{/t}', value: 'phone' },
+    { name: '{t}Tablet{/t}', value: 'tablet' }
+  ]">
+    <ui-select name="size" theme="select2" ng-model="criteria.size">
+      <ui-select-match>
+        <strong>{t}Size{/t}:</strong> [% $select.selected.name %]
+      </ui-select-match>
+      <ui-select-choices repeat="item.value as item in size | filter: { name: $select.search }">
+        <div ng-bind-html="item.name | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>
+  </li>
   <li class="quicklinks ng-cloak dropdown visible-lg">
     <div class="select2-container">
       <a class="select2-choice dropdown-toggle" type="button" data-toggle="dropdown">
