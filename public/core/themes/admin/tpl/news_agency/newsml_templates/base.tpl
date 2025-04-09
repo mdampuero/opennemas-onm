@@ -76,6 +76,7 @@
                       <identified-content>
                         <event start-date="{format_date date=$content->event_start_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_start_hour|default:'00:00' type='custom' format="HHmmssxxx"}" end-date="{format_date date=$content->event_end_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_end_hour|default:'00:00' type='custom' format="HHmmssxxx"}"></event>
                         <location>
+                          <location.city>{$content->event_city}</location.city>
                           <location.place>{$content->event_place}</location.place>
                           <location.address>{$content->event_address}</location.address>
                         </location>
@@ -86,7 +87,7 @@
                           <organizer.name>{$content->event_organizer_name}</organizer.name>
                           <organizer.url>{$content->event_organizer_url}</organizer.url>
                         </organizer>
-                        <price min="{$content->event_minprice}" url="{$content->event_minprice_url|escape:'html'}"></price>
+                        <price min="{$content->event_tickets_price}" url="{$content->event_tickets_link|escape:'html'}"></price>
                       </identified-content>
                     {/if}
                   </docdata>

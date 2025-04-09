@@ -201,9 +201,10 @@ class HttpTaquilla extends Http
         $content->event_end_hour       = '';
         $content->event_place          = $data['place']['name'];
         $content->event_address        = $data['place']['address'];
+        $content->event_city           = $data['place']['city'];
         $content->event_website        = $data['entity']['name_url'];
-        $content->event_minprice       = $details['sminprice'];
-        $content->event_minprice_url   = $details['sminprice_url'];
+        $content->event_tickets_price  = $details['sminprice'];
+        $content->event_tickets_link   = $details['sminprice_url'];
         $content->extCategory          = $data['entity']['type'];
         $content->tags                 = [];
 
