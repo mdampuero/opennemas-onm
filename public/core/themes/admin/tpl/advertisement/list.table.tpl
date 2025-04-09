@@ -186,21 +186,3 @@
   </td>
   {/acl}
 {/block}
-
-<!-- If you want to add a new action, you can add it here -->
-{block name="itemActions"}
-  {acl isAllowed="ADVERTISEMENT_UPDATE"}
-    <a class="btn btn-white btn-small" href="[% routing.generate('backend_advertisement_show', { id: getItemId(item) }) %]" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
-      <i class="fa fa-pencil"></i>
-    </a>
-    <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_advertisement_show', { id: getItemId(item) }) %]" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" ng-class="{ 'dropup': $index >= data.items.length - 1 }" class="btn-group" options="data.extra.locale" text="{t}Edit{/t}"></translator>
-  {/acl}
-  <a class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
-    <i class="fa fa-external-link"></i>
-  </a>
-  {acl isAllowed="ADVERTISEMENT_DELETE"}
-    <button class="btn btn-white btn-small" ng-click="sendToTrash(item)" type="button" uib-tooltip="{t}Remove{/t}" tooltip-placement="top">
-      <i class="fa fa-trash-o text-danger"></i>
-    </button>
-  {/acl}
-{/block}
