@@ -62,3 +62,8 @@ manager_ws_user:
 manager_ws_user_group:
     resource: '@ManagerWebServiceBundle/Resources/config/routing/user_group.yml'
     prefix:   /
+
+manager_ws_onmai:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/onmai.yml'
+    prefix:   /
+

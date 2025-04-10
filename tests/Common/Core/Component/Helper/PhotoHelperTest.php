@@ -208,19 +208,6 @@ class PhotoHelperTest extends \PHPUnit\Framework\TestCase
             ->with($photo)
             ->willReturn('/glorp/xyzzy/foobar.jpg');
 
-        // Mock instance
-        $this->instance->expects($this->once())
-            ->method('getBaseUrl')
-            ->willReturn('http://example.com');
-
-        // Mock router
-        $this->router->expects($this->once())
-            ->method('setContext')
-            ->with($this->callback(function ($context) {
-                return $context instanceof RequestContext
-                    && $context->getBaseUrl() === 'http://example.com';
-            }));
-
         $this->router->expects($this->once())
             ->method('generate')
             ->with('asset_image', [

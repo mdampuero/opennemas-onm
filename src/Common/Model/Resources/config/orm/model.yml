@@ -19,6 +19,7 @@ imports:
     - { resource: connection/instance.yml }
     - { resource: connection/manager.yml }
     - { resource: entity/ads.yml }
+    - { resource: entity/ai.yml }
     - { resource: entity/category.yml }
     - { resource: entity/client.yml }
     - { resource: entity/comment.yml }
@@ -38,6 +39,8 @@ imports:
     - { resource: entity/purchase.yml }
     - { resource: entity/settings.yml }
     - { resource: entity/tag.yml }
+    - { resource: entity/prompt.yml }
+    - { resource: entity/promptManager.yml }
     - { resource: entity/theme.yml }
     - { resource: entity/url.yml }
     - { resource: entity/user.yml }

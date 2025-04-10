@@ -189,6 +189,11 @@ class MetaHelper
             'content_keywords'    => $keywords ?? $this->settings->get('site_keywords')
         ];
 
+        // Add meta description exception for event and company
+        if (in_array($content->content_type_name, ['event', 'company'])) {
+            $data['content_description'] = $content->seo_description ?? null;
+        }
+
         return $data;
     }
 }

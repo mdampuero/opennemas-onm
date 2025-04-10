@@ -276,6 +276,31 @@ services:
         arguments: [ '@service_container' ]
         public:     true
 
+    core.helper.ai:
+        class:     Common\Core\Component\Helper\AIHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.openai:
+        class:     Common\Core\Component\Helper\OpenAIHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.gemini:
+        class:     Common\Core\Component\Helper\GeminiHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.mistralai:
+        class:     Common\Core\Component\Helper\MistralAIHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.helper.deepseek:
+        class:     Common\Core\Component\Helper\DeepSeekHelper
+        arguments: [ '@service_container' ]
+        public:    true
+
     core.helper.oql:
         class:     Common\Core\Component\Helper\OqlHelper
         arguments: [ '@service_container' ]
