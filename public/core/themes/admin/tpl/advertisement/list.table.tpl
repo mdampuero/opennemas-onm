@@ -153,13 +153,13 @@
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('devices')">
     <small class="text-italic">
       <span ng-if="item.params.devices.desktop" class="d-block">
-        <i class="fa fa-desktop" title="Desktop"></i> Desktop
+        <i class="fa fa-desktop" title="Desktop"></i> {t}Desktop{/t}
       </span> <br />
       <span ng-if="item.params.devices.tablet" class="d-block">
-        <i class="fa fa-tablet fa-1x" title="Tablet"></i> Tablet
+        <i class="fa fa-tablet fa-1x" title="Tablet"></i> {t}Tablet{/t}
       </span> <br />
       <span ng-if="item.params.devices.phone" class="d-block">
-        <i class="fa fa-mobile fa-1x" title="Phone"></i> Phone
+        <i class="fa fa-mobile fa-1x" title="Phone"></i> {t}Phone{/t}
       </span>
     </small>
   </td>
