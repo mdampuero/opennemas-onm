@@ -20,8 +20,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('AdvertisementListCtrl', [
-      '$controller', '$scope', 'oqlEncoder', 'routing', '$location', 'http', 'messenger', 'localizer',
-      function($controller, $scope, oqlEncoder, routing, $location, http, messenger, localizer) {
+      '$controller', '$scope', 'oqlEncoder', 'routing', '$location', 'http', 'messenger', 'localizer', '$uibModal',
+      function($controller, $scope, oqlEncoder, routing, $location, http, messenger, localizer, $uibModal) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
@@ -46,6 +46,8 @@
           getList: 'backend_ws_advertisements_list',
           patchItem: 'backend_ws_content_set_content_status',
           patchList: 'backend_ws_advertisements_update_batch',
+          deleteItem: 'backend_ws_content_send_to_trash',
+          deleteList: 'backend_ws_contents_batch_send_to_trash',
         };
 
         /**
@@ -134,9 +136,9 @@
           contents[index][loading] = 1;
 
           var route = {
-            name:   $scope.routes.patchItem,
+            name: $scope.routes.patchItem,
             params: {
-              content_type_name: 'advertisement',
+              contentType: 'advertisement',
               id: id
             }
           };
@@ -170,6 +172,96 @@
           var keys = [ 'title' ];
 
           return lz.localize($scope.contents, keys, $scope.extra.options.default);
+        };
+
+        /**
+         * Sends a content to trash by using a confirmation dialog
+         *
+         * @param mixed content The content to send to trash.
+         */
+        $scope.sendToTrash = function(content) {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-delete',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  content: content
+                };
+              },
+              success: function() {
+                return function() {
+                  var route = {
+                    name: $scope.routes.deleteItem,
+                    params: {
+                      contentType: 'advertisement',
+                      id: content.id
+                    }
+                  };
+
+                  return http.post(route);
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            messenger.post(response.data);
+
+            if (response.success) {
+              $scope.list($scope.route, true);
+            }
+          });
+        };
+
+        /**
+         * Sends a list of selected contents to trash by using a confirmation dialog
+         */
+        $scope.sendToTrashSelected = function() {
+          // Enable spinner
+          $scope.deleting = 1;
+
+          var modal = $uibModal.open({
+            templateUrl: 'modal-delete-selected',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  selected: $scope.selected
+                };
+              },
+              success: function() {
+                return function() {
+                  var route = {
+                    name: $scope.routes.deleteList,
+                    params: {
+                      contentType: 'advertisement'
+                    }
+                  };
+
+                  return http.post(route, { ids: $scope.selected.contents });
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            messenger.post(response.data);
+
+            if (response.success) {
+              $scope.selected = { all: false, contents: [] };
+              $scope.list($scope.route, true);
+            }
+          }).catch(function(error) {
+            console.error('Error in sendToTrashSelected:', error);
+            $scope.deleting = 0;
+            messenger.post({
+              type: 'error',
+              message: error.message || 'Failed to delete selected items'
+            });
+          });
         };
 
         /**

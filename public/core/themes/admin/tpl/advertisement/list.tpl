@@ -149,15 +149,34 @@ status = [
   {include file="advertisement/list.table.tpl"}
 {/block}
 
+
+{block name="modals"}
+  <script type="text/ng-template" id="modal-delete">
+    {include file="common/modals/_modalDelete.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-delete-selected">
+    {include file="common/modals/_modalBatchDelete.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-update-selected">
+    {include file="common/modals/_modalBatchUpdate.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-adblock">
+    {include file="advertisement/modal.adblock.tpl"}
+  </script>
+  <script type="text/ng-template" id="ad_position_template">
+    <div ng-repeat="position in content.positions">[% map[position].name %]</div>
+  </script>
+{/block}
+
 {block name="footer-js" append}
-{javascripts}
-<script>
-jQuery(document).ready(function($) {
-  $('#starttime, #endtime').datetimepicker({
-    format: 'YYYY-MM-DD HH:mm:ss',
-    useCurrent: false,
-  });
-});
-</script>
-{/javascripts}
+  {javascripts}
+    <script>
+    jQuery(document).ready(function($) {
+      $('#starttime, #endtime').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:ss',
+        useCurrent: false,
+      });
+    });
+    </script>
+  {/javascripts}
 {/block}

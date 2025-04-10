@@ -118,7 +118,6 @@
         {t}All{/t}
       </small>
       <div class="table-text">
-      [% categories %]
         <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.fk_content_categories }) %]" ng-if="item.fk_content_categories">
           [% (categories | filter: { id: item.fk_content_categories } : true).title %]
         </a>
