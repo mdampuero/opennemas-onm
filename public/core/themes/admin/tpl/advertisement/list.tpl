@@ -37,9 +37,12 @@ status = [
 {/block}
 
 {block name="selectedActions"}
-  {acl isAllowed="AUTHOR_DELETE"}
+  {acl isAllowed="ADVERTISEMENT_DELETE"}
     <li class="quicklinks">
-      <button class="btn btn-link" ng-click="deleteSelected(item.id)" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+      <span class="h-seperate"></span>
+    </li>
+    <li class="quicklinks">
+      <button class="btn btn-link" ng-click="sendToTrashSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
         <i class="fa fa-trash-o fa-lg"></i>
       </button>
     </li>

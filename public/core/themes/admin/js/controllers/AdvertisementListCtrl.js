@@ -37,6 +37,11 @@
         };
 
         /**
+         * The list of elements
+         */
+        $scope.items = [];
+
+        /**
          * @memberOf AdvertisementListCtrl
          * @description
          *  The list of routes for the controller.
@@ -241,7 +246,7 @@
                     }
                   };
 
-                  return http.post(route, { ids: $scope.selected.contents });
+                  return http.post(route, { ids: $scope.selected.items });
                 };
               }
             }
@@ -251,11 +256,10 @@
             messenger.post(response.data);
 
             if (response.success) {
-              $scope.selected = { all: false, contents: [] };
+              $scope.selected = { all: false, items: [] };
               $scope.list($scope.route, true);
             }
           }).catch(function(error) {
-            console.error('Error in sendToTrashSelected:', error);
             $scope.deleting = 0;
             messenger.post({
               type: 'error',

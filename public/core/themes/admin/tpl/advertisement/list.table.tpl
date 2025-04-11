@@ -38,6 +38,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-featured-clicks" checklist-model="app.columns.selected" checklist-value="'clicks'" type="checkbox">
+    <label for="checkbox-featured-clicks">
+      {t}Clicks{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-featured-type" checklist-model="app.columns.selected" checklist-value="'type'" type="checkbox">
     <label for="checkbox-featured-type">
       {t}Type{/t}
@@ -67,8 +73,11 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('devices')" width="150">
     {t}Devices{/t}
   </th>
-  <th class="v-align-middle" ng-if="isColumnEnabled('position')" width="150">
+  <th class="v-align-middle" ng-if="isColumnEnabled('position')" width="200">
     {t}Position{/t}
+  </th>
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('clicks')" width="75">
+    {t}Clicks{/t}
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('type')" width="80">
     {t}Type{/t}
@@ -163,11 +172,12 @@
       </span>
     </small>
   </td>
-  <td class="v-align-middle" ng-if="isColumnEnabled('position')">
-    <span ng-repeat="value in item.positions | limitTo:3">
-      [% map[value].name %]
-    </span>
-    <span ng-show="item.positions.length > 3" tooltip-class="text-left" tooltip-placement="bottom-left">{t 1="[% item.positions.length %]"}%1 positions{/t}</span>
+  <td class="hidden-xs hidden-sm small-text" ng-if="isColumnEnabled('position')">
+    <span ng-repeat="value in item.positions | limitTo:3" class="ad-position">[% map[value].name %]</span>
+    <span ng-show="item.positions.length > 3" {* uib-tooltip-template="'ad_position_template'" tooltip-placement="bottom" *}>{t 1="[% item.positions.length - 3 %]"}And %1 more…{/t}</span>
+  </td>
+  <td class="hidden-xs text-center" ng-if="isColumnEnabled('clicks')">
+    [% item.num_clic_count %]
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('type')">
     <i class="fa fa-file-picture-o fa-lg m-r-5 text-success" ng-if="item.with_script == 0 && item.is_flash != 1" title="{t}Media element (jpg, png, gif){/t}"></i>
