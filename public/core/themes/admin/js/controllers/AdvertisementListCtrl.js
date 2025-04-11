@@ -387,6 +387,41 @@
 
           return match ? match.title : null;
         };
+
+        /**
+         * Initializes the adblock detection tool with specific configurations.
+         * @returns {void}
+         */
+        var fuckAdBlock = new FuckAdBlock({
+          debug: false,
+          checkOnLoad: true,
+          resetOnEnd: true
+        });
+
+        /**
+         * Handles the event when an adblocker is detected.
+         * Opens a modal dialog to inform the user about the detected adblocker.
+         * @returns {void}
+         */
+        fuckAdBlock.onDetected(function() {
+          /**
+           * Opens a modal when an adblocker is detected.
+           * @returns {Object} The modal instance.
+           */
+          $uibModal.open({
+            templateUrl: 'modal-adblock',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return null;
+              },
+              success: function() {
+                return null;
+              }
+            }
+          });
+        });
       }
     ]);
 })();
