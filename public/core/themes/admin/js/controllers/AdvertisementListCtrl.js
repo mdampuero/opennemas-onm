@@ -268,47 +268,75 @@
           });
         };
 
-        $scope.updateSelectedItems = function(name, value, loading) {
-          // Spinner
-          $scope.deleting = 1;
+        /**
+         *  @ngdoc method
+         *  @name updateSelectedItems
+         *  @methodOf AdvertisementListCtrl
+         *
+         *  @description
+         *  Opens a confirmation modal to update a list of selected items.
+         *  Sends a POST request with the selected item IDs and a value to apply.
+         *  Displays success or error messages based on the response.
+         *
+         *  @param {string} name - The property name to update (e.g., 'status', 'category').
+         *  @param {*} value - The new value to assign to the selected items.
+         *
+         *  @example
+         *  $scope.updateSelectedItems('content_status', 1);
+         */
+        $scope.updateSelectedItems = function(name, value) {
+          $scope.updating = 1;
 
-          var modal = $uibModal.open({
+          const selectedItems = angular.copy($scope.selected.items);
+
+          if (!selectedItems.length) {
+            $scope.updating = 0;
+            return messenger.post({
+              type: 'warning',
+              message: 'No items selected.'
+            });
+          }
+
+          const modal = $uibModal.open({
             templateUrl: 'modal-update-selected',
             backdrop: 'static',
             controller: 'ModalCtrl',
             resolve: {
-              template: function() {
-                return {
-                  name: name,
-                  value: value,
+              template: () => ({ name, value }),
+              success: () => () => {
+                const route = {
+                  name: $scope.routes.patchList,
+                  params: { contentType: 'advertisement' }
                 };
-              },
-              success: function() {
-                return function() {
-                  var selected = $scope.selected.items;
 
-                  var route = {
-                    name: $scope.routes.patchList,
-                    params: {
-                      contentType: 'advertisement'
-                    }
-                  };
-
-                  return http.post(route, { ids: selected, value: value });
-                };
+                return http.post(route, {
+                  ids: selectedItems,
+                  value: value
+                });
               }
             }
           });
 
           modal.result.then(function(response) {
-            if (response) {
-              messenger.post(response.data.messages);
+            $scope.updating = 0;
 
-              if (response.success) {
-                $scope.selected = { all: false, items: [] };
-                $scope.list($scope.route, true);
-              }
+            if (!response) {
+              return;
             }
+
+            messenger.post(response.data.messages || []);
+
+            if (response.success) {
+              $scope.selected = { all: false, items: [] };
+              $scope.list($scope.route, true);
+            }
+          }).catch(function(error) {
+            $scope.updating = 0;
+
+            messenger.post({
+              type: 'error',
+              message: error.message || 'Failed to update selected items.'
+            });
           });
         };
 
