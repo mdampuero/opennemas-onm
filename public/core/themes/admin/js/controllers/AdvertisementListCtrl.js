@@ -297,22 +297,26 @@
             });
           }
 
-          const modal = $uibModal.open({
+          var modal = $uibModal.open({
             templateUrl: 'modal-update-selected',
             backdrop: 'static',
             controller: 'ModalCtrl',
             resolve: {
-              template: () => ({ name, value }),
-              success: () => () => {
-                const route = {
-                  name: $scope.routes.patchList,
-                  params: { contentType: 'advertisement' }
-                };
+              template: function() {
+                return { name: name, value: value };
+              },
+              success: function() {
+                return function() {
+                  var route = {
+                    name: $scope.routes.patchList,
+                    params: { contentType: 'advertisement' }
+                  };
 
-                return http.post(route, {
-                  ids: selectedItems,
-                  value: value
-                });
+                  return http.post(route, {
+                    ids: selectedItems,
+                    value: value
+                  });
+                };
               }
             }
           });
