@@ -112,6 +112,7 @@
 
             $scope.items = $scope.getContentsLocalizeTitle($scope.contents);
             $scope.map   = response.data.map;
+            $scope.categories = response.data.categories;
 
             $scope.parseList(response.data);
             $scope.disableFlags('http');
@@ -369,6 +370,23 @@
           $scope.tempCriteria.endtime = null;
 
           $scope.criteria = angular.copy($scope.tempCriteria);
+        };
+
+        /**
+         * @function getCategoryTitle
+         * @memberof AdvertisementListCtrl
+         *
+         * @description
+         *  Get CategoryTitle by CategoryId
+         */
+        $scope.getCategoryTitle = function(categoryId) {
+          var id = parseInt(Array.isArray(categoryId) ? categoryId[0] : categoryId, 10);
+
+          var match = $scope.categories.find(function(cat) {
+            return cat.id === id;
+          });
+
+          return match ? match.title : null;
         };
       }
     ]);

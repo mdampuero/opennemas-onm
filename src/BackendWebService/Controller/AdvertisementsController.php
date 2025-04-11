@@ -31,14 +31,19 @@ class AdvertisementsController extends ContentController
         list($criteria, $order, $epp, $page) =
             $this->get('core.helper.oql')->getFiltersFromOql($oql);
 
+        $categories = $this->get('api.service.category')->responsify(
+            $this->get('api.service.category')->getList()['items']
+        );
+
         $results = $em->findBy($criteria, $order, $epp, $page);
         $results = \Onm\StringUtils::convertToUtf8($results);
         $total   = $em->countBy($criteria);
 
         return new JsonResponse([
-            'map'     => $map,
-            'items' => $results,
-            'total'   => $total
+            'map'        => $map,
+            'items'      => $results,
+            'categories' => $categories,
+            'total'      => $total
         ]);
     }
 }
