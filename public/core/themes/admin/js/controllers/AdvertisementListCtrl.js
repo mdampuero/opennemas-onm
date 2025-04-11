@@ -71,7 +71,6 @@
                 '"^[value]($|,)|,[value],|(^|,)[value]$"',
               starttime: 'starttime >= "[value]"',
               endtime: 'endtime <= "[value]"',
-              size: 'params regexp \'"devices"\\s*:\\s*{[^}]*"[value]"\\s*:\\s*1\''
             }
           });
 
