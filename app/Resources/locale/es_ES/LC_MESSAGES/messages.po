@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-07 08:04+0000\n"
-"PO-Revision-Date: 2025-04-07 09:59+0200\n"
+"POT-Creation-Date: 2025-04-11 10:02+0000\n"
+"PO-Revision-Date: 2025-04-11 12:15+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -717,12 +717,12 @@ msgstr "Estás usando %d Mb de almacenamiento."
 #, php-format
 msgid ""
 "Note that <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
-"pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" "
-"title=\"Learn more\">the cost %s € Mb/month</a>."
+"pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
+"\"Learn more\">the cost %s € Mb/month</a>."
 msgstr ""
 "Nota que <a href=\"http://help.opennemas.com/knowledgebase/articles/227476-"
-"precios-opennemas-page-views-y-espacio-ocupado\" target=\"_blank\" "
-"title=\"Descubre más\">el coste es de %s € Mb/month</a>."
+"precios-opennemas-page-views-y-espacio-ocupado\" target=\"_blank\" title="
+"\"Descubre más\">el coste es de %s € Mb/month</a>."
 
 #, php-format
 msgid "You have %d activated users."
@@ -745,12 +745,12 @@ msgstr "Este mes estás registrando %d páginas vistas."
 #, php-format
 msgid ""
 "Note that <a href=\"http://help.opennemas.com/knowledgebase/articles/666994-"
-"pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" "
-"title=\"Learn more\">the cost %s € pv/month</a>."
+"pricing-opennemas-page-views-and-storage-space\" target=\"_blank\" title="
+"\"Learn more\">the cost %s € pv/month</a>."
 msgstr ""
 "Nota que <a href=\"http://help.opennemas.com/knowledgebase/articles/227476-"
-"precios-opennemas-page-views-y-espacio-ocupado\" target=\"_blank\" "
-"title=\"Descubre más\">el coste es de %s € Mb/month</a>."
+"precios-opennemas-page-views-y-espacio-ocupado\" target=\"_blank\" title="
+"\"Descubre más\">el coste es de %s € Mb/month</a>."
 
 msgid "Already voted."
 msgstr "Ya has votado."
@@ -892,9 +892,8 @@ msgstr "Por favor, escribe una dirección de correo electrónico válida."
 
 #, php-format
 msgid ""
-"<strong>The email address is already in use.</strong><ul><li>Sign in <a "
-"href=\"%s\">here</a>.</li><li>Recover password <a href=\"%s\">here</a>.</"
-"li></ul>"
+"<strong>The email address is already in use.</strong><ul><li>Sign in <a href="
+"\"%s\">here</a>.</li><li>Recover password <a href=\"%s\">here</a>.</li></ul>"
 msgstr ""
 "<strong>Esta dirección de correo ya está en uso.</strong><ul><li>Si quieres "
 "iniciar sesión, pulsa <a href=\"%s\">aquí</a>.</li><li>Si has olvidado tu "
@@ -1274,11 +1273,11 @@ msgstr ""
 "imagen."
 
 msgid ""
-"Notification scheduled successfully. For further details, click <a "
-"href=\"webpush_notifications/history\">here</a>"
+"Notification scheduled successfully. For further details, click <a href="
+"\"webpush_notifications/history\">here</a>"
 msgstr ""
-"Notificación planificada con éxito. Para más detalles, pincha <a "
-"href=\"webpush_notifications/history\">aquí</a>"
+"Notificación planificada con éxito. Para más detalles, pincha <a href="
+"\"webpush_notifications/history\">aquí</a>"
 
 msgid "ID"
 msgstr "ID"
@@ -1570,6 +1569,402 @@ msgstr "Pagar con PayPal"
 msgid "There is no billing information."
 msgstr "No hay información de facturación."
 
+msgid "Corporate and Business"
+msgstr "Corporativo y Negocios"
+
+msgid "corporate-and-business"
+msgstr "corporativo-y-negocios"
+
+msgid "Conferences"
+msgstr "Conferencias"
+
+msgid "conferences"
+msgstr "conferencias"
+
+msgid "Seminars"
+msgstr "Seminarios"
+
+msgid "seminars"
+msgstr "seminarios"
+
+msgid "Webinars"
+msgstr "Webinars"
+
+msgid "webinars"
+msgstr "webinars"
+
+msgid "Trade Shows"
+msgstr "Ferias Comerciales"
+
+msgid "trade-shows"
+msgstr "ferias-comerciales"
+
+msgid "Press Conferences"
+msgstr "Ruedas de Prensa"
+
+msgid "press-conferences"
+msgstr "ruedas-de-prensa"
+
+msgid "Workshops"
+msgstr "Talleres"
+
+msgid "workshops"
+msgstr "talleres"
+
+msgid "Product Launches"
+msgstr "Lanzamientos de Producto"
+
+msgid "product-launches"
+msgstr "lanzamientos-de-producto"
+
+msgid "Networking"
+msgstr "Networking"
+
+msgid "networking"
+msgstr "networking"
+
+msgid "Team Building"
+msgstr "Team Building"
+
+msgid "team-building"
+msgstr "team-building"
+
+msgid "Summits"
+msgstr "Cumbres"
+
+msgid "summits"
+msgstr "cumbres"
+
+msgid "social"
+msgstr "social"
+
+msgid "Weddings"
+msgstr "Bodas"
+
+msgid "weddings"
+msgstr "bodas"
+
+msgid "Baptisms"
+msgstr "Bautizos"
+
+msgid "baptisms"
+msgstr "bautizos"
+
+msgid "First Communions"
+msgstr "Primeras Comuniones"
+
+msgid "first-communions"
+msgstr "primeras-comuniones"
+
+msgid "Anniversaries"
+msgstr "Aniversarios"
+
+msgid "anniversaries"
+msgstr "aniversarios"
+
+msgid "Birthdays"
+msgstr "Cumpleaños"
+
+msgid "birthdays"
+msgstr "cumpleanos"
+
+msgid "Farewells"
+msgstr "Despedidas"
+
+msgid "farewells"
+msgstr "despedidas"
+
+msgid "Baby Showers"
+msgstr "Baby Showers"
+
+msgid "baby-showers"
+msgstr "baby-showers"
+
+msgid "Reunions"
+msgstr "Reuniones"
+
+msgid "reunions"
+msgstr "reuniones"
+
+msgid "Graduations"
+msgstr "Graduaciones"
+
+msgid "graduations"
+msgstr "graduaciones"
+
+msgid "Themed Parties"
+msgstr "Fiestas Temáticas"
+
+msgid "themed-parties"
+msgstr "fiestas-tematicas"
+
+msgid "Cultural and Artistic"
+msgstr "Cultural y Artístico"
+
+msgid "cultural-and-artistic"
+msgstr "cultural-y-artistico"
+
+msgid "Concerts"
+msgstr "Conciertos"
+
+msgid "concerts"
+msgstr "conciertos"
+
+msgid "Theater"
+msgstr "Teatro"
+
+msgid "theater"
+msgstr "teatro"
+
+msgid "Exhibitions"
+msgstr "Exposiciones"
+
+msgid "exhibitions"
+msgstr "exposiciones"
+
+msgid "Performances"
+msgstr "Espectáculos"
+
+msgid "performances"
+msgstr "espectaculos"
+
+msgid "Festivals"
+msgstr "Festivales"
+
+msgid "festivals"
+msgstr "festivales"
+
+msgid "Cinema"
+msgstr "Cine"
+
+msgid "cinema"
+msgstr "cine"
+
+msgid "Book Fairs"
+msgstr "Ferias del Libro"
+
+msgid "book-fairs"
+msgstr "ferias-del-libro"
+
+msgid "Urban Art"
+msgstr "Arte Urbano"
+
+msgid "urban-art"
+msgstr "arte-urbano"
+
+msgid "Sports"
+msgstr "Deportes"
+
+msgid "sports"
+msgstr "deportes"
+
+msgid "Races"
+msgstr "Carreras"
+
+msgid "races"
+msgstr "carreras"
+
+msgid "Tournaments"
+msgstr "Torneos"
+
+msgid "tournaments"
+msgstr "torneos"
+
+msgid "sports-exhibitions"
+msgstr "exhibiciones-deportivas"
+
+msgid "Classes"
+msgstr "Clases"
+
+msgid "sports-classes"
+msgstr "clases-deportivas"
+
+msgid "Esports"
+msgstr "Esports"
+
+msgid "esports"
+msgstr "esports"
+
+msgid "Triathlons"
+msgstr "Triatlones"
+
+msgid "triathlons"
+msgstr "triatlones"
+
+msgid "Extreme Sports"
+msgstr "Deportes Extremos"
+
+msgid "extreme-sports"
+msgstr "deportes-extremos"
+
+msgid "Educational"
+msgstr "Educativo"
+
+msgid "educational"
+msgstr "educativo"
+
+msgid "Courses"
+msgstr "Cursos"
+
+msgid "courses"
+msgstr "cursos"
+
+msgid "educational-conferences"
+msgstr "conferencias-educativas"
+
+msgid "Symposiums"
+msgstr "Simposios"
+
+msgid "symposiums"
+msgstr "simposios"
+
+msgid "Debates"
+msgstr "Debates"
+
+msgid "debates"
+msgstr "debates"
+
+msgid "educational-workshops"
+msgstr "talleres-educativos"
+
+msgid "Fairs"
+msgstr "Ferias"
+
+msgid "educational-fairs"
+msgstr "ferias-educativas"
+
+msgid "Religious"
+msgstr "Religioso"
+
+msgid "religious"
+msgstr "religioso"
+
+msgid "Masses"
+msgstr "Misss"
+
+msgid "masses"
+msgstr "misas"
+
+msgid "Pilgrimages"
+msgstr "Peregrinaciones"
+
+msgid "pilgrimages"
+msgstr "peregrinaciones"
+
+msgid "Retreats"
+msgstr "Retiros"
+
+msgid "retreats"
+msgstr "retiros"
+
+msgid "Festivities"
+msgstr "Festividades"
+
+msgid "festivities"
+msgstr "festividades"
+
+msgid "Charitable"
+msgstr "Benéfico"
+
+msgid "charitable"
+msgstr "benefico"
+
+msgid "Gala Events"
+msgstr "Eventos de Gala"
+
+msgid "gala-events"
+msgstr "eventos-de-gala"
+
+msgid "Auctions"
+msgstr "Subastas"
+
+msgid "auctions"
+msgstr "subastas"
+
+msgid "Donations"
+msgstr "Donaciones"
+
+msgid "donations"
+msgstr "donaciones"
+
+msgid "Volunteering"
+msgstr "Voluntariado"
+
+msgid "volunteering"
+msgstr "voluntariado"
+
+msgid "Benefit Concerts"
+msgstr "Conciertos Benéficos"
+
+msgid "benefit-concerts"
+msgstr "conciertos-beneficos"
+
+msgid "Gastronomic"
+msgstr "Gastronómico"
+
+msgid "gastronomic"
+msgstr "gastronomico"
+
+msgid "Food Fairs"
+msgstr "Ferias Gastronómicas"
+
+msgid "food-fairs"
+msgstr "ferias-gastronomicas"
+
+msgid "Tastings"
+msgstr "Catas"
+
+msgid "tastings"
+msgstr "catas"
+
+msgid "Gastronomic Festivals"
+msgstr "Festivales Gastronómicos"
+
+msgid "gastronomic-festivals"
+msgstr "festivales-gastronomicos"
+
+msgid "Technological"
+msgstr "Tecnológico"
+
+msgid "technological"
+msgstr "tecnologico"
+
+msgid "Tech Fairs"
+msgstr "Ferias Tecnológicas"
+
+msgid "tech-fairs"
+msgstr "ferias-tecnologicas"
+
+msgid "Demos"
+msgstr "Demos"
+
+msgid "demos"
+msgstr "demos"
+
+msgid "Hackathons"
+msgstr "Hackathons"
+
+msgid "hackathons"
+msgstr "hackathons"
+
+msgid "Governmental"
+msgstr "Gubernamental"
+
+msgid "governmental"
+msgstr "gubernamental"
+
+msgid "Inaugurations"
+msgstr "Inauguraciones"
+
+msgid "inaugurations"
+msgstr "inauguraciones"
+
+msgid "governmental-summits"
+msgstr "cumbres-gubernamentales"
+
+msgid "governmental-debates"
+msgstr "debates-gubernamentales"
+
 msgid "Live blog post"
 msgstr "Artículo en directo"
 
@@ -1606,8 +2001,14 @@ msgstr "Datos del organizador"
 msgid "Event date"
 msgstr "Fecha del evento"
 
+msgid "Event Type"
+msgstr "Tipo de evento"
+
 msgid "Event location"
 msgstr "Localización del evento"
+
+msgid "Tickets"
+msgstr "Entradas"
 
 msgid "External website"
 msgstr "Sitio web externo"
@@ -2168,6 +2569,9 @@ msgstr "Planificado"
 msgid "Error"
 msgstr "Error"
 
+msgid "Select a type"
+msgstr "Selecciona un tipo"
+
 msgid "Add a tag..."
 msgstr "Añadir una etiqueta..."
 
@@ -2225,6 +2629,9 @@ msgstr ""
 
 msgid "Pick an image"
 msgstr "Escoja una imagen"
+
+msgid "No event type selected"
+msgstr "No se ha seleccionado ningún tipo de evento."
 
 msgid "Link"
 msgstr "Enlace"
@@ -2668,6 +3075,11 @@ msgstr "Revise el formulario ya que tiene campos sin completar o inválidos."
 msgid "You must have at least 1 languages ​​set for the frontend"
 msgstr "Debes tener al menos 1 idioma configurado para la interfaz"
 
+msgid "The provided iframe is not valid. Please check the field and try again."
+msgstr ""
+"El iframe proporcionado no es válido. Por favor, revise el campo e inténtelo "
+"de nuevo."
+
 msgid "Instance information"
 msgstr "Información de la instancia"
 
@@ -2979,8 +3391,8 @@ msgid ""
 "Get more help from our videotutorials in <a href=\"%1\" class=\"text-white "
 "bold\">our YouTube channel</a> and subscribe to it."
 msgstr ""
-"Puedes ver más videotutoriales en <a href=\"%1\" class=\"text-white "
-"bold\">nuestro canal de YouTube</a> y también puedes suscribirte al mismo."
+"Puedes ver más videotutoriales en <a href=\"%1\" class=\"text-white bold"
+"\">nuestro canal de YouTube</a> y también puedes suscribirte al mismo."
 
 msgid "Logged in users"
 msgstr "Usuarios conectados"
@@ -3085,9 +3497,6 @@ msgstr "Importar"
 
 msgid "as"
 msgstr "como"
-
-msgid "Select a type"
-msgstr "Selecciona un tipo"
 
 msgid "Transform with ONM AI"
 msgstr "Transformar con ONM AI"
@@ -3507,14 +3916,14 @@ msgstr "Los comentarios de Facebook no están configurados"
 
 msgid ""
 "If you want to moderate comments, you first need to create a Facebook "
-"application in <br><a href=\"https://developers.facebook.com/\" "
-"target=\"_blank\">here</a> to get an application Id and then click on "
-"settings to configure it"
+"application in <br><a href=\"https://developers.facebook.com/\" target="
+"\"_blank\">here</a> to get an application Id and then click on settings to "
+"configure it"
 msgstr ""
 "Si quieres moderar los comentarios, primero tienes que crear una aplicación "
-"de Facebook desde <a href=\"https://developers.facebook.com/\" "
-"target=\"_blank\">aquí</a> para obtener un Id de aplicación y luego haz clic "
-"en configuración para configurarlo"
+"de Facebook desde <a href=\"https://developers.facebook.com/\" target="
+"\"_blank\">aquí</a> para obtener un Id de aplicación y luego haz clic en "
+"configuración para configurarlo"
 
 msgid "Disqus"
 msgstr "Disqus"
@@ -3856,13 +4265,13 @@ msgid "Redirect your own domain"
 msgstr "Redirige tu dominio"
 
 msgid ""
-"You have <strong><a href=\"https://en.wikipedia.org/wiki/HTTPS\" "
-"class=\"text-white\" title=\"What is SSL encryption?\" target=\"_blank\">SSL "
+"You have <strong><a href=\"https://en.wikipedia.org/wiki/HTTPS\" class="
+"\"text-white\" title=\"What is SSL encryption?\" target=\"_blank\">SSL "
 "encription enabled</a></strong> for your main domain."
 msgstr ""
 "Tu dominio principal tiene el <strong><a href=\"https://en.wikipedia.org/"
-"wiki/HTTPS\" class=\"text-white\" title=\"What is SSL encryption?\" "
-"target=\"_blank\">cifrado SSL activado</a></strong>."
+"wiki/HTTPS\" class=\"text-white\" title=\"What is SSL encryption?\" target="
+"\"_blank\">cifrado SSL activado</a></strong>."
 
 msgid "Congrats, your newspaper is secure!"
 msgstr "¡Enhorabuena, tu periódico es seguro!"
@@ -3966,8 +4375,26 @@ msgstr "Nombre del lugar"
 msgid "Place address"
 msgstr "Dirección del lugar"
 
+msgid "Latitude"
+msgstr "Latitud"
+
+msgid "Longitude"
+msgstr "Longitud"
+
+msgid "Event iframe map"
+msgstr "Iframe del mapa del evento"
+
+msgid "Price"
+msgstr "Precio"
+
+msgid "Purchase URL"
+msgstr "URL de compra"
+
 msgid "Website URL"
 msgstr "URL del sitio web"
+
+msgid "SEO Information"
+msgstr "Información SEO"
 
 msgid "Config event module"
 msgstr "Configuración de módulo «Evento»"
@@ -4120,12 +4547,12 @@ msgstr "Volver a la <a href=\"%1\">tienda</a> e intentarlo de nuevo"
 
 msgid ""
 "I have read and accept the <a href=\"http://help.opennemas.com/knowledgebase/"
-"articles/235348-condiciones-del-servicio-de-opennemas\" "
-"target=\"_blank\">Terms of Service</a>"
+"articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
+"\">Terms of Service</a>"
 msgstr ""
 "Leí y acepto los <a href=\"http://help.opennemas.com/knowledgebase/"
-"articles/235348-condiciones-del-servicio-de-opennemas\" "
-"target=\"_blank\">Términos del servicio</a>"
+"articles/235348-condiciones-del-servicio-de-opennemas\" target=\"_blank"
+"\">Términos del servicio</a>"
 
 msgid "Packs"
 msgstr "Packs"
@@ -4210,9 +4637,6 @@ msgstr "Tamaño"
 
 msgid "Suggested for frontpage"
 msgstr "Sugerir en portada principal"
-
-msgid "SEO Information"
-msgstr "Información SEO"
 
 msgid "Inner title"
 msgstr "Título interior"
@@ -4479,8 +4903,8 @@ msgstr ""
 "mejoras en tu periódico."
 
 msgid ""
-"See our <a href=\"http://www.youtube.com/user/OpennemasPublishing\" "
-"target=\"_blank\">video tutorials</a> for getting step-by-step guidance."
+"See our <a href=\"http://www.youtube.com/user/OpennemasPublishing\" target="
+"\"_blank\">video tutorials</a> for getting step-by-step guidance."
 msgstr ""
 "Echa un vistazo a nuestros <a href=\"http://www.youtube.com/user/"
 "OpennemasPublishing\" target=\"_blank\">tutoriales en vídeo</a> para obtener "
@@ -5074,13 +5498,13 @@ msgid "Robots.txt rules"
 msgstr "Reglas de robots.txt"
 
 msgid ""
-"Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a "
-"href=\"http://www.robotstxt.org/robotstxt.html\" target=\"_blank\" ng-"
-"click=\"$event.stopPropagation();\">documentation</a>."
+"Add custom robots.txt rules like 'Disallow: /tag'. Refer to the <a href="
+"\"http://www.robotstxt.org/robotstxt.html\" target=\"_blank\" ng-click="
+"\"$event.stopPropagation();\">documentation</a>."
 msgstr ""
 "Añade reglas personalizadas como 'Disallow: /tag' al fichero robots.txt. "
-"Consulta la <a href=\"http://www.robotstxt.org/robotstxt.html\" "
-"target=\"_blank\" ng-click=\"$event.stopPropagation();\">documentación</a>."
+"Consulta la <a href=\"http://www.robotstxt.org/robotstxt.html\" target="
+"\"_blank\" ng-click=\"$event.stopPropagation();\">documentación</a>."
 
 msgid "Select your main font (titles, headings…)."
 msgstr "Selecciona tu fuente principal (títulos, encabezados…)."
@@ -5208,8 +5632,8 @@ msgid ""
 "Guide-Finding-your-UTID\" target=\"_blank\" ng-click=\"$event."
 "stopPropagation();\">here</a>."
 msgstr ""
-"Cómo encontrar su UTID de Quantcast <a class=\"external-link\" "
-"href=\"https://help.quantcast.com/hc/en-us/articles/360051794614-TCF-v2-GTM-"
+"Cómo encontrar su UTID de Quantcast <a class=\"external-link\" href="
+"\"https://help.quantcast.com/hc/en-us/articles/360051794614-TCF-v2-GTM-"
 "Implementation-Guide-Finding-your-UTID\" target=\"_blank\" ng-click=\"$event."
 "stopPropagation();\">aqui</a>."
 
@@ -5220,21 +5644,21 @@ msgid ""
 "Get your data-domain-script from your OneTrust script. Check an example "
 "script <a class=\"external-link\" href=\"https://community.cookiepro.com/s/"
 "article/UUID-5394213a-70b9-c4e6-d68c-f809b55e7af6#UUID-7478d3b4-18eb-3ac0-"
-"a6fd-fb7ebff9f8dc_section-idm4591571479548831554522590036\" "
-"target=\"_blank\" ng-click=\"$event.stopPropagation();\">here</a>."
+"a6fd-fb7ebff9f8dc_section-idm4591571479548831554522590036\" target=\"_blank"
+"\" ng-click=\"$event.stopPropagation();\">here</a>."
 msgstr ""
 "Obtenga su OneTrust data-domain-script desde el propio script. Puede ver un "
 "ejemplo <a class=\"external-link\" href=\"https://community.cookiepro.com/s/"
 "article/UUID-5394213a-70b9-c4e6-d68c-f809b55e7af6#UUID-7478d3b4-18eb-3ac0-"
-"a6fd-fb7ebff9f8dc_section-idm4591571479548831554522590036\" "
-"target=\"_blank\" ng-click=\"$event.stopPropagation();\">aqui</a>."
+"a6fd-fb7ebff9f8dc_section-idm4591571479548831554522590036\" target=\"_blank"
+"\" ng-click=\"$event.stopPropagation();\">aqui</a>."
 
 msgid "Didomi apiKey"
 msgstr "Didomi apiKey"
 
 msgid ""
-"Help to find your Didomi credentials <a class=\"external-link\" "
-"href=\"https://support.didomi.io/\" target=\"_blank\" ng-click=\"$event."
+"Help to find your Didomi credentials <a class=\"external-link\" href="
+"\"https://support.didomi.io/\" target=\"_blank\" ng-click=\"$event."
 "stopPropagation();\">here</a>."
 msgstr ""
 "Ayuda para encontrar tus credenciales de Didomi <a class=\"external-link\" "
@@ -5279,15 +5703,14 @@ msgstr "Añadir Master"
 
 msgid ""
 "You can get your Google Analytics Site ID from <a class=\"external-link\" "
-"href=\"https://www.google.com/analytics/\" target=\"_blank\" ng-"
-"click=\"$event.stopPropagation();\">GAnalytics site</a> under the General "
-"Overview list (should be something like UA-546457-3)."
+"href=\"https://www.google.com/analytics/\" target=\"_blank\" ng-click="
+"\"$event.stopPropagation();\">GAnalytics site</a> under the General Overview "
+"list (should be something like UA-546457-3)."
 msgstr ""
-"Puedes obtener tu ID de sitio web de Google Analytics desde <a "
-"class=\"external-link\" href=\"https://www.google.com/analytics/\" "
-"target=\"_blank\" ng-click=\"$event.stopPropagation();\">el sitio web de "
-"GAnalytics</a> bajo la lista de la Vista previa (debería ser algo semejante "
-"a UA-546457-3)."
+"Puedes obtener tu ID de sitio web de Google Analytics desde <a class="
+"\"external-link\" href=\"https://www.google.com/analytics/\" target=\"_blank"
+"\" ng-click=\"$event.stopPropagation();\">el sitio web de GAnalytics</a> "
+"bajo la lista de la Vista previa (debería ser algo semejante a UA-546457-3)."
 
 msgid "We are not responsible of the stats or of any third party services"
 msgstr "No somos responsables de las estadísticas de servicios de terceros"
@@ -5413,12 +5836,12 @@ msgstr "Llave privada"
 
 msgid ""
 "Get your reCaptcha key from <a class=\"external-link\" href=\"https://www."
-"google.com/recaptcha/admin#whyrecaptcha\" target=\"_blank\" ng-"
-"click=\"$event.stopPropagation();\">this page</a>."
+"google.com/recaptcha/admin#whyrecaptcha\" target=\"_blank\" ng-click="
+"\"$event.stopPropagation();\">this page</a>."
 msgstr ""
-"Puedes obtener tus llaves de reCAPTCHA desde <a class=\"external-link\" "
-"href=\"https://www.google.com/recaptcha/admin#whyrecaptcha\"\" "
-"target=\"_blank\" ng-click=\"$event.stopPropagation();\">esta página</a>."
+"Puedes obtener tus llaves de reCAPTCHA desde <a class=\"external-link\" href="
+"\"https://www.google.com/recaptcha/admin#whyrecaptcha\"\" target=\"_blank\" "
+"ng-click=\"$event.stopPropagation();\">esta página</a>."
 
 msgid "Used when we want to test if the user is an human and not a robot."
 msgstr ""
@@ -5431,15 +5854,15 @@ msgid "Google Search API key"
 msgstr "Llave de la API de Google Search"
 
 msgid ""
-"You can get your Google <strong>Search</strong> API Key from <a "
-"class=\"external-link\" href=\"http://www.google.com/cse/manage/create\" "
-"target=\"_blank\" ng-click=\"$event.stopPropagation();\">Google Search sign "
-"up website</a>."
+"You can get your Google <strong>Search</strong> API Key from <a class="
+"\"external-link\" href=\"http://www.google.com/cse/manage/create\" target="
+"\"_blank\" ng-click=\"$event.stopPropagation();\">Google Search sign up "
+"website</a>."
 msgstr ""
-"Puedes obtener tus llaves de Google <strong>Search</strong> desde <a "
-"href=\"http://www.google.com/cse/manage/create\" target=\"_blank\" "
-"class=\"external-link\" ng-click=\"$event.stopPropagation();\">el sitio web "
-"Google Search sign up</a>."
+"Puedes obtener tus llaves de Google <strong>Search</strong> desde <a href="
+"\"http://www.google.com/cse/manage/create\" target=\"_blank\" class="
+"\"external-link\" ng-click=\"$event.stopPropagation();\">el sitio web Google "
+"Search sign up</a>."
 
 msgid "Google News"
 msgstr "Google News"
@@ -5451,15 +5874,15 @@ msgid "Google Maps API key"
 msgstr "Llave de la API de Google Maps"
 
 msgid ""
-"You can get your Google <strong>Maps</strong> API Key from <a "
-"class=\"external-link\" href=\"http://code.google.com/apis/maps/signup."
-"html\" target=\"_blank\" ng-click=\"$event.stopPropagation();\">Google maps "
-"sign up website</a>."
+"You can get your Google <strong>Maps</strong> API Key from <a class="
+"\"external-link\" href=\"http://code.google.com/apis/maps/signup.html\" "
+"target=\"_blank\" ng-click=\"$event.stopPropagation();\">Google maps sign up "
+"website</a>."
 msgstr ""
-"Puedes obtener tuss llaves de Google <strong>Maps</strong> desde <a "
-"class=\"external-link\" href=\"http://code.google.com/apis/maps/signup."
-"html\" target=\"_blank\" ng-click=\"$event.stopPropagation();\">el sitio web "
-"Google Maps sign up</a>."
+"Puedes obtener tuss llaves de Google <strong>Maps</strong> desde <a class="
+"\"external-link\" href=\"http://code.google.com/apis/maps/signup.html\" "
+"target=\"_blank\" ng-click=\"$event.stopPropagation();\">el sitio web Google "
+"Maps sign up</a>."
 
 msgid "Google Tag Manager"
 msgstr "Google Tag Manager"
@@ -5471,15 +5894,15 @@ msgid "Google Tag Manager container Id for AMP"
 msgstr "Id de contenedor de Google Tag Manager para AMP"
 
 msgid ""
-"You can get your Google <strong>Tags</strong> container Id from <a "
-"class=\"external-link\" href=\"https://tagmanager.google.com/#/home\" "
-"target=\"_blank\" ng-click=\"$event.stopPropagation();\">Google tags sign up "
+"You can get your Google <strong>Tags</strong> container Id from <a class="
+"\"external-link\" href=\"https://tagmanager.google.com/#/home\" target="
+"\"_blank\" ng-click=\"$event.stopPropagation();\">Google tags sign up "
 "website</a>."
 msgstr ""
 "Puedes obtener el id de contenedor de Google <strong>Tags</strong> desde <a "
-"class=\"external-link\" href=\"https://tagmanager.google.com/#/home\" "
-"target=\"_blank\" ng-click=\"$event.stopPropagation();\">el sitio web de "
-"Google Tags</a>."
+"class=\"external-link\" href=\"https://tagmanager.google.com/#/home\" target="
+"\"_blank\" ng-click=\"$event.stopPropagation();\">el sitio web de Google "
+"Tags</a>."
 
 msgid "Data Layer"
 msgstr "Data Layer"
@@ -5509,9 +5932,9 @@ msgid "Act-On secret"
 msgstr "Secreto de Act-On"
 
 msgid ""
-"You can get your <strong>Act-On</strong> auth codes from your <a "
-"class=\"external-link\" href=\"http://act-on.com\" target=\"_blank\" ng-"
-"click=\"$event.stopPropagation();\">the Act-On account</a>."
+"You can get your <strong>Act-On</strong> auth codes from your <a class="
+"\"external-link\" href=\"http://act-on.com\" target=\"_blank\" ng-click="
+"\"$event.stopPropagation();\">the Act-On account</a>."
 msgstr ""
 "Puedes obtener los códigos de autenticación de <strong>Act-On</strong> desde "
 "su <a class=\"external-link\" href=\"http://act-on.com\" target=\"_blank\" "
@@ -5550,9 +5973,9 @@ msgid "APP key"
 msgstr "Llave de la aplicación"
 
 msgid ""
-"You can get your Facebook App Keys from <a class=\"external-link\" "
-"href=\"https://developers.facebook.com/apps\" target=\"_blank\" ng-"
-"click=\"$event.stopPropagation();\">Facebook Developers website</a>."
+"You can get your Facebook App Keys from <a class=\"external-link\" href="
+"\"https://developers.facebook.com/apps\" target=\"_blank\" ng-click=\"$event."
+"stopPropagation();\">Facebook Developers website</a>."
 msgstr ""
 "Puedes obtener tus llaves de aplicación de Facebook desde <a href=\"https://"
 "developers.facebook.com/apps\" target=\"_blank\" ng-click=\"$event."
@@ -6394,8 +6817,8 @@ msgid ""
 "External email address configured on the <a href=\"%1\">newsletter "
 "configuration section</a> "
 msgstr ""
-"La dirección de correo electrónico externa se configura desde la <a "
-"href=\"%1\"> sección de configuración de boletines</a> "
+"La dirección de correo electrónico externa se configura desde la <a href="
+"\"%1\"> sección de configuración de boletines</a> "
 
 msgid "Add to list"
 msgstr "Añadir a la lista"
@@ -7933,9 +8356,6 @@ msgstr "Pack"
 msgid "Partner"
 msgstr "Socio"
 
-msgid "Price"
-msgstr "Precio"
-
 msgid "w/customization"
 msgstr "w/personalización"
 
@@ -8462,1222 +8882,3 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
-
-#, fuzzy
-#~ msgid "Select a language"
-#~ msgstr "Selecciona un idioma..."
-
-#~ msgid "Introductions"
-#~ msgstr "Introducciones"
-
-#~ msgid "Transformation"
-#~ msgstr "Transformación"
-
-#~ msgid "AI"
-#~ msgstr "IA"
-
-#~ msgid "Own prompts"
-#~ msgstr "Prompts propios"
-
-#~ msgid "words managed"
-#~ msgstr "palabras gestionadas"
-
-#~ msgid "Config prompts"
-#~ msgstr "Configuración prompts"
-
-#~ msgid "opennemas AI"
-#~ msgstr "opennemas AI"
-
-#, fuzzy
-#~ msgid "Edit prompt"
-#~ msgstr "Editar contenido"
-
-#~ msgid "Manual category"
-#~ msgstr "Categoría manual"
-
-#~ msgid "Automatic category"
-#~ msgstr "Categoría automática"
-
-#~ msgid "Canonical URL"
-#~ msgstr "URL canónica"
-
-#~ msgid "CANONICAL URL"
-#~ msgstr "URL canónica"
-
-#~ msgid "Browser update"
-#~ msgstr "Actualización de navegador"
-
-#~ msgid "Notify users that they should update their browser"
-#~ msgstr "Notificar a los usuarios que deberían actualizar su navegador"
-
-#~ msgid "Time zone: "
-#~ msgstr "Zona horaria:"
-
-#~ msgid "My selection "
-#~ msgstr "Mi selección"
-
-#~ msgid "Place"
-#~ msgstr "Lugar"
-
-#~ msgid "Invalid parameters, please add a valid JSON"
-#~ msgstr "Parámetros inválidos, por favor añade un JSON válido"
-
-#~ msgid "Fonts"
-#~ msgstr "Fuentes"
-
-#~ msgid "Choose header default size"
-#~ msgstr "Elija el tamaño predeterminado del encabezado"
-
-#~ msgid ""
-#~ "Your theme offers multiple fonts to match your page style. Select yout "
-#~ "main font (titles, headings…)."
-#~ msgstr ""
-#~ "Tu tema ofrece multiples fuentes que combinan con el estilo de tu página. "
-#~ "Selecciona tu fuente principal (títulos, cabeceras...)."
-
-#~ msgid "Unable to find any content that matches your search."
-#~ msgstr "No se pudieron encontrar contenidos que coincidan con tu búsqueda."
-
-#~ msgid "Use CMP on your AMP pages"
-#~ msgstr "Use CMP en sus páginas AMP"
-
-#~ msgid "Successfully sent"
-#~ msgstr "Enviado con éxito"
-
-#~ msgid "Won't take effect on manual sending"
-#~ msgstr "No tendrá efecto para el envío manual"
-
-#~ msgid "Webpushr Api Key"
-#~ msgstr "Webpushr Auth Key"
-
-#~ msgid "Webpushr Auth Key"
-#~ msgstr "Webpushr Auth Key"
-
-#~ msgid "External"
-#~ msgstr "Externo"
-
-#~ msgid "Book created successfully."
-#~ msgstr "Libro creado correctamente."
-
-#~ msgid "Unable to create the new book."
-#~ msgstr "No se pudo crear el nuevo libro."
-
-#~ msgid "Unable to find the book with the id \"%d\""
-#~ msgstr "No se pudo encontrar un libro con el identificador «%d»"
-
-#~ msgid "You can't modify this book because you don't have enough privileges."
-#~ msgstr ""
-#~ "No puedes modificar este libro porque no tienes permisos suficientes."
-
-#~ msgid "Book data sent not valid."
-#~ msgstr "Los datos del libro enviados no son válidos."
-
-#~ msgid "Book updated succesfully."
-#~ msgstr "Libro actualizado correctamente."
-
-#~ msgid "Book '%s' deleted successfully."
-#~ msgstr "Libro «%s» eliminado correctamente."
-
-#~ msgid "Unable to create the new special."
-#~ msgstr "No se pudo crear el nuevo especial."
-
-#~ msgid "Unable to find the special with the id \"%d\""
-#~ msgstr "No se pudo encontrar el especial con el identificador «%d»"
-
-#~ msgid "Special data sent not valid."
-#~ msgstr "Los datos enviados del especial no son válidos."
-
-#~ msgid "Special successfully updated."
-#~ msgstr "Especial actualizado correctamente."
-
-#~ msgid "Unable to update the special."
-#~ msgstr "No se pudo actualizar el especial."
-
-#~ msgid "Special deleted successfully."
-#~ msgstr "Especial eliminado correctamente."
-
-#~ msgid "You must give an id for delete a special."
-#~ msgstr "Debes proporcionar un identificador para eliminar un especial."
-
-#~ msgid "Specials"
-#~ msgstr "Especiales"
-
-#~ msgid "Books"
-#~ msgstr "Libros"
-
-#~ msgid "Administrate settings"
-#~ msgstr "Administrar configuraciones"
-
-#~ msgid "Book"
-#~ msgstr "Libro"
-
-#~ msgid "Special"
-#~ msgstr "Especial"
-
-#~ msgid "Delete book"
-#~ msgstr "Eliminar libro"
-
-#~ msgid "Delete books"
-#~ msgstr "Eliminar libros"
-
-#~ msgid "Unable to find any book that matches your search."
-#~ msgstr "No se pudieron encontrar libros que coincidan con tu búsqueda."
-
-#~ msgid "Cover image"
-#~ msgstr "Imagen de portada"
-
-#~ msgid "Editorial"
-#~ msgstr "Editorial"
-
-#~ msgid "Unable to find any special that matches your search."
-#~ msgstr "No se pudieron encontrar especiales que coincidan con tu búsqueda."
-
-#~ msgid "Section"
-#~ msgstr "Sección"
-
-#~ msgid "Special contents"
-#~ msgstr "Contenidos especiales"
-
-#~ msgid "Articles in left column"
-#~ msgstr "Artículos en la columna izquierda"
-
-#~ msgid "Articles in right column"
-#~ msgstr "Artículos en la columna derecha"
-
-# Albums edit
-#~ msgid "Image for Special"
-#~ msgstr "Imagen para el especial"
-
-#~ msgid "Activate users has a cost of 12€ user/month."
-#~ msgstr "Activar usuarios tiene un coste de 12€ usuario/mes."
-
-#~ msgid ""
-#~ "If you have questions please have a look to our help article and/or "
-#~ "contact us at <a href=\"mailto:sales@openhost.es\">sales@openhost.es</a>"
-#~ msgstr ""
-#~ "Si tienes cualquier pregunta puedes consulta el artículo de ayuda y/o "
-#~ "contactar con nosotros en <a href=\"mailto:sales@openhost."
-#~ "es\">sales@openhost.es</a>."
-
-#~ msgid ""
-#~ "Please, fill billing information below, we will send you an invoice for "
-#~ "all activated users at the end of the month."
-#~ msgstr ""
-#~ "Por favor, completa la información e facturación de debajo, te enviaremos "
-#~ "una factura de todos tus usuarios activos al final del mes."
-
-#~ msgid "I understand and accept the cost of the operation."
-#~ msgstr "Entiendo y acepto los costes de la operación."
-
-#~ msgid "Text complexity"
-#~ msgstr "Complejidad del texto"
-
-#~ msgid "Word count"
-#~ msgstr "Número de palabras"
-
-#, fuzzy
-#~ msgid "Advertising"
-#~ msgstr "Publicidad"
-
-#, fuzzy
-#~ msgid "Suscriptions"
-#~ msgstr "Suscripciones"
-
-#~ msgid "RTB Media Integration"
-#~ msgstr "Integración con RTB Media"
-
-#~ msgid "RTB Files"
-#~ msgstr "Ficheros RTB"
-
-#~ msgid ""
-#~ "Search files using the input below and click \"Add\" to integrate them as "
-#~ "RTB Ad files"
-#~ msgstr ""
-#~ "Busca ficheros usando el buscador de abajo y pulsa \"Añadir\" para "
-#~ "integrarlos como ficheros de RTB de publicidad."
-
-#~ msgid "Google+"
-#~ msgstr "Google+"
-
-#~ msgid "Google+ Page Url"
-#~ msgstr "Url de la página de Google+"
-
-#~ msgid ""
-#~ "If you have a <strong>Google+ page</strong>, please complete this input."
-#~ msgstr ""
-#~ "Si tiene una <strong>página en Google+</strong>, completa este campo."
-
-#~ msgid "Advanced"
-#~ msgstr "Avanzado"
-
-#~ msgid "[% element.key.name %]"
-#~ msgstr "[% element.key.name %]"
-
-#~ msgid "Aerospace"
-#~ msgstr "Aeroespacial"
-
-#~ msgid "Automotive"
-#~ msgstr "Automoción"
-
-#~ msgid "Breeding"
-#~ msgstr "Ganadería"
-
-#~ msgid "Comerce"
-#~ msgstr "Comercio"
-
-#~ msgid "Advertising and marketing"
-#~ msgstr "Publicidad y Marketing"
-
-#~ msgid "Culture"
-#~ msgstr "Cultura"
-
-#~ msgid "Education"
-#~ msgstr "Educación"
-
-#~ msgid "Electronic"
-#~ msgstr "Electrónica"
-
-#~ msgid "Energy"
-#~ msgstr "Energía"
-
-#~ msgid "Entertainment"
-#~ msgstr "Entretenimiento"
-
-#~ msgid "Finance"
-#~ msgstr "Financiero"
-
-#~ msgid "Maritime"
-#~ msgstr "Marítimo"
-
-#~ msgid "Food"
-#~ msgstr "Alimentación"
-
-#~ msgid "Healthcare"
-#~ msgstr "Salud"
-
-#~ msgid "Information technology"
-#~ msgstr "Tecnologías de la información"
-
-#~ msgid "Mining"
-#~ msgstr "Minería"
-
-#~ msgid "Fuels"
-#~ msgstr "Combustibles"
-
-#~ msgid "Pharmaceutical"
-#~ msgstr "Farmacéutico"
-
-#~ msgid "Real estate"
-#~ msgstr "Inmobiliario"
-
-#~ msgid "Telecommunications"
-#~ msgstr "Telecomunicaciones"
-
-#~ msgid "Tobacco"
-#~ msgstr "Tabaco"
-
-#~ msgid "Textile"
-#~ msgstr "Textil"
-
-#~ msgid "Transport"
-#~ msgstr "Transporte"
-
-#~ msgid "Industry"
-#~ msgstr "Industria"
-
-#~ msgid "Beauty"
-#~ msgstr "Belleza"
-
-#~ msgid "Animals"
-#~ msgstr "Animales"
-
-#~ msgid "Cleaning"
-#~ msgstr "Limpieza"
-
-#~ msgid "Sport"
-#~ msgstr "Deporte"
-
-#~ msgid "Hostelry"
-#~ msgstr "Hostelería"
-
-#~ msgid "Metal"
-#~ msgstr "Metal"
-
-#~ msgid "Architecture"
-#~ msgstr "Arquitectura"
-
-#~ msgid "Email not valid: %s"
-#~ msgstr "Dirección de correo no válida: %s"
-
-#~ msgid "Newsletter sending report"
-#~ msgstr "Informe de envío de boletín"
-
-#~ msgid "<strong>%1 emails</strong> have being sent."
-#~ msgstr "Se han enviado <strong>%1 correos-e</strong>."
-
-#~ msgid "No emails were sent."
-#~ msgstr "No se envió ningún correo-e."
-
-#~ msgid "Please, find below the report."
-#~ msgstr "Debajo puedes encontrar el informe."
-
-#~ msgid "Fishing"
-#~ msgstr "Pesca"
-
-#~ msgid "Meat"
-#~ msgstr "Carne"
-
-#~ msgid "Petroleum"
-#~ msgstr "Petróleo"
-
-#~ msgid "Wood"
-#~ msgstr "Madera"
-
-#~ msgid "Widget %s not available"
-#~ msgstr "Widget %s no disponible"
-
-#~ msgid "Link to"
-#~ msgstr "Enlace a"
-
-#~ msgid "Invalid tag"
-#~ msgstr "Etiqueta no válida"
-
-#~ msgid "Original:"
-#~ msgstr "Original:"
-
-#~ msgid "Page views this month"
-#~ msgstr "Páginas vistas este mes"
-
-#~ msgid "coming soon... work in progress..."
-#~ msgstr "pronto tendrás esta información..."
-
-#~ msgid "Unable to find the menu with the id \"%d\""
-#~ msgstr "No se pudo encontrar el menu con el identificador «%d»"
-
-#~ msgid "Menu '%s' created successfully."
-#~ msgstr "Menú «%s» creado correctamente."
-
-#~ msgid "Unable to create the menu"
-#~ msgstr "No se pudo crear el menú"
-
-#~ msgid "Unable to find a menu with the id \"%s\""
-#~ msgstr "No se pudo encontrar un menú con el identificador «%s»"
-
-#~ msgid "Menu data sent not valid."
-#~ msgstr "Los datos enviados del menú no son válidos."
-
-#~ msgid "Menu updated successfully."
-#~ msgstr "Menú actualizado con éxito."
-
-#~ msgid "There was an error while updating the menu."
-#~ msgstr "Se ha producido un error al actualizar el menú."
-
-#~ msgid "Blogs"
-#~ msgstr "Blogs"
-
-#~ msgid "Form"
-#~ msgstr "Formularios"
-
-#~ msgid "Archive"
-#~ msgstr "Archivar"
-
-#~ msgid "Category blog"
-#~ msgstr "Categoría tipo Blog"
-
-#~ msgid "Synched category"
-#~ msgstr "Categoría sincronizada"
-
-#~ msgid "Add items"
-#~ msgstr "Añadir elementos"
-
-#~ msgid "Add new item"
-#~ msgstr "Añadir nuevo elemento"
-
-#~ msgid "Synchronized Category"
-#~ msgstr "Categoría sincronizada"
-
-#~ msgid ""
-#~ "Fill the below form with the title and the external URL you want to add "
-#~ "to the menu."
-#~ msgstr ""
-#~ "Completa el formulario de debajo con el título y la URL externa que "
-#~ "quieres añadir al menú."
-
-#~ msgid "Unable to find any menu that matches your search."
-#~ msgstr "No se pudieron encontrar menús que coincidan con tu búsqueda."
-
-#~ msgid "Position assigned"
-#~ msgstr "Posición asignada"
-
-#~ msgid "Assigned to"
-#~ msgstr "Asignado a"
-
-#~ msgid "No position"
-#~ msgstr "Sin posición"
-
-#~ msgid "Unasigned"
-#~ msgstr "Sin asignar"
-
-#~ msgid "Keyword created successfully"
-#~ msgstr "Palabra clave creada correctamente"
-
-#~ msgid "Keyword updated successfully"
-#~ msgstr "Palabra clave actualizada correctamente"
-
-#~ msgid "Letter successfully created."
-#~ msgstr "Carta creada correctamente."
-
-#~ msgid "Unable to find the letter with the id \"%d\""
-#~ msgstr "No se pudo encontrar la carta con el identificador «%d»"
-
-#~ msgid "Letter data sent not valid."
-#~ msgstr "Los datos enviados de la carta no son válidos."
-
-#~ msgid "Letter successfully updated."
-#~ msgstr "Carta actualizada con éxito."
-
-#~ msgid "Unable to update the letter."
-#~ msgstr "No se pudo actualizar la carta."
-
-#~ msgid ""
-#~ "Your letter has not been saved, make sure you fill in all the fields "
-#~ "correctly."
-#~ msgstr ""
-#~ "Tu carta no ha sido guardada, asegúrate de rellenar todos los campos "
-#~ "correctamente."
-
-#~ msgid "Unable to find any letter that matches your search."
-#~ msgstr "No se pudieron encontrar cartas que coincidan con tu búsqueda."
-
-#~ msgid "Publish/Unpublish"
-#~ msgstr "Publicar/despublicar"
-
-#~ msgid "Editing letter"
-#~ msgstr "Editando carta"
-
-#~ msgid "Creating letter"
-#~ msgstr "Creando carta"
-
-#~ msgid "Author information"
-#~ msgstr "Información del autor"
-
-#~ msgid "Related url"
-#~ msgstr "Url del relacionado"
-
-#~ msgid "Image assigned"
-#~ msgstr "Imagen asignada"
-
-#~ msgid "Delete letter"
-#~ msgstr "Eliminar carta"
-
-#~ msgid "Delete letters"
-#~ msgstr "Eliminar cartas"
-
-#~ msgid "Unable to find any keyword that matches your search."
-#~ msgstr ""
-#~ "No se pudieron encontrar palabras clave que coincidan con tu búsqueda."
-
-#~ msgid "Keyword"
-#~ msgstr "Palabra clave"
-
-#~ msgid "Are you sure that do you want remove \"%1\"?"
-#~ msgstr "¿Estás seguro de que quieres eliminar \"%1\"?"
-
-#~ msgid "Editing keyword"
-#~ msgstr "Editando palabra clave"
-
-#~ msgid "Creating keyword"
-#~ msgstr "Creando palabra clave"
-
-#~ msgid "Manage poll comments"
-#~ msgstr "Administrar comentarios de encuestas"
-
-#~ msgid "Comment data sent not valid."
-#~ msgstr "Los datos enviados del comentario no son válidos."
-
-#~ msgid "Now you are using the %s comment system."
-#~ msgstr "Ahora está usando el sistema de comentarios de %s."
-
-#~ msgid "Comment with id \"%d\" doesn't exists."
-#~ msgstr "El comentario con el identificador «%d» no existe."
-
-#~ msgid "Comment updated successfully."
-#~ msgstr "Comentario actualizado correctamente."
-
-#~ msgid ""
-#~ "Please provide your Disqus configuration to start to use your Disqus "
-#~ "Comments module"
-#~ msgstr ""
-#~ "Debes completar la configuración de Disqus para empezar a usar su sistema "
-#~ "de comentarios"
-
-#~ msgid "Disqus configurations saved properly."
-#~ msgstr "Configuraciones de Disqus guardadas correctamente."
-
-#~ msgid "There was an error while saving the Disqus module configuration"
-#~ msgstr ""
-#~ "Se ha producido un error al guardar la configuración del módulo de Disqus"
-
-#~ msgid "Facebook configuration saved successfully"
-#~ msgstr "Configuración de Facebook guardada correctamente."
-
-#~ msgid ""
-#~ "There was an error while saving the Facebook comments module configuration"
-#~ msgstr ""
-#~ "Se ha producido un error al guardar la configuración del módulo de "
-#~ "comentarios de Facebook"
-
-#~ msgid "Unable to update item with id \"%d\""
-#~ msgstr "No se pudo actualizar el elemento con el identificador «%d»"
-
-#~ msgid "%d item(s) updated successfully"
-#~ msgstr "%d elemento(s) actualizado(s) correctamente"
-
-#~ msgid "Your comment is valid and now is waiting for moderation."
-#~ msgstr "Tu comentario es válido y ahora deberá ser moderado."
-
-#~ msgid "Not valid comment id."
-#~ msgstr "Identificador de comentario no válido."
-
-#~ msgid "Status not valid."
-#~ msgstr "Estado no válido."
-
-#~ msgid "Unable to delete the comment."
-#~ msgstr "No se pudo eliminar el comentario."
-
-#~ msgid "A Favor"
-#~ msgstr "A Favor"
-
-#~ msgid "En Contra"
-#~ msgstr "En Contra"
-
-#~ msgid "Unable to find any comment that matches your search."
-#~ msgstr ""
-#~ "No se pudo encontrar ningún comentario que coincida con tu búsqueda."
-
-#~ msgid "Maybe changing any filter could help."
-#~ msgstr "Puede que cambiar algún filtro mejore la búsqueda."
-
-#~ msgid "Update"
-#~ msgstr "Actualizar"
-
-#~ msgid "Updating"
-#~ msgstr "Actualizando"
-
-#~ msgid ""
-#~ "Are you sure that do you want send to the trash this comment from \"%1\"?"
-#~ msgstr ""
-#~ "¿Estás seguro de que quieres enviar a la papelera este comentario de "
-#~ "\"%1\"?"
-
-#~ msgid "Video type and file URLs"
-#~ msgstr "Tipo de vídeo y URLs a los archivos"
-
-#~ msgid "HTML5 video"
-#~ msgstr "Vídeo HTML5"
-
-#~ msgid "Flash video"
-#~ msgstr "Vídeo Flash"
-
-#~ msgid "FLV format"
-#~ msgstr "Formato FLV"
-
-#~ msgid "http://www.example.com/path/to/file.flv"
-#~ msgstr "http://www.ejemplo.es/ruta/al/archivo.flv"
-
-#~ msgid "Allowed video sources:"
-#~ msgstr "Orígenes de vídeo permitidos:"
-
-#~ msgid "Pick the method to add the video"
-#~ msgstr "El tipo de método para añadir el vídeo"
-
-#~ msgid "Unable to create the new article."
-#~ msgstr "No se pudo crear el nuevo artículo."
-
-#~ msgid "Unable to update the article."
-#~ msgstr "No se pudo actualizar el artículo."
-
-#~ msgid ""
-#~ "You can't modify this article because you don't have enought privileges."
-#~ msgstr "No tienes suficientes permisos para modificar este artículo."
-
-#~ msgid "Article data sent not valid."
-#~ msgstr "Los datos del artículo enviados no son válidos."
-
-#~ msgid "Article successfully updated."
-#~ msgstr "Artículo actualizado correctamente."
-
-#, fuzzy
-#~ msgid "No available selectedTranslators for \"%1&rarr;%2\""
-#~ msgstr "No hay ningún traductor disponible para «%1&rarr;%2»"
-
-#~ msgid "Unable to find the article with the id \"%d\""
-#~ msgstr "No se pudo encontrar un artículo con el identificador «%d»"
-
-#~ msgid "Style"
-#~ msgstr "Estilo"
-
-#~ msgid "Custom CSS"
-#~ msgstr "CSS personalizado"
-
-#~ msgid "This sripts will be included in the global.css file."
-#~ msgstr "Estos scripts se incluirán en el fichero global.css"
-
-#~ msgid "Translate selected"
-#~ msgstr "Traducir seleccionados"
-
-#~ msgid "Translate into %1"
-#~ msgstr "Traducir a %1"
-
-#~ msgid "No available articles."
-#~ msgstr "No hay artículos disponibles."
-
-#~ msgid "Article has external link"
-#~ msgstr "Artículo con enlace externo"
-
-#~ msgid "Suggest this element to home"
-#~ msgstr "Sugerir este elemento en portada"
-
-#~ msgid "Suggest to home"
-#~ msgstr "Sugerir en portada"
-
-#~ msgid "Unsuggest this element to home"
-#~ msgstr "No sugerir este elemento en portada"
-
-#~ msgid "Unsuggest to home"
-#~ msgstr "No sugerir en portada"
-
-#~ msgid "Creating article"
-#~ msgstr "Creando artículo"
-
-#~ msgid "Editing article"
-#~ msgstr "Editando artículo"
-
-#~ msgid "Images assigned"
-#~ msgstr "Imágenes asignadas"
-
-#~ msgid "Image to show in frontpages"
-#~ msgstr "Imagen a mostrar en portadas"
-
-#~ msgid "Image to show in inner"
-#~ msgstr "Imagen a mostrar en interior"
-
-#~ msgid "Home image"
-#~ msgstr "Imagen para portada principal"
-
-#~ msgid "Video for frontpage"
-#~ msgstr "Vídeo para portada"
-
-#~ msgid "Pick a video"
-#~ msgstr "Escoja un vídeo"
-
-#~ msgid "Creation date"
-#~ msgstr "Fecha de creación"
-
-#~ msgid "Footer text for inner video:"
-#~ msgstr "Pie para el vídeo interior:"
-
-#~ msgid "Video for inner article page"
-#~ msgstr "Vídeo para artículo interior"
-
-#~ msgid "Related in home"
-#~ msgstr "Relacionado en portada principal"
-
-#~ msgid "Album for frontpage"
-#~ msgstr "Álbum: portadas"
-
-#~ msgid "Only one album"
-#~ msgstr "Solo un álbum"
-
-#~ msgid "Album for inner"
-#~ msgstr "Álbum: interior"
-
-# Albums edit
-#~ msgid "Gallery for Home"
-#~ msgstr "Galería para portada principal"
-
-#~ msgid "Frontpage image"
-#~ msgstr "Imagen de portada"
-
-#~ msgid "There is no opinions yet."
-#~ msgstr "No hay ninguna opinión todavía."
-
-#~ msgid "Inner image"
-#~ msgstr "Imagen de interior"
-
-#~ msgid "Piwik Statistics"
-#~ msgstr "Estadísticas de Piwik"
-
-#~ msgid "Page ID:"
-#~ msgstr "Identificador del sitio:"
-
-#~ msgid ""
-#~ "You can get your Piwik Site information from <a href=\"https://piwik."
-#~ "openhost.es/admin\">our Piwik server</a>."
-#~ msgstr ""
-#~ "Puede obtener información del sitio de Piwik desde <a href=\"https://"
-#~ "piwik.openhost.es/admin\">nuestro servidor de Piwik</a>."
-
-#~ msgid "Subscription"
-#~ msgstr "Suscripción"
-
-#~ msgid "Seo tags"
-#~ msgstr "Etiquetas SEO"
-
-#~ msgid "Complete all the required album information before save it"
-#~ msgstr ""
-#~ "Complete toda la información requerida para el álbum antes de guardarlo"
-
-#~ msgid "Check that you have included more than one image in this album"
-#~ msgstr "Comprueba que has incluído más de una imagen en este álbum"
-
-#~ msgid "Assign an image as a cover image"
-#~ msgstr "Asigna una imagen como imagen de portada"
-
-#~ msgid "Google Tags"
-#~ msgstr "Google Tags"
-
-#~ msgid "Number of videos in frontpage"
-#~ msgstr "Número de vídeos en portada"
-
-#~ msgid "Total number of videos to show per page in the frontpage"
-#~ msgstr "Número total de vídeos para mostrar por página en portada"
-
-#~ msgid "Add contents to groups by using the \"Add contents\" button"
-#~ msgstr "Añade contenidos a los grupos usando el botón «Añadir contenidos»"
-
-#~ msgid "Category targeting"
-#~ msgstr "Segmentación por categoría"
-
-#~ msgid "Index"
-#~ msgstr "Índice"
-
-#~ msgid "Scope"
-#~ msgstr "Ámbito"
-
-#~ msgid "Extension targeting"
-#~ msgstr "Segmentación por extensión"
-
-#~ msgid "Google Analytics Custom variables"
-#~ msgstr "Variables personalizadas de Google Analytics"
-
-#~ msgid "Flash based"
-#~ msgstr "Basado en Flash"
-
-#~ msgid "Override default click handler"
-#~ msgstr "Sobrescribir el gestor de clic predeterminado"
-
-#~ msgid ""
-#~ "When you click in some Flash-based advertisements they redirect you to "
-#~ "another web site. If you want to overlap that address with that specified "
-#~ "by you above you should mark this."
-#~ msgstr ""
-#~ "Cuando clicas en un anuncio basado en Flash te redirige a otra página "
-#~ "web. Si quieres sobreescribir esta dirección con la que especificaste más "
-#~ "arriba debes marcar esta opción."
-
-#~ msgid "Image or Flash object"
-#~ msgstr "Imagen u objeto Flash"
-
-#~ msgid "No image assigned"
-#~ msgstr "Imagen no asignada"
-
-#~ msgid "Click here to add contents"
-#~ msgstr "Pulse para añadir contenidos"
-
-#~ msgid "You must put %1 specials in the HOME"
-#~ msgstr "Debe tener %d especiales para la portada"
-
-#~ msgid "Gallery for frontpage"
-#~ msgstr "Galería para portada"
-
-#~ msgid "Add gallery"
-#~ msgstr "Añadir álbum"
-
-#~ msgid "Gallery for inner"
-#~ msgstr "Galería para noticia interior"
-
-#~ msgid "Editing menu"
-#~ msgstr "Editando menú"
-
-#~ msgid "Click on arrow to reveal more configuration options."
-#~ msgstr "Haz clic en las flechas para revelar más opciones de configuración."
-
-#~ msgid "Poll category"
-#~ msgstr "Categoría de encuestas"
-
-#~ msgid "Video Category"
-#~ msgstr "Categoría de vídeo"
-
-#~ msgid "Synched blog category"
-#~ msgstr "Categoría sincronizada tipo blog"
-
-#~ msgid "Clean contents"
-#~ msgstr "Limpiar contenidos"
-
-#~ msgid "Block title"
-#~ msgstr "Bloquear título"
-
-#~ msgid "Add dynamic contents"
-#~ msgstr "Añadir contenidos dinámicos"
-
-#~ msgid "Use Consent Management Platform (CMP)"
-#~ msgstr "Utilizar Plataforma de gestión de consentimiento (CMP)"
-
-#~ msgid "Week"
-#~ msgstr "Semana"
-
-#~ msgid "SemiMonth"
-#~ msgstr "Medio mes"
-
-#~ msgid "Month"
-#~ msgstr "Mes"
-
-#~ msgid "Year"
-#~ msgstr "Año"
-
-#~ msgid "Please configure your Paywall module before using it."
-#~ msgstr "Debes configurar el módulo «Paywall» antes de usarlo."
-
-#~ msgid "Paypal API authentication is incorrect."
-#~ msgstr "La autenticación del API de PayPal no es correcta."
-
-#~ msgid "We are checking your IPN url. Please wait a minute."
-#~ msgstr "Estamos verificando tu url de IPN. Por favor, espere un minuto."
-
-#~ msgid "Paypal IPN configuration is incorrect. Please validate it."
-#~ msgstr ""
-#~ "La configuración del IPN en Paypal es incorrecta. Por favor, compruébela."
-
-#~ msgid "Paywall settings saved."
-#~ msgstr "Configuración de Paywall guardada."
-
-#~ msgid ""
-#~ "Paypal IPN configuration is incorrect. Please correct it and try again."
-#~ msgstr ""
-#~ "La configuración del IPN de Paypal es incorrecta. Por favor, corríjelo."
-
-#~ msgid "Paywall"
-#~ msgstr "Paywall"
-
-#~ msgid "Statistics"
-#~ msgstr "Estadísticas"
-
-#~ msgid "Paywall users"
-#~ msgstr "Usuarios de paywall"
-
-#~ msgid "Paywall purchases"
-#~ msgstr "Compras en paywall"
-
-#~ msgid "You already have an active Subscription until %s"
-#~ msgstr "Ya tienes una suscripción activa hasta el %s"
-
-#~ msgid "Your payment was already registered"
-#~ msgstr "Tu pago ya fue registrado"
-
-#~ msgid "Your subscription could not been created. Please try again."
-#~ msgstr ""
-#~ "No se ha podido crear tu suscripción. Por favor, inténtalo de nuevo."
-
-#~ msgid "%s - Premium subscription activated"
-#~ msgstr "%s - Suscripción premium activada"
-
-#~ msgid "Site agency"
-#~ msgstr "Agencia del sitio"
-
-#~ msgid "Paypal Settings"
-#~ msgstr "Opciones de Paypal"
-
-#~ msgid "Account email:"
-#~ msgstr "Correo del usuario de la cuenta"
-
-#~ msgid ""
-#~ "You can get your PayPal account email from <a class=\"external-link\" "
-#~ "href=\"https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run\" "
-#~ "target=\"_blank\" ng-click=\"$event.stopPropagation();\">PayPal site</a>. "
-#~ "This must be a business account for receiving payments"
-#~ msgstr ""
-#~ "Puedes recibir correos electrónicos de <a class=\"external-link\" "
-#~ "href=\"https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run\" "
-#~ "target=\"_blank\" ng-click=\"$event.stopPropagation();\">PayPal</a>. Esta "
-#~ "debe ser tu cuenta de empresa para recibir las notificaciones de pagos."
-
-#~ msgid "Premium users"
-#~ msgstr "Usuarios premium"
-
-#~ msgid "Create new user"
-#~ msgstr "Crear nuevo usuario"
-
-#~ msgid "Filter by name"
-#~ msgstr "Filtrar por nombre"
-
-#~ msgid "E-mail"
-#~ msgstr "Correo electrónico"
-
-#~ msgid "Last login"
-#~ msgstr "Último inicio de sesión"
-
-#~ msgid "End of subscription"
-#~ msgstr "Fin de la suscripción"
-
-#~ msgid "--All--"
-#~ msgstr "--Todos--"
-
-#~ msgid "Registered"
-#~ msgstr "Registrado"
-
-#~ msgid "Expired"
-#~ msgstr "Expirado"
-
-#~ msgid "%1 users"
-#~ msgstr "%1 usuarios"
-
-#~ msgid "Export list"
-#~ msgstr "Exportar listado"
-
-#~ msgid "Filter by name or email"
-#~ msgstr "Filtrar por nombre"
-
-#~ msgid "Sort by"
-#~ msgstr "Ordenar por"
-
-#~ msgid "Payment date"
-#~ msgstr "Fecha de pago"
-
-#~ msgid "Full name"
-#~ msgstr "Nombre completo"
-
-#~ msgid "%1 purchases"
-#~ msgstr "%1 compras"
-
-#~ msgid "Show all…"
-#~ msgstr "Mostrar todo…"
-
-#~ msgid "No paywall users yet."
-#~ msgstr "No hay usuarios de paywall aún."
-
-#~ msgid "Order id"
-#~ msgstr "Id de la compra"
-
-#~ msgid "No purchases were made yet."
-#~ msgstr "No se ha realizado ninguna compra actualmente"
-
-#~ msgid ""
-#~ "The paywall allows you to monetize your contents by enabling a "
-#~ "subscription enabled model access to your contents."
-#~ msgstr ""
-#~ "«Paywall» le permite monetizar sus contenidos permitiendo un modelos de "
-#~ "acceso bajo suscripción a sus contenidos."
-
-#~ msgid "Subscribed users"
-#~ msgstr "Usuarios suscritos"
-
-#~ msgid "Lastest purchases"
-#~ msgstr "Últimas compras"
-
-#~ msgid "Purchases last month"
-#~ msgstr "Compras en el último mes"
-
-#~ msgid "Get this parameters from your "
-#~ msgstr "Obtenga estos parametros desde su"
-
-#~ msgid "Paypal identification data"
-#~ msgstr "datos de identificación de Paypal"
-
-#~ msgid "Use the testing environment Sandbox"
-#~ msgstr "Utiliza el entorno de prueba Sandbox"
-
-#~ msgid "Real mode (recommended)"
-#~ msgstr "Modo real (recomendado)"
-
-#~ msgid "Testing mode"
-#~ msgstr "Modo de prueba"
-
-#~ msgid ""
-#~ "Paypal allows you to enable a testing environment where <strong>all the "
-#~ "transactions will not be real</strong>, so you can test if the paywall is "
-#~ "working well."
-#~ msgstr ""
-#~ "Paypal te permite activar un entorno de pruebas donde <strong> todas las "
-#~ "transacciones no serán reales </strong>, por lo que puedes probar si el "
-#~ "muro de pago está funcionando bien."
-
-#~ msgid ""
-#~ "Active a testing environment in your Paypal account (only if you are a "
-#~ "developer)"
-#~ msgstr ""
-#~ "Activa un entorno de prueba en tu cuenta de Paypal (sólo si eres un "
-#~ "desarrollador)"
-
-#~ msgid "Validate here your Paypal API credentials in the selected mode"
-#~ msgstr ""
-#~ "Valida aquí tus credenciales del API de PayPal en el modo seleccionado"
-
-#~ msgid "Validate"
-#~ msgstr "Validar"
-
-#~ msgid "Currency & taxes"
-#~ msgstr "Moneda e impuestos"
-
-#~ msgid "Money unit"
-#~ msgstr "Moneda"
-
-#~ msgid "VAT %"
-#~ msgstr "IVA %"
-
-#~ msgid "Payment modes"
-#~ msgstr "Modos de pago"
-
-#~ msgid ""
-#~ "Below you can add different payment modes by including the time range "
-#~ "that the user can purchase, the description and the price"
-#~ msgstr ""
-#~ "A continuación puedes agregar diferentes formas de pago incluyendo el "
-#~ "rango de tiempo que el usuario puede comprar, la descripción y el precio"
-
-#~ msgid "Add new payment mode"
-#~ msgstr "Añadir un nuevo modo de pago"
-
-#~ msgid "Recurring payments (optional)"
-#~ msgstr "Pagos recurrentes (opcional)"
-
-#~ msgid ""
-#~ "Paypal allow your users to subscribe to your Paywall through recurring "
-#~ "payments. This means that your users will be charged periodically without "
-#~ "having to worry about payments and due dates, and will allow you to "
-#~ "increase the user engagement."
-#~ msgstr ""
-#~ "PayPal permite a los usuarios que se suscriban a su Paywall través de "
-#~ "pagos periódicos. Esto significa que los usuarios deberán pagar "
-#~ "periódicamente sin tener que preocuparse acerca de los pagos y las fechas "
-#~ "de vencimiento, y le permitirá aumentar la participación de los usuarios."
-
-#~ msgid "Mark this if you want to enable recurring payments"
-#~ msgstr "Marque esta opción si desea habilitar los pagos recurrentes"
-
-#~ msgid ""
-#~ "You have to activate some options in the Paypal configuration to make "
-#~ "recurring payments work. Please follow next steps:"
-#~ msgstr ""
-#~ "Tienes que activar algunas opciones en la configuración de Paypal para "
-#~ "hacer que los pagos recurrentes funcionen. Por favor, sigue los "
-#~ "siguientes pasos:"
-
-#~ msgid "Go to your merchant Paypal"
-#~ msgstr "Ve a tu cuenta de comerciante de Paypal"
-
-#~ msgid "IPN web configuration page "
-#~ msgstr "Página de configuración del IPN"
-
-#~ msgid " and log in with your merchant account"
-#~ msgstr "e inicie sesión con su cuenta de comerciante"
-
-#~ msgid "Click in the \"Choose IPN configuration\" button"
-#~ msgstr "Haz clic en el botón \"Escoger configuración del IPN\""
-
-#~ msgid "Fill in the \"Notification URL\" field with this address"
-#~ msgstr "Rellene el campo \"URL de notificación\" con esta dirección"
-
-#~ msgid "Enable the \"Receive IPN messages\" checkbox"
-#~ msgstr "Active la casilla de verificación \"Recibir mensajes de IPN\""
-
-#~ msgid ""
-#~ "Click on the validate button to check ipn is working fine and enable "
-#~ "recurring payment"
-#~ msgstr ""
-#~ "Haz clic en el botón de validación para comprobar que IPN está "
-#~ "funcionando y habilitar el pago recurrente"
-
-#~ msgid "Waiting"
-#~ msgstr "Esperando"
-
-#~ msgid "Valid"
-#~ msgstr "Válido"
-
-#~ msgid "Finally, click in the \"Save\" button to save this configuration"
-#~ msgstr ""
-#~ "Por último, haga clic en el botón \"Guardar\" para guardar la "
-#~ "configuración"
-
-#~ msgid "Accept Opennemas payment agreements terms"
-#~ msgstr "Acepto el acuerdo y condiciones de pago de Opennemas"
-
-#~ msgid ""
-#~ "Read and accept the <a href=\"http://help.opennemas.com/\" "
-#~ "target=\"_blank\">payment agreements terms</a> of Opennemas"
-#~ msgstr ""
-#~ "Lea y acepte los <a href=\"http://help.opennemas.com/\" "
-#~ "target=\"_blank\"> términos de pago </a> de Opennemas"
-
-#~ msgid "We value your privacy"
-#~ msgstr "Tu privacidad es importante para nosotros"
-
-#~ msgid "I Do Not Accept"
-#~ msgstr "No acepto"
-
-#~ msgid "I Accept"
-#~ msgstr "Aceptar"
-
-#~ msgid "Show Purposes"
-#~ msgstr "Ver propósitos"
-
-#~ msgid ""
-#~ "We and our partners use technology such as cookies on our site to "
-#~ "personalize content and ads, provide social media features, and analyze "
-#~ "our traffic. Click below to consent to the use of this technology by us "
-#~ "and these 3rd parties across the web. You can change your mind and "
-#~ "revisit your consent choices at anytime by returning to this site."
-#~ msgstr ""
-#~ "Tanto nuestros partners como nosotros utilizamos cookies en nuestro sitio "
-#~ "web para personalizar contenido y publicidad, proporcionar "
-#~ "funcionalidades a las redes sociales, o analizar nuestro tráfico. "
-#~ "Haciendo click consientes el uso de esta tecnologia en nuestra web. "
-#~ "Puedes cambiar de opinion y personalizar tu consentimiento siempre que "
-#~ "quieras volviendo a esta web"
-
-#~ msgid "Privacy Settings"
-#~ msgstr "Configuración de privacidad"
-
-#~ msgid ""
-#~ "We and our partners use technology such as cookies on our site to "
-#~ "personalize content and ads, provide social media features, and analyze "
-#~ "our traffic. You can toggle on or off your consent preference based on "
-#~ "purpose for all companies listed under each purpose to the use of this "
-#~ "technology across the web. You can change your mind and revisit your "
-#~ "consent choices at anytime by returning to this site."
-#~ msgstr ""
-#~ "Puedes configurar tus preferencias y elegir como quieres que tus datos "
-#~ "sean utilizados para los siguientes propósitos. Puedes elegir configurar "
-#~ "tus preferencias solo con nosotros independientemente del resto de "
-#~ "nuestros partners. Cada propósito tiene una descripción para que puedas "
-#~ "saber como nosotros y nuestros partners utilizamos tus datos"
-
-#~ msgid "Reject All"
-#~ msgstr "Rechazar todo"
-
-#~ msgid "See full vendor list"
-#~ msgstr "Ver lista completa de partners"
-
-#~ msgid "Save & Exit"
-#~ msgstr "Guardar y salir"
-
-#~ msgid ""
-#~ "We and our partners use technology such as cookies on our site to "
-#~ "personalize content and ads, provide social media features, and analyze "
-#~ "our traffic. You can toggle on or off your consent preference for each "
-#~ "company to the use of this technology across the web. You can change your "
-#~ "mind and revisit your consent choices at anytime by returning to this "
-#~ "site."
-#~ msgstr ""
-#~ "Puedes dar tu consentimiento de manera individual a cada partner. Ver la "
-#~ "lista de todos los propósitos para los cuales utilizan tus datos para "
-#~ "tener más información. En algunos casos, las empresas pueden revelar que "
-#~ "usan tus datos sin pedir tu consentimiento, en función de intereses "
-#~ "legítimos. Puedes hacer click en su política de privacidad para obtener "
-#~ "más información al respecto o para rechazarlo."
-
-#~ msgid "Accept All"
-#~ msgstr "Aceptar todo"
-
-#~ msgid "Back to purposes"
-#~ msgstr "Volver a los propósitos"

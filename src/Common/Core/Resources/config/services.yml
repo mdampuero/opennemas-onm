@@ -8,7 +8,7 @@ parameters:
     core.locale.default:
         backend:
             language:
-                available: [ 'en_US', 'es_ES', 'gl_ES' ]
+                available: [ 'en_US', 'es_ES', 'eu_ES', 'ca_ES', 'gl_ES', 'pt_PT', 'fr_FR']
                 selected: 'en_US'
                 slug: []
             timezone: UTC
