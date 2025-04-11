@@ -37,6 +37,18 @@ status = [
 {/block}
 
 {block name="selectedActions"}
+  {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
+    <li class="quicklinks">
+      <button class="btn btn-link"  ng-click="updateSelectedItems('content_status', 0, 'loading')" uib-tooltip="{t}Disable{/t}" tooltip-placement="bottom" type="button">
+        <i class="fa fa-times fa-lg"></i>
+      </button>
+    </li>
+    <li class="quicklinks">
+      <button class="btn btn-link" ng-click="updateSelectedItems('content_status', 1, 'loading')" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
+        <i class="fa fa-check fa-lg"></i>
+      </button>
+    </li>
+  {/acl}
   {acl isAllowed="ADVERTISEMENT_DELETE"}
     <li class="quicklinks">
       <span class="h-seperate"></span>

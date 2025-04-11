@@ -50,7 +50,7 @@
         $scope.routes = {
           getList: 'backend_ws_advertisements_list',
           patchItem: 'backend_ws_content_set_content_status',
-          patchList: 'backend_ws_advertisements_update_batch',
+          patchList: 'backend_ws_contents_batch_set_content_status',
           deleteItem: 'backend_ws_content_send_to_trash',
           deleteList: 'backend_ws_contents_batch_send_to_trash',
         };
@@ -265,6 +265,50 @@
               type: 'error',
               message: error.message || 'Failed to delete selected items'
             });
+          });
+        };
+
+        $scope.updateSelectedItems = function(name, value, loading) {
+          // Spinner
+          $scope.deleting = 1;
+
+          var modal = $uibModal.open({
+            templateUrl: 'modal-update-selected',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  name: name,
+                  value: value,
+                };
+              },
+              success: function() {
+                return function() {
+                  var selected = $scope.selected.items;
+
+                  var route = {
+                    name: $scope.routes.patchList,
+                    params: {
+                      contentType: 'advertisement'
+                    }
+                  };
+
+                  return http.post(route, { ids: selected, value: value });
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response) {
+              messenger.post(response.data.messages);
+
+              if (response.success) {
+                $scope.selected = { all: false, items: [] };
+                $scope.list($scope.route, true);
+              }
+            }
           });
         };
 
