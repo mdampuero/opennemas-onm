@@ -28,11 +28,8 @@ function smarty_function_url($params, &$smarty)
             \Onm\StringUtils::generateSlug($params[$params['slug_key']]);
     }
 
-    $name          = $params['name'];
-    $forceAbsolute = array_key_exists('absolute', $params) && $params['absolute'];
-    $absoluteUrl   = $forceAbsolute
-        ? UrlGeneratorInterface::ABSOLUTE_URL
-        : UrlGeneratorInterface::ABSOLUTE_PATH;
+    $name     = $params['name'];
+    $absolute = $params['absolute'] ?? null;
 
     unset($params['name'], $params['absolute'], $params['sluggable'], $params['slug_key']);
 
@@ -48,9 +45,13 @@ function smarty_function_url($params, &$smarty)
             }
         }
 
-        $url = $smarty->getContainer()
+        $path = $smarty->getContainer()
             ->get('router')
-            ->generate($name, $params, $absoluteUrl);
+            ->generate($name, $params);
+
+        $url = $absolute
+            ? $smarty->getContainer()->get('core.instance')->getBaseUrl() . $path
+            : $path;
     } catch (RouteNotFoundException $e) {
         $url = '#not-found-' . $name;
     } catch (InvalidParameterException $e) {

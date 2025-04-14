@@ -9,7 +9,8 @@
  */
 function smarty_function_renderLink($params, &$smarty)
 {
-    $item = $params['item'];
+    $item     = $params['item'];
+    $absolute = $params['absolute'] ?? null;
 
     $multilanguage = $smarty->getContainer()->get('core.instance')->hasMultilanguage();
     $localeDefault = $smarty->getContainer()->get('core.locale')->getLocaleShort('frontend');
@@ -27,7 +28,7 @@ function smarty_function_renderLink($params, &$smarty)
         $relatedItem = $smarty->getContainer()->get($serviceMap[$item->type])->getItem($item->referenceId);
         return $smarty->getContainer()->get('core.helper.url_generator')->generate($relatedItem, [
             'locale' => $localelong,
-            'absolute' => true
+            'absolute' => $absolute
         ]);
     }
 
@@ -35,7 +36,10 @@ function smarty_function_renderLink($params, &$smarty)
     $url = generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault);
 
     if ($url !== null && $item->type != 'external') {
-        $url = $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url);
+        $path = $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url);
+        $url  = $absolute
+            ? $smarty->getContainer()->get('core.instance')->getBaseUrl() . $path
+            : $path;
     }
 
     return $url;
