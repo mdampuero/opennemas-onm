@@ -161,7 +161,7 @@
                 <option value="">{t}Select a type{/t}…</option>
                 <option value="article">{t}Article{/t}</option>
                 <option value="opinion">{t}Opinion{/t}</option>
-                {is_module_activated name="es.openhost.module.onmai"}
+                {is_module_activated name="es.openhost.module.events"}
                   <option value="event">{t}Event{/t}</option>
                 {/is_module_activated}
               </select>
