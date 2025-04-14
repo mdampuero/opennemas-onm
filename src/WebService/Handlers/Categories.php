@@ -122,7 +122,7 @@ class Categories
 
             $categories = [];
             foreach ($menuItemsObject as $key => $value) {
-                if ($value->type != 'category' && $value->type != 'blog-category') {
+                if ($value->type != 'category') {
                     continue;
                 }
 
@@ -132,7 +132,7 @@ class Categories
                 }
 
                 foreach ($value->submenu as $subValue) {
-                    if ($subValue->type == 'category' || $subValue->type == 'blog-category') {
+                    if ($subValue->type == 'category') {
                         $categories[$subValue->pk_item] = $subValue;
                     }
                 }

@@ -19,7 +19,6 @@ function smarty_function_renderLink($params, &$smarty)
 
     $serviceMap = [
         'tags' => 'api.service.tag',
-        'blog-category' => 'api.service.category',
         'category' => 'api.service.category',
         'static' => 'api.service.content',
     ];
