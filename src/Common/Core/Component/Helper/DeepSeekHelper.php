@@ -9,6 +9,20 @@ use GuzzleHttp\Exception\ClientException;
 
 class DeepSeekHelper
 {
+    /**
+     * The application log service.
+     *
+     * @var Monolog
+     */
+    protected $appLog;
+
+    /**
+     * The error log service.
+     *
+     * @var Monolog
+     */
+    protected $errorLog;
+
     // HTTP client instance for making requests
     protected $client;
 
@@ -36,15 +50,18 @@ class DeepSeekHelper
     // Array for models
     protected $suggestedModels = [];
 
-    /**
-     * Constructor for the DeepSeekHelper class.
-     * Initializes the container and HTTP client.
+     /**
+     * Initializes the DeepSeek service.
      *
-     * @param mixed $container Container with necessary dependencies.
+     * @param ContainerInterface $container The service container.
+     * @param LoggerInterface    $appLog    Logger for application-level logs.
+     * @param LoggerInterface    $errorLog  Logger for error logs.
      */
-    public function __construct($container)
+    public function __construct($container, $appLog, $errorLog)
     {
         $this->container = $container;
+        $this->appLog    = $appLog;
+        $this->errorLog  = $errorLog;
         $this->client    = new Client([
             'timeout' => $this->getTimeout(),
         ]);
@@ -93,6 +110,7 @@ class DeepSeekHelper
                     if ($i === $this->getMaxRetries() - 1) {
                         throw $e;
                     }
+                    $this->errorLog->error('ONMAI - ClientException - Retry ' . ($i + 1) . ': ' . $e->getMessage());
 
                     // Wait between retries
                     sleep($this->retryDelay);
@@ -100,6 +118,7 @@ class DeepSeekHelper
                     if ($i === $this->getMaxRetries() - 1) {
                         throw $e;
                     }
+                    $this->errorLog->error('ONMAI - RequestException - Retry ' . ($i + 1) . ': ' . $e->getMessage());
 
                     // Wait between retries
                     sleep($this->retryDelay);
@@ -107,6 +126,7 @@ class DeepSeekHelper
                     if ($i === $this->getMaxRetries() - 1) {
                         throw $e;
                     }
+                    $this->errorLog->error('ONMAI - Exception - Retry ' . ($i + 1) . ': ' . $e->getMessage());
 
                     // Wait between retries
                     sleep($this->retryDelay);
@@ -115,6 +135,7 @@ class DeepSeekHelper
         } catch (Exception $e) {
             // Handle errors
             $struct['error'] = $e->getMessage();
+            $this->errorLog->error('ONMAI - Exception - Final: ' . $e->getMessage());
             return $struct;
         }
     }

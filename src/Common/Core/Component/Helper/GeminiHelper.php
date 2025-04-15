@@ -10,6 +10,20 @@ use GuzzleHttp\Exception\ClientException;
 class GeminiHelper
 {
     /**
+     * The application log service.
+     *
+     * @var Monolog
+     */
+    protected $appLog;
+
+    /**
+     * The error log service.
+     *
+     * @var Monolog
+     */
+    protected $errorLog;
+
+    /**
      * HTTP client instance for making API requests.
      *
      * @var Client
@@ -89,13 +103,17 @@ class GeminiHelper
     ];
 
     /**
-     * Constructor to initialize the helper with a dependency container.
+     * Initializes the Gemini service.
      *
-     * @param mixed $container Dependency injection container.
+     * @param ContainerInterface $container The service container.
+     * @param LoggerInterface    $appLog    Logger for application-level logs.
+     * @param LoggerInterface    $errorLog  Logger for error logs.
      */
-    public function __construct($container)
+    public function __construct($container, $appLog, $errorLog)
     {
         $this->container = $container;
+        $this->appLog    = $appLog;
+        $this->errorLog  = $errorLog;
         $this->client    = new Client([
             'timeout' => $this->getTimeout(),
         ]);
@@ -135,16 +153,36 @@ class GeminiHelper
                     $response = json_decode($request->getBody(), true);
 
                     return $this->normalizeResponse($response, $struct);
+                } catch (ClientException $e) {
+                    if ($i === $this->getMaxRetries() - 1) {
+                        throw $e;
+                    }
+                    $this->errorLog->error('ONMAI - ClientException - Retry ' . ($i + 1) . ': ' . $e->getMessage());
+
+                    // Wait between retries
+                    sleep($this->retryDelay);
+                } catch (RequestException $e) {
+                    if ($i === $this->getMaxRetries() - 1) {
+                        throw $e;
+                    }
+                    $this->errorLog->error('ONMAI - RequestException - Retry ' . ($i + 1) . ': ' . $e->getMessage());
+
+                    // Wait between retries
+                    sleep($this->retryDelay);
                 } catch (\Exception $e) {
                     if ($i === $this->getMaxRetries() - 1) {
                         throw $e;
                     }
+                    $this->errorLog->error('ONMAI - Exception - Retry ' . ($i + 1) . ': ' . $e->getMessage());
 
+                    // Wait between retries
                     sleep($this->retryDelay);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
+            // Handle errors
             $struct['error'] = $e->getMessage();
+            $this->errorLog->error('ONMAI - Exception - Final: ' . $e->getMessage());
             return $struct;
         }
     }
