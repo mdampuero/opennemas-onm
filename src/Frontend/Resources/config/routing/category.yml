@@ -1,4 +1,4 @@
-category_category_homepage:
+category_homepage:
     path:     /{category_slug}/
     defaults: { _controller: FrontendBundle:Category:homepage }
     requirements:

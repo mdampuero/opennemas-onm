@@ -83,7 +83,7 @@ class L10nRouteHelper
             'frontend_blog_show',
             'frontend_blog_show_amp',
             'category_frontpage',
-            'category_category_homepage',
+            'category_homepage',
             'frontend_company_show',
             'frontend_companies_index',
             'frontend_companies',

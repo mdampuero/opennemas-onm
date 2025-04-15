@@ -48,7 +48,7 @@ class FrontpagesController extends Controller
                 $mergeCategoryUrl = (bool) $this->get('orm.manager')->getDataSet('Settings')
                     ->get('merge_category_url', 0);
                 if ($mergeCategoryUrl && !$request->query->get('noredirect', false)) {
-                    return new RedirectResponse($this->generateUrl('category_category_homepage', [
+                    return new RedirectResponse($this->generateUrl('category_homepage', [
                         'category_slug' => $categoryName
                     ]), 301);
                 }
