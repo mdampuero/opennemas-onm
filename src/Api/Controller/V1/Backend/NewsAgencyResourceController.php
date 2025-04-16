@@ -79,9 +79,7 @@ class NewsAgencyResourceController extends ApiController
         $response = new JsonResponse($msg->getMessages(), $msg->getCode());
 
         if (empty($params['content_status'])) {
-            $route = $params['content_type_name'] === 'article'
-                ? 'backend_article_show'
-                : 'backend_opinion_show';
+            $route = 'backend_' . $params['content_type_name'] . '_show';
 
             $response->headers->set('location', $this->generateUrl($route, [
                 'id' => $id
