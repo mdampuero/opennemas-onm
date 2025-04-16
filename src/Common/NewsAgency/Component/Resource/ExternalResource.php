@@ -36,6 +36,13 @@ class ExternalResource
     public $body = '';
 
     /**
+     * The canonical url
+     *
+     * @var string
+     */
+    public $canonicalurl = '';
+
+    /**
      * The category name.
      *
      * @var string
@@ -90,6 +97,11 @@ class ExternalResource
      * @var array
      */
     public $related = [];
+
+    /**
+     * The resource signature.
+     */
+    public $signature = null;
 
     /**
      * The source id.
