@@ -557,33 +557,33 @@ class AIHelper
     }
 
     /**
-     * Transforms the given fields of text based on specific instructions and tone.
+     * Transforms the given data fields of text based on specific instructions and tone.
      *
-     * @param array $or The array containing the text fields to be transformed.
+     * @param array $data The array containing the text fields to be transformed.
      * @param array $fields The specific fields of text to transform (e.g., 'title', 'description').
-     * @param array $tone The tone to be used in the transformation.
      *
-     * @return array The array with transformed text fields or the original array if no transformation occurs.
+     * @return array The array with transformed data or the original array if no transformation occurs.
      */
-    public function transform($or = [], $fields = ['title', 'title_int', 'description', 'body'])
+    public function transform($data = [], $fields = ['title', 'title_int', 'description', 'body'])
     {
-        if (empty($or) || empty($fields) || empty($or['prompt'])) {
-            return $or;
+        $settings = $this->getCurrentSettings();
+        if (empty($data) || empty($fields) || empty($data['prompt'] || empty($settings['engine']))) {
+            return $data;
         }
 
         foreach ($fields as $field) {
-            if (!key_exists($field, $or)) {
+            if (!key_exists($field, $data)) {
                 continue;
             }
 
-            $cleanContent = trim(strip_tags($or[$field]));
+            $cleanContent = trim(strip_tags($data[$field]));
 
             if ($cleanContent === '') {
-                return $or[$field];
+                continue;
             }
 
-            $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $or["prompt"]);
-            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$or[$field]}\n";
+            $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $data["prompt"]);
+            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$data[$field]}\n";
 
             $instructions = [
                 ['value' => 'Utiliza el mismo tema del texto original.'],
@@ -592,40 +592,30 @@ class AIHelper
                 ['value' => 'Si el texto original tiene formato html, debes mantenerlo.']
             ];
 
-            if (!empty($or['tone'] ?? false)) {
-                $instructions[] = ['value' => "Adopta un tono {$or['tone']}
-                    en la transformación."];
-            } else {
-                $instructions[] = ['value' => "Debes mantener el tono del texto original."];
-            }
+            $instructions[] = !empty($data['tone'])
+                ? ['value' => "Adopta un tono {$data['tone']} en la transformación."]
+                : ['value' => "Debes mantener el tono del texto original."];
 
-            if (!empty($or['language'] ?? false)) {
-                $instructions[] = ['value' => "La respuesta debe ser en el idioma {$or['language']}."];
+            if (!empty($data['language'])) {
+                $instructions[] = ['value' => "La respuesta debe ser en el idioma {$data['language']}."];
             }
 
             $this->insertInstructions($instructions);
 
-            $data             = $this->getCurrentSettings();
-            $data['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
+            $response = $this->container->get('core.helper.' . $settings['engine'])
+                ->sendMessage($settings, $this->getStructureResponse());
 
-            if (!empty($data['engine'])) {
-                $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
-                    $data,
-                    $this->getStructureResponse()
-                );
+            $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
 
-                $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
-            } else {
-                return $or[$field];
-            }
-
+            $settings['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
             if (empty($response['error']) && !empty($response['result'])) {
                 $this->generateWords($response);
-                $this->saveAction($data, $response);
-                $or[$field] = $response['result'];
+                $this->saveAction($settings, $response);
+                $data[$field] = $response['result'];
             }
         }
-        return $or;
+
+        return $data;
     }
 
     /**
