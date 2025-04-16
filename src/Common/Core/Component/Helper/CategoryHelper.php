@@ -316,10 +316,10 @@ class CategoryHelper
 
         $category = $this->getCategory($item);
 
-        if (empty($category->params) || empty($category->params['manual'])) {
+        if (empty($category->layout)) {
             return false;
         }
 
-        return (bool) $category->params['manual'];
+        return (bool) $category->layout;
     }
 }

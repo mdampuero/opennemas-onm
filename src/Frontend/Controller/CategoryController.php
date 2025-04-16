@@ -50,6 +50,7 @@ class CategoryController extends FrontendController
      * {@inheritdoc}
      */
     protected $routes = [
+        'homepage' => 'category_homepage',
         'list' => 'category_frontpage'
     ];
 
@@ -109,7 +110,7 @@ class CategoryController extends FrontendController
         /**
          * If the category is manual, we redirect to the frontpage.
          */
-        if (($item->params['manual'] ?? 0) == 1) {
+        if (($item->layout ?? 0) == 1) {
             return $this->forward('Frontend\Controller\FrontpagesController::showAction', [], [
                 'category' => $item->name,
                 'noredirect' => true
