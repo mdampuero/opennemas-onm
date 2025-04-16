@@ -23,16 +23,18 @@ function smarty_function_renderLink($params, &$smarty)
         'static' => 'api.service.content',
     ];
 
-    if (!empty($item->referenceId) && array_key_exists($item->type, $serviceMap)) {
-        $relatedItem = $smarty->getContainer()->get($serviceMap[$item->type])->getItem($item->referenceId);
-        return $smarty->getContainer()->get('core.helper.url_generator')->generate($relatedItem, [
-            'locale' => $localelong,
-            'absolute' => $absolute
-        ]);
+    if ($item->type != 'category') {
+        if (!empty($item->referenceId) && array_key_exists($item->type, $serviceMap)) {
+            $relatedItem = $smarty->getContainer()->get($serviceMap[$item->type])->getItem($item->referenceId);
+            return $smarty->getContainer()->get('core.helper.url_generator')->generate($relatedItem, [
+                'locale' => $localelong,
+                'absolute' => $absolute
+            ]);
+        }
     }
 
     //Support old menu versions and items with no reference ID
-    $url = generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault);
+    $url = generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault, $smarty);
 
     if ($url !== null && $item->type != 'external') {
         $path = $smarty->getContainer()->get('core.decorator.url')->prefixUrl($url);
@@ -44,26 +46,42 @@ function smarty_function_renderLink($params, &$smarty)
     return $url;
 }
 
-function generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault)
+function generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault, &$smarty)
 {
+    $sh = $smarty->getContainer()->get('core.helper.setting');
+    $cs = $smarty->getContainer()->get('api.service.category');
+
+    $enabledMerge = $sh->isMergeEnabled();
+    $link         = $item->link;
+    $layout       = $category->layout ?? false;
+
+    if ($item->type === 'category') {
+        $category = !empty($item->referenceId)
+            ? $cs->getItemBySlug($link)
+            : $cs->getItem($item->referenceId);
+    }
+
+
     $mapUrl = [
-        'category'      => "/" . $item->link . "/",
-        'videoCategory' => "/video/" . $item->link . "/",
-        'albumCategory' => "/album/" . $item->link . "/",
-        'pollCategory'  => "/encuesta/" . $item->link . "/",
-        'static'        => "/" . STATIC_PAGE_PATH . "/" . $item->link . ".html",
-        'tags'          => "/tags/" . $item->link . "/",
+        'category'      => $enabledMerge
+            ? "/{$link}/"
+            : ($layout ? "/seccion/{$link}/" : "/blog/section/{$link}/"),
+        'videoCategory' => "/video/" . $link . "/",
+        'albumCategory' => "/album/" . $link . "/",
+        'pollCategory'  => "/encuesta/" . $link . "/",
+        'static'        => "/" . STATIC_PAGE_PATH . "/" . $link . ".html",
+        'tags'          => "/tags/" . $link . "/",
     ];
 
     switch ($item->type) {
         case 'internal':
-            $formatLink = ltrim($item->link, '/');
+            $formatLink = ltrim($link, '/');
             return $multilanguage
                 ? ($locale === $localeDefault ? '/' . $formatLink : '/' . $locale . '/' . $formatLink)
                 : '/' . $formatLink;
         case 'external':
-            return $item->link;
+            return $link;
         default:
-            return $mapUrl[$item->type] ?? "/$item->link/";
+            return $mapUrl[$item->type] ?? "/$link/";
     }
 }
