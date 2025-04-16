@@ -48,22 +48,117 @@ class NewsMLComponentTextTaquilla extends NewsML
     }
 
     /**
-     * Returns the type assigned to the event
+     * Returns the place address assigned to the event
      *
      * @param SimpleXMLObject The parsed data.
      *
-     * @return string The event type.
+     * @return string The event address place.
      */
-    public function getEventType($data)
+    public function getEventAddress($data)
     {
-        $property = $data->xpath('//DescriptiveMetadata/Property[@FormalName="Tesauro"]');
+        $property = $data->xpath('//identified-content/location/location.address');
 
-        $eventType = null;
+        $address = null;
         if (is_array($property) && !empty($property)) {
-            $eventType = (string) $property[0]->attributes()->Value;
+            $address = (string) $property[0];
         }
 
-        return $eventType;
+        return $address;
+    }
+
+    /**
+     * Returns the information about the event
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The event information.
+     */
+    public function getEventInfo($data)
+    {
+        $property = $data->xpath('//identified-content/location/location.address');
+
+        $address = null;
+        if (is_array($property) && !empty($property)) {
+            $address = (string) $property[0];
+        }
+
+        return $address;
+    }
+
+    /**
+     * Returns the event place latitude
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The event place latitude.
+     */
+    public function getEventLatitude($data)
+    {
+        $property = $data->xpath('//identified-content/location/location.latitude');
+
+        $latitude = '';
+        if (is_array($property) && !empty($property)) {
+            $latitude = (string) $property[0];
+        }
+
+        return $latitude;
+    }
+
+    /**
+     * Returns the event place latitude
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The event place latitude.
+     */
+    public function getEventLongitude($data)
+    {
+        $property = $data->xpath('//identified-content/location/location.longitude');
+
+        $longitude = '';
+        if (is_array($property) && !empty($property)) {
+            $longitude = (string) $property[0];
+        }
+
+        return $longitude;
+    }
+
+    /**
+     * Returns the event organizer name.
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The event organizer name.
+     */
+    public function getEventOrganizerName($data)
+    {
+        $property = $data->xpath('//identified-content/organizer/organizer.name');
+
+        $name = '';
+        if (is_array($property) && !empty($property)) {
+            $name = (string) $property[0];
+        }
+
+        return $name;
+    }
+
+    /**
+     * Returns the event organizer url
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The event organizer url.
+     */
+    public function getEventOrganizerUrl($data)
+    {
+        $property = $data->xpath('//identified-content/organizer/organizer.url');
+
+        $url = '';
+        if (is_array($property) && !empty($property)) {
+            $url = (string) $property[0];
+        }
+
+        return $url;
     }
 
     /**
@@ -86,22 +181,23 @@ class NewsMLComponentTextTaquilla extends NewsML
     }
 
     /**
-     * Returns the place address assigned to the event
+     * Returns the start date for the event
      *
      * @param SimpleXMLObject The parsed data.
      *
-     * @return string The event address place.
+     * @return DateTime The event start date.
      */
-    public function getEventAddress($data)
+    public function getEventStartDate($data)
     {
-        $property = $data->xpath('//identified-content/location/location.address');
+        $start = $data->xpath('//identified-content/event/@start-date');
 
-        $address = null;
-        if (is_array($property) && !empty($property)) {
-            $address = (string) $property[0];
+        if (is_array($start) && !empty($start)) {
+            $startDate = \DateTime::createFromFormat('Ymd\THisP', $start[0]);
+
+            return $startDate;
         }
 
-        return $address;
+        return new \DateTime('now');
     }
 
     /**
@@ -143,22 +239,62 @@ class NewsMLComponentTextTaquilla extends NewsML
     }
 
     /**
+     * Returns the type assigned to the event
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The event type.
+     */
+    public function getEventType($data)
+    {
+        $property = $data->xpath('//DescriptiveMetadata/Property[@FormalName="Tesauro"]');
+
+        $eventType = null;
+        if (is_array($property) && !empty($property)) {
+            $eventType = (string) $property[0]->attributes()->Value;
+        }
+
+        return $eventType;
+    }
+
+    /**
+     * Returns the event website in Taquilla
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The event website.
+     */
+    public function getEventWebsite($data)
+    {
+        $website = $data->xpath('//identified-content/virtloc/@value');
+
+        if (is_array($website) && !empty($website)) {
+            return (string) $website[0];
+        }
+
+        return '';
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function parse($data)
     {
-        // event_organizer_name
-        // event_organizer_url
+        $eventStartDate = $this->getEventStartDate($data);
 
-        $this->bag['event_start_date']    = $this->getTags($data);
-        $this->bag['event_start_hour']    = $this->getTags($data);
-        $this->bag['event_end_date']      = $this->getTags($data);
-        $this->bag['event_end_hour']      = $this->getTags($data);
-        $this->bag['event_website']       = $this->getTags($data);
-        $this->bag['event_place']         = $this->getEventPlace($data);
-        $this->bag['event_address']       = $this->getEventAddress($data);
-        $this->bag['event_tickets_price'] = $this->getEventTicketMinPrice($data);
-        $this->bag['event_tickets_link']  = $this->getEventTicketUrl($data);
+        $this->bag['event_start_date']     = $eventStartDate->format('d-m-Y');
+        $this->bag['event_start_hour']     = $eventStartDate->format('h:i');
+        $this->bag['event_website']        = $this->getEventWebsite($data);
+        $this->bag['event_info']           = $this->getEventInfo($data);
+        $this->bag['event_place']          = $this->getEventPlace($data);
+        $this->bag['event_address']        = $this->getEventAddress($data);
+        $this->bag['event_latitude']       = $this->getEventLatitude($data);
+        $this->bag['event_longitude']      = $this->getEventLongitude($data);
+        $this->bag['event_tickets_price']  = $this->getEventTicketMinPrice($data);
+        $this->bag['event_tickets_link']   = $this->getEventTicketUrl($data);
+        $this->bag['event_organizer_name'] = $this->getEventOrganizerName($data);
+        $this->bag['event_organizer_url']  = $this->getEventOrganizerUrl($data);
+        $this->bag['canonicalurl']         = $this->getEventWebsite($data);
 
         return parent::parse($data);
     }

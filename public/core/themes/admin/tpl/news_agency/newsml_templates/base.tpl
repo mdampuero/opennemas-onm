@@ -79,13 +79,15 @@
                           <location.city>{$content->event_city}</location.city>
                           <location.place>{$content->event_place}</location.place>
                           <location.address>{$content->event_address}</location.address>
+                          <location.latitude>{$content->event_latitude}</location.latitude>
+                          <location.longitude>{$content->event_longitude}</location.longitude>
                         </location>
                         {if $content->event_website}
                         <virtloc value="{$content->event_website}"></virtloc>
                         {/if}
                         <organizer>
                           <organizer.name>{$content->event_organizer_name}</organizer.name>
-                          <organizer.url>{$content->event_organizer_url}</organizer.url>
+                          <organizer.url>{$content->event_organizer_url|escape:'html'}</organizer.url>
                         </organizer>
                         <price min="{$content->event_tickets_price}" url="{$content->event_tickets_link|escape:'html'}"></price>
                       </identified-content>
