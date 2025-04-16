@@ -145,8 +145,8 @@ class Importer
     /**
      * Imports a resource.
      *
-     * @param string  $id   The resource id.
-     * @param integer $data The content information.
+     * @param string $id   The resource id.
+     * @param array  $data The content information.
      *
      * @return int The content id.
      *
@@ -393,7 +393,7 @@ class Importer
     /**
      * Returns the content data from the resource.
      *
-     * @param Resource $resource The resource to import.
+     * @param ExternalResource $resource The resource to import.
      * @param array    $data     The information to use while importing.
      *
      * @return array The array of data.
@@ -451,9 +451,12 @@ class Importer
         }
 
         // OnmAI transform
-        if (in_array('es.openhost.module.onmai', $this->instance->activated_modules)) {
+        if (in_array('es.openhost.module.onmai', $this->instance->activated_modules)
+            && $resource->type !== 'photo'
+        ) {
             $data = $this->container->get('core.helper.ai')->transform($data);
         }
+
         return $data;
     }
 
@@ -550,6 +553,7 @@ class Importer
 
         $data = array_merge($data, [
             'created'         => $date->format('Y-m-d H:i:s'),
+            'canonicalurl'    => $resource->canonicalurl,
             'fk_content_type' => 5,
             'categories'      => [ $this->getCategory($resource, $data) ],
             'agency'          => !empty($resource->signature)
