@@ -68,8 +68,7 @@ class CategoryController extends FrontendController
     {
         $params = $request->query->all();
 
-        $mergeCategoryUrl = (bool) $this->get('orm.manager')->getDataSet('Settings')
-            ->get('merge_category_url', 0);
+        $mergeCategoryUrl = (bool) $this->get('core.helper.setting')->isMergeEnabled();
         if ($mergeCategoryUrl) {
             $expectedCategory = $this->getExpectedUri('homepage', $params);
 
