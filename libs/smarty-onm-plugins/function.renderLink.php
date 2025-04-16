@@ -52,36 +52,35 @@ function generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault, 
     $cs = $smarty->getContainer()->get('api.service.category');
 
     $enabledMerge = $sh->isMergeEnabled();
-    $link         = $item->link;
-    $layout       = $category->layout ?? false;
 
     if ($item->type === 'category') {
-        $category = !empty($item->referenceId)
-            ? $cs->getItemBySlug($link)
+        $category = empty($item->referenceId)
+            ? $cs->getItemBySlug($item->link)
             : $cs->getItem($item->referenceId);
     }
 
+    $layout = $category->layout ?? false;
 
     $mapUrl = [
         'category'      => $enabledMerge
-            ? "/{$link}/"
-            : ($layout ? "/seccion/{$link}/" : "/blog/section/{$link}/"),
-        'videoCategory' => "/video/" . $link . "/",
-        'albumCategory' => "/album/" . $link . "/",
-        'pollCategory'  => "/encuesta/" . $link . "/",
-        'static'        => "/" . STATIC_PAGE_PATH . "/" . $link . ".html",
-        'tags'          => "/tags/" . $link . "/",
+            ? "/{$item->link}/"
+            : ($layout ? "/seccion/{$item->link}/" : "/blog/section/{$item->link}/"),
+        'videoCategory' => "/video/" . $item->link . "/",
+        'albumCategory' => "/album/" . $item->link . "/",
+        'pollCategory'  => "/encuesta/" . $item->link . "/",
+        'static'        => "/" . STATIC_PAGE_PATH . "/" . $item->link . ".html",
+        'tags'          => "/tags/" . $item->link . "/",
     ];
 
     switch ($item->type) {
         case 'internal':
-            $formatLink = ltrim($link, '/');
+            $formatLink = ltrim($item->link, '/');
             return $multilanguage
                 ? ($locale === $localeDefault ? '/' . $formatLink : '/' . $locale . '/' . $formatLink)
                 : '/' . $formatLink;
         case 'external':
-            return $link;
+            return $item->link;
         default:
-            return $mapUrl[$item->type] ?? "/$link/";
+            return $mapUrl[$item->type] ?? "/$item->link/";
     }
 }
