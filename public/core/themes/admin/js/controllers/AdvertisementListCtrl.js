@@ -37,6 +37,17 @@
         };
 
         /**
+         * The temporary criteria to search
+         */
+        $scope.tempCriteria = {
+          content_type_name: 'advertisement',
+          epp: 10,
+          in_litter: 0,
+          orderBy: { created: 'desc' },
+          page: 1,
+        };
+
+        /**
          * The list of elements
          */
         $scope.items = [];
@@ -352,9 +363,6 @@
          *  Apply the filter to the list of advertisement
          */
         $scope.applyFilter = function() {
-          $scope.tempCriteria.epp = $scope.criteria.epp;
-          $scope.tempCriteria.page = 1;
-
           $scope.criteria = angular.copy($scope.tempCriteria);
         };
 
