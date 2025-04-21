@@ -120,7 +120,7 @@ status = [
           <div class="grid-collapse-body ng-cloak">
             <div class="form-group">
               <div class="input-group">
-                <span class="input-group-addon add-on" onclick="document.getElementById('starttime').focus();">
+                <span class="input-group-addon add-on">
                     <i class="fa fa-calendar m-r-5"></i> {t}Start date{/t}
                 </span>
                 <input class="input-min-45 input-300" type="datetime" id="starttime" autocomplete="off" name="starttime" datetime-picker ng-model="tempCriteria.starttime" />
@@ -128,7 +128,7 @@ status = [
             </div>
             <div class="form-group">
               <div class="input-group">
-                <span class="input-group-addon add-on" onclick="document.getElementById('endtime').focus();">
+                <span class="input-group-addon add-on">
                   <i class="fa fa-calendar m-r-5"></i> {t}End date{/t}
                 </span>
                 <input class="input-min-45 input-300" type="datetime" id="endtime" autocomplete="off" name="endtime" datetime-picker ng-model="tempCriteria.endtime" />
