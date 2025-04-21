@@ -353,6 +353,7 @@
          */
         $scope.applyFilter = function() {
           $scope.tempCriteria.epp = $scope.criteria.epp;
+          $scope.tempCriteria.page = 1;
 
           $scope.criteria = angular.copy($scope.tempCriteria);
         };
