@@ -30,6 +30,9 @@
         <a class="btn btn-white btn-small" href="[% routing.generate('backend_subscription_show', { id: item.pk_user_group }) %]" uib-tooltip="{t}Edit{/t}" tooltip-placement="top">
           <i class="fa fa-pencil"></i>
         </a>
+        <button class="btn btn-white btn-small" ng-click="import(item.pk_user_group)" type="button" uib-tooltip="{t}Import{/t}" tooltip-placement="top">
+          <i class="fa fa-address-book"></i>
+        </button>
         <button class="btn btn-white btn-small" ng-click="delete(item.pk_user_group)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
           <i class="fa fa-trash-o text-danger"></i>
         </button>

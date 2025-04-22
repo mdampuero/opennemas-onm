@@ -40,6 +40,13 @@
       </button>
     </li>
   {/acl}
+  {acl isAllowed="MASTER"}
+    <li class="quicklinks">
+      <button class="btn btn-link" ng-click="importSelected()" uib-tooltip="{t}Import{/t}" tooltip-placement="bottom" type="button">
+        <i class="fa fa-address-book fa-lg"></i>
+      </button>
+    </li>
+  {/acl}
   {acl isAllowed="SUBSCRIPTION_DELETE"}
     <li class="quicklinks hidden-xs">
       <span class="h-seperate"></span>
