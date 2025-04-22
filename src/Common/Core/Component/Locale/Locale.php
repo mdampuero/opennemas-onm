@@ -54,6 +54,7 @@ class Locale
         'gl' => 'gl_ES',
         'fr' => 'fr_FR',
         'pt' => 'pt_PT',
+        'zh' => 'zh_CN',
     ];
 
     /**
