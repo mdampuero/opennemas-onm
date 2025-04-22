@@ -55,7 +55,7 @@
           <DescriptiveMetadata>
             <Language FormalName="es" />
             <DateLineDate>{format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}</DateLineDate>
-          <Property FormalName="Tesauro" Value="{if $extCategory}{$extCategory}{else}{get_category_slug($content)}{/if}"/>
+            <Property FormalName="Tesauro" Value="{if $extCategory}{$extCategory}{else}{get_category_slug($content)}{/if}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$content->id}" />
           </DescriptiveMetadata>
           <ContentItem Href="{get_url item=$content absolute=true}">
@@ -73,14 +73,14 @@
                       <keyword key="{renderMetaKeywords content=$content onlyTags=True}"/>
                     </key-list>
                     {if $content->content_type_name == 'event'}
-                      <identified-content>
+                      <identified-content type-id="{$content->event_type_id}" subtype-id="{$content->event_subtype_id}">
                         <event start-date="{format_date date=$content->event_start_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_start_hour|default:'00:00' type='custom' format="HHmmssxxx"}" end-date="{format_date date=$content->event_end_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_end_hour|default:'00:00' type='custom' format="HHmmssxxx"}"></event>
                         <location>
                           <location.city>{$content->event_city}</location.city>
                           <location.place>{$content->event_place}</location.place>
                           <location.address>{$content->event_address}</location.address>
-                          <location.latitude>{$content->event_latitude}</location.latitude>
-                          <location.longitude>{$content->event_longitude}</location.longitude>
+                          <location.latitude>{$content->event_map_latitude}</location.latitude>
+                          <location.longitude>{$content->event_map_longitude}</location.longitude>
                         </location>
                         {if $content->event_website}
                         <virtloc value="{$content->event_website}"></virtloc>
