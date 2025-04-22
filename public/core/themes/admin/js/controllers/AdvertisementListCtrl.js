@@ -380,10 +380,12 @@
          *   Cancel the filter and reset the criteria.
          */
         $scope.cancelFilter = function() {
-          $scope.tempCriteria.starttime = null;
-          $scope.tempCriteria.endtime = null;
+          $scope.tempCriteria.starttime = '';
+          $scope.tempCriteria.endtime = '';
 
           $scope.criteria = angular.copy($scope.tempCriteria);
+
+          window.location.reload();
         };
 
         /**
