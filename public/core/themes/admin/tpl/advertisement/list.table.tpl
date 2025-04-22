@@ -2,7 +2,7 @@
 
 {block name="commonColumns"}
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-featured-title" checklist-model="app.columns.selected" checklist-value="'title'" type="checkbox">
+    <input id="checkbox-featured-title" checklist-model="app.columns.selected" checklist-value="'title'" type="checkbox" disabled="true">
     <label for="checkbox-featured-title">
       {t}Title{/t}
     </label>
