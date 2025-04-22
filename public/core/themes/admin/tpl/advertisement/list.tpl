@@ -110,9 +110,9 @@ status = [
     <div class="select2-container">
       <a class="select2-choice dropdown-toggle" type="button" data-toggle="dropdown">
         <strong>{t}Time Range{/t}</strong>
-        [% criteria.starttime %]
-        <span ng-if="criteria.starttime && criteria.endtime"> - </span>
-        [% criteria.endtime %]
+        [% tempCriteria.starttime %]
+        <span ng-if="tempCriteria.starttime && tempCriteria.endtime"> - </span>
+        [% tempCriteria.endtime %]
         <span class="caret"></span>
       </a>
       <ul class="ui-select-dropdown dropdown-menu p-10" ng-click="$event.stopPropagation()">
