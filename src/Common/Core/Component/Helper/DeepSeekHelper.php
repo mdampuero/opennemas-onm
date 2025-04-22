@@ -50,6 +50,9 @@ class DeepSeekHelper
     // Array for models
     protected $suggestedModels = [];
 
+    // Array for data log
+    protected $dataLog = [];
+
      /**
      * Initializes the DeepSeek service.
      *
@@ -77,6 +80,7 @@ class DeepSeekHelper
     public function sendMessage($data, $struct)
     {
         try {
+            $request = $this->getDataLog();
             // Try the request up to $maxRetries times
             for ($i = 0; $i < $this->getMaxRetries(); $i++) {
                 try {
@@ -110,7 +114,10 @@ class DeepSeekHelper
                     if ($i === $this->getMaxRetries() - 1) {
                         throw $e;
                     }
-                    $this->errorLog->error('ONMAI - ClientException - Retry ' . ($i + 1) . ': ' . $e->getMessage());
+                    $this->errorLog->error(
+                        'ONMAI - ClientException - Retry ' . ($i + 1) . ': ' . $e->getMessage(),
+                        $request
+                    );
 
                     // Wait between retries
                     sleep($this->retryDelay);
@@ -118,7 +125,10 @@ class DeepSeekHelper
                     if ($i === $this->getMaxRetries() - 1) {
                         throw $e;
                     }
-                    $this->errorLog->error('ONMAI - RequestException - Retry ' . ($i + 1) . ': ' . $e->getMessage());
+                    $this->errorLog->error(
+                        'ONMAI - RequestException - Retry ' . ($i + 1) . ': ' . $e->getMessage(),
+                        $request
+                    );
 
                     // Wait between retries
                     sleep($this->retryDelay);
@@ -126,7 +136,10 @@ class DeepSeekHelper
                     if ($i === $this->getMaxRetries() - 1) {
                         throw $e;
                     }
-                    $this->errorLog->error('ONMAI - Exception - Retry ' . ($i + 1) . ': ' . $e->getMessage());
+                    $this->errorLog->error(
+                        'ONMAI - Exception - Retry ' . ($i + 1) . ': ' . $e->getMessage(),
+                        $request
+                    );
 
                     // Wait between retries
                     sleep($this->retryDelay);
@@ -135,7 +148,7 @@ class DeepSeekHelper
         } catch (Exception $e) {
             // Handle errors
             $struct['error'] = $e->getMessage();
-            $this->errorLog->error('ONMAI - Exception - Final: ' . $e->getMessage());
+            $this->errorLog->error('ONMAI - Exception - Final: ' . $e->getMessage(), $request);
             return $struct;
         }
     }
@@ -279,5 +292,23 @@ class DeepSeekHelper
             $this->suggestedModels = [];
         }
         return $this->suggestedModels;
+    }
+
+    /**
+     * Get the value of dataLog
+     */
+    public function getDataLog()
+    {
+        return [
+            'request' => $this->dataLog
+        ];
+    }
+
+    /**
+     * Set the value of dataLog
+     */
+    public function setDataLog($dataLog)
+    {
+        $this->dataLog = $dataLog;
     }
 }
