@@ -234,312 +234,333 @@ class EventHelper
                 'parent'   => 23,
             ],
             26 => [
+                'id'       => 25,
+                'name'     => _('Museum'),
+                'slug'     => _('museum'),
+                'category' => false,
+                'parent'   => 23,
+            ],
+            27 => [
                 'id'       => 26,
                 'name'     => _('Exhibitions'),
                 'slug'     => _('exhibitions'),
                 'category' => false,
                 'parent'   => 23,
             ],
-            27 => [
+            28 => [
                 'id'       => 27,
                 'name'     => _('Performances'),
                 'slug'     => _('performances'),
                 'category' => false,
                 'parent'   => 23,
             ],
-            28 => [
+            29 => [
                 'id'       => 28,
                 'name'     => _('Festivals'),
                 'slug'     => _('festivals'),
                 'category' => false,
                 'parent'   => 23,
             ],
-            29 => [
+            30 => [
                 'id'       => 29,
                 'name'     => _('Cinema'),
                 'slug'     => _('cinema'),
                 'category' => false,
                 'parent'   => 23,
             ],
-            30 => [
+            31 => [
                 'id'       => 30,
                 'name'     => _('Book Fairs'),
                 'slug'     => _('book-fairs'),
                 'category' => false,
                 'parent'   => 23,
             ],
-            31 => [
+            32 => [
                 'id'       => 31,
                 'name'     => _('Urban Art'),
                 'slug'     => _('urban-art'),
                 'category' => false,
                 'parent'   => 23,
             ],
-            32 => [
+            33 => [
                 'id'       => 32,
                 'name'     => _('Sports'),
                 'slug'     => _('sports'),
                 'category' => true,
                 'parent'   => null,
             ],
-            33 => [
+            34 => [
                 'id'       => 33,
+                'name'     => _('Sports'),
+                'slug'     => _('sports'),
+                'category' => false,
+                'parent'   => 32,
+            ],
+            35 => [
+                'id'       => 34,
                 'name'     => _('Races'),
                 'slug'     => _('races'),
                 'category' => false,
                 'parent'   => 32,
             ],
-            34 => [
-                'id'       => 34,
+            36 => [
+                'id'       => 35,
                 'name'     => _('Tournaments'),
                 'slug'     => _('tournaments'),
                 'category' => false,
                 'parent'   => 32,
             ],
-            35 => [
-                'id'       => 35,
+            37 => [
+                'id'       => 36,
                 'name'     => _('Exhibitions'),
                 'slug'     => _('sports-exhibitions'),
                 'category' => false,
                 'parent'   => 32,
             ],
-            36 => [
-                'id'       => 36,
+            38 => [
+                'id'       => 37,
                 'name'     => _('Classes'),
                 'slug'     => _('sports-classes'),
                 'category' => false,
                 'parent'   => 32,
             ],
-            37 => [
-                'id'       => 37,
+            39 => [
+                'id'       => 38,
                 'name'     => _('Esports'),
                 'slug'     => _('esports'),
                 'category' => false,
                 'parent'   => 32,
             ],
-            38 => [
-                'id'       => 38,
+            40 => [
+                'id'       => 39,
                 'name'     => _('Triathlons'),
                 'slug'     => _('triathlons'),
                 'category' => false,
                 'parent'   => 32,
             ],
-            39 => [
-                'id'       => 39,
+            41 => [
+                'id'       => 40,
                 'name'     => _('Extreme Sports'),
                 'slug'     => _('extreme-sports'),
                 'category' => false,
                 'parent'   => 32,
             ],
-            40 => [
-                'id'       => 40,
+            42 => [
+                'id'       => 41,
                 'name'     => _('Educational'),
                 'slug'     => _('educational'),
                 'category' => true,
                 'parent'   => null,
             ],
-            41 => [
-                'id'       => 41,
+            43 => [
+                'id'       => 42,
                 'name'     => _('Courses'),
                 'slug'     => _('courses'),
                 'category' => false,
-                'parent'   => 40,
+                'parent'   => 41,
             ],
-            42 => [
-                'id'       => 42,
+            44 => [
+                'id'       => 43,
                 'name'     => _('Conferences'),
                 'slug'     => _('educational-conferences'),
                 'category' => false,
-                'parent'   => 40,
+                'parent'   => 41,
             ],
-            43 => [
-                'id'       => 43,
+            45 => [
+                'id'       => 44,
                 'name'     => _('Symposiums'),
                 'slug'     => _('symposiums'),
                 'category' => false,
-                'parent'   => 40,
+                'parent'   => 41,
             ],
-            44 => [
-                'id'       => 44,
+            46 => [
+                'id'       => 45,
                 'name'     => _('Debates'),
                 'slug'     => _('debates'),
                 'category' => false,
-                'parent'   => 40,
+                'parent'   => 41,
             ],
-            45 => [
-                'id'       => 45,
+            47 => [
+                'id'       => 46,
                 'name'     => _('Workshops'),
                 'slug'     => _('educational-workshops'),
                 'category' => false,
-                'parent'   => 40,
+                'parent'   => 41,
             ],
-            46 => [
-                'id'       => 46,
+            48 => [
+                'id'       => 47,
                 'name'     => _('Fairs'),
                 'slug'     => _('educational-fairs'),
                 'category' => false,
-                'parent'   => 40,
+                'parent'   => 41,
             ],
-            47 => [
-                'id'       => 47,
+            49 => [
+                'id'       => 48,
                 'name'     => _('Religious'),
                 'slug'     => _('religious'),
                 'category' => true,
                 'parent'   => null,
             ],
-            48 => [
-                'id'       => 48,
+            50 => [
+                'id'       => 49,
                 'name'     => _('Masses'),
                 'slug'     => _('masses'),
                 'category' => false,
-                'parent'   => 47,
+                'parent'   => 48,
             ],
-            49 => [
-                'id'       => 49,
+            51 => [
+                'id'       => 50,
                 'name'     => _('Pilgrimages'),
                 'slug'     => _('pilgrimages'),
                 'category' => false,
-                'parent'   => 47,
+                'parent'   => 48,
             ],
-            50 => [
-                'id'       => 50,
+            52 => [
+                'id'       => 51,
                 'name'     => _('Retreats'),
                 'slug'     => _('retreats'),
                 'category' => false,
-                'parent'   => 47,
+                'parent'   => 48,
             ],
-            51 => [
-                'id'       => 51,
+            53 => [
+                'id'       => 52,
                 'name'     => _('Festivities'),
                 'slug'     => _('festivities'),
                 'category' => false,
-                'parent'   => 47,
+                'parent'   => 48,
             ],
-            52 => [
-                'id'       => 52,
+            54 => [
+                'id'       => 53,
                 'name'     => _('Charitable'),
                 'slug'     => _('charitable'),
                 'category' => true,
                 'parent'   => null,
             ],
-            53 => [
-                'id'       => 53,
+            55 => [
+                'id'       => 54,
                 'name'     => _('Gala Events'),
                 'slug'     => _('gala-events'),
                 'category' => false,
-                'parent'   => 52,
+                'parent'   => 53,
             ],
-            54 => [
-                'id'       => 54,
+            56 => [
+                'id'       => 55,
                 'name'     => _('Auctions'),
                 'slug'     => _('auctions'),
                 'category' => false,
-                'parent'   => 52,
+                'parent'   => 53,
             ],
-            55 => [
-                'id'       => 55,
+            57 => [
+                'id'       => 56,
                 'name'     => _('Donations'),
                 'slug'     => _('donations'),
                 'category' => false,
-                'parent'   => 52,
+                'parent'   => 53,
             ],
-            56 => [
-                'id'       => 56,
+            58 => [
+                'id'       => 57,
                 'name'     => _('Volunteering'),
                 'slug'     => _('volunteering'),
                 'category' => false,
-                'parent'   => 52,
+                'parent'   => 53,
             ],
-            57 => [
-                'id'       => 57,
+            59 => [
+                'id'       => 58,
                 'name'     => _('Benefit Concerts'),
                 'slug'     => _('benefit-concerts'),
                 'category' => false,
-                'parent'   => 52,
+                'parent'   => 53,
             ],
-            58 => [
-                'id'       => 58,
+            60 => [
+                'id'       => 59,
                 'name'     => _('Gastronomic'),
                 'slug'     => _('gastronomic'),
                 'category' => true,
                 'parent'   => null,
             ],
-            59 => [
-                'id'       => 59,
+            61 => [
+                'id'       => 60,
                 'name'     => _('Food Fairs'),
                 'slug'     => _('food-fairs'),
                 'category' => false,
-                'parent'   => 58,
+                'parent'   => 59,
             ],
-            60 => [
-                'id'       => 60,
+            62 => [
+                'id'       => 61,
                 'name'     => _('Tastings'),
                 'slug'     => _('tastings'),
                 'category' => false,
-                'parent'   => 58,
+                'parent'   => 59,
             ],
-            61 => [
-                'id'       => 61,
+            63 => [
+                'id'       => 62,
                 'name'     => _('Gastronomic Festivals'),
                 'slug'     => _('gastronomic-festivals'),
                 'category' => false,
-                'parent'   => 58,
+                'parent'   => 59,
             ],
-            62 => [
-                'id'       => 62,
+            64 => [
+                'id'       => 63,
                 'name'     => _('Technological'),
                 'slug'     => _('technological'),
                 'category' => true,
                 'parent'   => null,
             ],
-            63 => [
-                'id'       => 63,
+            65 => [
+                'id'       => 64,
                 'name'     => _('Tech Fairs'),
                 'slug'     => _('tech-fairs'),
                 'category' => false,
-                'parent'   => 62,
+                'parent'   => 63,
             ],
-            64 => [
-                'id'       => 64,
+            66 => [
+                'id'       => 65,
                 'name'     => _('Demos'),
                 'slug'     => _('demos'),
                 'category' => false,
-                'parent'   => 62,
+                'parent'   => 63,
             ],
-            65 => [
-                'id'       => 65,
+            67 => [
+                'id'       => 66,
                 'name'     => _('Hackathons'),
                 'slug'     => _('hackathons'),
                 'category' => false,
-                'parent'   => 62,
+                'parent'   => 63,
             ],
-            66 => [
-                'id'       => 66,
+            68 => [
+                'id'       => 67,
                 'name'     => _('Governmental'),
                 'slug'     => _('governmental'),
                 'category' => true,
                 'parent'   => null,
             ],
-            67 => [
-                'id'       => 67,
+            69 => [
+                'id'       => 68,
                 'name'     => _('Inaugurations'),
                 'slug'     => _('inaugurations'),
                 'category' => false,
-                'parent'   => 66,
+                'parent'   => 67,
             ],
-            68 => [
-                'id'       => 68,
+            70 => [
+                'id'       => 69,
                 'name'     => _('Summits'),
                 'slug'     => _('governmental-summits'),
                 'category' => false,
-                'parent'   => 66,
+                'parent'   => 67,
             ],
-            69 => [
-                'id'       => 69,
+            71 => [
+                'id'       => 70,
                 'name'     => _('Debates'),
                 'slug'     => _('governmental-debates'),
                 'category' => false,
-                'parent'   => 66,
+                'parent'   => 67,
+            ],
+            72 => [
+                'id'       => 71,
+                'name'     => _('Other'),
+                'slug'     => _('other'),
+                'category' => false,
+                'parent'   => 67,
             ],
         ];
     }
