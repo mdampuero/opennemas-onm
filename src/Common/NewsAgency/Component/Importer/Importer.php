@@ -182,10 +182,12 @@ class Importer
 
         if (!empty($webpushNotification)
             && array_key_exists('content_type_name', $data)
-            && $data['content_type_name'] == 'article') {
+            && $data['content_type_name'] == 'article'
+        ) {
             $data['webpush_notifications'] = $this->container->get('core.helper.webpush_notifications')
                 ->createNotificationFromData($data);
         }
+
         return $this->container->get('api.service.content')
             ->createItem($data);
     }
@@ -552,18 +554,30 @@ class Importer
         $date = new \DateTime();
 
         $data = array_merge($data, [
-            'created'         => $date->format('Y-m-d H:i:s'),
-            'canonicalurl'    => $resource->canonicalurl,
-            'fk_content_type' => 5,
-            'categories'      => [ $this->getCategory($resource, $data) ],
-            'agency'          => !empty($resource->signature)
+            'created'              => $date->format('Y-m-d H:i:s'),
+            'canonicalurl'         => $resource->canonicalurl,
+            'event_start_date'     => $resource->event_start_date,
+            'event_start_hour'     => $resource->event_start_hour,
+            'event_website'        => $resource->event_website,
+            'event_place'          => $resource->event_place,
+            'event_address'        => $resource->event_address,
+            'event_map_latitude'   => $resource->event_map_latitude,
+            'event_map_longitude'  => $resource->event_map_longitude,
+            'event_tickets_price'  => $resource->event_tickets_price,
+            'event_tickets_link'   => $resource->event_tickets_link,
+            'event_type'           => $resource->event_type,
+            'event_organizer_name' => $resource->event_organizer_name,
+            'event_organizer_url'  => $resource->event_organizer_url,
+            'fk_content_type'      => 5,
+            'categories'           => [ $this->getCategory($resource, $data) ],
+            'agency'               => !empty($resource->signature)
                 ? $resource->signature
                 : (array_key_exists('agency_string', $this->config)
                     ? $this->config['agency_string']
                     : null),
-            'description'     => $resource->summary,
-            'title_int'       => $resource->title,
-            'slug'            => $this->container->get('data.manager.filter')
+            'description'          => $resource->summary,
+            'title_int'            => $resource->title,
+            'slug'                 => $this->container->get('data.manager.filter')
                 ->set($resource->title)
                 ->filter('slug')
                 ->get()

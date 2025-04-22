@@ -200,10 +200,12 @@ class HttpTaquilla extends Http
         $content->event_place          = $data['place']['name'];
         $content->event_city           = $data['place']['city'];
         $content->event_address        = $data['place']['address'];
-        $content->event_latitude       = $data['place']['latitude'];
-        $content->event_longitude      = $data['place']['longitude'];
+        $content->event_map_latitude   = $data['place']['latitude'];
+        $content->event_map_longitude  = $data['place']['longitude'];
         $content->event_tickets_price  = $details['sminprice'];
         $content->event_tickets_link   = $details['sminprice_url'];
+        $content->event_type_id        = $data['entity']['type_id'];
+        $content->event_subtype_id     = $data['entity']['subtype_id'];
         $content->event_website        = $data['entity']['name_url'];
         $content->extCategory          = $data['entity']['type'];
         $content->tags                 = [];
@@ -230,64 +232,5 @@ class HttpTaquilla extends Http
         $content->featureContent = $featureContent ?? null;
 
         return $content;
-    }
-
-    /**
-     * Listado de tipos y subtipos
-     */
-    public function getTypes()
-    {
-        $tipos = [
-            // Tipos principales
-            4   => 'Espectáculos y teatro',
-            2   => 'Conciertos',
-            3   => 'Deportes',
-            5   => 'Museos y visitas guiadas',
-            7   => 'Parques de ocio',
-            15  => 'Cine',
-
-            // Subtipos de "Espectáculos y teatro"
-            30  => 'Musicales',
-            31  => 'Teatro',
-            33  => 'Humor/Monólogos',
-            32  => 'Magia',
-            34  => 'Espectáculos para niños',
-            36  => 'Circo',
-            48  => 'Flamenco',
-            49  => 'Ópera/Clásica',
-            29  => 'Danza y Ballet',
-            37  => 'Otros espectáculos',
-
-            // Subtipos de "Conciertos"
-            104 => 'Festivales',
-            2   => 'Pop/Rock',
-            8   => 'Hip Hop',
-            46  => 'Hard-Rock/Heavy',
-            45  => 'Autor/Folk',
-            47  => 'Jazz/Blues',
-            22  => 'Dance/Electrónica',
-            10  => 'Otros estilos',
-            102 => 'Discotecas',
-
-            // Subtipos de "Deportes"
-            14  => 'Fútbol',
-            15  => 'Baloncesto',
-            16  => 'Tenis',
-            17  => 'F1/automovilismo',
-            18  => 'Motociclismo',
-            20  => 'Otros deportes',
-
-            // Subtipos de "Museos y visitas guiadas"
-            24  => 'Museos/Exposiciones',
-            26  => 'Visitas guiadas y Tours',
-
-            // Subtipos de "Parques de ocio"
-            43  => 'Parques de atracciones',
-            41  => 'Parques acuáticos',
-            42  => 'Zoo/Acuarios',
-            44  => 'Otros parques',
-        ];
-
-        return $tipos;
     }
 }

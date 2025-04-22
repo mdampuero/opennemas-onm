@@ -158,6 +158,97 @@ class ExternalResource
     public $urn = 'urn:nitf:::';
 
     /**
+     * The event resource start date.
+     *
+     * @var string
+     */
+    public $event_start_date;
+
+    /**
+     * The event resource start hour.
+     *
+     * @var string
+     */
+    public $event_start_hour;
+
+    /**
+     * The event resource website.
+     *
+     * @var string
+     */
+    public $event_website;
+
+    /**
+     * The event resource information.
+     *
+     * @var string
+     */
+    public $event_info;
+
+    /**
+     * The event resource place.
+     *
+     * @var string
+     */
+    public $event_place;
+
+    /**
+     * The event resource address.
+     *
+     * @var string
+     */
+    public $event_address;
+
+    /**
+     * The event resource latitude.
+     *
+     * @var string
+     */
+    public $event_map_latitude;
+
+    /**
+     * The event resource longitude.
+     *
+     * @var string
+     */
+    public $event_map_longitude;
+
+    /**
+     * The event resource ticket price.
+     *
+     * @var string
+     */
+    public $event_tickets_price;
+
+    /**
+     * The event resource ticket link.
+     *
+     * @var string
+     */
+    public $event_tickets_link;
+
+    /**
+     * The event resource type.
+     *
+     * @var string
+     */
+    public $event_type;
+
+    /**
+     * The event resource organizer name.
+     *
+     * @var string
+     */
+    public $event_organizer_name;
+
+    /**
+     * The event resource organizer url.
+     *
+     * @var string
+     */
+    public $event_organizer_url;
+
+    /**
      * Initializes a Resource.
      *
      * @param array $data The resource data.

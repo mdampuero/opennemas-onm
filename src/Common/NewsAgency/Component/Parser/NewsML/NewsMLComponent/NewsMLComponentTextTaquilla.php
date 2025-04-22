@@ -245,7 +245,7 @@ class NewsMLComponentTextTaquilla extends NewsML
      *
      * @return string The event type.
      */
-    public function getEventType($data)
+    public function getEventTypeString($data)
     {
         $property = $data->xpath('//DescriptiveMetadata/Property[@FormalName="Tesauro"]');
 
@@ -255,6 +255,44 @@ class NewsMLComponentTextTaquilla extends NewsML
         }
 
         return $eventType;
+    }
+
+    /**
+     * Returns the type id assigned to the event
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The event type.
+     */
+    public function getEventTypeId($data)
+    {
+        $property = $data->xpath('//identified-content/@type-id');
+
+        $eventTypeId = null;
+        if (is_array($property) && !empty($property)) {
+            $eventTypeId = (string) $property[0];
+        }
+
+        return $eventTypeId;
+    }
+
+    /**
+     * Returns the subtype id assigned to the event
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The event type.
+     */
+    public function getEventSubtypeId($data)
+    {
+        $property = $data->xpath('//identified-content/@subtype-id');
+
+        $eventSubtypeId = null;
+        if (is_array($property) && !empty($property)) {
+            $eventSubtypeId = (string) $property[0];
+        }
+
+        return $eventSubtypeId;
     }
 
     /**
@@ -288,14 +326,43 @@ class NewsMLComponentTextTaquilla extends NewsML
         $this->bag['event_info']           = $this->getEventInfo($data);
         $this->bag['event_place']          = $this->getEventPlace($data);
         $this->bag['event_address']        = $this->getEventAddress($data);
-        $this->bag['event_latitude']       = $this->getEventLatitude($data);
-        $this->bag['event_longitude']      = $this->getEventLongitude($data);
+        $this->bag['event_map_latitude']   = $this->getEventLatitude($data);
+        $this->bag['event_map_longitude']  = $this->getEventLongitude($data);
         $this->bag['event_tickets_price']  = $this->getEventTicketMinPrice($data);
         $this->bag['event_tickets_link']   = $this->getEventTicketUrl($data);
+        $this->bag['event_type_string']    = $this->getEventTypeString($data);
+        $this->bag['event_type_id']        = $this->getEventTypeId($data);
+        $this->bag['event_subtype_id']     = $this->getEventSubtypeId($data);
         $this->bag['event_organizer_name'] = $this->getEventOrganizerName($data);
         $this->bag['event_organizer_url']  = $this->getEventOrganizerUrl($data);
         $this->bag['canonicalurl']         = $this->getEventWebsite($data);
 
+        // Parse taquilla id to Opennemas event type
+        $this->bag['event_type'] = $this->getEventTypeParsed(
+            $this->getEventTypeId($data)
+        );
+
         return parent::parse($data);
+    }
+
+    /**
+     * Maps the event type from Taquilla.com to Opennemas
+     * We are only using types not subtypes
+     *
+     * https://api.taquilla.com/data/search/types?t10id=96008
+     */
+    protected function getEventTypeParsed($typeId)
+    {
+        $taquillaTypes = [
+            // Tipos principales
+            4  => 'espectaculos',
+            2  => 'conciertos',
+            3  => 'deportes',
+            5  => 'museo',
+            7  => 'otros',
+            15 => 'cine',
+        ];
+
+        return $taquillaTypes[$typeId];
     }
 }
