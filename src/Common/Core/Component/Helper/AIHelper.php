@@ -602,12 +602,12 @@ class AIHelper
 
             $this->insertInstructions($instructions);
 
+            $settings['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
+
             $response = $this->container->get('core.helper.' . $settings['engine'])
                 ->sendMessage($settings, $this->getStructureResponse());
 
             $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
-
-            $settings['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
             if (empty($response['error']) && !empty($response['result'])) {
                 $this->generateWords($response);
                 $this->saveAction($settings, $response);
