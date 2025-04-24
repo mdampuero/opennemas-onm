@@ -9,6 +9,20 @@ use GuzzleHttp\Exception\ClientException;
 
 class MistralAIHelper
 {
+    /**
+     * The application log service.
+     *
+     * @var Monolog
+     */
+    protected $appLog;
+
+    /**
+     * The error log service.
+     *
+     * @var Monolog
+     */
+    protected $errorLog;
+
     // HTTP client instance for making requests
     protected $client;
 
@@ -36,15 +50,21 @@ class MistralAIHelper
      // Array for models
     protected $suggestedModels = [];
 
+    // Array for data log
+    protected $dataLog = [];
+
     /**
-     * Constructor for the MistralAIHelper class.
-     * Initializes the container and HTTP client.
+     * Initializes the MistralAI service.
      *
-     * @param mixed $container Container with necessary dependencies.
+     * @param ContainerInterface $container The service container.
+     * @param LoggerInterface    $appLog    Logger for application-level logs.
+     * @param LoggerInterface    $errorLog  Logger for error logs.
      */
-    public function __construct($container)
+    public function __construct($container, $appLog, $errorLog)
     {
         $this->container = $container;
+        $this->appLog    = $appLog;
+        $this->errorLog  = $errorLog;
         $this->client    = new Client([
             'timeout' => $this->getTimeout(),
         ]);
@@ -60,6 +80,7 @@ class MistralAIHelper
     public function sendMessage($data, $struct)
     {
         try {
+            $request = $this->getDataLog();
             // Try the request up to $maxRetries times
             for ($i = 0; $i < $this->getMaxRetries(); $i++) {
                 try {
@@ -90,19 +111,45 @@ class MistralAIHelper
                     //$response = $this->simulResponse();
 
                     return $this->normalizeResponse($response, $struct);
-                } catch (\Exception $e) {
-                    // If it's the last retry, throw the exception
+                } catch (ClientException $e) {
                     if ($i === $this->getMaxRetries() - 1) {
                         throw $e;
                     }
+                    $this->errorLog->error(
+                        'ONMAI - ClientException - Retry ' . ($i + 1) . ': ' . $e->getMessage(),
+                        $request
+                    );
+
+                    // Wait between retries
+                    sleep($this->retryDelay);
+                } catch (RequestException $e) {
+                    if ($i === $this->getMaxRetries() - 1) {
+                        throw $e;
+                    }
+                    $this->errorLog->error(
+                        'ONMAI - RequestException - Retry ' . ($i + 1) . ': ' . $e->getMessage(),
+                        $request
+                    );
+
+                    // Wait between retries
+                    sleep($this->retryDelay);
+                } catch (\Exception $e) {
+                    if ($i === $this->getMaxRetries() - 1) {
+                        throw $e;
+                    }
+                    $this->errorLog->error(
+                        'ONMAI - Exception - Retry ' . ($i + 1) . ': ' . $e->getMessage(),
+                        $request
+                    );
 
                     // Wait between retries
                     sleep($this->retryDelay);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Handle errors
             $struct['error'] = $e->getMessage();
+            $this->errorLog->error('ONMAI - Exception - Final: ' . $e->getMessage(), $request);
             return $struct;
         }
     }
@@ -245,5 +292,23 @@ class MistralAIHelper
         } catch (\Exception $e) {
             return [];
         }
+    }
+
+    /**
+     * Get the value of dataLog
+     */
+    public function getDataLog()
+    {
+        return [
+            'request' => $this->dataLog
+        ];
+    }
+
+    /**
+     * Set the value of dataLog
+     */
+    public function setDataLog($dataLog)
+    {
+        $this->dataLog = $dataLog;
     }
 }

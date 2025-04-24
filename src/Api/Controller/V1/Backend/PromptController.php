@@ -35,7 +35,7 @@ class PromptController extends ApiController
      * {@inheritdoc}
      */
     protected $permissions = [
-        'list'   => 'ONMAI_ADMIN'
+        'list'   => 'ARTICLE_ADMIN'
     ];
 
     /**

@@ -21,6 +21,20 @@ class AIHelper
     protected $container;
 
     /**
+     * The application log service.
+     *
+     * @var Monolog
+     */
+    protected $appLog;
+
+    /**
+     * The error log service.
+     *
+     * @var Monolog
+     */
+    protected $errorLog;
+
+    /**
      * Conversion factor used in calculations.
      */
     public $conversion = 1000000;
@@ -126,13 +140,17 @@ class AIHelper
 
 
     /**
-     * Initializes the Menu service.
+     * Initializes the AIHelper class with the provided service container and loggers.
      *
-     * @param Container          $container The service container.
+     * @param ContainerInterface $container The service container.
+     * @param LoggerInterface    $appLog    Logger for application-level logs.
+     * @param LoggerInterface    $errorLog  Logger for error logs.
      */
-    public function __construct($container)
+    public function __construct($container, $appLog, $errorLog)
     {
         $this->container = $container;
+        $this->appLog    = $appLog;
+        $this->errorLog  = $errorLog;
     }
 
     /**
@@ -437,8 +455,9 @@ class AIHelper
 
         if ($messages["locale"] ?? false) {
             $this->userPrompt .= ($messages["locale"] ?? false) ?
-                sprintf("\n\n### IDIOMA DE LA RESPUESTA:\n%s", sprintf(
-                    'El idioma configurado es "%s". Responde usando este idioma y las convenciones culturales.',
+                sprintf("\n\n### IDIOMA:\n%s", sprintf(
+                    'El idioma de la respuesta debe ser "%s". Responde estrictamente usando este idioma y
+                    las convenciones culturales.',
                     $messages['locale']
                 )) : "";
         }
@@ -465,6 +484,17 @@ class AIHelper
      */
     public function sendMessage($messages)
     {
+        $dataLog = [
+            'mode'     => $messages['promptSelected']['mode'] ?? '',
+            'prompt'   => $messages['promptSelected']['name'] ?? '',
+            'role'     => $messages['roleSelected']['name'] ?? '',
+            'field'    => $messages['promptSelected']['field'] ?? '',
+            'tone'     => $messages['toneSelected']['name'] ?? '',
+            'model'    => $messages['promptSelected']['model'] ?? '',
+            'language' => $messages['locale'] ?? '',
+            'method'   => __METHOD__,
+        ];
+
         $this->getInstructions();
 
         $data = $this->getCurrentSettings($messages['promptSelected']['model'] ?? null);
@@ -479,6 +509,11 @@ class AIHelper
         }
 
         if ($data['engine'] ?? false) {
+            /**
+             * Log the selected prompt details for debugging purposes.
+             */
+            $this->container->get('core.helper.' . $data['engine'])->setDataLog($dataLog);
+
             $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
                 $data,
                 $this->getStructureResponse()
@@ -492,6 +527,11 @@ class AIHelper
         if (empty($response['error'])) {
             $this->generateWords($response);
             $this->saveAction($data, $response);
+        } else {
+            $this->errorLog->error(
+                'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
+                $this->container->get('core.helper.' . $data['engine'])->getDataLog()
+            );
         }
 
         return $response;
@@ -522,7 +562,10 @@ class AIHelper
             ['value' => 'No debes añadir información adicional ni modificar el significado del texto.'],
             ['value' => 'Debes respetar la estructura y longitud del texto.'],
             ['value' => 'Mantén la terminología, puntuación, gramática y ortografía del original.'],
-            ['value' => 'No alteres el formato original del texto.']
+            ['value' => 'No alteres el formato original del texto.'],
+            ['value' => 'Si el texto original tiene formato html, debes mantenerlo.'],
+            ['value' => 'Devuelve solo el texto traducido. No incluyas encabezados,
+            etiquetas, símbolos ni explicaciones'],
         ];
 
         if (!empty($params['tone']['name'] ?? false)) {
@@ -535,9 +578,21 @@ class AIHelper
 
         $data = $this->getCurrentSettings();
 
+        $dataLog = [
+            'tone'     => $params['tone']['name'] ?? '',
+            'model'    => ($data['engine'] ?? '') . '_' . ($data['model'] ?? ''),
+            'language' => $lang ?? '',
+            'method'   => __METHOD__
+        ];
+
         $data['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
 
         if (!empty($data['engine'])) {
+            /**
+             * Log the selected prompt details for debugging purposes.
+             */
+            $this->container->get('core.helper.' . $data['engine'])->setDataLog($dataLog);
+
             $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
                 $data,
                 $this->getStructureResponse()
@@ -551,6 +606,11 @@ class AIHelper
         if (empty($response['error'])) {
             $this->generateWords($response);
             $this->saveAction($data, $response);
+        } else {
+            $this->errorLog->error(
+                'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
+                $this->container->get('core.helper.' . $data['engine'])->getDataLog()
+            );
         }
 
         return $response;
@@ -602,7 +662,17 @@ class AIHelper
 
             $this->insertInstructions($instructions);
 
+            $dataLog = [
+                'tone'     => $params['tone']['name'] ?? '',
+                'model'    => ($settings['engine'] ?? '') . '_' . ($settings['model'] ?? ''),
+                'language' => $lang ?? '',
+                'method'   => __METHOD__
+            ];
+
             $settings['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
+
+            // Log the selected prompt details for debugging purposes.
+            $this->container->get('core.helper.' . $settings['engine'])->setDataLog($dataLog);
 
             $response = $this->container->get('core.helper.' . $settings['engine'])
                 ->sendMessage($settings, $this->getStructureResponse());
@@ -612,6 +682,11 @@ class AIHelper
                 $this->generateWords($response);
                 $this->saveAction($settings, $response);
                 $data[$field] = $response['result'];
+            } else {
+                $this->errorLog->error(
+                    'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
+                    $this->container->get('core.helper.' . $data['engine'])->getDataLog()
+                );
             }
         }
 
@@ -683,6 +758,13 @@ class AIHelper
             'date'     => $date->format('Y-m-d H:i:s'),
             'service'  => $this->getService()
         ];
+
+        /**
+         * Log the selected prompt details for debugging purposes.
+         */
+        $dataLog             = $this->container->get('core.helper.' . $params['engine'])->getDataLog();
+        $dataLog['response'] = $tokens;
+        $this->appLog->info('ONMAI - ' . __METHOD__, $dataLog);
 
         $this->container->get('api.service.ai')->createItem($data);
     }
