@@ -14,8 +14,8 @@
      *   Provides actions to edit, save and update articles.
      */
     .controller('AdvertisementConfigCtrl', [
-      '$controller', '$scope', '$uibModal',
-      function($controller, $scope, $uibModal) {
+      '$controller', '$scope', '$uibModal', '$rootScope',
+      function($controller, $scope, $uibModal, $rootScope) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 

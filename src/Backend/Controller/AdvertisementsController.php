@@ -367,7 +367,7 @@ class AdvertisementsController extends Controller
 
             return $this->render('advertisement/config.tpl', [
                 'configs' => $ds->get($keys),
-                'extra_ads_txt' => $this->get('core.helper.advertisement')->getAdsTxtFromManager()
+                'extra_ads_txt' => $this->get('core.helper.advertisement')->getAdsManagerWithPosition()
             ]);
         }
 
@@ -383,6 +383,7 @@ class AdvertisementsController extends Controller
                 'default_mark'      => $formValues->filter('ads_settings_mark_default', '', FILTER_SANITIZE_STRING),
             ],
             'ads_txt'          => $formValues->filter('ads_txt', '', FILTER_SANITIZE_STRING),
+            'adsposition'      => $formValues->filter('adsposition', '', FILTER_SANITIZE_STRING),
             'dfp_options'      => [
                 'target'     => $formValues->filter('dfp_options_target', '', FILTER_SANITIZE_STRING),
                 'module'     => $formValues->filter('dfp_options_module', '', FILTER_SANITIZE_STRING),

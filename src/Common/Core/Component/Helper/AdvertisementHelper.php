@@ -226,6 +226,37 @@ class AdvertisementHelper
         return implode("\n", array_unique($adsLines));
     }
 
+
+    /**
+     * Returns the list of ads on the manager with their position.
+     *
+     * @return array The list of ads with their position.
+     */
+    public function getAdsManagerWithPosition()
+    {
+        $positions = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('adsposition');
+
+        $ads = $this->getAdsTxtFromManager();
+
+        if (!$ads || !is_array($ads)) {
+            return [];
+        }
+
+        foreach ($ads as $ad) {
+            $positions[$ad->id] = $positions[$ad->id] ? $positions[$ad->id] : 0;
+            if (!isset($positions[$ad->id])) {
+                $ad->position = null;
+            }
+
+            $ad->position = $positions[$ad->id];
+        }
+
+        return $ads;
+    }
+
+
     /**
      * Checks if request url is ads restricted.
      *
