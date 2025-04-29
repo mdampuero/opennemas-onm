@@ -95,7 +95,7 @@
                 ng-if="template.promptSelected"
                 ng-options="item as item.name for item in template.onmai_extras.languages"
                 >
-                <option value="">{t}Select a language{/t}</option>
+                <option value="">{t}Select a language...{/t}</option>
               </select>
             </div>
           </div>
