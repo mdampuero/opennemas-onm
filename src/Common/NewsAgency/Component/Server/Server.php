@@ -35,6 +35,13 @@ abstract class Server
     protected $localFiles = [];
 
     /**
+     * The server parameters.
+     *
+     * @var array
+     */
+    protected $params = [];
+
+    /**
      * Files in server.
      *
      * @var array
