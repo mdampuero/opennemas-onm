@@ -142,6 +142,9 @@
         {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Automatic import{/t}" field="auto_import"}
       </div>
       <div ng-if="item.auto_import">
+        <div class="grid-collapse-title">
+          {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Import as draft{/t}" field="draft_import"}
+        </div>
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.import }" ng-click="expanded.import = !expanded.import">
           <i class="fa fa-cloud-download m-r-10"></i>
           {t}Import{/t} {t}as{/t}
@@ -152,6 +155,7 @@
           <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!expanded.import && item.target">
             <span ng-if="item.target === 'article'">{t}Article{/t}</span>
             <span ng-if="item.target === 'opinion'">{t}Opinion{/t}</span>
+            <span ng-if="item.target === 'event'">{t}Event{/t}</span>
           </span>
         </div>
         <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.import }">

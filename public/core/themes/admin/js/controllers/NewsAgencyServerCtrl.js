@@ -88,6 +88,10 @@
           if ($scope.item.auto_import) {
             $scope.item.auto_import = parseInt($scope.item.auto_import);
           }
+
+          if ($scope.item.draft_import) {
+            $scope.item.draft_import = parseInt($scope.item.draft_import);
+          }
         };
 
         /**

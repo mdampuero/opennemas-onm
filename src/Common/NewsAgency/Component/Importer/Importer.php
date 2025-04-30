@@ -162,6 +162,11 @@ class Importer
 
         $data = $this->getData($resource, $data);
 
+        // Import contents as draft enabled
+        if ($this->isDraftImportEnabled()) {
+            $data['content_status'] = 0;
+        }
+
         if ($resource->type === 'photo') {
             $file = new \SplFileInfo($data['path']);
 
@@ -202,6 +207,18 @@ class Importer
     {
         return array_key_exists('auto_import', $this->config)
             && $this->config['auto_import'];
+    }
+
+    /**
+     * Check if draft-import mode is enabled.
+     *
+     * @return boolean True if the draft-import mode is enabled. Otherwise,
+     *                 returns false.
+     */
+    public function isDraftImportEnabled()
+    {
+        return array_key_exists('draft_import', $this->config)
+            && $this->config['draft_import'];
     }
 
     /**
