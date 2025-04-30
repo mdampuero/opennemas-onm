@@ -14,8 +14,8 @@
      *   Provides actions to edit, save and update articles.
      */
     .controller('AdvertisementConfigCtrl', [
-      '$controller', '$scope', '$uibModal', '$rootScope',
-      function($controller, $scope, $uibModal, $rootScope) {
+      '$controller', '$scope', '$uibModal', '$rootScope', 'http',
+      function($controller, $scope, $uibModal, $rootScope, http) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -37,19 +37,21 @@
           'onecall_sync'
         ];
 
-        /**
-         * @function init
-         * @memberOf AdvertisementConfigCtrl
-         * Method to init the advertisement config controller
-         *
-         * @param {String} domain The configured domain
-         * @param {String} tagsFormat The configured tags format
-         */
-        $scope.init = function(domain, tagsFormat) {
+        $scope.treeOptions = {
+          dragMove: function(event) {
+            // TODO: Implement drag move logic
+          },
+          dropped: function(event) {
+            // Todo: Implement dropped logic
+          }
+        };
+
+        $scope.init = function(domain, tagsFormat, extraads) {
           if ($scope.smartAvailableTagsFormats.indexOf(tagsFormat) < 0) {
             tagsFormat = 'onecall_async';
           }
-
+          // TODO: Implement extra ads logic
+          $scope.extraads = extraads || [];
           $scope.smart.domain     = domain;
           $scope.smart.tagsFormat = tagsFormat;
         };

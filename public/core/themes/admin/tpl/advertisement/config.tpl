@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_ads_config}" method="POST" ng-controller="AdvertisementConfigCtrl" ng-init="init({json_encode($configs['smart_ad_server']['domain'])|clear_json}, {json_encode($configs['smart_ad_server']['tags_format'])|clear_json});">
+<form action="{url name=admin_ads_config}" method="POST" ng-controller="AdvertisementConfigCtrl" ng-init="init({json_encode($configs['smart_ad_server']['domain'])|clear_json}, {json_encode($configs['smart_ad_server']['tags_format'])|clear_json}, {$extra_ads_txt|@json_encode|escape:"javascript"});">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -350,11 +350,18 @@
               {t}Authorized Digital Sellers from inheritance{/t}
             </label>
             {foreach from=$extra_ads_txt item=ads_container}
-            <div class="controls">
-              <label class="form-label">
-                {$ads_container->name}
-              </label>
-              <textarea class="form-control" disabled rows="10">{$ads_container->ads_lines}</textarea>
+            <div ui-tree="treeOptions">
+              <div ng-model="containers" type="container" ui-tree-nodes="">
+                <div class="newsletter-container ng-cloak" ui-tree-node>
+                  <span ui-tree-handle>
+                    <span class="angular-ui-tree-icon"></span>
+                  </span>
+                  <label class="form-label">
+                    {$ads_container->name}
+                  </label>
+                  <textarea class="form-control" disabled rows="10">{$ads_container->ads_lines}</textarea>
+                </div>
+              </div>
             </div>
             {/foreach}
           </div>
