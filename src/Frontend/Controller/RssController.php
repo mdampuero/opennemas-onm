@@ -489,7 +489,10 @@ class RssController extends FrontendController
 
                     ]
                 ],
-                'content_type_name' => [['value' => 'article']],
+                'content_type_name' => [[
+                    'value' => ['article', 'album', 'opinion', 'video', 'event'],
+                    'operator' => 'IN'
+                ]],
                 'content_status'    => [['value' => 1]],
                 'in_litter'         => [['value' => 0]],
                 'starttime'         => [
