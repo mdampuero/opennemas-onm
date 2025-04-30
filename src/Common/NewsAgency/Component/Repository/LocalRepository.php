@@ -131,8 +131,6 @@ class LocalRepository
             );
         }
 
-        $this->sort($this->contents, [ 'priority' => 'desc' ]);
-
         return $this;
     }
 
