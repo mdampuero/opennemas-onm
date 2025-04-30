@@ -259,7 +259,7 @@
             </div>
           </div>
         </div>
-        <div ng-if="item.target === 'article'">
+        <div ng-if="item.target !== 'opinion'">
           <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.category }" ng-click="expanded.category = !expanded.category">
             <i class="fa fa-bookmark m-r-10"></i>{t}Category{/t}
             <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>
