@@ -777,6 +777,16 @@
                               </label>
                             </div>
                           </div>
+                          <div class="controls m-t-5">
+                            <div class="checkbox p-b-10">
+                              <input id="theme-option-content-summary-forced" name="theme-option-content-summary-forced" ng-model="settings.theme_options.content_summary_forced" ng-checked="[% settings.theme_options.content_summary_forced == 'true' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                              <label class="form-label m-b-15" for="theme-option-content-summary-forced">
+                                <span class="help">
+                                  {t}Extract from body if needed{/t}
+                                </span>
+                              </label>
+                            </div>
+                          </div>
                         </div>
                         <div class="col-xs-12 m-b-15">
                           <label class="form-label m-b-15" for="theme-option-content-info">
