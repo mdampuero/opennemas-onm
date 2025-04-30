@@ -172,6 +172,20 @@ class ExternalResource
     public $event_start_hour;
 
     /**
+     * The event resource end date.
+     *
+     * @var string
+     */
+    public $event_end_date;
+
+    /**
+     * The event resource end hour.
+     *
+     * @var string
+     */
+    public $event_end_hour;
+
+    /**
      * The event resource website.
      *
      * @var string
