@@ -441,6 +441,17 @@ class Importer
             'tone'                => $this->getTone($data),
         ]);
 
+        // Import contents with default tags if set on agency
+        if (array_key_exists('tags', $this->config)
+            && $this->config['tags']
+        ) {
+            $defaultTags = array_map(function ($tag) {
+                return (int) $tag;
+            }, $this->config['tags']);
+
+            $data['tags'] = array_merge($defaultTags, $data['tags']);
+        }
+
         // Force some properties for photos
         if ($resource->type === 'photo') {
             $data['content_type_name'] = 'photo';
@@ -575,6 +586,8 @@ class Importer
             'canonicalurl'         => $resource->canonicalurl,
             'event_start_date'     => $resource->event_start_date,
             'event_start_hour'     => $resource->event_start_hour,
+            'event_end_date'       => $resource->event_end_date,
+            'event_end_hour'       => $resource->event_end_hour,
             'event_website'        => $resource->event_website,
             'event_place'          => $resource->event_place,
             'event_address'        => $resource->event_address,

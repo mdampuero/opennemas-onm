@@ -74,7 +74,7 @@
                     </key-list>
                     {if $content->content_type_name == 'event'}
                       <identified-content type-id="{$content->event_type_id}" subtype-id="{$content->event_subtype_id}">
-                        <event start-date="{format_date date=$content->event_start_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_start_hour|default:'00:00' type='custom' format="HHmmssxxx"}" end-date="{format_date date=$content->event_end_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_end_hour|default:'00:00' type='custom' format="HHmmssxxx"}"></event>
+                        <event start-date="{format_date date=$content->event_start_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_start_hour|default:'00:00' type='custom' format="HHmmssxxx"}" {if $content->event_end_date}end-date="{format_date date=$content->event_end_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_end_hour|default:'00:00' type='custom' format="HHmmssxxx"}"{/if}></event>
                         <location>
                           <location.city>{$content->event_city}</location.city>
                           <location.place>{$content->event_place}</location.place>

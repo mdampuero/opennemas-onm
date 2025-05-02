@@ -201,6 +201,26 @@ class NewsMLComponentTextTaquilla extends NewsML
     }
 
     /**
+     * Returns the end date for the event
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return DateTime The event end date.
+     */
+    public function getEventEndDate($data)
+    {
+        $end = $data->xpath('//identified-content/event/@end-date');
+
+        if (is_array($end) && !empty($end)) {
+            $endDate = \DateTime::createFromFormat('Ymd\THisP', $end[0]);
+
+            return $endDate;
+        }
+
+        return null;
+    }
+
+    /**
      * Returns the ticket url assigned to the event
      *
      * @param SimpleXMLObject The parsed data.
@@ -319,8 +339,9 @@ class NewsMLComponentTextTaquilla extends NewsML
     public function parse($data)
     {
         $eventStartDate = $this->getEventStartDate($data);
+        $eventEndDate   = $this->getEventEndDate($data);
 
-        $this->bag['event_start_date']     = $eventStartDate->format('d-m-Y');
+        $this->bag['event_start_date']     = $eventStartDate->format('Y-m-d');
         $this->bag['event_start_hour']     = $eventStartDate->format('h:i');
         $this->bag['event_website']        = $this->getEventWebsite($data);
         $this->bag['event_info']           = $this->getEventInfo($data);
@@ -336,6 +357,11 @@ class NewsMLComponentTextTaquilla extends NewsML
         $this->bag['event_organizer_name'] = $this->getEventOrganizerName($data);
         $this->bag['event_organizer_url']  = $this->getEventOrganizerUrl($data);
         $this->bag['canonicalurl']         = $this->getEventWebsite($data);
+
+        if ($eventEndDate && $eventEndDate != $eventStartDate) {
+            $this->bag['event_end_date'] = $eventEndDate->format('Y-m-d');
+            $this->bag['event_end_hour'] = $eventEndDate->format('h:i');
+        }
 
         // Parse taquilla id to Opennemas event type
         $this->bag['event_type'] = $this->getEventTypeParsed(

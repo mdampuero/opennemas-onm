@@ -173,7 +173,27 @@
             </div>
           </div>
         </div>
-
+        <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.tags = !expanded.tags">
+          <i class="fa fa-tag m-r-10"></i>
+          {t}Tags{/t}
+          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.tags }"></i>
+          <span class="pull-right" ng-if="!expanded.tags">
+            {include file="common/component/icon/status.tpl" iForm="form.tags" iNgModel="item.tags" iValidation=true}
+          </span>
+          <span class="badge badge-default m-r-5 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.tags && item.tags && item.tags.length != 0 && data.extra.tags" ng-class="{ 'badge-danger' : item.tags.length === 0 }">
+            <strong>
+              [% data.extra.tags[config.locale.selected].length %] {t}Tags{/t}
+            </strong>
+          </span>
+        </div>
+        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.tags }">
+          <div class="form-group no-margin">
+            <label for="metadata" class="form-label">{t}Tags{/t}</label>
+            <div class="controls">
+              <onm-tags-input class="block" ng-model="item.tags" hide-generate="true" selection-only="true" generate-from="false" ignore-locale="true" max-results="5" max-tags="15" placeholder="{t}Add a tag...{/t}"/>
+            </div>
+          </div>
+        </div>
         {is_module_activated name="es.openhost.module.onmai"}
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.onmai }" ng-click="expanded.onmai = !expanded.onmai">
           <i class="fa fa-refresh m-r-10"></i>

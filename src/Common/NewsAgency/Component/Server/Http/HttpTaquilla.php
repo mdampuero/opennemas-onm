@@ -210,6 +210,11 @@ class HttpTaquilla extends Http
         $content->extCategory          = $data['entity']['type'];
         $content->tags                 = [];
 
+        if (array_key_exists('end_date', $data) && $data['end_date'] != $data['date']) {
+            $content->event_end_date = $data['end_date'];
+            $content->event_end_hour = $time != 'unknown' ? $time : '00:00';
+        }
+
         if (!empty($data['entity']['img_urls'])) {
             $featureContent['inner'] = new \StdClass();
 
