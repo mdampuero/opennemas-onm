@@ -23,8 +23,7 @@ class HttpTaquilla extends Http
     {
         $content = $this->getContentFromUrl($this->getUrl());
 
-        return !empty($content)
-            && json_validate($content);
+        return !empty($content);
     }
 
     /**
@@ -79,7 +78,7 @@ class HttpTaquilla extends Http
      */
     public function getRemoteFiles() : Server
     {
-        $content = $this->getContentFromUrl($this->getUrl());
+        $content = $this->getContentFromUrl($this->getUrl() . '&t10num=1000&t10ic=1');
 
         if (!$content) {
             throw new \Exception(sprintf(
@@ -94,19 +93,97 @@ class HttpTaquilla extends Http
             return $this;
         }
 
+        $this->generateDataArray($data);
+
+        // Iterate over the next event pages
+        do {
+            $content = $this->getContentFromUrl(
+                'https://api.taquilla.com' . $data['meta']['next'] . '&t10id=96008'
+            );
+
+            $data = json_decode($content, true);
+
+            if (empty($data)) {
+                return $this;
+            }
+
+            $this->generateDataArray($data);
+        } while ($data['meta']['next']);
+
+        // Group events by entity to avoid duplicated
+        $this->groupEventsByEntity($data);
+
+        return $this;
+    }
+
+    /**
+     * Generates data array and add data to the remoteFiles array
+     *
+     * @param array  $data The array file content.
+     */
+    protected function generateDataArray(array $data) : void
+    {
         // Associate objects with their place and entity
-        foreach ($data['objects'] as &$value) {
+        foreach ($data['objects'] as $value) {
             $value['place']  = $data['places'][$value['place_id']];
-            $value['entity'] = $data['entities'][array_pop($value['entity_ids'])];
-             // Generate files
+            $value['entity'] = $data['entities'][reset($value['entity_ids'])];
+            // Generate files
             $this->remoteFiles[] = [
                 'content'  => $value,
                 'filename' => (string) $value['date'] . $value['event_id'] . '.xml',
                 'url'      => preg_replace([ '/\n/', '/\s+/' ], '', $value['event_id'])
             ];
         }
+    }
 
-        return $this;
+    /**
+     * Groups remote files by event/entity combinations and consolidates date ranges
+     *
+     * Transforms multiple events with the same name/entity but different dates into
+     * single events with start/end date ranges. This reduces duplication while
+     * preserving the temporal information.
+     */
+    protected function groupEventsByEntity(): void
+    {
+        $grouped = [];
+
+        // Group files by event_name + last entity_id hash
+        foreach ($this->remoteFiles as $file) {
+            $eventKey = md5(
+                $file['content']['event_name'] . '-' .
+                end($file['content']['entity_ids'])
+            );
+
+            $grouped[$eventKey][] = $file;
+        }
+
+        // Process each group to consolidate date ranges
+        $consolidatedEvents = [];
+        foreach ($grouped as $files) {
+            if (count($files) === 1) {
+                $consolidatedEvents[] = $files[0];
+                continue;
+            }
+
+            $consolidatedEvents[] = $this->createDateRangeEvent($files);
+        }
+
+        $this->remoteFiles = $consolidatedEvents;
+    }
+
+    /**
+     * Creates a consolidated event with date range from multiple single-date events
+     */
+    protected function createDateRangeEvent(array $events): array
+    {
+        $dates = array_column(array_column($events, 'content'), 'date');
+        sort($dates);
+
+        $baseEvent                        = $events[0];
+        $baseEvent['content']['date']     = reset($dates); // earliest date
+        $baseEvent['content']['end_date'] = end($dates); // latest date
+
+        return $baseEvent;
     }
 
     /**
