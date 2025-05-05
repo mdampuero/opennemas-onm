@@ -245,17 +245,16 @@ class AdvertisementHelper
         }
 
         foreach ($ads as $ad) {
-            $positions[$ad->id] = $positions[$ad->id] ? $positions[$ad->id] : 0;
-            if (!isset($positions[$ad->id])) {
-                $ad->position = null;
-            }
-
-            $ad->position = $positions[$ad->id];
+            $positions[$ad->id] = $positions[$ad->id] ?? 0;
+            $ad->position       = $positions[$ad->id];
         }
+
+        usort($ads, function ($a, $b) {
+            return $a->position <=> $b->position;
+        });
 
         return $ads;
     }
-
 
     /**
      * Checks if request url is ads restricted.

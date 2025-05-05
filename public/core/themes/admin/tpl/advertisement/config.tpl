@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_ads_config}" method="POST" ng-controller="AdvertisementConfigCtrl" ng-init="init({json_encode($configs['smart_ad_server']['domain'])|clear_json}, {json_encode($configs['smart_ad_server']['tags_format'])|clear_json}, {$extra_ads_txt|@json_encode|escape:"javascript"});">
+<form action="{url name=admin_ads_config}" method="POST" ng-controller="AdvertisementConfigCtrl" ng-init="init({json_encode($configs['smart_ad_server']['domain'])|clear_json}, {json_encode($configs['smart_ad_server']['tags_format'])|clear_json}, {json_encode($extra_ads_txt)|clear_json});">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -359,7 +359,9 @@
                   <label class="form-label">
                     {$ads_container->name}
                   </label>
-                  <textarea class="form-control" disabled rows="10">{$ads_container->ads_lines}</textarea>
+                  <textarea class="form-control" disabled rows="10">
+                    {$ads_container->ads_lines}
+                  </textarea>
                 </div>
               </div>
             </div>
