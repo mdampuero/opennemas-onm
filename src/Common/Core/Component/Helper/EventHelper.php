@@ -644,6 +644,25 @@ class EventHelper
     }
 
     /**
+     * Retrieves the name of an event type based on its id.
+     *
+     * @param string $id The id of the event type.
+     * @return string|null The name of the event type or null if the id doesn't exist.
+     */
+    public function getEventTypeNameById($id)
+    {
+        $eventTypes = $this->getEventTypes();
+
+        foreach ($eventTypes as $eventType) {
+            if ($eventType['id'] === (int) $id) {
+                return $eventType['name'];
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Matches the given event type with the event types list.
      *
      * This method checks if the provided event type exists in the list of available event types.
