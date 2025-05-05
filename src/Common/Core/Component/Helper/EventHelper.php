@@ -588,6 +588,7 @@ class EventHelper
             // If the event is parent, create a group but don't add it as an event
             if ($event['category']) {
                 $groupedEvents[$event['slug']] = [
+                    'id'    => $event['id'],
                     'name'     => $event['name'],
                     'slug'     => $event['slug'],
                     'group'    => $event['name'],
@@ -603,6 +604,7 @@ class EventHelper
                 $parent = $eventById[$parentId];
 
                 $groupedEvents[$parent['slug']]['children'][] = [
+                    'id'    => $event['id'],
                     'name'  => $event['name'],
                     'slug'  => $event['slug'],
                     'group' => $parent['name'],
