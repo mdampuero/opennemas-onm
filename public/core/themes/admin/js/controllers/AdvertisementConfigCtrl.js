@@ -57,6 +57,16 @@
           $scope.smart.tagsFormat = tagsFormat;
         };
 
+        $scope.getAdPositions = function() {
+          const positions = {};
+
+          $scope.extraads.forEach(function(item) {
+            positions[item.id] = parseInt(item.position);
+          });
+
+          return JSON.stringify(positions);
+        };
+
         $scope.$watch('extraads', function(newOrder, oldOrder) {
           if (newOrder !== oldOrder) {
             newOrder.forEach(function(item, index) {

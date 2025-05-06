@@ -358,11 +358,13 @@
                       <span class="angular-ui-tree-icon"></span>
                     </span>
                     <label class="form-label">
-                      [% extraad.name %]
+                      [% extraad.name %] [% extraad.position %]
                     </label>
                     <textarea class="form-control" disabled rows="10">
                       [% extraad.ads_lines %]
                     </textarea>
+                    <input type="hidden" id="ads_txt_position" name="ads_txt_position" ng-value="getAdPositions(extra
+                    .id)">
                   </div>
                   </div>
                 </div>

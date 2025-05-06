@@ -383,7 +383,7 @@ class AdvertisementsController extends Controller
                 'default_mark'      => $formValues->filter('ads_settings_mark_default', '', FILTER_SANITIZE_STRING),
             ],
             'ads_txt'          => $formValues->filter('ads_txt', '', FILTER_SANITIZE_STRING),
-            'adsposition'      => $formValues->filter('adsposition', '', FILTER_SANITIZE_STRING),
+            'adstxt_position' => json_decode($formValues->get('ads_txt_position'), true),
             'dfp_options'      => [
                 'target'     => $formValues->filter('dfp_options_target', '', FILTER_SANITIZE_STRING),
                 'module'     => $formValues->filter('dfp_options_module', '', FILTER_SANITIZE_STRING),

@@ -233,11 +233,9 @@ class AdvertisementHelper
      */
     public function getAdsManagerWithPosition()
     {
-        // Get the positions from the settings
-        // and the ads from the manager
         $positions = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('adsposition');
+            ->get('adstxt_position');
         $ads       = $this->getAdsTxtFromManager();
 
         // If no ads are found, return an empty array
