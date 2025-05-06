@@ -349,18 +349,22 @@
             <label class="form-label">
               {t}Authorized Digital Sellers from inheritance{/t}
             </label>
-            <div class="newsletter-container-items" ui-tree="treeOptions">
-              <div ng-model="extraads" ui-tree-nodes="">
-                <div class="controls" ng-repeat="extraad in extraads" ui-tree-node>
-                  <span ui-tree-handle>
-                    <span class="angular-ui-tree-icon"></span>
-                  </span>
-                  <label class="form-label">
-                    [% extraad.name %]
-                  </label>
-                  <textarea class="form-control" disabled rows="10">
-                    [% extraad.ads_lines %]
-                  </textarea>
+            <div class ="controls">
+              <div class="ng-cloak" ui-tree="treeOptions">
+                <div ng-model="extraads" ui-tree-nodes="">
+                  <div ng-repeat="extraad in extraads" ui-tree-node>
+                  <div>
+                    <span ui-tree-handle>
+                      <span class="angular-ui-tree-icon"></span>
+                    </span>
+                    <label class="form-label">
+                      [% extraad.name %]
+                    </label>
+                    <textarea class="form-control" disabled rows="10">
+                      [% extraad.ads_lines %]
+                    </textarea>
+                  </div>
+                  </div>
                 </div>
               </div>
             </div>
