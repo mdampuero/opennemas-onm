@@ -122,7 +122,10 @@
   <script type="text/ng-template" id="modal-delete">
     {include file="common/extension/modal.delete.tpl"}
   </script>
+  <script type="text/ng-template" id="modal-empty">
+    {include file="category/modal.empty.tpl"}
+  </script>
   <script type="text/ng-template" id="modal-move">
-    {include file="tag/modal.move.tpl"}
+    {include file="category/modal.move.tpl"}
   </script>
 {/block}
