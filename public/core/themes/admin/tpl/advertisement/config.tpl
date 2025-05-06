@@ -350,7 +350,7 @@
               {t}Authorized Digital Sellers from inheritance{/t}
             </label>
             <div class="newsletter-container-items" ui-tree="treeOptions">
-              <div ui-tree-nodes="">
+              <div ng-model="extraads" ui-tree-nodes="">
                 <div class="controls" ng-repeat="extraad in extraads" ui-tree-node>
                   <span ui-tree-handle>
                     <span class="angular-ui-tree-icon"></span>

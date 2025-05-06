@@ -233,24 +233,26 @@ class AdvertisementHelper
      */
     public function getAdsManagerWithPosition()
     {
+        // Get the positions from the settings
+        // and the ads from the manager
         $positions = $this->container->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('adsposition');
+        $ads       = $this->getAdsTxtFromManager();
 
-        $ads = $this->getAdsTxtFromManager();
-
+        // If no ads are found, return an empty array
         if (!$ads || !is_array($ads)) {
             return [];
         }
 
-        // Ordenamos según la posición definida en settings
+        // Sort the ads by their position
         usort($ads, function ($a, $b) use ($positions) {
             $posA = $positions[$a->id] ?? 0;
             $posB = $positions[$b->id] ?? 0;
             return $posA <=> $posB;
         });
 
-        // Transformamos a array plano con los datos esperados
+        // Make a simple array with the ads and their position
         $simpleAds = [];
         foreach ($ads as $ad) {
             $simpleAds[] = [
