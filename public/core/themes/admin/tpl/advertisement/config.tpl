@@ -349,23 +349,21 @@
             <label class="form-label">
               {t}Authorized Digital Sellers from inheritance{/t}
             </label>
-            {foreach from=$extra_ads_txt item=ads_container}
-            <div ui-tree="treeOptions">
-              <div ng-model="containers" type="container" ui-tree-nodes="">
-                <div class="newsletter-container ng-cloak" ui-tree-node>
+            <div class="newsletter-container-items" ui-tree="treeOptions">
+              <div ui-tree-nodes="">
+                <div class="controls" ng-repeat="extraad in extraads" ui-tree-node>
                   <span ui-tree-handle>
                     <span class="angular-ui-tree-icon"></span>
                   </span>
                   <label class="form-label">
-                    {$ads_container->name}
+                    [% extraad.name %]
                   </label>
                   <textarea class="form-control" disabled rows="10">
-                    {$ads_container->ads_lines}
+                    [% extraad.ads_lines %]
                   </textarea>
                 </div>
               </div>
             </div>
-            {/foreach}
           </div>
           {/if}
         {/acl}

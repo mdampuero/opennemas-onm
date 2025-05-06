@@ -226,11 +226,10 @@ class AdvertisementHelper
         return implode("\n", array_unique($adsLines));
     }
 
-
     /**
-     * Returns the list of ads on the manager with their position.
+     * Returns the list of ads on the manager, ordered by their position.
      *
-     * @return array The list of ads with their position.
+     * @return array The ordered list of Ads entities.
      */
     public function getAdsManagerWithPosition()
     {
@@ -244,16 +243,25 @@ class AdvertisementHelper
             return [];
         }
 
-        foreach ($ads as $ad) {
-            $positions[$ad->id] = $positions[$ad->id] ?? 0;
-            $ad->position       = $positions[$ad->id];
-        }
-
-        usort($ads, function ($a, $b) {
-            return $a->position <=> $b->position;
+        // Ordenamos según la posición definida en settings
+        usort($ads, function ($a, $b) use ($positions) {
+            $posA = $positions[$a->id] ?? 0;
+            $posB = $positions[$b->id] ?? 0;
+            return $posA <=> $posB;
         });
 
-        return $ads;
+        // Transformamos a array plano con los datos esperados
+        $simpleAds = [];
+        foreach ($ads as $ad) {
+            $simpleAds[] = [
+                'id' => $ad->id,
+                'name' => $ad->name,
+                'ads_lines' => $ad->ads_lines,
+                'position' => $positions[$ad->id] ?? 0,
+            ];
+        }
+
+        return $simpleAds;
     }
 
     /**

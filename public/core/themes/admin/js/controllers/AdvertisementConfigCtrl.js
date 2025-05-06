@@ -50,8 +50,8 @@
           if ($scope.smartAvailableTagsFormats.indexOf(tagsFormat) < 0) {
             tagsFormat = 'onecall_async';
           }
-          // TODO: Implement extra ads logic
-          $scope.extraads = extraads || [];
+
+          $scope.extraads         = extraads;
           $scope.smart.domain     = domain;
           $scope.smart.tagsFormat = tagsFormat;
         };
