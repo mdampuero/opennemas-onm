@@ -363,32 +363,43 @@ class NewsMLComponentTextTaquilla extends NewsML
             $this->bag['event_end_hour'] = $eventEndDate->format('h:i');
         }
 
-        // Parse taquilla id to Opennemas event type
-        $this->bag['event_type'] = $this->getEventTypeParsed(
-            $this->getEventTypeId($data)
+        // Parse taquilla id to Opennemas event type id
+        $this->bag['event_type'] = $this->getEventTypeMapped(
+            $this->bag['event_type_id'],
+            $this->bag['event_subtype_id']
         );
 
         return parent::parse($data);
     }
 
     /**
-     * Maps the event type from Taquilla.com to Opennemas
-     * We are only using types not subtypes
+     * Maps the event type/subtype from Taquilla.com to Opennemas
      *
      * https://api.taquilla.com/data/search/types?t10id=96008
      */
-    protected function getEventTypeParsed($typeId)
+    protected function getEventTypeMapped($typeId, $subtypeId)
     {
         $taquillaTypes = [
-            // Tipos principales
-            4  => 'espectaculos',
-            2  => 'conciertos',
-            3  => 'deportes',
-            5  => 'museo',
-            7  => 'otros',
-            15 => 'cine',
+            4  => 28, // Espectáculos
+            2  => 24, // Conciertos
+            3  => 34, // Deportes
+            5  => 26, // Museo
+            7  => 72, // Otros (Parques de ocio)',
+            15 => 30, // Cine
         ];
 
-        return $taquillaTypes[$typeId];
+        $taquillaSubtypes = [
+            30  => 73, // Musicales
+            31  => 25, // Teatro',
+            36  => 74, // Circo
+            104 => 75, // Festivales
+        ];
+
+        // If subtype matches get subtype
+        $onmType = array_key_exists($subtypeId, $taquillaSubtypes)
+            ? $taquillaSubtypes[$subtypeId]
+            : $taquillaTypes[$typeId];
+
+        return $onmType;
     }
 }
