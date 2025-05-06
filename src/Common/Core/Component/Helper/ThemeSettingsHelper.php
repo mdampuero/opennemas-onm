@@ -121,6 +121,7 @@ class ThemeSettingsHelper extends SettingHelper
                 'article_header_media',
                 'article_header_order',
                 'article_header_align',
+                'event_info_display',
                 'share_tools',
                 'tags_display',
                 'related_contents',

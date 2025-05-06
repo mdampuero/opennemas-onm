@@ -1292,6 +1292,24 @@
                             </div>
                           </div>
                           <div class="col-xs-12 m-b-15">
+                            <label class="form-label m-b-15" for="theme-option-event-info-display">
+                              <h4>
+                                <i class="fa fa-calendar"></i>
+                                {t}Events info{/t}
+                              </h4>
+                              <span class="help">
+                                {t}Choose where to display{/t}
+                              </span>
+                            </label>
+                            <div class="controls">
+                              <div class="input-group">
+                                <select id="theme-option-event-info-display" name="theme-option-event-info-display" ng-model="settings.theme_options.event_info_display">
+                                  <option value="[% event_info_display_name %]" ng-repeat="(event_info_display_name,event_info_display_value) in extra.theme_skins[settings.theme_skin].params.options.event_info_display.options" ng-selected="[% event_info_display_name === settings.theme_options.event_info_display || settings.theme_options.event_info_display == undefined %]">[% event_info_display_value %]</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-xs-12 m-b-15">
                             <label class="form-label m-b-15" for="theme-option-related-contents">
                               <h4>
                                 <i class="fa fa-bars"></i>
