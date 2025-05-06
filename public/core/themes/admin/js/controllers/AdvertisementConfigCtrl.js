@@ -37,12 +37,13 @@
           'onecall_sync'
         ];
 
+        $scope.originalOrder = [];
+
         $scope.treeOptions = {
-          dragMove: function(event) {
-            // TODO: Implement drag move logic
-          },
           dropped: function(event) {
-            // Todo: Implement dropped logic
+            $scope.extraads.forEach(function(item, index) {
+              item.position = index;
+            });
           }
         };
 
@@ -55,6 +56,14 @@
           $scope.smart.domain     = domain;
           $scope.smart.tagsFormat = tagsFormat;
         };
+
+        $scope.$watch('extraads', function(newOrder, oldOrder) {
+          if (newOrder !== oldOrder) {
+            newOrder.forEach(function(item, index) {
+              item.position = index;
+            });
+          }
+        }, true);
       }
     ]);
 })();
