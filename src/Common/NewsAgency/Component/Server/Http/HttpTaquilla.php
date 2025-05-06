@@ -293,20 +293,14 @@ class HttpTaquilla extends Http
         if (!empty($data['entity']['img_urls'])) {
             $featureContent['inner'] = new \StdClass();
 
-            $img     = $data['entity']['img_urls']['full_size'];
-            $imgData = @getimagesize($img);
+            $img = $data['entity']['img_urls']['full_size'];
 
             $featureContent['inner']->title             = $data['entity']['name'];
             $featureContent['inner']->content_type_name = 'photo';
             $featureContent['inner']->pk_content        = 'photo_' . $data['event_id'];
             $featureContent['inner']->created           = $now;
-            $featureContent['inner']->external_uri      = $data['entity']['img_urls']['full_size'];
-            $featureContent['inner']->image_data        = [
-                'filename' => basename($img),
-                'mimetype' => $imgData['mime'],
-                'width'    => $imgData[0],
-                'height'   => $imgData[1]
-            ];
+            $featureContent['inner']->external_uri      = $img;
+            $featureContent['inner']->image_data        = ['filename' => basename($img) ];
         }
 
         $content->featureContent = $featureContent ?? null;
