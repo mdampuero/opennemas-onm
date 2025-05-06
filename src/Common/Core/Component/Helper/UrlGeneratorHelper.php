@@ -128,9 +128,6 @@ class UrlGeneratorHelper
         if (!$content instanceof \Content) {
             $reflect = new \ReflectionClass($content);
             $method  = 'getUriFor' . $reflect->getShortName();
-            $method  = array_key_exists('alternative_url', $params) && $params['alternative_url']
-                    ? $method . "Alt"
-                    : $method;
         }
 
         if (method_exists($this, $method)) {
