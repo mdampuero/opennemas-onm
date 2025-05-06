@@ -103,11 +103,9 @@ class HttpTaquilla extends Http
 
             $data = json_decode($content, true);
 
-            if (empty($data)) {
-                return $this;
+            if (!empty($data)) {
+                $this->generateDataArray($data);
             }
-
-            $this->generateDataArray($data);
         } while ($data['meta']['next']);
 
         // Group events by entity to avoid duplicated
