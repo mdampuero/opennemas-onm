@@ -562,6 +562,27 @@ class EventHelper
                 'category' => false,
                 'parent'   => 67,
             ],
+            73 => [
+                'id'       => 73,
+                'name'     => _('Musicals'),
+                'slug'     => _('musicals'),
+                'category' => false,
+                'parent'   => 23,
+            ],
+            74 => [
+                'id'       => 74,
+                'name'     => _('Circus'),
+                'slug'     => _('circus'),
+                'category' => false,
+                'parent'   => 23,
+            ],
+            75 => [
+                'id'       => 75,
+                'name'     => _('Festivals'),
+                'slug'     => _('festivals'),
+                'category' => false,
+                'parent'   => 23,
+            ],
         ];
     }
 
