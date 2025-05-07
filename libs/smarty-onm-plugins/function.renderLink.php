@@ -18,9 +18,9 @@ function smarty_function_renderLink($params, &$smarty)
     $localelong    = $multilanguage ? $smarty->getContainer()->get('core.locale')->getRequestLocale() : null;
 
     $serviceMap = [
-        'tags' => 'api.service.tag',
         'category' => 'api.service.category',
-        'static' => 'api.service.content',
+        'static'   => 'api.service.content',
+        'tags'     => 'api.service.tag',
     ];
 
     if ($item->type != 'category') {
@@ -51,25 +51,25 @@ function generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault, 
     $sh = $smarty->getContainer()->get('core.helper.setting');
     $cs = $smarty->getContainer()->get('api.service.category');
 
-    $enabledMerge = $sh->isMergeEnabled();
-
     if ($item->type === 'category') {
-        $category = empty($item->referenceId)
-            ? $cs->getItemBySlug($item->link)
-            : $cs->getItem($item->referenceId);
+        try {
+            $category = empty($item->referenceId)
+                ? $cs->getItemBySlug($item->link)
+                : $cs->getItem($item->referenceId);
+        } catch (\Api\Exception\GetItemException $e) {
+            return '';
+        }
     }
 
-    $layout = $category->layout ?? false;
-
     $mapUrl = [
-        'category'      => $enabledMerge
-            ? "/{$item->link}/"
-            : ($layout ? "/seccion/{$item->link}/" : "/blog/section/{$item->link}/"),
-        'videoCategory' => "/video/" . $item->link . "/",
         'albumCategory' => "/album/" . $item->link . "/",
+        'videoCategory' => "/video/" . $item->link . "/",
         'pollCategory'  => "/encuesta/" . $item->link . "/",
-        'static'        => "/" . STATIC_PAGE_PATH . "/" . $item->link . ".html",
+        'static'        => "/estaticas/" . $item->link . ".html",
         'tags'          => "/tags/" . $item->link . "/",
+        'category'      => $sh->isMergeEnabled()
+            ? "/" . $item->link . "/"
+            : ($category->layout ? "/seccion/{$item->link}/" : "/blog/section/{$item->link}/"),
     ];
 
     switch ($item->type) {
@@ -81,6 +81,6 @@ function generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault, 
         case 'external':
             return $item->link;
         default:
-            return $mapUrl[$item->type] ?? "/$item->link/";
+            return $mapUrl[$item->type] ?? "/" . $item->link . "/";
     }
 }
