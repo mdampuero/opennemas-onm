@@ -353,12 +353,12 @@
               <div class="ng-cloak" ui-tree="treeOptions">
                 <div ng-model="extraads" ui-tree-nodes="">
                   <div ng-repeat="extraad in extraads" ui-tree-node>
-                  <div>
-                    <span ui-tree-handle>
-                      <span class="angular-ui-tree-icon"></span>
-                    </span>
+                  <span ui-tree-handle style="position: absolute; left: 0; z-index: 10; cursor: move;">
+                    <span class="angular-ui-tree-icon"></span>
+                  </span>
+                  <div style="position: relative; padding-left: 30px;">
                     <label class="form-label">
-                      [% extraad.name %] [% extraad.position %]
+                      [% extraad.name %]
                     </label>
                     <textarea class="form-control" disabled rows="10">
                       [% extraad.ads_lines %]
