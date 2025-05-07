@@ -184,20 +184,55 @@ class AdvertisementHelper
         return false;
     }
 
-    public function getAdsTxtFromManager($skipMaster = false)
+    /**
+     * Returns the list of Ads entities or array, ordered by their position.
+     *
+     * @param bool $skipMaster If true, skips the MASTER permission check.
+     * @param bool $asArray If true, returns simplified arrays; if false, returns full entities.
+     * @return array
+     */
+    public function getAdsTxtFromManager($skipMaster = false, $asArray = false)
     {
-        if (!$this->container->get('core.security')->hasPermission('MASTER') && !$skipMaster) {
+        if (!$skipMaster && !$this->container->get('core.security')->hasPermission('MASTER')) {
             return [];
         }
+
+        $positions = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('adstxt_position');
 
         $oql = sprintf(
             'instances ~ "%s" or instances ~ "Todos"',
             $this->container->get('core.instance')->internal_name
         );
+
         $ads = $this->container->get('orm.manager')->getRepository('Ads')
             ->findBy($oql);
 
-        return $ads;
+        if (empty($ads)) {
+            return [];
+        }
+
+        // Sort ads by position
+        usort($ads, function ($a, $b) use ($positions) {
+            $posA = $positions[$a->id] ?? 0;
+            $posB = $positions[$b->id] ?? 0;
+            return $posA <=> $posB;
+        });
+
+        if (!$asArray) {
+            return $ads;
+        }
+
+        // Return simplified ad structure
+        return array_map(function ($ad) use ($positions) {
+            return [
+                'id' => $ad->id,
+                'name' => $ad->name,
+                'ads_lines' => $ad->ads_lines,
+                'position' => $positions[$ad->id] ?? 0,
+            ];
+        }, $ads);
     }
 
     public function getAdsTxtContent()
@@ -224,44 +259,6 @@ class AdvertisementHelper
         }
 
         return implode("\n", array_unique($adsLines));
-    }
-
-    /**
-     * Returns the list of ads on the manager, ordered by their position.
-     *
-     * @return array The ordered list of Ads entities.
-     */
-    public function getAdsManagerWithPosition()
-    {
-        $positions = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('adstxt_position');
-        $ads       = $this->getAdsTxtFromManager();
-
-        // If no ads are found, return an empty array
-        if (!$ads || !is_array($ads)) {
-            return [];
-        }
-
-        // Sort the ads by their position
-        usort($ads, function ($a, $b) use ($positions) {
-            $posA = $positions[$a->id] ?? 0;
-            $posB = $positions[$b->id] ?? 0;
-            return $posA <=> $posB;
-        });
-
-        // Make a simple array with the ads and their position
-        $simpleAds = [];
-        foreach ($ads as $ad) {
-            $simpleAds[] = [
-                'id' => $ad->id,
-                'name' => $ad->name,
-                'ads_lines' => $ad->ads_lines,
-                'position' => $positions[$ad->id] ?? 0,
-            ];
-        }
-
-        return $simpleAds;
     }
 
     /**
