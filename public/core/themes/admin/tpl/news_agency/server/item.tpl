@@ -180,6 +180,7 @@
               <div class="col-sm-7">
                 <div class="form-group">
                   <select ng-model="item.titlePromptSelected" class="form-control"
+                          ng-init="item.titlePromptSelected = item.titlePromptSelected || null"
                           ng-options="prompt as prompt.name for prompt in onmai_prompts | filter:{ field_or: 'titles' } track by prompt.id">
                     <option value="">{t}No, keep the original content{/t}</option>
                   </select>
@@ -204,6 +205,7 @@
               <div class="col-sm-7">
                 <div class="form-group">
                   <select ng-model="item.descriptionPromptSelected" class="form-control"
+                          ng-init="item.descriptionPromptSelected = item.descriptionPromptSelected || null"
                           ng-options="prompt as prompt.name for prompt in onmai_prompts | filter:{ field_or: 'descriptions' } track by prompt.id">
                     <option value="">{t}No, keep the original content{/t}</option>
                   </select>
@@ -228,8 +230,9 @@
               <div class="col-sm-7">
                 <div class="form-group">
                   <select ng-model="item.bodyPromptSelected" class="form-control"
+                          ng-init="item.bodyPromptSelected = item.bodyPromptSelected || null"
                           ng-options="prompt as prompt.name for prompt in onmai_prompts | filter:{ field_or: 'bodies' } track by prompt.id">
-                    <option value="">{t}No, keep the original content{/t}</option>
+                    <option ng-value="" value="">{t}No, keep the original content{/t}</option>
                   </select>
                 </div>
               </div>
