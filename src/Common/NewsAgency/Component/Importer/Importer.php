@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Common\NewsAgency\Component\Importer;
 
 use Common\Model\Entity\Content;
@@ -106,7 +108,7 @@ class Importer
                     continue;
                 }
 
-                $finalContents [] = $this->import($resource);
+                $finalContents[] = $this->import($resource);
                 $imported++;
             } catch (\Exception $e) {
                 $invalid++;
@@ -126,7 +128,7 @@ class Importer
      *
      * @param array $config The importer configuration.
      */
-    public function configure(array $config) : Importer
+    public function configure(array $config): Importer
     {
         $this->config = $config;
 
@@ -155,7 +157,7 @@ class Importer
     public function import($resource, $data = [])
     {
         if ($this->isImported($resource)) {
-            $imported = $this->getImported([ $resource->urn ]);
+            $imported = $this->getImported([$resource->urn]);
 
             return $imported[$resource->urn];
         }
@@ -182,7 +184,8 @@ class Importer
 
         if (!empty($webpushNotification)
             && array_key_exists('content_type_name', $data)
-            && $data['content_type_name'] == 'article') {
+            && $data['content_type_name'] == 'article'
+        ) {
             $data['webpush_notifications'] = $this->container->get('core.helper.webpush_notifications')
                 ->createNotificationFromData($data);
         }
@@ -210,10 +213,10 @@ class Importer
      * @return bool True if the item or one of the items in the list is already
      *              imported. False otherwise.
      */
-    public function isImported($resources) : bool
+    public function isImported($resources): bool
     {
         if (array_key_exists('id', $resources)) {
-            $resources = [ $resources ];
+            $resources = [$resources];
         }
 
         $urns = array_map(function ($a) {
@@ -222,7 +225,7 @@ class Importer
 
         $criteria = [
             'urn_source' => [
-                [ 'value' => $urns, 'operator' => 'IN' ]
+                ['value' => $urns, 'operator' => 'IN']
             ]
         ];
 
@@ -239,7 +242,7 @@ class Importer
      *
      * @return Importer The current Importer.
      */
-    public function setInstance(Instance $instance) : Importer
+    public function setInstance(Instance $instance): Importer
     {
         $this->path = sprintf(
             '%s/%s/importers',
@@ -259,7 +262,7 @@ class Importer
      *
      * @return Importer The current importer.
      */
-    public function setPropagation(bool $propagation) : Importer
+    public function setPropagation(bool $propagation): Importer
     {
         $this->propagation = $propagation;
 
@@ -275,7 +278,7 @@ class Importer
      * @return ?int The author id if author id is present in data or in default
      *              server configuration or null if author id is not present.
      */
-    protected function getAuthor(ExternalResource $resource, array $data) : ?int
+    protected function getAuthor(ExternalResource $resource, array $data): ?int
     {
         if (array_key_exists('fk_author', $data)
             && !empty($data['fk_author'])
@@ -317,7 +320,7 @@ class Importer
      *              default server configuration or null if category id is not
      *              present.
      */
-    protected function getCategory(ExternalResource $resource, array $data) : ?int
+    protected function getCategory(ExternalResource $resource, array $data): ?int
     {
         if (array_key_exists('fk_content_category', $data)
             && !empty($data['fk_content_category'])
@@ -349,42 +352,114 @@ class Importer
     }
 
     /**
-     * Returns the prompt based on the provided data or the default configuration.
+     * Returns the title prompt from the provided data array.
      *
-     * @param array $data The data containing the prompt information.
-     *
-     * @return ?string The prompt if available in the data or, if auto-import is enabled,
-     *                 the default prompt from the configuration. Returns null if no prompt is found.
+     * @param array $data Input data that may contain a 'titlePrompt' key.
+     * @return array|null The title prompt array if set, null otherwise.
      */
-    protected function getPrompt(array $data): ?string
+    protected function getTitlePrompt(array $data)
     {
-        if (!array_key_exists('prompt', $data)) {
-            return $this->isAutoImportEnabled() ? ($this->config['promptSelected']['prompt'] ?? null) : null;
+        if (!array_key_exists('titlePrompt', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['titlePromptSelected'] ?? null) : null;
         }
 
-        if (!empty($data['prompt'])) {
-            return $data['prompt'];
+        if (!empty($data['titlePrompt'])) {
+            return $data['titlePrompt'];
         }
 
         return null;
     }
 
     /**
-     * Returns the tone based on the provided data or the default configuration.
+     * Returns the title tone from the provided data array.
      *
-     * @param array $data The data containing the tone information.
-     *
-     * @return ?string The tone if available in the data or, if auto-import is enabled,
-     *                 the default tone from the configuration. Returns null if no tone is found.
+     * @param array $data Input data that may contain a 'titleTone' key.
+     * @return string|null The title tone string if set, null otherwise.
      */
-    protected function getTone(array $data): ?string
+    protected function getTitleTone(array $data): ?string
     {
-        if (!array_key_exists('tone', $data)) {
-            return $this->isAutoImportEnabled() ? ($this->config['toneSelected']['name'] ?? null) : null;
+        if (!array_key_exists('titleTone', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['titleToneSelected']['name'] ?? null) : null;
         }
 
-        if (!empty($data['tone'])) {
-            return $data['tone'];
+        if (!empty($data['titleTone'])) {
+            return $data['titleTone'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the description prompt from the provided data array.
+     *
+     * @param array $data Input data that may contain a 'descriptionPrompt' key.
+     * @return array|null The description prompt array if set, null otherwise.
+     */
+    protected function getDescriptionPrompt(array $data)
+    {
+        if (!array_key_exists('descriptionPrompt', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['descriptionPromptSelected'] ?? null) : null;
+        }
+
+        if (!empty($data['descriptionPrompt'])) {
+            return $data['descriptionPrompt'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the description tone from the provided data array.
+     *
+     * @param array $data Input data that may contain a 'descriptionTone' key.
+     * @return string|null The description tone string if set, null otherwise.
+     */
+    protected function getDescriptionTone(array $data): ?string
+    {
+        if (!array_key_exists('descriptionTone', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['descriptionToneSelected']['name'] ?? null) : null;
+        }
+
+        if (!empty($data['descriptionTone'])) {
+            return $data['descriptionTone'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the body prompt from the provided data array.
+     *
+     * @param array $data Input data that may contain a 'bodyPrompt' key.
+     * @return array|null The body prompt array if set, null otherwise.
+     */
+    protected function getBodyPrompt(array $data)
+    {
+        if (!array_key_exists('bodyPrompt', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['bodyPromptSelected'] ?? null) : null;
+        }
+
+        if (!empty($data['bodyPrompt'])) {
+            return $data['bodyPrompt'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the body tone from the provided data array.
+     *
+     * @param array $data Input data that may contain a 'bodyTone' key.
+     * @return string|null The body tone string if set, null otherwise.
+     */
+    protected function getBodyTone(array $data): ?string
+    {
+        if (!array_key_exists('bodyTone', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['bodyToneSelected']['name'] ?? null) : null;
+        }
+
+        if (!empty($data['bodyTone'])) {
+            return $data['bodyTone'];
         }
 
         return null;
@@ -398,7 +473,7 @@ class Importer
      *
      * @return array The array of data.
      */
-    protected function getData(ExternalResource $resource, array $data) : array
+    protected function getData(ExternalResource $resource, array $data): array
     {
         if (!array_key_exists('content_type_name', $data)
             && array_key_exists('target', $this->config)
@@ -418,8 +493,12 @@ class Importer
             'urn_source'          => $resource->urn,
             'body'                => $resource->body,
             'href'                => $resource->href,
-            'prompt'              => $this->getPrompt($data),
-            'tone'                => $this->getTone($data),
+            'titlePrompt'         => $this->getTitlePrompt($data),
+            'titleTone'           => $this->getTitleTone($data),
+            'descriptionPrompt'   => $this->getDescriptionPrompt($data),
+            'descriptionTone'     => $this->getDescriptionTone($data),
+            'bodyPrompt'          => $this->getBodyPrompt($data),
+            'bodyTone'            => $this->getBodyTone($data),
         ]);
 
         // Force some properties for photos
@@ -435,13 +514,13 @@ class Importer
             && array_key_exists('external_link', $this->config)
             && !empty($this->config['external_link'])
         ) {
-            $data['params'] = [ 'bodyLink' => $this->config['external_link'] ];
+            $data['params'] = ['bodyLink' => $this->config['external_link']];
         }
 
         if (array_key_exists('external', $this->config)
             && $this->config['external'] === 'original'
         ) {
-            $data['params'] = [ 'bodyLink' => $data['href'] ];
+            $data['params'] = ['bodyLink' => $data['href']];
         }
 
         $method = 'getDataFor' . ucfirst($data['content_type_name']);
@@ -467,14 +546,14 @@ class Importer
      *
      * @return array The information to import the resource as article.
      */
-    protected function getDataForArticle(ExternalResource $resource, array $data) : array
+    protected function getDataForArticle(ExternalResource $resource, array $data): array
     {
         $date = new \DateTime();
 
         $data = array_merge($data, [
             'created'         => $date->format('Y-m-d H:i:s'),
             'fk_content_type' => 1,
-            'categories'      => [ $this->getCategory($resource, $data) ],
+            'categories'      => [$this->getCategory($resource, $data)],
             'agency'          => !empty($resource->signature)
                 ? $resource->signature
                 : (array_key_exists('agency_string', $this->config)
@@ -511,21 +590,21 @@ class Importer
             if ($content->content_type_name === 'photo') {
                 $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
                     $content,
-                    [ 'featured_frontpage', 'featured_inner' ]
+                    ['featured_frontpage', 'featured_inner']
                 );
             }
 
             if ($content->content_type_name === 'video') {
                 $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
                     $content,
-                    [ 'featured_frontpage', 'featured_inner' ]
+                    ['featured_frontpage', 'featured_inner']
                 );
             }
 
             if ($content->content_type_name === 'article') {
                 $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
                     $content,
-                    [ 'related_frontpage', 'related_inner' ],
+                    ['related_frontpage', 'related_inner'],
                     $data['related_contents']
                 );
             }
@@ -544,7 +623,7 @@ class Importer
      *
      * @return array The information to import the resource as opinion.
      */
-    protected function getDataForOpinion(ExternalResource $resource, array $data) : array
+    protected function getDataForOpinion(ExternalResource $resource, array $data): array
     {
         $date = new \DateTime();
         $data = array_merge($data, [
@@ -577,7 +656,7 @@ class Importer
             if ($content->content_type_name === 'photo') {
                 $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
                     $content,
-                    [ 'featured_frontpage', 'featured_inner' ]
+                    ['featured_frontpage', 'featured_inner']
                 );
                 break;
             }
@@ -596,7 +675,7 @@ class Importer
      *
      * @return array The information to import the resource as photo.
      */
-    protected function getDataForPhoto(ExternalResource $resource, array $data) : array
+    protected function getDataForPhoto(ExternalResource $resource, array $data): array
     {
         $data['path'] = sprintf(
             '%s/%s/%s',
@@ -616,11 +695,11 @@ class Importer
      *
      * @return array The list of imported contents.
      */
-    protected function getImported(array $urns) : array
+    protected function getImported(array $urns): array
     {
         $criteria = [
             'urn_source' => [
-                [ 'value' => $urns, 'operator' => 'IN' ]
+                ['value' => $urns, 'operator' => 'IN']
             ]
         ];
 
@@ -642,7 +721,7 @@ class Importer
      */
     protected function getResources()
     {
-        $criteria = [ 'source' => $this->config['id'] ];
+        $criteria = ['source' => $this->config['id']];
 
         if (!array_key_exists('filters', $this->config)
             || empty($this->config['filters'])
@@ -654,7 +733,7 @@ class Importer
         foreach ($this->config['filters'] as $filter) {
             $criteria = array_merge(
                 $criteria,
-                [ 'tags' => $filter, 'title' => $filter, 'body' => $filter ]
+                ['tags' => $filter, 'title' => $filter, 'body' => $filter]
             );
 
             $items     = $this->repository->findBy($criteria, 'priority asc');
@@ -671,7 +750,7 @@ class Importer
      *
      * @return array A list of tag ids.
      */
-    protected function getTags(ExternalResource $resource) : array
+    protected function getTags(ExternalResource $resource): array
     {
         $tags = !empty($resource->tags) ? $resource->tags : $resource->title;
         $tags = $this->container->get('api.service.tag')
@@ -700,9 +779,9 @@ class Importer
             'content-author-{{fk_author}}-frontpage',
             '{{content_type_name}}-frontpage,category-{{content_type_name}}-{{categories}}',
             'content_type_name-widget-article' .
-            '.*category-widget-({{categories}}|all)' .
-            '.*tag-widget-({{tags}}|all)' .
-            '.*author-widget-({{fk_author}}|all)',
+                '.*category-widget-({{categories}}|all)' .
+                '.*tag-widget-({{tags}}|all)' .
+                '.*author-widget-({{fk_author}}|all)',
             'last-suggested-{{categories}}',
             'rss-author-{{fk_author}}',
             'tag-{{tags}}',
@@ -714,8 +793,8 @@ class Importer
             'content-author-{{fk_author}}-frontpage',
             '{{content_type_name}}-frontpage$',
             'content_type_name-widget-{{content_type_name}}' .
-            '.*tag-widget-({{tags}}|all)' .
-            '.*author-widget-({{fk_author}}|all)',
+                '.*tag-widget-({{tags}}|all)' .
+                '.*author-widget-({{fk_author}}|all)',
             'rss-author-{{fk_author}}',
             'rss-{{content_type_name}}$',
             'sitemap',

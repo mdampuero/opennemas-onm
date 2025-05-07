@@ -535,8 +535,12 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
             'in_home'             => 0,
             'tags'                => [],
             'frontpage'           => 0,
-            'prompt'              => null,
-            'tone'                => null
+            'titlePrompt'         => null,
+            'titleTone'           => null,
+            'descriptionPrompt'   => null,
+            'descriptionTone'     => null,
+            'bodyPrompt'          => null,
+            'bodyTone'            => null,
         ];
 
         $this->ts->expects($this->any())->method('getListByString')

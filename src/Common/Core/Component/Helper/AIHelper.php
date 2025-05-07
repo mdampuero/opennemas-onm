@@ -627,12 +627,21 @@ class AIHelper
      */
     public function transform($or = [], $fields = ['title', 'title_int', 'description', 'body'])
     {
-        if (empty($or) || empty($fields) || empty($or['prompt'])) {
+        if (empty($or) || empty($fields)) {
             return $or;
         }
 
+        $or['title_intPrompt'] = $or['titlePrompt'] ?? null;
+
         foreach ($fields as $field) {
-            if (!key_exists($field, $or)) {
+            $tone = '';
+
+            if (key_exists($field . 'Prompt', $or) && !empty($or[$field . 'Prompt'])) {
+                $prompt = $or[$field . 'Prompt']['prompt'];
+                $tone   = (empty($or[$field . 'Tone'] ?? '')) ? '' : $or[$field . 'Prompt']['tone'];
+
+                $or[$field . 'Prompt'] = $or[$field . 'Prompt']['prompt'];
+            } else {
                 continue;
             }
 
@@ -642,18 +651,15 @@ class AIHelper
                 return $or[$field];
             }
 
-            $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $or["prompt"]);
+            $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $prompt);
             $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$or[$field]}\n";
 
             $instructions = [
-                ['value' => 'Utiliza el mismo tema del texto original.'],
-                ['value' => 'Intenta conservar la misma cantidad de palabras.'],
-                ['value' => 'Responde directamente con el texto transformado.'],
-                ['value' => 'Si el texto original tiene formato html, debes mantenerlo.']
+                ['value' => 'Responde directamente con el texto transformado.']
             ];
 
-            if (!empty($or['tone'] ?? false)) {
-                $instructions[] = ['value' => "Adopta un tono {$or['tone']}
+            if (!empty($tone)) {
+                $instructions[] = ['value' => "Adopta un tono {$tone}
                     en la transformación."];
             } else {
                 $instructions[] = ['value' => "Debes mantener el tono del texto original."];
@@ -669,10 +675,10 @@ class AIHelper
 
             $dataLog = [
                 'field'    => $field,
-                'tone'     => $or['tone'] ?? '',
+                'tone'     => $tone,
                 'model'    => ($data['engine'] ?? '') . '_' . ($data['model'] ?? ''),
                 'language' => $or['language'] ?? '',
-                'prompt'   => $or['prompt'] ?? '',
+                'prompt'   => $prompt ?? '',
             ];
 
             $data['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
