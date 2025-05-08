@@ -628,19 +628,19 @@ class AIHelper
     {
         $settings = $this->getCurrentSettings();
 
-        if (empty($data) || empty($fields) || empty(empty($settings['engine']))) {
+        if (empty($data) || empty($fields) || empty($settings['engine'])) {
             return $data;
         }
 
-        $or['title_intPrompt'] = $or['titlePrompt'] ?? null;
+        $data['title_intPrompt'] = $data['titlePrompt'] ?? null;
 
         foreach ($fields as $field) {
             $tone = '';
-            if (key_exists($field . 'Prompt', $or) && !empty($or[$field . 'Prompt'])) {
-                $prompt = $or[$field . 'Prompt']['prompt'];
-                $tone   = (empty($or[$field . 'Tone'] ?? '')) ? '' : $or[$field . 'Prompt']['tone'];
+            if (key_exists($field . 'Prompt', $data) && !empty($data[$field . 'Prompt'])) {
+                $prompt = $data[$field . 'Prompt']['prompt'];
+                $tone   = (empty($data[$field . 'Tone'] ?? '')) ? '' : $data[$field . 'Prompt']['tone'];
 
-                $or[$field . 'Prompt'] = $or[$field . 'Prompt']['prompt'];
+                $data[$field . 'Prompt'] = $data[$field . 'Prompt']['prompt'];
             } else {
                 continue;
             }
@@ -652,7 +652,7 @@ class AIHelper
             }
 
             $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $prompt);
-            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$or[$field]}\n";
+            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$data[$field]}\n";
 
             $instructions = [
                 ['value' => 'Responde directamente con el texto transformado.']
@@ -672,7 +672,7 @@ class AIHelper
                 'field'    => $field,
                 'tone'     => $tone,
                 'model'    => ($data['engine'] ?? '') . '_' . ($data['model'] ?? ''),
-                'language' => $or['language'] ?? '',
+                'language' => $data['language'] ?? '',
                 'prompt'   => $prompt ?? '',
             ];
 
@@ -696,7 +696,6 @@ class AIHelper
                 );
             }
         }
-
         return $data;
     }
 
