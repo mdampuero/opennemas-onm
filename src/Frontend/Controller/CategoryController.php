@@ -10,7 +10,6 @@
 namespace Frontend\Controller;
 
 use Api\Exception\GetListException;
-use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -21,14 +20,16 @@ class CategoryController extends FrontendController
      * {@inheritdoc}
      */
     protected $caches = [
-        'list' => 'frontpages'
+        'homepage' => 'frontpages',
+        'list'     => 'frontpages'
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $groups = [
-        'list' => 'category_frontpage'
+        'homepage' => 'category_frontpage',
+        'list'     => 'category_frontpage'
     ];
 
     /**
@@ -42,8 +43,8 @@ class CategoryController extends FrontendController
      * {@inheritdoc}
      */
     protected $queries = [
-        'list'     => [ 'category_slug', 'page' ],
-        'homepage' => [ 'category_slug', 'page' ]
+        'homepage' => [ 'category_slug', 'page' ],
+        'list'     => [ 'category_slug', 'page' ]
     ];
 
     /**
@@ -51,14 +52,15 @@ class CategoryController extends FrontendController
      */
     protected $routes = [
         'homepage' => 'category_homepage',
-        'list' => 'category_frontpage'
+        'list'     => 'category_frontpage'
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $templates = [
-        'list' => 'blog/blog.tpl'
+        'homepage' => 'blog/blog.tpl',
+        'list'     => 'blog/blog.tpl'
     ];
 
     /**
@@ -106,9 +108,7 @@ class CategoryController extends FrontendController
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
 
-        /**
-         * If the category is manual, we redirect to the frontpage.
-         */
+        // If the category is manual, we redirect to the frontpage.
         if (($item->layout ?? 0) == 1) {
             return $this->forward('Frontend\Controller\FrontpagesController::showAction', [], [
                 'category' => $item->name,
@@ -128,7 +128,8 @@ class CategoryController extends FrontendController
         if (!$this->isCached($params)) {
             $this->hydrateList($params);
         }
-        return $this->render($this->getTemplate('list'), $params);
+
+        return $this->render($this->getTemplate($action), $params);
     }
 
     /**
@@ -266,10 +267,19 @@ class CategoryController extends FrontendController
         // Retrieve and accumulate the IDs of all child categories and their descendants
         array_push($categoryIds, ...$this->get('api.service.category')->getChildIds($params['category']));
 
-        $response = $service->getList(
+        // Check for tag filter
+        $filter = '';
+        if ($params['tag_slug'] ?? null) {
+            $filter = $this->getSqlTagFilter($params['tag_slug']);
+        }
+
+        $response = $service->getListBySql(
             sprintf(
-                'content_status = 1 and in_litter = 0 and category_id in [%s] ' .
-                    'and content_type_name in ["article","event","album","video"] ' .
+                'select * from contents ' .
+                'join content_category on contents.pk_content = content_category.content_id ' .
+                $filter .
+                ' where content_status = 1 and in_litter = 0 and category_id in (%s) ' .
+                    'and content_type_name in ("article","event","album","video") ' .
                     'and (starttime is null or starttime < "%s") ' .
                     'and (endtime is null or endtime > "%s") ' .
                     'order by starttime desc limit %d offset %d',
@@ -281,9 +291,25 @@ class CategoryController extends FrontendController
             )
         );
 
+        $count = sprintf(
+            'select count(*) as total from contents ' .
+            'join content_category on contents.pk_content = content_category.content_id ' .
+            $filter .
+            ' where content_status = 1 and in_litter = 0 and category_id in (%s) ' .
+                'and content_type_name in ("article","event","album","video") ' .
+                'and (starttime is null or starttime < "%s") ' .
+                'and (endtime is null or endtime > "%s") ',
+            implode(',', $categoryIds),
+            $now,
+            $now
+        );
+
+        $total = $this->get('orm.manager')->getConnection('instance')
+            ->executeQuery($count)->fetchAll();
+
         return [
             $response['items'],
-            $response['total']
+            $total[0]['total']
         ];
     }
 
@@ -330,6 +356,31 @@ class CategoryController extends FrontendController
     }
 
     /**
+     * Returns an sql string for filtering list by tag
+     *
+     * @param string $filter The tag slug to filter.
+     *
+     * @return string The sql for filtering by tag.
+     *
+     * @throws ResourceNotFoundException If tag doesn't exist or if there was a problem.
+     */
+    protected function getSqlTagFilter($filter)
+    {
+        $oql = sprintf('slug = "%s"', $filter);
+
+        try {
+            $tag = $this->get('api.service.tag')->getList($oql)['items'];
+        } catch (GetListException $e) {
+            throw new ResourceNotFoundException();
+        }
+
+        return empty($tag)
+            ? new ResourceNotFoundException()
+            : 'join contents_tags on contents.pk_content = contents_tags.content_id ' .
+                'and contents_tags.tag_id = ' . $tag[0]->id;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function hydrateList(array &$params = []) : void
@@ -369,6 +420,21 @@ class CategoryController extends FrontendController
             }
         }
 
+        // Generate pages route based on action
+        $action = $this->get('core.globals')->getAction();
+        $route  = [
+            'name'   => $this->routes[$action],
+            'params' => [
+                'category_slug' => $params['category']->name
+            ]
+        ];
+
+        // Keep filter on route when paginating
+        if ($params['tag_slug'] ?? null) {
+            $route['name']          = 'category_homepage_tag';
+            $route['params']['tag_slug'] = $params['tag_slug'];
+        }
+
         $params['x-tags']    .= implode(',', array_unique($xtags));
         $params['total']      = $total;
         $params['pagination'] = $this->get('paginator')->get([
@@ -378,12 +444,7 @@ class CategoryController extends FrontendController
             'maxLinks'    => 5,
             'page'        => $params['page'],
             'total'       => $total,
-            'route'       => [
-                'name'   => 'category_frontpage',
-                'params' => [
-                    'category_slug' => $params['category']->name
-                ]
-            ]
+            'route'       => $route
         ]);
     }
 }
