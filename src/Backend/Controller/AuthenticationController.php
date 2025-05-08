@@ -81,9 +81,10 @@ class AuthenticationController extends Controller
 
         if ($request->query->has('language')) {
             $locale = $request->get('language');
-            $this->get('core.locale')->setContext('backend')->setLocale($locale);
 
-            $this->get('core.locale')->apply();
+            $this->get('core.locale')
+                ->setLocale($locale)
+                ->apply();
         }
 
         return $this->render('login/login.tpl', [
