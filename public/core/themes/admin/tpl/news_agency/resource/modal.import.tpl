@@ -66,16 +66,26 @@
   <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-t-10">
       <div class="row">
         <div class="col-sm-12">
-      <h4>
-        {t}Transform with ONM AI{/t}
-      </h4>
-      <hr class="m-t-0 m-b-10">
+          <h4>
+            {t}Transform with ONM AI{/t}
+          </h4>
+          <hr class="m-t-0 m-b-15">
+        </div>
       </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <label class="form-label text-capitalize">
+            <b>{t}Title{/t}</b>
+          </label>
+        </div>
       </div>
       <div class="row">
         <div class="col-sm-6">
           <div class="form-group">
-            <select name="field" id="field" class="form-control" ng-model="template.promptSelected" ng-options="item as item.name for item in template.onmai_prompts">
+            <select name="field" id="field" class="form-control"
+                  ng-model="template.titlePromptSelected"
+                  ng-options="item as item.name for item in template.onmai_prompts | filter:{ field_or: 'titles' }">
               <option value="">{t}No, keep the original content{/t}</option>
             </select>
           </div>
@@ -83,28 +93,88 @@
         <div class="col-sm-6">
           <div class="form-group">
             <select name="field" id="field" class="form-control"
-              ng-model="template.toneSelected"
-              ng-if="template.promptSelected"
+              ng-model="template.titleToneSelected"
+              ng-if="template.titlePromptSelected"
               ng-options="item as item.name for item in template.onmai_extras.tones"
               >
               <option value="">{t}Select a tone{/t}</option>
             </select>
           </div>
         </div>
-        {if !in_array("es.openhost.module.multilanguage", $app.instance->activated_modules)}
-          <div class="col-sm-6">
-            <div class="form-group">
-              <select name="field" id="field" class="form-control"
-                ng-model="template.languageSelected"
-                ng-if="template.promptSelected"
-                ng-options="item as item.name for item in template.onmai_extras.languages"
-                >
-                <option value="">{t}Select a language...{/t}</option>
-              </select>
-            </div>
-          </div>
-        {/if}
       </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <label class="form-label text-capitalize">
+            <b>{t}Description{/t}</b>
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <select name="field" id="field" class="form-control"
+                  ng-model="template.descriptionPromptSelected"
+                  ng-options="item as item.name for item in template.onmai_prompts | filter:{ field_or: 'descriptions' }">
+              <option value="">{t}No, keep the original content{/t}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <select name="field" id="field" class="form-control"
+              ng-model="template.descriptionToneSelected"
+              ng-if="template.descriptionPromptSelected"
+              ng-options="item as item.name for item in template.onmai_extras.tones"
+              >
+              <option value="">{t}Select a tone{/t}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <label class="form-label text-capitalize">
+            <b>{t}Body{/t}</b>
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <select name="field" id="field" class="form-control"
+                  ng-model="template.bodyPromptSelected"
+                  ng-options="item as item.name for item in template.onmai_prompts | filter:{ field_or: 'bodies' }">
+              <option value="">{t}No, keep the original content{/t}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <select name="field" id="field" class="form-control"
+              ng-model="template.bodyToneSelected"
+              ng-if="template.bodyPromptSelected"
+              ng-options="item as item.name for item in template.onmai_extras.tones"
+              >
+              <option value="">{t}Select a tone{/t}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      {if !in_array("es.openhost.module.multilanguage", $app.instance->activated_modules)}
+        <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <select name="field" id="field" class="form-control"
+                  ng-model="template.languageSelected"
+                  ng-if="template.promptSelected"
+                  ng-options="item as item.name for item in template.onmai_extras.languages"
+                  >
+                  <option value="">{t}Select a language...{/t}</option>
+                </select>
+              </div>
+            </div>
+        </div>
+      {/if}
     </div>
   </div>
   {/if}

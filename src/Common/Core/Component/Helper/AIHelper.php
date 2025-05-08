@@ -627,12 +627,21 @@ class AIHelper
     public function transform($data = [], $fields = ['title', 'title_int', 'description', 'body'])
     {
         $settings = $this->getCurrentSettings();
-        if (empty($data) || empty($fields) || empty($data['prompt'] || empty($settings['engine']))) {
+
+        if (empty($data) || empty($fields) || empty(empty($settings['engine']))) {
             return $data;
         }
 
+        $or['title_intPrompt'] = $or['titlePrompt'] ?? null;
+
         foreach ($fields as $field) {
-            if (!key_exists($field, $data)) {
+            $tone = '';
+            if (key_exists($field . 'Prompt', $or) && !empty($or[$field . 'Prompt'])) {
+                $prompt = $or[$field . 'Prompt']['prompt'];
+                $tone   = (empty($or[$field . 'Tone'] ?? '')) ? '' : $or[$field . 'Prompt']['tone'];
+
+                $or[$field . 'Prompt'] = $or[$field . 'Prompt']['prompt'];
+            } else {
                 continue;
             }
 
@@ -642,18 +651,15 @@ class AIHelper
                 continue;
             }
 
-            $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $data["prompt"]);
-            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$data[$field]}\n";
+            $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $prompt);
+            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$or[$field]}\n";
 
             $instructions = [
-                ['value' => 'Utiliza el mismo tema del texto original.'],
-                ['value' => 'Intenta conservar la misma cantidad de palabras.'],
-                ['value' => 'Responde directamente con el texto transformado.'],
-                ['value' => 'Si el texto original tiene formato html, debes mantenerlo.']
+                ['value' => 'Responde directamente con el texto transformado.']
             ];
 
-            $instructions[] = !empty($data['tone'])
-                ? ['value' => "Adopta un tono {$data['tone']} en la transformación."]
+            $instructions[] = !empty($tone)
+                ? ['value' => "Adopta un tono {$tone} en la transformación."]
                 : ['value' => "Debes mantener el tono del texto original."];
 
             if (!empty($data['language'])) {
@@ -663,10 +669,11 @@ class AIHelper
             $this->insertInstructions($instructions);
 
             $dataLog = [
-                'tone'     => $params['tone']['name'] ?? '',
-                'model'    => ($settings['engine'] ?? '') . '_' . ($settings['model'] ?? ''),
-                'language' => $lang ?? '',
-                'method'   => __METHOD__
+                'field'    => $field,
+                'tone'     => $tone,
+                'model'    => ($data['engine'] ?? '') . '_' . ($data['model'] ?? ''),
+                'language' => $or['language'] ?? '',
+                'prompt'   => $prompt ?? '',
             ];
 
             $settings['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
