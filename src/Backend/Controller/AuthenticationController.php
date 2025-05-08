@@ -83,6 +83,7 @@ class AuthenticationController extends Controller
             $locale = $request->get('language');
 
             $this->get('core.locale')
+                ->setContext('backend')
                 ->setLocale($locale)
                 ->apply();
         }
