@@ -79,6 +79,11 @@ class AuthenticationController extends Controller
             $session->getFlashBag()->add('error', $auth->getErrorMessage());
         }
 
+        if ($request->query->has('language')) {
+            $locale = $request->query->get('language');
+            $this->get('core.locale')->setContext('backend')->setLocale($locale);
+        }
+
         return $this->render('login/login.tpl', [
             'locale'    => $this->get('core.locale')->getLocale(),
             'locales'   => $this->get('core.locale')->getAvailableLocales(),
