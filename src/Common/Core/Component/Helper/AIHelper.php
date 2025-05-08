@@ -671,7 +671,7 @@ class AIHelper
             $dataLog = [
                 'field'    => $field,
                 'tone'     => $tone,
-                'model'    => ($data['engine'] ?? '') . '_' . ($data['model'] ?? ''),
+                'model'    => ($settings['engine'] ?? '') . '_' . ($settings['model'] ?? ''),
                 'language' => $data['language'] ?? '',
                 'prompt'   => $prompt ?? '',
             ];
@@ -692,7 +692,7 @@ class AIHelper
             } else {
                 $this->errorLog->error(
                     'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
-                    $this->container->get('core.helper.' . $data['engine'])->getDataLog()
+                    $this->container->get('core.helper.' . $settings['engine'])->getDataLog()
                 );
             }
         }
