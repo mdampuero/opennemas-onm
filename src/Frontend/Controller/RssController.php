@@ -439,7 +439,8 @@ class RssController extends FrontendController
      */
     public function tagRSSAction(Request $request)
     {
-        $slug = $request->get('tag_slug', null);
+        $slug     = $request->get('tag_slug', null);
+        $category = $request->query->filter('category');
 
         try {
             $item = $this->get('api.service.tag')->getList(sprintf(
@@ -448,6 +449,14 @@ class RssController extends FrontendController
             ))['items'];
         } catch (\Exception $e) {
             throw new ResourceNotFoundException();
+        }
+
+        if (!empty($category)) {
+            try {
+                $category = $this->get('api.service.category')->getItemBySlug($category);
+            } catch (\Exception $e) {
+                throw new ResourceNotFoundException();
+            }
         }
 
         if (empty($item)) {
@@ -503,6 +512,26 @@ class RssController extends FrontendController
                     [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
                 ]
             ];
+
+            // Check for category
+            if (!empty($category)) {
+                $rssTitle = sprintf('RSS de %s en %s', $item[0]->name, $category->title);
+
+                $categoryJoin = [
+                    'table'               => 'content_category',
+                    'type'                => 'inner',
+                    'contents.pk_content' => [
+                        [
+                            'value' => 'content_category.content_id',
+                            'field' => true
+                        ]
+                    ],
+                    'content_category.category_id' => [[ 'value' => $category->id ]],
+                ];
+
+                // Add category join on sql filters
+                array_push($filters['join'], $categoryJoin);
+            }
 
             $contents = $er->findBy($filters, $order, $total, 1);
 
