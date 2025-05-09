@@ -636,7 +636,7 @@ class AIHelper
 
         foreach ($fields as $field) {
             $tone = '';
-            if (key_exists($field . 'Prompt', $data) && !empty($data[$field . 'Prompt'])) {
+            if (key_exists($field . 'Prompt', $data) && !empty($data[$field . 'Prompt']) && ($data[$field] ?? false)) {
                 $prompt = $data[$field . 'Prompt']['prompt'];
                 $tone   = (empty($data[$field . 'Tone'] ?? '')) ? '' : $data[$field . 'Prompt']['tone'];
 

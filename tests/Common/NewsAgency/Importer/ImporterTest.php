@@ -535,11 +535,8 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
             'in_home'             => 0,
             'tags'                => [],
             'frontpage'           => 0,
-            'titlePrompt'         => null,
             'titleTone'           => null,
-            'descriptionPrompt'   => null,
             'descriptionTone'     => null,
-            'bodyPrompt'          => null,
             'bodyTone'            => null,
         ];
 
