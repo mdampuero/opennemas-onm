@@ -635,14 +635,20 @@ class AIHelper
         $data['title_intPrompt'] = $data['titlePrompt'] ?? null;
 
         foreach ($fields as $field) {
-            $tone = '';
-            if (key_exists($field . 'Prompt', $data) && !empty($data[$field . 'Prompt']) && ($data[$field] ?? false)) {
-                $prompt = $data[$field . 'Prompt']['prompt'];
-                $tone   = (empty($data[$field . 'Tone'] ?? '')) ? '' : $data[$field . 'Prompt']['tone'];
+            $promptKey = $field . 'Prompt';
+            $toneKey   = $field . 'Tone';
 
-                $data[$field . 'Prompt'] = $data[$field . 'Prompt']['prompt'];
-            } else {
+            if (empty($data[$promptKey]['prompt'] ?? null) || empty($data[$field] ?? null)) {
                 continue;
+            }
+
+            // Extract prompt and specific tone
+            $prompt = $data[$promptKey]['prompt'];
+            $tone   = $data[$toneKey] ?? '';
+
+            // If empty tone assign default prompt tone
+            if (empty($tone)) {
+                $tone = $data[$promptKey]['tone'] ?? '';
             }
 
             $cleanContent = trim(strip_tags($data[$field]));
@@ -652,18 +658,20 @@ class AIHelper
             }
 
             $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $prompt);
-            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$data[$field]}\n";
+            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n" . $data[$field] . "\n";
 
             $instructions = [
                 ['value' => 'Responde directamente con el texto transformado.']
             ];
 
             $instructions[] = !empty($tone)
-                ? ['value' => "Adopta un tono {$tone} en la transformación."]
+                ? ['value' => "Adopta un tono " . $tone . " en la transformación."]
                 : ['value' => "Debes mantener el tono del texto original."];
 
             if (!empty($data['language'])) {
-                $instructions[] = ['value' => "La respuesta debe ser en el idioma {$data['language']}."];
+                $instructions[] = [
+                    'value' => "La respuesta debe ser en el idioma " . $data['language'] . "."
+                ];
             }
 
             $this->insertInstructions($instructions);
@@ -696,6 +704,7 @@ class AIHelper
                 );
             }
         }
+
         return $data;
     }
 

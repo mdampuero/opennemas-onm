@@ -565,13 +565,13 @@ class Importer
             $data = $this->container->get('core.helper.ai')->transform($data);
         }
 
-        /**
-         * Remove the prompts from the data array so they are not considered by the persister.
-         */
-        unset($data['titlePrompt']);
-        unset($data['title_intPrompt']);
-        unset($data['descriptionPrompt']);
-        unset($data['bodyPrompt']);
+        // Remove prompts from the data array so they are not considered by the persister.
+        unset(
+            $data['titlePrompt'],
+            $data['title_intPrompt'],
+            $data['descriptionPrompt'],
+            $data['bodyPrompt']
+        );
 
         return $data;
     }
