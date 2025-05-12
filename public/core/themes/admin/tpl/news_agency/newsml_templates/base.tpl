@@ -83,7 +83,7 @@
                           <location.longitude>{$content->event_map_longitude}</location.longitude>
                         </location>
                         {if $content->event_website}
-                        <virtloc value="{$content->event_website}"></virtloc>
+                        <virtloc value="{$content->event_website|escape:'html'}"></virtloc>
                         {/if}
                         <organizer>
                           <organizer.name>{$content->event_organizer_name}</organizer.name>
