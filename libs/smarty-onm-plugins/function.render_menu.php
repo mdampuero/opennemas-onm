@@ -36,7 +36,9 @@ function smarty_function_render_menu($params, &$smarty)
         $ms = $smarty->getContainer()->get('api.service.menu');
         $cs = $smarty->getContainer()->get('api.service.category');
 
-        $menu = $ms->setCount(0)->getItemLocaleBy($oql);
+        $ms->setCount(0);
+
+        $menu = $ms->getItemLocaleBy($oql);
         if (empty($menu) || empty($menu->menu_items)) {
             return '';
         }
