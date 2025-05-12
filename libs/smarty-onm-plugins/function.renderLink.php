@@ -18,9 +18,8 @@ function smarty_function_renderLink($params, &$smarty)
     $localelong    = $multilanguage ? $smarty->getContainer()->get('core.locale')->getRequestLocale() : null;
 
     $serviceMap = [
-        'category' => 'api.service.category',
-        'static'   => 'api.service.content',
-        'tags'     => 'api.service.tag',
+        'static' => 'api.service.content',
+        'tags'   => 'api.service.tag',
     ];
 
     if ($item->type != 'category') {
@@ -49,16 +48,9 @@ function smarty_function_renderLink($params, &$smarty)
 function generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault, &$smarty)
 {
     $sh = $smarty->getContainer()->get('core.helper.setting');
-    $cs = $smarty->getContainer()->get('api.service.category');
 
     if ($item->type === 'category') {
-        try {
-            $category = empty($item->referenceId)
-                ? $cs->getItemBySlug($item->link)
-                : $cs->getItem($item->referenceId);
-        } catch (\Api\Exception\GetItemException $e) {
-            return '';
-        }
+        $category = array_column($smarty->getTemplateVars('categories'), null, 'name')[$item->link];
     }
 
     $mapUrl = [
