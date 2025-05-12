@@ -50,16 +50,22 @@ function generateUrlForMenuItem($item, $multilanguage, $locale, $localeDefault, 
     $sh = $smarty->getContainer()->get('core.helper.setting');
 
     if ($item->type === 'category') {
-        $category = array_column($smarty->getTemplateVars('categories'), null, 'name')[$item->link];
+        $categories = $smarty->getTemplateVars('categories');
+
+        $category = $categories ?? null
+            ? array_column($categories, null, 'name')[$item->link]
+            : null;
+
+        // If category has been deleted
+        if (is_null($category)) {
+            return '';
+        }
     }
 
     $mapUrl = [
-        'albumCategory' => "/album/" . $item->link . "/",
-        'videoCategory' => "/video/" . $item->link . "/",
-        'pollCategory'  => "/encuesta/" . $item->link . "/",
-        'static'        => "/estaticas/" . $item->link . ".html",
-        'tags'          => "/tags/" . $item->link . "/",
-        'category'      => $sh->isMergeEnabled()
+        'static'   => "/estaticas/" . $item->link . ".html",
+        'tags'     => "/tags/" . $item->link . "/",
+        'category' => $sh->isMergeEnabled()
             ? "/" . $item->link . "/"
             : ($category->layout ? "/seccion/{$item->link}/" : "/blog/section/{$item->link}/"),
     ];
