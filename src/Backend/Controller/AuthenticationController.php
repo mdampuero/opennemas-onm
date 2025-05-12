@@ -30,13 +30,6 @@ class AuthenticationController extends Controller
             return $this->redirect($this->generateUrl('admin_welcome'));
         }
 
-        if ($request->query->has('language')) {
-            $this->get('core.locale')
-                ->setContext('backend')
-                ->setLocale($request->query->get('language'))
-                ->apply();
-        }
-
         $target  = $this->generateUrl('admin_welcome');
         $session = $request->getSession();
         $token   = $request->get('token');
@@ -84,6 +77,14 @@ class AuthenticationController extends Controller
 
         if ($auth->hasError()) {
             $session->getFlashBag()->add('error', $auth->getErrorMessage());
+        }
+
+        if ($request->query->has('language')) {
+            $this->get('core.locale')
+                ->setContext('backend')
+                ->setLocale($request->query->get('language'))
+                ->setRequestLocale($request->query->get('language'))
+                ->apply();
         }
 
         return $this->render('login/login.tpl', [
