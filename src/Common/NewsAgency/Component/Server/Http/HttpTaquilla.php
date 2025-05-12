@@ -121,10 +121,13 @@ class HttpTaquilla extends Http
      */
     protected function generateDataArray(array $data) : void
     {
-        // Associate objects with their place and entity
+        // Associate objects with their place and entities
         foreach ($data['objects'] as $value) {
-            $value['place']  = $data['places'][$value['place_id']];
-            $value['entity'] = $data['entities'][reset($value['entity_ids'])];
+            foreach ($value['entity_ids'] as $id) {
+                $value['entities'][] = $data['entities'][$id];
+            }
+
+            $value['place'] = $data['places'][$value['place_id']];
             // Generate files
             $this->remoteFiles[] = [
                 'content'  => $value,
@@ -210,7 +213,7 @@ class HttpTaquilla extends Http
     }
 
     /**
-     * Parses the array and returns an object with the event information.
+     * Parses the array and returns an object with the Taquilla event.
      *
      * @param array      $data The data as an array.
      *
@@ -218,58 +221,28 @@ class HttpTaquilla extends Http
      */
     protected function parseArray(array $data) : \StdClass
     {
-        /**
-         * go_event
-         * go_event_id
-         * go_event_type
-         * go_event_tag
-         * go_event_extra_info
-         * go_event_contact_web
-         *
-         * go_event_dates_start
-         * go_event_dates_end
-         * go_event_dates_duration
-         * go_event_dates_all_day
-         *
-         * go_event_price_timetable
-         *
-         * go_event_tickets_free
-         * go_event_tickets_price
-         * go_event_tickets_link
-         * go_event_tickets_sold_out
-         *
-         * go_event_address_address
-         * go_event_address_name
-         * go_event_address_locality
-         * go_event_address_province
-         * go_event_address_postal_code
-         *
-         * go_event_location_location
-         * go_event_location_organizer
-         *
-         * go_event_map_latitude
-         * go_event_map_longitude
-         * go_event_map_link
-         * go_event_map_place_id
-         *
-         * go_event_price_timetable
-         */
-
         $content = new \StdClass();
         $now     = new \DateTime();
         $time    = array_pop($data['time']);
         $details = array_pop($data['session_details']);
 
+        // Process entities data related due to multiple entities
+        $content->body = '';
+        foreach ($data['entities'] as $entity) {
+            $content->body            .= $entity['info'] . "\n";
+            $content->event_type_id    = $entity['type_id'];
+            $content->event_subtype_id = $entity['subtype_id'];
+            $content->extCategory      = $entity['type'];
+        }
+
         $content->id                   = $data['event_id'];
         $content->title                = $data['event_name'];
-        $content->body                 = $data['entity']['info'];
         $content->created              = $now;
         $content->starttime            = $now;
         $content->changed              = $now;
         $content->agency               = 'Taquilla.com';
         $content->content_type_name    = 'event';
         $content->event_organizer_name = 'La Guía GO! | Taquilla.com';
-        $content->event_organizer_url  = $data['entity']['name_url'];
         $content->event_start_date     = $data['date'];
         $content->event_start_hour     = $time != 'unknown' ? $time : '00:00';
         $content->event_place          = $data['place']['name'];
@@ -279,10 +252,8 @@ class HttpTaquilla extends Http
         $content->event_map_longitude  = $data['place']['longitude'];
         $content->event_tickets_price  = $details['sminprice'];
         $content->event_tickets_link   = $details['sminprice_url'];
-        $content->event_type_id        = $data['entity']['type_id'];
-        $content->event_subtype_id     = $data['entity']['subtype_id'];
-        $content->event_website        = $data['entity']['name_url'];
-        $content->extCategory          = $data['entity']['type'];
+        $content->event_organizer_url  = strtok($details['sminprice_url'], '?');
+        $content->event_website        = $details['sminprice_url'];
         $content->tags                 = [];
 
         if (array_key_exists('end_date', $data) && $data['end_date'] != $data['date']) {
@@ -290,12 +261,13 @@ class HttpTaquilla extends Http
             $content->event_end_hour = $time != 'unknown' ? $time : '00:00';
         }
 
-        if (!empty($data['entity']['img_urls'])) {
+        $entity = reset($data['entities']);
+        if (!empty($entity['img_urls'])) {
             $featureContent['inner'] = new \StdClass();
 
-            $img = $data['entity']['img_urls']['full_size'];
+            $img = $entity['img_urls']['full_size'];
 
-            $featureContent['inner']->title             = $data['entity']['name'];
+            $featureContent['inner']->title             = $entity['name'];
             $featureContent['inner']->content_type_name = 'photo';
             $featureContent['inner']->pk_content        = 'photo_' . $data['event_id'];
             $featureContent['inner']->created           = $now;
