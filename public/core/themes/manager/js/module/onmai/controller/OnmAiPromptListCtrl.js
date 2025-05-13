@@ -292,6 +292,23 @@
             }
           });
         };
+
+        $scope.sort = function(name) {
+          if (!$scope.criteria.orderBy) {
+            $scope.criteria.orderBy = {};
+          }
+
+          const currentField = Object.keys($scope.criteria.orderBy)[0];
+
+          if (currentField === name) {
+            $scope.criteria.orderBy[name] = $scope.criteria.orderBy[name] === 'asc' ? 'desc' : 'asc';
+          } else {
+            $scope.criteria.orderBy = {};
+            $scope.criteria.orderBy[name] = 'asc';
+          }
+
+          $scope.criteria.page = 1;
+        };
       }
     ]);
 })();

@@ -49,6 +49,36 @@
                     </span>
                   </div>
                 </li>
+                <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="mode = [
+                    { name: '{t}Any{/t}', value: null},
+                    { name: '{t}Create{/t}', value: 'New'},
+                    { name: '{t}Edit{/t}', value: 'Edit'},
+                    { name: '{t}Agency{/t}', value: 'Agency' }
+                  ]">
+                  <ui-select name="mode" theme="select2" ng-model="criteria.mode">
+                    <ui-select-match>
+                      <strong>{t}Mode{/t}:</strong> [% $select.selected.name %]
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.value as item in mode | filter: $select.search">
+                      <div ng-bind-html="item.name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                  </ui-select>
+                </li>
+                <li class="hidden-xs m-r-10 ng-cloak quicklinks" ng-init="field = [
+                    { name: '{t}Any{/t}', value: null},
+                    { name: '{t}Titles{/t}', value: 'titles'},
+                    { name: '{t}Descriptions{/t}', value: 'descriptions'},
+                    { name: '{t}Bodies{/t}', value: 'bodies' }
+                  ]">
+                  <ui-select name="field" theme="select2" ng-model="criteria.field">
+                    <ui-select-match>
+                      <strong>{t}Field{/t}:</strong> [% $select.selected.name %]
+                    </ui-select-match>
+                    <ui-select-choices repeat="item.value as item in field | filter: $select.search">
+                      <div ng-bind-html="item.name | highlight: $select.search"></div>
+                    </ui-select-choices>
+                  </ui-select>
+                </li>
                 <li class="m-r-10 quicklinks">
                   <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
                     <i class="fa fa-fire fa-lg m-l-5 m-r-5"></i>
@@ -88,24 +118,29 @@
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
-                    <th width="300">
+                    <th width="300" ng-click="sort('name')" class="pointer">
                       {t}Name{/t}
                       <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
                     </th>
-                    <th>
+                    <th ng-click="sort('model')" class="pointer">
                       {t}Model{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('model') == 'asc', 'fa fa-caret-down': isOrderedBy('model') == 'desc'}"></i>
                     </th>
-                    <th>
+                    <th ng-click="sort('mode')" class="pointer">
                       {t}Mode{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('mode') == 'asc', 'fa fa-caret-down': isOrderedBy('mode') == 'desc'}"></i>
                     </th>
-                    <th>
+                    <th ng-click="sort('field')" class="pointer">
                       {t}Field{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('field') == 'asc', 'fa fa-caret-down': isOrderedBy('field') == 'desc'}"></i>
                     </th>
-                    <th>
+                    <th ng-click="sort('tone')" class="pointer">
                       {t}Tone{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('tone') == 'asc', 'fa fa-caret-down': isOrderedBy('tone') == 'desc'}"></i>
                     </th>
-                    <th>
+                    <th ng-click="sort('role')" class="pointer">
                       {t}Role{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('role') == 'asc', 'fa fa-caret-down': isOrderedBy('role') == 'desc'}"></i>
                     </th>
                     <th class="text-center" width="300">
                       {t}Instances{/t}
