@@ -204,7 +204,10 @@
                   &lt;{t}No tags{/t}&gt;
                 </small>
                 <div class="inline m-r-5 m-t-5" ng-repeat="item in getLocalizedTags(data.extra.tags, item.tags, config.locale.selected, config.locale.multilanguage)">
-                  <a class="label label-defaul label-info text-bold" href="[% routing.generate('backend_tag_show', { id: item.id }) %]">
+                  <a class="label label-defaul label-info text-bold" href="[% routing.generate('backend_tag_show', { id: item.id }) %]" ng-if="!item.private">
+                    [% item.name %]
+                  </a>
+                  <a class="label badge-private label-info text-bold" href="[% routing.generate('backend_tag_show', { id: item.id }) %]" ng-if="item.private">
                     [% item.name %]
                   </a>
                 </div>
