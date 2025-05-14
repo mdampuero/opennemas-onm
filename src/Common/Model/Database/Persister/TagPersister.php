@@ -74,15 +74,26 @@ class TagPersister extends BasePersister
      */
     public function update(Entity $entity)
     {
-        if ($entity->private === 1) {
-            $this->removeMenuItems($entity->slug, 'tags');
-        }
+        $changes = $entity->getChanges();
 
+        $this->conn->beginTransaction();
 
-        if ($this->hasCache()) {
-            $cacheId = 'instance-' . $this->instance->internal_name;
+        try {
+            parent::update($entity);
 
-            $this->cache->remove($cacheId);
+            if (isset($changes['private'])) {
+                $this->removeMenuItems($entity->slug, 'tags');
+            }
+
+            $this->conn->commit();
+
+            if ($this->hasCache()) {
+                $cacheId = 'instance-' . $this->instance->internal_name;
+                $this->cache->remove($cacheId);
+            }
+        } catch (\Throwable $e) {
+            $this->conn->rollback();
+            throw $e;
         }
     }
 
