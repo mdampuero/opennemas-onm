@@ -68,4 +68,33 @@ class TagPersister extends BasePersister
             $this->cache->remove($cacheId);
         }
     }
+
+    public function update(Entity $entity)
+    {
+        if ($entity->private === 1) {
+            $this->removeMenuItems($entity->slug, 'tags');
+        }
+
+
+        if ($this->hasCache()) {
+            $this->cache->remove($this->metadata->getPrefixedId($entity));
+        }
+    }
+
+    protected function removeMenuItems($slug, $type)
+    {
+        $sql = 'delete from menu_items'
+            . ' where link_name = ? and type = ?';
+
+        $params = [
+            $slug,
+            $type,
+        ];
+        $types  = [
+            \PDO::PARAM_STR,
+            \PDO::PARAM_STR,
+        ];
+
+        $this->conn->executeQuery($sql, $params, $types);
+    }
 }
