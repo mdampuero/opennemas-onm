@@ -69,6 +69,9 @@ class TagPersister extends BasePersister
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function update(Entity $entity)
     {
         if ($entity->private === 1) {
@@ -77,10 +80,18 @@ class TagPersister extends BasePersister
 
 
         if ($this->hasCache()) {
-            $this->cache->remove($this->metadata->getPrefixedId($entity));
+            $cacheId = 'instance-' . $this->instance->internal_name;
+
+            $this->cache->remove($cacheId);
         }
     }
 
+    /**
+     * Removes menu items.
+     *
+     * @param string $slug The slug of the tag.
+     * @param string $type The type of the menu item.
+     */
     protected function removeMenuItems($slug, $type)
     {
         $sql = 'delete from menu_items'
