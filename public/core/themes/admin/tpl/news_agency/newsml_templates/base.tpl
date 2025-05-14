@@ -67,7 +67,7 @@
                 <head>
                   <title><![CDATA[{$content->title_int|default:$content->title}]]></title>
                   <docdata management-status="usable">
-                    <doc.rights agent="Opennemas"/>
+                    <doc.rights agent="{$extSource|default:"Opennemas"}"/>
                     <doc-id id-string="{$content->id}" />
                     <key-list>
                       <keyword key="{renderMetaKeywords content=$content onlyTags=True}"/>

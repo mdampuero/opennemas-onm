@@ -35,6 +35,20 @@ class NewsMLComponentTextTaquilla extends NewsML
     /**
      * {@inheritdoc}
      */
+    public function getAgencyName($data)
+    {
+        $agency = $data->xpath('//NewsItem/NewsComponent/AdministrativeMetadata/Provider/Party');
+
+        if (is_array($agency) && !empty($agency)) {
+            return (string) $agency[0]->attributes()->FormalName;
+        }
+
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getCategory($data)
     {
         $property = $data->xpath('//identified-content/location/location.city');
