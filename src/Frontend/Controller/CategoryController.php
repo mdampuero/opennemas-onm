@@ -107,16 +107,15 @@ class CategoryController extends FrontendController
     {
         $action = $this->get('core.globals')->getAction();
         $item   = $this->getItem($request);
+        $params = $request->query->all();
 
-        // If the category is manual, we redirect to the frontpage.
-        if (($item->layout ?? 0) == 1) {
+        // If the category is manual and not tag filtered, we redirect to the frontpage.
+        if (($item->layout ?? 0) == 1 && !key_exists('tag_slug', $params)) {
             return $this->forward('Frontend\Controller\FrontpagesController::showAction', [], [
                 'category' => $item->name,
                 'noredirect' => true
             ]);
         }
-
-        $params = $request->query->all();
 
         // Fix category_slug from query basing on item
         $params['category_slug'] = $item->name;
