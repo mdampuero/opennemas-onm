@@ -57,6 +57,13 @@ class ExternalResource
     public $created_time = null;
 
     /**
+     * The content type name.
+     *
+     * @var string
+     */
+    public $content_type_name = '';
+
+    /**
      * The resource id.
      *
      * @var string

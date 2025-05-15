@@ -62,6 +62,20 @@ class NewsMLComponentTextTaquilla extends NewsML
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getContentTypeName($data)
+    {
+        $item = $data->xpath("//ContentItem");
+
+        if (is_array($item) && !empty($item)) {
+            return (string) $item[0]->attributes()->type;
+        }
+
+        return '';
+    }
+
+    /**
      * Returns the place address assigned to the event
      *
      * @param SimpleXMLObject The parsed data.
@@ -355,6 +369,7 @@ class NewsMLComponentTextTaquilla extends NewsML
         $eventStartDate = $this->getEventStartDate($data);
         $eventEndDate   = $this->getEventEndDate($data);
 
+        $this->bag['content_type_name']    = $this->getContentTypeName($data);
         $this->bag['event_start_date']     = $eventStartDate->format('Y-m-d');
         $this->bag['event_start_hour']     = $eventStartDate->format('h:i');
         $this->bag['event_website']        = $this->getEventWebsite($data);
@@ -409,11 +424,14 @@ class NewsMLComponentTextTaquilla extends NewsML
             104 => 75, // Festivales
         ];
 
-        // If subtype matches get subtype
-        $onmType = array_key_exists($subtypeId, $taquillaSubtypes)
-            ? $taquillaSubtypes[$subtypeId]
-            : $taquillaTypes[$typeId];
+        if (array_key_exists($subtypeId, $taquillaSubtypes)) {
+            return $taquillaSubtypes[$subtypeId];
+        }
 
-        return $onmType;
+        if (array_key_exists($typeId, $taquillaTypes)) {
+            return $taquillaTypes[$typeId];
+        }
+
+        return '';
     }
 }

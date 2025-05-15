@@ -500,6 +500,7 @@ class Importer
         }
 
         $data = array_merge($this->defaults, $data, [
+            'content_type_name'   => $resource->content_type_name,
             'description'         => $resource->summary,
             'frontpage'           => 0,
             'fk_author'           => $this->getAuthor($resource, $data),
