@@ -500,7 +500,6 @@ class Importer
         }
 
         $data = array_merge($this->defaults, $data, [
-            'content_type_name'   => $resource->content_type_name,
             'description'         => $resource->summary,
             'frontpage'           => 0,
             'fk_author'           => $this->getAuthor($resource, $data),
@@ -519,6 +518,11 @@ class Importer
             'bodyPrompt'          => $this->getBodyPrompt($data),
             'bodyTone'            => $this->getBodyTone($data),
         ]);
+
+        // Overwrite content_type_name if set on NewsML
+        if (!empty($resource->content_type_name)) {
+            $data['content_type_name'] = $resource->content_type_name;
+        }
 
         // Import contents with default tags if set on agency
         if (array_key_exists('tags', $this->config)
