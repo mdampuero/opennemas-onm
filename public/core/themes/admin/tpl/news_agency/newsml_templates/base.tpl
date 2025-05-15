@@ -58,7 +58,7 @@
             <Property FormalName="Tesauro" Value="{if $extCategory}{$extCategory}{else}{get_category_slug($content)}{/if}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$content->id}" />
           </DescriptiveMetadata>
-          <ContentItem Href="{get_url item=$content absolute=true}">
+          <ContentItem Href="{get_url item=$content absolute=true}" type="{$content->content_type_name}">
             <MediaType FormalName="Text" />
             <Format FormalName="NITF" />
             <MimeType FormalName="text/vnd.IPTC.NITF" />
