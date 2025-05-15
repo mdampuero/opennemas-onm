@@ -213,6 +213,29 @@ class HttpTaquilla extends Http
     }
 
     /**
+     * Check if server is from a special city.
+     * Madrid (54) or Barcelona (36)
+     *
+     * @param bool $content True if is a special city.
+     */
+    protected function isSpecialCity() : bool
+    {
+        $urlParams = parse_url($this->getUrl());
+
+        if (!key_exists('query', $urlParams)) {
+            return false;
+        }
+
+        parse_str($urlParams['query'], $queryParams);
+
+        if (!key_exists('t10region', $queryParams)) {
+            return false;
+        }
+
+        return in_array($queryParams['t10region'], [ 54, 36 ]);
+    }
+
+    /**
      * Parses the array and returns an object with the Taquilla event.
      *
      * @param array      $data The data as an array.
@@ -235,13 +258,33 @@ class HttpTaquilla extends Http
             $content->extCategory      = $entity['type'];
         }
 
+        // Import as article if is from those types
+        $content->content_type_name = 'event';
+        $types                      = [
+            5  => 'Museos y visitas guiadas',
+            7  => 'Parques de ocio',
+            26 => 'Visitas guiadas y tours',
+            43 => 'Parques de atracciones',
+            41 => 'Parques acuáticos',
+            42 => 'Zoo/Acuarios',
+            44 => 'Otros parques',
+        ];
+
+        if (in_array($content->event_subtype_id, array_keys($types))) {
+            $content->content_type_name = 'article';
+        }
+
+        // Import as article if is Musical and special city
+        if ($this->isSpecialCity() && $content->event_subtype_id == 30) {
+            $content->content_type_name = 'article';
+        }
+
         $content->id                   = $data['event_id'];
         $content->title                = $data['event_name'];
         $content->created              = $now;
         $content->starttime            = $now;
         $content->changed              = $now;
         $content->agency               = 'Taquilla.com';
-        $content->content_type_name    = 'event';
         $content->event_organizer_name = 'La Guía GO! | Taquilla.com';
         $content->event_start_date     = $data['date'];
         $content->event_start_hour     = $time != 'unknown' ? $time : '00:00';
