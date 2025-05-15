@@ -29,26 +29,6 @@ class NitfTaquilla extends Nitf
     }
 
     /**
-     * Returns the start date for the event
-     *
-     * @param SimpleXMLObject The parsed data.
-     *
-     * @return DateTime The event start date.
-     */
-    public function getEventStartDate($data)
-    {
-        $start = $data->xpath('//identified-content/event/@start-date');
-
-        if (is_array($start) && !empty($start)) {
-            $startDate = \DateTime::createFromFormat('Ymd\THisP', $start[0]);
-
-            return $startDate;
-        }
-
-        return new \DateTime('now');
-    }
-
-    /**
      * Returns the unique urn from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.
@@ -67,9 +47,8 @@ class NitfTaquilla extends Nitf
             strtolower($this->getAgencyName($data))
         );
 
-        $date = $this->getEventStartDate($data)->format('YmdHis');
-        $id   = $this->getId($data);
+        $id = $this->getId($data);
 
-        return "urn:$resource:$agency:$date:text:$id";
+        return "urn:$resource:$agency:text:$id";
     }
 }
