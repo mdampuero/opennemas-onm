@@ -32,15 +32,20 @@ function smarty_function_render_menu($params, &$smarty)
     }
 
     try {
+        $cc = $smarty->getContainer()->get('cache.connection.instance');
+        $cs = $smarty->getContainer()->get('api.service.category');
         $mh = $smarty->getContainer()->get('core.helper.menu');
         $ms = $smarty->getContainer()->get('api.service.menu');
-        $cs = $smarty->getContainer()->get('api.service.category');
-
-        $ms->setCount(0);
 
         $menu = $ms->getItemLocaleBy($oql);
         if (empty($menu) || empty($menu->menu_items)) {
             return '';
+        }
+
+        // Check if is cached in redis
+        $cacheId = sprintf('menu-%s-html%s', $menu->id, $menu->locale);
+        if ($cc->exists($cacheId)) {
+            return $cc->get($cacheId);
         }
 
         $menuItemsObject = $mh->castToObjectNested($menu->menu_items);
@@ -52,6 +57,9 @@ function smarty_function_render_menu($params, &$smarty)
         ]);
 
         $output = $smarty->fetch($tpl);
+
+        // Set cache with html output in redis
+        $cc->set($cacheId, $output);
 
         return $output;
     } catch (\Api\Exception\GetItemException $e) {
