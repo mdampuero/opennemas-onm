@@ -373,7 +373,7 @@ EOT;
      */
     protected function insertInstructions($instructions = [], $role = '')
     {
-        $instructionsString = sprintf("### INSTRUCCIONES IMPORTANTES:\n%s", $role);
+        $instructionsString = '';
         if (count($instructions)) {
             $counter = 0;
 
@@ -388,6 +388,32 @@ EOT;
             $instructionsString .= sprintf(". Sigue estas reglas estrictamente:\n%s", $instructionList);
         }
         $this->userPrompt .= $instructionsString;
+    }
+
+    /**
+     * Inserts the given instructions into the user prompt with an optional role description.
+     *
+     * @param array $instructions The list of instructions to insert.
+     * @param string $role The role description to be included in the instructions.
+     */
+    protected function getStringtInstructions($instructions = [])
+    {
+        $instructionsString = '';
+        if (count($instructions)) {
+            $counter = 0;
+
+            $instructionList = implode("\n", array_map(
+                function ($item) use (&$counter) {
+                    $counter++;
+                    return $counter . '. ' . $item['value'];
+                },
+                $instructions
+            ));
+        }
+        if ($instructionList) {
+            $instructionsString = sprintf("## Sigue estas reglas estrictamente:\n%s", $instructionList);
+        }
+        return $instructionsString;
     }
 
     /**
@@ -410,7 +436,7 @@ EOT;
                 function ($item) use (&$counter) {
                     $counter++;
                     $instruction = $this->getInstructionsById($item);
-                    return $counter . '. ' . $instruction['value'] ?? '';
+                    return $counter . '. ' . $instruction['value'] ?? $item;
                 },
                 $instructions
             ));
@@ -588,11 +614,6 @@ EOT;
             return ['error' => 'Empty text or language', 'result' => ''];
         }
 
-        $this->userPrompt  = "### OBJETIVO:\n" .
-            "Traduce el siguiente texto al idioma seleccionado siguiendo estrictamente las instrucciones.\n";
-        $this->userPrompt .= "### TEXTO:\n{$text}\n";
-        $this->userPrompt .= "### IDIOMA SELECCIONADO:\n{$lang}\n";
-
         $instructions = [
             ['value' => 'Debes mantener el estilo del texto original.'],
             ['value' => 'No debes añadir información adicional ni modificar el significado del texto.'],
@@ -604,14 +625,6 @@ EOT;
             etiquetas, símbolos ni explicaciones'],
         ];
 
-        if (!empty($params['tone']['name'] ?? false)) {
-            $instructions[] = ['value' => "Adopta un tono {$params['tone']['name']} en la traducción."];
-        } else {
-            $instructions[] = ['value' => "Debes mantener el tono del texto original."];
-        }
-
-        $this->insertInstructions($instructions);
-
         $data = $this->getCurrentSettings();
 
         $dataLog = [
@@ -621,7 +634,19 @@ EOT;
             'method'   => __METHOD__
         ];
 
-        $data['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
+        $data['messages'] = [
+            [
+                'role' => 'user',
+                'content' => $this->replaceVars([
+                    'objetivo' => 'Traduce el TEXTO ORIGINAL al idioma indicado',
+                    'instrucciones' => $this->getStringtInstructions($instructions),
+                    'rol' => 'Eres un experto traductor de textos.',
+                    'idioma' => $lang,
+                    'fuente' => $text,
+                    'tono' => $params['tone']['name'] ?? 'Mantén el mismo tono del texto original.'
+                ])
+            ]
+        ];
 
         if (!empty($data['engine'])) {
             /**
