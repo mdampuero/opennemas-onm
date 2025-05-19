@@ -297,6 +297,7 @@ class OnmAIController extends Controller
         return new JsonResponse([
             'results' => $helperLocale->translateAttributes($items, ['mode', 'field']),
             'items'   => $items,
+            'extra'   => $this->promptGetExtraData(),
             'total'   => $total,
         ]);
     }
@@ -362,6 +363,29 @@ class OnmAIController extends Controller
         return new JsonResponse([
             'extra' => $extra,
             'item'  => $converter->responsify($item->getData())
+        ]);
+    }
+
+    /**
+     * Generates a preview of an AI prompt based on provided input parameters.
+     *
+     * @param Request $request The HTTP request containing an 'item' array in the POST body.
+     *                         Expected keys: 'prompt', 'mode', 'role', 'tone', and 'instructions'.
+     *
+     * @return JsonResponse Returns a JSON response with the generated 'promptPreview' string.
+     */
+    public function promptPreviewAction(Request $request)
+    {
+        $item = $request->request->get('item');
+        $data = [
+            'prompt'       => $item['prompt'] ?? '',
+            'mode'         => $item['mode'] ?? '',
+            'role'         => $item['role'] ?? '',
+            'tone'         => $item['tone'] ?? '',
+            'instructions' => $item['instructions'] ?? [],
+        ];
+        return new JsonResponse([
+            'promptPreview' => $this->get('core.helper.ai')->previewPrompt($data),
         ]);
     }
 

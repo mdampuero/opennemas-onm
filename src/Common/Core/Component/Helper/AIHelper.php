@@ -100,6 +100,38 @@ class AIHelper
     ];
 
     /**
+     * The base template used for generating prompts with placeholders to be replaced dynamically.
+     *
+     * Placeholders:
+     * - {{rol}}: The role or persona to be assumed.
+     * - {{instrucciones}}: A list of specific instructions to follow.
+     * - {{idioma}}: The target language for the response.
+     * - {{fuente}}: The original source text or input.
+     * - {{tono}}: The tone in which the response should be written.
+     * - {{objetivo}}: The main objective or goal of the response.
+     *
+     * Note: "{{fuente}}" may be replaced with "{{tema}}" if 'mode' is set to 'New' in replaceVars().
+     */
+    protected $template = <<<EOT
+### INSTRUCCIONES IMPORTANTES:
+{{rol}}
+## Sigue estas reglas estrictamente:
+{{instrucciones}}
+
+### IDIOMA:
+El idioma de la respuesta debe ser "{{idioma}}". Responde estrictamente usando este idioma yas convenciones culturales.
+
+### TEXTO ORIGINAL:
+{{fuente}}
+
+### TONO DE LA RESPUESTA:
+{{tono}}
+
+### OBJETIVO:
+{{objetivo}}
+EOT;
+
+    /**
      * The service instance used for processing.
      */
     protected $service;
@@ -307,21 +339,6 @@ class AIHelper
     }
 
     /**
-     * Masks an API key by showing only the first 3 and last 4 characters, hiding the middle.
-     *
-     * @param string $apiKey The API key to be masked.
-     * @return string The masked API key.
-     */
-    protected function maskApiKey($apiKey)
-    {
-        if (strlen($apiKey) > 7) {
-            return substr($apiKey, 0, 3) . str_repeat('.', strlen($apiKey) - 7) . substr($apiKey, -4);
-        }
-
-        return $apiKey;
-    }
-
-    /**
      * Retrieves the structure response.
      *
      * @return array The structure response array.
@@ -350,45 +367,6 @@ class AIHelper
     }
 
     /**
-     * Adds a new instruction to the existing list of instructions.
-     *
-     * @param array $instruction The instruction to be added.
-     */
-    public function addInstruction($instruction)
-    {
-        $instructions = $this->getInstructions();
-        array_push($instructions, $instruction);
-        $this->setInstructions($instructions);
-    }
-
-    /**
-     * Sets the list of instructions.
-     *
-     * @param array $instructions The instructions to be set.
-     * @return $this The current instance for method chaining.
-     */
-    public function setInstructions($instructions)
-    {
-        $this->instructions = $instructions;
-        return $this;
-    }
-
-    /**
-     * Retrieves instructions filtered by the given criteria.
-     *
-     * @param array $filter An associative array containing 'type' and 'field' filters.
-     * @return array The filtered list of instructions.
-     */
-    public function getInstructionsByFilter(array $filter = []): array
-    {
-        return $filter
-            ? array_filter($this->instructions, function ($i) use ($filter) {
-                return in_array($i['type'], $filter['type']) && in_array($i['field'], $filter['field']);
-            })
-            : $this->instructions;
-    }
-
-    /**
      * Inserts the given instructions into the user prompt with an optional role description.
      *
      * @param array $instructions The list of instructions to insert.
@@ -414,65 +392,114 @@ class AIHelper
     }
 
     /**
-     * Adds the selected tone to the `userPrompt` if it's present in the messages.
+     * Builds a numbered string list of instruction texts based on their IDs.
      *
-     * @param array $messages The array containing the selected tone information.
+     * @param array $instructions An array of instruction IDs to include in the list.
+     *
+     * @return string Returns a newline-separated, numbered string of instruction values.
+     *                If the array is empty, returns an empty string.
      */
-    protected function insertTone($messages = [])
+    protected function getInstructionsList($instructions = [])
     {
-        if ($messages["toneSelected"]["name"] ?? false) {
-            $this->userPrompt .= sprintf("\n\n### TONO:\n%s", $messages["toneSelected"]["name"]);
+        $this->getInstructions();
+
+        $instructionsString = '';
+        if ($instructions && count($instructions)) {
+            $counter = 0;
+
+            $instructionsString = implode("\n", array_map(
+                function ($item) use (&$counter) {
+                    $counter++;
+                    $instruction = $this->getInstructionsById($item);
+                    return $counter . '. ' . $instruction['value'] ?? '';
+                },
+                $instructions
+            ));
         }
+
+        return $instructionsString;
     }
 
     /**
-     * Adds the selected language to the `userPrompt` if it's present in the messages.
+     * Retrieves an instruction from the internal list by its ID.
      *
-     * @param array $messages The array containing the selected language information.
+     * @param mixed $id The ID of the instruction to retrieve.
+     *
+     * @return array|null Returns the instruction as an associative array if found, or null if not found.
      */
-    protected function insertLanguage($messages = [])
+    protected function getInstructionsById($id)
     {
-        if ($messages["toneSelected"]["name"] ?? false) {
-            $this->userPrompt .= sprintf("\n\n### IDIOMA DE LA RESPUESTA:\n%s", $messages["toneSelected"]["name"]);
+        foreach ($this->instructions as $i) {
+            if ($i['id'] === $id) {
+                return $i;
+            }
         }
+        return null;
     }
 
     /**
-     * Generates a prompt from messages with instructions, tone, language, and other fields.
+     * Prepares and generates a preview of a prompt by replacing template variables with provided data.
      *
-     * @param array $messages Contains prompt details such as mode, field, role, locale, and input.
+     * @param array $data An associative array with the following keys:
+     *                    - 'prompt': The main goal or objective of the prompt.
+     *                    - 'role': The role name to be converted using getRoleByName().
+     *                    - 'tone': The desired tone for the prompt.
+     *                    - 'mode': The mode of the prompt.
+     *                    - 'instructions': An array of instruction IDs.
      *
-     * @return string The generated prompt.
+     * @return string Returns the prompt string with all variables replaced.
      */
-    public function generatePrompt($messages)
+    public function previewPrompt($data)
     {
-        $this->insertInstructions($this->getInstructionsByFilter(
-            [
-                'type'  => ['Both', $messages['promptSelected']['mode_or']],
-                'field' => ['all', $messages['promptSelected']['field_or']],
-            ]
-        ), $messages['roleSelected']['prompt'] ?? '');
+        $vars = [
+            'objetivo' => $data['prompt'],
+            'rol' => $this->getRoleByName($data['role']),
+            'tono' => $data['tone'],
+            'mode' => $data['mode'],
+            'instrucciones' => $this->getInstructionsList($data['instructions'])
+        ];
+        return $this->replaceVars($vars);
+    }
 
-        if ($messages["locale"] ?? false) {
-            $this->userPrompt .= ($messages["locale"] ?? false) ?
-                sprintf("\n\n### IDIOMA:\n%s", sprintf(
-                    'El idioma de la respuesta debe ser "%s". Responde estrictamente usando este idioma y
-                    las convenciones culturales.',
-                    $messages['locale']
-                )) : "";
+    /**
+     * Retrieves the prompt text associated with a given role name.
+     *
+     * @param string $name The name of the role to search for.
+     *
+     * @return string Returns the prompt text for the role if found, or an empty string if not found or not set.
+     */
+    protected function getRoleByName(string $name)
+    {
+        foreach ($this->getRoles() as $item) {
+            if (isset($item['name']) && $item['name'] === $name) {
+                return $item['prompt'] ?? '';
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Replaces placeholders in the template with the provided variable values.
+     *
+     * @param array $vars An associative array of variables where keys correspond to placeholders
+     *                    in the template (e.g., {{key}}) and values are their replacements.
+     *                    Special case: if 'mode' is set to 'New', a specific string is replaced.
+     *
+     * @return string Returns the template string with all placeholders replaced by their corresponding values.
+     */
+    public function replaceVars(array $vars): string
+    {
+        $template = $this->template;
+
+        if (isset($vars['mode']) && $vars['mode'] === 'New') {
+            $template = str_replace('### TEXTO ORIGINAL:', '### TEMA:', $template);
         }
 
-        if ($messages['promptSelected']['mode_or'] == 'New') {
-            $this->userPrompt .= ($messages["input"] ?? false) ? sprintf("\n\n### TEMA:\n%s", $messages["input"]) : "";
-        } elseif ($messages['promptSelected']['mode_or'] == 'Edit') {
-            $this->userPrompt .= ($messages["input"] ?? false) ? sprintf("\n\n### TEXTO:\n%s", $messages["input"]) : '';
+        foreach ($vars as $key => $value) {
+            $template = str_replace('{{' . $key . '}}', $value, $template);
         }
 
-        $this->insertTone($messages);
-
-        $this->userPrompt .= sprintf("\n\n### OBJETIVO:\n%s", $messages["promptInput"]);
-
-        return $this->userPrompt;
+        return $template;
     }
 
     /**
@@ -504,7 +531,14 @@ class AIHelper
         if ($messages["input"] ?? false) {
             $data['messages'][] = [
                 'role' => 'user',
-                'content' => $this->generatePrompt($messages)
+                'content' => $this->replaceVars([
+                    'objetivo' => $messages["promptInput"] ?? '',
+                    'instrucciones' => $this->getInstructionsList($messages['promptSelected']['instructions']) ?? '',
+                    'rol' => $messages['roleSelected']['prompt'] ?? '',
+                    'idioma' => $messages["locale"] ?? '',
+                    'fuente' => $messages["input"] ?? '',
+                    'tono' => $messages['toneSelected']['name'] ?? ''
+                ])
             ];
         }
 
