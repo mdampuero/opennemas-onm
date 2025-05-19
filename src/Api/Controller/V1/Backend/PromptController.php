@@ -73,13 +73,20 @@ class PromptController extends ApiController
     {
         $this->checkSecurity($this->extension, $this->getActionPermission('list'));
 
-        $us           = $this->get($this->service);
-        $oql          = $request->query->get('oql', '');
+        $us         = $this->get($this->service);
+        $oql        = $request->query->get('oql', '');
+        $fi         = sprintf(
+            '(instances ~ "%s" or instances ~ "Todos")',
+            $this->container->get('core.instance')->internal_name
+        );
+        $separator  = preg_match('/^\s*order\s+by/i', $oql) ? ' ' : ' and ';
+        $oqlManager = $fi . $separator . $oql;
+
         $helperLocale = $this->get('core.helper.locale');
         $repository   = $this->get('orm.manager')->getRepository('PromptManager');
         $response     = $us->getList($oql);
         $items        = $helperLocale->translateAttributes($us->responsify($response['items']), ['mode', 'field']);
-        $itemsManager = $helperLocale->translateAttributes($us->responsify($repository->findBy($oql)), [
+        $itemsManager = $helperLocale->translateAttributes($us->responsify($repository->findBy($oqlManager)), [
             'mode',
             'field'
         ]);
