@@ -53,8 +53,6 @@ define('ADMIN_DIR', 'admin');
 define('FILE_DIR', 'files');
 define('ITEMS_PAGE', '20'); // TODO: delete from application
 
-define('STATIC_PAGE_PATH', 'estaticas');
-
 // Backup paths
 define('BACKUP_PATH', SITE_PATH . DS . '../tmp/backups');
 
@@ -69,7 +67,7 @@ mb_internal_encoding('UTF-8');
 /**
  * @var $loader ClassLoader
  */
-$loader = require __DIR__ . '/../vendor/autoload.php';
+$loader = include __DIR__ . '/../vendor/autoload.php';
 
 $loader->add('Onm', SITE_LIBS_PATH);
 $loader->setUseIncludePath(true);
