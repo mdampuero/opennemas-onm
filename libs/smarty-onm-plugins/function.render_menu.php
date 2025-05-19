@@ -43,7 +43,7 @@ function smarty_function_render_menu($params, &$smarty)
         }
 
         // Check if is cached in redis
-        $cacheId = sprintf('menu-%s-html%s', $menu->id, $menu->locale);
+        $cacheId = sprintf('menu-%s-html-%s%s', $menu->id, basename($tpl), $menu->locale);
         if ($cc->exists($cacheId)) {
             return $cc->get($cacheId);
         }
