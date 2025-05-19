@@ -115,7 +115,6 @@ class AIHelper
     protected $template = <<<EOT
 ### INSTRUCCIONES IMPORTANTES:
 {{rol}}
-## Sigue estas reglas estrictamente:
 {{instrucciones}}
 
 ### IDIOMA:
@@ -417,6 +416,9 @@ EOT;
             ));
         }
 
+        if ($instructionsString) {
+            $instructionsString = sprintf("## Sigue estas reglas estrictamente:\n%s", $instructionsString);
+        }
         return $instructionsString;
     }
 
@@ -533,7 +535,7 @@ EOT;
                 'role' => 'user',
                 'content' => $this->replaceVars([
                     'objetivo' => $messages["promptInput"] ?? '',
-                    'instrucciones' => $this->getInstructionsList($messages['promptSelected']['instructions']) ?? '',
+                    'instrucciones' => $this->getInstructionsList($messages['promptSelected']['instructions'] ?? []),
                     'rol' => $messages['roleSelected']['prompt'] ?? '',
                     'idioma' => $messages["locale"] ?? '',
                     'fuente' => $messages["input"] ?? '',
