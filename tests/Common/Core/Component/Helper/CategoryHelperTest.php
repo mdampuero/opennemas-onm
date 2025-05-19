@@ -364,7 +364,7 @@ class CategoryHelperTest extends \PHPUnit\Framework\TestCase
     */
     public function testIsManualCategory()
     {
-        $category = new Category([ 'id' => 436, 'logo_id' => 123, 'params' => ['manual' => '1']]);
+        $category = new Category([ 'id' => 436, 'logo_id' => 123, 'layout' => 1]);
 
         $this->assertFalse($this->helper->isManualCategory(131));
         $this->assertTrue($this->helper->isManualCategory($category));

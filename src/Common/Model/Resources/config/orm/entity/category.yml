@@ -11,6 +11,7 @@ orm:
                 visible:             boolean
                 enabled:             boolean
                 rss:                 boolean
+                layout:              boolean
                 parent_id:           integer
                 params:              array
                 logo_id:             integer
@@ -60,6 +61,9 @@ orm:
                         rss:
                             type: integer
                             options: { default: '0', notnull: false }
+                        layout:
+                            type: integer
+                            options: { default: '0', notnull: false}
                         parent_id:
                             type: integer
                             options: { default: null, notnull: false }

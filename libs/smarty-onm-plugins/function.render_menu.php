@@ -32,24 +32,34 @@ function smarty_function_render_menu($params, &$smarty)
     }
 
     try {
-        $menuHelper  = $smarty->getContainer()->get('core.helper.menu');
-        $menuService = $smarty->getContainer()->get('api.service.menu');
+        $cc = $smarty->getContainer()->get('cache.connection.instance');
+        $cs = $smarty->getContainer()->get('api.service.category');
+        $mh = $smarty->getContainer()->get('core.helper.menu');
+        $ms = $smarty->getContainer()->get('api.service.menu');
 
-        $menuService->setCount(0);
-
-        $menu = $menuService->getItemLocaleBy($oql);
+        $menu = $ms->getItemLocaleBy($oql);
         if (empty($menu) || empty($menu->menu_items)) {
             return '';
         }
 
-        $menuItemsObject = $menuHelper->castToObjectNested($menu->menu_items);
+        // Check if is cached in redis
+        $cacheId = sprintf('menu-%s-html%s', $menu->id, $menu->locale);
+        if ($cc->exists($cacheId)) {
+            return $cc->get($cacheId);
+        }
+
+        $menuItemsObject = $mh->castToObjectNested($menu->menu_items);
 
         $smarty->assign([
+            'actual_category' => $params['actual_category'] ?? null,
+            'categories'      => $cs->setCount(0)->getList()['items'],
             'menuItems'       => $menuItemsObject ?? [],
-            'actual_category' => $params['actual_category'] ?? null
         ]);
 
         $output = $smarty->fetch($tpl);
+
+        // Set cache with html output in redis
+        $cc->set($cacheId, $output);
 
         return $output;
     } catch (\Api\Exception\GetItemException $e) {
