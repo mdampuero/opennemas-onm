@@ -557,6 +557,10 @@ class Importer
             $data['params'] = ['bodyLink' => $data['href']];
         }
 
+        if ($this->config['canonicalurl'] ?? null) {
+            $data['canonicalurl'] = $data['href'];
+        }
+
         $method = 'getDataFor' . ucfirst($data['content_type_name']);
 
         if (method_exists($this, $method)) {
@@ -674,7 +678,6 @@ class Importer
 
         $data = array_merge($data, [
             'created'              => $date->format('Y-m-d H:i:s'),
-            'canonicalurl'         => $resource->canonicalurl,
             'event_start_date'     => $resource->event_start_date,
             'event_start_hour'     => $resource->event_start_hour,
             'event_end_date'       => $resource->event_end_date,

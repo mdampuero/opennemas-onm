@@ -120,6 +120,9 @@
           </div>
         </div>
       </div>
+      <div class="grid-collapse-title">
+        {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Keep canonical url from origin{/t}" field="canonicalurl"}
+      </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.agency }" ng-click="expanded.agency = !expanded.agency">
         <i class="fa fa-pencil m-r-10"></i>{t}Agency{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.agency }"></i>

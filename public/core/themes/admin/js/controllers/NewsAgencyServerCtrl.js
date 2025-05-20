@@ -23,6 +23,7 @@
         $scope.item = {
           authors_map: [],
           categories_map: [],
+          canonicalurl: '',
           filters: [],
           sync_from: '3600',
           external: 'none',
@@ -91,6 +92,10 @@
 
           if ($scope.item.draft_import) {
             $scope.item.draft_import = parseInt($scope.item.draft_import);
+          }
+
+          if ($scope.item.canonicalurl) {
+            $scope.item.canonicalurl = parseInt($scope.item.canonicalurl);
           }
         };
 

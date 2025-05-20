@@ -184,6 +184,16 @@ class NewsMLComponentTextTaquilla extends NewsML
         $url = '';
         if (is_array($property) && !empty($property)) {
             $url = (string) $property[0];
+
+            // If no scheme was present, add https://
+            if (!preg_match('/^https?:\/\//i', $url)) {
+                // Handle relative URLs
+                if (strpos($url, '//') === 0) {
+                    $url = 'https:' . $url;
+                } else {
+                    $url = 'https://' . $url;
+                }
+            }
         }
 
         return $url;
@@ -362,6 +372,18 @@ class NewsMLComponentTextTaquilla extends NewsML
     }
 
     /**
+     * Returns the href from the parsed data.
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return string The href.
+     */
+    public function getHref($data)
+    {
+        return $this->getEventOrganizerUrl($data);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function parse($data)
@@ -385,7 +407,7 @@ class NewsMLComponentTextTaquilla extends NewsML
         $this->bag['event_subtype_id']     = $this->getEventSubtypeId($data);
         $this->bag['event_organizer_name'] = $this->getEventOrganizerName($data);
         $this->bag['event_organizer_url']  = $this->getEventOrganizerUrl($data);
-        $this->bag['canonicalurl']         = $this->getEventWebsite($data);
+        $this->bag['href']                 = $this->getEventOrganizerUrl($data);
 
         if ($eventEndDate && $eventEndDate != $eventStartDate) {
             $this->bag['event_end_date'] = $eventEndDate->format('Y-m-d');
