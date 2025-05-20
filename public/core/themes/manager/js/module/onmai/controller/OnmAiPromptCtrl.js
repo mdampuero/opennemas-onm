@@ -32,7 +32,8 @@
         $scope.item = {
           field: 'titles',
           mode: 'New',
-          instances: [ 'Todos' ]
+          instances: [ 'Todos' ],
+          instructions: [],
         };
 
         $scope.instructionsAvailables = [];
