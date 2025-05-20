@@ -130,6 +130,15 @@
         <div class="grid simple">
           <div class="grid-body adstxt-form">
             <div class="form-group">
+              <div class="checkbox">
+                <input id="content-status" ng-false-value="0" ng-model="item.status" ng-true-value="1" type="checkbox">
+                <label for="content-status">{t}Published{/t}</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <hr>
+            </div>
+            <div class="form-group">
               <label class="form-label"><b>{t}Instructions{/t}</b></label>
               <div class="input-with-icon right">
                 <input class="form-control"
