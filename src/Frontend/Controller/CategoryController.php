@@ -260,7 +260,7 @@ class CategoryController extends FrontendController
     protected function getItems($params)
     {
         $service     = $this->get('api.service.content');
-        $now         = date('Y-m-d H:i:s');
+        $now         = gmdate('Y-m-d H:i:s');
         $categoryIds = [$params['category']->id];
 
         // Retrieve and accumulate the IDs of all child categories and their descendants
