@@ -14,6 +14,7 @@ orm:
                 prompt:       string
                 model:        string
                 instructions: array
+                status:       integer
             converters:
                 default:
                     class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
@@ -60,6 +61,9 @@ orm:
                         instructions:
                             type: text
                             options: { default: null, length: 65532, notnull: true }
+                        status:
+                            type: integer
+                            options: { default: '0', notnull: false, unsigned: true }
                     index:
                         -
                             name: PRIMARY

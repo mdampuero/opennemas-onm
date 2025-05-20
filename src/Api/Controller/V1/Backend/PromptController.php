@@ -76,7 +76,7 @@ class PromptController extends ApiController
         $us         = $this->get($this->service);
         $oql        = $request->query->get('oql', '');
         $fi         = sprintf(
-            '(instances ~ "%s" or instances ~ "Todos")',
+            '(instances ~ "%s" or instances ~ "Todos") and (status = 1) ',
             $this->container->get('core.instance')->internal_name
         );
         $separator  = preg_match('/^\s*order\s+by/i', $oql) ? ' ' : ' and ';

@@ -50,8 +50,14 @@
                   </div>
                 </li>
                 <li class="hidden-xs m-r-10 ng-cloak quicklinks">
+                  <select class="form-control form-control-lg" ng-model="criteria.model">
+                    <option value="">{t}Model{/t}: {t}Any{/t}</option>
+                    <option value="[% item.id %]" ng-repeat="item in extra.onmai_models">[% item.title %]</option>
+                  </select>
+                </li>
+                <li class="hidden-xs m-r-10 ng-cloak quicklinks">
                   <select class="form-control form-control-lg" ng-model="criteria.mode">
-                    <option value="">{t}Field{/t}: {t}Any{/t}</option>
+                    <option value="">{t}Mode{/t}: {t}Any{/t}</option>
                     <option value="New">{t}Create{/t}</option>
                     <option value="Edit">{t}Edit{/t}</option>
                     <option value="Agency">{t}Agency{/t}</option>
@@ -65,11 +71,10 @@
                     <option value="bodies">{t}Bodies{/t}</option>
                   </select>
                 </li>
-                <li class="hidden-xs m-r-10 ng-cloak quicklinks">
-                  <select class="form-control form-control-lg" ng-model="criteria.model">
-                    <option value="">{t}Model{/t}: {t}Any{/t}</option>
-                    <option value="[% item.id %]" ng-repeat="item in extra.onmai_models">[% item.title %]</option>
-                  </select>
+                <li class="m-r-10 quicklinks">
+                  <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
+                    <i class="fa fa-fire fa-lg m-l-5 m-r-5"></i>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -127,6 +132,9 @@
                     <th class="text-center" width="300">
                       {t}Instances{/t}
                     </th>
+                    <th class="text-center" width="300">
+                      {t}Published{/t}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -165,6 +173,11 @@
                             [% instance %]
                         </a>
                       </div>
+                    </td>
+                    <td class="text-center v-align-middle" >
+                      <button class="btn btn-white" ng-click="patch(item, 'status', item.status != 1 ? 1 : 0)" type="button">
+                        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.statusLoading == 1, 'fa-check text-success': !item.statusLoading == 1 && item.status == 1, 'fa-times text-danger': !item.statusLoading == 1 && item.status == 0 }"></i>
+                      </button>
                     </td>
                   </tr>
                 </tbody>
