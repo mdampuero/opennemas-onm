@@ -31,7 +31,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-loading btn-success text-uppercase" ng-click="!item.id ? save() : update()" ng-disabled="promptForm.$invalid || saving">
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="!item.id ? save() : update()" >
               <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
