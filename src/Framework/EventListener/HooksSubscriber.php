@@ -446,9 +446,7 @@ class HooksSubscriber implements EventSubscriberInterface
         $item  = $event->getArgument('item');
 
         if ($item->pk_menu ?? null) {
-            $this->container->get('core.instance')->hasMultilanguage()
-                ? $cache->removeByPattern('menu-' . $item->pk_menu . '-html*')
-                : $cache->remove('menu-' . $item->pk_menu . '-html');
+            $cache->removeByPattern('menu-' . $item->pk_menu . '-html*');
         }
     }
 
