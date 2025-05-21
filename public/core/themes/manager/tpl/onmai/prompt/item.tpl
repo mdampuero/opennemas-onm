@@ -147,7 +147,7 @@
                       ng-model="searchText"
                       type="text"
                       maxlength="64"
-                      placeholder="Buscar instrucción..." />
+                      placeholder="{t}Search{/t}..." />
               </div>
             </div>
             <span class="badge text-capitalize badge-success pointer"
