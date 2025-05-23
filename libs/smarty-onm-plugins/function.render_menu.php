@@ -38,7 +38,6 @@ function smarty_function_render_menu($params, &$smarty)
         $menuService->setCount(0);
 
         $menu = $menuService->getItemLocaleBy($oql);
-
         if (empty($menu) || empty($menu->menu_items)) {
             return '';
         }
