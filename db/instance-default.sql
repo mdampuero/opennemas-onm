@@ -127,6 +127,7 @@ CREATE TABLE `category` (
   KEY `logo_id` (`logo_id`),
   KEY `cover_id` (`cover_id`),
   KEY `parent_id` (`parent_id`),
+  KEY `category_name` (`name`(32)),
   CONSTRAINT `category_id_category_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `cover_id_pk_content` FOREIGN KEY (`cover_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `logo_id_pk_content` FOREIGN KEY (`logo_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE
