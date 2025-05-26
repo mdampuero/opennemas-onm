@@ -482,7 +482,7 @@ EOT;
         $vars = [
             'objetivo' => $data['prompt'],
             'rol' => $this->getRoleByName($data['role']),
-            'tono' => $data['tone'],
+            'tono' => $this->getToneByName($data['tone']),
             'mode' => $data['mode'],
             'instrucciones' => $this->getInstructionsList($data['instructions'])
         ];
@@ -501,6 +501,26 @@ EOT;
         foreach ($this->getRoles() as $item) {
             if (isset($item['name']) && $item['name'] === $name) {
                 return $item['prompt'] ?? '';
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Returns the description (prompt text) for a tone/role by its name.
+     *
+     * Iterates through the list of available tones and returns the description
+     * of the first match found with the given name.
+     *
+     * @param string $name The name of the tone/role to search for.
+     *
+     * @return string The description associated with the tone, or an empty string if not found.
+     */
+    protected function getToneByName(string $name)
+    {
+        foreach ($this->getTones() as $item) {
+            if (isset($item['name']) && $item['name'] === $name) {
+                return $item['description'] ?? '';
             }
         }
         return '';
@@ -561,11 +581,12 @@ EOT;
                 'role' => 'user',
                 'content' => $this->replaceVars([
                     'objetivo' => $messages["promptInput"] ?? '',
+                    'mode'     => $messages['promptSelected']['mode_or'] ?? '',
                     'instrucciones' => $this->getInstructionsList($messages['promptSelected']['instructions'] ?? []),
                     'rol' => $messages['roleSelected']['prompt'] ?? '',
                     'idioma' => $messages["locale"] ?? '',
                     'fuente' => $messages["input"] ?? '',
-                    'tono' => $messages['toneSelected']['name'] ?? ''
+                    'tono' => $messages['toneSelected']['description'] ?? ''
                 ])
             ];
         }
