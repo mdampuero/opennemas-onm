@@ -69,6 +69,19 @@ class JsonController extends FrontendController
                 'id' => $data['pk_content']
             ]);
 
+            $photoHelper    = $this->container->get('core.helper.photo');
+            $featuredHelper = $this->container->get('core.helper.featured_media');
+
+            $thumbnail = $photoHelper->getPhotoPath(
+                $featuredHelper->getFeaturedMedia(
+                    $item,
+                    'inner'
+                ),
+                null,
+                [],
+                true
+            );
+
             if ($type === 'event') {
                 $url = $this->generateUrl('frontend_event_show', [
                     'slug' => $data['slug']
@@ -92,7 +105,7 @@ class JsonController extends FrontendController
                 'author' => $this->getAuthorData($item),
                 'longitude' => $data['event_map_longitude'] ?? '',
                 'latitude' => $data['event_map_latitude'] ?? '',
-                'thumbnail' => 'https://www.laguiago.com/wp-content/uploads/2025/05/Untitled-12.png',
+                'thumbnail' => $thumbnail,
                 'content' => $data['description'] ?? '',
                 'subtype' => $this->getCategoryName($item) ?? '',
                 'nbParticipants' => 0,
