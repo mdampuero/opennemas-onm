@@ -2,8 +2,6 @@
 
 namespace Frontend\Controller;
 
-use Api\Exception\GetItemException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,7 +39,7 @@ class JsonController extends FrontendController
             . ' %s %s %s'
             . ' where content_type_name = "%s"'
             . ' %s %s %s',
-            null, // specify condition for the content type
+            null,
             $oqlCategory[0] ?? null,
             $oqlTag[0] ?? null,
             $type,
@@ -51,34 +49,100 @@ class JsonController extends FrontendController
         );
 
         $rawItems = $this->get('api.service.content')->getListBySql($baseOql)['items'];
+
         // $RawItems is an object, we need to convert it to an json
         $items = [];
 
         foreach ($rawItems as $item) {
             $data = $item->getData();
 
+            $categorySlug = $this->getCategorySlug($item);
+            $mainDomain   = $this->container->get('core.instance')->getBaseUrl();
+
+            $date    = $data['created']->format('Ymd');
+            $hour    = $data['created']->format('His');
+            $created = $date . $hour;
+
+            $url = $this->generateUrl('frontend_article_show', [
+                'category_slug' => $categorySlug,
+                'slug' => $data['slug'],
+                'created' => $created,
+                'id' => $data['pk_content']
+            ]);
+
+            $startDate = ($type === 'event' && !empty($data['event_start_date']) && !empty($data['event_start_hour']))
+                ? $data['event_start_date'] . 'T' . $data['event_start_hour']
+                : (($type === 'article' && !empty($data['starttime']))
+                    ? $data['starttime']->format('Y-m-d H:i:s')
+                    : '');
+
+            $endDate = ($type === 'event' && !empty($data['event_end_date']) && !empty($data['event_end_hour']))
+                ? $data['event_end_date'] . 'T' . $data['event_end_hour']
+                : '';
+
             $items[] = [
-                "allDay"         => 0,
-                "title"          => $data['title'] ?? '',
-                "url"            => 'https://www.laguiago.com/?post_type=go_event&p=' . ($data['pk_content'] ?? ''),
-                "author"         => 'Editor',
-                "longitude"      => '',
-                "latitude"       => '',
-                "thumbnail"      => 'https://www.laguiago.com/wp-content/uploads/2025/05/Untitled-12.png',
-                "content"        => $data['description'] ?? '',
-                "subtype"        => $data['categories'][0]['name'] ?? '',
-                "nbParticipants" => 0,
-                "address"        => $data['event_place'] ?? '',
-                "type"           => "event",
-                "id"             => 'event_' . ($data['pk_content'] ?? ''),
-                "date"           => isset($data['event_start_date'], $data['event_start_hour']) ?
-                                    $data['event_start_date'] . 'T' . $data['event_start_hour'] . ':00+0200' : '',
-                "endDate"        => isset($data['event_end_date'], $data['event_end_hour']) ?
-                                    $data['event_end_date'] . 'T' . $data['event_end_hour'] . ':59+0200' : '',
+                'allDay' => 0,
+                'title' => $data['title'] ?? '',
+                'url' => $mainDomain . $url,
+                'author' => $this->getAuthorData($item),
+                'longitude' => $data['event_map_longitude'] ?? '',
+                'latitude' => $data['event_map_latitude'] ?? '',
+                'thumbnail' => 'https://www.laguiago.com/wp-content/uploads/2025/05/Untitled-12.png',
+                'content' => $data['description'] ?? '',
+                'subtype' => $this->getCategoryName($item) ?? '',
+                'nbParticipants' => 0,
+                'address' => $data['event_place'] ?? '',
+                'type' => $data['event_type'] ?? '',
+                'id' => $type . '_' . ($data['pk_content'] ?? ''),
+                'date' => $startDate,
+                'endDate' => $endDate,
             ];
         }
+
         return new JsonResponse([
             'items' => $items
         ]);
+    }
+
+    /**
+     * Method to retrieve the author information.
+     *
+     * @param \Content $content The content object.
+     *
+     * @return string The author information.
+     */
+    protected function getAuthorData($content)
+    {
+        $author = $this->container->get('core.helper.author')->getAuthorName($content->fk_author);
+
+        if (empty($author)) {
+            $author = $this->container->get('orm.manager')->getDataSet('Settings', 'instance')
+                ->get('site_name');
+        }
+
+        return $author;
+    }
+
+    /**
+     * Method to retrieve the name of the category for the provided content.
+     *
+     * @param \Content $content The content object.
+     *
+     * @return string The category name or an empty string if not found.
+     */
+    protected function getCategoryName($content)
+    {
+        $category = $this->container->get('core.helper.category')
+            ->getCategoryName($content);
+
+        return $category ?? '';
+    }
+
+    protected function getCategorySlug($content)
+    {
+        $category = $this->container->get('core.helper.category')
+            ->getCategorySlug($content);
+
+        return $category ?? '';
     }
 }
