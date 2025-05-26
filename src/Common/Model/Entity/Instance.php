@@ -50,7 +50,7 @@ class Instance extends Entity
     }
 
     /**
-     * Returns the database name.
+     * Returns the databagit pushse name.
      *
      * @return string The database name.
      */

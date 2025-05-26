@@ -62,13 +62,18 @@ class JsonController extends FrontendController
             $date    = $data['created']->format('Ymd');
             $hour    = $data['created']->format('His');
             $created = $date . $hour;
-
-            $url = $this->generateUrl('frontend_article_show', [
+            $url     = $this->generateUrl('frontend_article_show', [
                 'category_slug' => $categorySlug,
                 'slug' => $data['slug'],
                 'created' => $created,
                 'id' => $data['pk_content']
             ]);
+
+            if ($type === 'event') {
+                $url = $this->generateUrl('frontend_event_show', [
+                    'slug' => $data['slug']
+                ]);
+            }
 
             $startDate = ($type === 'event' && !empty($data['event_start_date']) && !empty($data['event_start_hour']))
                 ? $data['event_start_date'] . 'T' . $data['event_start_hour']
