@@ -127,6 +127,7 @@ CREATE TABLE `category` (
   KEY `logo_id` (`logo_id`),
   KEY `cover_id` (`cover_id`),
   KEY `parent_id` (`parent_id`),
+  KEY `category_name` (`name`(32)),
   CONSTRAINT `category_id_category_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `cover_id_pk_content` FOREIGN KEY (`cover_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `logo_id_pk_content` FOREIGN KEY (`logo_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -462,6 +463,7 @@ CREATE TABLE `contents` (
   KEY `fk_user_last_editor` (`fk_user_last_editor`),
   KEY `content_type_name_changed` (`content_type_name`,`changed`),
   KEY `content_type_name_in_litter_content_status` (`content_type_name`,`in_litter`,`content_status`),
+  KEY `contents_slug` (`slug`(32)),
   CONSTRAINT `fk_author_users_id` FOREIGN KEY (`fk_author`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_publisher_users_id` FOREIGN KEY (`fk_publisher`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_user_last_editor_users_id` FOREIGN KEY (`fk_user_last_editor`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
