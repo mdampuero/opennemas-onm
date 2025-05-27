@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-07 09:34+0000\n"
-"PO-Revision-Date: 2025-04-07 11:35+0200\n"
+"POT-Creation-Date: 2025-05-21 13:43+0000\n"
+"PO-Revision-Date: 2025-05-21 15:48+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -3800,14 +3800,23 @@ msgstr "Data de envío"
 msgid "Not sent"
 msgstr "Non enviado"
 
-msgid "Reset filters"
-msgstr "Reiniciar filtros"
-
 msgid "Mode"
 msgstr "Modo"
 
 msgid "Field"
 msgstr "Campo"
+
+msgid "Titles"
+msgstr "Títulos"
+
+msgid "Descriptions"
+msgstr "Descricións"
+
+msgid "Bodies"
+msgstr "Corpos"
+
+msgid "Reset filters"
+msgstr "Reiniciar filtros"
 
 msgid "Default tone"
 msgstr "Tono predeterminado"
@@ -3820,15 +3829,6 @@ msgstr "Prompts do sistema"
 
 msgid "Roles"
 msgstr "Roles"
-
-msgid "Titles"
-msgstr "Títulos"
-
-msgid "Descriptions"
-msgstr "Descricións"
-
-msgid "Bodies"
-msgstr "Corpos"
 
 msgid "Prompt"
 msgstr "Prompt"
@@ -8104,14 +8104,23 @@ msgstr "Modelo predeterminado"
 msgid "Instructions"
 msgstr "Instrucións"
 
-msgid "Both"
-msgstr "Ambos"
-
 msgid "Instruction"
 msgstr "Instrución"
 
 msgid "New prompt"
 msgstr "Nova prompt"
+
+msgid "Objective"
+msgstr "Obxectivo"
+
+msgid "Final prompt preview"
+msgstr "Vista previa final da prompt"
+
+msgid "Selected instructions"
+msgstr "Instrucións seleccionadas"
+
+msgid "You have not selected any instructions"
+msgstr "Non seleccionaches ningunha instrución"
 
 msgid "Cost price per 1 million tokens"
 msgstr "Prezo de custo por 1 millón de tokens"
@@ -8418,6 +8427,9 @@ msgstr "Semella que te perdemos nas nubes."
 
 msgid "The page your looking for is not here"
 msgstr "A páxina que estás buscando non está aquí"
+
+#~ msgid "Both"
+#~ msgstr "Ambos"
 
 #~ msgid "Manual categories"
 #~ msgstr "Categorías manuais"

@@ -23,7 +23,8 @@
   </a>
 {/block}
 
-{block name="leftColumn"}
+{block name="grid"}
+<div class="content">
   <div class="grid simple">
     <div class="grid-body">
       <div class="row m-t-20">
@@ -86,4 +87,5 @@
       </div>
     </div>
   </div>
+</div>
 {/block}
