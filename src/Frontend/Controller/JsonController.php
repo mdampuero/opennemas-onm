@@ -129,6 +129,18 @@ class JsonController extends FrontendController
                 'slug' => $data['slug']
             ]);
 
+            // Get the category name and author name
+            $categoryName = $this->container->get('core.helper.category')
+                ->getCategoryName($item);
+            $authorName   = $this->container->get('core.helper.author')
+                ->getAuthorName($item->fk_author);
+
+            // If the author name is empty, use the site name as the author
+            if (empty($authorName)) {
+                $authorName = $this->container->get('orm.manager')->getDataSet('Settings', 'instance')
+                    ->get('site_name');
+            }
+
             // Prepare start and end dates and formats
             // If the event has a start date, format it as 'Y-m-dTH:i:s'
             // If the event has an end date, format it as 'Y-m-dTH:i:s'
@@ -162,12 +174,12 @@ class JsonController extends FrontendController
                 'allDay' => 0,
                 'title' => $data['title'] ?? '',
                 'url' => $mainDomain . $url,
-                'author' => $this->getAuthorData($item),
+                'author' => $authorName,
                 'longitude' => $data['event_longitude'] ?? '',
                 'latitude' => $data['event_latitude'] ?? '',
                 'thumbnail' => $thumbnail,
                 'content' => $data['description'],
-                'subtype' => $this->getCategoryName($item) ?? '',
+                'subtype' => $categoryName ?? '',
                 'nbParticipants' => 0,
                 'address' => $data['event_address'] ?? '',
                 'type' => $data['content_type_name'],
@@ -225,7 +237,8 @@ class JsonController extends FrontendController
             $data = $item->getData();
 
             // Variables for the article Json Response
-            $categorySlug = $this->getCategorySlug($item);
+            $categorySlug = $this->container->get('core.helper.category')
+                ->getCategorySlug($item);
             $date         = $data['created']->format('Ymd');
             $hour         = $data['created']->format('His');
             $created      = $date . $hour;
@@ -235,6 +248,18 @@ class JsonController extends FrontendController
                 'created' => $created,
                 'id' => $data['pk_content']
             ]);
+
+            // Get the category name and author name
+            $categoryName = $this->container->get('core.helper.category')
+                ->getCategoryName($item);
+            $authorName   = $this->container->get('core.helper.author')
+                ->getAuthorName($item->fk_author);
+
+            // If the author name is empty, use the site name as the author
+            if (empty($authorName)) {
+                $authorName = $this->container->get('orm.manager')->getDataSet('Settings', 'instance')
+                    ->get('site_name');
+            }
 
             // Get the thumbnail
             // Use the photo helper to get the featured media thumbnail
@@ -261,8 +286,8 @@ class JsonController extends FrontendController
                 'title' => $data['title'] ?? '',
                 'url' => $mainDomain . $url,
                 'date' => $created,
-                'author' => $this->getAuthorData($item),
-                'subtype' => $this->getCategoryName($item) ?? '',
+                'author' => $authorName,
+                'subtype' => $categoryName ?? '',
                 'summary' => strip_tags($data['description']) ?? '',
                 'content' => mb_strimwidth(strip_tags($data['body'] ?? ''), 0, 200, '...'),
                 'thumbnail' => $thumbnail ?? '',
@@ -272,56 +297,6 @@ class JsonController extends FrontendController
         // Return the JSON response with the items
         return new JsonResponse(
             $items,
-            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
         );
-    }
-
-    /**
-     * Method to retrieve the author information.
-     *
-     * @param \Content $content The content object.
-     *
-     * @return string The author information.
-     */
-    protected function getAuthorData($content)
-    {
-        $author = $this->container->get('core.helper.author')->getAuthorName($content->fk_author);
-
-        if (empty($author)) {
-            $author = $this->container->get('orm.manager')->getDataSet('Settings', 'instance')
-                ->get('site_name');
-        }
-
-        return $author;
-    }
-
-    /**
-     * Method to retrieve the name of the category for the provided content.
-     *
-     * @param \Content $content The content object.
-     *
-     * @return string The category name or an empty string if not found.
-     */
-    protected function getCategoryName($content)
-    {
-        $category = $this->container->get('core.helper.category')
-            ->getCategoryName($content);
-
-        return $category ?? '';
-    }
-
-    /**
-     * Method to retrieve the slug of the category for the provided content.
-     *
-     * @param \Content $content The content object.
-     *
-     * @return string The category slug or an empty string if not found.
-     */
-    protected function getCategorySlug($content)
-    {
-        $category = $this->container->get('core.helper.category')
-            ->getCategorySlug($content);
-
-        return $category ?? '';
     }
 }
