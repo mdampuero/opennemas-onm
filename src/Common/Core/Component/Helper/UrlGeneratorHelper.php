@@ -349,9 +349,22 @@ class UrlGeneratorHelper
             ])
             ->get();
 
-        $uri = $this->container->get('router')->generate('category_frontpage', [
-            'category_slug' => $category->name
-        ]);
+        $route = 'category_frontpage';
+        $param = 'category_slug';
+
+        if (!empty($category->layout)) {
+            $route = 'frontend_frontpage_category';
+            $param = 'category';
+        }
+
+        $route = $this->container->get('core.helper.setting')->isMergeEnabled()
+            ? 'category_homepage'
+            : $route;
+
+        $uri = $this->container->get('router')->generate(
+            $route,
+            [ $param => $category->name ]
+        );
 
         return ltrim($uri, '/');
     }
