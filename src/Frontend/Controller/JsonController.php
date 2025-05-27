@@ -18,60 +18,133 @@ class JsonController extends FrontendController
      */
     public function generalJsonAction(Request $request): Response
     {
-        $type     = htmlspecialchars($request->get('type', 'article'));
-        $category = htmlspecialchars($request->get('category', null));
-        $tag      = htmlspecialchars($request->get('tag', null));
+        $data = [
+            'type' => htmlspecialchars($request->get('type', null)),
+            'category' => htmlspecialchars($request->get('category', null)),
+            'tag' => htmlspecialchars($request->get('tag', null)),
+        ];
 
-        if (!empty($category)) {
-            $oqlCategory[0]  = ' inner join content_category as cc1 on cc1.content_id = contents.pk_content';
-            $oqlCategory[0] .= ' inner join category as c1 on c1.id = cc1.category_id';
-            $oqlCategory[1]  = " and c1.name = '" . $category . "'";
+        if (!empty($data['category'])) {
+            $data['oqlCategory']['query'] = implode(' ', [
+                'inner join content_category as cc1',
+                'on cc1.content_id = contents.pk_content',
+                'inner join category as c1',
+                'on c1.id = cc1.category_id',
+            ]);
+
+            $data['oqlCategory']['where'] = sprintf(
+                " and c1.name = '%s'",
+                $data['category']
+            );
         }
 
-        if (!empty($tag)) {
-            $oqlTag[0]  = ' inner join contents_tags as ct1 on ct1.content_id = contents.pk_content';
-            $oqlTag[0] .= ' inner join tags as t1 on t1.id = ct1.tag_id';
-            $oqlTag[1]  = " and t1.slug = '" . $tag . "'";
+        if (!empty($data['tag'])) {
+            $data['oqlTag']['query'] = implode(' ', [
+                'inner join contents_tags as ct1',
+                'on ct1.content_id = contents.pk_content',
+                'inner join tags as t1',
+                'on t1.id = ct1.tag_id',
+            ]);
+
+            $data['oqlTag']['where'] = sprintf(
+                " and t1.slug = '%s'",
+                $data['tag']
+            );
         }
 
+
+        if ($data['type'] === 'event') {
+            return $this->hydrateEvents($data);
+        }
+
+        return $this->hydrateArticles($data);
+    }
+
+    /**
+     * Hydrate events method.
+     *
+     * This method retrieves events based on the provided data and returns them as a JSON response.
+     *
+     * @param array $data The data containing filters and parameters for retrieving events.
+     * @return Response The JSON response containing the events.
+     */
+    protected function hydrateEvents($data) : Response
+    {
+        $items = [];
+        // Today's date in 'Y-m-d' format
+        $today = date('Y-m-d');
+
+        // Initialize the OQL for events
+        $eventsOql['query'] = ' inner join contentmeta as cm1
+                on contents.pk_content = cm1.fk_content
+                and cm1.meta_name = "event_start_date"
+                left join contentmeta as cm2
+                on contents.pk_content = cm2.fk_content
+                and cm2.meta_name = "event_end_date"
+                left join contentmeta as cm3
+                on contents.pk_content = cm3.fk_content
+                and cm3.meta_name = "event_start_hour"
+                left join contentmeta as cm4
+                on contents.pk_content = cm4.fk_content
+                and cm4.meta_name = "event_end_hour"';
+
+        // Filter for events that are either ongoing or upcoming
+        $eventsOql['where'] = ' and ('
+            . ' (cm1.meta_value is not null and cm1.meta_value >= "' . $today . '")'
+            . ' or (cm1.meta_value <= "' . $today . '" and cm2.meta_value >= "' . $today . '")'
+        . ')';
+
+        // If it's a event, we need order by start date, hour, and content ID
+        $orderBy = 'order by cm1.meta_value asc,
+            cm3.meta_value asc,
+            contents.pk_content asc';
+
+        // Construct the OQL for event, tag, and category filtering
         $baseOql = sprintf(
             'select * from contents'
             . ' %s %s %s'
             . ' where content_type_name = "%s"'
-            . ' %s %s %s',
-            null,
-            $oqlCategory[0] ?? null,
-            $oqlTag[0] ?? null,
-            $type,
-            null, // specify condition for the type
-            $oqlCategory[1] ?? null,
-            $oqlTag[1] ?? null,
+            . ' %s %s %s'
+            . ' %s',
+            $eventsOql['query'],
+            $data['oqlCategory']['query'] ?? null,
+            $data['oqlTag']['query'] ?? null,
+            $data['type'],
+            $eventsOql['where'],
+            $data['oqlCategory']['where'] ?? null,
+            $data['oqlTag']['where'] ?? null,
+            $orderBy,
         );
 
         $rawItems = $this->get('api.service.content')->getListBySql($baseOql)['items'];
 
-        // $RawItems is an object, we need to convert it to an json
-        $items = [];
-
+        // $RawItems is an object, we need to convert it to a json
         foreach ($rawItems as $item) {
             $data = $item->getData();
 
-            $categorySlug = $this->getCategorySlug($item);
-            $mainDomain   = $this->container->get('core.instance')->getBaseUrl();
-
-            $date    = $data['created']->format('Ymd');
-            $hour    = $data['created']->format('His');
-            $created = $date . $hour;
-            $url     = $this->generateUrl('frontend_article_show', [
-                'category_slug' => $categorySlug,
-                'slug' => $data['slug'],
-                'created' => $created,
-                'id' => $data['pk_content']
+            $mainDomain = $this->container->get('core.instance')->getBaseUrl();
+            $url        = $this->generateUrl('frontend_event_show', [
+                'slug' => $data['slug']
             ]);
 
+            // Prepare start and end dates and formats
+            // If the event has a start date, format it as 'Y-m-dTH:i:s'
+            // If the event has an end date, format it as 'Y-m-dTH:i:s'
+            $startDate = !empty($data['event_start_date']) ?
+                $data['event_start_date'] . 'T' . ($data['event_start_hour'] ?? '') :
+                '';
+            $endDate   = !empty($data['event_end_date']) ?
+                $data['event_end_date'] . 'T' . ($data['event_end_hour'] ?? '') :
+                '';
+
+            // Get the thumbnail
+            // Use the photo helper to get the featured media thumbnail
+            // If the item has no featured media, it will return an empty string
             $photoHelper    = $this->container->get('core.helper.photo');
             $featuredHelper = $this->container->get('core.helper.featured_media');
 
+            // Get the thumbnail path for the featured media
+            // If the item has no featured media, it will return an empty string
             $thumbnail = $photoHelper->getPhotoPath(
                 $featuredHelper->getFeaturedMedia(
                     $item,
@@ -82,44 +155,119 @@ class JsonController extends FrontendController
                 true
             );
 
-            if ($type === 'event') {
-                $url = $this->generateUrl('frontend_event_show', [
-                    'slug' => $data['slug']
-                ]);
-            }
-
-            $startDate = ($type === 'event' && !empty($data['event_start_date']) && !empty($data['event_start_hour']))
-                ? $data['event_start_date'] . 'T' . $data['event_start_hour']
-                : (($type === 'article' && !empty($data['starttime']))
-                    ? $data['starttime']->format('Y-m-d H:i:s')
-                    : '');
-
-            $endDate = ($type === 'event' && !empty($data['event_end_date']) && !empty($data['event_end_hour']))
-                ? $data['event_end_date'] . 'T' . $data['event_end_hour']
-                : '';
-
+            // Build the item array
             $items[] = [
                 'allDay' => 0,
                 'title' => $data['title'] ?? '',
                 'url' => $mainDomain . $url,
                 'author' => $this->getAuthorData($item),
-                'longitude' => $data['event_map_longitude'] ?? '',
-                'latitude' => $data['event_map_latitude'] ?? '',
+                'longitude' => $data['event_longitude'] ?? '',
+                'latitude' => $data['event_latitude'] ?? '',
                 'thumbnail' => $thumbnail,
-                'content' => $data['description'] ?? '',
+                'content' => $data['description'],
                 'subtype' => $this->getCategoryName($item) ?? '',
                 'nbParticipants' => 0,
-                'address' => $data['event_place'] ?? '',
-                'type' => $data['event_type'] ?? '',
-                'id' => $type . '_' . ($data['pk_content'] ?? ''),
+                'address' => $data['event_address'] ?? '',
+                'type' => $data['content_type_name'],
+                'id' => 'event_' . $data['pk_content'] ?? '',
                 'date' => $startDate,
                 'endDate' => $endDate,
             ];
         }
 
+        // Return the JSON response with the items
         return new JsonResponse([
             'items' => $items
         ]);
+    }
+
+    /**
+     * Hydrate articles method.
+     *
+     * This method retrieves articles based on the provided data and returns them as a JSON response.
+     *
+     * @param array $data The data containing filters and parameters for retrieving articles.
+     * @return Response The JSON response containing the articles.
+     */
+    protected function hydrateArticles($data) : Response
+    {
+        $items      = [];
+        $mainDomain = $this->container->get('core.instance')->getBaseUrl();
+
+        $orderBy = empty($data['type']) ?
+            ' order by contents.starttime desc limit 1' :
+            ' order by contents.starttime desc,
+                contents.pk_content asc';
+
+        $baseOql = sprintf(
+            'select * from contents'
+            . ' %s %s'
+            . ' where content_type_name = "%s"'
+            . ' %s %s'
+            . ' %s',
+            $data['oqlCategory']['query'] ?? null,
+            $data['oqlTag']['query'] ?? null,
+            empty($data['type']) ? 'article' : $data['type'],
+            $data['oqlCategory']['where'] ?? null,
+            $data['oqlTag']['where'] ?? null,
+            $orderBy ?? '',
+        );
+
+        $rawItems = $this->get('api.service.content')->getListBySql($baseOql)['items'];
+
+        foreach ($rawItems as $item) {
+            $data = $item->getData();
+
+            // Variables for the article Json Response
+            $categorySlug = $this->getCategorySlug($item);
+            $date         = $data['created']->format('Ymd');
+            $hour         = $data['created']->format('His');
+            $created      = $date . $hour;
+            $url          = $this->generateUrl('frontend_article_show', [
+                'category_slug' => $categorySlug,
+                'slug' => $data['slug'],
+                'created' => $created,
+                'id' => $data['pk_content']
+            ]);
+
+            // Get the thumbnail
+            // Use the photo helper to get the featured media thumbnail
+            // If the item has no featured media, it will return an empty string
+            $photoHelper    = $this->container->get('core.helper.photo');
+            $featuredHelper = $this->container->get('core.helper.featured_media');
+
+            // Get the thumbnail path for the featured media
+            // If the item has no featured media, it will return an empty string
+            $thumbnail = $photoHelper->getPhotoPath(
+                $featuredHelper->getFeaturedMedia(
+                    $item,
+                    'inner'
+                ),
+                null,
+                [],
+                true
+            );
+
+            // Build the item array
+            $items[] = [
+                'id' => 'article_' . $data['pk_content'] ?? '',
+                'type' => $data['content_type_name'] ?? 'article',
+                'title' => $data['title'] ?? '',
+                'url' => $mainDomain . $url,
+                'date' => $created,
+                'author' => $this->getAuthorData($item),
+                'subtype' => $this->getCategoryName($item) ?? '',
+                'summary' => strip_tags($data['description']) ?? '',
+                'content' => mb_strimwidth(strip_tags($data['body'] ?? ''), 0, 200, '...'),
+                'thumbnail' => $thumbnail ?? '',
+            ];
+        }
+
+        // Return the JSON response with the items
+        return new JsonResponse(
+            $items,
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        );
     }
 
     /**
@@ -156,6 +304,13 @@ class JsonController extends FrontendController
         return $category ?? '';
     }
 
+    /**
+     * Method to retrieve the slug of the category for the provided content.
+     *
+     * @param \Content $content The content object.
+     *
+     * @return string The category slug or an empty string if not found.
+     */
     protected function getCategorySlug($content)
     {
         $category = $this->container->get('core.helper.category')
