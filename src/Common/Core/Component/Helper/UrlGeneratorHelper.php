@@ -151,7 +151,6 @@ class UrlGeneratorHelper
             $uri = preg_replace('@\.html$@', '.amp.html', $uri);
         }
 
-
         return $this->container->get('core.decorator.url')->prefixUrl($uri);
     }
 
