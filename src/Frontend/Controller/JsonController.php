@@ -126,13 +126,14 @@ class JsonController extends FrontendController
             $orderBy,
         );
 
+        // Fetch the raw items using the API service
         $rawItems = $this->get('api.service.content')->getListBySql($baseOql)['items'];
 
         // $RawItems is an object, we need to convert it to a json
         foreach ($rawItems as $item) {
             $data = $item->getData();
 
-            $url        = $this->generateUrl('frontend_event_show', [
+            $url = $this->generateUrl('frontend_event_show', [
                 'slug' => $data['slug']
             ]);
 
