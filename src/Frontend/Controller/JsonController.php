@@ -142,13 +142,14 @@ class JsonController extends FrontendController
             }
 
             // Prepare start and end dates and formats
-            // If the event has a start date, format it as 'Y-m-dTH:i:s'
-            // If the event has an end date, format it as 'Y-m-dTH:i:s'
+            // If the event has a start date and hour, format it as 'Y-m-dTH:i:s'
+            // If the event has only the date, just use the date
             $startDate = !empty($data['event_start_date']) ?
-                $data['event_start_date'] . 'T' . ($data['event_start_hour'] ?? '') :
+                $data['event_start_date'] . (!empty($data['event_start_hour']) ? 'T' . $data['event_start_hour'] : '') :
                 '';
-            $endDate   = !empty($data['event_end_date']) ?
-                $data['event_end_date'] . 'T' . ($data['event_end_hour'] ?? '') :
+
+            $endDate = !empty($data['event_end_date']) ?
+                $data['event_end_date'] . (!empty($data['event_end_hour']) ? 'T' . $data['event_end_hour'] : '') :
                 '';
 
             // Get the thumbnail
