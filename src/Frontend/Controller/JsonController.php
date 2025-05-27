@@ -286,7 +286,7 @@ class JsonController extends FrontendController
                 'type' => $data['content_type_name'] ?? 'article',
                 'title' => $data['title'] ?? '',
                 'url' => $mainDomain . $url,
-                'date' => $created,
+                'date' => $data['created']->format('Y-m-d H:i:s') ?? '',
                 'author' => $authorName,
                 'subtype' => $categoryName ?? '',
                 'summary' => strip_tags($data['description']) ?? '',
