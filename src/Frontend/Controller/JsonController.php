@@ -9,12 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 class JsonController extends FrontendController
 {
     /**
-     * General JSON response action.
+     * General JSON action.
      *
-     * This action returns a dummy JSON response.
+     * This method handles the request and returns a JSON response based on the
+     * type, category, and tag parameters.
      *
-     * @param Request $request The HTTP request object.
-     * @return JsonResponse The JSON response.
+     * @param Request $request The HTTP request object containing parameters.
+     * @return Response The JSON response containing the requested data.
      */
     public function generalJsonAction(Request $request): Response
     {
@@ -59,6 +60,7 @@ class JsonController extends FrontendController
             return $this->hydrateEvents($data);
         }
 
+        // Default to articles if no type is specified or if is not an event
         return $this->hydrateArticles($data);
     }
 
@@ -258,7 +260,8 @@ class JsonController extends FrontendController
 
             // If the author name is empty, use the site name as the author
             if (empty($authorName)) {
-                $authorName = $this->container->get('orm.manager')->getDataSet('Settings', 'instance')
+                $authorName = $this->container->get('orm.manager')
+                    ->getDataSet('Settings', 'instance')
                     ->get('site_name');
             }
 
@@ -291,7 +294,7 @@ class JsonController extends FrontendController
                 'subtype' => $categoryName ?? '',
                 'summary' => strip_tags($data['description']) ?? '',
                 'content' => mb_strimwidth(strip_tags($data['body'] ?? ''), 0, 200, '...'),
-                'thumbnail' => $thumbnail ?? '',
+                'thumbnail' => $thumbnail,
             ];
         }
 
