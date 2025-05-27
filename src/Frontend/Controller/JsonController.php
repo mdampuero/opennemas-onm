@@ -18,12 +18,14 @@ class JsonController extends FrontendController
      */
     public function generalJsonAction(Request $request): Response
     {
+        // Variables to hold the data from the request
         $data = [
-            'type' => htmlspecialchars($request->get('type', null)),
-            'category' => htmlspecialchars($request->get('category', null)),
-            'tag' => htmlspecialchars($request->get('tag', null)),
+            'type' => $request->get('type', null),
+            'category' => $request->get('category', null),
+            'tag' => $request->get('tag', null),
         ];
 
+        // Initialize OQL queries for category and tag
         if (!empty($data['category'])) {
             $data['oqlCategory']['query'] = implode(' ', [
                 'inner join content_category as cc1',
@@ -52,7 +54,7 @@ class JsonController extends FrontendController
             );
         }
 
-
+        // Separate the logic for events and articles
         if ($data['type'] === 'event') {
             return $this->hydrateEvents($data);
         }
@@ -70,8 +72,8 @@ class JsonController extends FrontendController
      */
     protected function hydrateEvents($data) : Response
     {
+        // Initialize an empty array to hold the items and the current date
         $items = [];
-        // Today's date in 'Y-m-d' format
         $today = date('Y-m-d');
 
         // Initialize the OQL for events
@@ -191,9 +193,11 @@ class JsonController extends FrontendController
      */
     protected function hydrateArticles($data) : Response
     {
+        // Initialize an empty array to hold the items and the main domain
         $items      = [];
         $mainDomain = $this->container->get('core.instance')->getBaseUrl();
 
+        // Initialize the OQL for articles
         $orderBy = empty($data['type']) ?
             ' order by contents.starttime desc limit 1' :
             ' order by contents.starttime desc,
@@ -213,8 +217,10 @@ class JsonController extends FrontendController
             $orderBy ?? '',
         );
 
+        // Fetch the raw items using the API service
         $rawItems = $this->get('api.service.content')->getListBySql($baseOql)['items'];
 
+        // $RawItems is an object, we need to convert it to a json
         foreach ($rawItems as $item) {
             $data = $item->getData();
 
