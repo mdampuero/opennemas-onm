@@ -75,8 +75,9 @@ class JsonController extends FrontendController
     protected function hydrateEvents($data) : Response
     {
         // Initialize an empty array to hold the items and the current date
-        $items = [];
-        $today = date('Y-m-d');
+        $items      = [];
+        $today      = date('Y-m-d');
+        $mainDomain = $this->container->get('core.instance')->getBaseUrl();
 
         // Initialize the OQL for events
         $eventsOql['query'] = ' inner join contentmeta as cm1
@@ -93,10 +94,15 @@ class JsonController extends FrontendController
                 and cm4.meta_name = "event_end_hour"';
 
         // Filter for events that are either ongoing or upcoming
-        $eventsOql['where'] = ' and ('
-            . ' (cm1.meta_value is not null and cm1.meta_value >= "' . $today . '")'
-            . ' or (cm1.meta_value <= "' . $today . '" and cm2.meta_value >= "' . $today . '")'
-        . ')';
+        $eventsOql['where'] = sprintf(
+            ' and (
+                (cm1.meta_value is not null and cm1.meta_value >= "%s")
+                or (cm1.meta_value <= "%s" and cm2.meta_value >= "%s")
+            )',
+            $today,
+            $today,
+            $today
+        );
 
         // If it's a event, we need order by start date, hour, and content ID
         $orderBy = 'order by cm1.meta_value asc,
@@ -126,7 +132,6 @@ class JsonController extends FrontendController
         foreach ($rawItems as $item) {
             $data = $item->getData();
 
-            $mainDomain = $this->container->get('core.instance')->getBaseUrl();
             $url        = $this->generateUrl('frontend_event_show', [
                 'slug' => $data['slug']
             ]);
@@ -160,8 +165,6 @@ class JsonController extends FrontendController
             $photoHelper    = $this->container->get('core.helper.photo');
             $featuredHelper = $this->container->get('core.helper.featured_media');
 
-            // Get the thumbnail path for the featured media
-            // If the item has no featured media, it will return an empty string
             $thumbnail = $photoHelper->getPhotoPath(
                 $featuredHelper->getFeaturedMedia(
                     $item,
@@ -181,7 +184,7 @@ class JsonController extends FrontendController
                 'longitude' => $data['event_longitude'] ?? '',
                 'latitude' => $data['event_latitude'] ?? '',
                 'thumbnail' => $thumbnail,
-                'content' => $data['description'],
+                'content' => strip_tags($data['body'] ?? ''),
                 'subtype' => $categoryName ?? '',
                 'nbParticipants' => 0,
                 'address' => $data['event_address'] ?? '',
@@ -289,11 +292,11 @@ class JsonController extends FrontendController
                 'type' => $data['content_type_name'] ?? 'article',
                 'title' => $data['title'] ?? '',
                 'url' => $mainDomain . $url,
-                'date' => $data['created']->format('Y-m-d H:i:s') ?? '',
+                'date' => $data['starttime']->format('Y-m-d H:i:s') ?? '',
                 'author' => $authorName,
                 'subtype' => $categoryName ?? '',
                 'summary' => strip_tags($data['description']) ?? '',
-                'content' => mb_strimwidth(strip_tags($data['body'] ?? ''), 0, 200, '...'),
+                'content' => strip_tags($data['body'] ?? ''),
                 'thumbnail' => $thumbnail,
             ];
         }
