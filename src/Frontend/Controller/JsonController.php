@@ -298,7 +298,10 @@ class JsonController extends FrontendController
                 'subtype' => $categoryName ?? '',
                 'summary' => strip_tags($data['description']) ?? '',
                 'content' => strip_tags($data['body'] ?? ''),
+                'smallThumbnail' => $thumbnail,
                 'thumbnail' => $thumbnail,
+                'largeThumbnail' => $thumbnail,
+                'images' => [],
             ];
         }
 
