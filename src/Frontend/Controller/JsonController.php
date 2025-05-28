@@ -287,13 +287,13 @@ class JsonController extends FrontendController
                 true
             );
 
-            // Build the item array
+            // Build the json response for the article
             $items[] = [
                 'id' => 'article_' . $data['pk_content'] ?? '',
                 'type' => $data['content_type_name'] ?? 'article',
                 'title' => $data['title'] ?? '',
                 'url' => $mainDomain . $url,
-                'date' => $data['starttime']->format('Y-m-d H:i:s') ?? '',
+                'date' => isset($data['starttime']) ? $data['starttime']->format('Y-m-d\TH:i:sO') : '',
                 'author' => $authorName,
                 'subtype' => $categoryName ?? '',
                 'summary' => strip_tags($data['description']) ?? '',
@@ -301,7 +301,6 @@ class JsonController extends FrontendController
                 'smallThumbnail' => $thumbnail,
                 'thumbnail' => $thumbnail,
                 'largeThumbnail' => $thumbnail,
-                'images' => [],
             ];
         }
 
