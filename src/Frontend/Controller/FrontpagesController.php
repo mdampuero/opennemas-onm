@@ -44,14 +44,24 @@ class FrontpagesController extends Controller
         $categoryId   = 0;
 
         if (!empty($categoryName) && $categoryName !== 'home') {
+            // Force redirect if url merge is enabled
+            $mergeCategoryUrl = $this->get('orm.manager')
+                ->getDataSet('Settings')
+                ->get('merge_category_url', 0);
+
+            if ($mergeCategoryUrl && !$request->query->get('noredirect', false)) {
+                $redirectUrl = $this->generateUrl('category_homepage', [
+                    'category_slug' => $categoryName
+                ]);
+
+                return new RedirectResponse(
+                    $this->get('core.decorator.url')->prefixUrl($redirectUrl),
+                    301
+                );
+            }
+
+            // If is manual section
             try {
-                $mergeCategoryUrl = (bool) $this->get('orm.manager')->getDataSet('Settings')
-                    ->get('merge_category_url', 0);
-                if ($mergeCategoryUrl && !$request->query->get('noredirect', false)) {
-                    return new RedirectResponse($this->generateUrl('category_homepage', [
-                        'category_slug' => $categoryName
-                    ]), 301);
-                }
                 $category = $this->get('api.service.category')
                     ->getItemBySlug($categoryName);
             } catch (\Exception $e) {
