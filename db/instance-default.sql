@@ -118,6 +118,7 @@ CREATE TABLE `category` (
   `visible` tinyint(1) unsigned DEFAULT '0',
   `enabled` tinyint(1) unsigned DEFAULT '0',
   `rss` tinyint(1) unsigned DEFAULT '0',
+  `layout` tinyint(1) unsigned DEFAULT '0',
   `parent_id` bigint(20) unsigned DEFAULT NULL,
   `params` text,
   `logo_id` bigint(20) unsigned DEFAULT NULL,
