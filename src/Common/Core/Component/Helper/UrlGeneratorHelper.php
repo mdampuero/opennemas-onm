@@ -356,9 +356,10 @@ class UrlGeneratorHelper
             $param = 'category';
         }
 
-        $route = $this->container->get('core.helper.setting')->isMergeEnabled()
-            ? 'category_homepage'
-            : $route;
+        if ($this->container->get('core.helper.setting')->isMergeEnabled()) {
+            $route = 'category_homepage';
+            $param = 'category_slug';
+        }
 
         $uri = $this->container->get('router')->generate(
             $route,
