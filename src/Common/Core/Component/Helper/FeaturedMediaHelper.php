@@ -84,7 +84,6 @@ class FeaturedMediaHelper
     public function getFeaturedMedia($item, $type, $deep = true)
     {
         $item        = $this->contentHelper->getContent($item);
-
         $contentType = $this->contentHelper->getType($item);
 
         $map = [
