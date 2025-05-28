@@ -212,8 +212,15 @@ class JsonController extends FrontendController
      */
     protected function hydrateArticles($data) : Response
     {
-        // Initialize an empty array to hold the items and the main domain
-        $items      = [];
+        // Initialize an empty array to hold the items and images
+        // and the main domain for URL generation
+        $items   = [];
+        $images  = [];
+        $typeMap = [
+            'featured_inner' => 'inner',
+            'featured_frontpage' => 'frontpage',
+        ];
+
         $mainDomain = $this->container->get('core.instance')->getBaseUrl();
 
         // Initialize the OQL for articles
@@ -275,17 +282,26 @@ class JsonController extends FrontendController
             $photoHelper    = $this->container->get('core.helper.photo');
             $featuredHelper = $this->container->get('core.helper.featured_media');
 
-            // Get the thumbnail path for the featured media
-            // If the item has no featured media, it will return an empty string
-            $thumbnail = $photoHelper->getPhotoPath(
-                $featuredHelper->getFeaturedMedia(
-                    $item,
-                    'inner'
-                ),
-                null,
-                [],
-                true
-            );
+            // Filter the related contents to get the images
+            foreach ($data['related_contents'] as $image) {
+                if (isset($image['content_type_name'], $image['type']) &&
+                    $image['content_type_name'] === 'photo' &&
+                    isset($typeMap[$image['type']])) {
+                    // Map the type to the key in the images array
+                    $key = $typeMap[$image['type']];
+
+                    // Use the photo and featured helper to get the thumbnail
+                    $images[$key] = [
+                        'id' => $image['source_id'],
+                        'thumbnail' => $photoHelper->getPhotoPath(
+                            $featuredHelper->getFeaturedMedia($item, $key),
+                            null,
+                            [],
+                            true
+                        ),
+                    ];
+                }
+            }
 
             // Build the json response for the article
             $items[] = [
@@ -298,9 +314,10 @@ class JsonController extends FrontendController
                 'subtype' => $categoryName ?? '',
                 'summary' => strip_tags($data['description']) ?? '',
                 'content' => strip_tags($data['body'] ?? ''),
-                'smallThumbnail' => $thumbnail,
-                'thumbnail' => $thumbnail,
-                'largeThumbnail' => $thumbnail,
+                'smallThumbnail' => $images['inner']['thumbnail'] ?? '',
+                'thumbnail' => $images['inner']['thumbnail'] ?? '',
+                'largeThumbnail' => $images['inner']['thumbnail'] ?? '',
+                'images' => $images,
             ];
         }
 
