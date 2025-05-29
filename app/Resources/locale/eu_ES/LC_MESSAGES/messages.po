@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-11 11:49+0000\n"
-"PO-Revision-Date: 2025-04-11 13:50+0200\n"
+"POT-Creation-Date: 2025-05-29 08:44+0000\n"
+"PO-Revision-Date: 2025-05-29 10:52+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Euskera\n"
 "Language: es\n"
@@ -1699,6 +1699,12 @@ msgstr "Antzerti"
 msgid "theater"
 msgstr "antzerti"
 
+msgid "Museum"
+msgstr "Museoa"
+
+msgid "museum"
+msgstr "museoa"
+
 msgid "Exhibitions"
 msgstr "Erakusketak"
 
@@ -1947,6 +1953,24 @@ msgstr "Gobernu-gailurrak"
 
 msgid "governmental-debates"
 msgstr "Gobernu-eztabaidak"
+
+msgid "Other"
+msgstr "Beste"
+
+msgid "other"
+msgstr "bestela"
+
+msgid "Musicals"
+msgstr "Musikalak"
+
+msgid "musicals"
+msgstr "musikalak"
+
+msgid "Circus"
+msgstr "Zirkua"
+
+msgid "circus"
+msgstr "zirkua"
 
 msgid "Live blog post"
 msgstr "BIZI BLOG POST"
@@ -3465,11 +3489,17 @@ msgstr "Birzuzenketa"
 msgid "When importing assign an external link to the elements"
 msgstr "Inportatzean Esleitu kanpoko esteka elementuei"
 
+msgid "Keep canonical url from origin"
+msgstr "Jatorrizko URL kanonikoa mantendu"
+
 msgid "When importing elements this will be the signature"
 msgstr "Elementuak inportatzean sinadura izango da"
 
 msgid "Automatic import"
 msgstr "Inportazio automatikoa"
+
+msgid "Import as draft"
+msgstr "Zirriborro gisa inportatu"
 
 msgid "Import"
 msgstr "Inportatu"
@@ -3902,9 +3932,9 @@ msgid ""
 "configure it"
 msgstr ""
 "Iruzkinak moderatu nahi badituzu, lehenengo Facebook aplikazioa sortu behar "
-"baduzu <a href = \"href =\" https://developers.facebook.com/ target=\"_ "
-"blank\"> Hemen </a> aplikazio ID bat lortzeko eta ondoren egin klik "
-"Ezarpenak konfiguratzeko"
+"baduzu <a href = \"href =\" https://developers.facebook.com/ target=\"_ blank"
+"\"> Hemen </a> aplikazio ID bat lortzeko eta ondoren egin klik Ezarpenak "
+"konfiguratzeko"
 
 msgid "Disqus"
 msgstr "Desolatu"
@@ -4689,6 +4719,9 @@ msgstr ""
 
 msgid "Menu"
 msgstr "Menu"
+
+msgid "Manual"
+msgstr "Eskuzko"
 
 msgid "Only empty categories can be deleted"
 msgstr "Kategoria hutsak bakarrik ezabatu daitezke"
@@ -5489,6 +5522,16 @@ msgstr "Bigarren mailako letra-tipoa (gorputza, laburpena...)"
 msgid "Redirect to frontpage non-migrated contents"
 msgstr "Birzuzenketa Migratu gabeko edukia"
 
+msgid "Merge category URLs"
+msgstr "Kategoria URLak batu"
+
+msgid ""
+"If you enable this option, the URLs '/seccion/category/' and '/blog/section/"
+"category/' will be redirected to '/category/'."
+msgstr ""
+"Aukera hau gaitzen baduzu, '/seccion/category/' eta '/blog/section/"
+"category/' URLak '/category/'-ra birbideratuko dira."
+
 msgid "Google Analytics"
 msgstr "Google Analytics"
 
@@ -5815,8 +5858,8 @@ msgid ""
 "\"$event.stopPropagation();\">this page</a>."
 msgstr ""
 "Lortu zure recaptcha gakoa <a class = \"class-lock\" href = \"https://www."
-"google.com/recaptcha/admin#whyrecaptchapchaptchaptchaptcha\" target=\"_ "
-"blank\" ng-click = \"$ event.stoppropagation ();\"> Orrialde hau </a>."
+"google.com/recaptcha/admin#whyrecaptchapchaptchaptchaptcha\" target=\"_ blank"
+"\" ng-click = \"$ event.stoppropagation ();\"> Orrialde hau </a>."
 
 msgid "Used when we want to test if the user is an human and not a robot."
 msgstr ""
@@ -6140,9 +6183,6 @@ msgstr "Bizkor"
 msgid "Reset filters"
 msgstr "Berrezarri iragazkiak"
 
-msgid "Reload"
-msgstr "Berriz kargatu"
-
 msgid "System prompts"
 msgstr "Sistemaren galderak"
 
@@ -6411,6 +6451,9 @@ msgstr "Elementua bikoiztu nahi al duzu?"
 msgid "Mosaic"
 msgstr "Mosaiko"
 
+msgid "Reload"
+msgstr "Berriz kargatu"
+
 msgid "Unable to find any item or you don't have permission to see the list."
 msgstr "Ezin da elementurik aurkitu edo ez duzu zerrenda zerrenda ikusteko."
 
@@ -6613,12 +6656,6 @@ msgstr "Ikusi faktura"
 
 msgid "Module"
 msgstr "Moldulu"
-
-msgid "Manual categories"
-msgstr "Eskuzko kategoriak"
-
-msgid "Automatic categories"
-msgstr "Kategoria automatikoak"
 
 msgid "Synchronized instances"
 msgstr "Sinkronizatutako instantziak"
@@ -7191,9 +7228,6 @@ msgid ""
 msgstr ""
 "Gaituta badago, harpidedunek ez dute harpidedun hau ikusiko profila "
 "erregistratu edo editatzeko"
-
-msgid "Manual"
-msgstr "Eskuzko"
 
 msgid "Accept requests manually"
 msgstr "Eskaerak eskuz onartu"
@@ -8069,9 +8103,6 @@ msgstr "Papura"
 msgid "Instructions"
 msgstr "Argibideak"
 
-msgid "Both"
-msgstr "Biak"
-
 msgid "Instruction"
 msgstr "Agindu"
 
@@ -8488,9 +8519,6 @@ msgstr "Oraingoz ez da erosketarik"
 msgid "View purchase"
 msgstr "Ikusi erosketa"
 
-msgid "Other"
-msgstr "Beste"
-
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumerikoa, espaziorik gabe"
 
@@ -8815,3 +8843,12 @@ msgstr "Aukeratutako erabiltzaile taldeak ezabatu nahi dituzu?"
 
 msgid "Group name"
 msgstr "Taldearen izena"
+
+#~ msgid "Manual categories"
+#~ msgstr "Eskuzko kategoriak"
+
+#~ msgid "Automatic categories"
+#~ msgstr "Kategoria automatikoak"
+
+#~ msgid "Both"
+#~ msgstr "Biak"

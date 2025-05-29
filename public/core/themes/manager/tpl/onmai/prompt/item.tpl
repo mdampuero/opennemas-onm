@@ -31,7 +31,7 @@
             <span class="h-seperate"></span>
           </li>
           <li class="quicklinks">
-            <button class="btn btn-loading btn-success text-uppercase" ng-click="!item.id ? save() : update()" ng-disabled="promptForm.$invalid || saving">
+            <button class="btn btn-loading btn-success text-uppercase" ng-click="!item.id ? save() : update()" >
               <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': saving }"></i> {t}Save{/t}
             </button>
           </li>
@@ -79,7 +79,7 @@
               </ui-select-choices>
             </ui-select>
           </div>
-          <div class="col-md-3 col-sm-6 form-group">
+          <div class="col-md-3 col-sm-6 form-group" ng-if="item.mode != 'Agency'">
             <label>{t}Field{/t}</label>
             <ui-select name="mode" class="form-control" theme="select2" ng-model="item.field" search-enabled="false" required ng-init="options = [ { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Descriptions{/t}', key: 'descriptions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
               <ui-select-match>

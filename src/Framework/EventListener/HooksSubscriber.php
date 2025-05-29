@@ -14,6 +14,41 @@ use Symfony\Component\EventDispatcher\Event;
 class HooksSubscriber implements EventSubscriberInterface
 {
     /**
+     * The service container.
+     *
+     * @var Container
+     */
+    public $container = null;
+
+    /**
+     * The cache service.
+     *
+     * @var AbstractCache
+     */
+    public $cache = null;
+
+    /**
+     * The logger service.
+     *
+     * @var LoggerInterface
+     */
+    public $logger = null;
+
+    /**
+     * The CacheManager services for template.
+     *
+     * @var CacheManager
+     */
+    public $template = null;
+
+    /**
+     * The cache service for redis.
+     *
+     * @var Cache
+     */
+    public $redis = null;
+
+    /**
      * Initializes the object
      *
      * @param Container       $container The service container.
@@ -174,11 +209,13 @@ class HooksSubscriber implements EventSubscriberInterface
             // Menu hooks
             'menu.updateItem' => [
                 ['removeObjectCacheForContent', 20],
+                ['removeObjectCacheForMenu', 20],
                 ['removeSmartyCacheAll', 15],
                 ['removeVarnishCacheCurrentInstance', 10],
             ],
             'menu.deleteItem' => [
                 ['removeObjectCacheForContent', 20],
+                ['removeObjectCacheForMenu', 20],
                 ['removeSmartyCacheAll', 15],
                 ['removeVarnishCacheCurrentInstance', 10],
             ],
@@ -395,6 +432,21 @@ class HooksSubscriber implements EventSubscriberInterface
             }
 
             $this->cache->delete(\underscore(get_class($object)) . '-' . $object->id);
+        }
+    }
+
+    /**
+     * Deletes a menu html from cache after it is updated/deleted.
+     *
+     * @param Event $event The event to handle.
+     */
+    public function removeObjectCacheForMenu(Event $event)
+    {
+        $cache = $this->container->get('cache.connection.instance');
+        $item  = $event->getArgument('item');
+
+        if ($item->pk_menu ?? null) {
+            $cache->removeByPattern('menu-' . $item->pk_menu . '-html*');
         }
     }
 

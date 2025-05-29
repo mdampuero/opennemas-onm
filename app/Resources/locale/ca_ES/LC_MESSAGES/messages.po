@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-11 11:14+0000\n"
-"PO-Revision-Date: 2025-04-11 14:08+0200\n"
+"POT-Creation-Date: 2025-05-29 08:44+0000\n"
+"PO-Revision-Date: 2025-05-29 10:49+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Catalán\n"
 "Language: es\n"
@@ -1714,6 +1714,12 @@ msgstr "Teatre"
 msgid "theater"
 msgstr "teatre"
 
+msgid "Museum"
+msgstr "Museu"
+
+msgid "museum"
+msgstr "museu"
+
 msgid "Exhibitions"
 msgstr "Exposicions"
 
@@ -1962,6 +1968,24 @@ msgstr "estums governamentals"
 
 msgid "governmental-debates"
 msgstr "Debats governamentals"
+
+msgid "Other"
+msgstr "Altre"
+
+msgid "other"
+msgstr "altres"
+
+msgid "Musicals"
+msgstr "Musicals"
+
+msgid "musicals"
+msgstr "musicals"
+
+msgid "Circus"
+msgstr "Circ"
+
+msgid "circus"
+msgstr "circ"
 
 msgid "Live blog post"
 msgstr "Publicació del bloc en directe"
@@ -3482,11 +3506,17 @@ msgstr "Redirigir -se a"
 msgid "When importing assign an external link to the elements"
 msgstr "En importar assigneu un enllaç extern als elements"
 
+msgid "Keep canonical url from origin"
+msgstr "Mantén l'URL canònica de l'origen"
+
 msgid "When importing elements this will be the signature"
 msgstr "En importar elements, aquesta serà la signatura"
 
 msgid "Automatic import"
 msgstr "Importació automàtica"
+
+msgid "Import as draft"
+msgstr "Importa com a esborrany"
 
 msgid "Import"
 msgstr "Importar"
@@ -4710,6 +4740,9 @@ msgstr ""
 msgid "Menu"
 msgstr "Menú"
 
+msgid "Manual"
+msgstr "Manual"
+
 msgid "Only empty categories can be deleted"
 msgstr "Només es poden suprimir les categories buides"
 
@@ -5518,6 +5551,16 @@ msgstr "Font secundària (cos, resum…)"
 msgid "Redirect to frontpage non-migrated contents"
 msgstr "Redirigiu-vos a la pàgina frontal contingut no migrat"
 
+msgid "Merge category URLs"
+msgstr "Fusiona les URL de categoria"
+
+msgid ""
+"If you enable this option, the URLs '/seccion/category/' and '/blog/section/"
+"category/' will be redirected to '/category/'."
+msgstr ""
+"Si actives aquesta opció, les URL '/seccion/category/' i '/blog/section/"
+"category/' es redirigiran a '/category/'."
+
 msgid "Google Analytics"
 msgstr "Google Analytics"
 
@@ -5845,8 +5888,8 @@ msgid ""
 "\"$event.stopPropagation();\">this page</a>."
 msgstr ""
 "Obteniu la vostra tecla Recaptcha de <a class = \"externa-link\" href = "
-"\"https://www.google.com/recaptcha/admin#whyrecaptcha\" target= \"_blank"
-"\" ng-click = \"$ event.stoppropagació ();\"> aquesta pàgina </a>."
+"\"https://www.google.com/recaptcha/admin#whyrecaptcha\" target= \"_blank\" "
+"ng-click = \"$ event.stoppropagació ();\"> aquesta pàgina </a>."
 
 msgid "Used when we want to test if the user is an human and not a robot."
 msgstr "S'utilitza quan volem provar si l'usuari és humà i no un robot."
@@ -6171,9 +6214,6 @@ msgstr "Puntualment"
 msgid "Reset filters"
 msgstr "Restablir els filtres"
 
-msgid "Reload"
-msgstr "Carregar"
-
 msgid "System prompts"
 msgstr "Proves de sistema"
 
@@ -6448,6 +6488,9 @@ msgstr "Voleu duplicar l'element?"
 msgid "Mosaic"
 msgstr "Mosaic"
 
+msgid "Reload"
+msgstr "Carregar"
+
 msgid "Unable to find any item or you don't have permission to see the list."
 msgstr "No es pot trobar cap article o no tingueu permís per veure la llista."
 
@@ -6651,12 +6694,6 @@ msgstr "Veure la factura"
 
 msgid "Module"
 msgstr "Mòdul"
-
-msgid "Manual categories"
-msgstr "Categories manuals"
-
-msgid "Automatic categories"
-msgstr "Categories automàtiques"
 
 msgid "Synchronized instances"
 msgstr "Instàncies sincronitzades"
@@ -7240,9 +7277,6 @@ msgid ""
 msgstr ""
 "Si està activat, els subscriptors no veuran aquesta subscripció mentre "
 "registreu o editeu el perfil"
-
-msgid "Manual"
-msgstr "Manual"
 
 msgid "Accept requests manually"
 msgstr "Accepteu les sol·licituds manualment"
@@ -8131,9 +8165,6 @@ msgstr "Paper"
 msgid "Instructions"
 msgstr "Instruccions"
 
-msgid "Both"
-msgstr "Ambdós"
-
 msgid "Instruction"
 msgstr "Instrucció"
 
@@ -8556,9 +8587,6 @@ msgstr "Ara no hi ha compres"
 msgid "View purchase"
 msgstr "Veure la compra"
 
-msgid "Other"
-msgstr "Altre"
-
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumèric, sense espais"
 
@@ -8795,8 +8823,8 @@ msgid ""
 msgstr ""
 "<a href = \"http://www.opennemas.com/\" style = \"font-family: 'Trebuchet "
 "ms', 'lucida grande', 'lucida sans unicode', 'lucida sans', tahoma, sans-"
-"serif; tipus de lletra: 14px; línia-height: normal;\" target= \"_blank"
-"\"> OpenNemas </a> <span style = \"color:#000000\"> equip </span>"
+"serif; tipus de lletra: 14px; línia-height: normal;\" target= \"_blank\"> "
+"OpenNemas </a> <span style = \"color:#000000\"> equip </span>"
 
 msgid "Do you want to delete the notification?"
 msgstr "Voleu eliminar la notificació?"
@@ -8881,3 +8909,12 @@ msgstr "Voleu suprimir els grups d'usuari seleccionats?"
 
 msgid "Group name"
 msgstr "Nom de grup"
+
+#~ msgid "Manual categories"
+#~ msgstr "Categories manuals"
+
+#~ msgid "Automatic categories"
+#~ msgstr "Categories automàtiques"
+
+#~ msgid "Both"
+#~ msgstr "Ambdós"

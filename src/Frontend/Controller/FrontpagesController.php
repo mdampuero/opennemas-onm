@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -10,6 +11,7 @@
 namespace Frontend\Controller;
 
 use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -42,6 +44,23 @@ class FrontpagesController extends Controller
         $categoryId   = 0;
 
         if (!empty($categoryName) && $categoryName !== 'home') {
+            // Force redirect if url merge is enabled
+            $mergeCategoryUrl = $this->get('orm.manager')
+                ->getDataSet('Settings')
+                ->get('merge_category_url', 0);
+
+            if ($mergeCategoryUrl && !$request->query->get('noredirect', false)) {
+                $redirectUrl = $this->generateUrl('category_homepage', [
+                    'category_slug' => $categoryName
+                ]);
+
+                return new RedirectResponse(
+                    $this->get('core.decorator.url')->prefixUrl($redirectUrl),
+                    301
+                );
+            }
+
+            // If is manual section
             try {
                 $category = $this->get('api.service.category')
                     ->getItemBySlug($categoryName);

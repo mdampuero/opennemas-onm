@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-11 11:05+0000\n"
-"PO-Revision-Date: 2025-04-11 14:14+0200\n"
+"POT-Creation-Date: 2025-05-29 08:44+0000\n"
+"PO-Revision-Date: 2025-05-29 10:55+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: French\n"
 "Language: es\n"
@@ -1722,6 +1722,12 @@ msgstr "Théâtre"
 msgid "theater"
 msgstr "théâtre"
 
+msgid "Museum"
+msgstr "Musée"
+
+msgid "museum"
+msgstr "musee"
+
 msgid "Exhibitions"
 msgstr "Expositions"
 
@@ -1970,6 +1976,24 @@ msgstr "gouvernement du gouvernement"
 
 msgid "governmental-debates"
 msgstr "débats gouvernementaux"
+
+msgid "Other"
+msgstr "Autre"
+
+msgid "other"
+msgstr "autre"
+
+msgid "Musicals"
+msgstr "Comédies musicales"
+
+msgid "musicals"
+msgstr "comedies-musicales"
+
+msgid "Circus"
+msgstr "Cirque"
+
+msgid "circus"
+msgstr "cirque"
 
 msgid "Live blog post"
 msgstr "Article de blog en direct"
@@ -3496,11 +3520,17 @@ msgstr "Rediriger vers"
 msgid "When importing assign an external link to the elements"
 msgstr "Lors de l'importation, attribuez un lien externe aux éléments"
 
+msgid "Keep canonical url from origin"
+msgstr "Conserver l'URL canonique d'origine"
+
 msgid "When importing elements this will be the signature"
 msgstr "Lors de l'importation d'éléments, ce sera la signature"
 
 msgid "Automatic import"
 msgstr "Importation automatique"
+
+msgid "Import as draft"
+msgstr "Importer comme brouillon"
 
 msgid "Import"
 msgstr "Importer"
@@ -4735,6 +4765,9 @@ msgstr ""
 msgid "Menu"
 msgstr "Menu"
 
+msgid "Manual"
+msgstr "Manuel"
+
 msgid "Only empty categories can be deleted"
 msgstr "Seules les catégories vides peuvent être supprimées"
 
@@ -5545,6 +5578,16 @@ msgstr "Police secondaire (corps, résumé…)"
 msgid "Redirect to frontpage non-migrated contents"
 msgstr "Rediriger vers la page FrontPage non migrate du contenu"
 
+msgid "Merge category URLs"
+msgstr "Fusionner les URL des catégories"
+
+msgid ""
+"If you enable this option, the URLs '/seccion/category/' and '/blog/section/"
+"category/' will be redirected to '/category/'."
+msgstr ""
+"Si vous activez cette option, les URL « /seccion/category/ » et « /blog/"
+"section/category/ » seront redirigées vers « /category/ »."
+
 msgid "Google Analytics"
 msgstr "Google Analytics"
 
@@ -5872,8 +5915,8 @@ msgid ""
 "\"$event.stopPropagation();\">this page</a>."
 msgstr ""
 "Obtenez votre touche recaptcha à partir de <a class = \"external-link\" href "
-"= \"https://www.google.com/recaptcha/admin#whyrecaptcha\" cible = \"_blank"
-"\" ng-click = \"$ event.stoppropagation ();\"> cette page </a>."
+"= \"https://www.google.com/recaptcha/admin#whyrecaptcha\" cible = \"_blank\" "
+"ng-click = \"$ event.stoppropagation ();\"> cette page </a>."
 
 msgid "Used when we want to test if the user is an human and not a robot."
 msgstr ""
@@ -6204,9 +6247,6 @@ msgstr "Rapide"
 msgid "Reset filters"
 msgstr "Réinitialiser les filtres"
 
-msgid "Reload"
-msgstr "Recharger"
-
 msgid "System prompts"
 msgstr "Invites du système"
 
@@ -6482,6 +6522,9 @@ msgstr "Voulez-vous dupliquer l'article?"
 msgid "Mosaic"
 msgstr "Mosaïque"
 
+msgid "Reload"
+msgstr "Recharger"
+
 msgid "Unable to find any item or you don't have permission to see the list."
 msgstr ""
 "Impossible de trouver un élément ou vous n'avez pas la permission de voir la "
@@ -6687,12 +6730,6 @@ msgstr "Afficher la facture"
 
 msgid "Module"
 msgstr "Module"
-
-msgid "Manual categories"
-msgstr "Catégories manuelles"
-
-msgid "Automatic categories"
-msgstr "Catégories automatiques"
 
 msgid "Synchronized instances"
 msgstr "Instances synchronisées"
@@ -7281,9 +7318,6 @@ msgid ""
 msgstr ""
 "S'ils sont activés, les abonnés ne verront pas cet abonnement lors de "
 "l'enregistrement ou de l'édition de profil"
-
-msgid "Manual"
-msgstr "Manuel"
 
 msgid "Accept requests manually"
 msgstr "Acceptez manuellement les demandes"
@@ -8174,9 +8208,6 @@ msgstr "Rôle"
 msgid "Instructions"
 msgstr "Instructions"
 
-msgid "Both"
-msgstr "Les deux"
-
 msgid "Instruction"
 msgstr "Instruction"
 
@@ -8601,9 +8632,6 @@ msgstr "Il n'y a pas d'achats pour l'instant"
 msgid "View purchase"
 msgstr "Afficher l'achat"
 
-msgid "Other"
-msgstr "Autre"
-
 msgid "Alphanumeric, without spaces"
 msgstr "Alphanumérique, sans espaces"
 
@@ -8930,3 +8958,12 @@ msgstr "Voulez-vous supprimer les groupes d'utilisateurs sélectionnés?"
 
 msgid "Group name"
 msgstr "Nom de groupe"
+
+#~ msgid "Manual categories"
+#~ msgstr "Catégories manuelles"
+
+#~ msgid "Automatic categories"
+#~ msgstr "Catégories automatiques"
+
+#~ msgid "Both"
+#~ msgstr "Les deux"

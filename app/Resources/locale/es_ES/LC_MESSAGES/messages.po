@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-11 10:02+0000\n"
-"PO-Revision-Date: 2025-04-11 12:15+0200\n"
+"POT-Creation-Date: 2025-05-29 08:44+0000\n"
+"PO-Revision-Date: 2025-05-29 10:51+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1716,6 +1716,12 @@ msgstr "Teatro"
 msgid "theater"
 msgstr "teatro"
 
+msgid "Museum"
+msgstr "Museo"
+
+msgid "museum"
+msgstr "museo"
+
 msgid "Exhibitions"
 msgstr "Exposiciones"
 
@@ -1964,6 +1970,24 @@ msgstr "cumbres-gubernamentales"
 
 msgid "governmental-debates"
 msgstr "debates-gubernamentales"
+
+msgid "Other"
+msgstr "Otros"
+
+msgid "other"
+msgstr "otro"
+
+msgid "Musicals"
+msgstr "Musicales"
+
+msgid "musicals"
+msgstr "musicales"
+
+msgid "Circus"
+msgstr "Circo"
+
+msgid "circus"
+msgstr "circo"
 
 msgid "Live blog post"
 msgstr "Artículo en directo"
@@ -3486,11 +3510,17 @@ msgstr "Redirigir a"
 msgid "When importing assign an external link to the elements"
 msgstr "Al importar asignar un enlace externo a los elementos"
 
+msgid "Keep canonical url from origin"
+msgstr "Mantener la URL canónica del origen"
+
 msgid "When importing elements this will be the signature"
 msgstr "Al importar elementos esta será la firma"
 
 msgid "Automatic import"
 msgstr "Importación automática"
+
+msgid "Import as draft"
+msgstr "Importar como borrador"
 
 msgid "Import"
 msgstr "Importar"
@@ -4711,6 +4741,9 @@ msgstr ""
 msgid "Menu"
 msgstr "Menú"
 
+msgid "Manual"
+msgstr "Manual"
+
 msgid "Only empty categories can be deleted"
 msgstr "Solo se pueden eliminar categorías sin contenidos"
 
@@ -5515,6 +5548,16 @@ msgstr "Fuente secundaria (cuerpo, sumario...)"
 msgid "Redirect to frontpage non-migrated contents"
 msgstr "Redirigir a portada contenidos no migrados"
 
+msgid "Merge category URLs"
+msgstr "Fusionar URLs de categorías"
+
+msgid ""
+"If you enable this option, the URLs '/seccion/category/' and '/blog/section/"
+"category/' will be redirected to '/category/'."
+msgstr ""
+"Si activa esta opción, las URL '/seccion/category/' y '/blog/section/"
+"category/' se redirigirán a '/category/'."
+
 msgid "Google Analytics"
 msgstr "Google Analytics"
 
@@ -6166,9 +6209,6 @@ msgstr "Prompt"
 msgid "Reset filters"
 msgstr "Reiniciar filtros"
 
-msgid "Reload"
-msgstr "Recargar"
-
 msgid "System prompts"
 msgstr "Prompts del sistema"
 
@@ -6443,6 +6483,9 @@ msgstr "¿Quieres duplicar el elemento?"
 msgid "Mosaic"
 msgstr "Mosaico"
 
+msgid "Reload"
+msgstr "Recargar"
+
 msgid "Unable to find any item or you don't have permission to see the list."
 msgstr ""
 "No se han encontrado elementos que coincidan con tu búsqueda o no tienes "
@@ -6648,12 +6691,6 @@ msgstr "Ver factura"
 
 msgid "Module"
 msgstr "Módulo"
-
-msgid "Manual categories"
-msgstr "Categorías manuales"
-
-msgid "Automatic categories"
-msgstr "Categorías automáticas"
 
 msgid "Synchronized instances"
 msgstr "Instancias sincronizadas"
@@ -7239,9 +7276,6 @@ msgid ""
 msgstr ""
 "Si está activado, los suscriptores no podrán ver esta suscripción mientras "
 "se registran o editan su perfil"
-
-msgid "Manual"
-msgstr "Manual"
 
 msgid "Accept requests manually"
 msgstr "Aceptar solicitudes manualmente"
@@ -8130,9 +8164,6 @@ msgstr "Rol"
 msgid "Instructions"
 msgstr "Instrucciones"
 
-msgid "Both"
-msgstr "Ambos"
-
 msgid "Instruction"
 msgstr "Instrucción"
 
@@ -8551,9 +8582,6 @@ msgstr "No hay compras por ahora"
 msgid "View purchase"
 msgstr "Ver compra"
 
-msgid "Other"
-msgstr "Otros"
-
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumérico, sin espacios"
 
@@ -8882,3 +8910,12 @@ msgstr ""
 
 msgid "Group name"
 msgstr "Nombre del grupo"
+
+#~ msgid "Manual categories"
+#~ msgstr "Categorías manuales"
+
+#~ msgid "Automatic categories"
+#~ msgstr "Categorías automáticas"
+
+#~ msgid "Both"
+#~ msgstr "Ambos"
