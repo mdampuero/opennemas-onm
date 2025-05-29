@@ -23,37 +23,37 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $caches = [
-        'list' => 'articles',
-        'taglist' => 'articles',
+        'list'     => 'articles',
+        'taglist'  => 'articles',
         'typelist' => 'articles',
-        'show' => 'articles'
+        'show'     => 'articles'
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $groups = [
-        'list' => 'article_inner',
-        'taglist' => 'article_inner',
+        'list'     => 'article_inner',
+        'taglist'  => 'article_inner',
         'typelist' => 'article_inner',
-        'show' => 'article_inner'
+        'show'     => 'article_inner'
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $positions = [
-        'list' => [ 1, 2, 5, 6, 7 ],
-        'taglist' => [ 1, 2, 5, 6, 7 ],
+        'list'     => [ 1, 2, 5, 6, 7 ],
+        'taglist'  => [ 1, 2, 5, 6, 7 ],
         'typelist' => [ 1, 2, 5, 6, 7 ],
-        'show' => [ 1, 2, 5, 6, 7 ]
+        'show'     => [ 1, 2, 5, 6, 7 ]
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $queries = [
-        'list' => [ 'page' ],
+        'list'     => [ 'page' ],
         'taglist'  => [ 'page', 'type', 'tag' ],
         'typelist' => [ 'page', 'type' ]
     ];
@@ -62,10 +62,10 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $routes = [
-        'list'      => 'frontend_events',
+        'list'     => 'frontend_events',
         'taglist'  => 'frontend_events_tag_list',
         'typelist' => 'frontend_events_list',
-        'show'      => 'frontend_event_show'
+        'show'     => 'frontend_event_show'
     ];
 
     /**
@@ -77,10 +77,10 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $templates = [
-        'list' => 'event/list.tpl',
+        'list'     => 'event/list.tpl',
         'taglist'  => 'event/list.tpl',
         'typelist' => 'event/list.tpl',
-        'show' => 'event/item.tpl'
+        'show'     => 'event/item.tpl'
     ];
 
     /**
@@ -135,43 +135,48 @@ class EventController extends FrontendController
      */
     protected function hydrateList(array &$params = []): void
     {
-        $date     = gmdate('Y-m-d H:i:s');
-        $type     = $params['type'] ?? null;
-        $tag      = $params['tag'] ?? null;
-        $ch       = $this->get('core.helper.event');
-        $settings = $this->get('orm.manager')
-            ->getDataSet('Settings', 'instance')
-            ->get('event_settings', false);
-
         if ($params['page'] <= 0
             || $params['page'] > $this->getParameter('core.max_page')) {
             throw new ResourceNotFoundException();
         }
 
-        $baseOql = sprintf(
-            'FROM contents'
-            . ' inner join contentmeta as cm1 on contents.pk_content = cm1.fk_content '
-            . ' and cm1.meta_name = "event_start_date" '
-            . ' left join contentmeta as cm2 on contents.pk_content = cm2.fk_content '
-            . ' and cm2.meta_name = "event_end_date" '
+        $action   = $this->get('core.globals')->getAction();
+        $tag      = $params['tag'] ?? null;
+        $type     = $params['type'] ?? null;
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('event_settings', false);
+
+        // Set dates
+        $eventDate     = date('Y-m-d');
+        $publishedDate = gmdate('Y-m-d H:i:s');
+
+        $baseSql = sprintf(
+            'FROM contents '
+            . 'inner join contentmeta as start_date_meta on contents.pk_content = start_date_meta.fk_content '
+            . 'and start_date_meta.meta_name = "event_start_date" '
+            . 'left join contentmeta as start_hour_meta on contents.pk_content = start_hour_meta.fk_content '
+            . 'and start_hour_meta.meta_name = "event_start_hour" '
+            . 'left join contentmeta as end_date_meta on contents.pk_content = end_date_meta.fk_content '
+            . 'and end_date_meta.meta_name = "event_end_date" '
         );
 
         // Check for event type, category or tag on first url parameter
         if (!empty($type)) {
-            if ($ch->matchType($type)) {
-                $baseOql .= sprintf(
-                    'join contentmeta as cm3 on contents.pk_content = cm3.fk_content '
-                    . 'AND cm3.meta_name = "event_type" AND cm3.meta_value = "%s" ',
+            if ($this->get('core.helper.event')->matchType($type)) {
+                $baseSql .= sprintf(
+                    'join contentmeta as event_type_meta on contents.pk_content = event_type_meta.fk_content '
+                    . 'AND event_type_meta.meta_name = "event_type" AND event_type_meta.meta_value = "%s" ',
                     $type
                 );
             } elseif ($category = $this->matchCategory($type)) {
-                $baseOql .= sprintf(
-                    'join content_category cc on contents.pk_content = cc.content_id '
-                    . 'and cc.category_id = %d ',
+                $baseSql .= sprintf(
+                    'join content_category on contents.pk_content = content_category.content_id '
+                    . 'and content_category.category_id = %d ',
                     $category->id
                 );
             } elseif (empty($tag) && $tagItem = $this->matchTag($type)) {
-                $baseOql .= $this->buildTagJoin($tagItem);
+                $baseSql .= $this->buildTagJoin($tagItem);
             } else {
                 throw new ResourceNotFoundException();
             }
@@ -179,43 +184,46 @@ class EventController extends FrontendController
 
         // Check for tag when second parameter
         if (!empty($tag) && $tagItem = $this->matchTag($tag)) {
-            $baseOql .= $this->buildTagJoin($tagItem);
+            $baseSql .= $this->buildTagJoin($tagItem);
         }
 
-        $baseOql .= sprintf(
+        $baseSql .= sprintf(
             'where content_type_name="event" and content_status=1 and in_litter=0 '
-            . 'and (cm1.meta_value >= "%s" or (cm1.meta_value < "%s" and cm2.meta_value >= "%s")) '
+            . 'and (start_date_meta.meta_value >= "%s" '
+            . 'or (start_date_meta.meta_value < "%s" and end_date_meta.meta_value >= "%s")) '
             . 'and (starttime is null or starttime < "%s") '
             . 'and (endtime is null or endtime > "%s") ',
-            gmdate('Y-m-d'),
-            gmdate('Y-m-d'),
-            gmdate('Y-m-d'),
-            $date,
-            $date
+            $eventDate,
+            $eventDate,
+            $eventDate,
+            $publishedDate,
+            $publishedDate
         );
 
         if ($settings["hide_current_events"] ?? false) {
-            $baseOql .= sprintf(
-                'and (cm1.meta_value >= "%s") ',
-                gmdate('Y-m-d'),
-                gmdate('Y-m-d')
+            $baseSql .= sprintf(
+                'and (start_date_meta.meta_value >= "%s") ',
+                $eventDate
             );
         }
 
         $pagination = sprintf(
-            'order by cm1.meta_value asc limit %d offset %d',
+            'order by start_date_meta.meta_value asc, '
+            . 'start_hour_meta.meta_value asc, '
+            . 'contents.pk_content asc '
+            . 'limit %d offset %d',
             $params['epp'],
             $params['epp'] * ($params['page'] - 1)
         );
 
-        $dataOql = sprintf(
-            'SELECT * ' . $baseOql . ' %s',
+        $sql = sprintf(
+            'select * ' . $baseSql . ' %s',
             $pagination
         );
 
-        $count = 'SELECT COUNT(*) AS total ' . $baseOql . ' order by cm1.meta_value asc';
+        $count = 'select count(*) as total ' . $baseSql;
         $total = $this->get('orm.manager')->getConnection('instance')->executeQuery($count)->fetchAll();
-        $items = $this->get('api.service.content')->getListBySql($dataOql)['items'];
+        $items = $this->get('api.service.content')->getListBySql($sql)['items'];
 
         // No first page and no contents
         if ($params['page'] > 1 && empty($items)) {
@@ -238,7 +246,7 @@ class EventController extends FrontendController
             'page'        => $params['page'],
             'total'       => $total[0]['total'],
             'route'       => [
-                'name' => 'frontend_events_list',
+                'name' => $this->routes[$action],
                 'params' => [ 'type' => $type, 'tag'  => $tag ]
             ]
         ]);
