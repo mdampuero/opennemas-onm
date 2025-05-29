@@ -1119,7 +1119,7 @@ CREATE TABLE `ai_actions` (
   `tokens` longtext,
   `params` longtext,
   `date` datetime DEFAULT NULL,
-  `service` varchar(64) DEFAULT NULL
+  `service` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1135,7 +1135,7 @@ CREATE TABLE `prompts` (
   `role` text,
   `field` varchar(32) DEFAULT NULL,
   `tone` text,
-  `prompt` text
+  `prompt` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

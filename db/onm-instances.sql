@@ -511,7 +511,7 @@ CREATE TABLE `prompt` (
   `model` varchar(255) DEFAULT NULL,
   `instances` longtext NOT NULL,
   `instructions` longtext,
-  `status` int NOT NULL DEFAULT '0'
+  `status` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
