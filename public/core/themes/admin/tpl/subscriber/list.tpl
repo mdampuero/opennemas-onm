@@ -33,6 +33,17 @@
   <li class="quicklinks">
     <span class="h-seperate"></span>
   </li>
+  {acl isAllowed="MASTER"}
+    <li class="quicklinks">
+      <span class="h-seperate"></span>
+    </li>
+    <li class="quicklinks">
+      <a class="btn btn-white" href="[% routing.generate('backend_subscriber_create') %]">
+        <i class="fa fa-address-book"></i>
+        {t}Import{/t}
+      </a>
+    </li>
+  {/acl}
   {acl isAllowed=SUBSCRIBER_CREATE}
     <li class="quicklinks">
       <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_subscriber_create') %]">
