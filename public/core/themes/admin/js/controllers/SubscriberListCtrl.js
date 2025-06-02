@@ -15,8 +15,8 @@
      *   Handles all actions in subscribers list.
      */
     .controller('SubscriberListCtrl', [
-      '$controller', '$scope', 'oqlEncoder',
-      function($controller, $scope, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder', '$uibModal', 'http', 'messenger',
+      function($controller, $scope, oqlEncoder, $uibModal, http, messenger) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -76,6 +76,46 @@
         $scope.isSelectable = function(item) {
           return $scope.backup.master ||
             $scope.getItemId(item) !== $scope.backup.id;
+        };
+
+        /**
+         * @function import
+         * @memberOf SubscriberListCtrl
+         *
+         * @description
+         *  Open import modal for starting import process.
+         *
+         * @returns {Promise}
+         */
+        $scope.import = function() {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-import',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  subscriber: $scope.subscriber
+                };
+              },
+              success: function() {
+                return function() {
+                  messenger.post({
+                    type: 'info',
+                    message: 'Importing subscribers...'
+                  });
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            // messenger.post(response.data);
+
+            if (response.success) {
+              $scope.list();
+            }
+          });
         };
       }
     ]);

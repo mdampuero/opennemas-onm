@@ -38,7 +38,7 @@
       <span class="h-seperate"></span>
     </li>
     <li class="quicklinks">
-      <a class="btn btn-white" href="[% routing.generate('backend_subscriber_create') %]">
+      <a class="btn btn-white" ng-click="import()" uib-tooltip="{t}Import{/t}" tooltip-placement="bottom" type="button">
         <i class="fa fa-address-book"></i>
         {t}Import{/t}
       </a>
@@ -126,5 +126,8 @@
 {block name="modals"}
   <script type="text/ng-template" id="modal-delete">
     {include file="common/extension/modal.delete.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-import">
+    {include file="common/extension/modalImportCSV.tpl"}
   </script>
 {/block}

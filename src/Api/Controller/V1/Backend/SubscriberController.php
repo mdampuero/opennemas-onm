@@ -136,6 +136,25 @@ class SubscriberController extends ApiController
     }
 
     /**
+     * Import subscribers from CSV file.
+     * This method expects a CSV file with the following columns:
+     * - email
+     * - name
+     * - activated (optional, default is 1)
+     * - user_groups (optional, default is empty)
+     *
+     * @return Response The response object.
+    */
+    public function importAction()
+    {
+        // TODO: Implement import functionality
+        $msg = $this->get('core.messenger');
+
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
      * Saves settings for CONTENT_SUBSCRIPTIONS extension.
      *
      * @param Request $request The request object.
