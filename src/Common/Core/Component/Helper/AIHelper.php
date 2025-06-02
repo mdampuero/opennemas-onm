@@ -699,94 +699,95 @@ EOT;
     }
 
     /**
-     * Transforms the given fields of text based on specific instructions and tone.
+     * Transforms the given data fields of text based on specific instructions and tone.
      *
-     * @param array $or The array containing the text fields to be transformed.
+     * @param array $data The array containing the text fields to be transformed.
      * @param array $fields The specific fields of text to transform (e.g., 'title', 'description').
-     * @param array $tone The tone to be used in the transformation.
      *
-     * @return array The array with transformed text fields or the original array if no transformation occurs.
+     * @return array The array with transformed data or the original array if no transformation occurs.
      */
-    public function transform($or = [], $fields = ['title', 'title_int', 'description', 'body'])
+    public function transform($data = [], $fields = ['title', 'title_int', 'description', 'body'])
     {
-        if (empty($or) || empty($fields) || empty($or['prompt'])) {
-            return $or;
+        $settings = $this->getCurrentSettings();
+
+        if (empty($data) || empty($fields) || empty($settings['engine'])) {
+            return $data;
         }
 
+        $data['title_intPrompt'] = $data['titlePrompt'] ?? null;
+
         foreach ($fields as $field) {
-            if (!key_exists($field, $or)) {
+            $promptKey = $field . 'Prompt';
+            $toneKey   = $field . 'Tone';
+
+            if (empty($data[$promptKey]['prompt'] ?? null) || empty($data[$field] ?? null)) {
                 continue;
             }
 
-            $cleanContent = trim(strip_tags($or[$field]));
+            // Extract prompt and specific tone
+            $prompt = $data[$promptKey]['prompt'];
+            $tone   = $data[$toneKey] ?? '';
+
+            // If empty tone assign default prompt tone
+            if (empty($tone)) {
+                $tone = $data[$promptKey]['tone'] ?? '';
+            }
+
+            $cleanContent = trim(strip_tags($data[$field]));
 
             if ($cleanContent === '') {
-                return $or[$field];
+                continue;
             }
 
-            $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $or["prompt"]);
-            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$or[$field]}\n";
+            $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $prompt);
+            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n" . $data[$field] . "\n";
 
             $instructions = [
-                ['value' => 'Utiliza el mismo tema del texto original.'],
-                ['value' => 'Intenta conservar la misma cantidad de palabras.'],
-                ['value' => 'Responde directamente con el texto transformado.'],
-                ['value' => 'Si el texto original tiene formato html, debes mantenerlo.']
+                ['value' => 'Responde directamente con el texto transformado.']
             ];
 
-            if (!empty($or['tone'] ?? false)) {
-                $instructions[] = ['value' => "Adopta un tono {$or['tone']}
-                    en la transformación."];
-            } else {
-                $instructions[] = ['value' => "Debes mantener el tono del texto original."];
-            }
+            $instructions[] = !empty($tone)
+                ? ['value' => "Adopta un tono " . $tone . " en la transformación."]
+                : ['value' => "Debes mantener el tono del texto original."];
 
-            if (!empty($or['language'] ?? false)) {
-                $instructions[] = ['value' => "La respuesta debe ser en el idioma {$or['language']}."];
+            if (!empty($data['language'])) {
+                $instructions[] = [
+                    'value' => "La respuesta debe ser en el idioma " . $data['language'] . "."
+                ];
             }
 
             $this->insertInstructions($instructions);
 
-            $data = $this->getCurrentSettings();
-
             $dataLog = [
                 'field'    => $field,
-                'tone'     => $or['tone'] ?? '',
-                'model'    => ($data['engine'] ?? '') . '_' . ($data['model'] ?? ''),
-                'language' => $or['language'] ?? '',
-                'prompt'   => $or['prompt'] ?? '',
+                'tone'     => $tone,
+                'model'    => ($settings['engine'] ?? '') . '_' . ($settings['model'] ?? ''),
+                'language' => $data['language'] ?? '',
+                'prompt'   => $prompt ?? '',
             ];
 
-            $data['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
+            $settings['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
 
-            if (!empty($data['engine'])) {
-                /**
-                 * Log the selected prompt details for debugging purposes.
-                 */
-                $this->container->get('core.helper.' . $data['engine'])->setDataLog($dataLog);
+            // Log the selected prompt details for debugging purposes.
+            $this->container->get('core.helper.' . $settings['engine'])->setDataLog($dataLog);
 
-                $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
-                    $data,
-                    $this->getStructureResponse()
-                );
+            $response = $this->container->get('core.helper.' . $settings['engine'])
+                ->sendMessage($settings, $this->getStructureResponse());
 
-                $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
-            } else {
-                return $or[$field];
-            }
-
+            $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
             if (empty($response['error']) && !empty($response['result'])) {
                 $this->generateWords($response);
-                $this->saveAction($data, $response);
-                $or[$field] = $response['result'];
+                $this->saveAction($settings, $response);
+                $data[$field] = $response['result'];
             } else {
                 $this->errorLog->error(
                     'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
-                    $this->container->get('core.helper.' . $data['engine'])->getDataLog()
+                    $this->container->get('core.helper.' . $settings['engine'])->getDataLog()
                 );
             }
         }
-        return $or;
+
+        return $data;
     }
 
     /**

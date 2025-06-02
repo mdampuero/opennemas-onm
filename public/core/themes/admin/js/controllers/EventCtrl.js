@@ -80,6 +80,15 @@
 
         /**
          * @memberOf EventCtrl
+         * @type {Boolean}
+         * @description
+         * State of the iframe validity
+         * @default false
+         */
+        $scope.isInvalidIframe = false;
+
+        /**
+         * @memberOf EventCtrl
          *
          * @description
          *  The list of routes for the controller.
@@ -111,7 +120,6 @@
           if ($scope.draftKey !== null && $scope.data.item.pk_content) {
             $scope.draftKey = 'event-' + $scope.data.item.pk_content + '-draft';
           }
-
           $scope.checkDraft();
           related.init($scope);
           related.watch();
@@ -136,6 +144,64 @@
             })
           );
         };
+
+        /**
+         * Parses the provided data and calculates its text complexity and word count.
+         * Updates the input data with the calculated values.
+         *
+         * @param {Object} data - The data object to parse, which contains a `body` property with the text to analyze.
+         * @param {boolean} preview - A flag that may control whether the data is in preview mode
+         * (this parameter isn't used in the function but could be useful for future extensions).
+         * @returns {Object} The modified data object, including the `text_complexity` and `word_count` properties.
+         */
+        $scope.parseData = function(data, preview) {
+          var bodyComplexity = $scope.getTextComplexity(data.body);
+
+          data.text_complexity = bodyComplexity.textComplexity;
+          data.word_count = bodyComplexity.wordsCount;
+          return data;
+        };
+
+        /**
+         * Retrieves the name of an event based on its slug.
+         *
+         * @param {string} id - The id of the event to find.
+         * @returns {string|null} The name of the event if found, null otherwise.
+         */
+        $scope.getEventName = function(id) {
+          if (!$scope.data || !$scope.data.extra || !$scope.data.extra.events) {
+            return null;
+          }
+
+          var event = Object.values($scope.data.extra.events).find(function(event) {
+            return event.id === parseInt(id);
+          });
+
+          return event ? event.name : null;
+        };
+
+        /**
+         * @name $scope.$watch
+         * @description
+         * Watches for changes in `item.event_map_iframe` and validates whether the content
+         * is an `<iframe>` with a `src` from Google Maps or OpenStreetMap.
+         *
+         * @param {string} newValue The new value of `item.event_map_iframe`.
+         */
+        $scope.$watch('item.event_map_iframe', function(newValue) {
+          if (!newValue || newValue.trim() === '') {
+            $scope.isInvalidIframe = false;
+
+            return;
+          }
+
+          var iframeRegex = new RegExp(
+            '<iframe[^>]+src=["\'](https?:\\/\\/(www\\.)?' +
+            '(maps\\.google\\.com|google\\.com\\/maps|openstreetmap\\.org)[^"\']+)[^>]*><\\/iframe>'
+          );
+
+          $scope.isInvalidIframe = !iframeRegex.test(newValue);
+        });
       }
     ]);
 })();

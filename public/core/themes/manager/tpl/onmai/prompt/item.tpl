@@ -42,7 +42,7 @@
 </div>
 <div class="content ng-hide" ng-show="extra">
   <form name="promptForm" novalidate>
-  <div class="row">
+    <div class="row">
       <div class="col-md-8">
         <div class="grid simple">
           <div class="grid-body adstxt-form">
