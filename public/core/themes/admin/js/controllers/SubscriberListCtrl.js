@@ -32,7 +32,8 @@
           deleteList: 'api_v1_backend_subscriber_delete_list',
           getList:    'api_v1_backend_subscriber_get_list',
           patchItem:  'api_v1_backend_subscriber_patch_item',
-          patchList:  'api_v1_backend_subscriber_patch_list'
+          patchList:  'api_v1_backend_subscriber_patch_list',
+          importSubscriber: 'api_v1_backend_subscriber_import',
         };
 
         /**
@@ -99,11 +100,24 @@
                 };
               },
               success: function() {
-                return function() {
-                  messenger.post({
-                    type: 'info',
-                    message: 'Importing subscribers...'
-                  });
+                return function(modal, template) {
+                  const reader = new FileReader();
+
+                  var route = {
+                    name: $scope.routes.importSubscriber,
+                  };
+
+                  if (template.file.type !== 'text/csv') {
+                    return messenger.post({
+                      type: 'error',
+                      message: 'Invalid file type. Please upload a CSV file.'
+                    });
+                  }
+
+                  reader.readAsText(template.file);
+                  reader.onload = function() {
+                    var content = reader.result;
+                  };
                 };
               }
             }

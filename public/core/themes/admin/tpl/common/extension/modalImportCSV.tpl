@@ -46,7 +46,7 @@
 <div class="modal-footer">
   <!-- Footer para el Paso 1 -->
   <div>
-    <button class="btn btn-primary" ng-click="confirmImport()" ng-show="importFile" ng-disabled="!selectedList">{t}Import{/t}</button>
+    <button class="btn btn-primary" ng-click="confirm()" ng-show="template.file">{t}Import{/t}</button>
     <button class="btn secondary" ng-click="close()">{t}Cancel{/t}</button>
   </div>
 </div>
