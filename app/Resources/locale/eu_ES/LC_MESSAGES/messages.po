@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-29 08:44+0000\n"
-"PO-Revision-Date: 2025-05-29 10:52+0200\n"
+"POT-Creation-Date: 2025-06-02 09:34+0000\n"
+"PO-Revision-Date: 2025-06-02 11:54+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Euskera\n"
 "Language: es\n"
@@ -5350,6 +5350,9 @@ msgstr "Bistaratu azpititulua"
 msgid "Display summary/description"
 msgstr "Bistaratu laburpena / deskribapena"
 
+msgid "Extract from body if needed"
+msgstr "Beharrezkoa bada, gorputzetik atera"
+
 msgid "Info"
 msgstr "Ez informazio zuen"
 
@@ -5436,6 +5439,9 @@ msgstr "Partekatu tresnak"
 
 msgid "Choose where to display"
 msgstr "Aukeratu non erakutsi"
+
+msgid "Events info"
+msgstr "Gertaeren informazioa"
 
 msgid "Automatic related contents"
 msgstr "Erlazionatutako edukiak automatikoki"
@@ -8097,11 +8103,23 @@ msgstr "Galdetu berria"
 msgid "Default model"
 msgstr "Lehenetsitako eredua"
 
-msgid "Role"
-msgstr "Papura"
+msgid "Objective"
+msgstr "Helburua"
+
+msgid "Final prompt preview"
+msgstr "Azken gonbitaren aurrebista"
 
 msgid "Instructions"
 msgstr "Argibideak"
+
+msgid "Selected instructions"
+msgstr "Hautatutako argibideak"
+
+msgid "You have not selected any instructions"
+msgstr "Ez duzu argibiderik hautatu"
+
+msgid "Role"
+msgstr "Papura"
 
 msgid "Instruction"
 msgstr "Agindu"

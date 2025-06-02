@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opennemas master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-29 08:44+0000\n"
-"PO-Revision-Date: 2025-05-29 11:02+0200\n"
+"POT-Creation-Date: 2025-06-02 09:34+0000\n"
+"PO-Revision-Date: 2025-06-02 11:59+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Portuguese\n"
 "Language: pt\n"
@@ -5362,6 +5362,9 @@ msgstr "Exibir legenda"
 msgid "Display summary/description"
 msgstr "Exibir resumo/descrição"
 
+msgid "Extract from body if needed"
+msgstr "Extrair do corpo se necessário"
+
 msgid "Info"
 msgstr "Informações"
 
@@ -5449,6 +5452,9 @@ msgstr "Compartilhe ferramentas"
 
 msgid "Choose where to display"
 msgstr "Escolha onde exibir"
+
+msgid "Events info"
+msgstr "Informações do evento"
 
 msgid "Automatic related contents"
 msgstr "Conteúdo relacionado automático"
@@ -8126,11 +8132,23 @@ msgstr "Novo prompt"
 msgid "Default model"
 msgstr "Modelo padrão"
 
-msgid "Role"
-msgstr "Papel"
+msgid "Objective"
+msgstr "Objetivo"
+
+msgid "Final prompt preview"
+msgstr "Pré-visualização do prompt final"
 
 msgid "Instructions"
 msgstr "Instruções"
+
+msgid "Selected instructions"
+msgstr "Instruções selecionadas"
+
+msgid "You have not selected any instructions"
+msgstr "Não selecionou nenhuma instrução"
+
+msgid "Role"
+msgstr "Papel"
 
 msgid "Instruction"
 msgstr "Instrução"
