@@ -166,7 +166,6 @@ EOT;
         'openai'    => 'Open AI',
         'gemini'    => 'Gemini',
         'deepseek'  => 'DeepSeek',
-        'mistralai' => 'Mistral AI',
         'openrouter' => 'OpenRouter',
     ];
 
@@ -648,10 +647,7 @@ EOT;
         ];
 
         $data = $this->getCurrentSettings();
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
-        die();
+
         $dataLog = [
             'tone'     => $params['tone']['name'] ?? '',
             'model'    => ($data['engine'] ?? '') . '_' . ($data['model'] ?? ''),
