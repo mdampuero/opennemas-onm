@@ -296,7 +296,6 @@ services:
         arguments: [ '@service_container', '@application.log', '@error.log' ]
         public:    true
 
-
     core.helper.deepseek:
         class:     Common\Core\Component\Helper\DeepSeekHelper
         arguments: [ '@service_container', '@application.log', '@error.log' ]

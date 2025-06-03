@@ -38,7 +38,7 @@ class OpenRouterHelper
     // Maximum timeout for a request in seconds
     protected $timeout = 120;
 
-    // Base URL for the OpenAI API
+    // Base URL for the OpenRouter API
     protected $baseEndpoint = 'https://openrouter.ai/api';
 
     // Specific endpoint for chat completions
@@ -54,7 +54,7 @@ class OpenRouterHelper
     protected $dataLog = [];
 
     /**
-     * Initializes the OpenAI service.
+     * Initializes the OpenRouter service.
      *
      * @param ContainerInterface $container The service container.
      * @param LoggerInterface    $appLog    Logger for application-level logs.
@@ -71,7 +71,7 @@ class OpenRouterHelper
     }
 
     /**
-     * Sends a message to the OpenAI API.
+     * Sends a message to the OpenRouter API.
      *
      * @param array $data Data required to send to the API, such as the message and API key.
      * @param array $struct Response structure to store the result.
@@ -97,7 +97,7 @@ class OpenRouterHelper
                         }
                     }
 
-                    // Make the POST request to the OpenAI API
+                    // Make the POST request to the OpenRouter API
                     $response = $this->client->request('POST', $this->baseEndpoint . $this->endpointChat, [
                         'headers' => [
                             'Content-Type' => 'application/json',
@@ -154,13 +154,13 @@ class OpenRouterHelper
     /**
      * Normalizes the response from the API to fit the expected structure.
      *
-     * @param array $originalResponse The original response from the OpenAI API.
+     * @param array $originalResponse The original response from the OpenRouter API.
      * @param array $struct The structure that will store the results.
      * @return array Normalized structure with the result and token usage.
      */
     public function normalizeResponse($originalResponse, $struct)
     {
-        // Extract the message content from the OpenAI response
+        // Extract the message content from the OpenRouter response
         if (isset($originalResponse['choices'][0]['message']['content'])) {
             $struct['result'] = $originalResponse['choices'][0]['message']['content'] ?? '';
             unset($originalResponse['choices'][0]['message']['content']);
@@ -201,7 +201,7 @@ class OpenRouterHelper
     }
 
     /**
-     * Gets the base endpoint for the OpenAI API.
+     * Gets the base endpoint for the OpenRouter API.
      *
      * @return string Base URL for the API.
      */
@@ -211,7 +211,7 @@ class OpenRouterHelper
     }
 
     /**
-     * Gets the chat endpoint for the OpenAI API.
+     * Gets the chat endpoint for the OpenRouter API.
      *
      * @return string Chat completion endpoint.
      */

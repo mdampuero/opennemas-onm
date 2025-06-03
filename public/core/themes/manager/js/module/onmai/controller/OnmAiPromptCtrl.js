@@ -229,6 +229,17 @@
           return id;
         };
 
+        $scope.instructionExists = function(id) {
+          for (var i = 0; i < $scope.extra.onmai_instructions.length; i++) {
+            var instruction = $scope.extra.onmai_instructions[i];
+
+            if (instruction.id === id) {
+              return true;
+            }
+          }
+          return false;
+        };
+
         $scope.hasTitle = function(item) {
           return item.title && item.title.trim() !== '';
         };
