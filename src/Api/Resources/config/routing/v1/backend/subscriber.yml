@@ -81,6 +81,13 @@ api_v1_backend_subscriber_save_item:
     options:
         expose: true
 
+api_v1_backend_subscriber_import:
+    path:     /subscribers/import
+    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:import }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
 api_v1_backend_subscriber_update_item:
     path:     /subscribers/{id}
     defaults: { _controller: ApiBundle:V1/Backend/Subscriber:updateItem }
@@ -89,10 +96,3 @@ api_v1_backend_subscriber_update_item:
         expose: true
     requirements:
         id: \d+
-
-api_v1_backend_subscriber_import:
-    path:     /subscribers/import
-    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:import }
-    methods:  [ PUT ]
-    options:
-        expose: true

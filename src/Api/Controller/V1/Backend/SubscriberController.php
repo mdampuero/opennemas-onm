@@ -145,11 +145,49 @@ class SubscriberController extends ApiController
      *
      * @return Response The response object.
     */
-    public function importAction()
+    public function importAction(Request $request)
     {
-        // TODO: Implement import functionality
-        $msg = $this->get('core.messenger');
+        $msg     = $this->get('core.messenger');
+        $content = $request->request->get('csv_file', null);
 
+        if (empty($content)) {
+            return new JsonResponse(
+                [ _('No file provided') ],
+                400
+            );
+        }
+
+        $lines = explode("\n", $content);
+        array_shift($lines); // Eliminar encabezado
+
+        $subscribers = [];
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            if (!$line) {
+                continue;
+            }
+
+            $columns = explode(',', $line);
+
+            // Asegura mínimo dos columnas
+            if (count($columns) < 2) {
+                continue; // o loguear error
+            }
+
+            $email = trim($columns[0]);
+            $name  = trim($columns[1]);
+
+            // Si hay fecha, úsala; si no, usa la actual
+            $signupDate = isset($columns[2]) ? trim($columns[2]) : date('Y-m-d');
+
+            $subscribers[] = [
+                'email' => $email,
+                'name' => $name,
+                'signup_date' => $signupDate,
+            ];
+        }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }

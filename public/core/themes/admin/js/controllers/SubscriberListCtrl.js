@@ -117,6 +117,10 @@
                   reader.readAsText(template.file);
                   reader.onload = function() {
                     var content = reader.result;
+
+                    return http.put(route, { csv_file: content }).then(function() {
+                      $scope.list();
+                    });
                   };
                 };
               }
