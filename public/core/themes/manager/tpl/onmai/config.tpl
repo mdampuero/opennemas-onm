@@ -153,6 +153,56 @@
         </div>
       </ng-container>
     </uib-tab>
+    <uib-tab heading="{t}OpenRouter{/t}" ng-click="selectTab('openrouter')">
+      <ng-container>
+        <h4>{t}API Key{/t}</h4>
+        <div class="row m-t-15">
+          <div class="controls col-md-12 m-b-10">
+            <input class="form-control l-h-16" ng-model="onmai_settings.engines.openrouter.apiKey" type="text">
+          </div>
+        </div>
+        <h4>{t}Models and prices{/t}</h4>
+        <p>
+          <i class="fa fa-info-circle text-info"></i>
+          <small class="text-muted">{t}The selling prices are expressed per million words, with one word approximately equivalent to 1.5 tokens. You can check the price table here.{/t}
+            <a class="btn-link" target="_blank" href="https://openrouter.ai/models" class="admin_add">
+              <span class="fa fa-external-link"></span>
+            </a>
+          </small>
+        </p>
+        <div class="grid simple bg-white onm-shadow m-t-30" ng-repeat="item in onmai_settings.engines.openrouter.models">
+          <div class="grid-body ng-cloak">
+            <h4 class="form-label m-b-20">
+              <div class="row">
+                <div class="col-md-6">
+                  <select class="form-control" ng-model="item.id" ng-if="modelsSuggested.openrouter.length > 0">
+                    <option value="[% model %]" ng-repeat="model in modelsSuggested.openrouter">[% model %]</option>
+                  </select>
+                  <input type="text" class="form-control"  ng-model="item.id" ng-if="modelsSuggested.openrouter.length == 0">
+                </div>
+                <div class="col-md-6">
+                  <div class="checkbox pull-right">
+                    <button class="btn btn-block btn-danger ng-cloak" ng-click="removeModel($index)" type="button">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </h4>
+            <hr>
+            <div class="row" ng-include="'model'"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 m-t-20">
+            <button class="btn btn-block btn-default" ng-click="addModel()" type="button">
+              <i class="fa fa-plus"></i>
+              {t}Add{/t}
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </uib-tab>
     <uib-tab heading="{t}DeepSeek{/t}" ng-click="selectTab('deepseek')">
       <ng-container>
         <h4>{t}API Key{/t}</h4>
