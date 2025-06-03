@@ -158,7 +158,7 @@ class SubscriberController extends ApiController
         }
 
         $lines = explode("\n", $content);
-        array_shift($lines); // Eliminar encabezado
+        array_shift($lines);
 
         $subscribers = [];
 
@@ -170,16 +170,10 @@ class SubscriberController extends ApiController
             }
 
             $columns = explode(',', $line);
+            $email   = trim($columns[0]);
+            $name    = isset($columns[1]) ? trim($columns[1]) : $email;
 
-            // Asegura mínimo dos columnas
-            if (count($columns) < 2) {
-                continue; // o loguear error
-            }
-
-            $email = trim($columns[0]);
-            $name  = trim($columns[1]);
-
-            // Si hay fecha, úsala; si no, usa la actual
+            // This use the current date as signup date if not provided
             $signupDate = isset($columns[2]) ? trim($columns[2]) : date('Y-m-d');
 
             $subscribers[] = [
