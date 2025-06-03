@@ -1113,24 +1113,30 @@ DROP TABLE IF EXISTS `ai_actions`;
 --
 
 CREATE TABLE `ai_actions` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `messages` longtext,
   `response` longtext,
   `tokens` longtext,
   `params` longtext,
   `date` datetime DEFAULT NULL,
-  `service` varchar(64) DEFAULT NULL
+  `service` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `prompts`;
+--
+-- Table structure for table `prompts`
+--
+
 CREATE TABLE `prompts` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `mode` varchar(32) NOT NULL,
   `name` text NOT NULL,
   `role` text,
   `field` varchar(32) DEFAULT NULL,
   `tone` text,
-  `prompt` text
+  `prompt` text,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
