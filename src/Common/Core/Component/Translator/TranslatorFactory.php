@@ -58,12 +58,19 @@ class TranslatorFactory
      */
     public function getTranslatorsData()
     {
-        return array_map(function ($a) {
+        $translators = array_map(function ($a) {
             return [
                 'translator' => $a,
                 'parameters' => $this->get($a)->getRequiredParameters()
             ];
         }, $this->getAvailableTranslators());
+
+        $translators[] = [
+            'translator' => 'onmai',
+            'parameters' => []
+        ];
+
+        return $translators;
     }
 
     /**

@@ -71,6 +71,7 @@
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="website" icon="fa-external-link" title="{t}Website{/t}" iRoute="item.website"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="maps" icon="fa-map-marker" title="{t}Google maps url{/t}" iRoute="item.maps"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
+      {include file="ui/component/content-editor/accordion/seo-input.tpl"}
     </div>
   </div>
   <div class="grid simple">
@@ -82,6 +83,15 @@
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo"}
     </div>
   </div>
+  {if !empty({setting name=seo_information})}
+    <div class="grid simple" ng-if="!hasMultilanguage()">
+      <div class="grid-body no-padding">
+        <div class="grid-collapse-title">
+          <i class="fa fa-search m-r-10"></i> {t}SEO Information{/t}
+        </div>
+        {include file="ui/component/content-editor/accordion/seo_info.tpl"}
+    </div>
+  {/if}
 {/block}
 
 {block name="leftColumn"}

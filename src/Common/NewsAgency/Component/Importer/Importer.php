@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Common\NewsAgency\Component\Importer;
 
 use Common\Model\Entity\Content;
@@ -63,6 +65,14 @@ class Importer
     protected $repository;
 
     /**
+     * The current instance.
+     *
+     * @var Instance
+     *
+     */
+    public $instance;
+
+    /**
      * Initializes the Importer.
      *
      * @param array $config The importer configuration.
@@ -71,9 +81,10 @@ class Importer
     {
         $this->container  = $container;
         $this->repository = new LocalRepository();
+        $this->instance   = $this->container->get('core.instance');
 
         $this->configure($config);
-        $this->setInstance($container->get('core.instance'));
+        $this->setInstance($this->instance);
     }
 
     /**
@@ -97,7 +108,7 @@ class Importer
                     continue;
                 }
 
-                $finalContents [] = $this->import($resource);
+                $finalContents[] = $this->import($resource);
                 $imported++;
             } catch (\Exception $e) {
                 $invalid++;
@@ -117,7 +128,7 @@ class Importer
      *
      * @param array $config The importer configuration.
      */
-    public function configure(array $config) : Importer
+    public function configure(array $config): Importer
     {
         $this->config = $config;
 
@@ -136,8 +147,8 @@ class Importer
     /**
      * Imports a resource.
      *
-     * @param string  $id   The resource id.
-     * @param integer $data The content information.
+     * @param string $id   The resource id.
+     * @param array  $data The content information.
      *
      * @return int The content id.
      *
@@ -146,12 +157,17 @@ class Importer
     public function import($resource, $data = [])
     {
         if ($this->isImported($resource)) {
-            $imported = $this->getImported([ $resource->urn ]);
+            $imported = $this->getImported([$resource->urn]);
 
             return $imported[$resource->urn];
         }
 
         $data = $this->getData($resource, $data);
+
+        // Import contents as draft enabled
+        if ($this->isDraftImportEnabled()) {
+            $data['content_status'] = 0;
+        }
 
         if ($resource->type === 'photo') {
             $file = new \SplFileInfo($data['path']);
@@ -173,10 +189,12 @@ class Importer
 
         if (!empty($webpushNotification)
             && array_key_exists('content_type_name', $data)
-            && $data['content_type_name'] == 'article') {
+            && $data['content_type_name'] == 'article'
+        ) {
             $data['webpush_notifications'] = $this->container->get('core.helper.webpush_notifications')
                 ->createNotificationFromData($data);
         }
+
         return $this->container->get('api.service.content')
             ->createItem($data);
     }
@@ -194,6 +212,18 @@ class Importer
     }
 
     /**
+     * Check if draft-import mode is enabled.
+     *
+     * @return boolean True if the draft-import mode is enabled. Otherwise,
+     *                 returns false.
+     */
+    public function isDraftImportEnabled()
+    {
+        return array_key_exists('draft_import', $this->config)
+            && $this->config['draft_import'];
+    }
+
+    /**
      * Checks if a resource or a list of resources is already imported.
      *
      * @param mixed $resources A resource or a list of resources
@@ -201,10 +231,10 @@ class Importer
      * @return bool True if the item or one of the items in the list is already
      *              imported. False otherwise.
      */
-    public function isImported($resources) : bool
+    public function isImported($resources): bool
     {
         if (array_key_exists('id', $resources)) {
-            $resources = [ $resources ];
+            $resources = [$resources];
         }
 
         $urns = array_map(function ($a) {
@@ -213,7 +243,7 @@ class Importer
 
         $criteria = [
             'urn_source' => [
-                [ 'value' => $urns, 'operator' => 'IN' ]
+                ['value' => $urns, 'operator' => 'IN']
             ]
         ];
 
@@ -230,7 +260,7 @@ class Importer
      *
      * @return Importer The current Importer.
      */
-    public function setInstance(Instance $instance) : Importer
+    public function setInstance(Instance $instance): Importer
     {
         $this->path = sprintf(
             '%s/%s/importers',
@@ -250,7 +280,7 @@ class Importer
      *
      * @return Importer The current importer.
      */
-    public function setPropagation(bool $propagation) : Importer
+    public function setPropagation(bool $propagation): Importer
     {
         $this->propagation = $propagation;
 
@@ -266,7 +296,7 @@ class Importer
      * @return ?int The author id if author id is present in data or in default
      *              server configuration or null if author id is not present.
      */
-    protected function getAuthor(ExternalResource $resource, array $data) : ?int
+    protected function getAuthor(ExternalResource $resource, array $data): ?int
     {
         if (array_key_exists('fk_author', $data)
             && !empty($data['fk_author'])
@@ -308,7 +338,7 @@ class Importer
      *              default server configuration or null if category id is not
      *              present.
      */
-    protected function getCategory(ExternalResource $resource, array $data) : ?int
+    protected function getCategory(ExternalResource $resource, array $data): ?int
     {
         if (array_key_exists('fk_content_category', $data)
             && !empty($data['fk_content_category'])
@@ -340,14 +370,128 @@ class Importer
     }
 
     /**
+     * Returns the title prompt from the provided data array.
+     *
+     * @param array $data Input data that may contain a 'titlePrompt' key.
+     * @return array|null The title prompt array if set, null otherwise.
+     */
+    protected function getTitlePrompt(array $data)
+    {
+        if (!array_key_exists('titlePrompt', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['titlePromptSelected'] ?? null) : null;
+        }
+
+        if (!empty($data['titlePrompt'])) {
+            return $data['titlePrompt'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the title tone from the provided data array.
+     *
+     * @param array $data Input data that may contain a 'titleTone' key.
+     * @return string|null The title tone string if set, null otherwise.
+     */
+    protected function getTitleTone(array $data): ?string
+    {
+        if (!array_key_exists('titleTone', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['titleToneSelected']['name'] ?? null) : null;
+        }
+
+        if (!empty($data['titleTone'])) {
+            return $data['titleTone'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the description prompt from the provided data array.
+     *
+     * @param array $data Input data that may contain a 'descriptionPrompt' key.
+     * @return array|null The description prompt array if set, null otherwise.
+     */
+    protected function getDescriptionPrompt(array $data)
+    {
+        if (!array_key_exists('descriptionPrompt', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['descriptionPromptSelected'] ?? null) : null;
+        }
+
+        if (!empty($data['descriptionPrompt'])) {
+            return $data['descriptionPrompt'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the description tone from the provided data array.
+     *
+     * @param array $data Input data that may contain a 'descriptionTone' key.
+     * @return string|null The description tone string if set, null otherwise.
+     */
+    protected function getDescriptionTone(array $data): ?string
+    {
+        if (!array_key_exists('descriptionTone', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['descriptionToneSelected']['name'] ?? null) : null;
+        }
+
+        if (!empty($data['descriptionTone'])) {
+            return $data['descriptionTone'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the body prompt from the provided data array.
+     *
+     * @param array $data Input data that may contain a 'bodyPrompt' key.
+     * @return array|null The body prompt array if set, null otherwise.
+     */
+    protected function getBodyPrompt(array $data)
+    {
+        if (!array_key_exists('bodyPrompt', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['bodyPromptSelected'] ?? null) : null;
+        }
+
+        if (!empty($data['bodyPrompt'])) {
+            return $data['bodyPrompt'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the body tone from the provided data array.
+     *
+     * @param array $data Input data that may contain a 'bodyTone' key.
+     * @return string|null The body tone string if set, null otherwise.
+     */
+    protected function getBodyTone(array $data): ?string
+    {
+        if (!array_key_exists('bodyTone', $data)) {
+            return $this->isAutoImportEnabled() ? ($this->config['bodyToneSelected']['name'] ?? null) : null;
+        }
+
+        if (!empty($data['bodyTone'])) {
+            return $data['bodyTone'];
+        }
+
+        return null;
+    }
+
+    /**
      * Returns the content data from the resource.
      *
-     * @param Resource $resource The resource to import.
+     * @param ExternalResource $resource The resource to import.
      * @param array    $data     The information to use while importing.
      *
      * @return array The array of data.
      */
-    protected function getData(ExternalResource $resource, array $data) : array
+    protected function getData(ExternalResource $resource, array $data): array
     {
         if (!array_key_exists('content_type_name', $data)
             && array_key_exists('target', $this->config)
@@ -367,7 +511,29 @@ class Importer
             'urn_source'          => $resource->urn,
             'body'                => $resource->body,
             'href'                => $resource->href,
+            'titlePrompt'         => $this->getTitlePrompt($data),
+            'titleTone'           => $this->getTitleTone($data),
+            'descriptionPrompt'   => $this->getDescriptionPrompt($data),
+            'descriptionTone'     => $this->getDescriptionTone($data),
+            'bodyPrompt'          => $this->getBodyPrompt($data),
+            'bodyTone'            => $this->getBodyTone($data),
         ]);
+
+        // Overwrite content_type_name if set on NewsML
+        if (!empty($resource->content_type_name)) {
+            $data['content_type_name'] = $resource->content_type_name;
+        }
+
+        // Import contents with default tags if set on agency
+        if (array_key_exists('tags', $this->config)
+            && $this->config['tags']
+        ) {
+            $defaultTags = array_map(function ($tag) {
+                return (int) $tag;
+            }, $this->config['tags']);
+
+            $data['tags'] = array_merge($defaultTags, $data['tags']);
+        }
 
         // Force some properties for photos
         if ($resource->type === 'photo') {
@@ -382,13 +548,17 @@ class Importer
             && array_key_exists('external_link', $this->config)
             && !empty($this->config['external_link'])
         ) {
-            $data['params'] = [ 'bodyLink' => $this->config['external_link'] ];
+            $data['params'] = ['bodyLink' => $this->config['external_link']];
         }
 
         if (array_key_exists('external', $this->config)
             && $this->config['external'] === 'original'
         ) {
-            $data['params'] = [ 'bodyLink' => $data['href'] ];
+            $data['params'] = ['bodyLink' => $data['href']];
+        }
+
+        if ($this->config['canonicalurl'] ?? null) {
+            $data['canonicalurl'] = $data['href'];
         }
 
         $method = 'getDataFor' . ucfirst($data['content_type_name']);
@@ -396,6 +566,21 @@ class Importer
         if (method_exists($this, $method)) {
             $data = $this->{$method}($resource, $data);
         }
+
+        // OnmAI transform
+        if (in_array('es.openhost.module.onmai', $this->instance->activated_modules)
+            && $resource->type !== 'photo'
+        ) {
+            $data = $this->container->get('core.helper.ai')->transform($data);
+        }
+
+        // Remove prompts from the data array so they are not considered by the persister.
+        unset(
+            $data['titlePrompt'],
+            $data['title_intPrompt'],
+            $data['descriptionPrompt'],
+            $data['bodyPrompt']
+        );
 
         return $data;
     }
@@ -410,14 +595,14 @@ class Importer
      *
      * @return array The information to import the resource as article.
      */
-    protected function getDataForArticle(ExternalResource $resource, array $data) : array
+    protected function getDataForArticle(ExternalResource $resource, array $data): array
     {
         $date = new \DateTime();
 
         $data = array_merge($data, [
             'created'         => $date->format('Y-m-d H:i:s'),
             'fk_content_type' => 1,
-            'categories'      => [ $this->getCategory($resource, $data) ],
+            'categories'      => [$this->getCategory($resource, $data)],
             'agency'          => !empty($resource->signature)
                 ? $resource->signature
                 : (array_key_exists('agency_string', $this->config)
@@ -454,22 +639,97 @@ class Importer
             if ($content->content_type_name === 'photo') {
                 $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
                     $content,
-                    [ 'featured_frontpage', 'featured_inner' ]
+                    ['featured_frontpage', 'featured_inner']
                 );
             }
 
             if ($content->content_type_name === 'video') {
                 $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
                     $content,
-                    [ 'featured_frontpage', 'featured_inner' ]
+                    ['featured_frontpage', 'featured_inner']
                 );
             }
 
             if ($content->content_type_name === 'article') {
                 $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
                     $content,
-                    [ 'related_frontpage', 'related_inner' ],
+                    ['related_frontpage', 'related_inner'],
                     $data['related_contents']
+                );
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Returns the required information to import the resource as event.
+     *
+     * @param ExternalResource $resource The resource to import.
+     * @param array            $data     The information extracted from the
+     *                                   resource regardless of the target
+     *                                   content type.
+     *
+     * @return array The information to import the resource as event.
+     */
+    protected function getDataForEvent(ExternalResource $resource, array $data) : array
+    {
+        $date = new \DateTime();
+
+        $data = array_merge($data, [
+            'created'              => $date->format('Y-m-d H:i:s'),
+            'event_start_date'     => $resource->event_start_date,
+            'event_start_hour'     => $resource->event_start_hour,
+            'event_end_date'       => $resource->event_end_date,
+            'event_end_hour'       => $resource->event_end_hour,
+            'event_website'        => $resource->event_website,
+            'event_place'          => $resource->event_place,
+            'event_address'        => $resource->event_address,
+            'event_map_latitude'   => $resource->event_map_latitude,
+            'event_map_longitude'  => $resource->event_map_longitude,
+            'event_tickets_price'  => $resource->event_tickets_price,
+            'event_tickets_link'   => $resource->event_tickets_link,
+            'event_type'           => $resource->event_type,
+            'event_organizer_name' => $resource->event_organizer_name,
+            'event_organizer_url'  => $resource->event_organizer_url,
+            'fk_content_type'      => 5,
+            'categories'           => [ $this->getCategory($resource, $data) ],
+            'agency'               => !empty($resource->signature)
+                ? $resource->signature
+                : (array_key_exists('agency_string', $this->config)
+                    ? $this->config['agency_string']
+                    : null),
+            'description'          => $resource->summary,
+            'title_int'            => $resource->title,
+            'slug'                 => $this->container->get('data.manager.filter')
+                ->set($resource->title)
+                ->filter('slug')
+                ->get()
+        ]);
+
+        if (empty($resource->related)) {
+            return $data;
+        }
+
+        $resources = $this->repository->find($resource->related);
+        $urns      = array_map(function ($a) {
+            return $a->urn;
+        }, $resources);
+
+        $contents = !$this->propagation
+            ? $this->getImported($urns)
+            : array_map(function ($a) use ($data) {
+                return $this->setPropagation(false)->import($a, $data);
+            }, $resources);
+
+        $this->setPropagation(true);
+
+        $data['related_contents'] = [];
+        foreach ($contents as $content) {
+            if ($content->content_type_name === 'photo') {
+                $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
+                    $content,
+                    [ 'featured_frontpage', 'featured_inner' ]
                 );
             }
         }
@@ -487,7 +747,7 @@ class Importer
      *
      * @return array The information to import the resource as opinion.
      */
-    protected function getDataForOpinion(ExternalResource $resource, array $data) : array
+    protected function getDataForOpinion(ExternalResource $resource, array $data): array
     {
         $date = new \DateTime();
         $data = array_merge($data, [
@@ -520,7 +780,7 @@ class Importer
             if ($content->content_type_name === 'photo') {
                 $data['related_contents'] = $this->container->get('core.helper.featured_media')->getRelated(
                     $content,
-                    [ 'featured_frontpage', 'featured_inner' ]
+                    ['featured_frontpage', 'featured_inner']
                 );
                 break;
             }
@@ -539,7 +799,7 @@ class Importer
      *
      * @return array The information to import the resource as photo.
      */
-    protected function getDataForPhoto(ExternalResource $resource, array $data) : array
+    protected function getDataForPhoto(ExternalResource $resource, array $data): array
     {
         $data['path'] = sprintf(
             '%s/%s/%s',
@@ -559,11 +819,11 @@ class Importer
      *
      * @return array The list of imported contents.
      */
-    protected function getImported(array $urns) : array
+    protected function getImported(array $urns): array
     {
         $criteria = [
             'urn_source' => [
-                [ 'value' => $urns, 'operator' => 'IN' ]
+                ['value' => $urns, 'operator' => 'IN']
             ]
         ];
 
@@ -585,7 +845,7 @@ class Importer
      */
     protected function getResources()
     {
-        $criteria = [ 'source' => $this->config['id'] ];
+        $criteria = ['source' => $this->config['id']];
 
         if (!array_key_exists('filters', $this->config)
             || empty($this->config['filters'])
@@ -597,7 +857,7 @@ class Importer
         foreach ($this->config['filters'] as $filter) {
             $criteria = array_merge(
                 $criteria,
-                [ 'tags' => $filter, 'title' => $filter, 'body' => $filter ]
+                ['tags' => $filter, 'title' => $filter, 'body' => $filter]
             );
 
             $items     = $this->repository->findBy($criteria, 'priority asc');
@@ -614,7 +874,7 @@ class Importer
      *
      * @return array A list of tag ids.
      */
-    protected function getTags(ExternalResource $resource) : array
+    protected function getTags(ExternalResource $resource): array
     {
         $tags = !empty($resource->tags) ? $resource->tags : $resource->title;
         $tags = $this->container->get('api.service.tag')
@@ -643,9 +903,9 @@ class Importer
             'content-author-{{fk_author}}-frontpage',
             '{{content_type_name}}-frontpage,category-{{content_type_name}}-{{categories}}',
             'content_type_name-widget-article' .
-            '.*category-widget-({{categories}}|all)' .
-            '.*tag-widget-({{tags}}|all)' .
-            '.*author-widget-({{fk_author}}|all)',
+                '.*category-widget-({{categories}}|all)' .
+                '.*tag-widget-({{tags}}|all)' .
+                '.*author-widget-({{fk_author}}|all)',
             'last-suggested-{{categories}}',
             'rss-author-{{fk_author}}',
             'tag-{{tags}}',
@@ -657,8 +917,8 @@ class Importer
             'content-author-{{fk_author}}-frontpage',
             '{{content_type_name}}-frontpage$',
             'content_type_name-widget-{{content_type_name}}' .
-            '.*tag-widget-({{tags}}|all)' .
-            '.*author-widget-({{fk_author}}|all)',
+                '.*tag-widget-({{tags}}|all)' .
+                '.*author-widget-({{fk_author}}|all)',
             'rss-author-{{fk_author}}',
             'rss-{{content_type_name}}$',
             'sitemap',

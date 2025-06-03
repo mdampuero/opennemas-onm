@@ -128,9 +128,6 @@ class UrlGeneratorHelper
         if (!$content instanceof \Content) {
             $reflect = new \ReflectionClass($content);
             $method  = 'getUriFor' . $reflect->getShortName();
-            $method  = array_key_exists('alternative_url', $params) && $params['alternative_url']
-                    ? $method . "Alt"
-                    : $method;
         }
 
         if (method_exists($this, $method)) {
@@ -153,7 +150,6 @@ class UrlGeneratorHelper
         if (array_key_exists('_format', $params) && $params['_format'] == 'amp') {
             $uri = preg_replace('@\.html$@', '.amp.html', $uri);
         }
-
 
         return $this->container->get('core.decorator.url')->prefixUrl($uri);
     }
@@ -352,32 +348,23 @@ class UrlGeneratorHelper
             ])
             ->get();
 
-        $uri = $this->container->get('router')->generate('category_frontpage', [
-            'category_slug' => $category->name
-        ]);
+        $route = 'category_frontpage';
+        $param = 'category_slug';
 
-        return ltrim($uri, '/');
-    }
+        if (!empty($category->layout)) {
+            $route = 'frontend_frontpage_category';
+            $param = 'category';
+        }
 
-    /**
-     * Returns the ALt URI for a Category.
-     *
-     * @param Category $category The category object.
-     *
-     * @return string The category URI.
-     */
-    protected function getUriForCategoryAlt($category, $locale = null)
-    {
-        $category = $this->container->get('data.manager.filter')->set($category)
-            ->filter('localize', [
-                'keys'   => [ 'name' ],
-                'locale' => $locale
-            ])
-            ->get();
+        if ($this->container->get('core.helper.setting')->isMergeEnabled()) {
+            $route = 'category_homepage';
+            $param = 'category_slug';
+        }
 
-        $uri = $this->container->get('router')->generate('frontend_frontpage_category', [
-            'category' => $category->name
-        ]);
+        $uri = $this->container->get('router')->generate(
+            $route,
+            [ $param => $category->name ]
+        );
 
         return ltrim($uri, '/');
     }

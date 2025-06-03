@@ -289,8 +289,6 @@ class SitemapHelperTest extends \PHPUnit\Framework\TestCase
                 [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '>' ],
             ],
             'starttime'         => [
-                'union' => 'OR',
-                [ 'value' => null, 'operator' => 'IS', 'field' => true ],
                 [ 'value' => gmdate('Y-m-d H:i:s'), 'operator' => '<=' ],
             ],
             'changed ' => [

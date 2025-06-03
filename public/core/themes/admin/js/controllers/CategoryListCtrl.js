@@ -188,8 +188,11 @@
         $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
 
+          $scope.app.columns.selected =  _.uniq($scope.app.columns.selected.concat(
+            [ 'name', 'slug', 'contents', 'cover', 'color', 'visibility', 'enabled', 'rss' ]
+          ));
           $scope.criteria.orderBy = { name: 'asc' };
-          $scope.criteria.epp     = null;
+          $scope.criteria.epp     = 10;
 
           oqlEncoder.configure({ placeholder: {
             name: 'name ~ "%[value]%" or title ~ "%[value]%"',

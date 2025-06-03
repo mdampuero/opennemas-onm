@@ -82,6 +82,12 @@ class VideoController extends FrontendController
         $category = $params['o_category'];
         $date     = date('Y-m-d H:i:s');
 
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
+            throw new ResourceNotFoundException();
+        }
+
         $categoryOQL = !empty($category)
             ? sprintf(' and category_id=%d', $category->id)
             : '';
@@ -98,7 +104,6 @@ class VideoController extends FrontendController
             $params['epp'] * ($params['page'] - 1)
         ));
 
-        // No first page and no contents
         if ($params['page'] > 1 && empty($response['items'])) {
             throw new ResourceNotFoundException();
         }

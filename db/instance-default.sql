@@ -118,6 +118,7 @@ CREATE TABLE `category` (
   `visible` tinyint(1) unsigned DEFAULT '0',
   `enabled` tinyint(1) unsigned DEFAULT '0',
   `rss` tinyint(1) unsigned DEFAULT '0',
+  `layout` tinyint(1) unsigned DEFAULT '0',
   `parent_id` bigint(20) unsigned DEFAULT NULL,
   `params` text,
   `logo_id` bigint(20) unsigned DEFAULT NULL,
@@ -127,6 +128,7 @@ CREATE TABLE `category` (
   KEY `logo_id` (`logo_id`),
   KEY `cover_id` (`cover_id`),
   KEY `parent_id` (`parent_id`),
+  KEY `category_name` (`name`(32)),
   CONSTRAINT `category_id_category_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `cover_id_pk_content` FOREIGN KEY (`cover_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `logo_id_pk_content` FOREIGN KEY (`logo_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -139,7 +141,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (20,'Sin categorÃ­a','sin-categoria',NULL,0,1,0,NULL,NULL,NULL,NULL,NULL),(22,'Deportes','deportes',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(23,'EconomÃ­a','economia',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(24,'PolÃ­tica','politica',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(25,'Cultura','cultura',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(26,'Sociedad','sociedad',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(30,'Curiosidades','curiosidades',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(32,'Portadas','portadas',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(33,'Ciencia','ciencia',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(34,'Actualidad','actualidad',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(35,'Internacional','internacional',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `category` VALUES (20,'Sin categorÃ­a','sin-categoria',NULL,0,1,0,0,NULL,NULL,NULL,NULL,NULL),(22,'Deportes','deportes',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(23,'EconomÃ­a','economia',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(24,'PolÃ­tica','politica',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(25,'Cultura','cultura',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(26,'Sociedad','sociedad',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(30,'Curiosidades','curiosidades',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(32,'Portadas','portadas',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(33,'Ciencia','ciencia',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(34,'Actualidad','actualidad',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(35,'Internacional','internacional',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -462,6 +464,7 @@ CREATE TABLE `contents` (
   KEY `fk_user_last_editor` (`fk_user_last_editor`),
   KEY `content_type_name_changed` (`content_type_name`,`changed`),
   KEY `content_type_name_in_litter_content_status` (`content_type_name`,`in_litter`,`content_status`),
+  KEY `contents_slug` (`slug`(32)),
   CONSTRAINT `fk_author_users_id` FOREIGN KEY (`fk_author`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_publisher_users_id` FOREIGN KEY (`fk_publisher`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_user_last_editor_users_id` FOREIGN KEY (`fk_user_last_editor`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -648,7 +651,7 @@ CREATE TABLE `menu_items` (
 
 LOCK TABLES `menu_items` WRITE;
 /*!40000 ALTER TABLE `menu_items` DISABLE KEYS */;
-INSERT INTO `menu_items` VALUES (1,1,'Actualidad','actualidad','blog-category',1,0,null,null),(1,9,'QuiÃ©nes Somos','quienes-somos','static',1,0,null,null),(1,10,'Hemeroteca','archive/content/','internal',1,0,null,null),(1,11,'EconomÃ­a','economia','blog-category',1,0,null,null),(2,1,'PolÃ­tica','politica','blog-category',1,1,null,null),(2,9,'Publicidad','publicidad','static',2,0,null,null),(2,11,'Sociedad','sociedad','blog-category',2,0,null,null),(3,1,'Internacional','internacional','blog-category',2,1,null,null),(3,9,'Aviso Legal','condiciones-de-uso','static',3,0,null,null),(3,11,'TecnologÃ­a','tecnologia','blog-category',3,0,null,null),(4,1,'EconomÃ­a','economia','blog-category',3,1,null,null),(4,9,'PolÃ­tica de privacidad','politica-de-privacidad','static',4,0,null,null),(4,11,'Ciencia','ciencia','blog-category',4,0,null,null),(5,1,'OpiniÃ³n','opinion/','internal',2,0,null,null),(6,1,'Sociedad','sociedad','blog-category',3,0,null,null),(7,1,'Cultura','cultura','blog-category',4,0,null,null),(8,1,'Deportes','deportes','blog-category',5,0,null,null),(9,1,'Media','album/','internal',6,0,null,null),(10,1,'GalerÃ­as','album/','internal',1,9,null,null),(11,1,'VÃ­deos','video/','internal',2,9,null,null);
+INSERT INTO `menu_items` VALUES (1,1,'Actualidad','actualidad','category',1,0,null,null),(1,9,'QuiÃ©nes Somos','quienes-somos','static',1,0,null,null),(1,10,'Hemeroteca','archive/content/','internal',1,0,null,null),(1,11,'EconomÃ­a','economia','category',1,0,null,null),(2,1,'PolÃ­tica','politica','category',1,1,null,null),(2,9,'Publicidad','publicidad','static',2,0,null,null),(2,11,'Sociedad','sociedad','category',2,0,null,null),(3,1,'Internacional','internacional','category',2,1,null,null),(3,9,'Aviso Legal','condiciones-de-uso','static',3,0,null,null),(3,11,'TecnologÃ­a','tecnologia','category',3,0,null,null),(4,1,'EconomÃ­a','economia','category',3,1,null,null),(4,9,'PolÃ­tica de privacidad','politica-de-privacidad','static',4,0,null,null),(4,11,'Ciencia','ciencia','category',4,0,null,null),(5,1,'OpiniÃ³n','opinion/','internal',2,0,null,null),(6,1,'Sociedad','sociedad','category',3,0,null,null),(7,1,'Cultura','cultura','category',4,0,null,null),(8,1,'Deportes','deportes','category',5,0,null,null),(9,1,'Media','album/','internal',6,0,null,null),(10,1,'GalerÃ­as','album/','internal',1,9,null,null),(11,1,'VÃ­deos','video/','internal',2,9,null,null);
 /*!40000 ALTER TABLE `menu_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1103,6 +1106,33 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES (1,'editorial','a5d0bc6537be17bf937c9fd3fc4b30a4','','',NULL,'editorial@opennemas.com','Editorial','editorial',0,NULL,0),(2,'director','a5d0bc6537be17bf937c9fd3fc4b30a4','','',NULL,'director@opennemas.com','Director','director',0,NULL,0),(8,'xabier-r-blanco','a5d0bc6537be17bf937c9fd3fc4b30a4','','',636,'xabi.blanco@opennemas.com','Xabier R. Blanco','xabier-r-blanco',0,NULL,0),(9,'jose-luis-gomez','2d434b078be9d75b50325508fafe1f90','','Editor de Mundiario. Comentarista de Europa Press, TVG, RG y La RegiÃ³n. ',641,'joseluis@opennemas.com','Jose Luis Gomez','jose-luis-gomez',0,NULL,0),(10,'joaquin-vidal','57f671569ad7c429203371a9fd1a2881','','Director de Estrella Digital',643,'jvidal@estrelladigital.es','JoaquÃ­n Vidal','joaquin-vidal',0,NULL,0),(11,'alberto-j-rey','7cae6b5e96239c2d38b78de6395da31d','','Socio-director de wecom Consultora de ComunicaciÃ³n y Relaciones PÃºblicas',642,'alberto.rey@opennemas.com','Alberto J. Rey','alberto-j-rey',0,NULL,0),(12,'javier-fumero',NULL,' ','La EspaÃ±a Profunda',652,'javier.fumero@openhost.es','Javier Fumero','javier-fumero',0,NULL,0),(13,'juan-mendez',NULL,' ',' ',661,'juan-mendez@openhost.es','Juan MÃ©ndez','juan-mendez',0,NULL,0),(14,'lorenzo-sentenac',NULL,' ',' ',739,'lorenzo.sentenac@openhost.es','Lorenzo Sentenac','lorenzo-sentenac',0,NULL,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `ai_actions`;
+--
+-- Table structure for table `ai_actions`
+--
+
+CREATE TABLE `ai_actions` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `messages` longtext,
+  `response` longtext,
+  `tokens` longtext,
+  `params` longtext,
+  `date` datetime DEFAULT NULL,
+  `service` varchar(64) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `prompts`;
+CREATE TABLE `prompts` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `mode` varchar(32) NOT NULL,
+  `name` text NOT NULL,
+  `role` text,
+  `field` varchar(32) DEFAULT NULL,
+  `tone` text,
+  `prompt` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

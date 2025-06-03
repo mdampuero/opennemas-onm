@@ -566,6 +566,19 @@ class AdvertisementRendererTest extends TestCase
             ->willReturn('baz');
 
         $this->assertEquals('baz', $rendererSmart->renderInlineHeaders([]));
+
+        $rendererTraffective = $this->getMockBuilder('Frontend\Renderer\AdvertisementRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderTraffectiveHeaders', 'getAdvertisements' ])
+            ->getMock();
+
+        $rendererTraffective->expects($this->any())->method('getAdvertisements')
+            ->willReturn([$ad]);
+
+        $rendererTraffective->expects($this->any())->method('renderTraffectiveHeaders')
+            ->willReturn('qux');
+
+        $this->assertEquals('qux', $rendererTraffective->renderInlineHeaders([]));
     }
 
     /**
@@ -650,6 +663,33 @@ class AdvertisementRendererTest extends TestCase
 
         $this->renderer->expects($this->once())->method('getRendererClass')
             ->with(4)
+            ->willReturn($renderer);
+
+        $this->assertEquals(
+            'foo',
+            $method->invokeArgs($this->renderer, [ [ $ad ], [] ])
+        );
+    }
+
+    public function testRenderTraffectiveHeaders()
+    {
+        $method = new \ReflectionMethod($this->renderer, 'renderTraffectiveHeaders');
+        $method->setAccessible(true);
+
+        $ad              = new \Advertisement();
+        $ad->params      = [ 'category' => 'home', 'extension' => 'article' ];
+        $ad->with_script = 5;
+
+        $renderer = $this->getMockBuilder('Frontend\Renderer\Advertisement\TraffectiveRenderer')
+            ->setConstructorArgs([ $this->container ])
+            ->setMethods([ 'renderInlineHeader' ])
+            ->getMock();
+
+        $renderer->expects($this->any())->method('renderInlineHeader')
+            ->willReturn('foo');
+
+        $this->renderer->expects($this->once())->method('getRendererClass')
+            ->with(5)
             ->willReturn($renderer);
 
         $this->assertEquals(
@@ -959,7 +999,7 @@ class AdvertisementRendererTest extends TestCase
         $ad              = new \Advertisement();
         $ad->with_script = 3;
 
-        $types     = [ 'Image', 'Html', 'Revive', 'Dfp', 'Smart' ];
+        $types     = [ 'Image', 'Html', 'Revive', 'Dfp', 'Smart', 'Traffective' ];
         $class     = $types[$ad->with_script] . 'Renderer';
         $classPath = 'Frontend\Renderer\Advertisement\\' . $class;
 

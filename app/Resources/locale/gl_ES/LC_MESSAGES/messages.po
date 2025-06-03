@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-28 09:46+0000\n"
-"PO-Revision-Date: 2025-01-28 10:50+0100\n"
+"POT-Creation-Date: 2025-06-02 09:34+0000\n"
+"PO-Revision-Date: 2025-06-02 11:57+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -316,6 +316,18 @@ msgstr "Configuración"
 
 msgid "PressClipping"
 msgstr "PressClipping"
+
+msgid "ONM AI"
+msgstr "ONM AI"
+
+msgid "NEW"
+msgstr "NOVO"
+
+msgid "Prompts"
+msgstr "Prompts"
+
+msgid "Models"
+msgstr "Modelos"
 
 msgid "Utilities"
 msgstr "Utilidades"
@@ -1042,6 +1054,19 @@ msgstr "Axuda"
 msgid "Information"
 msgstr "Información"
 
+msgid "Prompt saved successfully"
+msgstr "Prompt gardado correctamente"
+
+msgid "Unable to save settings"
+msgstr "Non se puido gardar as configuración"
+
+msgid "Item saved successfully"
+msgstr "Elemento gardado correctamente"
+
+#, php-format
+msgid "%s items deleted successfully"
+msgstr "%s elementos eliminados correctamente"
+
 msgid "Purchase deleted successfully"
 msgstr "Compra eliminada correctamente"
 
@@ -1111,6 +1136,9 @@ msgstr "Estado de Opcache"
 msgid "Ads.txt"
 msgstr "Ads.txt"
 
+msgid "Configs"
+msgstr "Configuracións"
+
 msgid "System"
 msgstr "Sistema"
 
@@ -1136,9 +1164,6 @@ msgstr "%s usuarios eliminados correctamente"
 #, php-format
 msgid "%s items could not be deleted successfully"
 msgstr "%s elementos non se puideron eliminar correctamente"
-
-msgid "Item saved successfully"
-msgstr "Elemento gardado correctamente"
 
 #, php-format
 msgid "%s items updated successfully"
@@ -1174,10 +1199,6 @@ msgstr "O teu xornal xa está en liña"
 
 msgid "Error when creating a new instance"
 msgstr "Erro ao crear unha nova instancia"
-
-#, php-format
-msgid "%s items deleted successfully"
-msgstr "%s elementos eliminados correctamente"
 
 msgid "No file provided"
 msgstr "Non se forneceu ningún ficheiro"
@@ -1237,9 +1258,6 @@ msgstr "Seguinte"
 
 msgid "Previous"
 msgstr "Anterior"
-
-msgid "Unable to save settings"
-msgstr "Non se puido gardar as configuración"
 
 #, php-format
 msgid "The minimun size for the %s is 200x200. Please adjust your image size."
@@ -1386,6 +1404,9 @@ msgstr "Máis vistos 3 dias"
 msgid "Opinion"
 msgstr "Opinión"
 
+msgid "Webpush Module is not activated"
+msgstr "O módulo Webpush non está activado"
+
 msgid "A minimum of 2 answers are required"
 msgstr "Requírese un mínimo de 2 respostas"
 
@@ -1455,9 +1476,6 @@ msgstr "Comproba o URL do vídeo, semella ser incorrecto"
 
 msgid "Can't get video information. Check the url"
 msgstr "Non se puido obter información do vídeo. Comproba o enderezo"
-
-msgid "Webpush Module is not activated"
-msgstr "O módulo Webpush non está activado"
 
 msgid "Unexpected error"
 msgstr "Erro inesperado"
@@ -1543,6 +1561,426 @@ msgstr "Pagar con PayPal"
 msgid "There is no billing information."
 msgstr "Non hai información de facturación."
 
+msgid "Corporate and Business"
+msgstr "Corporativo e Empresarial"
+
+msgid "corporate-and-business"
+msgstr "corporativo-e-empresarial"
+
+msgid "Conferences"
+msgstr "Conferencias"
+
+msgid "conferences"
+msgstr "conferencias"
+
+msgid "Seminars"
+msgstr "Seminarios"
+
+msgid "seminars"
+msgstr "seminarios"
+
+msgid "Webinars"
+msgstr "Webinares"
+
+msgid "webinars"
+msgstr "webinares"
+
+msgid "Trade Shows"
+msgstr "Feiras Comerciais"
+
+msgid "trade-shows"
+msgstr "feiras-comerciais"
+
+msgid "Press Conferences"
+msgstr "Ruedas de Prensa"
+
+msgid "press-conferences"
+msgstr "ruedas-de-prensa"
+
+msgid "Workshops"
+msgstr "Obradoiros"
+
+msgid "workshops"
+msgstr "obradoiros"
+
+msgid "Product Launches"
+msgstr "Lanzamentos de Produto"
+
+msgid "product-launches"
+msgstr "lanzamentos-de-produto"
+
+msgid "Networking"
+msgstr "Networking"
+
+msgid "networking"
+msgstr "networking"
+
+msgid "Team Building"
+msgstr "Team Building"
+
+msgid "team-building"
+msgstr "team-building"
+
+msgid "Summits"
+msgstr "Cumios"
+
+msgid "summits"
+msgstr "cumios"
+
+msgid "social"
+msgstr "social"
+
+msgid "Weddings"
+msgstr "Vodas"
+
+msgid "weddings"
+msgstr "vodas"
+
+msgid "Baptisms"
+msgstr "Bautizos"
+
+msgid "baptisms"
+msgstr "bautizos"
+
+msgid "First Communions"
+msgstr "Primeiras Comuñóns"
+
+msgid "first-communions"
+msgstr "primeiras-comunions"
+
+msgid "Anniversaries"
+msgstr "Aniversarios"
+
+msgid "anniversaries"
+msgstr "aniversarios"
+
+msgid "Birthdays"
+msgstr "Aniversarios"
+
+msgid "birthdays"
+msgstr "aniversarios"
+
+msgid "Farewells"
+msgstr "Despedidas"
+
+msgid "farewells"
+msgstr "despedidas"
+
+msgid "Baby Showers"
+msgstr "Baby Showers"
+
+msgid "baby-showers"
+msgstr "baby-showers"
+
+msgid "Reunions"
+msgstr "Reunións"
+
+msgid "reunions"
+msgstr "reunions"
+
+msgid "Graduations"
+msgstr "Graduacións"
+
+msgid "graduations"
+msgstr "graduacions"
+
+msgid "Themed Parties"
+msgstr "Festas Temáticas"
+
+msgid "themed-parties"
+msgstr "festas-tematicas"
+
+msgid "Cultural and Artistic"
+msgstr "Cultural e Artístico"
+
+msgid "cultural-and-artistic"
+msgstr "cultural-e-artistico"
+
+msgid "Concerts"
+msgstr "Concertos"
+
+msgid "concerts"
+msgstr "concertos"
+
+msgid "Theater"
+msgstr "Teatro"
+
+msgid "theater"
+msgstr "teatro"
+
+msgid "Museum"
+msgstr "Museo"
+
+msgid "museum"
+msgstr "museo"
+
+msgid "Exhibitions"
+msgstr "Exposicións"
+
+msgid "exhibitions"
+msgstr "exposicions"
+
+msgid "Performances"
+msgstr "Espectáculos"
+
+msgid "performances"
+msgstr "espectaculos"
+
+msgid "Festivals"
+msgstr "Festivais"
+
+msgid "festivals"
+msgstr "festivais"
+
+msgid "Cinema"
+msgstr "Cine"
+
+msgid "cinema"
+msgstr "cine"
+
+msgid "Book Fairs"
+msgstr "Feiras do Libro"
+
+msgid "book-fairs"
+msgstr "feiras-do-libro"
+
+msgid "Urban Art"
+msgstr "Arte Urbana"
+
+msgid "urban-art"
+msgstr "arte-urbana"
+
+msgid "Sports"
+msgstr "Deportes"
+
+msgid "sports"
+msgstr "deportes"
+
+msgid "Races"
+msgstr "Carreiras"
+
+msgid "races"
+msgstr "carreiras"
+
+msgid "Tournaments"
+msgstr "Torneos"
+
+msgid "tournaments"
+msgstr "torneos"
+
+msgid "sports-exhibitions"
+msgstr "exhibicions-deportivas"
+
+msgid "Classes"
+msgstr "Clases"
+
+msgid "sports-classes"
+msgstr "clases-deportivas"
+
+msgid "Esports"
+msgstr "Esports"
+
+msgid "esports"
+msgstr "esports"
+
+msgid "Triathlons"
+msgstr "Triatlóns"
+
+msgid "triathlons"
+msgstr "triatlons"
+
+msgid "Extreme Sports"
+msgstr "Deportes Extremos"
+
+msgid "extreme-sports"
+msgstr "deportes-extremos"
+
+msgid "Educational"
+msgstr "Educativo"
+
+msgid "educational"
+msgstr "educativo"
+
+msgid "Courses"
+msgstr "Cursos"
+
+msgid "courses"
+msgstr "cursos"
+
+msgid "educational-conferences"
+msgstr "conferencias-educativas"
+
+msgid "Symposiums"
+msgstr "Simposios"
+
+msgid "symposiums"
+msgstr "simposios"
+
+msgid "Debates"
+msgstr "Debates"
+
+msgid "debates"
+msgstr "debates"
+
+msgid "educational-workshops"
+msgstr "obradoiros-educativos"
+
+msgid "Fairs"
+msgstr "Feiras"
+
+msgid "educational-fairs"
+msgstr "feiras-educativas"
+
+msgid "Religious"
+msgstr "Relixioso"
+
+msgid "religious"
+msgstr "relixioso"
+
+msgid "Masses"
+msgstr "Misas"
+
+msgid "masses"
+msgstr "misas"
+
+msgid "Pilgrimages"
+msgstr "Peregrinacións"
+
+msgid "pilgrimages"
+msgstr "peregrinacions"
+
+msgid "Retreats"
+msgstr "Retiros"
+
+msgid "retreats"
+msgstr "retiros"
+
+msgid "Festivities"
+msgstr "Festividades"
+
+msgid "festivities"
+msgstr "festividades"
+
+msgid "Charitable"
+msgstr "Benéfico"
+
+msgid "charitable"
+msgstr "benefico"
+
+msgid "Gala Events"
+msgstr "Eventos de Gala"
+
+msgid "gala-events"
+msgstr "eventos-de-gala"
+
+msgid "Auctions"
+msgstr "Poxas"
+
+msgid "auctions"
+msgstr "poxas"
+
+msgid "Donations"
+msgstr "Doazóns"
+
+msgid "donations"
+msgstr "doazons"
+
+msgid "Volunteering"
+msgstr "Voluntariado"
+
+msgid "volunteering"
+msgstr "voluntariado"
+
+msgid "Benefit Concerts"
+msgstr "Concertos Benéficos"
+
+msgid "benefit-concerts"
+msgstr "concertos-beneficos"
+
+msgid "Gastronomic"
+msgstr "Gastronómico"
+
+msgid "gastronomic"
+msgstr "gastronomico"
+
+msgid "Food Fairs"
+msgstr "Feiras Gastronómicas"
+
+msgid "food-fairs"
+msgstr "feiras-gastronomicas"
+
+msgid "Tastings"
+msgstr "Cata"
+
+msgid "tastings"
+msgstr "cata"
+
+msgid "Gastronomic Festivals"
+msgstr "Festivais Gastronómicos"
+
+msgid "gastronomic-festivals"
+msgstr "festivais-gastronomicos"
+
+msgid "Technological"
+msgstr "Tecnolóxico"
+
+msgid "technological"
+msgstr "tecnoloxico"
+
+msgid "Tech Fairs"
+msgstr "Feiras Tecnolóxicas"
+
+msgid "tech-fairs"
+msgstr "feiras-tecnoloxicas"
+
+msgid "Demos"
+msgstr "Demos"
+
+msgid "demos"
+msgstr "demos"
+
+msgid "Hackathons"
+msgstr "Hackathons"
+
+msgid "hackathons"
+msgstr "hackathons"
+
+msgid "Governmental"
+msgstr "Gobernamental"
+
+msgid "governmental"
+msgstr "gobernamental"
+
+msgid "Inaugurations"
+msgstr "Inauguracións"
+
+msgid "inaugurations"
+msgstr "inauguracions"
+
+msgid "governmental-summits"
+msgstr "cumios-gobernamentais"
+
+msgid "governmental-debates"
+msgstr "debates-gobernamentais"
+
+msgid "Other"
+msgstr "Outro"
+
+msgid "other"
+msgstr "outro"
+
+msgid "Musicals"
+msgstr "Musicais"
+
+msgid "musicals"
+msgstr "musicais"
+
+msgid "Circus"
+msgstr "Circo"
+
+msgid "circus"
+msgstr "circo"
+
 msgid "Live blog post"
 msgstr "Artigo en directo"
 
@@ -1579,8 +2017,14 @@ msgstr "Datos do organizador"
 msgid "Event date"
 msgstr "Data do evento"
 
+msgid "Event Type"
+msgstr "Tipo de evento"
+
 msgid "Event location"
 msgstr "Localización do evento"
+
+msgid "Tickets"
+msgstr "Entradas"
 
 msgid "External website"
 msgstr "Sitio web externo"
@@ -2140,6 +2584,9 @@ msgstr "Programado"
 msgid "Error"
 msgstr "Erro"
 
+msgid "Select a type"
+msgstr "Selecciona un tipo"
+
 msgid "Add a tag..."
 msgstr "Engadir unha etiqueta ..."
 
@@ -2197,6 +2644,9 @@ msgstr ""
 
 msgid "Pick an image"
 msgstr "Escoller unha imaxe"
+
+msgid "No event type selected"
+msgstr "Non se seleccionou ningún tipo de evento"
 
 msgid "Link"
 msgstr "Ligazón"
@@ -2380,11 +2830,56 @@ msgstr ""
 msgid "Server hour:"
 msgstr "Hora do servidor:"
 
-msgid "Cache"
-msgstr "Caché"
-
 msgid "Save"
 msgstr "Gardar"
+
+msgid "Service type"
+msgstr "Tipo de servizo"
+
+msgid "Opennemas AI"
+msgstr "Opennemas IA"
+
+msgid "Model"
+msgstr "Modelo"
+
+msgid "Open AI API Key"
+msgstr "Chave da API de OpenAI"
+
+msgid "Gemini API Key"
+msgstr "Chave da API de Gemini"
+
+msgid "DeepSeek API Key"
+msgstr "Chave da API de DeppSeek"
+
+msgid "Improve your manager"
+msgstr "Mellora o teu xestor"
+
+msgid "Contact with us to enjoy this feature."
+msgstr "Contacta connosco para gozar desta función."
+
+msgid "I want this module"
+msgstr "Quero este módulo"
+
+msgid "Total words managed"
+msgstr "Total de palabras xestionadas"
+
+msgid "Total interactions"
+msgstr "Total de interaccións"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Average price per 1 million words sent"
+msgstr "Prezo medio por 1 millón de palabras enviadas"
+
+msgid "Average price per 1 million words received"
+msgstr "Prezo medio por 1 millón de palabras recibidas"
+
+msgid "Day"
+msgstr "Dia"
+
+msgid "Cache"
+msgstr "Caché"
 
 msgid "Cache group"
 msgstr "Grupo de caché"
@@ -2591,6 +3086,10 @@ msgstr "Revise o formulario xa que ten campos sen completar ou inválidos."
 
 msgid "You must have at least 1 languages ​​set for the frontend"
 msgstr "Debe ter polo menos 1 idioma definido para a interface"
+
+msgid "The provided iframe is not valid. Please check the field and try again."
+msgstr ""
+"O iframe proporcionado non é válido. Comproba o campo e téntao de novo."
 
 msgid "Instance information"
 msgstr "Información da instancia"
@@ -2995,11 +3494,17 @@ msgstr "Redirixir a"
 msgid "When importing assign an external link to the elements"
 msgstr "Ao importar asignar unha ligazón externa aos elementos"
 
+msgid "Keep canonical url from origin"
+msgstr "Manter o URL canónico da orixe"
+
 msgid "When importing elements this will be the signature"
 msgstr "Ao importar elementos esta será a firma"
 
 msgid "Automatic import"
 msgstr "Importación automática"
+
+msgid "Import as draft"
+msgstr "Importar como borrador"
 
 msgid "Import"
 msgstr "Importar"
@@ -3007,8 +3512,17 @@ msgstr "Importar"
 msgid "as"
 msgstr "como"
 
-msgid "Select a type"
-msgstr "Selecciona un tipo"
+msgid "Transform with ONM AI"
+msgstr "Transforma con ONM IA"
+
+msgid "No, keep the original content"
+msgstr "No, mantén o contido orixinal"
+
+msgid "Select a tone"
+msgstr "Selecciona un tono"
+
+msgid "Select a language..."
+msgstr "Selecciona un idioma..."
 
 msgid "Default author"
 msgstr "Autor defecto"
@@ -3873,8 +4387,26 @@ msgstr "Nome do lugar"
 msgid "Place address"
 msgstr "Enderezo do lugar"
 
+msgid "Latitude"
+msgstr "Latitude"
+
+msgid "Longitude"
+msgstr "Lonxitude"
+
+msgid "Event iframe map"
+msgstr "Iframe do mapa do evento"
+
+msgid "Price"
+msgstr "Prezo"
+
+msgid "Purchase URL"
+msgstr "URL de compra"
+
 msgid "Website URL"
 msgstr "URL do sitio web"
+
+msgid "SEO Information"
+msgstr "Información SEO"
 
 msgid "Config event module"
 msgstr "Configuración do módulo «Evento»"
@@ -3917,9 +4449,6 @@ msgstr "Acabas de mercar os seguintes elementos:"
 
 msgid "You can find your invoice <a href=\"%1\">here</a>"
 msgstr "Pode atopar a súa factura <a href=\"%1\">aquí</a>"
-
-msgid "Total"
-msgstr "Total"
 
 msgid "Screenshots and videos"
 msgstr "Imaxes e vídeos"
@@ -4119,9 +4648,6 @@ msgstr "Tamaño"
 msgid "Suggested for frontpage"
 msgstr "Suxerido a portada principal"
 
-msgid "SEO Information"
-msgstr "Información SEO"
-
 msgid "Inner title"
 msgstr "Titulo interior"
 
@@ -4193,6 +4719,9 @@ msgstr ""
 
 msgid "Menu"
 msgstr "Menú"
+
+msgid "Manual"
+msgstr "Manual"
 
 msgid "Only empty categories can be deleted"
 msgstr "Só se poden eliminar categorías sen contidos"
@@ -4475,9 +5004,6 @@ msgstr "Idioma do periódico"
 msgid "Used for messages, interface and units in the newspaper."
 msgstr "Usado para as mensaxes, interface e medidas no seu xornal."
 
-msgid "Select a language..."
-msgstr "Selecciona un idioma..."
-
 msgid "Search a language"
 msgstr "Buscar un idioma"
 
@@ -4517,8 +5043,17 @@ msgstr "Servizo para a tradución automática"
 msgid "Services to translate your contents to a especific language."
 msgstr "Servizos para traducir os seus contidos a un idioma específico."
 
+msgid "Default service"
+msgstr "Servizo por defecto"
+
+msgid "Select a service..."
+msgstr "Selecciona un servizo…"
+
 msgid "Not defined"
 msgstr "Non definido"
+
+msgid "Service"
+msgstr "Servizo"
 
 msgid "Translate from"
 msgstr "Traducir desde"
@@ -4534,12 +5069,6 @@ msgstr "Selecciona un idioma"
 
 msgid "Required params for Service"
 msgstr "Parámetros requeridos para o servizo"
-
-msgid "Service"
-msgstr "Servizo"
-
-msgid "Select a service..."
-msgstr "Selecciona un servizo…"
 
 msgid "Default translator for \"%1\""
 msgstr "Tradutor por omisión para «%1»"
@@ -4610,6 +5139,12 @@ msgstr "Novas totais para o sitemap"
 
 msgid "Elements per page"
 msgstr "Elementos por páxina"
+
+msgid "Limit contents sitemap per year"
+msgstr "Limitar sitemap de contidos por ano"
+
+msgid "Sitemap news days"
+msgstr "Días sitemap news"
 
 msgid "Sitemaps enabled"
 msgstr "Sitemaps habilitados"
@@ -4812,6 +5347,9 @@ msgstr "Mostrar subtítulos"
 msgid "Display summary/description"
 msgstr "Mostrar resumo/descrición"
 
+msgid "Extract from body if needed"
+msgstr "Extraer do corpo se é necesario"
+
 msgid "Info"
 msgstr "Info"
 
@@ -4844,6 +5382,12 @@ msgstr "Portada da categoría"
 
 msgid "Show category cover (if exists)"
 msgstr "Mostrar a portada da categoría (se existe)"
+
+msgid "Secondary menu"
+msgstr "Menú secundario"
+
+msgid "Display subcategories menu if exists"
+msgstr "Mostrar menú de subcategorías se existe"
 
 msgid "Sidebar widgets"
 msgstr "Widgets da barra lateral"
@@ -4893,6 +5437,9 @@ msgstr "Ferramentas de compartir"
 
 msgid "Choose where to display"
 msgstr "Escolle onde queres mostrar"
+
+msgid "Events info"
+msgstr "Información dos eventos"
 
 msgid "Automatic related contents"
 msgstr "Contidos relacionados automáticos"
@@ -4978,6 +5525,16 @@ msgstr "Tipo de letra secundario (corpo, resumo...)"
 
 msgid "Redirect to frontpage non-migrated contents"
 msgstr "Redirixir a portada contidos non migrados"
+
+msgid "Merge category URLs"
+msgstr "Fusionar URL de categoría"
+
+msgid ""
+"If you enable this option, the URLs '/seccion/category/' and '/blog/section/"
+"category/' will be redirected to '/category/'."
+msgstr ""
+"Se activas esta opción, os URL '/seccion/category/' e '/blog/section/"
+"category/' serán redirixidos a '/category/'."
 
 msgid "Google Analytics"
 msgstr "Google Analytics"
@@ -5162,6 +5719,9 @@ msgstr "Integración de sistemas de Analíticas"
 
 msgid "Google Analytics API key"
 msgstr "Chave da API de Google Analytics"
+
+msgid "Add Master"
+msgstr "Engadir Master"
 
 msgid ""
 "You can get your Google Analytics Site ID from <a class=\"external-link\" "
@@ -5600,6 +6160,42 @@ msgstr "'%1' non activado - Opennemas"
 msgid "%1 temporary deactivated."
 msgstr "%1 está temporalmente desactivado."
 
+msgid "New"
+msgstr "Crear"
+
+msgid "Field"
+msgstr "Campo"
+
+msgid "Titles"
+msgstr "Títulos"
+
+msgid "Descriptions"
+msgstr "Descricións"
+
+msgid "Bodies"
+msgstr "Corpos"
+
+msgid "Default tone"
+msgstr "Tono predeterminado"
+
+msgid "Default role"
+msgstr "Rol predeterminado"
+
+msgid "Prompt"
+msgstr "Prompt"
+
+msgid "Reset filters"
+msgstr "Reiniciar filtros"
+
+msgid "System prompts"
+msgstr "Prompts do sistema"
+
+msgid "Roles"
+msgstr "Roles"
+
+msgid "Tones"
+msgstr "Tons"
+
 msgid ""
 "All the latest information about %1 in %2. News, events, reports and opinion "
 "articles."
@@ -5621,6 +6217,63 @@ msgstr "Tes certeza que queres restaurar do lixo «%1»?"
 
 msgid "Yes, restore"
 msgstr "Si, restaurar"
+
+msgid "Enter a topic"
+msgstr "Introduce un tema"
+
+msgid "Ex: Benefits of AI-powered CMS"
+msgstr "Ex: Beneficios dun CMS impulsado por IA"
+
+msgid "Suggested prompts"
+msgstr "Prompts suxestidos"
+
+msgid "Select a prompt"
+msgstr "Selecciona un prompt"
+
+msgid "Suggested role"
+msgstr "Rol suxeitado"
+
+msgid "Select a role"
+msgstr "Selecciona un rol"
+
+msgid "Suggested tone"
+msgstr "Tono suxesto"
+
+msgid "Response language"
+msgstr "Lingua de resposta"
+
+msgid "Prompt edit"
+msgstr "Edición do prompt"
+
+msgid "Original text"
+msgstr "Texto orixinal"
+
+msgid "words"
+msgstr "palabras"
+
+msgid "characters"
+msgstr "caracteres"
+
+msgid "Generated text"
+msgstr "Texto xerado"
+
+msgid "View original"
+msgstr "Ver orixinal"
+
+msgid "View generated"
+msgstr "Ver xerado"
+
+msgid "Regenerate "
+msgstr "Regenerar"
+
+msgid "Tone"
+msgstr "Ton"
+
+msgid "Continue"
+msgstr "Continuar"
+
+msgid "Translate"
+msgstr "Traducir"
 
 msgid "No available translators for \"%1&rarr;%2\""
 msgstr "Non hai ningún tradutor para «%1&rarr;%2»"
@@ -5893,15 +6546,6 @@ msgstr "Eliminar os datos da conta"
 msgid "Web Push notifications Dashboard"
 msgstr "Panel de control de notificacións Web Push"
 
-msgid "Improve your manager"
-msgstr "Mellora o teu xestor"
-
-msgid "Contact with us to enjoy this feature."
-msgstr "Contacta connosco para gozar desta función."
-
-msgid "I want this module"
-msgstr "Quero este módulo"
-
 msgid "Active Subscribers"
 msgstr "Subscriptores Activos"
 
@@ -6020,12 +6664,6 @@ msgstr "Ver factura"
 
 msgid "Module"
 msgstr "Modulo"
-
-msgid "Manual categories"
-msgstr "Categorías manuais"
-
-msgid "Automatic categories"
-msgstr "Categorías automáticas"
 
 msgid "Synchronized instances"
 msgstr "Instacias sincronizadas"
@@ -6396,6 +7034,24 @@ msgstr ""
 msgid "Convert png to jpg"
 msgstr "Converter png a jpg"
 
+msgid "Image format"
+msgstr "Formato de imaxe"
+
+msgid "If set, images will be automaticaly transformed"
+msgstr "Se está configurado, as imaxes serán transformadas automaticamente."
+
+msgid "Choose format"
+msgstr "Elixe formato"
+
+msgid "More file types"
+msgstr "Máis tipos de ficheiros"
+
+msgid "Transform png"
+msgstr "Transformar png"
+
+msgid "Transform gif"
+msgstr "Transformar gif"
+
 msgid "Delete multiple images"
 msgstr "Eliminar varias imaxes"
 
@@ -6592,9 +7248,6 @@ msgid ""
 msgstr ""
 "Se está activado, os subscritores no poderán ver esta subscrición mentras se "
 "rexistran ou editan ou seu perfil"
-
-msgid "Manual"
-msgstr "Manual"
 
 msgid "Accept requests manually"
 msgstr "Aceptar solicitudes manualmente"
@@ -6936,6 +7589,36 @@ msgstr "Código DFP personalizado"
 
 msgid "Custom code at the end of DFP tags"
 msgstr "Código personalizado ao final dos tags de DFP"
+
+msgid "Traffective integration"
+msgstr "Integración de Traffective"
+
+msgid "The main Domain (i.e. example.tld)."
+msgstr "O dominio principal (é dicir, exemplo.tld)."
+
+msgid "Client Alias"
+msgstr "Alias ​​de cliente"
+
+msgid "A unique identifier for the client or website."
+msgstr "Un identificador único para o cliente ou sitio web."
+
+msgid "DFP Url"
+msgstr "DFP Url"
+
+msgid "The URL for accessing the ad content from the ad server."
+msgstr "O URL para acceder ao contido do anuncio desde o servidor de anuncios."
+
+msgid "SRC Url"
+msgstr "SRC Url"
+
+msgid "The URL of the external script that loads the ad content."
+msgstr "O URL do script externo que carga o contido do anuncio."
+
+msgid "Disable ads"
+msgstr "Desactivar anuncios directos"
+
+msgid "Disable programmatic ads"
+msgstr "Desactivar anuncios programáticos"
 
 msgid "Tradedoubler integration"
 msgstr "Integración de Tradedoubler"
@@ -7402,6 +8085,104 @@ msgstr "Usuario de LinkedIn"
 msgid "No biography"
 msgstr "Sen biografía"
 
+msgid "Open AI"
+msgstr "Open AI"
+
+msgid "API Key"
+msgstr "Clave API"
+
+msgid "Models and prices"
+msgstr "Modelos e prezos"
+
+msgid ""
+"The selling prices are expressed per million words, with one word "
+"approximately equivalent to 1.5 tokens. You can check the price table here."
+msgstr ""
+"Os prezos de venda exprésanse por millón de palabras, sendo cada palabra "
+"aproximadamente equivalente a 1,5 tokens. Podes consultar a táboa de prezos "
+"aquí."
+
+msgid "Open AI pricing"
+msgstr "Prezos de Open AI"
+
+msgid "Gemini"
+msgstr "Gemini"
+
+msgid "Gemini pricing"
+msgstr "Prezos de Gemini"
+
+msgid "DeepSeek"
+msgstr "DeepSeek"
+
+msgid "DeepSeek Pricing"
+msgstr "Prezos de DeepSeek"
+
+msgid "Mistral AI"
+msgstr "Mistral AI"
+
+msgid "New prompt"
+msgstr "Nova prompt"
+
+msgid "Default model"
+msgstr "Modelo predeterminado"
+
+msgid "Objective"
+msgstr "Obxectivo"
+
+msgid "Final prompt preview"
+msgstr "Vista previa final da solicitude"
+
+msgid "Instructions"
+msgstr "Instrucións"
+
+msgid "Selected instructions"
+msgstr "Instrucións seleccionadas"
+
+msgid "You have not selected any instructions"
+msgstr "Non seleccionaches ningunha instrución"
+
+msgid "Role"
+msgstr "Rol"
+
+msgid "Instruction"
+msgstr "Instrución"
+
+msgid "#"
+msgstr "#"
+
+msgid "Change model"
+msgstr "Cambiar modelo"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "Cost price per 1 million tokens"
+msgstr "Prezo de custo por 1 millón de tokens"
+
+msgid "Input tokens"
+msgstr "Tokens de entrada"
+
+msgid "Output tokens"
+msgstr "Tokens de saída"
+
+msgid "Sale price per 1 million words"
+msgstr "Prezo de venda por 1 millón de palabras"
+
+msgid "Input words"
+msgstr "Palabras de entrada"
+
+msgid "Output words"
+msgstr "Palabras de saída"
+
+msgid "Params"
+msgstr "Parámetros"
+
+msgid "Remove param"
+msgstr "Eliminar parámetro"
+
+msgid "Add param"
+msgstr "Engadir parámetro"
+
 msgid ""
 "Here you can mass-delete cache, compile, sessions, and other stuff<br>\n"
 "                        from one specific instance."
@@ -7417,9 +8198,6 @@ msgstr "Nome da orde:"
 
 msgid "Command name"
 msgstr "Nome da orde"
-
-msgid "Params"
-msgstr "Parámetros"
 
 msgid "Cleans the cache for an specific instance"
 msgstr "Limpa a cache para unha instancia especificada"
@@ -7477,14 +8255,8 @@ msgstr "Ver en"
 msgid "VAT No."
 msgstr "Nº fiscal."
 
-msgid "Reset filters"
-msgstr "Reiniciar filtros"
-
 msgid "Vat number"
 msgstr "Número fiscal"
-
-msgid "#"
-msgstr "#"
 
 msgid "P.O."
 msgstr "Código postal"
@@ -7591,9 +8363,6 @@ msgstr "Pack"
 
 msgid "Partner"
 msgstr "Socio"
-
-msgid "Price"
-msgstr "Prezo"
 
 msgid "w/customization"
 msgstr "w/personalización"
@@ -7785,9 +8554,6 @@ msgstr "Non hai compras por agora"
 msgid "View purchase"
 msgstr "Ver compra"
 
-msgid "Other"
-msgstr "Outro"
-
 msgid "Alphanumeric, without spaces"
 msgstr "Alfanumérico, sen espacios"
 
@@ -7815,6 +8581,9 @@ msgstr "Descargar CSV dos seleccionados"
 msgid "Unlocked"
 msgstr "Desbloquear"
 
+msgid "Domain expire date"
+msgstr "Caducidade do dominio"
+
 msgid "Subdirectory"
 msgstr "Subdirectorio"
 
@@ -7838,6 +8607,9 @@ msgstr "Anexos"
 
 msgid "Kioskos"
 msgstr "Kioskos"
+
+msgid "AI Spent"
+msgstr "Gasto en IA"
 
 msgid "A new version of Opennemas is downloaded. Launch it?"
 msgstr "Descargouse unha nova versión de Opennemas. Desexa iniciala?"
@@ -8108,6 +8880,45 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 msgid "Group name"
 msgstr "Nome do grupo"
 
+#~ msgid "Manual categories"
+#~ msgstr "Categorías manuais"
+
+#~ msgid "Automatic categories"
+#~ msgstr "Categorías automáticas"
+
+#~ msgid "Both"
+#~ msgstr "Ambos"
+
+#, fuzzy
+#~ msgid "Select a language"
+#~ msgstr "Selecciona un idioma..."
+
+#~ msgid "Introductions"
+#~ msgstr "Introduccións"
+
+#~ msgid "Transformation"
+#~ msgstr "Transformación"
+
+#~ msgid "AI"
+#~ msgstr "IA"
+
+#~ msgid "Own prompts"
+#~ msgstr "Propmts propios"
+
+#~ msgid "words managed"
+#~ msgstr "palabras xestionadas"
+
+#~ msgid "Config prompts"
+#~ msgstr "Configurar prompts"
+
+#, fuzzy
+#~ msgid "opennemas AI"
+#~ msgstr "Tenda de Opennemas"
+
+#, fuzzy
+#~ msgid "Edit prompt"
+#~ msgstr "Editar contido"
+
 #~ msgid "Manual category"
 #~ msgstr "Categoría manual"
 
@@ -8116,9 +8927,6 @@ msgstr "Nome do grupo"
 
 #~ msgid "Canonical URL"
 #~ msgstr "URL canónica"
-
-#~ msgid "NEW"
-#~ msgstr "NOVO"
 
 #~ msgid "CANONICAL URL"
 #~ msgstr "URL canónica"
@@ -8162,9 +8970,6 @@ msgstr "Nome do grupo"
 
 #~ msgid "Successfully sent"
 #~ msgstr "\\Enviado con éxito"
-
-#~ msgid "Edit content"
-#~ msgstr "Editar contido"
 
 #~ msgid "Won't take effect on manual sending"
 #~ msgstr "Non terá efecto para o envío manual"
@@ -8222,9 +9027,6 @@ msgstr "Nome do grupo"
 
 #~ msgid "Specials"
 #~ msgstr "Especiais"
-
-#~ msgid "Books"
-#~ msgstr "Libros"
 
 #~ msgid "Administrate settings"
 #~ msgstr "Administrar configuracións"
@@ -8330,9 +9132,6 @@ msgstr "Nome do grupo"
 #~ msgid "Advanced"
 #~ msgstr "Avanzado"
 
-#~ msgid "Config"
-#~ msgstr "Configurar"
-
 #~ msgid "[% element.key.name %]"
 #~ msgstr "[% element.key.name %]"
 
@@ -8348,17 +9147,11 @@ msgstr "Nome do grupo"
 #~ msgid "Comerce"
 #~ msgstr "Comercio"
 
-#~ msgid "Construction"
-#~ msgstr "Construción"
-
 #~ msgid "Advertising and marketing"
 #~ msgstr "Publicidade e Marketing"
 
 #~ msgid "Culture"
 #~ msgstr "Cultura"
-
-#~ msgid "Education"
-#~ msgstr "Educación"
 
 #~ msgid "Electronic"
 #~ msgstr "Electrónica"
@@ -8419,9 +9212,6 @@ msgstr "Nome do grupo"
 
 #~ msgid "Cleaning"
 #~ msgstr "Limpeza"
-
-#~ msgid "Sport"
-#~ msgstr "Deporte"
 
 #~ msgid "Hostelry"
 #~ msgstr "Hostalería"
@@ -8942,9 +9732,6 @@ msgstr "Nome do grupo"
 #~ msgid "Use Consent Management Platform (CMP)"
 #~ msgstr "Usar plataforma de xestión de consentimento (CMP)"
 
-#~ msgid "Day"
-#~ msgstr "Dia"
-
 #~ msgid "Week"
 #~ msgstr "Semana"
 
@@ -9223,11 +10010,8 @@ msgstr "Nome do grupo"
 #~ "Read and accept the <a href=\"http://help.opennemas.com/\" target=\"_blank"
 #~ "\">payment agreements terms</a> of Opennemas"
 #~ msgstr ""
-#~ "Lee e acepta os <a href = \"http://help.opennemas.com/\" target = \"_blank"
+#~ "Lee e acepta os <a href = \"http://help.opennemas.com/\" target=\"_blank"
 #~ "\"> termos de acordos de pago </a> de Opennemas"
-
-#~ msgid "Set a price"
-#~ msgstr "Fixar prezo"
 
 #~ msgid "We value your privacy"
 #~ msgstr "A tua privacidade é importante para nós"

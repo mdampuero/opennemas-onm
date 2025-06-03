@@ -167,94 +167,123 @@
                   <span class="help">
                     {t}Services to translate your contents to a especific language.{/t}
                   </span>
-                  <div ng-repeat="code in settings.translators track by $index">
-                    <div class="row">
-                      <div class="col-xs-12">
-                        <h4 class="pull-left">
-                        [% (settings.translators[$index].from != undefined) ? extra.locales.frontend[settings.translators[$index].from] : '{t}Not defined{/t}' %]
-                        &rarr;
-                        [% (settings.translators[$index].to != undefined) ? extra.locales.frontend[settings.translators[$index].to] : '{t}Not defined{/t}' %]
-                        <strong class="small" ng-show="settings.translators[$index].default == true">({t}Default{/t})</strong>
-                        </h4>
-
-                        <button class="btn btn-white pull-right" ng-click="removeTranslator($index)" type="button">
-                          <i class="fa fa-times text-danger"></i>
-                        </button>
-                        <hr>
-                      </div>
-                    </div>
+                  <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-t-20">
                     <div class="row" >
-                      <div class="col-sm-6 col-md-6">
-                        <div class="form-group">
-                          <label class="form-label">
-                            {t}Translate from{/t}
-                          </label>
-                          <div class="controls">
-                            <select class="form-control" ng-model="settings.translators[$index].from" required>
-                              <option value="">{t}Select from language{/t}</option>
-                              <option value="[% item.code %]" ng-repeat="item in settings.locale.frontend.language.available">[% item.name %]</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-6 col-md-6">
-                        <div class="form-group">
-                          <label class="form-label">
-                            {t}Translate to{/t}
-                          </label>
-                          <div class="controls">
-                            <select class="form-control" ng-model="settings.translators[$index].to" ng-disabled="!settings.translators[$index].from" required>
-                              <option value="">{t}Select to language{/t}</option>
-                              <option value="[% item.code %]" ng-repeat="item in filterFromLanguages($index)">[% item.name %]</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row" ng-show="settings.translators[$index].translator && getParameters($index).length > 0">
                       <div class="col-md-4">
                         <div class="form-group">
                           <label class="form-label">
-                            {t}Required params for Service{/t}
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-4">
-                        <div class="form-group">
-                          <label class="form-label">
-                            {t}Service{/t}
+                            {t}Default service{/t}
                           </label>
                           <div class="controls">
-                            <select class="form-control" ng-model="settings.translators[$index].translator" required>
+                            <select class="form-control" ng-model="settings.translatorsDefault.translator">
                               <option value="">{t}Select a service...{/t}</option>
                               <option value="[% service.translator %]" ng-repeat="service in extra.translation_services">[% service.translator %]</option>
                             </select>
                           </div>
                         </div>
                       </div>
-                      <div class="col-sm-4" ng-repeat="(translationParam, text) in getParameters($index)" ng-show="settings.translators[$parent.$index].translator">
+                       <div class="col-sm-4"  ng-repeat="(translationParam, text) in settings.parametersDefault">
                         <div class="form-group">
                           <label class="form-label">
                             [% text %]
                           </label>
                           <div class="controls">
-                            <input class="form-control" ng-model="settings.translators[$parent.$index].config[translationParam]" type="text">
+                            <input class="form-control" ng-model="settings.translatorsDefault.config[translationParam]" type="text">
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="row" ng-show="settings.translators[$index].from.length > 0 && settings.translators[$index].to.length > 0">
-                      <div class="p-t-10 radio">
-                        <input id="translator-default-[% $index %]" ng-model="settings.translators[$index].default" ng-value="true" type="radio" ng-click="toggleDefaultTranslator($index)">
-                        <label for="translator-default-[% $index %]">
-                          {t 1="[% settings.translators[\$index].from %]-[% settings.translators[\$index].to %]"}Default translator for "%1"{/t}
-                        </label>
+                  </div>
+                  <div ng-repeat="code in settings.translators track by $index">
+                    <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel onm-shadow m-t-20">
+                      <div class="row">
+                        <div class="col-xs-12">
+                          <h4 class="pull-left">
+                          [% (settings.translators[$index].from != undefined) ? extra.locales.frontend[settings.translators[$index].from] : '{t}Not defined{/t}' %]
+                          &rarr;
+                          [% (settings.translators[$index].to != undefined) ? extra.locales.frontend[settings.translators[$index].to] : '{t}Not defined{/t}' %]
+                          <strong class="small" ng-show="settings.translators[$index].default == true">({t}Default{/t})</strong>
+                          </h4>
+
+                          <button class="btn btn-white pull-right" ng-click="removeTranslator($index)" type="button">
+                            <i class="fa fa-times text-danger"></i>
+                          </button>
+                          <hr>
+                        </div>
+                      </div>
+                      <div class="row" >
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label class="form-label">
+                              {t}Service{/t}
+                            </label>
+                            <div class="controls">
+                              <select class="form-control" ng-model="settings.translators[$index].translator" required>
+                                <option value="">{t}Select a service...{/t}</option>
+                                <option value="[% service.translator %]" ng-repeat="service in extra.translation_services">[% service.translator %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                          <div class="form-group">
+                            <label class="form-label">
+                              {t}Translate from{/t}
+                            </label>
+                            <div class="controls">
+                              <select class="form-control" ng-model="settings.translators[$index].from" required>
+                                <option value="">{t}Select from language{/t}</option>
+                                <option value="[% item.code %]" ng-repeat="item in settings.locale.frontend.language.available">[% item.name %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                          <div class="form-group">
+                            <label class="form-label">
+                              {t}Translate to{/t}
+                            </label>
+                            <div class="controls">
+                              <select class="form-control" ng-model="settings.translators[$index].to" ng-disabled="!settings.translators[$index].from" required>
+                                <option value="">{t}Select to language{/t}</option>
+                                <option value="[% item.code %]" ng-repeat="item in filterFromLanguages($index)">[% item.name %]</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" ng-show="settings.translators[$index].translator && getParameters($index).length > 0">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label class="form-label">
+                              {t}Required params for Service{/t}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-4" ng-repeat="(translationParam, text) in getParameters($index)" ng-show="settings.translators[$parent.$index].translator">
+                          <div class="form-group">
+                            <label class="form-label">
+                              [% text %]
+                            </label>
+                            <div class="controls">
+                              <input class="form-control" ng-model="settings.translators[$parent.$index].config[translationParam]" type="text">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" ng-show="settings.translators[$index].from.length > 0 && settings.translators[$index].to.length > 0">
+                        <div class="p-t-10 radio">
+                          <input id="translator-default-[% $index %]" ng-model="settings.translators[$index].default" ng-value="true" type="radio" ng-click="toggleDefaultTranslator($index)">
+                          <label for="translator-default-[% $index %]">
+                            {t 1="[% settings.translators[\$index].from %]-[% settings.translators[\$index].to %]"}Default translator for "%1"{/t}
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="row p-t-30 text-center">
+                  <div class="row p-t-20 text-center">
                     <div class="col-xs-12" ng-show="settings.locale.frontend && settings.locale.frontend.language.available.length > 1" type="button">
                       <button class="btn btn-block btn-white" ng-click="addTranslator()">
                         <i class="fa fa-plus"></i>

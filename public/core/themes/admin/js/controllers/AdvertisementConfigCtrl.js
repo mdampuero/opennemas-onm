@@ -27,6 +27,15 @@
         $scope.smart = {};
 
         /**
+         * Traffective config object.
+         * @type {Object}
+         * @property {String} domain
+         * @property {String} clientAlias
+         * @property {String} dfpUrl
+         */
+        $scope.traffective = {};
+
+        /**
          * The available smart tags format
          *
          * @type {Array}
@@ -44,14 +53,21 @@
          *
          * @param {String} domain The configured domain
          * @param {String} tagsFormat The configured tags format
+         * @param {Object} traffective The traffective config object
          */
-        $scope.init = function(domain, tagsFormat) {
+        $scope.init = function(domain, tagsFormat, traffective) {
           if ($scope.smartAvailableTagsFormats.indexOf(tagsFormat) < 0) {
             tagsFormat = 'onecall_async';
           }
 
-          $scope.smart.domain     = domain;
-          $scope.smart.tagsFormat = tagsFormat;
+          $scope.smart.domain             = domain;
+          $scope.smart.tagsFormat         = tagsFormat;
+          $scope.traffective.domain       = traffective.domain;
+          $scope.traffective.clientAlias  = traffective.client_alias;
+          $scope.traffective.dfpUrl       = traffective.dfpUrl;
+          $scope.traffective.srcUrl       = traffective.srcUrl;
+          $scope.traffective.ads          = traffective.ads;
+          $scope.traffective.progAds      = traffective.progAds;
         };
       }
     ]);
