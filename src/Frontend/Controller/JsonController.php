@@ -75,9 +75,7 @@ class JsonController extends FrontendController
     protected function hydrateEvents($data) : Response
     {
         // Initialize an empty array to hold the items and the current date
-        $items      = [];
-        $today      = date('Y-m-d');
-        $mainDomain = $this->container->get('core.instance')->getBaseUrl();
+        $today = date('Y-m-d');
 
         // Initialize the OQL for events
         $eventsOql['query'] = ' inner join contentmeta as cm1
@@ -131,10 +129,8 @@ class JsonController extends FrontendController
 
         // $RawItems is an object, we need to convert it to a json
         foreach ($rawItems as $item) {
-            $data = $item->getData();
-
-            $url = $this->generateUrl('frontend_event_show', [
-                'slug' => $data['slug']
+            $url = $this->container->get('core.helper.url_generator')->generate($item, [
+                'absolute' => true,
             ]);
 
             // Get the category name and author name
@@ -143,21 +139,15 @@ class JsonController extends FrontendController
             $authorName   = $this->container->get('core.helper.author')
                 ->getAuthorName($item->fk_author);
 
-            // If the author name is empty, use the site name as the author
-            if (empty($authorName)) {
-                $authorName = $this->container->get('orm.manager')->getDataSet('Settings', 'instance')
-                    ->get('site_name');
-            }
-
             // Prepare start and end dates and formats
             // If the event has a start date and hour, format it as 'Y-m-dTH:i:s'
             // If the event has only the date, just use the date
-            $startDate = !empty($data['event_start_date']) ?
-                $data['event_start_date'] . (!empty($data['event_start_hour']) ? 'T' . $data['event_start_hour'] : '') :
+            $startDate = !empty($item->event_start_date) ?
+                $item->event_start_date . (!empty($item->event_start_hour) ? 'T' . $item->event_start_hour : '') :
                 '';
 
-            $endDate = !empty($data['event_end_date']) ?
-                $data['event_end_date'] . (!empty($data['event_end_hour']) ? 'T' . $data['event_end_hour'] : '') :
+            $endDate = !empty($item->event_end_date) ?
+                $item->event_end_date . (!empty($item->event_end_hour) ? 'T' . $item->event_end_hour : '') :
                 '';
 
             // Get the thumbnail
@@ -177,29 +167,27 @@ class JsonController extends FrontendController
             );
 
             // Build the item array
-            $items[] = [
+            $events['items'][] = [
                 'allDay' => 0,
-                'title' => $data['title'] ?? '',
-                'url' => $mainDomain . $url,
-                'author' => $authorName,
-                'longitude' => $data['event_longitude'] ?? '',
-                'latitude' => $data['event_latitude'] ?? '',
+                'title' => $item->title ?? '',
+                'url' => $url,
+                'author' => $authorName ?? 'Redacción',
+                'longitude' => $item->event_longitude ?? '',
+                'latitude' => $item->event_latitude ?? '',
                 'thumbnail' => $thumbnail,
-                'content' => strip_tags($data['body'] ?? ''),
+                'content' => strip_tags($item->body ?? ''),
                 'subtype' => $categoryName ?? '',
                 'nbParticipants' => 0,
-                'address' => $data['event_address'] ?? '',
-                'type' => $data['content_type_name'],
-                'id' => 'event_' . $data['pk_content'] ?? '',
+                'address' => $item->event_address ?? '',
+                'type' => $item->content_type_name,
+                'id' => 'event_' . $item->pk_content ?? '',
                 'date' => $startDate,
                 'endDate' => $endDate,
             ];
         }
 
         // Return the JSON response with the items
-        return new JsonResponse([
-            'items' => $items
-        ]);
+        return new JsonResponse($events);
     }
 
     /**
@@ -285,8 +273,6 @@ class JsonController extends FrontendController
         }
 
         // Return the JSON response with the items
-        return new JsonResponse(
-            $articles,
-        );
+        return new JsonResponse($articles);
     }
 }
