@@ -638,7 +638,7 @@ class EventHelper
 
         foreach ($groupedEvents as $group) {
             foreach ($group['children'] as $child) {
-                $result[] = $child;
+                $result[$child['id']] = $child;
             }
         }
 
@@ -646,18 +646,18 @@ class EventHelper
     }
 
     /**
-     * Retrieves the name of an event type based on its slug.
+     * Retrieves the event type based on its slug.
      *
      * @param string $slug The slug of the event type.
-     * @return string|null The name of the event type or null if the slug doesn't exist.
+     * @return string|null The event type or null if the slug doesn't exist.
      */
-    public function getEventTypeNameBySlug($slug)
+    public function getEventTypeBySlug($slug)
     {
         $eventTypes = $this->getEventTypes();
 
         foreach ($eventTypes as $eventType) {
             if ($eventType['slug'] === $slug) {
-                return $eventType['name'];
+                return $eventType;
             }
         }
 
@@ -665,40 +665,21 @@ class EventHelper
     }
 
     /**
-     * Retrieves the name of an event type based on its id.
+     * Retrieves the event type based on its id.
      *
      * @param string $id The id of the event type.
-     * @return string|null The name of the event type or null if the id doesn't exist.
+     * @return string|null The event type or null if the id doesn't exist.
      */
-    public function getEventTypeNameById($id)
+    public function getEventTypeById($id)
     {
         $eventTypes = $this->getEventTypes();
 
         foreach ($eventTypes as $eventType) {
             if ($eventType['id'] === (int) $id) {
-                return $eventType['name'];
+                return $eventType;
             }
         }
 
         return null;
-    }
-
-    /**
-     * Matches the given event type with the event types list.
-     *
-     * This method checks if the provided event type exists in the list of available event types.
-     * It first looks for a matching slug in the pre-defined list, and if not found, it queries an external service.
-     *
-     * @param string $type The event type slug to match.
-     *
-     * @return bool True if the event type exists, false otherwise.
-     */
-    public function matchType(string $type): bool
-    {
-        if ($this->getEventTypeNameBySlug($type)) {
-            return true;
-        }
-
-        return false;
     }
 }

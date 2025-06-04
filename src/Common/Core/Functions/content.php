@@ -335,7 +335,9 @@ function get_last_live_update_date($item) : ?string
  */
 function get_event_type_name_by_slug($slug) : ?string
 {
-    return getService('core.helper.event')->getEventTypeNameBySlug($slug);
+    $event = getService('core.helper.event')->getEventTypeBySlug($slug);
+
+    return $event['name'] ?? null;
 }
 
 /**
@@ -349,5 +351,7 @@ function get_event_type_name_by_slug($slug) : ?string
  */
 function get_event_type_name_by_id($id) : ?string
 {
-    return getService('core.helper.event')->getEventTypeNameById($id);
+    $event = getService('core.helper.event')->getEventTypeById($id);
+
+    return $event['id'] ?? null;
 }
