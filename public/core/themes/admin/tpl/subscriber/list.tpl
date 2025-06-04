@@ -35,13 +35,13 @@
   </li>
   {acl isAllowed="MASTER"}
     <li class="quicklinks">
-      <span class="h-seperate"></span>
-    </li>
-    <li class="quicklinks">
       <a class="btn btn-white" ng-click="import()" uib-tooltip="{t}Import{/t}" tooltip-placement="bottom" type="button">
         <i class="fa fa-address-book"></i>
         {t}Import{/t}
       </a>
+    </li>
+    <li class="quicklinks">
+      <span class="h-seperate"></span>
     </li>
   {/acl}
   {acl isAllowed=SUBSCRIBER_CREATE}

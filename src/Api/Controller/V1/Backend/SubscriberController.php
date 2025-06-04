@@ -147,8 +147,10 @@ class SubscriberController extends ApiController
     */
     public function importAction(Request $request)
     {
-        $msg     = $this->get('core.messenger');
-        $content = $request->request->get('csv_file', null);
+        $service  = $this->get($this->service);
+        $imported = [];
+        $errors   = [];
+        $content  = $request->request->get('csv_file', null);
 
         if (empty($content)) {
             return new JsonResponse(
@@ -158,32 +160,37 @@ class SubscriberController extends ApiController
         }
 
         $lines = explode("\n", $content);
-        array_shift($lines);
+        array_shift($lines); // remove header
 
         $subscribers = [];
 
         foreach ($lines as $line) {
             $line = trim($line);
-
             if (!$line) {
                 continue;
             }
 
-            $columns = explode(',', $line);
-            $email   = trim($columns[0]);
-            $name    = isset($columns[1]) ? trim($columns[1]) : $email;
-
-            // This use the current date as signup date if not provided
+            $columns    = explode(',', $line);
+            $email      = trim($columns[0]);
+            $name       = isset($columns[1]) ? trim($columns[1]) : $email;
             $signupDate = isset($columns[2]) ? trim($columns[2]) : date('Y-m-d');
 
-            $subscribers[] = [
+            $data = [
                 'email' => $email,
                 'name' => $name,
                 'signup_date' => $signupDate,
+                'activated' => 1,
+                'type' => 1,
             ];
+
+            $item       = $service->createSubscriber($data);
+            $imported[] = $item;
         }
 
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
+        return new JsonResponse([
+            'imported' => count($imported),
+            'errors' => $errors,
+        ], empty($errors) ? 200 : 207); // 207: Multi-Status
     }
 
     /**

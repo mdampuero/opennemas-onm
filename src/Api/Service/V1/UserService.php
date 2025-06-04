@@ -74,6 +74,22 @@ class UserService extends OrmService
         return parent::createItem($data);
     }
 
+    public function createSubscriber($data)
+    {
+        if (!array_key_exists('email', $data)) {
+            throw new InvalidArgumentException('The email is required', 400);
+        }
+
+        $item = $this->checkItem($data['email']);
+
+        // Convert item to subscriber + user
+        if (!empty($item)) {
+            return $this->convert($item, 2);
+        }
+
+        return parent::createItem($data);
+    }
+
     /**
      * {@inheritdoc}
      */
