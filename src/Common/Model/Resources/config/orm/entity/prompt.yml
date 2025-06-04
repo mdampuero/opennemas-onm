@@ -35,13 +35,13 @@ orm:
                             options: { default: null, length: 32, notnull: true }
                         name:
                             type: text
-                            options: { default: null, length: 64, notnull: true }
+                            options: { default: null, length: 65532, notnull: true }
                         tone:
                             type: text
-                            options: { default: null, length: 1024, notnull: false }
+                            options: { default: null, length: 65532, notnull: false }
                         role:
                             type: text
-                            options: { default: null, length: 1024, notnull: false }
+                            options: { default: null, length: 65532, notnull: false }
                         field:
                             type: text
                             options: { default: null, length: 32, notnull: false }

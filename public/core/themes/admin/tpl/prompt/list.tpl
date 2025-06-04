@@ -36,14 +36,25 @@
                       </span>
                     </div>
                   </li>
+                  <li class="hidden-xs m-r-10 ng-cloak quicklinks">
+                    <select class="form-control form-control-lg" ng-model="criteria.mode">
+                      <option value="">{t}Mode{/t}: {t}Any{/t}</option>
+                      <option value="New">{t}Create{/t}</option>
+                      <option value="Edit">{t}Edit{/t}</option>
+                      <option value="Agency">{t}Agency{/t}</option>
+                    </select>
+                  </li>
+                  <li class="hidden-xs m-r-10 ng-cloak quicklinks">
+                    <select class="form-control form-control-lg" ng-model="criteria.field">
+                      <option value="">{t}Field{/t}: {t}Any{/t}</option>
+                      <option value="titles">{t}Titles{/t}</option>
+                      <option value="descriptions">{t}Descriptions{/t}</option>
+                      <option value="bodies">{t}Bodies{/t}</option>
+                    </select>
+                  </li>
                   <li class="m-r-10 quicklinks">
                     <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
                       <i class="fa fa-fire fa-lg m-l-5 m-r-5"></i>
-                    </button>
-                  </li>
-                  <li class="quicklinks">
-                    <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
-                      <i class="fa fa-refresh fa-lg m-l-5 m-r-5" ng-class="{ 'fa-spin': loading }"></i>
                     </button>
                   </li>
                 </ul>

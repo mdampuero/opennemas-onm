@@ -100,6 +100,37 @@ class AIHelper
     ];
 
     /**
+     * The base template used for generating prompts with placeholders to be replaced dynamically.
+     *
+     * Placeholders:
+     * - {{rol}}: The role or persona to be assumed.
+     * - {{instrucciones}}: A list of specific instructions to follow.
+     * - {{idioma}}: The target language for the response.
+     * - {{fuente}}: The original source text or input.
+     * - {{tono}}: The tone in which the response should be written.
+     * - {{objetivo}}: The main objective or goal of the response.
+     *
+     * Note: "{{fuente}}" may be replaced with "{{tema}}" if 'mode' is set to 'New' in replaceVars().
+     */
+    protected $template = <<<EOT
+### INSTRUCCIONES IMPORTANTES:
+{{rol}}
+{{instrucciones}}
+
+### IDIOMA:
+El idioma de la respuesta debe ser "{{idioma}}". Responde estrictamente usando este idioma yas convenciones culturales.
+
+### TEXTO ORIGINAL:
+{{fuente}}
+
+### TONO DE LA RESPUESTA:
+{{tono}}
+
+### OBJETIVO:
+{{objetivo}}
+EOT;
+
+    /**
      * The service instance used for processing.
      */
     protected $service;
@@ -307,21 +338,6 @@ class AIHelper
     }
 
     /**
-     * Masks an API key by showing only the first 3 and last 4 characters, hiding the middle.
-     *
-     * @param string $apiKey The API key to be masked.
-     * @return string The masked API key.
-     */
-    protected function maskApiKey($apiKey)
-    {
-        if (strlen($apiKey) > 7) {
-            return substr($apiKey, 0, 3) . str_repeat('.', strlen($apiKey) - 7) . substr($apiKey, -4);
-        }
-
-        return $apiKey;
-    }
-
-    /**
      * Retrieves the structure response.
      *
      * @return array The structure response array.
@@ -350,45 +366,6 @@ class AIHelper
     }
 
     /**
-     * Adds a new instruction to the existing list of instructions.
-     *
-     * @param array $instruction The instruction to be added.
-     */
-    public function addInstruction($instruction)
-    {
-        $instructions = $this->getInstructions();
-        array_push($instructions, $instruction);
-        $this->setInstructions($instructions);
-    }
-
-    /**
-     * Sets the list of instructions.
-     *
-     * @param array $instructions The instructions to be set.
-     * @return $this The current instance for method chaining.
-     */
-    public function setInstructions($instructions)
-    {
-        $this->instructions = $instructions;
-        return $this;
-    }
-
-    /**
-     * Retrieves instructions filtered by the given criteria.
-     *
-     * @param array $filter An associative array containing 'type' and 'field' filters.
-     * @return array The filtered list of instructions.
-     */
-    public function getInstructionsByFilter(array $filter = []): array
-    {
-        return $filter
-            ? array_filter($this->instructions, function ($i) use ($filter) {
-                return in_array($i['type'], $filter['type']) && in_array($i['field'], $filter['field']);
-            })
-            : $this->instructions;
-    }
-
-    /**
      * Inserts the given instructions into the user prompt with an optional role description.
      *
      * @param array $instructions The list of instructions to insert.
@@ -396,7 +373,7 @@ class AIHelper
      */
     protected function insertInstructions($instructions = [], $role = '')
     {
-        $instructionsString = sprintf("### INSTRUCCIONES IMPORTANTES:\n%s", $role);
+        $instructionsString = '';
         if (count($instructions)) {
             $counter = 0;
 
@@ -414,65 +391,163 @@ class AIHelper
     }
 
     /**
-     * Adds the selected tone to the `userPrompt` if it's present in the messages.
+     * Inserts the given instructions into the user prompt with an optional role description.
      *
-     * @param array $messages The array containing the selected tone information.
+     * @param array $instructions The list of instructions to insert.
+     * @param string $role The role description to be included in the instructions.
      */
-    protected function insertTone($messages = [])
+    protected function getStringtInstructions($instructions = [])
     {
-        if ($messages["toneSelected"]["name"] ?? false) {
-            $this->userPrompt .= sprintf("\n\n### TONO:\n%s", $messages["toneSelected"]["name"]);
+        $instructionsString = '';
+        if (count($instructions)) {
+            $counter = 0;
+
+            $instructionList = implode("\n", array_map(
+                function ($item) use (&$counter) {
+                    $counter++;
+                    return $counter . '. ' . $item['value'];
+                },
+                $instructions
+            ));
         }
+        if ($instructionList) {
+            $instructionsString = sprintf("## Sigue estas reglas estrictamente:\n%s", $instructionList);
+        }
+        return $instructionsString;
     }
 
     /**
-     * Adds the selected language to the `userPrompt` if it's present in the messages.
+     * Builds a numbered string list of instruction texts based on their IDs.
      *
-     * @param array $messages The array containing the selected language information.
+     * @param array $instructions An array of instruction IDs to include in the list.
+     *
+     * @return string Returns a newline-separated, numbered string of instruction values.
+     *                If the array is empty, returns an empty string.
      */
-    protected function insertLanguage($messages = [])
+    protected function getInstructionsList($instructions = [])
     {
-        if ($messages["toneSelected"]["name"] ?? false) {
-            $this->userPrompt .= sprintf("\n\n### IDIOMA DE LA RESPUESTA:\n%s", $messages["toneSelected"]["name"]);
+        $this->getInstructions();
+
+        $instructionsString = '';
+        if ($instructions && count($instructions)) {
+            $counter = 0;
+
+            $instructionsString = implode("\n", array_map(
+                function ($item) use (&$counter) {
+                    $counter++;
+                    $instruction = $this->getInstructionsById($item);
+                    return $counter . '. ' . $instruction['value'] ?? $item;
+                },
+                $instructions
+            ));
         }
+
+        if ($instructionsString) {
+            $instructionsString = sprintf("## Sigue estas reglas estrictamente:\n%s", $instructionsString);
+        }
+        return $instructionsString;
     }
 
     /**
-     * Generates a prompt from messages with instructions, tone, language, and other fields.
+     * Retrieves an instruction from the internal list by its ID.
      *
-     * @param array $messages Contains prompt details such as mode, field, role, locale, and input.
+     * @param mixed $id The ID of the instruction to retrieve.
      *
-     * @return string The generated prompt.
+     * @return array|null Returns the instruction as an associative array if found, or null if not found.
      */
-    public function generatePrompt($messages)
+    protected function getInstructionsById($id)
     {
-        $this->insertInstructions($this->getInstructionsByFilter(
-            [
-                'type'  => ['Both', $messages['promptSelected']['mode_or']],
-                'field' => ['all', $messages['promptSelected']['field_or']],
-            ]
-        ), $messages['roleSelected']['prompt'] ?? '');
+        foreach ($this->instructions as $i) {
+            if ($i['id'] === $id) {
+                return $i;
+            }
+        }
+        return null;
+    }
 
-        if ($messages["locale"] ?? false) {
-            $this->userPrompt .= ($messages["locale"] ?? false) ?
-                sprintf("\n\n### IDIOMA:\n%s", sprintf(
-                    'El idioma de la respuesta debe ser "%s". Responde estrictamente usando este idioma y
-                    las convenciones culturales.',
-                    $messages['locale']
-                )) : "";
+    /**
+     * Prepares and generates a preview of a prompt by replacing template variables with provided data.
+     *
+     * @param array $data An associative array with the following keys:
+     *                    - 'prompt': The main goal or objective of the prompt.
+     *                    - 'role': The role name to be converted using getRoleByName().
+     *                    - 'tone': The desired tone for the prompt.
+     *                    - 'mode': The mode of the prompt.
+     *                    - 'instructions': An array of instruction IDs.
+     *
+     * @return string Returns the prompt string with all variables replaced.
+     */
+    public function previewPrompt($data)
+    {
+        $vars = [
+            'objetivo' => $data['prompt'],
+            'rol' => $this->getRoleByName($data['role']),
+            'tono' => $this->getToneByName($data['tone']),
+            'mode' => $data['mode'],
+            'instrucciones' => $this->getInstructionsList($data['instructions'])
+        ];
+        return $this->replaceVars($vars);
+    }
+
+    /**
+     * Retrieves the prompt text associated with a given role name.
+     *
+     * @param string $name The name of the role to search for.
+     *
+     * @return string Returns the prompt text for the role if found, or an empty string if not found or not set.
+     */
+    protected function getRoleByName(string $name)
+    {
+        foreach ($this->getRoles() as $item) {
+            if (isset($item['name']) && $item['name'] === $name) {
+                return $item['prompt'] ?? '';
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Returns the description (prompt text) for a tone/role by its name.
+     *
+     * Iterates through the list of available tones and returns the description
+     * of the first match found with the given name.
+     *
+     * @param string $name The name of the tone/role to search for.
+     *
+     * @return string The description associated with the tone, or an empty string if not found.
+     */
+    protected function getToneByName(string $name)
+    {
+        foreach ($this->getTones() as $item) {
+            if (isset($item['name']) && $item['name'] === $name) {
+                return $item['description'] ?? '';
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Replaces placeholders in the template with the provided variable values.
+     *
+     * @param array $vars An associative array of variables where keys correspond to placeholders
+     *                    in the template (e.g., {{key}}) and values are their replacements.
+     *                    Special case: if 'mode' is set to 'New', a specific string is replaced.
+     *
+     * @return string Returns the template string with all placeholders replaced by their corresponding values.
+     */
+    public function replaceVars(array $vars): string
+    {
+        $template = $this->template;
+
+        if (isset($vars['mode']) && $vars['mode'] === 'New') {
+            $template = str_replace('### TEXTO ORIGINAL:', '### TEMA:', $template);
         }
 
-        if ($messages['promptSelected']['mode_or'] == 'New') {
-            $this->userPrompt .= ($messages["input"] ?? false) ? sprintf("\n\n### TEMA:\n%s", $messages["input"]) : "";
-        } elseif ($messages['promptSelected']['mode_or'] == 'Edit') {
-            $this->userPrompt .= ($messages["input"] ?? false) ? sprintf("\n\n### TEXTO:\n%s", $messages["input"]) : '';
+        foreach ($vars as $key => $value) {
+            $template = str_replace('{{' . $key . '}}', $value, $template);
         }
 
-        $this->insertTone($messages);
-
-        $this->userPrompt .= sprintf("\n\n### OBJETIVO:\n%s", $messages["promptInput"]);
-
-        return $this->userPrompt;
+        return $template;
     }
 
     /**
@@ -504,7 +579,15 @@ class AIHelper
         if ($messages["input"] ?? false) {
             $data['messages'][] = [
                 'role' => 'user',
-                'content' => $this->generatePrompt($messages)
+                'content' => $this->replaceVars([
+                    'objetivo' => $messages["promptInput"] ?? '',
+                    'mode'     => $messages['promptSelected']['mode_or'] ?? '',
+                    'instrucciones' => $this->getInstructionsList($messages['promptSelected']['instructions'] ?? []),
+                    'rol' => $messages['roleSelected']['prompt'] ?? '',
+                    'idioma' => $messages["locale"] ?? '',
+                    'fuente' => $messages["input"] ?? '',
+                    'tono' => $messages['toneSelected']['description'] ?? ''
+                ])
             ];
         }
 
@@ -552,11 +635,6 @@ class AIHelper
             return ['error' => 'Empty text or language', 'result' => ''];
         }
 
-        $this->userPrompt  = "### OBJETIVO:\n" .
-            "Traduce el siguiente texto al idioma seleccionado siguiendo estrictamente las instrucciones.\n";
-        $this->userPrompt .= "### TEXTO:\n{$text}\n";
-        $this->userPrompt .= "### IDIOMA SELECCIONADO:\n{$lang}\n";
-
         $instructions = [
             ['value' => 'Debes mantener el estilo del texto original.'],
             ['value' => 'No debes añadir información adicional ni modificar el significado del texto.'],
@@ -568,14 +646,6 @@ class AIHelper
             etiquetas, símbolos ni explicaciones'],
         ];
 
-        if (!empty($params['tone']['name'] ?? false)) {
-            $instructions[] = ['value' => "Adopta un tono {$params['tone']['name']} en la traducción."];
-        } else {
-            $instructions[] = ['value' => "Debes mantener el tono del texto original."];
-        }
-
-        $this->insertInstructions($instructions);
-
         $data = $this->getCurrentSettings();
 
         $dataLog = [
@@ -585,7 +655,19 @@ class AIHelper
             'method'   => __METHOD__
         ];
 
-        $data['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
+        $data['messages'] = [
+            [
+                'role' => 'user',
+                'content' => $this->replaceVars([
+                    'objetivo' => 'Traduce el TEXTO ORIGINAL al idioma indicado',
+                    'instrucciones' => $this->getStringtInstructions($instructions),
+                    'rol' => 'Eres un experto traductor de textos.',
+                    'idioma' => $lang,
+                    'fuente' => $text,
+                    'tono' => $params['tone']['name'] ?? 'Mantén el mismo tono del texto original.'
+                ])
+            ]
+        ];
 
         if (!empty($data['engine'])) {
             /**
@@ -617,94 +699,95 @@ class AIHelper
     }
 
     /**
-     * Transforms the given fields of text based on specific instructions and tone.
+     * Transforms the given data fields of text based on specific instructions and tone.
      *
-     * @param array $or The array containing the text fields to be transformed.
+     * @param array $data The array containing the text fields to be transformed.
      * @param array $fields The specific fields of text to transform (e.g., 'title', 'description').
-     * @param array $tone The tone to be used in the transformation.
      *
-     * @return array The array with transformed text fields or the original array if no transformation occurs.
+     * @return array The array with transformed data or the original array if no transformation occurs.
      */
-    public function transform($or = [], $fields = ['title', 'title_int', 'description', 'body'])
+    public function transform($data = [], $fields = ['title', 'title_int', 'description', 'body'])
     {
-        if (empty($or) || empty($fields) || empty($or['prompt'])) {
-            return $or;
+        $settings = $this->getCurrentSettings();
+
+        if (empty($data) || empty($fields) || empty($settings['engine'])) {
+            return $data;
         }
 
+        $data['title_intPrompt'] = $data['titlePrompt'] ?? null;
+
         foreach ($fields as $field) {
-            if (!key_exists($field, $or)) {
+            $promptKey = $field . 'Prompt';
+            $toneKey   = $field . 'Tone';
+
+            if (empty($data[$promptKey]['prompt'] ?? null) || empty($data[$field] ?? null)) {
                 continue;
             }
 
-            $cleanContent = trim(strip_tags($or[$field]));
+            // Extract prompt and specific tone
+            $prompt = $data[$promptKey]['prompt'];
+            $tone   = $data[$toneKey] ?? '';
+
+            // If empty tone assign default prompt tone
+            if (empty($tone)) {
+                $tone = $data[$promptKey]['tone'] ?? '';
+            }
+
+            $cleanContent = trim(strip_tags($data[$field]));
 
             if ($cleanContent === '') {
-                return $or[$field];
+                continue;
             }
 
-            $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $or["prompt"]);
-            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n{$or[$field]}\n";
+            $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $prompt);
+            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n" . $data[$field] . "\n";
 
             $instructions = [
-                ['value' => 'Utiliza el mismo tema del texto original.'],
-                ['value' => 'Intenta conservar la misma cantidad de palabras.'],
-                ['value' => 'Responde directamente con el texto transformado.'],
-                ['value' => 'Si el texto original tiene formato html, debes mantenerlo.']
+                ['value' => 'Responde directamente con el texto transformado.']
             ];
 
-            if (!empty($or['tone'] ?? false)) {
-                $instructions[] = ['value' => "Adopta un tono {$or['tone']}
-                    en la transformación."];
-            } else {
-                $instructions[] = ['value' => "Debes mantener el tono del texto original."];
-            }
+            $instructions[] = !empty($tone)
+                ? ['value' => "Adopta un tono " . $tone . " en la transformación."]
+                : ['value' => "Debes mantener el tono del texto original."];
 
-            if (!empty($or['language'] ?? false)) {
-                $instructions[] = ['value' => "La respuesta debe ser en el idioma {$or['language']}."];
+            if (!empty($data['language'])) {
+                $instructions[] = [
+                    'value' => "La respuesta debe ser en el idioma " . $data['language'] . "."
+                ];
             }
 
             $this->insertInstructions($instructions);
 
-            $data = $this->getCurrentSettings();
-
             $dataLog = [
                 'field'    => $field,
-                'tone'     => $or['tone'] ?? '',
-                'model'    => ($data['engine'] ?? '') . '_' . ($data['model'] ?? ''),
-                'language' => $or['language'] ?? '',
-                'prompt'   => $or['prompt'] ?? '',
+                'tone'     => $tone,
+                'model'    => ($settings['engine'] ?? '') . '_' . ($settings['model'] ?? ''),
+                'language' => $data['language'] ?? '',
+                'prompt'   => $prompt ?? '',
             ];
 
-            $data['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
+            $settings['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
 
-            if (!empty($data['engine'])) {
-                /**
-                 * Log the selected prompt details for debugging purposes.
-                 */
-                $this->container->get('core.helper.' . $data['engine'])->setDataLog($dataLog);
+            // Log the selected prompt details for debugging purposes.
+            $this->container->get('core.helper.' . $settings['engine'])->setDataLog($dataLog);
 
-                $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
-                    $data,
-                    $this->getStructureResponse()
-                );
+            $response = $this->container->get('core.helper.' . $settings['engine'])
+                ->sendMessage($settings, $this->getStructureResponse());
 
-                $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
-            } else {
-                return $or[$field];
-            }
-
+            $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
             if (empty($response['error']) && !empty($response['result'])) {
                 $this->generateWords($response);
-                $this->saveAction($data, $response);
-                $or[$field] = $response['result'];
+                $this->saveAction($settings, $response);
+                $data[$field] = $response['result'];
             } else {
                 $this->errorLog->error(
                     'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
-                    $this->container->get('core.helper.' . $data['engine'])->getDataLog()
+                    $this->container->get('core.helper.' . $settings['engine'])->getDataLog()
                 );
             }
         }
-        return $or;
+
+        return $data;
     }
 
     /**

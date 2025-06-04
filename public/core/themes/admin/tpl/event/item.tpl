@@ -64,6 +64,7 @@
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
       {include file="ui/component/content-editor/accordion/scheduling.tpl"}
+      {include file="ui/component/content-editor/accordion/seo-input.tpl"}
     </div>
   </div>
   <div class="grid simple">
@@ -140,6 +141,7 @@
           </span>
         </div>
       </div>
+      {include file="ui/component/content-editor/accordion/event.tpl"}
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.where = !expanded.where">
         <i class="fa fa-map-marker m-r-10"></i>
         {t}Event location{/t}
@@ -151,6 +153,23 @@
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.where }">
         {include file="ui/component/input/text.tpl" iField="event_place" iRequired=true iTitle="{t}Place name{/t}" iValidation=true}
         {include file="ui/component/input/text.tpl" iField="event_address" iTitle="{t}Place address{/t}" }
+        {include file="ui/component/input/text.tpl" iField="event_map_latitude" iTitle="{t}Latitude{/t}" iPlaceholder="42\°21\'30.9 N"}
+        {include file="ui/component/input/text.tpl" iField="event_map_longitude" iTitle="{t}Longitude{/t}" iPlaceholder="7\°51\'32.9 W"}
+        <div class="controls">
+          <label class="form-label" for="event_end_hour">{t}Event iframe map{/t}</label>
+          <textarea name="event-map-iframe" id="event-map-iframe" ng-model="item.event_map_iframe" class="form-control"
+            rows="4">
+          </textarea>
+        </div>
+      </div>
+      <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.ticket = !expanded.ticket">
+        <i class="fa fa-ticket m-r-10"></i>
+        {t}Tickets{/t}
+        <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.ticket }"></i>
+      </div>
+      <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.ticket }">
+        {include file="ui/component/input/text.tpl" iField="event_tickets_price" iTitle="{t}Price{/t}"}
+        {include file="ui/component/input/text.tpl" iField="event_tickets_link" iTitle="{t}Purchase URL{/t}"}
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.external_website = !expanded.external_website">
         <i class="fa fa-external-link m-r-10"></i>
@@ -169,6 +188,15 @@
       {include file="common/component/related-contents/_featured-media.tpl" iName="featuredInner" iTitle="{t}Featured in inner{/t}" types="photo,video,album"}
     </div>
   </div>
+  {if !empty({setting name=seo_information})}
+    <div class="grid simple" ng-if="!hasMultilanguage()">
+      <div class="grid-body no-padding">
+        <div class="grid-collapse-title">
+          <i class="fa fa-search m-r-10"></i> {t}SEO Information{/t}
+        </div>
+        {include file="ui/component/content-editor/accordion/seo_info.tpl"}
+    </div>
+  {/if}
 {/block}
 
 {block name="customFields"}

@@ -118,6 +118,7 @@ CREATE TABLE `category` (
   `visible` tinyint(1) unsigned DEFAULT '0',
   `enabled` tinyint(1) unsigned DEFAULT '0',
   `rss` tinyint(1) unsigned DEFAULT '0',
+  `layout` tinyint(1) unsigned DEFAULT '0',
   `parent_id` bigint(20) unsigned DEFAULT NULL,
   `params` text,
   `logo_id` bigint(20) unsigned DEFAULT NULL,
@@ -127,6 +128,7 @@ CREATE TABLE `category` (
   KEY `logo_id` (`logo_id`),
   KEY `cover_id` (`cover_id`),
   KEY `parent_id` (`parent_id`),
+  KEY `category_name` (`name`(32)),
   CONSTRAINT `category_id_category_parent_id` FOREIGN KEY (`parent_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `cover_id_pk_content` FOREIGN KEY (`cover_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `logo_id_pk_content` FOREIGN KEY (`logo_id`) REFERENCES `contents` (`pk_content`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -139,7 +141,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (20,'Sin categorÃ­a','sin-categoria',NULL,0,1,0,NULL,NULL,NULL,NULL,NULL),(22,'Deportes','deportes',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(23,'EconomÃ­a','economia',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(24,'PolÃ­tica','politica',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(25,'Cultura','cultura',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(26,'Sociedad','sociedad',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(30,'Curiosidades','curiosidades',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(32,'Portadas','portadas',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(33,'Ciencia','ciencia',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(34,'Actualidad','actualidad',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(35,'Internacional','internacional',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,1,1,1,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `category` VALUES (20,'Sin categorÃ­a','sin-categoria',NULL,0,1,0,0,NULL,NULL,NULL,NULL,NULL),(22,'Deportes','deportes',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(23,'EconomÃ­a','economia',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(24,'PolÃ­tica','politica',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(25,'Cultura','cultura',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(26,'Sociedad','sociedad',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(30,'Curiosidades','curiosidades',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(31,'Fotos de Hoy','fotos-de-hoy',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(32,'Portadas','portadas',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(33,'Ciencia','ciencia',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(34,'Actualidad','actualidad',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(35,'Internacional','internacional',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL),(36,'TecnologÃ­a','tecnologia',NULL,1,1,1,0,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -462,6 +464,7 @@ CREATE TABLE `contents` (
   KEY `fk_user_last_editor` (`fk_user_last_editor`),
   KEY `content_type_name_changed` (`content_type_name`,`changed`),
   KEY `content_type_name_in_litter_content_status` (`content_type_name`,`in_litter`,`content_status`),
+  KEY `contents_slug` (`slug`(32)),
   CONSTRAINT `fk_author_users_id` FOREIGN KEY (`fk_author`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_publisher_users_id` FOREIGN KEY (`fk_publisher`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_user_last_editor_users_id` FOREIGN KEY (`fk_user_last_editor`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -1110,24 +1113,30 @@ DROP TABLE IF EXISTS `ai_actions`;
 --
 
 CREATE TABLE `ai_actions` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `messages` longtext,
   `response` longtext,
   `tokens` longtext,
   `params` longtext,
   `date` datetime DEFAULT NULL,
-  `service` varchar(64) DEFAULT NULL
+  `service` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `prompts`;
+--
+-- Table structure for table `prompts`
+--
+
 CREATE TABLE `prompts` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `mode` varchar(32) NOT NULL,
   `name` text NOT NULL,
   `role` text,
   `field` varchar(32) DEFAULT NULL,
   `tone` text,
-  `prompt` text
+  `prompt` text,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

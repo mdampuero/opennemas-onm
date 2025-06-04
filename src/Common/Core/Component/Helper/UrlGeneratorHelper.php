@@ -151,7 +151,6 @@ class UrlGeneratorHelper
             $uri = preg_replace('@\.html$@', '.amp.html', $uri);
         }
 
-
         return $this->container->get('core.decorator.url')->prefixUrl($uri);
     }
 
@@ -349,9 +348,23 @@ class UrlGeneratorHelper
             ])
             ->get();
 
-        $uri = $this->container->get('router')->generate('category_frontpage', [
-            'category_slug' => $category->name
-        ]);
+        $route = 'category_frontpage';
+        $param = 'category_slug';
+
+        if (!empty($category->layout)) {
+            $route = 'frontend_frontpage_category';
+            $param = 'category';
+        }
+
+        if ($this->container->get('core.helper.setting')->isMergeEnabled()) {
+            $route = 'category_homepage';
+            $param = 'category_slug';
+        }
+
+        $uri = $this->container->get('router')->generate(
+            $route,
+            [ $param => $category->name ]
+        );
 
         return ltrim($uri, '/');
     }

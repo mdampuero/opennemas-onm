@@ -23,7 +23,8 @@
   </a>
 {/block}
 
-{block name="leftColumn"}
+{block name="grid"}
+<div class="content">
   <div class="grid simple">
     <div class="grid-body">
       <div class="row m-t-20">
@@ -42,7 +43,7 @@
             </ui-select-choices>
           </ui-select>
         </div>
-        <div class="col-md-3 col-sm-6 form-group" ng-if="item.mode != 'Agency'">
+        <div class="col-md-3 col-sm-6 form-group">
           <label>{t}Field{/t}</label>
           <ui-select name="mode" class="form-control" theme="select2" ng-model="item.field" search-enabled="false" required ng-init="options = [ { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Descriptions{/t}', key: 'descriptions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
             <ui-select-match>
@@ -86,4 +87,5 @@
       </div>
     </div>
   </div>
+</div>
 {/block}
