@@ -212,22 +212,16 @@ class JsonController extends FrontendController
      */
     protected function hydrateArticles($data) : Response
     {
-        // Initialize an empty array to hold the items and images
-        // and the main domain for URL generation
-        $items   = [];
-        $images  = [];
-        $typeMap = [
-            'featured_inner' => 'inner',
-            'featured_frontpage' => 'frontpage',
-        ];
-
-        $mainDomain = $this->container->get('core.instance')->getBaseUrl();
-
         // Initialize the OQL for articles
-        $orderBy = empty($data['type']) ?
-            ' order by contents.starttime desc limit 1' :
+        $limit   = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('elements_in_rss', 10);
+
+        $orderBy = sprintf(
             ' order by contents.starttime desc,
-                contents.pk_content asc';
+            contents.pk_content asc limit %d',
+            $limit
+        );
 
         $baseOql = sprintf(
             'select * from contents'
@@ -240,27 +234,16 @@ class JsonController extends FrontendController
             empty($data['type']) ? 'article' : $data['type'],
             $data['oqlCategory']['where'] ?? null,
             $data['oqlTag']['where'] ?? null,
-            $orderBy ?? '',
+            $orderBy,
         );
 
         // Fetch the raw items using the API service
-        $rawItems = $this->get('api.service.content')->getListBySql($baseOql)['items'];
+        $items = $this->get('api.service.content')->getListBySql($baseOql)['items'];
 
         // $RawItems is an object, we need to convert it to a json
-        foreach ($rawItems as $item) {
-            $data = $item->getData();
-
-            // Variables for the article Json Response
-            $categorySlug = $this->container->get('core.helper.category')
-                ->getCategorySlug($item);
-            $date         = $data['created']->format('Ymd');
-            $hour         = $data['created']->format('His');
-            $created      = $date . $hour;
-            $url          = $this->generateUrl('frontend_article_show', [
-                'category_slug' => $categorySlug,
-                'slug' => $data['slug'],
-                'created' => $created,
-                'id' => $data['pk_content']
+        foreach ($items as $item) {
+            $url = $this->container->get('core.helper.url_generator')->generate($item, [
+                'absolute' => true,
             ]);
 
             // Get the category name and author name
@@ -269,61 +252,41 @@ class JsonController extends FrontendController
             $authorName   = $this->container->get('core.helper.author')
                 ->getAuthorName($item->fk_author);
 
-            // If the author name is empty, use the site name as the author
-            if (empty($authorName)) {
-                $authorName = $this->container->get('orm.manager')
-                    ->getDataSet('Settings', 'instance')
-                    ->get('site_name');
-            }
-
             // Get the thumbnail
             // Use the photo helper to get the featured media thumbnail
             // If the item has no featured media, it will return an empty string
             $photoHelper    = $this->container->get('core.helper.photo');
             $featuredHelper = $this->container->get('core.helper.featured_media');
 
-            // Filter the related contents to get the images
-            foreach ($data['related_contents'] as $image) {
-                if (isset($image['content_type_name'], $image['type']) &&
-                    $image['content_type_name'] === 'photo' &&
-                    isset($typeMap[$image['type']])) {
-                    // Map the type to the key in the images array
-                    $key = $typeMap[$image['type']];
-
-                    // Use the photo and featured helper to get the thumbnail
-                    $images[$key] = [
-                        'id' => $image['source_id'],
-                        'thumbnail' => $photoHelper->getPhotoPath(
-                            $featuredHelper->getFeaturedMedia($item, $key),
-                            null,
-                            [],
-                            true
-                        ),
-                    ];
-                }
-            }
+            // Get Thumbnail for the inner and frontpage featured images
+            $thumbnail = $photoHelper->getPhotoPath(
+                $featuredHelper->getFeaturedMedia($item, 'frontpage'),
+                null,
+                [],
+                true
+            );
 
             // Build the json response for the article
-            $items[] = [
-                'id' => 'article_' . $data['pk_content'] ?? '',
-                'type' => $data['content_type_name'] ?? 'article',
-                'title' => $data['title'] ?? '',
-                'url' => $mainDomain . $url,
-                'date' => isset($data['starttime']) ? $data['starttime']->format('Y-m-d\TH:i:sO') : '',
-                'author' => $authorName,
+            $articles['items'][] = [
+                'id' => 'article_' . $item->pk_content ?? '',
+                'type' => $item->content_type_name ?? 'article',
+                'title' => $item->title ?? '',
+                'url' => $url,
+                'date' => isset($item->starttime) ? $item->starttime->format('Y-m-d\TH:i:sO') : '',
+                'author' => $authorName ?? 'Redacción',
                 'subtype' => $categoryName ?? '',
-                'summary' => strip_tags($data['description']) ?? '',
-                'content' => strip_tags($data['body'] ?? ''),
-                'smallThumbnail' => $images['inner']['thumbnail'] ?? '',
-                'thumbnail' => $images['inner']['thumbnail'] ?? '',
-                'largeThumbnail' => $images['inner']['thumbnail'] ?? '',
-                'images' => $images,
+                'summary' => strip_tags($item->description) ?? '',
+                'content' => $item->body ?? '',
+                'smallThumbnail' => $thumbnail ?? '',
+                'thumbnail' => $thumbnail ?? '',
+                'largeThumbnail' => $thumbnail ?? '',
+                'images' => [],
             ];
         }
 
         // Return the JSON response with the items
         return new JsonResponse(
-            $items,
+            $articles,
         );
     }
 }
