@@ -169,6 +169,20 @@ class JsonController extends FrontendController
                 true
             );
 
+            // Construct the content for the article body
+            // If the item has a thumbnail, include it in the content
+            // Otherwise, just use the body of the item
+            $content  = '';
+            $content .= $item->body ?? '';
+
+            if (!empty($thumbnail)) {
+                $content .= sprintf(
+                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" />',
+                    $thumbnail,
+                    $item->title ?? ''
+                );
+            }
+
             // Build the item array
             $events['items'][] = [
                 'allDay' => 0,
@@ -178,7 +192,7 @@ class JsonController extends FrontendController
                 'longitude' => $item->event_longitude ?? '',
                 'latitude' => $item->event_latitude ?? '',
                 'thumbnail' => $thumbnail,
-                'content' => strip_tags($item->body ?? ''),
+                'content' => $content ?? '',
                 'subtype' => $categoryName ?? '',
                 'nbParticipants' => 0,
                 'address' => $item->event_address ?? '',
@@ -257,7 +271,19 @@ class JsonController extends FrontendController
                 true
             );
 
-            // Build the json response for the article
+            // Construct the content for the article body
+            // If the item has a thumbnail, include it in the content
+            // Otherwise, just use the body of the item
+            $content = '';
+            if (!empty($thumbnail)) {
+                $content .= sprintf(
+                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" />',
+                    $thumbnail,
+                    $item->title ?? ''
+                );
+            }
+            $content .= $item->body ?? '';
+
             $articles['items'][] = [
                 'id' => 'article_' . $item->pk_content ?? '',
                 'type' => $item->content_type_name ?? 'article',
@@ -270,7 +296,7 @@ class JsonController extends FrontendController
                 ],
                 'subtype' => 'Opennemas',
                 'summary' => strip_tags($item->description) ?? '',
-                'content' => $item->body ?? '',
+                'content' => $content ?? '',
                 'smallThumbnail' => $thumbnail ?? '',
                 'thumbnail' => $thumbnail ?? '',
                 'largeThumbnail' => $thumbnail ?? '',
