@@ -22,6 +22,12 @@
 
 {block name="customColumns"}
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-type" checklist-model="app.columns.selected" checklist-value="'type'" type="checkbox">
+    <label for="checkbox-type">
+      {t}Type{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-start" checklist-model="app.columns.selected" checklist-value="'start'" type="checkbox">
     <label for="checkbox-start">
       {t}Start{/t}
@@ -42,6 +48,9 @@
 {/block}
 
 {block name="customColumnsHeader"}
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('type')" width="150">
+    {t}Type{/t}
+  </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('start')" width="150">
     {t}Start{/t}
   </th>
@@ -54,6 +63,10 @@
 {/block}
 
 {block name="customColumnsBody"}
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('type')">
+    <div>
+      [% data.extra.events[item.event_type].name %]
+  </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('start')">
     <span ng-show="!item.event_start_date && !item.event_start_hour">?</span>
     <div ng-show="item.event_start_date">
