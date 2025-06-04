@@ -76,26 +76,26 @@ class JsonController extends FrontendController
     {
         // Initialize an empty array to hold the items and the current date
         $today = date('Y-m-d');
+        $limit = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('elements_in_rss', 10);
 
         // Initialize the OQL for events
-        $eventsOql['query'] = ' inner join contentmeta as cm1
-                on contents.pk_content = cm1.fk_content
-                and cm1.meta_name = "event_start_date"
-                left join contentmeta as cm2
-                on contents.pk_content = cm2.fk_content
-                and cm2.meta_name = "event_end_date"
-                left join contentmeta as cm3
-                on contents.pk_content = cm3.fk_content
-                and cm3.meta_name = "event_start_hour"
-                left join contentmeta as cm4
-                on contents.pk_content = cm4.fk_content
-                and cm4.meta_name = "event_end_hour"';
+        $eventsOql['query'] = ' inner join contentmeta as start_date_meta
+                on contents.pk_content = start_date_meta.fk_content
+                and start_date_meta.meta_name = "event_start_date"
+                left join contentmeta as start_hour_meta
+                on contents.pk_content = start_hour_meta.fk_content
+                and start_hour_meta.meta_name = "event_start_hour"
+                left join contentmeta as end_date_meta
+                on contents.pk_content = end_date_meta.fk_content
+                and end_date_meta.meta_name = "event_end_date"';
 
         // Filter for events that are either ongoing or upcoming
         $eventsOql['where'] = sprintf(
-            ' and (
-                (cm1.meta_value is not null and cm1.meta_value >= "%s")
-                or (cm1.meta_value <= "%s" and cm2.meta_value >= "%s")
+            ' and content_status=1 and in_litter=0 and (
+                (start_date_meta.meta_value is not null and start_date_meta.meta_value >= "%s")
+                or (start_date_meta.meta_value <= "%s" and end_date_meta.meta_value >= "%s")
             )',
             $today,
             $today,
@@ -103,9 +103,12 @@ class JsonController extends FrontendController
         );
 
         // If it's a event, we need order by start date, hour, and content ID
-        $orderBy = 'order by cm1.meta_value asc,
-            cm3.meta_value asc,
-            contents.pk_content asc';
+        $orderBy = sprintf(
+            'order by start_date_meta.meta_value asc,
+            start_hour_meta.meta_value asc,
+            contents.pk_content asc limit %d',
+            $limit
+        );
 
         // Construct the OQL for event, tag, and category filtering
         $baseOql = sprintf(
@@ -201,7 +204,7 @@ class JsonController extends FrontendController
     protected function hydrateArticles($data) : Response
     {
         // Initialize the OQL for articles
-        $limit   = $this->get('orm.manager')
+        $limit = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('elements_in_rss', 10);
 
@@ -262,7 +265,10 @@ class JsonController extends FrontendController
                 'url' => $url,
                 'date' => isset($item->starttime) ? $item->starttime->format('Y-m-d\TH:i:sO') : '',
                 'author' => $authorName ?? 'Redacción',
-                'subtype' => $categoryName ?? '',
+                'categories' => [
+                    $categoryName ?? '',
+                ],
+                'subtype' => 'Opennemas',
                 'summary' => strip_tags($item->description) ?? '',
                 'content' => $item->body ?? '',
                 'smallThumbnail' => $thumbnail ?? '',
