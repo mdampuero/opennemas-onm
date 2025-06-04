@@ -80,13 +80,14 @@ class UserService extends OrmService
             throw new InvalidArgumentException('The email is required', 400);
         }
 
-        $item = $this->checkItem($data['email']);
-
         // Convert item to subscriber + user
+        $item = $this->checkItem($data['email']);
         if (!empty($item)) {
             return $this->convert($item, 2);
         }
 
+        // Create a new subscriber + user
+        $data['type'] = 2;
         return parent::createItem($data);
     }
 

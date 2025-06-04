@@ -147,10 +147,11 @@ class SubscriberController extends ApiController
     */
     public function importAction(Request $request)
     {
-        $service  = $this->get($this->service);
-        $imported = [];
-        $errors   = [];
-        $content  = $request->request->get('csv_file', null);
+        $service    = $this->get($this->service);
+        $imported   = [];
+        $errors     = [];
+        $content    = $request->request->get('csv_file', null);
+        $newsletter = $request->request->get('newsletter', null);
 
         if (empty($content)) {
             return new JsonResponse(
@@ -161,8 +162,6 @@ class SubscriberController extends ApiController
 
         $lines = explode("\n", $content);
         array_shift($lines); // remove header
-
-        $subscribers = [];
 
         foreach ($lines as $line) {
             $line = trim($line);
@@ -178,7 +177,7 @@ class SubscriberController extends ApiController
             $data = [
                 'email' => $email,
                 'name' => $name,
-                'signup_date' => $signupDate,
+                'register_date' => $signupDate,
                 'activated' => 1,
                 'type' => 1,
             ];

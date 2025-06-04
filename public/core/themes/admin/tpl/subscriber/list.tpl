@@ -35,7 +35,7 @@
   </li>
   {acl isAllowed="MASTER"}
     <li class="quicklinks">
-      <a class="btn btn-white" ng-click="import()" uib-tooltip="{t}Import{/t}" tooltip-placement="bottom" type="button">
+      <a class="btn btn-white" ng-click="import(data.extra.subscriptions)" uib-tooltip="{t}Import{/t}" tooltip-placement="bottom" type="button">
         <i class="fa fa-address-book"></i>
         {t}Import{/t}
       </a>

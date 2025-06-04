@@ -15,8 +15,8 @@
      *   Handles all actions in subscribers list.
      */
     .controller('SubscriberListCtrl', [
-      '$controller', '$scope', 'oqlEncoder', '$uibModal', 'http', 'messenger',
-      function($controller, $scope, oqlEncoder, $uibModal, http, messenger) {
+      '$controller', '$scope', 'oqlEncoder', '$uibModal', 'http', 'messenger', '$location',
+      function($controller, $scope, oqlEncoder, $uibModal, http, messenger, $location) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -88,7 +88,7 @@
          *
          * @returns {Promise}
          */
-        $scope.import = function() {
+        $scope.import = function(subscriber) {
           var modal = $uibModal.open({
             templateUrl: 'modal-import',
             backdrop: 'static',
@@ -96,7 +96,7 @@
             resolve: {
               template: function() {
                 return {
-                  subscriber: $scope.subscriber
+                  subscriber: subscriber
                 };
               },
               success: function() {
@@ -106,6 +106,13 @@
                   var route = {
                     name: $scope.routes.importSubscriber,
                   };
+
+                  if (!template.selectList) {
+                    return messenger.post({
+                      type: 'error',
+                      message: 'Please select a newsletter to import subscribers.'
+                    });
+                  }
 
                   if (template.file.type !== 'text/csv') {
                     return messenger.post({
@@ -118,7 +125,11 @@
                   reader.onload = function() {
                     var content = reader.result;
 
-                    return http.put(route, { csv_file: content }).then(function() {
+                    return http.put(route,
+                      {
+                        csv_file: content,
+                        newsletter: template.selectList
+                      }).then(function() {
                       $scope.list();
                     });
                   };

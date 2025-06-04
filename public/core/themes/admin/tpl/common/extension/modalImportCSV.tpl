@@ -37,7 +37,7 @@
   <!-- Paso 2: Seleccionar lista -->
   <div ng-if="template.file">
     <p>{t}Step 2: Select the list to import to{/t}</p>
-    <select ng-model="selectedList" ng-options="list.name for list in availableLists">
+    <select ng-model="template.selectList" ng-options="list.name for list in template.subscriber">
       <option value="">{t}Select a list{/t}</option>
     </select>
   </div>
