@@ -128,10 +128,10 @@ class JsonController extends FrontendController
         );
 
         // Fetch the raw items using the API service
-        $rawItems = $this->get('api.service.content')->getListBySql($baseOql)['items'];
+        $items = $this->get('api.service.content')->getListBySql($baseOql)['items'];
 
-        // $RawItems is an object, we need to convert it to a json
-        foreach ($rawItems as $item) {
+        // $items is an object, we need to convert it to a json
+        foreach ($items as $item) {
             $url = $this->container->get('core.helper.url_generator')->generate($item, [
                 'absolute' => true,
             ]);
@@ -231,7 +231,7 @@ class JsonController extends FrontendController
         // Fetch the raw items using the API service
         $items = $this->get('api.service.content')->getListBySql($baseOql)['items'];
 
-        // $RawItems is an object, we need to convert it to a json
+        // $items is an object, we need to convert it to a json
         foreach ($items as $item) {
             $url = $this->container->get('core.helper.url_generator')->generate($item, [
                 'absolute' => true,
