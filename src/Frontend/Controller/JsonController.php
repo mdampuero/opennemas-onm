@@ -5,6 +5,8 @@ namespace Frontend\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use DateTime;
+use DateTimeZone;
 
 class JsonController extends FrontendController
 {
@@ -142,16 +144,33 @@ class JsonController extends FrontendController
             $authorName   = $this->container->get('core.helper.author')
                 ->getAuthorName($item->fk_author);
 
-            // Prepare start and end dates and formats
-            // If the event has a start date and hour, format it as 'Y-m-dTH:i:s'
-            // If the event has only the date, just use the date
-            $startDate = !empty($item->event_start_date) ?
-                $item->event_start_date . (!empty($item->event_start_hour) ? 'T' . $item->event_start_hour : '') :
-                '';
+            // If the event has a start date and hour, create a DateTime object
+            // Don't use secconds because our backend doesn't support it.
+            $startDateObj = DateTime::createFromFormat(
+                'Y-m-d H:i',
+                $item->event_start_date . ' ' .
+                (
+                    !empty($item->event_start_hour)
+                        ? $item->event_start_hour
+                        : '00:00'
+                ),
+                new DateTimeZone('Europe/Madrid')
+            );
+            $startDate    = $startDateObj ? $startDateObj->format('Y-m-d\TH:i:sO') : '';
 
-            $endDate = !empty($item->event_end_date) ?
-                $item->event_end_date . (!empty($item->event_end_hour) ? 'T' . $item->event_end_hour : '') :
-                '';
+            // If the event has an end date, format it as 'Y-m-dTH:i:s'
+            // Don't use secconds because our backend doesn't support it.
+            $endDateObj = DateTime::createFromFormat(
+                'Y-m-d H:i',
+                $item->event_end_date . ' ' .
+                (
+                    !empty($item->event_end_hour)
+                        ? $item->event_end_hour :
+                        '00:00'
+                ),
+                new DateTimeZone('Europe/Madrid')
+            );
+            $endDate    = $endDateObj ? $endDateObj->format('Y-m-d\TH:i:sO') : '';
 
             // Get the thumbnail
             // Use the photo helper to get the featured media thumbnail
