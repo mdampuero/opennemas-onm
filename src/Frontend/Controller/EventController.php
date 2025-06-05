@@ -314,6 +314,7 @@ class EventController extends FrontendController
 
         $params['tag']        = $tagItem->name ?? null;
         $params['x-tags']    .= ',event-frontpage';
+        $params['o_category'] = $category ?? null;
         $params['contents']   = $items;
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
