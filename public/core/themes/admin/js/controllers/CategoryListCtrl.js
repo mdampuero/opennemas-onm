@@ -189,7 +189,7 @@
           $scope.backup.criteria = $scope.criteria;
 
           $scope.app.columns.selected =  _.uniq($scope.app.columns.selected.concat(
-            [ 'name', 'slug', 'contents', 'cover', 'color', 'visibility', 'enabled', 'rss' ]
+            [ 'name', 'slug', 'contents', 'cover', 'color', 'visibility', 'enabled', 'rss', 'layout' ]
           ));
           $scope.criteria.orderBy = { name: 'asc' };
           $scope.criteria.epp     = 10;

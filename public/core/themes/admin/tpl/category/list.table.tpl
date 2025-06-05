@@ -51,8 +51,8 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-manual" checklist-model="app.columns.selected" checklist-value="'manual'" type="checkbox">
-    <label for="checkbox-manual">
+    <input id="checkbox-layout" checklist-model="app.columns.selected" checklist-value="'layout'" type="checkbox">
+    <label for="checkbox-layout">
      {t}Manual{/t}
     </label>
   </div>
@@ -83,7 +83,7 @@
   <th class="text-center v-align-middle" width="100" ng-if="isColumnEnabled('rss')">
     {t}RSS{/t}
   </th>
-  <th class="text-center v-align-middle" width="100" ng-if="isColumnEnabled('manual')">
+  <th class="text-center v-align-middle" width="100" ng-if="isColumnEnabled('layout')">
     {t}Manual{/t}
   </th>
 {/block}
@@ -146,7 +146,9 @@
       <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.rssLoading, 'fa-check text-success' : !item.rssLoading && item.rss == '1', 'fa-times text-error': !item.rssLoading && item.rss == '0' }"></i>
     </button>
   </td>
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('manual')">
-    <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.manualLoading, 'fa-check text-success' : !item.manualLoading && item.params.manual == '1', 'fa-times text-error': !item.manualLoading && item.params.manual != '1' }"></i>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('layout')">
+    <button class="btn btn-white" ng-click="patch(item, 'layout', item.layout != 1 ? 1 : 0)" type="button">
+      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.layoutLoading, 'fa-check text-success' : !item.layoutLoading && item.layout == '1', 'fa-times text-error': !item.layoutLoading && item.layout == '0' }"></i>
+    </button>
   </td>
 {/block}
