@@ -390,3 +390,8 @@ services:
         class:      Common\Core\Component\Helper\TagHelper
         arguments:  [ ]
         public:     true
+
+    core.helper.storage:
+        class:      Common\Core\Component\Helper\StorageHelper
+        arguments:  ['@service_container', '@application.log', '@error.log']
+        public:     true
