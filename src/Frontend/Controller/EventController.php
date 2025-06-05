@@ -12,6 +12,7 @@ namespace Frontend\Controller;
 use Api\Exception\GetItemException;
 use Api\Exception\GetListException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -194,6 +195,9 @@ class EventController extends FrontendController
         $eventDate     = date('Y-m-d');
         $publishedDate = gmdate('Y-m-d H:i:s');
 
+        // Flag for canonical url when duplicated list
+        $changeCanonical = false;
+
         $baseSql = sprintf(
             'FROM contents '
             . 'inner join contentmeta as start_date_meta on contents.pk_content = start_date_meta.fk_content '
@@ -222,6 +226,7 @@ class EventController extends FrontendController
                     $eventType['id']
                 );
             } elseif (empty($categorySlug) && $category = $this->matchCategory($type)) {
+                $changeCanonical = true;
                 $baseSql .= sprintf(
                     'join content_category on contents.pk_content = content_category.content_id '
                     . 'and content_category.category_id = %d ',
@@ -287,6 +292,24 @@ class EventController extends FrontendController
         if (!empty($expire)) {
             $this->setViewExpireDate($expire);
             $params['x-cache-for'] = $expire;
+        }
+
+        // Set canonical for pages with same content but diferent uri
+        if ($changeCanonical) {
+            $canonicalAction = [
+                'taglist'  => 'categorytypelist',
+                'typelist' => 'categorylist'
+            ];
+
+            $canonicalParams = [
+                'category_slug' => $params['type'] ?? null,
+                'type'          => $params['tag'] ?? null
+            ];
+
+            $params['o_canonical'] = $this->getCanonicalUrl(
+                $canonicalAction[$action],
+                array_filter($canonicalParams)
+            );
         }
 
         $params['tag']        = $tagItem->name ?? null;
