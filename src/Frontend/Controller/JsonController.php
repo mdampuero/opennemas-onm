@@ -224,7 +224,14 @@ class JsonController extends FrontendController
 
         // Return the JSON response with the items
         $response = new Response();
-        $response->setContent(json_encode($events, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $response->setContent(
+            json_encode(
+                $events,
+                JSON_UNESCAPED_UNICODE |
+                JSON_UNESCAPED_SLASHES |
+                JSON_PRETTY_PRINT
+            )
+        );
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
@@ -328,7 +335,14 @@ class JsonController extends FrontendController
 
         // Return the JSON response with the items
         $response = new Response();
-        $response->setContent(json_encode($articles, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        $response->setContent(
+            json_encode(
+                $articles,
+                JSON_UNESCAPED_UNICODE |
+                JSON_UNESCAPED_SLASHES |
+                JSON_PRETTY_PRINT
+            )
+        );
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
