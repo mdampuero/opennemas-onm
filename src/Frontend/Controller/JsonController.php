@@ -4,8 +4,6 @@ namespace Frontend\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use DateTime;
-use DateTimeZone;
 
 class JsonController extends FrontendController
 {
@@ -20,44 +18,36 @@ class JsonController extends FrontendController
      */
     public function generalJsonAction(Request $request): Response
     {
-        // Variables to hold the data from the request
-        $data = [
-            'type' => $request->get('type', null),
-            'category' => $request->get('category', null),
-            'tag' => $request->get('tag', null),
-        ];
+        $category = $request->get('category', null);
+        $tag      = $request->get('tag', null);
+        $type     = $request->get('type', 'article');
 
         // Initialize OQL queries for category and tag
-        if (!empty($data['category'])) {
-            $data['oqlCategory']['query'] = implode(' ', [
-                'inner join content_category as cc1',
-                'on cc1.content_id = contents.pk_content',
-                'inner join category as c1',
-                'on c1.id = cc1.category_id',
-            ]);
-
-            $data['oqlCategory']['where'] = sprintf(
-                " and c1.name = '%s'",
-                $data['category']
-            );
+        $categoryJoin = '';
+        if (!empty($category)) {
+            $categoryJoin = 'inner join content_category as cc1 '
+                . 'on cc1.content_id = contents.pk_content '
+                . 'inner join category as c1 '
+                . 'on c1.id = cc1.category_id '
+                . 'and c1.name = "' . $category . '"';
         }
 
-        if (!empty($data['tag'])) {
-            $data['oqlTag']['query'] = implode(' ', [
-                'inner join contents_tags as ct1',
-                'on ct1.content_id = contents.pk_content',
-                'inner join tags as t1',
-                'on t1.id = ct1.tag_id',
-            ]);
-
-            $data['oqlTag']['where'] = sprintf(
-                " and t1.slug = '%s'",
-                $data['tag']
-            );
+        $tagJoin = '';
+        if (!empty($tag)) {
+            $tagJoin = 'inner join contents_tags as ct1 '
+                . 'on ct1.content_id = contents.pk_content '
+                . 'inner join tags as t1 '
+                . 'on t1.id = ct1.tag_id '
+                . 'and t1.slug = "' . $tag . '"';
         }
+
+        $data = [
+            'categoryJoin' => $categoryJoin,
+            'tagJoin'      => $tagJoin
+        ];
 
         // Separate the logic for events and articles
-        if ($data['type'] === 'event') {
+        if ($type === 'event') {
             return $this->hydrateEvents($data);
         }
 
@@ -81,28 +71,6 @@ class JsonController extends FrontendController
             ->getDataSet('Settings', 'instance')
             ->get('elements_in_rss', 10);
 
-        // Initialize the OQL for events
-        $eventsOql['query'] = ' inner join contentmeta as start_date_meta
-                on contents.pk_content = start_date_meta.fk_content
-                and start_date_meta.meta_name = "event_start_date"
-                left join contentmeta as start_hour_meta
-                on contents.pk_content = start_hour_meta.fk_content
-                and start_hour_meta.meta_name = "event_start_hour"
-                left join contentmeta as end_date_meta
-                on contents.pk_content = end_date_meta.fk_content
-                and end_date_meta.meta_name = "event_end_date"';
-
-        // Filter for events that are either ongoing or upcoming
-        $eventsOql['where'] = sprintf(
-            ' and content_status=1 and in_litter=0 and (
-                (start_date_meta.meta_value is not null and start_date_meta.meta_value >= "%s")
-                or (start_date_meta.meta_value <= "%s" and end_date_meta.meta_value >= "%s")
-            )',
-            $today,
-            $today,
-            $today
-        );
-
         // If it's a event, we need order by start date, hour, and content ID
         $orderBy = sprintf(
             'order by start_date_meta.meta_value asc,
@@ -113,111 +81,85 @@ class JsonController extends FrontendController
 
         // Construct the OQL for event, tag, and category filtering
         $baseOql = sprintf(
-            'select * from contents'
-            . ' %s %s %s'
-            . ' where content_type_name = "%s"'
-            . ' %s %s %s'
-            . ' %s',
-            $eventsOql['query'],
-            $data['oqlCategory']['query'] ?? null,
-            $data['oqlTag']['query'] ?? null,
-            $data['type'],
-            $eventsOql['where'],
-            $data['oqlCategory']['where'] ?? null,
-            $data['oqlTag']['where'] ?? null,
-            $orderBy,
+            'select * from contents '
+            . 'inner join contentmeta as start_date_meta on contents.pk_content = start_date_meta.fk_content '
+            . 'and start_date_meta.meta_name = "event_start_date" '
+            . 'left join contentmeta as start_hour_meta on contents.pk_content = start_hour_meta.fk_content '
+            . 'and start_hour_meta.meta_name = "event_start_hour" '
+            . 'left join contentmeta as end_date_meta on contents.pk_content = end_date_meta.fk_content '
+            . 'and end_date_meta.meta_name = "event_end_date" '
+            . '%s %s '
+            . 'where content_type_name = "event" and content_status=1 and in_litter=0 '
+            . 'and ((start_date_meta.meta_value is not null and start_date_meta.meta_value >= "%s") '
+            . 'or (start_date_meta.meta_value <= "%s" and end_date_meta.meta_value >= "%s")) '
+            . '%s',
+            $data['categoryJoin'],
+            $data['tagJoin'],
+            $today,
+            $today,
+            $today,
+            $orderBy
         );
 
-        // Fetch the raw items using the API service
         $items = $this->get('api.service.content')->getListBySql($baseOql)['items'];
 
-        // $items is an object, we need to convert it to a json
+        $events = [];
         foreach ($items as $item) {
             $url = $this->container->get('core.helper.url_generator')->generate($item, [
                 'absolute' => true,
             ]);
 
-            // Get the category name and author name
             $categoryName = $this->container->get('core.helper.category')
                 ->getCategoryName($item);
             $authorName   = $this->container->get('core.helper.author')
                 ->getAuthorName($item->fk_author);
 
-            // If the event has a start date and hour, create a DateTime object
-            // Don't use secconds because our backend doesn't support it.
-            $startDateObj = DateTime::createFromFormat(
-                'Y-m-d H:i',
-                $item->event_start_date . ' ' .
-                (
-                    !empty($item->event_start_hour)
-                        ? $item->event_start_hour
-                        : '00:00'
-                ),
-                new DateTimeZone('Europe/Madrid')
-            );
-            $startDate    = $startDateObj ? $startDateObj->format('Y-m-d\TH:i:sO') : '';
+            // Create a DateTime object for event dates and use extended ISO 8601 format
+            $start = $item->event_start_date . ' ' . $item->event_start_hour ?? '00:00';
+            $end   = $item->event_start_date . ' ' . $item->event_start_hour ?? '00:00';
 
-            // If the event has an end date, format it as 'Y-m-dTH:i:s'
-            // Don't use secconds because our backend doesn't support it.
-            $endDateObj = DateTime::createFromFormat(
-                'Y-m-d H:i',
-                $item->event_end_date . ' ' .
-                (
-                    !empty($item->event_end_hour)
-                        ? $item->event_end_hour :
-                        '00:00'
-                ),
-                new DateTimeZone('Europe/Madrid')
-            );
-            $endDate    = $endDateObj ? $endDateObj->format('Y-m-d\TH:i:sO') : '';
+            $startDate = new \DateTime($start, new \DateTimeZone('Europe/Madrid'));
+            $endDate   = new \DateTime($end, new \DateTimeZone('Europe/Madrid'));
+            $startDate = $startDate->format('Y-m-d\TH:i:sO');
+            $endDate   = $endDate->format('Y-m-d\TH:i:sO');
 
-            // Get the thumbnail
-            // Use the photo helper to get the featured media thumbnail
-            // If the item has no featured media, it will return an empty string
+            // Get the image url
             $photoHelper    = $this->container->get('core.helper.photo');
             $featuredHelper = $this->container->get('core.helper.featured_media');
-
-            $thumbnail = $photoHelper->getPhotoPath(
-                $featuredHelper->getFeaturedMedia(
-                    $item,
-                    'inner'
-                ),
+            $imageUrl       = $photoHelper->getPhotoPath(
+                $featuredHelper->getFeaturedMedia($item, 'frontpage'),
                 null,
                 [],
                 true
             );
 
-            // Construct the content for the article body
-            // If the item has a thumbnail, include it in the content
-            // Otherwise, just use the body of the item
-            $content  = '';
-            $content .= $item->body ?? '';
-
-            if (!empty($thumbnail)) {
-                $content .= sprintf(
-                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" />',
-                    $thumbnail,
-                    $item->title ?? ''
+            // Add image at the beggining of the body
+            if (!empty($imageUrl)) {
+                $item->body = sprintf(
+                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" /> %s',
+                    $imageUrl,
+                    $item->title ?? '',
+                    $item->body
                 );
             }
 
             // Build the item array
             $events['items'][] = [
-                'allDay' => 0,
-                'title' => $item->title ?? '',
-                'url' => $url,
-                'author' => $authorName ?? 'Redacción',
-                'longitude' => $item->event_longitude ?? '',
-                'latitude' => $item->event_latitude ?? '',
-                'thumbnail' => $thumbnail,
-                'content' => $content ?? '',
-                'subtype' => $categoryName ?? '',
+                'allDay'         => 0,
+                'title'          => $item->title,
+                'url'            => $url,
+                'author'         => $authorName ?? 'Redacción',
+                'longitude'      => $item->event_longitude,
+                'latitude'       => $item->event_latitude,
+                'thumbnail'      => $imageUrl,
+                'content'        => $item->body,
+                'subtype'        => $categoryName,
                 'nbParticipants' => 0,
-                'address' => $item->event_address ?? '',
-                'type' => $item->content_type_name,
-                'id' => 'event_' . $item->pk_content ?? '',
-                'date' => $startDate,
-                'endDate' => $endDate,
+                'address'        => $item->event_address,
+                'type'           => $item->content_type_name,
+                'id'             => 'event_' . $item->pk_content,
+                'date'           => $startDate,
+                'endDate'        => $endDate,
             ];
         }
 
@@ -231,7 +173,9 @@ class JsonController extends FrontendController
                 JSON_PRETTY_PRINT
             )
         );
+
         $response->headers->set('Content-Type', 'application/json');
+
         return $response;
     }
 
@@ -245,90 +189,69 @@ class JsonController extends FrontendController
      */
     protected function hydrateArticles($data) : Response
     {
-        // Initialize the OQL for articles
         $limit = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('elements_in_rss', 10);
 
-        $orderBy = sprintf(
-            ' order by contents.starttime desc,
-            contents.pk_content asc limit %d',
-            $limit
-        );
-
+        $orderBy = ' order by contents.starttime desc limit ' . $limit;
         $baseOql = sprintf(
             'select * from contents'
             . ' %s %s'
-            . ' where content_type_name = "%s"'
-            . ' %s %s'
+            . ' where content_type_name = "article"'
             . ' %s',
-            $data['oqlCategory']['query'] ?? null,
-            $data['oqlTag']['query'] ?? null,
-            empty($data['type']) ? 'article' : $data['type'],
-            $data['oqlCategory']['where'] ?? null,
-            $data['oqlTag']['where'] ?? null,
+            $data['categoryJoin'],
+            $data['tagJoin'],
             $orderBy,
         );
 
-        // Fetch the raw items using the API service
         $items = $this->get('api.service.content')->getListBySql($baseOql)['items'];
 
-        // $items is an object, we need to convert it to a json
+        $articles = [];
         foreach ($items as $item) {
             $url = $this->container->get('core.helper.url_generator')->generate($item, [
                 'absolute' => true,
             ]);
 
-            // Get the category name and author name
             $categoryName = $this->container->get('core.helper.category')
                 ->getCategoryName($item);
             $authorName   = $this->container->get('core.helper.author')
                 ->getAuthorName($item->fk_author);
 
-            // Get the thumbnail
-            // Use the photo helper to get the featured media thumbnail
-            // If the item has no featured media, it will return an empty string
+            // Get the image url
             $photoHelper    = $this->container->get('core.helper.photo');
             $featuredHelper = $this->container->get('core.helper.featured_media');
-
-            // Get Thumbnail for the inner and frontpage featured images
-            $thumbnail = $photoHelper->getPhotoPath(
+            $imageUrl       = $photoHelper->getPhotoPath(
                 $featuredHelper->getFeaturedMedia($item, 'frontpage'),
                 null,
                 [],
                 true
             );
 
-            // Construct the content for the article body
-            // If the item has a thumbnail, include it in the content
-            // Otherwise, just use the body of the item
-            $content = '';
-            if (!empty($thumbnail)) {
-                $content .= sprintf(
-                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" />',
-                    $thumbnail,
-                    $item->title ?? ''
+            // Add image at the beggining of the body
+            if (!empty($imageUrl)) {
+                $item->body = sprintf(
+                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" /> %s',
+                    $imageUrl,
+                    $item->title ?? '',
+                    $item->body
                 );
             }
-            $content .= $item->body ?? '';
 
             $articles['items'][] = [
-                'id' => 'article_' . $item->pk_content ?? '',
-                'type' => $item->content_type_name ?? 'article',
-                'title' => $item->title ?? '',
-                'url' => $url,
-                'date' => isset($item->starttime) ? $item->starttime->format('Y-m-d\TH:i:sO') : '',
-                'author' => $authorName ?? 'Redacción',
-                'categories' => [
-                    $categoryName ?? '',
-                ],
-                'subtype' => 'Opennemas',
-                'summary' => strip_tags($item->description) ?? '',
-                'content' => $content ?? '',
-                'smallThumbnail' => $thumbnail ?? '',
-                'thumbnail' => $thumbnail ?? '',
-                'largeThumbnail' => $thumbnail ?? '',
-                'images' => [],
+                'id'             => 'article_' . $item->pk_content,
+                'type'           => $item->content_type_name,
+                'title'          => $item->title,
+                'url'            => $url,
+                'date'           => $item->starttime->format('Y-m-d\TH:i:sO'),
+                'author'         => $authorName ?? 'Redacción',
+                'categories'     => [ $categoryName ],
+                'subtype'        => 'Opennemas',
+                'summary'        => strip_tags($item->description),
+                'content'        => $item->body,
+                'smallThumbnail' => $imageUrl ?? '',
+                'thumbnail'      => $imageUrl ?? '',
+                'largeThumbnail' => $imageUrl ?? '',
+                'images'         => [],
             ];
         }
 
@@ -342,7 +265,9 @@ class JsonController extends FrontendController
                 JSON_PRETTY_PRINT
             )
         );
+
         $response->headers->set('Content-Type', 'application/json');
+
         return $response;
     }
 }
