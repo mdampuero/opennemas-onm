@@ -124,11 +124,14 @@ class StorageHelperTest extends TestCase
             'path_style' => true
         ];
 
-        $storageHelper = \Common\Core\Component\Helper\StorageHelperFactory::create(
-            $testConfig,
+        // Create a StorageHelperFactory with mocked loggers
+        $factory = new \Common\Core\Component\Helper\StorageHelperFactory(
             $this->loggerMock,
             $this->loggerMock
         );
+
+        // Create the StorageHelper instance
+        $storageHelper = $factory->create($testConfig);
 
         $path    = 'test/file.txt';
         $content = 'test content';

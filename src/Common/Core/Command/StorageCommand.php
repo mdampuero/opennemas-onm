@@ -86,13 +86,8 @@ class StorageCommand extends ContainerAwareCommand
             'path_style' => true
         ];
 
-        /** @var LoggerInterface $logApp */
-        $logApp = $this->getContainer()->get('application.log');
-
-        /** @var LoggerInterface $logError */
-        $logError = $this->getContainer()->get('error.log');
-
-        $storage = StorageHelperFactory::create($config, $logApp, $logError);
+        $factory = $this->getContainer()->get('core.helper.storage_factory');
+        $storage = $factory->create($config);
 
         switch ($operation) {
             case 'upload':

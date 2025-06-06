@@ -395,3 +395,8 @@ services:
         class:      Common\Core\Component\Helper\StorageHelper
         arguments:  ['@service_container', '@application.log', '@error.log']
         public:     true
+
+    core.helper.storage_factory:
+        class:      Common\Core\Component\Helper\StorageHelperFactory
+        arguments:  [ '@application.log', '@error.log' ]
+        public:     true
