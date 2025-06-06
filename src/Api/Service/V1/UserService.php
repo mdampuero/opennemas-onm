@@ -77,7 +77,7 @@ class UserService extends OrmService
     public function createSubscriber($data)
     {
         if (!array_key_exists('email', $data)) {
-            throw new InvalidArgumentException('The email is required', 400);
+            return false;
         }
 
         $item = $this->checkItem($data['email']);
@@ -85,10 +85,6 @@ class UserService extends OrmService
         // Convert item to subscriber + user
         if (!empty($item)) {
             return $this->convert($item, 2);
-        }
-
-        if (array_key_exists('newsletter', $data)) {
-            // TODO:: Assign the newsletter to the subscriber
         }
 
         return parent::createItem($data);

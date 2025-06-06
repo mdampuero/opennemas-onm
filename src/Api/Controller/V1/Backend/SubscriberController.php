@@ -180,6 +180,7 @@ class SubscriberController extends ApiController
                 'register_date' => $signupDate,
                 'activated' => 1,
                 'type' => 1,
+                'user_groups' => [ [ 'user_group_id' => $newsletter['pk_user_group'], 'status' => 1]]
             ];
 
             $item       = $service->createSubscriber($data);
