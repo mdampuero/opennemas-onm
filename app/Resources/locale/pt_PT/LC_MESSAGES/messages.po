@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opennemas master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-02 09:34+0000\n"
-"PO-Revision-Date: 2025-06-02 11:59+0200\n"
+"POT-Creation-Date: 2025-06-05 14:50+0000\n"
+"PO-Revision-Date: 2025-06-06 08:19+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Portuguese\n"
 "Language: pt\n"
@@ -5353,23 +5353,11 @@ msgstr "Cor do link principal da cor do link"
 msgid "Choose main menu links color"
 msgstr "Escolha o menu principal links de cor"
 
-msgid "Display pretitle or category in contents"
-msgstr "Exibir preto ou categoria em conteúdo"
-
-msgid "Display subtitle"
-msgstr "Exibir legenda"
-
-msgid "Display summary/description"
-msgstr "Exibir resumo/descrição"
+msgid "Default contents"
+msgstr "Conteúdo Padrão"
 
 msgid "Extract from body if needed"
 msgstr "Extrair do corpo se necessário"
-
-msgid "Info"
-msgstr "Informações"
-
-msgid "Display content's author"
-msgstr "Exibir o autor do conteúdo"
 
 msgid "Display author's photo"
 msgstr "Exibir a foto do autor"
@@ -5377,14 +5365,17 @@ msgstr "Exibir a foto do autor"
 msgid "Display author's bio"
 msgstr "Exibir a biografia do autor"
 
-msgid "Display content's date"
-msgstr "Exibir a data do conteúdo"
-
-msgid "Display content's time"
-msgstr "Exibir o tempo do conteúdo"
+msgid "Hour"
+msgstr "Hora"
 
 msgid "Display content's readtime"
 msgstr "Exibir o tempo de leitura do conteúdo"
+
+msgid "Tiny contents"
+msgstr "Conteúdo Minúsculo"
+
+msgid "Over contents"
+msgstr "Conteúdo Over"
 
 msgid "Layout"
 msgstr "Layout"
@@ -5398,11 +5389,32 @@ msgstr "Cobertura cobertura"
 msgid "Show category cover (if exists)"
 msgstr "Mostrar a cobertura da categoria (se existe)"
 
+msgid "Display pretitle or category in contents"
+msgstr "Exibir preto ou categoria em conteúdo"
+
+msgid "Display subtitle"
+msgstr "Exibir legenda"
+
+msgid "Display summary/description"
+msgstr "Exibir resumo/descrição"
+
 msgid "Secondary menu"
 msgstr "Menu secundário"
 
 msgid "Display subcategories menu if exists"
 msgstr "Exibir menu de subcategorias se existir"
+
+msgid "Info"
+msgstr "Informações"
+
+msgid "Display content's author"
+msgstr "Exibir o autor do conteúdo"
+
+msgid "Display content's date"
+msgstr "Exibir a data do conteúdo"
+
+msgid "Display content's time"
+msgstr "Exibir o tempo do conteúdo"
 
 msgid "Sidebar widgets"
 msgstr "Widgets da barra lateral"
@@ -8892,6 +8904,18 @@ msgstr "Deseja excluir os grupos de usuários selecionados?"
 
 msgid "Group name"
 msgstr "Nome do grupo"
+
+#, fuzzy
+#~ msgid "Time"
+#~ msgstr "Cronograma"
+
+#, fuzzy
+#~ msgid "OpenRouter API Key"
+#~ msgstr "Chave da API da AI abrir"
+
+#, fuzzy
+#~ msgid "OpenRouter"
+#~ msgstr "Aberto"
 
 #~ msgid "Manual categories"
 #~ msgstr "Categorias manuais"

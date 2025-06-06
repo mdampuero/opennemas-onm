@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-02 09:34+0000\n"
-"PO-Revision-Date: 2025-06-02 11:51+0200\n"
+"POT-Creation-Date: 2025-06-05 14:50+0000\n"
+"PO-Revision-Date: 2025-06-06 08:14+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Catalán\n"
 "Language: es\n"
@@ -5368,23 +5368,11 @@ msgstr "Color de l'enllaç del menú principal"
 msgid "Choose main menu links color"
 msgstr "Trieu el color dels enllaços del menú principal"
 
-msgid "Display pretitle or category in contents"
-msgstr "Mostra el pretelet o la categoria de contingut"
-
-msgid "Display subtitle"
-msgstr "Mostra el subtítol"
-
-msgid "Display summary/description"
-msgstr "Mostra resum/descripció"
+msgid "Default contents"
+msgstr "Contingut per defecte"
 
 msgid "Extract from body if needed"
 msgstr "Extracte del cos si cal"
-
-msgid "Info"
-msgstr "Informació"
-
-msgid "Display content's author"
-msgstr "Mostra l’autor del contingut"
 
 msgid "Display author's photo"
 msgstr "Mostra la foto de l'autor"
@@ -5392,14 +5380,17 @@ msgstr "Mostra la foto de l'autor"
 msgid "Display author's bio"
 msgstr "Mostra la bio de l'autor"
 
-msgid "Display content's date"
-msgstr "Mostra la data del contingut"
-
-msgid "Display content's time"
-msgstr "Mostra el temps del contingut"
+msgid "Hour"
+msgstr "Hora"
 
 msgid "Display content's readtime"
 msgstr "Mostra el temps de lectura del contingut"
+
+msgid "Tiny contents"
+msgstr "Contingut petit"
+
+msgid "Over contents"
+msgstr "Contingut Over"
 
 msgid "Layout"
 msgstr "Pla"
@@ -5413,11 +5404,32 @@ msgstr "Coberta de categoria"
 msgid "Show category cover (if exists)"
 msgstr "Mostra la coberta de la categoria (si existeix)"
 
+msgid "Display pretitle or category in contents"
+msgstr "Mostra el pretelet o la categoria de contingut"
+
+msgid "Display subtitle"
+msgstr "Mostra el subtítol"
+
+msgid "Display summary/description"
+msgstr "Mostra resum/descripció"
+
 msgid "Secondary menu"
 msgstr "Menú secundari"
 
 msgid "Display subcategories menu if exists"
 msgstr "Mostra les subcategories Menú si existeix"
+
+msgid "Info"
+msgstr "Informació"
+
+msgid "Display content's author"
+msgstr "Mostra l’autor del contingut"
+
+msgid "Display content's date"
+msgstr "Mostra la data del contingut"
+
+msgid "Display content's time"
+msgstr "Mostra el temps del contingut"
 
 msgid "Sidebar widgets"
 msgstr "Widgets de la barra lateral"
@@ -8927,6 +8939,18 @@ msgstr "Voleu suprimir els grups d'usuari seleccionats?"
 
 msgid "Group name"
 msgstr "Nom de grup"
+
+#, fuzzy
+#~ msgid "Time"
+#~ msgstr "Horari"
+
+#, fuzzy
+#~ msgid "OpenRouter API Key"
+#~ msgstr "Obrir AI API Key"
+
+#, fuzzy
+#~ msgid "OpenRouter"
+#~ msgstr "Obert"
 
 #~ msgid "Manual categories"
 #~ msgstr "Categories manuals"

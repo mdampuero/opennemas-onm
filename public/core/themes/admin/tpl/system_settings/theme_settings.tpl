@@ -840,12 +840,12 @@
                                   </div>
                                   <div class="controls visible-xs-inline visible-sm-inline visible-md-inline visible-lg-inline">
                                     <div class="checkbox p-b-10">
-                                      <input id="theme-option-content-time" name="theme-option-content-time" ng-model="settings.theme_options.content_time" ng-checked="[% settings.theme_options.content_time != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.content_date === 'true'"/>
-                                      <input id="theme-option-content-time" name="theme-option-content-time" ng-model="settings.theme_options.content_time" ng-checked="[% settings.theme_options.content_time != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.content_date !== 'true'"/>
-                                      <label class="form-label m-b-15" for="theme-option-content-time">
+                                      <input id="theme-option-content-hour" name="theme-option-content-hour" ng-model="settings.theme_options.content_time" ng-checked="[% settings.theme_options.content_time != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.content_date === 'true'"/>
+                                      <input id="theme-option-content-hour" name="theme-option-content-hour" ng-model="settings.theme_options.content_time" ng-checked="[% settings.theme_options.content_time != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.content_date !== 'true'"/>
+                                      <label class="form-label m-b-15" for="theme-option-content-hour">
                                         <i class="fa fa-clock-o"></i>
                                         <span class="help">
-                                          {t}Time{/t}
+                                          {t}Hour{/t}
                                         </span>
                                       </label>
                                     </div>
@@ -973,12 +973,12 @@
                                   </div>
                                   <div class="controls visible-xs-inline visible-sm-inline visible-md-inline visible-lg-inline">
                                     <div class="checkbox p-b-10">
-                                      <input id="theme-option-content-tiny-time" name="theme-option-content-tiny-time" ng-model="settings.theme_options.content_tiny_time" ng-checked="[% settings.theme_options.content_tiny_time == 'true' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.content_tiny_date === 'true'"/>
-                                      <input id="theme-option-content-tiny-time" name="theme-option-content-tiny-time" ng-model="settings.theme_options.content_tiny_time" ng-checked="[% settings.theme_options.content_tiny_time == 'true' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.content_tiny_date !== 'true'"/>
-                                      <label class="form-label m-b-15" for="theme-option-content-tiny-time">
+                                      <input id="theme-option-content-tiny-hour" name="theme-option-content-tiny-hour" ng-model="settings.theme_options.content_tiny_time" ng-checked="[% settings.theme_options.content_tiny_time == 'true' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.content_tiny_date === 'true'"/>
+                                      <input id="theme-option-content-tiny-hour" name="theme-option-content-tiny-hour" ng-model="settings.theme_options.content_tiny_time" ng-checked="[% settings.theme_options.content_tiny_time == 'true' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.content_tiny_date !== 'true'"/>
+                                      <label class="form-label m-b-15" for="theme-option-content-tiny-hour">
                                         <i class="fa fa-clock-o"></i>
                                         <span class="help">
-                                          {t}Time{/t}
+                                          {t}Hour{/t}
                                         </span>
                                       </label>
                                     </div>
@@ -1106,12 +1106,12 @@
                                   </div>
                                   <div class="controls visible-xs-inline visible-sm-inline visible-md-inline visible-lg-inline">
                                     <div class="checkbox p-b-10">
-                                      <input id="theme-option-content-over-time" name="theme-option-content-over-time" ng-model="settings.theme_options.content_over_time" ng-checked="[% settings.theme_options.content_over_time == 'true' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.content_over_date === 'true'"/>
-                                      <input id="theme-option-content-over-time" name="theme-option-content-over-time" ng-model="settings.theme_options.content_over_time" ng-checked="[% settings.theme_options.content_over_time == 'true' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.content_over_date !== 'true'"/>
-                                      <label class="form-label m-b-15" for="theme-option-content-over-time">
+                                      <input id="theme-option-content-over-hour" name="theme-option-content-over-hour" ng-model="settings.theme_options.content_over_time" ng-checked="[% settings.theme_options.content_over_time == 'true' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" ng-if="settings.theme_options.content_over_date === 'true'"/>
+                                      <input id="theme-option-content-over-hour" name="theme-option-content-over-hour" ng-model="settings.theme_options.content_over_time" ng-checked="[% settings.theme_options.content_over_time == 'true' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" disabled ng-if="settings.theme_options.content_over_date !== 'true'"/>
+                                      <label class="form-label m-b-15" for="theme-option-content-over-hour">
                                         <i class="fa fa-clock-o"></i>
                                         <span class="help">
-                                          {t}Time{/t}
+                                          {t}Hour{/t}
                                         </span>
                                       </label>
                                     </div>

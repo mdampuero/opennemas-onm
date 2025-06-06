@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-02 09:34+0000\n"
-"PO-Revision-Date: 2025-06-02 11:54+0200\n"
+"POT-Creation-Date: 2025-06-05 14:50+0000\n"
+"PO-Revision-Date: 2025-06-06 08:16+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Euskera\n"
 "Language: es\n"
@@ -5341,23 +5341,11 @@ msgstr "Menu nagusiaren esteka kolorea"
 msgid "Choose main menu links color"
 msgstr "Aukeratu Menu nagusien esteken kolorea"
 
-msgid "Display pretitle or category in contents"
-msgstr "Bistaratu Pretitle edo Kategoria Edukietan"
-
-msgid "Display subtitle"
-msgstr "Bistaratu azpititulua"
-
-msgid "Display summary/description"
-msgstr "Bistaratu laburpena / deskribapena"
+msgid "Default contents"
+msgstr "Eduki lehenetsia"
 
 msgid "Extract from body if needed"
 msgstr "Beharrezkoa bada, gorputzetik atera"
-
-msgid "Info"
-msgstr "Ez informazio zuen"
-
-msgid "Display content's author"
-msgstr "Bistaratu edukien egilea"
 
 msgid "Display author's photo"
 msgstr "Bistaratu egilearen argazkia"
@@ -5365,14 +5353,17 @@ msgstr "Bistaratu egilearen argazkia"
 msgid "Display author's bio"
 msgstr "Bistaratu egilearen bio"
 
-msgid "Display content's date"
-msgstr "Bistaratu edukien data"
-
-msgid "Display content's time"
-msgstr "Bistaratu edukien ordua"
+msgid "Hour"
+msgstr "Ordua"
 
 msgid "Display content's readtime"
 msgstr "Bistaratu edukien irakurketa"
+
+msgid "Tiny contents"
+msgstr "Eduki txikia"
+
+msgid "Over contents"
+msgstr "Gainjarritako edukia"
 
 msgid "Layout"
 msgstr "Diseinu"
@@ -5386,11 +5377,32 @@ msgstr "Kategoria Azala"
 msgid "Show category cover (if exists)"
 msgstr "Erakutsi kategoriako azala (badago)"
 
+msgid "Display pretitle or category in contents"
+msgstr "Bistaratu Pretitle edo Kategoria Edukietan"
+
+msgid "Display subtitle"
+msgstr "Bistaratu azpititulua"
+
+msgid "Display summary/description"
+msgstr "Bistaratu laburpena / deskribapena"
+
 msgid "Secondary menu"
 msgstr "Bigarren Menua"
 
 msgid "Display subcategories menu if exists"
 msgstr "Bistaratu azpikategorien menua badago"
+
+msgid "Info"
+msgstr "Ez informazio zuen"
+
+msgid "Display content's author"
+msgstr "Bistaratu edukien egilea"
+
+msgid "Display content's date"
+msgstr "Bistaratu edukien data"
+
+msgid "Display content's time"
+msgstr "Bistaratu edukien ordua"
 
 msgid "Sidebar widgets"
 msgstr "Alboko widgetak"
@@ -8861,6 +8873,18 @@ msgstr "Aukeratutako erabiltzaile taldeak ezabatu nahi dituzu?"
 
 msgid "Group name"
 msgstr "Taldearen izena"
+
+#, fuzzy
+#~ msgid "Time"
+#~ msgstr "Ordutegi"
+
+#, fuzzy
+#~ msgid "OpenRouter API Key"
+#~ msgstr "Ireki AI API gakoa"
+
+#, fuzzy
+#~ msgid "OpenRouter"
+#~ msgstr "Ireki"
 
 #~ msgid "Manual categories"
 #~ msgstr "Eskuzko kategoriak"
