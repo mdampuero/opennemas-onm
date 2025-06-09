@@ -175,6 +175,13 @@ class JsonController extends FrontendController
         );
 
         $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('x-cacheable', true);
+        $response->headers->set('x-tags', 'rss-event');
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+        if (!empty($expire)) {
+            $response->headers->set('x-cache-for', $expire);
+        }
 
         return $response;
     }
@@ -267,6 +274,13 @@ class JsonController extends FrontendController
         );
 
         $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('x-cacheable', true);
+        $response->headers->set('x-tags', 'rss-article');
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+        if (!empty($expire)) {
+            $response->headers->set('x-cache-for', $expire);
+        }
 
         return $response;
     }
