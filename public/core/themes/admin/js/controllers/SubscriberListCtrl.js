@@ -95,8 +95,13 @@
             controller: 'ModalCtrl',
             resolve: {
               template: function() {
+                const cleanSubscriber = angular.copy(subscriber);
+
+                // Delete any entry for select List
+                delete cleanSubscriber["0"];
+
                 return {
-                  subscriber: subscriber
+                  subscriber: cleanSubscriber
                 };
               },
               success: function() {
