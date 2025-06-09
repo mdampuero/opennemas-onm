@@ -48,6 +48,12 @@ class StorageCommand extends ContainerAwareCommand
                 InputOption::VALUE_REQUIRED,
                 ''
             )
+            ->addOption(
+                'destination',
+                null,
+                InputOption::VALUE_REQUIRED,
+                ''
+            )
             ->setHelp('');
     }
 
@@ -61,9 +67,10 @@ class StorageCommand extends ContainerAwareCommand
     {
         $this->output = $output;
 
-        $operation = $input->getOption('operation');
-        $file      = $input->getOption('file');
-        $path      = $input->getOption('path');
+        $operation   = $input->getOption('operation');
+        $file        = $input->getOption('file');
+        $path        = $input->getOption('path');
+        $destination = $input->getOption('destination', '');
 
         if (!$operation) {
             $output->writeln('<fg=red;options=bold>FAIL - </> The --operation parameter is required');
@@ -103,10 +110,9 @@ class StorageCommand extends ContainerAwareCommand
                     return 1;
                 }
 
-                $path   = basename($localFile);
+                $path   = ($destination) ? $destination : basename($localFile);
                 $result = $storage->upload($path, file_get_contents($localFile), ['visibility' => 'public']);
-                $url    = rtrim($config['endpoint'], '/') . '/' . $config['bucket'] . '/' . ltrim($path, '/');
-                $this->logResult('Upload - ' . $url . ' ', $result);
+                $this->logResult('Upload ', $result);
                 break;
 
             case 'read':

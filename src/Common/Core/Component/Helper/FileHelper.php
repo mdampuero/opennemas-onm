@@ -11,6 +11,7 @@ namespace Common\Core\Component\Helper;
 
 use Common\Core\Component\Loader\InstanceLoader;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
 
 abstract class FileHelper
 {
@@ -48,7 +49,7 @@ abstract class FileHelper
         $this->publicDir = $publicDir;
     }
 
-   /**
+    /**
      * Checks if a file exists.
      *
      * @param string $path The path to file.
@@ -116,6 +117,18 @@ abstract class FileHelper
         }
 
         $file->move($directory, $name);
+
+        /**
+         * Calls the console command to upload the file to the storage.
+         */
+        $process = new Process(
+            sprintf(
+                '/home/opennemas/current/bin/console app:core:storage --operation=upload --file=%s --destination=%s',
+                $target,
+                str_replace($this->publicDir, '', $target)
+            )
+        );
+        $process->start();
     }
 
     /**
@@ -137,6 +150,17 @@ abstract class FileHelper
         if ($this->fs->exists($path) && is_file($path)) {
             $this->fs->remove($path);
         }
+
+        /**
+         * Calls the console command to upload the file to the storage.
+         */
+        $process = new Process(
+            sprintf(
+                '/home/opennemas/current/bin/console app:core:storage --operation=delete --path=%s',
+                str_replace($this->publicDir, '', $path)
+            )
+        );
+        $process->start();
     }
 
     /**

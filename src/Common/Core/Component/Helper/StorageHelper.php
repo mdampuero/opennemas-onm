@@ -29,7 +29,9 @@ class StorageHelper
     public function upload(string $path, string $contents, array $params = []): bool
     {
         try {
-            return $this->filesystem->put($path, $contents, $params);
+            $result = $this->filesystem->put($path, $contents, $params);
+            $this->logApp->info("File uploaded to {$path} successfully.");
+            return $result;
         } catch (\Throwable $e) {
             $this->logError->error("Error uploading file to {$path}: " . $e->getMessage());
             return false;
@@ -45,7 +47,9 @@ class StorageHelper
     public function delete(string $path): bool
     {
         try {
-            return $this->filesystem->delete($path);
+            $result = $this->filesystem->delete($path);
+            $this->logApp->info("File deleted {$path} successfully.");
+            return $result;
         } catch (\Throwable $e) {
             $this->logError->error("Error deleting file {$path}: " . $e->getMessage());
             return false;
@@ -62,9 +66,13 @@ class StorageHelper
     {
         try {
             if (method_exists($this->filesystem, 'fileExists')) {
-                return $this->filesystem->fileExists($path);
+                $result = $this->filesystem->fileExists($path);
+                $this->logApp->info("File exists {$path} successfully.");
+                return $result;
             }
-            return $this->filesystem->has($path);
+            $result = $this->filesystem->has($path);
+            $this->logApp->info("File exists {$path} successfully.");
+            return $result;
         } catch (\Throwable $e) {
             $this->logError->error("Error checking existence of file {$path}: " . $e->getMessage());
             return false;
@@ -80,7 +88,9 @@ class StorageHelper
     public function read(string $path): ?string
     {
         try {
-            return $this->filesystem->read($path);
+            $result = $this->filesystem->read($path);
+            $this->logApp->info("File readed {$path} successfully.");
+            return $result;
         } catch (\Throwable $e) {
             $this->logError->error("Error reading file {$path}: " . $e->getMessage());
             return null;
@@ -100,8 +110,12 @@ class StorageHelper
         try {
             if ($this->exists($path)) {
                 $this->filesystem->delete($path);
+                $this->logApp->info("File {$path} deleted successfully.");
             }
-            return $this->filesystem->put($path, $contents);
+
+            $result = $this->filesystem->put($path, $contents);
+            $this->logApp->info("File {$path} put successfully.");
+            return $result;
         } catch (\Throwable $e) {
             $this->logError->error("Error replacing file {$path}: " . $e->getMessage());
             return false;
