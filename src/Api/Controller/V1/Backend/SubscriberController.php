@@ -147,9 +147,8 @@ class SubscriberController extends ApiController
     */
     public function importAction(Request $request)
     {
+        $msg        = $this->get('core.messenger');
         $service    = $this->get($this->service);
-        $imported   = [];
-        $errors     = [];
         $content    = $request->request->get('csv_file', null);
         $newsletter = $request->request->get('newsletter', null);
 
@@ -183,14 +182,14 @@ class SubscriberController extends ApiController
                 'user_groups' => [ [ 'user_group_id' => $newsletter['pk_user_group'], 'status' => 1]]
             ];
 
-            $item       = $service->createSubscriber($data);
-            $imported[] = $item;
+            try {
+                $service->createSubscriber($data);
+            } catch (\Exception $e) {
+                continue;
+            }
         }
 
-        return new JsonResponse([
-            'imported' => count($imported),
-            'errors' => $errors,
-        ], empty($errors) ? 200 : 207); // 207: Multi-Status
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
     /**

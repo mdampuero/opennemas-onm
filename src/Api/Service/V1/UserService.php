@@ -76,15 +76,20 @@ class UserService extends OrmService
 
     public function createSubscriber($data)
     {
-        if (!array_key_exists('email', $data)) {
-            return false;
-        }
+        try {
+            $item = $this->checkItem($data['email']);
 
-        $item = $this->checkItem($data['email']);
+            if (!empty($item)) {
+                $convert = $this->convert($item, 2);
 
-        // Convert item to subscriber + user
-        if (!empty($item)) {
-            return $this->convert($item, 2);
+                if ($convert) {
+                    return $this->assignLists($item, $data);
+                }
+            }
+        } catch (CreateExistingItemException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            throw new CreateItemException($e->getMessage(), $e->getCode());
         }
 
         return parent::createItem($data);
@@ -288,6 +293,25 @@ class UserService extends OrmService
 
         if (empty($type)) {
             $item->type = $this->ctype;
+        }
+
+        $this->em->persist($item, $item->getOrigin());
+
+        return $item;
+    }
+
+    /**
+     * Assigns user groups (lists) to the subscriber.
+     *
+     * @param Entity $item The item to assign lists to.
+     * @param array $data The data containing user_groups.
+     *
+     * @return Entity
+     */
+    protected function assignLists($item, array $data)
+    {
+        if (!empty($data['user_groups'])) {
+            $item->user_groups = $data['user_groups'];
         }
 
         $this->em->persist($item, $item->getOrigin());
