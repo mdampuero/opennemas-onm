@@ -74,6 +74,20 @@ class UserService extends OrmService
         return parent::createItem($data);
     }
 
+    /**
+     * Creates a new subscriber or updates an existing one by converting it and
+     * assigning user groups.
+     *
+     * If a subscriber with the given email already exists,
+     * it is converted to type 2 and assigned to the specified user groups.
+     * Otherwise, a new subscriber is created using the parent class logic.
+     *
+     * @param array $data The subscriber data.
+     * @return Entity The created or updated subscriber entity.
+     *
+     * @throws CreateExistingItemException If a known item-related conflict occurs.
+     * @throws CreateItemException For any other unexpected creation errors.
+     */
     public function createSubscriber($data)
     {
         try {
@@ -83,6 +97,8 @@ class UserService extends OrmService
                 $convert = $this->convert($item, 2);
 
                 if ($convert) {
+                    // If the subscriber was successfully converted to type 2 (user + subscription),
+                    // assign the corresponding newsletter user groups (lists).
                     return $this->assignLists($item, $data);
                 }
             }
