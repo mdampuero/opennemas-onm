@@ -37,9 +37,14 @@
   <!-- Paso 2: Seleccionar lista -->
   <div ng-if="template.file">
     <p>{t}Step 2: Select the list to import to{/t}</p>
-    <select ng-model="template.selectList" ng-options="list.name for list in template.subscriber">
-      <option value="">{t}Select a list{/t}</option>
-    </select>
+    <ui-select class="block onm-ui-select" ng-model="template.selectList" theme="select2">
+      <ui-select-match placeholder="{t}Select some newsletter list{/t}">
+        [% $select.selected.name %]
+      </ui-select-match>
+      <ui-select-choices repeat="list in template.subscriber track by list.pk_user_group">
+        <div ng-bind-html="list.name | highlight: $select.search"></div>
+      </ui-select-choices>
+    </ui-select>
   </div>
 </div>
 
