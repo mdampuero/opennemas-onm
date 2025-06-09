@@ -173,13 +173,20 @@ class SubscriberController extends ApiController
             $name       = isset($columns[1]) ? trim($columns[1]) : $email;
             $signupDate = isset($columns[2]) ? trim($columns[2]) : date('Y-m-d');
 
+            $userGroups = array_map(function ($group) {
+                return [
+                    'user_group_id' => $group['pk_user_group'],
+                    'status' => 1
+                ];
+            }, $newsletter);
+
             $data = [
                 'email' => $email,
                 'name' => $name,
                 'register_date' => $signupDate,
                 'activated' => 1,
                 'type' => 1,
-                'user_groups' => [ [ 'user_group_id' => $newsletter['pk_user_group'], 'status' => 1]]
+                'user_groups' => $userGroups
             ];
 
             try {

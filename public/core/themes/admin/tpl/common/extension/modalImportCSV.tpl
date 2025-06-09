@@ -35,16 +35,11 @@
   </div>
 
   <!-- Paso 2: Seleccionar lista -->
-  <div ng-if="template.file">
+  <div class="form-group" ng-if="template.file">
     <p>{t}Step 2: Select the list to import to{/t}</p>
-    <ui-select class="block onm-ui-select" ng-model="template.selectList" theme="select2">
-      <ui-select-match placeholder="{t}Select some newsletter list{/t}">
-        [% $select.selected.name %]
-      </ui-select-match>
-      <ui-select-choices repeat="list in template.subscriber track by list.pk_user_group">
-        <div ng-bind-html="list.name | highlight: $select.search"></div>
-      </ui-select-choices>
-    </ui-select>
+    <select multiple ng-class="select2" ng-model="template.selectList" ng-options="list as list.name for (key, list) in template.subscriber">
+      <option value="">{t}Select a Newsletter List{/t}</option>
+    </select>
   </div>
 </div>
 

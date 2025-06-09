@@ -100,10 +100,8 @@
                 // Delete any entry for select List
                 delete cleanSubscriber["0"];
 
-                const subscriberArray = Object.values(cleanSubscriber);
-
                 return {
-                  subscriber: subscriberArray
+                  subscriber: cleanSubscriber
                 };
               },
               success: function() {
