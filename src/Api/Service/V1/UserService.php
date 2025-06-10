@@ -335,7 +335,7 @@ class UserService extends OrmService
 
         // Create copies to avoid modifying the original arrays.
         $currentToCompare = $currentUserGroups;
-        $newToCompare = $newUserGroups;
+        $newToCompare     = $newUserGroups;
 
         // Sort the arrays for consistent comparison.
         if (is_array($currentToCompare)) {
