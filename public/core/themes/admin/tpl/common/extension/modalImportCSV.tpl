@@ -2,12 +2,11 @@
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
   <h4 class="modal-title">
     <i class="fa fa-upload"></i>
-    {t}Import Items{/t} [% subscriber %]
+    {t}Import Items{/t}
   </h4>
 </div>
 
 <div class="modal-body">
-  <!-- Paso 1: Subida de fichero -->
   <div ng-show="!template.file">
     <div class="text-center">
       <i class="fa fa-file-o fa-3x" ng-if="template.file"></i>
@@ -34,8 +33,7 @@
     </div>
   </div>
 
-  <!-- Paso 2: Seleccionar lista -->
-  <div class="form-group" ng-if="template.file">
+  <div class="form-group" ng-if="template.file && template.type === 2">
     <p>{t}Step 2: Select the list to import to{/t}</p>
     <select multiple ng-class="select2" ng-model="template.selectList" ng-options="list as list.name for (key, list) in template.subscriber">
       <option value="">{t}Select a Newsletter List{/t}</option>
@@ -44,7 +42,6 @@
 </div>
 
 <div class="modal-footer">
-  <!-- Footer para el Paso 1 -->
   <div>
     <button class="btn btn-primary" ng-click="confirm()" ng-show="template.file">{t}Import{/t}</button>
     <button class="btn secondary" ng-click="close()">{t}Cancel{/t}</button>

@@ -101,6 +101,7 @@
                 delete cleanSubscriber["0"];
 
                 return {
+                  type: 2,
                   subscriber: cleanSubscriber
                 };
               },
