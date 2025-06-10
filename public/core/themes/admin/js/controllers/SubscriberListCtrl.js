@@ -15,8 +15,8 @@
      *   Handles all actions in subscribers list.
      */
     .controller('SubscriberListCtrl', [
-      '$controller', '$scope', 'oqlEncoder', '$uibModal', 'http', 'messenger', '$location',
-      function($controller, $scope, oqlEncoder, $uibModal, http, messenger, $location) {
+      '$controller', '$scope', 'oqlEncoder', '$uibModal', 'http', 'messenger',
+      function($controller, $scope, oqlEncoder, $uibModal, http, messenger) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**

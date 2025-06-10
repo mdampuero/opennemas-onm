@@ -95,7 +95,12 @@ class SubscriptionController extends ApiController
             $name       = isset($columns[1]) ? trim($columns[1]) : $email;
             $signupDate = isset($columns[2]) ? trim($columns[2]) : date('Y-m-d');
 
-            $newsletter = $service->getItem(7);
+            $userGroups = [
+                [
+                    'user_group_id' => $newsletter,
+                    'status'        => 1
+                ]
+            ];
 
             $data = [
                 'email'         => $email,
@@ -103,11 +108,11 @@ class SubscriptionController extends ApiController
                 'register_date' => $signupDate,
                 'activated'     => 1,
                 'type'          => 1,
-               // 'user_groups'   => $userGroups
+                'user_groups'   => $userGroups
             ];
 
             try {
-                // TODO: Service
+                $this->get('api.service.subscriber')->createSubscriber($data);
             } catch (\Exception $e) {
                 continue;
             }

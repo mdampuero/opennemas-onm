@@ -176,7 +176,7 @@ class SubscriberController extends ApiController
             $userGroups = array_map(function ($group) {
                 return [
                     'user_group_id' => $group['pk_user_group'],
-                    'status' => 1
+                    'status'        => 1
                 ];
             }, $newsletter);
 

@@ -15,8 +15,8 @@
      *   Handles all actions in subscriptions list.
      */
     .controller('SubscriptionListCtrl', [
-      '$controller', '$scope', 'oqlEncoder',
-      function($controller, $scope, oqlEncoder) {
+      '$controller', '$scope', 'oqlEncoder', '$uibModal', 'http', 'messenger',
+      function($controller, $scope, oqlEncoder, $uibModal, http, messenger) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -69,6 +69,7 @@
               template: function() {
                 // Type 1 is only upload file and type 2 is upload and select.
                 return {
+                  newsletter: newsletter,
                   type: 1
                 };
               },
@@ -94,6 +95,7 @@
                     return http.put(route,
                       {
                         csv_file: content,
+                        newsletter: newsletter
                       }).then(function() {
                       $scope.list();
                     });

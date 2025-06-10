@@ -56,7 +56,7 @@ api_v1_backend_subscription_save_item:
 
 api_v1_backend_subscription_import_item:
     path:     /subscriptions/import
-    defaults: { _controller: ApiBundle:V1/Backend/Subscriber:import }
+    defaults: { _controller: ApiBundle:V1/Backend/Subscription:import }
     methods:  [ PUT ]
     options:
         expose: true
