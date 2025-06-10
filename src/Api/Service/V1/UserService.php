@@ -315,6 +315,7 @@ class UserService extends OrmService
             $item = $this->container->get('orm.manager')
                 ->getRepository($this->entity, $this->origin)
                 ->findOneBy(sprintf('email = "%s"', $email));
+
             return $item;
         } catch (EntityNotFoundException $e) {
             return null;

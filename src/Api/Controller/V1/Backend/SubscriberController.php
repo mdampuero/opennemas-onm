@@ -181,12 +181,12 @@ class SubscriberController extends ApiController
             }, $newsletter);
 
             $data = [
-                'email' => $email,
-                'name' => $name,
+                'email'         => $email,
+                'name'          => $name,
                 'register_date' => $signupDate,
-                'activated' => 1,
-                'type' => 1,
-                'user_groups' => $userGroups
+                'activated'     => 1,
+                'type'          => 1,
+                'user_groups'   => $userGroups
             ];
 
             try {
