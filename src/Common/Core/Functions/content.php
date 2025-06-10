@@ -353,5 +353,5 @@ function get_event_type_name_by_id($id) : ?string
 {
     $event = getService('core.helper.event')->getEventTypeById($id);
 
-    return $event['id'] ?? null;
+    return $event['name'] ?? null;
 }
