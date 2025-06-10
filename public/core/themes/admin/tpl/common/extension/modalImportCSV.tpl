@@ -2,43 +2,68 @@
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
   <h4 class="modal-title">
     <i class="fa fa-upload"></i>
-    {t}Import Items{/t}
+    {t}Import contacts to Newsletter{/t}
   </h4>
 </div>
 
 <div class="modal-body">
-  <div ng-show="!template.file">
-    <div class="text-center">
-      <i class="fa fa-file-o fa-3x" ng-if="template.file"></i>
-      <i class="fa fa-warning fa-3x text-warning" ng-if="!template.file"></i>
-      <p class="m-t-15 text-center">
-        <strong ng-if="template.file" title="[% getFileName() %]">
-          [% template.file.name %]
-        </strong>
-        <strong ng-if="!template.file">
-          {t}No file selected{/t}
-        </strong>
-      </p>
-      <label class="btn btn-default btn-block m-t-15" for="file">
-        <input class="hidden" id="file" name="file" file-model="template.file" type="file" accept="text/csv"/>
-        <span ng-if="!template.file">
-          <i class="fa fa-plus m-r-5"></i>
-          {t}Add{/t}
-        </span>
-        <span ng-if="template.file">
-          <i class="fa fa-edit m-r-5"></i>
-          {t}Change{/t}
-        </span>
-      </label>
-    </div>
-  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel-heading">
+          <h4 class="panel-title">
+              <span class="badge" style="background: #337ab7; margin-right: 10px;">1</span>
+              {t}Select your CSV File{/t}
+          </h4>
+      </div>
 
-  <div class="form-group" ng-if="template.file && template.type === 2">
-    <p>{t}Step 2: Select the list to import to{/t}</p>
-    <select multiple ng-class="select2" ng-model="template.selectList" ng-options="list as list.name for (key, list) in template.subscriber">
-      <option value="">{t}Select a Newsletter List{/t}</option>
-    </select>
-  </div>
+      <div>
+        <div class="text-center">
+          <i class="fa fa-file-o fa-3x" ng-if="template.file"></i>
+          <i class="fa fa-warning fa-3x text-warning" ng-if="!template.file"></i>
+          <p class="m-t-15 text-center">
+            <strong ng-if="template.file" title="[% getFileName() %]">
+              [% template.file.name %]
+            </strong>
+            <strong ng-if="!template.file">
+              {t}No file selected{/t}
+            </strong>
+          </p>
+          <label class="btn btn-default btn-block m-t-15" for="file">
+            <input class="hidden" id="file" name="file" file-model="template.file" type="file" accept="text/csv"/>
+            <span ng-if="!template.file">
+              <i class="fa fa-plus m-r-5"></i>
+              {t}Add{/t}
+            </span>
+            <span ng-if="template.file">
+              <i class="fa fa-edit m-r-5"></i>
+              {t}Change{/t}
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12" ng-if="template.file && template.type === 2">
+      <div class="panel-heading">
+          <h4 class="panel-title">
+              <span class="badge" style="background: #337ab7; margin-right: 10px;">2</span>
+              {t}Step 2: Select the list to import to{/t}
+          </h4>
+      </div>
+
+      <div class="form-group">
+        <label for="newsletterLists" class="control-label">
+            <i class="fa fa-envelope"></i>
+            {t}List of Newsletter available{/t}
+        </label>
+        <select class="form-control" multiple size="5" id="newsletterLists" ng-model="template.selectList" ng-options="list as list.name for (key, list) in template.subscriber" style="min-height: 130px;">
+        </select>
+        <div class="help-block">
+            <i class="fa fa-lightbulb-o"></i>
+            {t}Hold Ctrl (Cmd on Mac) to select multiple lists{/t}
+        </div>
+      </div>
+    </div>
 </div>
 
 <div class="modal-footer">
