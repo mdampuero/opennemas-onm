@@ -67,9 +67,7 @@ class SubscriptionController extends ApiController
      */
     public function importAction(Request $request)
     {
-        // TODO: Import one action
         $msg        = $this->get('core.messenger');
-        $service    = $this->get($this->service);
         $content    = $request->request->get('csv_file', null);
         $newsletter = $request->request->get('newsletter', null);
 
@@ -95,12 +93,14 @@ class SubscriptionController extends ApiController
             $name       = isset($columns[1]) ? trim($columns[1]) : $email;
             $signupDate = isset($columns[2]) ? trim($columns[2]) : date('Y-m-d');
 
-            $userGroups = [
-                [
-                    'user_group_id' => $newsletter,
-                    'status'        => 1
-                ]
-            ];
+            $userGroups = is_array($newsletter)
+                ? array_map(
+                    function ($id) {
+                        return ['user_group_id' => $id, 'status' => 1];
+                    },
+                    $newsletter
+                )
+                : [['user_group_id' => $newsletter, 'status' => 1]];
 
             $data = [
                 'email'         => $email,
@@ -120,16 +120,6 @@ class SubscriptionController extends ApiController
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function importListAction()
-    {
-        // TODO: Import List Action
-    }
-
-
 
     /**
      * {@inheritdoc}

@@ -57,6 +57,19 @@
           $scope.list();
         };
 
+        $scope.importSelected = function() {
+          var selected = $scope.selected.items;
+
+          if (!selected.length) {
+            messenger.post({
+              type: 'error',
+              message: 'Please select at least one item to import.'
+            });
+          }
+
+          $scope.import(selected);
+        };
+
         /**
          *
          */
