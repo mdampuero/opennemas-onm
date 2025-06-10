@@ -91,16 +91,22 @@ class UserService extends OrmService
     public function createSubscriber($data)
     {
         try {
-            $item = $this->checkItem($data['email']);
+            $item = $this->checkSubscriber($data['email']);
 
             if (!empty($item)) {
-                $convert = $this->convert($item, 2);
+                // Convert the subscriber to type 2 if not already.
+                if ($item->type !== 1) {
+                    $item = $this->convert($item, 2);
+                }
 
-                if ($convert) {
-                    // If the subscriber was successfully converted to type 2 (user + subscription),
-                    // assign the corresponding newsletter user groups (lists).
+                // Check if the provided user groups differ from the existing ones.
+                if (!empty($data['user_groups']) && $this->areUserGroupsDifferent($item, $data['user_groups'])) {
+                    // Assign the new user groups if they are different.
                     return $this->assignLists($item, $data);
                 }
+
+                // Return the existing item if no changes are needed.
+                return $item;
             }
         } catch (CreateExistingItemException $e) {
             throw $e;
@@ -294,6 +300,53 @@ class UserService extends OrmService
         }
 
         return $item;
+    }
+
+    /**
+     * Checks if a subscriber with the given email exists.
+     *
+     * @param string $email The email address.
+     *
+     * @return Entity|null The subscriber entity with the given email, or null if not found.
+     */
+    protected function checkSubscriber($email)
+    {
+        try {
+            $item = $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->findOneBy(sprintf('email = "%s"', $email));
+            return $item;
+        } catch (EntityNotFoundException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Checks if the provided user groups differ from the existing ones.
+     *
+     * @param Entity $item The subscriber entity.
+     * @param array $newUserGroups The new user groups to compare.
+     * @return bool True if the user groups differ, false otherwise.
+     */
+    protected function areUserGroupsDifferent($item, array $newUserGroups)
+    {
+        // Get the current user groups from the item, defaulting to an empty array if none.
+        $currentUserGroups = $item->user_groups ?? [];
+
+        // Create copies to avoid modifying the original arrays.
+        $currentToCompare = $currentUserGroups;
+        $newToCompare = $newUserGroups;
+
+        // Sort the arrays for consistent comparison.
+        if (is_array($currentToCompare)) {
+            sort($currentToCompare);
+        }
+        if (is_array($newToCompare)) {
+            sort($newToCompare);
+        }
+
+        // Compare the sorted arrays to check for differences.
+        return $currentToCompare !== $newToCompare;
     }
 
     /**

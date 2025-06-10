@@ -144,8 +144,6 @@
           });
 
           modal.result.then(function(response) {
-            // messenger.post(response.data);
-
             if (response.success) {
               $scope.list();
             }
