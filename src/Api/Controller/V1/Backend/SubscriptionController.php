@@ -67,7 +67,6 @@ class SubscriptionController extends ApiController
      */
     public function importAction(Request $request)
     {
-        $msg        = $this->get('core.messenger');
         $content    = $request->request->get('csv_file', null);
         $newsletter = $request->request->get('newsletter', null);
 
@@ -81,9 +80,16 @@ class SubscriptionController extends ApiController
         $lines = explode("\n", $content);
         array_shift($lines); // Remove Header
 
-        foreach ($lines as $line) {
-            $line = trim($line);
+        // TODO: Hardcoded maxLines, maybe new setting on manager for this.
+        $maxLines       = 3000;
+        $processedLines = 0;
 
+        foreach ($lines as $line) {
+            if ($processedLines >= $maxLines) {
+                break;
+            }
+
+            $line = trim($line);
             if (!$line) {
                 continue;
             }
@@ -118,6 +124,7 @@ class SubscriptionController extends ApiController
 
             try {
                 $this->get('api.service.subscriber')->createSubscriber($data);
+                $processedLines++;
             } catch (\Exception $e) {
                 continue;
             }
@@ -126,7 +133,7 @@ class SubscriptionController extends ApiController
         return new JsonResponse(['messages' => [[
             'id'      => '200',
             'type'    => 'success',
-            'message' => sprintf(_('Import successfully'))
+            'message' => sprintf(_('Import successfully (up to %d lines processed)'), $processedLines)
         ]]]);
     }
 

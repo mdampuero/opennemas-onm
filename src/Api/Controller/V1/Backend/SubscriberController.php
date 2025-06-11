@@ -147,7 +147,6 @@ class SubscriberController extends ApiController
     */
     public function importAction(Request $request)
     {
-        $msg        = $this->get('core.messenger');
         $service    = $this->get($this->service);
         $content    = $request->request->get('csv_file', null);
         $newsletter = $request->request->get('newsletter', null);
@@ -162,7 +161,15 @@ class SubscriberController extends ApiController
         $lines = explode("\n", $content);
         array_shift($lines); // remove header
 
+        // TODO: Hardcoded maxLines, maybe new setting on manager for this.
+        $maxLines       = 3000;
+        $processedLines = 0;
+
         foreach ($lines as $line) {
+            if ($processedLines >= $maxLines) {
+                break;
+            }
+
             $line = trim($line);
             if (!$line) {
                 continue;
@@ -196,12 +203,17 @@ class SubscriberController extends ApiController
 
             try {
                 $service->createSubscriber($data);
+                $processedLines++;
             } catch (\Exception $e) {
                 continue;
             }
         }
 
-        return new JsonResponse($msg->getMessages(), $msg->getCode());
+        return new JsonResponse(['messages' => [[
+            'id'      => '200',
+            'type'    => 'success',
+            'message' => sprintf(_('Import successfully (up to %d lines processed)'), $processedLines)
+        ]]]);
     }
 
     /**
