@@ -97,6 +97,9 @@ frontend_redirect:
 frontend_rss:
     resource: '@FrontendBundle/Resources/config/routing/rss.yml'
 
+frontend_json:
+    resource: '@FrontendBundle/Resources/config/routing/json.yml'
+
 frontend_search:
     resource: '@FrontendBundle/Resources/config/routing/search.yml'
 

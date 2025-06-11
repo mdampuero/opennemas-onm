@@ -20,6 +20,7 @@ class EventCacheHelper extends ContentCacheHelper
         '.*tag-widget-({{tags}}|all)' .
         '.*author-widget-({{fk_author}}|all)',
         'last-suggested-{{categories}}',
+        'rss-{{content_type_name}}$',
         'sitemap',
         'tag-{{tags}}',
         'header-date',
