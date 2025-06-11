@@ -101,6 +101,15 @@ class SynchronizeCommand extends Command
                 continue;
             }
 
+            // Skip instance if locked (synchronizing)
+            $isLocked = $this->getContainer()->get('news_agency.service.synchronizer')
+                ->setInstance($instance)
+                ->isLocked();
+
+            if ($isLocked) {
+                continue;
+            }
+
             $j = 1;
 
             foreach ($servers as $server) {

@@ -1,0 +1,37 @@
+frontend_json:
+  path: /json/
+  defaults: { _controller: FrontendBundle:Json:generalJson }
+  options:
+    l10n: true
+    subdirectory: true
+
+frontend_json_type:
+  path: /json/{type}/
+  defaults: { _controller: FrontendBundle:Json:generalJson }
+  requirements:
+      type:     '(article|event)'
+  options:
+    l10n: true
+    subdirectory: true
+
+frontend_json_type_category:
+  path: /json/{type}/{category}/
+  defaults: { _controller: FrontendBundle:Json:generalJson }
+  requirements:
+    type:     '(article|event)'
+    category: '[^/]+'
+  options:
+    l10n: true
+    subdirectory: true
+
+frontend_json_type_category_tag:
+  path: /json/{type}/{category}/{tag}/
+  defaults: { _controller: FrontendBundle:Json:generalJson }
+  requirements:
+    type:     '(article|event)'
+    category: '[^/]+'
+    tag: '[^/]+'
+  options:
+    l10n: true
+    subdirectory: true
+
