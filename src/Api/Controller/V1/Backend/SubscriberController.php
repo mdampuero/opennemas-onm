@@ -170,8 +170,13 @@ class SubscriberController extends ApiController
 
             $columns    = explode(',', $line);
             $email      = trim($columns[0]);
-            $name       = isset($columns[1]) ? trim($columns[1]) : $email;
-            $signupDate = isset($columns[2]) ? trim($columns[2]) : date('Y-m-d');
+            $name       = empty($columns[1]) ? $email : trim($columns[1]);
+            $signupDate = empty($columns[2]) ? date('Y-m-d') : $columns[2];
+
+            // Verify if the email is a valid.
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                continue;
+            }
 
             $userGroups = array_map(function ($group) {
                 return [

@@ -105,13 +105,7 @@
                   reader.onload = function() {
                     var content = reader.result;
 
-                    return http.put(route,
-                      {
-                        csv_file: content,
-                        newsletter: newsletter
-                      }).then(function() {
-                      $scope.list();
-                    });
+                    return http.put(route, { csv_file: content, newsletter: newsletter });
                   };
                 };
               }
@@ -119,8 +113,10 @@
           });
 
           modal.result.then(function(response) {
+            messenger.post(response.data);
+
             if (response.success) {
-              $scope.list();
+              // $scope.list($scope.route, true);
             }
           });
         };
