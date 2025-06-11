@@ -68,7 +68,7 @@
 
 <div class="modal-footer">
   <div>
-    <button class="btn btn-primary" ng-click="confirm()" ng-show="template.file">{t}Import{/t}</button>
-    <button class="btn secondary" ng-click="close()">{t}Cancel{/t}</button>
+    <button class="btn btn-primary" ng-click="confirm()" ng-disabled="loading" ng-show="template.file">{t}Import{/t}</button>
+    <button class="btn secondary" ng-click="close()"  ng-disabled="loading">{t}Cancel{/t}</button>
   </div>
 </div>

@@ -77,7 +77,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-import',
             backdrop: 'static',
-            controller: 'ModalCtrl',
+            controller: 'SubscriberModalCtrl',
             resolve: {
               template: function() {
                 // Type 1 is only upload file and type 2 is upload and select.
@@ -88,7 +88,8 @@
               },
               success: function() {
                 return function(modal, template) {
-                  const reader = new FileReader();
+                  const loading = 1;
+                  const reader  = new FileReader();
 
                   var route = {
                     name: $scope.routes.importItem,
@@ -105,18 +106,17 @@
                   reader.onload = function() {
                     var content = reader.result;
 
-                    return http.put(route, { csv_file: content, newsletter: newsletter });
+                    return http.put(route, {
+                      csv_file: content,
+                      newsletter: newsletter
+                    }).then(function(response) {
+                      modal.close();
+                      messenger.post(response.data);
+                      $scope.init();
+                    });
                   };
                 };
               }
-            }
-          });
-
-          modal.result.then(function(response) {
-            messenger.post(response.data);
-
-            if (response.success) {
-              // $scope.list($scope.route, true);
             }
           });
         };

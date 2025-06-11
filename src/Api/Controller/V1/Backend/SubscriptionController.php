@@ -126,7 +126,7 @@ class SubscriptionController extends ApiController
         return new JsonResponse(['messages' => [[
             'id'      => '200',
             'type'    => 'success',
-            'message' => sprintf(_('Content saved successfully'))
+            'message' => sprintf(_('Import successfully'))
         ]]]);
     }
 
