@@ -227,6 +227,7 @@ class EventController extends FrontendController
                 );
             } elseif (empty($categorySlug) && $category = $this->matchCategory($type)) {
                 $changeCanonical = true;
+
                 $baseSql .= sprintf(
                     'join content_category on contents.pk_content = content_category.content_id '
                     . 'and content_category.category_id = %d ',
