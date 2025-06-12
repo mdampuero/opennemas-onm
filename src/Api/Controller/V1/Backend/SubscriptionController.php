@@ -81,7 +81,7 @@ class SubscriptionController extends ApiController
         array_shift($lines); // Remove Header
 
         // TODO: Hardcoded maxLines, maybe new setting on manager for this.
-        $maxLines       = 3000;
+        $maxLines       = 1000;
         $processedLines = 0;
 
         foreach ($lines as $line) {
