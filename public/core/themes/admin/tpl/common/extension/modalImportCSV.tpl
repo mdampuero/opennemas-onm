@@ -8,7 +8,7 @@
 
 <div class="modal-body">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12" ng-show="!loading">
       <div class="panel-heading">
           <h4 class="panel-title">
               <span class="badge" style="background: #337ab7; margin-right: 10px;">1</span>
@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <div class="col-md-12" ng-if="template.file && template.type === 2">
+    <div class="col-md-12" ng-show="!loading" ng-if="template.file && template.type === 2">
       <div class="panel-heading">
           <h4 class="panel-title">
               <span class="badge" style="background: #337ab7; margin-right: 10px;">2</span>
@@ -62,6 +62,22 @@
             <i class="fa fa-lightbulb-o"></i>
             {t}Hold Ctrl (Cmd on Mac) to select multiple lists{/t}
         </div>
+      </div>
+    </div>
+
+    <div class="col-md-12" ng-if="loading">
+      <div class="panel-heading">
+          <h4 class="panel-title">
+              <span class="badge" style="background: #337ab7; margin-right: 10px;">2</span>
+              {t}Import on process{/t}
+          </h4>
+      </div>
+
+      <div>
+        <div class="alert alert-info">
+           {t}Please wait: The import process is currently running. Do not close this window.{/t}
+        </div>
+        <p>{t}Once the process is complete, this window will close automatically.{/t}</p>
       </div>
     </div>
 </div>

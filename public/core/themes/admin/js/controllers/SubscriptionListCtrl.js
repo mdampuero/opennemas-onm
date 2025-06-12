@@ -88,7 +88,6 @@
               },
               success: function() {
                 return function(modal, template) {
-                  const loading = 1;
                   const reader  = new FileReader();
 
                   var route = {

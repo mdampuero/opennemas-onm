@@ -92,7 +92,7 @@
           var modal = $uibModal.open({
             templateUrl: 'modal-import',
             backdrop: 'static',
-            controller: 'ModalCtrl',
+            controller: 'SubscriberModalCtrl',
             resolve: {
               template: function() {
                 const cleanSubscriber = angular.copy(subscriber);
@@ -131,22 +131,17 @@
                   reader.onload = function() {
                     var content = reader.result;
 
-                    return http.put(route,
-                      {
-                        csv_file: content,
-                        newsletter: template.selectList
-                      }).then(function() {
-                      $scope.list();
+                    return http.put(route, {
+                      csv_file: content,
+                      newsletter: template.selectList
+                    }).then(function(response) {
+                      modal.close();
+                      messenger.post(response.data);
+                      $scope.init();
                     });
                   };
                 };
               }
-            }
-          });
-
-          modal.result.then(function(response) {
-            if (response.success) {
-              $scope.list();
             }
           });
         };
