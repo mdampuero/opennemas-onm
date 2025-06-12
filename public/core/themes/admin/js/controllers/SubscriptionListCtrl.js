@@ -57,6 +57,16 @@
           $scope.list();
         };
 
+        /**
+         * @function importSelected
+         * @memberOf SubscriptionListCtrl
+         *
+         * @description
+         *   Checks which newsletter lists have been selected and initiates the
+         *   import process for those selections.
+         *   If no items are selected, it shows an error message using the
+         *   messenger service.
+         */
         $scope.importSelected = function() {
           var selected = $scope.selected.items;
 
@@ -71,7 +81,18 @@
         };
 
         /**
+         * @function import
+         * @memberOf SubscriptionListCtrl
          *
+         * @description
+         *   Opens a modal to handle the import process for a given newsletter list.
+         *   The modal allows the user to upload a CSV file which is then read and sent
+         *   to the backend for processing. If the uploaded file is not a valid CSV, an
+         *   error message is shown. Upon successful import, the modal is closed and
+         *   the view is reinitialized.
+         *
+         * @param {Object} newsletter - The selected newsletter list object to
+         * import subscribers into.
          */
         $scope.import = function(newsletter) {
           var modal = $uibModal.open({
