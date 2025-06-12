@@ -116,11 +116,11 @@
               </div>
               <div class="form-group col-md-12">
                 <label class="form-label" for="name">{t}Objective{/t}</label>
-                <textarea name="prompt" id="prompt" ng-change="delayedPreview()" ng-model="item.prompt" class="form-control" rows="8" required maxlength="2048"></textarea>
+                <textarea name="prompt" id="prompt" ng-change="delayedPreview()" ng-model="item.prompt" class="form-control" rows="8" required ></textarea>
               </div>
               <div class="col-md-12">
                 <label class="form-label" for="name">{t}Final prompt preview{/t}</label>
-                <textarea name="preview" id="preview" readonly ng-model="preview" class="form-control" rows="18" required maxlength="2048"></textarea>
+                <textarea name="preview" id="preview" readonly ng-model="preview" class="form-control" rows="18" ></textarea>
               </div>
             </div>
           </div>

@@ -82,7 +82,7 @@
           {t}Prompt{/t}
         </label>
         <div class="controls">
-          <textarea name="prompt" id="prompt" ng-model="item.prompt" class="form-control" rows="5" maxlength="2048"></textarea>
+          <textarea name="prompt" id="prompt" ng-model="item.prompt" class="form-control" rows="5" maxlength="4096"></textarea>
         </div>
       </div>
     </div>
