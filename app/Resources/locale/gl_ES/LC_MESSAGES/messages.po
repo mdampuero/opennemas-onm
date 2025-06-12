@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-05 14:50+0000\n"
-"PO-Revision-Date: 2025-06-06 08:18+0200\n"
+"POT-Creation-Date: 2025-06-11 09:15+0000\n"
+"PO-Revision-Date: 2025-06-11 11:25+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -2850,6 +2850,9 @@ msgstr "Chave da API de Gemini"
 
 msgid "DeepSeek API Key"
 msgstr "Chave da API de DeppSeek"
+
+msgid "OpenRouter API Key"
+msgstr "Clave da API de OpenRouter"
 
 msgid "Improve your manager"
 msgstr "Mellora o teu xestor"
@@ -8123,14 +8126,14 @@ msgstr "Gemini"
 msgid "Gemini pricing"
 msgstr "Prezos de Gemini"
 
+msgid "OpenRouter"
+msgstr "OpenRouter"
+
 msgid "DeepSeek"
 msgstr "DeepSeek"
 
 msgid "DeepSeek Pricing"
 msgstr "Prezos de DeepSeek"
-
-msgid "Mistral AI"
-msgstr "Mistral AI"
 
 msgid "New prompt"
 msgstr "Nova prompt"
@@ -8892,17 +8895,8 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 msgid "Group name"
 msgstr "Nome do grupo"
 
-#, fuzzy
-#~ msgid "Time"
-#~ msgstr "Horario"
-
-#, fuzzy
-#~ msgid "OpenRouter API Key"
-#~ msgstr "Chave da API de OpenAI"
-
-#, fuzzy
-#~ msgid "OpenRouter"
-#~ msgstr "Abertas"
+#~ msgid "Mistral AI"
+#~ msgstr "Mistral AI"
 
 #~ msgid "Manual categories"
 #~ msgstr "Categorías manuais"

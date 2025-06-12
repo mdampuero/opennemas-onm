@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-05 14:50+0000\n"
-"PO-Revision-Date: 2025-06-06 08:16+0200\n"
+"POT-Creation-Date: 2025-06-11 09:15+0000\n"
+"PO-Revision-Date: 2025-06-11 11:27+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Euskera\n"
 "Language: es\n"
@@ -2845,6 +2845,9 @@ msgstr "Gemini API gakoa"
 msgid "DeepSeek API Key"
 msgstr "Deepseeek API gakoa"
 
+msgid "OpenRouter API Key"
+msgstr "OpenRouter API Gakoa"
+
 msgid "Improve your manager"
 msgstr "Hobetu zure kudeatzailea"
 
@@ -5342,7 +5345,7 @@ msgid "Choose main menu links color"
 msgstr "Aukeratu Menu nagusien esteken kolorea"
 
 msgid "Default contents"
-msgstr "Eduki lehenetsia"
+msgstr "Eduki lehenetsiak"
 
 msgid "Extract from body if needed"
 msgstr "Beharrezkoa bada, gorputzetik atera"
@@ -5360,10 +5363,10 @@ msgid "Display content's readtime"
 msgstr "Bistaratu edukien irakurketa"
 
 msgid "Tiny contents"
-msgstr "Eduki txikia"
+msgstr "Eduki gehiago"
 
 msgid "Over contents"
-msgstr "Gainjarritako edukia"
+msgstr "Eduki gehiago"
 
 msgid "Layout"
 msgstr "Diseinu"
@@ -8100,14 +8103,14 @@ msgstr "Gemini"
 msgid "Gemini pricing"
 msgstr "Gemini prezioak"
 
+msgid "OpenRouter"
+msgstr "OpenRouter"
+
 msgid "DeepSeek"
 msgstr "Deepseek"
 
 msgid "DeepSeek Pricing"
 msgstr "Deepseeket Prezioak"
-
-msgid "Mistral AI"
-msgstr "Mistral AI"
 
 msgid "New prompt"
 msgstr "Galdetu berria"
@@ -8874,17 +8877,8 @@ msgstr "Aukeratutako erabiltzaile taldeak ezabatu nahi dituzu?"
 msgid "Group name"
 msgstr "Taldearen izena"
 
-#, fuzzy
-#~ msgid "Time"
-#~ msgstr "Ordutegi"
-
-#, fuzzy
-#~ msgid "OpenRouter API Key"
-#~ msgstr "Ireki AI API gakoa"
-
-#, fuzzy
-#~ msgid "OpenRouter"
-#~ msgstr "Ireki"
+#~ msgid "Mistral AI"
+#~ msgstr "Mistral AI"
 
 #~ msgid "Manual categories"
 #~ msgstr "Eskuzko kategoriak"

@@ -166,7 +166,7 @@ EOT;
         'openai'    => 'Open AI',
         'gemini'    => 'Gemini',
         'deepseek'  => 'DeepSeek',
-        'mistralai' => 'Mistral AI',
+        'openrouter' => 'OpenRouter',
     ];
 
 
@@ -432,14 +432,19 @@ EOT;
         if ($instructions && count($instructions)) {
             $counter = 0;
 
-            $instructionsString = implode("\n", array_map(
-                function ($item) use (&$counter) {
-                    $counter++;
-                    $instruction = $this->getInstructionsById($item);
-                    return $counter . '. ' . $instruction['value'] ?? $item;
-                },
-                $instructions
-            ));
+            $mapped = array_map(function ($item) use (&$counter) {
+                $instruction = $this->getInstructionsById($item);
+                if (!($instruction['value'] ?? false)) {
+                    return null;
+                }
+                $counter++;
+                return $counter . '. ' . $instruction['value'];
+            }, $instructions);
+
+            $filtered = array_filter($mapped);
+            if (!empty($filtered)) {
+                $instructionsString = implode("\n", $filtered);
+            }
         }
 
         if ($instructionsString) {

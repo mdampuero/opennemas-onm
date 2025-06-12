@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-05 14:50+0000\n"
-"PO-Revision-Date: 2025-06-06 08:14+0200\n"
+"POT-Creation-Date: 2025-06-11 09:15+0000\n"
+"PO-Revision-Date: 2025-06-11 11:17+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Catalán\n"
 "Language: es\n"
@@ -2859,6 +2859,9 @@ msgstr "Clau de l'API Gemini"
 msgid "DeepSeek API Key"
 msgstr "Deepseek API Key"
 
+msgid "OpenRouter API Key"
+msgstr "Clau de l'API d'OpenRouter"
+
 msgid "Improve your manager"
 msgstr "Millora el teu gestor"
 
@@ -5369,7 +5372,7 @@ msgid "Choose main menu links color"
 msgstr "Trieu el color dels enllaços del menú principal"
 
 msgid "Default contents"
-msgstr "Contingut per defecte"
+msgstr "Contingut predeterminat"
 
 msgid "Extract from body if needed"
 msgstr "Extracte del cos si cal"
@@ -8162,14 +8165,14 @@ msgstr "Gemini"
 msgid "Gemini pricing"
 msgstr "Preu Gemini"
 
+msgid "OpenRouter"
+msgstr "OpenRouter"
+
 msgid "DeepSeek"
 msgstr "Deepseek"
 
 msgid "DeepSeek Pricing"
 msgstr "Preu de DeepSeek"
-
-msgid "Mistral AI"
-msgstr "Mistral ai"
 
 msgid "New prompt"
 msgstr "Novetat"
@@ -8940,17 +8943,8 @@ msgstr "Voleu suprimir els grups d'usuari seleccionats?"
 msgid "Group name"
 msgstr "Nom de grup"
 
-#, fuzzy
-#~ msgid "Time"
-#~ msgstr "Horari"
-
-#, fuzzy
-#~ msgid "OpenRouter API Key"
-#~ msgstr "Obrir AI API Key"
-
-#, fuzzy
-#~ msgid "OpenRouter"
-#~ msgstr "Obert"
+#~ msgid "Mistral AI"
+#~ msgstr "Mistral ai"
 
 #~ msgid "Manual categories"
 #~ msgstr "Categories manuals"

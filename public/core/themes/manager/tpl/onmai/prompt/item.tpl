@@ -164,6 +164,7 @@
             <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel m-t-5 p-t-15 bg-light">
               <div class="form-status text-left">
                 <span class="badge text-capitalize badge-primary pointer m-a-5"
+                      ng-if="instructionExists(id)"
                       uib-tooltip="{t}Remove{/t}" tooltip-placement="top"
                       ng-repeat="id in item.instructions"
                       ng-click="deselectInstruction(id)"

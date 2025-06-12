@@ -6,15 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opennemas master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-05 14:50+0000\n"
-"PO-Revision-Date: 2025-06-06 08:19+0200\n"
+"POT-Creation-Date: 2025-06-11 09:15+0000\n"
+"PO-Revision-Date: 2025-06-11 11:26+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Portuguese\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  opennemas_template_strings.pot  #-#-#-#-#\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 3.36.0\n"
 
@@ -2854,6 +2853,9 @@ msgstr "Chave da API de Gêmeos"
 msgid "DeepSeek API Key"
 msgstr "Chave Deepseek API"
 
+msgid "OpenRouter API Key"
+msgstr "Chave da API OpenRouter"
+
 msgid "Improve your manager"
 msgstr "Melhorar seu gerente"
 
@@ -5354,7 +5356,7 @@ msgid "Choose main menu links color"
 msgstr "Escolha o menu principal links de cor"
 
 msgid "Default contents"
-msgstr "Conteúdo Padrão"
+msgstr "Conteúdo padrão"
 
 msgid "Extract from body if needed"
 msgstr "Extrair do corpo se necessário"
@@ -5372,7 +5374,7 @@ msgid "Display content's readtime"
 msgstr "Exibir o tempo de leitura do conteúdo"
 
 msgid "Tiny contents"
-msgstr "Conteúdo Minúsculo"
+msgstr "Conteúdo pequeno"
 
 msgid "Over contents"
 msgstr "Conteúdo Over"
@@ -8129,14 +8131,14 @@ msgstr "Gêmeos"
 msgid "Gemini pricing"
 msgstr "Preços de Gêmeos"
 
+msgid "OpenRouter"
+msgstr "OpenRouter"
+
 msgid "DeepSeek"
 msgstr "Deepseek"
 
 msgid "DeepSeek Pricing"
 msgstr "Preço Deepseek"
-
-msgid "Mistral AI"
-msgstr "Ai Mistral"
 
 msgid "New prompt"
 msgstr "Novo prompt"
@@ -8905,17 +8907,8 @@ msgstr "Deseja excluir os grupos de usuários selecionados?"
 msgid "Group name"
 msgstr "Nome do grupo"
 
-#, fuzzy
-#~ msgid "Time"
-#~ msgstr "Cronograma"
-
-#, fuzzy
-#~ msgid "OpenRouter API Key"
-#~ msgstr "Chave da API da AI abrir"
-
-#, fuzzy
-#~ msgid "OpenRouter"
-#~ msgstr "Aberto"
+#~ msgid "Mistral AI"
+#~ msgstr "Ai Mistral"
 
 #~ msgid "Manual categories"
 #~ msgstr "Categorias manuais"
