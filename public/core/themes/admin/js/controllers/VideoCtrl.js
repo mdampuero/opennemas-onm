@@ -60,7 +60,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       endtime: null,
       thumbnail: null,
       title: '',
-      type: 'web-source',
+      type: 'upload',
       with_comment: 0,
       categories: [],
       related_contents: [],
@@ -153,7 +153,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         return;
       }
 
-      if (type === 'web-source' && ![ 'external', 'script' ].includes($scope.item.type)) {
+      if (type === 'web-source' && ![ 'external', 'script', 'upload' ].includes($scope.item.type)) {
         return;
       }
 
@@ -252,5 +252,33 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
       return data;
     };
+
+    /**
+     * @function getFileName
+     * @memberOf AttachmentCtrl
+     *
+     * @description
+     *   Returns the filename for a File or a string.
+     *
+     * @return {String} The filename.
+     */
+    $scope.getFileName = function() {
+      if (!$scope.item.path) {
+        return '';
+      }
+
+      if (angular.isObject($scope.item.path)) {
+        return $scope.item.path.name;
+      }
+
+      return $scope.item.path.replace(/.*\/([^/]+)/, '$1');
+    };
+
+    // Update path in original item when localized item changes
+    $scope.$watch('item.path', function(nv) {
+      if ($scope.data && $scope.data.item) {
+        $scope.data.item.path = nv;
+      }
+    });
   }
 ]);

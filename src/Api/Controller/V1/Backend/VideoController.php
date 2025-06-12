@@ -37,7 +37,7 @@ class VideoController extends ContentController
     /**
      * {@inheritdoc}
      */
-    protected $service = 'api.service.content';
+    protected $service = 'api.service.video';
 
     /**
      * Get the videos config.
@@ -55,6 +55,31 @@ class VideoController extends ContentController
             ->get('extraInfoContents.VIDEO_MANAGER');
 
         return new JsonResponse([ 'extra_fields' => $settings ]);
+    }
+
+    public function saveItemAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
+
+        $msg  = $this->get('core.messenger');
+        $data = $request->request->all();
+        $file = $request->files->get('path');
+
+        $response = new JsonResponse($msg->getMessages(), 500);
+        $item = $this->get($this->service)->createItem($data, $file);
+
+        $msg->add(_('Item saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+
+        if (!empty($this->getItemRoute)) {
+            $response->headers->set('Location', $this->generateUrl(
+                $this->getItemRoute,
+                [ 'id' => $this->getItemId($item) ]
+            ));
+        }
+
+        return $response;
     }
 
     /**

@@ -96,6 +96,16 @@ class Instance extends Entity
     }
 
     /**
+     * Returns the relative path for instance videos files.
+     *
+     * @return string The relative path for the instance media videos.
+     */
+    public function getVideosShortPath()
+    {
+        return $this->getMediaShortPath() . '/videos';
+    }
+
+    /**
      * Returns the relative path for instance photo files.
      *
      * @return string The relative path for photos.

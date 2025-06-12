@@ -103,8 +103,18 @@
     <div class="grid-body">
       <div ng-if="!item.pk_content" class="video-type-selector form-group">
         <div class="row">
-          <div class="col-sm-4">
-            <button ng-click="selectType('web-source')" ng-class="{ 'selected' : item.type !== 'script' && item.type !== 'external' }" class="clearfix btn btn-white video-type-selector-button">
+          <div class="col-sm-3">
+            <button ng-click="selectType('upload')" ng-class="{ 'selected' : item.type == 'upload'}" class="clearfix btn btn-white video-type-selector-button">
+              <div class="video-selector-icon">
+                <i class="fa fa-upload fa-3x"></i>
+              </div>
+              <div class="video-selector-text">
+                {t}Upload video file{/t}
+              </div>
+            </button>
+          </div>
+          <div class="col-sm-3">
+            <button ng-click="selectType('web-source')" ng-class="{ 'selected' : item.type == 'web-source' }" class="clearfix btn btn-white video-type-selector-button">
               <div class="video-selector-icon">
                 <i class="fa fa-youtube fa-3x"></i>
               </div>
@@ -113,7 +123,7 @@
               </div>
             </button>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <button ng-click="selectType('script')" ng-class="{ 'selected' : item.type == 'script' }" class="clearfix btn btn-white video-type-selector-button">
               <div class="video-selector-icon">
                 <i class="fa fa-file-code-o fa-3x"></i>
@@ -123,7 +133,7 @@
               </div>
             </button>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <button ng-click="selectType('external')" ng-class="{ 'selected' : item.type == 'external' }" class="clearfix btn btn-white video-type-selector-button">
               <div class="video-selector-icon">
                 <i class="fa fa-film fa-3x"></i>
@@ -135,7 +145,7 @@
           </div>
         </div>
       </div>
-      <span ng-if="item.type !== 'external' && item.type !== 'script'">
+      <span ng-if="item.type == 'web-source'">
         <div class="form-group">
           <label for="video_url" class="form-label">{t}Video URL{/t}</label>
           <div class="controls">
@@ -151,8 +161,47 @@
           </div>
         </div>
       </span>
-      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
+      <div class="row">
+        <div class="col-lg-4" ng-if="item.type === 'upload'">
+          <div class="row">
+            <div class="col-lg-12 col-lg-offset-0 col-sm-6 col-sm-offset-3">
+              <div class="p-b-30 p-l-30 p-r-30 p-t-35">
+                <div class="text-center">
+                  <i class="fa fa-file-o fa-3x" ng-if="item.path"></i>
+                  <i class="fa fa-warning fa-3x text-warning" ng-if="!item.path"></i>
+                  <p class="m-t-15 text-center">
+                    <strong ng-if="item.path" title="[% getFileName() %]">
+                      [% getFileName() %]
+                    </strong>
+                    <strong ng-if="!item.path">
+                      {t}No file selected{/t}
+                    </strong>
+                  </p>
+                </div>
+                <label class="btn btn-default btn-block m-t-15" for="file">
+                  <input class="hidden" id="file" name="file" file-model="item.path" type="file" accept="video/*" />
+                  <span ng-if="!item.path">
+                    <i class="fa fa-plus m-r-5"></i>
+                    {t}Add{/t}
+                  </span>
+                  <span ng-if="item.path">
+                    <i class="fa fa-edit m-r-5"></i>
+                    {t}Change{/t}
+                  </span>
+                </label>
+                <a class="btn btn-white btn-block m-t-15" ng-show="item.path && !item.path.name" ng-href="{$app.instance->getBaseUrl()}[% data.extra.paths.attachment +  item.path %]" target="_blank">
+                  <i class="fa fa-download m-r-5"></i>
+                  {t}Download{/t}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-class="{ 'col-lg-8': item.type == 'upload', 'col-lg-12': item.type != 'upload' }">
+          {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
+          {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
+        </div>
+      </div>
       <span ng-if="item.type === 'external'">
         <div class="form-group">
           <div class="controls">

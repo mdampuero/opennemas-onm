@@ -378,7 +378,7 @@ services:
 
     core.helper.video:
         class:      Common\Core\Component\Helper\VideoHelper
-        arguments:  [ '@core.helper.content', '@core.helper.related', '@core.template.admin', '@data.manager.filter' ]
+        arguments:  [ '@core.helper.content', '@core.helper.related', '@core.template.admin', '@data.manager.filter', '@core.loader.instance', '%core.paths.public%' ]
         public:     true
 
     core.helper.widget:
