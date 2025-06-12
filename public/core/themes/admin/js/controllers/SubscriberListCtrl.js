@@ -84,9 +84,17 @@
          * @memberOf SubscriberListCtrl
          *
          * @description
-         *  Open import modal for starting import process.
+         *   Opens a modal window to start the subscriber import process.
+         *   This process involves uploading a CSV file and selecting a newsletter list
+         *   to import the subscribers into. The CSV file is read on the client side
+         *   and then sent to the backend for processing. Appropriate validations are
+         *   performed to ensure the required data is provided.
          *
-         * @returns {Promise}
+         * @param {Object} subscriber - The subscriber data to be imported. It
+         * may include temporary selection keys that will be cleaned before sending.
+         *
+         * @returns {Promise} A promise that resolves when the import process is
+         * successfully completed and the modal is closed.
          */
         $scope.import = function(subscriber) {
           var modal = $uibModal.open({
