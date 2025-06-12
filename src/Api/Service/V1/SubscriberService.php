@@ -47,26 +47,6 @@ class SubscriberService extends UserService
     /**
      * {@inheritdoc}
      */
-    public function getSubscriber($email)
-    {
-        try {
-            if (empty($email)) {
-                throw new \InvalidArgumentException();
-            }
-
-            $oql = sprintf('email = %s and type != 0', $email);
-
-            return $this->container->get('orm.manager')
-                ->getRepository($this->entity, $this->origin)
-                ->findOneBy($oql);
-        } catch (\Exception $e) {
-            throw new GetItemException($e->getMessage(), $e->getCode());
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getOqlForList($oql)
     {
          // Force OQL to include type
