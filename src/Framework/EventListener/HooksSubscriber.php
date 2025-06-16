@@ -470,7 +470,6 @@ class HooksSubscriber implements EventSubscriberInterface
         $cache = $this->container->get('cache.connection.instance');
         $item  = $event->getArgument('item');
         $mh    = $this->container->get('core.helper.menu');
-
         $menus = $mh->getMenusbyCategory($item);
 
         foreach ($menus as $menu) {
