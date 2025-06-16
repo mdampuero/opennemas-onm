@@ -165,9 +165,9 @@ class MenuHelper
                 continue;
             }
 
-            // Extract all link_names from the menu items and normalize by trimming and lowercasing
+            // Extract all link_names from the menu items
             $menuItemNames = array_map(function ($item) {
-                return strtolower(trim($item['link_name']));
+                return $item['link_name'];
             }, $menu->menu_items);
 
             // Find intersection between menu item names and given item names
