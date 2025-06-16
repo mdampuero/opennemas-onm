@@ -146,30 +146,35 @@ class MenuHelper
      */
     public function getMenusbyCategory($items)
     {
-        $oql = '';
-
-        $menus = $this->container->get('api.service.menu')->getList($oql)['items'];
+        $menus = $this->container->get('api.service.menu')->getList('')['items'];
 
         if (!is_array($items)) {
             $items = [$items];
         }
 
-        $itemNames = array_map(function ($item) {
+        // Prepare a flipped array of item names for fast lookup
+        $itemNames = array_flip(array_map(function ($item) {
             return $item->name;
-        }, $items);
+        }, $items));
 
         $matchedMenus = [];
 
         foreach ($menus as $menu) {
+            // Skip menus without menu_items property
             if (!isset($menu->menu_items)) {
                 continue;
             }
 
-            foreach ($menu->menu_items as $menuItem) {
-                if (in_array($menuItem['link_name'], $itemNames)) {
-                    $matchedMenus[] = $menu->pk_menu;
-                    break;
-                }
+            // Extract all link_names from the menu items and normalize by trimming and lowercasing
+            $menuItemNames = array_map(function ($item) {
+                return strtolower(trim($item['link_name']));
+            }, $menu->menu_items);
+
+            // Find intersection between menu item names and given item names
+            $intersect = array_intersect($menuItemNames, array_keys($itemNames));
+
+            if (!empty($intersect)) {
+                $matchedMenus[] = $menu->pk_menu;
             }
         }
 

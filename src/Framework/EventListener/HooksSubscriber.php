@@ -477,6 +477,7 @@ class HooksSubscriber implements EventSubscriberInterface
             $cache->removeByPattern('menu-' . $menu . '-html*');
         }
     }
+
     /**
      * Removes the redis cache for the content listing widgets in frontpage.
      *
