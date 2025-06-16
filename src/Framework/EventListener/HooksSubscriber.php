@@ -230,7 +230,10 @@ class HooksSubscriber implements EventSubscriberInterface
             // Category Hooks
             'category.updateItem' => [
                 ['removeObjectCacheForMenuByCategory', 20],
-            ]
+            ],
+            'category.patchItem'  => [
+                [ 'removeObjectCacheForMenuByCategory', 20 ]
+            ],
         ];
     }
 
