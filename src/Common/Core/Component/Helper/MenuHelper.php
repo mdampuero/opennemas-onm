@@ -146,7 +146,9 @@ class MenuHelper
      */
     public function getMenusbyCategory($items)
     {
-        $menus = $this->container->get('api.service.menu')->getList('')['items'];
+        $oql = '';
+
+        $menus = $this->container->get('api.service.menu')->getList($oql)['items'];
 
         if (!is_array($items)) {
             $items = [$items];
