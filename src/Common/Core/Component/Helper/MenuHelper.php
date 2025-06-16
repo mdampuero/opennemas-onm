@@ -133,4 +133,46 @@ class MenuHelper
 
         return $menuItemObject;
     }
+
+    /**
+     * Retrieves the IDs of menus that include menu items linked to the given
+     * category or categories.
+     *
+     * This method queries all available menus and filters them by checking if
+     * their menu items match the names of the provided category items.
+     *
+     * @param object|object[] $items A category item or an array of category items.
+     * @return array An array of matching menu IDs (pk_menu).
+     */
+    public function getMenusbyCategory($items)
+    {
+        $oql = '';
+
+        $menus = $this->container->get('api.service.menu')->getList($oql)['items'];
+
+        if (!is_array($items)) {
+            $items = [$items];
+        }
+
+        $itemNames = array_map(function ($item) {
+            return $item->name;
+        }, $items);
+
+        $matchedMenus = [];
+
+        foreach ($menus as $menu) {
+            if (!isset($menu->menu_items)) {
+                continue;
+            }
+
+            foreach ($menu->menu_items as $menuItem) {
+                if (in_array($menuItem['link_name'], $itemNames)) {
+                    $matchedMenus[] = $menu->pk_menu;
+                    break;
+                }
+            }
+        }
+
+        return $matchedMenus;
+    }
 }
