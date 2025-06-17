@@ -295,16 +295,11 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     $scope.selectedFile = null;
     $scope.progress = -1;
     $scope.uploadComplete = false;
-
-    // Tamaño total en MB
     $scope.totalSizeMB = 0;
     $scope.uploadedSizeMB = 0;
     $scope.estimatedTimeRemaining = '--';
-
-    // Para medir tiempo
     $scope.uploadStartTime = 0;
 
-    // Genera un ID único por archivo
     $scope.generateFileId = function() {
       return 'file-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
     };
@@ -328,7 +323,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
     $scope.uploadInChunks = function() {
       const file = $scope.selectedFile;
-      const chunkSize = 2 * 1024 * 1024;
+      const chunkSize = 10 * 1024 * 1024;
       const totalChunks = Math.ceil(file.size / chunkSize);
       var currentChunk = 0;
       var uploadedBytes = 0;
