@@ -306,8 +306,8 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       const file = $scope.selectedFile;
       const chunkSize = 15 * 1024 * 1024;
       const totalChunks = Math.ceil(file.size / chunkSize);
-      let currentChunk = 0;
-      let uploadedBytes = 0;
+      var currentChunk = 0;
+      var uploadedBytes = 0;
 
       $scope.sendNextChunk = function() {
         const start = currentChunk * chunkSize;
