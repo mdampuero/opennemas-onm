@@ -179,7 +179,16 @@
                   </p>
                 </div>
                 <label class="btn btn-default btn-block m-t-15" for="file">
-                  <input class="hidden" id="file" name="file" file-model="item.path" type="file" accept="video/*" />
+                  {* <input class="hidden" id="file" name="file" file-model="item.path" type="file" accept="video/*" /> *}
+                  <input class="hidden" type="file" id="file" onchange="angular.element(this).scope().setFile(this.files)" />
+
+                  <div class="progress" ng-if="progress >= 0 && !uploadComplete && !uploadError" style="margin-top: 10px; height: 20px">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="[% progress %]"
+                        aria-valuemin="0" aria-valuemax="100"
+                        style="width: [% progress %]%;">
+                      [% progress %]%
+                    </div>
+                  </div>
                   <span ng-if="!item.path">
                     <i class="fa fa-plus m-r-5"></i>
                     {t}Add{/t}

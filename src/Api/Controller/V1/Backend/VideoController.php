@@ -65,7 +65,6 @@ class VideoController extends ContentController
         $data = $request->request->all();
         $file = $request->files->get('path');
 
-        $response = new JsonResponse($msg->getMessages(), 500);
         $item = $this->get($this->service)->createItem($data, $file);
 
         $msg->add(_('Item saved successfully'), 'success', 201);

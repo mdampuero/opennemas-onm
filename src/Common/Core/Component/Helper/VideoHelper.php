@@ -313,7 +313,6 @@ class VideoHelper extends FileHelper
     public function move(\SplFileInfo $file, string $target, bool $copy = false): void
     {
         $name      = basename($target);
-
         $directory = str_replace($name, '', $target);
 
         if ($copy) {
@@ -322,18 +321,6 @@ class VideoHelper extends FileHelper
         }
 
         $file->move($directory, $name);
-
-        /**
-         * Calls the console command to upload the file to the storage.
-         */
-        $process = new Process(
-            sprintf(
-                '/home/opennemas/current/bin/console app:core:storage --operation=upload --file=%s --destination=%s',
-                $target,
-                str_replace($this->publicDir, '', $target)
-            )
-        );
-        $process->start();
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Api\Service\V1;
 
 use Api\Exception\CreateItemException;
@@ -14,36 +16,49 @@ use Api\Exception\FileAlreadyExistsException;
 use Api\Exception\UpdateItemException;
 use Api\Exception\DeleteItemException;
 use Api\Exception\DeleteListException;
+use Symfony\Component\Process\Process;
 
 class VideoService extends ContentService
 {
 
-    /**
-     * {@inheritdoc}
-     */
-    public function createItem($data, $file = null)
-    {
-        if (empty($file)) {
-            throw new CreateItemException(_('No file provided'));
-        }
 
-        try {
-            $fh   = $this->container->get('core.helper.video');
-            $path = $fh->generatePath($file, new \DateTime($data['created'] ?? null));
+    // public function createItem($data, $file = null)
+    // {
+    //     if (empty($file)) {
+    //         throw new CreateItemException(_('No file provided'));
+    //     }
 
-            if ($fh->exists($path)) {
-                throw new FileAlreadyExistsException(_('A file with the same name has already been uploaded today'));
-            }
+    //     try {
+    //         $fh           = $this->container->get('core.helper.video');
+    //         $instance     = $this->container->get('core.instance');
+    //         $path         = $fh->generatePath($file, new \DateTime($data['created'] ?? null), $data);
+    //         $data['path'] = '/' . $fh->getRelativePath($path);
 
-            $data['path'] = '/' . $fh->getRelativePath($path);
+    //         $data['information'] = [
+    //             'source' => [
+    //                 $fh->getExtension($file) => $instance->getVideosShortPath() . '/' . $fh->getRelativePath($path)
+    //             ]
+    //         ];
+    //         $fh->move($file, $path);
+    //         $item = parent::createItem($data);
 
-            $fh->move($file, $path);
+    //         $process = new Process(
+    //             sprintf(
+    //                 '/home/opennemas/current/bin/console %s --operation=%s --file=%s --destination=%s --item=%s',
+    //                 'app:core:storage',
+    //                 'upload',
+    //                 $path,
+    //                 $instance->getVideosShortPath() . '/' . $fh->getRelativePath($path),
+    //                 $item->pk_content
+    //             )
+    //         );
+    //         $process->start();
 
-            return parent::createItem($data);
-        } catch (\Exception $e) {
-            throw new CreateItemException($e->getMessage(), $e->getCode());
-        }
-    }
+    //         return $item;
+    //     } catch (\Exception $e) {
+    //         throw new CreateItemException($e->getMessage(), $e->getCode());
+    //     }
+    // }
 
     /**
      * {@inheritdoc}
@@ -102,7 +117,7 @@ class VideoService extends ContentService
 
         $items   = [];
         $deleted = array_map(function ($a) {
-                return $a->pk_content;
+            return $a->pk_content;
         }, $response['items']);
 
         $related = $this->getRelatedContents(implode(',', $deleted));

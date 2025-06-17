@@ -2,8 +2,8 @@
  * Handle actions for video inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$scope', '$timeout', '$window', 'http', 'messenger', 'related', 'routing', 'translator',
-  function($controller, $scope, $timeout, $window, http, messenger, related, routing, translator) {
+  '$controller', '$scope', '$timeout', '$window', 'http', 'messenger', 'related', 'routing', 'translator', '$http',
+  function($controller, $scope, $timeout, $window, http, messenger, related, routing, translator, $http) {
     'use strict';
 
     // Initialize the super class and extend it.
@@ -110,11 +110,11 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      */
     $scope.routes = {
       createItem: 'api_v1_backend_video_create_item',
-      getItem:    'api_v1_backend_video_get_item',
-      list:       'backend_videos_list',
-      public:     'frontend_video_show',
-      redirect:   'backend_video_show',
-      saveItem:   'api_v1_backend_video_save_item',
+      getItem: 'api_v1_backend_video_get_item',
+      list: 'backend_videos_list',
+      public: 'frontend_video_show',
+      redirect: 'backend_video_show',
+      saveItem: 'api_v1_backend_video_save_item',
       updateItem: 'api_v1_backend_video_update_item'
     };
 
@@ -153,16 +153,16 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         return;
       }
 
-      if (type === 'web-source' && ![ 'external', 'script', 'upload' ].includes($scope.item.type)) {
+      if (type === 'web-source' && !['external', 'script', 'upload'].includes($scope.item.type)) {
         return;
       }
 
       $scope.defaultItem.type = type;
-      $scope.item             = angular.copy($scope.defaultItem);
-      $scope.data.item        = angular.copy($scope.defaultItem);
+      $scope.item = angular.copy($scope.defaultItem);
+      $scope.data.item = angular.copy($scope.defaultItem);
 
       $scope.featuredFrontpage = null;
-      $scope.featuredInner     = null;
+      $scope.featuredInner = null;
 
       $scope.localize($scope.data.item, 'item', true);
     };
@@ -176,7 +176,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      */
     $scope.getVideoData = function() {
       var route = {
-        name:   'api_v1_backend_video_get_info',
+        name: 'api_v1_backend_video_get_info',
         params: { url: $scope.item.path }
       };
 
@@ -191,7 +191,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
           }
 
           $scope.flags.http.fetch_video_info = false;
-          $scope.flags.generate.slug         = true;
+          $scope.flags.generate.slug = true;
 
           $scope.item.type = $scope.item.information.service;
         },
@@ -280,5 +280,80 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.data.item.path = nv;
       }
     });
+
+    $scope.selectedFile = null;
+    $scope.progress = -1;
+    $scope.uploadComplete = false;
+    $scope.uploadError = false;
+
+    // Genera un ID único por archivo
+    $scope.generateFileId = function() {
+      return 'file-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
+    };
+
+    // Se llama al cambiar el input file
+    $scope.setFile = function(files) {
+      $scope.selectedFile = files[0];
+      $scope.fileId = $scope.generateFileId();
+      $scope.progress = 0;
+      $scope.uploadComplete = false;
+      $scope.uploadError = false;
+      $scope.$apply();
+      $scope.uploadInChunks();
+    };
+
+    $scope.uploadInChunks = function() {
+      const file = $scope.selectedFile;
+      const chunkSize = 15 * 1024 * 1024;
+      const totalChunks = Math.ceil(file.size / chunkSize);
+      let currentChunk = 0;
+      let uploadedBytes = 0;
+
+      $scope.sendNextChunk = function() {
+        const start = currentChunk * chunkSize;
+        const end = Math.min(file.size, start + chunkSize);
+        const chunk = file.slice(start, end);
+
+        const formData = new FormData();
+
+        formData.append('chunk', chunk);
+        formData.append('chunkNumber', currentChunk);
+        formData.append('totalChunks', totalChunks);
+        formData.append('fileName', file.name);
+        formData.append('fileId', $scope.fileId);
+        formData.append('fileType', 'video');
+
+        // No actualizar aquí, actualizamos cuando se recibe el .then()
+
+        $http.post(routing.generate('api_v1_backend_storage_upload_chunk'), formData, {
+          // eslint-disable-next-line no-undefined
+          headers: { 'Content-Type': undefined },
+          transformRequest: angular.identity
+        }).then(function(response) {
+          // ✅ Sumamos bytes enviados
+          uploadedBytes += end - start;
+          $scope.progress = Math.floor(uploadedBytes / file.size * 100);
+          $scope.$applyAsync();
+
+          currentChunk++;
+
+          if (currentChunk < totalChunks) {
+            $scope.sendNextChunk();
+          } else {
+            if (response.data.status === 'done') {
+              $scope.progress = 100;
+              $scope.uploadComplete = true;
+              $scope.filePath = response.data.filePath;
+            }
+            $scope.$applyAsync();
+          }
+        }, function(error) {
+          //console.error('Error subiendo chunk:', error);
+          $scope.uploadError = true;
+          $scope.$applyAsync();
+        });
+      };
+      $scope.sendNextChunk();
+    };
   }
 ]);

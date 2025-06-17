@@ -54,6 +54,12 @@ class StorageCommand extends ContainerAwareCommand
                 InputOption::VALUE_REQUIRED,
                 ''
             )
+            ->addOption(
+                'item',
+                null,
+                InputOption::VALUE_REQUIRED,
+                ''
+            )
             ->setHelp('');
     }
 
@@ -71,6 +77,7 @@ class StorageCommand extends ContainerAwareCommand
         $file        = $input->getOption('file');
         $path        = $input->getOption('path');
         $destination = $input->getOption('destination', '');
+        $item        = $input->getOption('item');
 
         if (!$operation) {
             $output->writeln('<fg=red;options=bold>FAIL - </> The --operation parameter is required');
@@ -112,7 +119,14 @@ class StorageCommand extends ContainerAwareCommand
 
                 $path   = ($destination) ? $destination : basename($localFile);
                 $result = $storage->upload($path, file_get_contents($localFile), ['visibility' => 'public']);
+
                 $this->logResult('Upload ', $result);
+
+                if ($item) {
+                    $this->updateItemInformationSource($item, [
+                        'mp4' => $config['endpoint'] . '/' . $config['bucket'] . $path
+                    ]);
+                }
                 break;
 
             case 'read':
@@ -158,6 +172,24 @@ class StorageCommand extends ContainerAwareCommand
         ));
 
         return 0;
+    }
+
+    private function updateItemInformationSource(string $itemPK, array $source): void
+    {
+        $instance = $this->getContainer()->get('orm.manager')
+            ->getRepository('Instance')->find(1);
+        $this->getContainer()->get('core.loader')->configureInstance($instance);
+        $this->getContainer()->get('core.security')->setInstance($instance);
+        $sc   = $this->getContainer()->get('api.service.content');
+        $item = $sc->getItem($itemPK);
+        if ($item) {
+            $sc->updateItem($itemPK, [
+                'information' => [
+                    'source' => $source
+                ]
+            ]);
+            $this->logResult('Update InformationSource Item# ' . $itemPK, true);
+        }
     }
 
     private function logResult(string $operation, bool $success, string $extra = ''): void
