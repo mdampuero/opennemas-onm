@@ -162,55 +162,48 @@
         </div>
       </span>
       <div class="row">
-        <div class="col-lg-4" ng-if="item.type === 'upload'">
-          <div class="row">
-            <div class="col-lg-12 col-lg-offset-0 col-sm-6 col-sm-offset-3">
-              <div class="p-b-30 p-l-30 p-r-30 p-t-35">
-                <div class="text-center">
-                  <i class="fa fa-file-o fa-3x" ng-if="item.path"></i>
-                  <i class="fa fa-warning fa-3x text-warning" ng-if="!item.path"></i>
-                  <p class="m-t-15 text-center">
-                    <strong ng-if="item.path" title="[% getFileName() %]">
-                      [% getFileName() %]
-                    </strong>
-                    <strong ng-if="!item.path">
-                      {t}No file selected{/t}
-                    </strong>
-                  </p>
+        <div class="col-lg-12" ng-if="item.type === 'upload'">
+          <div class="m-t-15 m-b-30">
+            <div class="text-center">
+              <i class="fa fa-file-o fa-3x" ng-if="item.path"></i>
+              <i class="fa fa-warning fa-3x text-warning" ng-if="!item.path"></i>
+              <p class="m-t-15 text-center">
+                <strong ng-if="item.path" title="[% getFileName() %]">
+                  [% getFileName() %]
+                </strong>
+                <strong ng-if="!item.path">
+                  {t}No file selected{/t}
+                </strong>
+              </p>
+            </div>
+            <label class="btn btn-default btn-block m-t-15" for="file">
+              <input class="hidden" type="file" id="file" onchange="angular.element(this).scope().setFile(this.files)" />
+              <span ng-if="!item.path">
+                <i class="fa fa-plus m-r-5"></i>
+                {t}Add{/t}
+              </span>
+            </label>
+            <div class="m-t-15 m-b-30" ng-if="progress >= 0 && !uploadComplete && !uploadError">
+              <div class="progress" style="margin-top: 10px; height: 20px">
+                <div class="progress-bar" role="progressbar" aria-valuenow="[% progress %]"
+                    aria-valuemin="0" aria-valuemax="100"
+                    style="width: [% progress %]%; transition: none !important; -webkit-transition: none !important;">
+                  <b>[% progress %]%</b>
                 </div>
-                <label class="btn btn-default btn-block m-t-15" for="file">
-                  {* <input class="hidden" id="file" name="file" file-model="item.path" type="file" accept="video/*" /> *}
-                  <input class="hidden" type="file" id="file" onchange="angular.element(this).scope().setFile(this.files)" />
-
-                  <div class="progress" ng-if="progress >= 0 && !uploadComplete && !uploadError" style="margin-top: 10px; height: 20px">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="[% progress %]"
-                        aria-valuemin="0" aria-valuemax="100"
-                        style="width: [% progress %]%;">
-                      [% progress %]%
-                    </div>
-                  </div>
-                  <span ng-if="!item.path">
-                    <i class="fa fa-plus m-r-5"></i>
-                    {t}Add{/t}
-                  </span>
-                  <span ng-if="item.path">
-                    <i class="fa fa-edit m-r-5"></i>
-                    {t}Change{/t}
-                  </span>
-                </label>
-                <a class="btn btn-white btn-block m-t-15" ng-show="item.path && !item.path.name" ng-href="{$app.instance->getBaseUrl()}[% data.extra.paths.attachment +  item.path %]" target="_blank">
-                  <i class="fa fa-download m-r-5"></i>
-                  {t}Download{/t}
-                </a>
+              </div>
+              <div class="text-center">
+                <p>{t}Uploading{/t} <b>[% uploadedSizeMB %] {t}to{/t} [% totalSizeMB %] MB</b> ({t}Estimated time remaining:{/t} <b>[% estimatedTimeRemaining %]</b>)</p>
               </div>
             </div>
+            <a class="btn btn-white btn-block m-t-15" ng-show="item.path && !item.path.name" ng-href="{$app.instance->getBaseUrl()}[% data.extra.paths.attachment +  item.path %]" target="_blank">
+              <i class="fa fa-download m-r-5"></i>
+              {t}Download{/t}
+            </a>
           </div>
         </div>
-        <div ng-class="{ 'col-lg-8': item.type == 'upload', 'col-lg-12': item.type != 'upload' }">
-          {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-          {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
-        </div>
       </div>
+      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
+      {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
       <span ng-if="item.type === 'external'">
         <div class="form-group">
           <div class="controls">

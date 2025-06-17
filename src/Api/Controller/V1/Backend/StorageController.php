@@ -28,7 +28,7 @@ class StorageController extends Controller
 
         // Save the chunk
         $chunk->move($uploadDir, $chunkNumber);
-
+        //sleep(1);
         // Check if this is the last chunk
         if ((int) $chunkNumber + 1 == (int) $totalChunks) {
             // Reconstruct the file from chunks

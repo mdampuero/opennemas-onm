@@ -281,10 +281,28 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       }
     });
 
+    $scope.formatSeconds = function(seconds) {
+      if (!isFinite(seconds) || seconds < 0) {
+        return '--';
+      }
+      seconds = Math.round(seconds);
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+
+      return minutes + ':' + (remainingSeconds < 10 ? '0' : '') + remainingSeconds + ' min';
+    };
+
     $scope.selectedFile = null;
     $scope.progress = -1;
     $scope.uploadComplete = false;
-    $scope.uploadError = false;
+
+    // Tamaño total en MB
+    $scope.totalSizeMB = 0;
+    $scope.uploadedSizeMB = 0;
+    $scope.estimatedTimeRemaining = '--';
+
+    // Para medir tiempo
+    $scope.uploadStartTime = 0;
 
     // Genera un ID único por archivo
     $scope.generateFileId = function() {
@@ -297,14 +315,20 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       $scope.fileId = $scope.generateFileId();
       $scope.progress = 0;
       $scope.uploadComplete = false;
-      $scope.uploadError = false;
+
+      $scope.totalSizeMB = ($scope.selectedFile.size / (1024 * 1024)).toFixed(2);
+      $scope.uploadedSizeMB = 0;
+      $scope.estimatedTimeRemaining = '--';
+
+      $scope.uploadStartTime = Date.now();
+
       $scope.$apply();
       $scope.uploadInChunks();
     };
 
     $scope.uploadInChunks = function() {
       const file = $scope.selectedFile;
-      const chunkSize = 5 * 1024 * 1024;
+      const chunkSize = 2 * 1024 * 1024;
       const totalChunks = Math.ceil(file.size / chunkSize);
       var currentChunk = 0;
       var uploadedBytes = 0;
@@ -323,16 +347,32 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         formData.append('fileId', $scope.fileId);
         formData.append('fileType', 'video');
 
-        // No actualizar aquí, actualizamos cuando se recibe el .then()
-
         $http.post(routing.generate('api_v1_backend_storage_upload_chunk'), formData, {
           // eslint-disable-next-line no-undefined
           headers: { 'Content-Type': undefined },
           transformRequest: angular.identity
         }).then(function(response) {
-          // ✅ Sumamos bytes enviados
           uploadedBytes += end - start;
           $scope.progress = Math.floor(uploadedBytes / file.size * 100);
+
+          // Actualizamos MB subidos
+          $scope.uploadedSizeMB = (uploadedBytes / (1024 * 1024)).toFixed(2);
+
+          // Calcular tiempo transcurrido en segundos
+          const elapsedSeconds = (Date.now() - $scope.uploadStartTime) / 1000;
+
+          // Bytes por segundo
+          const uploadSpeed = uploadedBytes / elapsedSeconds;
+
+          // Bytes restantes
+          const remainingBytes = file.size - uploadedBytes;
+
+          // Estimación de tiempo restante en segundos
+          const estimatedRemainingSeconds = remainingBytes / uploadSpeed;
+
+          // Convertimos a formato amigable (mm:ss)
+          $scope.estimatedTimeRemaining = $scope.formatSeconds(estimatedRemainingSeconds);
+
           $scope.$applyAsync();
 
           currentChunk++;
@@ -348,8 +388,6 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
             $scope.$applyAsync();
           }
         }, function(error) {
-          //console.error('Error subiendo chunk:', error);
-          $scope.uploadError = true;
           $scope.$applyAsync();
         });
       };
