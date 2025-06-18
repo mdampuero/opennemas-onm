@@ -116,7 +116,7 @@ class JsonController extends FrontendController
 
             // Create a DateTime object for event dates and use extended ISO 8601 format
             $start = $item->event_start_date . ' ' . $item->event_start_hour ?? '00:00';
-            $end   = $item->event_start_date . ' ' . $item->event_start_hour ?? '00:00';
+            $end   = $item->event_end_date . ' ' . $item->event_end_hour ?? '00:00';
 
             $startDate = new \DateTime($start, new \DateTimeZone('Europe/Madrid'));
             $endDate   = new \DateTime($end, new \DateTimeZone('Europe/Madrid'));
