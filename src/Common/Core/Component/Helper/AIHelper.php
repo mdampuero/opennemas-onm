@@ -754,13 +754,15 @@ EOT;
             ];
 
             $settings['messages'] = [['role' => 'user', 'content' => $this->replaceVars([
-                'objetivo' => $data[$promptKey]['prompt'] ?? '',
-                'mode'     => 'Edit',
+                'objetivo'      => $data[$promptKey]['prompt'] ?? '',
+                'mode'          => 'Edit',
                 'instrucciones' => $this->getInstructionsList($data[$promptKey]['instructions'] ?? []),
-                'rol' => $this->getRoleByName($data[$promptKey]['role']) ?? '',
-                'idioma' => !empty($data['language']) ? $data['language'] : 'El mismo idioma del texto original',
-                'fuente' => $data[$field] ?? '',
-                'tono' => ($tone) ? $this->getToneByName($tone) : 'Debes mantener el tono del texto original'
+                'rol'           => $this->getRoleByName($data[$promptKey]['role']) ?? '',
+                'idioma'        => !empty($data['language'])
+                    ? $data['language']
+                    : 'Mantén el idioma del texto original',
+                'fuente'        => $data[$field] ?? '',
+                'tono'          => ($tone) ? $this->getToneByName($tone) : 'Mantén el tono del texto original'
             ])]];
 
             // Log the selected prompt details for debugging purposes.
