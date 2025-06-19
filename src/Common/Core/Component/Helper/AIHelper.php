@@ -118,7 +118,8 @@ class AIHelper
 {{instrucciones}}
 
 ### IDIOMA:
-El idioma de la respuesta debe ser "{{idioma}}". Responde estrictamente usando este idioma yas convenciones culturales.
+El idioma de la respuesta debe ser "{{idioma}}". Responde estrictamente usando este idioma
+siguiendo sus convenciones culturales.
 
 ### TEXTO ORIGINAL:
 {{fuente}}
@@ -744,25 +745,6 @@ EOT;
                 continue;
             }
 
-            $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $prompt);
-            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n" . $data[$field] . "\n";
-
-            $instructions = [
-                ['value' => 'Responde directamente con el texto transformado.']
-            ];
-
-            $instructions[] = !empty($tone)
-                ? ['value' => "Adopta un tono " . $tone . " en la transformación."]
-                : ['value' => "Debes mantener el tono del texto original."];
-
-            if (!empty($data['language'])) {
-                $instructions[] = [
-                    'value' => "La respuesta debe ser en el idioma " . $data['language'] . "."
-                ];
-            }
-
-            $this->insertInstructions($instructions);
-
             $dataLog = [
                 'field'    => $field,
                 'tone'     => $tone,
@@ -771,7 +753,17 @@ EOT;
                 'prompt'   => $prompt ?? '',
             ];
 
-            $settings['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
+            $settings['messages'] = [['role' => 'user', 'content' => $this->replaceVars([
+                'objetivo'      => $data[$promptKey]['prompt'] ?? '',
+                'mode'          => 'Edit',
+                'instrucciones' => $this->getInstructionsList($data[$promptKey]['instructions'] ?? []),
+                'rol'           => $this->getRoleByName($data[$promptKey]['role']) ?? '',
+                'idioma'        => !empty($data['language'])
+                    ? $data['language']
+                    : 'Mantén el idioma del texto original',
+                'fuente'        => $data[$field] ?? '',
+                'tono'          => ($tone) ? $this->getToneByName($tone) : 'Mantén el tono del texto original'
+            ])]];
 
             // Log the selected prompt details for debugging purposes.
             $this->container->get('core.helper.' . $settings['engine'])->setDataLog($dataLog);
