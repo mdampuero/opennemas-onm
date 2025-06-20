@@ -101,16 +101,25 @@ class SynchronizeCommand extends Command
                 continue;
             }
 
-            // Skip instance if locked (synchronizing)
+            // Skip instance if locked (synchronizing + importing)
             $isLocked = $this->getContainer()->get('news_agency.service.synchronizer')
                 ->setInstance($instance)
                 ->isLocked();
 
             if ($isLocked) {
+                $output->writeln(sprintf(
+                    '- <fg=yellow;options=bold>SKIPPED (%s)</>',
+                    $instance->internal_name
+                ));
                 continue;
             }
 
             $j = 1;
+
+            // Lock instance while synchronizing and importing
+            $this->getContainer()->get('news_agency.service.synchronizer')
+                ->setInstance($instance)
+                ->lockSync();
 
             foreach ($servers as $server) {
                 $output->writeln(str_pad(sprintf(
@@ -214,6 +223,11 @@ class SynchronizeCommand extends Command
 
                 $j++;
             }
+
+            // Unlock when finished
+            $this->getContainer()->get('news_agency.service.synchronizer')
+                ->setInstance($instance)
+                ->unlockSync();
         }
 
         $this->end();
