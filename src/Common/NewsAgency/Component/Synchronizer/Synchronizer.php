@@ -511,7 +511,7 @@ class Synchronizer
     /**
      * Sets up the environment for a new synchronization.
      */
-    protected function setupSyncEnvironment() : void
+    public function setupSyncEnvironment() : void
     {
         if (!$this->fs->exists($this->syncPath)) {
             $this->fs->mkdir($this->syncPath);

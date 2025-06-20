@@ -117,6 +117,7 @@ class SynchronizeCommand extends Command
             $j = 1;
 
             // Lock instance while synchronizing and importing
+            $this->getContainer()->get('news_agency.service.synchronizer')->setupSyncEnvironment();
             $this->getContainer()->get('news_agency.service.synchronizer')
                 ->setInstance($instance)
                 ->lockSync();
