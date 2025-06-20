@@ -134,7 +134,7 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $synchronizer = $this->getMockBuilder('Common\NewsAgency\Component\Synchronizer\Synchronizer')
             ->disableOriginalConstructor()
             ->setMethods([
-                'emptyServer', 'isSyncEnvironmentReady', 'lockSync', 'unlockSync'
+                'emptyServer', 'isSyncEnvironmentReady'
             ])->getMock();
 
         $synchronizer->expects($this->once())->method('isSyncEnvironmentReady')
@@ -151,7 +151,7 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $synchronizer = $this->getMockBuilder('Common\NewsAgency\Component\Synchronizer\Synchronizer')
             ->disableOriginalConstructor()
             ->setMethods([
-                'emptyServer', 'isSyncEnvironmentReady', 'lockSync', 'unlockSync'
+                'emptyServer', 'isSyncEnvironmentReady'
             ])->getMock();
 
         $serverA = [ 'id' => 22398 ];
@@ -159,12 +159,10 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
 
         $synchronizer->expects($this->once())->method('isSyncEnvironmentReady')
             ->willReturn(true);
-        $synchronizer->expects($this->once())->method('lockSync');
-        $synchronizer->expects($this->at(2))->method('emptyServer')
+        $synchronizer->expects($this->at(1))->method('emptyServer')
             ->with($serverA);
-        $synchronizer->expects($this->at(3))->method('emptyServer')
+        $synchronizer->expects($this->at(2))->method('emptyServer')
             ->with($serverB);
-        $synchronizer->expects($this->once())->method('unlockSync');
 
         $synchronizer->empty([ $serverA, $serverB ]);
     }
@@ -178,15 +176,13 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
 
         $synchronizer = $this->getMockBuilder('Common\NewsAgency\Component\Synchronizer\Synchronizer')
             ->disableOriginalConstructor()
-            ->setMethods([ 'emptyServer', 'isSyncEnvironmentReady', 'lockSync', 'unlockSync' ])
+            ->setMethods([ 'emptyServer', 'isSyncEnvironmentReady' ])
             ->getMock();
 
         $synchronizer->expects($this->once())->method('isSyncEnvironmentReady')
             ->willReturn(true);
-        $synchronizer->expects($this->once())->method('lockSync');
         $synchronizer->expects($this->once())->method('emptyServer')
             ->with($server);
-        $synchronizer->expects($this->once())->method('unlockSync');
 
         $synchronizer->empty($server);
     }
@@ -279,18 +275,15 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $synchronizer = $this->getMockBuilder('Common\NewsAgency\Component\Synchronizer\Synchronizer')
             ->disableOriginalConstructor()
             ->setMethods([
-                'isSyncEnvironmentReady', 'lockSync', 'unlockSync',
-                'setupSyncEnvironment', 'updateServer', 'updateSyncFile'
+                'isSyncEnvironmentReady', 'setupSyncEnvironment', 'updateServer', 'updateSyncFile'
             ])->getMock();
 
         $synchronizer->expects($this->once())->method('isSyncEnvironmentReady')
             ->willReturn(false);
         $synchronizer->expects($this->once())->method('setupSyncEnvironment');
-        $synchronizer->expects($this->once())->method('lockSync');
         $synchronizer->expects($this->once())->method('updateServer')
             ->with($serverB);
         $synchronizer->expects($this->once())->method('updateSyncFile');
-        $synchronizer->expects($this->once())->method('unlockSync');
 
         $this->assertEquals($synchronizer, $synchronizer->synchronize([ $serverA, $serverB ]));
     }
@@ -305,18 +298,15 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $synchronizer = $this->getMockBuilder('Common\NewsAgency\Component\Synchronizer\Synchronizer')
             ->disableOriginalConstructor()
             ->setMethods([
-                'isSyncEnvironmentReady', 'lockSync', 'unlockSync',
-                'setupSyncEnvironment', 'updateServer', 'updateSyncFile'
+                'isSyncEnvironmentReady', 'setupSyncEnvironment', 'updateServer', 'updateSyncFile'
             ])->getMock();
 
         $synchronizer->expects($this->once())->method('isSyncEnvironmentReady')
             ->willReturn(false);
         $synchronizer->expects($this->once())->method('setupSyncEnvironment');
-        $synchronizer->expects($this->once())->method('lockSync');
         $synchronizer->expects($this->once())->method('updateServer')
             ->with($server);
         $synchronizer->expects($this->once())->method('updateSyncFile');
-        $synchronizer->expects($this->once())->method('unlockSync');
 
         $this->assertEquals($synchronizer, $synchronizer->synchronize($server));
     }
@@ -332,20 +322,17 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         $synchronizer = $this->getMockBuilder('Common\NewsAgency\Component\Synchronizer\Synchronizer')
             ->disableOriginalConstructor()
             ->setMethods([
-                'isSyncEnvironmentReady', 'lockSync', 'unlockSync',
-                'setupSyncEnvironment', 'updateServer', 'updateSyncFile'
+                'isSyncEnvironmentReady', 'setupSyncEnvironment', 'updateServer', 'updateSyncFile'
             ])->getMock();
 
         $synchronizer->expects($this->once())->method('isSyncEnvironmentReady')
             ->willReturn(false);
         $synchronizer->expects($this->once())->method('setupSyncEnvironment');
-        $synchronizer->expects($this->once())->method('lockSync');
         $synchronizer->expects($this->once())->method('updateServer')
             ->with($server)
             ->willThrowException(new Exception());
         $synchronizer->expects($this->once())->method('updateSyncFile')
             ->willThrowException(new Exception());
-        $synchronizer->expects($this->once())->method('unlockSync');
 
         $this->assertEquals($synchronizer, $synchronizer->synchronize($server));
     }
