@@ -29,6 +29,11 @@ class NotificationEndpoint extends Endpoint
                 . $this->replaceUriWildCards($this->config['actions']['send_notification']['path'], $params);
 
             $data          = $params['data'] ?? [];
+            $logParams     = $params;
+
+            // Remove image and icon from log parameters to avoid logging sensitive data
+            unset($logParams['data']['image'], $logParams['data']['icon']);
+
             $requestParams = [ 'headers' => $this->auth->getAuthHeaders() ];
             if (!empty($data)) {
                 //Webpushr service needs 'json' field and sendpulse use the standard 'form_params'
@@ -49,8 +54,8 @@ class NotificationEndpoint extends Endpoint
             }
         } catch (\Exception $e) {
             getService('application.log')
-                ->error('Error sending the notification to server [ ' . $e->getMessage() . ' ] params : '
-                . json_encode($params));
+                ->error('Error sending the notification to server [ ' . $e->getMessage() . ' ] params: '
+                . substr(json_encode($logParams), 0, 1000));
             throw new WebPushException('webpush.notification.send.failure: ' . $e->getMessage());
         }
         return $body;
