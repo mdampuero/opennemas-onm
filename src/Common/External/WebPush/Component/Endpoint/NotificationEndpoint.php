@@ -28,8 +28,8 @@ class NotificationEndpoint extends Endpoint
             $url = $this->url
                 . $this->replaceUriWildCards($this->config['actions']['send_notification']['path'], $params);
 
-            $data          = $params['data'] ?? [];
-            $logParams     = $params;
+            $data      = $params['data'] ?? [];
+            $logParams = $params ?? [];
 
             // Remove image and icon from log parameters to avoid logging sensitive data
             unset($logParams['data']['image'], $logParams['data']['icon']);
