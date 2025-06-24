@@ -228,6 +228,24 @@ class SendpulseHelper
             // Ensure the extension is lowercase
             $extension = strtolower(pathinfo($image->path, PATHINFO_EXTENSION));
 
+            if ($extension === 'webp') {
+                $basePath = $this->container->getParameter('core.paths.public')
+                    . $this->container->get('core.instance')->getMediaShortPath() . DS;
+
+                $processor = $this->container->get('core.image.processor')
+                    ->open($basePath . $image->path)
+                    ->forceFormat('jpeg');
+
+                $content = $processor->getRawContent();
+
+                $name = pathinfo($image->path, PATHINFO_FILENAME);
+
+                $data['image'] = [
+                    'name' => $name . '.jpg',
+                    'data' => base64_encode($content),
+                ];
+            }
+
             // Check if the extension is in the available image types
             if (in_array($extension, $this->availableImageType)) {
                 // Get image content and base64 encode
