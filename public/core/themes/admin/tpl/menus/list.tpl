@@ -66,4 +66,7 @@
   <script type="text/ng-template" id="modal-batch-remove-permanently">
     {include file="common/modals/_modalBatchDelete.tpl"}
   </script>
+  <script type="text/ng-template" id="modal-duplicate">
+    {include file="common/extension/modal.duplicate.tpl"}
+  </script>
 {/block}
