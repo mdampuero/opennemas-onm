@@ -45,6 +45,7 @@
           deleteList: 'api_v1_backend_letter_delete_list',
           deleteItem: 'api_v1_backend_letter_delete_item',
           public:     'frontend_letter_show',
+          saveItem:   'api_v1_backend_letter_save_item',
         };
 
         /**
