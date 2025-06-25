@@ -108,4 +108,7 @@
   <script type="text/ng-template" id="modal-delete">
     {include file="common/extension/modal.trash.tpl"}
   </script>
+  <script type="text/ng-template" id="modal-duplicate">
+    {include file="common/extension/modal.duplicate.tpl"}
+  </script>
 {/block}
