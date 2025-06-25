@@ -43,6 +43,7 @@
           patchItem:  'api_v1_backend_poll_patch_item',
           patchList:  'api_v1_backend_poll_patch_list',
           public:     'frontend_poll_show',
+          saveItem:   'api_v1_backend_poll_save_item'
         };
 
         /**
