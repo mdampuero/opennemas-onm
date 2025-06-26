@@ -59,6 +59,39 @@
               </label>
             </div>
           </div>
+          <div class="form-group" ng-if="config.hide_current_events">
+            <div>
+              <label class="control-label">
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                {t}Time period to hide ongoing events{/t}
+              </label>
+              <ui-select ng-init="month = [
+                { name: '{t}Select period...{/t}', value: null },
+                { name: '{t}1 Month{/t}', value: 1 },
+                { name: '{t}3 Months{/t}', value: 3 },
+                { name: '{t}6 Months{/t}', value: 6 },
+                { name: '{t}12 Months{/t}', value: 12 }
+              ]" ng-model="config.hide_events_month" theme="select2" class="form-control">
+                <ui-select-match>
+                  <span ng-show="!$select.selected">
+                    <i class="fa fa-calendar-o text-muted"></i>
+                    {t}Select period...{/t}
+                  </span>
+                  <span ng-show="$select.selected">
+                    <i class="fa fa-check text-success"></i>
+                    <strong>[% $select.selected.name %]</strong>
+                  </span>
+                </ui-select-match>
+                <ui-select-choices repeat="item.value as item in month | filter: { name: $select.search }">
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
+                </ui-select-choices>
+              </ui-select>
+              <small class="help-block text-muted">
+                <i class="fa fa-info-circle"></i>
+                {t}This option will hide events that start or end before the current date plus the selected period.{/t}
+              </small>
+            </div>
+          </div>
         </div>
       </div>
     </div>
