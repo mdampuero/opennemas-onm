@@ -78,7 +78,7 @@
                     {t}Select period...{/t}
                   </span>
                   <span ng-show="$select.selected">
-                    <i class="fa fa-check text-success"></i>
+                    <i ng-if="$select.selected.value" class="fa fa-check text-success"></i>
                     <strong>[% $select.selected.name %]</strong>
                   </span>
                 </ui-select-match>
