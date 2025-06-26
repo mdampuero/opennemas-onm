@@ -54,7 +54,8 @@
           getList:    'api_v1_backend_obituary_get_list',
           patchItem:  'api_v1_backend_obituary_patch_item',
           patchList:  'api_v1_backend_obituary_patch_list',
-          public:     'frontend_obituary_show'
+          public:     'frontend_obituary_show',
+          saveItem:   'api_v1_backend_obituary_save_item'
         };
 
         /**

@@ -66,7 +66,15 @@
       <i class="fa fa-pencil"></i>
     </a>
   {/acl}
-  <a class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
+  {acl isAllowed="LETTER_ADMIN"}
+  <button class="btn btn-white btn-small" ng-click="createCopy(item)" type="button" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available" uib-tooltip="{t}Duplicate{/t}" tooltip-placement="top">
+    <i class="fa fa-copy"></i>
+  </button>
+  {/acl}
+  <a ng-if="item.slug" class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
+    <i class="fa fa-external-link"></i>
+  </a>
+  <a ng-if="!item.slug" class="btn btn-white btn-small" disabled>
     <i class="fa fa-external-link"></i>
   </a>
   {acl isAllowed="LETTER_DELETE"}
