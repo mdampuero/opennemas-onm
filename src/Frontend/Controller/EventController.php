@@ -11,6 +11,7 @@ namespace Frontend\Controller;
 
 use Api\Exception\GetItemException;
 use Api\Exception\GetListException;
+use DateTime;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -259,9 +260,14 @@ class EventController extends FrontendController
         );
 
         if ($settings["hide_current_events"] ?? false) {
+            $months = $settings["hide_events_month"] ?? 1;
+
+            // Calculate the date to hide events
+            $hideDate = (new DateTime($eventDate))->modify("-$months months")->format('Y-m-d');
+
             $baseSql .= sprintf(
                 'and (start_date_meta.meta_value >= "%s") ',
-                $eventDate
+                $hideDate
             );
         }
 
