@@ -71,8 +71,9 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iValidation=true iTitle="{t}Title{/t}"}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=30 required=true imagepicker=true}
+      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iValidation=true iTitle="{t}Title{/t}"
+      AI=true AIFieldType="titles"}
+      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=30 required=true imagepicker=true AI=true AIFieldType="bodies"}
     </div>
   </div>
 {/block}
@@ -86,5 +87,8 @@
   </script>
   <script type="text/ng-template" id="modal-expansible-fields">
     {include file="common/modals/_modalExpansibleFields.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-onmai">
+    {include file="common/modals/_modalOnmAI.tpl"}
   </script>
 {/block}

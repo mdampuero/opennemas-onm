@@ -68,7 +68,7 @@
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      {include file="ui/component/input/text.tpl" iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
+      {include file="ui/component/input/text.tpl" iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true AI=true AIFieldType="titles"}
       <div class="row">
         <div class="form-group col-md-6">
           {include file="ui/component/input/text.tpl" iCounter=false iField="author" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Author{/t}" iValidation=true}
@@ -77,7 +77,7 @@
           {include file="ui/component/input/text.tpl" iCounter=false iField="email" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Email{/t}" iValidation=true}
         </div>
       </div>
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standar" rows=15}
+      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standar" rows=15 AI=true AIFieldType="bodies"}
     </div>
   </div>
 {/block}
@@ -88,5 +88,8 @@
   </script>
   <script type="text/ng-template" id="modal-expansible-fields">
     {include file="common/modals/_modalExpansibleFields.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-onmai">
+    {include file="common/modals/_modalOnmAI.tpl"}
   </script>
 {/block}
