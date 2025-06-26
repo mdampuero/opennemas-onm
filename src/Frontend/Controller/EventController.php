@@ -260,7 +260,10 @@ class EventController extends FrontendController
         );
 
         if ($settings["hide_current_events"] ?? false) {
-            $months = $settings["hide_events_month"] ?? 1;
+            $months = empty(!$settings['hide_events_month'])
+                ? $settings['hide_events_month']
+                : 0;
+
 
             // Calculate the date to hide events
             $hideDate = (new DateTime($eventDate))->modify("-$months months")->format('Y-m-d');
