@@ -228,28 +228,21 @@ class SendpulseHelper
             // Ensure the extension is lowercase
             $extension = strtolower(pathinfo($image->path, PATHINFO_EXTENSION));
 
-            // Check if the extension is in the available image types
-            if (in_array($extension, $this->availableImageType)) {
-                // Get image content and base64 encode
-                $imageContent  = file_get_contents($basePath . $image->path);
-                $data['image'] = [
-                    'name' => basename($image->path),
-                    'data' => base64_encode($imageContent)
-                ];
-            }
+            // Get image content and base64 encode
+            $imageContent  = file_get_contents($basePath . $image->path);
+            $data['image'] = [
+                'name' => basename($image->path),
+                'data' => base64_encode($imageContent)
+            ];
 
             // If the image is not an avaliable image type
             if (!in_array($extension, $this->availableImageType)) {
-                $basePath = $this->container->getParameter('core.paths.public')
-                    . $this->container->get('core.instance')->getMediaShortPath() . DS;
-
                 // Open the image and convert it to jpeg
-                $processor = $this->container->get('core.image.processor')
+                $content = $this->container->get('core.image.processor')
                     ->open($basePath . $image->path)
-                    ->forceFormat('jpeg');
+                    ->forceFormat('jpeg')
+                    ->getRawContent();
 
-                // Get the raw content of the image
-                $content = $processor->getRawContent();
                 // Get the name of the image without extension
                 $name = pathinfo($image->path, PATHINFO_FILENAME);
 
