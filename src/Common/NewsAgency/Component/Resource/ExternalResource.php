@@ -64,6 +64,13 @@ class ExternalResource
     public $content_type_name = '';
 
     /**
+     * The content status: Canceled | Usable | Pending | Withheld.
+     *
+     * @var string
+     */
+    public $status;
+
+    /**
      * The resource id.
      *
      * @var string

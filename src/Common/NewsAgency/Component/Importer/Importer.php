@@ -165,7 +165,7 @@ class Importer
         $data = $this->getData($resource, $data);
 
         // Import contents as draft enabled
-        if ($this->isDraftImportEnabled()) {
+        if ($this->isDraftImportEnabled() || $resource->status === 'Withheld') {
             $data['content_status'] = 0;
         }
 
