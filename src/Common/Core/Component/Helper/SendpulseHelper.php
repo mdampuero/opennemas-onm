@@ -238,9 +238,8 @@ class SendpulseHelper
                 ];
             }
 
-            // If the image is a webp, convert it to jpeg
-            // as sendpulse does not support webp images
-            if ($extension === 'webp') {
+            // If the image is not an avaliable image type
+            if (!in_array($extension, $this->availableImageType)) {
                 $basePath = $this->container->getParameter('core.paths.public')
                     . $this->container->get('core.instance')->getMediaShortPath() . DS;
 
