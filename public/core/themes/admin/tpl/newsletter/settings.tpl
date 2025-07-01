@@ -174,7 +174,15 @@
             {t}Text to add to the newsletter footer{/t}
           </label>
           <div class="controls">
-            <textarea class="form-control" id="newsletter_footer" name="newsletter_footer" ng-model="settings.newsletter_footer" onm-editor onm-editor-preset="simple"></textarea>
+            <textarea class="form-control" id="newsletter_footer" name="newsletter_footer" ng-model="settings.newsletter_footer" onm-editor onm-editor-preset="standard"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="newsletter_footer_subscriber">
+            {t}Text for subscribers to add to the newsletter footer {/t}
+          </label>
+          <div class="controls">
+            <textarea class="form-control" id="newsletter_footer_subscriber" name="newsletter_footer_subscriber" ng-model="settings.newsletter_footer_subscriber" onm-editor onm-editor-preset="simple"></textarea>
           </div>
         </div>
         {if $app.security->hasPermission('MASTER')}
