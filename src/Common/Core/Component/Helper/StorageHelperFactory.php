@@ -10,6 +10,7 @@ class StorageHelperFactory
 {
     private $logApp;
     private $logError;
+    private $s3Client;
 
     public function __construct($logApp, $logError)
     {
@@ -19,7 +20,7 @@ class StorageHelperFactory
 
     public function create(array $config): StorageHelper
     {
-        $client = new S3Client([
+        $this->s3Client = new S3Client([
             'credentials'             => [
                 'key'    => $config['key'],
                 'secret' => $config['secret'],
@@ -30,9 +31,14 @@ class StorageHelperFactory
             'use_path_style_endpoint' => $config['path_style'] ?? false,
         ]);
 
-        $adapter    = new AwsS3Adapter($client, $config['bucket']);
+        $adapter    = new AwsS3Adapter($this->s3Client, $config['bucket']);
         $filesystem = new Filesystem($adapter);
 
         return new StorageHelper($filesystem, $this->logApp, $this->logError);
+    }
+
+    public function getS3Client(): S3Client
+    {
+        return $this->s3Client;
     }
 }

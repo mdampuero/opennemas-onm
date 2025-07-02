@@ -5,6 +5,7 @@ namespace Api\Controller\V1\Backend;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Process\Process;
 
 class StorageController extends Controller
 {
@@ -45,8 +46,8 @@ class StorageController extends Controller
             fclose($output);
 
             // Create a SplFileInfo object for the reconstructed file
-            $file = new \SplFileInfo($tempFilePath);
-
+            $file     = new \SplFileInfo($tempFilePath);
+            $fileSize = $file->getSize();
             // Get path and filename
             $finalPath = $helper->generatePath($file, new \DateTime());
 
@@ -66,6 +67,13 @@ class StorageController extends Controller
             return new JsonResponse([
                 'status'   => 'done',
                 'fileName' => $file->getFilename(),
+                'step' => [
+                    'label' => 'Compressing',
+                    'styleClass' => 'warning',
+                    'progress' => '0%'
+                ],
+                'fileSize'      => $fileSize,
+                'fileSizeMB'    => round($fileSize / 1048576, 2),
                 'finalPath' => $finalPath,
                 'relativePath' => $instance->getVideosShortPath() . '/' . $helper->getRelativePath($finalPath),
             ]);
@@ -73,5 +81,44 @@ class StorageController extends Controller
 
         // Uploading chunk
         return new JsonResponse(['status' => 'uploading']);
+    }
+
+    public function processAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
+        $pk_content = $request->request->get('pk_content');
+        $service    = $this->get('api.service.content');
+        $item       = $service->getItem($pk_content);
+
+        $step = $item->information['step'] ?? [];
+        $stepProgress = intval(rtrim($step['progress'], '%'));
+
+        if ($step['label'] === 'Compressing' && $stepProgress == 0) {
+            $process = new Process(
+                sprintf(
+                    '/home/opennemas/current/bin/console %s --item=%s',
+                    'app:core:ffmpeg',
+                    $item->pk_content
+                )
+            );
+            $process->start();
+        }
+
+        if ($step['label'] === 'Uploading to S3' && $stepProgress == 0) {
+            $process = new Process(
+                sprintf(
+                    '/home/opennemas/current/bin/console %s --operation=%s --item=%s',
+                    'app:core:storage',
+                    'uploadByItem',
+                    $item->pk_content
+                )
+            );
+            $process->start();
+        }
+        // Uploading chunk
+        return new JsonResponse([
+            'item' => $service->responsify($item),
+            'step' => $step
+        ]);
     }
 }

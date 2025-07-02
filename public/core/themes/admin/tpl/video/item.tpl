@@ -40,7 +40,7 @@
         </a>
       </li>
       <li class="quicklinks">
-        <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving || (item.pk_content == undefined && item.type === 'upload')" type="button">
           <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
           {t}Save{/t}
         </button>
@@ -161,49 +161,69 @@
           </div>
         </div>
       </span>
+      <ng-container ng-if="item.type !== 'upload' || item.pk_content">
+        {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
+        {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
+      </ng-container>
       <div class="row">
         <div class="col-lg-12" ng-if="item.type === 'upload'">
-          <div class="m-t-15 m-b-30">
-            <div class="text-center">
-              <i class="fa fa-file-o fa-3x" ng-if="item.path"></i>
-              <i class="fa fa-warning fa-3x text-warning" ng-if="!item.path"></i>
-              <p class="m-t-15 text-center">
-                <strong ng-if="item.path" title="[% getFileName() %]">
-                  [% getFileName() %]
-                </strong>
-                <strong ng-if="!item.path">
-                  {t}No file selected{/t}
-                </strong>
-              </p>
-            </div>
-            <label class="btn btn-default btn-block m-t-15" for="file">
-              <input class="hidden" type="file" id="file" onchange="angular.element(this).scope().setFile(this.files)" />
-              <span ng-if="!item.path">
-                <i class="fa fa-plus m-r-5"></i>
-                {t}Add{/t}
-              </span>
-            </label>
-            <div class="m-t-15 m-b-30" ng-if="progress >= 0 && !uploadComplete && !uploadError">
-              <div class="progress" style="margin-top: 10px; height: 20px">
-                <div class="progress-bar" role="progressbar" aria-valuenow="[% progress %]"
-                    aria-valuemin="0" aria-valuemax="100"
-                    style="width: [% progress %]%; transition: none !important; -webkit-transition: none !important;">
-                  <b>[% progress %]%</b>
+          <div class="m-t-0 m-b-30" ng-if="!item.pk_content">
+            <div class="upload-dropzone"
+                ng-class="{ 'dragover': isDragOver }"
+                ng-click="triggerFileInput()"
+                ng-drop="true"
+
+                ondragover="angular.element(this).scope().onDragOver(event)"
+                ondragleave="angular.element(this).scope().onDragLeave(event)"
+                ondrop="angular.element(this).scope().onDrop(event)"
+                >
+                <div class="text-center">
+                  <i class="fa fa-file-o fa-3x" ng-if="item.path"></i>
+                  <i class="fa fa-folder-open fa-3x text-warning" ng-if="uploading === -1"></i>
+                  <i class="fa fa-cloud-upload fa-3x text-info" ng-if="uploading === 0"></i>
+                  <i class="fa fa-check-circle fa-3x text-success" ng-if="uploading === 1"></i>
+                </div>
+              <p><strong>Haz clic o arrastra un archivo aquí</strong></p>
+              <input type="file" id="fileInput" style="display: none"  onchange="angular.element(this).scope().setFile(this.files)">
+              <div class="m-t-15 m-b-30" ng-if="progress >= 0 && !uploadComplete && !uploadError">
+                <div class="progress" style="margin-top: 10px; height: 20px">
+                  <div class="progress-bar" role="progressbar" aria-valuenow="[% progress %]"
+                      aria-valuemin="0" aria-valuemax="100"
+                      style="width: [% progress %]%; transition: none !important; -webkit-transition: none !important;">
+                    <b>[% progress %]%</b>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <p>{t}Uploading{/t} <b>[% uploadedSizeMB %] {t}to{/t} [% totalSizeMB %] MB</b> ({t}Estimated time remaining:{/t} <b>[% estimatedTimeRemaining %]</b>)</p>
                 </div>
               </div>
-              <div class="text-center">
-                <p>{t}Uploading{/t} <b>[% uploadedSizeMB %] {t}to{/t} [% totalSizeMB %] MB</b> ({t}Estimated time remaining:{/t} <b>[% estimatedTimeRemaining %]</b>)</p>
-              </div>
             </div>
-            <a class="btn btn-white btn-block m-t-15" ng-show="item.path && !item.path.name" ng-href="{$app.instance->getBaseUrl()}[% data.extra.paths.attachment +  item.path %]" target="_blank">
-              <i class="fa fa-download m-r-5"></i>
-              {t}Download{/t}
-            </a>
+          </div>
+          <div class="m-t-0 m-b-30" ng-if="item.pk_content">
+            <div class="upload-file-list">
+              <div class="file-item">
+                <div class="file-info">
+                  <i class="fa fa-video-camera fa-lg text-[% item.information.step.styleClass %]"></i>
+                  <span class="file-name">[% item.information.fileName %]</span>
+
+                  <input type="hidden" ng-model="item.path" class="form-control" />
+                  <span class="file-size">[% item.information.fileSizeMB %] MB</span>
+                </div>
+                <span class="badge badge-[% item.information.step.styleClass %]">
+                  [% item.information.step.label %] [% item.information.step.progress %]
+                </span>
+              </div>
+              <ng-container ng-if="item.path">
+                <p class="m-t-20">
+                  <a href="[% item.path %]" download  target="_blank" >
+                    <small>[% item.path %]</small>
+                  </a>
+                </p>
+              </ng-container>
+            </div>
           </div>
         </div>
       </div>
-      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
       <span ng-if="item.type === 'external'">
         <div class="form-group">
           <div class="controls">

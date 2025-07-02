@@ -2,22 +2,19 @@
  * Handle actions for video inner form.
  */
 angular.module('BackendApp.controllers').controller('VideoCtrl', [
-  '$controller', '$scope', '$timeout', '$window', 'http', 'messenger', 'related', 'routing', 'translator', '$http',
-  function($controller, $scope, $timeout, $window, http, messenger, related, routing, translator, $http) {
+  '$controller', '$scope', '$timeout', '$window', 'http', 'messenger', 'related', 'routing', 'translator', '$http', '$interval',
+  function($controller, $scope, $timeout, $window, http, messenger, related, routing, translator, $http, $interval) {
     'use strict';
 
     // Initialize the super class and extend it.
     $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
-    /**
-     * @inheritdoc
-     */
-    $scope.draftEnabled = true;
+    $scope.intervalPromise = null;
 
     /**
      * @inheritdoc
      */
-    $scope.draftKey = 'video-draft';
+    $scope.draftEnabled = false;
 
     /**
      * @inheritdoc
@@ -122,8 +119,17 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @inheritdoc
      */
     $scope.buildScope = function() {
+      $scope.selectedFile = null;
+      $scope.progress = -1;
+      $scope.uploadComplete = false;
+      $scope.totalSizeMB = 0;
+      $scope.uploadedSizeMB = 0;
+      $scope.estimatedTimeRemaining = '--';
+      $scope.uploadStartTime = 0;
+      $scope.fileId = '';
       $scope.localize($scope.data.item, 'item', true);
       $scope.expandFields();
+
       // Check if item is new (created) or existing for use default value or not
       if (!$scope.data.item.pk_content) {
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
@@ -131,14 +137,53 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
       $scope.data.item = $scope.parseData($scope.data.item, false);
 
-      if ($scope.draftKey !== null && $scope.data.item.pk_content) {
-        $scope.draftKey = 'video-' + $scope.data.item.pk_content + '-draft';
-      }
-
       $scope.checkDraft();
       related.init($scope);
       related.watch();
       translator.init($scope);
+
+      if ($scope.data.item.pk_content && !$scope.data.item.path && $scope.data.item.type === 'upload') {
+        $scope.process();
+        $scope.intervalPromise = $interval($scope.fetchStatus, 2500);
+      }
+    };
+
+    $scope.fetchStatus = function() {
+      var route = {
+        name: 'api_v1_backend_video_get_item',
+        params: { id: $scope.item.pk_content }
+      };
+
+      http.get(route).then(
+        function(response) {
+          $scope.item.information = response.data.item.information || {};
+          if ($scope.item.information.step.progress === '0%') {
+            $scope.process();
+          }
+          if ($scope.item.information.step.label === 'Completed') {
+            $scope.item.path = response.data.item.path || '';
+            $interval.cancel($scope.intervalPromise);
+          }
+        }
+        // function(response) {
+
+        // }
+      );
+    };
+
+    $scope.process = function() {
+      var route = {
+        name: 'api_v1_backend_storage_process'
+      };
+
+      http.post(route, { pk_content: $scope.item.pk_content }).then(
+        function(response) {
+          //console.log(response);
+        }
+        // function(response) {
+
+        // }
+      );
     };
 
     /**
@@ -275,9 +320,9 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     };
 
     // Update path in original item when localized item changes
-    $scope.$watch('item.path', function(nv) {
-      if ($scope.data && $scope.data.item) {
-        $scope.data.item.path = nv;
+    $scope.$watch('item.type', function(nv) {
+      if (nv === 'upload') {
+        $scope.uploading = -1;
       }
     });
 
@@ -292,13 +337,34 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       return minutes + ':' + (remainingSeconds < 10 ? '0' : '') + remainingSeconds + ' min';
     };
 
-    $scope.selectedFile = null;
-    $scope.progress = -1;
-    $scope.uploadComplete = false;
-    $scope.totalSizeMB = 0;
-    $scope.uploadedSizeMB = 0;
-    $scope.estimatedTimeRemaining = '--';
-    $scope.uploadStartTime = 0;
+    $scope.isDragOver = false;
+
+    $scope.triggerFileInput = function() {
+      document.getElementById('fileInput').click();
+    };
+
+    $scope.onDragOver = function(event) {
+      event.preventDefault();
+      $scope.isDragOver = true;
+      $scope.$apply();
+    };
+
+    $scope.onDragLeave = function(event) {
+      event.preventDefault();
+      $scope.isDragOver = false;
+      $scope.$apply();
+    };
+
+    $scope.onDrop = function(event) {
+      event.preventDefault();
+      $scope.isDragOver = false;
+
+      const files = event.dataTransfer.files;
+
+      if (files.length > 0) {
+        $scope.setFile(files);
+      }
+    };
 
     $scope.generateFileId = function() {
       return 'file-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
@@ -309,6 +375,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       $scope.selectedFile = files[0];
       $scope.fileId = $scope.generateFileId();
       $scope.progress = 0;
+      $scope.uploading = 0;
       $scope.uploadComplete = false;
 
       $scope.totalSizeMB = ($scope.selectedFile.size / (1024 * 1024)).toFixed(2);
@@ -376,9 +443,20 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
             $scope.sendNextChunk();
           } else {
             if (response.data.status === 'done') {
+              $scope.flags.http.saving = true;
               $scope.progress = 100;
+              $scope.uploading = 1;
               $scope.uploadComplete = true;
               $scope.filePath = response.data.filePath;
+              $scope.item.information = response.data;
+              $scope.item.title = response.data.fileName;
+
+              $scope.getSlug($scope.item.title, function(response) {
+                $scope.item.slug = response.data.slug;
+                $scope.flags.generate.slug = false;
+                $scope.flags.block.slug = true;
+                $scope.saveWithoutValidate();
+              });
             }
             $scope.$applyAsync();
           }
@@ -387,6 +465,35 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         });
       };
       $scope.sendNextChunk();
+
+      $scope.saveWithoutValidate = function() {
+        var route = { name: $scope.routes.saveItem };
+        var successCb = function(response) {
+          $scope.disableFlags('http');
+
+          if ($scope.routes.redirect && response.status === 201) {
+            var id = response.headers().location
+              .substring(response.headers().location.lastIndexOf('/') + 1);
+
+            $window.location.href =
+              routing.generate($scope.routes.redirect, { id: id });
+          }
+
+          if (response.status === 200 && $scope.refreshOnUpdate) {
+            $timeout(function() {
+              $scope.getItem($scope.getItemId());
+            }, 500);
+          }
+
+          messenger.post(response.data);
+        };
+
+        http.post(route, $scope.item).then(successCb, $scope.errorCb);
+      };
+
+      $scope.$on('$destroy', function() {
+        $interval.cancel($scope.intervalPromise);
+      });
     };
   }
 ]);
