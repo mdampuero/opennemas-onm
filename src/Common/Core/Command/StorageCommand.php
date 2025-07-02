@@ -166,15 +166,12 @@ class StorageCommand extends ContainerAwareCommand
                 $localFile = $itemObject->information['finalPath'] ?? null;
                 $path      = $itemObject->information['relativePath'] ?? null;
                 $path = $itemObject->information['relativePath'] ?? null;
-                // if ($path !== null && str_starts_with($path, '/')) {
-                //     $path = substr($path, 1);
-                // }
-
 
                 if (!$localFile || !file_exists($localFile)) {
                     $output->writeln('<fg=red;options=bold>FAIL - </> Local file does not exist');
                     return 1;
                 }
+
                 if (!$path) {
                     $output->writeln('<fg=red;options=bold>FAIL - </> Relative path is not set in item');
                     return 1;

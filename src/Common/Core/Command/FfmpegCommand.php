@@ -120,7 +120,7 @@ class FfmpegCommand extends ContainerAwareCommand
         $this->getContainer()->get('application.log')->info("Input: $inputFile, Output: $outputFile");
 
         $ffmpegCommand = sprintf(
-            '/usr/bin/ffmpeg -i %s -vf %s -c:v libx265 -crf %d -progress pipe:1 -nostats %s',
+            '/usr/bin/ffmpeg -i %s -vf %s -c:v libx264 -crf %d -progress pipe:1 -nostats %s',
             escapeshellarg($inputFile),
             escapeshellarg('scale=' . $scale),
             $crf,
@@ -131,6 +131,22 @@ class FfmpegCommand extends ContainerAwareCommand
         $process->setTimeout(null);
 
         $lastPrintedPct = -5;
+
+
+
+
+        // $itemObject = $this->getItem($item);
+        // $instance = $this->getContainer()->get('orm.manager')
+        //     ->getRepository('Instance')->find(1);
+        // $this->getContainer()->get('core.loader')->configureInstance($instance);
+        // $this->getContainer()->get('core.security')->setInstance($instance);
+        // $sc                                = $this->getContainer()->get('api.service.content');
+        // $information                       = $item->information;
+        // $information['status']      = 'working';
+        // $sc->updateItem($item->pk_content, [
+        //     'information' => $information
+        // ]);
+
 
         $process->run(function ($type, $buffer) use ($durationMs, $item, &$lastPrintedPct, $output) {
             foreach (explode("\n", $buffer) as $line) {
@@ -175,26 +191,26 @@ class FfmpegCommand extends ContainerAwareCommand
             date('Y-m-d H:i:s')
         ));
 
-        // Eliminar el archivo original
-        // if (!unlink($inputFile)) {
-        //     $output->writeln('<fg=red>WARNING - Could not delete original file: ' . $inputFile . '</>');
-        //     $this->getContainer()->get('application.log')->warning("Could not delete original file: $inputFile");
-        // } else {
-        //     $output->writeln('<fg=yellow>Original file deleted: ' . $inputFile . '</>');
-        // }
+        //Eliminar el archivo original
+        if (!unlink($inputFile)) {
+            $output->writeln('<fg=red>WARNING - Could not delete original file: ' . $inputFile . '</>');
+            $this->getContainer()->get('application.log')->warning("Could not delete original file: $inputFile");
+        } else {
+            $output->writeln('<fg=yellow>Original file deleted: ' . $inputFile . '</>');
+        }
 
-        // // Renombrar el archivo comprimido con el nombre del original
-        // if (!rename($outputFile, $inputFile)) {
-        //     $output->writeln('<fg=red>WARNING - Could not rename output file to original name</>');
-        //     $this->getContainer()->get('application.log')->warning("Could not rename $outputFile to $inputFile");
-        // } else {
-        //     $output->writeln('<fg=yellow>Output file renamed to original name: ' . $inputFile . '</>');
+        // Renombrar el archivo comprimido con el nombre del original
+        if (!rename($outputFile, $inputFile)) {
+            $output->writeln('<fg=red>WARNING - Could not rename output file to original name</>');
+            $this->getContainer()->get('application.log')->warning("Could not rename $outputFile to $inputFile");
+        } else {
+            $output->writeln('<fg=yellow>Output file renamed to original name: ' . $inputFile . '</>');
 
-        //     // Actualizar tamaño del archivo en bytes y MB
+            // Actualizar tamaño del archivo en bytes y MB
 
-        //
-        // }
-         $this->setNextStep($item, $inputFile);
+
+            $this->setNextStep($item, $inputFile);
+        }
         return 0;
     }
 
@@ -239,6 +255,7 @@ class FfmpegCommand extends ContainerAwareCommand
         $information['step']['progress']   = '0%';
         $information['step']['label']      = 'Uploading to S3';
         $information['step']['styleClass'] = 'primary';
+        // $information['status']['done'] = 'primary';
         $sc->updateItem($item->pk_content, [
             'information' => $information
         ]);

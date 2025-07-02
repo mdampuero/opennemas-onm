@@ -65,10 +65,6 @@ class VideoService extends ContentService
      */
     public function updateItem($id, $data, $file = null)
     {
-        if (empty($file) && empty($data['path'])) {
-            throw new UpdateItemException(_('No file provided'));
-        }
-
         try {
             $item = $this->getItem($id);
 
