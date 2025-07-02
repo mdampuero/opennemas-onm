@@ -138,7 +138,6 @@ class NewsletterController extends Controller
                 'newsletter_subscribe_email',
                 'newsletter_maillist',
                 'newsletter_footer',
-                'newsletter_footer_subscriber',
                 'newsletter_subscriptionType',
                 'actOn.marketingLists',
                 'actOn.formPage',
