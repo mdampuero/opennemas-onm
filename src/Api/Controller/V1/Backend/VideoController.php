@@ -2,7 +2,6 @@
 
 namespace Api\Controller\V1\Backend;
 
-use Api\Exception\GetItemException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

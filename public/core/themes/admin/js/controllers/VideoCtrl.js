@@ -99,6 +99,18 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
     /**
      * @memberOf VideoCtrl
+     */
+    $scope.isDragOver = false;
+
+    /**
+     * @memberOf VideoCtrl
+     * @description
+     *  Buffer size in MB
+     */
+    $scope.bufferSize = 10;
+
+    /**
+     * @memberOf VideoCtrl
      *
      * @description
      *  The list of routes for the controller.
@@ -148,6 +160,15 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       }
     };
 
+    /**
+     * @function fetchStatus
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *   Fetches the status of the video item from the backend.
+     *   If the status is 'done', it processes the video.
+     *   If the step is 'Completed', it stops the interval.
+     */
     $scope.fetchStatus = function() {
       var route = {
         name: 'api_v1_backend_video_get_item',
@@ -157,33 +178,38 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       http.get(route).then(
         function(response) {
           $scope.item.information = response.data.item.information || {};
-          if ($scope.item.information.step.progress === '0%') {
+          if ($scope.item.information.status === 'done') {
             $scope.process();
           }
           if ($scope.item.information.step.label === 'Completed') {
             $scope.item.path = response.data.item.path || '';
             $interval.cancel($scope.intervalPromise);
           }
+        },
+        function(response) {
+          messenger.post({ message: response.data, type: 'error' });
         }
-        // function(response) {
-
-        // }
       );
     };
 
+    /**
+     * @function process
+     * @memberOf VideoCtrl
+     *
+     * @description
+     * Processes the video item, typically after upload or when the video is ready.
+     * It sends a request to the backend to process the video.
+     * If the request fails, it shows an error message.
+     */
     $scope.process = function() {
       var route = {
         name: 'api_v1_backend_storage_process'
       };
 
-      http.post(route, { pk_content: $scope.item.pk_content }).then(
-        function(response) {
-          //console.log(response);
-        }
-        // function(response) {
-
-        // }
-      );
+      http.post(route, { pk_content: $scope.item.pk_content })
+        .catch(function(response) {
+          messenger.post({ message: response.data, type: 'error' });
+        });
     };
 
     /**
@@ -326,6 +352,15 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       }
     });
 
+    /**
+     * @function formatSeconds
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *  Formats seconds into a human-readable string in the format "MM:SS min".
+     * * @param {number} seconds - The number of seconds to format.
+     * * @returns {string} The formatted time string.
+     */
     $scope.formatSeconds = function(seconds) {
       if (!isFinite(seconds) || seconds < 0) {
         return '--';
@@ -337,24 +372,49 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       return minutes + ':' + (remainingSeconds < 10 ? '0' : '') + remainingSeconds + ' min';
     };
 
-    $scope.isDragOver = false;
-
+    /**
+     * @function triggerFileInput
+     * @memberOf VideoCtrl
+     * @description
+     *   Triggers the file input click event to open the file selection dialog.
+     */
     $scope.triggerFileInput = function() {
       document.getElementById('fileInput').click();
     };
 
+    /**
+     * @function onDragOver
+     * @memberOf VideoCtrl
+     * @description
+     *   Handles the drag over event to allow file dropping.
+     * @param {Event} event - The drag over event.
+     */
     $scope.onDragOver = function(event) {
       event.preventDefault();
       $scope.isDragOver = true;
       $scope.$apply();
     };
 
+    /**
+     * @function onDragLeave
+     * @memberOf VideoCtrl
+     * @description
+     *   Handles the drag leave event to reset the drag over state.
+     * @param {Event} event - The drag leave event.
+     */
     $scope.onDragLeave = function(event) {
       event.preventDefault();
       $scope.isDragOver = false;
       $scope.$apply();
     };
 
+    /**
+     * @function onDrop
+     * @memberOf VideoCtrl
+     * @description
+     *   Handles the drop event to process the dropped files.
+     * @param {Event} event - The drop event.
+     */
     $scope.onDrop = function(event) {
       event.preventDefault();
       $scope.isDragOver = false;
@@ -366,11 +426,24 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       }
     };
 
+    /**
+     * @function generateFileId
+     * @memberOf VideoCtrl
+     * @description
+     *   Generates a unique file ID based on the current timestamp and a random number.
+     * @returns {string} A unique file ID.
+     */
     $scope.generateFileId = function() {
       return 'file-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
     };
 
-    // Se llama al cambiar el input file
+    /**
+     * @function setFile
+     * @memberOf VideoCtrl
+     * @description
+     *   Sets the selected file and initializes upload parameters.
+     * @param {FileList} files - The list of files selected by the user.
+     */
     $scope.setFile = function(files) {
       $scope.selectedFile = files[0];
       $scope.fileId = $scope.generateFileId();
@@ -388,9 +461,17 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       $scope.uploadInChunks();
     };
 
+    /**
+     * @function uploadInChunks
+     * @memberOf VideoCtrl
+     * @description
+     *   Uploads the selected file in chunks to the server.
+     *   It calculates the chunk size, uploads each chunk, and updates the progress.
+     *   Once all chunks are uploaded, it finalizes the upload and saves the item.
+     */
     $scope.uploadInChunks = function() {
       const file = $scope.selectedFile;
-      const chunkSize = 10 * 1024 * 1024;
+      const chunkSize = $scope.bufferSize * 1024 * 1024;
       const totalChunks = Math.ceil(file.size / chunkSize);
       var currentChunk = 0;
       var uploadedBytes = 0;
@@ -410,30 +491,19 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         formData.append('fileType', 'video');
 
         $http.post(routing.generate('api_v1_backend_storage_upload_chunk'), formData, {
-          // eslint-disable-next-line no-undefined
+          /* eslint-disable-next-line no-undefined */
           headers: { 'Content-Type': undefined },
           transformRequest: angular.identity
         }).then(function(response) {
-          uploadedBytes += end - start;
-          $scope.progress = Math.floor(uploadedBytes / file.size * 100);
+          uploadedBytes                 += end - start;
+          $scope.progress               = Math.floor(uploadedBytes / file.size * 100);
+          $scope.uploadedSizeMB         = (uploadedBytes / (1024 * 1024)).toFixed(2);
+          const elapsedSeconds          = (Date.now() - $scope.uploadStartTime) / 1000;
+          const uploadSpeed             = uploadedBytes / elapsedSeconds;
+          const remainingBytes          = file.size - uploadedBytes;
+          const estimatedRemaining      = remainingBytes / uploadSpeed;
 
-          // Actualizamos MB subidos
-          $scope.uploadedSizeMB = (uploadedBytes / (1024 * 1024)).toFixed(2);
-
-          // Calcular tiempo transcurrido en segundos
-          const elapsedSeconds = (Date.now() - $scope.uploadStartTime) / 1000;
-
-          // Bytes por segundo
-          const uploadSpeed = uploadedBytes / elapsedSeconds;
-
-          // Bytes restantes
-          const remainingBytes = file.size - uploadedBytes;
-
-          // Estimación de tiempo restante en segundos
-          const estimatedRemainingSeconds = remainingBytes / uploadSpeed;
-
-          // Convertimos a formato amigable (mm:ss)
-          $scope.estimatedTimeRemaining = $scope.formatSeconds(estimatedRemainingSeconds);
+          $scope.estimatedTimeRemaining = $scope.formatSeconds(estimatedRemaining);
 
           $scope.$applyAsync();
 
@@ -460,12 +530,20 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
             }
             $scope.$applyAsync();
           }
-        }, function(error) {
+        }, function() {
           $scope.$applyAsync();
         });
       };
+
+      /*
+       * This will trigger the upload process.
+       */
       $scope.sendNextChunk();
 
+      /**
+       * @function saveWithoutValidate
+       * @memberOf VideoCtrl
+       */
       $scope.saveWithoutValidate = function() {
         var route = { name: $scope.routes.saveItem };
         var successCb = function(response) {
@@ -494,6 +572,30 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       $scope.$on('$destroy', function() {
         $interval.cancel($scope.intervalPromise);
       });
+    };
+
+    /**
+     * @function copyPath
+     * @memberOf VideoCtrl
+     *
+     * @description
+     *   Copies the video path to the clipboard.
+     *   If the path is empty, it does nothing.
+     */
+    $scope.copyPath = function() {
+      if (!$scope.item.path) {
+        return;
+      }
+
+      var tempInput = document.createElement('input');
+
+      tempInput.style.position = 'absolute';
+      tempInput.style.left     = '-9999px';
+      tempInput.value          = $scope.item.path;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
     };
   }
 ]);

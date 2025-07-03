@@ -40,7 +40,8 @@
         </a>
       </li>
       <li class="quicklinks">
-        <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving || (item.pk_content == undefined && item.type === 'upload')" type="button">
+        <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()"
+          ng-disabled="flags.http.loading || flags.http.saving || (item.pk_content == undefined && item.type === 'upload') || (item.type === 'upload' && item.path == '')" type="button">
           <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
           {t}Save{/t}
         </button>
@@ -183,8 +184,9 @@
                   <i class="fa fa-cloud-upload fa-3x text-info" ng-if="uploading === 0"></i>
                   <i class="fa fa-check-circle fa-3x text-success" ng-if="uploading === 1"></i>
                 </div>
-              <p><strong>Haz clic o arrastra un archivo aquí</strong></p>
               <input type="file" id="fileInput" style="display: none"  onchange="angular.element(this).scope().setFile(this.files)">
+              <p ng-if="uploading !== 1"><strong>{t}Click or drag a file here{/t}</strong></p>
+              <p ng-if="uploading === 1"><strong>{t}Redirecting{/t}...</strong></p>
               <div class="m-t-15 m-b-30" ng-if="progress >= 0 && !uploadComplete && !uploadError">
                 <div class="progress" style="margin-top: 10px; height: 20px">
                   <div class="progress-bar" role="progressbar" aria-valuenow="[% progress %]"
@@ -214,11 +216,14 @@
                 </span>
               </div>
               <ng-container ng-if="item.path">
-                <p class="m-t-20">
-                  <a href="[% item.path %]" download  target="_blank" >
-                    <small>[% item.path %]</small>
-                  </a>
-                </p>
+                <div class="input-group m-t-20">
+                  <input type="text" class="form-control" ng-model="item.path" readonly="readonly"  />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" ng-click="copyPath()" tooltip="{t}Copy URL{/t}" >
+                      <span class="glyphicon glyphicon-copy"></span>
+                    </button>
+                  </span>
+                </div>
               </ng-container>
             </div>
           </div>
