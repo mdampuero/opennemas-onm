@@ -219,7 +219,7 @@ class RouterListener implements EventSubscriberInterface
             }
 
             //Fix in order to prevent /manager/ throws a 404
-            if ($newRequest->getPathInfo() == '/manager/') {
+            if (strpos($newRequest->getPathInfo(), '/manager/') === 0) {
                 $event->setResponse(new RedirectResponse('/manager#/', 301));
                 return;
             }
