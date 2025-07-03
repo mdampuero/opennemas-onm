@@ -59,7 +59,7 @@
   },
   "organizer": {
     "@type": "Organization",
-    "name": "{($content->event_organizer_name) ? "{$content->event_organizer_name|escape:'htmlall'}" : "Desconocido"}",
+    "name": "{($content->event_organizer_name) ? "{$content->event_organizer_name|escape:'htmlall'}" : "{t}Unknown{/t}"}",
     "url": "{($content->event_organizer_url) ? "{$content->event_organizer_url}" : "{$siteUrl}"}"
   }
   {if has_featured_media($content, 'frontpage')}
