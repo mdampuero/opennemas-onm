@@ -158,7 +158,6 @@ class EventController extends ContentController
 
         $event = new Content(['pk_content' => 0]);
 
-        dump($request->request->filter('item')); // Debugging line, can be removed later
         $data = $request->request->filter('item');
         $data = json_decode($data, true);
 
