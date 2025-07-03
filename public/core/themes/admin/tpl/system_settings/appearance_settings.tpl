@@ -434,6 +434,18 @@
                     <input class="form-control" id="elements-in-rss" name="elements-in-rss" ng-model="settings.elements_in_rss" type="number">
                   </div>
                 </div>
+                <h4>
+                  <i class="fa fa-feed"></i>
+                  FEED
+                </h4>
+                <div class="form-group">
+                  <label class="form-label" for="elements-in-feed">
+                    {t}Items in Feed{/t}
+                  </label>
+                  <div class="controls">
+                    <input class="form-control" id="elements-in-feed" name="elements-in-feed" ng-model="settings.elements_in_feed" type="number">
+                  </div>
+                </div>
                 {/if}
               </div>
             </div>

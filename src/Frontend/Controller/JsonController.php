@@ -69,7 +69,7 @@ class JsonController extends FrontendController
         $today = date('Y-m-d');
         $limit = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('elements_in_rss', 10);
+            ->get('elements_in_feed', 10);
 
         // If it's a event, we need order by start date, hour, and content ID
         $orderBy = sprintf(
@@ -198,7 +198,7 @@ class JsonController extends FrontendController
     {
         $limit = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('elements_in_rss', 10);
+            ->get('elements_in_feed', 10);
 
         $orderBy = ' order by contents.starttime desc limit ' . $limit;
         $baseOql = sprintf(
