@@ -104,7 +104,9 @@
           public:     'frontend_event_show',
           redirect:   'backend_event_show',
           saveItem:   'api_v1_backend_event_save_item',
-          updateItem: 'api_v1_backend_event_update_item'
+          updateItem: 'api_v1_backend_event_update_item',
+          savePreview: 'api_v1_backend_event_save_preview',
+          getPreview: 'api_v1_backend_event_get_preview',
         };
 
         /**
