@@ -1,0 +1,4 @@
+manager_storage_config:
+    path: /storage/config
+    options:
+        expose: true

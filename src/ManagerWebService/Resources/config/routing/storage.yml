@@ -1,0 +1,27 @@
+manager_ws_storage_config:
+    path:     /storage/config
+    defaults: { _controller: ManagerWebServiceBundle:Storage:config }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_storage_config_save:
+    path:     /storage/config
+    defaults: { _controller: ManagerWebServiceBundle:Storage:configSave }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+manager_ws_storage_config_download:
+    path:     /storage/config/download
+    defaults: { _controller: ManagerWebServiceBundle:Storage:configDownload }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_storage_config_upload:
+    path:     /storage/config/upload
+    defaults: { _controller: ManagerWebServiceBundle:Storage:configUpload }
+    methods:  [ PUT ]
+    options:
+        expose: true

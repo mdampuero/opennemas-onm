@@ -181,7 +181,19 @@ class SidebarController extends Controller
                             'click'    => true,
                         ],
                     ]
-                    ],
+                ],
+                [
+                    'name'     => _('ONM Cloud'),
+                    'icon'     => 'fa fa-cloud',
+                    'items' => [
+                        [
+                            'name'     => _('Configs'),
+                            'icon'     => 'fa fa-cog fa-lg',
+                            'route'    => 'manager_storage_config',
+                            'click'    => true,
+                        ],
+                    ]
+                ],
                 [
                     'name'     => _('System'),
                     'icon'     => 'fa-gears',
