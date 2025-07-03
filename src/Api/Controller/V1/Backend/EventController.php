@@ -13,6 +13,7 @@ use Api\Exception\GetItemException;
 use Api\Controller\V1\ApiController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class EventController extends ContentController
 {
@@ -119,5 +120,78 @@ class EventController extends ContentController
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * gets the preview of the event content.
+     *
+     * @throws GetItemException If no preview is available.
+     * @return Response The response object containing the preview content.
+     */
+    public function getPreviewAction()
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
+
+        $session = $this->get('session');
+        $content = $session->get('last_preview');
+
+        $session->remove('last_preview');
+
+        return new Response($content);
+    }
+
+    /**
+     * Saves the preview of the event content.
+     *
+     * @param Request $request The request object.
+     *
+     * @return Response The response object containing the status of the save operation.
+     */
+    public function savePreviewAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('ADMIN'));
+
+        if ($this->get('core.instance') && !$this->get('core.instance')->isSubdirectory()) {
+            $this->get('core.locale')->setContext('frontend')
+                ->setRequestLocale($request->get('locale'));
+        }
+
+        $event = new Content(['pk_content' => 0]);
+
+        dump($request->request->filter('item')); // Debugging line, can be removed later
+        $data = $request->request->filter('item');
+        $data = json_decode($data, true);
+
+        foreach ($data as $key => $value) {
+            if (isset($value) && !empty($value)) {
+                $event->{$key} = $value;
+            }
+        }
+
+        $event = $this->get('data.manager.filter')->set($event)
+            ->filter('localize', ['keys' => $this->get($this->service)->getL10nKeys()])
+            ->get();
+
+        $this->view = $this->get('core.template');
+        $this->view->setCaching(0);
+
+        list($positions, $advertisements) = $this->getAdvertisements();
+
+        $params = [
+            'ads_positions'  => $positions,
+            'advertisements' => $advertisements,
+            'item'           => $event,
+            'content'        => $event,
+            'contentId'      => $event->pk_content
+        ];
+
+        $this->view->assign($params);
+
+        $this->get('session')->set(
+            'last_preview',
+            $this->view->fetch('event/item.tpl')
+        );
+
+        return new Response('OK');
     }
 }
