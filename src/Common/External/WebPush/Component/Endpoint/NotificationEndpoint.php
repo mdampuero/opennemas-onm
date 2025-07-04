@@ -31,8 +31,15 @@ class NotificationEndpoint extends Endpoint
             $data      = $params['data'] ?? [];
             $logParams = $params ?? [];
 
-            // Remove image and icon data from log parameters
-            unset($logParams['data']['image'], $logParams['data']['icon']);
+            // Remove 'data' on image to avoid logging sensitive information
+            if (isset($logParams['data']['image']['data'])) {
+                unset($logParams['data']['image']['data']);
+            }
+
+            // Remove 'data' on icon to avoid logging sensitive information
+            if (isset($logParams['data']['icon']['data'])) {
+                unset($logParams['data']['icon']['data']);
+            }
 
             $requestParams = [ 'headers' => $this->auth->getAuthHeaders() ];
             if (!empty($data)) {
