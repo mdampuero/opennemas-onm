@@ -22,6 +22,7 @@ class StorageCommand extends ContainerAwareCommand
 {
     private $output;
     private $item;
+    private $factory;
 
     /**
      * Configures the command.
@@ -94,9 +95,8 @@ class StorageCommand extends ContainerAwareCommand
 
         $this->logCommandStart();
 
-        $config  = $this->getStorageConfig();
-        $factory = $this->getContainer()->get('core.helper.storage_factory');
-        $storage = $factory->create($config);
+        $this->factory = $this->getContainer()->get('core.helper.storage_factory');
+        $storage       = $this->factory->create();
 
         switch ($operation) {
             case 'upload':
@@ -109,7 +109,7 @@ class StorageCommand extends ContainerAwareCommand
                 return $this->handleDelete($path, $storage, $output);
 
             case 'uploadByItem':
-                return $this->handleUploadByItem($itemPK, $instanceId, $factory, $config, $output);
+                return $this->handleUploadByItem($itemPK, $instanceId, $output);
 
             default:
                 $output->writeln('<fg=red;options=bold>FAIL - Unknown operation: ' . $operation . '</>');
@@ -256,7 +256,7 @@ class StorageCommand extends ContainerAwareCommand
      *
      * @return int Exit code (0 on success, 1 on failure)
      */
-    private function handleUploadByItem($itemPK, $instanceId, $factory, $config, OutputInterface $output)
+    private function handleUploadByItem($itemPK, $instanceId, OutputInterface $output)
     {
         if (!$itemPK) {
             $output->writeln('<fg=red;options=bold>FAIL - </> The --item parameter is required');
@@ -290,12 +290,14 @@ class StorageCommand extends ContainerAwareCommand
             return 1;
         }
 
-        $s3Client    = $factory->getS3Client();
+        $s3Client    = $this->factory->getS3Client();
         $lastPercent = 0;
         $filesize    = filesize($localFile);
 
+        $config = $this->factory->getConfig();
+
         $uploader = new MultipartUploader($s3Client, $localFile, [
-            'bucket' => $config['bucket'],
+            'bucket' => $config['provider']['bucket'],
             'key'    => substr($path, 1),
             'ACL'    => 'public-read',
             'before_upload' => function ($params) use (&$lastPercent, $output, $filesize) {
@@ -314,7 +316,7 @@ class StorageCommand extends ContainerAwareCommand
 
         try {
             $uploader->upload();
-            $this->setNextStep($config, $path);
+            $this->setNextStep($path);
             $this->logResult('Upload ', true);
         } catch (MultipartUploadException $e) {
             $output->writeln('<fg=red;options=bold>Upload failed: </>' . $e->getMessage());
@@ -332,11 +334,13 @@ class StorageCommand extends ContainerAwareCommand
      * @param array  $config        Configuration array containing 'endpoint' and 'bucket'.
      * @param string $relativePath  The relative path of the file in the remote storage.
      */
-    private function setNextStep($config, $relativePath)
+    private function setNextStep($relativePath)
     {
+        $config                            = $this->factory->getConfig();
         $item                              = $this->getItem();
         $information                       = $item->information;
-        $path                              = $config['endpoint'] . '/' . $config['bucket'] . $relativePath;
+        $path                              = (($config['provider']['enabled'] ?? false)) ?
+            $config['provider']['public_endpoint'] . $relativePath : $relativePath;
         $information['step']['progress']   = '';
         $information['step']['label']      = 'Completed';
         $information['step']['styleClass'] = 'success';

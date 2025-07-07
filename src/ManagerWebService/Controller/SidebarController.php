@@ -183,7 +183,7 @@ class SidebarController extends Controller
                     ]
                 ],
                 [
-                    'name'     => _('ONM Cloud'),
+                    'name'     => _('Storage'),
                     'icon'     => 'fa fa-cloud',
                     'items' => [
                         [

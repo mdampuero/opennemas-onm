@@ -15,9 +15,14 @@ class StorageHelperTest extends TestCase
     private $filesystemMock;
     private $loggerMock;
     private $storageHelper;
+    private $container;
 
     protected function setUp(): void
     {
+        $this->container = $this->getMockBuilder('ServiceContainer' . uniqid())
+            ->setMethods([ 'get' ])
+            ->getMock();
+
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->setMethods(['put', 'delete', 'fileExists', 'has', 'read', 'listContents'])
             ->disableOriginalConstructor()
@@ -108,48 +113,5 @@ class StorageHelperTest extends TestCase
         $this->filesystemMock->method('listContents')->willReturn(new \ArrayIterator($expected));
 
         $this->assertEquals($expected, $this->storageHelper->listContents('folder'));
-    }
-
-    /**
-     * Full integration test for upload, exists, read, delete.
-     */
-    public function testFullFileLifecycleIntegration()
-    {
-        $testConfig = [
-            'key'        => 'DO801FCQYMJ92HJ3YXEV',
-            'secret'     => '16u0BZ/XOIw+6yfH5BoCBnWqlluIL6v7f0IwAXemiBo',
-            'region'     => 'ams3',
-            'bucket'     => 'onm-test',
-            'endpoint'   => 'https://ams3.digitaloceanspaces.com',
-            'path_style' => true
-        ];
-
-        // Create a StorageHelperFactory with mocked loggers
-        $factory = new \Common\Core\Component\Helper\StorageHelperFactory(
-            $this->loggerMock,
-            $this->loggerMock
-        );
-
-        // Create the StorageHelper instance
-        $storageHelper = $factory->create($testConfig);
-
-        $path    = 'test/file.txt';
-        $content = 'test content';
-
-        // Upload the file
-        $this->assertTrue($storageHelper->upload($path, $content, ['visibility' => 'public']));
-
-        // Verify it exists
-        $this->assertTrue($storageHelper->exists($path));
-
-        // Read and verify content
-        $readContent = $storageHelper->read($path);
-        $this->assertEquals($content, $readContent);
-
-        // Delete it
-        $this->assertTrue($storageHelper->delete($path));
-
-        // Confirm it's gone
-        $this->assertFalse($storageHelper->exists($path));
     }
 }

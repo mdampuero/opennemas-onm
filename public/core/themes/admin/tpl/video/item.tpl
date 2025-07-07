@@ -179,7 +179,6 @@
                 ondrop="angular.element(this).scope().onDrop(event)"
                 >
                 <div class="text-center">
-                  <i class="fa fa-file-o fa-3x" ng-if="item.path"></i>
                   <i class="fa fa-folder-open fa-3x text-warning" ng-if="uploading === -1"></i>
                   <i class="fa fa-cloud-upload fa-3x text-info" ng-if="uploading === 0"></i>
                   <i class="fa fa-check-circle fa-3x text-success" ng-if="uploading === 1"></i>

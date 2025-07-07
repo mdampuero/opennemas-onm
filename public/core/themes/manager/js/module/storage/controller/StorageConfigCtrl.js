@@ -26,7 +26,11 @@
         }));
 
         $scope.save = function() {
-          return http.put('manager_ws_storage_config_save', {
+          if ($scope.validateForm() === false) {
+            return;
+          }
+
+          http.put('manager_ws_storage_config_save', {
             storage_settings: $scope.storage_settings
           })
             .then(function(response) {
@@ -36,42 +40,25 @@
             });
         };
 
-        $scope.openImportModal = function() {
-          var modal = $uibModal.open({
-            templateUrl: 'modal-import-settings',
-            backdrop: 'static',
-            controller: 'ModalImportCtrl',
-            resolve: {
-              template: function() {
-                return {
-                };
-              },
-              success: function() {
-                return function(modal, template) {
-                  const reader = new FileReader();
+        $scope.validateForm = function() {
+          var compress = $scope.storage_settings && $scope.storage_settings.compress;
+          var provider = $scope.storage_settings && $scope.storage_settings.provider;
 
-                  var route = {
-                    name: 'manager_ws_onmai_config_upload',
-                  };
+          if (compress && compress.enabled && !compress.command) {
+            messenger.post('You must specify a command for video compression', 'error');
+            return false;
+          }
 
-                  if (template.file.type !== 'application/json') {
-                    return messenger.post('No es un fichero JSON Válido', 'error');
-                  }
-
-                  reader.readAsText(template.file);
-                  reader.onload = function() {
-                    var content = reader.result;
-
-                    return http.put(route, { config: content }).then(function(response) {
-                      modal.close();
-                      messenger.post(response.data);
-                      $scope.init();
-                    });
-                  };
-                };
-              }
-            }
-          });
+          if (provider && provider.enabled && (
+            !provider.endpoint ||
+            !provider.key ||
+            !provider.secret ||
+            !provider.region ||
+            !provider.public_endpoint)) {
+            messenger.post('Complete all fields for S3 provider', 'error');
+            return false;
+          }
+          return true;
         };
 
         $scope.init = function() {
@@ -81,7 +68,11 @@
           };
 
           http.get(route).then(function(response) {
-            $scope.storage_settings = response.data.storage_settings;
+            $scope.storage_settings                  = response.data.storage_settings;
+            $scope.storage_settings.compress         = $scope.storage_settings.compress || {};
+            $scope.storage_settings.compress.enabled = $scope.storage_settings.compress.enabled === 'true';
+            $scope.storage_settings.provider         = $scope.storage_settings.provider || {};
+            $scope.storage_settings.provider.enabled = $scope.storage_settings.provider.enabled === 'true';
             $scope.loading = 0;
           });
         };

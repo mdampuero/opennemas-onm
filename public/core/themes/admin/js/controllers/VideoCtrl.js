@@ -521,6 +521,10 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
               $scope.item.information = response.data;
               $scope.item.title = response.data.fileName;
 
+              if (response.data.step.label === 'Completed') {
+                $scope.item.path = response.data.relativePath;
+              }
+
               $scope.getSlug($scope.item.title, function(response) {
                 $scope.item.slug = response.data.slug;
                 $scope.flags.generate.slug = false;

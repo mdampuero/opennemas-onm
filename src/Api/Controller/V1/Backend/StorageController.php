@@ -60,17 +60,43 @@ class StorageController extends Controller
             rename($tempFilePath, $finalPath);
             rmdir($uploadDir);
 
-            return new JsonResponse([
-                'status'      => 'done',
-                'fileName'    => $file->getFilename(),
-                'step'        => [
+            $config = $this->container->get('orm.manager')
+                ->getDataSet('Settings', 'manager')
+                ->get('storage_settings', []);
+
+            $enabledCompressed = $config['compress']['enabled'] ?? false;
+            $enabledProvider   = $config['provider']['enabled'] ?? false;
+
+            if (filter_var($enabledCompressed, FILTER_VALIDATE_BOOLEAN)) {
+                $step = [
                     'label'      => 'Compressing',
                     'styleClass' => 'warning',
                     'progress'   => '0%'
-                ],
-                'fileSize'    => $fileSize,
-                'fileSizeMB'  => round($fileSize / 1048576, 2),
-                'finalPath'   => $finalPath,
+                ];
+            } elseif (filter_var($enabledProvider, FILTER_VALIDATE_BOOLEAN)) {
+                $step = [
+                    'label'      => 'Uploading to S3',
+                    'styleClass' => 'primary',
+                    'progress'   => '0%'
+                ];
+            } else {
+                $step = [
+                    'label'      => 'Completed',
+                    'styleClass' => 'success',
+                    'progress'   => ''
+                ];
+            }
+
+            return new JsonResponse([
+                'source'       => [pathinfo($finalPath, PATHINFO_EXTENSION) =>
+                    $instance->getVideosShortPath() . '/' . $helper->getRelativePath($finalPath)],
+                'status'       => 'done',
+                'fileName'     => $file->getFilename(),
+                'step'         => $step,
+                'fileSize'     => $fileSize,
+                'fileSizeMB'   => round($fileSize / 1048576, 2),
+                'finalPath'    => $finalPath,
+                'path'         => $instance->getVideosShortPath() . '/' . $helper->getRelativePath($finalPath),
                 'relativePath' => $instance->getVideosShortPath() . '/' . $helper->getRelativePath($finalPath),
             ]);
         }
