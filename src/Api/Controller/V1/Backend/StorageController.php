@@ -3,6 +3,7 @@
 namespace Api\Controller\V1\Backend;
 
 use Common\Core\Controller\Controller;
+use Common\Model\Entity\Task;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Process\Process;
@@ -89,7 +90,7 @@ class StorageController extends Controller
 
             return new JsonResponse([
                 'source'       => [pathinfo($finalPath, PATHINFO_EXTENSION) =>
-                    $instance->getVideosShortPath() . '/' . $helper->getRelativePath($finalPath)],
+                $instance->getVideosShortPath() . '/' . $helper->getRelativePath($finalPath)],
                 'status'       => 'done',
                 'fileName'     => $file->getFilename(),
                 'step'         => $step,
@@ -127,15 +128,22 @@ class StorageController extends Controller
                 'information' => $information
             ]);
 
-            $process = new Process(
-                sprintf(
-                    '/home/opennemas/current/bin/console %s --item=%s --instance=%s',
+            /**
+             * Create a new task for the FFMPEG converter.
+             */
+            $em = $this->get('orm.manager');
+            $em->persist(new Task($em->getConverter('Task')->objectify([
+                'name' => 'FFMPEG converter',
+                'command' => '/home/opennemas/current/bin/console %s --item=%s --instance=%s',
+                'params' => [
                     'app:core:ffmpeg',
                     $item->pk_content,
                     $instance->id
-                )
-            );
-            $process->start();
+                ],
+                'status' => 'pending',
+                'instance_id' => $instance->id,
+                'created' => new \DateTime()
+            ])));
         }
 
         if ($step['label'] === 'Uploading to S3' && $stepProgress == 0 && $information['status'] === 'done') {

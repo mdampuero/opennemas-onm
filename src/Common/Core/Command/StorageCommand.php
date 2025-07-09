@@ -148,23 +148,6 @@ class StorageCommand extends ContainerAwareCommand
     }
 
     /**
-     * Returns the configuration array for connecting to the storage service.
-     *
-     * @return array Storage configuration parameters
-     */
-    private function getStorageConfig(): array
-    {
-        return [
-            'key'        => 'DO801FCQYMJ92HJ3YXEV',
-            'secret'     => '16u0BZ/XOIw+6yfH5BoCBnWqlluIL6v7f0IwAXemiBo',
-            'region'     => 'ams3',
-            'bucket'     => 'onm-test',
-            'endpoint'   => 'https://ams3.digitaloceanspaces.com',
-            'path_style' => true
-        ];
-    }
-
-    /**
      * Handles the file upload operation.
      * Validates the input file and destination, uploads the file, and logs the result.
      *

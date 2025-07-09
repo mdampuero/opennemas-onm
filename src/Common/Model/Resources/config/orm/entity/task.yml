@@ -1,0 +1,61 @@
+orm:
+    metadata:
+        -
+            name:  Task
+            class: Common\Model\Entity\Task
+            properties:
+                id:           integer
+                name:         string
+                command:      string
+                params:       array
+                status:       string
+                instance_id:  integer
+                created:      datetime
+                updated:      datetime
+            converters:
+                default:
+                    class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
+                    arguments: [ '@orm.metadata.task' ]
+            repositories:
+                manager:
+                    class:     Opennemas\Orm\Database\Repository\BaseRepository
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.task', '@cache.connection.manager' ]
+            persisters:
+                manager:
+                    class:     Opennemas\Orm\Database\Persister\BasePersister
+                    arguments: [ '@orm.connection.manager', '@orm.metadata.task',  '@cache.connection.manager' ]
+            mapping:
+                database:
+                    table: tasks
+                    columns:
+                        id:
+                            type: integer
+                            options: { default: null, unsigned: true, autoincrement: true }
+                        name:
+                            type: text
+                            options: { default: null, length: 255, notnull: true }
+                        command:
+                            type: text
+                            options: { default: null, length: 65532, notnull: true }
+                        params:
+                            type: text
+                            options: { default: null, length: 65532, notnull: true }
+                        status:
+                            type: text
+                            options: { default: null, length: 255, notnull: true }
+                        instance_id:
+                            type: integer
+                            options: { default: null,  notnull: false, unsigned: true }
+                        created:
+                            type:    datetimetz
+                            options: { default: null, notnull: true }
+                        updated:
+                            type:    datetimetz
+                            options: { default: null, notnull: true }
+                    index:
+                        -
+                            name: PRIMARY
+                            columns: [ id ]
+                            primary: true
+                            unique: true
+                            flags: {  }
