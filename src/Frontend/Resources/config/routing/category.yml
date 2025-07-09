@@ -12,7 +12,7 @@ category_homepage_tag:
     defaults: { _controller: FrontendBundle:Category:homepage }
     requirements:
         category_slug: '^[a-z0-9\-]+'
-        tag_slug: '[^/]+'
+        tag_slug: '^[a-z0-9\-]+'
     options:
         l10n: true
         subdirectory: true
