@@ -3,7 +3,7 @@
     <i class="fa fa-times"></i>
   </button>
   <h3 class="p-b-30 p-t-30 text-center">{t}Are you sure?{/t}</h3>
-  <h4 class="p-b-30 text-center" ng-if="!template.selected || template.selected == 1">{t}Do you want to delete the instance?{/t}</h4>
+  <h4 class="p-b-30 text-center" ng-if="!template.selected || template.selected == 1">{t escape=off 1="test"}Do you want to delete the instance <strong>%1</strong>?{/t}</h4>
   <h4 class="p-b-30 text-center" ng-if="template.selected > 1">{t}Do you want to delete the selected instances?{/t}</h4>
 </div>
 <div class="modal-footer row">
