@@ -9,6 +9,7 @@ orm:
                 command:      string
                 params:       array
                 status:       string
+                pid:          integer
                 instance_id:  integer
                 created:      datetime
                 updated:      datetime
@@ -44,6 +45,9 @@ orm:
                             type: text
                             options: { default: null, length: 255, notnull: true }
                         instance_id:
+                            type: integer
+                            options: { default: null,  notnull: false, unsigned: true }
+                        pid:
                             type: integer
                             options: { default: null,  notnull: false, unsigned: true }
                         created:

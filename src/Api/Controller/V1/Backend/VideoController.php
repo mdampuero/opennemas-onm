@@ -53,7 +53,7 @@ class VideoController extends ContentController
             ->getDataSet('Settings')
             ->get('extraInfoContents.VIDEO_MANAGER');
 
-        return new JsonResponse([ 'extra_fields' => $settings ]);
+        return new JsonResponse(['extra_fields' => $settings]);
     }
 
     public function saveItemAction(Request $request)
@@ -73,7 +73,7 @@ class VideoController extends ContentController
         if (!empty($this->getItemRoute)) {
             $response->headers->set('Location', $this->generateUrl(
                 $this->getItemRoute,
-                [ 'id' => $this->getItemId($item) ]
+                ['id' => $this->getItemId($item)]
             ));
         }
 
@@ -162,6 +162,73 @@ class VideoController extends ContentController
         } catch (\Exception $e) {
             $msg->add(_('Unable to save settings'), 'error');
             $this->get('error.log')->error($e->getMessage());
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Updates some instance properties.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function patchItemAction(Request $request, $id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
+        $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', [$id]);
+
+        $msg = $this->get('core.messenger');
+
+        $this->get($this->service)
+            ->patchItem($id, $request->request->all());
+
+        //Remove file to storage
+        $this->get($this->service)->removeFromStorage($id);
+
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Updates some properties for a list of items.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function patchListAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
+
+        $params = $request->request->all();
+        $ids    = $params['ids'];
+
+        $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', $ids);
+
+        $msg = $this->get('core.messenger');
+
+        unset($params['ids']);
+
+        $updated = $this->get($this->service)->patchList($ids, $params);
+
+        //Remove file to storage
+        $this->get($this->service)->removeFromStorage($ids);
+
+        if ($updated > 0) {
+            $msg->add(
+                sprintf(_('%s items updated successfully'), $updated),
+                'success'
+            );
+        }
+
+        if ($updated !== count($ids)) {
+            $msg->add(sprintf(
+                _('%s items could not be updated successfully'),
+                count($ids) - $updated
+            ), 'error');
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());

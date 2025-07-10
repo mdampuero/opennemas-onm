@@ -13,12 +13,16 @@ namespace Common\Core\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 class TaskCommand extends ContainerAwareCommand
 {
     private $output;
+    private $conn;
+    private const STATUS_PROCESSING = 'processing';
+    private const STATUS_PENDING    = 'pending';
 
     /**
      * Configures the command.
@@ -28,6 +32,12 @@ class TaskCommand extends ContainerAwareCommand
         $this
             ->setName('app:core:task')
             ->setDescription('Runs a task related to storage operations')
+            ->addOption(
+                'limit',
+                null,
+                InputOption::VALUE_REQUIRED,
+                ''
+            )
             ->setHelp('');
     }
 
@@ -40,6 +50,8 @@ class TaskCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
+        $limit        = $input->getOption('limit');
+        $this->conn   = $this->getContainer()->get('orm.manager')->getConnection('manager');
 
         $this->logCommandStart();
         $this->executeTasksPending();
@@ -79,42 +91,35 @@ class TaskCommand extends ContainerAwareCommand
      * This method retrieves tasks with a status of 'pending'
      * and processes them by updating their status to 'done'.
      */
-    protected function executeTasksPending()
+    protected function executeTasksPending($limit = 1)
     {
         $sql   = sprintf(
             'SELECT * FROM tasks WHERE status = "%s" AND NOT EXISTS (
                 SELECT 1 FROM tasks WHERE status = "%s"
-            ) ORDER BY id ASC LIMIT 1',
-            'pending',
-            'processing'
+            ) ORDER BY id ASC LIMIT %d',
+            self::STATUS_PENDING,
+            self::STATUS_PROCESSING,
+            $limit
         );
-        $tasks = $this->getContainer()->get('orm.manager')->getConnection('manager')
-            ->fetchAll($sql);
+        $tasks = $this->conn->fetchAll($sql);
 
         foreach ($tasks as $task) {
+            $command  = $task['command'] . ' --task=%s';
+            $params   = unserialize($task['params'] ?? '[]');
+            $params[] = $task['id'];
+            $process  = new Process(vsprintf($command, $params));
+            $process->start();
+            $pid = $process->getPid();
+            $this->conn->update('tasks', [
+                'status' => self::STATUS_PROCESSING,
+                'pid'    => $pid
+            ], ['id' => $task['id']]);
             $this->output->writeln(sprintf(
                 str_pad('<options=bold>Executing task #' . $task['id'], 128, '.')
                     . '<fg=green;options=bold>DONE</>'
                     . ' <fg=blue;options=bold>(%s)</></>',
                 $task['name']
             ));
-
-            $command = $task['command'];
-            $params  = unserialize($task['params'] ?? '[]');
-
-            try {
-                $process = new Process(vsprintf($command, $params));
-                $process->start();
-
-                if (!$process->isSuccessful()) {
-                    throw new \RuntimeException($process->getErrorOutput());
-                }
-                $this->getContainer()->get('orm.manager')->getConnection('manager')
-                    ->update('tasks', ['status' => 'done'], ['id' => $task['id']]);
-            } catch (\Exception $e) {
-                $this->getContainer()->get('orm.manager')->getConnection('manager')
-                    ->update('tasks', ['status' => 'error'], ['id' => $task['id']]);
-            }
         }
     }
 }

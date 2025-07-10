@@ -20,9 +20,10 @@ use Symfony\Component\Process\Process;
 class FfmpegCommand extends ContainerAwareCommand
 {
     private $item;
-    private const FFMPEG_PATH    = '/usr/bin/ffmpeg';
-    private const FFPROBE_PATH   = '/usr/bin/ffprobe';
-    private const DEFAULT_PARAMS = '-c:v libx264 -crf 24 -preset slow -vf "scale=1280:-2" -c:a aac -b:a 128k';
+    private const FFMPEG_PATH        = '/usr/bin/ffmpeg';
+    private const FFPROBE_PATH       = '/usr/bin/ffprobe';
+    private const DEFAULT_PARAMS     = '-c:v libx264 -crf 24 -preset slow -vf "scale = 1280:-2" -c:a aac -b:a 128k';
+    private const OUTPUT_FILE_FORMAT = 'mp4';
 
     /**
      * Configures the command.
@@ -44,6 +45,12 @@ class FfmpegCommand extends ContainerAwareCommand
                 InputOption::VALUE_REQUIRED,
                 ''
             )
+            ->addOption(
+                'task',
+                null,
+                InputOption::VALUE_REQUIRED,
+                ''
+            )
             ->setHelp('');
     }
 
@@ -56,6 +63,7 @@ class FfmpegCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $itemPK = $input->getOption('item');
+        $taskPK = $input->getOption('task');
         $params = self::DEFAULT_PARAMS;
 
         if (!$itemPK) {
@@ -83,7 +91,7 @@ class FfmpegCommand extends ContainerAwareCommand
 
         if ($inputFile) {
             $pathInfo   = pathinfo($inputFile);
-            $outputFile = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '_output.' . $pathInfo['extension'];
+            $outputFile = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '_output.' . self::OUTPUT_FILE_FORMAT;
         } else {
             $output->writeln('<fg=red;options=bold>FAIL - </> No input file found for the item.');
             return 1;
@@ -115,13 +123,13 @@ class FfmpegCommand extends ContainerAwareCommand
 
         $this->getContainer()->get('application.log')->info("Input: $inputFile, Output: $outputFile");
 
-        $ffmpegCommand = sprintf(
+        $ffmpegCommand = str_replace(": ", ":", sprintf(
             '%s -i %s %s -progress pipe:1 -nostats %s',
             self::FFMPEG_PATH,
             escapeshellarg($inputFile),
             $params,
             escapeshellarg($outputFile)
-        );
+        ));
 
         $process = new Process($ffmpegCommand);
         $process->setTimeout(null);
@@ -161,8 +169,13 @@ class FfmpegCommand extends ContainerAwareCommand
         if (!$process->isSuccessful()) {
             $this->getContainer()->get('application.log')->error("FFmpeg process failed: " .
                 $process->getErrorOutput());
-            $output->writeln('<fg=red;options=bold>FAIL - FFmpeg process failed</>');
+            $output->writeln('<fg=red;options=bold>FAIL - ' . $process->getErrorOutput() . '</>');
             return 1;
+        }
+
+        if ($taskPK) {
+            $em = $this->getContainer()->get('orm.manager');
+            $em->remove($em->getRepository('Task')->find($taskPK));
         }
 
         $output->writeln(sprintf(
@@ -171,6 +184,8 @@ class FfmpegCommand extends ContainerAwareCommand
                 . ' <fg=blue;options=bold>(%s)</></>',
             date('Y-m-d H:i:s')
         ));
+
+
 
         //Delete original file
         if (!unlink($inputFile)) {
@@ -181,17 +196,39 @@ class FfmpegCommand extends ContainerAwareCommand
         }
 
         // Rename output file to original name
-        if (!rename($outputFile, $inputFile)) {
+
+        if (!rename($outputFile, str_replace(
+            '_output.' . self::OUTPUT_FILE_FORMAT,
+            '.' . self::OUTPUT_FILE_FORMAT,
+            $outputFile
+        ))) {
             $output->writeln('<fg=red>WARNING - Could not rename output file to original name</>');
             $this->getContainer()->get('application.log')->warning("Could not rename $outputFile to $inputFile");
         } else {
             $output->writeln('<fg=yellow>Output file renamed to original name: ' . $inputFile . '</>');
 
             // Update item information
-            $this->setNextStep($inputFile);
+            $this->setNextStep();
+
+            // Create Thumbnail
+            //ffmpeg -i "${VIDEO_PATH}" -ss "${TIME}" -vframes 1 "${THUMBNAIL_PATH}" -y 2>/dev/null
         }
         return 0;
     }
+
+    /**
+     * Changes the file extension of a given file path.
+     */
+    private function changeFileExtension(string $filePath): string
+    {
+        $pathInfo     = pathinfo($filePath);
+        $newExtension = ltrim(self::OUTPUT_FILE_FORMAT, '.');
+
+        $directory = $pathInfo['dirname'] === '.' ? '' : $pathInfo['dirname'] . DIRECTORY_SEPARATOR;
+
+        return $directory . $pathInfo['filename'] . '.' . $newExtension;
+    }
+
 
     /**
      * Updates the current item's information using the content service.
@@ -224,11 +261,22 @@ class FfmpegCommand extends ContainerAwareCommand
      *
      * @param string|null $inputFile The path to the input file to calculate its size.
      */
-    private function setNextStep($inputFile = null)
+    private function setNextStep()
     {
-        $item                              = $this->getItem();
-        $information                       = $item->information;
-        $newSizeBytes                      = filesize($inputFile);
+        $item             = $this->getItem();
+        $information      = $item->information;
+        $pathInfoOriginal = pathinfo($information['finalPath']);
+
+        unset($information['source'][$pathInfoOriginal['extension']]);
+        $information['source'][self::OUTPUT_FILE_FORMAT] = $this->changeFileExtension(
+            $information['relativePath']
+        );
+
+        $information['fileName']           = $this->changeFileExtension($information['fileName']);
+        $information['finalPath']          = $this->changeFileExtension($information['finalPath']);
+        $information['path']               = $this->changeFileExtension($information['path']);
+        $information['relativePath']       = $this->changeFileExtension($information['relativePath']);
+        $newSizeBytes                      = filesize($information['finalPath']);
         $newSizeMB                         = number_format($newSizeBytes / (1024 * 1024), 2);
         $information['fileSize']           = (string) $newSizeBytes;
         $information['fileSizeMB']         = (string) $newSizeMB;
@@ -236,6 +284,7 @@ class FfmpegCommand extends ContainerAwareCommand
         $information['status']             = 'done';
         $information['step']['label']      = 'Uploading to S3';
         $information['step']['styleClass'] = 'primary';
+
         $this->updateInformation([
             'information' => $information
         ]);
