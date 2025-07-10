@@ -71,7 +71,11 @@
             controller: 'modalCtrl',
             resolve: {
               template: function() {
-                return { };
+                return {
+                  instance: $scope.items.filter(function(e) {
+                    return e.id === id;
+                  })[0].name
+                };
               },
               success: function() {
                 return function(modalWindow) {
