@@ -436,7 +436,7 @@
                 </div>
                 <h4>
                   <i class="fa fa-feed"></i>
-                  FEED
+                  GoodBarber
                 </h4>
                 <div class="form-group">
                   <label class="form-label" for="elements-in-feed">
