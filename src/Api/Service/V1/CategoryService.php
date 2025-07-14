@@ -160,19 +160,6 @@ class CategoryService extends OrmService
         return $response['total'];
     }
 
-    public function getListParents(array $ids)
-    {
-        if (empty($ids)) {
-            throw new ApiException('No parent IDs provided', 400);
-        }
-
-        try {
-            return $this->getListByIds($ids);
-        } catch (\Exception $e) {
-            throw new ApiException('Failed to retrieve parent categories: ' . $e->getMessage(), $e->getCode());
-        }
-    }
-
     public function getListWithoutLocalizer($oql = '')
     {
         try {

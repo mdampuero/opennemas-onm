@@ -210,7 +210,7 @@ class CategoryController extends ApiController
         // Get the parent categories and create a map [id => parent_name]
         $parentMap = [];
         if (!empty($uniqueParentIds)) {
-            $parentsResponse = $us->getListParents($uniqueParentIds);
+            $parentsResponse = $us->getListByIds($uniqueParentIds);
             foreach ($parentsResponse['items'] as $parent) {
                 $parentMap[$parent->id] = $parent->title;
             }
