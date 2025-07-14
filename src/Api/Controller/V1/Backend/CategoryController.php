@@ -225,7 +225,6 @@ class CategoryController extends ApiController
 
         return [
             'items'      => $us->responsify($itemsWithParents),
-            'parents'    => $categoriesWithParents,
             'total'      => $response['total'],
             'extra'      => $this->getExtraData($response['items']),
             'o-filename' => $this->filename,
