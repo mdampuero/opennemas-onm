@@ -189,7 +189,7 @@
           $scope.backup.criteria = $scope.criteria;
 
           $scope.app.columns.selected =  _.uniq($scope.app.columns.selected.concat(
-            [ 'name', 'slug', 'contents', 'cover', 'color', 'visibility', 'enabled', 'rss', 'layout' ]
+            [ 'name', 'slug', 'parent', 'contents', 'cover', 'color', 'visibility', 'enabled', 'rss', 'layout' ]
           ));
 
           $scope.criteria.epp     = 10;
