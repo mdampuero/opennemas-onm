@@ -136,7 +136,7 @@ class StorageController extends Controller
                 'name' => 'FFMPEG converter',
                 'command' => '/home/opennemas/current/bin/console %s --item=%s --instance=%s',
                 'params' => [
-                    'app:core:ffmpeg',
+                    'app:ffmpeg:compress',
                     $item->pk_content,
                     $instance->id
                 ],
@@ -148,9 +148,17 @@ class StorageController extends Controller
 
         if ($step['label'] === 'Uploading to S3' && $stepProgress == 0 && $information['status'] === 'done') {
             $information['status'] = 'uploading';
+            $created = new \Datetime();
+            $photo   = $this->container->get('api.service.photo')->createItem([
+                'created'     => $created->format('Y-m-d H:i:s'),
+                'path_file'   => $created->format('/Y/m/d/'),
+                'title'       => $item->title
+            ], new \SplFileInfo($information['thumbnails']), true);
+            $information['photo'] = $photo->id;
             $service->updateItem($pk_content, [
                 'information' => $information
             ]);
+
             $process = new Process(
                 sprintf(
                     '/home/opennemas/current/bin/console %s --operation=%s --item=%s --instance=%s',

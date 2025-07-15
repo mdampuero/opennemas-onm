@@ -183,6 +183,34 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
           }
           if ($scope.item.information.step.label === 'Completed') {
             $scope.item.path = response.data.item.path || '';
+            $scope.item.related_contents = [];
+            var route = {
+              name: 'api_v1_backend_photo_get_item',
+              params: { id: $scope.item.information.photo }
+            };
+
+            http.get(route).then(function(response) {
+              $scope.data.extra.related_contents[response.data.item.pk_content] = response.data.item;
+
+              var relatedItem = {
+                caption: response.data.item.title,
+                content_type_name: "photo",
+                position: 0,
+                target_id: response.data.item.pk_content,
+                type: "featured_frontpage",
+              };
+
+              // Clone
+              var relatedItemInner = angular.copy(relatedItem);
+
+              $scope.featuredInner = relatedItemInner;
+              // $scope.featuredFrontpage = relatedItem;
+              // $scope.expanded.featuredFrontpage = false;
+              relatedItemInner.type = "featured_inner";
+
+              $scope.item.related_contents.push(relatedItem);
+              $scope.item.related_contents.push(relatedItemInner);
+            });
             $interval.cancel($scope.intervalPromise);
           }
         },
@@ -495,13 +523,13 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
           headers: { 'Content-Type': undefined },
           transformRequest: angular.identity
         }).then(function(response) {
-          uploadedBytes                 += end - start;
-          $scope.progress               = Math.floor(uploadedBytes / file.size * 100);
-          $scope.uploadedSizeMB         = (uploadedBytes / (1024 * 1024)).toFixed(2);
-          const elapsedSeconds          = (Date.now() - $scope.uploadStartTime) / 1000;
-          const uploadSpeed             = uploadedBytes / elapsedSeconds;
-          const remainingBytes          = file.size - uploadedBytes;
-          const estimatedRemaining      = remainingBytes / uploadSpeed;
+          uploadedBytes += end - start;
+          $scope.progress = Math.floor(uploadedBytes / file.size * 100);
+          $scope.uploadedSizeMB = (uploadedBytes / (1024 * 1024)).toFixed(2);
+          const elapsedSeconds = (Date.now() - $scope.uploadStartTime) / 1000;
+          const uploadSpeed = uploadedBytes / elapsedSeconds;
+          const remainingBytes = file.size - uploadedBytes;
+          const estimatedRemaining = remainingBytes / uploadSpeed;
 
           $scope.estimatedTimeRemaining = $scope.formatSeconds(estimatedRemaining);
 
@@ -539,44 +567,41 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         });
       };
 
-      /*
-       * This will trigger the upload process.
-       */
       $scope.sendNextChunk();
+    };
 
-      /**
-       * @function saveWithoutValidate
-       * @memberOf VideoCtrl
-       */
-      $scope.saveWithoutValidate = function() {
-        var route = { name: $scope.routes.saveItem };
-        var successCb = function(response) {
-          $scope.disableFlags('http');
+    /**
+     * @function saveWithoutValidate
+     * @memberOf VideoCtrl
+     */
+    $scope.saveWithoutValidate = function() {
+      var route = { name: $scope.routes.saveItem };
+      var successCb = function(response) {
+        $scope.disableFlags('http');
 
-          if ($scope.routes.redirect && response.status === 201) {
-            var id = response.headers().location
-              .substring(response.headers().location.lastIndexOf('/') + 1);
+        if ($scope.routes.redirect && response.status === 201) {
+          var id = response.headers().location
+            .substring(response.headers().location.lastIndexOf('/') + 1);
 
-            $window.location.href =
-              routing.generate($scope.routes.redirect, { id: id });
-          }
+          $window.location.href =
+            routing.generate($scope.routes.redirect, { id: id });
+        }
 
-          if (response.status === 200 && $scope.refreshOnUpdate) {
-            $timeout(function() {
-              $scope.getItem($scope.getItemId());
-            }, 500);
-          }
+        if (response.status === 200 && $scope.refreshOnUpdate) {
+          $timeout(function() {
+            $scope.getItem($scope.getItemId());
+          }, 500);
+        }
 
-          messenger.post(response.data);
-        };
-
-        http.post(route, $scope.item).then(successCb, $scope.errorCb);
+        messenger.post(response.data);
       };
 
-      $scope.$on('$destroy', function() {
-        $interval.cancel($scope.intervalPromise);
-      });
+      http.post(route, $scope.item).then(successCb, $scope.errorCb);
     };
+
+    $scope.$on('$destroy', function() {
+      $interval.cancel($scope.intervalPromise);
+    });
 
     /**
      * @function copyPath
@@ -594,8 +619,8 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
       var tempInput = document.createElement('input');
 
       tempInput.style.position = 'absolute';
-      tempInput.style.left     = '-9999px';
-      tempInput.value          = $scope.item.path;
+      tempInput.style.left = '-9999px';
+      tempInput.value = $scope.item.path;
       document.body.appendChild(tempInput);
       tempInput.select();
       document.execCommand('copy');

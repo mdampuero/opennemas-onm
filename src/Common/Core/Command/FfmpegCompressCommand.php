@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-class FfmpegCommand extends ContainerAwareCommand
+class FfmpegCompressCommand extends ContainerAwareCommand
 {
     private $item;
     private const FFMPEG_PATH        = '/usr/bin/ffmpeg';
@@ -31,7 +31,7 @@ class FfmpegCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('app:core:ffmpeg')
+            ->setName('app:ffmpeg:compress')
             ->setDescription('Transcode video using ffmpeg and show progress.')
             ->addOption(
                 'item',
@@ -64,7 +64,8 @@ class FfmpegCommand extends ContainerAwareCommand
     {
         $itemPK = $input->getOption('item');
         $taskPK = $input->getOption('task');
-        $params = self::DEFAULT_PARAMS;
+        $config = $this->getConfig();
+        $params = $config['compress']['command'] ?? self::DEFAULT_PARAMS;
 
         if (!$itemPK) {
             $output->writeln('<fg=red;options=bold>FAIL - </> The --item parameters are required');
@@ -185,8 +186,6 @@ class FfmpegCommand extends ContainerAwareCommand
             date('Y-m-d H:i:s')
         ));
 
-
-
         //Delete original file
         if (!unlink($inputFile)) {
             $output->writeln('<fg=red>WARNING - Could not delete original file: ' . $inputFile . '</>');
@@ -196,7 +195,6 @@ class FfmpegCommand extends ContainerAwareCommand
         }
 
         // Rename output file to original name
-
         if (!rename($outputFile, str_replace(
             '_output.' . self::OUTPUT_FILE_FORMAT,
             '.' . self::OUTPUT_FILE_FORMAT,
@@ -285,9 +283,29 @@ class FfmpegCommand extends ContainerAwareCommand
         $information['step']['label']      = 'Uploading to S3';
         $information['step']['styleClass'] = 'primary';
 
+        $information['thumbnails'] = $this->createThumbnail($information);
+
         $this->updateInformation([
             'information' => $information
         ]);
+    }
+
+    private function createThumbnail($information)
+    {
+        $pathInfo      = pathinfo($information['finalPath']);
+        $thumbnailPath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '_thumbnail.jpg';
+
+        $command = sprintf(
+            '%s -ss 5 -i %s -vframes 1 -q:v 2 -y %s',
+            self::FFMPEG_PATH,
+            escapeshellarg($information['finalPath']),
+            escapeshellarg($thumbnailPath)
+        );
+
+        $process = new Process($command);
+        $process->run();
+
+        return $thumbnailPath;
     }
 
     /**
@@ -332,5 +350,11 @@ class FfmpegCommand extends ContainerAwareCommand
         $this->getContainer()->get('core.security')->setInstance($instance);
 
         return $this;
+    }
+
+    public function getConfig(){
+        return $this->getContainer()->get('orm.manager')
+            ->getDataSet('Settings', 'manager')
+            ->get('storage_settings', []);
     }
 }

@@ -11,6 +11,9 @@
 
 namespace Api\Service\V1;
 
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
+
 class VideoService extends ContentService
 {
     /**
@@ -33,5 +36,40 @@ class VideoService extends ContentService
                 $storage->delete($item->information['relativePath']);
             }
         }
+    }
+
+    /**
+     * Generates a thumbnail image from a given video file path.
+     *
+     * @param string $inputPath Full path to the input video file.
+     * @return string|null Returns the path to the generated thumbnail, or null on failure.
+     * @throws \RuntimeException If ffmpeg fails or the input file doesn't exist.
+     */
+    public function generateThumbnailFromVideoPath(string $inputPath): ?string
+    {
+        if (!file_exists($inputPath)) {
+            throw new \RuntimeException("File not found: $inputPath");
+        }
+
+        $pathInfo      = pathinfo($inputPath);
+        $thumbnailPath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '_thumbnailTmp.jpg';
+
+        $ffmpegPath = '/usr/bin/ffmpeg'; // o configurable por parámetro si lo prefieres
+
+        $command = sprintf(
+            '%s -ss 5 -i %s -vframes 1 -q:v 2 -y %s',
+            escapeshellcmd($ffmpegPath),
+            escapeshellarg($inputPath),
+            escapeshellarg($thumbnailPath)
+        );
+
+        $process = new Process($command);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        return $thumbnailPath;
     }
 }
