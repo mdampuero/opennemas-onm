@@ -40,6 +40,12 @@
         </a>
       </li>
       <li class="quicklinks">
+        <button class="btn btn-white m-r-5" id="preview-button" ng-click="preview()" type="button" id="preview_button">
+          <i class="fa fa-desktop" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.generating_preview }"></i>
+          {t}Preview{/t}
+        </button>
+      </li>
+      <li class="quicklinks">
         <button class="btn btn-loading btn-success text-uppercase" ng-click="submit()" ng-disabled="flags.http.loading || flags.http.saving" type="button">
           <i class="fa fa-save m-r-5" ng-class="{ 'fa-circle-o-notch fa-spin': flags.http.saving }"></i>
           {t}Save{/t}
@@ -76,12 +82,9 @@
         <i class="fa fa-user m-r-10"></i>
         {t}Organizer data{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.organizer }"></i>
-        <span class="pull-right" ng-if="!expanded.organizer">
-          {include file="common/component/icon/status.tpl" iFlag="event_organizer_name" iForm="form.event_organizer_name" iNgModel="item.event_organizer_name" iValidation=true}
-        </span>
       </div>
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.organizer }">
-        {include file="ui/component/input/text.tpl" iField="event_organizer_name" iRequired=true iTitle="{t}Organizer name{/t}" iValidation=true}
+        {include file="ui/component/input/text.tpl" iField="event_organizer_name" iTitle="{t}Organizer name{/t}"}
         {include file="ui/component/input/text.tpl" iField="event_organizer_url" iTitle="{t}Organizer website{/t}"}
       </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.when = !expanded.when">
@@ -232,6 +235,17 @@
 {/block}
 
 {block name="modals"}
+  <script type="text/ng-template" id="modal-preview">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()" type="button">&times;</button>
+      <h4 class="modal-title">
+        {t}Preview{/t}
+      </h4>
+    </div>
+    <div class="modal-body clearfix no-padding">
+      <iframe ng-src="[% template.src %]" frameborder="0"></iframe>
+    </div>
+  </script>
   <script type="text/ng-template" id="modal-draft">
     {include file="common/modals/_draft.tpl"}
   </script>
