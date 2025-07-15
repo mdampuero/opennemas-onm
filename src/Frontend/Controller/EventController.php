@@ -147,6 +147,33 @@ class EventController extends FrontendController
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * TODO: Remove when only an advertisement group without category_frontpage.
+     */
+    protected function getAdvertisements($category = null, $token = null)
+    {
+        $token      = $token;
+        $categoryId = empty($category) ? 0 : $category->id;
+        $action     = $this->get('core.globals')->getAction();
+        $group      = $this->getAdvertisementGroup($action);
+
+        $positions = array_merge(
+            $this->get('core.helper.advertisement')->getPositionsForGroup('all'),
+            $this->get('core.helper.advertisement')->getPositionsForGroup($group),
+            $this->get('core.helper.advertisement')->getPositionsForGroup('category_frontpage'),
+            $this->getAdvertisementPositions($group)
+        );
+
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $categoryId);
+
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
+    }
+
+    /**
      * Returns the list of items basing on a list of parameters.
      *
      * @param array $params The list of parameters.
