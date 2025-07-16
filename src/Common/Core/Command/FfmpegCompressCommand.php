@@ -294,10 +294,12 @@ class FfmpegCompressCommand extends ContainerAwareCommand
     {
         $pathInfo      = pathinfo($information['finalPath']);
         $thumbnailPath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '_thumbnail.jpg';
-
+        $config        = $this->getConfig();
+        $second        = $config['thumbnail']['seconds'] ?? 5;
         $command = sprintf(
-            '%s -ss 5 -i %s -vframes 1 -q:v 2 -y %s',
+            '%s -ss %d -i %s -vframes 1 -q:v 2 -y %s',
             self::FFMPEG_PATH,
+            $second,
             escapeshellarg($information['finalPath']),
             escapeshellarg($thumbnailPath)
         );
@@ -352,7 +354,11 @@ class FfmpegCompressCommand extends ContainerAwareCommand
         return $this;
     }
 
-    public function getConfig(){
+    /**
+     * Get manager config
+     */
+    public function getConfig()
+    {
         return $this->getContainer()->get('orm.manager')
             ->getDataSet('Settings', 'manager')
             ->get('storage_settings', []);

@@ -131,6 +131,10 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @inheritdoc
      */
     $scope.buildScope = function() {
+      if (!$scope.data.extra.storage_module && !$scope.data.item.pk_content) {
+        $scope.data.item.type = 'web-source';
+      }
+
       $scope.selectedFile = null;
       $scope.progress = -1;
       $scope.uploadComplete = false;

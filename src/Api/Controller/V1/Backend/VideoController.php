@@ -92,11 +92,12 @@ class VideoController extends ContentController
         }
 
         return array_merge(parent::getExtraData($items), [
-            'authors'      => $this->getAuthors($items),
-            'categories'   => $this->getCategories($items),
-            'extra_fields' => $extraFields ?? null,
-            'tags'         => $this->getTags($items),
-            'formSettings' => [
+            'authors'        => $this->getAuthors($items),
+            'storage_module' => $this->get('core.security')->hasExtension('es.openhost.module.storage'),
+            'categories'     => $this->getCategories($items),
+            'extra_fields'   => $extraFields ?? null,
+            'tags'           => $this->getTags($items),
+            'formSettings'   => [
                 'name'             => $this->module,
                 'expansibleFields' => $this->getFormSettings($this->module)
             ]

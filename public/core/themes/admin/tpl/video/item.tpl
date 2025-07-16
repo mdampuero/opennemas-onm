@@ -49,7 +49,6 @@
     </ul>
   </div>
 {/block}
-
 {block name="rightColumn"}
   <div class="grid simple">
     <div class="grid-body no-padding">
@@ -104,17 +103,19 @@
     <div class="grid-body">
       <div ng-if="!item.pk_content" class="video-type-selector form-group">
         <div class="row">
-          <div class="col-sm-3">
-            <button ng-click="selectType('upload')" ng-class="{ 'selected' : item.type == 'upload'}" class="clearfix btn btn-white video-type-selector-button">
-              <div class="video-selector-icon">
-                <i class="fa fa-upload fa-3x"></i>
-              </div>
-              <div class="video-selector-text">
-                {t}Upload video file{/t}
-              </div>
-            </button>
-          </div>
-          <div class="col-sm-3">
+          {is_module_activated name="es.openhost.module.storage"}
+            <div class="col-sm-3">
+              <button ng-click="selectType('upload')" ng-class="{ 'selected' : item.type == 'upload'}" class="clearfix btn btn-white video-type-selector-button">
+                <div class="video-selector-icon">
+                  <i class="fa fa-upload fa-3x"></i>
+                </div>
+                <div class="video-selector-text">
+                  {t}Upload video file{/t}
+                </div>
+              </button>
+            </div>
+          {/is_module_activated}
+          <div ng-class="data.extra.storage_module ? 'col-sm-3' : 'col-sm-4'">
             <button ng-click="selectType('web-source')" ng-class="{ 'selected' : item.type == 'web-source' }" class="clearfix btn btn-white video-type-selector-button">
               <div class="video-selector-icon">
                 <i class="fa fa-youtube fa-3x"></i>
@@ -124,7 +125,7 @@
               </div>
             </button>
           </div>
-          <div class="col-sm-3">
+          <div ng-class="data.extra.storage_module ? 'col-sm-3' : 'col-sm-4'">
             <button ng-click="selectType('script')" ng-class="{ 'selected' : item.type == 'script' }" class="clearfix btn btn-white video-type-selector-button">
               <div class="video-selector-icon">
                 <i class="fa fa-file-code-o fa-3x"></i>
@@ -134,7 +135,7 @@
               </div>
             </button>
           </div>
-          <div class="col-sm-3">
+          <div ng-class="data.extra.storage_module ? 'col-sm-3' : 'col-sm-4'">
             <button ng-click="selectType('external')" ng-class="{ 'selected' : item.type == 'external' }" class="clearfix btn btn-white video-type-selector-button">
               <div class="video-selector-icon">
                 <i class="fa fa-film fa-3x"></i>

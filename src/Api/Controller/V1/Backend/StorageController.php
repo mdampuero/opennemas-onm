@@ -49,11 +49,11 @@ class StorageController extends Controller
             }
             fclose($output);
 
-            $file      = new \SplFileInfo($tempFilePath);
-            $fileSize  = $file->getSize();
-            $finalPath = $helper->generatePath($file, new \DateTime());
-
-            $finalDir = dirname($finalPath);
+            $file         = new \SplFileInfo($tempFilePath);
+            $fileSize     = $file->getSize();
+            $finalPath    = $helper->generatePath($file, new \DateTime());
+            $finalPathTmp = $helper->generateTmpPath($file, new \DateTime(), $instance->internal_name);
+            $finalDir     = dirname($finalPathTmp);
             if (!is_dir($finalDir)) {
                 mkdir($finalDir, 0777, true);
             }
@@ -61,12 +61,8 @@ class StorageController extends Controller
             rename($tempFilePath, $finalPath);
             rmdir($uploadDir);
 
-            $config = $this->container->get('orm.manager')
-                ->getDataSet('Settings', 'manager')
-                ->get('storage_settings', []);
-
-            $enabledCompressed = $config['compress']['enabled'] ?? false;
-            $enabledProvider   = $config['provider']['enabled'] ?? false;
+            $enabledCompressed = true;
+            $enabledProvider   = true;
 
             if (filter_var($enabledCompressed, FILTER_VALIDATE_BOOLEAN)) {
                 $step = [
@@ -97,6 +93,7 @@ class StorageController extends Controller
                 'fileSize'     => $fileSize,
                 'fileSizeMB'   => round($fileSize / 1048576, 2),
                 'finalPath'    => $finalPath,
+                'finalPathTmp' => $finalPathTmp,
                 'path'         => $instance->getVideosShortPath() . '/' . $helper->getRelativePath($finalPath),
                 'relativePath' => $instance->getVideosShortPath() . '/' . $helper->getRelativePath($finalPath),
             ]);
@@ -148,12 +145,14 @@ class StorageController extends Controller
 
         if ($step['label'] === 'Uploading to S3' && $stepProgress == 0 && $information['status'] === 'done') {
             $information['status'] = 'uploading';
+
             $created = new \Datetime();
             $photo   = $this->container->get('api.service.photo')->createItem([
                 'created'     => $created->format('Y-m-d H:i:s'),
                 'path_file'   => $created->format('/Y/m/d/'),
                 'title'       => $item->title
             ], new \SplFileInfo($information['thumbnails']), true);
+
             $information['photo'] = $photo->id;
             $service->updateItem($pk_content, [
                 'information' => $information

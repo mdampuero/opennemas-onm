@@ -120,6 +120,27 @@ class VideoHelper extends FileHelper
     }
 
     /**
+     * Returns the path where the file should be moved.
+     *
+     * @param \SplFileInfo     $file The file to generate path to.
+     * @param DateTime $date The date to generate the path from.
+     *
+     * @return string The path where the file should be moved.
+     */
+    public function generateTmpPath(\SplFileInfo $file, \DateTime $date, string $instance): string
+    {
+        return preg_replace('/\/+/', '/', sprintf(
+            '%s/%s/%s/%s%s.%s',
+            dirname(__DIR__, 5) . '/tmp/instances/' . $instance,
+            $this->getPathForFile(),
+            $date->format('Y/m/d'),
+            $date->format('YmdHis'),
+            str_pad(substr(gettimeofday()['usec'], 0, 5), 5, '0'),
+            $this->getExtension($file)
+        ));
+    }
+
+    /**
      * @codeCoverageIgnore
      *
      * Returns the extension for a file.
