@@ -370,6 +370,27 @@ class Processor
     }
 
     /**
+     * Forces the image to be in a specific format.
+     *
+     * @param string $format The format to force the image into.
+     */
+    public function forceFormat(string $format)
+    {
+        $this->image->getImagick()->setImageFormat($format);
+        return $this;
+    }
+
+    /**
+     * Returns the raw content of the image.
+     *
+     * @return string The raw content of the image.
+     */
+    public function getRawContent()
+    {
+        return $this->image->getImagick()->getImageBlob();
+    }
+
+    /**
      * Crops the image basing on a list of parameters.
      *
      * @param array $params The list of parameters (topX, topY, width

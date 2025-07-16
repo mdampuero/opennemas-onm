@@ -38,7 +38,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
                 'clear', 'getImageFilename', 'getImageFormat', 'getImageLength',
                 'getImageMimeType', 'getImageProperties', 'getImageIterations',
                 'getImageDelay', 'getImageCompressionQuality', 'setImageFormat',
-                'setImageAlphaChannel', 'setOption'
+                'setImageAlphaChannel', 'setOption', 'getImageBlob'
             ])->getMock();
 
         $this->imagine = $this->getMockBuilder('Imagine')
@@ -52,7 +52,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([])
             ->setMethods([
                 'getImagine', 'getFormat', 'getQuality',
-                'getInterations', 'getDelay', 'setImageFormat'
+                'getInterations', 'getDelay', 'setImageFormat',
+                'getRawContent', 'forceFormat'
             ])->getMock();
 
         $this->im->expects($this->any())->method('getImagine')
@@ -332,6 +333,55 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(0);
     }
 
+    /**
+     * Tests getRawContent.
+     */
+    public function testGetRawContent()
+    {
+        $this->image->expects($this->once())
+            ->method('getImagick')
+            ->willReturn($this->imagick);
+
+        $this->imagick->expects($this->once())
+            ->method('getImageBlob')
+            ->willReturn('raw content');
+
+        $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
+            ->setConstructorArgs([])
+            ->setMethods(['getImagine'])
+            ->getMock();
+
+        $property = new \ReflectionProperty($this->im, 'image');
+        $property->setAccessible(true);
+        $property->setValue($this->im, $this->image);
+
+        $this->assertEquals('raw content', $this->im->getRawContent());
+    }
+
+    /**
+     * Tests forceFormat.
+     */
+    public function testForceFormat()
+    {
+        $this->image->expects($this->once())
+            ->method('getImagick')
+            ->willReturn($this->imagick);
+
+        $this->imagick->expects($this->once())
+            ->method('setImageFormat')
+            ->with('png');
+
+        $this->im = $this->getMockBuilder('Common\Core\Component\Image\Processor')
+            ->setConstructorArgs([])
+            ->setMethods(['getImagine'])
+            ->getMock();
+
+        $property = new \ReflectionProperty($this->im, 'image');
+        $property->setAccessible(true);
+        $property->setValue($this->im, $this->image);
+
+        $this->im->forceFormat('png');
+    }
 
     /**
      * Tests getSize.

@@ -12,7 +12,6 @@ namespace Frontend\Controller;
 use Api\Exception\GetItemException;
 use Api\Exception\GetListException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -148,6 +147,33 @@ class EventController extends FrontendController
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * TODO: Remove when only an advertisement group without category_frontpage.
+     */
+    protected function getAdvertisements($category = null, $token = null)
+    {
+        $token      = $token;
+        $categoryId = empty($category) ? 0 : $category->id;
+        $action     = $this->get('core.globals')->getAction();
+        $group      = $this->getAdvertisementGroup($action);
+
+        $positions = array_merge(
+            $this->get('core.helper.advertisement')->getPositionsForGroup('all'),
+            $this->get('core.helper.advertisement')->getPositionsForGroup($group),
+            $this->get('core.helper.advertisement')->getPositionsForGroup('category_frontpage'),
+            $this->getAdvertisementPositions($group)
+        );
+
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $categoryId);
+
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
+    }
+
+    /**
      * Returns the list of items basing on a list of parameters.
      *
      * @param array $params The list of parameters.
@@ -259,9 +285,17 @@ class EventController extends FrontendController
         );
 
         if ($settings["hide_current_events"] ?? false) {
+            $months = !empty($settings['hide_events_month'])
+                ? $settings['hide_events_month']
+                : 1;
+
+
+            // Calculate the date to hide events
+            $hideDate = (new \DateTime($eventDate))->modify("-$months months")->format('Y-m-d');
+
             $baseSql .= sprintf(
                 'and (start_date_meta.meta_value >= "%s") ',
-                $eventDate
+                $hideDate
             );
         }
 

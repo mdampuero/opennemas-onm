@@ -95,6 +95,24 @@ class NewsMLComponentTextTaquilla extends NewsML
     }
 
     /**
+     * Returns the content status for the event
+     *
+     * @param SimpleXMLObject The parsed data.
+     *
+     * @return int The event content status.
+     */
+    public function getContentStatus($data)
+    {
+        $status = $data->xpath('//Status');
+
+        if (is_array($status) && !empty($status)) {
+            return (string) $status[0]->attributes()->FormalName;
+        }
+
+        return null;
+    }
+
+    /**
      * Returns the information about the event
      *
      * @param SimpleXMLObject The parsed data.
@@ -408,6 +426,7 @@ class NewsMLComponentTextTaquilla extends NewsML
         $this->bag['event_organizer_name'] = $this->getEventOrganizerName($data);
         $this->bag['event_organizer_url']  = $this->getEventOrganizerUrl($data);
         $this->bag['href']                 = $this->getEventOrganizerUrl($data);
+        $this->bag['status']               = $this->getContentStatus($data);
 
         if ($eventEndDate && $eventEndDate != $eventStartDate) {
             $this->bag['event_end_date'] = $eventEndDate->format('Y-m-d');

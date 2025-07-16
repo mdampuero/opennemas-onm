@@ -270,16 +270,8 @@ class HttpTaquilla extends Http
             44 => 'Otros parques',
         ];
 
-        if (in_array($content->event_subtype_id, array_keys($types))) {
-            $content->content_type_name = 'article';
-        }
-
-        // Import as article if is Musical and special city
-        if ($this->isSpecialCity() && $content->event_subtype_id == 30) {
-            $content->content_type_name = 'article';
-        }
-
         $content->id                   = $data['event_id'];
+        $content->content_status       = 1;
         $content->title                = $data['event_name'];
         $content->created              = $now;
         $content->starttime            = $now;
@@ -298,6 +290,17 @@ class HttpTaquilla extends Http
         $content->event_organizer_url  = strtok($details['sminprice_url'], '?');
         $content->event_website        = $details['sminprice_url'];
         $content->tags                 = [];
+
+        if (in_array($content->event_subtype_id, array_keys($types))) {
+            $content->content_type_name = 'article';
+            $content->content_status    = 0;
+        }
+
+        // Import as article if is Musical and special city
+        if ($this->isSpecialCity() && $content->event_subtype_id == 30) {
+            $content->content_type_name = 'article';
+            $content->content_status    = 0;
+        }
 
         if (array_key_exists('end_date', $data) && $data['end_date'] != $data['date']) {
             $content->event_end_date = $data['end_date'];

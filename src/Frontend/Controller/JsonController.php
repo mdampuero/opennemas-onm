@@ -69,7 +69,7 @@ class JsonController extends FrontendController
         $today = date('Y-m-d');
         $limit = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('elements_in_rss', 10);
+            ->get('elements_in_feed', 10);
 
         // If it's a event, we need order by start date, hour, and content ID
         $orderBy = sprintf(
@@ -116,7 +116,7 @@ class JsonController extends FrontendController
 
             // Create a DateTime object for event dates and use extended ISO 8601 format
             $start = $item->event_start_date . ' ' . $item->event_start_hour ?? '00:00';
-            $end   = $item->event_start_date . ' ' . $item->event_start_hour ?? '00:00';
+            $end   = $item->event_end_date . ' ' . $item->event_end_hour ?? '00:00';
 
             $startDate = new \DateTime($start, new \DateTimeZone('Europe/Madrid'));
             $endDate   = new \DateTime($end, new \DateTimeZone('Europe/Madrid'));
@@ -149,13 +149,13 @@ class JsonController extends FrontendController
                 'title'          => $item->title,
                 'url'            => $url,
                 'author'         => $authorName ?? 'Redacción',
-                'longitude'      => $item->event_longitude,
-                'latitude'       => $item->event_latitude,
+                'longitude'      => $item->event_longitude ?? '',
+                'latitude'       => $item->event_latitude ?? '',
                 'thumbnail'      => $imageUrl,
                 'content'        => $item->body,
                 'subtype'        => $categoryName,
                 'nbParticipants' => 0,
-                'address'        => $item->event_address,
+                'address'        => $item->event_address ?? '',
                 'type'           => $item->content_type_name,
                 'id'             => 'event_' . $item->pk_content,
                 'date'           => $startDate,
@@ -198,7 +198,7 @@ class JsonController extends FrontendController
     {
         $limit = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('elements_in_rss', 10);
+            ->get('elements_in_feed', 10);
 
         $orderBy = ' order by contents.starttime desc limit ' . $limit;
         $baseOql = sprintf(

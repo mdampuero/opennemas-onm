@@ -105,5 +105,8 @@
   <script type="text/ng-template" id="modal-update-selected">
     {include file="common/modals/_modalBatchUpdate.tpl"}
   </script>
+  <script type="text/ng-template" id="modal-duplicate">
+    {include file="common/extension/modal.duplicate.tpl"}
+  </script>
 {/block}
 

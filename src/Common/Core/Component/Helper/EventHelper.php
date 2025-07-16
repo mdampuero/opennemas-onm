@@ -575,14 +575,7 @@ class EventHelper
                 'slug'     => _('circus'),
                 'category' => false,
                 'parent'   => 23,
-            ],
-            75 => [
-                'id'       => 75,
-                'name'     => _('Festivals'),
-                'slug'     => _('festivals'),
-                'category' => false,
-                'parent'   => 23,
-            ],
+            ]
         ];
     }
 

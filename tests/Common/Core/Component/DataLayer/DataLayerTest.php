@@ -82,7 +82,7 @@ class DataLayerTest extends \PHPUnit\Framework\TestCase
         $dl->expects($this->any())->method('getDataLayer')
             ->willReturn($data);
 
-        $output = '<script>
+        $output = '<@script>
             var device = (window.innerWidth || document.documentElement.clientWidth '
             . '|| document.body.clientWidth) < 768 ? "phone" : '
             . '((window.innerWidth || document.documentElement.clientWidth '
