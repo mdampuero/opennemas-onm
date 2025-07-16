@@ -56,7 +56,15 @@
           }
         };
 
-
+        /**
+         * Initializes the ad configuration with domain and tag settings.
+         *
+         * @param {string} domain - The domain for which ads will be configured.
+         * @param {string} tagsFormat - The format of tags to be used. If not a
+         * valid format from smartAvailableTagsFormats, defaults to 'onecall_async'.
+         * @param {Object} traffective - Configuration object for Traffective ads.
+         * @param {Object} extraads - Additional ads configuration.
+         */
         $scope.init = function(domain, tagsFormat, traffective, extraads) {
           if ($scope.smartAvailableTagsFormats.indexOf(tagsFormat) < 0) {
             tagsFormat = 'onecall_async';
