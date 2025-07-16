@@ -243,6 +243,11 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
         return;
       }
 
+      if ($scope.isInvalidIframe) {
+        messenger.post(window.strings.forms.not_valid_iframe, 'error');
+        return;
+      }
+
       $scope.draftEnabled      = false;
       $scope.flags.http.saving = true;
 

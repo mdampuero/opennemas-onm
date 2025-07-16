@@ -7,6 +7,11 @@
         <i class="fa fa-pencil"></i>
       </a>
     {/acl}
+    {acl isAllowed="WIDGET_ADMIN"}
+      <button class="btn btn-white btn-small" ng-click="createCopy(item)" type="button" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available" uib-tooltip="{t}Duplicate{/t}" tooltip-placement="top">
+        <i class="fa fa-copy"></i>
+      </button>
+    {/acl}
     {acl isAllowed="WIDGET_DELETE"}
       <button class="btn btn-white btn-small" ng-click="sendToTrash(item)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
         <i class="fa fa-trash-o text-danger">

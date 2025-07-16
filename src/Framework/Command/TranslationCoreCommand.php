@@ -18,10 +18,11 @@ class TranslationCoreCommand extends Command
 {
     public $supportedLanguages = [
         'es_ES',
+        'eu_ES',
+        'ca_ES',
         'gl_ES',
-        // 'it_IT',
-        // 'fr_FR',
-        // 'pt_PT',
+        'fr_FR',
+        'pt_PT',
     ];
 
     public $localeFolder = 'Resources/locale';

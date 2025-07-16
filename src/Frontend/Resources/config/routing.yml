@@ -40,9 +40,6 @@ frontend_author:
 frontend_blog:
     resource: '@FrontendBundle/Resources/config/routing/blog.yml'
 
-frontend_category:
-    resource: '@FrontendBundle/Resources/config/routing/category.yml'
-
 frontend_comment:
     resource: '@FrontendBundle/Resources/config/routing/comment.yml'
 
@@ -100,6 +97,9 @@ frontend_redirect:
 frontend_rss:
     resource: '@FrontendBundle/Resources/config/routing/rss.yml'
 
+frontend_json:
+    resource: '@FrontendBundle/Resources/config/routing/json.yml'
+
 frontend_search:
     resource: '@FrontendBundle/Resources/config/routing/search.yml'
 
@@ -126,3 +126,6 @@ frontend_widget:
 
 frontend_webpush_notifications:
     resource: '@FrontendBundle/Resources/config/routing/webpush_notifications.yml'
+
+frontend_category:
+    resource: '@FrontendBundle/Resources/config/routing/category.yml'

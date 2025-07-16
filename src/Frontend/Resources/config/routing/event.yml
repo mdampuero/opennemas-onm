@@ -5,14 +5,23 @@ frontend_events:
         l10n: true
         subdirectory: true
 
-frontend_event_taglist:
-    path: /events/{tag}/
-    defaults: { _controller: FrontendBundle:Event:tagList, _format: html } #  Tag list
+frontend_events_list:
+    path: /events/{type}/
+    defaults: { _controller: FrontendBundle:Event:typeList }
     requirements:
-        tag : '[^/.]+'
+        type: '[^/]+'
     options:
         l10n: true
-        expose: true
+        subdirectory: true
+
+frontend_events_tag_list:
+    path: /events/{type}/{tag}/
+    defaults: { _controller: FrontendBundle:Event:tagList }
+    requirements:
+        type: '[^/]+'
+        tag: '[^/]+'
+    options:
+        l10n: true
         subdirectory: true
 
 frontend_event_show:
@@ -23,4 +32,34 @@ frontend_event_show:
     options:
         l10n: true
         expose: true
+        subdirectory: true
+
+frontend_events_category:
+    path: /{category_slug}/events/
+    defaults: { _controller: FrontendBundle:Event:categoryList }
+    requirements:
+        category_slug: '[^/]+'
+    options:
+        l10n: true
+        subdirectory: true
+
+frontend_events_category_list:
+    path: /{category_slug}/events/{type}/
+    defaults: { _controller: FrontendBundle:Event:categoryTypeList }
+    requirements:
+        category_slug: '[^/]+'
+        type: '[^/]+'
+    options:
+        l10n: true
+        subdirectory: true
+
+frontend_events_category_tag_list:
+    path: /{category_slug}/events/{type}/{tag}/
+    defaults: { _controller: FrontendBundle:Event:categoryTagList }
+    requirements:
+        category_slug: '[^/]+'
+        type: '[^/]+'
+        tag: '[^/]+'
+    options:
+        l10n: true
         subdirectory: true

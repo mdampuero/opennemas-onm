@@ -54,7 +54,8 @@
           getList:    'api_v1_backend_company_get_list',
           patchItem:  'api_v1_backend_company_patch_item',
           patchList:  'api_v1_backend_company_patch_list',
-          public:     'frontend_company_show'
+          public:     'frontend_company_show',
+          saveItem:   'api_v1_backend_company_save_item'
         };
 
         /**

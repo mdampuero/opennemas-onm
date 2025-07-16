@@ -7,8 +7,22 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ClientException;
 
-class MistralAIHelper
+class OpenRouterHelper
 {
+    /**
+     * The application log service.
+     *
+     * @var Monolog
+     */
+    protected $appLog;
+
+    /**
+     * The error log service.
+     *
+     * @var Monolog
+     */
+    protected $errorLog;
+
     // HTTP client instance for making requests
     protected $client;
 
@@ -24,34 +38,40 @@ class MistralAIHelper
     // Maximum timeout for a request in seconds
     protected $timeout = 120;
 
-    // Base URL for the MistralAI API
-    protected $baseEndpoint = 'https://api.mistral.ai';
+    // Base URL for the OpenRouter API
+    protected $baseEndpoint = 'https://openrouter.ai/api';
 
     // Specific endpoint for chat completions
     protected $endpointChat = '/v1/chat/completions';
 
-     // Specific endpoint for list models
+    // Specific endpoint for list models
     protected $endpointModels = '/v1/models';
 
-     // Array for models
+    // Array for models
     protected $suggestedModels = [];
 
+    // Array for data log
+    protected $dataLog = [];
+
     /**
-     * Constructor for the MistralAIHelper class.
-     * Initializes the container and HTTP client.
+     * Initializes the OpenRouter service.
      *
-     * @param mixed $container Container with necessary dependencies.
+     * @param ContainerInterface $container The service container.
+     * @param LoggerInterface    $appLog    Logger for application-level logs.
+     * @param LoggerInterface    $errorLog  Logger for error logs.
      */
-    public function __construct($container)
+    public function __construct($container, $appLog, $errorLog)
     {
         $this->container = $container;
+        $this->appLog    = $appLog;
+        $this->errorLog  = $errorLog;
         $this->client    = new Client([
             'timeout' => $this->getTimeout(),
         ]);
     }
 
     /**
-     * Sends a message to the MistralAI API.
+     * Sends a message to the OpenRouter API.
      *
      * @param array $data Data required to send to the API, such as the message and API key.
      * @param array $struct Response structure to store the result.
@@ -60,6 +80,7 @@ class MistralAIHelper
     public function sendMessage($data, $struct)
     {
         try {
+            $request = $this->getDataLog();
             // Try the request up to $maxRetries times
             for ($i = 0; $i < $this->getMaxRetries(); $i++) {
                 try {
@@ -76,7 +97,7 @@ class MistralAIHelper
                         }
                     }
 
-                    // Make the POST request to the MistralAI API
+                    // Make the POST request to the OpenRouter API
                     $response = $this->client->request('POST', $this->baseEndpoint . $this->endpointChat, [
                         'headers' => [
                             'Content-Type' => 'application/json',
@@ -86,23 +107,46 @@ class MistralAIHelper
                     ]);
                     $response = json_decode($response->getBody(), true);
 
-                    // Simulated response for testing purposes (optional)
-                    //$response = $this->simulResponse();
-
                     return $this->normalizeResponse($response, $struct);
-                } catch (\Exception $e) {
-                    // If it's the last retry, throw the exception
+                } catch (ClientException $e) {
                     if ($i === $this->getMaxRetries() - 1) {
                         throw $e;
                     }
+                    $this->errorLog->error(
+                        'ONMAI - ClientException - Retry ' . ($i + 1) . ': ' . $e->getMessage(),
+                        $request
+                    );
+
+                    // Wait between retries
+                    sleep($this->retryDelay);
+                } catch (RequestException $e) {
+                    if ($i === $this->getMaxRetries() - 1) {
+                        throw $e;
+                    }
+                    $this->errorLog->error(
+                        'ONMAI - RequestException - Retry ' . ($i + 1) . ': ' . $e->getMessage(),
+                        $request
+                    );
+
+                    // Wait between retries
+                    sleep($this->retryDelay);
+                } catch (\Exception $e) {
+                    if ($i === $this->getMaxRetries() - 1) {
+                        throw $e;
+                    }
+                    $this->errorLog->error(
+                        'ONMAI - Exception - Retry ' . ($i + 1) . ': ' . $e->getMessage(),
+                        $request
+                    );
 
                     // Wait between retries
                     sleep($this->retryDelay);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Handle errors
             $struct['error'] = $e->getMessage();
+            $this->errorLog->error('ONMAI - Exception - Final: ' . $e->getMessage(), $request);
             return $struct;
         }
     }
@@ -110,13 +154,13 @@ class MistralAIHelper
     /**
      * Normalizes the response from the API to fit the expected structure.
      *
-     * @param array $originalResponse The original response from the MistralAI API.
+     * @param array $originalResponse The original response from the OpenRouter API.
      * @param array $struct The structure that will store the results.
      * @return array Normalized structure with the result and token usage.
      */
     public function normalizeResponse($originalResponse, $struct)
     {
-        // Extract the message content from the MistralAI response
+        // Extract the message content from the OpenRouter response
         if (isset($originalResponse['choices'][0]['message']['content'])) {
             $struct['result'] = $originalResponse['choices'][0]['message']['content'] ?? '';
             unset($originalResponse['choices'][0]['message']['content']);
@@ -157,7 +201,7 @@ class MistralAIHelper
     }
 
     /**
-     * Gets the base endpoint for the MistralAI API.
+     * Gets the base endpoint for the OpenRouter API.
      *
      * @return string Base URL for the API.
      */
@@ -167,7 +211,7 @@ class MistralAIHelper
     }
 
     /**
-     * Gets the chat endpoint for the MistralAI API.
+     * Gets the chat endpoint for the OpenRouter API.
      *
      * @return string Chat completion endpoint.
      */
@@ -184,38 +228,6 @@ class MistralAIHelper
     public function getTimeout()
     {
         return $this->timeout;
-    }
-
-    /**
-     * Simulates a response from the MistralAI API for testing purposes.
-     *
-     * @return array Simulated response.
-     */
-    public function simulResponse()
-    {
-        return [
-            'id' => 'chatcmpl-AtDf5dAEXRCkkKo2Z5pQttSf3vWVd',
-            'object' => 'chat.completion',
-            'created' => 1737723919,
-            'model' => 'gpt-4-turbo-2024-04-09',
-            'choices' => [
-                [
-                    'index' => 0,
-                    'message' => [
-                        'role' => 'assistant',
-                        'content' => '<p>Explore the <strong>latest advancements</strong> in technology </p>',
-                        'refusal' => null
-                    ],
-                    'logprobs' => null,
-                    'finish_reason' => 'stop'
-                ]
-            ],
-            'usage' => [
-                'prompt_tokens' => 475,
-                'completion_tokens' => 45,
-                'total_tokens' => 520
-            ]
-        ];
     }
 
     /**
@@ -239,11 +251,31 @@ class MistralAIHelper
 
             return $ids;
         } catch (ClientException $e) {
-            return [];
+            $this->suggestedModels = [];
         } catch (RequestException $e) {
-            return [];
+            $this->suggestedModels = [];
         } catch (\Exception $e) {
-            return [];
+            $this->suggestedModels = [];
         }
+
+        return $this->suggestedModels;
+    }
+
+    /**
+     * Get the value of dataLog
+     */
+    public function getDataLog()
+    {
+        return [
+            'request' => $this->dataLog
+        ];
+    }
+
+    /**
+     * Set the value of dataLog
+     */
+    public function setDataLog($dataLog)
+    {
+        $this->dataLog = $dataLog;
     }
 }

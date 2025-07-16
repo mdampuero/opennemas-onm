@@ -251,26 +251,25 @@ class LocalRepository
      * @param array $contents The list of contents to sort.
      * @param array $order    The order criteria.
      */
-    protected function sort(array &$contents, array $order)
+    protected function sort(array &$contents, array $order): void
     {
         $property  = 'created_time';
         $direction = 'desc';
 
         if (!empty($order)) {
-            $property  = array_keys($order)[0];
-            $direction = array_values($order)[0];
+            [$property, $direction] = [key($order), current($order)];
         }
 
-        usort($contents, function ($a, $b) use ($property, $direction) {
-            if ($property === 'priority') {
-                return $direction === 'desc'
-                    ? $b->{$property} <= $a->{$property}
-                    : $b->{$property} > $a->{$property};
-            }
+        usort($contents, static function ($a, $b) use ($property, $direction) {
+            $valA = $a->{$property};
+            $valB = $b->{$property};
 
-            return $direction === 'asc'
-                ? $b->{$property} <= $a->{$property}
-                : $b->{$property} > $a->{$property};
+            // Invert logic if property is 'priority'
+            $multiplier = ($property === 'priority')
+                ? ($direction === 'asc' ? -1 : 1)
+                : ($direction === 'asc' ? 1 : -1);
+
+            return $multiplier * ($valA <=> $valB);
         });
     }
 }

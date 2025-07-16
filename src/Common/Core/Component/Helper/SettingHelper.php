@@ -135,4 +135,9 @@ class SettingHelper
     {
         return boolval($this->ds->get('disable_default_ga'));
     }
+
+    public function isMergeEnabled() : bool
+    {
+        return boolval($this->ds->get('merge_category_url', 0));
+    }
 }

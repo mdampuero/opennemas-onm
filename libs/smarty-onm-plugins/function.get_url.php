@@ -38,7 +38,5 @@ function smarty_function_get_url($params, &$smarty)
             'locale'   => $translation ? $params['locale'] : null,
         ]);
 
-    $url = $container->get('core.decorator.url')->prefixUrl($url);
-
     return $escape ? rawurlencode($url) : $url;
 }

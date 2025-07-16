@@ -86,7 +86,8 @@ class DataLayer
 
         $json = str_replace('"%device%"', 'device', $json);
 
-        $code = '<script>
+        // Avoid lazyload for datalayer script
+        $code = '<@script>
             var device = (window.innerWidth || document.documentElement.clientWidth '
             . '|| document.body.clientWidth) < 768 ? "phone" : '
             . '((window.innerWidth || document.documentElement.clientWidth '

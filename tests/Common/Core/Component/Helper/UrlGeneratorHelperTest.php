@@ -64,6 +64,11 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
             ->setMethods([ 'generate' ])
             ->getMock();
 
+        $this->sh = $this->getMockBuilder('SettingHelper')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'isMergeEnabled' ])
+            ->getMock();
+
         $this->authorService = $this->getMockBuilder('AuthorService')
             ->setMethods([ 'getItem' ])
             ->getMock();
@@ -131,6 +136,9 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
             case 'router':
                 return $this->router;
+
+            case 'core.helper.setting':
+                return $this->sh;
         }
 
         return null;
@@ -148,14 +156,40 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests generate when the content provided has an external URI.
+     * Tests generate when the category provided has a manual layout.
      */
-    public function testGenerateForCategory()
+    public function testGenerateForManualCategory()
+    {
+        $category = new Category([ 'name' => 'garply', 'layout' => 1 ]);
+
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($category);
+
+        $this->sh->expects($this->any())->method('isMergeEnabled')
+            ->willReturn(false);
+
+        $this->router->expects($this->once())->method('generate')
+            ->with('frontend_frontpage_category', [ 'category' => 'garply' ])
+            ->willReturn('seccion/garply');
+
+        $this->assertEquals(
+            '/seccion/garply',
+            $this->urlGenerator->generate($category)
+        );
+    }
+
+    /**
+     * Tests generate when the category provided has a automatic layout.
+     */
+    public function testGenerateForAutoCategory()
     {
         $category = new Category([ 'name' => 'garply' ]);
 
         $this->fm->expects($this->any())->method('get')
             ->willReturn($category);
+
+        $this->sh->expects($this->any())->method('isMergeEnabled')
+            ->willReturn(false);
 
         $this->router->expects($this->once())->method('generate')
             ->with('category_frontpage', [ 'category_slug' => 'garply' ])
@@ -163,6 +197,29 @@ class UrlGeneratorHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             '/blog/section/garply',
+            $this->urlGenerator->generate($category)
+        );
+    }
+
+    /**
+     * Tests generate when has merge enabled.
+     */
+    public function testGenerateFormergeEnabledCategory()
+    {
+        $category = new Category([ 'name' => 'garply' ]);
+
+        $this->fm->expects($this->any())->method('get')
+            ->willReturn($category);
+
+        $this->sh->expects($this->any())->method('isMergeEnabled')
+            ->willReturn(true);
+
+        $this->router->expects($this->once())->method('generate')
+            ->with('category_homepage', [ 'category_slug' => 'garply' ])
+            ->willReturn('garply');
+
+        $this->assertEquals(
+            '/garply',
             $this->urlGenerator->generate($category)
         );
     }

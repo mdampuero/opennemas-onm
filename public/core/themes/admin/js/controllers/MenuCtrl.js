@@ -88,10 +88,6 @@
             link_name: 'slug',
             referenceId: 'id',
           },
-          'blog-category': {
-            link_name: 'name',
-            referenceId: 'id',
-          },
           category: {
             link_name: 'name',
             referenceId: 'id',
@@ -196,8 +192,6 @@
               $scope.data.extra.locale.default
             );
           }
-
-          $scope.data.extra['blog-category'] = angular.copy($scope.data.extra.category);
 
           $scope.menuData  = $scope.transformExtraData($scope.data.extra);
 

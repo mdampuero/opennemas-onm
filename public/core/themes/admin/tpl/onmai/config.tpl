@@ -63,6 +63,10 @@
               <h4>{t}DeepSeek API Key{/t}</h4>
               <input class="form-control" ng-model="settings.onmai_config.deepseek.apiKey" type="text">
             </div>
+            <div class="col-xs-12 col-md-6" ng-if="settings.onmai_config.service === 'openrouter'">
+              <h4>{t}OpenRouter API Key{/t}</h4>
+              <input class="form-control" ng-model="settings.onmai_config.openrouter.apiKey" type="text">
+            </div>
           </div>
         </div>
       </div>

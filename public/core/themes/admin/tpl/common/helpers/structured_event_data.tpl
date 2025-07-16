@@ -41,6 +41,17 @@
   "description": "{$content->description|replace:'\\':''|escape:'htmlall'}",
   "eventStatus": "https://schema.org/EventScheduled",
   "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  {if $content->event_tickets_link}
+  {assign var="clean_price" value=$content->event_tickets_price|regex_replace:'/[^\d,.]/':''}
+  "offers": {
+    "@type": "Offer",
+    "url": "{$content->event_tickets_link}",
+    "price": "{$clean_price|default:'0'}",
+    "priceCurrency": "EUR",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "{format_date date=$content->event_start_date format="yyyy-MM-dd'T'HH:mm:ssXXX" type="custom"}"
+  },
+  {/if}
   "location": {
     "@type": "Place",
     "name": "{($content->event_place) ? "{$content->event_place|escape:'htmlall'}" : ""}",
@@ -48,7 +59,7 @@
   },
   "organizer": {
     "@type": "Organization",
-    "name": "{($content->event_organizer_name) ? "{$content->event_organizer_name|escape:'htmlall'}" : "{$siteName|replace:'\\':''|escape:'htmlall'}"}",
+    "name": "{($content->event_organizer_name) ? "{$content->event_organizer_name|escape:'htmlall'}" : "{t}Unknown{/t}"}",
     "url": "{($content->event_organizer_url) ? "{$content->event_organizer_url}" : "{$siteUrl}"}"
   }
   {if has_featured_media($content, 'frontpage')}

@@ -60,6 +60,13 @@ class NewsAgencyResourceService implements Service
     protected $repository;
 
     /**
+     * The synchronizer.
+     *
+     * @var Synchronizer
+     */
+    protected $synchronizer;
+
+    /**
      * The event dispatcher service.
      *
      * @var EventDispatcher
