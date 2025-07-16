@@ -240,7 +240,7 @@
 
           // Change value to string for old numeric timezones
           if ($scope.settings.locale && !isNaN(Number($scope.settings.locale.backend.timezone)) &&
-              angular.isNumber(Number($scope.settings.locale.backend.timezone))) {
+            angular.isNumber(Number($scope.settings.locale.backend.timezone))) {
             $scope.settings.locale.backend.timezone = $scope.extra
               .timezones[Number($scope.settings.locale.backend.timezone)];
           }
@@ -251,9 +251,9 @@
 
           if ($scope.settings.locale) {
             $scope.settings.locale.frontend.language.available =
-            $scope.settings.locale.frontend.language.available.map(function(e) {
-              return { code: e, name: $scope.extra.locales.frontend[e] };
-            });
+              $scope.settings.locale.frontend.language.available.map(function(e) {
+                return { code: e, name: $scope.extra.locales.frontend[e] };
+              });
           }
 
           angular.forEach($scope.settings.translators, function(value) {
@@ -277,6 +277,19 @@
             });
         };
 
+        $scope.getParametersDefault = function(key) {
+          $scope.settings.parametersDefault = [];
+
+          if (typeof $scope.extra !== 'undefined') {
+            for (var i = 0; i < $scope.extra.translation_services.length; i++) {
+              if ($scope.extra.translation_services[i].translator === key) {
+                $scope.settings.parametersDefault = $scope.extra.translation_services[i].parameters;
+                break;
+              }
+            }
+          }
+        };
+
         /**
          * @function removeTranslator
          * @memberOf SettingsCtrl
@@ -289,6 +302,10 @@
         $scope.removeTranslator = function(index) {
           $scope.settings.translators.splice(index, 1);
         };
+
+        $scope.$watch('settings.translatorsDefault.translator', function(nv, ov) {
+          $scope.getParametersDefault(nv);
+        }, true);
       }
     ]);
 })();

@@ -37,6 +37,11 @@
     </a>
     <translator item="data.items[$index]" keys="keys" language="data.extra.locale.selected" link="[% routing.generate('backend_menu_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" class="btn-group" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
   {/acl}
+  {acl isAllowed="MENU_ADMIN"}
+    <button class="btn btn-white btn-small" ng-click="createCopy(item)" type="button" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available" uib-tooltip="{t}Duplicate{/t}" tooltip-placement="top">
+      <i class="fa fa-copy"></i>
+    </button>
+  {/acl}
   {acl isAllowed="MENU_DELETE"}
     <button class="btn btn-white btn-small" ng-click="delete(item.pk_menu)" type="button" uib-tooltip="{t}Delete{/t}" tooltip-placement="top">
       <i class="fa fa-trash-o text-danger"></i>

@@ -99,6 +99,22 @@
             return translators.shift();
           }
 
+          /**
+           * If the default translator is set, return the default translator.
+           */
+          if (typeof from !== 'undefined') {
+            if (typeof translator.config.locale.translatorsDefault !== 'undefined' &&
+                typeof translator.config.locale.translatorsDefault.translator !== 'undefined' &&
+                translator.config.locale.translatorsDefault.translator !== '') {
+              return {
+                default: true,
+                from: translator.config.locale.default,
+                to: to,
+                translator: translator.config.locale.translatorsDefault.translator
+              };
+            }
+          }
+
           return null;
         };
 

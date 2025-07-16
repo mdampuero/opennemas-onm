@@ -105,6 +105,11 @@ instances:
         webpush_subscribers:
             type: integer
             options: { default: 0, unsigned: true }
+        ai_spent:
+            type: float
+        ai_config:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
         tags:
             type: integer
             options: { default: 0, unsigned: true }
@@ -650,3 +655,46 @@ user_notification:
             primary: true
             unique: true
             flags: {  }
+prompt:
+    columns:
+        id:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        mode:
+            type: text
+            options: { default: null, length: 32, notnull: true }
+        name:
+            type: text
+            options: { default: null, length: 65532, notnull: true }
+        prompt:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        role:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        field:
+            type: text
+            options: { default: null, length: 32, notnull: false }
+        tone:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        model:
+            type: text
+            options: { default: null, length: 255, notnull: false }
+        instances:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        instructions:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        status:
+            type: integer
+            options: { default: 1, unsigned: true }
+
+    index:
+        -
+            name:    PRIMARY
+            columns: [ id ]
+            primary: true
+            unique:  true
+            flags:   {}

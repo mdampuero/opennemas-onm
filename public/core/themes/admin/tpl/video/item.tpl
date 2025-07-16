@@ -87,6 +87,15 @@
       {include file="ui/component/content-editor/accordion/additional-data.tpl"}
     </div>
   </div>
+  {if !empty({setting name=seo_information})}
+    <div class="grid simple" ng-if="!hasMultilanguage()">
+      <div class="grid-body no-padding">
+        <div class="grid-collapse-title">
+          <i class="fa fa-search m-r-10"></i> {t}SEO Information{/t}
+        </div>
+        {include file="ui/component/content-editor/accordion/seo_info.tpl"}
+    </div>
+  {/if}
 {/block}
 
 {block name="leftColumn"}
@@ -142,8 +151,9 @@
           </div>
         </div>
       </span>
-      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
+      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true
+      AI=true AIFieldType="titles"}
+      {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true AI=true AIFieldType="descriptions"}
       <span ng-if="item.type === 'external'">
         <div class="form-group">
           <div class="controls">
@@ -267,5 +277,8 @@
   </script>
   <script type="text/ng-template" id="modal-expansible-fields">
     {include file="common/modals/_modalExpansibleFields.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-onmai">
+    {include file="common/modals/_modalOnmAI.tpl"}
   </script>
 {/block}

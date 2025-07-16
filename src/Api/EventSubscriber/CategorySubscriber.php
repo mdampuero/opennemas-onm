@@ -51,6 +51,10 @@ class CategorySubscriber implements EventSubscriberInterface
                 [ 'onCategoryUpdate', 5 ],
                 [ 'removeCategoryCache', 5 ],
             ],
+            'category.emptyItem' => [
+                [ 'onCategoryUpdate', 5 ],
+                [ 'removeCategoryCache', 5 ],
+            ],
         ];
     }
 

@@ -35,6 +35,13 @@ abstract class Server
     protected $localFiles = [];
 
     /**
+     * The server parameters.
+     *
+     * @var array
+     */
+    protected $params = [];
+
+    /**
      * Files in server.
      *
      * @var array
@@ -75,7 +82,7 @@ abstract class Server
      *
      * @param string $url The http server URL.
      *
-     * @return strin The content from this URL.
+     * @return string The content from this URL.
      */
     protected function getContentFromUrl(string $url) : ?string
     {

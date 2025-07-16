@@ -104,7 +104,9 @@
                   isEditable:        $scope.isEditable,
                   items:             [ item ],
                   related:           $scope.data.extra.related,
-                  content_type_name: item.type === 'photo' ? 'photo' : 'article'
+                  content_type_name: item.type === 'photo' ? 'photo' : 'article',
+                  onmai_prompts:     $scope.onmai_prompts,
+                  onmai_extras:      $scope.onmai_extras,
                 };
               },
               success: function() {
@@ -215,6 +217,8 @@
           }
 
           $scope.list();
+
+          $scope.getOnmAIPrompts();
         };
 
         /**
@@ -319,6 +323,13 @@
               template.fk_content_category : null,
             content_status: template.content_status,
             content_type_name: template.content_type_name,
+            titlePrompt: template.titlePromptSelected ? template.titlePromptSelected : null,
+            titleTone: template.titleToneSelected ? template.titleToneSelected.name : null,
+            descriptionPrompt: template.descriptionPromptSelected ? template.descriptionPromptSelected : null,
+            descriptionTone: template.descriptionToneSelected ? template.descriptionToneSelected.name : null,
+            bodyPrompt: template.bodyPromptSelected ? template.bodyPromptSelected : null,
+            bodyTone: template.bodyToneSelected ? template.bodyToneSelected.name : null,
+            language: template.languageSelected ? template.languageSelected.code : null,
           };
 
           return http.put(route, data);
@@ -347,6 +358,12 @@
               template.fk_content_category : null,
             content_status: template.content_status,
             content_type_name: template.content_type_name,
+            titlePrompt: template.titlePromptSelected ? template.titlePromptSelected : null,
+            titleTone: template.titleToneSelected ? template.titleToneSelected.name : null,
+            descriptionPrompt: template.descriptionPromptSelected ? template.descriptionPromptSelected : null,
+            descriptionTone: template.descriptionToneSelected ? template.descriptionToneSelected.name : null,
+            bodyPrompt: template.bodyPromptSelected ? template.bodyPromptSelected : null,
+            bodyTone: template.bodyToneSelected ? template.bodyToneSelected.name : null
           };
 
           return http.post($scope.routes.importList, data);
@@ -446,6 +463,24 @@
           $scope.selected.related = _.concat(_.difference(
             $scope.selected.related, relatedToDelete), relatedToAdd);
         }, true);
+
+        $scope.getOnmAIPrompts = function() {
+          $scope.waiting = true;
+          var oqlQuery   = oqlEncoder.getOql({
+            epp: 1000,
+            mode: 'Agency',
+            orderBy: { name: 'asc' },
+            page: 1,
+          });
+
+          http.get({ name: 'api_v1_backend_onmai_prompt_get_list', params: { oql: oqlQuery } })
+            .then(function(response) {
+              $scope.onmai_prompts = response.data.items;
+              $scope.onmai_extras = response.data.extra;
+            }).finally(function() {
+              $scope.waiting = false;
+            });
+        };
       }
     ]);
 })();

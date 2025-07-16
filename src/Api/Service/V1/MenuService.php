@@ -93,6 +93,7 @@ class MenuService extends OrmService
                 });
 
                 $item->menu_items = $filteredItems;
+                $item->locale     = $locale ?? '';
             }
 
             return $item;

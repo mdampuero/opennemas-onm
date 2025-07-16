@@ -54,15 +54,26 @@
         </div>
       {/acl}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
+      {include file="ui/component/content-editor/accordion/seo-input.tpl"}
     </div>
   </div>
+  {if !empty({setting name=seo_information})}
+    <div class="grid simple" ng-if="!hasMultilanguage()">
+      <div class="grid-body no-padding">
+        <div class="grid-collapse-title">
+          <i class="fa fa-search m-r-10"></i> {t}SEO Information{/t}
+        </div>
+        {include file="ui/component/content-editor/accordion/seo_info.tpl"}
+    </div>
+  {/if}
 {/block}
 
 {block name="leftColumn"}
   <div class="grid simple">
     <div class="grid-body">
-      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iValidation=true iTitle="{t}Title{/t}"}
-      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=30 required=true imagepicker=true}
+      {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iValidation=true iTitle="{t}Title{/t}"
+      AI=true AIFieldType="titles"}
+      {include file="ui/component/content-editor/textarea.tpl" title="{t}Body{/t}" field="body" preset="standard" rows=30 required=true imagepicker=true AI=true AIFieldType="bodies"}
     </div>
   </div>
 {/block}
@@ -76,5 +87,8 @@
   </script>
   <script type="text/ng-template" id="modal-expansible-fields">
     {include file="common/modals/_modalExpansibleFields.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-onmai">
+    {include file="common/modals/_modalOnmAI.tpl"}
   </script>
 {/block}

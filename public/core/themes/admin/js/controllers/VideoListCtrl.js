@@ -50,7 +50,8 @@
           getList:    'api_v1_backend_video_get_list',
           patchItem:  'api_v1_backend_video_patch_item',
           patchList:  'api_v1_backend_video_patch_list',
-          public:     'frontend_video_show'
+          public:     'frontend_video_show',
+          saveItem:   'api_v1_backend_video_save_item'
         };
 
         /**

@@ -163,8 +163,8 @@ class AuthorController extends FrontendController
                 'and ((starttime is null or starttime <= "%s") and (endtime is null or endtime > "%s")) ' .
                 'order by starttime desc limit %d offset %d',
                 $params['item']->id,
-                gmdate('Y-m-d H:i:s'),
-                gmdate('Y-m-d H:i:s'),
+                date('Y-m-d H:i:s'),
+                date('Y-m-d H:i:s'),
                 $params['epp'],
                 $params['epp'] * ($params['page'] - 1)
             )

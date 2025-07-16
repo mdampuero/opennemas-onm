@@ -32,7 +32,8 @@ class LanguageSettingController extends SettingController
     protected $keys = [
         'time_zone',
         'locale',
-        'translators'
+        'translators',
+        'translatorsDefault'
     ];
 
     /**

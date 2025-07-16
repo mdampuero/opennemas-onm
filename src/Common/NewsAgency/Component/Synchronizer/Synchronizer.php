@@ -125,8 +125,6 @@ class Synchronizer
             return;
         }
 
-        $this->lockSync();
-
         if (array_key_exists('id', $servers)) {
             $servers = [ $servers ];
         }
@@ -134,8 +132,6 @@ class Synchronizer
         foreach ($servers as $server) {
             $this->emptyServer($server);
         }
-
-        $this->unlockSync();
     }
 
     /**
@@ -212,8 +208,6 @@ class Synchronizer
             $this->setupSyncEnvironment();
         }
 
-        $this->lockSync();
-
         if (array_key_exists('id', $servers)) {
             $servers = [ $servers ];
         }
@@ -231,8 +225,6 @@ class Synchronizer
                 $this->updateSyncFile();
             } catch (\Exception $e) {
                 throw new \Exception($e->getMessage(), $e->getCode());
-            } finally {
-                $this->unlockSync();
             }
         }
 
@@ -408,7 +400,7 @@ class Synchronizer
     /**
      * Creates a lock file to avoid concurrent synchronizations.
      */
-    protected function lockSync()
+    public function lockSync()
     {
         $this->fs->touch($this->lockFilePath);
         $this->fs->chgrp($this->lockFilePath, 'www-data', true);
@@ -519,7 +511,7 @@ class Synchronizer
     /**
      * Sets up the environment for a new synchronization.
      */
-    protected function setupSyncEnvironment() : void
+    public function setupSyncEnvironment() : void
     {
         if (!$this->fs->exists($this->syncPath)) {
             $this->fs->mkdir($this->syncPath);
@@ -529,7 +521,7 @@ class Synchronizer
     /**
      * Deletes the lock file.
      */
-    protected function unlockSync() : void
+    public function unlockSync() : void
     {
         if ($this->fs->exists($this->lockFilePath)) {
             $this->fs->remove($this->lockFilePath);

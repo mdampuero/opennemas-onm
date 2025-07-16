@@ -77,7 +77,7 @@ class PhotoHelper
      *
      * @return string The URL for the image.
      */
-    public function getPhotoPath($item, string $transform = null, array $params = [], $absolute = false)
+    public function getPhotoPath($item, ?string $transform = null, array $params = [], bool $absolute = false)
     {
         if (is_string($item) || empty($item)) {
             return $item;
@@ -105,19 +105,19 @@ class PhotoHelper
             return $url;
         }
 
-        if ($absolute) {
-            $this->router->setContext(
-                (new RequestContext())->setBaseUrl($this->instance->getBaseUrl())
-            );
-        }
-
-        return $this->router->generate(
+        // Generate the path on relative.
+        $resource = $this->router->generate(
             'asset_image',
             [
-                'params' => implode(',', array_merge([$transform], $params)),
+                'params' => implode(',', array_merge([ $transform ], $params)),
                 'path'   => ltrim($url, '/')
             ]
         );
+
+        // Generate the path on absolute or return to relative patch.
+        return $absolute
+            ? $this->instance->getBaseUrl() . $resource
+            : $resource;
     }
 
     /**

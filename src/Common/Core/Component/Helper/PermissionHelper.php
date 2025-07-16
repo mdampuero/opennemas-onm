@@ -1596,6 +1596,12 @@ class PermissionHelper
                 'description' => _('Manage module setting'),
                 'module'      => 'es.openhost.module.events',
                 'enabled'     => 1
+            ],
+            263 => [
+                'id'          => 263,
+                'name'        => 'ONMAI_ADMIN',
+                'module'      => 'es.openhost.module.onmai',
+                'enabled'     => 1
             ]
         ];
     }

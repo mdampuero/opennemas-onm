@@ -49,7 +49,7 @@ class AdvertisementRenderer extends Renderer
      *
      * @var array
      */
-    protected $types = [ 'Image', 'Html', 'Revive', 'Dfp', 'Smart' ];
+    protected $types = [ 'Image', 'Html', 'Revive', 'Dfp', 'Smart', 'Traffective' ];
 
     /**
      * Initializes the AdvertisementRenderer
@@ -362,7 +362,7 @@ class AdvertisementRenderer extends Renderer
         }
 
         $headers = '';
-        foreach (array_slice($this->types, -3) as $type) {
+        foreach (array_slice($this->types, -4) as $type) {
             $method   = 'render' . $type . 'Headers';
             $headers .= $this->{$method}($advertisements, $params);
         }
@@ -475,7 +475,7 @@ class AdvertisementRenderer extends Renderer
      * Returns the HTML for a safe frame advertisement slot
      *
      * @param int $type The advertisement script type.
-     * 0 -> Image, 1 -> Html, 2 -> Revive, 3 -> DFP, 4 -> Smart.
+     * 0 -> Image, 1 -> Html, 2 -> Revive, 3 -> DFP, 4 -> Smart, 5 -> Traffective.
      *
      * @return \AdvertisementRenderer The advertisement renderer object.
      */
@@ -611,6 +611,21 @@ class AdvertisementRenderer extends Renderer
 
         return !empty($advertisements)
             ? $this->getRendererClass(4)->renderInlineHeader($advertisements, $params)
+            : '';
+    }
+
+    /**
+     * Returns the HTML header section for the DFP advertisements.
+     *
+     * @param array $advertisements    The list of advertisements.
+     * @param array $params The list of parameters to render the advertisement header.
+     *
+     * @return string HTML for the DFP header.
+     */
+    protected function renderTraffectiveHeaders($advertisements, $params)
+    {
+        return !empty($advertisements)
+            ? $this->getRendererClass(5)->renderInlineHeader($advertisements, $params)
             : '';
     }
 

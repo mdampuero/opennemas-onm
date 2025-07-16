@@ -129,6 +129,8 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
       }
 
+      $scope.data.item = $scope.parseData($scope.data.item, false);
+
       if ($scope.draftKey !== null && $scope.data.item.pk_content) {
         $scope.draftKey = 'video-' + $scope.data.item.pk_content + '-draft';
       }
@@ -233,5 +235,22 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         $scope.preview[type] = $scope.trustSrc(nv[type]);
       }
     }, true);
+
+    /**
+     * Parses the data and calculates text complexity.
+     *
+     * @param {Object} data - Object containing the text information.
+     * @param {string} data.body - The body of the text to analyze.
+     * @param {boolean} preview - Indicates if it's a preview (not used in the function).
+     * @returns {Object} - The input object with added `text_complexity` and `word_count` properties.
+     */
+    $scope.parseData = function(data, preview) {
+      var bodyComplexity = $scope.getTextComplexity(data.description);
+
+      data.text_complexity = bodyComplexity.textComplexity;
+      data.word_count = bodyComplexity.wordsCount;
+
+      return data;
+    };
   }
 ]);

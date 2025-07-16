@@ -37,10 +37,10 @@
       </NewsLines>
       <AdministrativeMetadata>
         <Provider>
-          <Party FormalName="{setting name=site_name}" />
+          <Party {if $extSource}FormalName="{$extSource}"{else}FormalName="{setting name=site_name}"{/if}/>
         </Provider>
         <Creator>
-          <Party FormalName="{setting name=site_name}" />
+          <Party {if $extSource}FormalName="{$extSource}"{else}FormalName="{setting name=site_name}"{/if}/>
         </Creator>
       </AdministrativeMetadata>
       <!--Text collection.-->
@@ -55,10 +55,10 @@
           <DescriptiveMetadata>
             <Language FormalName="es" />
             <DateLineDate>{format_date date=$content->created type="custom" format="yMMdd'T'HHmmssxxx"}</DateLineDate>
-            <Property FormalName="Tesauro" Value="{get_category_slug($content)}"/>
+            <Property FormalName="Tesauro" Value="{if $extCategory}{$extCategory}{else}{get_category_slug($content)}{/if}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$content->id}" />
           </DescriptiveMetadata>
-          <ContentItem Href="{get_url item=$content absolute=true}">
+            <ContentItem Href="{if $content instanceof \Content}{get_url item=$content absolute=true}{/if}" type="{$content->content_type_name}">
             <MediaType FormalName="Text" />
             <Format FormalName="NITF" />
             <MimeType FormalName="text/vnd.IPTC.NITF" />
@@ -67,18 +67,29 @@
                 <head>
                   <title><![CDATA[{$content->title_int|default:$content->title}]]></title>
                   <docdata management-status="usable">
-                    <doc.rights agent="Opennemas"/>
+                    <doc.rights agent="{$extSource|default:"Opennemas"}"/>
                     <doc-id id-string="{$content->id}" />
                     <key-list>
                       <keyword key="{renderMetaKeywords content=$content onlyTags=True}"/>
                     </key-list>
                     {if $content->content_type_name == 'event'}
-                      <identified-content>
-                        <event start-date="{format_date date=$content->event_start_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_start_hour|default:'00:00' type='custom' format="HHmmssxxx"}" end-date="{format_date date=$content->event_end_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_end_hour|default:'00:00' type='custom' format="HHmmssxxx"}"></event>
-                        <location>{$content->event_place}</location>
+                      <identified-content type-id="{$content->event_type_id}" subtype-id="{$content->event_subtype_id}">
+                        <event start-date="{format_date date=$content->event_start_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_start_hour|default:'00:00' type='custom' format="HHmmssxxx"}" {if $content->event_end_date}end-date="{format_date date=$content->event_end_date type='custom' format="yMMdd'T'"}{format_date date=$content->event_end_hour|default:'00:00' type='custom' format="HHmmssxxx"}"{/if}></event>
+                        <location>
+                          <location.city>{$content->event_city}</location.city>
+                          <location.place>{$content->event_place}</location.place>
+                          <location.address>{$content->event_address}</location.address>
+                          <location.latitude>{$content->event_map_latitude}</location.latitude>
+                          <location.longitude>{$content->event_map_longitude}</location.longitude>
+                        </location>
                         {if $content->event_website}
-                        <virtloc value="{$content->event_website}"></virtloc>
+                        <virtloc value="{$content->event_website|escape:'html'}"></virtloc>
                         {/if}
+                        <organizer>
+                          <organizer.name>{$content->event_organizer_name}</organizer.name>
+                          <organizer.url>{$content->event_organizer_url|escape:'html'}</organizer.url>
+                        </organizer>
+                        <price min="{$content->event_tickets_price}" url="{$content->event_tickets_link|escape:'html'}"></price>
                       </identified-content>
                     {/if}
                   </docdata>
@@ -189,7 +200,7 @@
                   <!-- The link to download image -->
                   <ContentItem Href="{if !empty($featuredMediaContent->external_uri)}{$featuredMediaContent->external_uri}{else}{$app.instance->getBaseUrl()}{get_photo_path($featuredMediaContent)}{/if}">
                     <MediaType FormalName="PhotoFront" />
-                    <MimeType FormalName="{get_photo_mime_type($featuredMediaContent)}" />
+                    <MimeType FormalName="{if !empty($featuredMediaContent->image_data)}{$featuredMediaContent->image_data['mimetype']}{else}{get_photo_mime_type($featuredMediaContent)}{/if}" />
                     {if empty($featuredMediaContent->external_uri)}
                     <Characteristics>
                       <SizeInBytes>{get_photo_size($featuredMediaContent) * 1024}</SizeInBytes>
@@ -198,6 +209,13 @@
                       <Property FormalName="PixelDepth" Value="24" />
                       <Property FormalName="Width" Value="{get_photo_width($featuredMediaContent)}" />
                     </Characteristics>
+                    {elseif !empty($featuredMediaContent->image_data)}
+                      <Characteristics>
+                        <Property FormalName="Onm_Filename" Value="{$featuredMediaContent->image_data['filename']}" />
+                        <Property FormalName="Height" Value="{$featuredMediaContent->image_data['height']}" />
+                        <Property FormalName="PixelDepth" Value="24" />
+                        <Property FormalName="Width" Value="{$featuredMediaContent->image_data['width']}" />
+                      </Characteristics>
                     {/if}
                   </ContentItem>
                 </NewsComponent>

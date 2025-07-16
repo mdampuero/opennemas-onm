@@ -157,9 +157,10 @@ class InstanceController extends Controller
                 $creator->backupAssets($assetFolder);
                 $creator->backupDatabase($database);
                 $creator->backupInstance($instance->id);
-
-                $creator->deleteAssets($instance->internal_name);
+                $creator->backupInstanceMetas($instance->id);
                 $creator->deleteDatabase($database);
+                $creator->deleteAssets($instance->internal_name);
+                $creator->deleteInstanceFolder($instance->internal_name);
 
                 $em->remove($instance);
                 $deleted++;

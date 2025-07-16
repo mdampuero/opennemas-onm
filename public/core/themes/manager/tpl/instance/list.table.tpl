@@ -26,6 +26,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-domain_expire" checklist-model="columns.selected" checklist-value="'domain_expire'" type="checkbox">
+    <label for="checkbox-domain_expire">
+      {t}Domain expire date{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-subdirectory" checklist-model="columns.selected" checklist-value="'subdirectory'" type="checkbox">
     <label for="checkbox-subdirectory">
       {t}Subdirectory{/t}
@@ -182,6 +188,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-ai-spent" checklist-model="columns.selected" checklist-value="'ai_spent'" type="checkbox">
+    <label for="checkbox-ai-spent">
+      {t}AI Spent{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-blocked" checklist-model="columns.selected" checklist-value="'blocked'" type="checkbox">
     <label for="checkbox-blocked">
       {t}Blocked{/t}
@@ -215,6 +227,10 @@
   <th class="pointer" ng-click="sort('domains')" ng-show="isColumnEnabled('domains')" width="300">
     {t}Domains{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('domains') == 'asc', 'fa fa-caret-down': isOrderedBy('domains') == 'desc'}"></i>
+  </th>
+  <th class="text-center pointer" ng-click="sort('domain_expire')" ng-show="isColumnEnabled('domain_expire')" width="300">
+    {t}Domain expire date{/t}
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('domain_expire') == 'asc', 'fa fa-caret-down': isOrderedBy('domain_expire') == 'desc'}"></i>
   </th>
   <th class="pointer" ng-show="isColumnEnabled('subdirectory')" width="150">
     {t}Subdirectory{/t}
@@ -319,6 +335,10 @@
     <i class="fa fa-puzzle-piece" uib-tooltip="{t}Widgets{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('widgets') == 'asc', 'fa fa-caret-down': isOrderedBy('widgets') == 'desc'}"></i>
   </th>
+  <th class="text-center pointer" ng-click="sort('ai_spent')" ng-show="isColumnEnabled('ai_spent')" width="120">
+    <i class="fa fa-puzzle-piece" uib-tooltip="{t}AI Spent{/t}" tooltip-placement="bottom"></i>
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('ai_spent') == 'asc', 'fa fa-caret-down': isOrderedBy('ai_spent') == 'desc'}"></i>
+  </th>
   <th class="text-center pointer" ng-show="isColumnEnabled('blocked')" width="60">
     <i class="fa fa-lock" uib-tooltip="{t}Blocked{/t}" tooltip-placement="bottom"></i>
   </th>
@@ -373,6 +393,16 @@
           </span>
         </span>
       </small>
+    </div>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('domain_expire')">
+    <div>
+      <span ng-if="item.domain_expire">
+        <i class="fa fa-calendar"></i> [% item.domain_expire | moment : 'YYYY-MM-DD' %]
+      </span>
+      <span ng-if="item.domain_expire === null">
+        -
+      </span>
     </div>
   </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('subdirectory')" title="{t}Subdirectory{/t}">
@@ -516,6 +546,11 @@
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('widgets')" title="{t}Widgets{/t}">
     <span class="badge text-bold">
       [% item.widgets %]
+    </span>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('ai_spent')" title="{t}AI Spent{/t}">
+    <span class="badge badge-info">
+      € [% item.ai_spent | number: 2 %]
     </span>
   </td>
   <td class="text-center" ng-show="isColumnEnabled('blocked')">
