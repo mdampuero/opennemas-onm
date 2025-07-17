@@ -12,9 +12,9 @@
 namespace Common\NewsAgency\Component\Importer;
 
 use Common\Model\Entity\Content;
+use Common\Model\Entity\Instance;
 use Common\NewsAgency\Component\Repository\LocalRepository;
 use Common\NewsAgency\Component\Resource\ExternalResource;
-use Common\Model\Entity\Instance;
 
 class Importer
 {
@@ -165,7 +165,7 @@ class Importer
         $data = $this->getData($resource, $data);
 
         // Import contents as draft enabled
-        if ($this->isDraftImportEnabled()) {
+        if ($this->isDraftImportEnabled() || $resource->status === 'Withheld') {
             $data['content_status'] = 0;
         }
 
@@ -711,6 +711,9 @@ class Importer
             return $data;
         }
 
+        // Generate unique slug to avoid duplicated
+        $data['slug'] = $this->generateUniqueSlug($data['slug'], 'event');
+
         $resources = $this->repository->find($resource->related);
         $urns      = array_map(function ($a) {
             return $a->urn;
@@ -809,6 +812,32 @@ class Importer
         );
 
         return $data;
+    }
+
+    /**
+     * Returns a unique slug for content
+     *
+     * @param string $baseSlug The original slug.
+     * @param string $type     The content type.
+     *
+     * @return string The unique slug.
+     */
+    protected function generateUniqueSlug(string $baseSlug, string $type): string
+    {
+        $i    = 1;
+        $slug = $baseSlug;
+        $cs   = $this->container->get('api.service.content');
+
+        while (true) {
+            try {
+                $cs->getItemBySlugAndContentType($slug, $type);
+
+                $slug = $baseSlug . '-' . $i++;
+            } catch (\Exception $e) {
+                // Assume slug is available
+                return $slug;
+            }
+        }
     }
 
     /**

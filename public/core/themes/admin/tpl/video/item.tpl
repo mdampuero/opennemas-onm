@@ -164,8 +164,8 @@
         </div>
       </span>
       <ng-container ng-if="item.type !== 'upload' || item.pk_content">
-        {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true}
-        {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true}
+        {include file="ui/component/input/text.tpl" iCounter=true iField="title" iNgActions="ng-blur=\"generate()\"" iRequired=true iTitle="{t}Title{/t}" iValidation=true AI=true AIFieldType="titles"}
+        {include file="ui/component/content-editor/textarea.tpl" title="{t}Description{/t}" field="description" rows=5 imagepicker=true AI=true AIFieldType="descriptions"}
       </ng-container>
       <div class="row">
         <div class="col-lg-12" ng-if="item.type === 'upload'">
@@ -352,5 +352,8 @@
   </script>
   <script type="text/ng-template" id="modal-expansible-fields">
     {include file="common/modals/_modalExpansibleFields.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-onmai">
+    {include file="common/modals/_modalOnmAI.tpl"}
   </script>
 {/block}

@@ -286,13 +286,13 @@ services:
         arguments: [ '@service_container', '@application.log', '@error.log' ]
         public:    true
 
-    core.helper.gemini:
-        class:     Common\Core\Component\Helper\GeminiHelper
+    core.helper.openrouter:
+        class:     Common\Core\Component\Helper\OpenRouterHelper
         arguments: [ '@service_container', '@application.log', '@error.log' ]
         public:    true
 
-    core.helper.mistralai:
-        class:     Common\Core\Component\Helper\MistralAIHelper
+    core.helper.gemini:
+        class:     Common\Core\Component\Helper\GeminiHelper
         arguments: [ '@service_container', '@application.log', '@error.log' ]
         public:    true
 

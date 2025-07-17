@@ -23,49 +23,64 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $caches = [
-        'list'     => 'articles',
-        'taglist'  => 'articles',
-        'typelist' => 'articles',
-        'show'     => 'articles'
+        'list'             => 'articles',
+        'taglist'          => 'articles',
+        'typelist'         => 'articles',
+        'categorylist'     => 'articles',
+        'categorytaglist'  => 'articles',
+        'categorytypelist' => 'articles',
+        'show'             => 'articles'
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $groups = [
-        'list'     => 'article_inner',
-        'taglist'  => 'article_inner',
-        'typelist' => 'article_inner',
-        'show'     => 'article_inner'
+        'list'             => 'article_inner',
+        'taglist'          => 'article_inner',
+        'typelist'         => 'article_inner',
+        'categorylist'     => 'article_inner',
+        'categorytaglist'  => 'article_inner',
+        'categorytypelist' => 'article_inner',
+        'show'             => 'article_inner'
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $positions = [
-        'list'     => [ 1, 2, 5, 6, 7 ],
-        'taglist'  => [ 1, 2, 5, 6, 7 ],
-        'typelist' => [ 1, 2, 5, 6, 7 ],
-        'show'     => [ 1, 2, 5, 6, 7 ]
+        'list'             => [ 1, 2, 5, 6, 7 ],
+        'taglist'          => [ 1, 2, 5, 6, 7 ],
+        'typelist'         => [ 1, 2, 5, 6, 7 ],
+        'categorylist'     => [ 1, 2, 5, 6, 7 ],
+        'categorytaglist'  => [ 1, 2, 5, 6, 7 ],
+        'categorytypelist' => [ 1, 2, 5, 6, 7 ],
+        'show'             => [ 1, 2, 5, 6, 7 ]
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $queries = [
-        'list'     => [ 'page' ],
-        'taglist'  => [ 'page', 'type', 'tag' ],
-        'typelist' => [ 'page', 'type' ]
+        'list'             => [ 'page' ],
+        'taglist'          => [ 'page', 'type', 'tag' ],
+        'typelist'         => [ 'page', 'type' ],
+        'categorylist'     => [ 'page', 'category_slug'],
+        'categorytaglist'  => [ 'page', 'category_slug', 'type', 'tag' ],
+        'categorytypelist' => [ 'page', 'category_slug', 'type' ]
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $routes = [
-        'list'     => 'frontend_events',
-        'taglist'  => 'frontend_events_tag_list',
-        'typelist' => 'frontend_events_list',
-        'show'     => 'frontend_event_show'
+        'list'             => 'frontend_events',
+        'taglist'          => 'frontend_events_tag_list',
+        'typelist'         => 'frontend_events_list',
+        'categorylist'     => 'frontend_events_category',
+        'categorytaglist'  => 'frontend_events_category_tag_list',
+        'categorytypelist' => 'frontend_events_category_list',
+        'show'             => 'frontend_event_show'
     ];
 
     /**
@@ -77,16 +92,43 @@ class EventController extends FrontendController
      * {@inheritdoc}
      */
     protected $templates = [
-        'list'     => 'event/list.tpl',
-        'taglist'  => 'event/list.tpl',
-        'typelist' => 'event/list.tpl',
-        'show'     => 'event/item.tpl'
+        'list'             => 'event/list.tpl',
+        'taglist'          => 'event/list.tpl',
+        'typelist'         => 'event/list.tpl',
+        'categorylist'     => 'event/list.tpl',
+        'categorytaglist'  => 'event/list.tpl',
+        'categorytypelist' => 'event/list.tpl',
+        'show'             => 'event/item.tpl'
     ];
 
     /**
      * {@inheritdoc}
      */
     protected $extension = 'es.openhost.module.events';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function categoryListAction(Request $request)
+    {
+        return parent::listAction($request);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function categoryTagListAction(Request $request)
+    {
+        return parent::listAction($request);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function categoryTypeListAction(Request $request)
+    {
+        return parent::listAction($request);
+    }
 
     /**
      * {@inheritdoc}
@@ -102,6 +144,33 @@ class EventController extends FrontendController
     public function typeListAction(Request $request)
     {
         return parent::listAction($request);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * TODO: Remove when only an advertisement group without category_frontpage.
+     */
+    protected function getAdvertisements($category = null, $token = null)
+    {
+        $token      = $token;
+        $categoryId = empty($category) ? 0 : $category->id;
+        $action     = $this->get('core.globals')->getAction();
+        $group      = $this->getAdvertisementGroup($action);
+
+        $positions = array_merge(
+            $this->get('core.helper.advertisement')->getPositionsForGroup('all'),
+            $this->get('core.helper.advertisement')->getPositionsForGroup($group),
+            $this->get('core.helper.advertisement')->getPositionsForGroup('category_frontpage'),
+            $this->getAdvertisementPositions($group)
+        );
+
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $categoryId);
+
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
     }
 
     /**
@@ -140,16 +209,20 @@ class EventController extends FrontendController
             throw new ResourceNotFoundException();
         }
 
-        $action   = $this->get('core.globals')->getAction();
-        $tag      = $params['tag'] ?? null;
-        $type     = $params['type'] ?? null;
-        $settings = $this->get('orm.manager')
+        $action       = $this->get('core.globals')->getAction();
+        $categorySlug = $params['category_slug'] ?? null;
+        $tag          = $params['tag'] ?? null;
+        $type         = $params['type'] ?? null;
+        $settings     = $this->get('orm.manager')
             ->getDataSet('Settings', 'instance')
             ->get('event_settings', false);
 
         // Set dates
         $eventDate     = date('Y-m-d');
         $publishedDate = gmdate('Y-m-d H:i:s');
+
+        // Flag for canonical url when duplicated list
+        $changeCanonical = false;
 
         $baseSql = sprintf(
             'FROM contents '
@@ -161,15 +234,26 @@ class EventController extends FrontendController
             . 'and end_date_meta.meta_name = "event_end_date" '
         );
 
-        // Check for event type, category or tag on first url parameter
+        // Check for category at the start of the path
+        if (!empty($categorySlug) && $category = $this->matchCategory($categorySlug)) {
+            $baseSql .= sprintf(
+                'join content_category on contents.pk_content = content_category.content_id '
+                . 'and content_category.category_id = %d ',
+                $category->id
+            );
+        }
+
+        // Check for event type, category as type or tag on first url parameter
         if (!empty($type)) {
-            if ($this->get('core.helper.event')->matchType($type)) {
+            if ($eventType = $this->get('core.helper.event')->getEventTypeBySlug($type)) {
                 $baseSql .= sprintf(
                     'join contentmeta as event_type_meta on contents.pk_content = event_type_meta.fk_content '
                     . 'AND event_type_meta.meta_name = "event_type" AND event_type_meta.meta_value = "%s" ',
-                    $type
+                    $eventType['id']
                 );
-            } elseif ($category = $this->matchCategory($type)) {
+            } elseif (empty($categorySlug) && $category = $this->matchCategory($type)) {
+                $changeCanonical = true;
+
                 $baseSql .= sprintf(
                     'join content_category on contents.pk_content = content_category.content_id '
                     . 'and content_category.category_id = %d ',
@@ -201,9 +285,17 @@ class EventController extends FrontendController
         );
 
         if ($settings["hide_current_events"] ?? false) {
+            $months = !empty($settings['hide_events_month'])
+                ? $settings['hide_events_month']
+                : 1;
+
+
+            // Calculate the date to hide events
+            $hideDate = (new \DateTime($eventDate))->modify("-$months months")->format('Y-m-d');
+
             $baseSql .= sprintf(
                 'and (start_date_meta.meta_value >= "%s") ',
-                $eventDate
+                $hideDate
             );
         }
 
@@ -237,8 +329,27 @@ class EventController extends FrontendController
             $params['x-cache-for'] = $expire;
         }
 
+        // Set canonical for pages with same content but diferent uri
+        if ($changeCanonical) {
+            $canonicalAction = [
+                'taglist'  => 'categorytypelist',
+                'typelist' => 'categorylist'
+            ];
+
+            $canonicalParams = [
+                'category_slug' => $params['type'] ?? null,
+                'type'          => $params['tag'] ?? null
+            ];
+
+            $params['o_canonical'] = $this->getCanonicalUrl(
+                $canonicalAction[$action],
+                array_filter($canonicalParams)
+            );
+        }
+
         $params['tag']        = $tagItem->name ?? null;
         $params['x-tags']    .= ',event-frontpage';
+        $params['o_category'] = $category ?? null;
         $params['contents']   = $items;
         $params['pagination'] = $this->get('paginator')->get([
             'directional' => true,
@@ -247,7 +358,11 @@ class EventController extends FrontendController
             'total'       => $total[0]['total'],
             'route'       => [
                 'name' => $this->routes[$action],
-                'params' => [ 'type' => $type, 'tag'  => $tag ]
+                'params' => [
+                    'type' => $type,
+                    'tag'  => $tag,
+                    'category_slug' => $category->name ?? null
+                ]
             ]
         ]);
     }

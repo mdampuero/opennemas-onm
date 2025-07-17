@@ -43,6 +43,7 @@
          * @type {Object}
          */
         $scope.routes = {
+          saveItem:   'api_v1_backend_widget_save_item',
           deleteItem: 'api_v1_backend_widget_delete_item',
           deleteList: 'api_v1_backend_widget_delete_list',
           getList:    'api_v1_backend_widget_get_list',

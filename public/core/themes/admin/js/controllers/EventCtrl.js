@@ -15,8 +15,10 @@
      *   Check billing information when saving user.
      */
     .controller('EventCtrl', [
-      '$controller', '$scope', 'related', 'routing', 'translator',
-      function($controller, $scope, related, routing, translator) {
+      '$controller', '$scope', 'related', 'routing', 'translator', 'cleaner',
+      'http', '$uibModal',
+      function($controller, $scope, related, routing, translator, cleaner, http,
+          $uibModal) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -102,7 +104,9 @@
           public:     'frontend_event_show',
           redirect:   'backend_event_show',
           saveItem:   'api_v1_backend_event_save_item',
-          updateItem: 'api_v1_backend_event_update_item'
+          updateItem: 'api_v1_backend_event_update_item',
+          savePreview: 'api_v1_backend_event_save_preview',
+          getPreview: 'api_v1_backend_event_get_preview',
         };
 
         /**
@@ -202,6 +206,59 @@
 
           $scope.isInvalidIframe = !iframeRegex.test(newValue);
         });
+
+        /**
+         * @function preview
+         * @memberOf EventCtrl
+         *
+         * @description
+         *  Generates a preview of the event item by sending the data to the server.
+         *
+         * @param {Object} item - The event item to preview.
+         */
+        $scope.preview = function() {
+          $scope.flags.http.generating_preview = true;
+
+          // Force ckeditor
+          CKEDITOR.instances.body.updateElement();
+          CKEDITOR.instances.description.updateElement();
+
+          var status = { starttime: null, endtime: null, content_status: 1 };
+          var item   = Object.assign({}, $scope.data.item, status);
+
+          if (item.tags) {
+            item.tags = item.tags.filter(function(tag) {
+              return Number.isInteger(tag);
+            });
+          }
+
+          var data = {
+            item: JSON.stringify(cleaner.clean(item)),
+            locale: $scope.config.locale.selected
+          };
+
+          http.put($scope.routes.savePreview, data).then(function() {
+            $uibModal.open({
+              templateUrl: 'modal-preview',
+              windowClass: 'modal-fullscreen',
+              controller: 'ModalCtrl',
+              resolve: {
+                template: function() {
+                  return {
+                    src: routing.generate($scope.routes.getPreview)
+                  };
+                },
+                success: function() {
+                  return null;
+                }
+              }
+            });
+
+            $scope.flags.http.generating_preview = false;
+          }, function() {
+            $scope.flags.http.generating_preview = false;
+          });
+        };
       }
     ]);
 })();

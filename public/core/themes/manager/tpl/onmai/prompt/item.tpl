@@ -81,7 +81,7 @@
                   </ui-select-choices>
                 </ui-select>
               </div>
-              <div class="col-md-3 col-sm-6 form-group" ng-if="item.mode != 'Agency'">
+              <div class="col-md-3 col-sm-6 form-group">
                 <label>{t}Field{/t}</label>
                 <ui-select name="mode" class="form-control" ng-change="" theme="select2" ng-model="item.field" search-enabled="false" required ng-init="options = [ { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Descriptions{/t}', key: 'descriptions'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
                   <ui-select-match>
@@ -116,11 +116,11 @@
               </div>
               <div class="form-group col-md-12">
                 <label class="form-label" for="name">{t}Objective{/t}</label>
-                <textarea name="prompt" id="prompt" ng-change="delayedPreview()" ng-model="item.prompt" class="form-control" rows="8" required maxlength="2048"></textarea>
+                <textarea name="prompt" id="prompt" ng-change="delayedPreview()" ng-model="item.prompt" class="form-control" rows="8" required ></textarea>
               </div>
               <div class="col-md-12">
                 <label class="form-label" for="name">{t}Final prompt preview{/t}</label>
-                <textarea name="preview" id="preview" readonly ng-model="preview" class="form-control" rows="18" required maxlength="2048"></textarea>
+                <textarea name="preview" id="preview" readonly ng-model="preview" class="form-control" rows="18" ></textarea>
               </div>
             </div>
           </div>
@@ -164,6 +164,7 @@
             <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel m-t-5 p-t-15 bg-light">
               <div class="form-status text-left">
                 <span class="badge text-capitalize badge-primary pointer m-a-5"
+                      ng-if="instructionExists(id)"
                       uib-tooltip="{t}Remove{/t}" tooltip-placement="top"
                       ng-repeat="id in item.instructions"
                       ng-click="deselectInstruction(id)"

@@ -118,7 +118,8 @@ class AIHelper
 {{instrucciones}}
 
 ### IDIOMA:
-El idioma de la respuesta debe ser "{{idioma}}". Responde estrictamente usando este idioma yas convenciones culturales.
+El idioma de la respuesta debe ser "{{idioma}}". Responde estrictamente usando este idioma
+siguiendo sus convenciones culturales.
 
 ### TEXTO ORIGINAL:
 {{fuente}}
@@ -166,7 +167,7 @@ EOT;
         'openai'    => 'Open AI',
         'gemini'    => 'Gemini',
         'deepseek'  => 'DeepSeek',
-        'mistralai' => 'Mistral AI',
+        'openrouter' => 'OpenRouter',
     ];
 
 
@@ -432,14 +433,19 @@ EOT;
         if ($instructions && count($instructions)) {
             $counter = 0;
 
-            $instructionsString = implode("\n", array_map(
-                function ($item) use (&$counter) {
-                    $counter++;
-                    $instruction = $this->getInstructionsById($item);
-                    return $counter . '. ' . $instruction['value'] ?? $item;
-                },
-                $instructions
-            ));
+            $mapped = array_map(function ($item) use (&$counter) {
+                $instruction = $this->getInstructionsById($item);
+                if (!($instruction['value'] ?? false)) {
+                    return null;
+                }
+                $counter++;
+                return $counter . '. ' . $instruction['value'];
+            }, $instructions);
+
+            $filtered = array_filter($mapped);
+            if (!empty($filtered)) {
+                $instructionsString = implode("\n", $filtered);
+            }
         }
 
         if ($instructionsString) {
@@ -739,25 +745,6 @@ EOT;
                 continue;
             }
 
-            $this->userPrompt  = sprintf("\n\n### OBJETIVO:\n%s", $prompt);
-            $this->userPrompt .= "\n### TEXTO ORIGINAL:\n" . $data[$field] . "\n";
-
-            $instructions = [
-                ['value' => 'Responde directamente con el texto transformado.']
-            ];
-
-            $instructions[] = !empty($tone)
-                ? ['value' => "Adopta un tono " . $tone . " en la transformación."]
-                : ['value' => "Debes mantener el tono del texto original."];
-
-            if (!empty($data['language'])) {
-                $instructions[] = [
-                    'value' => "La respuesta debe ser en el idioma " . $data['language'] . "."
-                ];
-            }
-
-            $this->insertInstructions($instructions);
-
             $dataLog = [
                 'field'    => $field,
                 'tone'     => $tone,
@@ -766,7 +753,17 @@ EOT;
                 'prompt'   => $prompt ?? '',
             ];
 
-            $settings['messages'] = [['role' => 'user', 'content' => $this->userPrompt]];
+            $settings['messages'] = [['role' => 'user', 'content' => $this->replaceVars([
+                'objetivo'      => $data[$promptKey]['prompt'] ?? '',
+                'mode'          => 'Edit',
+                'instrucciones' => $this->getInstructionsList($data[$promptKey]['instructions'] ?? []),
+                'rol'           => $this->getRoleByName($data[$promptKey]['role']) ?? '',
+                'idioma'        => !empty($data['language'])
+                    ? $data['language']
+                    : 'Mantén el idioma del texto original',
+                'fuente'        => $data[$field] ?? '',
+                'tono'          => ($tone) ? $this->getToneByName($tone) : 'Mantén el tono del texto original'
+            ])]];
 
             // Log the selected prompt details for debugging purposes.
             $this->container->get('core.helper.' . $settings['engine'])->setDataLog($dataLog);

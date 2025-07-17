@@ -47,6 +47,7 @@
           patchItem:  'api_v1_backend_static_page_patch_item',
           patchList:  'api_v1_backend_static_page_patch_list',
           public:     'frontend_static_page',
+          saveItem:   'api_v1_backend_static_page_save_item'
         };
 
         /**
