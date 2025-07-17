@@ -70,7 +70,11 @@
                     <doc.rights agent="{$extSource|default:"Opennemas"}"/>
                     <doc-id id-string="{$content->id}" />
                     <key-list>
-                      <keyword key="{renderMetaKeywords content=$content onlyTags=True}"/>
+                      {if is_string($content->tags)}
+                        <keyword key="{$content->tags}"/>
+                      {else}
+                        <keyword key="{renderMetaKeywords content=$content onlyTags=true}"/>
+                      {/if}
                     </key-list>
                     {if $content->content_type_name == 'event'}
                       <identified-content type-id="{$content->event_type_id}" subtype-id="{$content->event_subtype_id}">

@@ -289,7 +289,7 @@ class HttpTaquilla extends Http
         $content->event_tickets_link   = $details['sminprice_url'];
         $content->event_organizer_url  = strtok($details['sminprice_url'], '?');
         $content->event_website        = $details['sminprice_url'];
-        $content->tags                 = [];
+        $content->tags                 = $entity['name'] . " " . $data['place']['city'] . " " . $entity['type'];
 
         if (in_array($content->event_subtype_id, array_keys($types))) {
             $content->content_type_name = 'article';
