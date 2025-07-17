@@ -53,7 +53,7 @@ class StorageController extends Controller
             $fileSize     = $file->getSize();
             $finalPath    = $helper->generatePath($file, new \DateTime());
             $finalPathTmp = $helper->generateTmpPath($file, new \DateTime(), $instance->internal_name);
-            $finalDir     = dirname($finalPathTmp);
+            $finalDir     = dirname($finalPath);
             if (!is_dir($finalDir)) {
                 mkdir($finalDir, 0777, true);
             }
