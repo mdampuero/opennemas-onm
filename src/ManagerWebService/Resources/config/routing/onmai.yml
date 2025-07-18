@@ -91,6 +91,13 @@ manager_ws_onmai_prompt_save:
     options:
         expose: true
 
+manager_ws_onmai_prompt_preview:
+    path:     /onmai/prompt/preview
+    defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptPreview }
+    methods:  [ POST ]
+    options:
+        expose: true
+
 manager_ws_onmai_prompt_update:
     path:     /onmai/prompt/{id}
     defaults: { _controller: ManagerWebServiceBundle:OnmAI:promptUpdate }

@@ -36,6 +36,13 @@ class ExternalResource
     public $body = '';
 
     /**
+     * The canonical url
+     *
+     * @var string
+     */
+    public $canonicalurl = '';
+
+    /**
      * The category name.
      *
      * @var string
@@ -48,6 +55,20 @@ class ExternalResource
      * @var \Datetime
      */
     public $created_time = null;
+
+    /**
+     * The content type name.
+     *
+     * @var string
+     */
+    public $content_type_name = '';
+
+    /**
+     * The content status: Canceled | Usable | Pending | Withheld.
+     *
+     * @var string
+     */
+    public $status;
 
     /**
      * The resource id.
@@ -90,6 +111,11 @@ class ExternalResource
      * @var array
      */
     public $related = [];
+
+    /**
+     * The resource signature.
+     */
+    public $signature = null;
 
     /**
      * The source id.
@@ -144,6 +170,111 @@ class ExternalResource
      * @var string
      */
     public $urn = 'urn:nitf:::';
+
+    /**
+     * The event resource start date.
+     *
+     * @var string
+     */
+    public $event_start_date;
+
+    /**
+     * The event resource start hour.
+     *
+     * @var string
+     */
+    public $event_start_hour;
+
+    /**
+     * The event resource end date.
+     *
+     * @var string
+     */
+    public $event_end_date;
+
+    /**
+     * The event resource end hour.
+     *
+     * @var string
+     */
+    public $event_end_hour;
+
+    /**
+     * The event resource website.
+     *
+     * @var string
+     */
+    public $event_website;
+
+    /**
+     * The event resource information.
+     *
+     * @var string
+     */
+    public $event_info;
+
+    /**
+     * The event resource place.
+     *
+     * @var string
+     */
+    public $event_place;
+
+    /**
+     * The event resource address.
+     *
+     * @var string
+     */
+    public $event_address;
+
+    /**
+     * The event resource latitude.
+     *
+     * @var string
+     */
+    public $event_map_latitude;
+
+    /**
+     * The event resource longitude.
+     *
+     * @var string
+     */
+    public $event_map_longitude;
+
+    /**
+     * The event resource ticket price.
+     *
+     * @var string
+     */
+    public $event_tickets_price;
+
+    /**
+     * The event resource ticket link.
+     *
+     * @var string
+     */
+    public $event_tickets_link;
+
+    /**
+     * The event resource type.
+     *
+     * @var string
+     */
+    public $event_type;
+
+    /**
+     * The event resource organizer name.
+     *
+     * @var string
+     */
+    public $event_organizer_name;
+
+    /**
+     * The event resource organizer url.
+     *
+     * @var string
+     */
+    public $event_organizer_url;
 
     /**
      * Initializes a Resource.

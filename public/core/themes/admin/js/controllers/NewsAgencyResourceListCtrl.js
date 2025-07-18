@@ -323,8 +323,12 @@
               template.fk_content_category : null,
             content_status: template.content_status,
             content_type_name: template.content_type_name,
-            prompt: template.promptSelected ? template.promptSelected.prompt : null,
-            tone: template.toneSelected ? template.toneSelected.name : null,
+            titlePrompt: template.titlePromptSelected ? template.titlePromptSelected : null,
+            titleTone: template.titleToneSelected ? template.titleToneSelected.name : null,
+            descriptionPrompt: template.descriptionPromptSelected ? template.descriptionPromptSelected : null,
+            descriptionTone: template.descriptionToneSelected ? template.descriptionToneSelected.name : null,
+            bodyPrompt: template.bodyPromptSelected ? template.bodyPromptSelected : null,
+            bodyTone: template.bodyToneSelected ? template.bodyToneSelected.name : null,
             language: template.languageSelected ? template.languageSelected.code : null,
           };
 
@@ -354,8 +358,12 @@
               template.fk_content_category : null,
             content_status: template.content_status,
             content_type_name: template.content_type_name,
-            prompt: template.promptSelected ? template.promptSelected.prompt : null,
-            tone: template.toneSelected ? template.toneSelected.name : null
+            titlePrompt: template.titlePromptSelected ? template.titlePromptSelected : null,
+            titleTone: template.titleToneSelected ? template.titleToneSelected.name : null,
+            descriptionPrompt: template.descriptionPromptSelected ? template.descriptionPromptSelected : null,
+            descriptionTone: template.descriptionToneSelected ? template.descriptionToneSelected.name : null,
+            bodyPrompt: template.bodyPromptSelected ? template.bodyPromptSelected : null,
+            bodyTone: template.bodyToneSelected ? template.bodyToneSelected.name : null
           };
 
           return http.post($scope.routes.importList, data);

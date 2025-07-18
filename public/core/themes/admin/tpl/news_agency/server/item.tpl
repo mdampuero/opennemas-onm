@@ -120,6 +120,9 @@
           </div>
         </div>
       </div>
+      <div class="grid-collapse-title">
+        {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Keep canonical url from origin{/t}" field="canonicalurl"}
+      </div>
       <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.agency }" ng-click="expanded.agency = !expanded.agency">
         <i class="fa fa-pencil m-r-10"></i>{t}Agency{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.agency }"></i>
@@ -142,6 +145,9 @@
         {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Automatic import{/t}" field="auto_import"}
       </div>
       <div ng-if="item.auto_import">
+        <div class="grid-collapse-title">
+          {include file="ui/component/content-editor/accordion/checkbox.tpl" title="{t}Import as draft{/t}" field="draft_import"}
+        </div>
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.import }" ng-click="expanded.import = !expanded.import">
           <i class="fa fa-cloud-download m-r-10"></i>
           {t}Import{/t} {t}as{/t}
@@ -152,6 +158,7 @@
           <span class="badge badge-default m-r-10 m-t-2 ng-cloak pull-right text-bold text-uppercase" ng-show="!expanded.import && item.target">
             <span ng-if="item.target === 'article'">{t}Article{/t}</span>
             <span ng-if="item.target === 'opinion'">{t}Opinion{/t}</span>
+            <span ng-if="item.target === 'event'">{t}Event{/t}</span>
           </span>
         </div>
         <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.import }">
@@ -161,35 +168,118 @@
                 <option value="">{t}Select a type{/t}…</option>
                 <option value="article">{t}Article{/t}</option>
                 <option value="opinion">{t}Opinion{/t}</option>
+                {is_module_activated name="es.openhost.module.events"}
+                  <option value="event">{t}Event{/t}</option>
+                {/is_module_activated}
               </select>
               {include file="common/component/icon/status.tpl" iClass="form-status-absolute" iForm="form.target" iNgModel="item.target" iRequired=true iValidation=true}
             </div>
           </div>
         </div>
-        {if in_array("es.openhost.module.onmai", $app.instance->activated_modules)}
+        <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.tags = !expanded.tags">
+          <i class="fa fa-tag m-r-10"></i>
+          {t}Tags{/t}
+          <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.tags }"></i>
+          <span class="pull-right" ng-if="!expanded.tags">
+            {include file="common/component/icon/status.tpl" iForm="form.tags" iNgModel="item.tags" iValidation=true}
+          </span>
+          <span class="badge badge-default m-r-5 m-t-2 ng-cloak pull-right text-uppercase text-bold" ng-show="!expanded.tags && item.tags && item.tags.length != 0 && data.extra.tags" ng-class="{ 'badge-danger' : item.tags.length === 0 }">
+            <strong>
+              [% data.extra.tags[config.locale.selected].length %] {t}Tags{/t}
+            </strong>
+          </span>
+        </div>
+        <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.tags }">
+          <div class="form-group no-margin">
+            <label for="metadata" class="form-label">{t}Tags{/t}</label>
+            <div class="controls">
+              <onm-tags-input class="block" ng-model="item.tags" hide-generate="true" selection-only="true" generate-from="false" ignore-locale="true" max-results="5" max-tags="15" placeholder="{t}Add a tag...{/t}"/>
+            </div>
+          </div>
+        </div>
+        {is_module_activated name="es.openhost.module.onmai"}
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.onmai }" ng-click="expanded.onmai = !expanded.onmai">
           <i class="fa fa-refresh m-r-10"></i>
           {t}Transform with ONM AI{/t}
           <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.onmai }"></i>
         </div>
         <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.onmai }">
-            <div class="form-group">
-              <select name="field" id="field" class="form-control"
-                  ng-model="item.promptSelected"
-                  ng-options="prompt as prompt.name for prompt in onmai_prompts track by prompt.id">
-                <option value="">{t}No, keep the original content{/t}</option>
-              </select>
+            <label class="form-label text-capitalize">
+              <b>{t}Title{/t}</b>
+            </label>
+            <div class="row">
+              <div class="col-sm-7">
+                <div class="form-group">
+                  <select ng-model="item.titlePromptSelected" class="form-control"
+                          ng-init="item.titlePromptSelected = item.titlePromptSelected || null"
+                          ng-options="prompt as prompt.name for prompt in onmai_prompts | filter:{ field_or: 'titles' } track by prompt.id">
+                    <option value="">{t}No, keep the original content{/t}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-5">
+                <div class="form-group">
+                  <label>
+                  <select name="field" id="field" class="form-control"
+                      ng-model="item.titleToneSelected"
+                      ng-if="item.titlePromptSelected"
+                      ng-options="tone as tone.name for tone in onmai_extras.tones track by tone.name">
+                    <option value="">{t}Select a tone{/t}</option>
+                  </select>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label>
-              <select name="field" id="field" class="form-control"
-                  ng-model="item.toneSelected"
-                  ng-if="item.promptSelected"
-                  ng-options="tone as tone.name for tone in onmai_extras.tones track by tone.name">
-                <option value="">{t}Select a tone{/t}</option>
-              </select>
+            <label class="form-label text-capitalize">
+              <b>{t}Description{/t}</b>
+            </label>
+            <div class="row">
+              <div class="col-sm-7">
+                <div class="form-group">
+                  <select ng-model="item.descriptionPromptSelected" class="form-control"
+                          ng-init="item.descriptionPromptSelected = item.descriptionPromptSelected || null"
+                          ng-options="prompt as prompt.name for prompt in onmai_prompts | filter:{ field_or: 'descriptions' } track by prompt.id">
+                    <option value="">{t}No, keep the original content{/t}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-5">
+                <div class="form-group">
+                  <label>
+                  <select name="field" id="field" class="form-control"
+                      ng-model="item.descriptionToneSelected"
+                      ng-if="item.descriptionPromptSelected"
+                      ng-options="tone as tone.name for tone in onmai_extras.tones track by tone.name">
+                    <option value="">{t}Select a tone{/t}</option>
+                  </select>
+                </div>
+              </div>
             </div>
-            {if !in_array("es.openhost.module.multilanguage", $app.instance->activated_modules)}
+            <label class="form-label text-capitalize">
+              <b>{t}Body{/t}</b>
+            </label>
+            <div class="row">
+              <div class="col-sm-7">
+                <div class="form-group">
+                  <select ng-model="item.bodyPromptSelected" class="form-control"
+                          ng-init="item.bodyPromptSelected = item.bodyPromptSelected || null"
+                          ng-options="prompt as prompt.name for prompt in onmai_prompts | filter:{ field_or: 'bodies' } track by prompt.id">
+                    <option ng-value="" value="">{t}No, keep the original content{/t}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-5">
+                <div class="form-group">
+                  <label>
+                  <select name="field" id="field" class="form-control"
+                      ng-model="item.bodyToneSelected"
+                      ng-if="item.bodyPromptSelected"
+                      ng-options="tone as tone.name for tone in onmai_extras.tones track by tone.name">
+                    <option value="">{t}Select a tone{/t}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            {is_module_activated name="es.openhost.module.onmai"}
               <div class="form-group">
                 <label>
                 <select name="field" id="field" class="form-control"
@@ -200,9 +290,9 @@
                   <option value="">{t}Select a language...{/t}</option>
                 </select>
               </div>
-            {/if}
+            {/is_module_activated}
         </div>
-        {/if}
+        {/is_module_activated}
         <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.author }" ng-click="expanded.author = !expanded.author">
           <i class="fa fa-edit m-r-10"></i>{t}Author{/t}
           <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.author }"></i>
@@ -255,7 +345,7 @@
             </div>
           </div>
         </div>
-        <div ng-if="item.target === 'article'">
+        <div ng-if="item.target !== 'opinion'">
           <div class="grid-collapse-title ng-cloak pointer" ng-class="{ 'open': expanded.category }" ng-click="expanded.category = !expanded.category">
             <i class="fa fa-bookmark m-r-10"></i>{t}Category{/t}
             <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.category }"></i>

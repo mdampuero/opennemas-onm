@@ -292,6 +292,44 @@
             }
           });
         };
+
+        $scope.sort = function(name) {
+          if (!$scope.criteria.orderBy) {
+            $scope.criteria.orderBy = {};
+          }
+
+          const currentField = Object.keys($scope.criteria.orderBy)[0];
+
+          if (currentField === name) {
+            $scope.criteria.orderBy[name] = $scope.criteria.orderBy[name] === 'asc' ? 'desc' : 'asc';
+          } else {
+            $scope.criteria.orderBy = {};
+            $scope.criteria.orderBy[name] = 'asc';
+          }
+
+          $scope.criteria.page = 1;
+        };
+
+        $scope.patch = function(item, property, value) {
+          var data = {};
+
+          item[property + 'Loading'] = 1;
+          data[property] = value;
+
+          var route = {
+            name:   'manager_ws_onmai_prompt_update',
+            params: { id: item.id }
+          };
+
+          http.put(route, data).then(function(response) {
+            item[property + 'Loading'] = 0;
+            item[property] = value;
+            messenger.post(response.data);
+          }, function(response) {
+            item[property + 'Loading'] = 0;
+            messenger.post(response.data);
+          });
+        };
       }
     ]);
 })();

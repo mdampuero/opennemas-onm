@@ -297,6 +297,7 @@ class OnmAIController extends Controller
         return new JsonResponse([
             'results' => $helperLocale->translateAttributes($items, ['mode', 'field']),
             'items'   => $items,
+            'extra'   => $this->promptGetExtraData(),
             'total'   => $total,
         ]);
     }
@@ -362,6 +363,29 @@ class OnmAIController extends Controller
         return new JsonResponse([
             'extra' => $extra,
             'item'  => $converter->responsify($item->getData())
+        ]);
+    }
+
+    /**
+     * Generates a preview of an AI prompt based on provided input parameters.
+     *
+     * @param Request $request The HTTP request containing an 'item' array in the POST body.
+     *                         Expected keys: 'prompt', 'mode', 'role', 'tone', and 'instructions'.
+     *
+     * @return JsonResponse Returns a JSON response with the generated 'promptPreview' string.
+     */
+    public function promptPreviewAction(Request $request)
+    {
+        $item = $request->request->get('item');
+        $data = [
+            'prompt'       => $item['prompt'] ?? '',
+            'mode'         => $item['mode'] ?? '',
+            'role'         => $item['role'] ?? '',
+            'tone'         => $item['tone'] ?? '',
+            'instructions' => $item['instructions'] ?? [],
+        ];
+        return new JsonResponse([
+            'promptPreview' => $this->get('core.helper.ai')->previewPrompt($data),
         ]);
     }
 
@@ -471,10 +495,31 @@ class OnmAIController extends Controller
         $settingOpenai  = [
             'onmai_roles'        => $serviceManager->get('onmai_roles') ?? [],
             'onmai_tones'        => $serviceManager->get('onmai_tones') ?? [],
-            'onmai_instructions' => $serviceManager->get('onmai_instructions') ?? [],
+            'onmai_instructions' => $this->getInstructionsAvailable(),
             'onmai_models'       => $this->get($this->helper)->getModels()
         ];
         return $settingOpenai;
+    }
+
+    /**
+     * Retrieves all available instructions that are not marked as disabled.
+     *
+     * This method fetches the 'onmai_instructions' setting from the Settings dataset,
+     * filters out any instructions where 'disabled' is not equal to "0", and reindexes
+     * the resulting array to ensure it has sequential numeric keys (important for JSON serialization).
+     *
+     * @return array An array of available instructions (where 'disabled' === "0"), reindexed with numeric keys.
+     */
+    private function getInstructionsAvailable()
+    {
+        $serviceManager = getService('orm.manager')->getDataSet('Settings', 'manager');
+        $instructions   = $serviceManager->get('onmai_instructions') ?? [];
+        $instructions   = array_filter($instructions, function ($item) {
+            $item['disabled'] = $item['disabled'] ?? "0";
+            return $item['disabled'] === "0";
+        });
+
+        return array_values($instructions);
     }
 
     /**

@@ -12,6 +12,7 @@
 namespace Common\Core\Component\Helper;
 
 use Api\Exception\GetItemException;
+use Api\Exception\GetListException;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -67,6 +68,13 @@ class ContentHelper
      * @var SubscriptionHelper
      */
     protected $subscriptionHelper;
+
+    /**
+     * The locale core.
+     *
+     * @var Locale
+     */
+    protected $locale;
 
     /**
      * Initializes the ContentHelper.
@@ -174,6 +182,16 @@ class ContentHelper
         return min(array_filter([ $starttime, $endtime ]));
     }
 
+    /**
+     * Retrieves the creation date of the first item of a given content type.
+     *
+     * This method queries the service to get the first item of the specified content type that was created after
+     * January 1, 2000, and that is not in litter (i.e., `in_litter` is 0). It returns the creation date of the item.
+     *
+     * @param string $contentTypeName The content type name to search for (default is 'article').
+     *
+     * @return string|null The creation date of the first item found, or null if no item matches the criteria.
+     */
     public function getFirstItemDate($contentTypeName = 'article')
     {
         $oql = sprintf(
@@ -503,7 +521,7 @@ class ContentHelper
         $value = $this->getProperty($item, 'content_type_name', $unpublished);
 
         return !empty($value)
-            ? !$readable ? $value : _(ucfirst(implode(' ', explode('_', $value))))
+            ? (!$readable ? $value : _(ucfirst(implode(' ', explode('_', $value)))))
             : null;
     }
 

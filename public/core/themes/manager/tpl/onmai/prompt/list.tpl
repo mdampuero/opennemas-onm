@@ -49,14 +49,31 @@
                     </span>
                   </div>
                 </li>
+                <li class="hidden-xs m-r-10 ng-cloak quicklinks">
+                  <select class="form-control form-control-lg" ng-model="criteria.model">
+                    <option value="">{t}Model{/t}: {t}Any{/t}</option>
+                    <option value="[% item.id %]" ng-repeat="item in extra.onmai_models">[% item.title %]</option>
+                  </select>
+                </li>
+                <li class="hidden-xs m-r-10 ng-cloak quicklinks">
+                  <select class="form-control form-control-lg" ng-model="criteria.mode">
+                    <option value="">{t}Mode{/t}: {t}Any{/t}</option>
+                    <option value="New">{t}Create{/t}</option>
+                    <option value="Edit">{t}Edit{/t}</option>
+                    <option value="Agency">{t}Agency{/t}</option>
+                  </select>
+                </li>
+                <li class="hidden-xs m-r-10 ng-cloak quicklinks">
+                  <select class="form-control form-control-lg" ng-model="criteria.field">
+                    <option value="">{t}Field{/t}: {t}Any{/t}</option>
+                    <option value="titles">{t}Titles{/t}</option>
+                    <option value="descriptions">{t}Descriptions{/t}</option>
+                    <option value="bodies">{t}Bodies{/t}</option>
+                  </select>
+                </li>
                 <li class="m-r-10 quicklinks">
                   <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom">
                     <i class="fa fa-fire fa-lg m-l-5 m-r-5"></i>
-                  </button>
-                </li>
-                <li class="quicklinks">
-                  <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
-                    <i class="fa fa-refresh fa-lg m-l-5 m-r-5" ng-class="{ 'fa-spin': loading }"></i>
                   </button>
                 </li>
               </ul>
@@ -88,27 +105,35 @@
               <table class="table table-hover no-margin">
                 <thead>
                   <tr>
-                    <th width="300">
+                    <th width="300" ng-click="sort('name')" class="pointer">
                       {t}Name{/t}
                       <i ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
                     </th>
-                    <th>
+                    <th ng-click="sort('model')" class="pointer">
                       {t}Model{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('model') == 'asc', 'fa fa-caret-down': isOrderedBy('model') == 'desc'}"></i>
                     </th>
-                    <th>
+                    <th ng-click="sort('mode')" class="pointer">
                       {t}Mode{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('mode') == 'asc', 'fa fa-caret-down': isOrderedBy('mode') == 'desc'}"></i>
                     </th>
-                    <th>
+                    <th ng-click="sort('field')" class="pointer">
                       {t}Field{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('field') == 'asc', 'fa fa-caret-down': isOrderedBy('field') == 'desc'}"></i>
                     </th>
-                    <th>
+                    <th ng-click="sort('tone')" class="pointer">
                       {t}Tone{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('tone') == 'asc', 'fa fa-caret-down': isOrderedBy('tone') == 'desc'}"></i>
                     </th>
-                    <th>
+                    <th ng-click="sort('role')" class="pointer">
                       {t}Role{/t}
+                      <i ng-class="{ 'fa fa-caret-up': isOrderedBy('role') == 'asc', 'fa fa-caret-down': isOrderedBy('role') == 'desc'}"></i>
                     </th>
                     <th class="text-center" width="300">
                       {t}Instances{/t}
+                    </th>
+                    <th class="text-center" width="300">
+                      {t}Published{/t}
                     </th>
                   </tr>
                 </thead>
@@ -133,8 +158,7 @@
                       [% item.mode %]
                     </td>
                     <td>
-                      <ng-container ng-if="item.mode == 'Agency'"></ng-container>
-                      <ng-container ng-if="item.mode != 'Agency'">[% item.field %]</ng-container>
+                      [% item.field %]
                     </td>
                     <td>
                       [% item.tone %]
@@ -148,6 +172,11 @@
                             [% instance %]
                         </a>
                       </div>
+                    </td>
+                    <td class="text-center v-align-middle" >
+                      <button class="btn btn-white" ng-click="patch(item, 'status', item.status != 1 ? 1 : 0)" type="button">
+                        <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.statusLoading == 1, 'fa-check text-success': !item.statusLoading == 1 && item.status == 1, 'fa-times text-danger': !item.statusLoading == 1 && item.status == 0 }"></i>
+                      </button>
                     </td>
                   </tr>
                 </tbody>
@@ -253,30 +282,13 @@
           <div class="form-group">
             <div class="controls">
               <div class="row" ng-repeat="item in settings.onmai_instructions track by $index">
-                <div class="col-lg-2 col-md-3 m-b-15">
-                  <ui-select name="mode" class="form-control" theme="select2" ng-model="item.type" search-enabled="false" required ng-init="options = [ { name: '{t}Both{/t}', key: 'Both'},{ name: '{t}Create{/t}', key: 'New'}, { name: '{t}Edit{/t}', key: 'Edit'} ]">
-                    <ui-select-match>
-                      [% $select.selected.name %]
-                    </ui-select-match>
-                    <ui-select-choices repeat="item.key as item in options | filter: $select.search">
-                      <div ng-bind-html="item.name | highlight: $select.search"></div>
-                    </ui-select-choices>
-                  </ui-select>
+                <div class="col-md-3">
+                  <input class="form-control" ng-model="item.title" placeholder="{t}Title{/t}" type="text" required maxlength="32">
                 </div>
-                <div class="col-lg-2 col-md-3 m-b-15">
-                  <ui-select name="field" class="form-control" theme="select2" ng-model="item.field" search-enabled="false" required ng-init="options = [ { name: '{t}All{/t}', key: 'all'}, { name: '{t}Titles{/t}', key: 'titles'}, { name: '{t}Descriptions{/t}', key: 'description'}, { name: '{t}Bodies{/t}', key: 'bodies' } ]">
-                    <ui-select-match>
-                      [% $select.selected.name %]
-                    </ui-select-match>
-                    <ui-select-choices repeat="item.key as item in options | filter: $select.search">
-                      <div ng-bind-html="item.name | highlight: $select.search"></div>
-                    </ui-select-choices>
-                  </ui-select>
-                </div>
-                <div class="col-lg-7 col-md-7">
+                <div class="col-md-7">
                   <input class="form-control" ng-model="item.value" placeholder="{t}Instruction{/t}" type="text" required maxlength="2048">
                 </div>
-                <div class="col-lg-1 col-md-2 m-b-15 text-center">
+                <div class="col-md-2 m-b-15 text-right">
                   <button class="btn btn-white" ng-click="activeInstruction($index)" type="button">
                       <i class="fa" ng-class="{
                           'fa-times text-danger': item.disabled == 1 && item.disabled != undefined,

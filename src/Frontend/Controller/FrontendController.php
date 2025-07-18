@@ -273,11 +273,19 @@ class FrontendController extends Controller
      */
     protected function getCanonicalUrl($action, $params)
     {
+        // If content has specific canonical
+        if ($params['canonicalurl'] ?? null) {
+            return $params['canonicalurl'];
+        }
+
         if (array_key_exists('o_content', $params)) {
             $url = $this->get('core.helper.url_generator')
                 ->generate($params['o_content'], [ 'absolute' => true ]);
 
-            return $this->get('core.decorator.url')->prefixUrl($url);
+            // If content has custom canonical return it
+            return $params['o_content']->canonicalurl ?? null
+                ? $params['o_content']->canonicalurl
+                : $this->get('core.decorator.url')->prefixUrl($url);
         }
 
         $params = $this->getKnownParameters($action, $params);

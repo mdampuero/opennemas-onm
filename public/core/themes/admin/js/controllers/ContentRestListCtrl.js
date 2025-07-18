@@ -107,6 +107,11 @@
             data.title = 'Copy of ' + data.title;
           }
 
+          if (data.pk_menu && data.name) {
+            delete data.pk_menu;
+            data.name = 'Copy of ' + data.name;
+          }
+
           return data;
         };
 

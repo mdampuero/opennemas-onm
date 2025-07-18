@@ -31,7 +31,7 @@
           openai: [],
           deepseek: [],
           gemini: [],
-          mistralai: [],
+          openrouter: [],
         };
 
         $scope.addModel = function() {

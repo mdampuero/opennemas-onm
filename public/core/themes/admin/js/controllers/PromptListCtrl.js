@@ -128,6 +128,14 @@
         $scope.removeTone = function(index) {
           $scope.data.extra.tones.splice(index, 1);
         };
+
+        $scope.resetFilters = function() {
+          $scope.criteria = {
+            epp: 200,
+            page: 1,
+            orderBy: { name: 'asc' }
+          };
+        };
       }
     ]);
 })();

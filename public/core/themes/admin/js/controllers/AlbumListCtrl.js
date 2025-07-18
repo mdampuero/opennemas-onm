@@ -49,7 +49,8 @@
           getList:    'api_v1_backend_album_get_list',
           patchItem:  'api_v1_backend_album_patch_item',
           patchList:  'api_v1_backend_album_patch_list',
-          public:     'frontend_album_show'
+          public:     'frontend_album_show',
+          saveItem:   'api_v1_backend_album_save_item'
         };
 
         /**

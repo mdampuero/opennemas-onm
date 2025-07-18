@@ -11,6 +11,7 @@
 namespace Api\Service\V1;
 
 use Api\Exception\ApiException;
+use Api\Exception\GetListException;
 
 class CategoryService extends OrmService
 {

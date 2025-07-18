@@ -4,15 +4,17 @@ orm:
             name:  PromptManager
             class: Common\Model\Entity\PromptManager
             properties:
-                id:        integer
-                name:      string
-                instances: array
-                mode:      string
-                field:     string
-                tone:      string
-                role:      string
-                prompt:    string
-                model:     string
+                id:           integer
+                name:         string
+                instances:    array
+                mode:         string
+                field:        string
+                tone:         string
+                role:         string
+                prompt:       string
+                model:        string
+                instructions: array
+                status:       integer
             converters:
                 default:
                     class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
@@ -56,6 +58,12 @@ orm:
                         model:
                             type: text
                             options: { default: null, length: 255, notnull: false }
+                        instructions:
+                            type: text
+                            options: { default: null, length: 65532, notnull: true }
+                        status:
+                            type: integer
+                            options: { default: '0', notnull: false, unsigned: true }
                     index:
                         -
                             name: PRIMARY

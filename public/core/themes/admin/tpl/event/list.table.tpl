@@ -22,6 +22,12 @@
 
 {block name="customColumns"}
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-type" checklist-model="app.columns.selected" checklist-value="'type'" type="checkbox">
+    <label for="checkbox-type">
+      {t}Type{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-start" checklist-model="app.columns.selected" checklist-value="'start'" type="checkbox">
     <label for="checkbox-start">
       {t}Start{/t}
@@ -42,6 +48,9 @@
 {/block}
 
 {block name="customColumnsHeader"}
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('type')" width="150">
+    {t}Type{/t}
+  </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('start')" width="150">
     {t}Start{/t}
   </th>
@@ -54,6 +63,10 @@
 {/block}
 
 {block name="customColumnsBody"}
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('type')">
+    <div>
+      [% data.extra.events[item.event_type].name %]
+  </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('start')">
     <span ng-show="!item.event_start_date && !item.event_start_hour">?</span>
     <div ng-show="item.event_start_date">
@@ -92,7 +105,15 @@
     </a>
     <translator item="data.items[$index]" keys="data.extra.keys" language="data.extra.locale.selected" link="[% routing.generate('backend_event_show', { id: getItemId(item) }) %]" ng-class="{ 'dropup': $index >= items.length - 1 }" class="btn-group" ng-if="data.extra.locale.multilanguage && data.extra.locale.available" options="data.extra.locale" text="{t}Edit{/t}"></translator>
   {/acl}
-  <a class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
+  {acl isAllowed="EVENT_ADMIN"}
+    <button class="btn btn-white btn-small" ng-click="createCopy(item)" type="button" ng-if="!data.extra.locale.multilanguage || !data.extra.locale.available" uib-tooltip="{t}Duplicate{/t}" tooltip-placement="top">
+      <i class="fa fa-copy"></i>
+    </button>
+  {/acl}
+  <a ng-if="item.slug" class="btn btn-white btn-small" href="[% getFrontendUrl(item) %]" target="_blank" uib-tooltip="{t}Link{/t}" tooltip-placement="top">
+    <i class="fa fa-external-link"></i>
+  </a>
+  <a ng-if="!item.slug" class="btn btn-white btn-small" disabled>
     <i class="fa fa-external-link"></i>
   </a>
   {acl isAllowed="EVENT_DELETE"}

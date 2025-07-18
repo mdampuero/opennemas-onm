@@ -19,8 +19,8 @@
      *   Handles actions for instance edition form
      */
     .controller('OnmAiPromptCtrl', [
-      '$location', '$routeParams', '$scope', 'http', 'routing', 'messenger',
-      function($location, $routeParams, $scope, http, routing, messenger) {
+      '$location', '$routeParams', '$scope', 'http', 'routing', 'messenger', '$timeout',
+      function($location, $routeParams, $scope, http, routing, messenger, $timeout) {
         /**
          * @memberOf OnmAiPromptCtrl
          *
@@ -32,10 +32,13 @@
         $scope.item = {
           field: 'titles',
           mode: 'New',
-          instances: [ 'Todos' ]
+          instances: [ 'Todos' ],
+          instructions: [],
         };
 
-        $scope.filterRole = $scope.item.field;
+        $scope.instructionsAvailables = [];
+        $scope.previewTimeout         = null;
+        $scope.filterRole             = $scope.item.field;
 
         /**
          * @function save
@@ -128,6 +131,17 @@
             });
         };
 
+        $scope.generatePreview = function() {
+          var data = {
+            item: $scope.item,
+          };
+
+          http.post('manager_ws_onmai_prompt_preview', data)
+            .then(function(response) {
+              $scope.preview = response.data.promptPreview;
+            });
+        };
+
         $scope.$on('$destroy', function() {
           $scope.item = null;
         });
@@ -146,18 +160,16 @@
           if (response.data.item) {
             $scope.item = response.data.item;
           }
-        });
 
-        $scope.$watch('item.mode', function(nv, ov) {
-          if (!nv || nv === ov) {
-            return;
+          for (var i = 0; i < $scope.extra.onmai_instructions.length; i++) {
+            var instructionId = $scope.extra.onmai_instructions[i].id;
+
+            if ($scope.item.instructions.indexOf(instructionId) === -1) {
+              $scope.instructionsAvailables.push(instructionId);
+            }
           }
-          if (nv === 'Agency') {
-            $scope.filterRole = nv;
-          } else {
-            $scope.filterRole = $scope.item.field;
-          }
-        }, true);
+          $scope.generatePreview();
+        });
 
         $scope.$watch('item.field', function(nv, ov) {
           if (!nv || nv === ov) {
@@ -165,6 +177,101 @@
           }
           $scope.filterRole = $scope.item.field;
         }, true);
+
+        $scope.selectInstruction = function(item) {
+          const index = $scope.instructionsAvailables.indexOf(item);
+
+          if (index !== -1) {
+            $scope.instructionsAvailables.splice(index, 1);
+            $scope.item.instructions.push(item);
+          }
+          $scope.generatePreview();
+        };
+
+        $scope.deselectInstruction = function(item) {
+          const index = $scope.item.instructions.indexOf(item);
+
+          if (index !== -1) {
+            $scope.item.instructions.splice(index, 1);
+            $scope.instructionsAvailables.push(item);
+          }
+          $scope.generatePreview();
+        };
+
+        $scope.getInstruction = function(id) {
+          for (var i = 0; i < $scope.extra.onmai_instructions.length; i++) {
+            var instruction = $scope.extra.onmai_instructions[i];
+
+            if (instruction.id === id) {
+              return instruction;
+            }
+          }
+          return null;
+        };
+
+        $scope.filterInstructions = function(id) {
+          if (!$scope.searchText) {
+            return true;
+          }
+          var title = $scope.getInstructionTitle(id);
+
+          return title && title.toLowerCase().indexOf($scope.searchText.toLowerCase()) !== -1;
+        };
+
+        $scope.getInstructionTitle = function(id) {
+          for (var i = 0; i < $scope.extra.onmai_instructions.length; i++) {
+            var instruction = $scope.extra.onmai_instructions[i];
+
+            if (instruction.id === id) {
+              return instruction.title;
+            }
+          }
+          return id;
+        };
+
+        $scope.instructionExists = function(id) {
+          for (var i = 0; i < $scope.extra.onmai_instructions.length; i++) {
+            var instruction = $scope.extra.onmai_instructions[i];
+
+            if (instruction.id === id) {
+              return true;
+            }
+          }
+          return false;
+        };
+
+        $scope.hasTitle = function(item) {
+          return item.title && item.title.trim() !== '';
+        };
+
+        $scope.delayedPreview = function() {
+          if ($scope.previewTimeout) {
+            $timeout.cancel($scope.previewTimeout);
+          }
+
+          $scope.previewTimeout = $timeout(function() {
+            $scope.generatePreview();
+          }, 1000);
+        };
+
+        $scope.getInstructions = function() {
+          var string = '{Instrucciones}\n';
+          var countInstructions = 0;
+
+          if ($scope.item.instructions.length > 0) {
+            string = '';
+          }
+          for (var i = 0; i < $scope.item.instructions.length; i++) {
+            var instruccion = $scope.item.instructions[i];
+
+            if (instruccion.value) {
+              countInstructions++;
+              string += countInstructions + '. ' + instruccion.value + "\n";
+            }
+          }
+
+          return string;
+        };
       }
     ]);
 })();
