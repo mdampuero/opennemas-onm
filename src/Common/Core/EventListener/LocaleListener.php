@@ -49,7 +49,8 @@ class LocaleListener implements EventSubscriberInterface
         }
 
         if (strpos($event->getRequest()->getRequestUri(), '/admin/login') === 0) {
-            $locale = $event->getRequest()->get('language');
+            $locale = $event->getRequest()->get('language') ??
+                $this->locale->getLocale('backend');
 
             if ($locale === $this->locale->getLocale('backend')) {
                 $this->locale->setContext(
