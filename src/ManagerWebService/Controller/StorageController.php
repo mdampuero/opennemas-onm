@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 class StorageController extends Controller
 {
     /**
-     * Returns the list of prompts as JSON.
+     * Returns the config storage as JSON.
      *
      * @param Request $request The request object.
      *
@@ -36,7 +36,7 @@ class StorageController extends Controller
     }
 
     /**
-     * Save prompt settings
+     * Save storage settings
      *
      * @param Request $request The request object.
      *
@@ -53,6 +53,58 @@ class StorageController extends Controller
             ->set($request);
 
         $msg->add(_('Prompt saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Returns the list tasks as JSON.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     *
+     */
+
+    public function tasksAction(Request $request)
+    {
+        $oql          = $request->query->get('oql', '');
+        $repository   = $this->get('orm.manager')->getRepository('Task');
+        $converter    = $this->get('orm.manager')->getConverter('Task');
+        $helperLocale = $this->get('core.helper.locale');
+
+        $ids   = [];
+        $total = $repository->countBy($oql);
+        $items = $repository->findBy($oql);
+
+        $items = array_map(function ($a) use ($converter, &$ids) {
+            $ids[] = $a->id;
+            return $converter->responsify($a);
+        }, $items);
+
+        return new JsonResponse([
+            'results' => $helperLocale->translateAttributes($items, ['mode', 'field']),
+            'items'   => $items,
+            'extra'   => [],
+            'total'   => $total,
+        ]);
+    }
+
+    /**
+     * Deletes a task container.
+     *
+     * @param integer $id The task id.
+     *
+     * @return JsonResponse The response object.
+     *
+     */
+    public function deleteAction($id)
+    {
+        $em  = $this->get('orm.manager');
+        $msg = $this->get('core.messenger');
+
+        $em->remove($em->getRepository('Task')->find($id));
+        $msg->add(_('Item deleted successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }

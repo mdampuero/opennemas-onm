@@ -24,6 +24,8 @@ class FfmpegCompressCommand extends ContainerAwareCommand
     private const FFPROBE_PATH       = '/usr/bin/ffprobe';
     private const DEFAULT_PARAMS     = '-c:v libx264 -crf 24 -preset slow -vf "scale = 1280:-2" -c:a aac -b:a 128k';
     private const OUTPUT_FILE_FORMAT = 'mp4';
+    private $taskPK                  = null;
+    private $em;
 
     /**
      * Configures the command.
@@ -62,10 +64,11 @@ class FfmpegCompressCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $itemPK = $input->getOption('item');
-        $taskPK = $input->getOption('task');
-        $config = $this->getConfig();
-        $params = $config['compress']['command'] ?? self::DEFAULT_PARAMS;
+        $this->em     = $this->getContainer()->get('orm.manager');
+        $itemPK       = $input->getOption('item');
+        $this->taskPK = $input->getOption('task');
+        $config       = $this->getConfig();
+        $params       = $config['compress']['command'] ?? self::DEFAULT_PARAMS;
 
         if (!$itemPK) {
             $output->writeln('<fg=red;options=bold>FAIL - </> The --item parameters are required');
@@ -168,15 +171,21 @@ class FfmpegCompressCommand extends ContainerAwareCommand
         });
 
         if (!$process->isSuccessful()) {
-            $this->getContainer()->get('application.log')->error("FFmpeg process failed: " .
+            $this->getContainer()->get('error.log')->error("FFmpeg process failed: " .
                 $process->getErrorOutput());
             $output->writeln('<fg=red;options=bold>FAIL - ' . $process->getErrorOutput() . '</>');
+            if ($this->taskPK) {
+                $conn = $this->getContainer()->get('orm.manager')->getConnection('manager');
+                $conn->update('tasks', [
+                    'status' => 'error',
+                    'output' => $process->getErrorOutput()
+                ], ['id' => $this->taskPK]);
+            }
             return 1;
         }
 
-        if ($taskPK) {
-            $em = $this->getContainer()->get('orm.manager');
-            $em->remove($em->getRepository('Task')->find($taskPK));
+        if ($this->taskPK) {
+            $this->em->remove($this->em->getRepository('Task')->find($this->taskPK));
         }
 
         $output->writeln(sprintf(
@@ -189,7 +198,7 @@ class FfmpegCompressCommand extends ContainerAwareCommand
         //Delete original file
         if (!unlink($inputFile)) {
             $output->writeln('<fg=red>WARNING - Could not delete original file: ' . $inputFile . '</>');
-            $this->getContainer()->get('application.log')->warning("Could not delete original file: $inputFile");
+            $this->getContainer()->get('error.log')->warning("Could not delete original file: $inputFile");
         } else {
             $output->writeln('<fg=yellow>Original file deleted: ' . $inputFile . '</>');
         }
@@ -201,7 +210,7 @@ class FfmpegCompressCommand extends ContainerAwareCommand
             $outputFile
         ))) {
             $output->writeln('<fg=red>WARNING - Could not rename output file to original name</>');
-            $this->getContainer()->get('application.log')->warning("Could not rename $outputFile to $inputFile");
+            $this->getContainer()->get('error.log')->warning("Could not rename $outputFile to $inputFile");
         } else {
             $output->writeln('<fg=yellow>Output file renamed to original name: ' . $inputFile . '</>');
 
@@ -307,6 +316,15 @@ class FfmpegCompressCommand extends ContainerAwareCommand
         $process = new Process($command);
         $process->run();
 
+        if (!$process->isSuccessful()) {
+            $this->getContainer()->get('error.log')->error("FFmpeg process failed: " .
+                $process->getErrorOutput());
+            $conn = $this->em->getConnection('manager');
+            $conn->update('tasks', [
+                'status' => 'error',
+                'output' => $process->getErrorOutput()
+            ], ['id' => $this->taskPK]);
+        }
         return $thumbnailPath;
     }
 

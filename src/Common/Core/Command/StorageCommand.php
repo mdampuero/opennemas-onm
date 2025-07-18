@@ -127,7 +127,7 @@ class StorageCommand extends ContainerAwareCommand
     private function logCommandStart()
     {
         $this->output->writeln(sprintf(
-            str_pad('<options=bold>Starting command', 128, '.')
+            str_pad('<options=bold>Starting command', 20, '.')
                 . '<fg=green;options=bold>DONE</>'
                 . ' <fg=blue;options=bold>(%s)</></>',
             date('Y-m-d H:i:s')
@@ -140,7 +140,7 @@ class StorageCommand extends ContainerAwareCommand
     private function logCommandFinish()
     {
         $this->output->writeln(sprintf(
-            str_pad('<options=bold>Finish command', 128, '.')
+            str_pad('<options=bold>Finish command', 20, '.')
                 . '<fg=green;options=bold>DONE</>'
                 . ' <fg=blue;options=bold>(%s)</></>',
             date('Y-m-d H:i:s')

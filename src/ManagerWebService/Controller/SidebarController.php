@@ -192,6 +192,12 @@ class SidebarController extends Controller
                             'route'    => 'manager_storage_config',
                             'click'    => true,
                         ],
+                        [
+                            'name'     => _('Tasks'),
+                            'icon'     => 'fa fa-tasks fa-lg',
+                            'route'    => 'manager_storage_tasks',
+                            'click'    => true,
+                        ],
                     ]
                 ],
                 [
