@@ -5,6 +5,7 @@ namespace Api\Controller\V1\Backend;
 use Api\Controller\V1\ApiController;
 use GuzzleHttp\Psr7\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DataTransferController extends ApiController
 {
@@ -20,8 +21,11 @@ class DataTransferController extends ApiController
      */
     protected $availableExports = [
         'advertisement' => [
-            'type'           => 'json',
-            'excludeColumns' => ['created_at', 'update_at'], // e.g., ['created_at', 'updated_at']
+            'config'         => [
+                'service' => 'api.service.content',
+                'limit'   => 5
+            ],
+            'excludeColumns' => ['created_at', 'update_at'],
         ],
     ];
 
@@ -36,11 +40,10 @@ class DataTransferController extends ApiController
      */
     protected $availableImports = [
         'advertisement' => [
-            'type'           => 'json',
             'config'         => [
                 'limit' => 1000
             ],
-            'excludeColumns' => [], // e.g., ['id']
+            'excludeColumns' => [],
         ],
     ];
 
@@ -53,28 +56,76 @@ class DataTransferController extends ApiController
      *
      * @return JsonResponse Response Object
      */
-    public function exportListAction(Request $request)
+    public function exportListAction($contentType, $type)
     {
-        $msg    = $this->get('core.messenger');
-        $module = $request->query->get('module');
-        $format = $request->query->get('format');
-
-        if (!$module || !isset($this->availableExports[$module])) {
+        if (!$contentType || !isset($this->availableExports[$contentType])) {
             return new JsonResponse(
-                $msg->getMessages(),
-                $msg->getCode()
+                ['error' => 'Unsupported export: ' . $contentType],
+                400
             );
         }
 
-        $config = $this->availableExports[$module];
-        $type   = !empty($format) ? $format : $config['type'];
+        $config = $this->availableExports[$contentType];
 
-        // TODO: Fetch data from repository based on module
-        // TODO: Filter columns based on $config['excludeColumns']
-        // TODO: Serialize data to the desired format (currently only JSON)
-        // return new JsonResponse($filtered);
+        if ($type !== 'json' && $type !== 'csv') {
+            return new JsonResponse(
+                ['error' => 'Unsupported format: ' . $type],
+                400
+            );
+        }
 
-        return new JsonResponse(['message' => 'Export logic not implemented yet']);
+        $response = new StreamedResponse(function () use ($contentType, $config, $type) {
+            $batchSize = $config['config']['limit'];
+            $offset    = 0;
+
+            $service = $this->get($config['config']['service']);
+
+            $output = fopen('php://output', 'w');
+
+            if ($type === 'json') {
+                $exportData = [
+                    'metadata' => [
+                        'content_type' => $contentType,
+                        'export_date'  => date('Y-m-d H:i:s'),
+                    ],
+                    'items' => [],
+                ];
+
+                do {
+                    $query = sprintf(
+                        'content_type_name = "%s" order by starttime desc limit %d offset %d',
+                        $contentType,
+                        $batchSize,
+                        $offset
+                    );
+
+                    $data = $service->getList($query);
+
+                    foreach ($data['items'] as $index => $item) {
+                        $itemData              = (array) $item->getStored();
+                        $exportData['items'][] = $itemData;
+                    }
+
+                    $offset += $batchSize;
+                } while (count($data['items']) === $batchSize);
+
+                fwrite($output, json_encode($exportData, JSON_PRETTY_PRINT));
+            }
+
+            fclose($output);
+        });
+
+        // Configurar headers
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Content-Disposition', sprintf(
+            'attachment; filename="%s_export_%s.json"',
+            $contentType,
+            date('Y-m-d_H-i-s')
+        ));
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
     }
 
     /**

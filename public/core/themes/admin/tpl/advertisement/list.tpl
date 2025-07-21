@@ -31,6 +31,20 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
               <span class="h-seperate"></span>
             </li>
             {/acl}
+            {acl isAllowed="MASTER"}
+            <li class="quicklinks">
+              <a href="{url
+              name=api_v1_backend_datatransfer_export
+              contentType='advertisement'
+              type='json'}" class="btn btn-primary" id="create-button">
+                <i class="fa fa-plus"></i>
+                {t}Export{/t}
+              </a>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
+            {/acl}
             <li class="quicklinks">
               <a href="{url name=admin_ad_create}" class="btn btn-primary" id="create-button">
                 <i class="fa fa-plus"></i>
