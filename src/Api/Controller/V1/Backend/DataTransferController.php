@@ -21,11 +21,20 @@ class DataTransferController extends ApiController
      */
     protected $availableExports = [
         'advertisement' => [
-            'config'         => [
+            'config' => [
                 'service' => 'api.service.content',
-                'limit'   => 5
+                'limit'   => 1000,
+                'query'   => 'content_type_name = "%s" order by starttime desc limit %d offset %d'
             ],
-            'excludeColumns' => ['created_at', 'update_at'],
+            'excludeColumns' => ['created_at', 'updated_at', 'categories', 'tags']
+        ],
+        'event' => [
+            'config' => [
+                'service' => 'api.service.event',
+                'limit'   => 1500,
+                'query'   => 'content_type_name = "%s" order by starttime desc limit %d offset %d'
+            ],
+            'excludeColumns' => ['created_at', 'updated_at', 'categories', 'tags']
         ],
     ];
 
@@ -65,21 +74,32 @@ class DataTransferController extends ApiController
             );
         }
 
-        $config = $this->availableExports[$contentType];
+        $config = $this->availableExports[$contentType]['config'];
 
-        if ($type !== 'json' && $type !== 'csv') {
+        if (!in_array($type, ['json', 'csv'], true)) {
             return new JsonResponse(
                 ['error' => 'Unsupported format: ' . $type],
                 400
             );
         }
 
-        $response = new StreamedResponse(function () use ($contentType, $config, $type) {
-            $batchSize = $config['config']['limit'];
-            $offset    = 0;
+        $batchSize      = $config['limit'] ?? 1000;
+        $offset         = 0;
+        $excludeColumns = $this->availableExports[$contentType]['excludeColumns'] ?? [];
+        $queryTemplate  = $config['query'] ??
+            'content_type_name = "%s" order by starttime desc limit %d offset %d';
 
-            $service = $this->get($config['config']['service']);
+        $service = $this->container->get($config['service']);
 
+        $response = new StreamedResponse(function () use (
+            $service,
+            $contentType,
+            $type,
+            $queryTemplate,
+            $batchSize,
+            $offset,
+            $excludeColumns
+        ) {
             $output = fopen('php://output', 'w');
 
             if ($type === 'json') {
@@ -91,23 +111,16 @@ class DataTransferController extends ApiController
                     'items' => [],
                 ];
 
-                do {
-                    $query = sprintf(
-                        'content_type_name = "%s" order by starttime desc limit %d offset %d',
-                        $contentType,
-                        $batchSize,
-                        $offset
-                    );
+                $query = sprintf($queryTemplate, $contentType, $batchSize, $offset);
+                $data  = $service->getList($query);
 
-                    $data = $service->getList($query);
+                $items = array_map(function ($item) {
+                    return (array) $item->getStored();
+                }, $data['items']);
 
-                    foreach ($data['items'] as $index => $item) {
-                        $itemData              = (array) $item->getStored();
-                        $exportData['items'][] = $itemData;
-                    }
+                $filtered = $this->filterColumns($items, $excludeColumns);
 
-                    $offset += $batchSize;
-                } while (count($data['items']) === $batchSize);
+                $exportData['items'] = array_merge($exportData['items'], $filtered);
 
                 fwrite($output, json_encode($exportData, JSON_PRETTY_PRINT));
             }
@@ -115,7 +128,6 @@ class DataTransferController extends ApiController
             fclose($output);
         });
 
-        // Configurar headers
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Content-Disposition', sprintf(
             'attachment; filename="%s_export_%s.json"',
