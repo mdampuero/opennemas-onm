@@ -26,18 +26,6 @@
           </a>
         </li>
         <li class="quicklinks"><span class="h-seperate"></span></li>
-        <li class="quicklinks">
-          <a href="{url
-          name=api_v1_backend_datatransfer_export
-          contentType='event'
-          type='json'}" class="btn btn-primary" id="create-button">
-            <i class="fa fa-plus"></i>
-            {t}Export{/t}
-          </a>
-        </li>
-        <li class="quicklinks">
-          <span class="h-seperate"></span>
-        </li>
       {/acl}
       {acl isAllowed="EVENT_CREATE"}
         <li class="quicklinks">
