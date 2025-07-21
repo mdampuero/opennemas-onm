@@ -28,7 +28,7 @@ class StorageController extends Controller
         $fileType    = $request->request->get('fileType');
         $helper      = $this->container->get('core.helper.' . $fileType);
         $instance    = $this->container->get('core.instance');
-        $uploadDir   = $this->getParameter('kernel.project_dir') . '/tmp/uploads/' . $fileId;
+        $uploadDir   = $this->getParameter('kernel.project_dir') . '/tmp/instances/uploads/' . $fileId;
 
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
