@@ -5,6 +5,7 @@ namespace Api\Controller\V1\Backend;
 use Api\Controller\V1\ApiController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DataTransferController extends ApiController
@@ -26,7 +27,7 @@ class DataTransferController extends ApiController
                 'limit'   => 1000,
                 'query'   => [
                     'list' => 'content_type_name = "%s" order by starttime desc limit %d offset %d',
-                    'single' => 'content_type_name = "%s" and pk_content in [%s]'
+                    'single' => 'content_type_name = "%s" and pk_content in [%s] order by starttime desc'
                 ]
             ],
             'excludeColumns' => ['created_at', 'updated_at', 'categories', 'tags'],
@@ -106,18 +107,16 @@ class DataTransferController extends ApiController
             'items' => $filtered,
         ];
 
-        // Streamed response with JSON output
-        $response = new StreamedResponse(function () use ($exportData) {
-            echo json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-        });
+        $json = json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set(
-            'Content-Disposition',
-            'attachment; filename="export_' . $contentType . '_' . date('Ymd_His') . '.json"'
-        );
-
-        return $response;
+        return new Response($json, 200, [
+            'Content-Type' => 'application/json',
+            'Content-Disposition' => sprintf(
+                'attachment; filename="export_%s_%s.json"',
+                $contentType,
+                date('Ymd_His')
+            ),
+        ]);
     }
 
     /**
