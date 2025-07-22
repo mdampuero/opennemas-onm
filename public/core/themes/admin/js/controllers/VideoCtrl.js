@@ -466,7 +466,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @returns {string} A unique file ID.
      */
     $scope.generateFileId = function() {
-      return 'file-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
+       return 'file-' + Date.now() + '-' + Math.floor(Math.random() * 1e9);
     };
 
     /**
@@ -519,6 +519,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         formData.append('chunkNumber', currentChunk);
         formData.append('totalChunks', totalChunks);
         formData.append('fileName', file.name);
+        formData.append('fileSize', file.size);
         formData.append('fileId', $scope.fileId);
         formData.append('fileType', 'video');
 

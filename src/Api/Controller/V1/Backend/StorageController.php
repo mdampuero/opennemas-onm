@@ -25,6 +25,7 @@ class StorageController extends Controller
         $totalChunks = $request->request->get('totalChunks');
         $fileName    = $request->request->get('fileName');
         $fileId      = $request->request->get('fileId');
+        $fileSizeOr  = $request->request->get('fileSize');
         $fileType    = $request->request->get('fileType');
         $helper      = $this->container->get('core.helper.' . $fileType);
         $instance    = $this->container->get('core.instance');
@@ -39,7 +40,8 @@ class StorageController extends Controller
             'totalChunks' => $totalChunks,
             'fileName'    => $fileName,
             'fileId'      => $fileId,
-            'fileType'    => $fileType
+            'fileType'    => $fileType,
+            'fileSizeOr'    => $fileSizeOr,
         ]);
 
         if (!is_dir($uploadDir)) {
@@ -67,9 +69,9 @@ class StorageController extends Controller
                 stream_copy_to_stream($input, $output);
                 fclose($input);
                 //unlink($chunkPath);
-                $logger->info('STORAGE - Merging chunk ' . $i, [
-                    'chunkPath' => $chunkPath
-                ]);
+                // $logger->info('STORAGE - Merging chunk ' . $i, [
+                //     'chunkPath' => $chunkPath
+                // ]);
             }
             fclose($output);
 
@@ -96,9 +98,11 @@ class StorageController extends Controller
              * Log for debugging purposes.
              */
             $logger->info('STORAGE - Final path', [
-                'finalPath' => $finalPath,
-                'finalDir'  => $finalDir,
-                'fileSize'  => $fileSize
+                'finalPath'  => $finalPath,
+                'finalDir'   => $finalDir,
+                'fileSize'   => $fileSize,
+                'fileSizeOr' => $fileSizeOr,
+
             ]);
             rename($tempFilePath, $finalPath);
 
