@@ -17,6 +17,20 @@
 {/block}
 
 {block name="primaryActions"}
+  {acl isAllowed="MASTER"}
+    <li class="quicklinks">
+      <a href="{url
+      name=api_v1_backend_datatransfer_export
+      contentType='widget'
+      type='json'}" class="btn btn-primary" id="export-button">
+        <i class="fa fa-plus"></i>
+        {t}Export{/t}
+      </a>
+    </li>
+    <li class="quicklinks">
+      <span class="h-seperate"></span>
+    </li>
+  {/acl}
   {acl isAllowed="WIDGET_CREATE"}
     <li class="quicklinks">
       <a class="btn btn-loading btn-success text-uppercase" href="{url name=backend_widget_create}">

@@ -39,6 +39,13 @@ class DataTransferController extends ApiController
             ],
             'excludeColumns' => ['created_at', 'updated_at', 'categories', 'tags']
         ],
+        'widget' => [
+            'config' => [
+                'service' => 'api.service.widget',
+                'limit'   => 500,
+            ],
+            'excludeColumns' => ['created_at', 'updated_at']
+        ],
     ];
 
     /**

@@ -36,7 +36,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
               <a href="{url
               name=api_v1_backend_datatransfer_export
               contentType='advertisement'
-              type='json'}" class="btn btn-primary" id="create-button">
+              type='json'}" class="btn btn-primary" id="export-button">
                 <i class="fa fa-plus"></i>
                 {t}Export{/t}
               </a>
