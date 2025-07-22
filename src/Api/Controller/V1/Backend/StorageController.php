@@ -30,6 +30,18 @@ class StorageController extends Controller
         $instance    = $this->container->get('core.instance');
         $uploadDir   = $this->getParameter('kernel.project_dir') . '/tmp/instances/uploads/' . $fileId;
 
+        /**
+         * Log for debugging purposes.
+         */
+        $logger = $this->get('application.log');
+        $logger->info('STORAGE - Uploading chunk', [
+            'chunkNumber' => $chunkNumber,
+            'totalChunks' => $totalChunks,
+            'fileName'    => $fileName,
+            'fileId'      => $fileId,
+            'fileType'    => $fileType
+        ]);
+
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
@@ -40,12 +52,24 @@ class StorageController extends Controller
             $tempFilePath = $uploadDir . '/' . $fileName;
             $output       = fopen($tempFilePath, 'wb');
 
+            /**
+             * Log for debugging purposes.
+             */
+            $logger->info('STORAGE - Uploading finish', [
+                'output' => $output
+            ]);
             for ($i = 0; $i < $totalChunks; $i++) {
+                /**
+                 * Log for debugging purposes.
+                 */
                 $chunkPath = $uploadDir . '/' . $i;
                 $input     = fopen($chunkPath, 'rb');
                 stream_copy_to_stream($input, $output);
                 fclose($input);
-                unlink($chunkPath);
+                //unlink($chunkPath);
+                $logger->info('STORAGE - Merging chunk ' . $i, [
+                    'chunkPath' => $chunkPath
+                ]);
             }
             fclose($output);
 
@@ -57,7 +81,11 @@ class StorageController extends Controller
             if (!is_dir($finalDir)) {
                 mkdir($finalDir, 0777, true);
             }
-
+            $logger->info('STORAGE - Final path', [
+                'finalPath' => $finalPath,
+                'finalDir'  => $finalDir,
+                'fileSize'  => $fileSize
+            ]);
             rename($tempFilePath, $finalPath);
             rmdir($uploadDir);
 
