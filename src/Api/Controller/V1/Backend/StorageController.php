@@ -66,7 +66,7 @@ class StorageController extends Controller
                 $input     = fopen($chunkPath, 'rb');
                 stream_copy_to_stream($input, $output);
                 fclose($input);
-                unlink($chunkPath);
+                //unlink($chunkPath);
                 $logger->info('STORAGE - Merging chunk ' . $i, [
                     'chunkPath' => $chunkPath
                 ]);
@@ -83,6 +83,16 @@ class StorageController extends Controller
             }
 
             /**
+             * Remove the upload directory asynchronously to avoid blocking the request.
+             */
+            $command = sprintf('rm -rf %s > /dev/null 2>&1 &', escapeshellarg($uploadDir));
+            $process = new Process($command);
+            $process->start();
+            $logger->info('STORAGE - Remove chunks folder', [
+                'uploadDir' => $uploadDir
+            ]);
+
+            /**
              * Log for debugging purposes.
              */
             $logger->info('STORAGE - Final path', [
@@ -91,7 +101,6 @@ class StorageController extends Controller
                 'fileSize'  => $fileSize
             ]);
             rename($tempFilePath, $finalPath);
-            rmdir($uploadDir);
 
             $enabledCompressed = true;
             $enabledProvider   = true;
