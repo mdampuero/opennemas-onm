@@ -66,7 +66,7 @@ class StorageController extends Controller
                 $input     = fopen($chunkPath, 'rb');
                 stream_copy_to_stream($input, $output);
                 fclose($input);
-                //unlink($chunkPath);
+                unlink($chunkPath);
                 $logger->info('STORAGE - Merging chunk ' . $i, [
                     'chunkPath' => $chunkPath
                 ]);
@@ -81,6 +81,10 @@ class StorageController extends Controller
             if (!is_dir($finalDir)) {
                 mkdir($finalDir, 0777, true);
             }
+
+            /**
+             * Log for debugging purposes.
+             */
             $logger->info('STORAGE - Final path', [
                 'finalPath' => $finalPath,
                 'finalDir'  => $finalDir,
