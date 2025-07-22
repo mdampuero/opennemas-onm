@@ -54,6 +54,13 @@
       </button>
     </li>
   {/acl}
+  {acl isAllowed="MASTER"}
+  <li class="quicklinks">
+    <button class="btn btn-link" ng-click="exportSelectedItems('api_v1_backend_datatransfer_export_item')" uib-tooltip="{t}Export{/t}" tooltip-placement="bottom" type="button">
+      <i class="fa fa-download fa-lg"></i>
+    </button>
+  </li>
+  {/acl}
   {acl isAllowed="WIDGET_DELETE"}
     <li class="quicklinks">
       <span class="h-seperate"></span>

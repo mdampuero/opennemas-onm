@@ -19,7 +19,7 @@ class DataTransferController extends ApiController
      *  excludeColumns: string[]
      * }>
      */
-    protected $availableExports = [
+    protected $availableDataTransfer = [
         'advertisement' => [
             'config' => [
                 'service' => 'api.service.content',
@@ -29,7 +29,8 @@ class DataTransferController extends ApiController
                     'single' => 'content_type_name = "%s" and pk_content in [%s]'
                 ]
             ],
-            'excludeColumns' => ['created_at', 'updated_at', 'categories', 'tags']
+            'excludeColumns' => ['created_at', 'updated_at', 'categories', 'tags'],
+            'allowImport' => true
         ],
         'event' => [
             'config' => [
@@ -37,32 +38,16 @@ class DataTransferController extends ApiController
                 'limit'   => 1500,
                 'query'   => 'content_type_name = "%s" order by starttime desc limit %d offset %d'
             ],
-            'excludeColumns' => ['created_at', 'updated_at', 'categories', 'tags']
+            'excludeColumns' => ['created_at', 'updated_at', 'categories', 'tags'],
+            'allowImport' => false
         ],
         'widget' => [
             'config' => [
                 'service' => 'api.service.widget',
                 'limit'   => 500,
             ],
-            'excludeColumns' => ['created_at', 'updated_at']
-        ],
-    ];
-
-    /**
-     * Defines available importable modules, with format
-     * and excluded columns.
-     *
-     * @var array<string, array{
-     *  type: string,
-     *  excludeColumns: string[]
-     * }>
-     */
-    protected $availableImports = [
-        'advertisement' => [
-            'config'         => [
-                'limit' => 1000
-            ],
-            'excludeColumns' => [],
+            'excludeColumns' => ['created_at', 'updated_at'],
+            'allowImport' => true
         ],
     ];
 
@@ -78,7 +63,7 @@ class DataTransferController extends ApiController
     public function exportItemAction(Request $request)
     {
         $contentType = $request->query->get('contentType');
-        $config      = $this->availableExports[$contentType]['config'] ?? null;
+        $config      = $this->availableDataTransfers[$contentType]['config'] ?? null;
         $ids         = $request->query->get('ids');
 
         if (!$contentType) {
@@ -109,7 +94,7 @@ class DataTransferController extends ApiController
             return (array) $item->getStored();
         }, $data['items']);
 
-        $excludeColumns = $this->availableExports[$contentType]['excludeColumns'] ?? [];
+        $excludeColumns = $this->availableDataTransfers[$contentType]['excludeColumns'] ?? [];
         $filtered       = $this->filterColumns($items, $excludeColumns);
 
         $exportData = [
@@ -139,21 +124,21 @@ class DataTransferController extends ApiController
      * Handles the export logic for a given module.
      *
      * Expected query parameters:
-     * - module: The module to export (must be in $availableExports)
+     * - module: The module to export (must be in $availableDataTransfers)
      * - format: (optional) Format override (default is the configured one)
      *
      * @return JsonResponse Response Object
      */
     public function exportListAction($contentType, $type)
     {
-        if (!$contentType || !isset($this->availableExports[$contentType])) {
+        if (!$contentType || !isset($this->availableDataTransfers[$contentType])) {
             return new JsonResponse(
                 ['error' => 'Unsupported export: ' . $contentType],
                 400
             );
         }
 
-        $config = $this->availableExports[$contentType]['config'];
+        $config = $this->availableDataTransfers[$contentType]['config'];
 
         if (!in_array($type, ['json', 'csv'], true)) {
             return new JsonResponse(
@@ -164,7 +149,7 @@ class DataTransferController extends ApiController
 
         $batchSize      = $config['limit'] ?? 1000;
         $offset         = 0;
-        $excludeColumns = $this->availableExports[$contentType]['excludeColumns'] ?? [];
+        $excludeColumns = $this->availableDataTransfers[$contentType]['excludeColumns'] ?? [];
         $queryTemplate  = $config['query']['list'] ??
             'content_type_name = "%s" order by starttime desc limit %d offset %d';
 
@@ -239,8 +224,6 @@ class DataTransferController extends ApiController
                 $msg->getCode()
             );
         }
-
-        $config = $this->availableImports[$module];
 
         // TODO: Parse incoming data
         // TODO: Filter excluded columns and validate

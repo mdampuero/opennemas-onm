@@ -15,8 +15,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('ContentRestListCtrl', [
-      '$controller', '$scope', '$uibModal', 'oqlEncoder', '$location', 'http', 'messenger', '$window',
-      function($controller, $scope, $uibModal, oqlEncoder, $location, http, messenger, $window) {
+      '$controller', '$scope', '$uibModal', 'oqlEncoder', '$location', 'http', 'messenger', 'routing', '$window',
+      function($controller, $scope, $uibModal, oqlEncoder, $location, http, messenger, routing, $window) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -191,6 +191,30 @@
                   });
               });
             }
+          });
+        };
+
+        /**
+         * Exports selected items.
+         *
+         * @param {String} route The route name.
+         * @param mixed ids The ids of the items to export.
+         */
+        $scope.exportSelectedItems = function(route) {
+          const ids         = $scope.selected.items;
+          const contentType = $scope.criteria.content_type_name;
+
+          if (ids.length === 0) {
+            messenger.post(window.strings.forms.no_items_selected, 'error');
+            return;
+          }
+
+          var url = routing.generate(route, { ids: ids, contentType: contentType });
+
+          http.get(url).then(function(response) {
+            messenger.post(response.data.messages);
+
+            window.location.href = url;
           });
         };
 

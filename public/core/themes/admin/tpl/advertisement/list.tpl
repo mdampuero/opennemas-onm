@@ -86,9 +86,11 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
               <i class="fa fa-check fa-lg"></i>
             </button>
           </li>
+          {/acl}
+          {acl isAllowed="MASTER"}
           <li class="quicklinks">
             <button class="btn btn-link" ng-click="exportSelectedItems('api_v1_backend_datatransfer_export_item')" uib-tooltip="{t}Export{/t}" tooltip-placement="bottom" type="button">
-              <i class="fa fa-pencil fa-lg"></i>
+              <i class="fa fa-download fa-lg"></i>
             </button>
           </li>
           {/acl}

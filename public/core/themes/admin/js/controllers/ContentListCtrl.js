@@ -379,7 +379,7 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      * @param mixed ids The ids of the items to export.
      */
     $scope.exportSelectedItems = function(route) {
-      const ids = $scope.selected.contents;
+      const ids         = $scope.selected.contents;
       const contentType = $scope.criteria.content_type_name;
 
       if (ids.length === 0) {
