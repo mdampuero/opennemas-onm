@@ -19,7 +19,7 @@ class DataTransferController extends ApiController
      *  excludeColumns: string[]
      * }>
      */
-    protected $availableDataTransfer = [
+    protected $availableDataTransfers = [
         'advertisement' => [
             'config' => [
                 'service' => 'api.service.content',
