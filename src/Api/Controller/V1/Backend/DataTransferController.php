@@ -3,7 +3,7 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
-use GuzzleHttp\Psr7\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -24,7 +24,10 @@ class DataTransferController extends ApiController
             'config' => [
                 'service' => 'api.service.content',
                 'limit'   => 1000,
-                'query'   => 'content_type_name = "%s" order by starttime desc limit %d offset %d'
+                'query'   => [
+                    'list' => 'content_type_name = "%s" order by starttime desc limit %d offset %d',
+                    'single' => 'content_type_name = "%s" and pk_content in [%s]'
+                ]
             ],
             'excludeColumns' => ['created_at', 'updated_at', 'categories', 'tags']
         ],
@@ -57,6 +60,75 @@ class DataTransferController extends ApiController
     ];
 
     /**
+     * Handles the export of items for a given content type.
+     *
+     * Expected query parameters:
+     * - contentType: The type of content to export (e.g., 'advertisement', 'event')
+     * - ids: Comma-separated list of IDs to export
+     *
+     * @return StreamedResponse|JsonResponse
+     */
+    public function exportItemAction(Request $request)
+    {
+        $contentType = $request->query->get('contentType');
+        $config      = $this->availableExports[$contentType]['config'] ?? null;
+        $ids         = $request->query->get('ids');
+
+        if (!$contentType) {
+            return new JsonResponse(['error' => 'Content type is required'], 400);
+        }
+
+        if (!$ids) {
+            return new JsonResponse(['error' => 'IDs are required'], 400);
+        }
+
+        if (!$config || !isset($config['service'])) {
+            return new JsonResponse(['error' => 'Invalid export config for content type'], 400);
+        }
+
+        $idList = implode(',', array_map('intval', $ids));
+
+        $query = sprintf(
+            $config['query']['single'] ?? 'content_type_name = "%s" and pk_content in [%s]',
+            $contentType,
+            $idList
+        );
+
+        $service = $this->container->get($config['service']);
+        $data    = $service->getList($query);
+
+        // Convertir a array y aplicar filtro de columnas
+        $items = array_map(function ($item) {
+            return (array) $item->getStored();
+        }, $data['items']);
+
+        $excludeColumns = $this->availableExports[$contentType]['excludeColumns'] ?? [];
+        $filtered       = $this->filterColumns($items, $excludeColumns);
+
+        $exportData = [
+            'metadata' => [
+                'content_type' => $contentType,
+                'export_date'  => date('Y-m-d H:i:s'),
+                'items_count'  => count($filtered),
+            ],
+            'items' => $filtered,
+        ];
+
+        // Streamed response with JSON output
+        $response = new StreamedResponse(function () use ($exportData) {
+            echo json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        });
+
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set(
+            'Content-Disposition',
+            'attachment; filename="export_' . $contentType . '_' . date('Ymd_His') . '.json"'
+        );
+
+        return $response;
+    }
+
+    /**
      * Handles the export logic for a given module.
      *
      * Expected query parameters:
@@ -86,7 +158,7 @@ class DataTransferController extends ApiController
         $batchSize      = $config['limit'] ?? 1000;
         $offset         = 0;
         $excludeColumns = $this->availableExports[$contentType]['excludeColumns'] ?? [];
-        $queryTemplate  = $config['query'] ??
+        $queryTemplate  = $config['query']['list'] ??
             'content_type_name = "%s" order by starttime desc limit %d offset %d';
 
         $service = $this->container->get($config['service']);

@@ -373,6 +373,30 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
     };
 
     /**
+     * Exports selected items.
+     *
+     * @param {String} route The route name.
+     * @param mixed ids The ids of the items to export.
+     */
+    $scope.exportSelectedItems = function(route) {
+      const ids = $scope.selected.contents;
+      const contentType = $scope.criteria.content_type_name;
+
+      if (ids.length === 0) {
+        messenger.post(window.strings.forms.no_items_selected, 'error');
+        return;
+      }
+
+      var url = routing.generate(route, { ids: ids, contentType: contentType });
+
+      $http.get(url).then(function(response) {
+        messenger.post(response.data.messages);
+
+        window.location.href = url;
+      });
+    };
+
+    /**
      * Updates selected items.
      *
      * @param string route   Route name.
