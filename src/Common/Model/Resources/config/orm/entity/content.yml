@@ -57,6 +57,7 @@ orm:
                 webpush_notifications:  array
                 tags:                   array
                 related_contents:       array
+                advertisements:         array
                 subscriptions:          array
                 timetable:              array
                 title_int:              l10n_string
@@ -175,6 +176,17 @@ orm:
                                     type: datetime
                                 modified:
                                     type: datetime
+                        advertisements:
+                            table: advertisements
+                            source_key: pk_content
+                            target_key: pk_advertisement
+                            columns:
+                                pk_advertisement:
+                                    type: integer
+                                with_script:
+                                    type: boolean
+                                script:
+                                    type: string
                     columns:
                         pk_content:
                             type: bigint

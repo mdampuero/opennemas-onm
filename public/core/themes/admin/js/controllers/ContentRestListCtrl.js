@@ -15,8 +15,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('ContentRestListCtrl', [
-      '$controller', '$scope', '$uibModal', 'oqlEncoder', '$location', 'http', 'messenger', 'routing', '$window',
-      function($controller, $scope, $uibModal, oqlEncoder, $location, http, messenger, routing, $window) {
+      '$controller', '$scope', '$uibModal', 'oqlEncoder', '$location', 'http', '$http', 'messenger', 'routing', '$window',
+      function($controller, $scope, $uibModal, oqlEncoder, $location, http, $http, messenger, routing, $window) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -211,7 +211,7 @@
 
           var url = routing.generate(route, { ids: ids, contentType: contentType });
 
-          http.get(url).then(function(response) {
+          $http.get(url).then(function(response) {
             messenger.post(response.data.messages);
 
             window.location.href = url;

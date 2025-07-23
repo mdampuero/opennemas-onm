@@ -26,28 +26,25 @@ class DataTransferController extends ApiController
                 'service' => 'api.service.content',
                 'limit'   => 1000,
                 'query'   => [
-                    'list' => 'content_type_name = "%s" order by starttime desc limit %d offset %d',
+                    'list' => 'content_type_name = "%s" order by starttime desc',
                     'single' => 'content_type_name = "%s" and pk_content in [%s] order by starttime desc'
                 ]
             ],
-            'excludeColumns' => ['created_at', 'updated_at', 'categories', 'tags'],
-            'allowImport' => true
-        ],
-        'event' => [
-            'config' => [
-                'service' => 'api.service.event',
-                'limit'   => 1500,
-                'query'   => 'content_type_name = "%s" order by starttime desc limit %d offset %d'
+            'includeColumns' => [
+                'title',
+                'posicion',
+                'params',
+                'content_status',
+                'advertisements',
             ],
-            'excludeColumns' => ['created_at', 'updated_at', 'categories', 'tags'],
-            'allowImport' => false
+            'allowImport' => true
         ],
         'widget' => [
             'config' => [
                 'service' => 'api.service.widget',
                 'limit'   => 500,
             ],
-            'excludeColumns' => ['created_at', 'updated_at'],
+            'includeColumns' => [],
             'allowImport' => true
         ],
     ];
@@ -88,9 +85,10 @@ class DataTransferController extends ApiController
         );
 
         $service = $this->container->get($config['service']);
-        $data    = $service->getList($query);
+        $method  = $config['method'] ?? 'getList';
 
-        // Convertir a array y aplicar filtro de columnas
+        $data = $service->$method($query);
+
         $items = array_map(function ($item) {
             return (array) $item->getStored();
         }, $data['items']);
@@ -138,6 +136,7 @@ class DataTransferController extends ApiController
         }
 
         $config = $this->availableDataTransfers[$contentType]['config'];
+        $method = $config['method'] ?? 'getList';
 
         if (!in_array($type, ['json', 'csv'], true)) {
             return new JsonResponse(
@@ -148,7 +147,7 @@ class DataTransferController extends ApiController
 
         $batchSize      = $config['limit'] ?? 1000;
         $offset         = 0;
-        $excludeColumns = $this->availableDataTransfers[$contentType]['excludeColumns'] ?? [];
+        $includeColumns = $this->availableDataTransfers[$contentType]['includeColumns'] ?? [];
         $queryTemplate  = $config['query']['list'] ??
             'content_type_name = "%s" order by starttime desc limit %d offset %d';
 
@@ -161,7 +160,8 @@ class DataTransferController extends ApiController
             $queryTemplate,
             $batchSize,
             $offset,
-            $excludeColumns
+            $includeColumns,
+            $method
         ) {
             $output = fopen('php://output', 'w');
 
@@ -175,15 +175,17 @@ class DataTransferController extends ApiController
                 ];
 
                 $query = sprintf($queryTemplate, $contentType, $batchSize, $offset);
-                $data  = $service->getList($query);
+                $data  = $service->$method($query);
 
                 $items = array_map(function ($item) {
                     return (array) $item->getStored();
                 }, $data['items']);
 
-                $filtered = $this->filterColumns($items, $excludeColumns);
+                if (!empty($includeColumns)) {
+                    $items = $this->filterColumns($items, $includeColumns, true);
+                }
 
-                $exportData['items'] = array_merge($exportData['items'], $filtered);
+                $exportData['items'] = array_merge($exportData['items'], $items);
 
                 fwrite($output, json_encode($exportData, JSON_PRETTY_PRINT));
             }
@@ -197,8 +199,6 @@ class DataTransferController extends ApiController
             $contentType,
             date('Y-m-d_H-i-s')
         ));
-        $response->headers->set('Pragma', 'no-cache');
-        $response->headers->set('Expires', '0');
 
         return $response;
     }
@@ -242,10 +242,14 @@ class DataTransferController extends ApiController
      * @param string[] $excludeColumns
      * @return array
      */
-    protected function filterColumns(array $data, array $excludeColumns): array
+    protected function filterColumns(array $items, array $columns, bool $include = false): array
     {
-        return array_map(function ($item) use ($excludeColumns) {
-            return array_diff_key($item, array_flip($excludeColumns));
-        }, $data);
+        return array_map(function ($item) use ($columns, $include) {
+            if ($include) {
+                return array_intersect_key($item, array_flip($columns));
+            } else {
+                return array_diff_key($item, array_flip($columns));
+            }
+        }, $items);
     }
 }
