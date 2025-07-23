@@ -18,6 +18,7 @@ class StorageController extends Controller
      */
     public function uploadChunkAction(Request $request)
     {
+        $logger = $this->get('application.log');
         $this->checkSecurity($this->extension, $this->getActionPermission('save'));
 
         $chunk       = $request->files->get('chunk');
@@ -25,23 +26,22 @@ class StorageController extends Controller
         $totalChunks = $request->request->get('totalChunks');
         $fileName    = $request->request->get('fileName');
         $fileId      = $request->request->get('fileId');
-        $fileSizeOr  = $request->request->get('fileSize');
+        $fileSize    = $request->request->get('fileSize');
         $fileType    = $request->request->get('fileType');
         $helper      = $this->container->get('core.helper.' . $fileType);
         $instance    = $this->container->get('core.instance');
-        $uploadDir   = $this->getParameter('kernel.project_dir') . '/tmp/instances/uploads/' . $fileId;
+        $uploadDir   = $this->getParameter('kernel.project_dir') . '/tmp/spool/uploads/' . $fileId;
 
         /**
          * Log for debugging purposes.
          */
-        $logger = $this->get('application.log');
-        $logger->info('STORAGE - Uploading chunk', [
+        $logger->info(sprintf('STORAGE - Uploading chunk %d/%d ', $chunkNumber, $totalChunks), [
             'chunkNumber' => $chunkNumber,
             'totalChunks' => $totalChunks,
             'fileName'    => $fileName,
             'fileId'      => $fileId,
             'fileType'    => $fileType,
-            'fileSizeOr'    => $fileSizeOr,
+            'fileSize'    => $fileSize,
         ]);
 
         if (!is_dir($uploadDir)) {
@@ -51,96 +51,21 @@ class StorageController extends Controller
         $chunk->move($uploadDir, $chunkNumber);
 
         if ((int) $chunkNumber + 1 == (int) $totalChunks) {
-            $tempFilePath = $uploadDir . '/' . $fileName;
-            $output       = fopen($tempFilePath, 'wb');
-
-            /**
-             * Log for debugging purposes.
-             */
-            $logger->info('STORAGE - Uploading finish', [
-                'output' => $output
+            $logger->info('STORAGE - Uploading finish ', [
+                'folderTmp'    => $uploadDir
             ]);
-            for ($i = 0; $i < $totalChunks; $i++) {
-                /**
-                 * Log for debugging purposes.
-                 */
-                $chunkPath = $uploadDir . '/' . $i;
-                $input     = fopen($chunkPath, 'rb');
-                stream_copy_to_stream($input, $output);
-                fclose($input);
-                //unlink($chunkPath);
-                // $logger->info('STORAGE - Merging chunk ' . $i, [
-                //     'chunkPath' => $chunkPath
-                // ]);
-            }
-            fclose($output);
-
-            $file         = new \SplFileInfo($tempFilePath);
-            $fileSize     = $file->getSize();
-            $finalPath    = $helper->generatePath($file, new \DateTime());
-            $finalPathTmp = $helper->generateTmpPath($file, new \DateTime(), $instance->internal_name);
-            $finalDir     = dirname($finalPath);
-            if (!is_dir($finalDir)) {
-                mkdir($finalDir, 0777, true);
-            }
-
-            /**
-             * Remove the upload directory asynchronously to avoid blocking the request.
-             */
-            $command = sprintf('rm -rf %s > /dev/null 2>&1 &', escapeshellarg($uploadDir));
-            $process = new Process($command);
-            $process->start();
-            $logger->info('STORAGE - Remove chunks folder', [
-                'uploadDir' => $uploadDir
-            ]);
-
-            /**
-             * Log for debugging purposes.
-             */
-            $logger->info('STORAGE - Final path', [
-                'finalPath'  => $finalPath,
-                'finalDir'   => $finalDir,
-                'fileSize'   => $fileSize,
-                'fileSizeOr' => $fileSizeOr,
-
-            ]);
-            rename($tempFilePath, $finalPath);
-
-            $enabledCompressed = true;
-            $enabledProvider   = true;
-
-            if (filter_var($enabledCompressed, FILTER_VALIDATE_BOOLEAN)) {
-                $step = [
+            return new JsonResponse([
+                'status'       => 'done',
+                'step'         => [
                     'label'      => 'Compressing',
                     'styleClass' => 'warning',
                     'progress'   => '0%'
-                ];
-            } elseif (filter_var($enabledProvider, FILTER_VALIDATE_BOOLEAN)) {
-                $step = [
-                    'label'      => 'Uploading to S3',
-                    'styleClass' => 'primary',
-                    'progress'   => '0%'
-                ];
-            } else {
-                $step = [
-                    'label'      => 'Completed',
-                    'styleClass' => 'success',
-                    'progress'   => ''
-                ];
-            }
-
-            return new JsonResponse([
-                'source'       => [pathinfo($finalPath, PATHINFO_EXTENSION) =>
-                $instance->getVideosShortPath() . '/' . $helper->getRelativePath($finalPath)],
-                'status'       => 'done',
-                'fileName'     => $file->getFilename(),
-                'step'         => $step,
+                ],
+                'fileName'     => $fileName,
+                'folderTmp'    => $uploadDir,
+                'totalChunks'  => $totalChunks,
                 'fileSize'     => $fileSize,
                 'fileSizeMB'   => round($fileSize / 1048576, 2),
-                'finalPath'    => $finalPath,
-                'finalPathTmp' => $finalPathTmp,
-                'path'         => $instance->getVideosShortPath() . '/' . $helper->getRelativePath($finalPath),
-                'relativePath' => $instance->getVideosShortPath() . '/' . $helper->getRelativePath($finalPath),
             ]);
         }
 
@@ -202,6 +127,8 @@ class StorageController extends Controller
             $service->updateItem($pk_content, [
                 'information' => $information
             ]);
+
+            unlink($information['thumbnails'] ?? '');
 
             $process = new Process(
                 sprintf(

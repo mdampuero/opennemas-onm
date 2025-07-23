@@ -25,7 +25,10 @@ class FfmpegCompressCommand extends ContainerAwareCommand
     private const DEFAULT_PARAMS     = '-c:v libx264 -crf 24 -preset slow -vf "scale = 1280:-2" -c:a aac -b:a 128k';
     private const OUTPUT_FILE_FORMAT = 'mp4';
     private $taskPK                  = null;
+    private $instance                = null;
     private $em;
+    private $loggerApp;
+    private $loggerErr;
 
     /**
      * Configures the command.
@@ -64,21 +67,29 @@ class FfmpegCompressCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->em     = $this->getContainer()->get('orm.manager');
-        $itemPK       = $input->getOption('item');
-        $this->taskPK = $input->getOption('task');
-        $config       = $this->getConfig();
-        $params       = $config['compress']['command'] ?? self::DEFAULT_PARAMS;
+        $this->em        = $this->getContainer()->get('orm.manager');
+        $this->loggerApp = $this->getContainer()->get('application.log');
+        $this->loggerErr = $this->getContainer()->get('error.log');
+        $itemPK          = $input->getOption('item');
+        $this->taskPK    = $input->getOption('task');
+        $config          = $this->getConfig();
+        $params          = $config['compress']['command'] ?? self::DEFAULT_PARAMS;
+
+        $this->loggerApp->info('FFMPEG - compress command started', [
+            'itemPK' => $itemPK,
+            'params' => $params,
+            'taskPK' => $this->taskPK
+        ]);
 
         if (!$itemPK) {
-            $output->writeln('<fg=red;options=bold>FAIL - </> The --item parameters are required');
+            $this->loggerErr->error('FFMPEG - The --item parameters are required');
             return 1;
         }
 
         $instanceId = $input->getOption('instance');
 
         if (!$instanceId) {
-            $output->writeln('<fg=red;options=bold>FAIL - </> The --instance parameters are required');
+            $this->loggerErr->error('FFMPEG - The --instance parameters are required');
             return 1;
         }
 
@@ -86,32 +97,43 @@ class FfmpegCompressCommand extends ContainerAwareCommand
         $this->setItem($itemPK);
 
         $item = $this->getItem();
+
         if (!$item) {
-            $output->writeln('<fg=red;options=bold>FAIL - </> The item does not exist');
+            $this->loggerErr->error('FFMPEG - The item does not exist');
             return 1;
         }
 
-        $inputFile = $item->information['finalPath'] ?? null;
+        $this->loggerApp->info('FFMPEG - Assembling chunks', [
+            'folderTmp' => $item->information['folderTmp'],
+            'fileName'  => $item->information['fileName'],
+            'totalChunks' => $item->information['totalChunks']
+        ]);
+
+        $resultAssembling = $this->assemblingChunks(
+            $item->information['folderTmp'],
+            $item->information['fileName'],
+            $item->information['totalChunks']
+        );
+
+        $this->loggerApp->info('FFMPEG - Assembled file', [
+            'path' => $resultAssembling['path'],
+            'tmp'  => $resultAssembling['tmp']
+        ]);
+
+        $inputFile = $resultAssembling['tmp'] ?? null;
 
         if ($inputFile) {
             $pathInfo   = pathinfo($inputFile);
             $outputFile = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '_output.' . self::OUTPUT_FILE_FORMAT;
         } else {
-            $output->writeln('<fg=red;options=bold>FAIL - </> No input file found for the item.');
+            $this->loggerErr->error('FFMPEG - No input file found for the item.');
             return 1;
         }
 
         if (!file_exists($inputFile)) {
-            $output->writeln("<fg=red;options=bold>FAIL - </> Input file does not exist: $inputFile");
+            $this->loggerErr->error("FFMPEG - Input file does not exist: $inputFile");
             return 1;
         }
-
-        $output->writeln(sprintf(
-            str_pad('<options=bold>Starting FFMPEG command', 64, '.')
-                . '<fg=green;options=bold>DONE</>'
-                . ' <fg=blue;options=bold>(%s)</></>',
-            date('Y-m-d H:i:s')
-        ));
 
         // Get video duration in seconds
         $durationCmd = sprintf(
@@ -125,8 +147,6 @@ class FfmpegCompressCommand extends ContainerAwareCommand
 
         $output->writeln(sprintf('<info>Video duration: %.2f seconds</info>', $durationSeconds));
 
-        $this->getContainer()->get('application.log')->info("Input: $inputFile, Output: $outputFile");
-
         $ffmpegCommand = str_replace(": ", ":", sprintf(
             '%s -i %s %s -progress pipe:1 -nostats %s',
             self::FFMPEG_PATH,
@@ -134,6 +154,10 @@ class FfmpegCompressCommand extends ContainerAwareCommand
             $params,
             escapeshellarg($outputFile)
         ));
+
+        $this->loggerApp->info('FFMPEG - Starting FFMPEG command', [
+            'command' => $ffmpegCommand
+        ]);
 
         $process = new Process($ffmpegCommand);
         $process->setTimeout(null);
@@ -165,13 +189,13 @@ class FfmpegCompressCommand extends ContainerAwareCommand
                 }
 
                 if ($line === 'progress=end') {
-                    $output->writeln('<fg=green;options=bold>Transcoding completed!</>');
+                    $this->loggerApp->info('FFMPEG - Transcoding completed successfully');
                 }
             }
         });
 
         if (!$process->isSuccessful()) {
-            $this->getContainer()->get('error.log')->error("FFmpeg process failed: " .
+            $this->loggerErr->error("FFMPEG - FFmpeg process failed: " .
                 $process->getErrorOutput());
             $output->writeln('<fg=red;options=bold>FAIL - ' . $process->getErrorOutput() . '</>');
             if ($this->taskPK) {
@@ -185,57 +209,75 @@ class FfmpegCompressCommand extends ContainerAwareCommand
         }
 
         if ($this->taskPK) {
+            $this->loggerApp->info('FFMPEG - Remove task');
             $this->em->remove($this->em->getRepository('Task')->find($this->taskPK));
         }
 
-        $output->writeln(sprintf(
-            str_pad('<options=bold>Finish FFMPEG command', 64, '.')
-                . '<fg=green;options=bold>DONE</>'
-                . ' <fg=blue;options=bold>(%s)</></>',
-            date('Y-m-d H:i:s')
-        ));
-
         //Delete original file
+        $this->loggerApp->info("FFMPEG - Delete original file " . $inputFile);
         if (!unlink($inputFile)) {
-            $output->writeln('<fg=red>WARNING - Could not delete original file: ' . $inputFile . '</>');
-            $this->getContainer()->get('error.log')->warning("Could not delete original file: $inputFile");
-        } else {
-            $output->writeln('<fg=yellow>Original file deleted: ' . $inputFile . '</>');
+            $this->loggerErr->warning("FFMPEG - Could not delete original file: $inputFile");
         }
 
         // Rename output file to original name
-        if (!rename($outputFile, str_replace(
+        $localPath = str_replace(
             '_output.' . self::OUTPUT_FILE_FORMAT,
             '.' . self::OUTPUT_FILE_FORMAT,
             $outputFile
-        ))) {
-            $output->writeln('<fg=red>WARNING - Could not rename output file to original name</>');
-            $this->getContainer()->get('error.log')->warning("Could not rename $outputFile to $inputFile");
+        );
+        $remotePath = $resultAssembling['path'];
+
+        if (!rename($outputFile, $localPath)) {
+            $this->loggerErr->warning("FFMPEG - Could not rename $outputFile to $inputFile");
         } else {
-            $output->writeln('<fg=yellow>Output file renamed to original name: ' . $inputFile . '</>');
-
             // Update item information
-            $this->setNextStep();
-
-            // Create Thumbnail
-            //ffmpeg -i "${VIDEO_PATH}" -ss "${TIME}" -vframes 1 "${THUMBNAIL_PATH}" -y 2>/dev/null
+            $this->setNextStep($localPath, $remotePath);
         }
+        $this->loggerApp->info('FFMPEG - Finished compressing video', [
+            'localPath'  => $localPath,
+            'remotePath' => $remotePath
+        ]);
         return 0;
     }
 
-    /**
-     * Changes the file extension of a given file path.
-     */
-    private function changeFileExtension(string $filePath): string
+    private function assemblingChunks($uploadDir, $fileName, $totalChunks)
     {
-        $pathInfo     = pathinfo($filePath);
-        $newExtension = ltrim(self::OUTPUT_FILE_FORMAT, '.');
+        $output = fopen($uploadDir . '/' . $fileName, 'wb');
+        if (!$output) {
+            throw new \RuntimeException('Could not open output file for writing: ' . $fileName);
+        }
 
-        $directory = $pathInfo['dirname'] === '.' ? '' : $pathInfo['dirname'] . DIRECTORY_SEPARATOR;
+        for ($i = 0; $i < $totalChunks; $i++) {
+            $chunkPath = $uploadDir . '/' . $i;
+            if (!file_exists($chunkPath)) {
+                throw new \RuntimeException('Chunk file does not exist: ' . $chunkPath);
+            }
+            $input = fopen($chunkPath, 'rb');
+            stream_copy_to_stream($input, $output);
+            fclose($input);
+            unlink($chunkPath);
+        }
+        fclose($output);
 
-        return $directory . $pathInfo['filename'] . '.' . $newExtension;
+        return [
+            'path' => $this->generatePath(new \DateTime()),
+            'tmp'  => $uploadDir . '/' . $fileName
+        ];
     }
 
+    private function generatePath(\DateTime $date): string
+    {
+        $now         = microtime(true);
+        $datetime    = \DateTime::createFromFormat('U.u', sprintf('%.6f', $now));
+        $newFileName = $datetime->format('YmdHisv') . '.' . self::OUTPUT_FILE_FORMAT;
+        return preg_replace('/\/+/', '/', sprintf(
+            '/%s/%s/%s/%s',
+            'media',
+            $this->instance->internal_name . '/videos',
+            $date->format('Y/m/d'),
+            $newFileName
+        ));
+    }
 
     /**
      * Updates the current item's information using the content service.
@@ -268,25 +310,16 @@ class FfmpegCompressCommand extends ContainerAwareCommand
      *
      * @param string|null $inputFile The path to the input file to calculate its size.
      */
-    private function setNextStep()
+    private function setNextStep($localPath, $remotePath)
     {
-        $item             = $this->getItem();
-        $information      = $item->information;
-        $pathInfoOriginal = pathinfo($information['finalPath']);
-
-        unset($information['source'][$pathInfoOriginal['extension']]);
-        $information['source'][self::OUTPUT_FILE_FORMAT] = $this->changeFileExtension(
-            $information['relativePath']
-        );
-
-        $information['fileName']           = $this->changeFileExtension($information['fileName']);
-        $information['finalPath']          = $this->changeFileExtension($information['finalPath']);
-        $information['path']               = $this->changeFileExtension($information['path']);
-        $information['relativePath']       = $this->changeFileExtension($information['relativePath']);
-        $newSizeBytes                      = filesize($information['finalPath']);
+        $item                              = $this->getItem();
+        $information                       = $item->information;
+        $newSizeBytes                      = filesize($localPath);
         $newSizeMB                         = number_format($newSizeBytes / (1024 * 1024), 2);
         $information['fileSize']           = (string) $newSizeBytes;
         $information['fileSizeMB']         = (string) $newSizeMB;
+        $information['localPath']          = $localPath;
+        $information['remotePath']         = $remotePath;
         $information['step']['progress']   = '0%';
         $information['status']             = 'done';
         $information['step']['label']      = 'Uploading to S3';
@@ -294,6 +327,9 @@ class FfmpegCompressCommand extends ContainerAwareCommand
 
         $information['thumbnails'] = $this->createThumbnail($information);
 
+        $this->loggerApp->info('FFMPEG - Updating item information', [
+            'information' => $information
+        ]);
         $this->updateInformation([
             'information' => $information
         ]);
@@ -301,21 +337,32 @@ class FfmpegCompressCommand extends ContainerAwareCommand
 
     private function createThumbnail($information)
     {
-        $pathInfo      = pathinfo($information['finalPath']);
-        $thumbnailPath = $pathInfo['dirname'] . '/' . $pathInfo['filename'] . '_thumbnail.jpg';
-        $config        = $this->getConfig();
-        $second        = $config['thumbnail']['seconds'] ?? 5;
+        $thumbnailPath = str_replace(
+            '.' . self::OUTPUT_FILE_FORMAT,
+            '.jpg',
+            $information['localPath']
+        );
+
+        $thumbnailPath = str_replace(
+            '/videos/' . self::OUTPUT_FILE_FORMAT,
+            '/images/',
+            $thumbnailPath
+        );
+
+        $config  = $this->getConfig();
+        $second  = $config['thumbnail']['seconds'] ?? 5;
         $command = sprintf(
             '%s -ss %d -i %s -vframes 1 -q:v 2 -y %s',
             self::FFMPEG_PATH,
             $second,
-            escapeshellarg($information['finalPath']),
+            escapeshellarg($information['localPath']),
             escapeshellarg($thumbnailPath)
         );
-
+        $this->loggerApp->info('FFMPEG - Create thumbnail command', [
+            'command' => $command
+        ]);
         $process = new Process($command);
         $process->run();
-
         if (!$process->isSuccessful()) {
             $this->getContainer()->get('error.log')->error("FFmpeg process failed: " .
                 $process->getErrorOutput());
@@ -364,12 +411,22 @@ class FfmpegCompressCommand extends ContainerAwareCommand
      */
     public function setInstance($instance)
     {
-        $instance = $this->getContainer()->get('orm.manager')
+        $this->instance = $this->getContainer()->get('orm.manager')
             ->getRepository('Instance')->find($instance);
-        $this->getContainer()->get('core.loader')->configureInstance($instance);
-        $this->getContainer()->get('core.security')->setInstance($instance);
+        $this->getContainer()->get('core.loader')->configureInstance($this->instance);
+        $this->getContainer()->get('core.security')->setInstance($this->instance);
 
         return $this;
+    }
+
+    /**
+     * Set the value of instance
+     *
+     * @return  self
+     */
+    public function getInstance()
+    {
+        return $this->instance;
     }
 
     /**

@@ -23,6 +23,8 @@ class StorageCommand extends ContainerAwareCommand
     private $output;
     private $item;
     private $factory;
+    private $loggerApp;
+    private $loggerErr;
 
     /**
      * Configures the command.
@@ -88,6 +90,17 @@ class StorageCommand extends ContainerAwareCommand
         $itemPK      = $input->getOption('item');
         $instanceId  = $input->getOption('instance');
 
+        $this->loggerApp = $this->getContainer()->get('application.log');
+        $this->loggerErr = $this->getContainer()->get('error.log');
+
+        $this->loggerApp->info('STORAGE - Upload command started', [
+            'operation'   => $operation,
+            'file'        => $file,
+            'path'        => $path,
+            'destination' => $destination,
+            'itemPK'      => $itemPK,
+            'instanceId'  => $instanceId
+        ]);
         if (!$operation) {
             $output->writeln('<fg=red;options=bold>FAIL - </> The --operation parameter is required');
             return 1;
@@ -260,18 +273,15 @@ class StorageCommand extends ContainerAwareCommand
             return 1;
         }
 
-        $localFile = $item->information['finalPath'] ?? null;
-        $path      = $item->information['relativePath'] ?? null;
+        $localFile = $item->information['localPath'] ?? null;
+        $path      = $item->information['remotePath'] ?? null;
 
-        if (!$localFile || !file_exists($localFile)) {
-            $output->writeln('<fg=red;options=bold>FAIL - </> Local file does not exist');
-            return 1;
-        }
-
-        if (!$path) {
-            $output->writeln('<fg=red;options=bold>FAIL - </> Relative path is not set in item');
-            return 1;
-        }
+        $this->loggerApp->info('STORAGE - Uploading item', [
+            'itemPK'      => $itemPK,
+            'instanceId'  => $instanceId,
+            'localFile'   => $localFile,
+            'path'        => $path
+        ]);
 
         $s3Client    = $this->factory->getS3Client();
         $lastPercent = 0;
@@ -324,15 +334,22 @@ class StorageCommand extends ContainerAwareCommand
         $information                       = $item->information;
         $path                              = (($config['provider']['enabled'] ?? false)) ?
             $config['provider']['public_endpoint'] . $relativePath : $relativePath;
+        $this->loggerApp->info('STORAGE - Uploading finish', [
+            'path'        => $path
+        ]);
+
         $information['step']['progress']   = '';
         $information['step']['label']      = 'Completed';
         $information['step']['styleClass'] = 'success';
         $information['status']             = 'done';
         $information['path']               = $path;
-        $information['source']             = [pathinfo($information['finalPath'], PATHINFO_EXTENSION) => $path];
+        $information['source']             = [pathinfo($information['localPath'], PATHINFO_EXTENSION) => $path];
 
         // Remove local file if it exists
-        unlink($item->information['finalPath'] ?? '');
+        $this->loggerApp->info('STORAGE - Remove local file', [
+            'localPath'        => $item->information['localPath']
+        ]);
+        unlink($item->information['localPath'] ?? '');
 
         $this->getContentService()->updateItem($item->pk_content, [
             'information' => $information,
@@ -364,18 +381,10 @@ class StorageCommand extends ContainerAwareCommand
      */
     private function logResult(string $operation, bool $success, string $extra = ''): void
     {
-        $this->output->writeln(sprintf(
-            str_pad("<options=bold>$operation", 128, '.')
-                . ($success
-                    ? '<fg=green;options=bold>DONE</>'
-                    : '<fg=red;options=bold>FAIL</>')
-                . ' <fg=blue;options=bold>(%s)</></>',
-            date('Y-m-d H:i:s')
-        ));
-
-        if ($extra) {
-            $this->output->writeln("<comment>$extra</comment>");
-        }
+        $this->loggerApp->info('STORAGE - ' . $operation, [
+            'success' => $success,
+            'extra'   => $extra
+        ]);
     }
 
     /**
