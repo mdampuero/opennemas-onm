@@ -32,7 +32,7 @@ class DataTransferController extends ApiController
             ],
             'includeColumns' => [
                 'title',
-                'posicion',
+                'positon',
                 'params',
                 'content_status',
                 'advertisements',
