@@ -128,79 +128,52 @@ class DataTransferController extends ApiController
      */
     public function exportListAction($contentType, $type)
     {
-        if (!$contentType || !isset($this->availableDataTransfers[$contentType])) {
-            return new JsonResponse(
-                ['error' => 'Unsupported export: ' . $contentType],
-                400
-            );
+        $config = $this->availableDataTransfers[$contentType] ?? null;
+        $limit  = $config['config']['limit'] ?? 1000;
+        $method = $config['config']['method'] ?? 'getList';
+        $offset = 0;
+
+        if (!$contentType || !$config) {
+            return new JsonResponse(['error' => 'Invalid content type or config'], 400);
         }
 
-        $config = $this->availableDataTransfers[$contentType]['config'];
-        $method = $config['method'] ?? 'getList';
-
-        if (!in_array($type, ['json', 'csv'], true)) {
-            return new JsonResponse(
-                ['error' => 'Unsupported format: ' . $type],
-                400
-            );
+        if (!in_array($type, ['json', 'csv'])) {
+            return new JsonResponse(['error' => 'Invalid export type'], 400);
         }
 
-        $batchSize      = $config['limit'] ?? 1000;
-        $offset         = 0;
-        $includeColumns = $this->availableDataTransfers[$contentType]['includeColumns'] ?? [];
-        $queryTemplate  = $config['query']['list'] ??
-            'content_type_name = "%s" order by starttime desc limit %d offset %d';
+        $service       = $this->container->get($config['config']['service']);
+        $query         = $config['config']['query']['list'] ?? 'getList';
+        $queryTemplate = sprintf($query, $contentType, $offset, $limit);
+        $data          = $service->$method($queryTemplate);
 
-        $service = $this->container->get($config['service']);
+        $items = array_map(function ($item) {
+            return (array) $item->getStored();
+        }, $data['items']);
 
-        $response = new StreamedResponse(function () use (
-            $service,
-            $contentType,
-            $type,
-            $queryTemplate,
-            $batchSize,
-            $offset,
-            $includeColumns,
-            $method
-        ) {
-            $output = fopen('php://output', 'w');
+        $includeColumns = $config['includeColumns'] ?? [];
 
-            if ($type === 'json') {
-                $exportData = [
-                    'metadata' => [
-                        'content_type' => $contentType,
-                        'export_date'  => date('Y-m-d H:i:s'),
-                    ],
-                    'items' => [],
-                ];
+        $filtered = $this->filterColumns($items, $includeColumns, true);
 
-                $query = sprintf($queryTemplate, $contentType, $batchSize, $offset);
-                $data  = $service->$method($query);
+        $exportData = [
+            'metadata' => [
+                'content_type' => $contentType,
+                'export_date'  => date('Y-m-d H:i:s'),
+                'items_count'  => count($filtered),
+            ],
+            'items' => $filtered,
+        ];
 
-                $items = array_map(function ($item) {
-                    return (array) $item->getStored();
-                }, $data['items']);
-
-                if (!empty($includeColumns)) {
-                    $items = $this->filterColumns($items, $includeColumns, true);
-                }
-
-                $exportData['items'] = array_merge($exportData['items'], $items);
-
-                fwrite($output, json_encode($exportData, JSON_PRETTY_PRINT));
-            }
-
-            fclose($output);
-        });
-
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Content-Disposition', sprintf(
-            'attachment; filename="%s_export_%s.json"',
-            $contentType,
-            date('Y-m-d_H-i-s')
-        ));
-
-        return $response;
+        if ($type === 'json') {
+            $json = json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            return new Response($json, 200, [
+                'Content-Type' => 'application/json',
+                'Content-Disposition' => sprintf(
+                    'attachment; filename="export_%s_%s.json"',
+                    $contentType,
+                    date('Ymd_His')
+                ),
+            ]);
+        }
     }
 
     /**
