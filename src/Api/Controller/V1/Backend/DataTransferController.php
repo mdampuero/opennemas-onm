@@ -184,17 +184,28 @@ class DataTransferController extends ApiController
     {
         $msg    = $this->get('core.messenger');
         $module = $request->query->get('module');
+        $config = $this->availableDataTransfers[$module] ?? null;
 
-        if (!$module || !isset($this->availableImports[$module])) {
+        if (!$module || $config['allowImport'] !== true) {
             return new JsonResponse(
                 $msg->getMessages(),
                 $msg->getCode()
             );
         }
 
-        // TODO: Parse incoming data
-        // TODO: Filter excluded columns and validate
-        // TODO: Save to database
+        $data = json_decode($request->getContent(), true);
+
+        if (!is_array($data) || empty($data)) {
+            return new JsonResponse(
+                ['error' => 'Invalid data format'],
+                400
+            );
+        }
+
+        $include = $config['includeColumns'] ?? [];
+
+        $processed = 0;
+        $errors    = [];
 
         return new JsonResponse(
             [
