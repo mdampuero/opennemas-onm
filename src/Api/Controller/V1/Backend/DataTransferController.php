@@ -126,7 +126,7 @@ class DataTransferController extends ApiController
      *
      * @return JsonResponse Response Object
      */
-    public function exportListAction($contentType, $type)
+    public function exportListAction($contentType)
     {
         $config = $this->availableDataTransfers[$contentType] ?? null;
         $limit  = $config['config']['limit'] ?? 1000;
@@ -135,10 +135,6 @@ class DataTransferController extends ApiController
 
         if (!$contentType || !$config) {
             return new JsonResponse(['error' => 'Invalid content type or config'], 400);
-        }
-
-        if (!in_array($type, ['json', 'csv'])) {
-            return new JsonResponse(['error' => 'Invalid export type'], 400);
         }
 
         $service       = $this->container->get($config['config']['service']);
@@ -164,17 +160,15 @@ class DataTransferController extends ApiController
             'items' => $filtered,
         ];
 
-        if ($type === 'json') {
-            $json = json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-            return new Response($json, 200, [
-                'Content-Type' => 'application/json',
-                'Content-Disposition' => sprintf(
-                    'attachment; filename="export_%s_%s.json"',
-                    $contentType,
-                    date('Ymd_His')
-                ),
-            ]);
-        }
+        $json = json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        return new Response($json, 200, [
+            'Content-Type' => 'application/json',
+            'Content-Disposition' => sprintf(
+                'attachment; filename="export_%s_%s.json"',
+                $contentType,
+                date('Ymd_His')
+            ),
+        ]);
     }
 
     /**
