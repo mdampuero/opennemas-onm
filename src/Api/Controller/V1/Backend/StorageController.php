@@ -30,7 +30,7 @@ class StorageController extends Controller
         $fileType    = $request->request->get('fileType');
         $helper      = $this->container->get('core.helper.' . $fileType);
         $instance    = $this->container->get('core.instance');
-        $uploadDir   = $this->getParameter('kernel.project_dir') . '/tmp/spool/uploads/' . $fileId;
+        $uploadDir   = '/home/opennemas/current/tmp/spool/uploads/' . $fileId;
 
         /**
          * Log for debugging purposes.
