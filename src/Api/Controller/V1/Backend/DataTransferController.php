@@ -142,7 +142,8 @@ class DataTransferController extends ApiController
         }
 
         $service       = $this->container->get($config['config']['service']);
-        $query         = $config['config']['query']['list'] ?? 'getList';
+        $query         = $config['config']['query']['list'] ??
+            'content_type_name = "%s" order by starttime desc limit %d offset %d';
         $queryTemplate = sprintf($query, $contentType, $offset, $limit);
         $data          = $service->$method($queryTemplate);
 
