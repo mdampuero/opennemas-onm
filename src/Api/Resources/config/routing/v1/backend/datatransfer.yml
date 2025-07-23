@@ -1,13 +1,13 @@
-api_v1_backend_datatransfer_export:
-    path:     /export/{contentType}
-    defaults: { _controller: ApiBundle:V1/Backend/DataTransfer:exportList }
+api_v1_backend_datatransfer_export_item:
+    path:     /export/item
+    defaults: { _controller: ApiBundle:V1/Backend/DataTransfer:exportItem }
     methods:  [ GET ]
     options:
         expose: true
 
-api_v1_backend_datatransfer_export_item:
-    path:     /export/item
-    defaults: { _controller: ApiBundle:V1/Backend/DataTransfer:exportItem }
+api_v1_backend_datatransfer_export:
+    path:     /export/{contentType}
+    defaults: { _controller: ApiBundle:V1/Backend/DataTransfer:exportList }
     methods:  [ GET ]
     options:
         expose: true

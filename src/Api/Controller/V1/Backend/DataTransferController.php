@@ -93,8 +93,8 @@ class DataTransferController extends ApiController
             return (array) $item->getStored();
         }, $data['items']);
 
-        $excludeColumns = $this->availableDataTransfers[$contentType]['excludeColumns'] ?? [];
-        $filtered       = $this->filterColumns($items, $excludeColumns);
+        $includeColumns = $this->availableDataTransfers[$contentType]['includeColumns'] ?? [];
+        $filtered       = $this->filterColumns($items, $includeColumns, true);
 
         $exportData = [
             'metadata' => [
