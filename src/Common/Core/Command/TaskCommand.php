@@ -32,12 +32,6 @@ class TaskCommand extends ContainerAwareCommand
         $this
             ->setName('app:core:task')
             ->setDescription('Runs a task related to storage operations')
-            ->addOption(
-                'limit',
-                null,
-                InputOption::VALUE_REQUIRED,
-                ''
-            )
             ->setHelp('');
     }
 
@@ -49,41 +43,24 @@ class TaskCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $config       = $this->getConfig();
+        $limit        = $config['tasks']['concurrent'] ?? 1;
         $this->output = $output;
-        $limit        = $input->getOption('limit');
         $this->conn   = $this->getContainer()->get('orm.manager')->getConnection('manager');
 
-        $this->logCommandStart();
-        $this->executeTasksPending();
-        $this->logCommandFinish();
+        $this->executeTasksPending($limit);
 
         return 0;
     }
 
     /**
-     * Logs the start of the command execution with a timestamp.
+     * Get manager config
      */
-    private function logCommandStart()
+    public function getConfig()
     {
-        $this->output->writeln(sprintf(
-            str_pad('<options=bold>Starting command', 32, '.')
-                . '<fg=green;options=bold>DONE</>'
-                . ' <fg=blue;options=bold>(%s)</></>',
-            date('Y-m-d H:i:s')
-        ));
-    }
-
-    /**
-     * Logs the completion of the command execution with a timestamp.
-     */
-    private function logCommandFinish()
-    {
-        $this->output->writeln(sprintf(
-            str_pad('<options=bold>Finish command', 32, '.')
-                . '<fg=green;options=bold>DONE</>'
-                . ' <fg=blue;options=bold>(%s)</></>',
-            date('Y-m-d H:i:s')
-        ));
+        return $this->getContainer()->get('orm.manager')
+            ->getDataSet('Settings', 'manager')
+            ->get('storage_settings', []);
     }
 
     /**
@@ -93,15 +70,24 @@ class TaskCommand extends ContainerAwareCommand
      */
     protected function executeTasksPending($limit = 1)
     {
-        $sql   = sprintf(
-            'SELECT * FROM tasks WHERE status = "%s" AND NOT EXISTS (
-                SELECT 1 FROM tasks WHERE status = "%s"
-            ) ORDER BY id ASC LIMIT %d',
-            self::STATUS_PENDING,
-            self::STATUS_PROCESSING,
-            $limit
+        $sqlCount = sprintf(
+            'SELECT COUNT(*) as cnt FROM tasks WHERE status = "%s"',
+            self::STATUS_PROCESSING
         );
-        $tasks = $this->conn->fetchAll($sql);
+
+        $processingCount = (int) $this->conn->fetchColumn($sqlCount);
+
+        $availableSlots = max(0, $limit - $processingCount);
+
+        $tasks = [];
+        if ($availableSlots > 0) {
+            $sql   = sprintf(
+                'SELECT * FROM tasks WHERE status = "%s" ORDER BY id ASC LIMIT %d',
+                self::STATUS_PENDING,
+                $availableSlots
+            );
+            $tasks = $this->conn->fetchAll($sql);
+        }
 
         foreach ($tasks as $task) {
             $command  = $task['command'] . ' --task=%s';
@@ -115,7 +101,7 @@ class TaskCommand extends ContainerAwareCommand
                 'pid'    => $pid
             ], ['id' => $task['id']]);
             $this->output->writeln(sprintf(
-                str_pad('<options=bold>Executing task #' . $task['id'], 128, '.')
+                str_pad('<options=bold>Executing task #' . $task['id'], 64, '.')
                     . '<fg=green;options=bold>DONE</>'
                     . ' <fg=blue;options=bold>(%s)</></>',
                 $task['name']

@@ -43,17 +43,38 @@
               </div>
             </div>
           </div>
-          <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel m-t-5 p-15 bg-light">
-            <div class="form-status text-left">
-              <label class="m-b-10"><b>{t}Thumbnail generate{/t}</b></label>
-              <hr>
-              <div class="row">
-                <div class="col-xs-3 form-group">
-                  <label class="form-label" for="seconds" >{t}Seconds{/t}</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    ng-model="storage_settings.thumbnail.seconds">
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel m-t-5 p-15 bg-light">
+                <div class="form-status text-left">
+                  <label class="m-b-10"><b>{t}Thumbnail generate{/t}</b></label>
+                  <hr>
+                  <div class="row">
+                    <div class="col-xs-6 form-group">
+                      <label class="form-label" for="seconds" >{t}Seconds{/t}</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        ng-model="storage_settings.thumbnail.seconds">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel m-t-5 p-15 bg-light">
+                <div class="form-status text-left">
+                  <label class="m-b-10"><b>{t}Concurrent tasks{/t}</b></label>
+                  <hr>
+                  <div class="row">
+                    <div class="col-xs-6 form-group">
+                      <label class="form-label" for="seconds" >{t}Number of tasks{/t}</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        ng-model="storage_settings.tasks.concurrent">
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
