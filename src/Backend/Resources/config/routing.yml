@@ -275,3 +275,7 @@ backend_settings:
 backend_pressclipping:
     prefix:   /
     resource: '@BackendBundle/Resources/config/routing/pressclipping.yml'
+
+backend_datatransfer:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/datatransfer.yml'

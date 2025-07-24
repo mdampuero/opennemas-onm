@@ -1,0 +1,5 @@
+backend_datatransfer_import:
+    path:     /datatransfer/
+    defaults: { _controller: BackendBundle:DataTransfer:import }
+    options:
+        expose: true
