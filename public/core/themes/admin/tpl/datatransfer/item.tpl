@@ -1,10 +1,11 @@
 {extends file="common/extension/list.tpl"}
 
 {block name="metaTitle"}
-  > {t}Cache{/t}
+  > {t}Datatransfer{/t}
 {/block}
 
 {block name="ngInit"}
+  ng-controller="DatatransferCtrl"
 {/block}
 
 {block name="icon"}
