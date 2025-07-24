@@ -24,11 +24,7 @@ class DataTransferController extends ApiController
         'advertisement' => [
             'config' => [
                 'service' => 'api.service.content',
-                'limit'   => 1000,
-                'query'   => [
-                    'list' => 'content_type_name = "%s" order by starttime desc',
-                    'single' => 'content_type_name = "%s" and pk_content in [%s] order by starttime desc'
-                ]
+                'limit'   => 1000
             ],
             'includeColumns' => [
                 'title',
@@ -44,7 +40,8 @@ class DataTransferController extends ApiController
                 'service' => 'api.service.widget',
                 'limit'   => 500,
             ],
-            'includeColumns' => [],
+            'includeColumns' => [
+            ],
             'allowImport' => true
         ],
     ];
@@ -140,7 +137,7 @@ class DataTransferController extends ApiController
         $service       = $this->container->get($config['config']['service']);
         $query         = $config['config']['query']['list'] ??
             'content_type_name = "%s" order by starttime desc limit %d offset %d';
-        $queryTemplate = sprintf($query, $contentType, $offset, $limit);
+        $queryTemplate = sprintf($query, $contentType, $limit, $offset);
         $data          = $service->$method($queryTemplate);
 
         $items = array_map(function ($item) {
@@ -215,15 +212,28 @@ class DataTransferController extends ApiController
     }
 
     /**
-     * Filters out excluded columns from a dataset.
+     * Filters columns from a dataset.
      *
-     * @param array $data
-     * @param string[] $excludeColumns
-     * @return array
+     * @param array $items Array of items to filter
+     * @param array $columns Columns to include or exclude
+     * @param bool $include If true, includes only specified columns. If false, excludes specified columns.
+     * @return array Filtered items
      */
     protected function filterColumns(array $items, array $columns, bool $include = false): array
     {
+        if (empty($items)) {
+            return [];
+        }
+
+        if (empty($columns)) {
+            return $items;
+        }
+
         return array_map(function ($item) use ($columns, $include) {
+            if (!is_array($item)) {
+                return [];
+            }
+
             if ($include) {
                 return array_intersect_key($item, array_flip($columns));
             } else {
