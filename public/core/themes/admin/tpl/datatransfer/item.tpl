@@ -93,22 +93,21 @@
         </div>
     </div>
 
-    <div class="col-lg-6">
-        <div class="grid simple">
-            <div class="grid-title">
-                <h4>
-                    <i class="fa fa-eye"></i>
-                    Vista Previa
-                </h4>
-            </div>
-            <div class="grid-body">
-                <div class="preview-content">
-                    <div class="loading">
-                        <p>Selecciona un archivo para ver su contenido aquí</p>
-                    </div>
+    <div class="col-lg-6" ng-show="template.file">
+      <div class="grid simple">
+        <div class="grid-title">
+            <h4>
+                <i class="fa fa-eye"></i>
+                Vista Previa
+            </h4>
+        </div>
+        <div class="grid-body">
+            <div class="preview-content">
+                <div class="loading">
                 </div>
             </div>
         </div>
+      </div>
     </div>
   </div>
 {/block}
