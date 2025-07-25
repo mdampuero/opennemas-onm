@@ -34,12 +34,14 @@
           { name: 'csv', mymetype: 'text/csv' },
         ];
 
+        $scope.previewError = false;
+
         /**
          * @ngdoc Import function
-         * @name  DatatransferCtrl#import
+         * @name DatatransferCtrl#import
          * @methodOf DatatransferCtrl
          * @description
-         *   Imports data from a file.
+         * Imports data from a file.
          * @param {File} file The file to import.
          */
         $scope.import = function(template) {
@@ -48,24 +50,58 @@
             return;
           }
 
+          // Limpiar estados previos
+          $scope.filename = template.file.name;
+          $scope.previewError = null;
+          $scope.importedData = null;
+
           const reader = new FileReader();
 
           reader.onload = function(event) {
             try {
               const json = JSON.parse(event.target.result);
 
+              // Aplicar cambios en el scope de Angular
               $scope.$apply(function() {
                 $scope.importedData = json;
+                $scope.previewError = null;
               });
             } catch (e) {
-              messenger.error('Error parsing JSON: ' + e.message);
+              $scope.$apply(function() {
+                $scope.previewError = 'Error parsing JSON: ' + e.message;
+                $scope.importedData = null;
+              });
             }
           };
 
           reader.onerror = function(event) {
-            messenger.error('Error reading file: ' + event.target.error.message);
+            $scope.$apply(function() {
+              $scope.previewError = 'Error reading file: ' + (event.target.error ? event.target.error.message : 'Unknown error');
+              $scope.importedData = null;
+            });
           };
 
+          const timeoutId = setTimeout(function() {
+            $scope.$apply(function() {
+              $scope.previewError = 'File processing timeout. The file might be too large.';
+              $scope.importedData = null;
+            });
+          }, 10000);
+
+          const originalOnLoad = reader.onload;
+          const originalOnError = reader.onerror;
+
+          reader.onload = function(event) {
+            clearTimeout(timeoutId);
+            originalOnLoad.call(this, event);
+          };
+
+          reader.onerror = function(event) {
+            clearTimeout(timeoutId);
+            originalOnError.call(this, event);
+          };
+
+          // Iniciar lectura del archivo
           reader.readAsText(template.file);
         };
       }
