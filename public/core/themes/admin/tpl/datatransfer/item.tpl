@@ -79,7 +79,7 @@
                 <hr>
                 <div class="form-group no-margin">
                   <div class="controls">
-                    <button class="btn btn-block btn-loading btn-primary" disabled>
+                    <button class="btn btn-block btn-loading btn-primary" ng-disabled="!template.file || http.flags.loading" ng-click="import(template)">
                         <i class="fa fa-cogs"></i>
                         Procesar
                     </button>
@@ -93,21 +93,37 @@
         </div>
     </div>
 
-    <div class="col-lg-6" ng-show="template.file">
+    <div class="col-lg-6">
       <div class="grid simple">
         <div class="grid-title">
-            <h4>
-                <i class="fa fa-eye"></i>
-                Vista Previa
-            </h4>
+          <h4>
+            <i class="fa fa-eye"></i>
+            Vista Previa
+          </h4>
         </div>
         <div class="grid-body">
-            <div class="preview-content">
-                <div class="loading">
-                </div>
+          <div class="preview-content">
+
+            <!-- Loader -->
+            <div class="loading" ng-show="!template.file">
+              <i class="fa fa-spinner fa-spin fa-3x"></i>
+              <p class="m-t-15">{t}Cargando vista previa...{/t}</p>
             </div>
+
+            <!-- Vista previa con scroll limitado -->
+            <div ng-if="importedData" class="m-t-20">
+              <pre class="json-preview">
+    [% (Array.isArray(importedData) ? importedData.slice(0, 50) : importedData) | json:2 %]
+              </pre>
+              <div class="text-muted small" ng-if="importedData.length > 50">
+                {t}Mostrando los primeros 50 elementos{/t}...
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
-    </div>
+  </div>
+
   </div>
 {/block}
