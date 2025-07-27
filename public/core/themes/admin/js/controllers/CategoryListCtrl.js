@@ -205,7 +205,7 @@
          * @inheritdoc
          */
         $scope.parseList = function(data) {
-          $scope.configure($scope.data.extra);
+          $scope.configure(data.extra);
           $scope.localize($scope.data.items, 'items');
         };
 
