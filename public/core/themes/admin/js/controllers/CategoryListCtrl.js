@@ -192,6 +192,7 @@
             [ 'name', 'slug', 'parent', 'contents', 'cover', 'color', 'visibility', 'enabled', 'rss', 'layout' ]
           ));
 
+          $scope.criteria.orderBy = { name: 'asc' };
           $scope.criteria.epp     = 10;
 
           oqlEncoder.configure({ placeholder: {
