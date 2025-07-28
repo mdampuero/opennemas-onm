@@ -27,6 +27,9 @@ class DataTransferController extends ApiController
                 'limit'   => 1000
             ],
             'includeColumns' => [
+                'content_type_name',
+                'fk_content_type',
+                'in_litter',
                 'title',
                 'positon',
                 'params',
@@ -40,8 +43,7 @@ class DataTransferController extends ApiController
                 'service' => 'api.service.widget',
                 'limit'   => 500,
             ],
-            'includeColumns' => [
-            ],
+            'includeColumns' => [],
             'allowImport' => true
         ],
     ];
@@ -179,36 +181,45 @@ class DataTransferController extends ApiController
      */
     public function importAction(Request $request)
     {
-        $msg    = $this->get('core.messenger');
-        $module = $request->query->get('module');
-        $config = $this->availableDataTransfers[$module] ?? null;
+        $content     = $request->request->get('content');
+        $contentType = $content['metadata']['content_type'] ?? null;
+        $items       = $content['items'] ?? [];
+        $config      = $this->availableDataTransfers[$contentType] ?? null;
 
-        if (!$module || $config['allowImport'] !== true) {
-            return new JsonResponse(
-                $msg->getMessages(),
-                $msg->getCode()
-            );
+        if (!$contentType || empty($items)) {
+            return new JsonResponse(['error' => 'Content type and items are required'], 400);
         }
 
-        $data = json_decode($request->getContent(), true);
-
-        if (!is_array($data) || empty($data)) {
-            return new JsonResponse(
-                ['error' => 'Invalid data format'],
-                400
-            );
+        if (!$config || !$config['allowImport']) {
+            return new JsonResponse(['error' => 'Import not allowed for this content type'], 403);
         }
 
-        $include = $config['includeColumns'] ?? [];
+        $us = $this->container->get($config['config']['service']);
 
-        $processed = 0;
-        $errors    = [];
+        $includeColumns = $config['includeColumns'] ?? [];
+        $cleanedItems   = [];
 
-        return new JsonResponse(
-            [
-                'message' => 'Import logic not implemented yet'
-            ]
-        );
+        foreach ($items as $item) {
+            if (!is_array($item)) {
+                return new JsonResponse(['error' => 'Invalid item format'], 400);
+            }
+
+            if (empty($includeColumns)) {
+                $filteredItem = $item;
+            } else {
+                $filteredItem = [];
+                foreach ($includeColumns as $column) {
+                    if (array_key_exists($column, $item)) {
+                        $filteredItem[$column] = $item[$column];
+                    }
+                }
+            }
+
+            $us->createItem($filteredItem);
+            $cleanedItems[] = $filteredItem;
+        }
+
+        return new JsonResponse(['success' => true, 'items' => $cleanedItems], 200);
     }
 
     /**

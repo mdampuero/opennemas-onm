@@ -36,6 +36,10 @@
 
         $scope.previewError = false;
 
+        $scope.routes = {
+          importItem: 'api_v1_backend_datatransfer_import'
+        };
+
         /**
          * @ngdoc Import function
          * @name DatatransferCtrl#import
@@ -45,17 +49,15 @@
          * @param {File} file The file to import.
          */
         $scope.import = function(template) {
-          if (!template.file) {
-            messenger.error('Please select a file to import.');
-            return;
-          }
-
-          // Limpiar estados previos
           $scope.filename = template.file.name;
           $scope.previewError = null;
           $scope.importedData = null;
 
           const reader = new FileReader();
+
+          var route = {
+            name: $scope.routes.importItem,
+          };
 
           reader.onload = function(event) {
             try {
@@ -65,6 +67,13 @@
               $scope.$apply(function() {
                 $scope.importedData = json;
                 $scope.previewError = null;
+              });
+
+              return http.put(route, {
+                content: json,
+              }).then(function(response) {
+                messenger.post(response.data);
+                $scope.init();
               });
             } catch (e) {
               $scope.$apply(function() {
