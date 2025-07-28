@@ -17,7 +17,7 @@
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-parent" checklist-model="app.columns.selected" checklist-value="'parent'" type="checkbox">
     <label for="checkbox-parent">
-      {t}Subsection off{/t}
+      {t}Subsection of{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
