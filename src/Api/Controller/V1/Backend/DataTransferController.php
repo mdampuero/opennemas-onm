@@ -43,7 +43,21 @@ class DataTransferController extends ApiController
                 'service' => 'api.service.widget',
                 'limit'   => 500,
             ],
-            'includeColumns' => [],
+            'includeColumns' => [
+                'fk_content_type',
+                'content_type_name',
+                'title',
+                'description',
+                'body',
+                'content_status',
+                'position',
+                'frontpage',
+                'in_litter',
+                'in_home',
+                'params',
+                'class',
+                'widget_type',
+            ],
             'allowImport' => true
         ],
     ];
