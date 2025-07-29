@@ -165,6 +165,13 @@ class SubscriberController extends ApiController
         $maxLines       = 1000;
         $processedLines = 0;
 
+        $userGroups = array_map(function ($group) {
+            return [
+                'user_group_id' => $group['pk_user_group'],
+                'status'        => 1
+            ];
+        }, $newsletter);
+
         foreach ($lines as $line) {
             if ($processedLines >= $maxLines) {
                 break;
@@ -184,13 +191,6 @@ class SubscriberController extends ApiController
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 continue;
             }
-
-            $userGroups = array_map(function ($group) {
-                return [
-                    'user_group_id' => $group['pk_user_group'],
-                    'status'        => 1
-                ];
-            }, $newsletter);
 
             $data = [
                 'email'         => $email,
