@@ -84,6 +84,15 @@ class SubscriptionController extends ApiController
         $maxLines       = 1000;
         $processedLines = 0;
 
+        $userGroups = is_array($newsletter)
+            ? array_map(
+                function ($id) {
+                    return ['user_group_id' => $id, 'status' => 1];
+                },
+                $newsletter
+            )
+            : [['user_group_id' => $newsletter, 'status' => 1]];
+
         foreach ($lines as $line) {
             if ($processedLines >= $maxLines) {
                 break;
@@ -103,15 +112,6 @@ class SubscriptionController extends ApiController
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 continue;
             }
-
-            $userGroups = is_array($newsletter)
-                ? array_map(
-                    function ($id) {
-                        return ['user_group_id' => $id, 'status' => 1];
-                    },
-                    $newsletter
-                )
-                : [['user_group_id' => $newsletter, 'status' => 1]];
 
             $data = [
                 'email'         => $email,
