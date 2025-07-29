@@ -101,7 +101,6 @@ class UserService extends OrmService
 
                 // Check if the provided user groups differ from the existing ones.
                 if (!empty($data['user_groups']) && $this->areUserGroupsDifferent($item, $data['user_groups'])) {
-                    // Assign the new user groups if they are different.
                     return $this->assignLists($item, $data);
                 }
 
@@ -112,6 +111,14 @@ class UserService extends OrmService
             throw $e;
         } catch (\Exception $e) {
             throw new CreateItemException($e->getMessage(), $e->getCode());
+        }
+
+        if (isset($data['register_date']) && is_string($data['register_date'])) {
+            try {
+                $data['register_date'] = new \DateTime($data['register_date'], new \DateTimeZone('UTC'));
+            } catch (\Exception $e) {
+                unset($data['register_date']);
+            }
         }
 
         return parent::createItem($data);
