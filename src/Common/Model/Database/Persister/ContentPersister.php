@@ -76,6 +76,12 @@ class ContentPersister extends BasePersister
             unset($entity->related_contents);
         }
 
+        $advertisements = [];
+        if (!empty($entity->advertisements)) {
+            $advertisements = $entity->advertisements;
+            unset($entity->advertisements);
+        }
+
         $live_blog_updates = [];
         if (!empty($entity->live_blog_updates)) {
             $live_blog_updates = $entity->live_blog_updates;
@@ -109,6 +115,11 @@ class ContentPersister extends BasePersister
 
             $this->persistWebpushNotifications($id, $webpush_notifications, $entity->starttime);
             $entity->webpush_notifications = $webpush_notifications;
+
+            if (!empty($advertisements)) {
+                $this->persistAdvertisements($id, $advertisements);
+                $advertisements = $advertisements;
+            }
 
             $this->conn->commit();
         } catch (\Throwable $e) {
@@ -536,6 +547,19 @@ class ContentPersister extends BasePersister
         $this->saveContentNotifications($id, $webpush_notifications);
     }
 
+    protected function persistAdvertisements($id, $advertisements)
+    {
+        // Ignore metas with value = null
+        if (!empty($advertisements)) {
+            $advertisements = array_filter($advertisements, function ($advertisement) {
+                return !is_null($advertisement);
+            });
+        }
+
+        // Update advertisements
+        $this->saveAdvertisements($id, $advertisements);
+    }
+
     /**
      * Deletes old LiveBlogUpdates.
      *
@@ -683,6 +707,35 @@ class ContentPersister extends BasePersister
                 empty($value['closed']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
             ]);
         }
+        $this->conn->executeQuery($sql, $params, $types);
+    }
+
+    protected function saveAdvertisements($id, $advertisements)
+    {
+        if (empty($advertisements)) {
+            return;
+        }
+        $sql = "insert into advertisements (pk_advertisement, with_script) values "
+            . str_repeat('(?,?),', count($advertisements));
+
+        $id     = array_values($id);
+        $sql    = rtrim($sql, ',');
+        $params = [];
+        $types  = [];
+
+        foreach ($advertisements as $value) {
+            $value['with_script'] = empty($value['with_script']) ? 0 : $value['with_script'];
+
+            $params = array_merge($params, array_merge($id, [
+                $value['with_script'],
+            ]));
+
+            $types = array_merge($types, [
+                \PDO::PARAM_INT,
+                empty($value['with_script']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+            ]);
+        }
+
         $this->conn->executeQuery($sql, $params, $types);
     }
 }
