@@ -85,8 +85,8 @@
       <div class="grid-collapse-title">
         <i class="fa fa-cog m-r-10"></i> {t}Parameters{/t}
       </div>
-      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired="item.type == 'script' || item.type == 'external'" iTitle="{t}Featured
-    in frontpage{/t}" types="photo"}
+      {include file="common/component/related-contents/_featured-media.tpl" iName="featuredFrontpage" iRequired="item.type == 'script' || item.type == 'external'" 
+        iTitle="{t}Featured in frontpage{/t}" types="photo"}
       {include file="ui/component/content-editor/accordion/additional-data.tpl"}
     </div>
   </div>
@@ -202,8 +202,8 @@
                     </div>
                   </div>
                   <div class="text-center">
-                    <p>{t}Uploading{/t} <b>[% uploadedSizeMB %] {t}to{/t} [% totalSizeMB %] MB</b> ({t}Estimated time
-                      remaining:{/t} <b>[% estimatedTimeRemaining %]</b>)</p>
+                    <p>{t}Uploading{/t} <b>[% uploadedSizeMB %] {t}to{/t} [% totalSizeMB %] MB</b> (
+                      {t}Estimated time remaining:{/t} <b>[% estimatedTimeRemaining %]</b>)</p>
                   </div>
                 </div>
               </div>
@@ -368,14 +368,14 @@
   {block name="modals"}
     <script type="text/ng-template" id="modal-draft">
       {include file="common/modals/_draft.tpl"}
-    </script>
+      </script>
     <script type="text/ng-template" id="modal-translate">
       {include file="common/modals/_translate.tpl"}
-    </script>
+      </script>
     <script type="text/ng-template" id="modal-expansible-fields">
       {include file="common/modals/_modalExpansibleFields.tpl"}
-    </script>
+      </script>
     <script type="text/ng-template" id="modal-onmai">
       {include file="common/modals/_modalOnmAI.tpl"}
-    </script>
+      </script>
 {/block}

@@ -29,11 +29,10 @@ class VideoService extends ContentService
         $storage = $factory->create();
 
         $itemPKs = is_array($itemPK) ? $itemPK : [$itemPK];
-
         foreach ($itemPKs as $pk) {
             $item = $this->getItem($pk);
-            if ($item->type === 'upload' && !empty($item->information['relativePath'])) {
-                $storage->delete($item->information['relativePath']);
+            if ($item->type === 'upload' && !empty($item->information['remotePath'])) {
+                $storage->delete($item->information['remotePath']);
             }
         }
     }
