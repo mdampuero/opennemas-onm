@@ -378,7 +378,7 @@ services:
 
     core.helper.video:
         class:      Common\Core\Component\Helper\VideoHelper
-        arguments:  [ '@core.helper.content', '@core.helper.related', '@core.template.admin', '@data.manager.filter' ]
+        arguments:  [ '@core.helper.content', '@core.helper.related', '@core.template.admin', '@data.manager.filter', '@core.loader.instance', '%core.paths.public%' ]
         public:     true
 
     core.helper.widget:
@@ -389,4 +389,14 @@ services:
     core.helper.tag:
         class:      Common\Core\Component\Helper\TagHelper
         arguments:  [ ]
+        public:     true
+
+    core.helper.storage:
+        class:      Common\Core\Component\Helper\StorageHelper
+        arguments:  ['@service_container', '@application.log', '@error.log']
+        public:     true
+
+    core.helper.storage_factory:
+        class:      Common\Core\Component\Helper\StorageHelperFactory
+        arguments:  ['@service_container', '@application.log', '@error.log' ]
         public:     true

@@ -153,3 +153,7 @@ api_v1_frontend_advertisement:
 api_v1_backend_pressclipping:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/pressclipping.yml'
     prefix:   /backend
+
+api_v1_backend_storage:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/storage.yml'
+    prefix:   /backend
