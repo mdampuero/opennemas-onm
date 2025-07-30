@@ -208,12 +208,20 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
               var relatedItemInner = angular.copy(relatedItem);
 
               $scope.featuredInner = relatedItemInner;
-              // $scope.featuredFrontpage = relatedItem;
-              // $scope.expanded.featuredFrontpage = false;
               relatedItemInner.type = "featured_inner";
 
               $scope.item.related_contents.push(relatedItem);
               $scope.item.related_contents.push(relatedItemInner);
+
+              // Update item
+              route.name   = $scope.routes.updateItem;
+              route.params = { id: $scope.getItemId() };
+              http.put(route, $scope.item).then(function(response) {
+                $scope.disableFlags('http');
+                  $window.location.href =
+                    routing.generate($scope.routes.redirect, { id: $scope.getItemId() });
+                messenger.post(response.data);
+              }, $scope.errorCb);
             });
             $interval.cancel($scope.intervalPromise);
           }
