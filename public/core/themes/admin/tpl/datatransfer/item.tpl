@@ -16,11 +16,32 @@
   {t}Datatransfer{/t}
 {/block}
 
+
+{block name="primaryActions"}
+  <div class="all-actions pull-right">
+    <ul class="nav quick-section">
+      <li class="quicklinks">
+        <button class="btn btn-default btn-block btn-loading" ng-disabled="!template.file">
+          <i class="fa fa-trash"></i>
+          {t}Clear file{/t}
+        </button>
+      </li>
+      <li class="quicklinks"><span class="h-seperate"></span></li>
+      <li class="quicklinks">
+        <button class="btn btn-primary btn-block btn-loading" ng-disabled="!template.file || http.flags.loading" ng-click="import(template)">
+          <i class="fa fa-cogs"></i>
+          {t}Import{/t}
+        </button>
+      </li>
+    </ul>
+  </div>
+{/block}
+
 {block name="filters"}{/block}
 
 {block name="list"}
 <div class="ng-cloak row" ng-if="!http.flags.loading">
-  <div class="col-lg-6">
+  <div class="col-lg-8">
     <div class="grid simple">
       <div class="grid-title">
         <h4>
@@ -56,146 +77,97 @@
             </label>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <div class="file-info m-t-20 p-10 bg-light rounded" ng-show="template.file">
-          <div class="file-info-item">
-            <strong>{t}Name:{/t}</strong>
-            <span id="fileName">[% template.file.name %]</span>
-          </div>
-          <div class="file-info-item">
-            <strong>{t}Type:{/t}</strong>
-            <span id="fileType">[% template.file.type %]</span>
-          </div>
-          <div class="file-info-item">
-            <strong>{t}Last modified:{/t}</strong>
-            <span id="fileDate">
-              [% template.file.lastModifiedDate | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
-            </span>
-          </div>
-        </div>
+  <div class="col-lg-4">
+    <div class="grid simple">
+      <div class="grid-title">
+        <h4>
+          <i class="fa fa-info-circle"></i>
+          {t}File Information{/t}
+        </h4>
+      </div>
+      <div class="grid-body">
+        <!-- Información del archivo cuando está seleccionado -->
+        <div ng-show="template.file">
+          <div class="file-info">
+            <div class="file-info-item m-b-15">
+              <div class="info-group m-b-15">
+                <label class="text-muted small">{t}File Name{/t}</label>
+                <div class="p-5 bg-light rounded">
+                  <span id="fileName" class="text-primary">
+                    [% template.file.name %]
+                  </span>
+                </div>
+              </div>
 
-        <hr class="m-t-20 m-b-20"/>
+                <div class="info-group m-b-15">
+                  <label class="text-muted small">{t}File Type{/t}</label>
+                  <div class="p-5 bg-light rounded">
+                    <span id="fileType" class="text-info">
+                      [% template.file.type %]
+                    </span>
+                  </div>
+                </div>
 
-        <div class="form-group no-margin">
-          <div class="controls">
-            <button class="btn btn-primary btn-block btn-loading" ng-disabled="!template.file || http.flags.loading" ng-click="import(template)">
-              <i class="fa fa-cogs"></i>
-              {t}Process file{/t}
-            </button>
-            <button class="btn btn-default btn-block btn-loading" ng-disabled="!template.file">
-              <i class="fa fa-trash"></i>
-              {t}Clear file{/t}
-            </button>
+              <div class="info-group m-b-15">
+                <label class="text-muted small">{t}Last Modified{/t}</label>
+                <div class="p-5 bg-light rounded">
+                  <span id="fileDate" class="text-warning">
+                    [% template.file.lastModifiedDate | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="col-lg-6">
+<div class="ng-cloak row">
+  <div class="col-lg-12">
     <div class="grid simple">
       <div class="grid-title">
         <h4>
-          <i class="fa fa-eye"></i>
+          <i class="fa fa-cogs"></i>
           {t}Preview{/t}
         </h4>
       </div>
-      <div class="grid-body">
-        <div class="preview-content">
-
-          <!-- Estado: No hay archivo seleccionado -->
-          <div class="text-center" ng-show="!template.file">
-            <i class="fa fa-file-text-o fa-4x text-muted"></i>
-            <p class="m-t-15 text-muted">
-              <strong>{t}Select a file to preview{/t}</strong>
-            </p>
-            <small class="text-muted">{t}The preview will appear here once you select a JSON or CSV file{/t}</small>
-          </div>
-
-          <!-- Estado: Archivo seleccionado pero no procesado -->
-          <div class="text-center" ng-show="template.file && !importedData && !http.flags.loading && !previewError">
-            <i class="fa fa-file-code-o fa-4x text-info"></i>
-            <p class="m-t-15">
-              <strong class="text-info">{t}File selected but not processed{/t}</strong>
-            </p>
-            <p class="text-muted">
-              <small>{t}Click "Process" to generate the preview{/t}</small>
-            </p>
-          </div>
-
-          <!-- Estado: Error al procesar -->
-          <div ng-if="previewError" class="text-center">
-            <i class="fa fa-exclamation-triangle fa-4x text-danger"></i>
-            <p class="m-t-15">
-              <strong class="text-danger">{t}Error to processing the file{/t}</strong>
-            </p>
-          </div>
-
-          <!-- Vista previa del contenido -->
-          <div ng-if="importedData && !http.flags.loading">
-            <!-- Header con información del resultado -->
-            <div class="m-b-15">
-              <div class="row">
-                <div class="col-xs-6">
-                  <small class="text-muted" ng-show="filename">
-                    <i class="fa fa-info-circle m-r-5"></i>
-                    <strong>{t}Name:{/t}</strong>
-                    <span class="label label-info">[% filename %]</span>
-                  </small>
-                </div>
-                <div class="col-xs-6 text-right">
-                  <small class="text-muted">
-                    <i class="fa fa-check-circle text-success m-r-5"></i>
-                    {t}Processed successfully{/t}
-                    <i class="fa fa-times-circle text-danger m-r-5"></i>
-                    {t}Error to processing{/t}
-                  </small>
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="well"
-              style="
-              max-height: 400px;
-              overflow-y: auto;
-              background-color: #f8f8f8;
-              border: 1px solid #e3e3e3;"
-              ng-show="!previewError"
-            >
-              <div class="m-b-10">
-                <span class="label label-default" ng-if="Array.isArray(importedData)">
-                  <i class="fa fa-list"></i> Array
-                </span>
-                <span class="label label-default" ng-if="!Array.isArray(importedData)">
-                  <i class="fa fa-code"></i> Object
-                </span>
-              </div>
-              <pre
-                style="
-                background: transparent;
-                border: none;
-                padding: 0;
-                margin: 0;
-                white-space: pre-wrap;
-                word-wrap: break-word;
-                font-size: 12px;
-                line-height: 1.4;"
-              > [% importedData | json:2 %]
-              </pre>
-            </div>
-
-            <div class="m-t-15">
-              <div class="row">
-                <div class="col-xs-12 text-right">
-                  <small class="text-muted">
-                    <i class="fa fa-clock-o m-r-5"></i>
-                    {t}File modified:{/t} [% template.file.lastModifiedDate | moment:'HH:mm' %]
-                  </small>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div class="grid-body no-padding">
+        <div class="table-wrapper ng-cloak">
+          <table class="table table-fixed table-hover no-margin">
+            <thead>
+              <tr>
+                <th ng-repeat="col in displayedColumns track by $index"
+                  class="v-align-middle [% col === 'widget_type' ? 'text-center' : '' %]"
+                  width="[% col === 'widget_type' ? 30 : 150 %]"
+                >
+                  <span class="text-uppercase">
+                    [% col %]
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-class="{ row_selected: isSelected(getItemId(item)) }" ng-repeat="item in items">
+                <td class="v-align-middle [% col === 'widget_type' ? 'text-center' : '' %]" ng-repeat="col in displayedColumns track by $index">
+                  <div class="table-text">
+                    <span ng-if="col === 'widget_type'">
+                      <i class="fa fa-lg fa-code" ng-if="!item.widget_type" uib-tooltip="HTML"></i>
+                      <i class="fa fa-lg fa-cog" ng-if="item.widget_type" uib-tooltip="{t}IntelligentWidget{/t}"></i>
+                    </span>
+                    <span ng-if="col !== 'widget_type'">
+                      [% item[col] %]
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

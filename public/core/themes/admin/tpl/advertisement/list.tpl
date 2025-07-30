@@ -43,6 +43,16 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
             <li class="quicklinks">
               <span class="h-seperate"></span>
             </li>
+            <li class="quicklinks">
+              <a href="{url
+              name=backend_datatransfer_import}" class="btn btn-white" id="export-button">
+                <i class="fa fa-upload"></i>
+                {t}Import{/t}
+              </a>
+            </li>
+            <li class="quicklinks">
+              <span class="h-seperate"></span>
+            </li>
             {/acl}
             <li class="quicklinks">
               <a href="{url name=admin_ad_create}" class="btn btn-primary" id="create-button">

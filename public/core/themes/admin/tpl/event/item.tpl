@@ -53,7 +53,6 @@
       </li>
     </ul>
   </div>
-
 {/block}
 
 {block name="rightColumn"}

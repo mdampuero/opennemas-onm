@@ -22,19 +22,25 @@
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
-         * @ngdoc available types import
-         * @name  DatatransferCtrl#availableTypes
+         * @ngdoc available columns configuration
+         * @name DatatransferCtrl#availableColumns
          * @propertyOf DatatransferCtrl
-         * @type    {Array}
+         * @type {Array}
          * @description
-         *   List of available types for data transfer.
+         * Configuration for available columns by entity type.
          */
-        $scope.availableTypes = [
-          { name: 'json', mymetype: 'application/json' },
-          { name: 'csv', mymetype: 'text/csv' },
-        ];
+        $scope.availableColumns = {
+          widget: {
+            name: 'widget',
+            columns: [ 'widget_type', 'title', 'class' ]
+          }
+        };
 
         $scope.previewError = false;
+
+        $scope.template = {
+          file: null
+        };
 
         $scope.routes = {
           importItem: 'api_v1_backend_datatransfer_import'
@@ -54,7 +60,6 @@
           $scope.importedData = null;
 
           const reader = new FileReader();
-
           var route = {
             name: $scope.routes.importItem,
           };
@@ -63,12 +68,6 @@
             try {
               const json = JSON.parse(event.target.result);
 
-              // Aplicar cambios en el scope de Angular
-              $scope.$apply(function() {
-                $scope.importedData = json;
-                $scope.previewError = null;
-              });
-
               return http.put(route, {
                 content: json,
               }).then(function(response) {
@@ -76,43 +75,70 @@
                 $scope.init();
               });
             } catch (e) {
-              $scope.$apply(function() {
-                $scope.previewError = 'Error parsing JSON: ' + e.message;
-                $scope.importedData = null;
+              $scope.previewError = 'Invalid JSON format: ' + e.message;
+              messenger.post({
+                type: 'error',
+                message: $scope.previewError
               });
             }
-          };
-
-          reader.onerror = function(event) {
-            $scope.$apply(function() {
-              $scope.previewError = 'Error reading file: ' + (event.target.error ? event.target.error.message : 'Unknown error');
-              $scope.importedData = null;
-            });
-          };
-
-          const timeoutId = setTimeout(function() {
-            $scope.$apply(function() {
-              $scope.previewError = 'File processing timeout. The file might be too large.';
-              $scope.importedData = null;
-            });
-          }, 10000);
-
-          const originalOnLoad = reader.onload;
-          const originalOnError = reader.onerror;
-
-          reader.onload = function(event) {
-            clearTimeout(timeoutId);
-            originalOnLoad.call(this, event);
-          };
-
-          reader.onerror = function(event) {
-            clearTimeout(timeoutId);
-            originalOnError.call(this, event);
           };
 
           // Iniciar lectura del archivo
           reader.readAsText(template.file);
         };
+
+        /**
+         * @ngdoc Load table data function
+         * @name DatatransferCtrl#loadTableData
+         * @methodOf DatatransferCtrl
+         * @description
+         * Loads and processes file data for table display.
+         */
+        $scope.loadTableData = function() {
+          if (!$scope.template.file) {
+            $scope.clearTableData();
+            return;
+          }
+
+          $scope.processing = true;
+          $scope.previewError = false;
+          $scope.filename = $scope.template.file.name;
+
+          const reader = new FileReader();
+
+          reader.onload = function(event) {
+            try {
+              const content = event.target.result;
+              let parsedData = JSON.parse(content);
+
+              const contentType = parsedData.metadata.content_type;
+
+              if (contentType && $scope.availableColumns[contentType]) {
+                $scope.displayedColumns = $scope.availableColumns[contentType].columns;
+              } else {
+                $scope.displayedColumns = Object.keys(parsedData.items[0] || {});
+              }
+
+              $scope.importedData = parsedData;
+              $scope.items = parsedData.items;
+              $scope.processing = false;
+
+              $scope.$apply();
+            } catch (error) {
+              // Manejo de errores...
+            }
+          };
+
+          reader.readAsText($scope.template.file);
+        };
+
+        $scope.$watch('template.file', function(newValue, oldValue) {
+          if (newValue !== oldValue) {
+            if (newValue) {
+              $scope.loadTableData();
+            }
+          }
+        });
       }
     ]);
 })();
