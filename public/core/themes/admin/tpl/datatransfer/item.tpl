@@ -21,13 +21,6 @@
   <div class="all-actions pull-right">
     <ul class="nav quick-section">
       <li class="quicklinks">
-        <button class="btn btn-default btn-block btn-loading" ng-disabled="!template.file">
-          <i class="fa fa-trash"></i>
-          {t}Clear file{/t}
-        </button>
-      </li>
-      <li class="quicklinks"><span class="h-seperate"></span></li>
-      <li class="quicklinks">
         <button class="btn btn-primary btn-block btn-loading" ng-disabled="!template.file || http.flags.loading" ng-click="import(template)">
           <i class="fa fa-cogs"></i>
           {t}Import{/t}
@@ -128,7 +121,7 @@
   </div>
 </div>
 
-<div class="ng-cloak row">
+<div class="ng-cloak row" ng-show="importedData">
   <div class="col-lg-12">
     <div class="grid simple">
       <div class="grid-title">
@@ -147,7 +140,7 @@
                   width="[% col === 'widget_type' ? 30 : 150 %]"
                 >
                   <span class="text-uppercase">
-                    [% col %]
+                    [% col.display %]
                   </span>
                 </th>
               </tr>
@@ -156,12 +149,12 @@
               <tr ng-class="{ row_selected: isSelected(getItemId(item)) }" ng-repeat="item in items">
                 <td class="v-align-middle [% col === 'widget_type' ? 'text-center' : '' %]" ng-repeat="col in displayedColumns track by $index">
                   <div class="table-text">
-                    <span ng-if="col === 'widget_type'">
+                    <span ng-if="col.name === 'widget_type'">
                       <i class="fa fa-lg fa-code" ng-if="!item.widget_type" uib-tooltip="HTML"></i>
                       <i class="fa fa-lg fa-cog" ng-if="item.widget_type" uib-tooltip="{t}IntelligentWidget{/t}"></i>
                     </span>
-                    <span ng-if="col !== 'widget_type'">
-                      [% item[col] %]
+                    <span ng-if="col.name !== 'widget_type'">
+                      [% item[col.name] %]
                     </span>
                   </div>
                 </td>

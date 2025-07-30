@@ -195,6 +195,7 @@ class DataTransferController extends ApiController
      */
     public function importAction(Request $request)
     {
+        $msg         = $this->get('core.messenger');
         $content     = $request->request->get('content');
         $contentType = $content['metadata']['content_type'] ?? null;
         $items       = $content['items'] ?? [];
@@ -229,12 +230,17 @@ class DataTransferController extends ApiController
                 }
             }
 
+            $filteredItem['content_status'] = 0;
+
             $us->createItem($filteredItem);
             $cleanedItems[] = $filteredItem;
         }
 
-        return new JsonResponse(['success' => true, 'items' => $cleanedItems], 200);
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
+
 
     /**
      * Filters columns from a dataset.

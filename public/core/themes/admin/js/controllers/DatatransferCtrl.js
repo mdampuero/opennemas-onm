@@ -16,8 +16,8 @@
      *   Provides actions to list notifications.
      */
     .controller('DatatransferCtrl', [
-      '$controller', '$scope', 'http', 'messenger', 'routing', 'oqlEncoder',
-      function($controller, $scope, http, messenger, routing, oqlEncoder) {
+      '$controller', '$scope', 'http', 'messenger', 'routing', 'oqlEncoder', '$window',
+      function($controller, $scope, http, messenger, routing, oqlEncoder, $window) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
@@ -32,7 +32,18 @@
         $scope.availableColumns = {
           widget: {
             name: 'widget',
-            columns: [ 'widget_type', 'title', 'class' ]
+            columns: [
+              { name: 'widget_type', display: 'Type' },
+              { name: 'title', display: 'Title' },
+              { name: 'class', display: 'Content' }
+            ]
+          },
+          advertisement: {
+            name: 'advertisement',
+            columns: [
+              { name: 'title', display: 'Title' },
+              { name: 'position', display: 'Position' },
+            ]
           }
         };
 
@@ -72,14 +83,10 @@
                 content: json,
               }).then(function(response) {
                 messenger.post(response.data);
-                $scope.init();
+                $scope.clearData();
               });
             } catch (e) {
-              $scope.previewError = 'Invalid JSON format: ' + e.message;
-              messenger.post({
-                type: 'error',
-                message: $scope.previewError
-              });
+              messenger.post(response.data);
             }
           };
 
@@ -95,11 +102,6 @@
          * Loads and processes file data for table display.
          */
         $scope.loadTableData = function() {
-          if (!$scope.template.file) {
-            $scope.clearTableData();
-            return;
-          }
-
           $scope.processing = true;
           $scope.previewError = false;
           $scope.filename = $scope.template.file.name;
@@ -109,7 +111,7 @@
           reader.onload = function(event) {
             try {
               const content = event.target.result;
-              let parsedData = JSON.parse(content);
+              const parsedData = JSON.parse(content);
 
               const contentType = parsedData.metadata.content_type;
 
@@ -125,11 +127,17 @@
 
               $scope.$apply();
             } catch (error) {
-              // Manejo de errores...
+              messenger.post($window.strings.not_valid, 'error');
             }
           };
 
           reader.readAsText($scope.template.file);
+        };
+
+        $scope.clearData = function() {
+          $scope.template.file = null;
+          $scope.displayedColumns = [];
+          $scope.importedData = null;
         };
 
         $scope.$watch('template.file', function(newValue, oldValue) {
