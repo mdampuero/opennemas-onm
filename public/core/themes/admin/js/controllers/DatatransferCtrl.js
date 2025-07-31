@@ -47,8 +47,6 @@
           }
         };
 
-        $scope.previewError = false;
-
         $scope.template = {
           file: null
         };
@@ -67,7 +65,6 @@
          */
         $scope.import = function(template) {
           $scope.filename = template.file.name;
-          $scope.previewError = null;
           $scope.importedData = null;
 
           const reader = new FileReader();
@@ -102,8 +99,6 @@
          * Loads and processes file data for table display.
          */
         $scope.loadTableData = function() {
-          $scope.processing = true;
-          $scope.previewError = false;
           $scope.filename = $scope.template.file.name;
 
           const reader = new FileReader();
@@ -123,7 +118,6 @@
 
               $scope.importedData = parsedData;
               $scope.items = parsedData.items;
-              $scope.processing = false;
 
               $scope.$apply();
             } catch (error) {
@@ -134,12 +128,23 @@
           reader.readAsText($scope.template.file);
         };
 
+        /**
+         * Clears the currently loaded file and resets the display
+         * @name DatatransferCtrl#$scope.clearData
+         * @function
+         */
         $scope.clearData = function() {
           $scope.template.file = null;
           $scope.displayedColumns = [];
           $scope.importedData = null;
         };
 
+        /**
+         * Watches for changes to the template file
+         * @name DatatransferCtrl#$scope.$watch
+         * @function
+         * @listens $scope.template.file
+         */
         $scope.$watch('template.file', function(newValue, oldValue) {
           if (newValue !== oldValue) {
             if (newValue) {

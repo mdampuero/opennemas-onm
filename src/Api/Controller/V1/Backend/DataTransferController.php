@@ -164,6 +164,10 @@ class DataTransferController extends ApiController
 
         $filtered = $this->filterColumns($items, $includeColumns, true);
 
+        $filtered = array_map(function ($item) {
+            return $this->convertStringsToInts($item);
+        }, $filtered);
+
         $exportData = [
             'metadata' => [
                 'content_type' => $contentType,
@@ -209,6 +213,8 @@ class DataTransferController extends ApiController
             return new JsonResponse(['error' => 'Import not allowed for this content type'], 403);
         }
 
+        $numericFieldsToCastAsString = ['desktop', 'tablet', 'mobile', 'devices'];
+
         $us = $this->container->get($config['config']['service']);
 
         $includeColumns = $config['includeColumns'] ?? [];
@@ -231,6 +237,12 @@ class DataTransferController extends ApiController
             }
 
             $filteredItem['content_status'] = 0;
+
+            foreach ($numericFieldsToCastAsString as $key) {
+                if (isset($filteredItem[$key]) && is_int($filteredItem[$key])) {
+                    $filteredItem[$key] = (string) $filteredItem[$key];
+                }
+            }
 
             $us->createItem($filteredItem);
             $cleanedItems[] = $filteredItem;
