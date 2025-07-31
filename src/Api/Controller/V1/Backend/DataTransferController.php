@@ -248,6 +248,17 @@ class DataTransferController extends ApiController
                 }
             }
 
+            if ($contentType === 'advertisement') {
+                $devices = &$filteredItem['params']['devices'];
+
+                $devices = array_map(
+                    function ($value) {
+                        return (int) $value;
+                    },
+                    array_intersect_key($devices, array_flip(['desktop', 'phone', 'tablet']))
+                ) + $devices;
+            }
+
             $filteredItem['content_status'] = 0;
 
             foreach ($numericFieldsToCastAsString as $key) {
