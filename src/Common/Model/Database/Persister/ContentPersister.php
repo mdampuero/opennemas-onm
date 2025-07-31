@@ -771,7 +771,6 @@ class ContentPersister extends BasePersister
             return;
         }
 
-        // Construir la parte VALUES de la consulta con el número correcto de placeholders (?,?)
         $sql = "INSERT INTO advertisements_positions (advertisement_id, position_id) VALUES "
             . str_repeat('(?,?),', count($adsPositions));
 
