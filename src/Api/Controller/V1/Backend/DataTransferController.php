@@ -164,10 +164,6 @@ class DataTransferController extends ApiController
 
         $filtered = $this->filterColumns($items, $includeColumns, true);
 
-        $filtered = array_map(function ($item) {
-            return $this->convertStringsToInts($item);
-        }, $filtered);
-
         $exportData = [
             'metadata' => [
                 'content_type' => $contentType,
