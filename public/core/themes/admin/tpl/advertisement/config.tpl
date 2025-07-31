@@ -433,8 +433,7 @@
                     </a>
                 </div>
                 {/acl}
-                <textarea class="form-control" name="ads_txt" id="ads_txt" rows="20">{$configs['ads_txt']|default:''}</textarea>
-                <input type="file" id="import_ads_txt" accept=".txt" style="display: none;" onchange="importAdsTxt(this)">
+                <textarea class="form-control" name="ads_txt" rows="20">{$configs['ads_txt']|default:''}</textarea>
                 <span class="help">{t}This will be the content of the file ads.txt on your root domain{/t}</span>
             </div>
         </div>
