@@ -225,8 +225,6 @@ class DataTransferController extends ApiController
             return $this->importAdsTxt($contentType, $items);
         }
 
-        $numericFieldsToCastAsString = ['desktop', 'tablet', 'mobile', 'devices'];
-
         $us = $this->container->get($config['config']['service']);
 
         $includeColumns = $config['includeColumns'] ?? [];
@@ -260,12 +258,6 @@ class DataTransferController extends ApiController
             }
 
             $filteredItem['content_status'] = 0;
-
-            foreach ($numericFieldsToCastAsString as $key) {
-                if (isset($filteredItem[$key]) && is_int($filteredItem[$key])) {
-                    $filteredItem[$key] = (string) $filteredItem[$key];
-                }
-            }
 
             $us->createItem($filteredItem);
             $cleanedItems[] = $filteredItem;
