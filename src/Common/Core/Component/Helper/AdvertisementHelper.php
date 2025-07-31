@@ -226,6 +226,22 @@ class AdvertisementHelper
         return implode("\n", array_unique($adsLines));
     }
 
+    public function getAdsTxtContentInstance()
+    {
+        $adsTxt = $this->container->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('ads_txt');
+
+        $containerLines = explode("\n", $adsTxt);
+        $adsLines       = [];
+
+        foreach ($containerLines as $line) {
+            $adsLines[] = str_replace(' ', '', $line);
+        }
+
+        return implode("\n", array_unique($adsLines));
+    }
+
     /**
      * Checks if request url is ads restricted.
      *
