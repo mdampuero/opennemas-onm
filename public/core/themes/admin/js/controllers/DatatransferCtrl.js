@@ -137,6 +137,13 @@
           $scope.template.file = null;
           $scope.displayedColumns = [];
           $scope.importedData = null;
+
+          // Reset the file input element to allow re-uploading the same file
+          const input = document.getElementById('file');
+
+          if (input) {
+            input.value = null;
+          }
         };
 
         /**
