@@ -82,6 +82,12 @@ class ContentPersister extends BasePersister
             unset($entity->advertisements);
         }
 
+        $adsPositions = [];
+        if (!empty($entity->ads_positions)) {
+            $adsPositions = $entity->ads_positions;
+            unset($entity->ads_positions);
+        }
+
         $live_blog_updates = [];
         if (!empty($entity->live_blog_updates)) {
             $live_blog_updates = $entity->live_blog_updates;
@@ -119,6 +125,11 @@ class ContentPersister extends BasePersister
             if (!empty($advertisements)) {
                 $this->persistAdvertisements($id, $advertisements);
                 $advertisements = $advertisements;
+            }
+
+            if (!empty($adsPositions)) {
+                $this->persistAdsPositions($id, $adsPositions);
+                $adsPositions = $adsPositions;
             }
 
             $this->conn->commit();
@@ -560,6 +571,19 @@ class ContentPersister extends BasePersister
         $this->saveAdvertisements($id, $advertisements);
     }
 
+    protected function persistAdsPositions($id, $adsPositions)
+    {
+        // Ignore metas with value = null
+        if (!empty($adsPositions)) {
+            $adsPositions = array_filter($adsPositions, function ($adsPosition) {
+                return !is_null($adsPosition);
+            });
+        }
+
+        // Update advertisements
+        $this->saveAdsPositions($id, $adsPositions);
+    }
+
     /**
      * Deletes old LiveBlogUpdates.
      *
@@ -735,6 +759,37 @@ class ContentPersister extends BasePersister
                 \PDO::PARAM_INT,
                 empty($value['with_script']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['script']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+            ]);
+        }
+
+        $this->conn->executeQuery($sql, $params, $types);
+    }
+
+    protected function saveAdsPositions($id, $adsPositions)
+    {
+        if (empty($adsPositions)) {
+            return;
+        }
+
+        // Construir la parte VALUES de la consulta con el número correcto de placeholders (?,?)
+        $sql = "INSERT INTO advertisements_positions (advertisement_id, position_id) VALUES "
+            . str_repeat('(?,?),', count($adsPositions));
+
+        $id     = array_values($id);
+        $sql    = rtrim($sql, ',');
+        $params = [];
+        $types  = [];
+
+        foreach ($adsPositions as $value) {
+            $value['with_script'] = empty($value['position_id']) ? 0 : $value['position_id'];
+
+            $params = array_merge($params, array_merge($id, [
+                $value['position_id']
+            ]));
+
+            $types = array_merge($types, [
+                \PDO::PARAM_INT,
+                empty($value['position_id']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
             ]);
         }
 

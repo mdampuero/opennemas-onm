@@ -35,6 +35,7 @@ class DataTransferController extends ApiController
                 'params',
                 'content_status',
                 'advertisements',
+                'ads_positions'
             ],
             'allowImport' => true
         ],

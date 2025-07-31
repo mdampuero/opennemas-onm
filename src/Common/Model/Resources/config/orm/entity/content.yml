@@ -58,6 +58,7 @@ orm:
                 tags:                   array
                 related_contents:       array
                 advertisements:         array
+                ads_positions:          array
                 subscriptions:          array
                 timetable:              array
                 title_int:              l10n_string
@@ -187,6 +188,15 @@ orm:
                                     type: boolean
                                 script:
                                     type: string
+                        ads_positions:
+                            table: advertisements_positions
+                            source_key: pk_content
+                            target_key: advertisement_id
+                            columns:
+                                advertisement_id:
+                                    type: integer
+                                position_id:
+                                    type: integer
                     columns:
                         pk_content:
                             type: bigint
