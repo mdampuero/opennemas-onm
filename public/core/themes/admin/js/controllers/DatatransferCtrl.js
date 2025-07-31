@@ -42,7 +42,6 @@
             name: 'advertisement',
             columns: [
               { name: 'title', display: 'Title' },
-              { name: 'position', display: 'Position' },
             ]
           }
         };
