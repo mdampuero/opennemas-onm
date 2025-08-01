@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
@@ -71,13 +79,15 @@ class DataTransferController extends ApiController
     ];
 
     /**
-     * Handles the export of items for a given content type.
+     * Exports a set of items by ID for a specific content type.
      *
-     * Expected query parameters:
-     * - contentType: The type of content to export (e.g., 'advertisement', 'event')
-     * - ids: Comma-separated list of IDs to export
+     * @param Request $request
+     *   Query parameters expected:
+     *   - contentType (string): The content type to export.
+     *   - ids (array|int[]): Array of IDs to export.
      *
      * @return StreamedResponse|JsonResponse
+     *   A downloadable JSON file of exported data or an error response.
      */
     public function exportItemAction(Request $request)
     {
@@ -139,13 +149,13 @@ class DataTransferController extends ApiController
     }
 
     /**
-     * Handles the export logic for a given module.
+     * Exports all items of a specific content type using default configuration.
      *
-     * Expected query parameters:
-     * - module: The module to export (must be in $availableDataTransfers)
-     * - format: (optional) Format override (default is the configured one)
+     * @param string $contentType
+     *   The content type to export (must exist in $availableDataTransfers).
      *
-     * @return JsonResponse Response Object
+     * @return Response|JsonResponse
+     *   A downloadable JSON file of exported data or an error response.
      */
     public function exportListAction($contentType)
     {
@@ -197,13 +207,15 @@ class DataTransferController extends ApiController
     }
 
     /**
-     * Handles the import logic for a given module.
+     * Imports items for a given content type from a JSON request body.
      *
-     * Expected:
-     * - module: passed in query or route
-     * - JSON body with data to import
+     * @param Request $request
+     *   The HTTP request with JSON body containing:
+     *   - metadata.content_type (string): The content type.
+     *   - items (array): The data items to import.
      *
-     * @return JsonResponse Response Object
+     * @return JsonResponse
+     *   Response indicating success or failure with messages.
      */
     public function importAction(Request $request)
     {
@@ -260,7 +272,17 @@ class DataTransferController extends ApiController
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
-
+    /**
+     * Specialized export method for Ads.txt settings.
+     *
+     * @param string $contentType
+     *   The content type being exported (must be 'adstxt').
+     * @param array $config
+     *   The configuration settings for adstxt export.
+     *
+     * @return Response
+     *   A downloadable JSON response with Ads.txt metadata and items.
+     */
     protected function exportAdstxt($contentType, $config)
     {
         $adstxtHelper = $this->container->get($config['config']['service']);
@@ -286,6 +308,17 @@ class DataTransferController extends ApiController
         ]);
     }
 
+    /**
+     * Specialized import method for Ads.txt settings.
+     *
+     * @param string $contentType
+     *   The content type being imported (must be 'adstxt').
+     * @param array $items
+     *   Array of Ads.txt entries to be saved.
+     *
+     * @return JsonResponse
+     *   Response with success message or error.
+     */
     protected function importAdsTxt($contentType, $items)
     {
         $msg = $this->get('core.messenger');
@@ -308,12 +341,17 @@ class DataTransferController extends ApiController
     }
 
     /**
-     * Filters columns from a dataset.
+     * Filters specified columns in a given dataset of items.
      *
-     * @param array $items Array of items to filter
-     * @param array $columns Columns to include or exclude
-     * @param bool $include If true, includes only specified columns. If false, excludes specified columns.
-     * @return array Filtered items
+     * @param array $items
+     *   The full list of items to filter.
+     * @param array $columns
+     *   List of column keys to include or exclude.
+     * @param bool $include
+     *   If true, only includes the specified columns. If false, excludes them.
+     *
+     * @return array
+     *   The filtered dataset with selected columns.
      */
     protected function filterColumns(array $items, array $columns, bool $include = false): array
     {
