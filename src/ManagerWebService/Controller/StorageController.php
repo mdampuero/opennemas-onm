@@ -57,6 +57,44 @@ class StorageController extends Controller
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
+     /**
+     * Returns the list of instances as JSON.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function instancesAction(Request $request)
+    {
+        $oql = $request->query->get('oql', '');
+
+        if (!$this->get('core.security')->hasPermission('MASTER')) {
+            $condition = sprintf('owner_id = %s ', $this->get('core.user')->id);
+
+            $oql = $this->get('orm.oql.fixer')->fix($oql)
+                ->addCondition($condition)->getOql();
+        }
+
+        $repository = $this->get('orm.manager')->getRepository('Instance');
+        $converter  = $this->get('orm.manager')->getConverter('Instance');
+
+        $instances = $repository->findBy($oql);
+        $total     = $repository->countBy($oql);
+
+        $instances = array_map(function ($a) use ($converter) {
+            return $converter->responsify($a->getData());
+        }, $instances);
+
+        return new JsonResponse([
+            'total'   => $total,
+            'results' => $instances,
+            'extra'   => [
+                'service' => 'storage'
+            ],
+            'oql' => $oql,
+        ]);
+    }
+    
     /**
      * Returns the list tasks as JSON.
      *
