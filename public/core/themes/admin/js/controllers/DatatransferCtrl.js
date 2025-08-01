@@ -72,6 +72,37 @@
         };
 
         /**
+         * @ngdoc property
+         * @name DatatransferCtrl#routes
+         * @propertyOf DatatransferCtrl
+         * @type {Object}
+         * @description
+         * Control pagination for loadTable
+         */
+        $scope.pagination = {
+          currentPage: 1,
+          itemsPerPage: 15,
+        };
+
+        /**
+         * @ngdoc getPaginatedItems
+         * @name DatatransferCtrl#getPaginatedItems
+         * @methodOf DatatransferCtrl
+         * @description
+         * Obtain the paginated Items
+         */
+        $scope.getPaginatedItems = function() {
+          if (!$scope.items) {
+            return [];
+          }
+
+          const start = ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage;
+          const end = start + $scope.pagination.itemsPerPage;
+
+          return $scope.items.slice(start, end);
+        };
+
+        /**
          * @ngdoc Import function
          * @name DatatransferCtrl#import
          * @methodOf DatatransferCtrl
@@ -80,6 +111,7 @@
          * @param {File} file The file to import.
          */
         $scope.import = function(template) {
+          $scope.saving = true;
           $scope.filename = template.file.name;
           $scope.importedData = null;
 
@@ -98,10 +130,12 @@
                 headers: { 'Content-Type': 'application/json' },
                 transformRequest: angular.toJson
               }).then(function(response) {
+                $scope.saving = false;
                 messenger.post(response.data);
                 $scope.clearData();
               });
             } catch (e) {
+              $scope.saving = false;
               $scope.clearData();
               messenger.post($window.strings.forms.not_valid, 'error');
             }
@@ -120,6 +154,7 @@
          */
         $scope.loadTableData = function() {
           $scope.filename = $scope.template.file.name;
+          $scope.pagination.currentPage = 1;
 
           const reader = new FileReader();
 
@@ -138,6 +173,7 @@
 
               $scope.importedData = parsedData;
               $scope.items = parsedData.items;
+              $scope.totalItems = parsedData.items.length;
 
               $scope.$apply();
             } catch (error) {

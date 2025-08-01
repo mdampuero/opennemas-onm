@@ -21,7 +21,7 @@
   <div class="all-actions pull-right">
     <ul class="nav quick-section">
       <li class="quicklinks">
-        <button class="btn btn-primary btn-block btn-loading" ng-disabled="!template.file || http.flags.loading" ng-click="import(template)">
+        <button class="btn btn-primary btn-block btn-loading" ng-disabled="!template.file || saving" ng-click="import(template)">
           <i class="fa fa-cogs"></i>
           {t}Import{/t}
         </button>
@@ -33,7 +33,28 @@
 {block name="filters"}{/block}
 
 {block name="list"}
-<div class="ng-cloak row" ng-if="!http.flags.loading">
+<div class="ng-cloak row" ng-if="saving">
+  <div class="col-lg-12">
+    <div class="grid simple">
+      <div class="grid-body">
+        <strong>
+          <i class="fa fa-spinner fa-spin text-danger"></i>
+          {t}Please wait: The import process is currently running. Do not close this window.{/t}
+        </strong>
+      </div>
+      <div class="grid-footer">
+        <div class="row">
+            <div class="col-xs-12">
+                <small class="text-muted">
+                  <i class="fa fa-check-circle"></i> {t}Once the process is complete, this window will close automatically.{/t}</small>
+                </small>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="ng-cloak row" ng-if="!http.flags.loading && !saving">
   <div class="col-lg-8">
     <div class="grid simple">
       <div class="grid-title">
@@ -121,7 +142,7 @@
   </div>
 </div>
 
-<div class="ng-cloak row" ng-show="importedData">
+<div class="ng-cloak row" ng-show="importedData || saving">
   <div class="col-lg-12">
     <div class="grid simple">
       <div class="grid-title">
@@ -146,7 +167,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-class="{ row_selected: isSelected(getItemId(item)) }" ng-repeat="item in items">
+              <tr ng-class="{ row_selected: isSelected(getItemId(item)) }" ng-repeat="item in getPaginatedItems()">
                 <td class="v-align-middle [% col === 'widget_type' ? 'text-center' : '' %]" ng-repeat="col in displayedColumns track by $index">
                   <div class="table-text">
                     <span ng-if="col.name === 'widget_type'">
@@ -161,6 +182,27 @@
               </tr>
             </tbody>
           </table>
+
+          <div class="text-center mt-4 mb-3" ng-if="items && items.length > pagination.itemsPerPage">
+            Mostrando [% (pagination.currentPage - 1) * pagination.itemsPerPage + 1 %] -
+            [% Math.min(pagination.currentPage * pagination.itemsPerPage, totalItems) %] de [% totalItems %] items
+
+            <div>
+              <button class="btn btn-primary btn-sm"
+                      ng-click="pagination.currentPage = pagination.currentPage - 1"
+                      ng-disabled="pagination.currentPage === 1">
+                &lsaquo; {t} Previous {/t}
+              </button>
+
+              <span class="page-number">[% pagination.currentPage %]</span>
+
+              <button class="btn btn-primary btn-sm"
+                      ng-click="pagination.currentPage = pagination.currentPage + 1"
+                      ng-disabled="pagination.currentPage * pagination.itemsPerPage >= totalItems">
+                {t} Next {/t} &rsaquo;
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
