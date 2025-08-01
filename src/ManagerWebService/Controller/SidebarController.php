@@ -187,6 +187,12 @@ class SidebarController extends Controller
                     'icon'     => 'fa fa-cloud',
                     'items' => [
                         [
+                            'name'     => _('Instances'),
+                            'icon'     => 'fa fa-cubes fa-lg',
+                            'route'    => 'manager_storage_instances',
+                            'click'    => true,
+                        ],
+                        [
                             'name'     => _('Configs'),
                             'icon'     => 'fa fa-cog fa-lg',
                             'route'    => 'manager_storage_config',
