@@ -55,3 +55,7 @@ manager_user_group:
 manager_onmai:
     prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/onmai.yml'
+
+manager_storage:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/storage.yml'

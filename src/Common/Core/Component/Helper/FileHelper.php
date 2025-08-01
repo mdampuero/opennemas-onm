@@ -48,7 +48,7 @@ abstract class FileHelper
         $this->publicDir = $publicDir;
     }
 
-   /**
+    /**
      * Checks if a file exists.
      *
      * @param string $path The path to file.
