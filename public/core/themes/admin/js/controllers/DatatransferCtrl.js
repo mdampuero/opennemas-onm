@@ -16,8 +16,8 @@
      *   Provides actions to list notifications.
      */
     .controller('DatatransferCtrl', [
-      '$controller', '$scope', 'http', 'messenger', 'routing', 'oqlEncoder', '$window',
-      function($controller, $scope, http, messenger, routing, oqlEncoder, $window) {
+      '$controller', '$scope', '$http', 'messenger', 'routing', 'oqlEncoder', '$window',
+      function($controller, $scope, $http, messenger, routing, oqlEncoder, $window) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
@@ -88,15 +88,15 @@
             name: $scope.routes.importItem,
           };
 
+          var url = routing.generate($scope.routes.importItem);
+
           reader.onload = function(event) {
             try {
               const json = JSON.parse(event.target.result);
 
-              return http.post(route, { content: json }, {
-                headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-                transformRequest: function(data) {
-                  return angular.toJson(data);
-                }
+              return $http.post(url, json, {
+                headers: { 'Content-Type': 'application/json' },
+                transformRequest: angular.toJson
               }).then(function(response) {
                 messenger.post(response.data);
                 $scope.clearData();

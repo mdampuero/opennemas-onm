@@ -208,7 +208,7 @@ class DataTransferController extends ApiController
     public function importAction(Request $request)
     {
         $msg         = $this->get('core.messenger');
-        $content     = $request->request->get('content');
+        $content     = json_decode($request->getContent(), true);
         $contentType = $content['metadata']['content_type'] ?? null;
         $items       = $content['items'] ?? [];
         $config      = $this->availableDataTransfers[$contentType] ?? null;
