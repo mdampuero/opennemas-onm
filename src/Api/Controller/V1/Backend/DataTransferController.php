@@ -225,10 +225,8 @@ class DataTransferController extends ApiController
             return $this->importAdsTxt($contentType, $items);
         }
 
-        $us = $this->container->get($config['config']['service']);
-
+        $us             = $this->container->get($config['config']['service']);
         $includeColumns = $config['includeColumns'] ?? [];
-        $cleanedItems   = [];
 
         foreach ($items as $item) {
             if (!is_array($item)) {
@@ -238,16 +236,11 @@ class DataTransferController extends ApiController
             if (empty($includeColumns)) {
                 $filteredItem = $item;
             } else {
-                $filteredItem = [];
-                foreach ($includeColumns as $column) {
-                    if (array_key_exists($column, $item)) {
-                        $filteredItem[$column] = $item[$column];
-                    }
-                }
+                $filteredItem = array_intersect_key($item, array_flip($includeColumns));
             }
 
             if ($contentType === 'advertisement') {
-                $devices = &$filteredItem['params']['devices'];
+                $devices = $filteredItem['params']['devices'];
 
                 $devices = array_map(
                     function ($value) {
@@ -260,13 +253,13 @@ class DataTransferController extends ApiController
             $filteredItem['content_status'] = 0;
 
             $us->createItem($filteredItem);
-            $cleanedItems[] = $filteredItem;
         }
 
         $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
+
 
     protected function exportAdstxt($contentType, $config)
     {

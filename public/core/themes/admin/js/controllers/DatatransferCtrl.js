@@ -92,8 +92,11 @@
             try {
               const json = JSON.parse(event.target.result);
 
-              return http.put(route, {
-                content: json,
+              return http.post(route, { content: json }, {
+                headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+                transformRequest: function(data) {
+                  return angular.toJson(data);
+                }
               }).then(function(response) {
                 messenger.post(response.data);
                 $scope.clearData();
