@@ -54,8 +54,8 @@ class DataTransferController extends ApiController
                 'limit'   => 500,
             ],
             'includeColumns' => [
-                'fk_content_type',
                 'content_type_name',
+                'fk_content_type',
                 'title',
                 'content_status',
                 'position',
@@ -253,7 +253,7 @@ class DataTransferController extends ApiController
             if (empty($includeColumns)) {
                 $filteredItem = $item;
             } else {
-                $filteredItem = $this->filterColumns($items, $includeColumns, true);
+                $filteredItem = array_intersect_key($item, array_flip($includeColumns));
             }
 
             if ($contentType === 'advertisement') {
