@@ -86,6 +86,8 @@ class DataTransferController extends ApiController
      *
      * @return StreamedResponse|JsonResponse
      *   A downloadable JSON file of exported data or an error response.
+     *
+     *  @Security("hasPermission('MASTER')")
      */
     public function exportItemAction(Request $request)
     {
@@ -154,6 +156,8 @@ class DataTransferController extends ApiController
      *
      * @return Response|JsonResponse
      *   A downloadable JSON file of exported data or an error response.
+     *
+     *  @Security("hasPermission('MASTER')")
      */
     public function exportListAction($contentType)
     {
@@ -214,6 +218,8 @@ class DataTransferController extends ApiController
      *
      * @return JsonResponse
      *   Response indicating success or failure with messages.
+     *
+     *  @Security("hasPermission('MASTER')")
      */
     public function importAction(Request $request)
     {

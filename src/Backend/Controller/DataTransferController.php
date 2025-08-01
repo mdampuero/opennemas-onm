@@ -28,6 +28,8 @@ class DataTransferController extends Controller
      * @param Request $request The request object.
      *
      * @return Response The response object.
+     *
+     *  @Security("hasPermission('MASTER')")
      */
     public function importAction(Request $request)
     {
