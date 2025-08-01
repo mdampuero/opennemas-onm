@@ -22,12 +22,13 @@
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
-         * @ngdoc available columns configuration
+         * @ngdoc property
          * @name DatatransferCtrl#availableColumns
          * @propertyOf DatatransferCtrl
-         * @type {Array}
+         * @type {Object}
          * @description
-         * Configuration for available columns by entity type.
+         * Configuration for available columns by entity type. Each entity type (e.g., `widget`, `advertisement`)
+         * contains a name and a list of column definitions, each with internal `name` and user-facing `display` values.
          */
         $scope.availableColumns = {
           widget: {
@@ -41,15 +42,31 @@
           advertisement: {
             name: 'advertisement',
             columns: [
-              { name: 'title', display: 'Title' },
+              { name: 'title', display: 'Title' }
             ]
           }
         };
 
+        /**
+         * @ngdoc property
+         * @name DatatransferCtrl#template
+         * @propertyOf DatatransferCtrl
+         * @type {Object}
+         * @description
+         * Object holding file reference used during import.
+         */
         $scope.template = {
           file: null
         };
 
+        /**
+         * @ngdoc property
+         * @name DatatransferCtrl#routes
+         * @propertyOf DatatransferCtrl
+         * @type {Object}
+         * @description
+         * Set of API endpoint routes used in the data transfer process.
+         */
         $scope.routes = {
           importItem: 'api_v1_backend_datatransfer_import'
         };
@@ -82,7 +99,8 @@
                 $scope.clearData();
               });
             } catch (e) {
-              messenger.post(response.data);
+              $scope.clearData();
+              messenger.post($window.strings.forms.not_valid, 'error');
             }
           };
 
@@ -112,7 +130,7 @@
               if (contentType && $scope.availableColumns[contentType]) {
                 $scope.displayedColumns = $scope.availableColumns[contentType].columns;
               } else {
-                $scope.displayedColumns = Object.keys(parsedData.items[0] || {});
+                $scope.displayedColumns = Object.keys(parsedData.items || {});
               }
 
               $scope.importedData = parsedData;
