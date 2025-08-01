@@ -1,0 +1,37 @@
+<NewsML>
+  <NewsItem>
+    <Identification>
+      <NewsIdentifier>
+        <ProviderId>afp.com</ProviderId>
+        <DateId>20040729</DateId>
+        <NewsItemId>040729054956.xm61wen7</NewsItemId>
+      </NewsIdentifier>
+    </Identification>
+    <AdministrativeMetadata>
+      <Provider>
+        <Party FormalName="Foobar Agency 'quote' "/>
+      </Provider>
+    </AdministrativeMetadata>
+    <DescriptiveMetadata>
+      <OfInterestTo FormalName="sample,tags"/>
+      <Property FormalName="Tesauro" Value="POL"/>
+    </DescriptiveMetadata>
+    <NewsManagement>
+      <FirstCreated>20040729T054956Z</FirstCreated>
+      <Urgency FormalName="U"></Urgency>
+    </NewsManagement>
+    <NewsComponent>
+      <NewsLines>
+        <HeadLine>Sample title</HeadLine>
+        <SubHeadLine>Sample pretitle</SubHeadLine>
+      </NewsLines>
+      <NewsComponent>
+        <MediaType FormalName="Text" />
+        <ContentItem>
+          <p>Paragraph 1</p>
+          <p>Paragraph 2</p>
+        </ContentItem>
+      </NewsComponent>
+    </NewsComponent>
+  </NewsItem>
+</NewsML>

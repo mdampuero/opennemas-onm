@@ -1,0 +1,71 @@
+.picker {
+  bottom: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.picker-body {
+  height: auto;
+  top: 50px;
+  bottom: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+}
+
+.picker-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: @text-color;
+  cursor: pointer;
+  margin: 8px 10px;
+  padding: 10px;
+  z-index: 100;
+
+  &:hover {
+    color: darken(@text-color, 25%)
+  }
+}
+
+
+.picker-content {
+  height: 100%;
+}
+
+.picker-sidebar + .picker-content {
+  padding-left: @sidebar-width;
+}
+
+.picker-dialog {
+  background: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, .5);
+  bottom: 20px;
+  height: auto;
+  left: 20px;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: auto;
+  z-index: 1200;
+}
+
+.picker-dialog.picker-photo-editor {
+  height: 600px;
+  margin: auto;
+  width: 800px;
+}
+
+.picker-loading {
+  left: 50%;
+  margin-left: -27px;
+  margin-top: -27px;
+  position: absolute;
+  top: 50%;
+}
+
+.picker-open {
+  overflow: hidden;
+}

@@ -1,0 +1,34 @@
+frontend_letter_frontpage:
+    path: /cartas-al-director/
+    defaults: { _controller: FrontendBundle:Letter:list }
+    options:
+        l10n: true
+        subdirectory: true
+
+frontend_letter_form:
+    path: /cartas-al-director/form
+    defaults: { _controller: FrontendBundle:Letter:form }
+    options:
+        l10n: true
+        subdirectory: true
+
+frontend_letter_show:
+    path: /cartas-al-director/{author_slug}/{slug}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:Letter:show, _format: html }
+    requirements:
+        author_slug:   '([^/]+)'
+        slug:          '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+    options:
+        expose: true
+        l10n: true
+        subdirectory: true
+
+frontend_letter_save:
+    path: /cartas-al-director/save
+    defaults: { _controller: FrontendBundle:Letter:save }
+    methods: [ POST ]
+    options:
+        expose: true
+        subdirectory: true

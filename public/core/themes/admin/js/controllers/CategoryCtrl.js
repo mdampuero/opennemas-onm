@@ -1,0 +1,152 @@
+(function() {
+  'use strict';
+
+  angular.module('BackendApp.controllers')
+
+    /**
+     * @ngdoc controller
+     * @name  SettingsCtrl
+     *
+     * @requires $controller
+     * @requires $scope
+     *
+     * @description
+     *   Handles actions for category edit form.
+     */
+    .controller('CategoryCtrl', [
+      '$controller', '$scope', '$timeout',
+      function($controller, $scope, $timeout) {
+        // Initialize the super class and extend it.
+        $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
+
+        /**
+         * @inheritdoc
+         */
+        $scope.item = {
+          description:  '',
+          layout:       '',
+          seo_title:    '',
+          header_1:     '',
+          parent_id:    null
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.routes = {
+          createItem: 'api_v1_backend_category_create_item',
+          getItem:    'api_v1_backend_category_get_item',
+          list:       'backend_categories_list',
+          redirect:   'backend_category_show',
+          saveItem:   'api_v1_backend_category_save_item',
+          updateItem: 'api_v1_backend_category_update_item'
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          $scope.localize($scope.data.item, 'item', true);
+          $scope.expandFields();
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.getItemId = function() {
+          return $scope.item.id;
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.hasMultilanguage = function() {
+          return $scope.config && $scope.config.locale &&
+            $scope.config.locale.multilanguage;
+        };
+
+        $scope.getData = function() {
+          var data = angular.extend({}, $scope.data.item);
+
+          if ($scope.item.params && Object.keys($scope.item.params).length > 0) {
+            data.params = angular.extend(data.params, $scope.item.params);
+          }
+
+          return data;
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.itemHasId = function() {
+          return $scope.item.id &&
+            $scope.item.id !== null;
+        };
+
+        /**
+         * @function saveItem
+         * @memberOf CategoryCtrl
+         *
+         * @description
+         *   Generate slug and then saves the item.
+         */
+        $scope.saveItem = function() {
+          $scope.flags.http.saving = true;
+
+          if (!$scope.data.item.name) {
+            $scope.save();
+          } else {
+            // Force slug to be valid
+            $scope.getSlug($scope.data.item.name, function(response) {
+              $scope.data.item.name           = response.data.slug;
+              $scope.flags.generate.name = false;
+              $scope.flags.block.name    = true;
+
+              $scope.save();
+            });
+          }
+        };
+
+        // Updates the logo_id when an image is selected
+        $scope.$watch('item.logo_id', function(nv, ov) {
+          if (!ov && !nv || nv && !angular.isObject(nv)) {
+            return;
+          }
+
+          $scope.item.logo_id = nv ? nv.pk_content : null;
+        }, true);
+
+        // Updates the cover_id when an image is selected
+        $scope.$watch('item.cover_id', function(nv, ov) {
+          if (!ov && !nv || nv && !angular.isObject(nv)) {
+            return;
+          }
+
+          $scope.item.cover_id = nv ? nv.pk_content : null;
+        }, true);
+
+        // Generates slug when flag changes
+        $scope.$watch('flags.generate.slug', function(nv) {
+          if ($scope.item.name || !nv || !$scope.item.title) {
+            $scope.flags.generate.slug = false;
+
+            return;
+          }
+
+          if ($scope.tm) {
+            $timeout.cancel($scope.tm);
+          }
+
+          $scope.tm = $timeout(function() {
+            $scope.getSlug($scope.item.title, function(response) {
+              $scope.item.name           = response.data.slug;
+              $scope.flags.generate.slug = false;
+              $scope.flags.block.slug    = true;
+
+              $scope.form.name.$setDirty(true);
+            });
+          }, 250);
+        }, true);
+      }
+    ]);
+})();

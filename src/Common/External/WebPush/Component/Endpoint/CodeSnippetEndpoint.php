@@ -1,0 +1,42 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Common\External\WebPush\Component\Endpoint;
+
+use Common\External\WebPush\Component\Exception\WebPushException;
+
+class CodeSnippetEndpoint extends Endpoint
+{
+    /**
+     * Get the collection snippet for the website.
+     *
+     * @return String
+     *
+     * @throws WebPushException If the action fails.
+     */
+    public function getCode($params = [])
+    {
+        try {
+            $url = $this->url . $this->replaceUriWildCards($this->config['actions']['get_code']['path'], $params);
+
+            $response = $this->client->get($url, [ 'headers' => $this->auth->getAuthHeaders() ]);
+            $body     = json_decode($response->getBody(), true);
+
+            getService('application.log')
+                    ->info('WebPush code snippet was successfully retrieved');
+        } catch (\Exception $e) {
+            getService('application.log')
+                ->error('Error retrieving the WebPush code snippet from server '
+                . $e->getMessage());
+            throw new WebPushException('webpush.snippet.get.failure: ' . $e->getMessage());
+        }
+
+        return $body;
+    }
+}

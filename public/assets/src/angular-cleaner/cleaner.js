@@ -1,0 +1,90 @@
+(function() {
+  'use strict';
+
+  /**
+   * @ngdoc module
+   * @name  onm.cleaner
+   *
+   * @description
+   *   The `onm.cleaner` module provides a service to clean properties added to
+   *   objects by some components.
+   */
+  angular.module('onm.cleaner', [])
+
+    /**
+     * @ngdoc service
+     * @name  cleaner
+     *
+     * @description
+     *   Service to remove $$hasKey properties from objects used inside
+     *   ng-repeat.
+     */
+    .service('cleaner', [
+      function() {
+        /**
+         * @function cleanObject
+         * @memberOf cleaner
+         *
+         * @description
+         *   Removes $$hashKey properties from object.
+         *
+         * @param {Object}  obj   The object to clean.
+         * @param {Boolean} empty Whether to remove empty arrays and objects.
+         */
+        this.cleanObject = function(obj, empty) {
+          if (!obj) {
+            return;
+          }
+
+          delete obj.$$hashKey;
+
+          for (var key in obj) {
+            // Clean empty objects and arrays
+            if (empty &&
+                (
+                  angular.isArray(obj[key]) &&
+                  obj[key].length === 0 ||
+                  angular.isObject(obj[key]) &&
+                  Object.keys(obj[key]).length === 0
+                )
+            ) {
+              delete obj[key];
+
+              continue;
+            }
+
+            // Skip file object handling
+            if (obj[key] instanceof File) {
+              continue;
+            }
+
+            // Convert undefined to null
+            if (typeof obj[key] === 'undefined') {
+              obj[key] = null;
+            }
+
+            this.clean(obj[key]);
+          }
+        };
+
+        /**
+         * @function clean
+         * @memberOf cleaner
+         *
+         * @description
+         *   Cleans an item.
+         *
+         * @param {Mixed} e The item to clean
+         *
+         * @return {Mixed} The cleaned item.
+         */
+        this.clean = function(e) {
+          if (typeof e === 'object') {
+            this.cleanObject(e);
+          }
+
+          return e;
+        };
+      }
+    ]);
+})();

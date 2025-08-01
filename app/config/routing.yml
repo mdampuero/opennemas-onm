@@ -1,0 +1,45 @@
+api:
+    resource: '@ApiBundle/Resources/config/routing.yml'
+    prefix:   /api
+
+backend:
+    resource: '@BackendBundle/Resources/config/routing.yml'
+    prefix:   /admin
+
+backend_webservice:
+    resource: '@BackendWebServiceBundle/Resources/config/routing.yml'
+    prefix:   /admin/entityws
+
+core:
+    resource: '@CoreBundle/Resources/config/routing.yml'
+    prefix:   /
+
+fos_js_routing:
+    resource: '@FOSJsRoutingBundle/Resources/config/routing/routing.xml'
+
+admin_welcome:
+    path:     /admin
+    defaults: { _controller: BackendBundle:Welcome:default }
+
+
+manager:
+    resource: '@ManagerBundle/Resources/config/routing.yml'
+    prefix:   /
+
+manager_webservice:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing.yml'
+    prefix:   /managerws
+
+oauth:
+    resource: '@OnmFrameworkBundle/Resources/config/routing/oauth.yml'
+    prefix:   /
+
+webservice:
+    resource: '@WebServiceBundle/Resources/config/routing.yml'
+    prefix:   /ws
+
+frontend:
+    resource: '@FrontendBundle/Resources/config/routing.yml'
+    prefix:   /
+
+

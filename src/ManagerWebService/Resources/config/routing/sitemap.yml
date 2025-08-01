@@ -1,0 +1,13 @@
+manager_ws_sitemap_save:
+    path:     /sitemap
+    defaults: { _controller: ManagerWebServiceBundle:Sitemap:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+manager_ws_sitemap_show:
+    path:     /sitemaps
+    defaults: { _controller: ManagerWebServiceBundle:Sitemap:show }
+    methods:  [ GET ]
+    options:
+        expose: true

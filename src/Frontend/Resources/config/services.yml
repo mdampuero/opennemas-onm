@@ -1,0 +1,32 @@
+services:
+    frontend.listener.authentication:
+        class:     Frontend\EventListener\AuthenticationListener
+        arguments: [ '@service_container' ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 99 }
+        public: true
+
+    frontend.renderer:
+        class:     Frontend\Renderer\Renderer
+        arguments: [ '@service_container' ]
+        public:    true
+
+    frontend.renderer.advertisement:
+        class:     Frontend\Renderer\AdvertisementRenderer
+        arguments: [ '@service_container' ]
+        public:    true
+
+    frontend.renderer.content:
+        class:     Frontend\Renderer\Content\ContentRenderer
+        arguments: [ '@service_container' ]
+        public:    true
+
+    frontend.renderer.widget:
+        class:     Frontend\Renderer\Widget\WidgetRenderer
+        arguments: [ '@service_container' ]
+        public:    true
+
+    frontend.renderer.statistics:
+        class:     Frontend\Renderer\StatisticsRenderer
+        arguments: [ '@service_container' ]
+        public:    true

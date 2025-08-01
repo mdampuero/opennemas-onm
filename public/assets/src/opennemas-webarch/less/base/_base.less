@@ -1,0 +1,38 @@
+body {
+  background-color: rgb(229, 233, 236) !important;
+  font-size: 14px;
+  min-height: 100%;
+  overflow-y: scroll; /*hidden*/
+
+  & > .overlay {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  &.server-sidebar > .overlay,
+  &.pinned > .overlay,
+  &.collapsed > .overlay {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.fa-sub {
+  color: #f00;
+  font-size: 80%;
+  margin-left: -5px;
+  margin-top: 9px;
+  position: absolute;
+  text-shadow: 0 0 1px #000;
+}
+
+.nojs {
+  margin-top: 100px;
+}
+
+@media (max-width: (@tablet-width - 1)) {
+  body > .overlay {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

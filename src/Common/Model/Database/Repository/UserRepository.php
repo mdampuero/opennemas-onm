@@ -1,0 +1,227 @@
+<?php
+
+namespace Common\Model\Database\Repository;
+
+use Opennemas\Orm\Database\Repository\BaseRepository;
+
+class UserRepository extends BaseRepository
+{
+    /**
+     * Returns a list of subscribers users.
+     *
+     * @return array The list of activated users.
+     */
+    public function findSubscribers()
+    {
+        $sql = 'SELECT id, email, name, activated,'
+            . ' GROUP_CONCAT(DISTINCT user_group_id) as user_groups FROM users '
+            . ' LEFT JOIN user_user_group ON user_user_group.user_id = id'
+            . ' WHERE type != 0'
+            . ' GROUP BY id';
+
+        $subscribers = $this->conn->fetchAll($sql);
+        $metas       = $this->conn->fetchAll('SELECT * FROM usermeta');
+
+        // Parse users for groups and metas
+        $users = [];
+        foreach ($subscribers as &$subscriber) {
+            $subscriber['user_groups'] = !empty($subscriber['user_groups'])
+                ? explode(',', $subscriber['user_groups'])
+                : [];
+
+            $users[$subscriber['id']] = $subscriber;
+        }
+
+        foreach ($metas as $meta) {
+            if (!array_key_exists($meta['user_id'], $users)) {
+                // If this happens there is a database inconsistency
+                continue;
+            }
+
+            $users[$meta['user_id']][$meta['meta_key']] = $meta['meta_value'];
+        }
+
+        return $users;
+    }
+
+    /**
+     * Returns a list where key is the user id and value is the number of
+     * contents assigned to the user.
+     *
+     * @param mixed $ids A user id or a list of user ids.
+     *
+     * @return array The list where keys are the user ids and values are the
+     *               number of contents.
+     */
+    public function countContents($ids)
+    {
+        if (empty($ids)) {
+            throw new \InvalidArgumentException();
+        }
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+        $sql = 'SELECT fk_author AS "id", COUNT(1) AS "contents" '
+            . 'FROM contents '
+            . 'WHERE fk_author IN (?) '
+            . 'GROUP BY fk_author';
+
+        $data = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        $contents = [];
+        foreach ($data as $value) {
+            $contents[$value['id']] = $value['contents'];
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Counts the number of contents authored by given authors.
+     *
+     * This method fetches the number of contents authored by the provided
+     * author IDs from the database, considering only active and non-littered
+     * contents of specific types (article, opinion, album, video, company,
+     * event, obituary, poll).
+     *
+     * @param mixed $ids The author IDs to filter the content count. Can be an
+     * array or a single ID.
+     *
+     * @throws \InvalidArgumentException If the provided $ids is empty or not an
+     * array or a valid ID.
+     *
+     * @return array An associative array where the key is the author ID, and
+     * the value is the count of their contents.
+     */
+    public function countContentsAuthors($ids)
+    {
+        if (empty($ids)) {
+            throw new \InvalidArgumentException();
+        }
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+        $sql = 'SELECT fk_author AS "id", COUNT(1) AS "contents" '
+            . 'FROM contents '
+            . 'WHERE fk_author IN (?) '
+            . 'AND content_type_name IN ("article", "opinion", "album",
+                "video", "company", "event", "obituary", "poll") '
+            . 'AND content_status = 1 AND in_litter = 0 '
+            . 'GROUP BY fk_author';
+
+        $data = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        $contents = [];
+        foreach ($data as $value) {
+            $contents[$value['id']] = $value['contents'];
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Moves all contents assigned to users basing on a user id
+     *
+     * @param integer $id     The user id
+     * @param integer $target The user id of the target user.
+     *
+     * @return array The list of ids and content types of the moved contents.
+     */
+    public function moveContents($ids, $target)
+    {
+        if (empty($ids) || empty($target)) {
+            throw new \InvalidArgumentException();
+        }
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+
+        $sql = 'SELECT pk_content AS "id", content_type_name AS "type"'
+            . ' FROM contents'
+            . ' WHERE fk_author IN (?)';
+
+        $contents = $this->conn->fetchAll(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+        if (empty($contents)) {
+            return [];
+        }
+        $sql = 'UPDATE IGNORE contents SET fk_author = ?'
+            . ' WHERE fk_author IN (?)';
+        $this->conn->executeQuery(
+            $sql,
+            [ $target, $ids ],
+            [ \PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+        $sql = 'DELETE FROM contents WHERE fk_author IN (?)';
+        $this->conn->executeQuery(
+            $sql,
+            [ $ids ],
+            [ \Doctrine\DBAL\Connection::PARAM_STR_ARRAY ]
+        );
+
+        return $contents;
+    }
+
+    /**
+     * Returns a list of all users.
+     *
+     * @return array The list of users.
+     */
+    public function findUsers()
+    {
+        $sql = 'SELECT users.*,
+                    GROUP_CONCAT(user_user_group.user_group_id) AS user_groups,
+                    usermeta.meta_value AS bio_description
+                FROM users
+                LEFT JOIN user_user_group ON users.id = user_user_group.user_id
+                LEFT JOIN usermeta ON users.id = usermeta.user_id AND usermeta.meta_key = "bio_description"
+                WHERE users.type != "1"
+                GROUP BY users.id
+                ORDER BY users.name ASC;';
+        try {
+            $users = $this->conn->fetchAll($sql);
+
+            return $users;
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Error al obtener usuarios: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Returns a list of all authors.
+     *
+     * @return array The list of authors.
+     */
+    public function findAuthors()
+    {
+        $sql = "SELECT users.*,
+                    GROUP_CONCAT(user_user_group.user_group_id) AS user_groups,
+                    um1.meta_value AS is_blog,
+                    um2.meta_value AS bio_description
+                FROM users
+                LEFT JOIN user_user_group ON users.id = user_user_group.user_id
+                LEFT JOIN usermeta um1 ON users.id = um1.user_id AND um1.meta_key = 'is_blog'
+                LEFT JOIN usermeta um2 ON users.id = um2.user_id AND um2.meta_key = 'bio_description'
+                WHERE user_user_group.user_group_id = 3
+                GROUP BY users.id ORDER BY users.name ASC;
+                ";
+        try {
+            $authors = $this->conn->fetchAll($sql);
+
+            return $authors;
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Error al obtener etiquetas: " . $e->getMessage());
+        }
+    }
+}

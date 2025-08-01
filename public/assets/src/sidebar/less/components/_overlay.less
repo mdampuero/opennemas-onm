@@ -1,0 +1,31 @@
+.sidebar {
+  .overlay {
+    background: none;
+    width: 0;
+    bottom: 50px;
+  }
+}
+
+.collapsed > .sidebar > .overlay,
+.unpinned-on-server > .sidebar > .overlay {
+  visibility: visible;
+  width: 50px;
+}
+
+@media (max-width: 767px) {
+  .sidebar {
+    .overlay {
+      bottom: 0;
+      display: none;
+    }
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .sidebar {
+    .overlay {
+      bottom: 0;
+      width: 50px;
+    }
+  }
+}

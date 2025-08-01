@@ -1,0 +1,9 @@
+manager_commands:
+    path: /framework/commands
+    options:
+        expose: true
+
+manager_command_output:
+    path: /framework/commands/output
+    options:
+        expose: true

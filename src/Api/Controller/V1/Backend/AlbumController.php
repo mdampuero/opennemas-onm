@@ -1,0 +1,130 @@
+<?php
+
+namespace Api\Controller\V1\Backend;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+class AlbumController extends ContentController
+{
+    /**
+     * {@inheritdoc}
+     */
+    protected $extension = 'ALBUM_MANAGER';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $getItemRoute = 'api_v1_backend_album_get_item';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $permissions = [
+        'create' => 'ALBUM_CREATE',
+        'delete' => 'ALBUM_DELETE',
+        'patch'  => 'ALBUM_UPDATE',
+        'update' => 'ALBUM_UPDATE',
+        'list'   => 'ALBUM_ADMIN',
+        'save'   => 'ALBUM_CREATE',
+        'show'   => 'ALBUM_UPDATE',
+    ];
+
+    protected $module = 'album';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $service = 'api.service.album';
+
+    /**
+     * Get the albums config.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function getConfigAction()
+    {
+        $this->checkSecurity($this->extension, 'ALBUM_SETTINGS');
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings')
+            ->get(['album_layout', 'album_max', 'album_stats_photo',
+                'extraInfoContents.ALBUM_MANAGER']);
+
+        return new JsonResponse([
+            'album_layout'      => $settings['album_layout'],
+            'album_max'         => $settings['album_max'],
+            'album_stats_photo' => $settings['album_stats_photo'],
+            'extra_fields'      => $settings['extraInfoContents.ALBUM_MANAGER'],
+        ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getExtraData($items = null)
+    {
+        $keys = $this->get('core.security')->hasExtension('es.openhost.module.extraInfoContents')
+            ? ['album_max', 'extraInfoContents.ALBUM_MANAGER']
+            : ['album_max'];
+
+        $settings = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get($keys);
+
+        return array_merge(parent::getExtraData($items), [
+            'categories'   => $this->getCategories($items),
+            'tags'         => $this->getTags($items),
+            'max_photos'   => $settings['album_max'] ?? 100,
+            'extra_fields' => $settings['extraInfoContents.ALBUM_MANAGER'] ?? null,
+            'formSettings' => [
+                'name'             => $this->module,
+                'expansibleFields' => $this->getFormSettings($this->module)
+            ]
+        ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getL10nKeys()
+    {
+        return $this->get($this->service)->getL10nKeys('album');
+    }
+
+    /**
+     * Saves configuration for albums.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveConfigAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, 'ALBUM_SETTINGS');
+
+        $msg      = $this->get('core.messenger');
+        $settings = [
+            'album_layout'      => $request->request->get('album_layout'),
+            'album_max'         => $request->request->get('album_max'),
+            'album_stats_photo' => $request->request->get('album_stats_photo'),
+            'extraInfoContents.ALBUM_MANAGER' => json_decode(
+                $request->request->get('extraFields'),
+                true
+            ),
+        ];
+
+        try {
+            $this->get('orm.manager')->getDataSet('Settings')->set($settings);
+            $this->get('core.dispatcher')->dispatch('albums.config');
+            $msg->add(_('Item saved successfully'), 'success');
+        } catch (\Exception $e) {
+            $msg->add(_('Unable to save settings'), 'error');
+            $this->get('error.log')->error($e->getMessage());
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+}

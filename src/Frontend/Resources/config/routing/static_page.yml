@@ -1,0 +1,9 @@
+frontend_static_page:
+    path: /estaticas/{slug}.html
+    defaults: { _controller: FrontendBundle:StaticPage:show }
+    requirements:
+        slug    : '[^/.]+'
+    options:
+        l10n: true
+        expose: true
+        subdirectory: true

@@ -1,0 +1,10 @@
+<NewsComponent>
+  <ContentItem>
+    <MediaType FormalName="Text"/>
+    <Format FormalName="bcNITF2.5"/>
+    <NewsItemId>040729054956.xm61wen7</NewsItemId>
+    <DataContent>
+      <p>Paragraph 1</p>
+    </DataContent>
+  </ContentItem>
+</NewsComponent>

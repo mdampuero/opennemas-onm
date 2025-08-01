@@ -1,0 +1,9 @@
+admin_store_checkout:
+    path: /store/checkout/
+    defaults: { _controller: BackendBundle:Store:checkout }
+# Disabled Temporary (ONM-8729)
+# admin_store_list:
+#     path: /store/
+#     defaults: { _controller: BackendBundle:Store:list }
+#     options:
+#         expose: true

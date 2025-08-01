@@ -1,0 +1,108 @@
+div[ng-view] {
+  transition: all .25s;
+}
+
+div[ng-view].ng-enter-active .content {
+  -webkit-animation: content-enter .5s;
+  -o-animation: content-enter .5s;
+  animation: content-enter .5s;
+}
+
+div[ng-view].ng-enter-active .actions-navbar .navbar {
+  -webkit-animation: actions-navbar-enter .5s;
+  -o-animation: actions-navbar-enter .5s;
+  animation: actions-navbar-enter .5s;
+}
+
+div[ng-view].ng-enter-active .filters-navbar {
+  z-index: 0;
+
+  -webkit-animation: filters-navbar-enter .5s;
+  -o-animation: filters-navbar-enter .5s;
+  animation: filters-navbar-enter .5s;
+}
+
+.login-form .alert-error {
+  -webkit-animation: shake .5s;
+  -o-animation: shake .5s;
+  animation: shake .5s;
+}
+
+div[ng-view].ng-leave-active .actions-navbar,
+div[ng-view].ng-leave-active .filters-navbar,
+div[ng-view].ng-leave-active .content {
+  position: absolute;
+  opacity: 0;
+
+  -webkit-animation: content-leave .01s;
+  -o-animation: content-leave .01s;
+  animation: content-leave .01s;
+}
+
+@-webkit-keyframes content-enter {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-moz-keyframes content-enter {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-o-keyframes content-enter {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes content-enter {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-webkit-keyframes content-leave {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+@-moz-keyframes content-leave {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+@-o-keyframes content-leave {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes content-leave {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@-webkit-keyframes actions-navbar-enter {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-moz-keyframes actions-navbar-enter {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-o-keyframes actions-navbar-enter {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes actions-navbar-enter {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-webkit-keyframes filters-navbar-enter {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-moz-keyframes filters-navbar-enter {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-o-keyframes filters-navbar-enter {
+  0%   { opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes filters-navbar-enter {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}

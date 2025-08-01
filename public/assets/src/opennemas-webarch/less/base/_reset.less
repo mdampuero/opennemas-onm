@@ -1,0 +1,174 @@
+[ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+a {
+  color:#376092;
+  transition: color 0.1s linear 0s, background-color 0.1s linear 0s, opacity 0.1s linear 0s, padding .25s !important;
+
+  &:hover,
+  &:focus {
+    color:#376092;
+    text-decoration: underline;
+  }
+}
+
+body.modal-open .page-container {
+  position: relative;
+}
+
+canvas {
+  display: flex;
+  margin: 0 auto;
+}
+
+hr {
+  margin: 15px 0;
+
+  &.inverted {
+    border-bottom: 0;
+  }
+}
+
+i.ng-hide-add-active, i.ng-hide-remove {
+  display: inline-block !important;
+}
+
+.a {
+  cursor: pointer;
+}
+
+.b-b, .b-l, .b-r, .b-t {
+  border-color: @border-color;
+}
+
+.actions-navbar ul.nav li.dropdown > ul.dropdown-menu {
+  margin-top: 10px;
+}
+
+.form-group .form-label {
+  margin-right: 0;
+}
+
+.iconset {
+  background:none !important;
+}
+
+.row {
+  margin-left: 0;
+  margin-right: -15px;
+}
+
+.row [class^='col-'],
+.row [class*=' col-'] {
+  padding-left: 0 !important;
+  padding-right: 15px !important;
+
+  &.no-padding {
+    padding: 0 !important;
+  }
+}
+
+.table td {
+  font-size: 107%;
+}
+
+.tooltip-inner {
+  max-width: 400px;
+  white-space: nowrap;
+}
+
+// Fix right margins for dropdowns in actions navbar
+.navbar .pull-right > li.open > .dropdown-menu, .navbar .nav > li.open > .dropdown-menu.pull-right {
+  margin-right: 0;
+}
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.eot');
+  src: url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/assets/components/bootstrap/dist/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+.fa-spin {
+  animation-duration: .75s;
+
+  &.ng-hide {
+    display: none !important;
+    animation-duration: 0s !important;
+    -webkit-transition: none !important;
+    transition: none !important;
+  }
+}
+
+.fa-exchange-alt {
+  display: inline-block;
+  font-size: inherit;
+  font: normal normal normal 14px/1 FontAwesome;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: auto;
+  transform: rotate(90deg) scale(-1, 1);
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
+  -ms-transform: rotate(90deg) scale(-1, 1);
+  -webkit-transform: rotate(90deg) scale(-1, 1);
+  width: 15px;
+
+  &:before {
+      content: "\f0ec";
+  }
+}
+
+// Set old alerts colors
+.alert-success {color: #fff;background-color: @success-color;}
+.alert-success .link {color: #fff;}
+.alert-success .alert-heading {color: #fff !important;}
+.alert-info {color: #fff;background-color: @info-color;}
+.alert-info .link {color: #fff;}
+.alert-info .alert-heading {color: #fff !important;}
+.alert-danger,
+.alert-error {color: #fff;background-color: @error-color;}
+.alert-danger .link,
+.alert-error .link {color: #fff;}
+.alert-danger .alert-heading,
+.alert-error .alert-heading {color: #fff !important;}
+
+.fa-stack-2x {
+  text-shadow: 0 0 1px rgba(0, 0, 0, .5);
+}
+
+.fa-circle-o-notch.fa-spin {
+  border: 3px solid @text-color;
+  border-radius: 50%;
+  border-top-color: transparent;
+  display: inline-block;
+  height: 14px;
+  text-align: center;
+  width: 14px;
+
+  &:before {
+    content: "";
+  }
+
+  &.fa-2x {
+    height: 28px;
+    width: 28px;
+  }
+
+  &.fa-3x {
+    border: 6px solid @text-color;
+    border-top-color: transparent;
+    height: 42px;
+    width: 42px;
+  }
+
+  &.fa-4x {
+    border: 6px solid @text-color;
+    border-top-color: transparent;
+    height: 50px;
+    width: 50px;
+  }
+}
+
+.text-danger {
+  color: @danger-color;
+}

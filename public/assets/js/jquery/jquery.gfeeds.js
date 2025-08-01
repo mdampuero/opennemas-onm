@@ -1,0 +1,41 @@
+/**
+ *  Plugin which uses the Google AJAX Feed API for creating feed content
+ *  @author:  M. Alsup (malsup at gmail dot com)
+ *  @version: 1.0.2 (5/11/2007)
+ *  Documentation and examples at: http://www.malsup.com/jquery/gfeed/
+ *  Free beer and free speech. Enjoy!
+ */
+(function($) {
+
+if (!window.google)  {
+    alert('You must include the Google AJAX Feed API script');
+    return;
+}
+
+if (!google.feeds) google.load("feeds", "1", {"language" : "es"});
+
+$.fn.gFeed = function(options) {
+    var opts = jQuery.extend({
+        target: this,
+        max:   2   // max number of items per feed
+    }, options || {});
+
+    var g = new google.feeds.FeedControl();
+
+    this.each(function() {
+        var url = this.href || opts.url;
+        var title = opts.title || this.title || $(this).text();
+        g.addFeed(url, title);
+        g.setNumEntries(opts.max);
+        g.setLinkTarget(google.feeds.LINK_TARGET_BLANK);
+    });
+
+    $(opts.target).each(function() {
+        g.draw(this, opts.tabs ? { drawMode: google.feeds.FeedControl.DRAW_MODE_TABBED } : null );
+
+    });
+
+    return this;
+};
+
+})(jQuery);

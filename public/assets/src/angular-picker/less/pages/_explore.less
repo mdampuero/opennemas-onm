@@ -1,0 +1,148 @@
+.explore-panel {
+  .picker-panel-sidebar {
+    .media-thumbnail-wrapper {
+      height: 230px;
+      margin: 0 auto 10px;
+      position: relative;
+      width: 230px;
+
+      .img-thumbnail {
+        border: none;
+      }
+    }
+
+    .media-information {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        padding: 0;
+        margin-bottom: 10px;
+      }
+
+      textarea {
+        width: 100%;
+      }
+
+      .v-seperate {
+        border-bottom: 1px solid #eee;
+        display: block;
+        margin: 20px 0;
+      }
+
+      .btn-primary {
+        width: 90%;
+
+        i {
+          margin-right: 5px
+        }
+      }
+    }
+  }
+
+  .picker-panel-content {
+    overflow-y: auto;
+  }
+
+  .picker-panel-wrapper {
+    .media-item, .list-item {
+      &.selectable {
+        &:before {
+          background-color: #fff;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+          content: "";
+          display: block;
+          height: 24px;
+          left: auto;
+          margin: 0;
+          opacity: 0;
+          position: absolute;
+          right: -7px;
+          transition: opacity .2s ease-in-out;
+          top: -7px;
+          width: 24px;
+          z-index: 10;
+        }
+
+        &:hover:before,
+        &.selected:before {
+          opacity: 1;
+        }
+
+        &.selected {
+          &:after {
+            color: @selected-color;
+            content: "\f00c";
+            font-family: 'FontAwesome';
+            font-size: 18px;
+            left: auto;
+            position: absolute;
+            right: -4.2px;
+            top: -9px;
+            z-index: 10;
+          }
+
+          &:before {
+            border-color: @selected-color;
+          }
+
+          .img-thumbnail {
+            background-color: @selected-color;
+          }
+        }
+      }
+
+      &.ignored {
+        opacity: .2;
+      }
+    }
+
+    .media-item {
+      float: left;
+      margin: 0 15px 15px 0;
+      position: relative;
+
+      .img-thumbnail {
+        height: 120px;
+        text-align: center;
+        transition: none;
+        width: 120px;
+
+        i {
+          padding: 16px 20px;
+        }
+
+        .progress {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .list-item {
+      margin: 0 0 20px 0;
+      padding-left: 36px;
+      position: relative;
+
+      &.selectable {
+        cursor: pointer;
+
+        &:before {
+          left: 3.2px;
+          opacity: 1;
+          right: auto;
+          top: -3.2px;
+        }
+
+        &.selected {
+          &:after {
+            left: 6.2px;
+            right: auto;
+            top: -4px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+<img src="Video_Frontpage _240.xcf" width="240" height="401" border="0" usemap="#map" />
+
+<map name="map">
+<!-- #$-:Image map file created by GIMP Image Map plug-in -->
+<!-- #$-:GIMP Image Map plug-in by Maurits Rijk -->
+<!-- #$-:Please do not edit lines starting with "#$" -->
+<!-- #$VERSION:2.3 -->
+<!-- #$AUTHOR:sandra -->
+<area shape="rect" coords="1,1,178,25" target="bigtopbanner"  nohref="nohref" />
+<area shape="rect" coords="178,1,238,25" target="toprightbanner"  nohref="nohref" />
+<area shape="rect" coords="2,348,178,372" target="bigbottombanner"  nohref="nohref" />
+<area shape="rect" coords="178,348,237,372" target="rightbottombanner"  nohref="nohref" />
+</map>

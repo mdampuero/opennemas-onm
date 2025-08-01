@@ -1,0 +1,131 @@
+main {
+    padding-bottom: 60px;
+}
+
+.alert-error .close {
+  background: none;
+  color: #f35958;
+  margin-top: -5px;
+}
+
+.wrapper {
+    min-height:100%;
+    position: relative;
+}
+
+#recaptcha_privacy {
+  display:none;
+}
+
+.login-body {
+  background: url(/core/themes/admin/images/moleskine.jpg) no-repeat;
+  background-size: cover;
+
+  .form-label {
+    color:#777 !important;
+  }
+
+  #recaptcha_area {
+    margin:0 auto
+  }
+
+  .input-group-addon {
+    border:1px solid #ccc;
+    border-right:0 none
+  }
+  .input-group input {
+    border:1px solid #ccc;
+    border-left:0 none;
+  }
+
+  .language-selector {
+    background-color: transparent;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 90%;
+    height: 30px !important;
+    width: 70px;
+    min-height: 20px;
+    text-indent: 2px;
+    z-index: 20;
+  }
+
+  .login-container {
+    margin-top: 8%;
+  }
+
+  .overlay {
+    background: rgba(0, 0, 0, .5);
+    height: 100%;
+    position: absolute;
+    width: 100%;
+  }
+
+  footer {
+    bottom: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    z-index: 20;
+
+    .credit > ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+
+      > li {
+        display:inline-block;
+        margin: 0;
+        padding:0;
+        line-height: 2.4em;
+        vertical-align: top;
+
+        &:first-child {
+          color: #fff;
+        }
+
+        &:last-child:after {
+          content: "";
+        }
+
+        &:after {
+          content: "\2022";
+          margin: 0px 10px;
+        }
+
+        > a, #languageDropdown {
+          display: inline-block;
+          color: #fff;
+          height: 30px;
+          line-height: 2.4em;
+
+          &:hover {
+            color: darken(#fff, 25%);
+          }
+        }
+      }
+    }
+
+    .dropdown-toggle {
+      cursor:pointer;
+    }
+
+    .dropdown-menu {
+      color:#ccc
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .login-body {
+    background-size: initial;
+
+    .overlay {
+      display: none;
+    }
+
+    .login-container {
+      margin-top: 10px;
+    }
+  }
+}

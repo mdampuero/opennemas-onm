@@ -1,0 +1,425 @@
+(function() {
+  'use strict';
+
+  angular.module('BackendApp.controllers')
+
+    /**
+     * @ngdoc controller
+     * @name  ArticleCtrl
+     *
+     * @requires $controller
+     * @requires $scope
+     * @requires $timeout
+     * @requires $uibModal
+     * @requires $window
+     * @requires cleaner
+     * @requires http
+     * @requires linker
+     * @requires localizer
+     * @requires messenger
+     * @requires webStorage
+     *
+     * @description
+     *   Provides actions to edit, save and update articles.
+     */
+    .controller('ArticleCtrl', [
+      '$controller', '$scope', '$timeout', '$uibModal', '$window', 'cleaner',
+      'http', 'related', 'routing', 'translator',
+      function($controller, $scope, $timeout, $uibModal, $window, cleaner,
+          http, related, routing, translator) {
+        // Initialize the super class and extend it.
+        $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftEnabled = true;
+
+        /**
+         * @inheritdoc
+         */
+        $scope.draftKey = 'article-draft';
+
+        /**
+         * @inheritdoc
+         */
+        $scope.dtm = null;
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  The article object.
+         *
+         * @type {Object}
+         */
+        $scope.item = {
+          body: '',
+          content_type_name: 'article',
+          fk_content_type: 1,
+          content_status: 0,
+          description: '',
+          frontpage: 0,
+          created: null,
+          starttime: null,
+          endtime: null,
+          title: '',
+          title_int: '',
+          type: 0,
+          with_comment: 0,
+          categories: [],
+          related_contents: [],
+          live_blog_updates: [],
+          tags: [],
+          external_link: '',
+          agency: '',
+          webpush_notifications: []
+        };
+
+        $scope.defaultLiveBlogUpdate = {
+          content_id: null,
+          title: '',
+          body: '',
+          image_id: null,
+          caption: '',
+        };
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  Flag to indicate if an update can be added.
+         *
+         * @type {Object}
+         */
+        $scope.canAddUpdate = true;
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  Flags for expanded items.
+         *
+         * @type {Object}
+         */
+        $scope.expanded = {
+          live_blog_update: {
+            0: true
+          }
+        };
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  The related service.
+         *
+         * @type {Object}
+         */
+        $scope.related = related;
+
+        /**
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *  The list of routes for the controller.
+         *
+         * @type {Object}
+         */
+        $scope.routes = {
+          createItem:  'api_v1_backend_article_create_item',
+          getItem:     'api_v1_backend_article_get_item',
+          getPreview:  'api_v1_backend_article_get_preview',
+          list:        'backend_articles_list',
+          public:      'frontend_article_show',
+          redirect:    'backend_article_show',
+          saveItem:    'api_v1_backend_article_save_item',
+          savePreview: 'api_v1_backend_article_save_preview',
+          updateItem:  'api_v1_backend_article_update_item'
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.buildScope = function() {
+          $scope.localize($scope.data.item, 'item', true, [ 'related_contents' ]);
+
+          $scope.expandFields();
+          // Check if item is new (created) or existing for use default value or not
+          if (!$scope.data.item.pk_content) {
+            $scope.item.with_comment = $scope.data.extra.comments_enabled ? 1 : 0;
+          }
+
+          if ($scope.draftKey !== null && $scope.data.item.pk_content) {
+            $scope.draftKey = 'article-' + $scope.data.item.pk_content + '-draft';
+          }
+
+          $scope.flags.block.title_int = $scope.item.title_int === $scope.item.title;
+
+          $scope.checkDraft();
+          related.init($scope);
+          related.watch();
+          translator.init($scope);
+        };
+
+        /**
+         * @function getFrontendUrl
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Generates the public URL basing on the item.
+         *
+         * @param {String} item  The item to generate route for.
+         *
+         * @return {String} The URL for the content.
+         */
+        $scope.getFrontendUrl = function(item) {
+          if (!$scope.selectedCategory || !item.pk_content) {
+            return '';
+          }
+
+          return $scope.data.extra.base_url + $scope.getL10nUrl(
+            routing.generate($scope.routes.public, {
+              id: item.pk_content.toString().padStart(6, '0'),
+              created: item.urldatetime || $window.moment(item.created).format('YYYYMMDDHHmmss'),
+              slug: item.slug,
+              category_slug: $scope.selectedCategory.name
+            })
+          );
+        };
+
+        /**
+         * Opens a modal with the preview of the article.
+         */
+        $scope.preview = function() {
+          $scope.flags.http.generating_preview = true;
+
+          // Force ckeditor
+          CKEDITOR.instances.body.updateElement();
+          CKEDITOR.instances.description.updateElement();
+
+          var status = { starttime: null, endtime: null, content_status: 1, with_comment: 0 };
+          var item   = Object.assign({}, $scope.data.item, status);
+
+          if (item.tags) {
+            item.tags = item.tags.filter(function(tag) {
+              return Number.isInteger(tag);
+            });
+          }
+
+          item = $scope.parseData(item, true);
+
+          var data = {
+            item: JSON.stringify(cleaner.clean(item)),
+            locale: $scope.config.locale.selected
+          };
+
+          http.put($scope.routes.savePreview, data).then(function() {
+            $uibModal.open({
+              templateUrl: 'modal-preview',
+              windowClass: 'modal-fullscreen',
+              controller: 'ModalCtrl',
+              resolve: {
+                template: function() {
+                  return {
+                    src: routing.generate($scope.routes.getPreview)
+                  };
+                },
+                success: function() {
+                  return null;
+                }
+              }
+            });
+
+            $scope.flags.http.generating_preview = false;
+          }, function() {
+            $scope.flags.http.generating_preview = false;
+          });
+        };
+
+        /**
+         * @function removeUpdate
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Remove selected update when LiveBlogUpdate is active.
+         */
+        $scope.removeUpdate = function(index) {
+          if (index === 0 && !$scope.canAddUpdate) {
+            $scope.canAddUpdate = true;
+          }
+
+          $scope.item.live_blog_updates.splice(index, 1);
+        };
+
+        /**
+         * @function undo
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Shows the change to be made on the input.
+         */
+        $scope.undo = function() {
+          if ($scope.flags.block.title_int || $scope.previous) {
+            return;
+          }
+
+          $scope.undoing        = true;
+          $scope.previous       = $scope.item.title_int;
+          $scope.item.title_int = $scope.item.title;
+        };
+
+        /**
+         * @function redo
+         * @memberOf ArticleCtrl
+         *
+         * @description
+         *   Stops showing the change to be made to the input.
+         */
+        $scope.redo = function() {
+          $scope.undoing = false;
+
+          if ($scope.flags.block.title_int || !$scope.previous) {
+            return;
+          }
+
+          $scope.item.title_int = $scope.previous;
+          $scope.previous       = null;
+        };
+
+        $scope.$watch('item.live_blog_updates', function(nv, ov) {
+          for (var iterator = 0; iterator < nv.length; iterator++) {
+            if (nv[iterator].image_id &&
+              (!ov[iterator] || !ov[iterator].image_id || ov[iterator].image_id.pk_content !== nv[iterator].image_id.pk_content)) {
+              if (nv[iterator].image_id.description) {
+                nv[iterator].caption = nv[iterator].image_id.description;
+              }
+            }
+
+            if (!nv[iterator].image_id) {
+              nv[iterator].caption = '';
+            }
+          }
+        }, true);
+
+        // Update title int when block flag changes
+        $scope.$watch('flags.block.title_int', function(nv) {
+          $scope.previous = null;
+          $scope.undoing  = false;
+
+          if (!nv) {
+            return;
+          }
+
+          $scope.item.title_int = $scope.item.title;
+        });
+
+        // Update title_int when title changes
+        $scope.$watch('item.title', function(nv, ov) {
+          // Mirror only when title_int locker is 'closed'
+          if (!$scope.flags.block.title_int) {
+            return;
+          }
+
+          if (!nv && !ov) {
+            return;
+          }
+
+          if (!$scope.item.title_int || ov === $scope.item.title_int) {
+            $scope.item.title_int = nv;
+          }
+
+          if (!$scope.item.pk_content) {
+            if ($scope.tm) {
+              $timeout.cancel($scope.tm);
+            }
+
+            if (!nv) {
+              $scope.item.slug = '';
+            }
+          }
+        }, true);
+
+        $scope.$watch('config.locale.selected', function(nv, ov) {
+          if (nv === ov) {
+            return;
+          }
+
+          if ($scope.flags.block.title_int !== ($scope.item.title === $scope.item.title_int)) {
+            $scope.flags.block.title_int = !$scope.flags.block.title_int;
+          }
+        });
+
+        /**
+         * @inheritdoc
+         */
+        $scope.addBlankUpdate = function() {
+          if ($scope.item.live_blog_updates.length === 0 || $scope.canAddUpdate) {
+            var date = $window.moment().format('YYYY-MM-DD HH:mm:ss');
+            var currentUpdate = Object.assign({ modified: date, created: date }, $scope.defaultLiveBlogUpdate);
+
+            $scope.canAddUpdate = false;
+            $scope.item.live_blog_updates.unshift(currentUpdate);
+
+            // Expand new update
+            if (!$scope.expanded.live_blog_update[0]) {
+              $scope.expanded.live_blog_update[0] = true;
+            }
+          }
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseData = function(data, preview) {
+          var parsedUpdates = [];
+          var bodyComplexity = $scope.getTextComplexity(data.body);
+
+          data.text_complexity = bodyComplexity.textComplexity;
+          data.word_count = bodyComplexity.wordsCount;
+
+          if (data.live_blog_updates.length > 0) {
+            for (var index in data.live_blog_updates) {
+              var update = data.live_blog_updates[index];
+
+              if (!update.title && !update.body && !update.caption) {
+                continue;
+              }
+
+              if (typeof update.image_id === 'object' && update.image_id !== null) {
+                update.image_id = update.image_id.pk_content;
+              }
+
+              if (!$scope.canAddUpdate && !preview) {
+                $scope.canAddUpdate = true;
+              }
+
+              update.content_id = data.pk_content ? data.pk_content : '';
+              parsedUpdates.push(update);
+            }
+          }
+
+          data.live_blog_updates = angular.copy(parsedUpdates);
+
+          return data;
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.validate = function() {
+          if ($scope.form && $scope.form.$invalid) {
+            $('[name=form]')[0].reportValidity();
+            return false;
+          }
+
+          if (!$('[name=form]')[0].checkValidity()) {
+            $('[name=form]')[0].reportValidity();
+            return false;
+          }
+
+          return true;
+        };
+      }
+    ]);
+})();

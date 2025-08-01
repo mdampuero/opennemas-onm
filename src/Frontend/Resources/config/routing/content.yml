@@ -1,0 +1,23 @@
+frontend_content_print:
+    path: /content/print/{slug}/{id}.{_format}
+    defaults: { _controller: FrontendBundle:Contents:print, _format: html,  page: 1 }
+    requirements:
+        slug : '[^/]+'
+        id   : '([0-9]+)'
+    options:
+        l10n: true
+        subdirectory: true
+
+frontend_content_stats:
+    path: /content/stats/
+    defaults: { _controller: FrontendBundle:Contents:stats }
+    options:
+        subdirectory: true
+
+frontend_content_permalink:
+    path: /content/{id}/
+    defaults: { _controller: FrontendBundle:Contents:permalink }
+    requirements:
+        id : '([0-9]+)'
+    options:
+        subdirectory: true

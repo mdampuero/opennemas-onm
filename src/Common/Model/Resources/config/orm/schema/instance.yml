@@ -1,0 +1,11 @@
+orm:
+    schema:
+        -
+            name: instance
+            entities:
+                - Category
+                - Content
+                - User
+                - UserGroup
+                - UserGroupPrivileges
+                - Url

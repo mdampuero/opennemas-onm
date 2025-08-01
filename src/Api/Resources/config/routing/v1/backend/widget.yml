@@ -1,0 +1,77 @@
+api_v1_backend_widget_create_item:
+    path:     /widgets/new
+    defaults: { _controller: ApiBundle:V1/Backend/Widget:createItem }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_widget_delete_item:
+    path:     /widgets/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Widget:deleteItem }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_widget_delete_list:
+    path:     /widgets
+    defaults: { _controller: ApiBundle:V1/Backend/Widget:deleteList }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_widget_get_form:
+    path:     /widgets/{uuid}/form
+    defaults: { _controller: ApiBundle:V1/Backend/Widget:getForm }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_widget_get_item:
+    path:     /widgets/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Widget:getItem }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_widget_get_list:
+    path:     /widgets
+    defaults: { _controller: ApiBundle:V1/Backend/Widget:getList, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_widget_patch_item:
+    path:     /widgets/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Widget:patchItem }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_widget_patch_list:
+    path:     /widgets
+    defaults: { _controller: ApiBundle:V1/Backend/Widget:patchList }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_widget_save_item:
+    path:     /widgets
+    defaults: { _controller: ApiBundle:V1/Backend/Widget:saveItem }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_widget_update_item:
+    path:     /widgets/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Widget:updateItem }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+

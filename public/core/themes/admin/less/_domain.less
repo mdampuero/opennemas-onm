@@ -1,0 +1,42 @@
+@import '../../../../assets/src/opennemas-webarch/less/helpers/_variables.less';
+
+.domain-list {
+  margin: 0;
+  padding: 0;
+}
+
+.domain-list-item {
+  border-bottom: 1px solid @border-color;
+  list-style: none;
+  margin: 0;
+  padding: 15px;
+  user-select: none;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  .fa-chevron-down,
+  .fa-chevron-right {
+    text-align: center;
+    width: 30px;
+    transition: all .1s;
+  }
+
+  .label {
+    margin: 13px 5px 0 0;
+    text-transform: uppercase;
+  }
+}
+
+.domain-list-item-details {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all .25s;
+
+  &.expanded {
+    max-height: 500px;
+    opacity: 1;
+  }
+}

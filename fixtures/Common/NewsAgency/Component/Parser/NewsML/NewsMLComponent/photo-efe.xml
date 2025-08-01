@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NewsML Version="1.2">
+  <NewsEnvelope>
+    <SentFrom>
+      <Party FormalName="EFE">
+        <Property FormalName="Organization" Value="Agencia EFE" />
+      </Party>
+    </SentFrom>
+    <DateAndTime>20150924T162942+0000</DateAndTime>
+    <NewsService FormalName="Servicio Multimedia" />
+  </NewsEnvelope>
+  <NewsItem Duid="multimedia_2721344">
+    <Comment FormalName="EfeNewsMLVersion">1.0.1</Comment>
+    <Identification>
+      <NewsIdentifier>
+        <ProviderId>multimedia.efeservicios.com</ProviderId>
+        <DateId>20150924T180800+0000</DateId>
+        <NewsItemId>2721344</NewsItemId>
+        <RevisionId PreviousRevision="1" Update="U">2</RevisionId>
+        <PublicIdentifier>urn:newsml:multimedia.efeservicios.com:20150924T180800+0000:2721344:2</PublicIdentifier>
+      </NewsIdentifier>
+    </Identification>
+    <NewsManagement>
+      <NewsItemType FormalName="News" />
+      <FirstCreated>20150924T180800+0000</FirstCreated>
+      <ThisRevisionCreated>20150924T181000+0000</ThisRevisionCreated>
+      <Status FormalName="Usable" />
+      <Urgency FormalName="5" />
+    </NewsManagement>
+    <NewsComponent Duid="multimedia_2721344.multimedia">
+      <NewsLines>
+        <HeadLine>El DAX 30 de Fráncfort baja un 1,92 % al cierre</HeadLine>
+        <SubHeadLine>BOLSA FRÁNCFORT CIERRE</SubHeadLine>
+        <CopyrightLine>© EFE 2015. Está expresamente prohibida la redistribución y la redifusión de todo o parte de los contenidos de los servicios de Efe, sin previo y expreso consentimiento de la Agencia EFE S.A.</CopyrightLine>
+      </NewsLines>
+      <AdministrativeMetadata>
+        <Provider>
+          <Party FormalName="Agencia EFE" />
+        </Provider>
+        <Creator>
+          <Party FormalName="Agencia EFE" />
+        </Creator>
+      </AdministrativeMetadata>
+      <DescriptiveMetadata>
+        <Language FormalName="es" />
+        <SubjectCode>
+          <SubjectMatter FormalName="04009000" Scheme="IptcSubjectCodes" />
+        </SubjectCode>
+        <Property FormalName="Tesauro" Value="ECO:ECONOMIA,MERCADOS-FINANZAS,BOLSAS-VALORES" />
+        <Property FormalName="EfeAmbito">
+          <Property FormalName="WorldRegion" Value="EUROPA" />
+          <Property FormalName="Country" Value="ALEMANIA" />
+          <Property FormalName="CountryArea" Value="-" />
+        </Property>
+        <Property FormalName="EfeObservaciones" Value="bolsa fráncfort londres parís|" />
+      </DescriptiveMetadata>
+      <NewsComponent Duid="multimedia_2721344.multimedia.texts">
+        <Role FormalName="Content list" />
+        <NewsComponent Duid="multimedia_2721344.multimedia.texts.11125503" Euid="11125503">
+          <Role FormalName="Main" />
+          <NewsLines>
+            <HeadLine>El DAX 30 de Fráncfort baja un 1,92 % al cierre</HeadLine>
+            <SubHeadLine>BOLSA FRÁNCFORT CIERRE</SubHeadLine>
+          </NewsLines>
+          <DescriptiveMetadata>
+            <Language FormalName="es" />
+            <DateLineDate>20150924T180500+0000</DateLineDate>
+            <Property FormalName="EFE_IdRefOriginal" Value="T_21171191" />
+            <Property FormalName="EFE_IdRefObject" Value="11125503" />
+          </DescriptiveMetadata>
+          <ContentItem>
+            <MediaType FormalName="Text" />
+            <Format FormalName="NITF" />
+            <MimeType FormalName="text/vnd.IPTC.NITF" />
+            <DataContent>
+              <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+                <head>
+                  <title>El DAX 30 de Fráncfort baja un 1,92 % al cierre</title>
+                  <docdata management-status="usable">
+                    <doc-id id-string="11125503" />
+                  </docdata>
+                </head>
+                <body>
+                  <body.head>
+                    <hedline>
+                      <hl1>El DAX 30 de Fráncfort baja un 1,92 % al cierre</hl1>
+                      <hl2>BOLSA FRÁNCFORT CIERRE</hl2>
+                    </hedline>
+                    <dateline>
+                      <location>Fráncfort (Alemania)</location>
+                      <story.date norm="20150924T180500+0000">20150924T180500+0000</story.date>
+                    </dateline>
+                    <abstract>
+                      <p>Fráncfort (Alemania), 24 sep (EFE).- El índice selectivo DAX 30 de la Bolsa de Fráncfort cerró hoy con una bajada del 1,92 %, ó 184,98 puntos, hasta 9.427,64 puntos.</p>
+                    </abstract>
+                  </body.head>
+                  <body.content>
+                    <p>Fráncfort (Alemania), 24 sep (EFE).- El índice selectivo DAX 30 de la Bolsa de Fráncfort cerró hoy con una bajada del 1,92 %, ó 184,98 puntos, hasta 9.427,64 puntos. </p>
+                  </body.content>
+                </body>
+              </nitf>
+            </DataContent>
+          </ContentItem>
+        </NewsComponent>
+        <NewsComponent Duid="multimedia_2721344.multimedia.texts.11125504" Euid="11125504">
+          <Role FormalName="Main" />
+          <NewsLines>
+            <HeadLine>La Bolsa de Londres baja un 1,17 % al cierre</HeadLine>
+            <SubHeadLine>BOLSA LONDRES CIERRE</SubHeadLine>
+          </NewsLines>
+          <DescriptiveMetadata>
+            <Language FormalName="es" />
+            <DateLineDate>20150924T180500+0000</DateLineDate>
+            <Property FormalName="EFE_IdRefOriginal" Value="T_21171175" />
+            <Property FormalName="EFE_IdRefObject" Value="11125504" />
+          </DescriptiveMetadata>
+          <ContentItem>
+            <MediaType FormalName="Text" />
+            <Format FormalName="NITF" />
+            <MimeType FormalName="text/vnd.IPTC.NITF" />
+            <DataContent>
+              <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+                <head>
+                  <title>La Bolsa de Londres baja un 1,17 % al cierre</title>
+                  <docdata management-status="usable">
+                    <doc-id id-string="11125504" />
+                  </docdata>
+                </head>
+                <body>
+                  <body.head>
+                    <hedline>
+                      <hl1>La Bolsa de Londres baja un 1,17 % al cierre</hl1>
+                      <hl2>BOLSA LONDRES CIERRE</hl2>
+                    </hedline>
+                    <dateline>
+                      <location>Londres</location>
+                      <story.date norm="20150924T180500+0000">20150924T180500+0000</story.date>
+                    </dateline>
+                    <abstract>
+                      <p>Londres, 24 sep (EFE).- El índice principal de la Bolsa de Valores de Londres, el FTSE-100, bajó hoy un 1,17 % al cierre, 70,75 puntos, hasta los 5.961,49 enteros.</p>
+                    </abstract>
+                  </body.head>
+                  <body.content>
+                    <p>Londres, 24 sep (EFE).- El índice principal de la Bolsa de Valores de Londres, el FTSE-100, bajó hoy un 1,17 % al cierre, 70,75 puntos, hasta los 5.961,49 enteros. </p>
+                  </body.content>
+                </body>
+              </nitf>
+            </DataContent>
+          </ContentItem>
+        </NewsComponent>
+        <NewsComponent Duid="multimedia_2721344.multimedia.texts.11125513" Euid="11125513">
+          <Role FormalName="Main" />
+          <NewsLines>
+            <HeadLine>La Bolsa de París cae un 1,93 % al cierre</HeadLine>
+            <SubHeadLine>BOLSA PARÍS CIERRE</SubHeadLine>
+          </NewsLines>
+          <DescriptiveMetadata>
+            <Language FormalName="es" />
+            <DateLineDate>20150924T180600+0000</DateLineDate>
+            <Property FormalName="EFE_IdRefOriginal" Value="T_21171065" />
+            <Property FormalName="EFE_IdRefObject" Value="11125513" />
+          </DescriptiveMetadata>
+          <ContentItem>
+            <MediaType FormalName="Text" />
+            <Format FormalName="NITF" />
+            <MimeType FormalName="text/vnd.IPTC.NITF" />
+            <DataContent>
+              <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+                <head>
+                  <title>La Bolsa de París cae un 1,93 % al cierre</title>
+                  <docdata management-status="usable">
+                    <doc-id id-string="11125513" />
+                  </docdata>
+                </head>
+                <body>
+                  <body.head>
+                    <hedline>
+                      <hl1>La Bolsa de París cae un 1,93 % al cierre</hl1>
+                      <hl2>BOLSA PARÍS CIERRE</hl2>
+                    </hedline>
+                    <dateline>
+                      <location>París</location>
+                      <story.date norm="20150924T180600+0000">20150924T180600+0000</story.date>
+                    </dateline>
+                    <abstract>
+                      <p>París, 24 sep (EFE).- La Bolsa de París cerró hoy a la baja y su índice de referencia, el CAC-40, se depreció un 1,93 % hasta cerrar en 4.347,24 puntos.</p>
+                    </abstract>
+                  </body.head>
+                  <body.content>
+                    <p>París, 24 sep (EFE).- La Bolsa de París cerró hoy a la baja y su índice de referencia, el CAC-40, se depreció un 1,93 % hasta cerrar en 4.347,24 puntos. </p>
+                  </body.content>
+                </body>
+              </nitf>
+            </DataContent>
+          </ContentItem>
+        </NewsComponent>
+      </NewsComponent>
+      <NewsComponent Duid="multimedia_2721344.multimedia.photos">
+        <Role FormalName="Content list" />
+        <NewsComponent Duid="multimedia_2721344.multimedia.photos.11125521" Euid="11125521">
+          <NewsLines>
+            <HeadLine>El DAX 30 de Fráncfort baja un 1,92 % al cierre</HeadLine>
+          </NewsLines>
+          <AdministrativeMetadata>
+            <Provider>
+              <Party FormalName="Agencia EFE" />
+            </Provider>
+          </AdministrativeMetadata>
+          <DescriptiveMetadata>
+            <Language FormalName="es" />
+            <DateLineDate>20150924T180700+0000</DateLineDate>
+            <Location HowPresent="Origin">
+              <Property FormalName="City" Value="Fráncfort" />
+            </Location>
+            <Property FormalName="EFE_IdRefOriginal" Value="FH_7398306" />
+            <Property FormalName="EFE_IdRefObject" Value="11125521" />
+          </DescriptiveMetadata>
+          <NewsComponent Duid="multimedia_2721344.multimedia.photos.11125521.file" EquivalentsList="yes">
+            <Role FormalName="Main" />
+            <ContentItem Href="http://pb.efeservicios.com/FormatosXML/libreria.aspx?erVehZrOtpDPBaTlDr7wk%2f2Yjrf39rSFgAIMhR8O1gnoFZ%2fbDOTHqH1TIcr%2fQLm9rXIaXxhBma540PRNvpeZCl7kvTadyFRMfjjHFK2MHUJAuTL%2fpFwgsDVCHFLPU3qui2gmoTudnZ0QCSfEbDLYleBlA%2fSMaAF7VdkVb%2b2HoDTumVTeLHhLVlL5zHLRwPFs5CsoW9xCdUleHG5s0KcvLLGiCdW3jn%2bAEO3EYJ9CqHmHOAFpNgwc6dX9YA0ZCJIiv62nTi9ss9oNUPoze2WAHg%3d%3d">
+              <MediaType FormalName="Photo" />
+              <MimeType FormalName="image/jpeg" />
+              <Characteristics>
+                <SizeInBytes>10530</SizeInBytes>
+                <Property FormalName="EFE_Filename" Value="20150923-11125521p.jpg" />
+                <Property FormalName="Height" Value="147" />
+                <Property FormalName="PixelDepth" Value="24" />
+                <Property FormalName="Width" Value="225" />
+              </Characteristics>
+            </ContentItem>
+            <ContentItem Href="http://pb.efeservicios.com/FormatosXML/libreria.aspx?erVehZrOtpDPBaTlDr7wk%2f2Yjrf39rSFgAIMhR8O1gnoFZ%2fbDOTHqH1TIcr%2fQLm9rXIaXxhBma540PRNvpeZCl7kvTadyFRMfjjHFK2MHUJAuTL%2fpFwgsDVCHFLPU3qui2gmoTudnZ0QCSfEbDLYleBlA%2fSMaAF7VdkVb%2b2HoDTumVTeLHhLVk2QMycVfxQf%2fUkxwAvQHQUSQKepGhhgFi63WaXptq6FM3vJeyTyHfwgMsD%2f58kbHeWhPtuZYT7AB4fL%2bHxDhSQIfP21Vgu%2bDw%3d%3d">
+              <MediaType FormalName="Photo" />
+              <MimeType FormalName="image/jpeg" />
+              <Characteristics>
+                <SizeInBytes>45322</SizeInBytes>
+                <Property FormalName="EFE_Filename" Value="20150923-11125521m.jpg" />
+                <Property FormalName="Height" Value="360" />
+                <Property FormalName="PixelDepth" Value="24" />
+                <Property FormalName="Width" Value="550" />
+              </Characteristics>
+            </ContentItem>
+            <ContentItem Href="http://pb.efeservicios.com/FormatosXML/libreria.aspx?erVehZrOtpDPBaTlDr7wk%2f2Yjrf39rSFgAIMhR8O1gnoFZ%2fbDOTHqH1TIcr%2fQLm9rXIaXxhBma540PRNvpeZCl7kvTadyFRMfjjHFK2MHUJAuTL%2fpFwgsDVCHFLPU3qui2gmoTudnZ0QCSfEbDLYleBlA%2fSMaAF7VdkVb%2b2HoDTumVTeLHhLVk2QMycVfxQfGFYqjmpiAPp%2f3D3iAcjrlx3Hfth84hppa7CvMiH6IAsXmqYzCIpH7uZohJJ%2fIC3LQALjjLzNWahjBemijvNFaw%3d%3d">
+              <MediaType FormalName="Photo" />
+              <MimeType FormalName="image/jpeg" />
+              <Characteristics>
+                <SizeInBytes>45648</SizeInBytes>
+                <Property FormalName="EFE_Filename" Value="20150923-11125521a.jpg" />
+                <Property FormalName="Height" Value="360" />
+                <Property FormalName="PixelDepth" Value="24" />
+                <Property FormalName="Width" Value="550" />
+              </Characteristics>
+            </ContentItem>
+            <ContentItem Href="http://pb.efeservicios.com/FormatosXML/libreria.aspx?erVehZrOtpDPBaTlDr7wk%2f2Yjrf39rSFgAIMhR8O1gnoFZ%2fbDOTHqH1TIcr%2fQLm9rXIaXxhBma540PRNvpeZCl7kvTadyFRMfjjHFK2MHUJAuTL%2fpFwgsDVCHFLPU3qui2gmoTudnZ0QCSfEbDLYleBlA%2fSMaAF7VdkVb%2b2HoDTumVTeLHhLVsWUPeeIShla6XlBD4f%2fglzzHiCeNd3E9qmMCI6X9A7lVpQ9ZxK71STiCk97qkkXZxQlJqrmf8uki3idBdIkvIovLF42EctvhA%3d%3d">
+              <MediaType FormalName="Photo" />
+              <MimeType FormalName="image/jpeg" />
+              <Characteristics>
+                <SizeInBytes>83892</SizeInBytes>
+                <Property FormalName="EFE_Filename" Value="20150923-11125521w.jpg" />
+                <Property FormalName="Height" Value="523" />
+                <Property FormalName="PixelDepth" Value="24" />
+                <Property FormalName="Width" Value="800" />
+              </Characteristics>
+            </ContentItem>
+          </NewsComponent>
+          <NewsComponent Duid="multimedia_2721344.multimedia.photos.11125521.text">
+            <Role FormalName="Caption" />
+            <ContentItem>
+              <MediaType FormalName="Text" />
+              <Format FormalName="NITF" />
+              <MimeType FormalName="text/vnd.IPTC.NITF" />
+              <DataContent>
+                <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+                  <head>
+                    <title>El DAX 30 de Fráncfort baja un 1,92 % al cierre</title>
+                    <docdata management-status="usable">
+                      <doc-id id-string="11125521" />
+                    </docdata>
+                  </head>
+                  <body>
+                    <body.head>
+                      <hedline>
+                        <hl1>El DAX 30 de Fráncfort baja un 1,92 % al cierre</hl1>
+                      </hedline>
+                      <dateline>
+                        <story.date norm="20150924T180700+0000">20150924T180700+0000</story.date>
+                      </dateline>
+                    </body.head>
+                    <body.content>
+                      <p>Agentes de bolsa realizan su trabajo en el parqué de Fráncfort, en Alemania. EFE/Archivo</p>
+                    </body.content>
+                  </body>
+                </nitf>
+              </DataContent>
+            </ContentItem>
+          </NewsComponent>
+        </NewsComponent>
+        <NewsComponent Duid="multimedia_2721344.multimedia.photos.11125521" Euid="11125521">
+          <NewsLines>
+            <HeadLine>El DAX 30 de Fráncfort baja un 1,92 % al cierre</HeadLine>
+          </NewsLines>
+          <AdministrativeMetadata>
+            <Provider>
+              <Party FormalName="AFP" />
+            </Provider>
+          </AdministrativeMetadata>
+          <DescriptiveMetadata>
+            <Language FormalName="es" />
+            <DateLineDate>20150924T180700+0000</DateLineDate>
+            <Location HowPresent="Origin">
+              <Property FormalName="City" Value="Fráncfort" />
+            </Location>
+            <Property FormalName="EFE_IdRefOriginal" Value="FH_7398306" />
+            <Property FormalName="EFE_IdRefObject" Value="11125521" />
+          </DescriptiveMetadata>
+          <NewsComponent Duid="multimedia_2721344.multimedia.photos.11125521.file" EquivalentsList="yes">
+            <Role FormalName="Main" />
+            <ContentItem Href="http://pb.efeservicios.com/FormatosXML/libreria.aspx?erVehZrOtpDPBaTlDr7wk%2f2Yjrf39rSFgAIMhR8O1gnoFZ%2fbDOTHqH1TIcr%2fQLm9rXIaXxhBma540PRNvpeZCl7kvTadyFRMfjjHFK2MHUJAuTL%2fpFwgsDVCHFLPU3qui2gmoTudnZ0QCSfEbDLYleBlA%2fSMaAF7VdkVb%2b2HoDTumVTeLHhLVlL5zHLRwPFs5CsoW9xCdUleHG5s0KcvLLGiCdW3jn%2bAEO3EYJ9CqHmHOAFpNgwc6dX9YA0ZCJIiv62nTi9ss9oNUPoze2WAHg%3d%3d">
+              <MediaType FormalName="Photo" />
+              <MimeType FormalName="image/jpeg" />
+              <Characteristics>
+                <SizeInBytes>10530</SizeInBytes>
+                <Property FormalName="EFE_Filename" Value="20150923-11125521p.jpg" />
+                <Property FormalName="Height" Value="147" />
+                <Property FormalName="PixelDepth" Value="24" />
+                <Property FormalName="Width" Value="225" />
+              </Characteristics>
+            </ContentItem>
+            <ContentItem Href="http://pb.efeservicios.com/FormatosXML/libreria.aspx?erVehZrOtpDPBaTlDr7wk%2f2Yjrf39rSFgAIMhR8O1gnoFZ%2fbDOTHqH1TIcr%2fQLm9rXIaXxhBma540PRNvpeZCl7kvTadyFRMfjjHFK2MHUJAuTL%2fpFwgsDVCHFLPU3qui2gmoTudnZ0QCSfEbDLYleBlA%2fSMaAF7VdkVb%2b2HoDTumVTeLHhLVk2QMycVfxQf%2fUkxwAvQHQUSQKepGhhgFi63WaXptq6FM3vJeyTyHfwgMsD%2f58kbHeWhPtuZYT7AB4fL%2bHxDhSQIfP21Vgu%2bDw%3d%3d">
+              <MediaType FormalName="Photo" />
+              <MimeType FormalName="image/jpeg" />
+              <Characteristics>
+                <SizeInBytes>45322</SizeInBytes>
+                <Property FormalName="EFE_Filename" Value="20150923-11125521m.jpg" />
+                <Property FormalName="Height" Value="360" />
+                <Property FormalName="PixelDepth" Value="24" />
+                <Property FormalName="Width" Value="550" />
+              </Characteristics>
+            </ContentItem>
+            <ContentItem Href="http://pb.efeservicios.com/FormatosXML/libreria.aspx?erVehZrOtpDPBaTlDr7wk%2f2Yjrf39rSFgAIMhR8O1gnoFZ%2fbDOTHqH1TIcr%2fQLm9rXIaXxhBma540PRNvpeZCl7kvTadyFRMfjjHFK2MHUJAuTL%2fpFwgsDVCHFLPU3qui2gmoTudnZ0QCSfEbDLYleBlA%2fSMaAF7VdkVb%2b2HoDTumVTeLHhLVk2QMycVfxQfGFYqjmpiAPp%2f3D3iAcjrlx3Hfth84hppa7CvMiH6IAsXmqYzCIpH7uZohJJ%2fIC3LQALjjLzNWahjBemijvNFaw%3d%3d">
+              <MediaType FormalName="Photo" />
+              <MimeType FormalName="image/jpeg" />
+              <Characteristics>
+                <SizeInBytes>45648</SizeInBytes>
+                <Property FormalName="EFE_Filename" Value="20150923-11125521a.jpg" />
+                <Property FormalName="Height" Value="360" />
+                <Property FormalName="PixelDepth" Value="24" />
+                <Property FormalName="Width" Value="550" />
+              </Characteristics>
+            </ContentItem>
+            <ContentItem Href="http://pb.efeservicios.com/FormatosXML/libreria.aspx?erVehZrOtpDPBaTlDr7wk%2f2Yjrf39rSFgAIMhR8O1gnoFZ%2fbDOTHqH1TIcr%2fQLm9rXIaXxhBma540PRNvpeZCl7kvTadyFRMfjjHFK2MHUJAuTL%2fpFwgsDVCHFLPU3qui2gmoTudnZ0QCSfEbDLYleBlA%2fSMaAF7VdkVb%2b2HoDTumVTeLHhLVsWUPeeIShla6XlBD4f%2fglzzHiCeNd3E9qmMCI6X9A7lVpQ9ZxK71STiCk97qkkXZxQlJqrmf8uki3idBdIkvIovLF42EctvhA%3d%3d">
+              <MediaType FormalName="Photo" />
+              <MimeType FormalName="image/jpeg" />
+              <Characteristics>
+                <SizeInBytes>83892</SizeInBytes>
+                <Property FormalName="EFE_Filename" Value="20150923-11125521w.jpg" />
+                <Property FormalName="Height" Value="523" />
+                <Property FormalName="PixelDepth" Value="24" />
+                <Property FormalName="Width" Value="800" />
+              </Characteristics>
+            </ContentItem>
+          </NewsComponent>
+          <NewsComponent Duid="multimedia_2721344.multimedia.photos.11125521.text">
+            <Role FormalName="Caption" />
+            <ContentItem>
+              <MediaType FormalName="Text" />
+              <Format FormalName="NITF" />
+              <MimeType FormalName="text/vnd.IPTC.NITF" />
+              <DataContent>
+                <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+                  <head>
+                    <title>El DAX 30 de Fráncfort baja un 1,92 % al cierre</title>
+                    <docdata management-status="usable">
+                      <doc-id id-string="11125521" />
+                    </docdata>
+                  </head>
+                  <body>
+                    <body.head>
+                      <hedline>
+                        <hl1>El DAX 30 de Fráncfort baja un 1,92 % al cierre</hl1>
+                      </hedline>
+                      <dateline>
+                        <story.date norm="20150924T180700+0000">20150924T180700+0000</story.date>
+                      </dateline>
+                    </body.head>
+                    <body.content>
+                      <p>Agentes de bolsa realizan su trabajo en el parqué de Fráncfort, en Alemania. EFE/Archivo</p>
+                    </body.content>
+                  </body>
+                </nitf>
+              </DataContent>
+            </ContentItem>
+          </NewsComponent>
+        </NewsComponent>
+      </NewsComponent>
+    </NewsComponent>
+  </NewsItem>
+</NewsML>

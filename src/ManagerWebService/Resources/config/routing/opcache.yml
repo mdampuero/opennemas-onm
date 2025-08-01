@@ -1,0 +1,5 @@
+manager_ws_opcache_status:
+    path:     /opcache
+    defaults: { _controller: ManagerWebServiceBundle:FrameworkStatus:opcacheStatus }
+    options:
+        expose: true

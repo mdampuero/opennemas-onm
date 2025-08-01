@@ -1,0 +1,4 @@
+imports:
+    - { resource: connection/instance.yml }
+    - { resource: connection/internal.yml }
+    - { resource: connection/manager.yml }

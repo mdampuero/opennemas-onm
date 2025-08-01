@@ -1,0 +1,3 @@
+{foreach $accounts as $account}
+  <img src="https://www.google-analytics.com/__utm.gif?utmwv=4&utmn={$random}&utmdt=Newsletter[{$date}]&utmhn={$url}&utmr=0&utmp={$relurl}&utmac={$account}&utmcc={$utma}" style="border:0" alt="" />
+{/foreach}

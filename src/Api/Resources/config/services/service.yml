@@ -1,0 +1,200 @@
+services:
+    api.service.album:
+        class:     Api\Service\V1\ContentService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.article:
+        class:     Api\Service\V1\ArticleService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.attachment:
+        class:     Api\Service\V1\AttachmentService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.author:
+        class:     Api\Service\V1\AuthorService
+        arguments: [ '@service_container', 'Common\Model\Entity\User', '@api.validator.user' ]
+        public:    true
+
+    api.service.category:
+        class:     Api\Service\V1\CategoryService
+        arguments: [ '@service_container', 'Common\Model\Entity\Category', '@api.validator.category' ]
+        public:    true
+
+    api.service.ai:
+        class:     Api\Service\V1\AIService
+        arguments: [ '@service_container', 'Common\Model\Entity\Ai' ]
+        public:    true
+
+    api.service.company:
+        class:     Api\Service\V1\CompanyService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.comment:
+        class:     Api\Service\V1\OrmService
+        arguments: [ '@service_container', 'Common\Model\Entity\Comment' ]
+        public:    true
+
+    api.service.content:
+        class:     Api\Service\V1\ContentService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.content_old:
+        class:     Api\Service\V1\ContentOldService
+        arguments: [ '@service_container', '\Content' ]
+        public:    true
+
+    api.service.content_position:
+        class:     Api\Service\V1\ContentPositionService
+        arguments: [ '@service_container', 'Common\Model\Entity\ContentPosition' ]
+        public:    true
+
+    api.service.event:
+        class:     Api\Service\V1\ContentService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.frontpage:
+        class:     Api\Service\V1\FrontpageService
+        arguments: [ '@service_container', 'Common\Model\Entity\Frontpage' ]
+        public:    true
+
+    api.service.frontpage_version:
+        class:     Api\Service\V1\FrontpageVersionService
+        arguments: [ '@service_container', 'Common\Model\Entity\FrontpageVersion' ]
+        public:    true
+
+    api.service.keyword:
+        class:     Api\Service\V1\KeywordService
+        arguments: [ '@service_container', 'Common\Model\Entity\Keyword' ]
+        public:    true
+
+    api.service.kiosko:
+        class:     Api\Service\V1\ContentService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.letter:
+        class:     Api\Service\V1\ContentService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.menu:
+        class:     Api\Service\V1\MenuService
+        arguments: [ '@service_container', 'Common\Model\Entity\Menu' ]
+        public:    true
+
+    api.service.newsletter:
+        class:     Api\Service\V1\NewsletterService
+        arguments: [ '@service_container', 'Common\Model\Entity\Newsletter' ]
+        public:    true
+
+    api.service.webpush_notifications:
+        class:     Api\Service\V1\WebPushNotificationsService
+        arguments: [ '@service_container', 'Common\Model\Entity\WebPushNotifications' ]
+        public:    true
+
+    api.service.newsstand:
+        class:     Api\Service\V1\NewsstandService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.news_agency.resource:
+        class:     Api\Service\V1\NewsAgencyResourceService
+        arguments: [ '@service_container' ]
+        public:    true
+
+    api.service.news_agency.server:
+        class:     Api\Service\V1\NewsAgencyServerService
+        arguments: [ '@service_container' ]
+        public:    true
+
+    api.service.obituary:
+        class:     Api\Service\V1\ContentService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.opinion:
+        class:     Api\Service\V1\OpinionService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.photo:
+        class:     Api\Service\V1\PhotoService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.poll:
+        class:     Api\Service\V1\PollService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.redis:
+        class:     Api\Service\V1\RedisService
+        arguments: [ '@service_container' ]
+        public:    true
+
+    api.service.smarty:
+        class:     Api\Service\V1\SmartyService
+        arguments: [ '@service_container' ]
+        public:    true
+
+    api.service.varnish:
+        class:     Api\Service\V1\VarnishService
+        arguments: [ '@service_container' ]
+        public:    true
+
+    api.service.subscriber:
+        class:     Api\Service\V1\SubscriberService
+        arguments: [ '@service_container', 'Common\Model\Entity\User', '@api.validator.user' ]
+        public:    true
+
+    api.service.subscription:
+        class:     Api\Service\V1\SubscriptionService
+        arguments: [ '@service_container', 'Common\Model\Entity\UserGroup', '@api.validator.subscription' ]
+        public:    true
+
+    api.service.tag:
+        class:     Api\Service\V1\TagService
+        arguments: [ '@service_container', 'Common\Model\Entity\Tag', '@api.validator.tag' ]
+        public:    true
+
+    api.service.trash:
+        class:     Api\Service\V1\TrashService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.user:
+        class:     Api\Service\V1\UserService
+        arguments: [ '@service_container', 'Common\Model\Entity\User', '@api.validator.user' ]
+        public:    true
+
+    api.service.user_group:
+        class:     Api\Service\V1\UserGroupService
+        arguments: [ '@service_container', 'Common\Model\Entity\UserGroup', '@api.validator.user_group' ]
+        public:    true
+
+    api.service.url:
+        class:     Api\Service\V1\OrmService
+        arguments: [ '@service_container', 'Common\Model\Entity\Url' ]
+        public:    true
+
+    api.service.video:
+        class:     Api\Service\V1\VideoService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.widget:
+        class:     Api\Service\V1\WidgetService
+        arguments: [ '@service_container', 'Common\Model\Entity\Content' ]
+        public:    true
+
+    api.service.prompt:
+        class:     Api\Service\V1\PromptService
+        arguments: [ '@service_container', 'Common\Model\Entity\Prompt' ]
+        public:    true

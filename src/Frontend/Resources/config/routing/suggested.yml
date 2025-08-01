@@ -1,0 +1,6 @@
+frontend_suggested_show:
+  path: /suggested/
+  defaults: { _controller: FrontendBundle:Suggested:show }
+  options:
+      subdirectory: true
+      l10n: true

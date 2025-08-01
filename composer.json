@@ -1,0 +1,182 @@
+{
+    "name": "openhost/opennemas",
+    "description": "High performance and scalable NMS focused in journalism workflow",
+    "keywords": ["nms", "newspapers", "magazines", "content management system"],
+    "homepage": "http://opennemas.com",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "OpenHost developers",
+            "email": "developers@openhost.es"
+        }
+    ],
+    "include-path": [
+        "libs/",
+        "libs/core",
+        "libs/models/",
+        "src/",
+        "src/WebService/Handlers/"
+    ],
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        },
+        "classmap": [
+            "app/AppKernel.php",
+            "app/AppCache.php"
+        ],
+        "files": [
+            "libs/functions.php",
+            "src/Common/Core/Functions/album.php",
+            "src/Common/Core/Functions/author.php",
+            "src/Common/Core/Functions/category.php",
+            "src/Common/Core/Functions/company.php",
+            "src/Common/Core/Functions/content.php",
+            "src/Common/Core/Functions/content_update.php",
+            "src/Common/Core/Functions/featured.php",
+            "src/Common/Core/Functions/helper.php",
+            "src/Common/Core/Functions/obituary.php",
+            "src/Common/Core/Functions/pagination.php",
+            "src/Common/Core/Functions/photo.php",
+            "src/Common/Core/Functions/poll.php",
+            "src/Common/Core/Functions/setting.php",
+            "src/Common/Core/Functions/related.php",
+            "src/Common/Core/Functions/sitemap.php",
+            "src/Common/Core/Functions/video.php",
+            "src/Common/Core/Functions/widget.php",
+            "src/Common/Core/Functions/tag.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.1",
+        "doctrine/doctrine-bundle": "^1.6",
+        "doctrine/orm": "^2.5",
+        "incenteev/composer-parameter-handler": "^2.0",
+        "sensio/distribution-bundle": "^5.0.19",
+        "sensio/framework-extra-bundle": "^5.0.0",
+        "symfony/monolog-bundle": "^3.3.0",
+        "symfony/polyfill-apcu": "^1.0",
+        "symfony/swiftmailer-bundle": "~2.6.4",
+        "symfony/symfony": "3.4.*",
+        "twig/twig": "^1.0||^2.0",
+
+        "drak/native-session": "1.0.2",
+        "econea/nusoap": "0.9.*",
+        "friendsofsymfony/jsrouting-bundle": "2.2.*",
+        "giggsey/libphonenumber-for-php": "^7.2",
+        "guzzlehttp/guzzle": "^6.3",
+        "hwi/oauth-bundle": "^0.6.3",
+        "imagine/imagine": "0.7.*",
+        "jagandecapri/symfony-parallel-process": "*",
+        "jdorn/sql-formatter": "1.2.16",
+        "jeremykendall/php-domain-parser": "~2.0",
+        "league/csv": "~8.0",
+        "lexik/jwt-authentication-bundle": "dev-master",
+        "luracast/restler": "3.0.0",
+        "php-http/guzzle6-adapter": "1.1.*",
+        "php-http/httplug-bundle": "1.11.*",
+        "ronanguilloux/isocodes": "^1.2",
+        "smarty-gettext/smarty-gettext": "@stable",
+        "smarty/smarty" : "~3.1",
+        "symfony/assetic-bundle": "~2.8",
+
+        "drexarj/disqus-php": "dev-master",
+        "opennemas/cache": "1.2.0",
+        "opennemas/data": "1.1.3",
+        "opennemas/orm": "1.6.0",
+        "opennemas/task": "1.0.*",
+        "opennemas/panorama-php": "1.0.3",
+        "cometcult/braintree-bundle": "dev-master",
+        "google/recaptcha": "1.2",
+        "rtconner/freshbooks-api": "dev-master",
+        "vdb/php-spider": "^0.4.4",
+        "mobiledetect/mobiledetectlib": "^2.8",
+        "globalpayments/php-sdk": "^3.0",
+        "matthiasmullie/minify": "^1.3",
+        "league/flysystem": "^1.1",
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "aws/aws-sdk-php": "^3.150"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.2",
+        "pdepend/pdepend": "^2.5",
+        "phploc/phploc": "^3.0",
+        "phpmd/phpmd": "^2.6",
+        "phpunit/phpunit": "^7",
+        "sebastian/phpcpd": "^2.0",
+        "squizlabs/php_codesniffer": "^3.4",
+        "symfony/phpunit-bridge": "^4.0",
+        "sensio/generator-bundle": "^3.0"
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url":  "https://github.com/openhost/CometCultBraintreeBundle"
+        },
+        {
+            "type": "git",
+            "url":  "https://github.com/openhost/jwt-authentication-bundle"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/openhost/NativeSession"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:opennemas/panorama-php.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:opennemas/cache.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:opennemas/data.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:opennemas/orm.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:opennemas/task.git"
+        }
+    ],
+    "scripts": {
+        "symfony-scripts": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+        ],
+        "post-install-cmd": [
+            "@symfony-scripts"
+        ],
+        "post-update-cmd": [
+            "@symfony-scripts"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-bin-dir": "bin",
+        "symfony-var-dir": "tmp",
+        "symfony-web-dir": "public",
+        "symfony-assets-install": "relative",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
+        },
+        "branch-alias": null
+    }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "opennemas",
+  "description": "The best CMS for online jornalism",
+  "homepage": "https://www.opennemas.com",
+  "repository": "https://bitbucket.org/opennemas/onm/",
+  "license": "SEE LICENSE IN LICENSE",
+  "apidoc": {
+    "title": "Opennemas REST API",
+    "header": {
+      "title": "Opennemas REST API"
+    }
+  },
+  "devDependencies": {
+    "apidoc": "^0.17.6",
+    "csslint": "^1.0.5",
+    "eslint": "^4.19.1",
+    "jsdoc": "~3.5.5",
+    "less": "~2.6.0",
+    "newman": "^4.4.0",
+    "openhost-jsdoc": "~0.3.5",
+    "uglify-js": "~2.6.2",
+    "uglifycss": "0.0.20",
+    "yarn": "^1.22.0"
+  }
+}

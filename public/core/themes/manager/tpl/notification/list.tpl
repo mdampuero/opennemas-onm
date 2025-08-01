@@ -1,0 +1,386 @@
+<div class="page-navbar actions-navbar">
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <ul class="nav quick-section">
+        <li class="quicklinks">
+          <h4>
+            <a class="no-padding" ng-href="[% routing.ngGenerate('manager_notifications_list') %]">
+              <i class="fa fa-bell"></i>
+              {t}Notifications{/t}
+            </a>
+          </h4>
+        </li>
+      </ul>
+      <div class="all-actions pull-right">
+        <ul class="nav quick-section">
+          <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_REPORT')">
+            <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notifications_csv', { token: security.token })%]" target="_blank">
+              <i class="fa fa-download fa-lg"></i>
+            </a>
+          </li>
+          <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_CREATE') && security.hasPermission('NOTIFICATION_REPORT')">
+            <span class="h-seperate"></span>
+          </li>
+          <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_CREATE')">
+            <a class="btn btn-success text-uppercase" ng-href="[% routing.ngGenerate('manager_notification_create') %]">
+              <i class="fa fa-plus m-r-5"></i>
+              {t}Create{/t}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page-navbar selected-navbar collapsed" ng-class="{ 'collapsed': selected.items.length == 0 }">
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <ul class="nav quick-section pull-left">
+        <li class="quicklinks">
+          <button class="btn btn-link" ng-click="deselectAll()" uib-tooltip="{t}Clear selection{/t}" tooltip-placement="right" type="button">
+            <i class="fa fa-arrow-left fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks">
+          <h4>
+            [% selected.items.length %] <span class="hidden-xs">{t}items selected{/t}</span>
+          </h4>
+        </li>
+      </ul>
+      <ul class="nav quick-section pull-right">
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('fixed', 0)" uib-tooltip="{t}Unfixed{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-unlock fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('fixed', 1)" uib-tooltip="{t}Fixed{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-lock fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('forced', 0)" uib-tooltip="{t}Unforced{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-eye-slash fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('forced', 1)" uib-tooltip="{t}Forced{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-eye fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('activated', 0)" uib-tooltip="{t}Disabled{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-times fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE')">
+          <button class="btn btn-link" ng-click="patchSelected('activated', 1)" uib-tooltip="{t}Enabled{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-check fa-lg"></i>
+          </button>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_UPDATE') && security.hasPermission('NOTIFICATION_DELETE')">
+          <span class="h-seperate"></span>
+        </li>
+        <li class="quicklinks" ng-if="security.hasPermission('NOTIFICATION_DELETE')">
+          <button class="btn btn-link" ng-click="deleteSelected()" uib-tooltip="{t}Delete{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-trash-o fa-lg"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="page-navbar filters-navbar">
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <ul class="nav quick-section">
+        <li class="m-r-10 quicklinks">
+          <div class="input-group input-group-animated">
+            <span class="input-group-addon">
+              <i class="fa fa-search fa-lg"></i>
+            </span>
+            <input class="input-min-45 input-150" ng-class="{ 'dirty': criteria.title }" ng-keyup="searchByKeypress($event)" ng-model="criteria.title" placeholder="{t}Search{/t}" type="text">
+            <span class="input-group-addon input-group-addon-inside pointer no-animate ng-hide" ng-click="clear('title')" ng-show="criteria.title">
+              <i class="fa fa-times"></i>
+            </span>
+          </div>
+        </li>
+        <li class="m-r-10 quicklinks">
+          <button class="btn btn-link" ng-click="resetFilters()" uib-tooltip="{t}Reset filters{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-fire fa-lg m-l-5 m-r-5"></i>
+          </button>
+        </li>
+        <li class="quicklinks">
+          <button class="btn btn-link" ng-click="list()" uib-tooltip="{t}Reload{/t}" tooltip-placement="bottom" type="button">
+            <i class="fa fa-lg fa-refresh m-l-5 m-r-5" ng-class="{ 'fa-spin': loading }"></i>
+          </button>
+        </li>
+      </ul>
+      <ul class="nav quick-section pull-right" ng-show="items && items.length > 0">
+        <li class="quicklinks form-inline pagination-links">
+          <onm-pagination ng-model="criteria.page" items-per-page="criteria.epp" total-items="total"></onm-pagination>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="content ng-hide" ng-show="items">
+  <div class="p-b-100 p-t-100 text-center" ng-if="items.length == 0">
+    <i class="fa fa-7x fa-user-secret"></i>
+    <h2 class="m-b-50">{t}There is nothing to see here, kid.{/t}</h2>
+  </div>
+  <div class="grid simple" ng-if="items.length > 0">
+    <div class="column-filters-toggle hidden-sm" ng-click="toggleColumns()" ng-if="items.length > 0"></div>
+    <div class="column-filters collapsed hidden-sm" ng-class="{ 'collapsed': columns.collapsed }" ng-if="items.length > 0">
+      <h5>{t}Columns{/t}</h5>
+      <div class="row">
+        <div class="col-sm-6 col-md-3 column">
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-title" checklist-model="columns.selected" checklist-value="'title'" type="checkbox">
+            <label for="checkbox-title">
+              {t}Title{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-target" checklist-model="columns.selected" checklist-value="'target'" type="checkbox">
+            <label for="checkbox-target">
+              {t}Target{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-l10n" checklist-model="columns.selected" checklist-value="'l10n'" type="checkbox">
+            <label for="checkbox-l10n">
+              {t}L10n{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-start" checklist-model="columns.selected" checklist-value="'start'" type="checkbox">
+            <label for="checkbox-start">
+              {t}Start{/t}
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3 column">
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-end" checklist-model="columns.selected" checklist-value="'end'" type="checkbox">
+            <label for="checkbox-end">
+              {t}End{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-view" checklist-model="columns.selected" checklist-value="'view'" type="checkbox">
+            <label for="checkbox-view">
+              {t}View{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-read" checklist-model="columns.selected" checklist-value="'read'" type="checkbox">
+            <label for="checkbox-read">
+              {t}Read{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-clicked" checklist-model="columns.selected" checklist-value="'clicked'" type="checkbox">
+            <label for="checkbox-clicked">
+              {t}Clicked{/t}
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3 column">
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-opened" checklist-model="columns.selected" checklist-value="'opened'" type="checkbox">
+            <label for="checkbox-opened">
+              {t}Opened{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-fixed" checklist-model="columns.selected" checklist-value="'fixed'" type="checkbox">
+            <label for="checkbox-fixed">
+              {t}Fixed{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-forced" checklist-model="columns.selected" checklist-value="'forced'" type="checkbox">
+            <label for="checkbox-forced">
+              {t}Forced{/t}
+            </label>
+          </div>
+          <div class="checkbox check-default p-b-5">
+            <input id="checkbox-enabled" checklist-model="columns.selected" checklist-value="'enabled'" type="checkbox">
+            <label for="checkbox-enabled">
+              {t}Enabled{/t}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-body no-padding">
+      <div class="table-wrapper">
+        <div class="grid-overlay" ng-if="loading"></div>
+        <table class="table table-hover no-margin">
+          <thead>
+            <tr>
+              <th width="15">
+                <div class="checkbox checkbox-default">
+                  <input id="select-all" ng-model="selected.all" type="checkbox" ng-change="toggleAll();">
+                  <label for="select-all"></label>
+                </div>
+              </th>
+              <th class="pointer" ng-click="sort('id')" width="10">
+                {t}#{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('id') == 'asc', 'fa fa-caret-down': isOrderedBy('id') == 'desc' }"></i>
+              </th>
+              <th ng-show="isColumnEnabled('title')">
+                {t}Title{/t}
+              </th>
+              <th class="pointer text-center" ng-show="isColumnEnabled('target')" width="10">
+                {t}Target{/t}
+              </th>
+              <th class="text-center" width="60" ng-show="isColumnEnabled('l10n')" width="10">
+                l10n
+              </th>
+              <th class="pointer text-center" ng-click="sort('start')" ng-show="isColumnEnabled('start')" width="200">
+                {t}Start{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('start') == 'asc', 'fa fa-caret-down': isOrderedBy('start') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('end')" ng-show="isColumnEnabled('end')" width="200">
+                {t}End{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('end') == 'asc', 'fa fa-caret-down': isOrderedBy('end') == 'desc'}"></i>
+              </th>
+              <th class="text-center" ng-click="sort('view')" ng-show="isColumnEnabled('view')" width="10">
+                {t}View{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('view') == 'asc', 'fa fa-caret-down': isOrderedBy('view') == 'desc'}"></i>
+              </th>
+              <th class="text-center" ng-click="sort('read')" ng-show="isColumnEnabled('read')" width="10">
+                {t}Read{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('read') == 'asc', 'fa fa-caret-down': isOrderedBy('read') == 'desc'}"></i>
+              </th>
+              <th class="text-center" ng-click="sort('clicked')" ng-show="isColumnEnabled('clicked')" width="10">
+                {t}Clicked{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('clicked') == 'asc', 'fa fa-caret-down': isOrderedBy('clicked') == 'desc'}"></i>
+              </th>
+              <th class="text-center" ng-click="sort('opened')" ng-show="isColumnEnabled('opened')" width="10">
+                {t}Opened{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('opened') == 'asc', 'fa fa-caret-down': isOrderedBy('opened') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('fixed')" ng-show="isColumnEnabled('fixed')" width="10">
+                {t}Fixed{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('fixed') == 'asc', 'fa fa-caret-down': isOrderedBy('fixed') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('forced')" ng-show="isColumnEnabled('forced')" width="10">
+                {t}Forced{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('forced') == 'asc', 'fa fa-caret-down': isOrderedBy('forced') == 'desc'}"></i>
+              </th>
+              <th class="pointer text-center" ng-click="sort('enabled')" ng-show="isColumnEnabled('enabled')" width="10">
+                {t}Enabled{/t}
+                <i ng-class="{ 'fa fa-caret-up': isOrderedBy('enabled') == 'asc', 'fa fa-caret-down': isOrderedBy('enabled') == 'desc'}"></i>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in items" ng-class="{ row_selected: isSelected(item.id) }">
+              <td>
+                <div class="checkbox check-default">
+                  <input id="checkbox[%$index%]" checklist-model="selected.items" checklist-value="item.id" type="checkbox">
+                  <label for="checkbox[%$index%]"></label>
+                </div>
+              </td>
+              <td>
+                [% item.id %]
+              </td>
+              <td ng-show="isColumnEnabled('title')" style="white-space: normal;">
+                <div ng-bind-html="item.title['en']"></div>
+                <div class="listing-inline-actions">
+                  <a class="btn btn-link" ng-href="[% routing.ngGenerate('manager_notification_show', { id: item.id }) %]" ng-if="security.hasPermission('NOTIFICATION_DELETE')" title="{t}Edit{/t}">
+                    <i class="fa fa-pencil m-r-5"></i>{t}Edit{/t}
+                  </a>
+                  <button class="btn btn-link text-danger" ng-click="delete(item.id)" ng-if="security.hasPermission('NOTIFICATION_DELETE')" type="button">
+                    <i class="fa fa-trash-o m-r-5"></i>{t}Delete{/t}
+                  </button>
+                  <a class="btn btn-link" ng-href="[% routing.generate('manager_ws_notification_csv', { id: item.id, token: security.token }) %]" ng-if="security.hasPermission('NOTIFICATION_REPORT')" target="_blank" title="{t}Download report{/t}">
+                    <i class="fa fa-download m-r-5"></i>{t}Report{/t}
+                  </button>
+                </div>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('target')">
+                <div ng-repeat="target in item.target track by $index">
+                  [% target === 'all' ? '{t}All{/t}' : target %]
+                </div>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('l10n')">
+                <span class="orb orb-success" ng-if="countStringsLeft(item) === 0" uib-tooltip="{t}Translations completed{/t}">
+                  <i class="fa fa-check" ng-if="countStringsLeft(item) === 0"></i>
+                </span>
+                <span class="orb orb-danger" ng-if="countStringsLeft(item) > 0" uib-tooltip="[% countStringsLeft(item) %] {t}translations left{/t}">
+                  [% countStringsLeft(item) %]
+                </span>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('start')">
+                [% item.start %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('end')">
+                [% item.end %]
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('view')">
+                <span class="badge badge-default">
+                  <strong>[% extra.stats[item.id] && extra.stats[item.id].view ? extra.stats[item.id].view : 0 %]</strong>
+                </span>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('read')">
+                <span class="badge badge-default">
+                  <strong>[% extra.stats[item.id] && extra.stats[item.id].read ? extra.stats[item.id].read : 0 %]</strong>
+                </span>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('clicked')">
+                <span class="badge badge-default">
+                  <strong>[% extra.stats[item.id] && extra.stats[item.id].clicked ? extra.stats[item.id].clicked : 0 %]</strong>
+                </span>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('opened')">
+                <span class="badge badge-default">
+                  <strong>[% extra.stats[item.id] && extra.stats[item.id].opened ? extra.stats[item.id].opened : 0 %]</strong>
+                </span>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('fixed')">
+                <button class="btn btn-white" ng-click="patch(item, 'fixed', item.fixed == 1 ? 0 : 1)" ng-if="security.hasPermission('NOTIFICATION_UPDATE')" type="button">
+                  <i class="fa" ng-class="{ 'fa-lock text-success' : !item.fixedLoading && item.fixed == 1, 'fa-unlock text-error': !item.fixedLoading && item.fixed == 0, 'fa-circle-o-notch fa-spin': item.fixedLoading }"></i>
+                </button>
+                <span ng-if="!security.hasPermission('NOTIFICATION_UPDATE')">
+                  <i class="fa" ng-class="{ 'fa-lock text-success' : item.fixed == 1, 'fa-unlock text-error': item.fixed == 0 }"></i>
+                </span>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('forced')">
+                <button class="btn btn-white" ng-click="patch(item, 'forced', item.forced == 1 ? 0 : 1)" ng-if="security.hasPermission('NOTIFICATION_UPDATE')" type="button">
+                  <i class="fa" ng-class="{ 'fa-eye text-success' : !item.forcedLoading && item.forced == 1, 'fa-eye-slash text-error': !item.forcedLoading && item.forced == 0, 'fa-circle-o-notch fa-spin': item.forcedLoading }"></i>
+                </button>
+                <span ng-if="!security.hasPermission('NOTIFICATION_UPDATE')">
+                  <i class="fa" ng-class="{ 'fa-eye text-success' : item.forced == 1, 'fa-eye-slash text-error': item.forced == 0 }"></i>
+                </span>
+              </td>
+              <td class="text-center" ng-show="isColumnEnabled('enabled')">
+                <button class="btn btn-white" ng-click="patch(item, 'enabled', item.enabled == 1 ? 0 : 1)" ng-if="security.hasPermission('NOTIFICATION_UPDATE')" type="button">
+                  <i class="fa" ng-class="{ 'fa-check text-success' : !item.enabledLoading && item.enabled == 1, 'fa-times text-error': !item.enabledLoading && item.enabled == 0, 'fa-circle-o-notch fa-spin': item.enabledLoading }"></i>
+                </button>
+                <span ng-if="!security.hasPermission('NOTIFICATION_UPDATE')">
+                  <i class="fa" ng-class="{ 'fa-check text-success' : item.enabled == 1, 'fa-times text-error': item.enabled == 0 }"></i>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/ng-template" id="modal-confirm">
+  {include file="common/modal_confirm.tpl"}
+</script>

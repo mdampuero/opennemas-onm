@@ -1,0 +1,39 @@
+frontend_blog_frontpage:
+    path: /blog/
+    defaults: { _controller: FrontendBundle:Blog:list }
+    options:
+        l10n: true
+        subdirectory: true
+
+frontend_blog_author_frontpage:
+    path: /blog/author/{author_slug}/
+    defaults: { _controller: FrontendBundle:Blog:listAuthor }
+    requirements:
+        author_slug: '[a-z0-9\-\.]+'
+    options:
+        l10n: true
+        subdirectory: true
+
+frontend_blog_show:
+    path: /blog/{author_slug}/{slug}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:Blog:show, content_type: opinion, }
+    requirements:
+        author_slug: '[a-z0-9\-.]+'
+        slug:        '[^/]+'
+        created:     '[0-9]{14}'
+        id:          '[0-9]+'
+    options:
+        l10n: true
+        subdirectory: true
+
+frontend_blog_show_amp:
+    path: /blog/{author_slug}/{slug}/{created}{id}.amp.html
+    defaults: { _controller: FrontendBundle:Blog:showAmp, content_type: opinion, _format: amp }
+    requirements:
+        author_slug: '[a-z0-9\-.]+'
+        slug :       '[^/]+'
+        created:     '[0-9]{14}'
+        id:          '[0-9]+'
+    options:
+        l10n: true
+        subdirectory: true

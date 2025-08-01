@@ -1,0 +1,188 @@
+.cbp_tmtimeline > li .cbp_tmicon {
+  box-shadow: none;
+  height: 56px;
+  line-height: 56px;
+  margin-top: -8px;
+  margin-left: -33px;
+  width: 56px;
+}
+
+.dropdown-menu-notifications {
+  margin-left: -270px;
+  padding-right: 0;
+  width: 540px;
+
+  .dropdown-title {
+    padding-right: 15px;
+  }
+}
+
+.notification-icon {
+  background: #fff;
+  border-radius: 100%;
+  float: left;
+  height: 40px;
+  margin-top: -20px;
+  padding: 10px;
+  position: absolute;
+  top: 50%;
+  width: 40px;
+
+  .fa {
+    font-size: 18px !important;
+    height: 20px;
+    left: 50%;
+    margin: -10px 0 0 -10px !important;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 20px;
+  }
+}
+
+.notification-list {
+  list-style: none;
+  height: 275px;
+  margin: 0;
+  padding: 0;
+  padding-right: 3px;
+  width: 100%;
+
+  &.notification-list-auto {
+    height: auto;
+  }
+
+  .nano > .nano-content {
+    padding-right: 12px;
+  }
+}
+
+.notification-list-item {
+  background-color: #fff;
+  border: 1px solid @border-color;
+  border-radius: 4px;
+  display: block;
+  margin-bottom: 15px;
+  max-height: 500px;
+  overflow: hidden;
+  position: relative;
+  transition: .25s ease-in all;
+  width: 100%;
+
+  & > a {
+    cursor: pointer;
+    display: block;
+    margin: 0 !important;
+    padding: 15px !important;
+    text-decoration: none;
+  }
+
+  &.ng-enter {
+    border: 0;
+    margin: 0;
+    max-height: 0;
+    opacity: 0;
+  }
+
+  &.ng-leave.ng-leave-active {
+    border: 0;
+    margin: 0 0 0 100px;
+    max-height: 0;
+    opacity: 0;
+  }
+}
+
+.notification-list-item-close {
+  height: 32px;
+  margin-top: -16px;
+  padding: 8px;
+  position: absolute;
+  right: 10px;
+  text-align: center;
+  top: 50%;
+  width: 32px;
+
+  i {
+    font-size: 18px !important;
+  }
+
+  &:hover i {
+    color: #000 !important;
+  }
+}
+
+.notification-list-item-with-icon {
+  .notification-body {
+    padding-left: 50px;
+  }
+}
+
+.notification-list-placeholder {
+  height: 275px;
+  padding-top: 80px;
+  position: absolute;
+  text-align: center;
+  top: 42px;
+  transition: all .25s;
+  width: 100%;
+
+  &.ng-hide.ng-hide-remove {
+    opacity: 0;
+  }
+}
+
+
+.notification-list-preview {
+  height: auto;
+  padding: 30px;
+}
+
+.notification-body {
+  margin: 0;
+
+  a {
+    color: inherit;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.notifications-orb {
+  background-color: @info-color;
+  border-radius: 100%;
+  color: #fff;
+  display: inline-block;
+  font-weight: bold;
+  height: 18px;
+  line-height: 1.25em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  text-align: center;
+  width: 18px;
+}
+
+.notification-title {
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.notification-item {
+  position:relative;
+}
+
+@media (max-width: 768px) {
+  .notification-item-icon {
+    position:absolute !important;
+    margin:0 !important;
+    top:-10px !important;
+    left:10px !important;
+  }
+
+  .notification-item .cbp_tmtime {
+    margin-left:70px
+  }
+}

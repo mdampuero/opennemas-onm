@@ -1,0 +1,30 @@
+services:
+    core.subscriber.category:
+        class:     Api\EventSubscriber\CategorySubscriber
+        arguments: [ '@service_container', '@api.helper.cache.category' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    core.subscriber.setting:
+        class: Api\EventSubscriber\SettingSubscriber
+        arguments: [ '@api.helper.cache' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    core.subscriber.tag:
+        class:     Api\EventSubscriber\TagSubscriber
+        arguments: [ '@api.helper.cache.tag', '@cache.connection.instance' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    core.subscriber.user:
+        class:     Api\EventSubscriber\UserSubscriber
+        arguments: [ '@service_container', '@api.helper.cache.user', '@cache.connection.instance' ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    core.subscriber.user_group:
+        class:     Api\EventSubscriber\UserGroupSubscriber
+        arguments: [ '@api.helper.cache.user_group' ]
+        tags:
+            - { name: kernel.event_subscriber }

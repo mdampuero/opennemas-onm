@@ -1,0 +1,70 @@
+api_v1_backend_comment_get_list:
+    path:     /comments{format}
+    defaults: { _controller: ApiBundle:V1/Backend/Comment:getList, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_comment_get_item:
+    path:     /comments/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Comment:getItem }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_comment_update_item:
+    path:     /comments/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Comment:updateItem }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_comment_patch_item:
+    path:     /comments/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Comment:patchItem }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_comment_patch_list:
+    path:     /comments
+    defaults: { _controller: ApiBundle:V1/Backend/Comment:patchList }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_comment_delete_item:
+    path:     /comments/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/Comment:deleteItem }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_comment_delete_list:
+    path:     /comments
+    defaults: { _controller: ApiBundle:V1/Backend/Comment:deleteList }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_comment_get_config:
+    path:     /comments/config
+    defaults: { _controller: ApiBundle:V1/Backend/Comment:getConfig }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_comment_save_config:
+    path:     /comments/config
+    defaults: { _controller: ApiBundle:V1/Backend/Comment:saveConfig }
+    methods:  [ PUT ]
+    options:
+        expose: true

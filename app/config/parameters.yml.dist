@@ -1,0 +1,148 @@
+parameters:
+    environment: dev
+    framework.secret: test
+    locale: en
+    # A secret key that's used to generate certain security-related tokens
+    secret: ThisTokenIsNotSoSecretChangeIt
+
+    # Doctrine DBAL
+    database:
+        dbal:
+            default_connection: default
+            connections:
+                default:
+                    driver:               mysqli
+                    dbname:               onm-instances
+                    host:                 localhost
+                    port:                 3306
+                    user:                 root
+                    password:             root
+                    charset:              UTF-8
+                    # slaves:
+                    #     slave1:
+                    #         driver:               mysqli
+                    #         dbname:               ~
+                    #         host:                 localhost
+                    #         port:                 ~
+                    #         user:                 root
+                    #         password:             root
+                    #         charset:              ~
+
+    # HWIOAuthBundle
+    hwi_oauth.target_path_parameter: _target_path
+
+    # JWTAuthentication
+    # JWT (RSA)
+    # public_private_key_algorithm: RS256
+    # public_key_path:              %kernel.root_dir%/jwt/rsa/public.pem
+    # private_key_path:             %kernel.root_dir%/jwt/rsa/private.pem
+    # pass_phrase:                  yourpassphrase
+    # JWT (Shared key)
+    shared_key_algorithm: HS512
+    shared_key:           yoursharedkey
+
+    # Swiftmailer
+    mailer_transport:  mail
+    mailer_host:       localhost
+    mailer_user:       ~
+    mailer_password:   ~
+    mailer_protocol:   ~
+    mailer_port:       ~
+    mailer_no_reply_address: no-reply@postman.opennemas.com
+
+    # Opennemas
+    backend_analytics.enabled: false
+    disable_robots:            false
+    password_min_level:        1 # Weak(0) | Good(1) | Strong(2)
+    instance_creator:
+        end_point:   https://manager.dev.opennemas.com/managerws/
+        base_domain: dev.opennemas.com
+        template:    es.openhost.theme.nemo
+    manager_url: https://manager.dev.opennemas.com/
+    manager_webservice:
+        api_key:         sheequaiJie5deewijie6oojaiShie5R
+        company_mail:    developers@openenmas.com
+        info_mail:       developers@opennemas.com
+        no_reply_sender: no-reply@postman.opennemas.com
+        no_reply_from:   no-reply@opennemas.com
+    opennemas.assetic.asset_compilation_in_dev: false
+    opennemas.assetic.asset_domain:             //media%d.opennemas.net
+    opennemas.assetic.asset_servers:            3
+    opennemas.assetic.use_asset_servers:        false
+    opennemas.backend_force_ssl:                false
+    opennemas.base_domain:                      .dev.opennemas.com
+    opennemas.redirect_frontend:                false
+    sales_email:                                developers@opennemas.com
+
+    # Cache
+    cache.default:
+        type: redis
+        file:
+            name:      internal
+            namespace: internal
+            path:      '%kernel.root_dir%/../tmp/cache/%kernel.environment%/file'
+        redis:
+            ttl:    86400
+            server: 127.0.0.1
+            port:   6379
+            prefix: onm
+
+    cache_handler:     Onm\Cache\Redis
+    cache_handler_params:
+        server: 127.0.0.1
+        port:   11211
+        connection_string: tcp:\\127.0.0.1
+        options:
+            ttl:    86400
+            server: localhost
+            prefix: onm
+
+    # ORM
+    orm.default:
+        connection:
+            driver:   mysqli
+            dbname:   onm-instances
+            host:     localhost
+            port:     3306
+            user:     root
+            password: root
+            charset:  UTF-8
+
+    # Session
+    session.name:          __onm_sess
+    session.gc_maxlifetime: 86400
+
+    # Sessions in redis, (tcp://ip:port?<options>)
+    session_handler_id:       session.handler.drak.redis
+    session_handler_savepath: tcp://localhost:6379?timeout=2
+    session_handler_options:
+        cookie_lifetime: 86400
+
+    # Varnish
+    varnish:
+        header_name: X-Varnish-Ban
+        servers:
+            server1:
+                host: localhost
+                port: 80
+
+    # External services
+    api.facebook.client_id:      numeric_id
+    api.facebook.client_secret:  alphanum_token
+    api.recaptcha.v3.site_key:   long_alphanum_token
+    api.recaptcha.v3.secret_key: long_alphanum_token
+    api.recaptcha.v2.site_key:   long_alphanum_token
+    api.recaptcha.v2.secret_key: long_alphanum_token
+    api.twitter.client_id:       short_alphanum_token
+    api.twitter.client_secret:   long_alphanum_token
+    braintree.environment:       sandbox
+    braintree.merchant_id:       numeric_id
+    braintree.private_key:       long_alphanum_token
+    braintree.public_key:        short_alphanum_token
+    braintree.url:               https://sandbox.braintreegateway.com
+    freshbooks.domain:           company_name
+    freshbooks.token:            long_alphanum_token
+    freshbooks.url:              https://%freshbooks.domain%.freshbooks.com
+    panorama:
+        youtube:
+            api_key: your api_key here

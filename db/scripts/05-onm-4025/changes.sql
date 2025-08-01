@@ -1,0 +1,12 @@
+DROP TABLE frontpages;
+CREATE TABLE frontpages (id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL, name VARCHAR(100) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE frontpage_versions (id BIGINT UNSIGNED AUTO_INCREMENT NOT NULL, frontpage_id BIGINT UNSIGNED DEFAULT NULL, name VARCHAR(100) DEFAULT NULL, type INT NOT NULL, created DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, publish_date DATETIME DEFAULT NULL, params VARCHAR(255) DEFAULT NULL, category_id BIGINT UNSIGNED DEFAULT NULL, INDEX frontpage_id (frontpage_id), INDEX category_id (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE content_positions DROP PRIMARY KEY;
+INSERT INTO `frontpage_versions` (`id`, `frontpage_id`, `name`, `type`, `created`, `publish_date`, `params`, `category_id`) VALUES (0, NULL, 'EMPTY', '0', CURRENT_TIMESTAMP, NULL, NULL, NULL);
+UPDATE `frontpage_versions` SET `id` = '0' WHERE `frontpage_versions`.`id` = 1;
+ALTER TABLE content_positions ADD frontpage_version_id BIGINT UNSIGNED DEFAULT 0 NOT NULL;
+UPDATE content_positions SET frontpage_version_id = 0;
+CREATE INDEX frontpage_version_id ON content_positions (frontpage_version_id);
+ALTER TABLE content_positions ADD PRIMARY KEY (pk_fk_content, fk_category, position, placeholder, frontpage_version_id);
+ALTER TABLE frontpage_versions ADD CONSTRAINT frontpage_id_id FOREIGN KEY (frontpage_id) REFERENCES frontpages (id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE content_positions ADD CONSTRAINT frontpage_version_id_id FOREIGN KEY (frontpage_version_id) REFERENCES frontpage_versions (id) ON UPDATE CASCADE ON DELETE CASCADE;

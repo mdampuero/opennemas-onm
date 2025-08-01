@@ -1,0 +1,35 @@
+# Common
+*~
+*.pot
+.deploy.php
+.deploy.themes.php
+.development
+.maintenance
+.vscode
+
+# Application
+app/config/parameters.yml
+app/config/connections.yml
+app/Resources/**/*.mo
+backups
+bin
+build
+node_modules
+tmp
+vendor
+
+# Public files
+public/assets/components
+public/assets/js/routes.js
+public/build
+public/bundles
+public/media/
+public/themes
+
+# Not ignore
+!public/themes/admin
+!public/themes/manager
+!tmp/SymfonyRequirements.php
+!tmp/bootstrap.php.cache
+!tmp/cache/.gitkeep
+!tmp/logs/.gitkeep

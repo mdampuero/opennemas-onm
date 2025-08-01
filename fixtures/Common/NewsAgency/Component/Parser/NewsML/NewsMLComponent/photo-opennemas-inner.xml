@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NewsML Version="1.2">
+  <NewsEnvelope>
+    <SentFrom>
+      <Party FormalName="Opennemas">
+        <Property FormalName="Organization" Value="Nemo"/>
+      </Party>
+    </SentFrom>
+    <DateAndTime>20181002T162322+02:00</DateAndTime>
+  </NewsEnvelope>
+  <NewsItem Duid="multimedia_861">
+    <Comment FormalName="OnmNewsMLVersion">1.0.1</Comment>
+    <Identification>
+      <NewsIdentifier>
+        <ProviderId>Nemo</ProviderId>
+        <DateId>20181002T162322+02:00</DateId>
+        <NewsItemId>861</NewsItemId>
+        <RevisionId PreviousRevision="1" Update="U">2</RevisionId>
+        <PublicIdentifier/>
+      </NewsIdentifier>
+    </Identification>
+    <NewsManagement>
+      <NewsItemType FormalName="News"/>
+      <FirstCreated>20181002T162322+02:00</FirstCreated>
+      <ThisRevisionCreated>20190925T164429+02:00</ThisRevisionCreated>
+      <Status FormalName="Usable"/>
+      <Urgency FormalName="5"/>
+    </NewsManagement>
+    <NewsComponent Duid="multimedia_861.multimedia">
+      <NewsLines>
+        <HeadLine>
+          Faxploit: cómo los ciberdelincuentes utilizan el fax para distribuir malware
+        </HeadLine>
+        <SubHeadLine/>
+      </NewsLines>
+      <AdministrativeMetadata>
+        <Provider>
+          <Party FormalName="Nemo"/>
+        </Provider>
+        <Creator>
+          <Party FormalName="Nemo"/>
+        </Creator>
+      </AdministrativeMetadata>
+      <NewsComponent Duid="multimedia_861.multimedia.texts">
+        <Role FormalName="Content list"/>
+        <NewsComponent Duid="multimedia_861.multimedia.texts.861" Euid="861">
+          <Role FormalName="Main"/>
+          <NewsLines>
+            <HeadLine>
+              Faxploit: cómo los ciberdelincuentes utilizan el fax para distribuir malware
+            </HeadLine>
+            <SubHeadLine/>
+          </NewsLines>
+          <DescriptiveMetadata>
+            <Language FormalName="es"/>
+            <DateLineDate>20181002T162322+02:00</DateLineDate>
+            <Property FormalName="Tesauro" Value="tecnologia"/>
+            <Property FormalName="Onm_IdRefObject" Value="861"/>
+          </DescriptiveMetadata>
+          <ContentItem Href="articulo/tecnologia/faxploit-check-point-descubre-ciberdelincuentes-utilizan-fax-distribuir-malware-empresas/20181002162322000861.html">
+            <MediaType FormalName="Text"/>
+            <Format FormalName="NITF"/>
+            <MimeType FormalName="text/vnd.IPTC.NITF"/>
+            <DataContent>
+              <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+                <head>
+                  <title>
+                    Faxploit: cómo los ciberdelincuentes utilizan el fax para distribuir malware
+                  </title>
+                  <docdata management-status="usable">
+                    <doc.rights provider="Opennemas"/>
+                    <doc-id id-string="861"/>
+                    <key-list>
+                      <keyword key="faxploit,ciberdelincuencia,malware"/>
+                    </key-list>
+                  </docdata>
+                </head>
+                <body>
+                  <body.head>
+                    <hedline>
+                      <hl1>
+                        Faxploit: cómo los ciberdelincuentes utilizan el fax para distribuir malware
+                      </hl1>
+                      <hl2/>
+                    </hedline>
+                    <rights>
+                      <rights.owner/>
+                      <rights.owner.photo>
+                        http://opennemas.dev.opennemas.com/media/opennemas/images
+                      </rights.owner.photo>
+                    </rights>
+                    <dateline>
+                      <story.date norm="20181002T162322+02:00"> 20181002T162322+02:00 </story.date>
+                    </dateline>
+                    <abstract>
+                      <p>
+                        <p>Las vulnerabilidades descubiertas afectan a millones de dispositivos en empresas y hogares de todo el mundo, y abren la puerta a los ciberdelincuentes para piratear redes mediante el envío de faxes maliciosos.</p>
+                      </p>
+                    </abstract>
+                  </body.head>
+                  <body.content>
+                    <p>Recientemente se ha descubierto cómo una máquina de fax pude ser el origen de hackeos tanto a empresas como a usuarios. Para ello, se explotan vulnerabilidades descubiertas recientemente en los protocolos de comunicación, que se utilizan en millones de dispositivos en todo el mundo. El atacante solo necesita un número de fax para tomar el control de la red de una compañía u hogar.</p>
+                    <p>La investigación demostró las vulnerabilidades en las populares impresoras fax HP Officejet Pro All-in-One. Los mismos protocolos también se utilizan en los faxes e impresoras multifunción de muchos otros proveedores, así como los servicios online como fax2email. Tras el descubrimiento de las vulnerabilidades, Check Point informó a HP, quien respondió rápidamente y desarrolló un parche de software para sus impresoras, que está disponible en HP.com.</p>
+                    <p>Aunque el fax no es una tecnología moderna, en la actualidad hay más de 45 millones de dispositivos en uso en todo el mundo, y se hacen 17.000 millones de envíos cada año. Aún se usa en muchos sectores de la industria, como en sanidad, abogacía, banca e inmobiliaria, donde almacenan y procesan grandes cantidades de datos personales y confidenciales. El Servicio Nacional de Salud del Reino Unido tiene más de 9,000 máquinas de fax en uso para enviar datos de pacientes. En muchos países, los correos electrónicos no se consideran evidencia en los tribunales de justicia, por lo que el fax se utiliza para los procesos legales. Casi la mitad de todas las impresoras láser vendidas en Europa son dispositivos multifunción que incluyen funciones fax.</p>
+                    <p><em>"Muchas empresas ni siquiera saben que tienen una máquina de fax conectada a su red, pero es una función que está integrada en muchas impresoras multifunción de oficina y hogar",</em> explica Yaniv Balmas, Group Manager de Investigaciones de Seguridad en Check Point. Esta investigación pionera muestra cómo estos dispositivos pueden ser blanco de los delincuentes y utilizarse para tomar las redes y robar datos o interrumpir operaciones.</p>
+                    <blockquote>
+                      <p><em>"Es fundamental que las empresas se protejan contra estos posibles ataques actualizando sus faxes con los últimos parches y separándolos de otros dispositivos en sus redes",</em> continua Balmas. <em>"Es importante recordar que, en el actual y complejo contexto de la quinta generación de ciberataques, no se puede pasar por alto la seguridad de ninguna parte de las redes corporativas".</em></p>
+                    </blockquote>
+                    <p>Una vez que un atacante obtiene el número de fax de una empresa (se puede obtener fácilmente en los sitios web corporativos), envía un fichero de imagen creado especialmente, al fax objetivo del ataque. Las vulnerabilidades permiten codificar el malware (como ransomware, crypto-miners o spyware) en el fichero de imagen, que es decodificado por el fax y cargado en su memoria. El malware puede atacar datos confidenciales o causar interrupción de servicio propagándose a través de cualquier red a la que esté conectado el fax.</p>
+                    <p>Para minimizar el riesgo de seguridad de las máquinas de fax, se aconseja verificar las actualizaciones más recientes de firmware disponibles para sus dispositivos de fax. Las empresas deben colocar los dispositivos en una red segura que esté separada de las aplicaciones y los servidores que llevan información confidencial, para limitar la capacidad del malware de propagarse a través de la red.</p>
+                  </body.content>
+                </body>
+              </nitf>
+            </DataContent>
+          </ContentItem>
+        </NewsComponent>
+      </NewsComponent>
+      <NewsComponent Duid="multimedia_861.multimedia.photos">
+        <Role FormalName="Content list"/>
+        <NewsComponent Duid="multimedia_861.multimedia.photos.860" Euid="860">
+          <NewsLines>
+            <HeadLine>
+              Faxploit: cómo los ciberdelincuentes utilizan el fax para distribuir malware
+            </HeadLine>
+          </NewsLines>
+          <AdministrativeMetadata>
+            <Provider>
+              <Party FormalName="Nemo"/>
+            </Provider>
+          </AdministrativeMetadata>
+          <DescriptiveMetadata>
+            <Language FormalName="es"/>
+            <DateLineDate>20181002T162710+02:00</DateLineDate>
+            <Property FormalName="Onm_IdRefObject" Value="860"/>
+          </DescriptiveMetadata>
+          <NewsComponent Duid="multimedia_861.multimedia.photos.860.file">
+            <Role FormalName="Main"/>
+            <ContentItem Href="http://opennemas.dev.opennemas.com/media/opennemas/images/2018/10/02/2018100216271084045.jpg">
+              <MediaType FormalName="PhotoInner"/>
+              <MimeType FormalName="image/jpg"/>
+              <Characteristics>
+                <SizeInBytes>128716.8</SizeInBytes>
+                <Property FormalName="Onm_Filename" Value="2018100216271084045.jpg"/>
+                <Property FormalName="Height" Value="578"/>
+                <Property FormalName="PixelDepth" Value="24"/>
+                <Property FormalName="Width" Value="1024"/>
+              </Characteristics>
+            </ContentItem>
+          </NewsComponent>
+          <NewsComponent Duid="multimedia_861.multimedia.photos.860.text">
+            <Role FormalName="Caption"/>
+            <ContentItem>
+              <MediaType FormalName="Text"/>
+              <Format FormalName="NITF"/>
+              <MimeType FormalName="text/vnd.IPTC.NITF"/>
+              <DataContent>
+                <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+                  <head>
+                    <title>
+                      Faxploit: cómo los ciberdelincuentes utilizan el fax para distribuir malware
+                    </title>
+                    <docdata management-status="usable">
+                      <doc-id id-string="860"/>
+                    </docdata>
+                  </head>
+                  <body>
+                    <body.head>
+                      <hedline>
+                        <hl1>
+                          Faxploit: cómo los ciberdelincuentes utilizan el fax para distribuir malware
+                        </hl1>
+                      </hedline>
+                      <dateline>
+                        <story.date norm="20181002T162710+02:00"> 20181002T162710+02:00 </story.date>
+                      </dateline>
+                    </body.head>
+                    <body.content>
+                      <p>Faxploit</p>
+                    </body.content>
+                  </body>
+                </nitf>
+              </DataContent>
+            </ContentItem>
+          </NewsComponent>
+        </NewsComponent>
+      </NewsComponent>
+    </NewsComponent>
+  </NewsItem>
+</NewsML>

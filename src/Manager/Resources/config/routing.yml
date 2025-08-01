@@ -1,0 +1,61 @@
+manager_welcome:
+    path:  /manager
+    defaults: { _controller: ManagerBundle:Welcome:default }
+    options:
+        expose: true
+
+manager_ads:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/ads.yml'
+
+manager_client:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/client.yml'
+
+manager_instance:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/instance.yml'
+
+manager_commands:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/command.yml'
+
+manager_module:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/module.yml'
+
+manager_notification:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/notification.yml'
+
+manager_opcache:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/opcache.yml'
+
+manager_purchase:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/purchase.yml'
+
+manager_report:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/report.yml'
+
+manager_sitemap:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/sitemap.yml'
+
+manager_user:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/user.yml'
+
+manager_user_group:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/user_group.yml'
+
+manager_onmai:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/onmai.yml'
+
+manager_storage:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/storage.yml'

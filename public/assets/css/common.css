@@ -1,0 +1,124 @@
+/***********************************************************
+    Cookies overlay
+************************************************************/
+#cookies_overlay{background:rgba(0,0,0,0.85);position:fixed;left:0;top:0;color:#fff;width:100%;z-index:9999;font-size:12px;text-align:left;padding:10px 0}.cookies-overlay{margin:0 auto;max-width:960px}.cookies-overlay p{margin:0;padding-left:10px;float:left;width:90%}.cookies-overlay button{background:rgba(255,255,255,0.75);border:0;border-radius:10%;margin:0 10px;padding:3px 5px;color:#000;font-size:12px;font-weight:bold}.cookies-overlay button:hover{background:#fff}.cookies-overlay a{color:#fff;text-decoration:underline}
+/***********************************************************
+    Frontpage content disposition
+************************************************************/
+.image-top-wide .article-media,
+.image-middle-wide .article-media {width: 100%;}
+.image-top-right .article-media{max-width: 60%;float: right !important;margin-left: 10px;}
+.image-top-left .article-media{max-width: 60%;float: left !important;margin-right: 10px;}
+.image-middle-right .article-media{max-width: 60%;float: right !important;margin-left: 10px;}
+.image-middle-left .article-media{max-width: 60%;float: left !important;margin-right: 10px;}
+/***********************************************************
+  Default definitions for ads 
+************************************************************/
+.ads-footer, 
+.ads-header { 
+  width: 100%; 
+}
+.ads-break { 
+  clear:both; 
+  margin:10px 0; 
+}
+.ad-left { 
+  display:inline; 
+  float:left; 
+} 
+.ad-right { 
+  display:inline; 
+  float:left; 
+}
+
+.ads-skyscraper-container {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+.ads-skyscraper-container > div {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  width: 998px;
+}
+
+.ad-skyscraper-left {
+  left: -165px;
+  position: absolute;
+  text-align: right;
+}
+.ad-skyscraper-right {
+  position: absolute;
+  right: -165px;
+  text-align: left;
+}
+
+.ad-skyscraper-body {
+  text-align: center;
+  border: 0 none;
+}
+.ads.logo-sponsor { 
+  font-size: 10px;   
+  text-align: center;
+}
+.ad_in_column  { 
+  margin:0 auto; 
+}
+
+.ad_in_column > div { 
+  text-align:center; 
+  padding:5px; 
+}
+
+/***********************************************************
+  Widget rss
+***********************************************************/
+.widget-rss .external-feeds {border-bottom: 1px dotted #D0D0D0;padding: 0 5px;min-height: 300px;}
+.widget-rss .gfc-result {margin: 10px 0;padding-bottom:10px;border-bottom:1px dotted #D0D0D0;}
+.widget-rss .gfc-result .gf-title{height:auto;}
+.widget-rss .gfc-result .gf-title a{font-family: sans-serif;font-weight: bold;color: #111;line-height: 16px;}
+.widget-rss .gfc-result .gf-author{font-size: 10px;font-style: italic;font-weight: bold;}
+.widget-rss .gfc-result .gf-snippet{font-size: 12px;margin-top: 5px;}
+/***********************************************************
+  Polls in Frontpage
+***********************************************************/
+.poll form {display: inline-block;width: 100%;}
+.poll .submit-button {text-align: center;font-size: 11px;margin-right: 20px;float: right;}
+.poll ul {list-style: none;}
+.hidden {display:none;}
+/***********************************************************
+  Pager in blog format - copied fron bootstrap
+***********************************************************/
+.pager {margin: 20px 0;list-style: none;text-align: center;*zoom: 1;}
+.pager:before,
+.pager:after {display: table;content: "";line-height: 0;}
+.pager:after {clear: both;}
+.pager li {display: inline;}
+.pager li > a,
+.pager li > span {display: inline-block;padding: 5px 14px;background-color: #fff;border: 1px solid #ddd;-webkit-border-radius: 15px;-moz-border-radius: 15px;border-radius: 15px;}
+.pager li > a:hover,
+.pager li > a:focus {text-decoration: none;background-color: #f5f5f5;}
+.pager .next > a,
+.pager .next > span {float: right;}
+.pager .previous > a,
+.pager .previous > span {float: left;}
+.pager .disabled > a,
+.pager .disabled > a:hover,
+.pager .disabled > a:focus,
+.pager .disabled > span {color: #999999;background-color: #fff;cursor: default;}
+/***********************************************************
+  Opinion frontpage author style
+***********************************************************/
+article.onm-new.opinion a.opinion-author-name {text-transform: uppercase;}
+/***********************************************************
+  Comments wrapper definition
+***********************************************************/
+#comentarios.article-comments { margin: 10px 0;}
+/***********************************************************
+  Video container
+***********************************************************/
+.video-container {position: relative;padding-bottom: 56.25%;padding-top: 30px; height: 0; overflow: hidden;}
+.video-container iframe,
+.video-container object,
+.video-container embed {position: absolute;top: 0;left: 0;width: 100%;height: 100%;}

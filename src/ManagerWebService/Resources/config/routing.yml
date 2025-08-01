@@ -1,0 +1,73 @@
+managerwebservice_instance_create:
+    path:     '/instances/create'
+    defaults: { _controller: ManagerWebServiceBundle:WebService:create }
+    methods:  [ POST ]
+
+manager_ws_ads:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/ads.yml'
+    prefix:   /
+
+manager_ws_auth:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/auth.yml'
+    prefix: /
+
+manager_ws_client:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/client.yml'
+    prefix:   /
+
+manager_ws_command:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/command.yml'
+    prefix:   /
+
+manager_ws_instance:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/instance.yml'
+    prefix:   /
+
+manager_ws_module:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/module.yml'
+    prefix:   /
+
+manager_ws_notification:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/notification.yml'
+    prefix:   /
+
+manager_ws_opcache:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/opcache.yml'
+    prefix:   /
+
+manager_ws_purchase:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/purchase.yml'
+    prefix:   /
+
+manager_ws_report:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/report.yml'
+    prefix:   /
+
+manager_ws_sidebar:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/sidebar.yml'
+    prefix:   /
+
+manager_ws_sitemap:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/sitemap.yml'
+    prefix:   /
+
+manager_ws_template:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/template.yml'
+    prefix:   /
+
+manager_ws_user:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/user.yml'
+    prefix:   /
+
+manager_ws_user_group:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/user_group.yml'
+    prefix:   /
+
+manager_ws_onmai:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/onmai.yml'
+    prefix:   /
+
+manager_ws_storage:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/storage.yml'
+    prefix:   /
+

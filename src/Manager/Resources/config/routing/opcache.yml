@@ -1,0 +1,4 @@
+manager_opcache_status:
+    path: /framework/opcache
+    options:
+        expose: true

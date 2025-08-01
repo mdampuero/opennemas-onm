@@ -1,0 +1,449 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Frontend\Controller;
+
+use Api\Exception\GetListException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+
+class CategoryController extends FrontendController
+{
+    /**
+     * {@inheritdoc}
+     */
+    protected $caches = [
+        'homepage' => 'frontpages',
+        'list'     => 'frontpages'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $groups = [
+        'homepage' => 'category_frontpage',
+        'list'     => 'category_frontpage'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $positions = [
+        'category_frontpage' => [ 7, 9 ]
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $queries = [
+        'homepage' => [ 'category_slug', 'page' ],
+        'list'     => [ 'category_slug', 'page' ]
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $routes = [
+        'homepage' => 'category_homepage',
+        'list'     => 'category_frontpage'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $templates = [
+        'homepage' => 'blog/blog.tpl',
+        'list'     => 'blog/blog.tpl'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function listAction(Request $request)
+    {
+        $params = $request->query->all();
+
+        $mergeCategoryUrl = (bool) $this->get('core.helper.setting')->isMergeEnabled();
+        if ($mergeCategoryUrl) {
+            $expectedCategory = $this->getExpectedUri('homepage', $params);
+
+            return new RedirectResponse($expectedCategory, 301);
+        }
+
+        $action = $this->get('core.globals')->getAction();
+        $item   = $this->getItem($request);
+
+        // Fix category_slug from query basing on item
+        $params['category_slug'] = $item->name;
+
+        $expected = $this->getExpectedUri($action, $params);
+
+        if (strpos($request->getRequestUri(), $expected) === false) {
+            return new RedirectResponse($expected, 301);
+        }
+
+        $params = $this->getParameters($request, $item);
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrateList($params);
+        }
+
+        return $this->render($this->getTemplate($action), $params);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function homepageAction(Request $request)
+    {
+        $action = $this->get('core.globals')->getAction();
+        $item   = $this->getItem($request);
+        $params = $request->query->all();
+
+        // If the category is manual and not tag filtered, we redirect to the frontpage.
+        if (($item->layout ?? 0) == 1 && !key_exists('tag_slug', $params)) {
+            return $this->forward('Frontend\Controller\FrontpagesController::showAction', [], [
+                'category' => $item->name,
+                'noredirect' => true
+            ]);
+        }
+
+        // Fix category_slug from query basing on item
+        $params['category_slug'] = $item->name;
+
+        $params = $this->getParameters($request, $item);
+
+        $this->view->setConfig($this->getCacheConfiguration($action));
+
+        if (!$this->isCached($params)) {
+            $this->hydrateList($params);
+        }
+
+        return $this->render($this->getTemplate($action), $params);
+    }
+
+    /**
+     * Action for synchronized blog frontpage.
+     *
+     * @param Request The request object.
+     *
+     * @return Response The response object.
+     */
+    public function extCategoryAction(Request $request)
+    {
+        $slug  = $request->query->filter('category_slug', '', FILTER_SANITIZE_STRING);
+        $page  = (int) $request->query->get('page', 1);
+        $wsUrl = $this->get('core.helper.instance_sync')->getSyncUrl($slug);
+
+        if (empty($wsUrl)) {
+            throw new ResourceNotFoundException();
+        }
+
+        $this->view->setConfig('frontpages');
+
+        $cacheId = $this->view->getCacheId('category', 'sync', $slug, $page);
+
+        if ($this->view->getCaching() === 0
+            || !$this->view->isCached('blog/blog.tpl', $cacheId)
+        ) {
+            $cm = new \ContentManager();
+
+            $category = unserialize($cm->getUrlContent(
+                $wsUrl . '/ws/categories/object/' . $slug,
+                true
+            ));
+
+            if (empty($category)) {
+                throw new ResourceNotFoundException();
+            }
+
+            // Get all contents for this frontpage
+            list($pagination, $articles, $related) = unserialize(
+                mb_convert_encoding(
+                    $cm->getUrlContent(
+                        $wsUrl . '/ws/frontpages/allcontentblog/' . $slug . '/' . $page,
+                        true
+                    ),
+                    'ISO-8859-1',
+                    'UTF-8'
+                )
+            );
+
+            $this->view->assign([
+                'articles'   => $articles,
+                'related'    => $related,
+                'category'   => $category,
+                'pagination' => $pagination
+            ]);
+        }
+
+        $this->getAdvertisements();
+
+        return $this->render('blog/blog.tpl', [
+            'cache_id'    => $cacheId,
+            'x-cache-for' => '3h',
+            'x-cacheable' => true,
+            'x-tags'      => 'ext-category,' . $slug . ',' . $page
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * TODO: Remove when only an advertisement group without article_inner.
+     */
+    protected function getAdvertisements($category = null, $token = null)
+    {
+        $token      = $token;
+        $categoryId = empty($category) ? 0 : $category->id;
+        $action     = $this->get('core.globals')->getAction();
+        $group      = $this->getAdvertisementGroup($action);
+
+        $positions = array_merge(
+            $this->get('core.helper.advertisement')->getPositionsForGroup('all'),
+            $this->get('core.helper.advertisement')->getPositionsForGroup($group),
+            $this->get('core.helper.advertisement')->getPositionsForGroup('article_inner'),
+            $this->getAdvertisementPositions($group)
+        );
+
+        $advertisements = $this->get('advertisement_repository')
+            ->findByPositionsAndCategory($positions, $categoryId);
+
+        $this->get('frontend.renderer.advertisement')
+            ->setPositions($positions)
+            ->setAdvertisements($advertisements);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getCacheId($params)
+    {
+        return $this->view->getCacheId(
+            $this->get('core.globals')->getExtension(),
+            $this->get('core.globals')->getAction(),
+            $params['category']->id,
+            $params['page']
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getItem(Request $request)
+    {
+        $item = $this->getCategory($request->get('category_slug'));
+
+        if (!$item->enabled) {
+            throw new ResourceNotFoundException();
+        }
+
+        return $item;
+    }
+
+    /**
+     * Returns the list of items basing on a list of parameters.
+     *
+     * @param array $params The list of parameters.
+     *
+     * @return array The list of items.
+     */
+    protected function getItems($params)
+    {
+        $service     = $this->get('api.service.content');
+        $now         = gmdate('Y-m-d H:i:s');
+        $categoryIds = [$params['category']->id];
+
+        // Retrieve and accumulate the IDs of all child categories and their descendants
+        array_push($categoryIds, ...$this->get('api.service.category')->getChildIds($params['category']));
+
+        // Check for tag filter
+        $filter = '';
+        if ($params['tag_slug'] ?? null) {
+            $filter = $this->getSqlTagFilter($params['tag_slug']);
+        }
+
+        $response = $service->getListBySql(
+            sprintf(
+                'select * from contents ' .
+                'join content_category on contents.pk_content = content_category.content_id ' .
+                $filter .
+                ' where content_status = 1 and in_litter = 0 and category_id in (%s) ' .
+                    'and content_type_name in ("article","event","album","video") ' .
+                    'and (starttime is null or starttime < "%s") ' .
+                    'and (endtime is null or endtime > "%s") ' .
+                    'order by starttime desc limit %d offset %d',
+                implode(',', $categoryIds),
+                $now,
+                $now,
+                $params['epp'],
+                $params['epp'] * ($params['page'] - 1)
+            )
+        );
+
+        $count = sprintf(
+            'select count(*) as total from contents ' .
+            'join content_category on contents.pk_content = content_category.content_id ' .
+            $filter .
+            ' where content_status = 1 and in_litter = 0 and category_id in (%s) ' .
+                'and content_type_name in ("article","event","album","video") ' .
+                'and (starttime is null or starttime < "%s") ' .
+                'and (endtime is null or endtime > "%s") ',
+            implode(',', $categoryIds),
+            $now,
+            $now
+        );
+
+        $total = $this->get('orm.manager')->getConnection('instance')
+            ->executeQuery($count)->fetchAll();
+
+        return [
+            $response['items'],
+            $total[0]['total']
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getParameters($request, $item = null)
+    {
+        $action      = $this->get('core.globals')->getAction();
+        $extension   = $this->get('core.globals')->getExtension();
+        $categoryIds = [$item->id];
+
+        // Retrieve and accumulate the IDs of all child categories and their descendants
+        array_push($categoryIds, ...$this->get('api.service.category')->getChildIds($item));
+
+        $categoriesWithPrefix = array_map(function ($category) use ($extension) {
+            return $extension . '-' . $category;
+        }, $categoryIds);
+
+        $params = array_merge($request->query->all(), [
+            'category'   => $item,
+            'time'       => time(),
+            'o_category' => $item,
+            'x-tags'     => implode(',', $categoriesWithPrefix)
+        ]);
+
+        if (!array_key_exists('page', $params)) {
+            $params['page'] = 1;
+        }
+
+        $params['epp'] = $this->get('orm.manager')
+            ->getDataSet('Settings', 'instance')
+            ->get('items_in_blog', 10);
+
+        // Prevent invalid page when page is not numeric
+        $params['page'] = (int) $params['page'];
+
+        $this->getAdvertisements($item);
+
+        return array_merge($this->params, $params, [
+            'cache_id'    => $this->getCacheId($params),
+            'o_canonical' => $this->getCanonicalUrl($action, $params)
+        ]);
+    }
+
+    /**
+     * Returns an sql string for filtering list by tag
+     *
+     * @param string $filter The tag slug to filter.
+     *
+     * @return string The sql for filtering by tag.
+     *
+     * @throws ResourceNotFoundException If tag doesn't exist or if there was a problem.
+     */
+    protected function getSqlTagFilter($filter)
+    {
+        $oql = sprintf('slug = "%s"', $filter);
+
+        try {
+            $tag = $this->get('api.service.tag')->getList($oql)['items'];
+        } catch (GetListException $e) {
+            throw new ResourceNotFoundException();
+        }
+
+        return empty($tag)
+            ? new ResourceNotFoundException()
+            : 'join contents_tags on contents.pk_content = contents_tags.content_id ' .
+                'and contents_tags.tag_id = ' . $tag[0]->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function hydrateList(array &$params = []) : void
+    {
+        // Invalid page provided as parameter
+        if ($params['page'] <= 0
+            || $params['page'] > $this->getParameter('core.max_page')
+        ) {
+            throw new ResourceNotFoundException();
+        }
+
+        try {
+            list($contents, $total) = $this->getItems($params);
+        } catch (GetListException $e) {
+            throw new ResourceNotFoundException();
+        }
+
+        // No first page and no contents
+        if ($params['page'] > 1 && empty($contents)) {
+            throw new ResourceNotFoundException();
+        }
+
+        $expire = $this->get('core.helper.content')->getCacheExpireDate();
+
+        if (!empty($expire)) {
+            $this->setViewExpireDate($expire);
+
+            $params['x-cache-for'] = $expire;
+        }
+
+        $params['articles'] = $contents;
+
+        $xtags = [];
+        foreach ($contents as $content) {
+            if ($content->fk_author) {
+                $xtags[] = ',author-' . $content->fk_author;
+            }
+        }
+
+        // Generate pages route based on action
+        $action = $this->get('core.globals')->getAction();
+        $route  = [
+            'name'   => $this->routes[$action],
+            'params' => [
+                'category_slug' => $params['category']->name
+            ]
+        ];
+
+        // Keep filter on route when paginating
+        if ($params['tag_slug'] ?? null) {
+            $route['name']          = 'category_homepage_tag';
+            $route['params']['tag_slug'] = $params['tag_slug'];
+        }
+
+        $params['x-tags']    .= implode(',', array_unique($xtags));
+        $params['total']      = $total;
+        $params['pagination'] = $this->get('paginator')->get([
+            'directional' => true,
+            'boundary'    => false,
+            'epp'         => $params['epp'],
+            'maxLinks'    => 5,
+            'page'        => $params['page'],
+            'total'       => $total,
+            'route'       => $route
+        ]);
+    }
+}

@@ -1,0 +1,31 @@
+manager_onmai_config:
+    path: /onmai/config
+    options:
+        expose: true
+
+manager_onmai_instances:
+    path: /onmai/instances
+    options:
+        expose: true
+
+manager_onmai_prompt_list:
+    path: /onmai/prompt
+    options:
+        expose: true
+
+manager_onmai_prompt_show:
+    path: /onmai/prompt/{id}
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_onmai_prompt_create:
+    path: /onmai/prompt/create
+    options:
+        expose: true
+
+manager_onmai_prompt_config:
+    path: /onmai/prompt/config
+    options:
+        expose: true

@@ -1,0 +1,277 @@
+admin_content_set_available:
+    path:     /content/set-available/
+    defaults: { _controller: BackendBundle:Content:setAvailable }
+
+admin_content_toggle_suggested:
+    path:     /content/toggle-suggested/
+    defaults: { _controller: BackendBundle:Content:toggleSuggested }
+
+admin_content_quick_info:
+    path:     /content/quick-info/
+    defaults: { _controller: BackendBundle:Content:quickInfo }
+
+admin_content_send_to_trash:
+    path:     /content/send-to-trash/
+    defaults: { _controller: BackendBundle:Content:sendToTrash }
+
+admin_content_update_property:
+    path:     /content/update-property/
+    defaults: { _controller: BackendBundle:Content:updateProperty }
+
+admin_instance_sync:
+    path:     /instance-sync/
+    defaults: { _controller: BackendBundle:InstanceSync:list }
+
+admin_instance_sync_create:
+    path:     /instance-sync/create/
+    defaults: { _controller: BackendBundle:InstanceSync:create }
+
+admin_instance_sync_fetch_categories:
+    path:     /instance-sync/fetch-categories/
+    defaults: { _controller: BackendBundle:InstanceSync:fetchCategories }
+
+admin_instance_sync_show:
+    path:     /instance-sync/show/
+    defaults: { _controller: BackendBundle:InstanceSync:show }
+
+admin_instance_sync_delete:
+    path:     /instance-sync/delete/
+    defaults: { _controller: BackendBundle:InstanceSync:delete }
+
+# Ads manager routes
+admin_ads:
+    path:     /ads/
+    defaults: { _controller: BackendBundle:Advertisements:list }
+
+admin_ad_create:
+    path:     /ads/create/
+    defaults: { _controller: BackendBundle:Advertisements:create }
+
+admin_ad_show:
+    path:     /ads/{id}/show/
+    defaults: { _controller: BackendBundle:Advertisements:show }
+
+admin_advertisement_show:
+    path:     /ads/{id}/show/
+    defaults: { _controller: BackendBundle:Advertisements:show }
+    options:
+        expose: true
+
+admin_ad_update:
+    path:     /ad/{id}/update/
+    defaults: { _controller: BackendBundle:Advertisements:update }
+
+admin_ads_content_provider:
+    path:     /ads/content-provider/
+    defaults: { _controller: BackendBundle:Advertisements:contentProvider }
+
+admin_ads_config:
+    path:     /ads/config/
+    defaults: { _controller: BackendBundle:Advertisements:config }
+
+# Search controller routes
+admin_search:
+    path:     /search/
+    defaults: { _controller: BackendBundle:Search:default }
+
+admin_search_content_provider:
+    path:     /search/content-provider/
+    defaults: { _controller: BackendBundle:Search:contentProvider }
+
+# Trash controller routes
+admin_trash:
+    path:     /trash/
+    defaults: { _controller: BackendBundle:Trash:default }
+
+admin_system_settings_save:
+    path:     /system/settings/save/
+    defaults: { _controller: BackendBundle:SystemSettings:save }
+    methods:  [POST]
+
+# Getting started routes
+admin_getting_started:
+    path:     /getting-started/
+    defaults: { _controller: BackendBundle:GettingStarted:gettingStarted }
+
+admin_getting_started_accept_terms:
+    path:     /getting-started/accept-terms/
+    defaults: { _controller: BackendBundle:GettingStarted:acceptTerms }
+    options:
+        expose: true
+
+admin_getting_started_finish:
+    path:     /getting-started/finish/
+    defaults: { _controller: BackendBundle:GettingStarted:finishWizard }
+
+# Routing refactoring starts here
+backend_account:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/account.yml'
+
+backend_album:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/album.yml'
+
+backend_article:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/article.yml'
+
+backend_attachment:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/attachment.yml'
+
+backend_authentication:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/authentication.yml'
+
+backend_author:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/author.yml'
+
+backend_cache:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/cache.yml'
+
+backend_category:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/category.yml'
+
+backend_comment:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/comment.yml'
+
+backend_company:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/company.yml'
+
+backend_domain:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/domain.yml'
+
+backend_event:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/event.yml'
+
+backend_frontpage:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/frontpage.yml'
+
+backend_keyword:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/keyword.yml'
+
+backend_letter:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/letter.yml'
+
+backend_menu:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/menu.yml'
+
+backend_newsletter:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/newsletter.yml'
+
+backend_webpush_notifications:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/webpush_notifications.yml'
+
+backend_newsletter_template:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/newsletter_template.yml'
+
+backend_newsstand:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/newsstand.yml'
+
+backend_news_agency_resource:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/news_agency_resource.yml'
+
+backend_news_agency_server:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/news_agency_server.yml'
+
+backend_notification:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/notification.yml'
+
+backend_obituary:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/obituary.yml'
+
+backend_onmai:
+    prefix:    /
+    resource: '@BackendBundle/Resources/config/routing/onmai.yml'
+
+backend_opinion:
+    prefix:    /
+    resource: '@BackendBundle/Resources/config/routing/opinion.yml'
+
+backend_password:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/password.yml'
+
+backend_photo:
+    prefix: /
+    resource: '@BackendBundle/Resources/config/routing/photo.yml'
+
+backend_poll:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/poll.yml'
+
+backend_purchase:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/purchase.yml'
+
+backend_static_pages:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/static_page.yml'
+
+backend_store:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/store.yml'
+
+backend_subscriber:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/subscriber.yml'
+
+backend_subscription:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/subscription.yml'
+
+backend_tag:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/tag.yml'
+
+backend_theme:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/theme.yml'
+
+backend_video:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/video.yml'
+
+backend_url:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/url.yml'
+
+backend_user:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/user.yml'
+
+backend_user_group:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/user_group.yml'
+
+backend_widget:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/widget.yml'
+
+backend_settings:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/setting.yml'
+
+backend_pressclipping:
+    prefix:   /
+    resource: '@BackendBundle/Resources/config/routing/pressclipping.yml'

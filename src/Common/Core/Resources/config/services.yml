@@ -1,0 +1,189 @@
+imports:
+    - { resource: services/helper.yml }
+    - { resource: services/listener.yml }
+    - { resource: services/loader.yml }
+    - { resource: services/subscriber.yml }
+    - { resource: services/template.yml }
+parameters:
+    core.locale.default:
+        backend:
+            language:
+                available: [ 'en_US', 'es_ES', 'eu_ES', 'ca_ES', 'gl_ES', 'pt_PT', 'fr_FR']
+                selected: 'en_US'
+                slug: []
+            timezone: UTC
+        frontend:
+            language:
+                available: [ 'en_US', 'es_ES', 'eu_ES', 'ca_ES', 'gl_ES', 'pt_PT', 'fr_FR', 'zh_CN']
+                selected: 'en_US'
+                slug: { 'en_US': 'en', 'es_ES': 'es', 'eu_ES': 'eu', 'ca_ES': 'ca', 'gl_ES': 'gl', 'pt_PT': 'pt', 'fr_FR': 'fr', 'zh_CN': 'zh'}
+            timezone: UTC
+    core.locale.path:      '%kernel.root_dir%/Resources/locale'
+    core.maintenance.file: '%kernel.root_dir%/../.maintenance'
+services:
+    core.collector.brand:
+        class:     Common\Core\Component\Collector\BrandCollector
+        public:    false
+        arguments: [ '%kernel.root_dir%' ]
+        tags:
+            -
+                name:     data_collector
+                id:       'core.collector.brand'
+                template: '@Core/collector/brand.html.twig'
+                priority: 2000
+
+    core.factory.url_decorator:
+        class:     Common\Core\Component\Url\UrlDecoratorFactory
+        arguments: [ '@service_container', '@core.helper.url', '@core.instance' ]
+        public:    true
+
+    core.decorator.url:
+        class:     Common\Core\Component\Url\UrlDecorator
+        factory:   [ '@core.factory.url_decorator', 'getUrlDecorator' ]
+        public:    true
+
+    core.dispatcher:
+        class:     Common\Core\Component\EventDispatcher\EventDispatcher
+        arguments: [ '@event_dispatcher' ]
+        public:    true
+
+    core.factory.translator:
+        class:     Common\Core\Component\Translator\TranslatorFactory
+        public:    true
+
+    core.geo:
+        class:     Common\Core\Component\Geo\Geo
+        arguments: [ '@core.locale' ]
+        public:    true
+
+    core.globals:
+        class:     Common\Core\Component\Core\GlobalVariables
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.google.tag_manager:
+        class:     Common\Core\Component\Google\TagManager
+        arguments:   [ '@service_container' ]
+        public:    true
+
+    core.image.processor:
+        class:     Common\Core\Component\Image\Processor
+        public:    true
+
+    core.instance:
+        class:     Common\Model\Entity\Instance
+        factory:   [ '@core.globals', 'getInstance' ]
+        public:    true
+
+    core.instance.checker:
+        class:     Common\Core\Component\Instance\Checker
+        arguments: [ '@orm.manager', '@core.locale' ]
+        public:    true
+
+    core.instance.validator:
+        class:     Common\Core\Component\Instance\Validator
+        arguments: [ '@orm.manager' ]
+        public:    true
+
+    core.locale:
+        class:     Common\Core\Component\Locale\Locale
+        arguments: [ '%core.locale.default%', '%core.locale.path%' ]
+        public:    true
+
+    core.renderer.newsletter:
+        class:     Common\Core\Component\Renderer\NewsletterRenderer
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.recaptcha:
+        class:     Common\Core\Component\Security\Recaptcha\Recaptcha
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.redirector:
+        class:     Common\Core\Component\Routing\Redirector
+        arguments: [ '@service_container', '@api.service.url', '@cache.connection.instance' ]
+        public:    true
+
+    core.status.checker:
+        class:     Common\Core\Component\Status\Checker
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.security:
+        class:     Common\Core\Component\Security\Security
+        public:    true
+
+    core.security.authentication:
+        class:     Common\Core\Component\Security\Authentication\Authentication
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.security.authentication.success:
+        class:     Common\Core\Component\Security\Authentication\AuthenticationSuccessHandler
+        arguments: [ '@core.security.authentication', '@application.log', '@router', '@security.token_storage', '@core.decorator.url' ]
+        public:    true
+
+    core.security.authentication.failure:
+        class:     Common\Core\Component\Security\Authentication\AuthenticationFailureHandler
+        arguments: [ '@core.security.authentication', '@application.log', '@router', '@core.decorator.url' ]
+        public:    true
+
+    core.security.authentication.oauth.success:
+        class:     Common\Core\Component\Security\Authentication\OAuthAuthenticationSuccessHandler
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.security.encoder.password:
+        class:     Common\Core\Component\Security\Encoder\PasswordEncoder
+        public:    true
+
+    core.security.http.logout.failure:
+        class:     Common\Core\Component\Security\Http\Logout\LogoutSuccessHandler
+        arguments: [ '@router' ]
+        public:    true
+
+    core.security.user.provider:
+        class:     Common\Core\Component\Security\User\UserProvider
+        arguments: [ '@orm.manager', '@cache.manager', [ 'instance' ] ]
+        public:    true
+
+    core.security.user.oauth_provider:
+        class:     Common\Core\Component\Security\User\OAuthUserProvider
+        arguments: [ '@orm.manager', '@security.token_storage', [ 'instance' ] ]
+        public:    true
+
+    core.service.data_layer:
+        class:     Common\Core\Component\DataLayer\DataLayer
+        factory:   [ '@core.service.data_layer_factory', 'getDataLayer' ]
+        public:    true
+
+    core.service.data_layer_factory:
+        class:     Common\Core\Component\DataLayer\DataLayerFactory
+        arguments: [ '@service_container' ]
+        public:    true
+
+    core.theme:
+        class:     Common\Model\Entity\Extension
+        factory:   [ '@core.loader.theme', 'getTheme' ]
+        public:    true
+
+    core.user:
+        class:     Common\Model\Entity\User
+        factory:   [ '@core.globals', 'getUser' ]
+        public:    true
+
+    core.validator:
+        class:      Common\Core\Component\Validator\Validator
+        arguments: [ '@orm.manager', '@validator', '@core.helper.comment' ]
+        public:    true
+
+    core.variables.extractor:
+        class:     Common\Core\Component\Core\VariablesExtractor
+        arguments:   [ '@core.globals', '@service_container', '@core.template.frontend' ]
+        public:    true
+
+    core.varnish:
+        class:     Common\Core\Component\Varnish\Varnish
+        arguments: [ '@application.log', '%varnish%' ]
+        public:    true

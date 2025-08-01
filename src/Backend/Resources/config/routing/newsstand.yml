@@ -1,0 +1,21 @@
+backend_newsstand_create:
+    path:     /newsstands/new/
+    defaults: { _controller: BackendBundle:Newsstand:create }
+
+backend_newsstand_show:
+    path:     /newsstands/{id}/
+    defaults: { _controller: BackendBundle:Newsstand:show }
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+backend_newsstands_list:
+    path:     /newsstands/
+    defaults: { _controller: BackendBundle:Newsstand:list }
+    options:
+        expose: true
+
+backend_newsstands_config:
+    path:     /newsstands/config/
+    defaults: { _controller: BackendBundle:Newsstand:config }

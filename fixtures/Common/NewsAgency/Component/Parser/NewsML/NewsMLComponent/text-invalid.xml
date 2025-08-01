@@ -1,0 +1,5 @@
+<NewsComponent>
+  <ContentItem>
+    <MediaType FormalName="waldo"/>
+  </ContentItem>
+</NewsComponent>

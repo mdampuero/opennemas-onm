@@ -1,0 +1,3 @@
+SET names 'utf8';
+INSERT INTO `extension` VALUES (77,'es.openhost.module.acton','a:3:{s:2:\"en\";s:18:\"Act-On integration\";s:2:\"es\";s:23:\"IntegraciÃ³n con Act-On\";s:2:\"gl\";s:23:\"IntegraciÃ³n con Act-On\";}','module','OpenHost S.L.','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}',NULL,'2018-06-15 08:22:33','2018-06-15 08:22:33',0,'http://www.openhost.es');
+INSERT INTO `extension_meta` VALUES (77,'category','module'),(77,'notes','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}'),(77,'price','a:1:{i:0;a:2:{s:5:\"value\";i:0;s:4:\"type\";s:7:\"monthly\";}}'),(77,'terms','a:3:{s:2:\"en\";s:0:\"\";s:2:\"es\";s:0:\"\";s:2:\"gl\";s:0:\"\";}');

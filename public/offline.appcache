@@ -1,0 +1,12 @@
+CACHE MANIFEST
+# Version 4
+
+CACHE:
+/assets/plugins/bootstrap/css/bootstrap.min.css
+/offline.html
+
+NETWORK:
+*
+
+FALLBACK:
+/manager /offline.html

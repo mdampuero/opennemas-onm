@@ -1,0 +1,241 @@
+/* Others =================================================================== */
+.application-loading {
+  background: #e5e9ec;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+
+.error-container .error-main {
+  margin: 0;
+  padding: 10% 0;
+  position: relative;
+}
+
+.loading-message {
+  height: 150px;
+  left: 50%;
+  margin: 0 auto;
+  margin-top: -75px;
+  margin-left: -250px;
+  position: absolute;
+  text-align: center;
+  top: 30%;
+  width: 500px;
+}
+
+.step-number {
+  background: @background-color;
+  border-radius: 20px;
+  padding: 5px 9px;
+  color: @default-color;
+  font-weight: bold;
+  font-family: Arial, Verdana;
+  font-size: .9em;
+  display: inline-block;
+  line-height: 1em;
+}
+
+@media (max-width: 767px) {
+  .visible-xs-inline {
+    display: inline-block !important;
+  }
+}
+.small-text {
+  font-size: 0.95em;
+}
+.label-info, .badge-info {
+  background-color: @info-color !important;
+}
+.label-private, .badge-private {
+  background-color: @private-color !important;
+  color: #fff;
+}
+.label-success, .badge-success {
+  background-color: @success-color !important;
+}
+.label-warning, .badge-warning {
+  background-color: @warning-color !important;
+  color: #5e5e5e;
+}
+.tagsinput .label-info, .tagsinput .badge-info {
+  font-size: 13px;
+}
+
+.showcase-info {
+  display: flex;
+  justify-content: space-between;
+
+  &.showcase-info-score {
+    align-items: flex-start;
+    border: 1px solid #eaeaea;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-height: 130px;
+    padding: 0.5rem;
+
+    > * {
+      flex-basis: 100%;
+    }
+
+    .onm-score {
+      align-items: center;
+      border-radius: 50%;
+      display: inline-flex;
+      font-size: 2rem;
+      justify-content: center;
+    }
+    .form-label {
+      .small {
+        width: auto!important;
+      }
+    }
+  }
+
+  &.showcase-info-top {
+    align-content: flex-start;
+  }
+  &.showcase-info-height-auto {
+    height: 100%;
+    min-height: unset;
+  }
+
+}
+.showcase-moment {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+:disabled {
+  cursor: not-allowed;
+}
+option.unavailable {
+  color: #888;
+}
+
+div#match-color {
+  cursor: pointer;
+}
+.match_viewer {
+  height: 28px;
+  border: 1px solid #B5B8C8;
+  border-right: 0 !important;
+  width: 30px !important;
+  display: inline-block;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  float: left;
+  margin-left: -2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+}
+
+.listing-no-contents {
+  padding: 15px;
+}
+
+/* Messages displayed from server =========================================== */
+.messages {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin-bottom: -1px;
+  padding-left: 210px;
+  z-index: 750;
+
+  & > * {
+    margin-bottom: 0;
+    padding: 15px;
+  }
+
+  .alert {
+    border: 0 !important;
+    border-radius: 0;
+
+    .close {
+      -webkit-appearance: none;
+      background: none;
+      background: transparent;
+      border: 0;
+      color: #fff;
+      cursor: pointer;
+      display: block;
+      font-size: 20px;
+      font-weight: bold;
+      height: auto;
+      line-height: 20px;
+      margin: -12px 0 0 0;
+      opacity: 1;
+      padding: 8px 10px 7px 7px;
+      width: auto;
+    }
+  }
+
+  .alert-error, .alert-danger {
+    background-color: @error-color;
+    color: #fff;
+  };
+
+  .alert-notice {
+    color: #fff;
+    background-color: @warning-color;
+  }
+}
+
+body.collapsed .messages {
+  padding-left: 50px;
+}
+
+@media (max-width: 767px) {
+  body.collapsed .messages {
+    padding-left: 0 !important;
+  }
+}
+
+.timetable :not(:last-child){
+  margin-bottom: 10px;
+}
+
+.timetable-day {
+  display: flex;
+  flex-flow: nowrap row;
+  justify-content: space-between;
+}
+
+.timetable-day .closed-label {
+  color: gray;
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+.timetable-schedule {
+  margin: 0 auto;
+  padding: 0 20px;
+  font-size: 0.8rem;
+  width: 100%;
+}
+
+.timetable-schedule > div {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: wrap row;
+}
+
+.timetable-time-wrapper {
+  width: 40%;
+}
+
+.timetable-time-wrapper [type="time"] {
+  width: 100%;
+}
+
+.timetable-schedule > div * {
+  display: block;
+}
+
+.timetable-schedule .btn {
+  align-self: center;
+  margin-top: 20px;
+  padding: 10px;
+}

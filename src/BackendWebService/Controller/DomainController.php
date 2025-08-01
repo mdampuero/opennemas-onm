@@ -1,0 +1,296 @@
+<?php
+
+namespace BackendWebService\Controller;
+
+use Common\Core\Controller\Controller;
+use Pdp\Parser;
+use Pdp\PublicSuffixListManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+
+class DomainController extends Controller
+{
+    /**
+     * Checks if the domain is not in use.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function checkAvailableAction(Request $request)
+    {
+        $domain = $request->query->get('domain');
+        $create = $request->query->get('create');
+
+        if (empty($domain) || !$this->isTLDValid($domain, $create)) {
+            return new JsonResponse(
+                sprintf(_('The domain %s is not valid'), $domain),
+                400
+            );
+        }
+
+        if (!$this->isDomainAvailable($domain)) {
+            return new JsonResponse(
+                sprintf(_('The domain %s is not available'), $domain),
+                400
+            );
+        }
+
+        return new JsonResponse(_('Your domain is configured correctly'));
+    }
+
+    /**
+     * Checks if the domain is configured correcty basing on information from
+     * dig command.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function checkValidAction(Request $request)
+    {
+        $domain = $request->query->get('domain');
+        $create = $request->query->get('create');
+
+        if (in_array($domain, $this->get('core.instance')->domains)) {
+            return new JsonResponse(
+                sprintf(_('The domain %s is already configured'), $domain),
+                400
+            );
+        }
+
+        if (empty($domain) || !$this->isTLDValid($domain, $create)) {
+            return new JsonResponse(
+                sprintf(_('The domain %s is not valid'), $domain),
+                400
+            );
+        }
+
+        return new JsonResponse(_('Your domain is valid'));
+    }
+
+    /**
+     * Deletes an instance domain.
+     *
+     * @param string $domain The domain to delete.
+     *
+     * @return JsonResponse The response object
+     */
+    public function delete($domain)
+    {
+        $instance = $this->get('core.instance');
+        $index    = array_search($instance->domains, $domain);
+
+        if ($index !== false) {
+            unset($instance->domains[$index]);
+            $this->get('orm.manager')->persist($instance);
+
+            return new JsonResponse(
+                _('Domain deleted successfully')
+            );
+        }
+
+        return new JsonResponse(
+            sprintf(_('Unable to delete the domain %s'), $domain),
+            400
+        );
+    }
+
+    /**
+     * Returns the list of domains for the current instance.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function listAction()
+    {
+        $instance = $this->get('core.instance');
+
+        $base    = mb_strtolower($instance->internal_name)
+            . $this->getParameter('opennemas.base_domain');
+        $primary = $instance->getMainDomain();
+
+        $domains = [];
+        foreach ($instance->domains as $value) {
+            $domains[] = [
+                'free'   => mb_strtolower($value) === $base,
+                'name'   => $value,
+                'main'   => $value == $primary,
+                'target' => $this->getTarget($value),
+                'valid'  => $this->isDomainValid($value)
+            ];
+        }
+
+        return new JsonResponse([
+            'primary' => $primary,
+            'base'    => $base,
+            'domains' => $domains,
+        ]);
+    }
+
+    /**
+     * Adds a new domain to the current instance.
+     *
+     * @param Request $request The request object.
+     *
+     * @return null|JsonResponse The response object.
+     */
+    public function saveAction(Request $request)
+    {
+        $purchase = $request->request->get('purchase');
+        $nonce    = $request->request->get('nonce');
+
+        try {
+            $ph = $this->get('core.helper.checkout');
+
+            $ph->getPurchase($purchase);
+
+            if (empty($nonce)) {
+                return null;
+            }
+
+            $ph->pay($nonce);
+
+            $purchase = $ph->getPurchase();
+
+            $ph->sendEmailToClient();
+            $ph->sendEmailToSales();
+            $ph->enable();
+
+            $this->get('application.log')->info(
+                'The user ' . $this->getUser()->id . ' has purchased '
+                . json_encode($purchase->details)
+            );
+        } catch (\Exception $e) {
+            $this->get('error.log')->error($e->getMessage());
+
+            return new JsonResponse([
+                'message' => $e->getMessage(),
+                'type' => 'error'
+            ], 400);
+        }
+
+        return new JsonResponse(_('Purchase completed!'));
+    }
+
+    /**
+     * Checks if a domain is available.
+     *
+     * @param string $domain   The domain to check.
+     * @param string $expected The expected domain.
+     *
+     * @return boolean True if the domain is available to purchase. Otherwise,
+     *                 returns false.
+     */
+    private function isDomainAvailable($domain)
+    {
+        return !checkdnsrr($domain, 'ANY');
+    }
+
+    /**
+     * Checks if the domain is valid.
+     *
+     * @param string $domain The domain to check.
+     *
+     * @return bool True if the domain is valid. False otherwise.
+     */
+    private function isDomainValid($domain)
+    {
+        $target   = $this->getTarget($domain);
+        $expected = [
+            str_replace('www.', '', $domain) . '.opennemas.net',
+            str_replace('www.', '', $domain) . '.cdn.cloudflare.net'
+        ];
+
+        if (in_array($target, $expected)) {
+            return true;
+        }
+
+        $ranges = @file_get_contents('https://www.cloudflare.com/ips-v4');
+
+        if (empty($ranges)) {
+            return false;
+        }
+
+        $ranges = array_filter(explode("\n", $ranges));
+
+        foreach ($ranges as $range) {
+            if ($this->isInRange($target, $range)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if IP is in range.
+     *
+     * @param string $ip The IP to check.
+     *
+     * @return bool True if the IP is in range. False otherwise.
+     */
+    private function isInRange($ip, $range)
+    {
+        list($subnet, $bits) = explode('/', $range);
+
+        if ($bits === null) {
+            $bits = 32;
+        }
+
+        $ip      = ip2long($ip);
+        $subnet  = ip2long($subnet);
+        $mask    = -1 << (32 - $bits);
+        $subnet &= $mask;
+
+        return ($ip & $mask) == $subnet;
+    }
+
+    /**
+     * Checks if the given domain is valid.
+     *
+     * @param string $domain The domain to check.
+     * @param string $create Whether it is a creation or a redirection.
+     *
+     * @return boolean True if the TLD is valid. Otherwise, returns false.
+     */
+    private function isTLDValid($domain, $create = false)
+    {
+        $pslManager = new PublicSuffixListManager();
+        $parser     = new Parser($pslManager->getList());
+
+        if ($create) {
+            $tlds = [
+                '.com', '.net', '.co.uk', '.es', '.cat', '.ch', '.cz', '.de',
+                '.dk', '.at', '.be', '.eu', '.fi', '.fr', '.in', '.info', '.it',
+                '.li', '.lt', '.mobi', '.name', '.nl', '.nu', '.org', '.pl',
+                '.pro', '.pt', '.re', '.se', '.tel', '.tf', '.us', '.wf', '.yt',
+            ];
+
+            $tld = substr($domain, strpos($domain, '.', 4));
+
+            if (!in_array($tld, $tlds)) {
+                return false;
+            }
+        }
+
+        return $parser->isSuffixValid($domain);
+    }
+
+    /**
+     * Returns the target for the given domain.
+     *
+     * @param string $domain  The domain to check.
+     *
+     * @return string The domain or IP where the given domain is pointing to.
+     */
+    private function getTarget($domain)
+    {
+        $output = dns_get_record($domain, DNS_CNAME);
+
+        if (empty($output)) {
+            return gethostbyname($domain);
+        }
+
+        return $output[0]['target'];
+    }
+}

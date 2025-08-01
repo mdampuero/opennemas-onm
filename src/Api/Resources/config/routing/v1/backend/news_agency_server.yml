@@ -1,0 +1,95 @@
+api_v1_backend_news_agency_server_check_item:
+    path:     /news-agency/servers/check
+    defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyServer:checkItem }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_news_agency_server_create_item:
+    path:     /news-agency/servers/new
+    defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyServer:createItem }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_news_agency_server_delete_item:
+    path:     /news-agency/servers/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyServer:deleteItem }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_news_agency_server_delete_list:
+    path:     /news-agency/servers
+    defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyServer:deleteList }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+api_v1_backend_news_agency_server_empty_item:
+    path:     /news-agency/servers/{id}/empty
+    defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyServer:emptyItem }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_news_agency_server_get_item:
+    path:     /news-agency/servers/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyServer:getItem }
+    methods:  [ GET ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_news_agency_server_get_list:
+    path:     /news-agency/servers
+    defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyServer:getList, format: '.json' }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+api_v1_backend_news_agency_server_patch_item:
+    path:     /news-agency/servers/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyServer:patchItem }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_news_agency_server_patch_list:
+    path:     /news-agency/servers
+    defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyServer:patchList }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+api_v1_backend_news_agency_server_save_item:
+    path:     /news-agency/servers
+    defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyServer:saveItem }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+api_v1_backend_news_agency_server_synchronize_item:
+    path:     /news-agency/servers/{id}/synchronize
+    defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyServer:synchronizeItem }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+
+
+api_v1_backend_news_agency_server_update_item:
+    path:     /news-agency/servers/{id}
+    defaults: { _controller: ApiBundle:V1/Backend/NewsAgencyServer:updateItem }
+    methods:  [ PUT ]
+    options:
+        expose: true
+    requirements:
+        id: \d+

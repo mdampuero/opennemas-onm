@@ -1,0 +1,159 @@
+api_v1_backend_album:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/album.yml'
+    prefix:   /backend
+
+api_v1_backend_article:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/article.yml'
+    prefix:   /backend
+
+api_v1_backend_attachment:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/attachment.yml'
+    prefix:   /backend
+
+api_v1_backend_author:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/author.yml'
+    prefix:   /backend
+
+api_v1_backend_event:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/event.yml'
+    prefix:   /backend
+
+api_v1_backend_cache:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/cache.yml'
+    prefix:   /backend
+
+api_v1_backend_category:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/category.yml'
+    prefix:   /backend
+
+api_v1_backend_comment:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/comment.yml'
+    prefix:   /backend
+
+api_v1_backend_company:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/company.yml'
+    prefix:   /backend
+
+api_v1_backend_content:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/content.yml'
+    prefix:   /backend
+
+api_v1_backend_keyword:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/keyword.yml'
+    prefix:   /backend
+
+api_v1_backend_letter:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/letter.yml'
+    prefix:   /backend
+
+api_v1_backend_menu:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/menu.yml'
+    prefix:   /backend
+
+api_v1_backend_newsletter:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/newsletter.yml'
+    prefix:   /backend
+
+api_v1_backend_newsletter_templates:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/newsletter_template.yml'
+    prefix:   /backend
+
+api_v1_backend_webpush_notifications:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/webpush_notifications.yml'
+    prefix:   /backend
+
+api_v1_backend_news_agency_resource:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/news_agency_resource.yml'
+    prefix:   /backend
+
+api_v1_backend_news_agency_server:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/news_agency_server.yml'
+    prefix:   /backend
+
+api_v1_backend_newsstand:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/newsstand.yml'
+    prefix:   /backend
+
+api_v1_backend_obituary:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/obituary.yml'
+    prefix:   /backend
+
+api_v1_backend_onmai:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/onmai.yml'
+    prefix:   /backend
+
+api_v1_backend_opinion:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/opinion.yml'
+    prefix:   /backend
+
+api_v1_backend_photo:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/photo.yml'
+    prefix:   /backend
+
+api_v1_backend_poll:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/poll.yml'
+    prefix:   /backend
+
+api_v1_backend_setting:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/setting.yml'
+    prefix:   /backend
+
+api_v1_backend_sitemap:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/sitemap.yml'
+    prefix:   /backend
+
+api_v1_backend_subscriber:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/subscriber.yml'
+    prefix:   /backend
+
+api_v1_backend_subscription:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/subscription.yml'
+    prefix:   /backend
+
+api_v1_backend_static_page:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/static_page.yml'
+    prefix:   /backend
+
+api_v1_backend_tag:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/tag.yml'
+    prefix:   /backend
+
+api_v1_backend_tool:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/tool.yml'
+    prefix:   /backend
+
+api_v1_backend_trash:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/trash.yml'
+    prefix:   /backend
+
+api_v1_backend_url:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/url.yml'
+    prefix:   /backend
+
+api_v1_backend_user:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/user.yml'
+    prefix:   /backend
+
+api_v1_backend_user_group:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/user_group.yml'
+    prefix:   /backend
+
+api_v1_backend_video:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/video.yml'
+    prefix:   /backend
+
+api_v1_backend_widget:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/widget.yml'
+    prefix:   /backend
+
+api_v1_frontend_advertisement:
+    resource: '@ApiBundle/Resources/config/routing/v1/frontend/advertisement.yml'
+    prefix:   /
+
+api_v1_backend_pressclipping:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/pressclipping.yml'
+    prefix:   /backend
+
+api_v1_backend_storage:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/storage.yml'
+    prefix:   /backend

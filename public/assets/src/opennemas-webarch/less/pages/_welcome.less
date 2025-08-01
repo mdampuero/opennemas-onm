@@ -1,0 +1,139 @@
+.welcome-page {
+  .welcome-message {
+    .tiles-body {
+      padding: 10px;
+      margin-bottom: 10px
+    }
+
+    .carousel {
+      border: none;
+    }
+
+    .carousel-control {
+      color: #fff;
+      background: @info-color;
+    }
+  }
+  .brand-link {
+    font-size: 2em;
+    font-weight: bold;
+    padding-top: 50px;
+    margin-bottom: 40px;
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.15);
+  }
+
+  .add-contents {
+
+    .actions > .button {
+      vertical-align: top;
+      list-style: none;
+      margin-bottom: 10px;
+      display: inline-block;
+      width: 49%;
+    }
+
+    .add-contents .actions a {
+      color: #333;
+      text-decoration: none;
+      margin: 0;
+    }
+    .actions a .fa {
+      width: 25px;
+      text-align: center
+    }
+    .actions a:hover > .fa {
+      text-decoration: none;
+    }
+  }
+
+  .merchant {
+    overflow: hidden;
+
+    .thumbnail {
+      text-align: center;
+      color: #333;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    .thumbnail:hover {
+      text-decoration: none;
+    }
+    .thumbnail .fa {
+      line-height: 50px;
+      font-size: 3em;
+    }
+    .thumbnail .title {
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+    .thumbnail .description {
+      font-size: .9em;
+      max-width: 90%;
+      margin: 0 auto;
+      color: #999;
+    }
+    .contact {
+      padding: 10px 15px;
+      text-align: center;
+      margin: 10px auto;
+      display: block;
+    }
+    .background-icon {
+      bottom: -10px;
+      color: rgba(0, 0, 0, .05);
+      font-size: 10em;
+      position: absolute;
+      right: 10px;
+      -webkit-transform: rotate(-25deg); /* Safari and Chrome */
+      -ms-transform: rotate(-25deg); /* IE 9 */
+      transform: rotate(-25deg);
+    }
+  }
+
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px; height: 0; overflow: hidden;
+  }
+
+  .video-container iframe,
+  .video-container object,
+  .video-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .video-container video {
+    position: absolute;
+    left: 0;
+    width: 100%;
+  }
+}
+@media (min-width: 993px) and (max-width: 1200px) {
+  .welcome-page .merchant .contact {
+    width: 50%;
+  }
+}
+@media (max-width: 992px) {
+  .add-contents {
+    .add-contents .actions a {
+      font-size: 14px;
+    }
+  }
+}
+@media (max-width: 767px) {
+  .welcome-page .well h4 {
+    font-size: 1.2em;
+    margin-right: 0;
+  }
+  .welcome-page .well .buttons {
+    position: relative;
+    float: none;
+    right: auto;
+  }
+  .welcome-page .well .buttons .dismiss {
+    display: inline-block;
+  }
+}

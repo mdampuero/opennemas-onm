@@ -1,0 +1,172 @@
+.grid.simple .grid-body,
+.grid.simple .grid-title,
+.grid.solid .grid-body,
+.grid.solid .grid-title,
+.grid .grid-collapse-title,
+.grid .grid-collapse-body {
+  padding: 15px;
+}
+
+.grid .grid-collapse-title {
+  border-top: 1px solid #e5e5e5;
+}
+
+.grid .grid-collapse-title,
+.grid .grid-collapse-body {
+  background: #fff;
+}
+
+.grid-collapse-title .fa {
+  text-align: center;
+  width: 15px;
+}
+
+.grid-title a {
+  color: #505458;
+
+  &.shaded {
+    background-color: #f8f8f8;
+  }
+}
+
+.grid-title a:hover {
+  color: #505458;
+  text-decoration: underline;
+}
+
+.grid .grid-collapse-body {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding-bottom: 0;
+  padding-top: 0;
+  transition: all .25s;
+  visibility: hidden;
+
+  &.expanded {
+    max-height: 10000px;
+    opacity: 1;
+    overflow: visible;
+    padding-bottom: 15px;
+    position: relative;
+    visibility: visible;
+  }
+}
+
+.grid-collapse-title .fa-chevron-right {
+  transition: all .25s;
+}
+
+.grid {
+  position: relative;
+}
+
+.grid.simple .grid-body {
+  border-color: #e5e5e5;
+}
+
+.grid-body.blue {
+  background-color: #0090d9 !important;
+}
+
+.grid.vertical .grid-body {
+  padding-left: 12px;
+  border-left: none;
+}
+
+.grid.simple .grid-title h4 {
+  overflow: initial;
+  margin: 0;
+}
+
+.grid-body-wrapper {
+  max-height: 800px;
+  opacity: 1;
+  overflow: hidden;
+  transition: all .5s;
+  width: 100%;
+
+  &.ng-hide {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all .5s;
+  }
+}
+
+.grid-hover:hover {
+  box-shadow: 0 0 3px rgba(0, 0, 0, .125);
+}
+
+.grid-overlay {
+  background: rgba(255, 255, 255, .5);
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+}
+
+.grid-body .tab-content {
+  margin: 0;
+  overflow: visible;
+}
+
+.grid-body .tab-content .tab-pane {
+  padding: 0;
+}
+
+.grid-body .tab-content .tab-pane .tab-wrapper {
+  padding: 15px;
+}
+
+.grid-body .nav-tabs {
+  background-color: #e5e9ec;
+}
+
+.column-filters {
+  background: #fff;
+  border: 1px solid @border-color;
+  border-bottom: 0;
+  margin: 0;
+  max-height: 250px;
+  overflow: hidden;
+  padding: 0 15px 15px;
+  transition: all .5s;
+
+  h5 {
+    margin: 15px 0;
+    transition: all .5s;
+  }
+
+  &.collapsed {
+    border-bottom: 0 solid @border-color;
+    border-top: 0 solid @border-color;
+    max-height: 0;
+    padding: 0 15px;
+
+    h5 {
+      margin: 0;
+    }
+  }
+}
+
+.column-filters-toggle {
+  background: #fff;
+  border: 1px solid @border-color;
+  border-bottom: 0;
+  cursor: pointer;
+  height: 25px;
+}
+
+.column-filters-checkbox {
+  float: left;
+  margin-bottom: 10px;
+  margin-top: 0 !important;
+  width: 200px;
+}
+
+.column-filters-ellipsis {
+  display: block;
+  margin: 3px auto;
+  width: 100px;
+}

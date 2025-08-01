@@ -1,0 +1,78 @@
+<div class="page-navbar actions-navbar">
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <ul class="nav quick-section">
+        <li class="quicklinks">
+          <h4>
+            <i class="fa fa-database"></i>
+            {t}Zend Opcache status{/t}
+          </h4>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="content ng-hide" ng-show="serverData">
+  <div class="opcache-stats">
+    <div class="alert alert-block alert-error fade in" ng-if="serverData.not_supported_message">
+      <button type="button" class="close" data-dismiss="alert"></button>
+      <h4 class="alert-heading"><i class="icon-warning-sign"></i> Error!</h4>
+      <p>[% serverData.not_supported_message %]</p>
+    </div>
+    <uib-tabset class="tab-form" ng-if="!serverData.not_supported_message">
+      <uib-tab heading="{t}Status{/t}">
+        <h4>{t}Opcache summary{/t}</h4>
+        <div class="row">
+          <div class="col-xs-4 text-center">
+            <canvas class="chart chart-pie" chart-data="memory.data" chart-labels="memory.labels" chart-options="memory.options"></canvas>
+            <h5>Memory usage</h5>
+          </div>
+          <div class="col-xs-4 text-center">
+            <canvas class="chart chart-pie" chart-data="keys.data" chart-labels="keys.labels" chart-options="keys.options"></canvas>
+            <h5>Keys usage</h5>
+          </div>
+          <div class="col-xs-4 text-center">
+            <canvas class="chart chart-pie" chart-data="hits.data" chart-labels="hits.labels" chart-options="hits.options"></canvas>
+            <h5>Hit rate</h5>
+          </div>
+        </div>
+        <h4>{t}Detailed statistics{/t}</h4>
+        <table class="table table-condensed table-stripped">
+          <tr ng-repeat="(key, value) in serverData.status_key_values">
+            <td>[% key %]</td>
+            <td>[% value %]</td>
+          </tr>
+        </table>
+      </uib-tab>
+      <uib-tab heading="{t}Configuration{/t}">
+        <table class="table table-condensed table-stripped">
+          <tr ng-repeat="(key, value) in serverData.directive_key_values">
+            <td>[% key %]</td>
+            <td>[% value %]</td>
+          </tr>
+        </table>
+      </uib-tab>
+      <uib-tab heading="{t}Scripts{/t}">
+        <table class="table table-condensed table-stripped">
+          <thead>
+            <tr>
+              <th width="70%">{t}Path{/t}</th>
+              <th width="20%">{t}Memory{/t}</th>
+              <th width="10%">{t}Hits{/t}</th>
+            </tr>
+          </thead>
+          <tr ng-repeat-start="dir in  serverData.files_key_values">
+            <td>[% dir.name %] ([% dir.count %])</td>
+            <td>[% dir.total_memory_consumption %]</td>
+            <td></td>
+          </tr>
+          <tr ng-repeat-end="(fileName, fileInfo) in dir.files">
+            <td>[% fileInfo.full_path %]</td>
+            <td>[% fileInfo.memory_consumption_human_readable %]</td>
+            <td>[% fileInfo.hits %]</td>
+          </tr>
+        </table>
+      </uib-tab>
+    </uib-tabset>
+  </div>
+</div>

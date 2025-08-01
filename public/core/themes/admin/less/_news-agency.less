@@ -1,0 +1,38 @@
+@import '../../../../assets/src/opennemas-webarch/less/helpers/_variables.less';
+
+.modal-news-agency-preview {
+  .modal-dialog {
+    @media (min-width: @phone-width) {
+      width: 700px;
+    }
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  .content-related {
+    overflow: auto;
+    white-space: nowrap;
+
+    .img-thumbnail {
+      display: inline-block;
+      height: 60px;
+      margin-left: 15px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+.related {
+  .img-thumbnail-wrapper {
+    .badge {
+      bottom: 10px;
+      position: absolute;
+      right: 10px;
+    }
+  }
+}

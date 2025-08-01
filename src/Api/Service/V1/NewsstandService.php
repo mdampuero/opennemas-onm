@@ -1,0 +1,123 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Api\Service\V1;
+
+use Api\Exception\CreateItemException;
+use Api\Exception\FileAlreadyExistsException;
+use Api\Exception\UpdateItemException;
+
+class NewsstandService extends ContentService
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function createItem($data, $file = null, $thumbnail = null)
+    {
+        if (empty($file)) {
+            throw new CreateItemException('No file provided');
+        }
+
+        try {
+            $data['changed'] = new \DateTime();
+            $data['created'] = new \DateTime();
+            $data            = $this->assignUser(
+                $data,
+                [ 'fk_user_last_editor', 'fk_publisher' ]
+            );
+
+            $data = $this->em->getConverter($this->entity)
+                ->objectify($this->parseData($data));
+
+            $item = new $this->class($data);
+
+            $nh       = $this->container->get('core.helper.newsstand');
+            $filePath = $nh->generatePath($file, $item->created);
+
+            if ($nh->exists($filePath)) {
+                throw new FileAlreadyExistsException();
+            }
+
+            $item->path = $nh->getRelativePath($filePath);
+
+            $photo = $this->container->get('api.service.photo')->createItem([], $thumbnail);
+
+            $item->related_contents = $this->container->get('core.helper.featured_media')
+                ->getRelated($photo, [ 'featured_frontpage', 'featured_inner' ]);
+
+            $nh->move($file, $filePath);
+
+            $this->validate($item);
+            $this->em->persist($item, $this->getOrigin());
+
+            $id = $this->em->getMetadata($item)->getId($item);
+
+            $this->dispatcher->dispatch($this->getEventName('createItem'), [
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
+            ]);
+
+            return $item;
+        } catch (\Exception $e) {
+            throw new CreateItemException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateItem($id, $data, $file = null, $thumbnail = null)
+    {
+        if (empty($file) && empty($data['path'])) {
+            throw new UpdateItemException('No file provided');
+        }
+
+        try {
+            $data = $this->assignUser($data, [ 'fk_user_last_editor' ]);
+            $data = $this->em->getConverter($this->entity)
+                ->objectify($data);
+
+            $item = $this->getItem($id);
+            $item->setData($data);
+
+            if (!empty($file)) {
+                $nh       = $this->container->get('core.helper.newsstand');
+                $filePath = $nh->generatePath($file, $item->created);
+
+                if ($nh->exists($filePath)) {
+                    throw new FileAlreadyExistsException();
+                }
+
+                $data['path'] = $nh->getRelativePath($filePath);
+
+                $nh->remove($item->path);
+                $nh->move($file, $filePath);
+
+                $item->path = $nh->getRelativePath($filePath);
+
+                $photo = $this->container->get('api.service.photo')->createItem([], $thumbnail);
+
+                $item->related_contents = $this->container->get('core.helper.featured_media')
+                    ->getRelated($photo, [ 'featured_frontpage', 'featured_inner' ]);
+            }
+
+            $this->validate($item);
+            $this->em->persist($item, $this->getOrigin());
+
+            $this->dispatcher->dispatch($this->getEventName('updateItem'), [
+                'action' => __METHOD__,
+                'id'     => $id,
+                'item'   => $item
+            ]);
+        } catch (\Exception $e) {
+            throw new UpdateItemException($e->getMessage());
+        }
+    }
+}

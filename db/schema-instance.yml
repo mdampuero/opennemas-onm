@@ -1,0 +1,1458 @@
+advertisements:
+    columns:
+        pk_advertisement:
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
+        fk_content_categories:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        path:
+            type: string
+            options: { length: 150, default: null, notnull: false }
+        url:
+            type: string
+            options: { length: 255, default: null, notnull: false }
+        type_medida:
+            type: string
+            options: { length: 50, default: null, notnull: false }
+        num_clic:
+            type: integer
+            options: { unsigned: true, default: 0, notnull: false }
+        num_clic_count:
+            type: integer
+            options: { unsigned: true, default: 0, notnull: false }
+        num_view:
+            type: integer
+            options: { unsigned: true, default: 0, notnull: false }
+        with_script:
+            type: smallint
+            options: { unsigned: true, default: 0, notnull: false }
+        script:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        overlap:
+            type: boolean
+            options: { default: false, comment: 'Hide Flash events' }
+        timeout:
+            type: integer
+            options: { unsigned: true, default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_advertisement]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: fk_content_categories
+            columns: [fk_content_categories]
+            primary: false
+            unique: false
+            flags: { type: fulltext }
+    foreign_keys:
+        -
+            name: advertisement_id_contents_id
+            source_field: [ pk_advertisement ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+advertisements_positions:
+    columns:
+        advertisement_id:
+            type: bigint
+            options: { length: 20, unsigned: true }
+        position_id:
+            type: integer
+            options: { unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [advertisement_id, position_id]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: advertisements_positions_advertisement_id
+            columns: [ advertisement_id ]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: advertisements_positions_content_id
+            source_field: [ advertisement_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+comments:
+    columns:
+        id:
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
+        content_id:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
+        author:
+            type: string
+            options: { length: 200, default: null, notnull: false }
+        author_email:
+            type: string
+            options: { length: 200, default: '', notnull: false }
+        author_url:
+            type: string
+            options: { length: 200 , default: '', notnull: false}
+        author_ip:
+            type: string
+            options: { length: 100, default: '', notnull: false }
+        date:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP, notnull: false }
+        body:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        status:
+            type: string
+            options: { length: 20, default: 'pending' }
+        agent:
+            type: string
+            options: { length: 255, default: '' }
+        type:
+            type: string
+            options: { length: 20, default: '' }
+        parent_id:
+            type: bigint
+            options: { unsigned: true, default: null, notnull: false }
+        user_id:
+            type: bigint
+            options: { length: 20, unsigned: true, default: 0 }
+        content_type_referenced:
+            type: string
+            options: { length: 20, default: null }
+    index:
+        -
+            name: PRIMARY
+            columns: [id]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: comment_content_id
+            columns: [content_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: comment_parent_id
+            columns: [parent_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: comment_status
+            columns: [status]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: comments_id_contents_id
+            source_field: [ content_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+commentsmeta:
+    columns:
+        fk_content:
+            type: bigint
+            options: { length: 20, unsigned: true }
+        meta_name:
+            type: string
+            options: { length: 255 }
+        meta_value:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [fk_content, meta_name]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: fk_content
+            columns: [fk_content]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: commentsmeta_id_comments_id
+            source_field: [ fk_content ]
+            target_table: comments
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+category:
+    columns:
+        id:
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
+        title:
+            type: text
+            options: { default: null, length: 65532 }
+        name:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        description:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        visible:
+            type: boolean
+            options: { unsigned: true, default: 0, notnull: false }
+        enabled:
+            type: boolean
+            options: { unsigned: true, default: 0, notnull: false }
+        rss:
+            type: boolean
+            options: { unsigned: true, default: 0, notnull: false }
+        parent_id:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
+        params:
+            type: text
+            options: {length: 65532, default: null, notnull: false}
+        logo_id:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
+        color:
+            type: string
+            options: { length: 10, default: null, notnull: false }
+        cover_id:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [id]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: logo_id
+            columns: [logo_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: cover_id
+            columns: [cover_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: parent_id
+            columns: [parent_id]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: logo_id_pk_content
+            source_field: [ logo_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
+        -
+            name: cover_id_pk_content
+            source_field: [ cover_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
+        -
+            name: category_id_category_parent_id
+            source_field: [ parent_id ]
+            target_table: category
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
+content_positions:
+    columns:
+        pk_fk_content:
+            type: bigint
+            options: { length: 20, unsigned: true }
+        fk_category:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null }
+        position:
+            type: integer
+            options: { unsigned: true, default: 0 }
+        placeholder:
+            type: string
+            options: { length: 45, default: '' }
+        params:
+            type: text
+            options: { length: 65632, default: null, notnull: false }
+        content_type:
+            type: string
+            options: { length: 45, default: null, notnull: false }
+        frontpage_version_id:
+            type: bigint
+            options: { length: 20, unsigned: true, notnull: true, default: '0' }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_fk_content, fk_category, position, placeholder, frontpage_version_id]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: content_position_pk_content
+            columns: [pk_fk_content]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: content_position_fk_category
+            columns: [fk_category]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: frontpage_version_id
+            columns: [frontpage_version_id]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: contentposition_id_contents_id
+            source_field: [ pk_fk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: frontpage_version_id_id
+            source_field: [ frontpage_version_id ]
+            target_table: frontpage_versions
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+contentmeta:
+    columns:
+        fk_content:
+            type: bigint
+            options: { length: 20, unsigned: true }
+        meta_name:
+            type: string
+            options: { length: 255 }
+        meta_value:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [fk_content, meta_name]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: fk_content
+            columns: [fk_content]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: contentmeta_id_contents_id
+            source_field: [ fk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+contents:
+    columns:
+        pk_content:
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
+        fk_content_type:
+            type: integer
+            options: { unsigned: true, default: null }
+        content_type_name:
+            type: string
+            options: { length: 20, default: null }
+        title:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        description:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        body:
+            type: text
+            options: { length: 4294967295, default: null, notnull: false }
+        starttime:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP, notnull: false }
+        endtime:
+            type: datetime
+            options: { default: null, notnull: false }
+        created:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP, notnull: false }
+        changed:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP, notnull: false, onUpdate: CURRENT_TIMESTAMP}
+        content_status:
+            type: integer
+            options: { unsigned: true, default: 0, notnull: false }
+        fk_author:
+            type: integer
+            options: { length: 10, unsigned: true, default: null, notnull: false }
+        fk_publisher:
+            type: integer
+            options: { length: 10, unsigned: true, default: null, notnull: false }
+        fk_user_last_editor:
+            type: integer
+            options: { length: 10, unsigned: true, default: null, notnull: false }
+        position:
+            type: integer
+            options: { default: 100, notnull: false, unsigned: true }
+        frontpage:
+            type: boolean
+            options: { default: 0, notnull: false }
+        in_litter:
+            type: boolean
+            options: { default: 0, notnull: false }
+        in_home:
+            type: smallint
+            options: { unsigned: true, default: 0, notnull: false }
+        slug:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        available:
+            type: smallint
+            options: { unsigned: true, default: 1, notnull: false }
+        with_comment:
+            type: smallint
+            options: { unsigned: true, default: 1, notnull: false }
+        params:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        favorite:
+            type: boolean
+            options: { default: null, notnull: false }
+        urn_source:
+            type: string
+            options: { length: 255, default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_content]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: fk_content_type
+            columns: [fk_content_type]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: in_litter
+            columns: [in_litter]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: content_status
+            columns: [content_status]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: in_home
+            columns: [in_home]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: frontpage
+            columns: [frontpage]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: fk_author
+            columns: [fk_author]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: fk_publisher
+            columns: [fk_publisher]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: fk_user_last_editor
+            columns: [fk_user_last_editor]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: available
+            columns: [available]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: starttime
+            columns: [starttime, endtime]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: endtime
+            columns: [endtime]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: created
+            columns: [created]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: urn_source
+            columns: [urn_source]
+            unique: true
+        -
+            name: content_type_name
+            columns: [content_type_name]
+            unique: false
+        -
+            name: content_type_name_changed
+            columns: [content_type_name, changed]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: content_type_name_in_litter_content_status
+            columns: [content_type_name, in_litter, content_status]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: fk_author_users_id
+            source_field: [ fk_author ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
+        -
+            name: fk_publisher_users_id
+            source_field: [ fk_publisher ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
+        -
+            name: fk_user_last_editor_users_id
+            source_field: [ fk_user_last_editor ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: SET NULL }
+
+content_category:
+    columns:
+        content_id:
+            type: bigint
+            options: { length: 20, unsigned: true }
+        category_id:
+            type: bigint
+            options: { unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [category_id, content_id]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: content_category_content_id
+            columns: [content_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: content_category_category_id
+            columns: [category_id]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: content_category_content_content_id
+            source_field: [ content_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: content_category_category_category_id
+            source_field: [ category_id ]
+            target_table: category
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+contents_tags:
+    columns:
+        content_id:
+            type: bigint
+            options: { length: 20, unsigned: true }
+        tag_id:
+            type: integer
+            options: { unsigned: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [content_id, tag_id]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: contents_tags_tag_id
+            columns: [ tag_id ]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: contents_tags_content_id
+            columns: [ content_id ]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: contents_tags_content_id
+            source_field: [ content_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: contents_tags_tag_id
+            source_field: [ tag_id ]
+            target_table: tags
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+content_views:
+    columns:
+        pk_fk_content:
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
+        views:
+            type: integer
+            options: { unsigned: true, default: 0 }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_fk_content]
+            primary: true
+            unique: true
+            flags: {  }
+    foreign_keys:
+        -
+            name: contentview_contentid_contents_id
+            source_field: [ pk_fk_content ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+frontpages:
+    columns:
+        id:
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
+        name:
+            type: string
+            options: { length: 100, default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [ id ]
+            primary: true
+            unique: true
+            flags: {  }
+frontpage_versions:
+    columns:
+        id:
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
+        name:
+            type: string
+            options: { length: 100, default: null, notnull: false }
+        type:
+            type: integer
+            options: { length: 10, default: null, notnull: true }
+        frontpage_id:
+            type: bigint
+            options: { length: 20, unsigned: true, notnull: false }
+        created:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP }
+        publish_date:
+            type: datetime
+            options: { notnull: false }
+        params:
+            type: string
+            options: { length: 255, default: null, notnull: false }
+        category_id:
+            type: bigint
+            options: { length: 20, unsigned: true, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [ id ]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: frontpage_id
+            columns: [frontpage_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: category_id
+            columns: [category_id]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: frontpage_id_id
+            source_field: [ frontpage_id ]
+            target_table: frontpages
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+menu_items:
+    columns:
+        pk_item:
+            type: integer
+            options: { unsigned: true, default: null }
+        pk_menu:
+            type: integer
+            options: { unsigned: true, default: null }
+        title:
+            type: string
+            options: { length: 255, default: null }
+        link_name:
+            type: string
+            options: { length: 255, default: null }
+        type:
+            type: string
+            options: { length: 255, default: null, comment: '''category'',''external'',''static'', internal''' }
+        position:
+            type: integer
+            options: { default: null }
+        pk_father:
+            type: integer
+            options: { default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_item, pk_menu]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: pk_item
+            columns: [pk_item]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: pk_menu
+            columns: [pk_menu]
+    foreign_keys:
+        -
+            name: menu_items_id_menu_id
+            source_field: [ pk_menu ]
+            target_table: menus
+            target_field: [ pk_menu ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+menus:
+    columns:
+        pk_menu:
+            type: integer
+            options: { unsigned: true, autoincrement: true }
+        name:
+            type: string
+            options: { length: 255, default: null }
+        position:
+            type: string
+            options: { length: 50, default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_menu]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: name
+            columns: [name]
+            primary: false
+            unique: true
+            flags: {  }
+        -
+            name: position
+            columns: [position]
+            primary: false
+            unique: false
+            flags: {  }
+menumetas:
+    columns:
+        fk_menu:
+            type: integer
+            options: { unsigned: true }
+        meta_key:
+            type: string
+            options: { length: 255, notnull: true }
+        meta_value:
+            type: text
+            options: { default: null, notnull: false }
+    foreign_keys:
+        -
+            source_field: [ fk_menu ]
+            target_table: menus
+            target_field: [ pk_menu ]
+newsletters:
+    columns:
+        id:
+            type: bigint
+            options: { lenght: 20, default: null, unsigned: true, autoincrement: true }
+        type:
+            type: integer
+            options: { length: 10, default: 0, notnull: true }
+        status:
+            type: integer
+            options: { length: 10, default: 0, notnull: true }
+        name:
+            type: string
+            options: { default: null, length: 512, notnull: false }
+        title:
+            type: string
+            options: { default: null, length: 512 }
+        contents:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        recipients:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        schedule:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        created:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP, notnull: true }
+        updated:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP, notnull: false }
+        sent:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP, notnull: false }
+        sent_items:
+            type: integer
+            options: { default: 0, notnull: true }
+        html:
+            type: text
+            options: { length: 4294967295, default: null, notnull: false }
+        template_id:
+            type: bigint
+            options: { lenght: 20, default: null, unsigned: true, notnull: false  }
+        params:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+    index:
+        -
+            name:    PRIMARY
+            columns: [ id ]
+            primary: true
+            unique:  true
+            flags:   {}
+        -
+            name:    newsletter_type
+            columns: [ type ]
+            primary: false
+            unique:  false
+            flags:   {}
+        -
+            name:    newsletter_template_id
+            columns: [ template_id ]
+            primary: false
+            unique:  false
+            flags:   {}
+orders:
+    columns:
+        id:
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
+        user_id:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null }
+        content_id:
+            type: bigint
+            options: { length: 20, unsigned: true, default: null }
+        created:
+            type: datetime
+            options: { default: CURRENT_TIMESTAMP }
+        payment_id:
+            type: string
+            options: { length: 50, default: null }
+        payment_status:
+            type: string
+            options: { length: 150, default: null }
+        payment_amount:
+            type: decimal
+            options: { scale: 2, default: null }
+        payment_method:
+            type: string
+            options: { length: 200, default: null }
+        type:
+            type: string
+            options: { length: 50, default: null }
+        params:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [id]
+            primary: true
+            unique: true
+            flags: {  }
+keywords:
+    columns:
+        id:
+            type: integer
+            options: { unsigned: true, autoincrement: true }
+        keyword:
+            type: string
+            options: { length: 60, default: null }
+        value:
+            type: string
+            options: { length: 240, default: null, notnull: false }
+        type:
+            type: string
+            options: { length: 20, default: 'intsearch' }
+    index:
+        -
+            name: PRIMARY
+            columns: [id]
+            primary: true
+            unique: true
+            flags: {  }
+ratings:
+    columns:
+        pk_rating:
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
+        total_votes:
+            type: smallint
+            options: { unsigned: true, default: 0 }
+        total_value:
+            type: integer
+            options: { unsigned: true, default: 0 }
+        ips_count_rating:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_rating]
+            primary: true
+            unique: true
+            flags: {  }
+content_content:
+    columns:
+        source_id:
+            type:    bigint
+            options: { length: 20, unsigned: true }
+        target_id:
+            type:    bigint
+            options: { length: 20, unsigned: true }
+        type:
+            type:    string
+            options: { length: 50, default: null }
+        content_type_name:
+            type:    string
+            options: { length: 20, default: null }
+        caption:
+            type:    text
+            options: { default: null, length: 65532, notnull: false }
+        position:
+            type:    integer
+            options: { default: 0, unsigned: true }
+    index:
+        -
+            name:    PRIMARY
+            columns: [ source_id, target_id, type ]
+            primary: true
+            unique:  false
+            flags:   {}
+        -
+            name:    source_id
+            columns: [ source_id ]
+            primary: false
+            unique:  false
+            flags:   {}
+        -
+            name:    target_id
+            columns: [ target_id ]
+            primary: false
+            unique:  false
+            flags:   {}
+    foreign_keys:
+        -
+            name:         related_contents_source_id_pk_content
+            source_field: [ source_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name:         related_contents_target_id_pk_content
+            source_field: [ target_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+content_updates:
+    columns:
+        content_id:
+            type:    bigint
+            options: { length: 20, unsigned: true }
+        title:
+            type:    text
+            options: { length: 65532, default: null, notnull: false }
+        body:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+        content_type_name:
+            type:    string
+            options: { length: 20, default: null }
+        caption:
+            type:    text
+            options: { default: null, length: 65532, notnull: false }
+        image_id:
+            type:    bigint
+            options: { length: 20, unsigned: true }
+        created:
+            type:    datetime
+            options: { default: CURRENT_TIMESTAMP }
+        modified:
+            type:    datetime
+            options: { default: CURRENT_TIMESTAMP }
+    index:
+        -
+            name:    PRIMARY
+            columns: [ content_id, created ]
+            primary: true
+            unique:  false
+            flags:   {}
+        -
+            name:    fk_image_id
+            columns: [ image_id ]
+            primary: false
+            unique:  false
+            flags:   {}
+    foreign_keys:
+        -
+            name:         fk_content_update
+            source_field: [ content_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE }
+        -
+            name:         fk_image_id
+            source_field: [ image_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onDelete: SET NULL }
+settings:
+    columns:
+        name:
+            type: string
+            options: { length: 128 }
+        value:
+            type: text
+            options: { length: 4294967295, default: null }
+    index:
+        -
+            name: PRIMARY
+            columns: [name]
+            primary: true
+            unique: true
+            flags: {  }
+static_pages:
+    columns:
+        pk_static_page:
+            type: bigint
+            options: { length: 20, unsigned: true, autoincrement: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_static_page]
+            primary: true
+            unique: true
+            flags: {  }
+    foreign_keys:
+        -
+            name: static_pages_id_contents_id
+            source_field: [ pk_static_page ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+tags:
+    columns:
+        id:
+            type: integer
+            options: { unsigned: true, autoincrement: true }
+        name:
+            type: string
+            options: { default: null, length: 60, notnull: true }
+        slug:
+            type: string
+            options: { default: null, length: 60, notnull: true }
+        description:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        locale:
+            type: string
+            options: { default: null, length: 5, notnull: false  }
+    index:
+        -
+            name:    PRIMARY
+            columns: [ id ]
+            primary: true
+            unique:  true
+            flags:   {  }
+        -
+            name:    slug
+            columns: [ slug ]
+            primary: false
+            unique:  false
+            flags:   {  }
+        -
+            name:    locale
+            columns: [ locale ]
+            primary: false
+            unique:  false
+            flags:   {  }
+url:
+    columns:
+        id:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        type:
+            type:    integer
+            options: { default: 0, unsigned: true, notnull: true }
+        source:
+            type:    string
+            options: { default: null, length: 1024, notnull: true }
+        target:
+            type:    string
+            options: { default: null, length: 1024, notnull: false }
+        content_type:
+            type:    string
+            options: { default: null, length: 30, notnull: false }
+        redirection:
+            type:    boolean
+            options: { default: 0, notnull: true }
+        enabled:
+            type:    boolean
+            options: { default: 0, notnull: true }
+    index:
+        -
+            name:    PRIMARY
+            columns: [ id ]
+            primary: true
+            unique:  true
+            flags:   {  }
+        -
+            name:    url_content_type
+            columns: [ content_type ]
+            primary: false
+            unique:  false
+            flags:   {}
+        -
+            name:    url_source
+            columns: [ source ]
+            primary: false
+            unique:  false
+            flags:   {}
+        -
+            name:    url_type
+            columns: [ type ]
+            primary: false
+            unique:  false
+            flags:   {}
+user_groups:
+    columns:
+        pk_user_group:
+            type:    integer
+            options: { unsigned: true, autoincrement: true }
+        name:
+            type:    string
+            options: { length: 50, default: null, notnull: false }
+        type:
+            type:    integer
+            options: { default: 0, notnull: true }
+        private:
+            type:    boolean
+            options: { default: 0, notnull: true }
+        request:
+            type:    boolean
+            options: { default: 0, notnull: true }
+        enabled:
+            type:    boolean
+            options: { default: 0, notnull: true }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_user_group]
+            primary: true
+            unique: true
+            flags: {  }
+user_groups_privileges:
+    columns:
+        pk_fk_user_group:
+            type: integer
+            options: { unsigned: true, default: null }
+        pk_fk_privilege:
+            type: integer
+            options: { unsigned: true, default: null }
+    index:
+        -
+            name: PRIMARY
+            columns: [pk_fk_user_group, pk_fk_privilege]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: pk_fk_user_group
+            columns: [pk_fk_user_group]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name: usergroups_privileges_groupid_usergroups_id
+            target_table: user_groups
+            source_field: [ pk_fk_user_group ]
+            target_field: [ pk_user_group ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+usermeta:
+    columns:
+        user_id:
+            type:    integer
+            options: { default: null, notnull: true, unsigned: true  }
+        meta_key:
+            type: string
+            options: { length: 255 }
+        meta_value:
+            type: text
+            options: { length: 65532, default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [user_id, meta_key]
+            primary: true
+            unique: true
+            flags: {  }
+        -
+            name: user_id
+            columns: [user_id]
+            primary: false
+            unique: false
+            flags: {  }
+        -
+            name: meta_key
+            columns: [meta_key]
+            primary: false
+            unique: false
+            flags: {  }
+    foreign_keys:
+        -
+            name:         usermeta_user_id_users_id
+            source_field: [ user_id ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+users:
+    columns:
+        id:
+            type:    integer
+            options: { autoincrement: true, default: null, length: 20, unsigned: true, }
+        username:
+            type:    string
+            options: { default: null, length: 100, notnull: false }
+        password:
+            type:    string
+            options: { default: null, length: 50, notnull: false }
+        url:
+            type:    string
+            options: { default: null, length: 255, notnull: false }
+        bio:
+            type:    text
+            options: { default: null, length: 65532, notnull: false }
+        avatar_img_id:
+            type:    bigint
+            options: { default: null, length: 20, notnull: false, unsigned: true }
+        email:
+            type:    string
+            options: { default: null, length: 255, notnull: false }
+        name:
+            type:    string
+            options: { default: null, length: 100, notnull: false }
+        slug:
+            type:    string
+            options: { default: null, length: 100, notnull: false }
+        type:
+            type:    integer
+            options: { comment: '0 backend - 1 frontend', default: 1, notnull: true, unsigned: true }
+        token:
+            type:    string
+            options: { default: null, length: 32, notnull: false }
+        activated:
+            type:    integer
+            options: { default: 0, notnull: true, unsigned: true }
+    index:
+        -
+            name:    PRIMARY
+            columns: [id]
+            primary: true
+            unique:  true
+            flags:   {  }
+        -
+            name:    avatar_img_id
+            columns: [ avatar_img_id ]
+            primary: false
+            unique:  false
+            flags:   {  }
+        -
+            name:    user_username
+            columns: [username]
+            primary: false
+            unique:  false
+            flags:   {  }
+        -
+            name:    user_email
+            columns: [email]
+            primary: false
+            unique:  false
+            flags:   {  }
+        -
+            name:    user_slug
+            columns: [ slug ]
+            primary: false
+            unique:  false
+            flags:   {  }
+        -
+            name:    user_type
+            columns: [type]
+            primary: false
+            unique:  false
+            flags:   {  }
+    foreign_keys:
+        -
+            name: avatar_img_id
+            source_field: [ avatar_img_id ]
+            target_table: contents
+            target_field: [ pk_content ]
+            restrictions: { onUpdate: CASCADE, onDelete: 'SET NULL' }
+user_user_group:
+    columns:
+        user_id:
+            type: integer
+            options: { default: null, unsigned: true }
+        user_group_id:
+            type: integer
+            options: { default: null, unsigned: true }
+        status:
+            type: integer
+            options: { default: 1, notnull: true, comment: '0 rejected - 1 accepted - 2 requested' }
+        expires:
+            type: datetime
+            options: { default: null, notnull: false }
+    index:
+        -
+            name: PRIMARY
+            columns: [ user_id, user_group_id ]
+            primary: true
+            unique: true
+            flags: {  }
+    foreign_keys:
+        -
+            name: user_id_id
+            source_field: [ user_id ]
+            target_table: users
+            target_field: [ id ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+        -
+            name: user_group_id_pk_user_group
+            source_field: [ user_group_id ]
+            target_table: user_groups
+            target_field: [ pk_user_group ]
+            restrictions: { onUpdate: CASCADE, onDelete: CASCADE }
+prompts:
+    columns:
+        id:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        mode:
+            type: text
+            options: { default: null, length: 32, notnull: true }
+        name:
+            type: text
+            options: { default: null, length: 65532, notnull: true }
+        tone:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        role:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        field:
+            type: text
+            options: { default: null, length: 32, notnull: false }
+        prompt:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+    index:
+        -
+            name:    PRIMARY
+            columns: [ id ]
+            primary: true
+            unique:  true
+            flags:   {}
+ai_actions:
+    columns:
+        id:
+            type: integer
+            options: { default: null, unsigned: true, autoincrement: true }
+        messages:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        response:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        tokens:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        params:
+            type: text
+            options: { default: null, length: 65532, notnull: false }
+        date:
+            type: datetime
+            options: { default: null, notnull: false }
+        service:
+            type: text
+            options: { default: null, length: 64, notnull: false }
+    index:
+        -
+            name:    PRIMARY
+            columns: [ id ]
+            primary: true
+            unique:  true
+            flags:   {}

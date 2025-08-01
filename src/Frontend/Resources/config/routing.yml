@@ -1,0 +1,131 @@
+frontend_robots:
+    path: /robots.txt
+    defaults: { _controller: FrontendBundle:Robots:index }
+    options:
+        subdirectory: true
+
+utilities_sharrre:
+    path: /utilities/sharrre
+    defaults: { _controller: FrontendBundle:Utilities:sharrre }
+    options:
+        subdirectory: true
+
+frontend_playground:
+    path: /playground/{action}
+    defaults: { _controller: FrontendBundle:Playground:default }
+    options:
+        subdirectory: true
+
+frontend_advertisement:
+    resource: '@FrontendBundle/Resources/config/routing/advertisement.yml'
+
+frontend_album:
+    resource: '@FrontendBundle/Resources/config/routing/album.yml'
+
+frontend_archive:
+    resource: '@FrontendBundle/Resources/config/routing/archive.yml'
+
+frontend_article:
+    resource: '@FrontendBundle/Resources/config/routing/article.yml'
+
+frontend_asset:
+    resource: '@FrontendBundle/Resources/config/routing/asset.yml'
+
+frontend_authentication:
+    resource: '@FrontendBundle/Resources/config/routing/authentication.yml'
+
+frontend_author:
+    resource: '@FrontendBundle/Resources/config/routing/author.yml'
+
+frontend_blog:
+    resource: '@FrontendBundle/Resources/config/routing/blog.yml'
+
+frontend_comment:
+    resource: '@FrontendBundle/Resources/config/routing/comment.yml'
+
+frontend_company:
+    resource: '@FrontendBundle/Resources/config/routing/company.yml'
+
+frontend_content:
+    resource: '@FrontendBundle/Resources/config/routing/content.yml'
+
+frontend_date:
+    resource: '@FrontendBundle/Resources/config/routing/date.yml'
+
+frontend_event:
+    resource: '@FrontendBundle/Resources/config/routing/event.yml'
+
+frontend_form:
+    resource: '@FrontendBundle/Resources/config/routing/form.yml'
+
+frontend_framework:
+    resource: '@FrontendBundle/Resources/config/routing/framework.yml'
+
+frontend_frontpage:
+    resource: '@FrontendBundle/Resources/config/routing/frontpage.yml'
+
+frontend_hbbtv:
+    resource: '@FrontendBundle/Resources/config/routing/hbbtv.yml'
+
+frontend_letter:
+    resource: '@FrontendBundle/Resources/config/routing/letter.yml'
+
+frontend_newsletter:
+    resource: '@FrontendBundle/Resources/config/routing/newsletter.yml'
+
+frontend_newsstand:
+    resource: '@FrontendBundle/Resources/config/routing/newsstand.yml'
+
+frontend_opinion:
+    resource: '@FrontendBundle/Resources/config/routing/opinion.yml'
+
+frontend_obituary:
+    resource: '@FrontendBundle/Resources/config/routing/obituary.yml'
+
+frontend_password:
+    resource: '@FrontendBundle/Resources/config/routing/password.yml'
+
+frontend_payment:
+    resource: '@FrontendBundle/Resources/config/routing/payment.yml'
+
+frontend_poll:
+    resource: '@FrontendBundle/Resources/config/routing/poll.yml'
+
+frontend_redirect:
+    resource: '@FrontendBundle/Resources/config/routing/redirect.yml'
+
+frontend_rss:
+    resource: '@FrontendBundle/Resources/config/routing/rss.yml'
+
+frontend_json:
+    resource: '@FrontendBundle/Resources/config/routing/json.yml'
+
+frontend_search:
+    resource: '@FrontendBundle/Resources/config/routing/search.yml'
+
+frontend_sitemap:
+    resource: '@FrontendBundle/Resources/config/routing/sitemap.yml'
+
+frontend_static_page:
+    resource: '@FrontendBundle/Resources/config/routing/static_page.yml'
+
+frontend_suggested:
+    resource: '@FrontendBundle/Resources/config/routing/suggested.yml'
+
+frontend_tag:
+    resource: '@FrontendBundle/Resources/config/routing/tag.yml'
+
+frontend_user:
+    resource: '@FrontendBundle/Resources/config/routing/user.yml'
+
+frontend_video:
+    resource: '@FrontendBundle/Resources/config/routing/video.yml'
+
+frontend_widget:
+    resource: '@FrontendBundle/Resources/config/routing/widget.yml'
+
+frontend_webpush_notifications:
+    resource: '@FrontendBundle/Resources/config/routing/webpush_notifications.yml'
+
+frontend_category:
+    resource: '@FrontendBundle/Resources/config/routing/category.yml'

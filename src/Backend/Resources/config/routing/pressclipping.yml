@@ -1,0 +1,12 @@
+
+backend_pressclipping_dashboard:
+    path:     /pressclipping/
+    defaults: { _controller: BackendBundle:PressClipping:dashboard }
+    options:
+        expose: true
+
+backend_pressclipping_settings:
+    path:     /pressclipping/settings/
+    defaults: { _controller: BackendBundle:PressClipping:settings }
+    options:
+        expose: true

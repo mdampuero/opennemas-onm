@@ -1,0 +1,127 @@
+tags-input .tags {
+  background-color: #fff;
+  border: 1px solid @input-border-color;
+  border-radius: 2px;
+  box-shadow: none;
+  cursor: text;
+  overflow: hidden;
+  padding: 3px;
+  word-wrap: break-word;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+tags-input.ng-invalid .tags {
+  box-shadow: none;
+  border-color: @danger-color;
+}
+
+tags-input.ng-pristine .tags {
+  box-shadow: none;
+  border-color: @input-border-color;
+}
+
+tags-input .tags.focused {
+  box-shadow: none;
+  outline: none;
+}
+
+tags-input .tags {
+  transition: background 0.2s linear 0s;
+}
+
+tags-input .tags.focused {
+  background-color: #f4f5f7;
+  border-color: @input-border-color;
+}
+
+tags-input .tags .tag-item {
+  background: 0;
+  background-color: @info-color;
+  border: 0;
+  border-radius: .25em;
+  color: #fff;
+  display: inline-block;
+  font-weight: 600;
+  margin-right: 4px;
+  text-shadow: none;
+  vertical-align: middle;
+
+  &.tag-item-new {
+    background-color: @success-color;
+  }
+  &.tag-item-private {
+    background-color: @private-color;
+  }
+}
+
+tags-input .tags .tag-item.badge-warning {
+  color: #5e5e5e;
+}
+
+.tags-input-counter {
+  font-weight: bold;
+  font-size: 75%;
+  margin: 5px 5px;
+}
+
+.tag-item-mark {
+  font-size: 80%;
+  margin-left: 5px;
+}
+
+tags-input .tags .input {
+  border: 0;
+  float: left;
+  height: 26px;
+  margin: 2px;
+  min-height: 26px;
+  min-width: 100px;
+  outline: 0;
+  padding: 0 5px !important;
+  transition: background 0.2s linear 0s;
+}
+
+tags-input .tags.focused .input {
+  background-color: #f4f5f7;
+}
+
+tags-input .tags .tag-item.selected {
+  background: 0;
+  background-color: @danger-color;
+}
+
+tags-input .tags .tag-item .remove-button {
+  background: 0 0;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font: 700 16px Arial,sans-serif;
+  margin: 0 0 0 5px;
+  padding: 0;
+  vertical-align: middle;
+}
+
+.tags-input-buttons {
+  position: absolute;
+  right: 0;
+  top: -35px;
+
+  .btn {
+    font-weight: 800;
+  }
+
+  .btn-info:focus {
+    background: @info-color;
+  }
+}
+
+.tags-input-loading {
+  position: absolute;
+  right: 10px;
+  top: 13px;
+}
+
+tags-input .autocomplete .suggestion-list {
+  max-height: 310px;
+}

@@ -1,0 +1,51 @@
+backend_ws_advertisements:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/advertisements.yml'
+    prefix:   /
+
+backend_ws_client:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/client.yml'
+    prefix:   /
+
+backend_ws_domain:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/domain.yml'
+    prefix:   /
+
+backend_ws_getting_started:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/getting_started.yml'
+    prefix:   /
+
+backend_ws_picker:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/picker.yml'
+    prefix:   /
+
+backend_ws_purchase:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/purchase.yml'
+    prefix:   /
+
+backend_ws_store:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/store.yml'
+    prefix:   /
+
+backend_ws_theme:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/theme.yml'
+    prefix:   /
+
+backend_ws_users:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/users.yml'
+    prefix:   /
+
+backend_ws_usergroups:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/usergroups.yml'
+    prefix:   /
+
+backend_ws_keywords:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/keywords.yml'
+    prefix:   /
+
+backend_ws_notification:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/notification.yml'
+    prefix:   /
+
+backend_ws_content:
+    resource: '@BackendWebServiceBundle/Resources/config/routing/content.yml'
+    prefix:   /

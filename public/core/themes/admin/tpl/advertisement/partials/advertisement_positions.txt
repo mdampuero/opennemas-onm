@@ -1,0 +1,127 @@
+
+FRONTPAGE
+
+1 Top Left LeaderBoard (728X90)
+2 Top Right LeaderBoard  (234X90)
+3 Center Left LeaderBoard (728X90)
+4 Center Right LeaderBoard (234x90)
+5 Bottom Left LeaderBoard (728X90)
+6 Bottom Right LeaderBoard (234X90)
+11 Button Column 1 position 1 (300X*)
+12 Button Column 1 position 2  (300X*)
+21 Button Column 2 position 1 (300X*)
+22 Button Column 2 position 2  (300X*)
+31 Button Column 3 position 1 (300X*)
+32 Button Column 3 position 2  (300X*)
+13 Button Column 1 position 3  (200x200)
+33 Button Column 3 position 3 (200x200)
+14 Button Column 1 position 4 (300X*)
+15 Button Column 1 position 5  (300X*)
+24 Button Column 2 position 4 (300X*)
+25 Button Column 2 position 5  (300X*)
+34 Button Column 3 position 4 (300X*)
+35 Button Column 3 position 5  (300X*)
+16 Button Column 1 position 6  (200x200)
+36 Button Column 3 position 6 (200x200)
+
+50 Frontpage Intersticial (800X600)
+
+
+//ARTICLE INNER
+
+101 Big  Banner Top(I) (728X90)
+102 Banner Top Right(I) (728X90)
+103 Banner1 Column Right (I) (300X*)
+104 Robapágina (650X*)
+105 Banner2 Column Right(I) (300X*)
+106 Banner3 Column Right(I) (300X*)
+107 Banner4 Column Right(I) (300X*)
+108 Banner5 Column Right(I) (300X*)
+109 Big Banner Bottom(I) (728X90)
+110 Banner Bottom Right(I) (234X90)
+150 Banner Intersticial - Inner (800X600)
+
+//VIDEO FRONTPAGE
+201 Big Banner Top (728X90)
+202 Banner Top  Right (234X90)
+203 Banner Column Right (300X*)
+209 Big Banner Bottom (728X90)
+210 Banner Bottom Right (234X90)
+250 Banner Intersticial - Video Frontpage (800X600)
+
+
+//VIDEO INNER
+
+301 Big Banner Top (728X90)
+302 Banner Top  Right (234X90)
+303 Banner Column Right (300X*)
+309 Big Banner Bottom (728X90)
+310 Banner Bottom Right (234X90)
+350 Banner Intersticial - Video Inner (800X600)
+
+
+
+//ALBUM FRONTPAGE
+
+401 Big Banner Top (728X90)
+402 Banner Top  Right (234X90)
+403 Banner1 Column Right(I) (300X*)
+405 Banner2 Column Right(II) (300X*)
+409 Big Banner Bottom (728X90)
+410 Banner Bottom Right (234X90)
+450 Banner Intersticial - Album Frontpage (800X600)
+
+
+//ALBUM INNER
+
+501 Big Banner Top (728X90)
+502 Banner Top  Right (234X90)
+503 Banner Column Right (300X*)
+509 Big Banner Bottom (728X90)
+510 Banner Bottom Right (234X90)
+550 Banner Intersticial - Album Frontpage (800X600)
+
+//FRONT OPINION
+601 Big Banner Top (728X90)
+602 Banner Top  Right (234X90)
+603 Banner Column Right (300X*)
+605 Banner Column Right 2 (300X*)
+609 Big Banner Bottom (728X90)
+610 Banner Bottom Right (234X90)
+650 Banner Intersticial - Opinion Frontpage (800X600)
+
+//OPINION INNER
+
+701 Big  Banner Top(I) (728X90)
+702 Banner Top Right(I) (728X90)
+703 Banner1 Column Right (I) (300X*)
+704 Robapágina (650X*)
+705 Banner2 Column Right(I) (300X*)
+706 Banner3 Column Right(I) (300X*)
+707 Banner4 Column Right(I) (300X*)
+708 Banner5 Column Right(I) (300X*)
+709 Big Banner Bottom(I) (728X90)
+710 Banner Bottom Right(I) (234X90)
+750 Banner Intersticial - Inner (800X600)
+
+ // POLL FRONT
+801 Big Banner Top (728X90)
+802 Banner Top  Right (234X90)
+803 Banner Column Right (300X*)
+805 Banner Column Right 2 (300X*)
+809 Big Banner Bottom (728X90)
+810 Banner Bottom Right (234X90)
+850 Banner Intersticial - Poll Frontpage (800X600)
+
+// POLL INNER
+901 Big Banner Top (728X90)
+902 Banner Top  Right (234X90)
+903 Banner Column Right (300X*)
+909 Big Banner Bottom (728X90)
+910 Banner Bottom Right (234X90)
+950 Banner Intersticial - Poll Frontpage (800X600)
+
+// NEWSLETTER
+1001 Big Banner Top (728X90)
+1009 Big Banner Bottom (728X90)
+

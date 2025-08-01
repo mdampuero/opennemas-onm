@@ -1,0 +1,137 @@
+<?php
+
+namespace Common\Core\Component\Helper;
+
+use Common\Model\Entity\Content;
+use Common\Model\Entity\Instance;
+use Symfony\Component\DependencyInjection\Container;
+
+class ContentMediaHelper
+{
+    /**
+     * The helper to retrieve author data.
+     *
+     * @var AuthorHelper
+     */
+    protected $authorHelper;
+
+    /**
+     * The service container.
+     *
+     * @var Container
+     */
+    protected $container;
+
+    /**
+     * The helper to retrieve content data.
+     *
+     * @var ContentHelper
+     */
+    protected $contentHelper;
+
+    /**
+     * The dataset to get the settings of the instance.
+     *
+     * @var DataSet
+     */
+    protected $ds;
+
+    /**
+     * The helper to retrieve featured media data.
+     *
+     * @var FeaturedMediaHelper
+     */
+    protected $featuredHelper;
+
+    /**
+     * The helper to retrieve image information.
+     *
+     * @var ImageHelper
+     */
+    protected $imageHelper;
+
+    /**
+     * The current instance.
+     *
+     * @var Instance
+     */
+    protected $instance;
+
+    /**
+     * Initializes ContentMedia
+     *
+     * @param Container $container The service container.
+     */
+    public function __construct(Container $container)
+    {
+        $this->container      = $container;
+        $this->authorHelper   = $this->container->get('core.helper.author');
+        $this->contentHelper  = $this->container->get('core.helper.content');
+        $this->ds             = $this->container->get('orm.manager')->getDataSet('Settings', 'instance');
+        $this->featuredHelper = $this->container->get('core.helper.featured_media');
+        $this->imageHelper    = $this->container->get('core.helper.image');
+        $this->instance       = $this->container->get('core.instance');
+    }
+
+    /**
+     * Get image url for a given content
+     *
+     * @param object $content The content object.
+     * @param string $type    The type of the featured media "frontpage"|"inner"|"social".
+     *
+     * @return object $mediaObject An object with image/video information
+     */
+    public function getMedia($content)
+    {
+        $media = $this->getMediaObject($content, 'inner');
+
+        if (empty($media)) {
+            return null;
+        }
+
+        $media = $this->contentHelper->getContent($media, 'photo');
+
+        if (is_object($media)) {
+            $media->width  = $media->width ?? 700;
+            $media->height = $media->height ?? 450;
+        }
+
+        return $media;
+    }
+
+    /**
+     * Returns the media object.
+     *
+     * @param Content $content The content object.
+     * @param String  $type    The type of the featured media "frontpage"|"inner"|"social".
+     *
+     * @return Content The media object for the specific content.
+     */
+    protected function getMediaObject($content, $type)
+    {
+        if (!empty($content) && $content->content_type_name === 'photo') {
+            return $content;
+        }
+
+        // Check for social image
+        $type = $this->featuredHelper->hasFeaturedMedia($content, 'social') ? 'social' : $type;
+
+        if ($this->featuredHelper->hasFeaturedMedia($content, $type)) {
+            $featuredMedia = $this->featuredHelper->getFeaturedMedia($content, $type);
+
+            return $this->getMediaObject($featuredMedia, 'frontpage');
+        }
+
+        if ($this->contentHelper->getType($content) === 'opinion'
+            && $this->authorHelper->hasAuthorAvatar($content)
+        ) {
+            return $this->authorHelper->getAuthorAvatar($content);
+        }
+
+        if ($this->container->get('core.helper.setting')->hasLogo('embed')) {
+            return $this->container->get('core.helper.setting')->getLogo('embed');
+        }
+
+        return null;
+    }
+}

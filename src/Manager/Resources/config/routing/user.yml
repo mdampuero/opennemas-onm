@@ -1,0 +1,16 @@
+manager_user_create:
+    path: /users/new
+    options:
+        expose: true
+
+manager_user_show:
+    path: /users/{id}
+    requirements:
+        id: \d+
+    options:
+        expose: true
+
+manager_users_list:
+    path: /users
+    options:
+        expose: true

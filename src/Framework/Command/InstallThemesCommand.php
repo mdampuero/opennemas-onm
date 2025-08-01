@@ -1,0 +1,268 @@
+<?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Framework\Command;
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Process\Process;
+
+class InstallThemesCommand extends Command
+{
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure()
+    {
+        $this
+            ->addArgument(
+                'theme',
+                InputArgument::OPTIONAL,
+                'What theme do you want to install'
+            )
+            ->setName('themes:install')
+            ->setDescription('Deploys or installs themes to the latest version')
+            ->setHelp(
+                <<<EOF
+The <info>themes:install</> updates or installs themes code by executing
+and updates the .deploy.php file.
+
+- Install all themes
+<info>php bin/console themes:install</>
+
+- Install a theme
+<info>php bin/console themes:install THEME_NAME</>
+EOF
+            );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $this->basePath = APPLICATION_PATH;
+        $this->input    = $input;
+        $this->output   = $output;
+
+        $theme = $input->getArgument('theme');
+
+        if (empty($theme)) {
+            $this->auth = $this->askCredentials();
+            $output->write('Getting themes from <fg=blue>bitbucket</>...');
+
+            try {
+                $this->themes = $this->getThemes();
+
+                if (!empty($this->themes)) {
+                    $output->writeln(' <info>DONE</>');
+                }
+            } catch (\Exception $e) {
+                $this->output->writeln('<fg=red>FAIL (' . $e->getMessage() . ')</>');
+            }
+        }
+
+        chdir($this->basePath);
+
+        if (!empty($theme)) {
+            $this->themes = [ $theme ];
+        }
+
+        if (empty($this->themes)) {
+            $this->output->writeln('<error>No themes to install</>');
+            return;
+        }
+
+        $this->output->writeln('Installing <info>' . count($this->themes) . '</> themes...');
+        $this->installThemes();
+    }
+
+    /**
+     * Asks Bitbucket credentials to the user.
+     *
+     * @return string The authentication string.
+     */
+    protected function askCredentials()
+    {
+        $helper = $this->getHelper('question');
+
+        $this->output->writeln('Please enter your <fg=blue>bitbucket</> credentials...');
+
+        $question = new Question('  Username: ');
+        $username = $helper->ask($this->input, $this->output, $question);
+
+        $question = new Question('  Password: ');
+        $question->setHidden(true);
+        $question->setHiddenFallback(false);
+        $password = $helper->ask($this->input, $this->output, $question);
+
+        if (empty($username) || empty($password)) {
+            throw new \InvalidArgumentException('Invalid bitbucket credentials');
+        }
+
+        return $username . ':' . $password;
+    }
+
+    /**
+     * Clones the theme.
+     *
+     * @param string $theme The theme name.
+     */
+    protected function cloneTheme($theme)
+    {
+        chdir($this->basePath . '/public/themes/');
+        $this->execProcess('git clone git@bitbucket.org:opennemas/onm-theme-' . $theme . '.git ' . $theme);
+        chdir($this->basePath);
+    }
+
+    /**
+     * Executes in a shell the provided command line.
+     *
+     * @param string $cmd The command to execute.
+     */
+    protected function execProcess($cmd)
+    {
+        $process = new Process($cmd);
+
+        $process->setTimeout(3600);
+        $process->run();
+
+        if ($process->isSuccessful()) {
+            $this->output->writeln('<info>DONE</>');
+
+            if ($this->output->isVerbose()) {
+                $this->output->writeln($process->getOutput());
+            }
+
+            return;
+        }
+
+        $this->output->writeln('<fg=red>FAIL</>');
+
+        if ($this->output->isVerbose()) {
+            $this->output->write($process->getErrorOutput());
+        }
+    }
+
+    /**
+     * Saves a file with a deploy version with the actual timestamp
+     *
+     * @param string $theme The theme name.
+     */
+    protected function generateDeployFile($theme)
+    {
+        $date     = date('YmdHis');
+        $contents = "<?php define('THEMES_DEPLOYED_AT', '$date');";
+        $path     = APPLICATION_PATH . '/public/themes/' . $theme
+            . '/.deploy.themes.php';
+
+        return file_put_contents($path, $contents);
+    }
+
+    /**
+     * Returns the error message basing on the HTTP error code.
+     *
+     * @param integer $code The error code.
+     *
+     * @return string The error message.
+     */
+    protected function getError($code)
+    {
+        $errors = [
+            401 => 'Authentication failure'
+        ];
+
+        if (array_key_exists($code, $errors)) {
+            $code .= ": {$errors[$code]}";
+        }
+
+        return $code;
+    }
+
+    /**
+     * Gets the list of repositories for themes from bitbucket.
+     *
+     * @param string $url The URL to get the themes from.
+     *
+     * @return null|array
+     */
+    protected function getThemes($url = 'https://api.bitbucket.org/2.0/repositories/opennemas?pagelen=100')
+    {
+        $ch = curl_init($url);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_USERPWD, $this->auth);
+
+        $resp = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        if ($code !== 200 || !$resp) {
+            throw new \RuntimeException($this->getError($code));
+        }
+
+        $resp   = json_decode($resp, true);
+        $themes = array_filter($resp['values'], function ($a) {
+            return strpos($a['name'], 'onm-theme-') !== false
+                && $a['name'] !== 'onm-theme-designer';
+        });
+
+        $themes = array_map(function ($a) {
+            return str_replace('onm-theme-', '', $a['name']);
+        }, $themes);
+
+        // Get the next page
+        if (array_key_exists('next', $resp)) {
+            $themes = array_merge($themes, $this->getThemes($resp['next']));
+        }
+
+        $themes = array_values($themes);
+
+        sort($themes);
+
+        return $themes;
+    }
+
+    /**
+     * Installs all themes in the list.
+     */
+    protected function installThemes()
+    {
+        foreach ($this->themes as $theme) {
+            $this->output->writeln("- Installing <fg=blue>$theme</>... ");
+            $this->output->write("  - Updating repository... ");
+
+            if (file_exists($this->basePath . '/public/themes/' . $theme)) {
+                $this->pullTheme($theme);
+            } else {
+                $this->cloneTheme($theme);
+            }
+
+            $this->output->write("  - Generating deploy number... ");
+            $this->generateDeployFile($theme)
+                ? $this->output->writeln('<info>DONE</>')
+                : $this->output->writeln('<fg=red>FAIL</>');
+        }
+    }
+
+    /**
+     * Updates the theme.
+     *
+     * @param string $theme The theme name.
+     */
+    protected function pullTheme($theme)
+    {
+        chdir($this->basePath . '/public/themes/' . $theme);
+        $this->execProcess('git pull');
+        chdir($this->basePath);
+    }
+}

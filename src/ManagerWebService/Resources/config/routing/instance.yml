@@ -1,0 +1,67 @@
+manager_ws_instance_delete:
+    path:     /instances/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Instance:delete }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_instance_new:
+    path:     /instances/new
+    defaults: { _controller: ManagerWebServiceBundle:Instance:new }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_instance_patch:
+    path:     /instances/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Instance:patch }
+    methods:  [ PATCH ]
+    options:
+        expose: true
+
+manager_ws_instance_save:
+    path:     /instances
+    defaults: { _controller: ManagerWebServiceBundle:Instance:save }
+    methods:  [ POST ]
+    options:
+        expose: true
+
+manager_ws_instance_show:
+    path:     /instances/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Instance:show }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_instance_update:
+    path:     /instances/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Instance:update }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+manager_ws_instances_csv:
+    path:     /instances.csv
+    defaults: { _controller:  ManagerWebServiceBundle:Instance:export }
+    methods:  [ GET ]
+
+manager_ws_instances_delete:
+    path:     /instances
+    defaults: { _controller: ManagerWebServiceBundle:Instance:deleteSelected }
+    methods:  [ DELETE ]
+    options:
+        expose: true
+
+manager_ws_instances_list:
+    path:     /instances
+    defaults: { _controller: ManagerWebServiceBundle:Instance:list }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_instances_patch:
+    path:     /instances
+    defaults: { _controller: ManagerWebServiceBundle:Instance:patchSelected }
+    methods:  [ PATCH ]
+    options:
+        expose: true
