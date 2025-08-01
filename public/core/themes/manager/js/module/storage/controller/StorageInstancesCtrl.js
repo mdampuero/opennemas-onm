@@ -3,8 +3,8 @@
 
   angular.module('ManagerApp.controllers')
     .controller('StorageInstancesCtrl', [
-      '$controller', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
-      function($controller, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
+      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
+      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         $.extend(this, $controller('ListCtrl', {
           $scope: $scope,
           $timeout: $timeout
@@ -75,6 +75,32 @@
         oqlDecoder.configure({
           ignore: ['internal_name', 'contact_mail', 'domains', 'settings']
         });
+
+        $scope.openStorageSettings = function(item) {
+          var modal = $uibModal.open({
+            templateUrl: '/managerws/template/storage:modalStorageSettings.' + appVersion + '.tpl',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  storage_settings: angular.copy(item.storage_settings)
+                };
+              },
+              success: function() {
+                return function(modalWindow) {
+                  modalWindow.close({ data: { type: 'success', message: 'Saved' }, success: true });
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response && response.data) {
+              messenger.post(response.data);
+            }
+          });
+        };
 
         $scope.list();
       }

@@ -28,5 +28,11 @@
     <div class="table-text">
       [% item.name %]
     </div>
+    <div class="listing-inline-actions">
+      <a ng-click="openStorageSettings(item)" class="btn btn-default btn-small" title="{t}Edit{/t}">
+        <i class="fa fa-pencil m-r-5"></i>
+        {t}Config{/t}
+      </a>
+    </div>
   </td>
 {/block}
