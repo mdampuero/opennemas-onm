@@ -1,0 +1,82 @@
+(function() {
+  'use strict';
+
+  angular.module('ManagerApp.controllers')
+    .controller('StorageInstancesCtrl', [
+      '$controller', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
+      function($controller, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
+        $.extend(this, $controller('ListCtrl', {
+          $scope: $scope,
+          $timeout: $timeout
+        }));
+
+        $scope.columns = {
+          collapsed: 1,
+          selected: [
+            'name'
+          ]
+        };
+
+        $scope.criteria = {
+          epp: 25,
+          page: 1,
+          activated_modules: 'es.openhost.module.storage'
+        };
+
+        $scope.list = function() {
+          $scope.loading = 1;
+
+          oqlEncoder.configure({
+            placeholder: {
+              name: 'name ~ "[value]" or ' +
+                'internal_name ~ "[value]" or ' +
+                'contact_mail ~ "[value]" or ' +
+                'domains ~ "[value]" or ' +
+                'settings ~ "[value]"',
+              activated_modules: '[key] ~ "[value]"'
+            }
+          });
+
+          var oql = oqlEncoder.getOql($scope.criteria);
+          var route = {
+            name: 'manager_ws_storage_instances',
+            params: { oql: oql }
+          };
+
+          $location.search('oql', oql);
+
+          return http.get(route).then(function(response) {
+            $scope.loading = 0;
+            $scope.items = response.data.results;
+            $scope.total = response.data.total;
+            $scope.extra = response.data.extra;
+
+            $scope.filteredItems = $scope.items;
+
+            $('body').animate({ scrollTop: '0px' }, 1000);
+          });
+        };
+
+        $scope.resetFilters = function() {
+          $scope.criteria = { epp: 25, page: 1, activated_modules: 'es.openhost.module.storage' };
+          $scope.list();
+        };
+
+        $scope.$watch('columns', function(newValues, oldValues) {
+          if (newValues !== oldValues) {
+            webStorage.local.set('storage-instances-columns', $scope.columns);
+          }
+        }, true);
+
+        if (webStorage.local.get('storage-instances-columns')) {
+          $scope.columns = webStorage.local.get('storage-instances-columns');
+        }
+
+        oqlDecoder.configure({
+          ignore: ['internal_name', 'contact_mail', 'domains', 'settings']
+        });
+
+        $scope.list();
+      }
+    ]);
+})();
