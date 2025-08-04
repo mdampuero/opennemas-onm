@@ -14,6 +14,7 @@ namespace ManagerWebService\Controller;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class StorageController extends Controller
 {
@@ -57,7 +58,7 @@ class StorageController extends Controller
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
-     /**
+    /**
      * Returns the list of instances as JSON.
      *
      * @param Request $request The request object.
@@ -77,12 +78,15 @@ class StorageController extends Controller
 
         $repository = $this->get('orm.manager')->getRepository('Instance');
         $converter  = $this->get('orm.manager')->getConverter('Instance');
+        $helper     = $this->get('core.helper.instance');
 
         $instances = $repository->findBy($oql);
         $total     = $repository->countBy($oql);
 
-        $instances = array_map(function ($a) use ($converter) {
-            return $converter->responsify($a->getData());
+        $instances = array_map(function ($a) use ($converter, $helper) {
+            $data                     = $converter->responsify($a->getData());
+            $data['storage_settings'] = $helper->getStorageSettings($a);
+            return $data;
         }, $instances);
 
         return new JsonResponse([
@@ -94,7 +98,36 @@ class StorageController extends Controller
             'oql' => $oql,
         ]);
     }
-    
+
+    /**
+     * Save instance storage settings
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function instancesSaveAction(Request $request)
+    {
+        $request = $request->query->all();
+        $msg     = $this->get('core.messenger');
+
+        $id               = $request['id'] ?? 0;
+        $storage_settings = $request['storage_settings'] ?? [];
+        $em               = $this->get('orm.manager');
+        $instance         = $em->getRepository('Instance')->find($id);
+
+        if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+            throw new AccessDeniedException();
+        }
+
+        $this->get('core.loader')->configureInstance($instance);
+        $em->getDataSet('Settings', 'instance')->set('storage_settings', $storage_settings);
+
+        $msg->add(_('Settings saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
     /**
      * Returns the list tasks as JSON.
      *

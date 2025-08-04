@@ -3,8 +3,8 @@
 
   angular.module('ManagerApp.controllers')
     .controller('StorageInstancesCtrl', [
-      '$controller', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
-      function($controller, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
+      '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
+      function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         $.extend(this, $controller('ListCtrl', {
           $scope: $scope,
           $timeout: $timeout
@@ -75,6 +75,52 @@
         oqlDecoder.configure({
           ignore: ['internal_name', 'contact_mail', 'domains', 'settings']
         });
+
+        $scope.openStorageSettings = function(item) {
+          var modal = $uibModal.open({
+            templateUrl: '/managerws/template/storage:modalStorageSettings.' + appVersion + '.tpl',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  storage_settings: angular.copy(item.storage_settings)
+                };
+              },
+              success: function() {
+                return function(modalWindow, template) {
+                  var route = {
+                    name: 'manager_ws_storage_instances_save',
+                    params: {
+                      id: item.id,
+                      storage_settings: {
+                        compress: template.storage_settings && template.storage_settings.compress || null,
+                        thumbnail: template.storage_settings && template.storage_settings.thumbnail || null,
+                        tasks: template.storage_settings && template.storage_settings.tasks || [],
+                        provider: template.storage_settings && template.storage_settings.provider || null
+                      }
+                    }
+                  };
+
+                  http.put(route).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response && response.data) {
+              messenger.post(response.data);
+              if (response.success) {
+                $scope.list();
+              }
+            }
+          });
+        };
 
         $scope.list();
       }
