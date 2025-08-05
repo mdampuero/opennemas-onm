@@ -72,21 +72,12 @@ class FfmpegCompressCommand extends ContainerAwareCommand
         $this->loggerErr = $this->getContainer()->get('error.log');
         $itemPK          = $input->getOption('item');
         $this->taskPK    = $input->getOption('task');
-        $config          = $this->getConfig();
-        $params          = $config['compress']['command'] ?? self::DEFAULT_PARAMS;
-
-        $this->loggerApp->info('FFMPEG - compress command started', [
-            'itemPK' => $itemPK,
-            'params' => $params,
-            'taskPK' => $this->taskPK
-        ]);
+        $instanceId      = $input->getOption('instance');
 
         if (!$itemPK) {
             $this->loggerErr->error('FFMPEG - The --item parameters are required');
             return 1;
         }
-
-        $instanceId = $input->getOption('instance');
 
         if (!$instanceId) {
             $this->loggerErr->error('FFMPEG - The --instance parameters are required');
@@ -94,6 +85,15 @@ class FfmpegCompressCommand extends ContainerAwareCommand
         }
 
         $this->setInstance($instanceId);
+
+        $config = $this->getConfig();
+        $params = $config['compress']['command'] ?? self::DEFAULT_PARAMS;
+
+        $this->loggerApp->info('FFMPEG - compress command started', [
+            'itemPK' => $itemPK,
+            'params' => $params,
+            'taskPK' => $this->taskPK
+        ]);
         $this->setItem($itemPK);
 
         $item = $this->getItem();
@@ -430,12 +430,23 @@ class FfmpegCompressCommand extends ContainerAwareCommand
     }
 
     /**
-     * Get manager config
+     * Get storage config for the current instance.
+     * Falls back to manager settings if instance config is empty.
      */
     public function getConfig()
     {
-        return $this->getContainer()->get('orm.manager')
-            ->getDataSet('Settings', 'manager')
+        $manager = $this->getContainer()->get('orm.manager');
+
+        $config = $manager
+            ->getDataSet('Settings', 'instance')
             ->get('storage_settings', []);
+
+        if (empty($config)) {
+            $config = $manager
+                ->getDataSet('Settings', 'manager')
+                ->get('storage_settings', []);
+        }
+
+        return $config;
     }
 }

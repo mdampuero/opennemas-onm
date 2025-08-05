@@ -25,6 +25,7 @@ class StorageCommand extends ContainerAwareCommand
     private $factory;
     private $loggerApp;
     private $loggerErr;
+    private $instance;
 
     /**
      * Configures the command.
@@ -109,7 +110,8 @@ class StorageCommand extends ContainerAwareCommand
         $this->logCommandStart();
 
         $this->factory = $this->getContainer()->get('core.helper.storage_factory');
-        $storage       = $this->factory->create();
+        $this->setInstance($instanceId);
+        $storage       = $this->factory->create($this->instance);
 
         switch ($operation) {
             case 'upload':
@@ -264,7 +266,6 @@ class StorageCommand extends ContainerAwareCommand
             return 1;
         }
 
-        $this->setInstance($instanceId);
         $this->setItem($itemPK);
 
         $item = $this->getItem();
@@ -288,7 +289,7 @@ class StorageCommand extends ContainerAwareCommand
         $filesize    = filesize($localFile);
 
         $config = $this->factory->getConfig();
-
+        
         $uploader = new MultipartUploader($s3Client, $localFile, [
             'bucket' => $config['provider']['bucket'],
             'key'    => substr($path, 1),
@@ -332,7 +333,7 @@ class StorageCommand extends ContainerAwareCommand
         $config                            = $this->factory->getConfig();
         $item                              = $this->getItem();
         $information                       = $item->information;
-        $path                              = (($config['provider']['enabled'] ?? false)) ?
+        $path                              = (($config['provider']['public_endpoint'] ?? false)) ?
             $config['provider']['public_endpoint'] . $relativePath : $relativePath;
         $this->loggerApp->info('STORAGE - Uploading finish', [
             'path'        => $path
@@ -421,12 +422,12 @@ class StorageCommand extends ContainerAwareCommand
      *
      * @return  self
      */
-    public function setInstance($instance)
+    public function setInstance($instanceId)
     {
-        $instance = $this->getContainer()->get('orm.manager')
-            ->getRepository('Instance')->find($instance);
-        $this->getContainer()->get('core.loader')->configureInstance($instance);
-        $this->getContainer()->get('core.security')->setInstance($instance);
+        $this->instance = $this->getContainer()->get('orm.manager')
+            ->getRepository('Instance')->find($instanceId);
+        $this->getContainer()->get('core.loader')->configureInstance($this->instance);
+        $this->getContainer()->get('core.security')->setInstance($this->instance);
 
         return $this;
     }

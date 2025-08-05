@@ -186,7 +186,8 @@ class VideoController extends ContentController
             ->patchItem($id, $request->request->all());
 
         //Remove file to storage
-        $this->get($this->service)->removeFromStorage($id);
+        $instance = $this->get('core.instance');
+        $this->get($this->service)->removeFromStorage($id, $instance);
 
         $msg->add(_('Item saved successfully'), 'success');
 
@@ -216,7 +217,8 @@ class VideoController extends ContentController
         $updated = $this->get($this->service)->patchList($ids, $params);
 
         //Remove file to storage
-        $this->get($this->service)->removeFromStorage($ids);
+        $instance = $this->get('core.instance');
+        $this->get($this->service)->removeFromStorage($ids, $instance);
 
         if ($updated > 0) {
             $msg->add(
