@@ -13,7 +13,8 @@
         $scope.columns = {
           collapsed: 1,
           selected: [
-            'name'
+            'name',
+            'manager_config'
           ]
         };
 
@@ -118,6 +119,44 @@
               if (response.success) {
                 $scope.list();
               }
+            }
+          });
+        };
+
+        $scope.useManagerConfig = function(item) {
+          var modal = $uibModal.open({
+            templateUrl: '/managerws/template/storage:modalUseManagerConfig.' + appVersion + '.tpl',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {};
+              },
+              success: function() {
+                return function(modalWindow) {
+                  var route = {
+                    name: 'manager_ws_storage_instances_save',
+                    params: {
+                      id: item.id,
+                      storage_settings: []
+                    }
+                  };
+
+                  http.put(route).then(function(response) {
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    modalWindow.close({ data: response.data, success: false });
+                  });
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            messenger.post(response.data);
+
+            if (response.success) {
+              $scope.list();
             }
           });
         };

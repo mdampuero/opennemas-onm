@@ -25,6 +25,12 @@
       {t}Download endpoint{/t}
     </label>
   </div>
+  <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-manager_config" checklist-model="columns.selected" checklist-value="'manager_config'" type="checkbox">
+    <label for="checkbox-manager_config">
+      {t}Manager config{/t}
+    </label>
+  </div>
 {/block}
 
 {block name="columnsHeader"}
@@ -46,6 +52,9 @@
   <th class="pointer" ng-show="isColumnEnabled('public_endpoint')" >
     {t}Download endpoint{/t}
   </th>
+  <th class="pointer text-center" ng-show="isColumnEnabled('manager_config')">
+    {t}Manager config{/t}
+  </th>
 {/block}
 
 {block name="columnsBody"}
@@ -59,6 +68,10 @@
         <a ng-click="openStorageSettings(item)" class="btn btn-default btn-small" title="{t}Edit{/t}">
           <i class="fa fa-pencil m-r-5"></i>
           {t}Config{/t}
+        </a>
+        <a ng-if="item.storage_settings && item.storage_settings.provider" ng-click="useManagerConfig(item)" class="btn btn-default btn-small" title="{t}Use manager config{/t}">
+          <i class="fa fa-wrench m-r-5"></i>
+          {t}Use manager config{/t}
         </a>
       </div>
     </div>
@@ -77,5 +90,13 @@
     <div class="table-text">
       [% item.storage_settings.provider.public_endpoint %]
     </div>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('manager_config')" title="{t}Manager config{/t}">
+    <span class="badge badge-success" ng-if="!(item.storage_settings && item.storage_settings.provider)">
+      {t}Yes{/t}
+    </span>
+    <span class="badge badge-danger" ng-if="item.storage_settings && item.storage_settings.provider">
+      {t}No{/t}
+    </span>
   </td>
 {/block}
