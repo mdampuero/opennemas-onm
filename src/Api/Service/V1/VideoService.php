@@ -23,10 +23,10 @@ class VideoService extends ContentService
      *
      * @return void
      */
-    public function removeFromStorage($itemPK)
+    public function removeFromStorage($itemPK, $instance)
     {
         $factory = $this->container->get('core.helper.storage_factory');
-        $storage = $factory->create();
+        $storage = $factory->create($instance);
 
         $itemPKs = is_array($itemPK) ? $itemPK : [$itemPK];
         foreach ($itemPKs as $pk) {
