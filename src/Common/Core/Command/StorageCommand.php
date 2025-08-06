@@ -312,6 +312,10 @@ class StorageCommand extends ContainerAwareCommand
             $uploader->upload();
             $this->setNextStep($path);
             $this->logResult('Upload ', true);
+
+            // update storage size
+            $this->instance->storage_size += $filesize;
+            $this->getContainer()->get('orm.manager')->persist($this->instance);
         } catch (MultipartUploadException $e) {
             $output->writeln('<fg=red;options=bold>Upload failed: </>' . $e->getMessage());
             return 1;
