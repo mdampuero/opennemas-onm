@@ -69,7 +69,7 @@
           <i class="fa fa-pencil m-r-5"></i>
           {t}Config{/t}
         </a>
-        <a ng-if="item.storage_settings && item.storage_settings.provider" ng-click="useManagerConfig(item)" class="btn btn-default btn-small" title="{t}Use manager config{/t}">
+        <a ng-if="item.storage_settings && item.storage_settings.provider" ng-click="useManagerConfig(item)" class="btn btn-danger btn-small" title="{t}Use manager config{/t}">
           <i class="fa fa-wrench m-r-5"></i>
           {t}Use manager config{/t}
         </a>
