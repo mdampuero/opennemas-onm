@@ -33,6 +33,12 @@ class VideoService extends ContentService
             $item = $this->getItem($pk);
             if ($item->type === 'upload' && !empty($item->information['remotePath'])) {
                 $storage->delete($item->information['remotePath']);
+                $size = $item->information['fileSize'];
+
+                if ($size > 0) {
+                    $instance->storage_size = max(0, $instance->storage_size - $size);
+                    $this->container->get('orm.manager')->persist($instance);
+                }
             }
         }
     }

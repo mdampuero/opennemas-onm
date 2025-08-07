@@ -10,39 +10,13 @@
           <label class="m-b-10"><b>{t}Video compress{/t}</b></label>
           <hr>
           <div class="row">
-            <div class="col-xs-12 form-group">
+            <div class="col-xs-9 form-group">
               <label class="form-label" for="command">{t}Command{/t}</label>
               <input type="text" class="form-control" ng-model="template.storage_settings.compress.command">
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-6">
-          <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel m-t-5 p-15 bg-light">
-            <div class="form-status text-left">
-              <label class="m-b-10"><b>{t}Thumbnail generate{/t}</b></label>
-              <hr>
-              <div class="row">
-                <div class="col-xs-6 form-group">
-                  <label class="form-label" for="seconds">{t}Seconds{/t}</label>
-                  <input type="text" class="form-control" ng-model="template.storage_settings.thumbnail.seconds">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-6">
-          <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel m-t-5 p-15 bg-light">
-            <div class="form-status text-left">
-              <label class="m-b-10"><b>{t}Concurrent tasks{/t}</b></label>
-              <hr>
-              <div class="row">
-                <div class="col-xs-6 form-group">
-                  <label class="form-label" for="concurrent">{t}Number of tasks{/t}</label>
-                  <input type="text" class="form-control" ng-model="template.storage_settings.tasks.concurrent">
-                </div>
-              </div>
+            <div class="col-xs-3 form-group">
+              <label class="form-label" for="seconds">{t}Thumbnail{/t} (s)</label>
+              <input type="text" class="form-control" ng-model="template.storage_settings.thumbnail.seconds">
             </div>
           </div>
         </div>

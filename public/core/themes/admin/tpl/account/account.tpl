@@ -101,6 +101,26 @@
             </div>
           </div>
           <div class="col-md-6">
+            <div class="tiles light-red m-b-15">
+              <div class="tiles-body">
+                <div class="tiles-title text-uppercase text-black">
+                  {t}S3 Storage size{/t}
+                </div>
+                <div class="widget-stats">
+                  <div class="wrapper last">
+                  {if $instance->storage_size/1024/1024 >= 1024}
+                    <span class="item-count">{($instance->storage_size/1024/1024/1024)|string_format:"%.2f"} GB</span>
+                  {else}
+                    <span class="item-count">{($instance->storage_size/1024/1024)|string_format:"%.2f"} MB</span>
+                  {/if}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
             <div class="tiles yellow m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
