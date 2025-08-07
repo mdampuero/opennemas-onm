@@ -180,14 +180,17 @@ class VideoController extends ContentController
         $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
         $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', [$id]);
 
-        $msg = $this->get('core.messenger');
+        $msg  = $this->get('core.messenger');
+        $data = $request->request->all();
 
         $this->get($this->service)
-            ->patchItem($id, $request->request->all());
+            ->patchItem($id, $data);
 
-        //Remove file to storage
-        $instance = $this->get('core.instance');
-        $this->get($this->service)->removeFromStorage($id, $instance);
+        if (array_key_exists('in_litter', $data)) {
+            $instance = $this->get('core.instance');
+            $mode     = $data['in_litter'] ? 'trash' : 'restore';
+            $this->get($this->service)->removeFromStorage($id, $instance, $mode);
+        }
 
         $msg->add(_('Item saved successfully'), 'success');
 
@@ -216,9 +219,11 @@ class VideoController extends ContentController
 
         $updated = $this->get($this->service)->patchList($ids, $params);
 
-        //Remove file to storage
-        $instance = $this->get('core.instance');
-        $this->get($this->service)->removeFromStorage($ids, $instance);
+        if (array_key_exists('in_litter', $params)) {
+            $instance = $this->get('core.instance');
+            $mode     = $params['in_litter'] ? 'trash' : 'restore';
+            $this->get($this->service)->removeFromStorage($ids, $instance, $mode);
+        }
 
         if ($updated > 0) {
             $msg->add(
