@@ -154,7 +154,7 @@
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-storage-size" checklist-model="columns.selected" checklist-value="'storage_size'" type="checkbox">
     <label for="checkbox-storage-size">
-      {t}Storage size{/t}
+      {t}S3 Storage used{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
@@ -318,7 +318,7 @@
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('media_size') == 'asc', 'fa fa-caret-down': isOrderedBy('media_size') == 'desc'}"></i>
   </th>
   <th class="text-center pointer" ng-click="sort('storage_size')" ng-show="isColumnEnabled('storage_size')" width="80">
-    <i class="fa fa-hdd-o" uib-tooltip="{t}Storage size{/t}" tooltip-placement="bottom"></i>
+    <i class="fa fa-hdd-o" uib-tooltip="{t}S3 Storage used{/t}" tooltip-placement="bottom"></i>
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('storage_size') == 'asc', 'fa fa-caret-down': isOrderedBy('storage_size') == 'desc'}"></i>
   </th>
   <th class="text-center pointer" ng-click="sort('advertisements')" ng-show="isColumnEnabled('advertisements')" width="80">
@@ -528,7 +528,7 @@
       MB
     </span>
   </td>
-  <td class="text-center v-align-middle" ng-show="isColumnEnabled('storage_size')" title="{t}Storage size{/t}">
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('storage_size')" title="{t}S3 Storage used{/t}">
     <span class="badge text-bold">
       [% item.storage_size / 1024 / 1024 | number : 2 %]
       MB

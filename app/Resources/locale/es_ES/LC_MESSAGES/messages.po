@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-29 08:49+0000\n"
-"PO-Revision-Date: 2025-07-29 10:49+0200\n"
+"POT-Creation-Date: 2025-08-08 09:34+0000\n"
+"PO-Revision-Date: 2025-08-08 11:55+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -1170,6 +1170,9 @@ msgstr "El total de elementos debe estar entre 500 y 1000"
 msgid "Sitemap saved successfully"
 msgstr "Configuración de sitemap guardada correctamente"
 
+msgid "Settings saved successfully"
+msgstr "Configuración guardadas correctamente"
+
 #, php-format
 msgid "%s users deleted successfully"
 msgstr "%s usuarios eliminados correctamente"
@@ -1397,9 +1400,6 @@ msgstr "%d semanas"
 
 msgid "No limit"
 msgstr "Sin límite"
-
-msgid "Settings saved successfully"
-msgstr "Configuración guardadas correctamente"
 
 msgid "List of contents"
 msgstr "Lista de contenidos"
@@ -6956,6 +6956,9 @@ msgstr "Almacenamiento ocupado"
 msgid "Users Active"
 msgstr "Usuarios activos"
 
+msgid "S3 Storage used"
+msgstr "Almacenamiento usado en S3"
+
 msgid "Emails sent from"
 msgstr "Correos electrónicos enviados desde"
 
@@ -8204,32 +8207,11 @@ msgstr "La clave se aplicará en el espacio de nombres actual"
 msgid "Delete compiles"
 msgstr "Eliminar compilados"
 
-msgid "Command"
-msgstr "Comando"
-
-msgid "Params"
-msgstr "Parámetros"
-
-msgid "Instance"
-msgstr "Instancia"
-
-msgid "#"
-msgstr "#"
-
 msgid "Video compress"
 msgstr "Compresión de video"
 
-msgid "Thumbnail generate"
-msgstr "Generar miniatura"
-
-msgid "Seconds"
-msgstr "Segundos"
-
-msgid "Concurrent tasks"
-msgstr "Tareas simultáneas"
-
-msgid "Number of tasks"
-msgstr "Número de tareas"
+msgid "Command"
+msgstr "Comando"
 
 msgid "S3 Provider"
 msgstr "Proveedor S3"
@@ -8248,6 +8230,39 @@ msgstr "Región"
 
 msgid "Download endpoint"
 msgstr "Endpoint de descarga"
+
+msgid "Params"
+msgstr "Parámetros"
+
+msgid "Instance"
+msgstr "Instancia"
+
+msgid "#"
+msgstr "#"
+
+msgid "Manager config"
+msgstr "Configuración del manager"
+
+msgid "Config"
+msgstr "Configuraciones"
+
+msgid "Use manager config"
+msgstr "Usar configuración del manager"
+
+msgid "Thumbnail generate"
+msgstr "Generar miniatura"
+
+msgid "Seconds"
+msgstr "Segundos"
+
+msgid "Concurrent tasks"
+msgstr "Tareas simultáneas"
+
+msgid "Number of tasks"
+msgstr "Número de tareas"
+
+msgid "Do you want to use the manager configuration for this instance?"
+msgstr "¿Quieres usar la configuración del administrador para esta instancia?"
 
 msgid "A new version of Opennemas is downloaded. Launch it?"
 msgstr "Se ha descargado una nueva versión de Opennemas. Deseas iniciarla?"

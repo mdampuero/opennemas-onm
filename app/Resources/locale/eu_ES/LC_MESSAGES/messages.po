@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-29 08:49+0000\n"
-"PO-Revision-Date: 2025-07-29 11:16+0200\n"
+"POT-Creation-Date: 2025-08-08 09:34+0000\n"
+"PO-Revision-Date: 2025-08-08 11:59+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Euskera\n"
 "Language: es\n"
@@ -1155,6 +1155,9 @@ msgstr "Elementuak 500 eta 1000 artean egon behar dute"
 msgid "Sitemap saved successfully"
 msgstr "Mapa-mapa arrakastaz gorde da"
 
+msgid "Settings saved successfully"
+msgstr "Ezarpenak arrakastaz gordeta"
+
 #, php-format
 msgid "%s users deleted successfully"
 msgstr "%s erabiltzaileak ondo ezabatu dira"
@@ -1380,9 +1383,6 @@ msgstr "%d aste"
 
 msgid "No limit"
 msgstr "Ez mugarik"
-
-msgid "Settings saved successfully"
-msgstr "Ezarpenak arrakastaz gordeta"
 
 msgid "List of contents"
 msgstr "Edukien zerrenda"
@@ -6905,6 +6905,9 @@ msgstr "Biltegiratze tamaina"
 msgid "Users Active"
 msgstr "Erabiltzaileak aktibatuta"
 
+msgid "S3 Storage used"
+msgstr "Erabilitako S3 biltegiratzea"
+
 msgid "Emails sent from"
 msgstr "Bidalitako mezu elektronikoak"
 
@@ -8143,32 +8146,11 @@ msgstr "Gakoa automatikoki izendatuko da"
 msgid "Delete compiles"
 msgstr "Ezabatu konpilak"
 
-msgid "Command"
-msgstr "Agindua"
-
-msgid "Params"
-msgstr "Partahs"
-
-msgid "Instance"
-msgstr "Jatzi"
-
-msgid "#"
-msgstr "#"
-
 msgid "Video compress"
 msgstr "Bideoa konprimatu"
 
-msgid "Thumbnail generate"
-msgstr "Miniatura sortu"
-
-msgid "Seconds"
-msgstr "Segunduak"
-
-msgid "Concurrent tasks"
-msgstr "Concurrent tasks"
-
-msgid "Number of tasks"
-msgstr "Tareen kopurua"
+msgid "Command"
+msgstr "Agindua"
 
 msgid "S3 Provider"
 msgstr "S3 hornitzailea"
@@ -8187,6 +8169,39 @@ msgstr "Eskualdea"
 
 msgid "Download endpoint"
 msgstr "Deskargatzeko puntua"
+
+msgid "Params"
+msgstr "Partahs"
+
+msgid "Instance"
+msgstr "Jatzi"
+
+msgid "#"
+msgstr "#"
+
+msgid "Manager config"
+msgstr "Kudeatzailearen konfigurazioa"
+
+msgid "Config"
+msgstr "Konfigurazioa"
+
+msgid "Use manager config"
+msgstr "Erabili kudeatzailearen konfigurazioa"
+
+msgid "Thumbnail generate"
+msgstr "Miniatura sortu"
+
+msgid "Seconds"
+msgstr "Segunduak"
+
+msgid "Concurrent tasks"
+msgstr "Concurrent tasks"
+
+msgid "Number of tasks"
+msgstr "Tareen kopurua"
+
+msgid "Do you want to use the manager configuration for this instance?"
+msgstr "Kudeatzailearen konfigurazioa erabili nahi duzu instantzia honetarako?"
 
 msgid "A new version of Opennemas is downloaded. Launch it?"
 msgstr "OpenNEMASen bertsio berria deskargatzen da. Abiarazi?"

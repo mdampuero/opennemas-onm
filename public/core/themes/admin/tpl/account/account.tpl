@@ -104,7 +104,7 @@
             <div class="tiles light-red m-b-15">
               <div class="tiles-body">
                 <div class="tiles-title text-uppercase text-black">
-                  {t}S3 Storage size{/t}
+                  {t}S3 Storage used{/t}
                 </div>
                 <div class="widget-stats">
                   <div class="wrapper last">
