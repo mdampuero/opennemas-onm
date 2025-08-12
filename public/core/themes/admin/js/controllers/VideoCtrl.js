@@ -485,7 +485,14 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @param {FileList} files - The list of files selected by the user.
      */
     $scope.setFile = function(files) {
-      $scope.selectedFile = files[0];
+      var file = files[0];
+
+      if (!file || file.type && file.type.indexOf('video') !== 0) {
+        messenger.post({ message: 'Only video files are allowed', type: 'error' });
+        return;
+      }
+
+      $scope.selectedFile = file;
       $scope.fileId = $scope.generateFileId();
       $scope.progress = 0;
       $scope.uploading = 0;
@@ -575,7 +582,8 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
             }
             $scope.$applyAsync();
           }
-        }, function() {
+        }, function(error) {
+          messenger.post({ message: error.data && error.data.message ? error.data.message : 'Upload failed', type: 'error' });
           $scope.$applyAsync();
         });
       };
