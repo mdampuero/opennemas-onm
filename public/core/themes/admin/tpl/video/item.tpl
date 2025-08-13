@@ -154,7 +154,7 @@
             </div>
           </div>
         </div>
-        <span ng-if="item.type == 'web-source'">
+        <span ng-if="item.type !== 'external' && item.type !== 'script' && item.type !== 'upload'">
           <div class="form-group">
             <label for="video_url" class="form-label">{t}Video URL{/t}</label>
             <div class="controls">
