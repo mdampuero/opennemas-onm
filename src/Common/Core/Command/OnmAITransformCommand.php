@@ -17,7 +17,7 @@ class OnmAITransformCommand extends Command
             ->setName('core:onmai:transform')
             ->setDescription('Applies AI transformations to contents using provided prompts')
             ->addOption('instance', null, InputOption::VALUE_REQUIRED, 'ID of the instance')
-            ->addOption('contents', null, InputOption::VALUE_REQUIRED, 'Comma separated list of content ids')
+            ->addOption('oql', null, InputOption::VALUE_REQUIRED, 'OQL query to select contents')
             ->addOption('promptTitle', null, InputOption::VALUE_REQUIRED, 'Prompt id for title')
             ->addOption('promptDescription', null, InputOption::VALUE_REQUIRED, 'Prompt id for description')
             ->addOption('promptBody', null, InputOption::VALUE_REQUIRED, 'Prompt id for body')
@@ -31,20 +31,29 @@ class OnmAITransformCommand extends Command
      */
     protected function do()
     {
-        list($instance, $ids, $promptTitleId, $promptDescriptionId, $promptBodyId) = $this->getParameters();
+        list($instance, $oql, $promptTitleId, $promptDescriptionId, $promptBodyId) = $this->getParameters();
         $this->setInstance($instance);
 
+        $service = $this->getContainer()->get('api.service.content');
+        $response = $service->getList($oql);
+        $ids = array_map(function ($item) {
+            return $item->pk_content;
+        }, $response['items']);
+        
         $prompts = $this->getPrompts($promptTitleId, $promptDescriptionId, $promptBodyId);
 
         $this->steps[] = count($ids);
         foreach ($ids as $id) {
-            $this->writeStep("Content $id", false, 2);
+            $baseMsg = "Content $id";
+            $this->writeStep($baseMsg, false, 2);
             try {
                 $this->processContent($id, $prompts);
                 $this->writeStatus('success', 'DONE', true);
+                $this->appendTaskOutput($baseMsg, 'DONE');
             } catch (\Exception $e) {
                 $this->getContainer()->get('error.log')->error($e->getMessage());
                 $this->writeStatus('error', 'FAIL', true);
+                $this->appendTaskOutput($baseMsg, 'ERROR', $e->getMessage());
             }
         }
 
@@ -65,22 +74,20 @@ class OnmAITransformCommand extends Command
     protected function getParameters(): array
     {
         $instance          = $this->input->getOption('instance');
-        $contents          = $this->input->getOption('contents');
+        $oql               = $this->input->getOption('oql');
         $promptTitle       = $this->input->getOption('promptTitle');
         $promptDescription = $this->input->getOption('promptDescription');
         $promptBody        = $this->input->getOption('promptBody');
         $this->taskPK      = $this->input->getOption('task');
 
-        if (empty($instance) || empty($contents) || empty($promptTitle)
+        if (empty($instance) || empty($oql) || empty($promptTitle)
             || empty($promptDescription) || empty($promptBody)
         ) {
-            throw new \InvalidArgumentException('Parameters instance, contents, promptTitle, promptDescription 
-            and promptBody are mandatory');
+            throw new \InvalidArgumentException('Parameters instance, oql, promptTitle, promptDescription'
+            . ' and promptBody are mandatory');
         }
 
-        $ids = preg_split('/\s*,\s*/', $contents);
-
-        return [$instance, $ids, $promptTitle, $promptDescription, $promptBody];
+        return [$instance, $oql, $promptTitle, $promptDescription, $promptBody];
     }
 
     /**
@@ -116,6 +123,27 @@ class OnmAITransformCommand extends Command
         $this->getContainer()->get('core.security')->setInstance($instance);
 
         return $this;
+    }
+
+    /**
+     * Appends a message to the task output if a task id is provided.
+     */
+    protected function appendTaskOutput(string $message, string $status, string $description = ''): void
+    {
+        if (!$this->taskPK) {
+            return;
+        }
+
+        $conn   = $this->getContainer()->get('orm.manager')->getConnection('manager');
+        $output = $conn->fetchColumn('SELECT output FROM tasks WHERE id = ?', [ $this->taskPK ]);
+
+        $line = str_pad($message, $this->padding, '.') . $status;
+        if (!empty($description)) {
+            $line .= ' ' . $description;
+        }
+        $output = ($output ?? '') . $line . PHP_EOL;
+
+        $conn->update('tasks', [ 'output' => $output ], [ 'id' => $this->taskPK ]);
     }
 
     /**
