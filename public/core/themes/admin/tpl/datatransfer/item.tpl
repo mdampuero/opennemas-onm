@@ -171,7 +171,6 @@
                 <td class="v-align-middle [% col.name === 'widget_type' ? 'text-center' : '' %]"
                     ng-repeat="col in displayedColumns track by $index">
                   <div class="table-text">
-
                     <!-- Widget type icons -->
                     <span ng-if="col.name === 'widget_type'">
                       <i class="fa fa-lg fa-code" ng-if="!item.widget_type" uib-tooltip="HTML"></i>
@@ -210,7 +209,6 @@
                     <span ng-if="col.name !== 'widget_type' && col.name !== 'advertisements.0.with_script'">
                       [% getNestedValue(item, col.name) %]
                     </span>
-
                   </div>
                 </td>
               </tr>

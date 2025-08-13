@@ -740,7 +740,7 @@ class ContentPersister extends BasePersister
             return;
         }
         $sql = "insert into advertisements (pk_advertisement, with_script, script) values "
-            . str_repeat('(?,?,?,?),', count($advertisements));
+            . str_repeat('(?,?,?),', count($advertisements));
 
         $id     = array_values($id);
         $sql    = rtrim($sql, ',');
