@@ -157,9 +157,8 @@
             <thead>
               <tr>
                 <th ng-repeat="col in displayedColumns track by $index"
-                  class="v-align-middle [% col === 'widget_type' ? 'text-center' : '' %]"
-                  width="[% col === 'widget_type' ? 30 : 150 %]"
-                >
+                    class="v-align-middle [% col.name === 'widget_type' ? 'text-center' : '' %]"
+                    width="[% col.with ? col.with + '%' : '150px' %]">
                   <span class="text-uppercase">
                     [% col.display %]
                   </span>
@@ -167,16 +166,51 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-class="{ row_selected: isSelected(getItemId(item)) }" ng-repeat="item in getPaginatedItems()">
-                <td class="v-align-middle [% col === 'widget_type' ? 'text-center' : '' %]" ng-repeat="col in displayedColumns track by $index">
+              <tr ng-class="{ row_selected: isSelected(getItemId(item)) }"
+                  ng-repeat="item in getPaginatedItems()">
+                <td class="v-align-middle [% col.name === 'widget_type' ? 'text-center' : '' %]"
+                    ng-repeat="col in displayedColumns track by $index">
                   <div class="table-text">
+
+                    <!-- Widget type icons -->
                     <span ng-if="col.name === 'widget_type'">
                       <i class="fa fa-lg fa-code" ng-if="!item.widget_type" uib-tooltip="HTML"></i>
                       <i class="fa fa-lg fa-cog" ng-if="item.widget_type" uib-tooltip="{t}IntelligentWidget{/t}"></i>
                     </span>
-                    <span ng-if="col.name !== 'widget_type'">
-                      [% item[col.name] %]
+
+                    <!-- Advertisements with_script icons -->
+                    <span ng-if="col.name === 'advertisements.0.with_script'">
+                      <i class="fa fa-file-picture-o fa-lg m-r-5 text-success"
+                        ng-if="getNestedValue(item, col.name) == 0 && item.is_flash != 1"
+                        title="{t}Media element (jpg, png, gif){/t}">
+                      </i>
+                      <i class="fa fa-file-video-o fa-lg m-r-5 text-danger"
+                        ng-if="getNestedValue(item, col.name) == 0 && item.is_flash == 1"
+                        title="{t}Media flash element (swf){/t}">
+                      </i>
+                      <i class="fa fa-file-code-o fa-lg m-r-5 text-info"
+                        ng-if="getNestedValue(item, col.name) == 1"
+                        title="Javascript">
+                      </i>
+                      <i class="fa fa-gg fa-lg m-r-5 text-info"
+                        ng-if="getNestedValue(item, col.name) == 2"
+                        title="OpenX">
+                      </i>
+                      <i class="fa fa-google fa-lg m-r-5 text-danger"
+                        ng-if="getNestedValue(item, col.name) == 3"
+                        title="Google DFP">
+                      </i>
+                      <i class="fa fa-plus-square fa-lg m-r-5 text-warning"
+                        ng-if="getNestedValue(item, col.name) == 4"
+                        title="Smart Adserver">
+                      </i>
                     </span>
+
+                    <!-- Generic column values -->
+                    <span ng-if="col.name !== 'widget_type' && col.name !== 'advertisements.0.with_script'">
+                      [% getNestedValue(item, col.name) %]
+                    </span>
+
                   </div>
                 </td>
               </tr>

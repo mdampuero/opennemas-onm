@@ -1,4 +1,4 @@
-{extends file="base/admin.tpl"}
+z{extends file="base/admin.tpl"}
 
 {block name="content"}
 <div ng-app="BackendApp" ng-controller="ContentListCtrl" ng-init="init('advertisement', 'backend_ws_advertisements_list');

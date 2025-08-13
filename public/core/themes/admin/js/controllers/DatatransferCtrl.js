@@ -34,7 +34,7 @@
           widget: {
             name: 'widget',
             columns: [
-              { name: 'widget_type', display: 'Type' },
+              { name: 'widget_type', display: 'Type', with: 30 },
               { name: 'title', display: 'Title' },
               { name: 'class', display: 'Content' }
             ]
@@ -42,7 +42,8 @@
           advertisement: {
             name: 'advertisement',
             columns: [
-              { name: 'title', display: 'Title' }
+              { name: 'title', display: 'Title' },
+              { name: 'advertisements.0.with_script', display: 'Type', with: 30 },
             ]
           }
         };
@@ -200,6 +201,12 @@
           if (input) {
             input.value = null;
           }
+        };
+
+        $scope.getNestedValue = function(obj, path) {
+          return path.split('.').reduce(function(o, k) {
+            return o ? o[k] : null;
+          }, obj);
         };
 
         /**
