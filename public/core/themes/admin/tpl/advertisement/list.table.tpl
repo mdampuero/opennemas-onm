@@ -132,7 +132,7 @@
           [% getCategoryTitle(catId) %]
         </a>
       </div>
-      <small ng-show="item.fk_content_categories.length > 3" {* uib-tooltip-template="'ad_position_template'" tooltip-placement="bottom" *}>{t 1="[% item.fk_content_categories.length - 3 %]"}And %1 more…{/t}</small>
+      <small ng-show="item.fk_content_categories.length > 3">{t 1="[% item.fk_content_categories.length - 3 %]"}And %1 more…{/t}</small>
     {/block}
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('starttime')">
