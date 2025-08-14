@@ -418,21 +418,6 @@
                 {t}Authorized Digital Sellers{/t}
             </label>
             <div class="controls text-right">
-                {acl isAllowed="MASTER"}
-                <div class="btn-group mb-2" role="group">
-                    <a href="{url
-                    name=api_v1_backend_datatransfer_export
-                    contentType='adstxt'}" class="btn btn-white" id="export-button">
-                      <i class="fa fa-download"></i>
-                      {t}Export{/t}
-                    </a>
-                    <a href="{url
-                    name=backend_datatransfer_import}" class="btn btn-white" id="export-button">
-                      <i class="fa fa-upload"></i>
-                      {t}Import{/t}
-                    </a>
-                </div>
-                {/acl}
                 <textarea class="form-control" name="ads_txt" rows="20">{$configs['ads_txt']|default:''}</textarea>
                 <span class="help">{t}This will be the content of the file ads.txt on your root domain{/t}</span>
             </div>

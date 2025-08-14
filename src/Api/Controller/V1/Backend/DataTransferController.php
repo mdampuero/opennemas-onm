@@ -70,13 +70,6 @@ class DataTransferController extends ApiController
                 'widget_type',
             ],
             'allowImport' => true
-        ],
-        'adstxt' => [
-            'config' => [
-                'service' => 'core.helper.advertisement',
-                'limit'   => 1000,
-            ],
-            'allowImport' => true,
         ]
     ];
 
@@ -174,10 +167,6 @@ class DataTransferController extends ApiController
             return new JsonResponse(['error' => 'Invalid content type or config'], 400);
         }
 
-        if ($contentType === 'adstxt') {
-            return $this->exportAdstxt($contentType, $config);
-        }
-
         $service       = $this->container->get($config['config']['service']);
         $query         = $config['config']['query']['list'] ??
             'content_type_name = "%s" order by starttime desc limit %d offset %d';
@@ -241,10 +230,6 @@ class DataTransferController extends ApiController
             return new JsonResponse(['error' => 'Import not allowed for this content type'], 403);
         }
 
-        if ($contentType === 'adstxt') {
-            return $this->importAdsTxt($contentType, $items);
-        }
-
         $us             = $this->container->get($config['config']['service']);
         $includeColumns = $config['includeColumns'] ?? [];
 
@@ -278,74 +263,6 @@ class DataTransferController extends ApiController
         $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
-    }
-
-    /**
-     * Specialized export method for Ads.txt settings.
-     *
-     * @param string $contentType
-     *   The content type being exported (must be 'adstxt').
-     * @param array $config
-     *   The configuration settings for adstxt export.
-     *
-     * @return Response
-     *   A downloadable JSON response with Ads.txt metadata and items.
-     */
-    protected function exportAdstxt($contentType, $config)
-    {
-        $adstxtHelper = $this->container->get($config['config']['service']);
-        $positions    = $adstxtHelper->getAdsTxtContentInstance();
-
-        $exportData = [
-            'metadata' => [
-                'content_type' => $contentType,
-                'export_date'  => date('Y-m-d H:i:s'),
-            ],
-            'items' => $positions,
-        ];
-
-        $json = json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-
-        return new Response($json, 200, [
-            'Content-Type' => 'application/json',
-            'Content-Disposition' => sprintf(
-                'attachment; filename="export_%s_%s.json"',
-                $contentType,
-                date('Ymd_His')
-            ),
-        ]);
-    }
-
-    /**
-     * Specialized import method for Ads.txt settings.
-     *
-     * @param string $contentType
-     *   The content type being imported (must be 'adstxt').
-     * @param array $items
-     *   Array of Ads.txt entries to be saved.
-     *
-     * @return JsonResponse
-     *   Response with success message or error.
-     */
-    protected function importAdsTxt($contentType, $items)
-    {
-        $msg = $this->get('core.messenger');
-
-        if (!$contentType || empty($items)) {
-            return new JsonResponse(['error' => 'Content type and items are required'], 400);
-        }
-
-        $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
-
-        $settings = [
-            'ads_txt' => $items
-        ];
-
-        $ds->set($settings);
-
-        $msg->add(_('Settings saved.'), 'success');
-
-        return new JsonResponse($msg->getMessages(), $msg->getcode());
     }
 
     /**
