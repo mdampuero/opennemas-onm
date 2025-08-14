@@ -126,11 +126,13 @@
       <small class="text-italic" ng-if="!item.fk_content_categories">
         {t}All{/t}
       </small>
-      <div class="table-text">
-        <a class="label label-default m-r-5 text-bold" href="[% routing.generate('backend_category_show', { id: item.fk_content_categories }) %]" ng-if="item.fk_content_categories">
-          [% getCategoryTitle(item.fk_content_categories) %]
+      <div ng-repeat="catId in item.fk_content_categories | limitTo:3">
+        <a class="label label-default m-r-5 text-bold"
+          href="[% routing.generate('backend_category_show', { id: catId }) %]">
+          [% getCategoryTitle(catId) %]
         </a>
       </div>
+      <small ng-show="item.fk_content_categories.length > 3" {* uib-tooltip-template="'ad_position_template'" tooltip-placement="bottom" *}>{t 1="[% item.fk_content_categories.length - 3 %]"}And %1 more…{/t}</small>
     {/block}
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('starttime')">
