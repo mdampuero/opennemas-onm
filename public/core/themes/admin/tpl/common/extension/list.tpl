@@ -66,13 +66,13 @@
         <div class="navbar navbar-inverse">
           <div class="navbar-inner">
             <ul class="nav quick-section">
-              <li class="m-r-10 quicklinks ng-cloak" ng-if="isModeSupported() && app.mode === 'grid'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
-                <button class="btn btn-link" ng-click="setMode('list')">
+              <li class="m-r-10 quicklinks ng-cloak" ng-if="isModeSupported() && app.mode === 'list'" uib-tooltip="{t}Mosaic{/t}" tooltip-placement="bottom">
+                <button class="btn btn-link" ng-click="setMode('grid')">
                   <i class="fa fa-lg fa-th"></i>
                 </button>
               </li>
-              <li class="m-r-10 quicklinks ng-cloak" ng-if="isModeSupported() && app.mode === 'list'" uib-tooltip="{t}List{/t}" tooltip-placement="bottom">
-                <button class="btn btn-link" ng-click="setMode('grid')">
+              <li class="m-r-10 quicklinks ng-cloak" ng-if="isModeSupported() && app.mode === 'grid'" uib-tooltip="{t}List{/t}" tooltip-placement="bottom">
+                <button class="btn btn-link" ng-click="setMode('list')">
                   <i class="fa fa-lg fa-list"></i>
                 </button>
               </li>

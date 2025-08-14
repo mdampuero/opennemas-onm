@@ -140,6 +140,9 @@ class MetaHelper
             $data = array_merge($data, $this->getContentData($content));
         }
 
+        // dump($data);
+        // die();
+
         return $data;
     }
 

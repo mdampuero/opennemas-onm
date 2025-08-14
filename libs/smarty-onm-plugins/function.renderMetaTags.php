@@ -26,6 +26,9 @@ function smarty_function_renderMetaTags($params, &$smarty)
         $content->firstData = array_shift($data);
     }
 
+    // dump($smarty);
+    // die();
+
     $page      = $smarty->getValue('page') ?? null;
     $extension = $smarty->getContainer()->get('core.globals')->getExtension();
     $action    = $smarty->getContainer()->get('core.globals')->getAction();
