@@ -665,7 +665,7 @@ class ContentPersister extends BasePersister
         $this->conn->executeQuery($sql, $params, $types);
     }
 
-      /**
+    /**
      * Saves new LiveBlogUpdates.
      *
      * @param array $id         The entity id.
@@ -734,13 +734,14 @@ class ContentPersister extends BasePersister
         $this->conn->executeQuery($sql, $params, $types);
     }
 
+
     protected function saveAdvertisements($id, $advertisements)
     {
         if (empty($advertisements)) {
             return;
         }
-        $sql = "insert into advertisements (pk_advertisement, with_script, script) values "
-            . str_repeat('(?,?,?),', count($advertisements));
+        $sql = "insert into advertisements (pk_advertisement, path, url, with_script, script) values "
+            . str_repeat('(?,?,?,?,?),', count($advertisements));
 
         $id     = array_values($id);
         $sql    = rtrim($sql, ',');
@@ -751,6 +752,8 @@ class ContentPersister extends BasePersister
             $value['with_script'] = empty($value['with_script']) ? 0 : $value['with_script'];
 
             $params = array_merge($params, array_merge($id, [
+                $value['path'] ?? null,
+                $value['url'] ?? null,
                 $value['with_script'],
                 $value['script'] ?? null,
             ]));
@@ -758,6 +761,8 @@ class ContentPersister extends BasePersister
             $types = array_merge($types, [
                 \PDO::PARAM_INT,
                 empty($value['with_script']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+                empty($value['path']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+                empty($value['url']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
                 empty($value['script']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
             ]);
         }
