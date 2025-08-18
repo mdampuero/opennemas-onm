@@ -15,6 +15,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-parent" checklist-model="app.columns.selected" checklist-value="'parent'" type="checkbox">
+    <label for="checkbox-parent">
+      {t}Subsection of{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-cover" checklist-model="app.columns.selected" checklist-value="'cover'" type="checkbox">
     <label for="checkbox-cover">
       {t}Cover{/t}
@@ -64,6 +70,9 @@
   </th>
   <th class="v-align-middle" width="200" ng-if="isColumnEnabled('slug')">
     {t}Slug{/t}
+  </th>
+  <th class="v-align-middle" width="200" ng-if="isColumnEnabled('parent')">
+    {t}Subsection of{/t}
   </th>
   <th class="text-center v-align-middle" width="80" ng-if="isColumnEnabled('cover')">
     <i class="fa fa-picture-o"></i>
@@ -117,6 +126,11 @@
   </td>
   <td class="v-align-middle" ng-if="isColumnEnabled('slug')">
     [% item.name %]
+  </td>
+  <td class="v-align-middle" ng-if="isColumnEnabled('parent')">
+    <span ng-if="item.parent_id">
+      [% item.parent %]
+    </span>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('cover')">
     <dynamic-image class="img-thumbnail" instance="{$app.instance->getMediaShortPath()}/" ng-model="item.logo_id" only-image="true"></dynamic-image>

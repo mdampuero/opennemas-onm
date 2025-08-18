@@ -155,6 +155,7 @@
           $scope.flags.http.loading = 1;
 
           var oql   = oqlEncoder.getOql($scope.criteria);
+
           var route = {
             name: $scope.routes.getList,
             params: { oql: oql }
