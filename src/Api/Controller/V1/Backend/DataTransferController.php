@@ -44,7 +44,13 @@ class DataTransferController extends ApiController
                 'frontpage',
                 'in_litter',
                 'in_home',
-                'params',
+                'params.sizes',
+                'params.openx_zone_id',
+                'params.googledfp_unit_id',
+                'params.smart_format_id',
+                'params.smart_page_id',
+                'params.orientation',
+                'params.devices',
                 'content_status',
                 'advertisements',
                 'ads_positions'
@@ -123,7 +129,7 @@ class DataTransferController extends ApiController
 
         $includeColumns = $this->availableDataTransfers[$contentType]['includeColumns'] ?? [];
          // TODO: Pass to helper fuction and allow filter nested arrays.
-        $filtered       = $this->filterColumns($items, $includeColumns, true);
+        $filtered       = $this->filterColumns($items, $includeColumns);
 
         $exportData = [
             'metadata' => [
@@ -180,7 +186,7 @@ class DataTransferController extends ApiController
 
         $includeColumns = $config['includeColumns'] ?? [];
 
-        $filtered = $this->filterColumns($items, $includeColumns, true);
+        $filtered = $this->filterColumns($items, $includeColumns);
 
         $exportData = [
             'metadata' => [
@@ -239,11 +245,7 @@ class DataTransferController extends ApiController
                 return new JsonResponse(['error' => 'Invalid item format'], 400);
             }
 
-            if (empty($includeColumns)) {
-                $filteredItem = $item;
-            } else {
-                $filteredItem = array_intersect_key($item, array_flip($includeColumns));
-            }
+            $filteredItem = $item;
 
             if ($contentType === 'advertisement') {
                 $devices = $filteredItem['params']['devices'];
@@ -267,19 +269,17 @@ class DataTransferController extends ApiController
     }
 
     /**
-     * Filters specified columns in a given dataset of items.
+     * Filters specified columns in a given dataset of items, supporting nested fields with dot notation.
      *
      * @param array $items
      *   The full list of items to filter.
      * @param array $columns
-     *   List of column keys to include or exclude.
-     * @param bool $include
-     *   If true, only includes the specified columns. If false, excludes them.
+     *   List of column keys to include or exclude (supports dot notation for nested fields).
      *
      * @return array
      *   The filtered dataset with selected columns.
      */
-    protected function filterColumns(array $items, array $columns, bool $include = false): array
+    protected function filterColumns(array $items, array $columns): array
     {
         if (empty($items)) {
             return [];
@@ -289,16 +289,93 @@ class DataTransferController extends ApiController
             return $items;
         }
 
-        return array_map(function ($item) use ($columns, $include) {
+        return array_map(function ($item) use ($columns) {
             if (!is_array($item)) {
                 return [];
             }
 
-            if ($include) {
-                return array_intersect_key($item, array_flip($columns));
-            } else {
-                return array_diff_key($item, array_flip($columns));
+            $result = [];
+            foreach ($columns as $column) {
+                // Handle nested fields with dot notation
+                if (strpos($column, '.') !== false) {
+                    $value = $this->getNestedValue($item, $column);
+                    if ($value !== null) {
+                        $this->setNestedValue($result, $column, $value);
+                    }
+                } else {
+                    if (array_key_exists($column, $item)) {
+                        $result[$column] = $item[$column];
+                    }
+                }
             }
+
+            return $result;
         }, $items);
+    }
+
+    /**
+     * Gets a nested value from an array using dot notation.
+     *
+     * @param array $array
+     * @param string $key
+     * @return mixed|null
+     */
+    protected function getNestedValue(array $array, string $key)
+    {
+        $keys    = explode('.', $key);
+        $current = $array;
+
+        foreach ($keys as $k) {
+            if (!is_array($current) || !array_key_exists($k, $current)) {
+                return null;
+            }
+            $current = $current[$k];
+        }
+
+        return $current;
+    }
+
+    /**
+     * Sets a nested value in an array using dot notation.
+     *
+     * @param array &$array
+     * @param string $key
+     * @param mixed $value
+     */
+    protected function setNestedValue(array &$array, string $key, $value): void
+    {
+        $keys    = explode('.', $key);
+        $current = &$array;
+
+        foreach ($keys as $k) {
+            if (!is_array($current)) {
+                $current = [];
+            }
+            $current = &$current[$k];
+        }
+
+        $current = $value;
+    }
+
+    /**
+     * Removes a nested field from an array using dot notation.
+     *
+     * @param array &$array
+     * @param string $key
+     */
+    protected function removeNestedField(array &$array, string $key): void
+    {
+        $keys    = explode('.', $key);
+        $lastKey = array_pop($keys);
+        $current = &$array;
+
+        foreach ($keys as $k) {
+            if (!is_array($current) || !array_key_exists($k, $current)) {
+                return;
+            }
+            $current = &$current[$k];
+        }
+
+        unset($current[$lastKey]);
     }
 }
