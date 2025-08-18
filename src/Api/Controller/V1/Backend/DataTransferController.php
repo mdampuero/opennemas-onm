@@ -122,6 +122,7 @@ class DataTransferController extends ApiController
         }, $data['items']);
 
         $includeColumns = $this->availableDataTransfers[$contentType]['includeColumns'] ?? [];
+         // TODO: Pass to helper fuction and allow filter nested arrays.
         $filtered       = $this->filterColumns($items, $includeColumns, true);
 
         $exportData = [
