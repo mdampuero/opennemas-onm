@@ -79,6 +79,11 @@ class DataTransferController extends ApiController
         ]
     ];
 
+    /**
+     * The DataTransferHelper.
+     *
+     * @var string
+     */
     protected $helper = 'core.helper.datatransfer';
 
     /**
@@ -240,7 +245,7 @@ class DataTransferController extends ApiController
             return new JsonResponse(['error' => 'Import not allowed for this content type'], 403);
         }
 
-        $us             = $this->container->get($config['config']['service']);
+        $us = $this->container->get($config['config']['service']);
 
         foreach ($items as $item) {
             if (!is_array($item)) {

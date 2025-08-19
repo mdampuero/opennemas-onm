@@ -44,8 +44,7 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
               <span class="h-seperate"></span>
             </li>
             <li class="quicklinks">
-              <a href="{url
-              name=backend_datatransfer_import}" class="btn btn-white" id="export-button">
+              <a class="btn btn-white" ng-click="import()" uib-tooltip="{t}Import{/t}" tooltip-placement="bottom" type="button">
                 <i class="fa fa-upload"></i>
                 {t}Import{/t}
               </a>
@@ -298,6 +297,9 @@ status = [ { name: '{t}All{/t}', value: null }, { name: '{t}Published{/t}', valu
   </script>
   <script type="text/ng-template" id="ad_position_template">
     <div ng-repeat="position in content.positions">[% map[position].name %]</div>
+  </script>
+  <script type="text/ng-template" id="modal-datatransfer">
+    {include file="common/extension/modal.datatransfer.tpl"}
   </script>
 </div>
 {/block}

@@ -218,6 +218,37 @@
           });
         };
 
+        $scope.import = function(route) {
+          var modal = $uibModal.open({
+            templateUrl: 'modal-datatransfer',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return { };
+              },
+              success: function() {
+                return null;
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response) {
+              var url = routing.generate(route);
+
+              $http.get(url).then(function(response) {
+                messenger.post(response.data.messages);
+                if (response.data.success) {
+                  $scope.list();
+                }
+              }, function(response) {
+                messenger.post(response.data, 'error');
+              });
+            }
+          });
+        };
+
         /**
          * @function sendToTrash
          * @memberOf ContentRestListCtrl

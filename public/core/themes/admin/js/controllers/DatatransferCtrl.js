@@ -117,6 +117,7 @@
           $scope.importedData = null;
 
           const reader = new FileReader();
+
           var route = {
             name: $scope.routes.importItem,
           };
