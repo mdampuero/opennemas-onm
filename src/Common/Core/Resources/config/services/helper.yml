@@ -400,3 +400,8 @@ services:
         class:      Common\Core\Component\Helper\StorageHelperFactory
         arguments:  ['@service_container', '@application.log', '@error.log' ]
         public:     true
+
+    core.helper.datatransfer:
+        class:      Common\Core\Component\Helper\DataTransferHelper
+        arguments: [ '@service_container' ]
+        public:     true
