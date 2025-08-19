@@ -249,6 +249,48 @@
           });
         };
 
+        $scope.import = function() {
+          $uibModal.open({
+            templateUrl: 'modal-datatransfer',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return {};
+              },
+              success: function($http) {
+                return function(modal, template) {
+                  if (!template.file) {
+                    return messenger.post('No file selected', 'error');
+                  }
+
+                  if (template.file.type !== 'application/json') {
+                    return messenger.post('No es un fichero JSON válido', 'error');
+                  }
+
+                  const reader = new FileReader();
+
+                  reader.readAsText(template.file);
+
+                  reader.onload = function(event) {
+                    const json = JSON.parse(event.target.result);
+
+                    const url = routing.generate('api_v1_backend_datatransfer_import');
+
+                    $http.post(url, json, {
+                      headers: { 'Content-Type': 'application/json' },
+                      transformRequest: angular.toJson
+                    }).then(function(response) {
+                      messenger.post(response.data);
+                      $scope.list($scope.route);
+                    });
+                  };
+                };
+              }
+            }
+          });
+        };
+
         /**
          * @function sendToTrash
          * @memberOf ContentRestListCtrl

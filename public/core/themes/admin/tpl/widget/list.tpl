@@ -30,8 +30,7 @@
       <span class="h-seperate"></span>
     </li>
     <li class="quicklinks">
-      <a href="{url
-      name=backend_datatransfer_import}" class="btn btn-white" id="export-button">
+      <a class="btn btn-white" ng-click="import()" uib-tooltip="{t}Import{/t}" tooltip-placement="bottom" type="button">
         <i class="fa fa-upload"></i>
         {t}Import{/t}
       </a>
@@ -129,5 +128,8 @@
   </script>
   <script type="text/ng-template" id="modal-duplicate">
     {include file="common/extension/modal.duplicate.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-datatransfer">
+    {include file="common/extension/modal.datatransfer.tpl"}
   </script>
 {/block}
