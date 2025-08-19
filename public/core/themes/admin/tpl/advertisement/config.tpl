@@ -417,7 +417,7 @@
             <label for="ads_txt" class="form-label">
                 {t}Authorized Digital Sellers{/t}
             </label>
-            <div class="controls text-right">
+            <div class="controls">
                 <textarea class="form-control" name="ads_txt" rows="20">{$configs['ads_txt']|default:''}</textarea>
                 <span class="help">{t}This will be the content of the file ads.txt on your root domain{/t}</span>
             </div>
