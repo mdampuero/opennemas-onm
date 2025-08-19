@@ -189,7 +189,7 @@
                   <i class="fa fa-cloud-upload fa-3x text-info" ng-if="uploading === 0"></i>
                   <i class="fa fa-check-circle fa-3x text-success" ng-if="uploading === 1"></i>
                 </div>
-                <input type="file" id="fileInput" style="display: none"
+                <input type="file" id="fileInput" style="display: none" accept="video/*"
                   onchange="angular.element(this).scope().setFile(this.files)">
                 <p ng-if="uploading !== 1"><strong>{t}Click or drag a file here{/t}</strong></p>
                 <p ng-if="uploading === 1"><strong>{t}Redirecting{/t}...</strong></p>
