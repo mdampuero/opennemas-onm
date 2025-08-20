@@ -18,9 +18,9 @@ class OnmAITransformCommand extends Command
             ->setDescription('Applies AI transformations to contents using provided prompts')
             ->addOption('instance', null, InputOption::VALUE_REQUIRED, 'ID of the instance')
             ->addOption('oql', null, InputOption::VALUE_REQUIRED, 'OQL query to select contents')
-            ->addOption('promptTitle', null, InputOption::VALUE_REQUIRED, 'Prompt id for title')
-            ->addOption('promptDescription', null, InputOption::VALUE_REQUIRED, 'Prompt id for description')
-            ->addOption('promptBody', null, InputOption::VALUE_REQUIRED, 'Prompt id for body')
+            ->addOption('promptTitle', null, InputOption::VALUE_OPTIONAL, 'Prompt id for title')
+            ->addOption('promptDescription', null, InputOption::VALUE_OPTIONAL, 'Prompt id for description')
+            ->addOption('promptBody', null, InputOption::VALUE_OPTIONAL, 'Prompt id for body')
             ->addOption('task', null, InputOption::VALUE_REQUIRED, 'Task id');
 
         $this->steps[] = 2;
@@ -39,7 +39,7 @@ class OnmAITransformCommand extends Command
         $ids = array_map(function ($item) {
             return $item->pk_content;
         }, $response['items']);
-        
+
         $prompts = $this->getPrompts($promptTitleId, $promptDescriptionId, $promptBodyId);
 
         $this->steps[] = count($ids);
@@ -47,7 +47,7 @@ class OnmAITransformCommand extends Command
             $baseMsg = "Content $id";
             $this->writeStep($baseMsg, false, 2);
             try {
-                $this->processContent($id, $prompts);
+                $this->processContent($id, $prompts, $promptTitleId, $promptDescriptionId, $promptBodyId);
                 $this->writeStatus('success', 'DONE', true);
                 $this->appendTaskOutput($baseMsg, 'DONE');
             } catch (\Exception $e) {
@@ -80,11 +80,8 @@ class OnmAITransformCommand extends Command
         $promptBody        = $this->input->getOption('promptBody');
         $this->taskPK      = $this->input->getOption('task');
 
-        if (empty($instance) || empty($oql) || empty($promptTitle)
-            || empty($promptDescription) || empty($promptBody)
-        ) {
-            throw new \InvalidArgumentException('Parameters instance, oql, promptTitle, promptDescription'
-            . ' and promptBody are mandatory');
+        if (empty($instance) || empty($oql)) {
+            throw new \InvalidArgumentException('Parameters instance and oql are mandatory');
         }
 
         return [$instance, $oql, $promptTitle, $promptDescription, $promptBody];
@@ -93,9 +90,9 @@ class OnmAITransformCommand extends Command
     /**
      * Fetch prompts by id from manager repository.
      *
-     * @param int $titleId
-     * @param int $descriptionId
-     * @param int $bodyId
+     * @param int|null $titleId
+     * @param int|null $descriptionId
+     * @param int|null $bodyId
      *
      * @return array
      */
@@ -103,11 +100,19 @@ class OnmAITransformCommand extends Command
     {
         $repo = $this->getContainer()->get('orm.manager')->getRepository('PromptManager');
 
-        return [
-            'titlePrompt'       => $repo->find($titleId)->getData(),
-            'descriptionPrompt' => $repo->find($descriptionId)->getData(),
-            'bodyPrompt'        => $repo->find($bodyId)->getData(),
-        ];
+        $prompts = [];
+
+        if ($titleId) {
+            $prompts['titlePrompt'] = $repo->find($titleId)->getData();
+        }
+        if ($descriptionId) {
+            $prompts['descriptionPrompt'] = $repo->find($descriptionId)->getData();
+        }
+        if ($bodyId) {
+            $prompts['bodyPrompt'] = $repo->find($bodyId)->getData();
+        }
+
+        return $prompts;
     }
 
     /**
@@ -151,24 +156,40 @@ class OnmAITransformCommand extends Command
      *
      * @param int   $id      Content id
      * @param array $prompts Prompt data
+     * @param int|null $titleId
+     * @param int|null $descriptionId
+     * @param int|null $bodyId
      */
-    protected function processContent($id, array $prompts): void
+    protected function processContent($id, array $prompts, $titleId = null, $descriptionId = null, $bodyId = null): void
     {
         $service = $this->getContainer()->get('api.service.content');
         $content = $service->getItem($id);
 
         $data = [
             'title'       => $content->title ?? '',
+            'title_int'   => $content->title_int ?? '',
             'description' => $content->description ?? '',
             'body'        => $content->body ?? '',
+            'categories'  => $content->categories ?? '',
+            'slug'        => $content->slug ?? '',
         ];
 
         $data = array_merge($data, $prompts);
 
-        $result = $this->getContainer()->get('core.helper.ai')->transform(
-            $data,
-            ['title', 'title_int', 'description', 'body']
-        );
+        // Build the fields to transform dynamically
+        $fieldsToTransform = [];
+        if ($titleId) {
+            $fieldsToTransform[] = 'title';
+            $fieldsToTransform[] = 'title_int';
+        }
+        if ($descriptionId) {
+            $fieldsToTransform[] = 'description';
+        }
+        if ($bodyId) {
+            $fieldsToTransform[] = 'body';
+        }
+        
+        $result = $this->getContainer()->get('core.helper.ai')->transform($data, $fieldsToTransform);
 
         $update = [
             'title'       => $result['title'] ?? $content->title,

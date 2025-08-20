@@ -840,11 +840,8 @@ EOT;
             $prompt = $data[$promptKey]['prompt'];
             $tone   = $data[$toneKey] ?? '';
 
-            if (in_array($data[$promptKey]['mode_or'] ?? '', ['Edit', 'Agency'])) {
-                $resources = $this->generateResourceByImporter($data);
-                $prompt = $this->replaceContentPlaceholders($prompt, $resources);
-            }
-
+            $prompt = $this->replaceContentPlaceholders($prompt, $this->generateResourceByImporter($data));
+            
             // If empty tone assign default prompt tone
             if (empty($tone)) {
                 $tone = $data[$promptKey]['tone'] ?? '';
@@ -865,7 +862,7 @@ EOT;
             ];
 
             $settings['messages'] = [['role' => 'user', 'content' => $this->replaceVars([
-                'objetivo'      => $data[$promptKey]['prompt'] ?? '',
+                'objetivo'      => $prompt,
                 'mode'          => 'Edit',
                 'instrucciones' => $this->getInstructionsList($data[$promptKey]['instructions'] ?? []),
                 'rol'           => $this->getRoleByName($data[$promptKey]['role']) ?? '',
@@ -875,7 +872,7 @@ EOT;
                 'fuente'        => $data[$field] ?? '',
                 'tono'          => ($tone) ? $this->getToneByName($tone) : 'Mantén el tono del texto original'
             ])]];
-
+           
             // Log the selected prompt details for debugging purposes.
             $this->container->get('core.helper.' . $settings['engine'])->setDataLog($dataLog);
 
