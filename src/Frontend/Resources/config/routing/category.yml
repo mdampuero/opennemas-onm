@@ -2,7 +2,7 @@ category_homepage:
     path:     /{category_slug}/
     defaults: { _controller: FrontendBundle:Category:homepage }
     requirements:
-        category_slug: '^[a-zA-Z0-9\-]+'
+        category_slug: '[^/.]+'
     options:
         l10n: true
         subdirectory: true
@@ -11,8 +11,8 @@ category_homepage_tag:
     path:     /{category_slug}/{tag_slug}/
     defaults: { _controller: FrontendBundle:Category:homepage }
     requirements:
-        category_slug: '^[a-zA-Z0-9\-]+'
-        tag_slug: '^[a-zA-Z0-9\-]+'
+        category_slug: '[^/.]+'
+        tag_slug: '[^/.]+'
     options:
         l10n: true
         subdirectory: true
@@ -21,7 +21,7 @@ category_frontpage:
     path:     /blog/section/{category_slug}/
     defaults: { _controller: FrontendBundle:Category:list }
     requirements:
-        category_slug: '^[a-zA-Z0-9\-]+'
+        category_slug: '[^/.]+'
     options:
         l10n: true
         subdirectory: true
@@ -30,6 +30,6 @@ categ_sync_frontpage:
     path:     /extseccion/blog/{category_slug}/
     defaults: { _controller: FrontendBundle:Category:extCategory }
     requirements:
-        category_slug: '^[a-zA-Z0-9\-]+'
+        category_slug: '[^/.]+'
     options:
         subdirectory: true
