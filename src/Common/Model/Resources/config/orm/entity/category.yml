@@ -12,6 +12,7 @@ orm:
                 enabled:             boolean
                 rss:                 boolean
                 layout:              boolean
+                parent:              l10n_string
                 parent_id:           integer
                 params:              array
                 logo_id:             integer

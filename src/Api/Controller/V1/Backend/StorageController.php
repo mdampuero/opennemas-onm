@@ -32,6 +32,25 @@ class StorageController extends Controller
         $instance    = $this->container->get('core.instance');
         $uploadDir   = '/home/opennemas/current/tmp/spool/uploads/' . $fileId;
 
+        $allowedExtensions = ['mp4', 'webm', 'ogg', 'ogv', 'mov', 'avi', 'wmv', 'flv', 'mpeg', 'mpg'];
+        $extension         = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        if (!in_array($extension, $allowedExtensions)) {
+            return new JsonResponse([
+                'status'  => 'error',
+                'message' => 'Only video files are allowed'
+            ], 400);
+        }
+
+        if ((int) $chunkNumber === 0) {
+            $mime = $chunk->getMimeType();
+            if (strpos($mime, 'video/') !== 0) {
+                return new JsonResponse([
+                    'status'  => 'error',
+                    'message' => 'Only video files are allowed'
+                ], 400);
+            }
+        }
+
         /**
          * Log for debugging purposes.
          */
