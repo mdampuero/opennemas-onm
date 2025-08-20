@@ -137,6 +137,7 @@ class DataTransferController extends ApiController
 
         $includeColumns = $this->availableDataTransfers[$contentType]['includeColumns'] ?? [];
         $filtered       = $helper->filterColumns($items, $includeColumns);
+        $filtered       = $helper->convertAdvertisementPaths($filtered, $contentType);
 
         $exportData = [
             'metadata' => [
@@ -195,6 +196,7 @@ class DataTransferController extends ApiController
         $includeColumns = $config['includeColumns'] ?? [];
 
         $filtered = $helper->filterColumns($items, $includeColumns);
+        $filtered = $helper->convertAdvertisementPaths($filtered, $contentType);
 
         $exportData = [
             'metadata' => [

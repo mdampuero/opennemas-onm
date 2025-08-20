@@ -7,6 +7,52 @@ namespace Common\Core\Component\Helper;
  */
 class DataTransferHelper
 {
+
+    /**
+     * The service container.
+     *
+     * @var ServiceContainer
+     */
+    protected $container;
+
+    /**
+     * Initializes the AdvertisementHelper.
+     *
+     * @param ServiceContainer $container The service container.
+     */
+    public function __construct($container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * Converts a path to a full URL.
+     *
+     * @param string $path The path to convert.
+     *
+     * @return string The full URL of the image.
+     */
+    protected function pathToImage($path)
+    {
+        if (empty($path)) {
+            return '';
+        }
+
+        // Find content
+        $cs      = $this->container->get('api.service.content');
+        $content = $cs->getItem($path);
+
+        if (empty($content)) {
+            return '';
+        }
+
+        // If content is not empty, get the full path with photo helper
+        $ih       = $this->container->get('core.helper.photo');
+        $fullPath = $ih->getPhotoPath($content, null, [], true);
+
+        return $fullPath ?? '';
+    }
+
     /**
      * Filters specified columns in a given dataset of items, supporting nested fields with dot notation.
      *
@@ -50,6 +96,36 @@ class DataTransferHelper
 
             return $result;
         }, $items);
+    }
+
+    /**
+     * Converts advertisement paths in a list of items to full URLs.
+     *
+     * @param array $items
+     *   The list of items containing advertisements.
+     *
+     * @return array
+     */
+    public function convertAdvertisementPaths(array $items): array
+    {
+        foreach ($items as &$item) {
+            if (empty($item['advertisements'])) {
+                continue;
+            }
+
+            foreach ($item['advertisements'] as &$ad) {
+                if (empty($ad['path']) || $ad['path'] === "0") {
+                    continue;
+                }
+
+                $ad['path'] = $this->pathToImage($ad['path']);
+            }
+            unset($ad);
+        }
+
+        unset($item);
+
+        return $items;
     }
 
     /**
