@@ -149,11 +149,56 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="var in availableVars">
-                    <td style="padding: 0.2rem !important;"><small>[% var.reference %]</small></td>
-                    <td style="padding: 0.2rem !important;"><small><code>[% var.variable %]</code></small></td>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Id of content{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{content.id}}'}}</code></small></td>
                     <td class="text-center" style="padding: 0.21rem !important;">
-                        <small><i class="fa fa-copy pointer" ng-click="copyVar(var.variable)"></i></<small>
+                      <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{content.id}}'}}')"></i></small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Internal title of content{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{content.title_int}}'}}</code></small></td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                      <small><i class="fa fa-copy pointer"
+                          ng-click="copyVar('{{'{{content.title_int}}'}}')"></i></small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Title of content{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{content.title}}'}}</code></small></td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                      <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{content.title}}'}}')"></i></small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Description of content{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{content.description}}'}}</code></small>
+                    </td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                      <small><i class="fa fa-copy pointer"
+                          ng-click="copyVar('{{'{{content.description}}'}}')"></i></small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Body of content{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{content.body}}'}}</code></small></td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                      <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{content.body}}'}}')"></i></small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Slug of content{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{content.slug}}'}}</code></small></td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                      <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{content.slug}}'}}')"></i></small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Name of category{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{category.name}}'}}</code></small></td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                      <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{category.name}}'}}')"></i></small>
                     </td>
                   </tr>
                 </tbody>

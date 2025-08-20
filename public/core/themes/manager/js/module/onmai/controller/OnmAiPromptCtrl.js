@@ -40,16 +40,6 @@
         $scope.previewTimeout         = null;
         $scope.filterRole             = $scope.item.field;
 
-        $scope.availableVars = [
-          { reference: 'Id of content', variable: '{{content.id}}' },
-          { reference: 'Internal title of content', variable: '{{content.title_int}}' },
-          { reference: 'Title of content', variable: '{{content.title}}' },
-          { reference: 'Description of content', variable: '{{content.description}}' },
-          { reference: 'Body of content', variable: '{{content.body}}' },
-          { reference: 'Slug of content', variable: '{{content.slug}}' },
-          { reference: 'Name of category', variable: '{{category.name}}' }
-        ];
-
         $scope.copyVar = function(value) {
           var tempInput = document.createElement('input');
 
