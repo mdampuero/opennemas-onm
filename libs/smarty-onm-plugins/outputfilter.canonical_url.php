@@ -48,5 +48,5 @@ function smarty_outputfilter_canonical_url($output, $smarty)
 
     $tpl = '<link rel="canonical" href="%s"/>';
 
-    return str_replace('</head>', sprintf($tpl, $url) . '</head>', $output);
+    return str_replace('</head>', sprintf($tpl, strtolower($url)) . '</head>', $output);
 }
