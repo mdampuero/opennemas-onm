@@ -40,6 +40,29 @@
         $scope.previewTimeout         = null;
         $scope.filterRole             = $scope.item.field;
 
+        $scope.availableVars = [
+          { reference: 'Id of content', variable: '{{content.id}}' },
+          { reference: 'Internal title of content', variable: '{{content.title_int}}' },
+          { reference: 'Title of content', variable: '{{content.title}}' },
+          { reference: 'Description of content', variable: '{{content.description}}' },
+          { reference: 'Body of content', variable: '{{content.body}}' },
+          { reference: 'Slug of content', variable: '{{content.slug}}' },
+          { reference: 'Name of category', variable: '{{category.name}}' }
+        ];
+
+        $scope.copyVar = function(value) {
+          var tempInput = document.createElement('input');
+
+          tempInput.style.position = 'absolute';
+          tempInput.style.left = '-9999px';
+          tempInput.value = value;
+          document.body.appendChild(tempInput);
+          tempInput.select();
+          document.execCommand('copy');
+          document.body.removeChild(tempInput);
+          messenger.post('Copiado');
+        };
+
         /**
          * @function save
          * @memberOf OnmAiPromptCtrl
@@ -266,7 +289,7 @@
 
             if (instruccion.value) {
               countInstructions++;
-              string += countInstructions + '. ' + instruccion.value + "\n";
+              string += countInstructions + '. ' + instruccion.value + '\n';
             }
           }
 

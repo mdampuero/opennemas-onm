@@ -139,6 +139,30 @@
               <hr>
             </div>
             <div class="form-group">
+              <label class="form-label"><b>{t}Available variables{/t}</b></label>
+              <table class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th>{t}Reference{/t}</th>
+                    <th>{t}Vars{/t}</th>
+                    <th class="text-center">{t}Copy{/t}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="var in availableVars">
+                    <td style="padding: 0.2rem !important;"><small>[% var.reference %]</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>[% var.variable %]</code></small></td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                        <small><i class="fa fa-copy pointer" ng-click="copyVar(var.variable)"></i></<small>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="form-group">
+              <hr>
+            </div>
+            <div class="form-group">
               <label class="form-label"><b>{t}Instructions{/t}</b></label>
               <div class="input-with-icon right">
                 <input class="form-control"
