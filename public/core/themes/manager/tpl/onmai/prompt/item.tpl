@@ -135,6 +135,7 @@
                 <label for="content-status">{t}Published{/t}</label>
               </div>
             </div>
+            <ng-container ng-if="item.mode !='New'">
             <div class="form-group">
               <hr>
             </div>
@@ -150,14 +151,14 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td style="padding: 0.2rem !important;"><small>{t}Id of content{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small>{t}Id{/t}</small></td>
                     <td style="padding: 0.2rem !important;"><small><code>{{'{{content.id}}'}}</code></small></td>
                     <td class="text-center" style="padding: 0.21rem !important;">
                       <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{content.id}}'}}')"></i></small>
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding: 0.2rem !important;"><small>{t}Internal title of content{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small>{t}Internal title{/t}</small></td>
                     <td style="padding: 0.2rem !important;"><small><code>{{'{{content.title_int}}'}}</code></small></td>
                     <td class="text-center" style="padding: 0.21rem !important;">
                       <small><i class="fa fa-copy pointer"
@@ -165,14 +166,14 @@
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding: 0.2rem !important;"><small>{t}Title of content{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small>{t}Title{/t}</small></td>
                     <td style="padding: 0.2rem !important;"><small><code>{{'{{content.title}}'}}</code></small></td>
                     <td class="text-center" style="padding: 0.21rem !important;">
                       <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{content.title}}'}}')"></i></small>
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding: 0.2rem !important;"><small>{t}Description of content{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small>{t}Description{/t}</small></td>
                     <td style="padding: 0.2rem !important;"><small><code>{{'{{content.description}}'}}</code></small>
                     </td>
                     <td class="text-center" style="padding: 0.21rem !important;">
@@ -181,14 +182,14 @@
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding: 0.2rem !important;"><small>{t}Body of content{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small>{t}Body{/t}</small></td>
                     <td style="padding: 0.2rem !important;"><small><code>{{'{{content.body}}'}}</code></small></td>
                     <td class="text-center" style="padding: 0.21rem !important;">
                       <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{content.body}}'}}')"></i></small>
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding: 0.2rem !important;"><small>{t}Slug of content{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small>{t}Slug{/t}</small></td>
                     <td style="padding: 0.2rem !important;"><small><code>{{'{{content.slug}}'}}</code></small></td>
                     <td class="text-center" style="padding: 0.21rem !important;">
                       <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{content.slug}}'}}')"></i></small>
@@ -204,6 +205,7 @@
                 </tbody>
               </table>
             </div>
+            </ng-container>
             <div class="form-group">
               <hr>
             </div>
