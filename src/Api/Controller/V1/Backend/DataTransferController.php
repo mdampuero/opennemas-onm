@@ -247,7 +247,8 @@ class DataTransferController extends ApiController
             return new JsonResponse(['error' => 'Import not allowed for this content type'], 403);
         }
 
-        $us = $this->container->get($config['config']['service']);
+        $us     = $this->container->get($config['config']['service']);
+        $helper = $this->container->get($this->helper);
 
         foreach ($items as $item) {
             if (!is_array($item)) {
@@ -265,6 +266,16 @@ class DataTransferController extends ApiController
                     },
                     array_intersect_key($devices, array_flip(['desktop', 'phone', 'tablet']))
                 ) + $devices;
+
+                if ($filteredItem['advertisements'][0]['path']) {
+                    $image = $helper->importPhotoFromUrl(
+                        $filteredItem['advertisements']['0']['path']
+                    );
+                    // Remove old path to new photo id
+                    dump('Image imported', $image); // Debugging line, can be removed later
+
+                    $filteredItem['advertisements'][0]['path'] = $image->pk_content;
+                }
             }
 
             $filteredItem['content_status'] = 0;

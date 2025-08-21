@@ -1,5 +1,4 @@
 <?php
-
 namespace Common\Core\Component\Helper;
 
 /**
@@ -126,6 +125,58 @@ class DataTransferHelper
         unset($item);
 
         return $items;
+    }
+
+    public function importPhotoFromUrl(string $url, array $data = [])
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+
+        $imageContent = curl_exec($ch);
+        if (curl_errno($ch)) {
+            $errorMsg = curl_error($ch);
+            curl_close($ch);
+            throw new \Exception("Failed to download file from URL: $url. cURL error: $errorMsg");
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($httpCode >= 400) {
+            throw new \Exception("Failed to download file from URL: $url. HTTP status code: $httpCode");
+        }
+
+        $data['created'] = (new \DateTime())->format('Y-m-d H:i:s');
+        $data['changed'] = (new \DateTime())->format('Y-m-d H:i:s');
+        $data['content_status'] = 1;
+
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $mimeType = $finfo->buffer($imageContent);
+
+        switch ($mimeType) {
+            case 'image/jpeg':
+                $extension = 'jpg';
+                break;
+            case 'image/png':
+                $extension = 'png';
+                break;
+            case 'image/gif':
+                $extension = 'gif';
+                break;
+            default:
+                $extension = 'bin';
+        }
+
+        $tmpFilePath = sys_get_temp_dir() . '/tmp_img_' . uniqid() . '.' . $extension;
+        file_put_contents($tmpFilePath, $imageContent);
+
+        $file = new \SplFileInfo($tmpFilePath);
+
+        $photoService = $this->container->get('api.service.photo');
+        $item         = $photoService->createItem($data, $file, true);
+
+        return $item;
     }
 
     /**
