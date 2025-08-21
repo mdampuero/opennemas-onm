@@ -151,7 +151,7 @@ class DataTransferHelper
         $data['changed'] = (new \DateTime())->format('Y-m-d H:i:s');
         $data['content_status'] = 1;
 
-        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $finfo    = new \finfo(FILEINFO_MIME_TYPE);
         $mimeType = $finfo->buffer($imageContent);
 
         switch ($mimeType) {

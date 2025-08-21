@@ -271,8 +271,6 @@ class DataTransferController extends ApiController
                     $image = $helper->importPhotoFromUrl(
                         $filteredItem['advertisements']['0']['path']
                     );
-                    // Remove old path to new photo id
-                    dump('Image imported', $image); // Debugging line, can be removed later
 
                     $filteredItem['advertisements'][0]['path'] = $image->pk_content;
                 }
