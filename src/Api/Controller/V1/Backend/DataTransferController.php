@@ -273,6 +273,8 @@ class DataTransferController extends ApiController
                     );
 
                     $filteredItem['advertisements'][0]['path'] = $image->pk_content;
+
+                    dump('Image imported', $filteredItem);
                 }
             }
 

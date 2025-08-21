@@ -750,19 +750,20 @@ class ContentPersister extends BasePersister
 
         foreach ($advertisements as $value) {
             $value['with_script'] = empty($value['with_script']) ? 0 : $value['with_script'];
+            $value['url']         = empty($value['url']) ? '' : $value['url'];
 
             $params = array_merge($params, array_merge($id, [
                 $value['path'] ?? null,
-                $value['url'] ?? null,
+                $value['url'],
                 $value['with_script'],
                 $value['script'] ?? null,
             ]));
 
             $types = array_merge($types, [
                 \PDO::PARAM_INT,
-                empty($value['with_script']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['path']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['url']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['with_script']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['script']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
             ]);
         }
