@@ -734,7 +734,12 @@ class ContentPersister extends BasePersister
         $this->conn->executeQuery($sql, $params, $types);
     }
 
-
+    /**
+     * Saves new Advertisements.
+     *
+     * @param array $id The entity id.
+     * @param array $advertisements The list of advertisements to save.
+     */
     protected function saveAdvertisements($id, $advertisements)
     {
         if (empty($advertisements)) {
@@ -771,6 +776,12 @@ class ContentPersister extends BasePersister
         $this->conn->executeQuery($sql, $params, $types);
     }
 
+    /**
+     * Saves new Advertisements positions.
+     *
+     * @param array $id The entity id.
+     * @param array $adsPositions The list of ads positions to save.
+     */
     protected function saveAdsPositions($id, $adsPositions)
     {
         if (empty($adsPositions)) {
