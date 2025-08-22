@@ -745,8 +745,8 @@ class ContentPersister extends BasePersister
         if (empty($advertisements)) {
             return;
         }
-        $sql = "insert into advertisements (pk_advertisement, path, url, with_script, script) values "
-            . str_repeat('(?,?,?,?,?),', count($advertisements));
+        $sql = "insert into advertisements (pk_advertisement, path, url, with_script, script, timeout) values "
+            . str_repeat('(?,?,?,?,?,?),', count($advertisements));
 
         $id     = array_values($id);
         $sql    = rtrim($sql, ',');
@@ -762,6 +762,7 @@ class ContentPersister extends BasePersister
                 $value['url'],
                 $value['with_script'],
                 $value['script'] ?? null,
+                $value['timeout'] ?? null,
             ]));
 
             $types = array_merge($types, [
@@ -770,6 +771,7 @@ class ContentPersister extends BasePersister
                 empty($value['url']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
                 empty($value['with_script']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
                 empty($value['script']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['timeout']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
             ]);
         }
 
