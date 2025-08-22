@@ -121,7 +121,7 @@ class DataTransferController extends ApiController
         $idList = implode(',', array_map('intval', $ids));
 
         $query = sprintf(
-            $config['query']['single'] ?? 'content_type_name = "%s" and pk_content in [%s]',
+            'content_type_name = "%s" and pk_content in [%s]',
             $contentType,
             $idList
         );
@@ -184,8 +184,7 @@ class DataTransferController extends ApiController
         }
 
         $service       = $this->container->get($config['config']['service']);
-        $query         = $config['config']['query']['list'] ??
-            'content_type_name = "%s" order by starttime desc limit %d offset %d';
+        $query         = 'content_type_name = "%s" and in_litter = 0 order by starttime desc limit %d offset %d';
         $queryTemplate = sprintf($query, $contentType, $limit, $offset);
         $data          = $service->$method($queryTemplate);
 
