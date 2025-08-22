@@ -282,6 +282,7 @@ class AdvertisementsController extends Controller
         ];
 
         if ($ad->update($data)) {
+            dispatchEventWithParams('advertisement.update', [ 'item' => $data ]);
             $this->get('session')->getFlashBag()->add(
                 'success',
                 _('Advertisement successfully updated.')
