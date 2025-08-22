@@ -218,37 +218,17 @@
           });
         };
 
-        $scope.import = function(route) {
-          var modal = $uibModal.open({
-            templateUrl: 'modal-datatransfer',
-            backdrop: 'static',
-            controller: 'ModalCtrl',
-            resolve: {
-              template: function() {
-                return { };
-              },
-              success: function() {
-                return null;
-              }
-            }
-          });
-
-          modal.result.then(function(response) {
-            if (response) {
-              var url = routing.generate(route);
-
-              $http.get(url).then(function(response) {
-                messenger.post(response.data.messages);
-                if (response.data.success) {
-                  $scope.list();
-                }
-              }, function(response) {
-                messenger.post(response.data, 'error');
-              });
-            }
-          });
-        };
-
+        /**
+         * Imports items from a JSON file.
+         * @memberOf ContentRestListCtrl
+         * @description
+         *  Opens a modal to select a JSON file and imports its content.
+         *  The JSON file must be in the correct format.
+         * @see DataTransferController::exportAction
+         * @see DataTransferController::importAction
+         *
+         * @return {void}
+         */
         $scope.import = function() {
           $uibModal.open({
             templateUrl: 'modal-datatransfer',

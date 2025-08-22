@@ -396,6 +396,11 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       });
     };
 
+    /**
+     * Imports items from a JSON file.
+     * @see DataTransferController::importAction
+     *
+     */
     $scope.import = function() {
       $uibModal.open({
         templateUrl: 'modal-datatransfer',
