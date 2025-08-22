@@ -147,8 +147,9 @@ class DataTransferHelper
             throw new \Exception("Failed to download file from URL: $url. HTTP status code: $httpCode");
         }
 
-        $data['created'] = (new \DateTime())->format('Y-m-d H:i:s');
-        $data['changed'] = (new \DateTime())->format('Y-m-d H:i:s');
+        $data['created']        = (new \DateTime())->format('Y-m-d H:i:s');
+        $data['changed']        = (new \DateTime())->format('Y-m-d H:i:s');
+        $data['description']    = '';
         $data['content_status'] = 1;
 
         $finfo    = new \finfo(FILEINFO_MIME_TYPE);
