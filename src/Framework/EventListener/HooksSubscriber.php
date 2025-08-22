@@ -452,6 +452,11 @@ class HooksSubscriber implements EventSubscriberInterface
         }
     }
 
+    /**
+     * Deletes an advertisement from cache after it is updated/deleted.
+     *
+     * @param Event $event The event to handle.
+     */
     public function removeObjectCacheForAdvertisement(Event $event)
     {
         $cache = $this->container->get('cache.connection.instance');
