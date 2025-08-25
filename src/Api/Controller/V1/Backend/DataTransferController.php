@@ -72,7 +72,11 @@ class DataTransferController extends ApiController
                 'params.targetContainer', 'params.append', 'params.pagetitle', 'params.pageSharrre',
                 'params.articleTitle', 'params.articleBody', 'params.articleSharrre',
                 'params.bgcolor', 'params.menu', 'params.borderColor', 'params.color',
-                'params.date', 'params.oldest', 'params.items',
+                'params.date', 'params.oldest', 'params.items', 'params.mostRecent',
+                'params.allCategories', 'params.show_category', 'params.show_author',
+                'params.show_author_photo', 'params.show_author_bio', 'params.show_date',
+                'params.show_time', 'params.show_readtime', 'params.hide_media',
+                'params.show_ongoing_events',
                 'class', 'widget_type',
             ],
             'allowImport' => true
