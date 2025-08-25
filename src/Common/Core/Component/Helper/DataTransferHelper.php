@@ -160,24 +160,23 @@ class DataTransferHelper
         $data['description']    = '';
         $data['content_status'] = 1;
 
-        $finfo    = new \finfo(FILEINFO_MIME_TYPE);
-        $mimeType = $finfo->buffer($imageContent);
+        $pathInfo  = pathinfo($url, PHP_URL_PATH);
+        $extension = strtolower($pathInfo['extension'] ?? '');
 
-        switch ($mimeType) {
-            case 'image/jpeg':
-                $extension = 'jpg';
-                break;
-            case 'image/png':
-                $extension = 'png';
-                break;
-            case 'image/gif':
-                $extension = 'gif';
-                break;
-            case 'image/webp':
-                $extension = 'webp';
-                break;
-            default:
-                $extension = 'bin';
+        $validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+        if (!in_array($extension, $validExtensions)) {
+            $finfo    = new \finfo(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo->buffer($imageContent);
+
+            $map = [
+                'image/jpeg' => 'jpg',
+                'image/png'  => 'png',
+                'image/gif'  => 'gif',
+                'image/webp' => 'webp',
+            ];
+
+            $extension = $map[$mimeType] ?? 'bin';
         }
 
         $tmpFilePath = sys_get_temp_dir() . '/tmp_img_' . uniqid() . '.' . $extension;
