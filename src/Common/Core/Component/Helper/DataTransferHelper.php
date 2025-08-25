@@ -165,6 +165,9 @@ class DataTransferHelper
             case 'image/gif':
                 $extension = 'gif';
                 break;
+            case 'image/webp':
+                $extension = 'webp';
+                break;
             default:
                 $extension = 'bin';
         }
