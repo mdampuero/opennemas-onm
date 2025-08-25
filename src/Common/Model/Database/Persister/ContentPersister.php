@@ -558,6 +558,12 @@ class ContentPersister extends BasePersister
         $this->saveContentNotifications($id, $webpush_notifications);
     }
 
+    /**
+     * Persits the content advertisements.
+     *
+     * @param integer $id         The entity id.
+     * @param array   $advertisements  The list of advertisements.
+     */
     protected function persistAdvertisements($id, $advertisements)
     {
         // Ignore metas with value = null
@@ -571,6 +577,12 @@ class ContentPersister extends BasePersister
         $this->saveAdvertisements($id, $advertisements);
     }
 
+    /**
+     * Persits the content ads positions.
+     *
+     * @param integer $id         The entity id.
+     * @param array   $adsPositions  The list of ads positions.
+     */
     protected function persistAdsPositions($id, $adsPositions)
     {
         // Ignore metas with value = null
