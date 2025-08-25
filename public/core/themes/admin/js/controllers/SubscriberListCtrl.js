@@ -144,8 +144,8 @@
                       newsletter: template.selectList
                     }).then(function(response) {
                       modal.close();
-                      messenger.post(response.data);
-                      $scope.init();
+                      messenger.post(response.data.messages[0]);
+                      $scope.list();
                     });
                   };
                 };
