@@ -127,6 +127,14 @@ class DataTransferHelper
         return $items;
     }
 
+    /**
+     * Imports a photo from a given URL and creates a photo item.
+     *
+     * @param string $url The URL of the photo to import.
+     * @param array $data Additional data to associate with the photo.
+     * @return array The created photo item.
+     * @throws \Exception If the file cannot be downloaded or processed.
+     */
     public function importPhotoFromUrl(string $url, array $data = [])
     {
         $ch = curl_init($url);
