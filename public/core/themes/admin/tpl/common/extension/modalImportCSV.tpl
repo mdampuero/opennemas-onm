@@ -5,7 +5,6 @@
     {t}Import contacts to Newsletter{/t}
   </h4>
 </div>
-
 <div class="modal-body">
   <div class="row">
     <div class="col-md-12" ng-show="!loading">
@@ -27,7 +26,6 @@
             </small>
           </div>
       </div>
-
       <div>
         <div class="text-center">
           <i class="fa fa-file-o fa-3x" ng-if="template.file"></i>
@@ -54,7 +52,6 @@
         </div>
       </div>
     </div>
-
     <div class="col-md-12" ng-show="!loading" ng-if="template.file && template.type === 2">
       <div class="panel-heading">
           <h4 class="panel-title">
@@ -62,7 +59,6 @@
               {t}Step 2: Select the list to import to{/t}
           </h4>
       </div>
-
       <div class="form-group">
         <label for="newsletterLists" class="control-label">
             <i class="fa fa-envelope"></i>
@@ -76,7 +72,6 @@
         </div>
       </div>
     </div>
-
     <div class="col-md-12" ng-if="loading">
       <div class="panel-heading">
           <h4 class="panel-title">
@@ -84,7 +79,6 @@
               {t}Import on process{/t}
           </h4>
       </div>
-
       <div>
         <div class="alert alert-info">
            {t}Please wait: The import process is currently running. Do not close this window.{/t}
@@ -93,7 +87,6 @@
       </div>
     </div>
 </div>
-
 <div class="modal-footer">
   <div>
     <button class="btn btn-primary" ng-click="confirm()" ng-disabled="loading" ng-show="template.file">{t}Import{/t}</button>
