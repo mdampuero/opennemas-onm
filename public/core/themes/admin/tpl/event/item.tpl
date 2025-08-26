@@ -90,14 +90,18 @@
       <div class="grid-collapse-title ng-cloak pointer" ng-click="expanded.when = !expanded.when">
         <i class="fa fa-calendar m-r-10"></i>{t}Event date{/t}
         <i class="fa fa-chevron-right pull-right m-t-5" ng-class="{ 'fa-rotate-90': expanded.when }"></i>
+        <span class="pull-right" ng-if="!expanded.when">
+          {include file="common/component/icon/status.tpl" iForm="form.event_start_date" iNgModel="item.event_start_date" iValidation=true}
+        </span>
       </div>
       <div class="grid-collapse-body ng-cloak" ng-class="{ 'expanded': expanded.when }">
         <div class="row">
           <div class="form-group col-sm-6">
-            <label class="form-label" for="event_start_date">{t}Start date{/t}</label>
-            <div class="controls">
+            <label class="form-label" for="event_start_date">{t}Start date{/t} </label>
+            {include file="common/component/icon/status.tpl" iClass="form-status-absolute" iStyle="margin-top: -6px" iForm="form.event_start_date" iNgModel="item.event_start_date" iValidation=true}
+            <div class="controls controls-validation">
               <div class="input-group">
-                <input class="form-control" datetime-picker datetime-picker-format="YYYY-MM-DD" datetime-picker-timezone="{$timezone}" datetime-picker-max="item.event_end_date" datetime-picker-use-current="true" id="event_start_date" name="event_start_date" ng-model="item.event_start_date" type="datetime">
+                <input class="form-control" datetime-picker datetime-picker-format="YYYY-MM-DD" datetime-picker-timezone="{$timezone}" datetime-picker-max="item.event_end_date" datetime-picker-use-current="true" id="event_start_date" name="event_start_date" ng-model="item.event_start_date" type="datetime" required>
                 <span class="input-group-addon add-on">
                   <span class="fa fa-calendar"></span>
                 </span>
