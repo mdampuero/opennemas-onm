@@ -16,6 +16,19 @@
           </h4>
       </div>
 
+      <div class="alert alert-warning m-t-15 text-left">
+        <i class="fa fa-info-circle m-r-5"></i>
+        {t}Expected CSV format:{/t}
+        <pre class="m-t-10" style="white-space: pre-line;">
+          Email, name (optional), signupDate (optional)
+          john@example.com, John Doe, 2023-07-15
+          jane@example.com, , 2023-08-01
+        </pre>
+        <small class="text-muted">
+          {t}If "name" is empty, it will default to the email. If "signupDate" is empty, it will default to today’s date.{/t}
+        </small>
+      </div>
+
       <div>
         <div class="text-center">
           <i class="fa fa-file-o fa-3x" ng-if="template.file"></i>
