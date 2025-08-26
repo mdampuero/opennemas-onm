@@ -32,8 +32,7 @@
           deleteList: 'api_v1_backend_subscription_delete_list',
           getList:    'api_v1_backend_subscription_get_list',
           patchItem:  'api_v1_backend_subscription_patch_item',
-          patchList:  'api_v1_backend_subscription_patch_list',
-          importItem: 'api_v1_backend_subscription_import_item'
+          patchList:  'api_v1_backend_subscription_patch_list'
         };
 
         /**
