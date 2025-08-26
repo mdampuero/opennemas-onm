@@ -101,7 +101,26 @@ class UserService extends OrmService
 
                 // Check if the provided user groups differ from the existing ones.
                 if (!empty($data['user_groups']) && $this->areUserGroupsDifferent($item, $data['user_groups'])) {
-                    return $this->assignLists($item, $data);
+                    $currentGroups = isset($item->user_groups) && is_array($item->user_groups)
+                        ? $item->user_groups
+                        : [];
+                    $newGroups     = $data['user_groups'] ?? [];
+
+                    // Reindex by user_group_id for proper merging
+                    $currentById = array_column($currentGroups, null, 'user_group_id');
+                    $newById     = array_column($newGroups, null, 'user_group_id');
+
+                    // Merge arrays, prioritizing new groups
+                    $merged = array_merge($currentById, $newById);
+
+                    // Reindex for final assignment
+                    $item->user_groups = array_values($merged);
+
+                    // Mark the item as modified and persist changes
+                    // is more efficient use persist directly than updateItem
+                    $this->em->persist($item, $item->getOrigin());
+
+                    return $item;
                 }
 
                 // Return the existing item if no changes are needed.
@@ -370,25 +389,6 @@ class UserService extends OrmService
 
         if (empty($type)) {
             $item->type = $this->ctype;
-        }
-
-        $this->em->persist($item, $item->getOrigin());
-
-        return $item;
-    }
-
-    /**
-     * Assigns user groups (lists) to the subscriber.
-     *
-     * @param Entity $item The item to assign lists to.
-     * @param array $data The data containing user_groups.
-     *
-     * @return Entity
-     */
-    protected function assignLists($item, array $data)
-    {
-        if (!empty($data['user_groups'])) {
-            $item->user_groups = $data['user_groups'];
         }
 
         $this->em->persist($item, $item->getOrigin());
