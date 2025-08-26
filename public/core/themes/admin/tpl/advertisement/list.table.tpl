@@ -26,12 +26,6 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-featured-devices" checklist-model="app.columns.selected" checklist-value="'devices'" type="checkbox">
-    <label for="checkbox-featured-devices">
-      {t}Devices{/t}
-    </label>
-  </div>
-  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-featured-dimensions" checklist-model="app.columns.selected" checklist-value="'dimensions'" type="checkbox">
     <label for="checkbox-featured-dimensions">
       {t}Dimensions{/t}
@@ -75,9 +69,6 @@
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('endtime')" width="150">
     {t}End date{/t}
-  </th>
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('devices')" width="150">
-    {t}Devices{/t}
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('dimensions')" width="150">
     {t}Dimensions{/t}
@@ -170,34 +161,10 @@
       [% item.endtime | moment : 'HH:mm:ss' %]
     </small>
   </td>
-  <td class="text-center v-align-middle" ng-if="isColumnEnabled('devices')">
-    <small class="text-italic">
-      <span ng-if="item.params.devices.desktop" class="d-block" style="opacity: 1;">
-        <i class="fa fa-desktop" title="Desktop"></i>
-      </span>
-      <span ng-if="!item.params.devices.desktop" class="d-block" style="opacity: 0.25;">
-        <i class="fa fa-desktop" title="Desktop"></i>
-      </span>
-      <br />
-      <span ng-if="item.params.devices.tablet" class="d-block" style="opacity: 1;">
-        <i class="fa fa-tablet fa-1x" title="Tablet"></i>
-      </span>
-      <span ng-if="!item.params.devices.tablet" class="d-block" style="opacity: 0.25;">
-        <i class="fa fa-tablet fa-1x" title="Tablet"></i>
-      </span>
-      <br />
-      <span ng-if="item.params.devices.phone" class="d-block" style="opacity: 1;">
-        <i class="fa fa-mobile fa-1x" title="Phone"></i>
-      </span>
-      <span ng-if="!item.params.devices.phone" class="d-block" style="opacity: 0.25;">
-        <i class="fa fa-mobile fa-1x" title="Phone"></i>
-      </span>
-    </small>
-  </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('dimensions')">
     <small class="text-italic">
       <!-- Desktop -->
-      <span ng-if="item.params.sizes" class="d-block" style="opacity: 1;">
+      <span ng-if="item.params.devices.desktop" class="d-block" style="opacity: 1;">
         <i class="fa fa-desktop" title="Desktop"></i>
         <span ng-repeat="d in item.params.sizes" ng-if="d.device === 'desktop'">
           [% d.width %]x[% d.height %]
