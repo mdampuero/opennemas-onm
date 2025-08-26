@@ -123,16 +123,19 @@
   </td>
   <td class="v-align-middle" ng-if="isColumnEnabled('category')">
     {block name="categoryColumn"}
-      <small class="text-italic" ng-if="!item.fk_content_categories">
+      <small class="text-italic" ng-if="!item.fk_content_categories || item.fk_content_categories.length == 0">
         {t}All{/t}
       </small>
-      <div ng-repeat="catId in item.fk_content_categories | limitTo:3">
-        <a class="label label-default m-r-5 text-bold"
-          href="[% routing.generate('backend_category_show', { id: catId }) %]">
-          [% getCategoryTitle(catId) %]
-        </a>
-      </div>
-      <small ng-show="item.fk_content_categories.length > 3">{t 1="[% item.fk_content_categories.length - 3 %]"}And %1 more…{/t}</small>
+      <a ng-if="item.fk_content_categories.length == 1"
+        class="label label-default m-r-5 text-bold"
+        href="[% routing.generate('backend_category_show', { id: item.fk_content_categories[0] }) %]">
+        [% getCategoryTitle(item.fk_content_categories[0]) %]
+      </a>
+      <small ng-if="item.fk_content_categories.length > 1"
+            uib-tooltip="[% item.fk_content_categories.map(getCategoryTitle).join(', ') %]"
+            tooltip-placement="top">
+        {t}Custom{/t}
+      </small>
     {/block}
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('starttime')">
