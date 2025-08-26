@@ -101,9 +101,7 @@ class UserService extends OrmService
 
                 // Check if the provided user groups differ from the existing ones.
                 if (!empty($data['user_groups']) && $this->areUserGroupsDifferent($item, $data['user_groups'])) {
-                    $currentGroups = isset($item->user_groups) && is_array($item->user_groups)
-                        ? $item->user_groups
-                        : [];
+                    $currentGroups = $item->user_groups ?? [];
                     $newGroups     = $data['user_groups'] ?? [];
 
                     // Reindex by user_group_id for proper merging
