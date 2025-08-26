@@ -202,6 +202,19 @@ class EventController extends FrontendController
     /**
      * {@inheritdoc}
      */
+    protected function getParameters($params, $item = null)
+    {
+        $params = parent::getParameters($params, $item);
+
+        $params['o_category'] = $this->container->get('core.helper.category')
+            ->getCategory($item);
+
+        return $params;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function hydrateList(array &$params = []): void
     {
         if ($params['page'] <= 0
