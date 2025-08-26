@@ -16,8 +16,13 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
+        $this->instanceLoader = $this->getMockBuilder('Common\Core\Component\Loader\InstanceLoader')
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getInstance' ])
+            ->getMock();
+
         $this->container = $this->getMockBuilder('Container')
-            ->setMethods([ 'get' ])
+            ->setMethods(['get'])
             ->getMock();
 
         $this->contentHelper = $this->getMockBuilder('Common\Core\Component\Helper\ContentHelper')
@@ -32,25 +37,25 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->em = $this->getMockBuilder('Repository\EntityManager')
             ->disableOriginalConstructor()
-            ->setMethods([ 'find' ])
+            ->setMethods(['find'])
             ->getMock();
 
         $this->filter = $this->getMockBuilder('Opennemas\Data\Filter\FilterManager')
             ->disableOriginalConstructor()
-            ->setMethods([ 'set', 'filter', 'get' ])
+            ->setMethods(['set', 'filter', 'get'])
             ->getMock();
 
         $this->kernel = $this->getMockBuilder('Kernel')
-            ->setMethods([ 'getContainer' ])
+            ->setMethods(['getContainer'])
             ->getMock();
 
         $this->template = $this->getMockBuilder('Common\Core\Component\Template\Template')
             ->disableOriginalConstructor()
-            ->setMethods([ 'fetch' ])
+            ->setMethods(['fetch'])
             ->getMock();
 
         $this->container->expects($this->any())->method('get')
-            ->will($this->returnCallback([ $this, 'serviceContainerCallback' ]));
+            ->will($this->returnCallback([$this, 'serviceContainerCallback']));
 
         $this->contentHelper->expects($this->any())->method('isReadyForPublish')
             ->willReturn(true);
@@ -58,7 +63,14 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
         $this->kernel->expects($this->any())->method('getContainer')
             ->willReturn($this->container);
 
-        $this->helper = new VideoHelper($this->contentHelper, $this->relatedHelper, $this->template, $this->filter);
+        $this->helper = new VideoHelper(
+            $this->contentHelper,
+            $this->relatedHelper,
+            $this->template,
+            $this->filter,
+            $this->instanceLoader,
+            '/dummy/public'
+        );
 
         $GLOBALS['kernel'] = $this->kernel;
     }
@@ -102,7 +114,7 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
             'content_status' => 1,
             'type'           => 'external',
             'starttime'      => new \DateTime()
-            ]);
+        ]);
 
         $this->assertEquals($video->type, $this->helper->getVideoType($video));
     }
@@ -136,9 +148,9 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
                 [
                     'embedHTML' =>
                     "<iframe type='text/html'" .
-                    "src='http://www.youtube.com/embed/QGWew64soYo'" .
-                    "width='560' height='349' frameborder='0'" .
-                    "allowfullscreen='true'></iframe>"
+                        "src='http://www.youtube.com/embed/QGWew64soYo'" .
+                        "width='560' height='349' frameborder='0'" .
+                        "allowfullscreen='true'></iframe>"
                 ]
             ]
         );
@@ -196,8 +208,9 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
             [
                 'type'        => 'external',
                 'information' =>
-                [ 'source' =>
-                    ['mp4' => 'https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4' ]
+                [
+                    'source' =>
+                    ['mp4' => 'https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4']
                 ]
             ]
         );
@@ -206,32 +219,33 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
             [
                 'type'        => 'Youtube',
                 'information' =>
-                [ 'embedUrl' =>
-                    ['mp4' => 'https://www.youtube.com/watch?v=WQn-D-i5lyM' ]
+                [
+                    'embedUrl' =>
+                    ['mp4' => 'https://www.youtube.com/watch?v=WQn-D-i5lyM']
                 ]
             ]
         );
 
         $this->template->expects($this->at(0))->method('fetch')
             ->with('video/render/external.tpl', [
-                    'isAmp'  => false,
-                    'info'   => $video1->information,
-                    'height' => 320,
-                    'width'  => 560,
-                    'title'  => $video1->title,
-                    'type' => ''
-                ])
+                'isAmp'  => false,
+                'info'   => $video1->information,
+                'height' => 320,
+                'width'  => 560,
+                'title'  => $video1->title,
+                'type' => ''
+            ])
             ->willReturn($externalOutput);
 
         $this->template->expects($this->at(1))->method('fetch')
             ->with('video/render/web-source.tpl', [
-                    'isAmp'  => false,
-                    'info'   => $video2->information,
-                    'height' => 320,
-                    'width'  => 560,
-                    'title'  => $video2->title,
-                    'type'   => 'youtube'
-                ])
+                'isAmp'  => false,
+                'info'   => $video2->information,
+                'height' => 320,
+                'width'  => 560,
+                'title'  => $video2->title,
+                'type'   => 'youtube'
+            ])
             ->willReturn($webSourceOutput);
 
         $this->filter->expects($this->at(0))->method('set')->willReturn($this->filter);
@@ -261,9 +275,9 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
                 [
                     'embedHTML' =>
                     "<iframe type='text/html'" .
-                    "src='http://www.youtube.com/embed/QGWew64soYo'" .
-                    "width='560' height='349' frameborder='0'" .
-                    "allowfullscreen='true'></iframe>"
+                        "src='http://www.youtube.com/embed/QGWew64soYo'" .
+                        "width='560' height='349' frameborder='0'" .
+                        "allowfullscreen='true'></iframe>"
                 ]
             ]
         );
@@ -314,13 +328,13 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetVideoThumbnailWhenInternalPhoto()
     {
         $video = new Content([
-            'related_contents' => [ [
+            'related_contents' => [[
                 'content_type_name' => 'photo',
                 'type'              => 'featured_frontpage',
                 'target_id'         => 126,
                 'caption'           => null,
                 'position'          => 0
-            ] ]
+            ]]
         ]);
 
         $photo = new Content([
@@ -350,7 +364,7 @@ class VideoHelperTest extends \PHPUnit\Framework\TestCase
     {
         $video = new Content([
             'title'       => 'Aliquam viderer cu graeco ius.',
-            'information' => [ 'thumbnail' => 'http://glorp.xxzz/path.jpg' ]
+            'information' => ['thumbnail' => 'http://glorp.xxzz/path.jpg']
         ]);
 
         $this->assertEquals(new Content([

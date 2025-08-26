@@ -102,11 +102,11 @@
           <li>
             <div class="dropup">
               <a class="dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                {t}Language{/t}: {$locales[$locale]}
+                {t}Language{/t}: {$availableLocales[$locale]}
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-                {foreach from=$locales key=key item=language}
+                {foreach from=$availableLocales key=key item=language}
                 <li class="{if $key == $locale}current{/if}"><a href="?language={$key}">{$language}</a></li>
                 {/foreach}
               </ul>

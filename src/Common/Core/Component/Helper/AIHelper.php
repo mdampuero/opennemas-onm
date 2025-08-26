@@ -502,7 +502,7 @@ EOT;
      *
      * @return string Returns the prompt text for the role if found, or an empty string if not found or not set.
      */
-    protected function getRoleByName(string $name)
+    protected function getRoleByName($name)
     {
         foreach ($this->getRoles() as $item) {
             if (isset($item['name']) && $item['name'] === $name) {
@@ -522,7 +522,7 @@ EOT;
      *
      * @return string The description associated with the tone, or an empty string if not found.
      */
-    protected function getToneByName(string $name)
+    protected function getToneByName($name)
     {
         foreach ($this->getTones() as $item) {
             if (isset($item['name']) && $item['name'] === $name) {
