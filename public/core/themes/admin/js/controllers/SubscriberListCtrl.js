@@ -85,32 +85,31 @@
          *
          * @description
          *   Opens a modal window to start the subscriber import process.
-         *   This process involves uploading a CSV file and selecting a newsletter list
+         *   This process involves uploading a CSV file and selecting a list
          *   to import the subscribers into. The CSV file is read on the client side
          *   and then sent to the backend for processing. Appropriate validations are
          *   performed to ensure the required data is provided.
          *
-         * @param {Object} subscriber - The subscriber data to be imported. It
-         * may include temporary selection keys that will be cleaned before sending.
+         * @param {Object} subscriptions - The lists to import subscribers to.
          *
          * @returns {Promise} A promise that resolves when the import process is
          * successfully completed and the modal is closed.
          */
-        $scope.import = function(subscriber) {
+        $scope.import = function(subscriptions) {
           var modal = $uibModal.open({
             templateUrl: 'modal-import',
             backdrop: 'static',
             controller: 'SubscriberModalCtrl',
             resolve: {
               template: function() {
-                const cleanSubscriber = angular.copy(subscriber);
+                const validLists = angular.copy(subscriptions);
 
-                // Delete any entry for select List
-                delete cleanSubscriber[0];
+                // Delete list "any"
+                delete validLists[0];
 
                 return {
                   type: 2,
-                  subscriber: cleanSubscriber
+                  lists: validLists
                 };
               },
               success: function() {
@@ -124,7 +123,7 @@
                   if (!template.selectList) {
                     return messenger.post({
                       type: 'error',
-                      message: 'Please select a newsletter to import subscribers.'
+                      message: 'Please select a list to import subscribers.'
                     });
                   }
 

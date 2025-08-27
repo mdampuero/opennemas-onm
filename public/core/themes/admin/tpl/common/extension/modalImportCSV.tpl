@@ -57,7 +57,7 @@
             <i class="fa fa-envelope"></i>
             {t}Select the lists you want to import subscribers to{/t}
         </label>
-        <select class="form-control" multiple size="5" id="newsletterLists" ng-model="template.selectList" ng-options="list as list.name for (key, list) in template.subscriber" style="min-height: 130px;">
+        <select class="form-control" multiple size="5" id="newsletterLists" ng-model="template.selectList" ng-options="list as list.name for (key, list) in template.lists" style="min-height: 130px;">
         </select>
       </div>
     </div>
