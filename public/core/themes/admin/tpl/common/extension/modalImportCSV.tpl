@@ -2,29 +2,28 @@
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="close()">&times;</button>
   <h4 class="modal-title">
     <i class="fa fa-upload"></i>
-    {t}Import contacts to Newsletter{/t}
+    {t}Import subscribers{/t}
   </h4>
 </div>
 <div class="modal-body">
   <div class="row">
     <div class="col-md-12" ng-show="!loading">
-      <div class="panel-heading">
-          <h4 class="panel-title">
-              <span class="badge" style="background: #337ab7; margin-right: 10px;">1</span>
-              {t}Select your CSV File{/t}
-          </h4>
-          <div class="alert alert-warning m-t-15 text-left">
-            <i class="fa fa-info-circle m-r-5"></i>
-            {t}Expected CSV format:{/t}
-            <pre class="m-t-10" style="white-space: pre-line;">
-              Email, name (optional), signupDate (optional)
-              john@example.com, John Doe, 2023-07-15
-              jane@example.com, , 2023-08-01
-            </pre>
-            <small class="text-muted">
-              {t}If "name" is empty, it will default to the email. If "signupDate" is empty, it will default to today’s date.{/t}
-            </small>
-          </div>
+      <div class="panel-heading" ng-if="!template.file">
+        <div class="alert alert-warning m-t-15 text-left">
+          <i class="fa fa-info-circle m-r-5"></i>
+          {t}Expected CSV format{/t}
+          <pre class="m-t-10" style="white-space: pre-line;">
+            Email, name (optional), signupDate (optional)
+            john@example.com, John Doe, 2023-07-15
+            jane@example.com, , 2023-08-01
+          </pre>
+          <small class="text-muted">
+            <p>{t}Only CSV files are allowed.{/t}</p>
+            <p>{t}The first row of the file will be ignored. These are expected to be the column names.{/t}</p>
+            <p>{t}The maximum number of subscribers allowed to be imported into the same file is 1000.{/t}</p>
+            <p>{t}If the "name" column is empty, the email address itself will be used as the name. If the "signupDate" column is empty, the registration date will be the current date.{/t}</p>
+          </small>
+        </div>
       </div>
       <div>
         <div class="text-center">
@@ -52,40 +51,29 @@
         </div>
       </div>
     </div>
-    <div class="col-md-12" ng-show="!loading" ng-if="template.file && template.type === 2">
-      <div class="panel-heading">
-          <h4 class="panel-title">
-              <span class="badge" style="background: #337ab7; margin-right: 10px;">2</span>
-              {t}Step 2: Select the list to import to{/t}
-          </h4>
-      </div>
+    <div class="col-md-12 m-t-20" ng-show="!loading" ng-if="template.file && template.type === 2">
       <div class="form-group">
         <label for="newsletterLists" class="control-label">
             <i class="fa fa-envelope"></i>
-            {t}List of Newsletter available{/t}
+            {t}Select the lists you want to import subscribers to{/t}
         </label>
         <select class="form-control" multiple size="5" id="newsletterLists" ng-model="template.selectList" ng-options="list as list.name for (key, list) in template.subscriber" style="min-height: 130px;">
         </select>
-        <div class="help-block">
-            <i class="fa fa-lightbulb-o"></i>
-            {t}Hold Ctrl (Cmd on Mac) to select multiple lists{/t}
-        </div>
       </div>
     </div>
     <div class="col-md-12" ng-if="loading">
-      <div class="panel-heading">
-          <h4 class="panel-title">
-              <span class="badge" style="background: #337ab7; margin-right: 10px;">2</span>
-              {t}Import on process{/t}
-          </h4>
-      </div>
       <div>
-        <div class="alert alert-info">
-           {t}Please wait: The import process is currently running. Do not close this window.{/t}
+        <div class="alert alert-info m-t-15 text-left">
+          <p>
+            <i class="fa fa-info-circle m-r-5"></i>
+            {t}Importing{/t}
+          </p>
+          <p>{t}Please wait: The import process is currently running. Do not close this window.{/t}</p>
+          <p>{t}Once the process is complete, this window will close automatically.{/t}</p>
         </div>
-        <p>{t}Once the process is complete, this window will close automatically.{/t}</p>
       </div>
     </div>
+  </div>
 </div>
 <div class="modal-footer">
   <div>
