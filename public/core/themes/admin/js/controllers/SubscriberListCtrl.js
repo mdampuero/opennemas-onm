@@ -106,7 +106,7 @@
                 const cleanSubscriber = angular.copy(subscriber);
 
                 // Delete any entry for select List
-                delete cleanSubscriber["0"];
+                delete cleanSubscriber[0];
 
                 return {
                   type: 2,
