@@ -73,12 +73,6 @@
          */
         $scope.init = function() {
           $scope.backup.criteria = $scope.criteria;
-          $scope.app.columns.selected =  _.uniq($scope.app.columns.selected.concat(
-            [
-              'title', 'category', 'starttime', 'endtime', 'position',
-              'type', 'clicks', 'published'
-            ]
-          ));
           $scope.app.columns.hidden = [];
 
           oqlEncoder.configure({
