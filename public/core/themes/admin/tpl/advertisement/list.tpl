@@ -171,6 +171,9 @@ status = [
   <script type="text/ng-template" id="modal-adblock">
     {include file="advertisement/modal.adblock.tpl"}
   </script>
+  <script type="text/ng-template" id="modal-duplicate">
+    {include file="common/extension/modal.duplicate.tpl"}
+  </script>
   <script type="text/ng-template" id="ad_position_template">
     <div ng-repeat="position in content.positions">[% map[position].name %]</div>
   </script>

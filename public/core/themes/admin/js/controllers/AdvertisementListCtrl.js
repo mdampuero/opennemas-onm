@@ -64,6 +64,7 @@
           patchList: 'backend_ws_contents_batch_set_content_status',
           deleteItem: 'backend_ws_content_send_to_trash',
           deleteList: 'backend_ws_contents_batch_send_to_trash',
+          saveItem: 'admin_advertisement_create'
         };
 
         /**
