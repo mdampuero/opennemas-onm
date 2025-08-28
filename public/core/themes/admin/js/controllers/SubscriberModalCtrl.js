@@ -101,7 +101,7 @@
 
           try {
             JSON.parse(content);
-            $scope.alert = { type: 'warning', message: 'The uploaded file appears to be JSON, not CSV.' };
+            $scope.alert = { type: 'error', message: 'The uploaded file appears to be JSON, not CSV.' };
             return false;
           } catch (e) {
             // Not JSON, which is good
@@ -112,7 +112,7 @@
           });
 
           if (lines.length < 2) {
-            $scope.alert = { type: 'warning', message: 'The uploaded file does not appear to be a valid CSV.' };
+            $scope.alert = { type: 'error', message: 'The uploaded file does not appear to be a valid CSV.' };
             return false;
           }
 
@@ -122,7 +122,7 @@
             var cols = lines[i].split(',').length;
 
             if (cols !== headerCols) {
-              $scope.alert = { type: 'warning', message: 'The uploaded file does not appear to be a valid CSV.' };
+              $scope.alert = { type: 'error', message: 'The uploaded file does not appear to be a valid CSV.' };
               return false;
             }
           }

@@ -27,7 +27,7 @@
       </div>
       <div>
         <div class="text-center">
-          <div ng-if="alert" class="alert alert-error">
+          <div ng-if="alert" class="alert alert-[% alert.type %]">
             [% alert.message %]
           </div>
           <i class="fa fa-file-o fa-3x" ng-if="template.file"></i>
