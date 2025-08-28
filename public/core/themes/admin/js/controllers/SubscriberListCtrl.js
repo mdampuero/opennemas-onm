@@ -120,20 +120,6 @@
                     name: $scope.routes.importSubscriber,
                   };
 
-                  if (!template.selectList) {
-                    return messenger.post({
-                      type: 'error',
-                      message: 'Please select a list to import subscribers.'
-                    });
-                  }
-
-                  if (template.file.type !== 'text/csv') {
-                    return messenger.post({
-                      type: 'error',
-                      message: 'Invalid file type. Please upload a CSV file.'
-                    });
-                  }
-
                   reader.readAsText(template.file);
                   reader.onload = function() {
                     var content = reader.result;

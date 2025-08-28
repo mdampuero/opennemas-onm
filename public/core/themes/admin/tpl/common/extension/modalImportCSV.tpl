@@ -27,6 +27,9 @@
       </div>
       <div>
         <div class="text-center">
+          <div ng-if="alert" class="alert alert-error">
+            [% alert.message %]
+          </div>
           <i class="fa fa-file-o fa-3x" ng-if="template.file"></i>
           <i class="fa fa-warning fa-3x text-warning" ng-if="!template.file"></i>
           <p class="m-t-15 text-center">
@@ -51,7 +54,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-12 m-t-20" ng-show="!loading" ng-if="template.file && template.type === 2">
+    <div class="col-md-12 m-t-20" ng-show="!loading" ng-if="template.file">
       <div class="form-group">
         <label for="newsletterLists" class="control-label">
             <i class="fa fa-envelope"></i>
