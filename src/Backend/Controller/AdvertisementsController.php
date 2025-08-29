@@ -79,11 +79,43 @@ class AdvertisementsController extends Controller
             ));
         }
 
-        $categories = json_decode($request->request->get('categories', ''), true);
-
-        if (is_array($categories) && empty($categories)) {
+        // First try to get the categories from the new field fk_content_categories
+        $fkCategories = $request->request->filter('fk_content_categories');
+        if (is_string($fkCategories)) {
+            $categories = json_decode($fkCategories, true);
+        } elseif (is_array($fkCategories)) {
+            $categories = $fkCategories;
+        } else {
             $categories = null;
         }
+
+        // If no categories, try the old field categories
+        if ($categories === null) {
+            $categories = json_decode($request->request->get('categories', ''), true);
+
+            // If empty array, set to null
+            if (is_array($categories) && empty($categories)) {
+                $categories = null;
+            }
+        }
+
+        $params  = $request->request->filter('params', []);
+        $devices = isset($params['devices']) && is_array($params['devices']) ? $params['devices'] : [];
+        $devices = [
+            'desktop' => isset($devices['desktop']) ?
+                (int) $devices['desktop'] :
+                (int) $request->request->get('restriction_devices_desktop', 0),
+            'tablet'  => isset($devices['tablet']) ?
+                (int) $devices['tablet'] :
+                (int) $request->request->get('restriction_devices_tablet', 0),
+            'phone'   => isset($devices['phone']) ?
+                (int) $devices['phone'] :
+                (int) $request->request->get('restriction_devices_phone', 0),
+        ];
+
+        $sizes = isset($params['sizes']) && is_array($params['sizes']) ?
+            $params['sizes'] :
+            json_decode($request->request->get('sizes', ''), true);
 
         $title = $request->request->filter('title', '', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
@@ -112,7 +144,7 @@ class AdvertisementsController extends Controller
             'fk_author'          => $user,
             'fk_publisher'       => $user,
             'params'             => [
-                'sizes'             => json_decode($request->request->get('sizes', ''), true),
+                'sizes'             => $sizes,
                 'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
                 'smart_page_id'     => $request->request->getDigits('smart_page_id', ''),
                 'smart_format_id'   => $request->request->getDigits('smart_format_id', ''),
@@ -120,11 +152,7 @@ class AdvertisementsController extends Controller
                 'user_groups'       => json_decode($request->request->get('user_groups'), true),
                 'orientation'       => $request->request->get('orientation', 'horizontal'),
                 'mark_text'         => $request->request->filter('mark_text', '', FILTER_SANITIZE_STRING),
-                'devices'           => [
-                    'desktop' => (int) $request->request->get('restriction_devices_desktop', 0),
-                    'tablet'  => (int) $request->request->get('restriction_devices_tablet', 0),
-                    'phone'   => (int) $request->request->get('restriction_devices_phone', 0),
-                ],
+                'devices'           => $devices,
             ]
         ];
 
