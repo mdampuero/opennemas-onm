@@ -132,12 +132,12 @@
           "width": 480
         }
       }
-    {elseif $content_type_name === 'opinion' and get_type(get_featured_media($content, 'social'))}
+    {elseif $content->content_type_name === 'opinion'}
       , "image": {
           "@type": "ImageObject",
-          "url": "{get_photo_path(get_featured_media($content, 'social'), '', [], true)}",
-          "height": {get_photo_height(get_featured_media($content, 'social'))|default:360},
-          "width": {get_photo_width(get_featured_media($content, 'social'))|default:480}
+          "url": "{get_photo_path(get_logo('embed'), null, [], true)}",
+          "height": {get_photo_height(get_logo('embed'))|default:360},
+          "width": {get_photo_width(get_logo('embed'))|default:480}
         }
       }
     {else}
