@@ -124,6 +124,22 @@
           "width": {get_photo_width(get_video_thumbnail(get_featured_media($content, 'inner')))|default:480}
         }
       }
+    {elseif $content->content_type_name === 'opinion' and has_author_avatar($content)}
+      , "image": {
+          "@type": "ImageObject",
+          "url": "{get_photo_path(get_author_avatar($content), '', [], true)}",
+          "height": 360,
+          "width": 480
+        }
+      }
+    {elseif $content_type_name === 'opinion' and get_type(get_featured_media($content, 'social'))}
+      , "image": {
+          "@type": "ImageObject",
+          "url": "{get_photo_path(get_featured_media($content, 'social'), '', [], true)}",
+          "height": {get_photo_height(get_featured_media($content, 'social'))|default:360},
+          "width": {get_photo_width(get_featured_media($content, 'social'))|default:480}
+        }
+      }
     {else}
       }
     {/if}
