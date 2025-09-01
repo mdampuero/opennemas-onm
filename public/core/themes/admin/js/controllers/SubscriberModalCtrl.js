@@ -17,8 +17,8 @@
      *   Controller for News Agency listing.
      */
     .controller('SubscriberModalCtrl', [
-      '$uibModalInstance', '$scope', 'template', 'success',
-      function($uibModalInstance, $scope, template, success) {
+      '$uibModalInstance', '$scope', 'template', 'success', 'messenger',
+      function($uibModalInstance, $scope, template, success, messenger) {
         /**
          * MemberOf modalCtrl
          *
@@ -95,24 +95,21 @@
          */
         $scope.validateCSVFile = function(content) {
           if (!content || content.trim().length === 0) {
-            $scope.alert = { type: 'warning', message: 'The uploaded file is empty.' };
+            $scope.alert = { type: 'warning', message: window.strings.modals.upload_empty };
             return false;
-          }
-
-          try {
-            JSON.parse(content);
-            $scope.alert = { type: 'error', message: 'The uploaded file appears to be JSON, not CSV.' };
-            return false;
-          } catch (e) {
-            // Not JSON, which is good
           }
 
           var lines = content.split(/\r?\n/).filter(function(l) {
             return l.trim().length > 0;
           });
 
+          if (lines.length > 1000) {
+            $scope.alert = { type: 'error', message: window.strings.modals.exceded_max_line };
+            return false;
+          }
+
           if (lines.length < 2) {
-            $scope.alert = { type: 'error', message: 'The uploaded file does not appear to be a valid CSV.' };
+            $scope.alert = { type: 'error', message: window.strings.modals.not_csv };
             return false;
           }
 
@@ -122,7 +119,7 @@
             var cols = lines[i].split(',').length;
 
             if (cols !== headerCols) {
-              $scope.alert = { type: 'error', message: 'The uploaded file does not appear to be a valid CSV.' };
+              $scope.alert = { type: 'error', message: window.strings.modals.not_csv };
               return false;
             }
           }
