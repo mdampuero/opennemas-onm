@@ -15,7 +15,7 @@ class DataTransferHelper
     protected $container;
 
     /**
-     * Initializes the AdvertisementHelper.
+     * Initializes the DataTransfer Helper.
      *
      * @param ServiceContainer $container The service container.
      */
@@ -188,6 +188,44 @@ class DataTransferHelper
         $item         = $photoService->createItem($data, $file, true);
 
         return $item;
+    }
+
+    /**
+     * Parses an OQL string into structured components (where, order, limit).
+     *
+     * @param string $oql
+     *   The OQL string (e.g. 'content_type_name="advertisement" and in_litter="0"
+     * order by created desc limit 10').
+     *
+     * @return array
+     *   An array with keys: 'where', 'order', 'limit'.
+     */
+    public function parseOql(string $oql): array
+    {
+        $result = [
+            'where' => null,
+            'order' => null,
+            'limit' => null,
+        ];
+
+        $oql = trim($oql);
+
+        // Extract WHERE clause
+        if (preg_match('/^(.*?)(\s+order by|\s+limit|$)/i', $oql, $m)) {
+            $result['where'] = trim($m[1]);
+        }
+
+        // Extract ORDER BY
+        if (preg_match('/order by (.*?)(\s+limit|$)/i', $oql, $m)) {
+            $result['order'] = trim($m[1]);
+        }
+
+        // Extract LIMIT
+        if (preg_match('/limit\s+(\d+)/i', $oql, $m)) {
+            $result['limit'] = (int) $m[1];
+        }
+
+        return $result;
     }
 
     /**

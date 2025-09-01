@@ -173,24 +173,27 @@ class DataTransferController extends ApiController
      * @return Response|JsonResponse
      *   A downloadable JSON file of exported data or an error response.
      *
-     *  @Security("hasPermission('MASTER')")
+     * @Security("hasPermission('MASTER')")
      */
-    public function exportListAction($contentType)
+    public function exportListAction(Request $request)
     {
-        $config = $this->availableDataTransfers[$contentType] ?? null;
-        $limit  = $config['config']['limit'] ?? 1000;
-        $method = $config['config']['method'] ?? 'getList';
-        $helper = $this->container->get($this->helper);
-        $offset = 0;
+        $contentType = $request->query->get('contentType');
+        $oql         = $request->query->get('oql');
 
+        // Validate content type and configuration
+        $config = $this->availableDataTransfers[$contentType] ?? null;
         if (!$contentType || !$config) {
             return new JsonResponse(['error' => 'Invalid content type or config'], 400);
         }
 
-        $service       = $this->container->get($config['config']['service']);
-        $query         = 'content_type_name = "%s" and in_litter = 0 order by starttime desc limit %d offset %d';
-        $queryTemplate = sprintf($query, $contentType, $limit, $offset);
-        $data          = $service->$method($queryTemplate);
+        $helper = $this->container->get($this->helper);
+        $oql    = $helper->parseOql($oql);
+
+        $service = $this->container->get($config['config']['service']);
+        $method  = $config['config']['method'] ?? 'getList';
+        $query   = $oql['where'] . ' order by ' . $oql['order'];
+
+        $data = $service->$method($query);
 
         $items = array_map(function ($item) {
             return (array) $item->getStored();

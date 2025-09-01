@@ -219,6 +219,25 @@
         };
 
         /**
+         * Exports list based on current criteria.
+         *
+         * @param {String} route The route name.
+         */
+        $scope.export = function(route) {
+          const contentType = $scope.criteria.content_type_name;
+          const oql         = oqlEncoder.getOql($scope.criteria);
+
+          // Build the URL for export
+          const url         = routing.generate(route, { contentType: contentType, oql: oql });
+
+          $http.get(url).then(function(response) {
+            messenger.post(response.data.messages);
+
+            window.location.href = url;
+          });
+        };
+
+        /**
          * Imports items from a JSON file.
          * @memberOf ContentRestListCtrl
          * @description
