@@ -32,8 +32,7 @@ class DataTransferController extends ApiController
     protected $availableDataTransfers = [
         'advertisement' => [
             'config' => [
-                'service' => 'api.service.content',
-                'limit'   => 1000
+                'service' => 'api.service.content'
             ],
             'includeColumns' => [
                 'content_type_name',
@@ -55,30 +54,19 @@ class DataTransferController extends ApiController
                 'advertisements',
                 'ads_positions'
             ],
+            'excludeMode' => false,
             'allowImport' => true
         ],
         'widget' => [
             'config' => [
-                'service' => 'api.service.widget',
-                'limit'   => 500,
+                'service' => 'api.service.widget'
             ],
             'includeColumns' => [
-                'content_type_name', 'fk_content_type', 'title', 'content_status',
-                'position', 'frontpage', 'in_litter', 'in_home',
-                'params.title', 'params.max_items', 'params.indetail', 'params.columns',
-                'params.tiny', 'params.list', 'params.source_type', 'params.skip',
-                'params.class', 'params.grid', 'params.days', 'params.related',
-                'params.uIappearThreshold', 'params.scrollDownOffset', 'params.scrollThreshold',
-                'params.targetContainer', 'params.append', 'params.pagetitle', 'params.pageSharrre',
-                'params.articleTitle', 'params.articleBody', 'params.articleSharrre',
-                'params.bgcolor', 'params.menu', 'params.borderColor', 'params.color',
-                'params.date', 'params.oldest', 'params.items', 'params.mostRecent',
-                'params.allCategories', 'params.show_category', 'params.show_author',
-                'params.show_author_photo', 'params.show_author_bio', 'params.show_date',
-                'params.show_time', 'params.show_readtime', 'params.hide_media',
-                'params.show_ongoing_events',
-                'class', 'widget_type',
+                'params.category', 'categories', 'tags',
+                'related_contents', 'webpush_notifications', 'starttime',
+                'endtime', 'created', 'changed', 'pk_content'
             ],
+            'excludeMode' => true,
             'allowImport' => true
         ]
     ];
@@ -140,7 +128,8 @@ class DataTransferController extends ApiController
         }, $data['items']);
 
         $includeColumns = $this->availableDataTransfers[$contentType]['includeColumns'] ?? [];
-        $filtered       = $helper->filterColumns($items, $includeColumns);
+        $exclude        = $this->availableDataTransfers[$contentType]['excludeMode'] ?? false;
+        $filtered       = $helper->filterColumns($items, $includeColumns, $exclude);
         $filtered       = $helper->convertAdvertisementPaths($filtered, $contentType);
 
         $exportData = [
@@ -181,7 +170,8 @@ class DataTransferController extends ApiController
         $oql         = $request->query->get('oql');
 
         // Validate content type and configuration
-        $config = $this->availableDataTransfers[$contentType] ?? null;
+        $config  = $this->availableDataTransfers[$contentType] ?? null;
+        $exclude = $this->availableDataTransfers[$contentType]['excludeMode'] ?? false;
         if (!$contentType || !$config) {
             return new JsonResponse(['error' => 'Invalid content type or config'], 400);
         }
@@ -201,7 +191,7 @@ class DataTransferController extends ApiController
 
         $includeColumns = $config['includeColumns'] ?? [];
 
-        $filtered = $helper->filterColumns($items, $includeColumns);
+        $filtered = $helper->filterColumns($items, $includeColumns, $exclude);
         $filtered = $helper->convertAdvertisementPaths($filtered, $contentType);
 
         $exportData = [

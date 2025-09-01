@@ -59,11 +59,14 @@ class DataTransferHelper
      *   The full list of items to filter.
      * @param array $columns
      *   List of column keys to include or exclude (supports dot notation for nested fields).
+     * @param boolean $exclude
+     *  If true, the specified columns will be excluded; if false, only the specified
+     *  columns will be included.
      *
      * @return array
      *   The filtered dataset with selected columns.
      */
-    public function filterColumns(array $items, array $columns): array
+    public function filterColumns(array $items, array $columns, bool $exclude = false): array
     {
         if (empty($items)) {
             return [];
@@ -73,14 +76,27 @@ class DataTransferHelper
             return $items;
         }
 
-        return array_map(function ($item) use ($columns) {
+        return array_map(function ($item) use ($columns, $exclude) {
             if (!is_array($item)) {
                 return [];
             }
 
+            // Exclusive mode
+            if ($exclude) {
+                $result = $item;
+                foreach ($columns as $column) {
+                    if (strpos($column, '.') !== false) {
+                        $this->unsetNestedValue($result, $column);
+                    } else {
+                        unset($result[$column]);
+                    }
+                }
+                return $result;
+            }
+
+            // Inclusive mode
             $result = [];
             foreach ($columns as $column) {
-                // Handle nested fields with dot notation
                 if (strpos($column, '.') !== false) {
                     $value = $this->getNestedValue($item, $column);
                     if ($value !== null) {
@@ -279,6 +295,22 @@ class DataTransferHelper
      * @param string $key
      */
     protected function removeNestedField(array &$array, string $key): void
+    {
+        $keys    = explode('.', $key);
+        $lastKey = array_pop($keys);
+        $current = &$array;
+
+        foreach ($keys as $k) {
+            if (!is_array($current) || !array_key_exists($k, $current)) {
+                return;
+            }
+            $current = &$current[$k];
+        }
+
+        unset($current[$lastKey]);
+    }
+
+    protected function unsetNestedValue(array &$array, string $key): void
     {
         $keys    = explode('.', $key);
         $lastKey = array_pop($keys);

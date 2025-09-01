@@ -19,7 +19,7 @@
 {block name="primaryActions"}
   {acl isAllowed="MASTER"}
     <li class="quicklinks">
-      <a href="{url name=api_v1_backend_datatransfer_export contentType='widget'}" class="btn btn-white" id="export-button">
+      <a class="btn btn-white" ng-click="export('api_v1_backend_datatransfer_export')" id="export-button">
         <i class="fa fa-download"></i>
         {t}Export{/t}
       </a>
