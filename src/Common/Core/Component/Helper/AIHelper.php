@@ -546,25 +546,38 @@ EOT;
      */
     protected function replaceContentPlaceholders(string $text, array $resources): string
     {
-        // Helper to safely read a field from array
-        $read = static function (array $data, string $field): string {
-            return array_key_exists($field, $data) ? (string) $data[$field] : '';
+        $localeConfig = $this->container->get('core.helper.locale')->getConfiguration();
+        $locale       = $localeConfig['selected'] ?? 'es_ES';
+
+        $toString = static function ($value, ?string $locale): string {
+            if (is_array($value)) {
+                return isset($locale, $value[$locale]) ? (string) $value[$locale] : '';
+            }
+            return (string) $value;
+        };
+
+        $read = static function (array $data, string $field, ?string $locale) use ($toString): string {
+            if (!array_key_exists($field, $data)) {
+                return '';
+            }
+            return $toString($data[$field], $locale);
         };
 
         return preg_replace_callback(
             '/{{\s*(\w+)\.(\w+)\s*}}/',
-            function ($m) use ($resources, $read) {
+            function ($m) use ($resources, $read, $locale) {
                 [, $entity, $field] = $m;
 
                 if (!isset($resources[$entity]) || !is_array($resources[$entity])) {
                     return '';
                 }
 
-                return $read($resources[$entity], $field);
+                return $read($resources[$entity], $field, $locale);
             },
             $text
         );
     }
+
 
 
     /**
@@ -708,7 +721,7 @@ EOT;
              * Log the selected prompt details for debugging purposes.
              */
             $this->container->get('core.helper.' . $data['engine'])->setDataLog($dataLog);
-
+            
             $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
                 $data,
                 $this->getStructureResponse()
@@ -821,13 +834,13 @@ EOT;
     public function transform($data = [], $fields = ['title', 'title_int', 'description', 'body'])
     {
         $settings = $this->getCurrentSettings();
-        
+
         if (empty($data) || empty($fields) || empty($settings['engine'])) {
             return $data;
         }
 
         $data['title_intPrompt'] = $data['titlePrompt'] ?? null;
-        
+
         foreach ($fields as $field) {
             $promptKey = $field . 'Prompt';
             $toneKey   = $field . 'Tone';
@@ -841,7 +854,7 @@ EOT;
             $tone   = $data[$toneKey] ?? '';
 
             $prompt = $this->replaceContentPlaceholders($prompt, $this->generateResourceByImporter($data));
-            
+
             // If empty tone assign default prompt tone
             if (empty($tone)) {
                 $tone = $data[$promptKey]['tone'] ?? '';
@@ -872,7 +885,7 @@ EOT;
                 'fuente'        => $data[$field] ?? '',
                 'tono'          => ($tone) ? $this->getToneByName($tone) : 'Mantén el tono del texto original'
             ])]];
-           
+
             // Log the selected prompt details for debugging purposes.
             $this->container->get('core.helper.' . $settings['engine'])->setDataLog($dataLog);
 
