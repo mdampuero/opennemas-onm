@@ -128,8 +128,8 @@
       , "image": {
           "@type": "ImageObject",
           "url": "{get_photo_path(get_author_avatar($content), '', [], true)}",
-          "height": 360,
-          "width": 480
+          "height": {get_photo_height(get_author_avatar($content))|default:360},
+          "width": {get_photo_width(get_author_avatar($content))|default:480}
         }
       }
     {else}
