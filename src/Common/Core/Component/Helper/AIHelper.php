@@ -502,7 +502,7 @@ EOT;
      *
      * @return string Returns the prompt text for the role if found, or an empty string if not found or not set.
      */
-    protected function getRoleByName(string $name)
+    protected function getRoleByName($name)
     {
         foreach ($this->getRoles() as $item) {
             if (isset($item['name']) && $item['name'] === $name) {
@@ -522,7 +522,7 @@ EOT;
      *
      * @return string The description associated with the tone, or an empty string if not found.
      */
-    protected function getToneByName(string $name)
+    protected function getToneByName($name)
     {
         foreach ($this->getTones() as $item) {
             if (isset($item['name']) && $item['name'] === $name) {
@@ -531,6 +531,54 @@ EOT;
         }
         return '';
     }
+
+    /**
+     * Replaces entity placeholders within a prompt using data from a resources array.
+     *
+     * Supported placeholders:
+     *  - {{content.field}}
+     *  - {{category.field}}
+     *
+     * @param string $text      The text that may contain placeholders.
+     * @param array  $resources The associative array of resources (e.g. ['content' => [...], 'category' => [...]]).
+     *
+     * @return string The text with placeholders replaced by their corresponding values.
+     */
+    protected function replaceContentPlaceholders(string $text, array $resources): string
+    {
+        $localeConfig = $this->container->get('core.helper.locale')->getConfiguration();
+        $locale       = $localeConfig['selected'] ?? 'es_ES';
+
+        $toString = static function ($value, ?string $locale): string {
+            if (is_array($value)) {
+                return isset($locale, $value[$locale]) ? (string) $value[$locale] : '';
+            }
+            return (string) $value;
+        };
+
+        $read = static function (array $data, string $field, ?string $locale) use ($toString): string {
+            if (!array_key_exists($field, $data)) {
+                return '';
+            }
+            return $toString($data[$field], $locale);
+        };
+
+        return preg_replace_callback(
+            '/{{\s*(\w+)\.(\w+)\s*}}/',
+            function ($m) use ($resources, $read, $locale) {
+                [, $entity, $field] = $m;
+
+                if (!isset($resources[$entity]) || !is_array($resources[$entity])) {
+                    return '';
+                }
+
+                return $read($resources[$entity], $field, $locale);
+            },
+            $text
+        );
+    }
+
+
 
     /**
      * Replaces placeholders in the template with the provided variable values.
@@ -556,15 +604,86 @@ EOT;
         return $template;
     }
 
+    public function generateResourceByContent($pkContent): array
+    {
+        try {
+            $content  = $this->container->get("api.service.content")->getItem($pkContent);
+            $category = [];
+
+            if (!empty($content->categories) && isset($content->categories[0])) {
+                try {
+                    $category = $this->container->get("api.service.category")->getItem($content->categories[0]);
+                } catch (\Throwable $e) {
+                    $category = [];
+                }
+            }
+
+            return [
+                'content' => [
+                    'id'          => $content->id ?? '',
+                    'title_int'   => $content->title_int ?? '',
+                    'title'       => $content->title ?? '',
+                    'description' => $content->description ?? '',
+                    'body'        => $content->body ?? '',
+                    'slug'        => $content->slug ?? ''
+                ],
+                'category' => [
+                    'name' => $category->name ?? '',
+                ]
+            ];
+        } catch (\Throwable $e) {
+            return [];
+        }
+    }
+
+    public function generateResourceByImporter($data): array
+    {
+        try {
+            $category = [];
+
+            if (!empty($data['categories']) && isset($data['categories'][0])) {
+                try {
+                    $category = $this->container->get("api.service.category")->getItem($data['categories'][0]);
+                } catch (\Throwable $e) {
+                    $category = [];
+                }
+            }
+
+            return [
+                'content' => [
+                    'id'          => $data['id'] ?? '',
+                    'title_int'   => $data['title_int'] ?? '',
+                    'title'       => $data['title'] ?? '',
+                    'description' => $data['description'] ?? '',
+                    'body'        => $data['body'] ?? '',
+                    'slug'        => $data['slug'] ?? ''
+                ],
+                'category' => [
+                    'name' => $category->name ?? '',
+                ]
+            ];
+        } catch (\Throwable $e) {
+            return [];
+        }
+    }
+
     /**
      * Sends a message by preparing settings, generating a prompt, and calling the appropriate engine.
      *
-     * @param array $messages Contains the user's input and other necessary information for the prompt.
+     * @param array    $messages  Contains the user's input and other necessary information for the prompt.
+     * @param int|null $pkContent Identifier of the original content used to replace placeholders.
      *
      * @return array The response from the engine, including the result or error if any.
      */
-    public function sendMessage($messages)
+    public function sendMessage($messages, $pkContent = null)
     {
+        if (!empty($pkContent) && in_array($messages['promptSelected']['mode_or'], ['Edit', 'Agency'])) {
+            $messages['promptInput'] = $this->replaceContentPlaceholders(
+                $messages['promptInput'] ?? '',
+                $this->generateResourceByContent($pkContent)
+            );
+        }
+
         $dataLog = [
             'mode'     => $messages['promptSelected']['mode'] ?? '',
             'prompt'   => $messages['promptSelected']['name'] ?? '',
@@ -602,7 +721,7 @@ EOT;
              * Log the selected prompt details for debugging purposes.
              */
             $this->container->get('core.helper.' . $data['engine'])->setDataLog($dataLog);
-
+            
             $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
                 $data,
                 $this->getStructureResponse()
@@ -627,13 +746,13 @@ EOT;
     }
 
     /**
-     * Transforms the given fields of text based on specific instructions and tone.
+     * Translate a text to a given language.
      *
-     * @param array $or The array containing the text fields to be transformed.
-     * @param array $fields The specific fields of text to transform (e.g., 'title', 'description').
-     * @param array $tone The tone to be used in the transformation.
+     * @param string   $text      The text to translate.
+     * @param string   $lang      Target language for the translation.
+     * @param array    $params    Optional parameters (e.g., tone).
      *
-     * @return array The array with transformed text fields or the original array if no transformation occurs.
+     * @return array The translated text or an error structure.
      */
     public function translate($text, $lang, $params = [])
     {
@@ -707,8 +826,8 @@ EOT;
     /**
      * Transforms the given data fields of text based on specific instructions and tone.
      *
-     * @param array $data The array containing the text fields to be transformed.
-     * @param array $fields The specific fields of text to transform (e.g., 'title', 'description').
+     * @param array    $data       The array containing the text fields to be transformed.
+     * @param array    $fields     The specific fields of text to transform (e.g., 'title', 'description').
      *
      * @return array The array with transformed data or the original array if no transformation occurs.
      */
@@ -734,6 +853,8 @@ EOT;
             $prompt = $data[$promptKey]['prompt'];
             $tone   = $data[$toneKey] ?? '';
 
+            $prompt = $this->replaceContentPlaceholders($prompt, $this->generateResourceByImporter($data));
+
             // If empty tone assign default prompt tone
             if (empty($tone)) {
                 $tone = $data[$promptKey]['tone'] ?? '';
@@ -754,7 +875,7 @@ EOT;
             ];
 
             $settings['messages'] = [['role' => 'user', 'content' => $this->replaceVars([
-                'objetivo'      => $data[$promptKey]['prompt'] ?? '',
+                'objetivo'      => $prompt,
                 'mode'          => 'Edit',
                 'instrucciones' => $this->getInstructionsList($data[$promptKey]['instructions'] ?? []),
                 'rol'           => $this->getRoleByName($data[$promptKey]['role']) ?? '',
