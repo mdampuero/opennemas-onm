@@ -245,6 +245,25 @@ class DataTransferHelper
     }
 
     /**
+     * Sanitize
+     */
+    public function sanitizeNulls(array $data): array
+    {
+        return array_map(function ($item) {
+            if (is_array($item)) {
+                foreach ($item as $key => $value) {
+                    if (is_array($value)) {
+                        $item[$key] = $this->sanitizeNulls($value);
+                    } elseif ($value === null) {
+                        $item[$key] = ''; // reemplaza null por cadena vacía
+                    }
+                }
+            }
+            return $item;
+        }, $data);
+    }
+
+    /**
      * Gets a nested value from an array using dot notation.
      *
      * @param array $array
