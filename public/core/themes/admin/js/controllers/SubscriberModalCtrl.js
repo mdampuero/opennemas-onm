@@ -53,12 +53,12 @@
          */
         $scope.confirm = function() {
           if (!$scope.template.selectList || $scope.template.selectList.length === 0) {
-            $scope.alert = { type: 'warning', message: 'Please select at least one list to import subscribers.' };
+            $scope.alert = { type: 'warning', message: window.strings.modals.select_list_is_not_selected };
             return;
           }
 
           if (!$scope.template.file) {
-            $scope.alert = { type: 'warning', message: 'Please select a CSV file.' };
+            $scope.alert = { type: 'warning', message: window.strings.modals.file_is_not_selected };
             return;
           }
 
