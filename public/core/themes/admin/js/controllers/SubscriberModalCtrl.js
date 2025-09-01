@@ -52,6 +52,11 @@
          *   Confirms and executes the confirmed action.
          */
         $scope.confirm = function() {
+          const mimeTypes = [
+            'text/csv',
+            'application/csv',
+          ];
+
           if (!$scope.template.selectList || $scope.template.selectList.length === 0) {
             $scope.alert = { type: 'warning', message: window.strings.modals.select_list_is_not_selected };
             return;
@@ -59,6 +64,12 @@
 
           if (!$scope.template.file) {
             $scope.alert = { type: 'warning', message: window.strings.modals.file_is_not_selected };
+            return;
+          }
+
+          // Check mime type for csv
+          if (mimeTypes.indexOf($scope.template.file.type) === -1) {
+            $scope.alert = { type: 'error', message: window.strings.modals.not_csv };
             return;
           }
 
