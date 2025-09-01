@@ -586,6 +586,9 @@ angular.module('BackendApp.controllers').controller('ContentRestInnerCtrl', [
               AIFieldTitle: AIFieldTitle || '',
               input: input,
               locale: locale,
+              contentId: $scope.data &&
+                $scope.data.item &&
+                $scope.data.item.pk_content ? $scope.data.item.pk_content : null,
               translationHelper: $scope.translationHelper
             };
           },
