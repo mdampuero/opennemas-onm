@@ -132,7 +132,7 @@
           "width": {get_photo_width(get_author_avatar($content))|default:480}
         }
       }
-    {else}
+    {elseif has_logo('embed')}
       , "image": {
           "@type": "ImageObject",
           "url": "{get_photo_path(get_logo('embed'), null, [], true)}",
