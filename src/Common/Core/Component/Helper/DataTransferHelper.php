@@ -272,6 +272,12 @@ class DataTransferHelper
         unset($current[$lastKey]);
     }
 
+    /**
+     * Unset a nested field from an array using dot notation.
+     *
+     * @param array &$array
+     * @param string $key
+     */
     protected function unsetNestedValue(array &$array, string $key): void
     {
         $keys    = explode('.', $key);
