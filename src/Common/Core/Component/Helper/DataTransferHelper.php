@@ -207,33 +207,6 @@ class DataTransferHelper
     }
 
     /**
-     * Recursively sanitize arrays by replacing null values with empty strings,
-     * but only when the expected type is a string. Numeric values (int/float)
-     * and other types are left untouched.
-     *
-     * @param array $data The input array to sanitize.
-     *
-     * @return array The sanitized array with null string values replaced by ''.
-     */
-    public function sanitizeNulls(array $data): array
-    {
-        return array_map(function ($item) {
-            if (is_array($item)) {
-                foreach ($item as $key => $value) {
-                    if (is_array($value)) {
-                        $item[$key] = $this->sanitizeNulls($value);
-                    } elseif ($value === null &&
-                        array_key_exists($key, $item) &&
-                        is_string($item[$key])) {
-                            $item[$key] = '';
-                    }
-                }
-            }
-            return $item;
-        }, $data);
-    }
-
-    /**
      * Gets a nested value from an array using dot notation.
      *
      * @param array $array

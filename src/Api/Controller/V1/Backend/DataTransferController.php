@@ -193,8 +193,10 @@ class DataTransferController extends ApiController
         $includeColumns = $config['includeColumns'] ?? [];
 
         $filtered = $helper->filterColumns($items, $includeColumns, $exclude);
-        $filtered = $helper->convertAdvertisementPaths($filtered, $contentType);
-        $filtered = $helper->sanitizeNulls($filtered);
+
+        if ($contentType === 'advertisement') {
+            $filtered = $helper->convertAdvertisementPaths($filtered);
+        }
 
         $exportData = [
             'metadata' => [
