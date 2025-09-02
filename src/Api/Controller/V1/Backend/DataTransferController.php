@@ -178,13 +178,14 @@ class DataTransferController extends ApiController
         }
 
         $helper = $this->container->get($this->helper);
-        $oql    = $helper->parseOql($oql);
 
-        $service = $this->container->get($config['config']['service']);
-        $method  = $config['config']['method'] ?? 'getList';
-        $query   = $oql['where'] . ' order by ' . $oql['order'];
+        $service       = $this->container->get($config['config']['service']);
+        $method        = $config['config']['method'] ?? 'getList';
+        $query         = 'content_type_name = "%s" and in_litter = 0
+            order by starttime desc';
+        $queryTemplate = sprintf($query, $contentType);
 
-        $data = $service->$method($query);
+        $data = $service->$method($queryTemplate);
 
         $items = array_map(function ($item) {
             return (array) $item->getStored();

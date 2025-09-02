@@ -207,45 +207,13 @@ class DataTransferHelper
     }
 
     /**
-     * Parses an OQL string into structured components (where, order, limit).
+     * Recursively sanitize arrays by replacing null values with empty strings,
+     * but only when the expected type is a string. Numeric values (int/float)
+     * and other types are left untouched.
      *
-     * @param string $oql
-     *   The OQL string (e.g. 'content_type_name="advertisement" and in_litter="0"
-     * order by created desc limit 10').
+     * @param array $data The input array to sanitize.
      *
-     * @return array
-     *   An array with keys: 'where', 'order', 'limit'.
-     */
-    public function parseOql(string $oql): array
-    {
-        $result = [
-            'where' => null,
-            'order' => null,
-            'limit' => null,
-        ];
-
-        $oql = trim($oql);
-
-        // Extract WHERE clause
-        if (preg_match('/^(.*?)(\s+order by|\s+limit|$)/i', $oql, $m)) {
-            $result['where'] = trim($m[1]);
-        }
-
-        // Extract ORDER BY
-        if (preg_match('/order by (.*?)(\s+limit|$)/i', $oql, $m)) {
-            $result['order'] = trim($m[1]);
-        }
-
-        // Extract LIMIT
-        if (preg_match('/limit\s+(\d+)/i', $oql, $m)) {
-            $result['limit'] = (int) $m[1];
-        }
-
-        return $result;
-    }
-
-    /**
-     * Sanitize
+     * @return array The sanitized array with null string values replaced by ''.
      */
     public function sanitizeNulls(array $data): array
     {
@@ -254,8 +222,10 @@ class DataTransferHelper
                 foreach ($item as $key => $value) {
                     if (is_array($value)) {
                         $item[$key] = $this->sanitizeNulls($value);
-                    } elseif ($value === null) {
-                        $item[$key] = ''; // reemplaza null por cadena vacía
+                    } elseif ($value === null &&
+                        array_key_exists($key, $item) &&
+                        is_string($item[$key])) {
+                            $item[$key] = '';
                     }
                 }
             }
