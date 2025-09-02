@@ -403,10 +403,9 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
      */
     $scope.export = function(route) {
       const contentType = $scope.criteria.content_type_name;
-      const oql         = oqlEncoder.getOql($scope.criteria);
 
       // Build the URL for export
-      const url         = routing.generate(route, { contentType: contentType, oql: oql });
+      const url         = routing.generate(route, { contentType: contentType });
 
       $http.get(url).then(function(response) {
         messenger.post(response.data.messages);

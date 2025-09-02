@@ -168,7 +168,6 @@ class DataTransferController extends ApiController
     public function exportListAction(Request $request)
     {
         $contentType = $request->query->get('contentType');
-        $oql         = $request->query->get('oql');
 
         // Validate content type and configuration
         $config  = $this->availableDataTransfers[$contentType] ?? null;
