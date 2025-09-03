@@ -140,6 +140,8 @@
           "width": {get_photo_width(get_logo('embed'))|default:480}
         }
       }
+    {else}
+      }
     {/if}
   ]
 </script>
