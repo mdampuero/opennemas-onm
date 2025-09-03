@@ -17,7 +17,7 @@ frontend_playground:
         subdirectory: true
 
 frontend_not_found:
-    path: /not-found
+    path: /not-found/
     defaults: { _controller: FrontendBundle:Error:notFound }
 
 frontend_advertisement:
