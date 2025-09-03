@@ -13,8 +13,8 @@
       <div class="col-sm-3 col-lg-3">
         <input data-nodrag class="menu-item-title" ng-model="item.title" type="text">
       </div>
-      <div ng-if="item.type === 'external'" class="col-sm-9 col-lg-9">
-        <input data-nodrag class="menu-item-link" ng-model="item.link_name" type="text">
+      <div ng-if="item.type === 'external'" class="col-sm-9 col-lg-9 form-group" ng-class="{ 'has-error': invalidLinks[item.pk_item] }">
+        <input data-nodrag class="menu-item-link form-control" ng-model="item.link_name" type="text" ng-blur="validateExternalLink(item)" ng-focus="clearExternalValidation(item)">
       </div>
     </div>
   </div>
