@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Onm package.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
@@ -107,7 +109,7 @@ class MenuController extends ApiController
             'module' => 'LIBRARY_MANAGER',
             'title' => 'Archive',
             'route' => 'frontend_archive',
-            'params' => [ 'component' => 'content' ]
+            'params' => ['component' => 'content']
         ],
     ];
 
@@ -182,7 +184,7 @@ class MenuController extends ApiController
         $this->get('core.locale')->setContext('frontend');
 
         $oql = 'content_type_name = "static_page" and in_litter = 0 and content_status = 1 '
-           . ' order by created desc';
+            . ' order by created desc';
 
         $response = $this->get('api.service.content')->getListWithoutLocalizer($oql);
         $this->get('core.locale')->setContext($context);
@@ -220,7 +222,7 @@ class MenuController extends ApiController
         $this->get('core.locale')->setContext('frontend');
 
         $oql = 'visible = 1 and enabled = 1'
-        . ' order by title asc';
+            . ' order by title asc';
 
         $categories = $this->get('api.service.category')->getListWithoutLocalizer($oql);
         $this->get('core.locale')->setContext($context);
@@ -246,7 +248,7 @@ class MenuController extends ApiController
         return $menuPositions;
     }
 
-     /**
+    /**
      * Returns the list of l10n keys.
      *
      * @return array The list of l10n keys.
@@ -263,7 +265,7 @@ class MenuController extends ApiController
      */
     private function getModulePages()
     {
-        $default = [ ['title' => _("Frontpage"),'link' => "/"] ];
+        $default = [['title' => _("Frontpage"), 'link' => "/"]];
         $modules = array_filter(array_map(function ($page) {
             if (!$this->get('core.security')->hasExtension($page['module'])) {
                 return null;
@@ -273,7 +275,7 @@ class MenuController extends ApiController
                 ltrim($this->get('router')->generate($page['route'], $page['params']), '/') :
                 ltrim($this->get('router')->generate($page['route']), '/');
 
-            return [ 'title' => _($page['title']), 'link'  => $link ];
+            return ['title' => _($page['title']), 'link'  => $link];
         }, $this->modulePages));
 
         return array_merge($default, $modules);
@@ -282,6 +284,52 @@ class MenuController extends ApiController
     protected function getItemId($item)
     {
         return $item->pk_menu;
+    }
+
+    /**
+     * Saves a new menu item.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function saveItemAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
+
+        $data          = $request->request->all();
+        $localeService = $this->container->get('core.locale');
+        $defaultLocale = $localeService->getLocale('frontend');
+
+        foreach ($data['menu_items'] as &$item) {
+            if (empty($item['locale'])) {
+                $item['locale'] = $defaultLocale;
+            }
+        }
+
+        $invalid = $this->validateExternalLinks($data['menu_items'] ?? []);
+        if (!empty($invalid)) {
+            $msg = $this->get('core.messenger');
+            foreach ($invalid as $link) {
+                $msg->add(sprintf(_('Invalid external link: %s'), $link), 'error');
+            }
+            return new JsonResponse($msg->getMessages(), 400);
+        }
+
+        $msg  = $this->get('core.messenger');
+        $item = $this->get($this->service)->createItem($data);
+        $msg->add(_('Item saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+
+        if (!empty($this->getItemRoute)) {
+            $response->headers->set('Location', $this->generateUrl(
+                $this->getItemRoute,
+                ['id' => $this->getItemId($item)]
+            ));
+        }
+
+        return $response;
     }
 
     /**
@@ -302,8 +350,17 @@ class MenuController extends ApiController
 
         foreach ($data['menu_items'] as &$item) {
             if (empty($item['locale'])) {
-                $item['locale'] = $defaultLocale; // Establece el locale por defecto
+                $item['locale'] = $defaultLocale;
             }
+        }
+
+        $invalid = $this->validateExternalLinks($data['menu_items'] ?? []);
+        if (!empty($invalid)) {
+            $msg = $this->get('core.messenger');
+            foreach ($invalid as $link) {
+                $msg->add(sprintf(_('Invalid external link: %s'), $link), 'error');
+            }
+            return new JsonResponse($msg->getMessages(), 400);
         }
 
         $this->get($this->service)->updateItem($id, $data);
@@ -312,5 +369,66 @@ class MenuController extends ApiController
         $msg->add(_('Item saved successfully'), 'success');
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Validates menu items of type external.
+     *
+     * @param array $menuItems The menu items to validate.
+     *
+     * @return array The list of invalid links.
+     */
+    private function validateExternalLinks(array $menuItems)
+    {
+        $errors   = [];
+        $instance = $this->get('core.instance');
+
+        $allowedSchemes = ['whatsapp', 'mailto', 'tel'];
+
+        foreach ($menuItems as $item) {
+            if (($item['type'] ?? '') !== 'external') {
+                continue;
+            }
+
+            $link = $item['link_name'] ?? $item['link'] ?? '';
+
+            if (preg_match('#^([a-z][a-z0-9+.-]*):#i', $link, $matches)) {
+                $scheme = strtolower($matches[1]);
+
+                if (in_array($scheme, $allowedSchemes, true)) {
+                    continue;
+                }
+
+                if (preg_match('#^[a-z][a-z0-9+.-]*://#i', $link)) {
+                    // curl
+                } else {
+                    $errors[] = $link;
+                    continue;
+                }
+            } elseif (strpos($link, '/') === 0) {
+                $link = $instance->getBaseUrl(true) . $link;
+            } else {
+                $errors[] = $link;
+                continue;
+            }
+
+            $ch = curl_init($link);
+            curl_setopt_array($ch, [
+                CURLOPT_NOBODY         => true,
+                CURLOPT_TIMEOUT        => 5,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_RETURNTRANSFER => true,
+            ]);
+            curl_exec($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $err  = curl_errno($ch);
+            curl_close($ch);
+
+            if ($err || $code >= 400 || $code === 0) {
+                $errors[] = $link;
+            }
+        }
+
+        return $errors;
     }
 }

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-29 08:49+0000\n"
-"PO-Revision-Date: 2025-07-29 11:16+0200\n"
+"POT-Creation-Date: 2025-08-21 06:41+0000\n"
+"PO-Revision-Date: 2025-08-21 08:44+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Euskera\n"
 "Language: es\n"
@@ -8311,6 +8311,27 @@ msgstr "Helburua"
 msgid "Final prompt preview"
 msgstr "Azken gonbitaren aurrebista"
 
+msgid "Available variables"
+msgstr "Aldagai erabilgarriak"
+
+msgid "Reference"
+msgstr "Erreferentzia"
+
+msgid "Vars"
+msgstr "Aldagaiak"
+
+msgid "Copy"
+msgstr "Kopiatu"
+
+msgid "Id"
+msgstr "Id"
+
+msgid "Internal title"
+msgstr "Barneko izenburua"
+
+msgid "Name of category"
+msgstr "Kategoriaren izena"
+
 msgid "Selected instructions"
 msgstr "Hautatutako argibideak"
 
@@ -8978,6 +8999,33 @@ msgstr "Kostatu"
 
 msgid "Subtotal"
 msgstr "Suptrotal"
+
+#, fuzzy
+#~ msgid "Id of content"
+#~ msgstr "Edukien zerrenda"
+
+#, fuzzy
+#~ msgid "Internal title of content"
+#~ msgstr "Edukien zerrenda"
+
+#, fuzzy
+#~ msgid "Title of content"
+#~ msgstr "Edukien zerrenda"
+
+#, fuzzy
+#~ msgid "Description of content"
+#~ msgstr "Edukien zerrenda"
+
+#, fuzzy
+#~ msgid "Body of content"
+#~ msgstr "Edukien zerrenda"
+
+#, fuzzy
+#~ msgid "Slug of content"
+#~ msgstr "Edukien zerrenda"
+
+#~ msgid "Only video files are allowed"
+#~ msgstr "Bideo-fitxategiak soilik onartzen dira"
 
 #, fuzzy
 #~ msgid ""

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-29 08:49+0000\n"
-"PO-Revision-Date: 2025-07-29 10:49+0200\n"
+"POT-Creation-Date: 2025-08-21 06:41+0000\n"
+"PO-Revision-Date: 2025-08-21 08:42+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -8374,6 +8374,27 @@ msgstr "Objetivo"
 msgid "Final prompt preview"
 msgstr "Vista previa del mensaje final"
 
+msgid "Available variables"
+msgstr "Variables disponibles"
+
+msgid "Reference"
+msgstr "Referencia"
+
+msgid "Vars"
+msgstr "Variables"
+
+msgid "Copy"
+msgstr "Copiar"
+
+msgid "Id"
+msgstr "Id"
+
+msgid "Internal title"
+msgstr "Título interno"
+
+msgid "Name of category"
+msgstr "Nombre de la categoría"
+
 msgid "Selected instructions"
 msgstr "Instrucciones seleccionadas"
 
@@ -9046,6 +9067,33 @@ msgstr "Precio"
 
 msgid "Subtotal"
 msgstr "Subtotal"
+
+#, fuzzy
+#~ msgid "Id of content"
+#~ msgstr "Lista de contenidos"
+
+#, fuzzy
+#~ msgid "Internal title of content"
+#~ msgstr "Lista de contenidos"
+
+#, fuzzy
+#~ msgid "Title of content"
+#~ msgstr "Lista de contenidos"
+
+#, fuzzy
+#~ msgid "Description of content"
+#~ msgstr "Lista de contenidos"
+
+#, fuzzy
+#~ msgid "Body of content"
+#~ msgstr "Lista de contenidos"
+
+#, fuzzy
+#~ msgid "Slug of content"
+#~ msgstr "Lista de contenidos"
+
+#~ msgid "Only video files are allowed"
+#~ msgstr "Solo se permiten archivos de vídeo"
 
 #, fuzzy
 #~ msgid ""
