@@ -110,11 +110,11 @@ class LocalizeFilter extends Filter
             $this->getParameter('locale', null, false) :
             $lm->getRequestLocale('frontend');
 
-        if (array_key_exists($locale, $value) && $value[$locale] !== '' && $value[$locale] !== null) {
+        if (array_key_exists($locale, $value) && (!empty($value[$locale]) || $value[$locale] === "0")) {
             return $value[$locale];
         }
 
-        if (array_key_exists($default, $value) && $value[$default] !== '' && $value[$default] !== null) {
+        if (array_key_exists($default, $value) && (!empty($value[$default]) || $value[$default] === "0")) {
             return $value[$default];
         }
 
