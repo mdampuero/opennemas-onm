@@ -108,6 +108,16 @@
          * @memberOf MenuCtrl
          *
          * @description
+         *  Store invalid external links by pk_item.
+         *
+         * @type {Object}
+         */
+        $scope.invalidLinks = {};
+
+        /**
+         * @memberOf MenuCtrl
+         *
+         * @description
          *  The options for ui-tree directive.
          *
          * @type {Object}
@@ -371,6 +381,7 @@
          * @param {Object} item The item to remove from the array of menu items.
          */
         $scope.removeItem = function(item) {
+          delete $scope.invalidLinks[item.pk_item];
           for (var id in $scope.childs) {
             $scope.childs[id] = $scope.childs[id].filter(function(child) {
               return child.pk_item !== item.pk_item;
@@ -380,6 +391,40 @@
           $scope.parents = $scope.parents.filter(function(parent) {
             return parent.pk_item !== item.pk_item;
           });
+        };
+
+        /**
+         * Validates an external link using the API.
+         *
+         * @param {Object} item The menu item to validate.
+         */
+        $scope.validateExternalLink = function(item) {
+          var route = { name: 'api_v1_backend_menu_validate_external_link' };
+
+          http.post(route, { link: item.link_name }).then(function() {
+            delete $scope.invalidLinks[item.pk_item];
+          }, function(response) {
+            $scope.invalidLinks[item.pk_item] = true;
+            messenger.post(response.data);
+          });
+        };
+
+        /**
+         * Clears the validation status for an external link.
+         *
+         * @param {Object} item The menu item to clear.
+         */
+        $scope.clearExternalValidation = function(item) {
+          delete $scope.invalidLinks[item.pk_item];
+        };
+
+        /**
+         * Determines if there are invalid external links.
+         *
+         * @returns {boolean} true if there is any invalid link, false otherwise.
+         */
+        $scope.hasInvalidExternalLinks = function() {
+          return Object.keys($scope.invalidLinks).length > 0;
         };
 
         /**

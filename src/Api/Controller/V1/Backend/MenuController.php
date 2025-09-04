@@ -281,6 +281,43 @@ class MenuController extends ApiController
         return array_merge($default, $modules);
     }
 
+    /**
+     * Validates that an external link is well-formed.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function validateExternalLinkAction(Request $request)
+    {
+        $link = $request->request->get('link');
+
+        if (!$this->isValidExternalLink($link)) {
+            $msg = $this->get('core.messenger');
+            $msg->add(_('The link is not valid'), 'error');
+
+            return new JsonResponse($msg->getMessages(), 400);
+        }
+
+        return new JsonResponse(['valid' => true]);
+    }
+
+    /**
+     * Checks if the provided link is a valid URL.
+     *
+     * @param string|null $link The link to validate.
+     *
+     * @return bool True if the link is valid, false otherwise.
+     */
+    protected function isValidExternalLink($link)
+    {
+        if (empty($link)) {
+            return false;
+        }
+
+        return filter_var($link, FILTER_VALIDATE_URL) !== false;
+    }
+
     protected function getItemId($item)
     {
         return $item->pk_menu;
