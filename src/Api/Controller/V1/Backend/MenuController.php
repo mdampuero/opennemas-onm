@@ -392,8 +392,7 @@ class MenuController extends ApiController
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $err  = curl_errno($ch);
             curl_close($ch);
-
-            if ($err || $code >= 400 || $code === 0) {
+            if ($err || $code >= 404 || $code === 0) {
                 $errors[] = $link;
             }
         }
