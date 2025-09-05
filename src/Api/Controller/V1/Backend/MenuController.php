@@ -287,52 +287,6 @@ class MenuController extends ApiController
     }
 
     /**
-     * Saves a new menu item.
-     *
-     * @param Request $request The request object.
-     *
-     * @return JsonResponse The response object.
-     */
-    public function saveItemAction(Request $request)
-    {
-        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
-
-        $data          = $request->request->all();
-        $localeService = $this->container->get('core.locale');
-        $defaultLocale = $localeService->getLocale('frontend');
-
-        foreach ($data['menu_items'] as &$item) {
-            if (empty($item['locale'])) {
-                $item['locale'] = $defaultLocale;
-            }
-        }
-
-        $invalid = $this->validateExternalLinks($data['menu_items'] ?? []);
-        if (!empty($invalid)) {
-            $msg = $this->get('core.messenger');
-            foreach ($invalid as $link) {
-                $msg->add(sprintf(_('Invalid external link: %s'), $link), 'error');
-            }
-            return new JsonResponse($msg->getMessages(), 400);
-        }
-
-        $msg  = $this->get('core.messenger');
-        $item = $this->get($this->service)->createItem($data);
-        $msg->add(_('Item saved successfully'), 'success', 201);
-
-        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
-
-        if (!empty($this->getItemRoute)) {
-            $response->headers->set('Location', $this->generateUrl(
-                $this->getItemRoute,
-                ['id' => $this->getItemId($item)]
-            ));
-        }
-
-        return $response;
-    }
-
-    /**
      * Updates the item information given its id and the new information.
      *
      * @param Request $request The request object.
@@ -354,19 +308,34 @@ class MenuController extends ApiController
             }
         }
 
-        $invalid = $this->validateExternalLinks($data['menu_items'] ?? []);
-        if (!empty($invalid)) {
-            $msg = $this->get('core.messenger');
-            foreach ($invalid as $link) {
-                $msg->add(sprintf(_('Invalid external link: %s'), $link), 'error');
-            }
-            return new JsonResponse($msg->getMessages(), 400);
-        }
-
         $this->get($this->service)->updateItem($id, $data);
 
         $msg = $this->get('core.messenger');
         $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Validates a single external link.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function validateLinkAction(Request $request)
+    {
+        $link   = $request->query->get('link', '');
+        $msg    = $this->get('core.messenger');
+        $invalid = $this->validateExternalLinks([
+            ['type' => 'external', 'link_name' => $link],
+        ]);
+
+        if (!empty($invalid)) {
+            $msg->add(sprintf(_('External link inválido: %s'), $link), 'error', 400);
+        } else {
+            $msg->add(_('Link is valid'), 'success');
+        }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
@@ -423,8 +392,7 @@ class MenuController extends ApiController
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $err  = curl_errno($ch);
             curl_close($ch);
-
-            if ($err || $code >= 400 || $code === 0) {
+            if ($err || $code >= 404 || $code === 0) {
                 $errors[] = $link;
             }
         }
