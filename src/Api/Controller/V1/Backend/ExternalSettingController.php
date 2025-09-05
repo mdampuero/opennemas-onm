@@ -94,4 +94,58 @@ class ExternalSettingController extends SettingController
             )
         );
     }
+
+    public function saveAction(Request $request)
+    {
+        $settings = $request->get('settings', []);
+        $msg      = $this->get('core.messenger');
+
+        $links    = [];
+        $linkKeys = [];
+
+        $urlKeys = [
+            'youtube_page',
+            'twitter_page',
+            'bluesky_page',
+            'instagram_page',
+            'pinterest_page',
+            'flickr_page',
+            'vimeo_page',
+            'linkedin_page',
+            'telegram_page',
+            'whatsapp_page',
+            'tiktok_page',
+            'dailymotion_page',
+        ];
+
+        foreach ($urlKeys as $key) {
+            if (!empty($settings[$key])) {
+                $links[]                    = ['type' => 'external', 'link_name' => $settings[$key]];
+                $linkKeys[$settings[$key]] = $key;
+            }
+        }
+
+        if (!empty($settings['facebook']['page'])) {
+            $links[]                             = ['type' => 'external', 'link_name' => $settings['facebook']['page']];
+            $linkKeys[$settings['facebook']['page']] = 'facebook.page';
+        }
+
+        if (!empty($links)) {
+            $invalid = $this->get('core.helper.link')->validateExternalLinks($links);
+            if (!empty($invalid)) {
+                $errors = [];
+                foreach ($invalid as $link) {
+                    $errors[] = [
+                        'type'    => 'error',
+                        'message' => sprintf(_('External link inválido: %s'), $link),
+                        'key'     => $linkKeys[$link] ?? '',
+                    ];
+                }
+
+                return new JsonResponse($errors, 400);
+            }
+        }
+
+        return $this->saveSettings($settings);
+    }
 }
