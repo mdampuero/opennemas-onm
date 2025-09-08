@@ -155,6 +155,16 @@
         </h4>
       </div>
       <div class="grid-body">
+        {if $app.security->hasPermission('MASTER')}
+          <div class="form-group">
+            <div class="help">{t}Choose newsletter's desired layout{/t}:</div>
+            <div class="controls">
+              <select id="newsletter_layout" name="newsletter_layout" ng-model="settings.newsletter_layout">
+                <option value="[% newsletter_layout_value %]" ng-repeat="(newsletter_layout_value,newsletter_layout_name) in settings.theme_skins[settings.theme_skin].params.newsletter_layouts" ng-selected="[% newsletter_layout_value === settings.newsletter_layout %]">[% newsletter_layout_name %]</option>
+              </select>
+            </div>
+          </div>
+        {/if}
         <div class="form-group">
           <label for="name" class="form-label">{t}Newsletter subject{/t}</label>
           <span class="help">{t}The subject of the emails in this newsletter{/t}</span>
