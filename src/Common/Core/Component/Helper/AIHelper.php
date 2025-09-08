@@ -720,6 +720,9 @@ EOT;
             /**
              * Log the selected prompt details for debugging purposes.
              */
+            if (!empty($messages['promptSelected']['debugging'])) {
+                $dataLog['messages'] = $data['messages'];
+            }
             $this->container->get('core.helper.' . $data['engine'])->setDataLog($dataLog);
             
             $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
@@ -887,6 +890,9 @@ EOT;
             ])]];
 
             // Log the selected prompt details for debugging purposes.
+            if (!empty($data[$promptKey]['debugging'])) {
+                $dataLog['messages'] = $settings['messages'];
+            }
             $this->container->get('core.helper.' . $settings['engine'])->setDataLog($dataLog);
 
             $response = $this->container->get('core.helper.' . $settings['engine'])

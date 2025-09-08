@@ -135,6 +135,12 @@
                 <label for="content-status">{t}Published{/t}</label>
               </div>
             </div>
+            <div class="form-group">
+              <div class="checkbox">
+                <input id="content-debugging" ng-false-value="0" ng-model="item.debugging" ng-true-value="1" type="checkbox">
+                <label for="content-debugging">{t}Debugging{/t}</label>
+              </div>
+            </div>
             <ng-container ng-if="item.mode !='New'">
             <div class="form-group">
               <hr>

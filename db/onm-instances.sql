@@ -506,6 +506,7 @@ CREATE TABLE `prompt` (
   `name` text NOT NULL,
   `prompt` text,
   `role` text,
+  `debugging` tinyint(1) DEFAULT '0',
   `field` varchar(32) NOT NULL,
   `tone` text,
   `model` varchar(255) DEFAULT NULL,
