@@ -48,11 +48,13 @@
           },
           link: function(scope) {
             scope.updateMirror = function(field) {
-              const selectedId = scope.ngModel[field.key];
-              const options = field.values.split(',');
+              var selectedId = scope.ngModel[field.key];
+              var options = field.values.split(',');
 
-              for (let i = 0; i < options.length; i++) {
-                const [ id, name ] = options[i].split(':');
+              for (var i = 0; i < options.length; i++) {
+                var parts = options[i].split(':');
+                var id = parts[0];
+                var name = parts[1];
 
                 if (id === selectedId) {
                   scope.ngModel[field.key + '_val'] = name;
