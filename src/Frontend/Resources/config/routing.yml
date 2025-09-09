@@ -16,6 +16,10 @@ frontend_playground:
     options:
         subdirectory: true
 
+frontend_not_found:
+    path: /not-found/
+    defaults: { _controller: FrontendBundle:Error:notFound }
+
 frontend_advertisement:
     resource: '@FrontendBundle/Resources/config/routing/advertisement.yml'
 
