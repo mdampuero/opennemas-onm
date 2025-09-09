@@ -434,6 +434,47 @@
             }
           });
         });
+
+        $scope.timeFilter = function() {
+          $scope.loading = true;
+
+          var modal = $uibModal.open({
+            templateUrl: 'modal-time-range',
+            backdrop: 'static',
+            controller: 'ModalCtrl',
+            resolve: {
+              template: function() {
+                return {};
+              },
+              success: function() {
+                return function() {
+                  // Load shared variable
+                  var selected = $scope.selected.contents;
+
+                  $scope.updateItemsStatus(loading, 1);
+
+                  var url = routing.generate(route,
+                    { contentType: $scope.criteria.content_type_name });
+
+                  return $http.post(url, { ids: selected, value: value });
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response) {
+              messenger.post(response.data.messages);
+
+              if (response.success) {
+                $scope.updateItemsStatus(loading, 0, name, value);
+              }
+            }
+
+            $scope.selected.contents = [];
+            $scope.selected.all = false;
+          });
+        };
       }
     ]);
 })();

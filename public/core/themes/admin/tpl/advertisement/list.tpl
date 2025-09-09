@@ -151,6 +151,11 @@ status = [
       </ul>
     </div>
   </li>
+  <li class="quicklinks ng-cloak dropdown visible-lg">
+    <button class="btn btn-white" ng-click="timeFilter()" type="button" uib-tooltip="{t}Time Range{/t}" tooltip-placement="top">
+      <i class="fa fa-clock-o text-primary"></i>
+    </button>
+  </li>
 {/block}
 
 {block name="list"}
@@ -173,6 +178,9 @@ status = [
   </script>
   <script type="text/ng-template" id="modal-duplicate">
     {include file="common/extension/modal.duplicate.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-time-range">
+    {include file="common/modals/_modalTimeRange.tpl"}
   </script>
   <script type="text/ng-template" id="ad_position_template">
     <div ng-repeat="position in content.positions">[% map[position].name %]</div>
