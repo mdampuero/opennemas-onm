@@ -115,43 +115,6 @@ status = [
     </ui-select>
   </li>
   <li class="quicklinks ng-cloak dropdown visible-lg">
-    <div class="select2-container">
-      <a class="select2-choice dropdown-toggle" type="button" data-toggle="dropdown">
-        <strong>{t}Time Range{/t}</strong>
-        [% tempCriteria.starttime %]
-        <span ng-if="tempCriteria.starttime && tempCriteria.endtime"> - </span>
-        [% tempCriteria.endtime %]
-        <span class="caret"></span>
-      </a>
-      <ul class="ui-select-dropdown dropdown-menu p-10" ng-click="$event.stopPropagation()">
-        <li>
-          <div class="grid-collapse-body ng-cloak">
-            <div class="form-group">
-              <div class="input-group">
-                <span class="input-group-addon add-on">
-                    <i class="fa fa-calendar m-r-5"></i> {t}Start date{/t}
-                </span>
-                <input class="input-min-45 input-300" type="datetime" id="starttime" autocomplete="off" name="starttime" datetime-picker ng-model="tempCriteria.starttime" />
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="input-group">
-                <span class="input-group-addon add-on">
-                  <i class="fa fa-calendar m-r-5"></i> {t}End date{/t}
-                </span>
-                <input class="input-min-45 input-300" type="datetime" id="endtime" autocomplete="off" name="endtime" datetime-picker ng-model="tempCriteria.endtime" />
-              </div>
-            </div>
-            <div class="form-group text-right m-b-0">
-              <button class="btn btn-default pull-left" ng-click="cancelFilter()">{t}Cancel{/t}</button>
-              <button class="btn btn-primary" ng-click="applyFilter()">{t}Confirm{/t}</button>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </li>
-  <li class="quicklinks ng-cloak dropdown visible-lg">
     <button class="btn btn-white" ng-click="timeFilter()" type="button" uib-tooltip="{t}Time Range{/t}" tooltip-placement="top">
       <i class="fa fa-clock-o text-primary"></i>
     </button>

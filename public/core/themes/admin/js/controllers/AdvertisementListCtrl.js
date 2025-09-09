@@ -81,8 +81,8 @@
               title: 'title ~ "%[value]%"',
               fk_content_categories: 'fk_content_categories regexp' +
                 '"^[value]($|,)|,[value],|(^|,)[value]$"',
-              starttime: 'starttime >= "[value]"',
-              endtime: 'endtime <= "[value]"',
+              starttime: 'starttime <= "[value]"',
+              endtime: 'endtime >= "[value]"',
             }
           });
 
@@ -357,30 +357,17 @@
         };
 
         /**
-         * @fucntion applyFilter
+         * @function applyFilter
          * @memberOf AdvertisementListCtrl
          *
          * @description
          *  Apply the filter to the list of advertisement
          */
-        $scope.applyFilter = function() {
-          $scope.criteria = angular.copy($scope.tempCriteria);
-        };
+        $scope.applyFilter = function(criteria) {
+          $scope.criteria      = angular.merge({}, $scope.criteria, criteria);
+          $scope.criteria.page = 1;
 
-        /**
-         * @function cancelFilter
-         * @memberOf AdvertisementListCtrl
-         *
-         * @description
-         *   Cancel the filter and reset the criteria.
-         */
-        $scope.cancelFilter = function() {
-          $scope.tempCriteria.starttime = '';
-          $scope.tempCriteria.endtime = '';
-
-          $scope.criteria = angular.copy($scope.tempCriteria);
-
-          window.location.reload();
+          $scope.list();
         };
 
         /**
@@ -435,44 +422,44 @@
           });
         });
 
+        /**
+         * @function timeFilter
+         * @memberOf MainController
+         *
+         * @description
+         * Opens the time filter modal and applies the selected criteria
+         */
         $scope.timeFilter = function() {
           $scope.loading = true;
+
+          if (!$scope.appliedCriteria) {
+            $scope.appliedCriteria = {
+              starttime: null,
+              endtime: null
+            };
+          }
 
           var modal = $uibModal.open({
             templateUrl: 'modal-time-range',
             backdrop: 'static',
-            controller: 'ModalCtrl',
+            controller: 'ModalTimeFilterCtrl',
             resolve: {
               template: function() {
                 return {};
               },
               success: function() {
-                return function() {
-                  // Load shared variable
-                  var selected = $scope.selected.contents;
-
-                  $scope.updateItemsStatus(loading, 1);
-
-                  var url = routing.generate(route,
-                    { contentType: $scope.criteria.content_type_name });
-
-                  return $http.post(url, { ids: selected, value: value });
+                return function(modalInstance, template, criteria) {
+                  $scope.applyFilter(criteria);
+                  return true;
                 };
               }
             }
           });
 
-          modal.result.then(function(response) {
-            if (response) {
-              messenger.post(response.data.messages);
-
-              if (response.success) {
-                $scope.updateItemsStatus(loading, 0, name, value);
-              }
-            }
-
-            $scope.selected.contents = [];
-            $scope.selected.all = false;
+          modal.result.then(function() {
+            $scope.loading = false;
+          }, function() {
+            $scope.loading = false;
           });
         };
       }
