@@ -388,6 +388,33 @@ class InstanceHelper
         }
     }
 
+    /**
+     * Returns the storage settings for the given instance.
+     *
+     * @param Instance $instance The current instance.
+     *
+     * @return array|null The storage settings or null if not found.
+     */
+    public function getStorageSettings(Instance $instance)
+    {
+        try {
+            $this->conn->selectDatabase($instance->getDatabaseName());
+
+            $sql = "select name, value from settings where name = 'storage_settings'";
+
+            $fetchAssoc = $this->conn->fetchAssoc($sql);
+
+            if (!$fetchAssoc) {
+                return [];
+            }
+
+            $storageSettings = PhpSerializer::unserialize($fetchAssoc['value']);
+
+            return $storageSettings ?? [];
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
 
     /**
      * Returns the created date of the last created content.

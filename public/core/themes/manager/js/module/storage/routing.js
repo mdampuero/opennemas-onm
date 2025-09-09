@@ -6,6 +6,11 @@
       '$routeProvider', 'routingProvider',
       function($routeProvider, routingProvider) {
         $routeProvider
+          .when(routingProvider.ngGenerateShort('manager_storage_instances'), {
+            templateUrl: '/managerws/template/storage:instances.' + appVersion + '.tpl',
+            controller: 'StorageInstancesCtrl',
+            reloadOnSearch: false
+          })
           .when(routingProvider.ngGenerateShort('manager_storage_config'), {
             templateUrl: '/managerws/template/storage:config.' + appVersion + '.tpl',
             controller: 'StorageConfigCtrl',

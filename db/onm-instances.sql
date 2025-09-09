@@ -195,6 +195,7 @@ CREATE TABLE `instances` (
   `widgets` int(10) unsigned NOT NULL DEFAULT '0',
   `static_pages` int(10) unsigned NOT NULL DEFAULT '0',
   `media_size` double NOT NULL DEFAULT '0',
+  `storage_size` bigint(20) unsigned NOT NULL DEFAULT '0',
   `alexa` int(10) unsigned NOT NULL,
   `page_views` bigint(20) unsigned NOT NULL DEFAULT '0',
   `emails` int(10) unsigned NOT NULL DEFAULT '0',
