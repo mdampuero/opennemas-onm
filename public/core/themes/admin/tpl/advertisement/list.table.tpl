@@ -137,10 +137,20 @@
         [% getCategoryTitle(item.fk_content_categories[0]) %]
       </a>
       <small ng-if="item.fk_content_categories.length > 1"
-            uib-tooltip="[% item.fk_content_categories.map(getCategoryTitle).join(', ') %]"
+            uib-tooltip-template="'categories_tooltip_template'"
             tooltip-placement="top">
         {t}Custom{/t}
       </small>
+      <script type="text/ng-template" id="categories_tooltip_template">
+        <div>
+          <span ng-repeat="id in item.fk_content_categories | limitTo:3">
+            [% getCategoryTitle(id) %]<span ng-if="!$last">, </span>
+          </span>
+          <span ng-if="item.fk_content_categories.length > 3">
+            {t 1="[% item.fk_content_categories.length - 3 %]"}And %1 more…{/t}
+          </span>
+        </div>
+      </script>
     {/block}
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('starttime')">
