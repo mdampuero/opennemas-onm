@@ -147,7 +147,6 @@ class HttpRss extends Http
         $article->title             = (string) $content->title;
         $article->body              = (string) htmlentities($content->children('content', true));
         $article->description       = (string) htmlentities($content->description);
-        $article->summary           = (string) htmlentities($content->description);
         $article->created_datetime  = new \DateTime($content->pubDate);
         $article->updated_datetime  = new \DateTime($content->pubDate);
         $article->content_type_name = 'article';
