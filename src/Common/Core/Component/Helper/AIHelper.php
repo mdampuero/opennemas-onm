@@ -737,7 +737,7 @@ EOT;
 
         if (empty($response['error'])) {
             $this->generateWords($response);
-            $this->saveAction($data, $response);
+            $this->saveAction($data, $response, $messages['promptSelected']['debugging'] ?? false);
         } else {
             $this->errorLog->error(
                 'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
@@ -815,7 +815,7 @@ EOT;
 
         if (empty($response['error'])) {
             $this->generateWords($response);
-            $this->saveAction($data, $response);
+            $this->saveAction($data, $response, false);
         } else {
             $this->errorLog->error(
                 'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
@@ -901,7 +901,7 @@ EOT;
             $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
             if (empty($response['error']) && !empty($response['result'])) {
                 $this->generateWords($response);
-                $this->saveAction($settings, $response);
+                $this->saveAction($settings, $response, $data[$promptKey]['debugging'] ?? false);
                 $data[$field] = $response['result'];
             } else {
                 $this->errorLog->error(
@@ -948,17 +948,16 @@ EOT;
      *
      * Prepares the data, formats the required information, and calls an external service to create a new item.
      *
-     * @param array $params The parameters containing messages and other relevant data.
-     * @param array $response The response data, including the result, token counts, and original response.
+     * @param array $params        The parameters containing messages and other relevant data.
+     * @param array $response      The response data, including the result, token counts, and original response.
+     * @param bool  $debugPrompt   Whether the selected prompt has debugging enabled.
      *
      * @return void This method does not return anything. It performs a save operation via an external service.
      */
-    protected function saveAction($params, $response)
+    protected function saveAction($params, $response, $debugPrompt = false)
     {
-        $messages = $params['messages'] ?? [];
-
         $messages = [
-            'request' => $params['messages'] ?? '',
+            'request'  => $params['messages'] ?? '',
             'response' => $response['original'] ?? ''
         ];
 
@@ -985,6 +984,11 @@ EOT;
          */
         $dataLog             = $this->container->get('core.helper.' . $params['engine'])->getDataLog();
         $dataLog['response'] = $tokens;
+
+        if ($debugPrompt) {
+            $dataLog['response']['result'] = $response['result'] ?? '';
+        }
+
         $this->appLog->info('ONMAI - ' . __METHOD__, $dataLog);
 
         $this->container->get('api.service.ai')->createItem($data);
