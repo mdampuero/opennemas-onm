@@ -46,6 +46,14 @@ function smarty_function_renderplaceholder($params, &$smarty)
             $content                  = $items[$contentPosition->pk_fk_content];
             $content->render_position = $count++;
 
+            // Merge theme settings params for contents
+            if (!in_array($contentPosition->content_type, [ 'widget', 'Advertisement'])) {
+                $params = array_merge(
+                    $params,
+                    $smarty->getcontainer()->get('core.helper.theme_settings')->getThemeVariables()
+                );
+            }
+
             $outputHTML .= $smarty->getContainer()->get('frontend.renderer')->render($content, $params);
         }
     }
