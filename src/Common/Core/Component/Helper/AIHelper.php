@@ -170,6 +170,12 @@ EOT;
         'openrouter' => 'OpenRouter',
     ];
 
+    /**
+     * Critical instruction added to all prompts to handle uncertain answers.
+     */
+    protected $errorDirective = 'IMPORTANTÍSIMO: Si no puedes proporcionar una respuesta certera 
+    o por cualquier motivo no puedes responder, responde únicamente con "ERROR".';
+
 
     /**
      * Initializes the AIHelper class with the provided service container and loggers.
@@ -374,6 +380,7 @@ EOT;
      */
     protected function insertInstructions($instructions = [], $role = '')
     {
+        $instructions = array_merge([['value' => $this->errorDirective]], $instructions);
         $instructionsString = '';
         if (count($instructions)) {
             $counter = 0;
@@ -399,6 +406,7 @@ EOT;
      */
     protected function getStringtInstructions($instructions = [])
     {
+        $instructions = array_merge([['value' => $this->errorDirective]], $instructions);
         $instructionsString = '';
         if (count($instructions)) {
             $counter = 0;
@@ -429,10 +437,10 @@ EOT;
     {
         $this->getInstructions();
 
-        $instructionsString = '';
-        if ($instructions && count($instructions)) {
-            $counter = 0;
+        $counter = 1;
+        $lines = [$counter . '. ' . $this->errorDirective];
 
+        if ($instructions && count($instructions)) {
             $mapped = array_map(function ($item) use (&$counter) {
                 $instruction = $this->getInstructionsById($item);
                 if (!($instruction['value'] ?? false)) {
@@ -444,9 +452,11 @@ EOT;
 
             $filtered = array_filter($mapped);
             if (!empty($filtered)) {
-                $instructionsString = implode("\n", $filtered);
+                $lines = array_merge($lines, $filtered);
             }
         }
+
+        $instructionsString = implode("\n", $lines);
 
         if ($instructionsString) {
             $instructionsString = sprintf("## Sigue estas reglas estrictamente:\n%s", $instructionsString);
@@ -724,7 +734,7 @@ EOT;
                 $dataLog['messages'] = $data['messages'];
             }
             $this->container->get('core.helper.' . $data['engine'])->setDataLog($dataLog);
-            
+
             $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
                 $data,
                 $this->getStructureResponse()
