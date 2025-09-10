@@ -14,6 +14,7 @@ function smarty_outputfilter_noindex($output, $smarty)
 
     // Check for custom content with no-index
     $content = $smarty->getValue('o_content');
+
     if ($content && !empty($content->noindex)) {
         return preg_match($pattern, $output)
             ? preg_replace($pattern, $replacement, $output)

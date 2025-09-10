@@ -29,6 +29,20 @@ class NitfTaquilla extends Nitf
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getTags($data)
+    {
+        $tags = $data->xpath('//head/docdata/key-list/keyword');
+
+        if (!empty($tags)) {
+            return (string) $tags[0]->attributes()->{'key'};
+        }
+
+        return '';
+    }
+
+    /**
      * Returns the unique urn from the parsed data.
      *
      * @param SimpleXMLObject The parsed data.

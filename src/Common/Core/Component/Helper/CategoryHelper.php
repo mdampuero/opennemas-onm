@@ -238,7 +238,6 @@ class CategoryHelper
         return !empty($category) ? $category->name : null;
     }
 
-
     /**
      * Returns the relative URL to the automatic frontpage of the category for the
      * provided item.

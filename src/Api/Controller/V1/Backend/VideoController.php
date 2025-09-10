@@ -2,7 +2,6 @@
 
 namespace Api\Controller\V1\Backend;
 
-use Api\Exception\GetItemException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +36,7 @@ class VideoController extends ContentController
     /**
      * {@inheritdoc}
      */
-    protected $service = 'api.service.content';
+    protected $service = 'api.service.video';
 
     /**
      * Get the videos config.
@@ -54,7 +53,31 @@ class VideoController extends ContentController
             ->getDataSet('Settings')
             ->get('extraInfoContents.VIDEO_MANAGER');
 
-        return new JsonResponse([ 'extra_fields' => $settings ]);
+        return new JsonResponse(['extra_fields' => $settings]);
+    }
+
+    public function saveItemAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('save'));
+
+        $msg  = $this->get('core.messenger');
+        $data = $request->request->all();
+        $file = $request->files->get('path');
+
+        $item = $this->get($this->service)->createItem($data, $file);
+
+        $msg->add(_('Item saved successfully'), 'success', 201);
+
+        $response = new JsonResponse($msg->getMessages(), $msg->getCode());
+
+        if (!empty($this->getItemRoute)) {
+            $response->headers->set('Location', $this->generateUrl(
+                $this->getItemRoute,
+                ['id' => $this->getItemId($item)]
+            ));
+        }
+
+        return $response;
     }
 
     /**
@@ -69,11 +92,12 @@ class VideoController extends ContentController
         }
 
         return array_merge(parent::getExtraData($items), [
-            'authors'      => $this->getAuthors($items),
-            'categories'   => $this->getCategories($items),
-            'extra_fields' => $extraFields ?? null,
-            'tags'         => $this->getTags($items),
-            'formSettings' => [
+            'authors'        => $this->getAuthors($items),
+            'storage_module' => $this->get('core.security')->hasExtension('es.openhost.module.storage'),
+            'categories'     => $this->getCategories($items),
+            'extra_fields'   => $extraFields ?? null,
+            'tags'           => $this->getTags($items),
+            'formSettings'   => [
                 'name'             => $this->module,
                 'expansibleFields' => $this->getFormSettings($this->module)
             ]
@@ -139,6 +163,80 @@ class VideoController extends ContentController
         } catch (\Exception $e) {
             $msg->add(_('Unable to save settings'), 'error');
             $this->get('error.log')->error($e->getMessage());
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Updates some instance properties.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function patchItemAction(Request $request, $id)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
+        $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', [$id]);
+
+        $msg  = $this->get('core.messenger');
+        $data = $request->request->all();
+
+        $this->get($this->service)
+            ->patchItem($id, $data);
+
+        if (array_key_exists('in_litter', $data)) {
+            $instance = $this->get('core.instance');
+            $mode     = $data['in_litter'] ? 'trash' : 'restore';
+            $this->get($this->service)->removeFromStorage($id, $instance, $mode);
+        }
+
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Updates some properties for a list of items.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function patchListAction(Request $request)
+    {
+        $this->checkSecurity($this->extension, $this->getActionPermission('patch'));
+
+        $params = $request->request->all();
+        $ids    = $params['ids'];
+
+        $this->checkSecurityForContents('CONTENT_OTHER_UPDATE', $ids);
+
+        $msg = $this->get('core.messenger');
+
+        unset($params['ids']);
+
+        $updated = $this->get($this->service)->patchList($ids, $params);
+
+        if (array_key_exists('in_litter', $params)) {
+            $instance = $this->get('core.instance');
+            $mode     = $params['in_litter'] ? 'trash' : 'restore';
+            $this->get($this->service)->removeFromStorage($ids, $instance, $mode);
+        }
+
+        if ($updated > 0) {
+            $msg->add(
+                sprintf(_('%s items updated successfully'), $updated),
+                'success'
+            );
+        }
+
+        if ($updated !== count($ids)) {
+            $msg->add(sprintf(
+                _('%s items could not be updated successfully'),
+                count($ids) - $updated
+            ), 'error');
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());

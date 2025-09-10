@@ -79,12 +79,19 @@ class AuthenticationController extends Controller
             $session->getFlashBag()->add('error', $auth->getErrorMessage());
         }
 
+        if ($request->query->has('language')) {
+            $this->get('core.locale')
+                ->setContext('backend')
+                ->setLocale($request->query->get('language'))
+                ->apply();
+        }
+
         return $this->render('login/login.tpl', [
-            'locale'    => $this->get('core.locale')->getLocale(),
-            'locales'   => $this->get('core.locale')->getAvailableLocales(),
-            'recaptcha' => $auth->getRecaptchaFromParameters(),
-            'target'    => $target,
-            'token'     => $auth->getCsrfToken()
+            'locale'           => $this->get('core.locale')->getLocale(),
+            'availableLocales' => $this->get('core.locale')->getAvailableLocales(),
+            'recaptcha'        => $auth->getRecaptchaFromParameters(),
+            'target'           => $target,
+            'token'            => $auth->getCsrfToken()
         ]);
     }
 }

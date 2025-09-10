@@ -1,0 +1,14 @@
+manager_storage_config:
+    path: /storage/config
+    options:
+        expose: true
+
+manager_storage_tasks:
+    path: /storage/tasks
+    options:
+        expose: true
+
+manager_storage_instances:
+    path: /storage/instances
+    options:
+        expose: true

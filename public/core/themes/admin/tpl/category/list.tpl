@@ -112,6 +112,9 @@
       </ui-select-choices>
     </ui-select>
   </li>
+  <li class="hidden-xs m-r-10 ng-cloak quicklinks">
+    <onm-category-selector ng-model="criteria.parent_id" label-text="{t}Subsection of{/t}" default-value-text="{t}Any{/t}" placeholder="{t}Any{/t}" />
+  </li>
 {/block}
 
 {block name="list"}

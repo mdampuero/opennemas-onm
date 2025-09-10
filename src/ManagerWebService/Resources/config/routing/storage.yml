@@ -1,0 +1,57 @@
+manager_ws_storage_config:
+    path:     /storage/config
+    defaults: { _controller: ManagerWebServiceBundle:Storage:config }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_storage_instances:
+    path:     /storage/instances
+    defaults: { _controller: ManagerWebServiceBundle:Storage:instances }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_storage_instances_save:
+    path:     /storage/instances/save
+    defaults: { _controller: ManagerWebServiceBundle:Storage:instancesSave }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+manager_ws_storage_tasks:
+    path:     /storage/tasks
+    defaults: { _controller: ManagerWebServiceBundle:Storage:tasks }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_storage_config_save:
+    path:     /storage/config
+    defaults: { _controller: ManagerWebServiceBundle:Storage:configSave }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+manager_ws_storage_config_download:
+    path:     /storage/config/download
+    defaults: { _controller: ManagerWebServiceBundle:Storage:configDownload }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_storage_config_upload:
+    path:     /storage/config/upload
+    defaults: { _controller: ManagerWebServiceBundle:Storage:configUpload }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+manager_ws_storage_task_delete:
+    path:     /storage/tasks/{id}
+    defaults: { _controller: ManagerWebServiceBundle:Storage:delete }
+    methods:  [ DELETE ]
+    requirements:
+        id: \d+
+    options:
+        expose: true

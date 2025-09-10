@@ -64,9 +64,9 @@ class HttpRssAtom extends HttpRss
     /**
      * {@inheritdoc}
      */
-    protected function parseXml(string $path, \SimpleXMLElement $content) : \StdClass
+    protected function parseXml(string $path, \SimpleXMLElement $content) : \Content
     {
-        $article = new \StdClass();
+        $article = new \Content();
 
         $article->id               = md5($path);
         $article->title            = (string) $content->title;

@@ -27,7 +27,21 @@ function smarty_modifier_ads_in_body($body, $contentType = 'article')
         return !in_array(trim($a), ['<p>&nbsp;</p>', '<p></p>']);
     });
 
-    $id       = $contentType === 'amp' ? 1060 : ($contentType === 'opinion' ? 3200 : 2200);
+    $id = 2200;
+    switch ($contentType) {
+        case 'amp':
+            $id = 1060;
+            break;
+
+        case 'opinion':
+            $id = 3200;
+            break;
+
+        case 'static_page':
+            $id = 2270;
+            break;
+    }
+
     $renderer = $smarty->getContainer()->get('frontend.renderer.advertisement');
     $ads      = $renderer->getAdvertisements();
     $hasLimit = $smarty->getContainer()
