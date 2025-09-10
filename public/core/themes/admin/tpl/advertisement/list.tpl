@@ -119,6 +119,11 @@ status = [
       <i class="fa fa-clock-o text-primary"></i>
     </button>
   </li>
+  <li class="quicklinks hidden-xs ng-cloak">
+    <button class="btn btn-link" ng-click="eraseFilters()" uib-tooltip="{t}Clean Filter{/t}" tooltip-placement="bottom" type="button">
+      <i class="fa fa-lg fa-eraser m-l-5 m-r-5" ng-class="{ 'fa-spin': flags.http.loading }"></i>
+    </button>
+  </li>
 {/block}
 
 {block name="list"}

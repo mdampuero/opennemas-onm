@@ -37,7 +37,7 @@
     </div>
 </div>
 <div class="modal-footer row">
-    <div class="col-xs-4">
+    <div class="col-xs-6">
       <button class="btn btn-block btn-danger text-uppercase" data-dismiss="modal" ng-click="close()" ng-disabled="loading" type="button">
         <h4 class="bold text-uppercase text-white">
           <i class="fa fa-times m-r-5"></i>
@@ -45,15 +45,7 @@
         </h4>
       </button>
     </div>
-    <div class="col-xs-4">
-      <button class="btn btn-block btn-primary text-uppercase" ng-click="clearFilters()" ng-disabled="loading" type="button">
-        <h4 class="bold text-uppercase text-white">
-          <i class="fa fa-times m-r-5"></i>
-          {t}Clear Filter{/t}
-        </h4>
-      </button>
-    </div>
-    <div class="col-xs-4">
+    <div class="col-xs-6">
       <button class="btn btn-block btn-success text-uppercase" data-dismiss="modal" ng-click="confirm()" ng-disabled="loading" type="button">
         <h4 class="bold text-uppercase text-white">
           <i class="fa fa-check m-r-5"></i>

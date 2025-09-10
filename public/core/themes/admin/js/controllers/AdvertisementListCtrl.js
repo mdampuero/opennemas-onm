@@ -39,7 +39,7 @@
         /**
          * The temporary criteria to search
          */
-        $scope.tempCriteria = {
+        $scope.defaultCriteria = {
           content_type_name: 'advertisement',
           epp: 10,
           in_litter: 0,
@@ -369,6 +369,19 @@
         };
 
         /**
+         * @function eraseFilters
+         * @memberOf AdvertisementListCtrl
+         *
+         * @description
+         *  Reset filters to default filters.
+         */
+        $scope.eraseFilters = function() {
+          $scope.appliedCriteria = {};
+          $scope.criteria = angular.merge({}, $scope.defaultCriteria);
+          $scope.criteria.page = 1;
+        };
+
+        /**
          * @function getCategoryTitle
          * @memberof AdvertisementListCtrl
          *
@@ -419,18 +432,6 @@
             }
           });
         });
-
-        /**
-         * @function clearFilters
-         * @memberOf AdvertisementListCtrl
-         *
-         * @description
-         * Clear time filter.
-         */
-        $scope.clearFilters = function() {
-          $scope.tempCriteria.starttime = null;
-          $scope.tempCriteria.endtime = null;
-        };
 
         /**
          * @function timeFilter
