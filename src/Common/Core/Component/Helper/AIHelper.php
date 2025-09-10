@@ -614,10 +614,60 @@ EOT;
         return $template;
     }
 
-    public function generateResourceByContent($pkContent): array
+    /**
+     * Converts a value into an array, recursively handling objects.
+     *
+     * @param mixed $value Value to convert.
+     *
+     * @return mixed The converted array or original scalar value.
+     */
+    protected function toArray($value)
+    {
+        if (is_array($value)) {
+            foreach ($value as $k => $v) {
+                $value[$k] = $this->toArray($v);
+            }
+            return $value;
+        }
+
+        if (is_object($value)) {
+            if ($value instanceof \JsonSerializable) {
+                $value = $value->jsonSerialize();
+            } elseif (method_exists($value, 'toArray')) {
+                $value = $value->toArray();
+            } elseif ($value instanceof \Traversable) {
+                $value = iterator_to_array($value);
+            } else {
+                $value = (array) $value;
+            }
+
+            $normalized = [];
+            foreach ($value as $key => $val) {
+                $cleanKey = is_string($key) ? preg_replace('/^\x00(?:\*|\w+)\x00/', '', $key) : $key;
+                $normalized[$cleanKey] = $this->toArray($val);
+            }
+
+            if (isset($normalized['data']) && is_array($normalized['data']) &&
+                (array_key_exists('stored', $normalized) || array_key_exists('origin', $normalized))
+            ) {
+                return $normalized['data'];
+            }
+
+            return $normalized;
+        }
+
+        return $value;
+    }
+
+    public function generateResource($source): array
     {
         try {
-            $content  = $this->container->get("api.service.content")->getItem($pkContent);
+            if (is_scalar($source)) {
+                $content = $this->container->get("api.service.content")->getItem($source);
+            } else {
+                $content = is_object($source) ? $source : (object) $source;
+            }
+
             $category = [];
 
             if (!empty($content->categories) && isset($content->categories[0])) {
@@ -628,49 +678,19 @@ EOT;
                 }
             }
 
-            return [
-                'content' => [
-                    'id'          => $content->id ?? '',
-                    'title_int'   => $content->title_int ?? '',
-                    'title'       => $content->title ?? '',
-                    'description' => $content->description ?? '',
-                    'body'        => $content->body ?? '',
-                    'slug'        => $content->slug ?? ''
-                ],
-                'category' => [
-                    'name' => $category->name ?? '',
-                ]
-            ];
-        } catch (\Throwable $e) {
-            return [];
-        }
-    }
-
-    public function generateResourceByImporter($data): array
-    {
-        try {
-            $category = [];
-
-            if (!empty($data['categories']) && isset($data['categories'][0])) {
-                try {
-                    $category = $this->container->get("api.service.category")->getItem($data['categories'][0]);
-                } catch (\Throwable $e) {
-                    $category = [];
-                }
+            $contentData = $this->toArray($content);
+            if (is_object($content) && isset($content->id)) {
+                $contentData['id'] = $content->id;
+            }
+            
+            $categoryData = !empty($category) ? $this->toArray($category) : [];
+            if (!empty($category) && is_object($category) && isset($category->id)) {
+                $categoryData['id'] = $category->id;
             }
 
             return [
-                'content' => [
-                    'id'          => $data['id'] ?? '',
-                    'title_int'   => $data['title_int'] ?? '',
-                    'title'       => $data['title'] ?? '',
-                    'description' => $data['description'] ?? '',
-                    'body'        => $data['body'] ?? '',
-                    'slug'        => $data['slug'] ?? ''
-                ],
-                'category' => [
-                    'name' => $category->name ?? '',
-                ]
+                'content'  => $contentData,
+                'category' => $categoryData,
             ];
         } catch (\Throwable $e) {
             return [];
@@ -690,7 +710,7 @@ EOT;
         if (!empty($pkContent) && in_array($messages['promptSelected']['mode_or'], ['Edit', 'Agency'])) {
             $messages['promptInput'] = $this->replaceContentPlaceholders(
                 $messages['promptInput'] ?? '',
-                $this->generateResourceByContent($pkContent)
+                $this->generateResource($pkContent)
             );
         }
 
@@ -870,7 +890,7 @@ EOT;
             $prompt = $data[$promptKey]['prompt'];
             $tone   = $data[$toneKey] ?? '';
 
-            $prompt = $this->replaceContentPlaceholders($prompt, $this->generateResourceByImporter($data));
+            $prompt = $this->replaceContentPlaceholders($prompt, $this->generateResource($data));
 
             // If empty tone assign default prompt tone
             if (empty($tone)) {
