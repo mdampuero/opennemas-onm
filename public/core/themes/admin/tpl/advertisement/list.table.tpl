@@ -206,7 +206,7 @@
       </span>
     </small>
   </td>
-  <td class="hidden-xs hidden-sm small-text" ng-if="isColumnEnabled('position')">
+  <td class="ads-listing hidden-xs hidden-sm small-text" ng-if="isColumnEnabled('position')">
     <span ng-repeat="value in item.positions | limitTo:3" class="ad-position">[% map[value].name %]</span>
     <span ng-show="item.positions.length > 3" {* uib-tooltip-template="'ad_position_template'" tooltip-placement="bottom" *}>{t 1="[% item.positions.length - 3 %]"}And %1 more…{/t}</span>
   </td>
