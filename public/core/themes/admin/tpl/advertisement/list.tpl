@@ -114,9 +114,9 @@ status = [
       </ui-select-choices>
     </ui-select>
   </li>
-  <li class="quicklinks ng-cloak dropdown visible-lg">
-    <button class="btn btn-white" ng-click="timeFilter()" type="button" uib-tooltip="{t}Time Range{/t}" tooltip-placement="top">
-      <i class="fa fa-clock-o text-primary"></i>
+  <li class="quicklinks hidden-xs ng-cloak">
+    <button class="btn btn-link" ng-click="timeFilter()" uib-tooltip="{t}Time Range{/t}" tooltip-placement="bottom" type="button">
+      <i class="fa fa-lg fa-clock-o m-l-5 m-r-5"></i>
     </button>
   </li>
   <li class="quicklinks hidden-xs ng-cloak">
