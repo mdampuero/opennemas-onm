@@ -81,8 +81,8 @@
               title: 'title ~ "%[value]%"',
               fk_content_categories: 'fk_content_categories regexp' +
                 '"^[value]($|,)|,[value],|(^|,)[value]$"',
-              starttime: 'starttime <= "[value]"',
-              endtime: 'endtime >= "[value]"',
+              starttime: 'starttime >= "[value]"',
+              endtime: 'endtime <= "[value]"',
             }
           });
 

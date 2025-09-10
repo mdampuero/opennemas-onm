@@ -10,7 +10,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="starttime" class="control-label">
-                    <i class="fa fa-calendar-plus-o"></i> Fecha de inicio
+                    <i class="fa fa-calendar-plus-o"></i> {t}Start date{/t}
                 </label>
                 <div class="input-group">
                     <input type="datetime" id="starttime" name="starttime" class="form-control" autocomplete="off" ng-model="tempCriteria.starttime" datetime-picker />
@@ -24,7 +24,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="endtime" class="control-label">
-                    <i class="fa fa-calendar-minus-o"></i> Fecha de fin
+                    <i class="fa fa-calendar-minus-o"></i> {t}End date{/t}
                 </label>
                 <div class="input-group">
                     <input type="datetime" id="endtime" name="endtime" class="form-control" autocomplete="off" ng-model="tempCriteria.endtime" datetime-picker />
