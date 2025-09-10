@@ -16,8 +16,8 @@
      * Controller for Time Filter Modal.
      */
     .controller('ModalTimeFilterCtrl', [
-      '$uibModalInstance', '$scope', '$q', 'routing', 'success', 'template',
-      function($uibModalInstance, $scope, $q, routing, success, template) {
+      '$uibModalInstance', '$scope', '$q', 'routing', 'success', 'template', 'criteria',
+      function($uibModalInstance, $scope, $q, routing, success, template, criteria) {
         /**
          * @memberOf ModalTimeFilterCtrl
          *
@@ -47,7 +47,7 @@
          *
          * @type {Object}
          */
-        $scope.tempCriteria = {
+        $scope.tempCriteria = angular.copy(criteria) || {
           starttime: null,
           endtime: null
         };

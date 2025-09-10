@@ -444,12 +444,16 @@
             backdrop: 'static',
             controller: 'ModalTimeFilterCtrl',
             resolve: {
+              criteria: function() {
+                return angular.copy($scope.appliedCriteria);
+              },
               template: function() {
                 return {};
               },
               success: function() {
                 return function(modalInstance, template, criteria) {
                   $scope.applyFilter(criteria);
+                  $scope.appliedCriteria = angular.copy(criteria);
                   return true;
                 };
               }
