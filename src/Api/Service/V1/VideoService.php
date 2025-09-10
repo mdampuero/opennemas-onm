@@ -17,22 +17,48 @@ use Symfony\Component\Process\Process;
 class VideoService extends ContentService
 {
     /**
-     * Removes one or multiple items from the storage if they are of type 'upload'.
+     * Handles storage operations for one or multiple items depending on the provided mode.
      *
-     * @param mixed $itemPK The primary key, identifier, or an array of identifiers of the items to remove.
+     * @param mixed  $itemPK   The primary key, identifier, or an array of identifiers of the items to remove.
+     * @param mixed  $instance The instance configuration.
+     * @param string $mode     Operation mode: 'trash', 'restore' or 'delete'.
      *
      * @return void
      */
-    public function removeFromStorage($itemPK)
+    public function removeFromStorage($itemPK, $instance, string $mode = 'delete')
     {
-        $factory = $this->container->get('core.helper.storage_factory');
-        $storage = $factory->create();
+        $factory  = $this->container->get('core.helper.storage_factory');
+        $storage  = $factory->create($instance);
+        $s3Client = $factory->getS3Client();
+        $config   = $factory->getConfig();
+        $bucket   = $config['provider']['bucket'];
 
         $itemPKs = is_array($itemPK) ? $itemPK : [$itemPK];
         foreach ($itemPKs as $pk) {
             $item = $this->getItem($pk);
             if ($item->type === 'upload' && !empty($item->information['remotePath'])) {
-                $storage->delete($item->information['remotePath']);
+                $remotePath = $item->information['remotePath'];
+
+                if ($mode === 'delete') {
+                    $storage->delete($remotePath);
+                    $size = $item->information['fileSize'];
+
+                    if ($size > 0) {
+                        $instance->storage_size = max(0, $instance->storage_size - $size);
+                        $this->container->get('orm.manager')->persist($instance);
+                    }
+                } elseif ($mode === 'trash' || $mode === 'restore') {
+                    try {
+                        $remotePath = ltrim($remotePath, '/');
+                        $acl = $mode === 'restore' ? 'public-read' : 'private';
+                        $s3Client->putObjectAcl([
+                            'Bucket' => $bucket,
+                            'Key'    => $remotePath,
+                            'ACL'    => $acl,
+                        ]);
+                    } catch (\Exception $e) {
+                    }
+                }
             }
         }
     }

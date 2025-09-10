@@ -138,23 +138,22 @@ class HttpRss extends Http
      * @param string            $path    The path to the XML file.
      * @param \SimpleXMLElement $content The content as XML.
      *
-     * @return \StdClass The content.
+     * @return \Content The content.
      */
-    protected function parseXml(string $path, \SimpleXMLElement $content) : \StdClass
+    protected function parseXml(string $path, \SimpleXMLElement $content) : \Content
     {
-        $article = new \StdClass();
-
-        $body = (string) htmlentities($content->description) . '<br>'
-            . htmlentities($content->children('content', true));
-
-        $article->id               = md5($path);
-        $article->title            = (string) $content->title;
-        $article->body             = (string) $body;
-        $article->created_datetime = new \DateTime($content->pubDate);
-        $article->updated_datetime = new \DateTime($content->pubDate);
-        $article->category_slug    = (string) $content->category_id;
-        $article->tags             = [];
-        $article->externalUri      = (string) $content->link[0];
+        $article                    = new \Content();
+        $article->id                = md5($path);
+        $article->title             = (string) $content->title;
+        $article->body              = (string) htmlentities($content->children('content', true));
+        $article->description       = (string) htmlentities($content->description);
+        $article->created_datetime  = new \DateTime($content->pubDate);
+        $article->updated_datetime  = new \DateTime($content->pubDate);
+        $article->content_type_name = 'article';
+        $article->content_status    = 1;
+        $article->category_slug     = (string) $content->category_id;
+        $article->tags              = [];
+        $article->externalUri       = (string) $content->link[0];
 
         return $article;
     }

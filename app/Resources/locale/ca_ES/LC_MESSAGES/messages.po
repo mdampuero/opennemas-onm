@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-10 07:48+0000\n"
-"PO-Revision-Date: 2025-09-10 10:20+0200\n"
+"POT-Creation-Date: 2025-09-10 10:10+0000\n"
+"PO-Revision-Date: 2025-09-10 12:12+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Catalán\n"
 "Language: es\n"
@@ -1172,6 +1172,9 @@ msgstr "Els elements totals han d'estar entre 500 i 1000"
 msgid "Sitemap saved successfully"
 msgstr "S'ha desat amb el lloc de lloc amb èxit"
 
+msgid "Settings saved successfully"
+msgstr "La configuració es va desar amb èxit"
+
 #, php-format
 msgid "%s users deleted successfully"
 msgstr "Els usuaris de %s es van suprimir amb èxit"
@@ -1401,9 +1404,6 @@ msgstr "%d setmanes"
 
 msgid "No limit"
 msgstr "Sense límit"
-
-msgid "Settings saved successfully"
-msgstr "La configuració es va desar amb èxit"
 
 msgid "List of contents"
 msgstr "Llista de continguts"
@@ -7878,6 +7878,9 @@ msgstr "Mida d'emmagatzematge"
 msgid "Users Active"
 msgstr "Els usuaris actius"
 
+msgid "Video storage"
+msgstr "Emmagatzematge de vídeo"
+
 msgid "Emails sent from"
 msgstr "Correus electrònics enviats des de"
 
@@ -8333,6 +8336,18 @@ msgstr "Punt de descàrrega"
 msgid "Instance"
 msgstr "Instància"
 
+msgid "Manager config"
+msgstr "Configuració del manager"
+
+msgid "Config"
+msgstr "Configuració"
+
+msgid "Use manager config"
+msgstr "Utilitza la configuració del manager"
+
+msgid "Do you want to use the manager configuration for this instance?"
+msgstr "Vols utilitzar la configuració del manager per a aquesta instància?"
+
 msgid "Do you want to delete the client?"
 msgstr "Voleu suprimir el client?"
 
@@ -8716,6 +8731,9 @@ msgstr "Enganxar"
 msgid "Kioskos"
 msgstr "Quioscos"
 
+msgid "Video Storage used"
+msgstr "Emmagatzematge de vídeo utilitzat"
+
 msgid "AI Spent"
 msgstr "Ai gastat"
 
@@ -8984,6 +9002,10 @@ msgstr "Voleu suprimir els grups d'usuari seleccionats?"
 
 msgid "Group name"
 msgstr "Nom de grup"
+
+#, fuzzy
+#~ msgid "S3 Storage used"
+#~ msgstr "Mida d'emmagatzematge"
 
 #~ msgid ""
 #~ "If you have a <strong>Youtube page</strong>, please complete the form "

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: opennemas master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-10 07:48+0000\n"
-"PO-Revision-Date: 2025-09-10 10:25+0200\n"
+"POT-Creation-Date: 2025-09-10 10:10+0000\n"
+"PO-Revision-Date: 2025-09-10 12:53+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Portuguese\n"
 "Language: pt\n"
@@ -1165,6 +1165,9 @@ msgstr "Os itens totais devem estar entre 500 e 1000"
 msgid "Sitemap saved successfully"
 msgstr "Sitemap salvo com sucesso"
 
+msgid "Settings saved successfully"
+msgstr "Configurações salvas com sucesso"
+
 #, php-format
 msgid "%s users deleted successfully"
 msgstr "%s usuários eliminados com sucesso"
@@ -1395,9 +1398,6 @@ msgstr "%d semanas"
 
 msgid "No limit"
 msgstr "Sem limite"
-
-msgid "Settings saved successfully"
-msgstr "Configurações salvas com sucesso"
 
 msgid "List of contents"
 msgstr "Lista de conteúdo"
@@ -7844,6 +7844,9 @@ msgstr "Tamanho de armazenamento"
 msgid "Users Active"
 msgstr "Usuários ativos"
 
+msgid "Video storage"
+msgstr "Armazenamento de vídeo"
+
 msgid "Emails sent from"
 msgstr "E -mails enviados de"
 
@@ -8299,6 +8302,18 @@ msgstr "Endpoint de descarregamento"
 msgid "Instance"
 msgstr "Exemplo"
 
+msgid "Manager config"
+msgstr "Configuração do manager"
+
+msgid "Config"
+msgstr "Configuração"
+
+msgid "Use manager config"
+msgstr "Usar a configuração do manager"
+
+msgid "Do you want to use the manager configuration for this instance?"
+msgstr "Você quer usar a configuração do manager para esta instância?"
+
 msgid "Do you want to delete the client?"
 msgstr "Você quer excluir o cliente?"
 
@@ -8679,6 +8694,9 @@ msgstr "Anexos"
 msgid "Kioskos"
 msgstr "Quiosques"
 
+msgid "Video Storage used"
+msgstr "Armazenamento de vídeo usado"
+
 msgid "AI Spent"
 msgstr "Ai gastou"
 
@@ -8948,6 +8966,10 @@ msgstr "Deseja excluir os grupos de usuários selecionados?"
 
 msgid "Group name"
 msgstr "Nome do grupo"
+
+#, fuzzy
+#~ msgid "S3 Storage used"
+#~ msgstr "Tamanho de armazenamento"
 
 #~ msgid ""
 #~ "If you have a <strong>Youtube page</strong>, please complete the form "

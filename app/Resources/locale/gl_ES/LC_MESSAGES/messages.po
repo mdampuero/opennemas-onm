@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-10 07:48+0000\n"
-"PO-Revision-Date: 2025-09-10 10:24+0200\n"
+"POT-Creation-Date: 2025-09-10 10:10+0000\n"
+"PO-Revision-Date: 2025-09-10 12:52+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Galician\n"
 "Language: gl\n"
@@ -1163,6 +1163,9 @@ msgstr "O total de elementos debe estar entre 500 e 1000"
 msgid "Sitemap saved successfully"
 msgstr "A configuración do sitemap gardouse correctamente"
 
+msgid "Settings saved successfully"
+msgstr "Configuración gardada correctamente"
+
 #, php-format
 msgid "%s users deleted successfully"
 msgstr "%s usuarios eliminados correctamente"
@@ -1395,9 +1398,6 @@ msgstr "%d semanas"
 
 msgid "No limit"
 msgstr "Sen limite"
-
-msgid "Settings saved successfully"
-msgstr "Configuración gardada correctamente"
 
 msgid "List of contents"
 msgstr "Lista de contidos"
@@ -7839,6 +7839,9 @@ msgstr "Amacenamento ocupado"
 msgid "Users Active"
 msgstr "Usuarios activos"
 
+msgid "Video storage"
+msgstr "Almacenamento de vídeo"
+
 msgid "Emails sent from"
 msgstr "Correos electrónicos enviados desde"
 
@@ -8291,6 +8294,18 @@ msgstr "Punto final de descarga"
 msgid "Instance"
 msgstr "Instancia"
 
+msgid "Manager config"
+msgstr "Configuración do manager"
+
+msgid "Config"
+msgstr "Configuración"
+
+msgid "Use manager config"
+msgstr "Usar a configuración do manager"
+
+msgid "Do you want to use the manager configuration for this instance?"
+msgstr "Queres usar a configuración do manager para esta instancia?"
+
 msgid "Do you want to delete the client?"
 msgstr "Desexas eliminar o cliente?"
 
@@ -8665,6 +8680,9 @@ msgstr "Anexos"
 msgid "Kioskos"
 msgstr "Kioskos"
 
+msgid "Video Storage used"
+msgstr "Almacenamento de vídeo usado"
+
 msgid "AI Spent"
 msgstr "Gasto en IA"
 
@@ -8936,6 +8954,10 @@ msgstr "Tes certeza que queres eliminar os grupos de usuarios seleccionados?"
 
 msgid "Group name"
 msgstr "Nome do grupo"
+
+#, fuzzy
+#~ msgid "S3 Storage used"
+#~ msgstr "Amacenamento ocupado"
 
 #~ msgid ""
 #~ "If you have a <strong>Youtube page</strong>, please complete the form "
@@ -9748,9 +9770,6 @@ msgstr "Nome do grupo"
 
 #~ msgid "Home image"
 #~ msgstr "Imaxe para mostrar en portada principal"
-
-#~ msgid "Video for frontpage"
-#~ msgstr "Video para a portada"
 
 #~ msgid "Pick a video"
 #~ msgstr "Escoller un vídeo"

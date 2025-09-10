@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-10 07:48+0000\n"
-"PO-Revision-Date: 2025-09-10 10:22+0200\n"
+"POT-Creation-Date: 2025-09-10 10:10+0000\n"
+"PO-Revision-Date: 2025-09-10 12:49+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Euskera\n"
 "Language: es\n"
@@ -1154,6 +1154,9 @@ msgstr "Elementuak 500 eta 1000 artean egon behar dute"
 msgid "Sitemap saved successfully"
 msgstr "Mapa-mapa arrakastaz gorde da"
 
+msgid "Settings saved successfully"
+msgstr "Ezarpenak arrakastaz gordeta"
+
 #, php-format
 msgid "%s users deleted successfully"
 msgstr "%s erabiltzaileak ondo ezabatu dira"
@@ -1386,9 +1389,6 @@ msgstr "%d aste"
 
 msgid "No limit"
 msgstr "Ez mugarik"
-
-msgid "Settings saved successfully"
-msgstr "Ezarpenak arrakastaz gordeta"
 
 msgid "List of contents"
 msgstr "Edukien zerrenda"
@@ -7816,6 +7816,9 @@ msgstr "Biltegiratze tamaina"
 msgid "Users Active"
 msgstr "Erabiltzaileak aktibatuta"
 
+msgid "Video storage"
+msgstr "Bideo biltegiratzea"
+
 msgid "Emails sent from"
 msgstr "Bidalitako mezu elektronikoak"
 
@@ -8269,6 +8272,18 @@ msgstr "Deskargatzeko puntua"
 msgid "Instance"
 msgstr "Jatzi"
 
+msgid "Manager config"
+msgstr "Manager konfigurazioa"
+
+msgid "Config"
+msgstr "Konfigurazioa"
+
+msgid "Use manager config"
+msgstr "Erabili manager konfigurazioa"
+
+msgid "Do you want to use the manager configuration for this instance?"
+msgstr "Manager konfigurazioa erabili nahi duzu instantzia honetan?"
+
 msgid "Do you want to delete the client?"
 msgstr "Bezeroa ezabatu nahi al duzu?"
 
@@ -8648,6 +8663,9 @@ msgstr "Eranskinak"
 msgid "Kioskos"
 msgstr "Kioskos"
 
+msgid "Video Storage used"
+msgstr "Erabilitako bideo biltegiratzea"
+
 msgid "AI Spent"
 msgstr "Ai gastatu"
 
@@ -8918,6 +8936,10 @@ msgstr "Aukeratutako erabiltzaile taldeak ezabatu nahi dituzu?"
 
 msgid "Group name"
 msgstr "Taldearen izena"
+
+#, fuzzy
+#~ msgid "S3 Storage used"
+#~ msgstr "Biltegiratze tamaina"
 
 #~ msgid ""
 #~ "If you have a <strong>Youtube page</strong>, please complete the form "

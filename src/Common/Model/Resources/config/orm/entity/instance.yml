@@ -30,6 +30,7 @@ orm:
                 blocked:             boolean
                 main_domain:         integer
                 media_size:          float
+                storage_size:       integer
                 name:                string
                 opinions:            integer
                 owner_id:            integer
@@ -148,6 +149,9 @@ orm:
                         media_size:
                             type:    float
                             options: { default: 0, unsigned: false, notnull: false }
+                        storage_size:
+                            type:    bigint
+                            options: { default: 0, unsigned: true, notnull: false }
                         alexa:
                             type:    integer
                             options: { default: 1000000, unsigned: true, notnull: false }

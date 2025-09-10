@@ -193,6 +193,12 @@ class SidebarController extends Controller
                             'click'    => true,
                         ],
                         [
+                            'name'     => _('Instances'),
+                            'icon'     => 'fa fa-cubes fa-lg',
+                            'route'    => 'manager_storage_instances',
+                            'click'    => true,
+                        ],
+                        [
                             'name'     => _('Tasks'),
                             'icon'     => 'fa fa-tasks fa-lg',
                             'route'    => 'manager_storage_tasks',
