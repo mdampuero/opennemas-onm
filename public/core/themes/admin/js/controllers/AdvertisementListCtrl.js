@@ -366,8 +366,6 @@
         $scope.applyFilter = function(criteria) {
           $scope.criteria      = angular.merge({}, $scope.criteria, criteria);
           $scope.criteria.page = 1;
-
-          $scope.list();
         };
 
         /**
@@ -423,8 +421,20 @@
         });
 
         /**
+         * @function clearFilters
+         * @memberOf AdvertisementListCtrl
+         *
+         * @description
+         * Clear time filter.
+         */
+        $scope.clearFilters = function() {
+          $scope.tempCriteria.starttime = null;
+          $scope.tempCriteria.endtime = null;
+        };
+
+        /**
          * @function timeFilter
-         * @memberOf MainController
+         * @memberOf AdvertisementListCtrl
          *
          * @description
          * Opens the time filter modal and applies the selected criteria
