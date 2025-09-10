@@ -170,6 +170,12 @@ EOT;
         'openrouter' => 'OpenRouter',
     ];
 
+    /**
+     * Critical instruction added to all prompts to handle uncertain answers.
+     */
+    protected $errorDirective = 'IMPORTANTÍSIMO: Si no puedes proporcionar una respuesta certera 
+    o por cualquier motivo no puedes responder, responde únicamente con "ERROR".';
+
 
     /**
      * Initializes the AIHelper class with the provided service container and loggers.
@@ -374,6 +380,7 @@ EOT;
      */
     protected function insertInstructions($instructions = [], $role = '')
     {
+        $instructions = array_merge([['value' => $this->errorDirective]], $instructions);
         $instructionsString = '';
         if (count($instructions)) {
             $counter = 0;
@@ -399,6 +406,7 @@ EOT;
      */
     protected function getStringtInstructions($instructions = [])
     {
+        $instructions = array_merge([['value' => $this->errorDirective]], $instructions);
         $instructionsString = '';
         if (count($instructions)) {
             $counter = 0;
@@ -429,10 +437,10 @@ EOT;
     {
         $this->getInstructions();
 
-        $instructionsString = '';
-        if ($instructions && count($instructions)) {
-            $counter = 0;
+        $counter = 1;
+        $lines = [$counter . '. ' . $this->errorDirective];
 
+        if ($instructions && count($instructions)) {
             $mapped = array_map(function ($item) use (&$counter) {
                 $instruction = $this->getInstructionsById($item);
                 if (!($instruction['value'] ?? false)) {
@@ -444,9 +452,11 @@ EOT;
 
             $filtered = array_filter($mapped);
             if (!empty($filtered)) {
-                $instructionsString = implode("\n", $filtered);
+                $lines = array_merge($lines, $filtered);
             }
         }
+
+        $instructionsString = implode("\n", $lines);
 
         if ($instructionsString) {
             $instructionsString = sprintf("## Sigue estas reglas estrictamente:\n%s", $instructionsString);
@@ -720,12 +730,19 @@ EOT;
             /**
              * Log the selected prompt details for debugging purposes.
              */
+            if (!empty($messages['promptSelected']['debugging'])) {
+                $dataLog['messages'] = $data['messages'];
+            }
             $this->container->get('core.helper.' . $data['engine'])->setDataLog($dataLog);
-            
+
             $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
                 $data,
                 $this->getStructureResponse()
             );
+
+            if (!empty($messages['promptSelected']['debugging'])) {
+                $response['prompt'] = $data['messages'][0]['content'] ?? '';
+            }
 
             $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
         } else {
@@ -734,7 +751,7 @@ EOT;
 
         if (empty($response['error'])) {
             $this->generateWords($response);
-            $this->saveAction($data, $response);
+            $this->saveAction($data, $response, $messages['promptSelected']['debugging'] ?? false);
         } else {
             $this->errorLog->error(
                 'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
@@ -812,7 +829,7 @@ EOT;
 
         if (empty($response['error'])) {
             $this->generateWords($response);
-            $this->saveAction($data, $response);
+            $this->saveAction($data, $response, false);
         } else {
             $this->errorLog->error(
                 'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
@@ -887,6 +904,9 @@ EOT;
             ])]];
 
             // Log the selected prompt details for debugging purposes.
+            if (!empty($data[$promptKey]['debugging'])) {
+                $dataLog['messages'] = $settings['messages'];
+            }
             $this->container->get('core.helper.' . $settings['engine'])->setDataLog($dataLog);
 
             $response = $this->container->get('core.helper.' . $settings['engine'])
@@ -895,7 +915,7 @@ EOT;
             $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
             if (empty($response['error']) && !empty($response['result'])) {
                 $this->generateWords($response);
-                $this->saveAction($settings, $response);
+                $this->saveAction($settings, $response, $data[$promptKey]['debugging'] ?? false);
                 $data[$field] = $response['result'];
             } else {
                 $this->errorLog->error(
@@ -942,17 +962,16 @@ EOT;
      *
      * Prepares the data, formats the required information, and calls an external service to create a new item.
      *
-     * @param array $params The parameters containing messages and other relevant data.
-     * @param array $response The response data, including the result, token counts, and original response.
+     * @param array $params        The parameters containing messages and other relevant data.
+     * @param array $response      The response data, including the result, token counts, and original response.
+     * @param bool  $debugPrompt   Whether the selected prompt has debugging enabled.
      *
      * @return void This method does not return anything. It performs a save operation via an external service.
      */
-    protected function saveAction($params, $response)
+    protected function saveAction($params, $response, $debugPrompt = false)
     {
-        $messages = $params['messages'] ?? [];
-
         $messages = [
-            'request' => $params['messages'] ?? '',
+            'request'  => $params['messages'] ?? '',
             'response' => $response['original'] ?? ''
         ];
 
@@ -979,6 +998,11 @@ EOT;
          */
         $dataLog             = $this->container->get('core.helper.' . $params['engine'])->getDataLog();
         $dataLog['response'] = $tokens;
+
+        if ($debugPrompt) {
+            $dataLog['response']['result'] = $response['result'] ?? '';
+        }
+
         $this->appLog->info('ONMAI - ' . __METHOD__, $dataLog);
 
         $this->container->get('api.service.ai')->createItem($data);
