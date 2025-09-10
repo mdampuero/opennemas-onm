@@ -740,6 +740,10 @@ EOT;
                 $this->getStructureResponse()
             );
 
+            if (!empty($messages['promptSelected']['debugging'])) {
+                $response['prompt'] = $data['messages'][0]['content'] ?? '';
+            }
+
             $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
         } else {
             $response['error'] = 'Error';
