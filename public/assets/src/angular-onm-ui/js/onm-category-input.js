@@ -11,33 +11,19 @@
           scope: {
             autoGenerate:  '=?',
             generateFrom:  '=',
-            hideGenerate:  '=',
-            ignoreLocale:  '=',
-            ignorePrivate: '=',
-            locale:        '=',
-            maxTags:       '=',
+            maxCategorys:  '=',
             maxResults:    '=',
             ngModel:       '=',
             placeholder:   '@',
-            required:      '=',
-            selectionOnly: '=',
-            filter:        '=',
-            exclude:       '='
+            required:      '='
           },
           template: function() {
             return '<div class="tags-input-wrapper">' +
-              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="category" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewCategory($tag), \'tag-item-new\': isNewCategory($tag), \'tag-item-private\': $tag.private }">' +
-                '<auto-complete debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="true" source="list($query)" template="categoryTemplate"></auto-complete>' +
+              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="category" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required">' +
+                '<auto-complete debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="true" source="list($query)"></auto-complete>' +
               '</tags-input>' +
               '<i class="fa fa-circle-o-notch fa-spin tags-input-loading" ng-if="loading"></i>' +
-              '<input name="categories" type="hidden" ng-value="getJsonValue()">' +
-            '</div>' +
-            '<script type="text/ng-template" id="categoryTemplate">' +
-              '<span class="tag-item-text" ng-bind-html="$highlight($getDisplayText())"></span>' +
-              '<span class="badge badge-success pull-right text-uppercase" ng-if="$parent.$parent.$parent.$parent.$parent.isNewCategory(data)">' +
-                '<strong> Test </strong></span>' +
-              '<span class="badge badge-private pull-right text-uppercase m-l-10" ng-if="data.private"><strong> Test private </strong></span>' +
-            '</script>';
+            '</div>';
           }
         };
       }
