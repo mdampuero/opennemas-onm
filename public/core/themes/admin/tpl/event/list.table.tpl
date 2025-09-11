@@ -51,11 +51,13 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('type')" width="150">
     {t}Type{/t}
   </th>
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('start')" width="150">
+  <th class="text-center v-align-middle pointer" ng-click="sort('event_start_date')" ng-if="isColumnEnabled('start')" width="150">
     {t}Start{/t}
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('event_start_date') == 'asc', 'fa fa-caret-down': isOrderedBy('event_start_date') == 'desc' }"></i>
   </th>
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('end')" width="150">
+  <th class="text-center v-align-middle pointer" ng-click="sort('event_end_date')" ng-if="isColumnEnabled('end')" width="150">
     {t}End{/t}
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('event_end_date') == 'asc', 'fa fa-caret-down': isOrderedBy('event_end_date') == 'desc' }"></i>
   </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('content_status')" width="150">
     {t}Published{/t}

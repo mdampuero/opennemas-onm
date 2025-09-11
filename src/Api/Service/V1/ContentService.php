@@ -125,13 +125,13 @@ class ContentService extends OrmService
         $cleanOql = preg_replace('/and tag\\s*=\\s*\"?([0-9]*)\"?\\s*/', '', $oql);
         preg_match('/tag\\s*=\\s*\"?([0-9]*)\"?\\s*/', $oql, $matches);
 
-        if (empty($matches)) {
-            return $cleanOql;
+        $fixer = $this->container->get('orm.oql.fixer')->fix($cleanOql);
+
+        if (!empty($matches)) {
+            $fixer->addCondition(sprintf('tag_id in [%s]', $matches[1]));
         }
 
-        return $this->container->get('orm.oql.fixer')->fix($cleanOql)
-            ->addCondition(sprintf('tag_id in [%s]', $matches[1]))
-            ->getOql();
+        return $fixer->getOql();
     }
 
     /**
