@@ -26,7 +26,7 @@
           },
           template: function() {
             return '<div class="tags-input-wrapper">' +
-              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="categoriesInLocale" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewCategory($tag), \'tag-item-new\': isNewCategory($tag), \'tag-item-private\': $tag.private }">' +
+              '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="category" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required" tag-class="{ \'tag-item-exists\': !isNewCategory($tag), \'tag-item-new\': isNewCategory($tag), \'tag-item-private\': $tag.private }">' +
                 '<auto-complete debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="true" source="list($query)" template="categoryTemplate"></auto-complete>' +
               '</tags-input>' +
               '<i class="fa fa-circle-o-notch fa-spin tags-input-loading" ng-if="loading"></i>' +
@@ -56,7 +56,15 @@
     .controller('OnmCategoryInputCtrl', [
       '$q', '$scope', '$timeout', '$window', 'http', 'oqlEncoder',
       function($q, $scope, $timeout, $window, http, oqlEncoder) {
-        $scope.categoriesInLocale = Array.isArray($scope.ngModel) ? $scope.ngModel : [];
+        /**
+         * @memberOf OnmCategoryInputCtrl
+         *
+         * @description
+         *  The list of category objects ready to use by category input directive.
+         *
+         * @type {Array}
+         */
+        $scope.category = null;
 
         /**
          * @function getCategory
@@ -116,6 +124,42 @@
         $scope.getJsonValue = function() {
           return JSON.stringify($scope.ngModel);
         };
+
+        $scope.$watch('ngModel', function(nv) {
+          var ids = !$scope.category ? [] : $scope.category.map(function(e) {
+            return e.id;
+          });
+
+          if (!nv || nv.length === 0 || angular.equals(nv, ids)) {
+            return;
+          }
+
+          $scope.loading = true;
+
+          var criteria = {
+            id: nv,
+            orderBy: { name: 'asc' },
+          };
+
+          oqlEncoder.configure({ placeholder: { id: '[key] in [[value]]' } });
+
+          http.get({
+            name: 'api_v1_backend_category_get_list',
+            params: { oql: oqlEncoder.getOql(criteria) }
+          }).then(function(response) {
+            $scope.loading = false;
+
+            if (response.data.items) {
+              $scope.category         = response.data.items;
+            }
+          });
+        }, true);
+
+        $scope.$watch('category', function(nv) {
+          $scope.ngModel = !nv || Array.isArray(nv) && !nv.length ? null : nv.map(function(e) {
+            return e.id;
+          });
+        }, true);
       }
     ]);
 })();
