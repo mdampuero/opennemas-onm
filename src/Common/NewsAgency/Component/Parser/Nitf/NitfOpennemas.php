@@ -37,11 +37,7 @@ class NitfOpennemas extends Nitf
     }
 
     /**
-     * Returns the body from the parsed data.
-     *
-     * @param SimpleXMLObject The parsed data.
-     *
-     * @return string The body.
+     * {@inheritdoc}
      */
     public function getBody($data)
     {
@@ -61,6 +57,33 @@ class NitfOpennemas extends Nitf
         }
 
         return iconv(mb_detect_encoding($body), "UTF-8", $body);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSummary($data)
+    {
+        $summaries = $data->xpath('//body/body.head/abstract');
+
+        if (empty($summaries)) {
+            return '';
+        }
+
+        $summary = '';
+        foreach ($summaries[0]->children() as $child) {
+            $summary .= '<p>' . (string) $child . '</p>';
+        }
+
+        if (!empty($summary) && !empty((string) $summaries[0])) {
+            $summary = preg_replace(
+                ["/\n/", '/<p>\s*<\/p>/'],
+                ['', ''],
+                html_entity_decode($summary)
+            );
+        }
+
+        return iconv(mb_detect_encoding($summary), "UTF-8", $summary);
     }
 
     /**
