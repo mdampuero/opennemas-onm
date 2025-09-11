@@ -54,7 +54,7 @@ class LinkHelper
 
             $link = $item['link_name'] ?? $item['link'] ?? '';
 
-            if ($link === '#' || str_starts_with($link, '#')) {
+            if ($link === '#' || strpos($link, '#') === 0) {
                 continue;
             }
 
