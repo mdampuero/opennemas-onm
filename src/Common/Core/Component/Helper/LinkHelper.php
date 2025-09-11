@@ -44,7 +44,7 @@ class LinkHelper
      */
     public function validateExternalLinks(array $menuItems): array
     {
-        $errors        = [];
+        $errors         = [];
         $allowedSchemes = ['whatsapp', 'mailto', 'tel'];
 
         foreach ($menuItems as $item) {
@@ -54,6 +54,10 @@ class LinkHelper
 
             $link = $item['link_name'] ?? $item['link'] ?? '';
 
+            if ($link === '#' || str_starts_with($link, '#')) {
+                continue;
+            }
+
             if (preg_match('#^([a-z][a-z0-9+\.-]*):#i', $link, $matches)) {
                 $scheme = strtolower($matches[1]);
 
@@ -61,9 +65,7 @@ class LinkHelper
                     continue;
                 }
 
-                if (preg_match('#^[a-z][a-z0-9+\.-]*://#i', $link)) {
-                    // curl
-                } else {
+                if (!preg_match('#^[a-z][a-z0-9+\.-]*://#i', $link)) {
                     $errors[] = $link;
                     continue;
                 }
@@ -80,12 +82,25 @@ class LinkHelper
                 CURLOPT_TIMEOUT        => 5,
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 
+                (KHTML, like Gecko) Chrome/126.0 Safari/537.36',
             ]);
+
             curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $err  = curl_errno($ch);
+
+            if ($code === 405) {
+                curl_setopt($ch, CURLOPT_NOBODY, false);
+                curl_setopt($ch, CURLOPT_HTTPGET, true);
+                curl_exec($ch);
+                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $err  = curl_errno($ch);
+            }
+
             curl_close($ch);
-            if ($err || $code >= 404 || $code === 0) {
+
+            if ($err || ($code >= 404 && $code !== 403) || $code === 0) {
                 $errors[] = $link;
             }
         }
