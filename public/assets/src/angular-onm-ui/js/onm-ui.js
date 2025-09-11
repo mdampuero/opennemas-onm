@@ -4,5 +4,6 @@ angular.module('onm.ui', [
   'onm.ui.editor',
   'onm.ui.menuSelector',
   'onm.ui.pagination',
-  'onm.ui.tagsInput'
+  'onm.ui.tagsInput',
+  'onm.ui.categoryInput'
 ]);
