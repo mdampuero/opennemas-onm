@@ -276,18 +276,25 @@
             $scope.criteria.orderBy = {};
           }
 
-          if ($scope.criteria.orderBy[name] === 'asc') {
-            $scope.criteria.orderBy[name] = 'desc';
-            return;
+          var current = $scope.criteria.orderBy[name];
+
+          // Remove the field to reinsert it in the correct position
+          delete $scope.criteria.orderBy[name];
+
+          if (current === 'asc') {
+            var descOrder = {};
+            descOrder[name] = 'desc';
+            $scope.criteria.orderBy = angular.extend({}, descOrder, $scope.criteria.orderBy);
+          } else if (current === 'desc') {
+            // Field is removed, leaving the rest of the order intact
+            // If no order remains, the request will use the default backend ordering
+          } else {
+            var ascOrder = {};
+            ascOrder[name] = 'asc';
+            $scope.criteria.orderBy = angular.extend({}, ascOrder, $scope.criteria.orderBy);
           }
 
-          if ($scope.criteria.orderBy[name] === 'desc') {
-            delete $scope.criteria.orderBy[name];
-            return;
-          }
-
-          $scope.criteria.orderBy[name] = 'asc';
-          $scope.criteria.page          = 1;
+          $scope.criteria.page = 1;
         };
 
         /**
