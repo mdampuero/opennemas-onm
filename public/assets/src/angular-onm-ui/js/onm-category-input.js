@@ -136,7 +136,7 @@
             $scope.loading = false;
 
             if (response.data.items) {
-              $scope.category         = response.data.items;
+              $scope.category = response.data.items;
             }
           });
         }, true);
