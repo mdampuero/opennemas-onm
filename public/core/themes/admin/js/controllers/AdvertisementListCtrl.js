@@ -382,6 +382,14 @@
         };
 
         /**
+         * @inhericdoc
+         */
+        $scope.hasMultilanguage = function() {
+          return $scope.config && $scope.config.locale &&
+            $scope.config.locale.multilanguage;
+        };
+
+        /**
          * @function getCategoryTitle
          * @memberof AdvertisementListCtrl
          *
@@ -395,7 +403,9 @@
             return cat.id === id;
           });
 
-          return match ? match.title : null;
+          var contents = $scope.localize(match);
+
+          return match ? contents.title : null;
         };
 
         /**

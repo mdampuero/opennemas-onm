@@ -6,7 +6,7 @@
 
 {block name="ngInit"}
 ng-controller="AdvertisementListCtrl"
-ng-init="init();
+ng-init="forcedLocale = '{$locale}'; init();
 advertisement_positions = {json_encode($advertisement_positions)|clear_json};
 type = {json_encode($types)|clear_json};
 status = [
@@ -17,7 +17,6 @@ status = [
 {/block}
 
 {block name="icon"}
-
 {/block}
 
 {block name="title"}

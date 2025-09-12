@@ -131,34 +131,9 @@
       <small class="text-italic" ng-if="!item.fk_content_categories || item.fk_content_categories.length == 0">
         {t}All{/t}
       </small>
-      <span ng-if="item.fk_content_categories.length == 1"
-            ng-init="title = getCategoryTitle(item.fk_content_categories[0])">
-        <a ng-if="title"
-          class="label label-default m-r-5 text-bold"
-          href="[% routing.generate('backend_category_show', { id: item.fk_content_categories[0] }) %]">
-          [% title %]
-        </a>
-        <span ng-if="!title">{t}Frontpage{/t}</span>
-      </span>
-      <small ng-if="item.fk_content_categories.length > 1"
-            uib-tooltip-template="'categories_tooltip_template'"
-            tooltip-placement="top">
+      <small ng-if="item.fk_content_categories.length >= 1">
         {t}Custom{/t}
       </small>
-      <script type="text/ng-template" id="categories_tooltip_template">
-        <div>
-          <span ng-repeat="id in item.fk_content_categories | limitTo:3">
-            <span ng-if="getCategoryTitle(id)"> [% getCategoryTitle(id) %]</span>
-            <span ng-if="!getCategoryTitle(id)">
-              {t}Frontpage{/t}
-            </span>
-            <span ng-if="!$last">, </span>
-          </span>
-          <span ng-if="item.fk_content_categories.length > 3">
-            {t 1="[% item.fk_content_categories.length - 3 %]"}And %1 more…{/t}
-          </span>
-        </div>
-      </script>
     {/block}
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('starttime')">
