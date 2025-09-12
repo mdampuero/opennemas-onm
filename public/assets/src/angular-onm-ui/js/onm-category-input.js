@@ -13,6 +13,7 @@
             generateFrom:  '=',
             maxCategorys:  '=',
             maxResults:    '=',
+            locale:        '=',
             ngModel:       '=',
             placeholder:   '@',
             required:      '='
@@ -93,8 +94,45 @@
 
               var items = response.data.items;
 
-              return items;
+              return $scope.localize(items);
             });
+          });
+        };
+
+        /**
+         * @function localize
+         * @memberOf OnmCategoryInputCtrl
+         *
+         * @description
+         *   Localizes the list of items based on the information included
+         *
+         * @param {Array|Object} items
+         * @returns
+         */
+        $scope.localize = function(items) {
+          if (!$scope.locale || !$scope.locale.multilanguage) {
+            return items;
+          }
+
+          var currentLocale = $scope.locale.default;
+
+          return items.map(function(item) {
+            return {
+              id: item.id,
+              title: typeof item.title === 'object' ?
+                item.title[currentLocale] ||
+                item.title[Object.keys(item.title)[0]] ||
+                '' :
+                item.title ||
+                '',
+              name: typeof item.name === 'object' ?
+                item.name[currentLocale] ||
+                item.name[Object.keys(item.name)[0]] ||
+                '' :
+                item.name ||
+                '',
+              raw: item
+            };
           });
         };
 
@@ -136,7 +174,7 @@
             $scope.loading = false;
 
             if (response.data.items) {
-              $scope.category = response.data.items;
+              $scope.category = $scope.localize(response.data.items);
             }
           });
         }, true);
