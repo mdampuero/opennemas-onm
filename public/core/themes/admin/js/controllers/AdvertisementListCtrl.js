@@ -403,9 +403,7 @@
             return cat.id === id;
           });
 
-          var contents = $scope.localize(match);
-
-          return match ? contents.title : null;
+          return match ? match.title : null;
         };
 
         /**
