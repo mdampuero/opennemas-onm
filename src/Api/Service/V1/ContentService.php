@@ -139,7 +139,7 @@ class ContentService extends OrmService
      */
     public function getList($oql = '')
     {
-        if (preg_match('/order by.*event_(start|end)_date/i', $oql)) {
+        if (preg_match('/order by.*event_start_date/i', $oql)) {
             list($criteria, $order, $epp, $page) = $this->container
                 ->get('core.helper.oql')
                 ->getFiltersFromOql($oql);
@@ -167,11 +167,19 @@ class ContentService extends OrmService
             }
 
             $criteria = $cleanCriteria;
-            $order = str_replace(
-                [ 'event_start_date', 'event_end_date' ],
-                [ 'start_date_meta.meta_value', 'end_date_meta.meta_value' ],
-                $order
-            );
+            if (!empty($order)) {
+                $order = preg_replace_callback(
+                    '/event_start_date\s+(asc|desc)/i',
+                    function ($matches) {
+                        $direction = strtoupper($matches[1]);
+                        return sprintf(
+                            'start_date_meta.meta_value IS NULL, start_date_meta.meta_value %s',
+                            $direction
+                        );
+                    },
+                    $order
+                );
+            }
 
             $limit = '';
             if ($epp > 0) {
@@ -182,9 +190,7 @@ class ContentService extends OrmService
             $sql = 'SELECT contents.* FROM contents '
                 . $tagJoin
                 . 'left join contentmeta as start_date_meta on contents.pk_content = start_date_meta.fk_content '
-                . 'and start_date_meta.meta_name = "event_start_date" '
-                . 'left join contentmeta as end_date_meta on contents.pk_content = end_date_meta.fk_content '
-                . 'and end_date_meta.meta_name = "event_end_date" ';
+                . 'and start_date_meta.meta_name = "event_start_date" ';
 
             if (!empty($criteria)) {
                 $sql .= 'WHERE ' . $criteria . ' ';
