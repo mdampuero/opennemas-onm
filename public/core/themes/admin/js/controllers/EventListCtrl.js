@@ -28,7 +28,7 @@
           content_type_name: 'event',
           epp: 10,
           in_litter: 0,
-          orderBy: { created: 'desc' },
+          orderBy: { event_start_date: 'desc' },
           page: 1,
           tag: null
         };
@@ -59,8 +59,11 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.backup.criteria    = $scope.criteria;
-          $scope.app.columns.hidden = [];
+          $scope.backup.criteria      = $scope.criteria;
+          $scope.app.columns.hidden   = [];
+          $scope.app.columns.selected =  _.uniq($scope.app.columns.selected.concat(
+            [ 'start', 'end' ]
+          ));
 
           oqlEncoder.configure({ placeholder: {
             title: '[key] ~ "%[value]%"',
