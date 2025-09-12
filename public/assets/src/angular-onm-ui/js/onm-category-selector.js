@@ -22,7 +22,7 @@
      * @requires http
      * @requires linker
      * @requires localizer
-     *c
+     *
      * @description
      *   Directive to create category selector dynamically.
      */
