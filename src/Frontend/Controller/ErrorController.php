@@ -60,8 +60,8 @@ class ErrorController extends Controller
                     ->getUrl(preg_replace('/^\//', '', $request->getRequestUri()));
 
                 if (!empty($url)) {
-                        return $this->container->get('core.redirector')
-                            ->getResponse($request, $url);
+                    return $this->container->get('core.redirector')
+                        ->getResponse($request, $url);
                 }
 
                 // no break
@@ -151,6 +151,29 @@ class ErrorController extends Controller
     {
         $this->get('application.log')->info($class);
 
+        $this->view->setConfig('articles');
+
+        $content = $this->get('core.template.frontend')
+            ->render('static_pages/404.tpl', [
+                'cache_id' => $this->view->getCacheId('error', 404),
+            ]);
+
+        return new Response($content, 404, [
+            'x-cacheable' => true,
+            'x-tags'      => 'not-found',
+        ]);
+    }
+
+    /**
+     * Generates the "Not Found" (404) response.
+     *
+     * This action renders the 404 error page when a requested resource
+     * cannot be found.
+     *
+     * @return Response The rendered 404 response.
+     */
+    public function notFoundAction()
+    {
         $this->view->setConfig('articles');
 
         $content = $this->get('core.template.frontend')

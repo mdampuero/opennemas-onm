@@ -224,34 +224,64 @@ class SendpulseHelper
         $basePath = $this->container->getParameter('core.paths.public')
             . $this->container->get('core.instance')->getMediaShortPath() . DS;
 
-        if ($image && $imageHelper->exists($basePath . $image->path) && $image->size <= 200) {
-            // Ensure the extension is lowercase
-            $extension = strtolower(pathinfo($image->path, PATHINFO_EXTENSION));
+        if ($image && $image->size <= 200) {
+            // Local images
+            if (!empty($image->path) && $imageHelper->exists($basePath . $image->path)) {
+                // Ensure the extension is lowercase
+                $extension = strtolower(pathinfo($image->path, PATHINFO_EXTENSION));
 
-            // Get image content and base64 encode
-            $imageContent  = file_get_contents($basePath . $image->path);
-            $data['image'] = [
-                'name' => basename($image->path),
-                'data' => base64_encode($imageContent)
-            ];
-
-            // If the image is not an avaliable image type
-            if (!in_array($extension, $this->availableImageType)) {
-                // Open the image and convert it to jpeg
-                $content = $this->container->get('core.image.processor')
-                    ->open($basePath . $image->path)
-                    ->forceFormat('jpeg')
-                    ->getRawContent();
-
-                // Get the name of the image without extension
-                $name = pathinfo($image->path, PATHINFO_FILENAME);
-
-                // Add the image data to the notification data
-                // with the name as the original filename and .jpg extension
+                // Get image content and base64 encode
+                $imageContent  = file_get_contents($basePath . $image->path);
                 $data['image'] = [
-                    'name' => $name . '.jpg',
-                    'data' => base64_encode($content),
+                    'name' => basename($image->path),
+                    'data' => base64_encode($imageContent)
                 ];
+
+                // If the image is not an avaliable image type
+                if (!in_array($extension, $this->availableImageType)) {
+                    // Open the image and convert it to jpeg
+                    $content = $this->container->get('core.image.processor')
+                        ->open($basePath . $image->path)
+                        ->forceFormat('jpeg')
+                        ->getRawContent();
+
+                    // Get the name of the image without extension
+                    $name = pathinfo($image->path, PATHINFO_FILENAME);
+
+                    // Add the image data to the notification data
+                    // with the name as the original filename and .jpg extension
+                    $data['image'] = [
+                        'name' => $name . '.jpg',
+                        'data' => base64_encode($content),
+                    ];
+                }
+            } elseif (!empty($image->external_uri)) {
+                $uriPath      = parse_url($image->external_uri, PHP_URL_PATH);
+                $extension    = strtolower(pathinfo($uriPath, PATHINFO_EXTENSION));
+                $imageContent = @file_get_contents($image->external_uri);
+
+                if ($imageContent !== false) {
+                    if (!in_array($extension, $this->availableImageType)) {
+                        $tmpFile = tempnam(sys_get_temp_dir(), 'img');
+                        file_put_contents($tmpFile, $imageContent);
+                        $content = $this->container->get('core.image.processor')
+                            ->open($tmpFile)
+                            ->forceFormat('jpeg')
+                            ->getRawContent();
+                        unlink($tmpFile);
+
+                        $name = pathinfo($uriPath, PATHINFO_FILENAME);
+                        $data['image'] = [
+                            'name' => $name . '.jpg',
+                            'data' => base64_encode($content),
+                        ];
+                    } else {
+                        $data['image'] = [
+                            'name' => basename($uriPath),
+                            'data' => base64_encode($imageContent),
+                        ];
+                    }
+                }
             }
         }
 

@@ -11,7 +11,7 @@
         <label for="noindex" class="form-label">
           Noindex
         </label>
-        {include file="ui/component/content-editor/accordion/checkbox.tpl" field="noindex" title="{t}Mark this content to prevent indexing{/t}"}
-    </div>
+        {include file="ui/component/content-editor/accordion/checkbox.tpl" field="noindex" isString=true title="{t}Mark this content to prevent indexing{/t}"}
+      </div>
   </div>
 </div>

@@ -45,7 +45,7 @@ class EventController extends ContentController
     /**
      * {@inheritdoc}
      */
-    protected $service = 'api.service.content';
+    protected $service = 'api.service.event';
 
     /**
      * {@inheritDoc}
