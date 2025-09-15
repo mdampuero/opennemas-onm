@@ -62,3 +62,10 @@ api_v1_backend_menu_save_item:
     defaults: { _controller: ApiBundle:V1/Backend/Menu:saveItem }
     options:
         expose: true
+
+api_v1_backend_menu_validate_link:
+    path:     /menus/validate-link
+    defaults: { _controller: ApiBundle:V1/Backend/Menu:validateLink }
+    methods:  [ GET ]
+    options:
+        expose: true

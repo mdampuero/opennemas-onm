@@ -115,8 +115,8 @@ class OnmAIController extends ApiController
             $messages["promptSelected"] = $request->request->get('promptSelected');
             $messages["promptInput"]    = $request->request->get('promptInput');
             $messages["locale"]         = $request->request->get('locale');
-
-            $response = $this->get($this->helper)->sendMessage($messages);
+            $contentId                  = $request->request->get('contentId');
+            $response = $this->get($this->helper)->sendMessage($messages, $contentId);
 
             unset($response['original']);
 

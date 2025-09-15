@@ -16,7 +16,7 @@ class MCompassRenderer extends StatisticsRenderer
         $this->config = $this->global->getContainer()
             ->get('orm.manager')
             ->getDataSet('Settings', 'instance')
-            ->get('marfeel_compass');
+            ->get(['marfeel_compass', 'cookies']);
     }
 
     /**
@@ -24,7 +24,10 @@ class MCompassRenderer extends StatisticsRenderer
      */
     protected function getParameters($content = null)
     {
-        return [ 'id' => $this->config['id'] ];
+        return [
+            'id'      => $this->config['marfeel_compass']['id'],
+            'cookies' => $this->config['cookies']
+        ];
     }
 
     /**
@@ -35,8 +38,8 @@ class MCompassRenderer extends StatisticsRenderer
     protected function validate()
     {
         if (!is_array($this->config)
-            || !array_key_exists('id', $this->config)
-            || empty(trim($this->config['id']))
+            || !array_key_exists('marfeel_compass', $this->config)
+            || empty(trim($this->config['marfeel_compass']['id']))
         ) {
             return false;
         }

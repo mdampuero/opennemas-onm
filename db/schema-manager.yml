@@ -81,6 +81,9 @@ instances:
         media_size:
             type: float
             options: { default: 0 }
+        storage_size:
+            type: bigint
+            options: { default: 0, unsigned: true }
         alexa:
             type: integer
             options: { default: null, unsigned: true }
