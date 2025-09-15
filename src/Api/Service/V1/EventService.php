@@ -45,6 +45,15 @@ class EventService extends ContentService
                 $criteria = $cleanCriteriaCat;
             }
 
+            if (!empty($criteria)) {
+                $criteria = str_replace(
+                    ['event_start_date', 'event_end_date'],
+                    ['start_date_meta.meta_value', 'end_date_meta.meta_value'],
+                    $criteria
+                );
+            }
+
+
             if (!empty($order)) {
                 $order = preg_replace_callback(
                     '/event_start_date\s+(asc|desc)/i',
