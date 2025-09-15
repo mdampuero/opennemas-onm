@@ -173,8 +173,8 @@ EOT;
     /**
      * Critical instruction added to all prompts to handle uncertain answers.
      */
-    protected $errorDirective = 'IMPORTANTÍSIMO: Si no puedes proporcionar una respuesta certera 
-    o por cualquier motivo no puedes responder, responde únicamente con "ERROR".';
+    protected $errorDirective = 'IMPORTANTÍSIMO: Si no puedes proporcionar una respuesta certera '
+        . 'o por cualquier motivo no puedes responder, responde únicamente con "ERROR".';
 
 
     /**
@@ -682,7 +682,7 @@ EOT;
             if (is_object($content) && isset($content->id)) {
                 $contentData['id'] = $content->id;
             }
-            
+
             $categoryData = !empty($category) ? $this->toArray($category) : [];
             if (!empty($category) && is_object($category) && isset($category->id)) {
                 $categoryData['id'] = $category->id;
@@ -868,7 +868,7 @@ EOT;
      *
      * @return array The array with transformed data or the original array if no transformation occurs.
      */
-    public function transform($data = [], $fields = ['title', 'title_int', 'description', 'body'])
+    public function transform($data = [], $fields = ['body', 'description', 'title', 'title_int'])
     {
         $settings = $this->getCurrentSettings();
 
