@@ -34,6 +34,7 @@
           mode: 'New',
           instances: [ 'Todos' ],
           instructions: [],
+          debugging: 0,
         };
 
         $scope.instructionsAvailables = [];
