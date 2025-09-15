@@ -93,6 +93,7 @@ class L10nRouteHelper
             'frontend_events_category_list',
             'frontend_events_category_tag_list',
             'frontend_event_show',
+            'frontend_event_show_legacy',
             'frontend_external_article_show',
             'frontend_frontpage',
             'frontend_frontpage_authors',

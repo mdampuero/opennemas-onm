@@ -12,6 +12,7 @@ namespace Frontend\Controller;
 use Api\Exception\GetItemException;
 use Api\Exception\GetListException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -197,6 +198,17 @@ class EventController extends FrontendController
         }
 
         return $item;
+    }
+
+    /**
+     * Redirects legacy event URLs to the new structure.
+     */
+    public function legacyShowAction(Request $request)
+    {
+        $item = $this->getItem($request);
+        $expected = $this->getExpectedUri('show', ['item' => $item]);
+
+        return new RedirectResponse($expected, 301);
     }
 
     /**

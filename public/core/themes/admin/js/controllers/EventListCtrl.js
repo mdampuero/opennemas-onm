@@ -15,8 +15,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('EventListCtrl', [
-      '$controller', '$scope', 'oqlEncoder', 'routing',
-      function($controller, $scope, oqlEncoder, routing) {
+      '$controller', '$scope', 'oqlEncoder', 'routing', '$window',
+      function($controller, $scope, oqlEncoder, routing, $window) {
         $.extend(this, $controller('ContentRestListCtrl', { $scope: $scope }));
 
         /**
@@ -83,9 +83,30 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          return $scope.getL10nUrl(
+          if (!$scope.categories) {
+            return '';
+          }
+
+          var categories = $scope.categories.filter(function(e) {
+            return e.id === item.categories[0];
+          });
+
+          if (categories.length === 0) {
+            return '';
+          }
+
+          var categoryName = categories[0].name;
+
+          if ($scope.hasMultilanguage() && typeof categoryName === 'object') {
+            categoryName = categoryName[$scope.config.locale.selected];
+          }
+
+          return $scope.data.extra.base_url + $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
+              id: item.pk_content.toString().padStart(6, '0'),
+              created: item.urldatetime || $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
+              category_slug: categoryName
             })
           );
         };
