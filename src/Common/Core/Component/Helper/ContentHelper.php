@@ -194,9 +194,94 @@ class ContentHelper
      */
     public function getFirstItemDate($contentTypeName = 'article')
     {
+        if ($contentTypeName === 'event') {
+            $service = $this->container->get('api.service.event');
+            $sql = 'SELECT contents.*, start_date_meta.meta_value as event_start_date '
+                . 'FROM contents '
+                . 'INNER JOIN contentmeta as start_date_meta '
+                . 'on contents.pk_content = start_date_meta.fk_content '
+                . 'AND start_date_meta.meta_name = "event_start_date" '
+                . 'WHERE contents.content_type_name = "event" '
+                . 'AND start_date_meta.meta_value IS NOT NULL '
+                . 'AND start_date_meta.meta_value >= "2000-01-01" '
+                . 'AND contents.in_litter = 0 '
+                . 'ORDER BY start_date_meta.meta_value ASC LIMIT 1';
+
+            try {
+                $response = $service->getListBySql($sql);
+                $item = $response['items'][0] ?? null;
+                $startDate = $item->event_start_date ?? null;
+
+                if (empty($startDate)) {
+                    return null;
+                }
+
+                return $startDate instanceof \DateTime
+                    ? $startDate
+                    : new \DateTime($startDate);
+            } catch (\Exception $e) {
+                return null;
+            }
+        }
+
         $oql = sprintf(
             'content_type_name = "%s" and created !is null and created >="2000-01-01" and in_litter = 0'
             . ' order by created asc limit 1',
+            $contentTypeName
+        );
+
+        try {
+            $item = $this->service->getItemBy($oql);
+            return $item->created;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Retrieves the last available date for a given content type.
+     *
+     * When the content type is `event`, it uses the `event_start_date` meta
+     * value to determine the most future event. For other content types, the
+     * latest `created` date is used.
+     *
+     * @param string $contentTypeName The content type name (default `article`).
+     *
+     * @return \DateTime|string|null The last date found, or null if unavailable.
+     */
+    public function getLastItemDate($contentTypeName = 'article')
+    {
+        if ($contentTypeName === 'event') {
+            $service = $this->container->get('api.service.event');
+            $sql = 'SELECT contents.*, start_date_meta.meta_value as event_start_date '
+                . 'FROM contents '
+                . 'INNER JOIN contentmeta as start_date_meta '
+                . 'on contents.pk_content = start_date_meta.fk_content '
+                . 'AND start_date_meta.meta_name = "event_start_date" '
+                . 'WHERE contents.content_type_name = "event" '
+                . 'AND start_date_meta.meta_value IS NOT NULL '
+                . 'AND contents.in_litter = 0 '
+                . 'ORDER BY start_date_meta.meta_value DESC LIMIT 1';
+
+            try {
+                $response = $service->getListBySql($sql);
+                $item = $response['items'][0] ?? null;
+                $startDate = $item->event_start_date ?? null;
+
+                if (empty($startDate)) {
+                    return null;
+                }
+
+                return $startDate instanceof \DateTime
+                    ? $startDate
+                    : new \DateTime($startDate);
+            } catch (\Exception $e) {
+                return null;
+            }
+        }
+
+        $oql = sprintf(
+            'content_type_name = "%s" and created !is null and in_litter = 0 order by created desc limit 1',
             $contentTypeName
         );
 

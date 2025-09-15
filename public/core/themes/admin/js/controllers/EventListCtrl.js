@@ -68,7 +68,7 @@
           oqlEncoder.configure({ placeholder: {
             title: '[key] ~ "%[value]%"',
             starttime: '[key] > "[value]"',
-            created: '[key] ~ "%[value]%"'
+            event_start_date: '[key] ~ "%[value]%"'
           } });
 
           $scope.list();

@@ -271,19 +271,26 @@ class ApiController extends Controller
             return $years;
         }
 
-        $fmt              = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
-        $helper           = $this->container->get($this->helper);
-        $firstContentDate = $helper->getFirstItemDate($this->module);
+        $fmt    = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
+        $helper = $this->container->get($this->helper);
 
+        $firstContentDate = $helper->getFirstItemDate($this->module);
         if (empty($firstContentDate)) {
             return $years;
         }
 
-        $currentDate   = new \DateTime('now');
-        $finalDate     = $currentDate->format('Y-m');
-        $iterationDate = $firstContentDate;
+        $lastContentDate = $helper->getLastItemDate($this->module);
+        if (empty($lastContentDate)) {
+            $lastContentDate = new \DateTime('now');
+        }
 
-        while ($iterationDate->format('Y-m') <= $finalDate) {
+        $iterationDate = $firstContentDate instanceof \DateTime
+            ? clone $firstContentDate
+            : new \DateTime($firstContentDate);
+        $finalDate = $lastContentDate instanceof \DateTime
+            ? $lastContentDate
+            : new \DateTime($lastContentDate);
+        while ($iterationDate->format('Y-m') <= $finalDate->format('Y-m')) {
             $years[] = [
                 'name' => (!is_null($fmt) ?
                     ucfirst($fmt->format($iterationDate)) :
