@@ -800,7 +800,7 @@
                           <div class="controls">
                             <input class="form-control" id="youtube-page" name="youtube-page" ng-model="settings.youtube_page" type="text">
                             <span class="help">
-                              {t escape=off}If you have a <strong>Youtube page</strong>, please complete the form with your youtube page url.{/t}
+                              {t escape=off 1="YouTube"}If you have a <strong>%1 page</strong>, add your page url on the form.{/t}
                             </span>
                           </div>
                         </div>
@@ -827,7 +827,7 @@
                         <div class="controls">
                           <input class="form-control" id="facebook-page" name="facebook-page" ng-model="settings.facebook.page" type="text">
                           <span class="help">
-                            {t escape=off}If you have a <strong>facebook page</strong>, please complete the form with your facebook page url and Id.{/t}
+                            {t escape=off 1="Facebook"}If you have a <strong>%1 page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -890,7 +890,7 @@
                         <div class="controls">
                           <input class="form-control" id="twitter-page" name="twitter-page" ng-model="settings.twitter_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>Twitter page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                            {t escape=off 1="Twitter"}If you have a <strong>%1 page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -918,7 +918,7 @@
                         <div class="controls">
                           <input class="form-control" id="bluesky-page" name="bluesky-page" ng-model="settings.bluesky_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>Bluesky page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                            {t escape=off 1="Bluesky"}If you have a <strong>%1 page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -944,7 +944,7 @@
                         <div class="controls">
                           <input class="form-control" id="instagram-page" name="instagram-page" ng-model="settings.instagram_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>Instagram page</strong>, add your page url on the form.{/t}
+                            {t escape=off 1="Instagram"}If you have a <strong>%1 page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -970,7 +970,7 @@
                         <div class="controls">
                           <input class="form-control" id="pinterest-page" name="pinterest-page" ng-model="settings.pinterest_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>Pinterest page</strong>, add your page url on the form.{/t}
+                            {t escape=off 1="Pinterest"}If you have a <strong>%1 page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -996,7 +996,7 @@
                         <div class="controls">
                           <input class="form-control" id="flickr-page" name="flickr-page" ng-model="settings.flickr_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>flickr page</strong>, add your page url on the form.{/t}
+                            {t escape=off 1="Flickr"}If you have a <strong>%1 page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -1022,7 +1022,7 @@
                         <div class="controls">
                           <input class="form-control" id="vimeo-page" name="vimeo-page" ng-model="settings.vimeo_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>Vimeo page</strong>, add your page url on the form.{/t}
+                            {t escape=off 1="Vimeo"}If you have a <strong>%1 page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -1048,7 +1048,7 @@
                         <div class="controls">
                           <input class="form-control" id="linkedin-page" name="linkedin-page" ng-model="settings.linkedin_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>LinkedIn page</strong>, add your page url on the form. Default will be set with Opennemas.{/t}
+                            {t escape=off 1="LinkedIn"}If you have a <strong>%1 page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -1074,7 +1074,7 @@
                         <div class="controls">
                           <input class="form-control" id="telegram-page" name="telegram-page" ng-model="settings.telegram_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>Telegram page</strong>, add your page url on the form.{/t}
+                            {t escape=off 1="Telegram"}If you have a <strong>%1 page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -1100,7 +1100,7 @@
                         <div class="controls">
                           <input class="form-control" id="whatsapp-page" name="whatsapp-page" ng-model="settings.whatsapp_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>Whatsapp page</strong>, add your page url on the form.{/t}
+                            {t escape=off 1="Whatsapp"}If you have a <strong>%1 page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -1126,7 +1126,7 @@
                         <div class="controls">
                           <input class="form-control" id="tiktok-page" name="tiktok-page" ng-model="settings.tiktok_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>TikTok page</strong>, add your page url on the form.{/t}
+                            {t escape=off 1="TikTok"}If you have a <strong>%1 page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>
@@ -1152,7 +1152,7 @@
                         <div class="controls">
                           <input class="form-control" id="dailymotion-page" name="dailymotion-page" ng-model="settings.dailymotion_page" type="text">
                           <span class="help">
-                            {t escape=off}If you also have a <strong>Dailymotion page</strong>, add your page url on the form.{/t}
+                            {t escape=off 1="Dailymotion"}If you have a <strong>%1 page</strong>, add your page url on the form.{/t}
                           </span>
                         </div>
                       </div>

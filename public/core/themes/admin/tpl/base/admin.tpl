@@ -94,6 +94,13 @@
           'not_valid' : '{t}The form has some missing or invalid fields, please review it.{/t}',
           'not_locale' : '{t}You must have at least 1 languages ​​set for the frontend{/t}',
           'not_valid_iframe' : '{t}The provided iframe is not valid. Please check the field and try again.{/t}',
+        },
+        modals: {
+          'upload_empty' : '{t}The uploaded file is empty. Please select a valid file and try again.{/t}',
+          'exceded_max_line': '{t}The uploaded file exceeds the maximum number of 1000 lines.{/t}',
+          'not_csv': '{t}The uploaded file does not appear to be a valid CSV.{/t}',
+          'file_is_not_selected': '{t}No file selected. Please select a file and try again.{/t}',
+          'select_list_is_not_selected': '{t}Please select at least one list to import subscribers.{/t}',
         }
       };
     </script>

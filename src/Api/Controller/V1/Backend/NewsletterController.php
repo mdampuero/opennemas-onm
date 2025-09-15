@@ -139,11 +139,15 @@ class NewsletterController extends Controller
                 'newsletter_maillist',
                 'newsletter_footer',
                 'newsletter_subscriptionType',
+                'newsletter_layout',
+                'theme_skin',
                 'actOn.marketingLists',
                 'actOn.formPage',
                 'actOn.headerId',
                 'actOn.footerId',
             ]);
+
+        $settings['theme_skins'] = $this->get('core.theme')->getSkins();
 
         return new JsonResponse([ 'settings' => $settings ]);
     }
