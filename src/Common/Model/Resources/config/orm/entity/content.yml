@@ -63,7 +63,7 @@ orm:
                 pretitle:               l10n_string
                 pressclipping_status:   string
                 pressclipping_sended:   string
-                noindex:                integer
+                noindex:                l10n_string
                 seo_title:              l10n_string
                 seo_description:        l10n_string
                 canonicalurl:           string

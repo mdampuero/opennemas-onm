@@ -11,6 +11,7 @@ orm:
                 field:       string
                 tone:        string
                 role:        string
+                debugging:   boolean
             converters:
                 default:
                     class:     Opennemas\Orm\Database\Data\Converter\BaseConverter
@@ -42,6 +43,9 @@ orm:
                         role:
                             type: text
                             options: { default: null, length: 65532, notnull: false }
+                        debugging:
+                            type: boolean
+                            options: { default: 0, notnull: false }
                         field:
                             type: text
                             options: { default: null, length: 32, notnull: false }

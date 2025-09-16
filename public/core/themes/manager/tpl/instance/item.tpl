@@ -80,6 +80,12 @@
                     [% instance.media_size | number: 2 %] MB
                   </dd>
                   <dt>
+                    <h5><i class="fa fa-hdd-o"></i> {t}Storage size{/t}</h5>
+                  </dt>
+                  <dd>
+                    [% instance.storage_size / 1024 / 1024 | number: 2 %] MB
+                  </dd>
+                  <dt>
                     <h5><i class="fa fa-flag-checkered"></i> {t}Language{/t}</h5>
                   </dt>
                   <dd>

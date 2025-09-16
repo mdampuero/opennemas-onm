@@ -33,6 +33,17 @@
   <li class="quicklinks">
     <span class="h-seperate"></span>
   </li>
+  {acl isAllowed="MASTER"}
+    <li class="quicklinks">
+      <a class="btn btn-white" ng-click="import(data.extra.subscriptions)" uib-tooltip="{t}Import{/t}" tooltip-placement="bottom" type="button">
+        <i class="fa fa-address-book"></i>
+        {t}Import{/t}
+      </a>
+    </li>
+    <li class="quicklinks">
+      <span class="h-seperate"></span>
+    </li>
+  {/acl}
   {acl isAllowed=SUBSCRIBER_CREATE}
     <li class="quicklinks">
       <a class="btn btn-success text-uppercase" href="[% routing.generate('backend_subscriber_create') %]">
@@ -115,5 +126,8 @@
 {block name="modals"}
   <script type="text/ng-template" id="modal-delete">
     {include file="common/extension/modal.delete.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-import">
+    {include file="common/extension/modalImportCSV.tpl"}
   </script>
 {/block}
