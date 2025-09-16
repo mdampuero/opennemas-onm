@@ -97,8 +97,8 @@
       <i class="fa fa-google fa-lg m-r-5 text-danger" ng-if="item.with_script == 3" title="Google DFP"></i>
       <i class="fa fa-plus-square fa-lg m-r-5 text-warning" ng-if="item.with_script == 4" title="Smart Adserver"></i>
     </span>
-    [% item.title %]
     <div class="table-text">
+      [% item.title %]
       <span class="hidden-lg">
         <span ng-show="item.positions.length > 1" tooltip-class="text-left" {* uib-tooltip-template="'ad_position_template'" *} tooltip-placement="bottom-left">{t 1="[% item.positions.length %]"}%1 positions{/t},</span>
         <span ng-show="item.positions.length == 1"><span ng-repeat="value in item.positions | limitTo:1">[% map[value].name %]</span>,</span>
