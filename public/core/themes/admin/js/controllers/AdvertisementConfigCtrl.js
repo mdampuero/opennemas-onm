@@ -14,8 +14,8 @@
      *   Provides actions to edit, save and update articles.
      */
     .controller('AdvertisementConfigCtrl', [
-      '$controller', '$scope', '$uibModal',
-      function($controller, $scope, $uibModal) {
+      '$controller', '$scope', '$uibModal', '$rootScope', 'http',
+      function($controller, $scope, $uibModal, $rootScope, http) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('InnerCtrl', { $scope: $scope }));
 
@@ -46,20 +46,31 @@
           'onecall_sync'
         ];
 
+        $scope.originalOrder = [];
+
+        $scope.treeOptions = {
+          dropped: function(event) {
+            $scope.extraads.forEach(function(item, index) {
+              item.position = index;
+            });
+          }
+        };
+
         /**
-         * @function init
-         * @memberOf AdvertisementConfigCtrl
-         * Method to init the advertisement config controller
+         * Initializes the ad configuration with domain and tag settings.
          *
-         * @param {String} domain The configured domain
-         * @param {String} tagsFormat The configured tags format
-         * @param {Object} traffective The traffective config object
+         * @param {string} domain - The domain for which ads will be configured.
+         * @param {string} tagsFormat - The format of tags to be used. If not a
+         * valid format from smartAvailableTagsFormats, defaults to 'onecall_async'.
+         * @param {Object} traffective - Configuration object for Traffective ads.
+         * @param {Object} extraads - Additional ads configuration.
          */
-        $scope.init = function(domain, tagsFormat, traffective) {
+        $scope.init = function(domain, tagsFormat, traffective, extraads) {
           if ($scope.smartAvailableTagsFormats.indexOf(tagsFormat) < 0) {
             tagsFormat = 'onecall_async';
           }
 
+          $scope.extraads         = extraads;
           $scope.smart.domain             = domain;
           $scope.smart.tagsFormat         = tagsFormat;
           $scope.traffective.domain       = traffective.domain;
@@ -69,6 +80,24 @@
           $scope.traffective.ads          = traffective.ads;
           $scope.traffective.progAds      = traffective.progAds;
         };
+
+        $scope.getAdPositions = function() {
+          const positions = {};
+
+          $scope.extraads.forEach(function(item) {
+            positions[item.id] = parseInt(item.position);
+          });
+
+          return JSON.stringify(positions);
+        };
+
+        $scope.$watch('extraads', function(newOrder, oldOrder) {
+          if (newOrder !== oldOrder) {
+            newOrder.forEach(function(item, index) {
+              item.position = index;
+            });
+          }
+        }, true);
       }
     ]);
 })();
