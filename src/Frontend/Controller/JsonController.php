@@ -133,6 +133,20 @@ class JsonController extends FrontendController
                 true
             );
 
+            // Clean undesired escape sequences
+            $item->body        = str_replace(["\n", "\t"], '', $item->body);
+            $item->description = str_replace(["\n", "\t"], '', $item->description);
+
+            // Add image at the beggining of the body
+            if (!empty($imageUrl)) {
+                $item->body = sprintf(
+                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" /> %s',
+                    $imageUrl,
+                    $item->title ?? '',
+                    $item->body
+                );
+            }
+
             // Build the item array
             $events['items'][] = [
                 'allDay'         => 0,
@@ -223,6 +237,20 @@ class JsonController extends FrontendController
                 [],
                 true
             );
+
+            // Clean undesired escape sequences
+            $item->body        = str_replace(["\n", "\t"], '', $item->body);
+            $item->description = str_replace(["\n", "\t"], '', $item->description);
+
+            // Add image at the beggining of the body
+            if (!empty($imageUrl)) {
+                $item->body = sprintf(
+                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" /> %s',
+                    $imageUrl,
+                    $item->title ?? '',
+                    $item->body
+                );
+            }
 
             $articles['items'][] = [
                 'id'             => 'article_' . $item->pk_content,
