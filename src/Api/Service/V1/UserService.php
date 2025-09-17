@@ -75,6 +75,73 @@ class UserService extends OrmService
     }
 
     /**
+     * Creates a new subscriber or updates an existing one by converting it and
+     * assigning user groups.
+     *
+     * If a subscriber with the given email already exists,
+     * it is converted to type 2 and assigned to the specified user groups.
+     * Otherwise, a new subscriber is created using the parent class logic.
+     *
+     * @param array $data The subscriber data.
+     * @return Entity The created or updated subscriber entity.
+     *
+     * @throws CreateExistingItemException If a known item-related conflict occurs.
+     * @throws CreateItemException For any other unexpected creation errors.
+     */
+    public function createSubscriber($data)
+    {
+        try {
+            $item = $this->checkSubscriber($data['email']);
+
+            if (!empty($item)) {
+                // Convert the subscriber to type 2 if not already.
+                if ($item->type !== 1) {
+                    $item = $this->convert($item, 2);
+                }
+
+                // Check if the provided user groups differ from the existing ones.
+                if (!empty($data['user_groups']) && $this->areUserGroupsDifferent($item, $data['user_groups'])) {
+                    $currentGroups = $item->user_groups ?? [];
+                    $newGroups     = $data['user_groups'] ?? [];
+
+                    // Reindex by user_group_id for proper merging
+                    $currentById = array_column($currentGroups, null, 'user_group_id');
+                    $newById     = array_column($newGroups, null, 'user_group_id');
+
+                    // Merge arrays, prioritizing new groups
+                    $merged = array_merge($currentById, $newById);
+
+                    // Reindex for final assignment
+                    $item->user_groups = array_values($merged);
+
+                    // Mark the item as modified and persist changes
+                    // is more efficient use persist directly than updateItem
+                    $this->em->persist($item, $item->getOrigin());
+
+                    return $item;
+                }
+
+                // Return the existing item if no changes are needed.
+                return $item;
+            }
+        } catch (CreateExistingItemException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            throw new CreateItemException($e->getMessage(), $e->getCode());
+        }
+
+        if (isset($data['register_date']) && is_string($data['register_date'])) {
+            try {
+                $data['register_date'] = new \DateTime($data['register_date'], new \DateTimeZone('UTC'));
+            } catch (\Exception $e) {
+                unset($data['register_date']);
+            }
+        }
+
+        return parent::createItem($data);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function deleteItem($id)
@@ -257,6 +324,54 @@ class UserService extends OrmService
         }
 
         return $item;
+    }
+
+    /**
+     * Checks if a subscriber with the given email exists.
+     *
+     * @param string $email The email address.
+     *
+     * @return Entity|null The subscriber entity with the given email, or null if not found.
+     */
+    protected function checkSubscriber($email)
+    {
+        try {
+            $item = $this->container->get('orm.manager')
+                ->getRepository($this->entity, $this->origin)
+                ->findOneBy(sprintf('email = "%s"', $email));
+
+            return $item;
+        } catch (EntityNotFoundException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Checks if the provided user groups differ from the existing ones.
+     *
+     * @param Entity $item The subscriber entity.
+     * @param array $newUserGroups The new user groups to compare.
+     * @return bool True if the user groups differ, false otherwise.
+     */
+    protected function areUserGroupsDifferent($item, array $newUserGroups)
+    {
+        // Get the current user groups from the item, defaulting to an empty array if none.
+        $currentUserGroups = $item->user_groups ?? [];
+
+        // Create copies to avoid modifying the original arrays.
+        $currentToCompare = $currentUserGroups;
+        $newToCompare     = $newUserGroups;
+
+        // Sort the arrays for consistent comparison.
+        if (is_array($currentToCompare)) {
+            sort($currentToCompare);
+        }
+        if (is_array($newToCompare)) {
+            sort($newToCompare);
+        }
+
+        // Compare the sorted arrays to check for differences.
+        return $currentToCompare !== $newToCompare;
     }
 
     /**

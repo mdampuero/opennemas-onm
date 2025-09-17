@@ -225,6 +225,108 @@ class UserServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests createSubscriber when email provided.
+     */
+    public function testCreateSubscriberWhenSubscriberDoesNotExist()
+    {
+        $data = [
+            'name' => 'flob',
+            'email' => 'flob@garply.com',
+            'type' => 1,
+            'user_groups' => [['user_group_id' => 7, 'status' => 1]]
+        ];
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('email = "flob@garply.com"')
+            ->will($this->throwException(new EntityNotFoundException('User')));
+
+        $this->converter->expects($this->any())->method('objectify')
+            ->with($data)
+            ->willReturn($data);
+        $this->em->expects($this->once())->method('persist');
+        $this->metadata->expects($this->once())->method('getId')
+            ->willReturn(['id' => 1]);
+
+        $item = $this->service->createSubscriber($data);
+
+        $this->assertEquals('flob@garply.com', $item->email);
+        $this->assertEquals('flob', $item->name);
+    }
+
+    /**
+     * Tests createSubscriber when type is needed to convert.
+     */
+    public function testCreateSubscriberConvertsTypeWhenNeeded()
+    {
+        $data = [
+            'email' => 'existing@example.com',
+            'user_groups' => [['user_group_id' => 5, 'status' => 1]]
+        ];
+
+        $existingItem = new Entity([
+            'id' => 2,
+            'email' => 'existing@example.com',
+            'type' => 0,
+            'name' => 'existing user'
+        ]);
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->with('email = "existing@example.com"')
+            ->willReturn($existingItem);
+
+        $this->em->expects($this->atLeastOnce())->method('persist');
+
+        $item = $this->service->createSubscriber($data);
+
+        $this->assertEquals('existing@example.com', $item->email);
+    }
+
+    /**
+     * Test createSubscriber No email provided should throw exception
+     *
+     * @expectedException \Api\Exception\CreateItemException
+     */
+    public function testCreateSubscriberWhenNoEmail()
+    {
+        $data = ['name' => 'flob'];
+
+        $this->service->createSubscriber($data);
+    }
+
+    /**
+     * Test createSubscriber Empty email should throw exception
+     *
+     * @expectedException \Api\Exception\CreateItemException
+     */
+    public function testCreateSubscriberWhenEmptyEmail()
+    {
+        $data = [
+            'name' => 'flob',
+            'email' => ''
+        ];
+
+        $this->service->createSubscriber($data);
+    }
+
+    /**
+     * Test createSubscriber Empty email should throw exception
+     *
+     * @expectedException \Api\Exception\CreateItemException
+     */
+    public function testCreateSubscriberRethrowsCreateExistingItemException()
+    {
+        $data = ['email' => 'test@example.com'];
+
+        $this->repository->expects($this->once())->method('findOneBy')
+            ->will($this->throwException(new \Api\Exception\CreateExistingItemException('Item already exists')));
+
+        $this->expectException(\Api\Exception\CreateExistingItemException::class);
+        $this->expectExceptionMessage('Item already exists');
+
+        $this->service->createSubscriber($data);
+    }
+
+    /**
      * Tests deleteItem when no error.
      */
     public function testDeleteItem()

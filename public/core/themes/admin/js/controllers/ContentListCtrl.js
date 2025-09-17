@@ -131,7 +131,9 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
         placeholder: {
           title: 'title ~ "%[value]%"',
           fk_content_categories: 'fk_content_categories regexp' +
-            '"^[value]($|,)|,[value],|(^|,)[value]$"'
+            '"^[value]($|,)|,[value],|(^|,)[value]$"',
+          starttime: 'starttime >= "[value]"',
+          endtime: 'endtime <= "[value]"',
         }
       });
 
@@ -773,6 +775,17 @@ angular.module('BackendApp.controllers').controller('ContentListCtrl', [
       var keys = [ 'title' ];
 
       return lz.localize($scope.contents, keys, $scope.extra.options.default);
+    };
+
+    $scope.applyFilter = function() {
+      $scope.criteria = angular.copy($scope.tempCriteria);
+    };
+
+    $scope.cancelFilter = function() {
+      $scope.tempCriteria.starttime = null;
+      $scope.tempCriteria.endtime = null;
+
+      $scope.criteria = angular.copy($scope.tempCriteria);
     };
   }
 ]);

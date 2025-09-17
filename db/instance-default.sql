@@ -1133,6 +1133,7 @@ CREATE TABLE `prompts` (
   `mode` varchar(32) NOT NULL,
   `name` text NOT NULL,
   `role` text,
+  `debugging` tinyint(1) DEFAULT '0',
   `field` varchar(32) DEFAULT NULL,
   `tone` text,
   `prompt` text,
