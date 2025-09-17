@@ -130,11 +130,11 @@ class EventService extends ContentService
      */
     private function replaceEventStartDateQuickFilters($criteria)
     {
-        $todayStart = (new \DateTimeImmutable('today'))->setTime(0, 0, 0);
-        $tomorrowStart = $todayStart->modify('+1 day');
+        $todayStart            = (new \DateTimeImmutable('today'))->setTime(0, 0, 0);
+        $tomorrowStart         = $todayStart->modify('+1 day');
         $dayAfterTomorrowStart = $tomorrowStart->modify('+1 day');
-        $weekStart = $todayStart->modify('monday this week');
-        $nextWeekStart = $weekStart->modify('+1 week');
+        $weekStart             = $todayStart->modify('monday this week');
+        $nextWeekStart         = $weekStart->modify('+1 week');
 
         $filters = [
             self::QUICK_FILTER_TODAY => [
@@ -169,8 +169,8 @@ class EventService extends ContentService
                 $pattern,
                 sprintf(
                     '(start_date_meta.meta_value >= "%s" AND start_date_meta.meta_value < "%s")',
-                    $range['start']->format('Y-m-d H:i:s'),
-                    $range['end']->format('Y-m-d H:i:s')
+                    $range['start']->format('Y-m-d'),
+                    $range['end']->format('Y-m-d')
                 ),
                 $criteria,
                 1
