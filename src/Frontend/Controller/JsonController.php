@@ -208,7 +208,7 @@ class JsonController extends FrontendController
         $baseOql = sprintf(
             'select * from contents'
             . ' %s %s'
-            . ' where content_type_name = "article"'
+            . ' where content_type_name = "article" and content_status=1 and in_litter=0 '
             . ' %s',
             $data['categoryJoin'],
             $data['tagJoin'],
