@@ -60,7 +60,7 @@ class EventController extends ContentController
         $events = $this->get('core.helper.event')->getEventsGroupedByType();
 
         $extraData = parent::getExtraData($items);
-        $years = [];
+        $years     = [];
 
         if (isset($extraData['years']) && is_array($extraData['years'])) {
             $years = $extraData['years'];
