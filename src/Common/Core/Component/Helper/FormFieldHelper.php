@@ -106,7 +106,12 @@ class FormFieldHelper
                 'name' => 'bodyLink',
                 'title' => _('External link'),
                 'module' => false,
-                'available' => [ 'article', 'opinion', 'event' ]
+                'available' => [
+                    'article',
+                    'opinion',
+                    'event',
+                    'obituary',
+                ]
             ],
             [
                 'name' => 'schedule',
