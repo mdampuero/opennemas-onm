@@ -111,6 +111,7 @@ class FormFieldHelper
                     'opinion',
                     'event',
                     'company',
+                    'poll',
                 ]
             ],
             [
