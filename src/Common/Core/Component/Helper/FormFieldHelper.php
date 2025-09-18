@@ -113,6 +113,8 @@ class FormFieldHelper
                     'company',
                     'poll',
                     'staticPage',
+                    'letter',
+                    'obituary',
                 ]
             ],
             [
