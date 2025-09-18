@@ -91,6 +91,22 @@ class PromptController extends ApiController
             'field'
         ]);
 
+        $items = array_map(function ($item) {
+            if (is_array($item)) {
+                $item['resource'] = 'prompt';
+            }
+
+            return $item;
+        }, $items);
+
+        $itemsManager = array_map(function ($item) {
+            if (is_array($item)) {
+                $item['resource'] = 'promptManager';
+            }
+
+            return $item;
+        }, $itemsManager);
+
         $this->roleFilters = ($request->query->get('field')) ? ['field' => $request->query->get('field')] : null;
         return [
             'items'      => array_merge($items, $itemsManager),

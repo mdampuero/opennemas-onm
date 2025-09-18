@@ -27,6 +27,13 @@ class AIHelper
      */
     protected $appLog;
 
+     /**
+     * Cache of prompt data indexed by resource and identifier.
+     *
+     * @var array<string, array>
+     */
+    protected $promptCache = [];
+
     /**
      * The error log service.
      *
@@ -698,6 +705,76 @@ EOT;
     }
 
     /**
+     * Retrieves the latest prompt data based on a stored reference.
+     *
+     * @param array|null $reference The stored reference containing the prompt identifier and origin.
+     *
+     * @return array|null The prompt data or null if it cannot be resolved.
+     */
+    public function getPromptByReference($reference): ?array
+    {
+        if (empty($reference) || !is_array($reference)) {
+            return null;
+        }
+
+        if (isset($reference['prompt'])) {
+            if (!isset($reference['resource'])) {
+                $reference['resource'] = isset($reference['instances']) ? 'promptManager' : 'prompt';
+            }
+
+            return $reference;
+        }
+
+        $id = (int) ($reference['id'] ?? 0);
+
+        if ($id <= 0) {
+            return null;
+        }
+
+        $resource = $reference['resource'] ?? (isset($reference['instances']) ? 'promptManager' : 'prompt');
+        $cacheKey = sprintf('%s:%d', $resource, $id);
+
+        if (array_key_exists($cacheKey, $this->promptCache)) {
+            return $this->promptCache[$cacheKey];
+        }
+
+        $data = null;
+
+        try {
+            if ($resource === 'promptManager') {
+                $prompt = $this->container->get('orm.manager')
+                    ->getRepository('PromptManager')
+                    ->find($id);
+
+                if ($prompt) {
+                    if (method_exists($prompt, 'getData')) {
+                        $data = $prompt->getData();
+                    } elseif (method_exists($prompt, 'toArray')) {
+                        $data = $prompt->toArray();
+                    }
+                }
+            } else {
+                $promptService = $this->container->get('api.service.prompt');
+                $entity        = $promptService->getItem($id);
+                $data          = $promptService->responsify($entity);
+            }
+        } catch (\Throwable $e) {
+            $data = null;
+        }
+
+        if (!is_array($data) || empty($data)) {
+            $this->promptCache[$cacheKey] = null;
+
+            return null;
+        }
+
+        $data['resource'] = $resource;
+
+        return $this->promptCache[$cacheKey] = $data;
+    }
+
+
+    /**
      * Sends a message by preparing settings, generating a prompt, and calling the appropriate engine.
      *
      * @param array    $messages  Contains the user's input and other necessary information for the prompt.
@@ -868,7 +945,7 @@ EOT;
      *
      * @return array The array with transformed data or the original array if no transformation occurs.
      */
-    public function transform($data = [], $fields = ['body', 'description', 'title', 'title_int'])
+    public function transform($data = [], $fields = ['body', 'description', 'title'])
     {
         $settings = $this->getCurrentSettings();
 
@@ -880,9 +957,21 @@ EOT;
 
         foreach ($fields as $field) {
             $promptKey = $field . 'Prompt';
+
+            if (!empty($data[$promptKey])) {
+                $resolvedPrompt = $this->getPromptByReference($data[$promptKey]);
+
+                if (!empty($resolvedPrompt)) {
+                    $data[$promptKey] = $resolvedPrompt;
+                }
+            } else {
+                continue;
+            }
+
+
             $toneKey   = $field . 'Tone';
 
-            if (empty($data[$promptKey]['prompt'] ?? null) || empty($data[$field] ?? null)) {
+            if (!is_array($data[$promptKey]) || empty($data[$promptKey]['prompt']) || empty($data[$field] ?? null)) {
                 continue;
             }
 
@@ -928,7 +1017,7 @@ EOT;
                 $dataLog['messages'] = $settings['messages'];
             }
             $this->container->get('core.helper.' . $settings['engine'])->setDataLog($dataLog);
-
+           
             $response = $this->container->get('core.helper.' . $settings['engine'])
                 ->sendMessage($settings, $this->getStructureResponse());
 
@@ -944,6 +1033,9 @@ EOT;
                 );
             }
         }
+
+        // Set value Title int
+        $data['title_int'] = $data['title'];
 
         return $data;
     }
