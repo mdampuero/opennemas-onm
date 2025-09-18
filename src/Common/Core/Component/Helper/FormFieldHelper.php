@@ -110,7 +110,7 @@ class FormFieldHelper
                     'article',
                     'opinion',
                     'event',
-                    'obituary',
+                    'company',
                 ]
             ],
             [
