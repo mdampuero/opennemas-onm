@@ -1,7 +1,7 @@
 <ui-select class="{$class}" name="dates" ng-model="{$ngModel}" theme="select2" search-enabled="false" >
   <ui-select-match>
     <strong>{t}Date{/t}:</strong> [% $select.selected.name %]
-    <span ng-if="$select.selected.group !== 'Quick filters'">
+    <span ng-if="$select.selected.filter !== 'Quick'">
     [% $select.selected.group %]
     </span>
   </ui-select-match>

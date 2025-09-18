@@ -145,19 +145,22 @@ class EventController extends ContentController
 
         $quickFilters = [
             [
-                'name'  => _('Today'),
-                'value' => EventService::QUICK_FILTER_TODAY,
-                'group' => $groupLabel,
+                'name'   => _('Today'),
+                'value'  => EventService::QUICK_FILTER_TODAY,
+                'filter' => 'Quick',
+                'group'  => $groupLabel,
             ],
             [
-                'name'  => _('Tomorrow'),
-                'value' => EventService::QUICK_FILTER_TOMORROW,
-                'group' => $groupLabel,
+                'name'   => _('Tomorrow'),
+                'value'  => EventService::QUICK_FILTER_TOMORROW,
+                'filter' => 'Quick',
+                'group'  => $groupLabel,
             ],
             [
-                'name'  => _('This week'),
-                'value' => EventService::QUICK_FILTER_THIS_WEEK,
-                'group' => $groupLabel,
+                'name'   => _('This week'),
+                'value'  => EventService::QUICK_FILTER_THIS_WEEK,
+                'filter' => 'Quick',
+                'group'  => $groupLabel,
             ],
         ];
 
