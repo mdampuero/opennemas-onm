@@ -112,6 +112,7 @@ class FormFieldHelper
                     'event',
                     'company',
                     'poll',
+                    'staticPage',
                 ]
             ],
             [
