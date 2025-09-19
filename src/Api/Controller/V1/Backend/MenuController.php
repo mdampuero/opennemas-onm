@@ -107,7 +107,7 @@ class MenuController extends ApiController
             'module' => 'LIBRARY_MANAGER',
             'title' => 'Archive',
             'route' => 'frontend_archive',
-            'params' => [ 'component' => 'content' ]
+            'params' => ['component' => 'content']
         ],
     ];
 
@@ -182,7 +182,7 @@ class MenuController extends ApiController
         $this->get('core.locale')->setContext('frontend');
 
         $oql = 'content_type_name = "static_page" and in_litter = 0 and content_status = 1 '
-           . ' order by created desc';
+            . ' order by created desc';
 
         $response = $this->get('api.service.content')->getListWithoutLocalizer($oql);
         $this->get('core.locale')->setContext($context);
@@ -220,7 +220,7 @@ class MenuController extends ApiController
         $this->get('core.locale')->setContext('frontend');
 
         $oql = 'visible = 1 and enabled = 1'
-        . ' order by title asc';
+            . ' order by title asc';
 
         $categories = $this->get('api.service.category')->getListWithoutLocalizer($oql);
         $this->get('core.locale')->setContext($context);
@@ -246,7 +246,7 @@ class MenuController extends ApiController
         return $menuPositions;
     }
 
-     /**
+    /**
      * Returns the list of l10n keys.
      *
      * @return array The list of l10n keys.
@@ -263,7 +263,7 @@ class MenuController extends ApiController
      */
     private function getModulePages()
     {
-        $default = [ ['title' => _("Frontpage"),'link' => "/"] ];
+        $default = [['title' => _("Frontpage"), 'link' => "/"]];
         $modules = array_filter(array_map(function ($page) {
             if (!$this->get('core.security')->hasExtension($page['module'])) {
                 return null;
@@ -273,7 +273,7 @@ class MenuController extends ApiController
                 ltrim($this->get('router')->generate($page['route'], $page['params']), '/') :
                 ltrim($this->get('router')->generate($page['route']), '/');
 
-            return [ 'title' => _($page['title']), 'link'  => $link ];
+            return ['title' => _($page['title']), 'link'  => $link];
         }, $this->modulePages));
 
         return array_merge($default, $modules);
@@ -302,7 +302,7 @@ class MenuController extends ApiController
 
         foreach ($data['menu_items'] as &$item) {
             if (empty($item['locale'])) {
-                $item['locale'] = $defaultLocale; // Establece el locale por defecto
+                $item['locale'] = $defaultLocale;
             }
         }
 
@@ -310,6 +310,30 @@ class MenuController extends ApiController
 
         $msg = $this->get('core.messenger');
         $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Validates a single external link.
+     *
+     * @param Request $request The request object.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function validateLinkAction(Request $request)
+    {
+        $link   = $request->query->get('link', '');
+        $msg    = $this->get('core.messenger');
+        $invalid = $this->get('core.helper.link')->validateExternalLinks([
+            ['type' => 'external', 'link_name' => $link],
+        ]);
+
+        if (!empty($invalid)) {
+            $msg->add(sprintf(_('External link inválido: %s'), $link), 'error', 400);
+        } else {
+            $msg->add(_('Link is valid'), 'success');
+        }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }

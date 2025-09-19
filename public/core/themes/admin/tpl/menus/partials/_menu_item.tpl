@@ -14,7 +14,16 @@
         <input data-nodrag class="menu-item-title" ng-model="item.title" type="text">
       </div>
       <div ng-if="item.type === 'external'" class="col-sm-9 col-lg-9">
-        <input data-nodrag class="menu-item-link" ng-model="item.link_name" type="text">
+        <div style="display:flex;align-items:center;">
+          <input data-nodrag class="menu-item-link"
+                 ng-model="item.link_name" type="text"
+                 ng-blur="validateExternalLink(item)"
+                 ng-focus="resetExternalLink(item)"
+                 ng-class="{ 'invalid': item.linkValid === false }">
+          <i class="fa fa-spinner fa-spin text-muted m-l-5 m-r-15" ng-if="item.validating"></i>
+          <i class="fa fa-check text-success m-l-5 m-r-15" ng-if="!item.validating && item.linkValid === true"></i>
+          <i class="fa fa-times text-danger m-l-5 m-r-15" ng-if="!item.validating && item.linkValid === false"></i>
+        </div>
       </div>
     </div>
   </div>

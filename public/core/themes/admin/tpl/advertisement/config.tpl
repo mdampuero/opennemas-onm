@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
-<form action="{url name=admin_ads_config}" method="POST" ng-controller="AdvertisementConfigCtrl" ng-init="init({json_encode($configs['smart_ad_server']['domain'])|clear_json}, {json_encode($configs['smart_ad_server']['tags_format'])|clear_json}, {json_encode($configs['traffective_config'])|clear_json});">
+<form action="{url name=admin_ads_config}" method="POST" ng-controller="AdvertisementConfigCtrl" ng-init="init({json_encode($configs['smart_ad_server']['domain'])|clear_json}, {json_encode($configs['smart_ad_server']['tags_format'])|clear_json}, {json_encode($configs['traffective_config'])|clear_json}, {json_encode($extra_ads_txt)|clear_json});">
   <div class="page-navbar actions-navbar">
     <div class="navbar navbar-inverse">
       <div class="navbar-inner">
@@ -402,14 +402,27 @@
             <label class="form-label">
               {t}Authorized Digital Sellers from inheritance{/t}
             </label>
-            {foreach from=$extra_ads_txt item=ads_container}
-            <div class="controls">
-              <label class="form-label">
-                {$ads_container->name}
-              </label>
-              <textarea class="form-control" disabled rows="10">{$ads_container->ads_lines}</textarea>
+            <div class ="controls">
+              <div class="ng-cloak" ui-tree="treeOptions">
+                <div ng-model="extraads" ui-tree-nodes="">
+                  <div ng-repeat="extraad in extraads" ui-tree-node>
+                  <span ui-tree-handle style="position: absolute; left: 0; z-index: 10; cursor: move;">
+                    <span class="angular-ui-tree-icon"></span>
+                  </span>
+                  <div style="position: relative; padding-left: 30px;">
+                    <label class="form-label">
+                      [% extraad.name %]
+                    </label>
+                    <textarea class="form-control" disabled rows="10">
+                      [% extraad.ads_lines %]
+                    </textarea>
+                    <input type="hidden" id="ads_txt_position" name="ads_txt_position"
+                      ng-value="getAdPositions(extraad.id)">
+                  </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            {/foreach}
           </div>
           {/if}
         {/acl}

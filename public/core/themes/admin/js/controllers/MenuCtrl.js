@@ -18,8 +18,8 @@
      *   Handle actions for article inner.
      */
     .controller('MenuCtrl', [
-      '$controller', '$scope', '$timeout', 'http',
-      function($controller, $scope, $timeout, http) {
+      '$controller', '$scope', '$timeout', '$q', 'http', 'messenger',
+      function($controller, $scope, $timeout, $q, http, messenger) {
         // Initialize the super class and extend it.
         $.extend(this, $controller('RestInnerCtrl', { $scope: $scope }));
 
@@ -103,6 +103,84 @@
          * @type {Object}
          */
         $scope.search = {};
+
+        $scope.flags = $scope.flags || {};
+        $scope.flags.invalidExternalLink = false;
+
+        function getAllItems() {
+          var items = [].concat($scope.parents || []);
+
+          angular.forEach($scope.childs || {}, function(child) {
+            items = items.concat(child);
+          });
+
+          return items;
+        }
+
+        function updateInvalidFlag() {
+          var items = getAllItems();
+
+          $scope.flags.invalidExternalLink = items.some(function(it) {
+            return it.type === 'external' && it.linkValid === false;
+          });
+        }
+
+        $scope.validateExternalLink = function(item) {
+          if (!item || !item.link_name) {
+            item.linkValid  = null;
+            item.validating = false;
+            updateInvalidFlag();
+            return $q.resolve();
+          }
+
+          item.validating = true;
+          return http.get({
+            name: 'api_v1_backend_menu_validate_link',
+            params: { link: item.link_name }
+          }).then(function() {
+            item.linkValid  = true;
+            item.validating = false;
+            updateInvalidFlag();
+          }, function(response) {
+            item.linkValid  = false;
+            item.validating = false;
+            updateInvalidFlag();
+            messenger.post(response.data);
+          });
+        };
+
+        $scope.resetExternalLink = function(item) {
+          item.linkValid  = null;
+          item.validating = false;
+          updateInvalidFlag();
+        };
+
+        var baseSaveItem = $scope.saveItem;
+
+        $scope.saveItem = function() {
+          var items = getAllItems();
+          var pending = [];
+
+          items.forEach(function(it) {
+            if (it.type === 'external' && it.linkValid !== true) {
+              pending.push($scope.validateExternalLink(it));
+            }
+          });
+
+          if (pending.length === 0) {
+            baseSaveItem();
+            return;
+          }
+
+          $scope.flags.http.saving = true;
+          $q.all(pending).then(function() {
+            if (!$scope.flags.invalidExternalLink) {
+              baseSaveItem();
+            } else {
+              $scope.flags.http.saving = false;
+            }
+          });
+        };
 
         /**
          * @memberOf MenuCtrl
@@ -380,6 +458,7 @@
           $scope.parents = $scope.parents.filter(function(parent) {
             return parent.pk_item !== item.pk_item;
           });
+          updateInvalidFlag();
         };
 
         /**

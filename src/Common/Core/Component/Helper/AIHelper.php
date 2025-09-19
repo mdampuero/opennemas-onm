@@ -170,6 +170,12 @@ EOT;
         'openrouter' => 'OpenRouter',
     ];
 
+    /**
+     * Critical instruction added to all prompts to handle uncertain answers.
+     */
+    protected $errorDirective = 'IMPORTANTÍSIMO: Si no puedes proporcionar una respuesta certera '
+        . 'o por cualquier motivo no puedes responder, responde únicamente con "ERROR".';
+
 
     /**
      * Initializes the AIHelper class with the provided service container and loggers.
@@ -374,6 +380,7 @@ EOT;
      */
     protected function insertInstructions($instructions = [], $role = '')
     {
+        $instructions = array_merge([['value' => $this->errorDirective]], $instructions);
         $instructionsString = '';
         if (count($instructions)) {
             $counter = 0;
@@ -399,6 +406,7 @@ EOT;
      */
     protected function getStringtInstructions($instructions = [])
     {
+        $instructions = array_merge([['value' => $this->errorDirective]], $instructions);
         $instructionsString = '';
         if (count($instructions)) {
             $counter = 0;
@@ -429,10 +437,10 @@ EOT;
     {
         $this->getInstructions();
 
-        $instructionsString = '';
-        if ($instructions && count($instructions)) {
-            $counter = 0;
+        $counter = 1;
+        $lines = [$counter . '. ' . $this->errorDirective];
 
+        if ($instructions && count($instructions)) {
             $mapped = array_map(function ($item) use (&$counter) {
                 $instruction = $this->getInstructionsById($item);
                 if (!($instruction['value'] ?? false)) {
@@ -444,9 +452,11 @@ EOT;
 
             $filtered = array_filter($mapped);
             if (!empty($filtered)) {
-                $instructionsString = implode("\n", $filtered);
+                $lines = array_merge($lines, $filtered);
             }
         }
+
+        $instructionsString = implode("\n", $lines);
 
         if ($instructionsString) {
             $instructionsString = sprintf("## Sigue estas reglas estrictamente:\n%s", $instructionsString);
@@ -604,10 +614,60 @@ EOT;
         return $template;
     }
 
-    public function generateResourceByContent($pkContent): array
+    /**
+     * Converts a value into an array, recursively handling objects.
+     *
+     * @param mixed $value Value to convert.
+     *
+     * @return mixed The converted array or original scalar value.
+     */
+    protected function toArray($value)
+    {
+        if (is_array($value)) {
+            foreach ($value as $k => $v) {
+                $value[$k] = $this->toArray($v);
+            }
+            return $value;
+        }
+
+        if (is_object($value)) {
+            if ($value instanceof \JsonSerializable) {
+                $value = $value->jsonSerialize();
+            } elseif (method_exists($value, 'toArray')) {
+                $value = $value->toArray();
+            } elseif ($value instanceof \Traversable) {
+                $value = iterator_to_array($value);
+            } else {
+                $value = (array) $value;
+            }
+
+            $normalized = [];
+            foreach ($value as $key => $val) {
+                $cleanKey = is_string($key) ? preg_replace('/^\x00(?:\*|\w+)\x00/', '', $key) : $key;
+                $normalized[$cleanKey] = $this->toArray($val);
+            }
+
+            if (isset($normalized['data']) && is_array($normalized['data']) &&
+                (array_key_exists('stored', $normalized) || array_key_exists('origin', $normalized))
+            ) {
+                return $normalized['data'];
+            }
+
+            return $normalized;
+        }
+
+        return $value;
+    }
+
+    public function generateResource($source): array
     {
         try {
-            $content  = $this->container->get("api.service.content")->getItem($pkContent);
+            if (is_scalar($source)) {
+                $content = $this->container->get("api.service.content")->getItem($source);
+            } else {
+                $content = is_object($source) ? $source : (object) $source;
+            }
+
             $category = [];
 
             if (!empty($content->categories) && isset($content->categories[0])) {
@@ -618,49 +678,19 @@ EOT;
                 }
             }
 
-            return [
-                'content' => [
-                    'id'          => $content->id ?? '',
-                    'title_int'   => $content->title_int ?? '',
-                    'title'       => $content->title ?? '',
-                    'description' => $content->description ?? '',
-                    'body'        => $content->body ?? '',
-                    'slug'        => $content->slug ?? ''
-                ],
-                'category' => [
-                    'name' => $category->name ?? '',
-                ]
-            ];
-        } catch (\Throwable $e) {
-            return [];
-        }
-    }
+            $contentData = $this->toArray($content);
+            if (is_object($content) && isset($content->id)) {
+                $contentData['id'] = $content->id;
+            }
 
-    public function generateResourceByImporter($data): array
-    {
-        try {
-            $category = [];
-
-            if (!empty($data['categories']) && isset($data['categories'][0])) {
-                try {
-                    $category = $this->container->get("api.service.category")->getItem($data['categories'][0]);
-                } catch (\Throwable $e) {
-                    $category = [];
-                }
+            $categoryData = !empty($category) ? $this->toArray($category) : [];
+            if (!empty($category) && is_object($category) && isset($category->id)) {
+                $categoryData['id'] = $category->id;
             }
 
             return [
-                'content' => [
-                    'id'          => $data['id'] ?? '',
-                    'title_int'   => $data['title_int'] ?? '',
-                    'title'       => $data['title'] ?? '',
-                    'description' => $data['description'] ?? '',
-                    'body'        => $data['body'] ?? '',
-                    'slug'        => $data['slug'] ?? ''
-                ],
-                'category' => [
-                    'name' => $category->name ?? '',
-                ]
+                'content'  => $contentData,
+                'category' => $categoryData,
             ];
         } catch (\Throwable $e) {
             return [];
@@ -680,7 +710,7 @@ EOT;
         if (!empty($pkContent) && in_array($messages['promptSelected']['mode_or'], ['Edit', 'Agency'])) {
             $messages['promptInput'] = $this->replaceContentPlaceholders(
                 $messages['promptInput'] ?? '',
-                $this->generateResourceByContent($pkContent)
+                $this->generateResource($pkContent)
             );
         }
 
@@ -720,12 +750,19 @@ EOT;
             /**
              * Log the selected prompt details for debugging purposes.
              */
+            if (!empty($messages['promptSelected']['debugging'])) {
+                $dataLog['messages'] = $data['messages'];
+            }
             $this->container->get('core.helper.' . $data['engine'])->setDataLog($dataLog);
-            
+
             $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
                 $data,
                 $this->getStructureResponse()
             );
+
+            if (!empty($messages['promptSelected']['debugging'])) {
+                $response['prompt'] = $data['messages'][0]['content'] ?? '';
+            }
 
             $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
         } else {
@@ -734,7 +771,7 @@ EOT;
 
         if (empty($response['error'])) {
             $this->generateWords($response);
-            $this->saveAction($data, $response);
+            $this->saveAction($data, $response, $messages['promptSelected']['debugging'] ?? false);
         } else {
             $this->errorLog->error(
                 'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
@@ -812,7 +849,7 @@ EOT;
 
         if (empty($response['error'])) {
             $this->generateWords($response);
-            $this->saveAction($data, $response);
+            $this->saveAction($data, $response, false);
         } else {
             $this->errorLog->error(
                 'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
@@ -831,7 +868,7 @@ EOT;
      *
      * @return array The array with transformed data or the original array if no transformation occurs.
      */
-    public function transform($data = [], $fields = ['title', 'title_int', 'description', 'body'])
+    public function transform($data = [], $fields = ['body', 'description', 'title', 'title_int'])
     {
         $settings = $this->getCurrentSettings();
 
@@ -853,7 +890,7 @@ EOT;
             $prompt = $data[$promptKey]['prompt'];
             $tone   = $data[$toneKey] ?? '';
 
-            $prompt = $this->replaceContentPlaceholders($prompt, $this->generateResourceByImporter($data));
+            $prompt = $this->replaceContentPlaceholders($prompt, $this->generateResource($data));
 
             // If empty tone assign default prompt tone
             if (empty($tone)) {
@@ -887,6 +924,9 @@ EOT;
             ])]];
 
             // Log the selected prompt details for debugging purposes.
+            if (!empty($data[$promptKey]['debugging'])) {
+                $dataLog['messages'] = $settings['messages'];
+            }
             $this->container->get('core.helper.' . $settings['engine'])->setDataLog($dataLog);
 
             $response = $this->container->get('core.helper.' . $settings['engine'])
@@ -895,7 +935,7 @@ EOT;
             $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
             if (empty($response['error']) && !empty($response['result'])) {
                 $this->generateWords($response);
-                $this->saveAction($settings, $response);
+                $this->saveAction($settings, $response, $data[$promptKey]['debugging'] ?? false);
                 $data[$field] = $response['result'];
             } else {
                 $this->errorLog->error(
@@ -942,17 +982,16 @@ EOT;
      *
      * Prepares the data, formats the required information, and calls an external service to create a new item.
      *
-     * @param array $params The parameters containing messages and other relevant data.
-     * @param array $response The response data, including the result, token counts, and original response.
+     * @param array $params        The parameters containing messages and other relevant data.
+     * @param array $response      The response data, including the result, token counts, and original response.
+     * @param bool  $debugPrompt   Whether the selected prompt has debugging enabled.
      *
      * @return void This method does not return anything. It performs a save operation via an external service.
      */
-    protected function saveAction($params, $response)
+    protected function saveAction($params, $response, $debugPrompt = false)
     {
-        $messages = $params['messages'] ?? [];
-
         $messages = [
-            'request' => $params['messages'] ?? '',
+            'request'  => $params['messages'] ?? '',
             'response' => $response['original'] ?? ''
         ];
 
@@ -979,6 +1018,11 @@ EOT;
          */
         $dataLog             = $this->container->get('core.helper.' . $params['engine'])->getDataLog();
         $dataLog['response'] = $tokens;
+
+        if ($debugPrompt) {
+            $dataLog['response']['result'] = $response['result'] ?? '';
+        }
+
         $this->appLog->info('ONMAI - ' . __METHOD__, $dataLog);
 
         $this->container->get('api.service.ai')->createItem($data);

@@ -108,8 +108,22 @@ class DeepSeekHelper
 
                     // Simulated response for testing purposes (optional)
                     //$response = $this->simulResponse();
+                    $normalized = $this->normalizeResponse($response, $struct);
+                    if (trim($normalized['result']) === 'ERROR') {
+                        if ($i === $this->getMaxRetries() - 1) {
+                            $normalized['error'] = 'ERROR';
+                            $normalized['result'] = '';
+                            return $normalized;
+                        }
+                        $this->errorLog->error(
+                            'ONMAI - ERROR result - Retry ' . ($i + 1),
+                            $request
+                        );
+                        sleep($this->retryDelay);
+                        continue;
+                    }
 
-                    return $this->normalizeResponse($response, $struct);
+                    return $normalized;
                 } catch (ClientException $e) {
                     if ($i === $this->getMaxRetries() - 1) {
                         throw $e;
