@@ -268,7 +268,7 @@ class NewsMLComponentTextTaquilla extends NewsML
         $end = $data->xpath('//identified-content/event/@end-date');
 
         if (is_array($end) && !empty($end)) {
-            $endDate = \DateTime::createFromFormat('Ymd\THisP', $end[0]);
+            $endDate = \DateTime::createFromFormat('Ymd', $end[0]);
 
             return $endDate;
         }
@@ -411,7 +411,7 @@ class NewsMLComponentTextTaquilla extends NewsML
 
         $this->bag['content_type_name']    = $this->getContentTypeName($data);
         $this->bag['event_start_date']     = $eventStartDate->format('Y-m-d');
-        $this->bag['event_start_hour']     = $eventStartDate->format('h:i');
+        $this->bag['event_start_hour']     = $eventStartDate->format('H:i');
         $this->bag['event_website']        = $this->getEventWebsite($data);
         $this->bag['event_info']           = $this->getEventInfo($data);
         $this->bag['event_place']          = $this->getEventPlace($data);
@@ -430,7 +430,6 @@ class NewsMLComponentTextTaquilla extends NewsML
 
         if ($eventEndDate && $eventEndDate != $eventStartDate) {
             $this->bag['event_end_date'] = $eventEndDate->format('Y-m-d');
-            $this->bag['event_end_hour'] = $eventEndDate->format('h:i');
         }
 
         // Parse taquilla id to Opennemas event type id
