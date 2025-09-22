@@ -644,10 +644,24 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->im, 'thumbnail');
         $method->setAccessible(true);
 
-        $this->image->expects($this->once())->method('thumbnail')
-            ->with(new Box(4298, 8456));
+        $size = $this->getMockBuilder('Size')
+            ->setMethods([ 'getHeight', 'getWidth' ])
+            ->getMock();
 
-        $method->invokeArgs($this->im, [ [ 4298, 8456 ] ]);
+        $this->image->expects($this->any())->method('getSize')
+            ->willReturn($size);
+
+        $size->expects($this->any())->method('getWidth')
+            ->willReturn(500);
+
+        $size->expects($this->any())->method('getHeight')
+            ->willReturn(1000);
+
+
+        $this->image->expects($this->once())->method('thumbnail')
+            ->with(new Box(4298, 4298));
+
+        $method->invokeArgs($this->im, [ [ 4298, 4298 ] ]);
     }
 
     /**

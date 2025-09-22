@@ -92,10 +92,10 @@
                 <div class="controls">
                   <div class="input-group">
                     <select id="image_resolution" name="image_resolution" ng-model="config.image_resolution">
-                      <option value="1920x1920">1920x1080px (16:9)</option>
-                      <option value="1600x1600">1600x900px (16:9)</option>
-                      <option value="1366x1366">1366x768px (16:9)</option>
-                      <option value="1280x1280">1280x720px (16:9)</option>
+                      <option value="1920x1080">1920x1080px (16:9)</option>
+                      <option value="1600x900">1600x900px (16:9)</option>
+                      <option value="1366x768">1366x768px (16:9)</option>
+                      <option value="1280x720">1280x720px (16:9)</option>
                       <option value="1600x1200">1600x1200px (4:3)</option>
                       <option value="1400x1050">1400x1050px (4:3)</option>
                       <option value="1280x960">1280x960px (4:3)</option>
