@@ -12,8 +12,11 @@
    *   Detects ad blockers and show modal.
    */
   angular.module('BackendApp.controllers').controller('AdBlockCtrl', [
-    '$uibModal', '$scope',
-    function ($uibModal, $scope) {
+    '$controller', '$uibModal', '$scope',
+    function($controller, $uibModal, $scope) {
+      // Initialize the super class and extend it.
+      $.extend(this, $controller('ContentListCtrl', { $scope: $scope }));
+
       // Initialize add block
       var fuckAdBlock = new FuckAdBlock({
         debug: false,
@@ -28,8 +31,12 @@
           backdrop: 'static',
           controller: 'ModalCtrl',
           resolve: {
-            template: function() { return null; },
-            success: function() { return null; }
+            template: function() {
+              return null;
+            },
+            success: function() {
+              return null;
+            }
           }
         });
       });

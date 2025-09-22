@@ -73,6 +73,8 @@ class NewsAgencyServerService implements Service
     public function createItem($data)
     {
         try {
+            $data = $this->normalizePromptSelections($data);
+
             $this->config[] = $data;
             $this->dataset->set('news_agency_config', $this->config);
 
@@ -279,6 +281,8 @@ class NewsAgencyServerService implements Service
         }
 
         try {
+            $data = $this->normalizePromptSelections($data);
+
             $this->config[$id - 1] = array_merge($this->config[$id - 1], $data);
 
             $this->dataset->set('news_agency_config', $this->config);
@@ -302,6 +306,7 @@ class NewsAgencyServerService implements Service
             throw new PatchListException('Invalid ids', 400);
         }
 
+        $data = $this->normalizePromptSelections($data);
         $updated = [];
         $items   = [];
 
@@ -335,8 +340,120 @@ class NewsAgencyServerService implements Service
     /**
      * {@inheritdoc}
      */
+    /**
+     * Normalizes the ONM AI prompt selections before persisting them in the configuration.
+     *
+     * @param array $data The data to normalize.
+     *
+     * @return array The normalized data.
+     */
+    protected function normalizePromptSelections(array $data): array
+    {
+        foreach ([
+            'titlePromptSelected',
+            'descriptionPromptSelected',
+            'bodyPromptSelected'
+        ] as $field) {
+            if (!array_key_exists($field, $data)) {
+                continue;
+            }
+
+            $data[$field] = $this->extractPromptReference($data[$field]);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Extracts the prompt reference (id and resource) from the provided selection.
+     *
+     * @param mixed $selection The original prompt selection.
+     *
+     * @return array|string|null The normalized selection or the original value when it cannot be normalized.
+     */
+    protected function extractPromptReference($selection)
+    {
+        if (empty($selection)) {
+            return null;
+        }
+
+        if (!is_array($selection)) {
+            return $selection;
+        }
+
+        if (isset($selection['id'])) {
+            $resource = $selection['resource']
+                ?? (isset($selection['instances']) ? 'promptManager' : 'prompt');
+
+            return [
+                'id'       => $selection['id'],
+                'resource' => $resource,
+            ];
+        }
+
+        return null;
+    }
+
+    /**
+     * Hydrates prompt selections with the latest prompt data for presentation purposes.
+     *
+     * @param array $item The item to hydrate.
+     *
+     * @return array The hydrated item.
+     */
+    protected function hydratePromptSelections(array $item): array
+    {
+        try {
+            $helper = $this->container->get('core.helper.ai');
+        } catch (\Exception $exception) {
+            $helper = null;
+        }
+
+        if (!$helper || !method_exists($helper, 'getPromptByReference')) {
+            return $item;
+        }
+
+        foreach ([
+            'titlePromptSelected',
+            'descriptionPromptSelected',
+            'bodyPromptSelected'
+        ] as $field) {
+            if (empty($item[$field]) || !is_array($item[$field])) {
+                continue;
+            }
+
+            if (isset($item[$field]['prompt'])) {
+                if (!isset($item[$field]['resource'])) {
+                    $item[$field]['resource'] = isset($item[$field]['instances']) ? 'promptManager' : 'prompt';
+                }
+
+                continue;
+            }
+
+            $resolved = $helper->getPromptByReference($item[$field]);
+
+            if (!empty($resolved)) {
+                $item[$field] = $resolved;
+            }
+        }
+
+        return $item;
+    }
+
     public function responsify($item)
     {
+        if (is_array($item)) {
+            if (isset($item[0]) && is_array($item[0])) {
+                foreach ($item as $index => $value) {
+                    $item[$index] = $this->hydratePromptSelections($value);
+                }
+
+                return $item;
+            }
+
+            return $this->hydratePromptSelections($item);
+        }
+
         return $item;
     }
 
@@ -374,6 +491,8 @@ class NewsAgencyServerService implements Service
         }
 
         try {
+            $data = $this->normalizePromptSelections($data);
+
             $this->config[$id - 1] = $data;
 
             $this->dataset->set('news_agency_config', $this->config);

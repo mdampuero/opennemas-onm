@@ -133,10 +133,28 @@ class JsonController extends FrontendController
                 true
             );
 
+            // Clean undesired escape sequences
+            $item->body        = str_replace(["\n", "\t"], '', $item->body);
+            $item->description = str_replace(["\n", "\t"], '', $item->description);
+
+            // Add buy ticket button
+            if (!empty($item->event_tickets_link)) {
+                $item->body = sprintf(
+                    '<a href="%s" title="%s" style="%s">%s</a><span>Precio: <strong>%s€</strong></span> %s',
+                    $item->event_tickets_link,
+                    "COMPRAR ENTRADAS",
+                    "background-color: #009ddd;border-radius: 4px;color: #fff;"
+                    . "display: inline-block;margin: 0 10px 10px 0;padding: 10px 20px;",
+                    "COMPRAR ENTRADAS",
+                    $item->event_tickets_price,
+                    $item->body
+                );
+            }
+
             // Add image at the beggining of the body
             if (!empty($imageUrl)) {
                 $item->body = sprintf(
-                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" /> %s',
+                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" /> </br> %s',
                     $imageUrl,
                     $item->title ?? '',
                     $item->body
@@ -204,7 +222,7 @@ class JsonController extends FrontendController
         $baseOql = sprintf(
             'select * from contents'
             . ' %s %s'
-            . ' where content_type_name = "article"'
+            . ' where content_type_name = "article" and content_status=1 and in_litter=0 '
             . ' %s',
             $data['categoryJoin'],
             $data['tagJoin'],
@@ -233,6 +251,10 @@ class JsonController extends FrontendController
                 [],
                 true
             );
+
+            // Clean undesired escape sequences
+            $item->body        = str_replace(["\n", "\t"], '', $item->body);
+            $item->description = str_replace(["\n", "\t"], '', $item->description);
 
             // Add image at the beggining of the body
             if (!empty($imageUrl)) {
