@@ -449,7 +449,7 @@ class Processor
         $width  = $params[0];
         $height = $params[1];
 
-        if ($width != $this->image->getSize()->getWidth() &&
+        if ($width != $this->image->getSize()->getWidth() ||
             $height != $this->image->getSize()->getHeight()) {
                 $height = $width;
         }
