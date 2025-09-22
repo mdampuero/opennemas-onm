@@ -17,11 +17,15 @@ use Common\Model\Entity\Instance;
  */
 class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
 {
+    protected $helper;
+
     /**
      * Configures the testing environment.
      */
     public function setUp()
     {
+        $this->helper = null;
+
         $this->container = $this->getMockBuilder('ServiceContainer')
             ->setMethods([ 'get', 'getParameter' ])
             ->getMock();
@@ -78,6 +82,9 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
             case 'core.instance':
                 return $this->instance;
 
+            case 'core.helper.ai':
+                return $this->helper;
+
             case 'orm.manager':
                 return $this->em;
 
@@ -104,6 +111,43 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
                 'action' => 'Api\Service\V1\NewsAgencyServerService::createItem',
                 'id'     => 1,
                 'item'   => $data
+            ]);
+
+        $this->service->createItem($data);
+    }
+
+    public function testCreateItemNormalizesPromptSelections()
+    {
+        $data = [
+            'titlePromptSelected' => [
+                'id'       => 5,
+                'resource' => 'prompt',
+                'prompt'   => 'Example prompt',
+            ],
+            'descriptionPromptSelected' => [
+                'id'        => 7,
+                'resource'  => 'promptManager',
+                'prompt'    => 'Other prompt',
+            ],
+            'bodyPromptSelected' => null,
+        ];
+
+        $expected = [
+            [
+                'titlePromptSelected'       => [ 'id' => 5, 'resource' => 'prompt' ],
+                'descriptionPromptSelected' => [ 'id' => 7, 'resource' => 'promptManager' ],
+                'bodyPromptSelected'        => null,
+            ]
+        ];
+
+        $this->dataset->expects($this->once())->method('set')
+            ->with('news_agency_config', $expected);
+
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with('news_agency.server.createItem', [
+                'action' => 'Api\Service\V1\NewsAgencyServerService::createItem',
+                'id'     => 1,
+                'item'   => $expected[0]
             ]);
 
         $this->service->createItem($data);
@@ -275,6 +319,30 @@ class NewsAgencyServerServiceTest extends \PHPUnit\Framework\TestCase
             array_merge([ 'id' => 1 ], $data),
             $this->service->getItem(1)
         );
+    }
+
+    public function testResponsifyHydratesPromptSelections()
+    {
+        $this->helper = $this->getMockBuilder('\stdClass')
+            ->setMethods([ 'getPromptByReference' ])
+            ->getMock();
+
+        $this->helper->expects($this->once())->method('getPromptByReference')
+            ->with([ 'id' => 3, 'resource' => 'prompt' ])
+            ->willReturn([
+                'id'       => 3,
+                'prompt'   => 'Updated prompt',
+                'resource' => 'prompt',
+            ]);
+
+        $item = [
+            'titlePromptSelected' => [ 'id' => 3, 'resource' => 'prompt' ],
+        ];
+
+        $result = $this->service->responsify($item);
+
+        $this->assertEquals('Updated prompt', $result['titlePromptSelected']['prompt']);
+        $this->assertEquals('prompt', $result['titlePromptSelected']['resource']);
     }
 
     /**

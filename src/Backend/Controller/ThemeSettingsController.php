@@ -24,6 +24,10 @@ class ThemeSettingsController extends Controller
      */
     public function configAction()
     {
-        return $this->render('system_settings/theme_settings.tpl');
+        return $this->render('system_settings/theme_settings.tpl', [
+            'extra_fields' => $this->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('extraInfoContents.ARTICLE_MANAGER')
+        ]);
     }
 }
