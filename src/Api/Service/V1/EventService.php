@@ -103,7 +103,7 @@ class EventService extends ContentService
 
         $total = $this->getCustomListTotal($fromAndJoins, $whereSql);
 
-        $sql = 'SELECT contents.*' . $fromAndJoins . $whereSql;
+        $sql = 'SELECT contents.pk_content' . $fromAndJoins . $whereSql;
 
         if (!empty($order)) {
             $sql .= 'ORDER BY ' . $order . ' ';

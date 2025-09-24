@@ -274,16 +274,18 @@ class ApiController extends Controller
         $fmt    = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
         $helper = $this->container->get($this->helper);
 
-        $firstContentDate = $helper->getFirstItemDate($this->module);
-        if (empty($firstContentDate)) {
-            return $years;
+        if ($this->module === 'event') {
+            $lastAndFirst     = $helper->getLastAndFirstItemDate();
+            $lastContentDate  = $lastAndFirst['max'];
+            $firstContentDate = $lastAndFirst['min'];
+        } else {
+            $firstContentDate = $helper->getFirstItemDate($this->module);
+            if (empty($firstContentDate)) {
+                return $years;
+            }
+            $lastContentDate = null;
         }
-
-        $lastContentDate = $helper->getLastItemDate($this->module);
-        if (empty($lastContentDate)) {
-            $lastContentDate = new \DateTime('now');
-        }
-
+       
         $iterationDate = $firstContentDate instanceof \DateTime
             ? clone $firstContentDate
             : new \DateTime($firstContentDate);

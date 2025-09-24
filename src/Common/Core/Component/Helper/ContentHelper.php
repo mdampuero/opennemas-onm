@@ -12,7 +12,6 @@
 namespace Common\Core\Component\Helper;
 
 use Api\Exception\GetItemException;
-use Api\Exception\GetListException;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -194,36 +193,6 @@ class ContentHelper
      */
     public function getFirstItemDate($contentTypeName = 'article')
     {
-        if ($contentTypeName === 'event') {
-            $service = $this->container->get('api.service.event');
-            $sql = 'SELECT contents.*, start_date_meta.meta_value as event_start_date '
-                . 'FROM contents '
-                . 'INNER JOIN contentmeta as start_date_meta '
-                . 'on contents.pk_content = start_date_meta.fk_content '
-                . 'AND start_date_meta.meta_name = "event_start_date" '
-                . 'WHERE contents.content_type_name = "event" '
-                . 'AND start_date_meta.meta_value IS NOT NULL '
-                . 'AND start_date_meta.meta_value >= "2000-01-01" '
-                . 'AND contents.in_litter = 0 '
-                . 'ORDER BY start_date_meta.meta_value ASC LIMIT 1';
-
-            try {
-                $response = $service->getListBySql($sql);
-                $item = $response['items'][0] ?? null;
-                $startDate = $item->event_start_date ?? null;
-
-                if (empty($startDate)) {
-                    return null;
-                }
-
-                return $startDate instanceof \DateTime
-                    ? $startDate
-                    : new \DateTime($startDate);
-            } catch (\Exception $e) {
-                return null;
-            }
-        }
-
         $oql = sprintf(
             'content_type_name = "%s" and created !is null and created >="2000-01-01" and in_litter = 0'
             . ' order by created asc limit 1',
@@ -249,47 +218,33 @@ class ContentHelper
      *
      * @return \DateTime|string|null The last date found, or null if unavailable.
      */
-    public function getLastItemDate($contentTypeName = 'article')
+    public function getLastAndFirstItemDate()
     {
-        if ($contentTypeName === 'event') {
-            $service = $this->container->get('api.service.event');
-            $sql = 'SELECT contents.*, start_date_meta.meta_value as event_start_date '
-                . 'FROM contents '
-                . 'INNER JOIN contentmeta as start_date_meta '
-                . 'on contents.pk_content = start_date_meta.fk_content '
-                . 'AND start_date_meta.meta_name = "event_start_date" '
-                . 'WHERE contents.content_type_name = "event" '
-                . 'AND start_date_meta.meta_value IS NOT NULL '
-                . 'AND contents.in_litter = 0 '
-                . 'ORDER BY start_date_meta.meta_value DESC LIMIT 1';
-
-            try {
-                $response = $service->getListBySql($sql);
-                $item = $response['items'][0] ?? null;
-                $startDate = $item->event_start_date ?? null;
-
-                if (empty($startDate)) {
-                    return null;
-                }
-
-                return $startDate instanceof \DateTime
-                    ? $startDate
-                    : new \DateTime($startDate);
-            } catch (\Exception $e) {
-                return null;
-            }
-        }
-
-        $oql = sprintf(
-            'content_type_name = "%s" and created !is null and in_litter = 0 order by created desc limit 1',
-            $contentTypeName
-        );
+        $sql = 'SELECT  MAX(start_date_meta.meta_value) AS event_start_date_max,
+                        MIN(start_date_meta.meta_value) AS event_start_date_min
+                FROM contents
+                INNER JOIN contentmeta AS start_date_meta
+                    ON contents.pk_content = start_date_meta.fk_content
+                AND start_date_meta.meta_name = "event_start_date"
+                AND start_date_meta.meta_value >= "2000-01-01"
+                WHERE contents.content_type_name = "event"
+                AND contents.in_litter = 0';
 
         try {
-            $item = $this->service->getItemBy($oql);
-            return $item->created;
+            $rs  = $this->container->get('dbal_connection')->fetchAll($sql);
+
+            $startDateMin = $rs[0]['event_start_date_min'] ?? null;
+            $startDateMax = $rs[0]['event_start_date_max'] ?? null;
+
+            return [
+                'min' => $startDateMin instanceof \DateTime ? $startDateMin : new \DateTime($startDateMin),
+                'max' => $startDateMax instanceof \DateTime ? $startDateMax : new \DateTime($startDateMax)
+            ];
         } catch (\Exception $e) {
-            return null;
+            return [
+                'min' => new \DateTime(),
+                'max' => new \DateTime()
+            ];
         }
     }
 
