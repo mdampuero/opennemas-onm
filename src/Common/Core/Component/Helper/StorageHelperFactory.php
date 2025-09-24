@@ -21,14 +21,21 @@ class StorageHelperFactory
         $this->logError  = $logError;
     }
 
-    public function create(): StorageHelper
+    public function create($instance = null): StorageHelper
     {
-        $config = $this->container->get('orm.manager')
-            ->getDataSet('Settings', 'manager')
-            ->get('storage_settings', []);
+        if ($instance) {
+            $config = $this->container->get('orm.manager')
+                ->getDataSet('Settings', 'instance')
+                ->get('storage_settings', []);
+        }
+
+        if (empty($config)) {
+            $config = $this->container->get('orm.manager')
+                ->getDataSet('Settings', 'manager')
+                ->get('storage_settings', []);
+        }
 
         $this->config = $config;
-
         $this->s3Client = new S3Client([
             'credentials'             => [
                 'key'    => $config['provider']['key'],

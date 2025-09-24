@@ -189,8 +189,9 @@
           $scope.backup.criteria = $scope.criteria;
 
           $scope.app.columns.selected =  _.uniq($scope.app.columns.selected.concat(
-            [ 'name', 'slug', 'contents', 'cover', 'color', 'visibility', 'enabled', 'rss', 'layout' ]
+            [ 'name', 'slug', 'parent', 'contents', 'cover', 'color', 'visibility', 'enabled', 'rss', 'layout' ]
           ));
+
           $scope.criteria.orderBy = { name: 'asc' };
           $scope.criteria.epp     = 10;
 
@@ -199,6 +200,14 @@
           } });
 
           $scope.list();
+        };
+
+        /**
+         * @inheritdoc
+         */
+        $scope.parseList = function(data) {
+          $scope.configure(data.extra);
+          $scope.localize($scope.data.items, 'items');
         };
 
         /**
@@ -302,57 +311,6 @@
               });
             }
           });
-        };
-
-        /**
-         * @inheritdoc
-         */
-        $scope.parseList = function(data) {
-          var items = $scope.data.items;
-
-          $scope.data.items = $scope.sortItems($scope.data.items, null, 0);
-
-          if (items.length !== $scope.data.items.length) {
-            $scope.data.items = items;
-          }
-
-          $scope.configure(data.extra);
-          $scope.localize($scope.data.items, 'items');
-        };
-
-        /**
-         * @function sortItems
-         * @memberOf CategoryListCtrl
-         *
-         * @description
-         *   Sorts items basing on the parent id.
-         *
-         * @param {Array}   items  The list of items to sort.
-         * @param {Integer} parent The id of the item to sort children for.
-         * @param {Integer} level  The level of the current children.
-         *
-         * @return {Array} The list of items sorted by parent.
-         */
-        $scope.sortItems = function(items, parent, level) {
-          var parents = items.filter(function(e) {
-            return e.parent_id === parent;
-          });
-
-          var sorted = [];
-
-          for (var i = 0; i < parents.length; i++) {
-            sorted.push(parents[i]);
-            $scope.levels[$scope.getItemId(parents[i])] = level;
-
-            var children = $scope.sortItems(items,
-              $scope.getItemId(parents[i]), level + 1);
-
-            if (children.length > 0) {
-              sorted = sorted.concat(children);
-            }
-          }
-
-          return sorted;
         };
       }
     ]);

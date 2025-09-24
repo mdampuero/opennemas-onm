@@ -253,6 +253,20 @@ class LetterController extends FrontendController
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function getParameters($params, $item = null)
+    {
+        $params = parent::getParameters($params, $item);
+
+        if (array_key_exists('bodyLink', $item->params)) {
+            $params['o_external_link'] = $item->params['bodyLink'];
+        }
+
+        return $params;
+    }
+
+    /**
      * Send verification email
      */
     protected function sendEmail($body, $subject, $email)

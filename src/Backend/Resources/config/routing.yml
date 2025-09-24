@@ -57,6 +57,12 @@ admin_advertisement_show:
     options:
         expose: true
 
+admin_advertisement_create:
+    path:     /ads/create/
+    defaults: { _controller: BackendBundle:Advertisements:create }
+    options:
+        expose: true
+
 admin_ad_update:
     path:     /ad/{id}/update/
     defaults: { _controller: BackendBundle:Advertisements:update }

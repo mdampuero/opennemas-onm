@@ -363,6 +363,20 @@ class CompanyController extends FrontendController
         return new JsonResponse($parsedPlaces);
     }
 
+     /**
+     * {@inheritdoc}
+     */
+    protected function getParameters($params, $item = null)
+    {
+        $params = parent::getParameters($params, $item);
+
+        if (array_key_exists('bodyLink', $item->params)) {
+            $params['o_external_link'] = $item->params['bodyLink'];
+        }
+
+        return $params;
+    }
+
     /**
      * Parse provinces to remove the (Provincia) tag.
      *

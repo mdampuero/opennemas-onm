@@ -136,6 +136,87 @@ class SubscriberController extends ApiController
     }
 
     /**
+     * Import subscribers from CSV file.
+     * This method expects a CSV file with the following columns:
+     * - email
+     * - name
+     * - activated (optional, default is 1)
+     * - user_groups (optional, default is empty)
+     *
+     * @return Response The response object.
+    */
+    public function importAction(Request $request)
+    {
+        $service    = $this->get($this->service);
+        $content    = $request->request->get('csv_file', null);
+        $newsletter = $request->request->get('newsletter', null);
+
+        if (empty($content)) {
+            return new JsonResponse(
+                [ _('No file provided') ],
+                400
+            );
+        }
+
+        $lines = explode("\n", $content);
+        array_shift($lines); // remove header
+
+        // TODO: Hardcoded maxLines, maybe new setting on manager for this.
+        $maxLines       = 1000;
+        $processedLines = 0;
+
+        $userGroups = array_map(function ($group) {
+            return [
+                'user_group_id' => $group['pk_user_group'],
+                'status'        => 1
+            ];
+        }, $newsletter);
+
+        foreach ($lines as $line) {
+            if ($processedLines >= $maxLines) {
+                break;
+            }
+
+            $line = trim($line);
+            if (!$line) {
+                continue;
+            }
+
+            $columns    = explode(',', $line);
+            $email      = trim($columns[0]);
+            $name       = empty($columns[1]) ? $email : trim($columns[1]);
+            $signupDate = empty($columns[2]) ? date('Y-m-d') : $columns[2];
+
+            // Verify if the email is a valid.
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                continue;
+            }
+
+            $data = [
+                'email'         => $email,
+                'name'          => $name,
+                'register_date' => $signupDate,
+                'activated'     => 1,
+                'type'          => 1,
+                'user_groups'   => $userGroups
+            ];
+
+            try {
+                $service->createSubscriber($data);
+                $processedLines++;
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
+        return new JsonResponse(['messages' => [[
+            'id'      => '200',
+            'type'    => 'success',
+            'message' => sprintf(_('Import successfully (up to %d lines processed)'), $processedLines)
+        ]]]);
+    }
+
+    /**
      * Saves settings for CONTENT_SUBSCRIPTIONS extension.
      *
      * @param Request $request The request object.

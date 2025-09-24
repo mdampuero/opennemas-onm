@@ -5,6 +5,20 @@ manager_ws_storage_config:
     options:
         expose: true
 
+manager_ws_storage_instances:
+    path:     /storage/instances
+    defaults: { _controller: ManagerWebServiceBundle:Storage:instances }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_storage_instances_save:
+    path:     /storage/instances/save
+    defaults: { _controller: ManagerWebServiceBundle:Storage:instancesSave }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
 manager_ws_storage_tasks:
     path:     /storage/tasks
     defaults: { _controller: ManagerWebServiceBundle:Storage:tasks }

@@ -270,6 +270,9 @@ class HttpTaquilla extends Http
             44 => 'Otros parques',
         ];
 
+        // Add laguiago affiliate ID on ticket url
+        $ticketUrl = str_replace('#tickets-list', '&t10id=6008#tickets-list', $details['sminprice_url']);
+
         $content->id                   = $data['event_id'];
         $content->content_status       = 1;
         $content->title                = $data['event_name'];
@@ -279,16 +282,16 @@ class HttpTaquilla extends Http
         $content->agency               = 'Taquilla.com';
         $content->event_organizer_name = 'La Guía GO! | Taquilla.com';
         $content->event_start_date     = $data['date'];
-        $content->event_start_hour     = $time != 'unknown' ? $time : '00:00';
+        $content->event_start_hour     = $time != 'unknown' ? $time : null;
         $content->event_place          = $data['place']['name'];
         $content->event_city           = $data['place']['city'];
         $content->event_address        = $data['place']['address'];
         $content->event_map_latitude   = $data['place']['latitude'];
         $content->event_map_longitude  = $data['place']['longitude'];
         $content->event_tickets_price  = $details['sminprice'];
-        $content->event_tickets_link   = $details['sminprice_url'];
-        $content->event_organizer_url  = strtok($details['sminprice_url'], '?');
-        $content->event_website        = $details['sminprice_url'];
+        $content->event_tickets_link   = $ticketUrl;
+        $content->event_organizer_url  = strtok($ticketUrl, '?');
+        $content->event_website        = $ticketUrl;
         $content->tags                 = $entity['name'] . " " . $data['place']['city'] . " " . $entity['type'];
 
         if (in_array($content->event_subtype_id, array_keys($types))) {
@@ -304,7 +307,22 @@ class HttpTaquilla extends Http
 
         if (array_key_exists('end_date', $data) && $data['end_date'] != $data['date']) {
             $content->event_end_date = $data['end_date'];
-            $content->event_end_hour = $time != 'unknown' ? $time : '00:00';
+        }
+
+        // Set start/end date to UTC
+        $fromTZ = new \DateTimeZone("Europe/Madrid");
+        $toTZ   = new \DateTimeZone("UTC");
+
+        // Create DateTime in Europe/Madrid timezone and convert to UTC
+        if ($content->event_start_hour ?? null) {
+            $dt = new \DateTime(
+                $content->event_start_date . ' ' . $content->event_start_hour,
+                $fromTZ
+            );
+            $dt->setTimezone($toTZ);
+
+            $content->event_start_date = $dt->format("Y-m-d");
+            $content->event_start_hour = $dt->format("H:i");
         }
 
         $entity = reset($data['entities']);

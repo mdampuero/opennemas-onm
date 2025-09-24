@@ -81,6 +81,10 @@ class StaticPageController extends FrontendController
     {
         $params = parent::getParameters($request, $item);
 
+        if (array_key_exists('bodyLink', $item->params)) {
+            $params['o_external_link'] = $item->params['bodyLink'];
+        }
+
         return array_merge($params, [
             'page' => $params['content'],
             'tags' => $this->getTags([ $item])

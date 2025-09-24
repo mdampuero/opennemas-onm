@@ -77,6 +77,20 @@ class ObituaryController extends FrontendController
     /**
      * {@inheritdoc}
      */
+    protected function getParameters($params, $item = null)
+    {
+        $params = parent::getParameters($params, $item);
+
+        if (array_key_exists('bodyLink', $item->params)) {
+            $params['o_external_link'] = $item->params['bodyLink'];
+        }
+
+        return $params;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function hydrateList(array &$params = []) : void
     {
         $date = gmdate('Y-m-d H:i:s');

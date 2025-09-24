@@ -127,6 +127,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    core.helper.link:
+        class:     Common\Core\Component\Helper\LinkHelper
+        arguments: [ '@core.instance' ]
+        public:    true
+
     core.helper.locale:
         class:     Common\Core\Component\Helper\LocaleHelper
         arguments: [ '@orm.manager', '@core.instance', '@core.locale', '@request_stack', '@core.security' ]

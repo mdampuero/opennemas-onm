@@ -70,9 +70,9 @@
 {block name="customColumnsBody"}
   {acl isAllowed="PHOTO_DESCRIPTION"}
     <td class="text-center v-align-middle" ng-if="isColumnEnabled('description')">
-      <span class="m-l-5">
-        [% item.description | striptags %]
-      </span>
+      <div class="table-text m-l-5" ng-if="item.description">
+          [% item.description | striptags  %]
+      </div>
     </td>
   {/acl}
   {acl isAllowed="PHOTO_RESOLUTION"}

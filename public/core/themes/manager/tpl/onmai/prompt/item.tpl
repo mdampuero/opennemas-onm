@@ -136,6 +136,83 @@
               </div>
             </div>
             <div class="form-group">
+              <div class="checkbox">
+                <input id="content-debugging" ng-false-value="0" ng-model="item.debugging" ng-true-value="1" type="checkbox">
+                <label for="content-debugging">{t}Debugging{/t}</label>
+              </div>
+            </div>
+            <ng-container ng-if="item.mode !='New'">
+            <div class="form-group">
+              <hr>
+            </div>
+            <div class="form-group">
+              <label class="form-label"><b>{t}Available variables{/t}</b></label>
+              <table class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th>{t}Reference{/t}</th>
+                    <th>{t}Vars{/t}</th>
+                    <th class="text-center">{t}Copy{/t}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Id{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{content.id}}'}}</code></small></td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                      <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{content.id}}'}}')"></i></small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Internal title{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{content.title_int}}'}}</code></small></td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                      <small><i class="fa fa-copy pointer"
+                          ng-click="copyVar('{{'{{content.title_int}}'}}')"></i></small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Title{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{content.title}}'}}</code></small></td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                      <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{content.title}}'}}')"></i></small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Description{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{content.description}}'}}</code></small>
+                    </td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                      <small><i class="fa fa-copy pointer"
+                          ng-click="copyVar('{{'{{content.description}}'}}')"></i></small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Body{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{content.body}}'}}</code></small></td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                      <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{content.body}}'}}')"></i></small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Slug{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{content.slug}}'}}</code></small></td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                      <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{content.slug}}'}}')"></i></small>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.2rem !important;"><small>{t}Name of category{/t}</small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{category.title}}'}}</code></small></td>
+                    <td class="text-center" style="padding: 0.21rem !important;">
+                      <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{category.title}}'}}')"></i></small>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            </ng-container>
+            <div class="form-group">
               <hr>
             </div>
             <div class="form-group">

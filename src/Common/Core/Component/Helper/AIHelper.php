@@ -27,6 +27,13 @@ class AIHelper
      */
     protected $appLog;
 
+     /**
+     * Cache of prompt data indexed by resource and identifier.
+     *
+     * @var array<string, array>
+     */
+    protected $promptCache = [];
+
     /**
      * The error log service.
      *
@@ -169,6 +176,12 @@ EOT;
         'deepseek'  => 'DeepSeek',
         'openrouter' => 'OpenRouter',
     ];
+
+    /**
+     * Critical instruction added to all prompts to handle uncertain answers.
+     */
+    protected $errorDirective = 'IMPORTANTÍSIMO: Si no puedes proporcionar una respuesta certera '
+        . 'o por cualquier motivo no puedes responder, responde únicamente con "ERROR".';
 
 
     /**
@@ -374,6 +387,7 @@ EOT;
      */
     protected function insertInstructions($instructions = [], $role = '')
     {
+        $instructions = array_merge([['value' => $this->errorDirective]], $instructions);
         $instructionsString = '';
         if (count($instructions)) {
             $counter = 0;
@@ -399,6 +413,7 @@ EOT;
      */
     protected function getStringtInstructions($instructions = [])
     {
+        $instructions = array_merge([['value' => $this->errorDirective]], $instructions);
         $instructionsString = '';
         if (count($instructions)) {
             $counter = 0;
@@ -429,10 +444,10 @@ EOT;
     {
         $this->getInstructions();
 
-        $instructionsString = '';
-        if ($instructions && count($instructions)) {
-            $counter = 0;
+        $counter = 1;
+        $lines = [$counter . '. ' . $this->errorDirective];
 
+        if ($instructions && count($instructions)) {
             $mapped = array_map(function ($item) use (&$counter) {
                 $instruction = $this->getInstructionsById($item);
                 if (!($instruction['value'] ?? false)) {
@@ -444,9 +459,11 @@ EOT;
 
             $filtered = array_filter($mapped);
             if (!empty($filtered)) {
-                $instructionsString = implode("\n", $filtered);
+                $lines = array_merge($lines, $filtered);
             }
         }
+
+        $instructionsString = implode("\n", $lines);
 
         if ($instructionsString) {
             $instructionsString = sprintf("## Sigue estas reglas estrictamente:\n%s", $instructionsString);
@@ -502,7 +519,7 @@ EOT;
      *
      * @return string Returns the prompt text for the role if found, or an empty string if not found or not set.
      */
-    protected function getRoleByName(string $name)
+    protected function getRoleByName($name)
     {
         foreach ($this->getRoles() as $item) {
             if (isset($item['name']) && $item['name'] === $name) {
@@ -522,7 +539,7 @@ EOT;
      *
      * @return string The description associated with the tone, or an empty string if not found.
      */
-    protected function getToneByName(string $name)
+    protected function getToneByName($name)
     {
         foreach ($this->getTones() as $item) {
             if (isset($item['name']) && $item['name'] === $name) {
@@ -531,6 +548,54 @@ EOT;
         }
         return '';
     }
+
+    /**
+     * Replaces entity placeholders within a prompt using data from a resources array.
+     *
+     * Supported placeholders:
+     *  - {{content.field}}
+     *  - {{category.field}}
+     *
+     * @param string $text      The text that may contain placeholders.
+     * @param array  $resources The associative array of resources (e.g. ['content' => [...], 'category' => [...]]).
+     *
+     * @return string The text with placeholders replaced by their corresponding values.
+     */
+    protected function replaceContentPlaceholders(string $text, array $resources): string
+    {
+        $localeConfig = $this->container->get('core.helper.locale')->getConfiguration();
+        $locale       = $localeConfig['selected'] ?? 'es_ES';
+
+        $toString = static function ($value, ?string $locale): string {
+            if (is_array($value)) {
+                return isset($locale, $value[$locale]) ? (string) $value[$locale] : '';
+            }
+            return (string) $value;
+        };
+
+        $read = static function (array $data, string $field, ?string $locale) use ($toString): string {
+            if (!array_key_exists($field, $data)) {
+                return '';
+            }
+            return $toString($data[$field], $locale);
+        };
+
+        return preg_replace_callback(
+            '/{{\s*(\w+)\.(\w+)\s*}}/',
+            function ($m) use ($resources, $read, $locale) {
+                [, $entity, $field] = $m;
+
+                if (!isset($resources[$entity]) || !is_array($resources[$entity])) {
+                    return '';
+                }
+
+                return $read($resources[$entity], $field, $locale);
+            },
+            $text
+        );
+    }
+
+
 
     /**
      * Replaces placeholders in the template with the provided variable values.
@@ -557,14 +622,175 @@ EOT;
     }
 
     /**
+     * Converts a value into an array, recursively handling objects.
+     *
+     * @param mixed $value Value to convert.
+     *
+     * @return mixed The converted array or original scalar value.
+     */
+    protected function toArray($value)
+    {
+        if (is_array($value)) {
+            foreach ($value as $k => $v) {
+                $value[$k] = $this->toArray($v);
+            }
+            return $value;
+        }
+
+        if (is_object($value)) {
+            if ($value instanceof \JsonSerializable) {
+                $value = $value->jsonSerialize();
+            } elseif (method_exists($value, 'toArray')) {
+                $value = $value->toArray();
+            } elseif ($value instanceof \Traversable) {
+                $value = iterator_to_array($value);
+            } else {
+                $value = (array) $value;
+            }
+
+            $normalized = [];
+            foreach ($value as $key => $val) {
+                $cleanKey = is_string($key) ? preg_replace('/^\x00(?:\*|\w+)\x00/', '', $key) : $key;
+                $normalized[$cleanKey] = $this->toArray($val);
+            }
+
+            if (isset($normalized['data']) && is_array($normalized['data']) &&
+                (array_key_exists('stored', $normalized) || array_key_exists('origin', $normalized))
+            ) {
+                return $normalized['data'];
+            }
+
+            return $normalized;
+        }
+
+        return $value;
+    }
+
+    public function generateResource($source): array
+    {
+        try {
+            if (is_scalar($source)) {
+                $content = $this->container->get("api.service.content")->getItem($source);
+            } else {
+                $content = is_object($source) ? $source : (object) $source;
+            }
+
+            $category = [];
+
+            if (!empty($content->categories) && isset($content->categories[0])) {
+                try {
+                    $category = $this->container->get("api.service.category")->getItem($content->categories[0]);
+                } catch (\Throwable $e) {
+                    $category = [];
+                }
+            }
+
+            $contentData = $this->toArray($content);
+            if (is_object($content) && isset($content->id)) {
+                $contentData['id'] = $content->id;
+            }
+
+            $categoryData = !empty($category) ? $this->toArray($category) : [];
+            if (!empty($category) && is_object($category) && isset($category->id)) {
+                $categoryData['id'] = $category->id;
+            }
+
+            return [
+                'content'  => $contentData,
+                'category' => $categoryData,
+            ];
+        } catch (\Throwable $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Retrieves the latest prompt data based on a stored reference.
+     *
+     * @param array|null $reference The stored reference containing the prompt identifier and origin.
+     *
+     * @return array|null The prompt data or null if it cannot be resolved.
+     */
+    public function getPromptByReference($reference): ?array
+    {
+        if (empty($reference) || !is_array($reference)) {
+            return null;
+        }
+
+        if (isset($reference['prompt'])) {
+            if (!isset($reference['resource'])) {
+                $reference['resource'] = isset($reference['instances']) ? 'promptManager' : 'prompt';
+            }
+
+            return $reference;
+        }
+
+        $id = (int) ($reference['id'] ?? 0);
+
+        if ($id <= 0) {
+            return null;
+        }
+
+        $resource = $reference['resource'] ?? (isset($reference['instances']) ? 'promptManager' : 'prompt');
+        $cacheKey = sprintf('%s:%d', $resource, $id);
+
+        if (array_key_exists($cacheKey, $this->promptCache)) {
+            return $this->promptCache[$cacheKey];
+        }
+
+        $data = null;
+
+        try {
+            if ($resource === 'promptManager') {
+                $prompt = $this->container->get('orm.manager')
+                    ->getRepository('PromptManager')
+                    ->find($id);
+
+                if ($prompt) {
+                    if (method_exists($prompt, 'getData')) {
+                        $data = $prompt->getData();
+                    } elseif (method_exists($prompt, 'toArray')) {
+                        $data = $prompt->toArray();
+                    }
+                }
+            } else {
+                $promptService = $this->container->get('api.service.prompt');
+                $entity        = $promptService->getItem($id);
+                $data          = $promptService->responsify($entity);
+            }
+        } catch (\Throwable $e) {
+            $data = null;
+        }
+
+        if (!is_array($data) || empty($data)) {
+            $this->promptCache[$cacheKey] = null;
+
+            return null;
+        }
+
+        $data['resource'] = $resource;
+
+        return $this->promptCache[$cacheKey] = $data;
+    }
+
+
+    /**
      * Sends a message by preparing settings, generating a prompt, and calling the appropriate engine.
      *
-     * @param array $messages Contains the user's input and other necessary information for the prompt.
+     * @param array    $messages  Contains the user's input and other necessary information for the prompt.
+     * @param int|null $pkContent Identifier of the original content used to replace placeholders.
      *
      * @return array The response from the engine, including the result or error if any.
      */
-    public function sendMessage($messages)
+    public function sendMessage($messages, $pkContent = null)
     {
+        if (!empty($pkContent) && in_array($messages['promptSelected']['mode_or'], ['Edit', 'Agency'])) {
+            $messages['promptInput'] = $this->replaceContentPlaceholders(
+                $messages['promptInput'] ?? '',
+                $this->generateResource($pkContent)
+            );
+        }
+
         $dataLog = [
             'mode'     => $messages['promptSelected']['mode'] ?? '',
             'prompt'   => $messages['promptSelected']['name'] ?? '',
@@ -601,12 +827,19 @@ EOT;
             /**
              * Log the selected prompt details for debugging purposes.
              */
+            if (!empty($messages['promptSelected']['debugging'])) {
+                $dataLog['messages'] = $data['messages'];
+            }
             $this->container->get('core.helper.' . $data['engine'])->setDataLog($dataLog);
 
             $response = $this->container->get('core.helper.' . $data['engine'])->sendMessage(
                 $data,
                 $this->getStructureResponse()
             );
+
+            if (!empty($messages['promptSelected']['debugging'])) {
+                $response['prompt'] = $data['messages'][0]['content'] ?? '';
+            }
 
             $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
         } else {
@@ -615,7 +848,7 @@ EOT;
 
         if (empty($response['error'])) {
             $this->generateWords($response);
-            $this->saveAction($data, $response);
+            $this->saveAction($data, $response, $messages['promptSelected']['debugging'] ?? false);
         } else {
             $this->errorLog->error(
                 'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
@@ -627,13 +860,13 @@ EOT;
     }
 
     /**
-     * Transforms the given fields of text based on specific instructions and tone.
+     * Translate a text to a given language.
      *
-     * @param array $or The array containing the text fields to be transformed.
-     * @param array $fields The specific fields of text to transform (e.g., 'title', 'description').
-     * @param array $tone The tone to be used in the transformation.
+     * @param string   $text      The text to translate.
+     * @param string   $lang      Target language for the translation.
+     * @param array    $params    Optional parameters (e.g., tone).
      *
-     * @return array The array with transformed text fields or the original array if no transformation occurs.
+     * @return array The translated text or an error structure.
      */
     public function translate($text, $lang, $params = [])
     {
@@ -693,7 +926,7 @@ EOT;
 
         if (empty($response['error'])) {
             $this->generateWords($response);
-            $this->saveAction($data, $response);
+            $this->saveAction($data, $response, false);
         } else {
             $this->errorLog->error(
                 'ONMAI - ' . __METHOD__ . ': ' . $response['error'],
@@ -707,12 +940,12 @@ EOT;
     /**
      * Transforms the given data fields of text based on specific instructions and tone.
      *
-     * @param array $data The array containing the text fields to be transformed.
-     * @param array $fields The specific fields of text to transform (e.g., 'title', 'description').
+     * @param array    $data       The array containing the text fields to be transformed.
+     * @param array    $fields     The specific fields of text to transform (e.g., 'title', 'description').
      *
      * @return array The array with transformed data or the original array if no transformation occurs.
      */
-    public function transform($data = [], $fields = ['title', 'title_int', 'description', 'body'])
+    public function transform($data = [], $fields = ['body', 'description', 'title'])
     {
         $settings = $this->getCurrentSettings();
 
@@ -724,15 +957,29 @@ EOT;
 
         foreach ($fields as $field) {
             $promptKey = $field . 'Prompt';
+
+            if (!empty($data[$promptKey])) {
+                $resolvedPrompt = $this->getPromptByReference($data[$promptKey]);
+
+                if (!empty($resolvedPrompt)) {
+                    $data[$promptKey] = $resolvedPrompt;
+                }
+            } else {
+                continue;
+            }
+
+
             $toneKey   = $field . 'Tone';
 
-            if (empty($data[$promptKey]['prompt'] ?? null) || empty($data[$field] ?? null)) {
+            if (!is_array($data[$promptKey]) || empty($data[$promptKey]['prompt']) || empty($data[$field] ?? null)) {
                 continue;
             }
 
             // Extract prompt and specific tone
             $prompt = $data[$promptKey]['prompt'];
             $tone   = $data[$toneKey] ?? '';
+
+            $prompt = $this->replaceContentPlaceholders($prompt, $this->generateResource($data));
 
             // If empty tone assign default prompt tone
             if (empty($tone)) {
@@ -754,7 +1001,7 @@ EOT;
             ];
 
             $settings['messages'] = [['role' => 'user', 'content' => $this->replaceVars([
-                'objetivo'      => $data[$promptKey]['prompt'] ?? '',
+                'objetivo'      => $prompt,
                 'mode'          => 'Edit',
                 'instrucciones' => $this->getInstructionsList($data[$promptKey]['instructions'] ?? []),
                 'rol'           => $this->getRoleByName($data[$promptKey]['role']) ?? '',
@@ -766,15 +1013,18 @@ EOT;
             ])]];
 
             // Log the selected prompt details for debugging purposes.
+            if (!empty($data[$promptKey]['debugging'])) {
+                $dataLog['messages'] = $settings['messages'];
+            }
             $this->container->get('core.helper.' . $settings['engine'])->setDataLog($dataLog);
-
+           
             $response = $this->container->get('core.helper.' . $settings['engine'])
                 ->sendMessage($settings, $this->getStructureResponse());
 
             $response['result'] = $this->removeHtmlCodeBlocks($response['result']);
             if (empty($response['error']) && !empty($response['result'])) {
                 $this->generateWords($response);
-                $this->saveAction($settings, $response);
+                $this->saveAction($settings, $response, $data[$promptKey]['debugging'] ?? false);
                 $data[$field] = $response['result'];
             } else {
                 $this->errorLog->error(
@@ -783,6 +1033,9 @@ EOT;
                 );
             }
         }
+
+        // Set value Title int
+        $data['title_int'] = $data['title'];
 
         return $data;
     }
@@ -821,17 +1074,16 @@ EOT;
      *
      * Prepares the data, formats the required information, and calls an external service to create a new item.
      *
-     * @param array $params The parameters containing messages and other relevant data.
-     * @param array $response The response data, including the result, token counts, and original response.
+     * @param array $params        The parameters containing messages and other relevant data.
+     * @param array $response      The response data, including the result, token counts, and original response.
+     * @param bool  $debugPrompt   Whether the selected prompt has debugging enabled.
      *
      * @return void This method does not return anything. It performs a save operation via an external service.
      */
-    protected function saveAction($params, $response)
+    protected function saveAction($params, $response, $debugPrompt = false)
     {
-        $messages = $params['messages'] ?? [];
-
         $messages = [
-            'request' => $params['messages'] ?? '',
+            'request'  => $params['messages'] ?? '',
             'response' => $response['original'] ?? ''
         ];
 
@@ -858,6 +1110,11 @@ EOT;
          */
         $dataLog             = $this->container->get('core.helper.' . $params['engine'])->getDataLog();
         $dataLog['response'] = $tokens;
+
+        if ($debugPrompt) {
+            $dataLog['response']['result'] = $response['result'] ?? '';
+        }
+
         $this->appLog->info('ONMAI - ' . __METHOD__, $dataLog);
 
         $this->container->get('api.service.ai')->createItem($data);

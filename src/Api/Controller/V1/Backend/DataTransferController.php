@@ -131,7 +131,6 @@ class DataTransferController extends ApiController
         $exclude        = $this->availableDataTransfers[$contentType]['excludeMode'] ?? false;
         $filtered       = $helper->filterColumns($items, $includeColumns, $exclude);
         $filtered       = $helper->convertAdvertisementPaths($filtered, $contentType);
-        $filtered       = $helper->sanitizeNulls($filtered);
 
         $exportData = [
             'metadata' => [

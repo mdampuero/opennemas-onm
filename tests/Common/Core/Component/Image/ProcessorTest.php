@@ -493,7 +493,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         // Set default values
         $defaultValues = [
             'flatten' => false,
-            'quality' => 85,
+            'quality' => 70,
             'resolution-units' => 'ppi',
             'resolution-x' => 72,
             'resolution-y' => 72,
@@ -506,16 +506,50 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn('jpg');
 
         // Mock getQuality to return 80
-        $this->im->expects($this->once())
+        $this->im->expects($this->any())
             ->method('getQuality')
             ->willReturn(80);
 
         // Test optimize with higher quality
-        $higherQualityOptimization = ['quality' => 90];
+        $higherQualityOptimization = ['quality' => 70];
+        $expectedOptimization      = array_merge($defaultValues, $higherQualityOptimization);
         $this->im->optimize($higherQualityOptimization);
 
         // Verify that optimization is updated when quality is higher
-        $this->assertEquals($higherQualityOptimization, $optimization->getValue($this->im));
+        $this->assertEquals($expectedOptimization, $optimization->getValue($this->im));
+    }
+
+    public function testOptimizeWithFormatJPEG()
+    {
+        $optimization = new \ReflectionProperty($this->im, 'optimization');
+        $defaults     = new \ReflectionProperty($this->im, 'defaults');
+
+        $optimization->setAccessible(true);
+        $defaults->setAccessible(true);
+
+        // Set default values
+        $defaultValues = [
+            'quality' => 70,
+        ];
+        $defaults->setValue($this->im, $defaultValues);
+
+        // Mock getFormat to return 'jpeg'
+        $this->im->expects($this->atLeastOnce())
+            ->method('getFormat')
+            ->willReturn('jpeg');
+
+        // Mock getQuality to return 80
+        $this->im->expects($this->any())
+            ->method('getQuality')
+            ->willReturn(80);
+
+        // Test optimize with higher quality
+        $higherQualityOptimization = ['quality' => 70];
+        $expectedOptimization      = array_merge($defaultValues, $higherQualityOptimization);
+        $this->im->optimize($higherQualityOptimization);
+
+        // Verify that optimization is updated when quality is higher
+        $this->assertEquals($expectedOptimization, $optimization->getValue($this->im));
     }
 
     public function testOptimizeWithFormatGIF()

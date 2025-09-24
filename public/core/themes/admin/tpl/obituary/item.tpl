@@ -66,6 +66,7 @@
       {include file="ui/component/content-editor/accordion/author.tpl"}
       {include file="ui/component/content-editor/accordion/tags.tpl"}
       {include file="ui/component/content-editor/accordion/slug.tpl" iRoute="[% getFrontendUrl(item) %]"}
+      {include file="ui/component/content-editor/accordion/input-text.tpl" field="params.bodyLink" icon="fa-external-link" title="{t}External link{/t}" iRoute="item.params.bodyLink"}
       {include datetime=true file="ui/component/content-editor/accordion/input-text.tpl" field="date" icon="fa-calendar" title="{t}Event date{/t}" iRequired=true}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="mortuary" icon="fa-university" title="{t}Mortuary{/t}"}
       {include file="ui/component/content-editor/accordion/input-text.tpl" field="website" icon="fa-external-link" title="{t}Website{/t}" iRoute="item.website"}

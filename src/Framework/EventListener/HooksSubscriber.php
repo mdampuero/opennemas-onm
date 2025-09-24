@@ -229,6 +229,13 @@ class HooksSubscriber implements EventSubscriberInterface
             'albums.config' => [
                 ['removeVarnishCacheForAlbums', 10]
             ],
+            // Category Hooks
+            'category.updateItem' => [
+                ['removeObjectCacheForMenuByCategory', 20],
+            ],
+            'category.patchItem'  => [
+                [ 'removeObjectCacheForMenuByCategory', 20 ]
+            ],
         ];
     }
 
@@ -449,6 +456,29 @@ class HooksSubscriber implements EventSubscriberInterface
 
         if ($item->pk_menu ?? null) {
             $cache->removeByPattern('menu-' . $item->pk_menu . '-html*');
+        }
+    }
+
+    /**
+     * Deletes cached HTML menu entries associated with a given category.
+     *
+     * This method is triggered after a category is updated or deleted.
+     * It retrieves all menus that include items linked to the given
+     * category and removes their cached HTML entries based on a cache
+     * key pattern.
+     *
+     * @param Event $event The event containing the affected category
+     * item under the 'item' argument.
+     */
+    public function removeObjectCacheForMenuByCategory(Event $event)
+    {
+        $cache = $this->container->get('cache.connection.instance');
+        $item  = $event->getArgument('item');
+        $mh    = $this->container->get('core.helper.menu');
+        $menus = $mh->getMenusbyCategory($item);
+
+        foreach ($menus as $menu) {
+            $cache->removeByPattern('menu-' . $menu . '-html*');
         }
     }
 
