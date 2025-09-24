@@ -8,6 +8,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-featured-created" checklist-model="app.columns.selected" checklist-value="'created'" type="checkbox">
+    <label for="checkbox-featured-created">
+      {t}Created{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-featured-starttime" checklist-model="app.columns.selected" checklist-value="'starttime'" type="checkbox">
     <label for="checkbox-featured-starttime">
       {t}Start date{/t}
@@ -60,6 +66,9 @@
 {block name="commonColumnsHeader"}
   <th class="v-align-middle" ng-if="isColumnEnabled('title')" width="300">
     {t}Title{/t}
+  </th>
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('created')" width="150">
+    {t}Created{/t}
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('starttime')" width="150">
     {t}Start date{/t}
@@ -125,6 +134,16 @@
         </button>
       {/acl}
     </div>
+  </td>
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('created')">
+    <div>
+      <i class="fa fa-calendar"></i>
+      [% item.created | moment : 'YYYY-MM-DD' %]
+    </div>
+    <small class="text-bold">
+      <i class="fa fa-clock-o"></i>
+      [% item.created | moment : 'HH:mm:ss' %]
+    </small>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('starttime')">
     <span class="text-bold" ng-if="!item.starttime">
