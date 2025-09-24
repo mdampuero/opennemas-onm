@@ -519,6 +519,39 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedOptimization, $optimization->getValue($this->im));
     }
 
+    public function testOptimizeWithFormatJPEG()
+    {
+        $optimization = new \ReflectionProperty($this->im, 'optimization');
+        $defaults     = new \ReflectionProperty($this->im, 'defaults');
+
+        $optimization->setAccessible(true);
+        $defaults->setAccessible(true);
+
+        // Set default values
+        $defaultValues = [
+            'quality' => 70,
+        ];
+        $defaults->setValue($this->im, $defaultValues);
+
+        // Mock getFormat to return 'jpeg'
+        $this->im->expects($this->atLeastOnce())
+            ->method('getFormat')
+            ->willReturn('jpeg');
+
+        // Mock getQuality to return 80
+        $this->im->expects($this->any())
+            ->method('getQuality')
+            ->willReturn(80);
+
+        // Test optimize with higher quality
+        $higherQualityOptimization = ['quality' => 70];
+        $expectedOptimization      = array_merge($defaultValues, $higherQualityOptimization);
+        $this->im->optimize($higherQualityOptimization);
+
+        // Verify that optimization is updated when quality is higher
+        $this->assertEquals($expectedOptimization, $optimization->getValue($this->im));
+    }
+
     public function testOptimizeWithFormatGIF()
     {
         $optimization = new \ReflectionProperty($this->im, 'optimization');
