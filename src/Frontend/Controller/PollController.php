@@ -159,6 +159,10 @@ class PollController extends FrontendController
             ->configureFromSettings()
             ->getHtml();
 
+        if (array_key_exists('bodyLink', $item->params)) {
+            $params['o_external_link'] = $item->params['bodyLink'];
+        }
+
         return $params;
     }
 
