@@ -235,15 +235,30 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsLocked()
     {
-        $this->fs->expects($this->at(0))->method('exists')
-            ->willReturn(false);
+        $lockFile = '/plugh/corge/qux/importers/.lock';
 
-        $this->fs->expects($this->at(1))->method('exists')
-            ->willReturn(true);
+        // Mock del filesystem
+        $this->fs = $this->createMock(Filesystem::class);
 
+        // Configuramos el mock para que 'exists' devuelva false la primera vez y true la segunda
+        $this->fs->method('exists')
+            ->willReturnOnConsecutiveCalls(false, true);
+
+        // Configuramos el mock para 'getMTime' (simula filemtime)
+        $this->fs->method('getMTime')
+            ->willReturn(time());
+
+        // Inyectamos el mock en el synchronizer
+        $this->synchronizer->setFilesystem($this->fs);
+        $this->synchronizer->setLockFile($lockFile);
+
+        // Cuando el archivo no existe, isLocked() debe ser false
         $this->assertFalse($this->synchronizer->isLocked());
+
+        // Cuando el archivo existe, isLocked() debe ser true
         $this->assertTrue($this->synchronizer->isLocked());
     }
+
 
     /**
      * Tests resetStats.

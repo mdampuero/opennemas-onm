@@ -171,9 +171,22 @@ class Synchronizer
      *
      * @return bool True if the environment is locked. False otherwise.
      */
-    public function isLocked() : bool
+    public function isLocked(): bool
     {
-        return $this->fs->exists($this->lockFilePath);
+        if (!$this->fs->exists($this->lockFilePath)) {
+            return false;
+        }
+
+        $lockTime = filemtime($this->lockFilePath);
+        $now      = time();
+
+        // If the lock file is older than 24 hours, remove it and return false.
+        if (($now - $lockTime) > 86400) {
+            $this->unlockSync();
+            return false;
+        }
+
+        return true;
     }
 
     /**
