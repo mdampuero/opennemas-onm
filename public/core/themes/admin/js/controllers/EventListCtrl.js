@@ -28,7 +28,7 @@
           content_type_name: 'event',
           epp: 10,
           in_litter: 0,
-          orderBy: { event_start_date: 'desc' },
+          orderBy: { created: 'desc' },
           page: 1,
           tag: null
         };
