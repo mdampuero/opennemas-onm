@@ -59,13 +59,16 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.backup.criteria    = $scope.criteria;
-          $scope.app.columns.hidden = [];
+          $scope.backup.criteria      = $scope.criteria;
+          $scope.app.columns.hidden   = [];
+          $scope.app.columns.selected =  _.uniq($scope.app.columns.selected.concat(
+            [ 'start', 'end' ]
+          ));
 
           oqlEncoder.configure({ placeholder: {
             title: '[key] ~ "%[value]%"',
             starttime: '[key] > "[value]"',
-            created: '[key] ~ "%[value]%"'
+            event_start_date: '[key] ~ "%[value]%"'
           } });
 
           $scope.list();

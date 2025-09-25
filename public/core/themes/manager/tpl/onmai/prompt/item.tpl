@@ -203,9 +203,9 @@
                   </tr>
                   <tr>
                     <td style="padding: 0.2rem !important;"><small>{t}Name of category{/t}</small></td>
-                    <td style="padding: 0.2rem !important;"><small><code>{{'{{category.name}}'}}</code></small></td>
+                    <td style="padding: 0.2rem !important;"><small><code>{{'{{category.title}}'}}</code></small></td>
                     <td class="text-center" style="padding: 0.21rem !important;">
-                      <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{category.name}}'}}')"></i></small>
+                      <small><i class="fa fa-copy pointer" ng-click="copyVar('{{'{{category.title}}'}}')"></i></small>
                     </td>
                   </tr>
                 </tbody>

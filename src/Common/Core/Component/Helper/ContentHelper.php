@@ -12,7 +12,6 @@
 namespace Common\Core\Component\Helper;
 
 use Api\Exception\GetItemException;
-use Api\Exception\GetListException;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -205,6 +204,47 @@ class ContentHelper
             return $item->created;
         } catch (\Exception $e) {
             return null;
+        }
+    }
+
+    /**
+     * Retrieves the last available date for a given content type.
+     *
+     * When the content type is `event`, it uses the `event_start_date` meta
+     * value to determine the most future event. For other content types, the
+     * latest `created` date is used.
+     *
+     * @param string $contentTypeName The content type name (default `article`).
+     *
+     * @return \DateTime|string|null The last date found, or null if unavailable.
+     */
+    public function getLastAndFirstItemDate()
+    {
+        $sql = 'SELECT  MAX(start_date_meta.meta_value) AS event_start_date_max,
+                        MIN(start_date_meta.meta_value) AS event_start_date_min
+                FROM contents
+                INNER JOIN contentmeta AS start_date_meta
+                    ON contents.pk_content = start_date_meta.fk_content
+                AND start_date_meta.meta_name = "event_start_date"
+                AND start_date_meta.meta_value >= "2000-01-01"
+                WHERE contents.content_type_name = "event"
+                AND contents.in_litter = 0';
+
+        try {
+            $rs  = $this->container->get('dbal_connection')->fetchAll($sql);
+
+            $startDateMin = $rs[0]['event_start_date_min'] ?? null;
+            $startDateMax = $rs[0]['event_start_date_max'] ?? null;
+
+            return [
+                'min' => $startDateMin instanceof \DateTime ? $startDateMin : new \DateTime($startDateMin),
+                'max' => $startDateMax instanceof \DateTime ? $startDateMax : new \DateTime($startDateMax)
+            ];
+        } catch (\Exception $e) {
+            return [
+                'min' => new \DateTime(),
+                'max' => new \DateTime()
+            ];
         }
     }
 

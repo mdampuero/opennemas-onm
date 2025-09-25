@@ -10,6 +10,7 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Exception\GetItemException;
+use Api\Service\V1\EventService;
 use Common\Model\Entity\Content;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,7 +46,7 @@ class EventController extends ContentController
     /**
      * {@inheritdoc}
      */
-    protected $service = 'api.service.content';
+    protected $service = 'api.service.event';
 
     /**
      * {@inheritDoc}
@@ -58,7 +59,16 @@ class EventController extends ContentController
 
         $events = $this->get('core.helper.event')->getEventsGroupedByType();
 
-        return array_merge(parent::getExtraData($items), [
+        $extraData = parent::getExtraData($items);
+        $years     = [];
+
+        if (isset($extraData['years']) && is_array($extraData['years'])) {
+            $years = $extraData['years'];
+        }
+
+        $extraData['years'] = $this->addQuickDateFilters($years);
+
+        return array_merge($extraData, [
             'categories' => $categories,
             'tags'       => $this->getTags($items),
             'events'     => $events,
@@ -120,6 +130,41 @@ class EventController extends ContentController
         }
 
         return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
+    /**
+     * Adds quick date filters to the year list used by the date selector.
+     *
+     * @param array $years The current list of year/month filters.
+     *
+     * @return array
+     */
+    private function addQuickDateFilters(array $years)
+    {
+        $groupLabel = _('Quick filters');
+
+        $quickFilters = [
+            [
+                'name'   => _('Today'),
+                'value'  => EventService::QUICK_FILTER_TODAY,
+                'filter' => 'Quick',
+                'group'  => $groupLabel,
+            ],
+            [
+                'name'   => _('Tomorrow'),
+                'value'  => EventService::QUICK_FILTER_TOMORROW,
+                'filter' => 'Quick',
+                'group'  => $groupLabel,
+            ],
+            [
+                'name'   => _('This week'),
+                'value'  => EventService::QUICK_FILTER_THIS_WEEK,
+                'filter' => 'Quick',
+                'group'  => $groupLabel,
+            ],
+        ];
+
+        return array_merge($quickFilters, $years);
     }
 
     /**
