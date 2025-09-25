@@ -861,6 +861,19 @@
                                       </label>
                                     </div>
                                   </div>
+                                  {if is_array($extra_fields) && array_key_exists('match_score', $extra_fields)}
+                                    <div class="controls visible-xs-inline visible-sm-inline visible-md-inline visible-lg-inline">
+                                      <div class="checkbox p-b-10">
+                                        <input id="theme-option-content-score" name="theme-option-content-score" ng-model="settings.theme_options.content_score" ng-checked="[% settings.theme_options.content_score != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                        <label class="form-label m-b-15" for="theme-option-content-score">
+                                          <i class="fa fa-futbol-o"></i>
+                                          <span class="help">
+                                            {t}Display sports scoreboard{/t}
+                                          </span>
+                                        </label>
+                                      </div>
+                                    </div>
+                                  {/if}
                                 </div>
                               </div>
                             </div>
@@ -994,6 +1007,19 @@
                                       </label>
                                     </div>
                                   </div>
+                                  {if is_array($extra_fields) && array_key_exists('match_score', $extra_fields)}
+                                    <div class="controls visible-xs-inline visible-sm-inline visible-md-inline visible-lg-inline">
+                                      <div class="checkbox p-b-10">
+                                        <input id="theme-option-content-tiny-score" name="theme-option-content-tiny-score" ng-model="settings.theme_options.content_tiny_score" ng-checked="[% settings.theme_options.content_tiny_score != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                        <label class="form-label m-b-15" for="theme-option-content-tiny-score">
+                                          <i class="fa fa-futbol-o"></i>
+                                          <span class="help">
+                                            {t}Display sports scoreboard{/t}
+                                          </span>
+                                        </label>
+                                      </div>
+                                    </div>
+                                  {/if}
                                 </div>
                               </div>
                             </div>
@@ -1127,6 +1153,19 @@
                                       </label>
                                     </div>
                                   </div>
+                                  {if is_array($extra_fields) && array_key_exists('match_score', $extra_fields)}
+                                    <div class="controls visible-xs-inline visible-sm-inline visible-md-inline visible-lg-inline">
+                                      <div class="checkbox p-b-10">
+                                        <input id="theme-option-content-over-score" name="theme-option-content-over-score" ng-model="settings.theme_options.content_over_score" ng-checked="[% settings.theme_options.content_over_score != 'false' %]" ng-true-value="'true'" ng-false-value="'false'" type="checkbox"/>
+                                        <label class="form-label m-b-15" for="theme-option-content-over-score">
+                                          <i class="fa fa-futbol-o"></i>
+                                          <span class="help">
+                                            {t}Display sports scoreboard{/t}
+                                          </span>
+                                        </label>
+                                      </div>
+                                    </div>
+                                  {/if}
                                 </div>
                               </div>
                             </div>

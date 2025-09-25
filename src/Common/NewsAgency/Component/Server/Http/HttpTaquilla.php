@@ -282,7 +282,7 @@ class HttpTaquilla extends Http
         $content->agency               = 'Taquilla.com';
         $content->event_organizer_name = 'La Guía GO! | Taquilla.com';
         $content->event_start_date     = $data['date'];
-        $content->event_start_hour     = $time != 'unknown' ? $time : '00:00';
+        $content->event_start_hour     = $time != 'unknown' ? $time : null;
         $content->event_place          = $data['place']['name'];
         $content->event_city           = $data['place']['city'];
         $content->event_address        = $data['place']['address'];
@@ -307,7 +307,22 @@ class HttpTaquilla extends Http
 
         if (array_key_exists('end_date', $data) && $data['end_date'] != $data['date']) {
             $content->event_end_date = $data['end_date'];
-            $content->event_end_hour = $time != 'unknown' ? $time : '00:00';
+        }
+
+        // Set start/end date to UTC
+        $fromTZ = new \DateTimeZone("Europe/Madrid");
+        $toTZ   = new \DateTimeZone("UTC");
+
+        // Create DateTime in Europe/Madrid timezone and convert to UTC
+        if ($content->event_start_hour ?? null) {
+            $dt = new \DateTime(
+                $content->event_start_date . ' ' . $content->event_start_hour,
+                $fromTZ
+            );
+            $dt->setTimezone($toTZ);
+
+            $content->event_start_date = $dt->format("Y-m-d");
+            $content->event_start_hour = $dt->format("H:i");
         }
 
         $entity = reset($data['entities']);

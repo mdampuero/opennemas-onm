@@ -211,6 +211,10 @@ class EventController extends FrontendController
         $params['o_category'] = $this->container->get('core.helper.category')
             ->getCategory($item);
 
+        if (array_key_exists('bodyLink', $item->params)) {
+            $params['o_external_link'] = $item->params['bodyLink'];
+        }
+
         return $params;
     }
 
