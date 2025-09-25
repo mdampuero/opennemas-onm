@@ -79,7 +79,7 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('dimensions')" width="150">
     {t}Dimensions{/t}
   </th>
-  <th class="v-align-middle" ng-if="isColumnEnabled('position')" width="250">
+  <th class="v-align-middle hidden-sm" ng-if="isColumnEnabled('position')" width="250">
     {t}Position{/t}
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('category')" width="150">

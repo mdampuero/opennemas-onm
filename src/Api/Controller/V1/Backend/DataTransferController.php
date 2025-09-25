@@ -249,7 +249,7 @@ class DataTransferController extends ApiController
         $us     = $this->container->get($config['config']['service']);
         $helper = $this->container->get($this->helper);
 
-        foreach ($items as $item) {
+        foreach (array_reverse($items) as $item) {
             if (!is_array($item)) {
                 return new JsonResponse(['error' => 'Invalid item format'], 400);
             }
