@@ -17,6 +17,10 @@ class EventService extends ContentService
             ->get('core.helper.oql')
             ->getFiltersFromOql($oql);
 
+        if (!$this->requiresEventMetaQuery($criteria, $order)) {
+            return parent::getList($oql);
+        }
+
         $oql = $this->getOqlForList($oql);
 
         $cleanCriteriaTag = preg_replace('/and tag\\s*=\\s*\"?([0-9]*)\"?\\s*/', '', $criteria);
@@ -117,8 +121,27 @@ class EventService extends ContentService
         $this->localizeList($items);
 
         return ['items' => $items, 'total' => $total];
+    }
 
-        return parent::getList($oql);
+    /**
+     * Determines if the custom query with event meta joins is required.
+     *
+     * @param string $criteria
+     * @param string $order
+     *
+     * @return bool
+     */
+    private function requiresEventMetaQuery($criteria, $order)
+    {
+        if (stripos($criteria, 'event_start_date') !== false) {
+            return true;
+        }
+
+        if (stripos($order, 'event_start_date') !== false) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
