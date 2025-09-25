@@ -30,13 +30,13 @@
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-start" checklist-model="app.columns.selected" checklist-value="'start'" type="checkbox">
     <label for="checkbox-start">
-      {t}Start event{/t}
+      {t}Event start{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-end" checklist-model="app.columns.selected" checklist-value="'end'" type="checkbox">
     <label for="checkbox-end">
-      {t}End event{/t}
+      {t}Event end{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
@@ -52,11 +52,11 @@
     {t}Type{/t}
   </th>
   <th class="text-center v-align-middle pointer" ng-click="sort('event_start_date')" ng-if="isColumnEnabled('start')" width="150">
-    {t}Start event{/t}
+    {t}Event start{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('event_start_date') == 'asc', 'fa fa-caret-down': isOrderedBy('event_start_date') == 'desc' }"></i>
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('end')" width="150">
-    {t}End event{/t}
+    {t}Event end{/t}
   </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('content_status')" width="150">
     {t}Published{/t}

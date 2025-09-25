@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-19 07:36+0000\n"
-"PO-Revision-Date: 2025-09-19 09:40+0200\n"
+"POT-Creation-Date: 2025-09-25 12:57+0000\n"
+"PO-Revision-Date: 2025-09-25 15:02+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: French\n"
 "Language: es\n"
@@ -5163,6 +5163,9 @@ msgstr "Heure"
 msgid "Display content's readtime"
 msgstr "Afficher la lecture du contenu"
 
+msgid "Display sports scoreboard"
+msgstr "Afficher le tableau de score sportif"
+
 msgid "Tiny contents"
 msgstr "Contenu minuscule"
 
@@ -8080,6 +8083,12 @@ msgstr "Publicité sans nom"
 msgid "Floating ads (for drop them into columns)"
 msgstr "Publicités flottantes (pour les déposer dans des colonnes)"
 
+msgid "Event start"
+msgstr "Début de l’événement"
+
+msgid "Event end"
+msgstr "Fin de l’événement"
+
 msgid "Hide ongoing events"
 msgstr "Masquer les événements en cours"
 
@@ -9139,6 +9148,14 @@ msgstr "Coût"
 
 msgid "Subtotal"
 msgstr "Total"
+
+#, fuzzy
+#~ msgid "Start event"
+#~ msgstr "Date de début"
+
+#, fuzzy
+#~ msgid "End event"
+#~ msgstr "Événement"
 
 #~ msgid "Unable to find any advertisement that matches your search."
 #~ msgstr ""
