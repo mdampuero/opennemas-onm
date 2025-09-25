@@ -33,6 +33,23 @@
           tag: null
         };
 
+        var defaultSort = $scope.sort;
+
+        $scope.sort = function(name) {
+          if (name === 'event_start_date') {
+            var direction = $scope.criteria.orderBy &&
+              $scope.criteria.orderBy[name];
+
+            $scope.criteria.orderBy = {};
+
+            if (direction) {
+              $scope.criteria.orderBy[name] = direction;
+            }
+          }
+
+          defaultSort.call($scope, name);
+        };
+
         /**
          * @memberOf SubscriptionListCtrl
          *
