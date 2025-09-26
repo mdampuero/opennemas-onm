@@ -14,7 +14,6 @@ use Framework\Component\MIME\MimeTypeTool;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class NewsAgencyResourceController extends ApiController
 {

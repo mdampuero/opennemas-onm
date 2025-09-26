@@ -10,6 +10,7 @@
 namespace Tests\Common\NewsAgency\Component\Synchronizer;
 
 use Common\NewsAgency\Component\Synchronizer\Synchronizer;
+use Symfony\Component\Config\Resource\ReflectionClassResource;
 use Common\Model\Entity\Instance;
 use Exception;
 
@@ -235,28 +236,26 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsLocked()
     {
-        $lockFile = '/plugh/corge/qux/importers/.lock';
-        $this->fs = $this->createMock(Filesystem::class);
+        $this->fs->expects($this->at(0))->method('exists')
+            ->willReturn(true);
 
-        // Configure the mock for 'exists'
-        $this->fs->method('exists')
-            ->willReturnOnConsecutiveCalls(false, true);
+        $this->fs->expects($this->at(1))->method('exists')
+            ->willReturn(false);
 
-        // Configure the mock for 'getMTime'
-        $this->fs->method('getMTime')
-            ->willReturn(time());
-
-        // Inject the mock filesystem into the synchronizer
-        $this->synchronizer->setFilesystem($this->fs);
-        $this->synchronizer->setLockFile($lockFile);
-
-        // When the file does not exist, isLocked() must be false
-        $this->assertFalse($this->synchronizer->isLocked());
-
-        // When the file exists, isLocked() must be true
         $this->assertTrue($this->synchronizer->isLocked());
+        $this->assertFalse($this->synchronizer->isLocked());
     }
 
+    /**
+     * Tests getLockFilePath.
+     */
+    public function testgetLockFilePath()
+    {
+        $this->assertEquals(
+            '/plugh/corge/qux/importers/.lock',
+            $this->synchronizer->getLockFilePath()
+        );
+    }
 
     /**
      * Tests resetStats.

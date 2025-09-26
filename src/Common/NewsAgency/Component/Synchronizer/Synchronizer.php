@@ -173,20 +173,17 @@ class Synchronizer
      */
     public function isLocked(): bool
     {
-        if (!$this->fs->exists($this->lockFilePath)) {
-            return false;
-        }
+        return $this->fs->exists($this->lockFilePath);
+    }
 
-        $lockTime = filemtime($this->lockFilePath);
-        $now      = time();
-
-        // If the lock file is older than 24 hours, remove it and return false.
-        if (($now - $lockTime) > 86400) {
-            $this->unlockSync();
-            return false;
-        }
-
-        return true;
+    /**
+     * Returns the path to the lock file.
+     *
+     * @return string The path to the lock file.
+     */
+    public function getLockFilePath(): string
+    {
+        return $this->lockFilePath;
     }
 
     /**
