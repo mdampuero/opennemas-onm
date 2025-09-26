@@ -100,6 +100,10 @@
                       <option value="1400x1050">1400x1050px (4:3)</option>
                       <option value="1280x960">1280x960px (4:3)</option>
                       <option value="1024x768">1024x768px (4:3)</option>
+                      <option value="1920x1920">1920px</option>
+                      <option value="1600x1600">1600px</option>
+                      <option value="1366x1366">1366px</option>
+                      <option value="1280x1280">1280px</option>
                     </select>
                   </div>
                 </div>

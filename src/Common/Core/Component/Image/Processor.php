@@ -263,9 +263,11 @@ class Processor
     {
         $this->optimization = $this->defaults;
 
-        if ($this->getFormat() === 'jpg' && !empty($optimization['quality'])) {
+        if ($this->getFormat() === 'jpeg' && !empty($optimization['quality'])) {
             $currentQuality = $this->getQuality();
-            if ($optimization['quality'] >= $currentQuality) {
+            $quality        = (int) $optimization['quality'];
+
+            if ($quality <= $currentQuality && !empty($optimization['quality'])) {
                 $this->optimization = $optimization;
             }
         }
