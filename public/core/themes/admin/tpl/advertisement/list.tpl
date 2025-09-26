@@ -34,7 +34,7 @@
     <li class="quicklinks">
       <a class="btn btn-white" ng-click="export('api_v1_backend_datatransfer_export')" id="export-button">
         <i class="fa fa-download"></i>
-        {t}Export{/t}
+        {t}Download{/t}
       </a>
     </li>
     <li class="quicklinks">
