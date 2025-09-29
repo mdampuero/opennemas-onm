@@ -21,7 +21,7 @@
           template: function() {
             return '<div class="tags-input-wrapper">' +
               '<tags-input add-from-autocomplete-only="true" display-property="name" key-property="id" min-length="2" ng-model="category" placeholder="[% placeholder %]" replace-spaces-with-dashes="false" ng-required="required">' +
-                '<auto-complete debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" min-length="2" select-first-match="true" source="list($query)"></auto-complete>' +
+                '<auto-complete debounce-delay="250" highlight-matched-text="true" max-results-to-show="[% maxResults + 1 %]" load-on-down-arrow="true" load-on-focus="true" load-on-empty="true" min-length="2" select-first-match="true" source="list($query)"></auto-complete>' +
               '</tags-input>' +
               '<i class="fa fa-circle-o-notch fa-spin tags-input-loading" ng-if="loading"></i>' +
             '</div>';
