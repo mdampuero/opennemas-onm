@@ -237,13 +237,13 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
     public function testIsLocked()
     {
         $this->fs->expects($this->at(0))->method('exists')
-            ->willReturn(true);
-
-        $this->fs->expects($this->at(1))->method('exists')
             ->willReturn(false);
 
-        $this->assertTrue($this->synchronizer->isLocked());
+        $this->fs->expects($this->at(1))->method('exists')
+            ->willReturn(true);
+
         $this->assertFalse($this->synchronizer->isLocked());
+        $this->assertTrue($this->synchronizer->isLocked());
     }
 
     /**
