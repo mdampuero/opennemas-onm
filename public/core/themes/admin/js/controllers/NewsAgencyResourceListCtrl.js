@@ -46,7 +46,8 @@
           getContent: 'api_v1_backend_news_agency_resource_get_content',
           getList:    'api_v1_backend_news_agency_resource_get_list',
           importItem: 'api_v1_backend_news_agency_resource_import_item',
-          importList: 'api_v1_backend_news_agency_resource_import_list'
+          importList: 'api_v1_backend_news_agency_resource_import_list',
+          unlockInstance: 'api_v1_backend_news_agency_resource_unlock_instance',
         };
 
         /**
@@ -133,6 +134,31 @@
               messenger.post(response.data);
             }
           });
+        };
+
+        /**
+         * @function unlockInstance
+         * @memberOf NewsAgencyResourceListCtrl
+         *
+         * @description
+         *   Unlocks the instance if it is locked.
+         */
+        $scope.unlockInstance = function() {
+          $scope.flags.http.saving = true;
+
+          http.post($scope.routes.unlockInstance, {})
+            .then(function(response) {
+              if (response.data) {
+                messenger.post(response.data);
+              }
+
+              if (response.success) {
+                $window.location.reload();
+              }
+            }
+            ).finally(function() {
+              $scope.disableFlags('http');
+            });
         };
 
         /**

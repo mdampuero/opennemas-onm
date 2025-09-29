@@ -10,6 +10,7 @@
 namespace Api\Controller\V1\Backend;
 
 use Api\Controller\V1\ApiController;
+use Api\Exception\ApiException;
 use Framework\Component\MIME\MimeTypeTool;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -165,5 +166,30 @@ class NewsAgencyResourceController extends ApiController
             'servers'  => $servers,
             'types'    => $types
         ];
+    }
+
+    /**
+     * Unlocks the instance to allow new imports.
+     *
+     * @return JsonResponse The response object.
+     */
+    public function unlockInstanceAction()
+    {
+        $this->checkSecurity($this->extension, 'MASTER');
+
+        $msg = $this->get('core.messenger');
+
+        try {
+            $this->get($this->service)->unlockInstance();
+            $msg->add(_('Instance unlocked successfully'), 'success', 200);
+        } catch (ApiException $e) {
+            if ($e->getMessage() === _('The instance is not locked')) {
+                $msg->add(_('The instance is not locked'), 'info', 200);
+            } else {
+                throw $e;
+            }
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 }
