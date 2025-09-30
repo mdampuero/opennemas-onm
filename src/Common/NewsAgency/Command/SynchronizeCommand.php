@@ -114,7 +114,7 @@ class SynchronizeCommand extends Command
 
                 // Filetime is more old than 24 hours, unlock it
                 if ($filetime !== 'unknown time'
-                    && (time() - filemtime($file)) > 86400
+                    && (time() - filemtime($file)) > 10800
                 ) {
                     $this->getContainer()->get('news_agency.service.synchronizer')
                         ->setInstance($instance)
