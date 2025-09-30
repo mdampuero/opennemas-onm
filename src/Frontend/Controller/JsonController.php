@@ -154,7 +154,8 @@ class JsonController extends FrontendController
             // Add image at the beggining of the body
             if (!empty($imageUrl)) {
                 $item->body = sprintf(
-                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" /> </br> %s',
+                    '<img src="%s" alt="%s" style="display:none;'
+                    . 'max-width:100%; height:auto; margin-bottom:20px;" /> </br> %s',
                     $imageUrl,
                     $item->title ?? '',
                     $item->body
@@ -259,7 +260,8 @@ class JsonController extends FrontendController
             // Add image at the beggining of the body
             if (!empty($imageUrl)) {
                 $item->body = sprintf(
-                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" /> %s',
+                    '<img src="%s" alt="%s" style="display:none; '
+                    . 'max-width:100%; height:auto; margin-bottom:20px;" /> %s',
                     $imageUrl,
                     $item->title ?? '',
                     $item->body
