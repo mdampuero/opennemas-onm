@@ -121,7 +121,30 @@ services:
 
     core.security.authentication.success:
         class:     Common\Core\Component\Security\Authentication\AuthenticationSuccessHandler
-        arguments: [ '@core.security.authentication', '@application.log', '@router', '@security.token_storage', '@core.decorator.url' ]
+        arguments:
+            [
+                '@core.security.authentication',
+                '@application.log',
+                '@router',
+                '@security.token_storage',
+                '@core.decorator.url',
+                '@core.security.authentication.two_factor'
+            ]
+        public:    true
+
+    core.security.authentication.two_factor:
+        class:     Common\Core\Component\Security\Authentication\TwoFactorManager
+        arguments:
+            [
+                '@session',
+                '@mailer',
+                '@core.template.admin',
+                '@application.log',
+                '@core.decorator.url',
+                '@router',
+                '@orm.manager',
+                '%secret%'
+            ]
         public:    true
 
     core.security.authentication.failure:

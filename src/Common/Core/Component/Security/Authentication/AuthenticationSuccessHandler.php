@@ -55,21 +55,30 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
     protected $urlDecorator;
 
     /**
+     * The two factor manager.
+     *
+     * @var TwoFactorManager
+     */
+    protected $twoFactor;
+
+    /**
      * Constructs a new handler.
      *
-     * @param Authentication $auth         The authentication service.
-     * @param Logger         $logger       The logger service.
-     * @param Router         $router       The router service.
-     * @param TokenStorage   $ts           The token storage.
-     * @param UrlDecorator   $urlDecorator The url decorator to transform url to subdirectory.
+     * @param Authentication   $auth         The authentication service.
+     * @param Logger           $logger       The logger service.
+     * @param Router           $router       The router service.
+     * @param TokenStorage     $ts           The token storage.
+     * @param UrlDecorator     $urlDecorator The url decorator to transform url to subdirectory.
+     * @param TwoFactorManager $twoFactor    The two factor manager.
      */
-    public function __construct($auth, $logger, $router, $ts, $urlDecorator)
+    public function __construct($auth, $logger, $router, $ts, $urlDecorator, $twoFactor = null)
     {
         $this->auth         = $auth;
         $this->logger       = $logger;
         $this->router       = $router;
         $this->ts           = $ts;
         $this->urlDecorator = $urlDecorator;
+        $this->twoFactor    = $twoFactor;
     }
 
     /**
@@ -119,6 +128,26 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
 
         $this->auth->success();
         $this->logger->info('security.authentication.success');
+
+        if ($this->twoFactor && $this->twoFactor->shouldChallenge($request, $token->getUser())) {
+            if ($this->twoFactor->initiate($request, $token->getUser(), $target)) {
+                return new RedirectResponse($this->twoFactor->getVerificationUrl());
+            }
+
+            $this->twoFactor->clear();
+            $session->getFlashBag()->add(
+                'error',
+                _('We were unable to send the verification code. Please try again or contact an administrator.')
+            );
+
+            $this->ts->setToken(null);
+
+            $loginUrl = $this->urlDecorator->prefixUrl(
+                $this->router->generate('backend_authentication_login')
+            );
+
+            return new RedirectResponse($loginUrl);
+        }
 
         return new RedirectResponse($target);
     }
