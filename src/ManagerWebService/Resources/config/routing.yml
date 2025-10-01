@@ -71,3 +71,7 @@ manager_ws_storage:
     resource: '@ManagerWebServiceBundle/Resources/config/routing/storage.yml'
     prefix:   /
 
+manager_ws_security:
+    resource: '@ManagerWebServiceBundle/Resources/config/routing/security.yml'
+    prefix:   /
+

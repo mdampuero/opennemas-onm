@@ -1,0 +1,4 @@
+manager_security_two_factor:
+    path: /security/two-factor
+    options:
+        expose: true

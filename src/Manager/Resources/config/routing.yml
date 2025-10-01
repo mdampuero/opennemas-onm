@@ -59,3 +59,7 @@ manager_onmai:
 manager_storage:
     prefix:   /manager
     resource: '@ManagerBundle/Resources/config/routing/storage.yml'
+
+manager_security:
+    prefix:   /manager
+    resource: '@ManagerBundle/Resources/config/routing/security.yml'

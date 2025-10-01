@@ -207,6 +207,18 @@ class SidebarController extends Controller
                     ]
                 ],
                 [
+                    'name'     => _('Seguridad'),
+                    'icon'     => 'fa fa-shield',
+                    'items' => [
+                        [
+                            'name'     => _('Configuración 2FA'),
+                            'icon'     => 'fa fa-lock fa-lg',
+                            'route'    => 'manager_security_two_factor',
+                            'click'    => true,
+                        ],
+                    ]
+                ],
+                [
                     'name'     => _('System'),
                     'icon'     => 'fa-gears',
                     'items' => [
