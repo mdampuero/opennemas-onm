@@ -17,6 +17,26 @@
 {/block}
 
 {block name="primaryActions"}
+  {acl isAllowed="MASTER"}
+    <li class="quicklinks">
+      <a class="btn btn-white" ng-click="export('api_v1_backend_datatransfer_export')" id="export-button">
+        <i class="fa fa-download"></i>
+        {t}Download{/t}
+      </a>
+    </li>
+    <li class="quicklinks">
+      <span class="h-seperate"></span>
+    </li>
+    <li class="quicklinks">
+      <a class="btn btn-white" ng-click="import()" uib-tooltip="{t}Import{/t}" tooltip-placement="bottom" type="button">
+        <i class="fa fa-upload"></i>
+        {t}Import{/t}
+      </a>
+    </li>
+    <li class="quicklinks">
+      <span class="h-seperate"></span>
+    </li>
+  {/acl}
   {acl isAllowed="WIDGET_CREATE"}
     <li class="quicklinks">
       <a class="btn btn-loading btn-success text-uppercase" href="{url name=backend_widget_create}">
@@ -39,6 +59,13 @@
         <i class="fa fa-check fa-lg"></i>
       </button>
     </li>
+  {/acl}
+  {acl isAllowed="MASTER"}
+  <li class="quicklinks">
+    <button class="btn btn-link" ng-click="exportSelectedItems('api_v1_backend_datatransfer_export_item')" uib-tooltip="{t}Export{/t}" tooltip-placement="bottom" type="button">
+      <i class="fa fa-download fa-lg"></i>
+    </button>
+  </li>
   {/acl}
   {acl isAllowed="WIDGET_DELETE"}
     <li class="quicklinks">
@@ -99,5 +126,8 @@
   </script>
   <script type="text/ng-template" id="modal-duplicate">
     {include file="common/extension/modal.duplicate.tpl"}
+  </script>
+  <script type="text/ng-template" id="modal-datatransfer">
+    {include file="common/extension/modal.datatransfer.tpl"}
   </script>
 {/block}

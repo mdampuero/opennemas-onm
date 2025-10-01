@@ -157,3 +157,7 @@ api_v1_backend_pressclipping:
 api_v1_backend_storage:
     resource: '@ApiBundle/Resources/config/routing/v1/backend/storage.yml'
     prefix:   /backend
+
+api_v1_backend_datatransfer:
+    resource: '@ApiBundle/Resources/config/routing/v1/backend/datatransfer.yml'
+    prefix:   /backend

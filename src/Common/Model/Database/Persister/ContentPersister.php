@@ -76,6 +76,18 @@ class ContentPersister extends BasePersister
             unset($entity->related_contents);
         }
 
+        $advertisements = [];
+        if (!empty($entity->advertisements)) {
+            $advertisements = $entity->advertisements;
+            unset($entity->advertisements);
+        }
+
+        $adsPositions = [];
+        if (!empty($entity->ads_positions)) {
+            $adsPositions = $entity->ads_positions;
+            unset($entity->ads_positions);
+        }
+
         $live_blog_updates = [];
         if (!empty($entity->live_blog_updates)) {
             $live_blog_updates = $entity->live_blog_updates;
@@ -109,6 +121,16 @@ class ContentPersister extends BasePersister
 
             $this->persistWebpushNotifications($id, $webpush_notifications, $entity->starttime);
             $entity->webpush_notifications = $webpush_notifications;
+
+            if (!empty($advertisements)) {
+                $this->persistAdvertisements($id, $advertisements);
+                $advertisements = $advertisements;
+            }
+
+            if (!empty($adsPositions)) {
+                $this->persistAdsPositions($id, $adsPositions);
+                $adsPositions = $adsPositions;
+            }
 
             $this->conn->commit();
         } catch (\Throwable $e) {
@@ -537,6 +559,44 @@ class ContentPersister extends BasePersister
     }
 
     /**
+     * Persits the content advertisements.
+     *
+     * @param integer $id         The entity id.
+     * @param array   $advertisements  The list of advertisements.
+     */
+    protected function persistAdvertisements($id, $advertisements)
+    {
+        // Ignore metas with value = null
+        if (!empty($advertisements)) {
+            $advertisements = array_filter($advertisements, function ($advertisement) {
+                return !is_null($advertisement);
+            });
+        }
+
+        // Update advertisements
+        $this->saveAdvertisements($id, $advertisements);
+    }
+
+    /**
+     * Persits the content ads positions.
+     *
+     * @param integer $id         The entity id.
+     * @param array   $adsPositions  The list of ads positions.
+     */
+    protected function persistAdsPositions($id, $adsPositions)
+    {
+        // Ignore metas with value = null
+        if (!empty($adsPositions)) {
+            $adsPositions = array_filter($adsPositions, function ($adsPosition) {
+                return !is_null($adsPosition);
+            });
+        }
+
+        // Update advertisements
+        $this->saveAdsPositions($id, $adsPositions);
+    }
+
+    /**
      * Deletes old LiveBlogUpdates.
      *
      * @param array $id   The entity id.
@@ -617,7 +677,7 @@ class ContentPersister extends BasePersister
         $this->conn->executeQuery($sql, $params, $types);
     }
 
-      /**
+    /**
      * Saves new LiveBlogUpdates.
      *
      * @param array $id         The entity id.
@@ -683,6 +743,86 @@ class ContentPersister extends BasePersister
                 empty($value['closed']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
             ]);
         }
+        $this->conn->executeQuery($sql, $params, $types);
+    }
+
+    /**
+     * Saves new Advertisements.
+     *
+     * @param array $id The entity id.
+     * @param array $advertisements The list of advertisements to save.
+     */
+    protected function saveAdvertisements($id, $advertisements)
+    {
+        if (empty($advertisements)) {
+            return;
+        }
+        $sql = "insert into advertisements (pk_advertisement, path, url, with_script, script, timeout) values "
+            . str_repeat('(?,?,?,?,?,?),', count($advertisements));
+
+        $id     = array_values($id);
+        $sql    = rtrim($sql, ',');
+        $params = [];
+        $types  = [];
+
+        foreach ($advertisements as $value) {
+            $value['with_script'] = empty($value['with_script']) ? 0 : $value['with_script'];
+            $value['url']         = empty($value['url']) ? '' : $value['url'];
+
+            $params = array_merge($params, array_merge($id, [
+                $value['path'] ?? null,
+                $value['url'],
+                $value['with_script'],
+                $value['script'] ?? null,
+                $value['timeout'] ?? null,
+            ]));
+
+            $types = array_merge($types, [
+                \PDO::PARAM_INT,
+                empty($value['path']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+                empty($value['url']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['with_script']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+                empty($value['script']) ? \PDO::PARAM_NULL : \PDO::PARAM_STR,
+                empty($value['timeout']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+            ]);
+        }
+
+        $this->conn->executeQuery($sql, $params, $types);
+    }
+
+    /**
+     * Saves new Advertisements positions.
+     *
+     * @param array $id The entity id.
+     * @param array $adsPositions The list of ads positions to save.
+     */
+    protected function saveAdsPositions($id, $adsPositions)
+    {
+        if (empty($adsPositions)) {
+            return;
+        }
+
+        $sql = "INSERT INTO advertisements_positions (advertisement_id, position_id) VALUES "
+            . str_repeat('(?,?),', count($adsPositions));
+
+        $id     = array_values($id);
+        $sql    = rtrim($sql, ',');
+        $params = [];
+        $types  = [];
+
+        foreach ($adsPositions as $value) {
+            $value['with_script'] = empty($value['position_id']) ? 0 : $value['position_id'];
+
+            $params = array_merge($params, array_merge($id, [
+                $value['position_id']
+            ]));
+
+            $types = array_merge($types, [
+                \PDO::PARAM_INT,
+                empty($value['position_id']) ? \PDO::PARAM_NULL : \PDO::PARAM_INT,
+            ]);
+        }
+
         $this->conn->executeQuery($sql, $params, $types);
     }
 }

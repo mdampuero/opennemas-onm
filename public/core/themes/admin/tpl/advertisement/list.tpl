@@ -5,15 +5,11 @@
 {/block}
 
 {block name="ngInit"}
-ng-controller="AdvertisementListCtrl"
-ng-init="forcedLocale = '{$locale}'; init();
-advertisement_positions = {json_encode($advertisement_positions)|clear_json};
-type = {json_encode($types)|clear_json};
-status = [
-  { name: '{t}All{/t}', value: null },
-  { name: '{t}Published{/t}', value: 1 },
-  { name: '{t}No published{/t}', value: 0 }
-];"
+  ng-controller="AdvertisementListCtrl"
+  ng-init="forcedLocale = '{$locale}'; init();
+  advertisement_positions = {json_encode($advertisement_positions)|clear_json};
+  type = {json_encode($types)|clear_json};
+  status = [{ name: '{t}All{/t}', value: null },{ name: '{t}Published{/t}', value: 1 },{ name: '{t}No published{/t}', value: 0 }];"
 {/block}
 
 {block name="icon"}
@@ -23,12 +19,31 @@ status = [
   {t}Advertisement{/t}
 {/block}
 
-
 {block name="primaryActions"}
   {acl isAllowed="ADVERTISEMENT_SETTINGS"}
     <li class="quicklinks">
       <a class="btn btn-link" href="{url name=admin_ads_config}">
         <i class="fa fa-cog fa-lg"></i>
+      </a>
+    </li>
+    <li class="quicklinks">
+      <span class="h-seperate"></span>
+    </li>
+    {/acl}
+    {acl isAllowed="MASTER"}
+    <li class="quicklinks">
+      <a class="btn btn-white" ng-click="export('api_v1_backend_datatransfer_export')" id="export-button">
+        <i class="fa fa-download"></i>
+        {t}Download{/t}
+      </a>
+    </li>
+    <li class="quicklinks">
+      <span class="h-seperate"></span>
+    </li>
+    <li class="quicklinks">
+      <a class="btn btn-white" ng-click="import()" uib-tooltip="{t}Import{/t}" tooltip-placement="bottom" type="button">
+        <i class="fa fa-upload"></i>
+        {t}Import{/t}
       </a>
     </li>
     <li class="quicklinks">
@@ -53,6 +68,13 @@ status = [
     <li class="quicklinks">
       <button class="btn btn-link" ng-click="updateSelectedItems('content_status', 1)" uib-tooltip="{t}Enable{/t}" tooltip-placement="bottom" type="button">
         <i class="fa fa-check fa-lg"></i>
+      </button>
+    </li>
+  {/acl}
+  {acl isAllowed="MASTER"}
+    <li class="quicklinks">
+      <button class="btn btn-link" ng-click="exportSelectedItems('api_v1_backend_datatransfer_export_item')" uib-tooltip="{t}Export{/t}" tooltip-placement="bottom" type="button">
+        <i class="fa fa-download fa-lg"></i>
       </button>
     </li>
   {/acl}
@@ -129,7 +151,6 @@ status = [
   {include file="advertisement/list.table.tpl"}
 {/block}
 
-
 {block name="modals"}
   <script type="text/ng-template" id="modal-delete">
     {include file="common/modals/_modalDelete.tpl"}
@@ -151,6 +172,9 @@ status = [
   </script>
   <script type="text/ng-template" id="ad_position_template">
     <div ng-repeat="position in content.positions">[% map[position].name %]</div>
+  </script>
+  <script type="text/ng-template" id="modal-datatransfer">
+    {include file="common/extension/modal.datatransfer.tpl"}
   </script>
 {/block}
 

@@ -32,7 +32,7 @@
           content_type_name: 'advertisement',
           epp: 10,
           in_litter: 0,
-          orderBy: { created: 'desc' },
+          orderBy: { created: 'desc', pk_content: 'desc' },
           page: 1,
         };
 
@@ -43,7 +43,7 @@
           content_type_name: 'advertisement',
           epp: 10,
           in_litter: 0,
-          orderBy: { created: 'desc' },
+          orderBy: { created: 'desc', pk_content: 'desc' },
           page: 1,
         };
 
