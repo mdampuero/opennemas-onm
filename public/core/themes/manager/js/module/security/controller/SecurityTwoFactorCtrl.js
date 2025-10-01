@@ -3,8 +3,8 @@
 
   angular.module('ManagerApp.controllers')
     .controller('SecurityTwoFactorCtrl', [
-      '$controller', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
-      function($controller, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
+      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
+      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         $.extend(this, $controller('ListCtrl', {
           $scope: $scope,
           $timeout: $timeout
@@ -88,25 +88,53 @@
             return;
           }
 
-          item.twoFactorLoading = true;
-          var targetState       = !item.two_factor_enabled;
+          var targetState = !item.two_factor_enabled;
 
-          var route = {
-            name: 'manager_ws_security_two_factor_save',
-            params: {
-              id: item.id,
-              enabled: targetState ? 1 : 0
+          var modal = $uibModal.open({
+            templateUrl: '/managerws/template/common:modal_confirm.' + appVersion + '.tpl',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  icon: 'fa-shield',
+                  name: targetState ? 'enable-two-factor' : 'disable-two-factor',
+                  item: item
+                };
+              },
+              success: function() {
+                return function(modalWindow) {
+                  item.twoFactorLoading = true;
+
+                  var route = {
+                    name: 'manager_ws_security_two_factor_save',
+                    params: {
+                      id: item.id,
+                      enabled: targetState ? 1 : 0
+                    }
+                  };
+
+                  http.put(route).then(function(response) {
+                    item.twoFactorLoading = false;
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    item.twoFactorLoading = false;
+                    modalWindow.close({ data: response.data, success: false });
+                  });
+                };
+              }
             }
-          };
-
-          http.put(route).then(function(response) {
-            item.two_factor_enabled = targetState;
-            messenger.post(response.data);
-            item.twoFactorLoading = false;
-          }, function(response) {
-            messenger.post(response.data);
-            item.twoFactorLoading = false;
           });
+
+          modal.result.then(function(response) {
+            if (response && response.data) {
+              messenger.post(response.data);
+            }
+
+            if (response && response.success) {
+              item.two_factor_enabled = targetState;
+            }
+          }, angular.noop);
         };
 
         $scope.list();
