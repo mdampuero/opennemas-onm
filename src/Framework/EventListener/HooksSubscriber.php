@@ -85,11 +85,9 @@ class HooksSubscriber implements EventSubscriberInterface
             ],
             'advertisement.update' => [
                 [ 'removeVarnishCacheCurrentInstance', 10 ],
-                [ 'removeObjectCacheForAdvertisement', 20],
             ],
             'advertisement.delete' => [
                 [ 'removeVarnishCacheCurrentInstance', 10 ],
-                [ 'removeObjectCacheForAdvertisement', 20],
             ],
             // Comments Config hooks
             'comments.config' => [
@@ -479,21 +477,6 @@ class HooksSubscriber implements EventSubscriberInterface
 
         foreach ($menus as $menu) {
             $cache->removeByPattern('menu-' . $menu . '-html*');
-        }
-    }
-
-    /**
-     * Deletes an advertisement from cache after it is updated/deleted.
-     *
-     * @param Event $event The event to handle.
-     */
-    public function removeObjectCacheForAdvertisement(Event $event)
-    {
-        $cache = $this->container->get('cache.connection.instance');
-        $item  = $event->getArgument('item');
-
-        if ($item['id']) {
-            $cache->removeByPattern('content-' . $item['id']);
         }
     }
 
