@@ -8,6 +8,31 @@
   {t}Configuración 2FA{/t}
 {/block}
 
+{block name="selectedActions"}
+  <li class="quicklinks">
+    <button
+      class="btn btn-link"
+      ng-click="toggleTwoFactorSelected(true)"
+      ng-disabled="bulkTwoFactorLoading"
+      uib-tooltip="{t}Enable 2FA{/t}"
+      tooltip-placement="bottom"
+      type="button">
+      <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': bulkTwoFactorLoading, 'fa-check text-white': !bulkTwoFactorLoading }"></i>
+    </button>
+  </li>
+  <li class="quicklinks">
+    <button
+      class="btn btn-link"
+      ng-click="toggleTwoFactorSelected(false)"
+      ng-disabled="bulkTwoFactorLoading"
+      uib-tooltip="{t}Disable 2FA{/t}"
+      tooltip-placement="bottom"
+      type="button">
+      <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': bulkTwoFactorLoading, 'fa-times text-white': !bulkTwoFactorLoading }"></i>
+    </button>
+  </li>
+{/block}
+
 {block name="leftFilters"}
   <li class="m-r-10 quicklinks">
     <div class="input-group input-group-animated">

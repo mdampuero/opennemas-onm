@@ -3,8 +3,8 @@
 
   angular.module('ManagerApp.controllers')
     .controller('SecurityTwoFactorCtrl', [
-      '$controller', '$location', '$scope', '$timeout', '$uibModal', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
-      function($controller, $location, $scope, $timeout, $uibModal, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
+      '$controller', '$location', '$scope', '$timeout', '$uibModal', '$q', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
+      function($controller, $location, $scope, $timeout, $uibModal, $q, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
         $.extend(this, $controller('ListCtrl', {
           $scope: $scope,
           $timeout: $timeout
@@ -83,6 +83,18 @@
           return item.id;
         };
 
+        function getSelectedInstances() {
+          if (!$scope.items || !$scope.selected || !$scope.selected.items) {
+            return [];
+          }
+
+          return $scope.items.filter(function(instance) {
+            return $scope.selected.items.indexOf(instance.id) !== -1;
+          });
+        }
+
+        $scope.bulkTwoFactorLoading = false;
+
         $scope.toggleTwoFactor = function(item) {
           if (item.twoFactorLoading) {
             return;
@@ -135,6 +147,109 @@
               item.two_factor_enabled = targetState;
             }
           }, angular.noop);
+        };
+
+        $scope.toggleTwoFactorSelected = function(targetState) {
+          if ($scope.bulkTwoFactorLoading) {
+            return;
+          }
+
+          var selectedInstances = getSelectedInstances();
+
+          if (!selectedInstances.length) {
+            return;
+          }
+
+          var modal = $uibModal.open({
+            templateUrl: '/managerws/template/common:modal_confirm.' + appVersion + '.tpl',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  icon: 'fa-shield',
+                  name: targetState ? 'enable-two-factor' : 'disable-two-factor',
+                  selected: selectedInstances
+                };
+              },
+              success: function() {
+                return function(modalWindow) {
+                  $scope.bulkTwoFactorLoading = true;
+
+                  selectedInstances.forEach(function(instance) {
+                    instance.twoFactorLoading = true;
+                  });
+
+                  var requests = selectedInstances.map(function(instance) {
+                    var route = {
+                      name: 'manager_ws_security_two_factor_save',
+                      params: {
+                        id: instance.id,
+                        enabled: targetState ? 1 : 0
+                      }
+                    };
+
+                    return http.put(route).then(function(response) {
+                      return { success: true, response: response, instance: instance };
+                    }, function(response) {
+                      return $q.when({ success: false, response: response, instance: instance });
+                    });
+                  });
+
+                  $q.all(requests).then(function(results) {
+                    var successCount = 0;
+                    var failureCount = 0;
+
+                    results.forEach(function(result) {
+                      result.instance.twoFactorLoading = false;
+
+                      if (result.success) {
+                        successCount += 1;
+                        result.instance.two_factor_enabled = targetState;
+
+                        var index = $scope.selected.items.indexOf(result.instance.id);
+
+                        if (index !== -1) {
+                          $scope.selected.items.splice(index, 1);
+                        }
+                      } else {
+                        failureCount += 1;
+
+                        if (result.response && result.response.data) {
+                          messenger.post(result.response.data);
+                        } else {
+                          messenger.post('Unexpected error while updating two-factor authentication.', 'error');
+                        }
+                      }
+                    });
+
+                    if (successCount > 0) {
+                      var successMessage = 'Two-factor authentication disabled successfully';
+
+                      if (targetState) {
+                          successMessage = 'Two-factor authentication enabled successfully';
+                      }
+
+                      if (successCount > 1) {
+                        successMessage += ' for ' + successCount + ' instances.';
+                      } else {
+                        successMessage += '.';
+                      }
+
+                      messenger.post(successMessage, 'success');
+                    }
+
+                    $scope.selected.all = false;
+                    $scope.bulkTwoFactorLoading = false;
+
+                    modalWindow.close({ success: failureCount === 0 });
+                  });
+                };
+              }
+            }
+          });
+
+          modal.result.then(angular.noop, angular.noop);
         };
 
         $scope.list();
