@@ -15,8 +15,7 @@
           selected: [
             'name',
             'internal_name',
-            'two_factor_enabled',
-            'delete_session'
+            'two_factor_enabled'
           ]
         };
 
@@ -72,9 +71,9 @@
           $scope.columns.selected = [];
         }
 
-        if ($scope.columns.selected.indexOf('delete_session') === -1) {
-          $scope.columns.selected.push('delete_session');
-        }
+        $scope.columns.selected = $scope.columns.selected.filter(function(column) {
+          return column !== 'delete_session';
+        });
 
         oqlDecoder.configure({
           ignore: [ 'internal_name', 'contact_mail', 'domains' ]
