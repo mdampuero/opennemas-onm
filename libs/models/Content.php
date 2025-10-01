@@ -522,7 +522,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.create', [ 'action' => __METHOD__, 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.create',
-                [ $this->content_type_name => $this ]
+                [ 'item' => $this ]
             );
 
             return true;
@@ -567,7 +567,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.update', [ 'action' => __METHOD__, 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
-                [ 'content' => $this ]
+                [ 'item' => $this ]
             );
 
             return true;
@@ -612,7 +612,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.update', [ 'action' => __METHOD__, 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
-                [ 'content' => $this ]
+                [ 'item' => $this ]
             );
 
             return true;
@@ -645,7 +645,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.delete', [ 'action' => __METHOD__, 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.delete',
-                [ $this->content_type_name => $this ]
+                [ 'item' => $this ]
             );
 
             return true;
@@ -684,7 +684,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.update', [ 'action' => __METHOD__, 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
+                [ 'item' => $this ]
             );
 
             return true;
@@ -753,7 +753,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.update', [ 'action' => __METHOD__, 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
+                [ 'item' => $this ]
             );
 
             return $this;
@@ -792,7 +792,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.update', [ 'action' => __METHOD__, 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
+                [ 'item' => $this ]
             );
 
             return $this;
@@ -829,7 +829,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.update', [ 'action' => __METHOD__, 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
+                [ 'item' => $this ]
             );
 
             return true;
@@ -867,7 +867,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.update', [ 'action' => __METHOD__, 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
+                [ 'item' => $this ]
             );
 
             return true;
@@ -901,7 +901,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.update', [ 'action' => __METHOD__, 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
+                [ 'item' => $this ]
             );
 
             return true;
@@ -965,7 +965,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.update', [ 'action' => __METHOD__, 'item' => $this ]);
             getService('core.dispatcher')->dispatch(
                 $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
+                [ 'item' => $this ]
             );
 
             // Set status for it's updated to next event
@@ -1034,7 +1034,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.update', [ 'action' => __METHOD__, 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
+                [ 'item' => $this ]
             );
 
             return true;
@@ -1074,7 +1074,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.set_positions', [ 'action' => __METHOD__, 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.set_positions',
-                [ $this->content_type_name => $this ]
+                [ 'item' => $this ]
             );
 
             return $this;
@@ -1121,7 +1121,7 @@ class Content implements \JsonSerializable, CsvSerializable
             dispatchEventWithParams('content.update', [ 'action' => __METHOD__, 'item' => $this ]);
             dispatchEventWithParams(
                 $this->content_type_name . '.update',
-                [ $this->content_type_name => $this ]
+                [ 'item' => $this ]
             );
 
             return $this;
