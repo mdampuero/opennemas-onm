@@ -25,7 +25,7 @@
     <button
       class="btn btn-link"
       ng-click="toggleTwoFactorSelected(true)"
-      nng-disabled="bulkTwoFactorLoading || bulkDeleteSessionLoading"
+      ng-disabled="bulkTwoFactorLoading || bulkDeleteSessionLoading"
       uib-tooltip="{t}Enable 2FA{/t}"
       tooltip-placement="bottom"
       type="button">
