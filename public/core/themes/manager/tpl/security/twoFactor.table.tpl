@@ -14,6 +14,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-delete-session" checklist-model="columns.selected" checklist-value="'delete_session'" type="checkbox">
+    <label for="checkbox-delete-session">
+      {t}Borrar sesión{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-two-factor" checklist-model="columns.selected" checklist-value="'two_factor_enabled'" type="checkbox">
     <label for="checkbox-two-factor">
       {t}2FA{/t}
@@ -34,6 +40,9 @@
     {t}Internal name{/t}
     <i ng-class="{ 'fa fa-caret-up': isOrderedBy('internal_name') == 'asc', 'fa fa-caret-down': isOrderedBy('internal_name') == 'desc' }"></i>
   </th>
+   <th class="text-center" ng-show="isColumnEnabled('delete_session')" width="180">
+    {t}Borrar sesión{/t}
+  </th>
   <th class="text-center" ng-show="isColumnEnabled('two_factor_enabled')" width="120">
     {t}2FA{/t}
   </th>
@@ -52,6 +61,12 @@
     <div class="table-text">
       [% item.internal_name %]
     </div>
+  </td>
+  <td class="text-center v-align-middle" ng-show="isColumnEnabled('delete_session')" title="{t}Delete two-factor session{/t}">
+    <button class="btn btn-white" ng-click="deleteSession(item)" ng-disabled="item.deleteSessionLoading || bulkDeleteSessionLoading" type="button">
+      <i class="fa" ng-class="{ 'fa-circle-o-notch fa-spin': item.deleteSessionLoading, 'fa-trash': !item.deleteSessionLoading }"></i>
+      <span class="m-l-5">{t}Borrar sesión{/t}</span>
+    </button>
   </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('two_factor_enabled')" title="{t}Two-factor authentication{/t}">
     <button class="btn btn-white" ng-click="toggleTwoFactor(item)" ng-disabled="item.twoFactorLoading" type="button">

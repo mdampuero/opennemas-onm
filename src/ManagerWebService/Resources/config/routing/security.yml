@@ -11,3 +11,10 @@ manager_ws_security_two_factor_save:
     methods:  [ PUT ]
     options:
         expose: true
+
+manager_ws_security_two_factor_delete_session:
+    path:     /security/two-factor/session/delete
+    defaults: { _controller: ManagerWebServiceBundle:Security:twoFactorDeleteSession }
+    methods:  [ DELETE ]
+    options:
+        expose: true
