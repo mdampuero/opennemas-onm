@@ -54,11 +54,16 @@ class SecurityListener implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        $uri      = $event->getRequest()->getRequestUri();
+        $request  = $event->getRequest();
+        $uri      = $request->getRequestUri();
         $instance = $this->container->get('core.instance');
 
         // Instance not registered
         if (empty($instance) || !$this->hasSecurity($uri)) {
+            return;
+        }
+
+        if ($this->enforceTwoFactor($event, $request, $uri)) {
             return;
         }
 
@@ -104,6 +109,55 @@ class SecurityListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [ KernelEvents::REQUEST => 'onKernelRequest' ];
+    }
+
+    /**
+     * Ensures the two factor challenge is completed before continuing.
+     *
+     * @param GetResponseEvent $event
+     * @param mixed            $request
+     * @param string           $uri
+     *
+     * @return bool
+     */
+    protected function enforceTwoFactor(GetResponseEvent $event, $request, $uri)
+    {
+        $twoFactor = $this->container->get('core.security.authentication.two_factor');
+
+        if (!$twoFactor) {
+            return false;
+        }
+
+        if (!$twoFactor->isPending() || $this->isTwoFactorAllowedPath($uri)) {
+            return false;
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            $event->setResponse(new JsonResponse([
+                'success'              => false,
+                'two_factor_required'  => true,
+            ], 403));
+
+            return true;
+        }
+
+        $event->setResponse(new RedirectResponse($twoFactor->getVerificationUrl()));
+
+        return true;
+    }
+
+    /**
+     * Checks if the current uri should bypass the two factor challenge.
+     *
+     * @param string $uri
+     *
+     * @return bool
+     */
+    protected function isTwoFactorAllowedPath($uri)
+    {
+        return preg_match('@^/admin/login/two-factor@', $uri)
+            || preg_match('@^/auth/logout@', $uri)
+            || preg_match('@^/(asset|assets|css|images|js|dynamic)/@', $uri);
     }
 
     /**
