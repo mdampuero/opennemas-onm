@@ -83,6 +83,34 @@ class SecurityController extends Controller
         return new JsonResponse($msg->getMessages(), $msg->getCode());
     }
 
+    public function twoFactorDeleteSessionAction(Request $request)
+    {
+        $msg    = $this->get('core.messenger');
+        $params = array_merge($request->request->all(), $request->query->all());
+
+        $ids = $params['ids'] ?? [];
+
+        if (!is_array($ids)) {
+            $ids = [ $ids ];
+        }
+
+        $ids = array_values(array_filter(array_map('intval', $ids)));
+
+        if (empty($ids)) {
+            $msg->add(_('Invalid instance identifiers'), 'error', 400);
+
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
+        }
+
+        if (count($ids) > 1) {
+            $msg->add(_('Two-factor sessions deleted successfully'), 'success');
+        } else {
+            $msg->add(_('Two-factor session deleted successfully'), 'success');
+        }
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+
     private function persistTwoFactorSetting($em, $instance, bool $enabled): void
     {
         $settings = $instance->settings;

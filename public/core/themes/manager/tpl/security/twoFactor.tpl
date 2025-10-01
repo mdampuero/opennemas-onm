@@ -9,26 +9,40 @@
 {/block}
 
 {block name="selectedActions"}
+   <li class="quicklinks">
+    <button
+      class="btn btn-link"
+      ng-click="deleteSessionsSelected()"
+      ng-disabled="bulkDeleteSessionLoading || bulkTwoFactorLoading"
+      uib-tooltip="{t}Delete sessions{/t}"
+      tooltip-placement="bottom"
+      type="button">
+      <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': bulkDeleteSessionLoading, 'fa-trash text-white': !bulkDeleteSessionLoading }"></i>
+      <span class="m-l-5">{t}Borrar sesiones{/t}</span>
+    </button>
+  </li>
   <li class="quicklinks">
     <button
       class="btn btn-link"
       ng-click="toggleTwoFactorSelected(true)"
-      ng-disabled="bulkTwoFactorLoading"
+      nng-disabled="bulkTwoFactorLoading || bulkDeleteSessionLoading"
       uib-tooltip="{t}Enable 2FA{/t}"
       tooltip-placement="bottom"
       type="button">
       <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': bulkTwoFactorLoading, 'fa-check text-white': !bulkTwoFactorLoading }"></i>
+      <span class="m-l-5">{t}Activar 2FA{/t}</span>
     </button>
   </li>
   <li class="quicklinks">
     <button
       class="btn btn-link"
       ng-click="toggleTwoFactorSelected(false)"
-      ng-disabled="bulkTwoFactorLoading"
+      ng-disabled="bulkTwoFactorLoading || bulkDeleteSessionLoading"
       uib-tooltip="{t}Disable 2FA{/t}"
       tooltip-placement="bottom"
       type="button">
       <i class="fa fa-lg" ng-class="{ 'fa-circle-o-notch fa-spin': bulkTwoFactorLoading, 'fa-times text-white': !bulkTwoFactorLoading }"></i>
+      <span class="m-l-5">{t}Desactivar 2FA{/t}</span>
     </button>
   </li>
 {/block}

@@ -15,7 +15,8 @@
           selected: [
             'name',
             'internal_name',
-            'two_factor_enabled'
+            'two_factor_enabled',
+            'delete_session'
           ]
         };
 
@@ -67,6 +68,14 @@
           $scope.columns = webStorage.local.get('security-two-factor-columns');
         }
 
+        if (!$scope.columns.selected) {
+          $scope.columns.selected = [];
+        }
+
+        if ($scope.columns.selected.indexOf('delete_session') === -1) {
+          $scope.columns.selected.push('delete_session');
+        }
+
         oqlDecoder.configure({
           ignore: [ 'internal_name', 'contact_mail', 'domains' ]
         });
@@ -94,6 +103,7 @@
         }
 
         $scope.bulkTwoFactorLoading = false;
+        $scope.bulkDeleteSessionLoading = false;
 
         $scope.toggleTwoFactor = function(item) {
           if (item.twoFactorLoading) {
@@ -145,6 +155,49 @@
 
             if (response && response.success) {
               item.two_factor_enabled = targetState;
+            }
+          }, angular.noop);
+        };
+
+        $scope.deleteSession = function(item) {
+          if (item.deleteSessionLoading) {
+            return;
+          }
+
+          var modal = $uibModal.open({
+            templateUrl: '/managerws/template/common:modal_confirm.' + appVersion + '.tpl',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  icon: 'fa-trash',
+                  name: 'delete-session',
+                  item: item
+                };
+              },
+              success: function() {
+                return function(modalWindow) {
+                  item.deleteSessionLoading = true;
+
+                  var route = 'manager_ws_security_two_factor_delete_session';
+                  var data = { ids: [ item.id ] };
+
+                  http.delete(route, data).then(function(response) {
+                    item.deleteSessionLoading = false;
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    item.deleteSessionLoading = false;
+                    modalWindow.close({ data: response.data, success: false });
+                  });
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response && response.data) {
+              messenger.post(response.data);
             }
           }, angular.noop);
         };
@@ -250,6 +303,62 @@
           });
 
           modal.result.then(angular.noop, angular.noop);
+        };
+
+        $scope.deleteSessionsSelected = function() {
+          if ($scope.bulkDeleteSessionLoading || $scope.bulkTwoFactorLoading) {
+            return;
+          }
+
+          var selectedInstances = getSelectedInstances();
+
+          if (!selectedInstances.length) {
+            return;
+          }
+
+          var modal = $uibModal.open({
+            templateUrl: '/managerws/template/common:modal_confirm.' + appVersion + '.tpl',
+            backdrop: 'static',
+            controller: 'modalCtrl',
+            resolve: {
+              template: function() {
+                return {
+                  icon: 'fa-trash',
+                  name: 'delete-sessions',
+                  selected: selectedInstances
+                };
+              },
+              success: function() {
+                return function(modalWindow) {
+                  $scope.bulkDeleteSessionLoading = true;
+
+                  var data = {
+                    ids: selectedInstances.map(function(instance) {
+                      return instance.id;
+                    })
+                  };
+
+                  http.delete('manager_ws_security_two_factor_delete_session', data).then(function(response) {
+                    $scope.bulkDeleteSessionLoading = false;
+                    modalWindow.close({ data: response.data, success: true });
+                  }, function(response) {
+                    $scope.bulkDeleteSessionLoading = false;
+                    modalWindow.close({ data: response.data, success: false });
+                  });
+                };
+              }
+            }
+          });
+
+          modal.result.then(function(response) {
+            if (response && response.data) {
+              messenger.post(response.data);
+            }
+
+            if (response && response.success) {
+              $scope.selected = { all: false, items: [] };
+            }
+          }, angular.noop);
         };
 
         $scope.list();
