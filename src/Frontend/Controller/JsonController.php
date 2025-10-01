@@ -139,14 +139,19 @@ class JsonController extends FrontendController
 
             // Add buy ticket button
             if (!empty($item->event_tickets_link)) {
+                $price = strpos($item->event_tickets_price, '€') !== false
+                    ? $item->event_tickets_price
+                    : $item->event_tickets_price . '€';
+
                 $item->body = sprintf(
-                    '<a href="%s" title="%s" style="%s">%s</a><span>Precio: <strong>%s€</strong></span> %s',
+                    '<a href="%s" title="%s" style="%s">%s</a>%s %s',
                     $item->event_tickets_link,
                     "COMPRAR ENTRADAS",
                     "background-color: #009ddd;border-radius: 4px;color: #fff;"
                     . "display: inline-block;margin: 0 10px 10px 0;padding: 10px 20px;",
                     "COMPRAR ENTRADAS",
-                    $item->event_tickets_price,
+                    empty($item->event_tickets_price)
+                        ? '' : '<span>Precio: <strong>' . $price . '</strong></span>',
                     $item->body
                 );
             }
