@@ -9,6 +9,7 @@
  */
 namespace Common\Core\Component\Security\Authentication;
 
+use Common\Model\Entity\Instance;
 use Opennemas\Orm\Core\EntityManager;
 use Psr\Log\LoggerInterface;
 use Swift_Mailer;
@@ -31,6 +32,7 @@ class TwoFactorManager
     const COOKIE_NAME = '__onm_two_factor';
     const CODE_TTL = 600; // 10 minutes
     const COOKIE_TTL = 2592000; // 30 days
+    const TWO_FACTOR_SETTINGS_KEY = 'two_factor_enabled';
 
     /**
      * @var SessionInterface
@@ -73,7 +75,14 @@ class TwoFactorManager
     protected $secret;
 
     /**
+     * @var Instance|null
+     */
+    protected $instance;
+
+    /**
      * Initializes the manager.
+     *
+     * @param Instance|null $instance The current instance, if available.
      */
     public function __construct(
         SessionInterface $session,
@@ -83,7 +92,8 @@ class TwoFactorManager
         UrlDecorator $urlDecorator,
         UrlGeneratorInterface $router,
         EntityManager $orm,
-        $secret
+        $secret,
+        ?Instance $instance = null
     ) {
         $this->session      = $session;
         $this->mailer       = $mailer;
@@ -93,6 +103,7 @@ class TwoFactorManager
         $this->router       = $router;
         $this->orm          = $orm;
         $this->secret       = (string) $secret;
+        $this->instance     = $instance;
     }
 
     /**
@@ -100,7 +111,7 @@ class TwoFactorManager
      */
     public function shouldChallenge(Request $request, $user)
     {
-        if (!$this->supportsUser($user)) {
+        if (!$this->supportsUser($user) || !$this->isTwoFactorEnabled()) {
             return false;
         }
 
@@ -135,6 +146,36 @@ class TwoFactorManager
         $signature = $this->buildSignature($userId, $passwordHash);
 
         return !hash_equals($signature, $payload['signature']);
+    }
+
+    /**
+     * Determines if two factor authentication is enabled for the current instance.
+     */
+    protected function isTwoFactorEnabled()
+    {
+        if (!$this->instance) {
+            return false;
+        }
+
+        $settings = $this->instance->settings;
+
+        if (!is_array($settings) || !array_key_exists(self::TWO_FACTOR_SETTINGS_KEY, $settings)) {
+            return false;
+        }
+
+        $value = $settings[self::TWO_FACTOR_SETTINGS_KEY];
+
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        $result = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+        if ($result !== null) {
+            return $result;
+        }
+
+        return false;
     }
 
     /**
