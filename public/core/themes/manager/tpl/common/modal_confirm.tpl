@@ -1,7 +1,7 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="dismiss();">&times;</button>
     <h4 class="modal-title">
-        <i class="fa fa-trash-o"></i>
+        <i class="fa" ng-class="template.icon || 'fa-trash-o'"></i>
         <span ng-if="template.name == 'logout'">{t}Log out{/t}</span>
         <span ng-if="template.name == 'delete-instance'">{t}Delete instance{/t}</span>
         <span ng-if="template.name == 'delete-instances'">{t}Delete selected instances{/t}</span>
@@ -13,6 +13,8 @@
         <span ng-if="template.name == 'delete-notifications'">{t}Delete notifications{/t}</span>
         <span ng-if="template.name == 'delete-module'">{t}Delete module{/t}</span>
         <span ng-if="template.name == 'delete-modules'">{t}Delete modules{/t}</span>
+        <span ng-if="template.name == 'enable-two-factor'">{t}Enable two-factor authentication{/t}</span>
+        <span ng-if="template.name == 'disable-two-factor'">{t}Disable two-factor authentication{/t}</span>
     </h4>
 </div>
 <div class="modal-body">
@@ -27,6 +29,8 @@
     <p ng-if="template.name == 'delete-notifications'">{t}Do you really want to delete the selected notifications?{/t}</p>
     <p ng-if="template.name == 'delete-module'">{t}Do you really want to delete the selected modules?{/t}</p>
     <p ng-if="template.name == 'delete-modules'">{t}Do you really want to delete the selected modules?{/t}</p>
+    <p ng-if="template.name == 'enable-two-factor'">{t}Do you really want to enable two-factor authentication?{/t}</p>
+    <p ng-if="template.name == 'disable-two-factor'">{t}Do you really want to disable two-factor authentication?{/t}</p>
     <ul ng-if="template.item">
         <li>
             [% template.name == 'delete-module' || template.name == 'delete-modules' ? template.item.name.en : template.item.name %]
@@ -72,5 +76,7 @@
         <span ng-if="template.name == 'delete-notifications'">{t}delete them{/t}</span>
         <span ng-if="template.name == 'delete-module'">{t}delete it{/t}</span>
         <span ng-if="template.name == 'delete-modules'">{t}delete them{/t}</span>
+        <span ng-if="template.name == 'enable-two-factor'">{t}enable it{/t}</span>
+        <span ng-if="template.name == 'disable-two-factor'">{t}disable it{/t}</span>
     </button>
 </div>
