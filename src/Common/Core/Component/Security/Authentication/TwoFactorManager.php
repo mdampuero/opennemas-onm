@@ -116,6 +116,7 @@ class TwoFactorManager
         }
 
         $cookie = $request->cookies->get(self::COOKIE_NAME);
+
         if (empty($cookie)) {
             return true;
         }
