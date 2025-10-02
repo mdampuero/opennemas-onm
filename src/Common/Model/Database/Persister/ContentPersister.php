@@ -774,7 +774,7 @@ class ContentPersister extends BasePersister
                 $value['url'],
                 $value['with_script'],
                 $value['script'] ?? null,
-                $value['timeout'] ?? null,
+                empty($value['timeout']) ? null : $value['timeout'],
             ]));
 
             $types = array_merge($types, [
