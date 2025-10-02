@@ -9,7 +9,7 @@
  */
 namespace Backend\Controller;
 
-use Common\Core\Annotation\Template;
+use Common\Core\Component\Security\Authentication\TwoFactorManager;
 use Common\Core\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -141,5 +141,34 @@ class AuthenticationController extends Controller
             'locale'           => $this->get('core.locale')->getLocale(),
             'availableLocales' => $this->get('core.locale')->getAvailableLocales(),
         ]);
+    }
+
+    /**
+     * Cancels the two factor challenge and returns to the login form.
+     */
+    public function twoFactorCancelAction(Request $request)
+    {
+        $twoFactor = $this->get('core.security.authentication.two_factor');
+
+        if ($twoFactor) {
+            $twoFactor->clear();
+        }
+
+        $tokenStorage = $this->get('security.token_storage');
+
+        if ($tokenStorage) {
+            $tokenStorage->setToken(null);
+        }
+
+        $session = $request->getSession();
+
+        if ($session) {
+            $session->invalidate();
+        }
+
+        $response = $this->redirect($this->generateUrl('backend_authentication_login'));
+        $response->headers->clearCookie(TwoFactorManager::COOKIE_NAME);
+
+        return $response;
     }
 }
