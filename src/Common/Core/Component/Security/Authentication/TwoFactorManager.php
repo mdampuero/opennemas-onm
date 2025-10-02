@@ -111,12 +111,11 @@ class TwoFactorManager
      */
     public function shouldChallenge(Request $request, $user)
     {
-        if (!$this->supportsUser($user) || !$this->isTwoFactorEnabled()) {
+        if (!$this->supportsUser($user) || !$this->isTwoFactorEnabled() || $user->getOrigin() === 'manager') {
             return false;
         }
 
         $cookie = $request->cookies->get(self::COOKIE_NAME);
-
         if (empty($cookie)) {
             return true;
         }
