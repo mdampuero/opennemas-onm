@@ -69,7 +69,7 @@
       [% data.extra.events[item.event_type].name %]
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('start')">
-    <span ng-show="!item.event_start_date && !item.event_start_hour">?</span>
+    <span ng-show="!item.event_start_date && !item.event_start_hour"><strong>∞</strong></span>
     <div ng-show="item.event_start_date">
       <i class="fa fa-calendar"></i>
       [% item.event_start_date %]
@@ -80,7 +80,7 @@
     </small>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('end')">
-    <span ng-show="!item.event_end_date && !item.event_end_hour">?</span>
+    <span ng-show="!item.event_end_date && !item.event_end_hour"><strong>∞</strong></span>
     <div ng-show="item.event_end_date">
       <i class="fa fa-calendar"></i>
       [% item.event_end_date %]
