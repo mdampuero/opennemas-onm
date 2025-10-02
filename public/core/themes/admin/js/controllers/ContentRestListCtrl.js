@@ -210,11 +210,15 @@
             return;
           }
 
-          var url = routing.generate(route, { ids: ids, contentType: contentType });
+          const url = routing.generate(route, { ids: ids, contentType: contentType });
 
-          http.get(url).then(function(response) {
+          const routes = {
+            name: 'api_v1_backend_datatransfer_export_item',
+            params: { ids: ids, contentType: contentType }
+          };
+
+          http.get(routes).then(function(response) {
             messenger.post(response.data.messages);
-
             window.location.href = url;
           });
         };
@@ -230,7 +234,12 @@
           // Build the URL for export
           const url         = routing.generate(route, { contentType: contentType });
 
-          http.get(url).then(function(response) {
+          const routes = {
+            name: route,
+            params: { contentType: contentType }
+          };
+
+          http.get(routes).then(function(response) {
             messenger.post(response.data.messages);
 
             window.location.href = url;
