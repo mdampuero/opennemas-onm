@@ -67,10 +67,10 @@
   </td>
   
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('two_factor_enabled')" title="{t}Two-factor authentication{/t}">
-    <span class="badge badge-success" ng-if="item.two_factor_enabled">
+    <span class="badge badge-success" style="font-size:0.8rem" ng-if="item.two_factor_enabled">
       {t}Yes{/t}
     </span>
-    <span class="badge badge-danger" ng-if="!item.two_factor_enabled">
+    <span class="badge badge-danger" style="font-size:0.8rem" ng-if="!item.two_factor_enabled">
       {t}No{/t}
     </span>
   </td>
