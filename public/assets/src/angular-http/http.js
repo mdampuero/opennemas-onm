@@ -207,17 +207,23 @@
          *
          * @return {Object} The response object.
          */
-        this.post = function(route, data) {
+        this.post = function(route, data, config) {
           if (!this.hasFile(data)) {
-            return $http.post(this.getUrl(route), data);
+            return $http.post(this.getUrl(route), data, config);
           }
 
           var formData = this.convertToFormData(data);
 
-          return $http.post(this.getUrl(route), formData, {
+          var defaultConfig = {
             transformRequest: angular.identity,
             headers: { 'Content-Type': undefined } // eslint-disable-line no-undefined
-          });
+          };
+
+          return $http.post(
+            this.getUrl(route),
+            formData,
+            angular.extend({}, defaultConfig, config)
+          );
         };
 
         /**

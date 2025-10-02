@@ -15,8 +15,8 @@
      *   Handles all actions in user groups list.
      */
     .controller('ContentRestListCtrl', [
-      '$controller', '$scope', '$uibModal', 'oqlEncoder', '$location', 'http', '$http', 'messenger', 'routing', '$window',
-      function($controller, $scope, $uibModal, oqlEncoder, $location, http, $http, messenger, routing, $window) {
+      '$controller', '$scope', '$uibModal', 'oqlEncoder', '$location', 'http', 'messenger', 'routing', '$window',
+      function($controller, $scope, $uibModal, oqlEncoder, $location, http, messenger, routing, $window) {
         $.extend(this, $controller('RestListCtrl', { $scope: $scope }));
 
         /**
@@ -212,7 +212,7 @@
 
           var url = routing.generate(route, { ids: ids, contentType: contentType });
 
-          $http.get(url).then(function(response) {
+          http.get(url).then(function(response) {
             messenger.post(response.data.messages);
 
             window.location.href = url;
@@ -230,7 +230,7 @@
           // Build the URL for export
           const url         = routing.generate(route, { contentType: contentType });
 
-          $http.get(url).then(function(response) {
+          http.get(url).then(function(response) {
             messenger.post(response.data.messages);
 
             window.location.href = url;
@@ -257,7 +257,7 @@
               template: function() {
                 return {};
               },
-              success: function($http) {
+              success: function() {
                 return function(modal, template) {
                   if (!template.file) {
                     return messenger.post('No file selected', 'error');
@@ -274,9 +274,11 @@
                   reader.onload = function(event) {
                     const json = JSON.parse(event.target.result);
 
-                    const url = routing.generate('api_v1_backend_datatransfer_import');
+                    const route = {
+                      name: 'api_v1_backend_datatransfer_import',
+                    };
 
-                    $http.post(url, json, {
+                    http.post(route, json, {
                       headers: { 'Content-Type': 'application/json' },
                       transformRequest: angular.toJson
                     }).then(function(response) {
