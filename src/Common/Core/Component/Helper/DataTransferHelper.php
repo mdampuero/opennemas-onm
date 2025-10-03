@@ -37,11 +37,11 @@ class DataTransferHelper
             return '';
         }
 
-        // Find content
-        $cs      = $this->container->get('api.service.content');
-        $content = $cs->getItem($path);
-
-        if (empty($content)) {
+        try {
+            // Find content
+            $cs      = $this->container->get('api.service.content');
+            $content = $cs->getItem($path);
+        } catch (\Exception $e) {
             return '';
         }
 
