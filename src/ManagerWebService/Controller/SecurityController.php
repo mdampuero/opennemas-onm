@@ -74,6 +74,9 @@ class SecurityController extends Controller
 
         $this->persistTwoFactorSetting($em, $instance, $enabled);
 
+        $this->get('core.dispatcher')
+            ->dispatch('instance.update', [ 'instance' => $instance ]);
+
         if ($enabled) {
             $msg->add(_('Two-factor authentication enabled successfully'), 'success');
         } else {
