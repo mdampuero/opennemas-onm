@@ -111,12 +111,13 @@ class TwoFactorManager
      */
     public function shouldChallenge(Request $request, $user)
     {
+        $this->logger->info(sprintf('2FA -  shouldChallenge', $user));
         if (!$this->supportsUser($user) || !$this->isTwoFactorEnabled() || $user->getOrigin() === 'manager') {
             return false;
         }
 
         $cookie = $request->cookies->get(self::COOKIE_NAME);
-
+        $this->logger->info(sprintf('2FA -  cookie', $cookie));
         if (empty($cookie)) {
             return true;
         }
@@ -153,6 +154,7 @@ class TwoFactorManager
      */
     protected function isTwoFactorEnabled()
     {
+        $this->logger->info(sprintf('2FA -  isTwoFactorEnabled', $this->instance));
         if (!$this->instance) {
             return false;
         }
@@ -183,6 +185,7 @@ class TwoFactorManager
      */
     public function initiate(Request $request, UserInterface $user, $target)
     {
+        $this->logger->info(sprintf('2FA -  initiate', $user));
         if (!$this->supportsUser($user)) {
             return false;
         }
@@ -208,7 +211,8 @@ class TwoFactorManager
             'target'        => $target,
             'secure'        => $secure,
         ];
-
+        $this->logger->info(sprintf('2FA -  ' . self::SESSION_KEY, $$data));
+        
         $this->session->set(self::SESSION_KEY, $data);
 
         return $this->sendCode($data['email'], $code);
