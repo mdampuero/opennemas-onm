@@ -112,7 +112,7 @@ class SynchronizeCommand extends Command
                 // use filemtime to show when it was locked
                 $filetime = file_exists($file) ? date('Y-m-d H:i:s', filemtime($file)) : 'unknown time';
 
-                // Filetime is more old than 24 hours, unlock it
+                // Filetime is more old than 3 hours, unlock it
                 if ($filetime !== 'unknown time'
                     && (time() - filemtime($file)) > 10800
                 ) {
