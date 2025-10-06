@@ -20,14 +20,6 @@
 {/block}
 
 {block name="primaryActions"}
-  {acl isAllowed="MASTER"}
-    <li class="quicklinks">
-      <a class="btn btn-primary" ng-click="unlockInstance()">
-        <span class="fa fa-unlock"></span> {t}Unlock instance{/t}
-      </a>
-    </li>
-  {/acl}
-  <li class="quicklinks"><span class="h-seperate"></span></li>
   {acl isAllowed="IMPORT_NEWS_AGENCY_CONFIG"}
     <li class="quicklinks">
       <a class="btn btn-link" href="{url name=backend_news_agency_server_list}">
