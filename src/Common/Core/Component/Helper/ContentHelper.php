@@ -12,7 +12,6 @@
 namespace Common\Core\Component\Helper;
 
 use Api\Exception\GetItemException;
-use Api\Exception\GetListException;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
@@ -206,6 +205,26 @@ class ContentHelper
         } catch (\Exception $e) {
             return null;
         }
+    }
+
+    /**
+     * Retrieves a date range from one year ago until one year ahead from today.
+     *
+     * The method calculates:
+     * - `min`: the date exactly one year before today.
+     * - `max`: the date exactly one year after today.
+     *
+     * @return array{
+     *     min: string,
+     *     max: string
+     * } An associative array with the minimum and maximum dates in `Y-m-d` format.
+     */
+    public function getLastAndFirstItemDate()
+    {
+        return [
+            'min' => (new \DateTime())->modify('-1 year')->format('Y-m-d'),
+            'max' => (new \DateTime())->modify('+1 year')->format('Y-m-d'),
+        ];
     }
 
     /**

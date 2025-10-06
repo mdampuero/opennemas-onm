@@ -33,6 +33,23 @@
           tag: null
         };
 
+        var defaultSort = $scope.sort;
+
+        $scope.sort = function(name) {
+          if (name === 'event_start_date') {
+            var direction = $scope.criteria.orderBy &&
+              $scope.criteria.orderBy[name];
+
+            $scope.criteria.orderBy = {};
+
+            if (direction) {
+              $scope.criteria.orderBy[name] = direction;
+            }
+          }
+
+          defaultSort.call($scope, name);
+        };
+
         /**
          * @memberOf SubscriptionListCtrl
          *
@@ -59,13 +76,16 @@
          *   Configures the controller.
          */
         $scope.init = function() {
-          $scope.backup.criteria    = $scope.criteria;
-          $scope.app.columns.hidden = [];
+          $scope.backup.criteria      = $scope.criteria;
+          $scope.app.columns.hidden   = [];
+          $scope.app.columns.selected =  _.uniq($scope.app.columns.selected.concat(
+            [ 'start', 'end' ]
+          ));
 
           oqlEncoder.configure({ placeholder: {
             title: '[key] ~ "%[value]%"',
             starttime: '[key] > "[value]"',
-            created: '[key] ~ "%[value]%"'
+            event_start_date: '[key] ~ "%[value]%"'
           } });
 
           $scope.list();

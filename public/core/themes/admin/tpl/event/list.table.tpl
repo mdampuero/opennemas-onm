@@ -30,13 +30,13 @@
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-start" checklist-model="app.columns.selected" checklist-value="'start'" type="checkbox">
     <label for="checkbox-start">
-      {t}Start{/t}
+      {t}Event start{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
     <input id="checkbox-end" checklist-model="app.columns.selected" checklist-value="'end'" type="checkbox">
     <label for="checkbox-end">
-      {t}End{/t}
+      {t}Event end{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
@@ -51,11 +51,12 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('type')" width="150">
     {t}Type{/t}
   </th>
-  <th class="text-center v-align-middle" ng-if="isColumnEnabled('start')" width="150">
-    {t}Start{/t}
+  <th class="text-center v-align-middle pointer" ng-click="sort('event_start_date')" ng-if="isColumnEnabled('start')" width="150">
+    {t}Event start{/t}
+    <i ng-class="{ 'fa fa-caret-up': isOrderedBy('event_start_date') == 'asc', 'fa fa-caret-down': isOrderedBy('event_start_date') == 'desc' }"></i>
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('end')" width="150">
-    {t}End{/t}
+    {t}Event end{/t}
   </th>
     <th class="text-center v-align-middle" ng-if="isColumnEnabled('content_status')" width="150">
     {t}Published{/t}
@@ -68,7 +69,7 @@
       [% data.extra.events[item.event_type].name %]
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('start')">
-    <span ng-show="!item.event_start_date && !item.event_start_hour">?</span>
+    <span ng-show="!item.event_start_date && !item.event_start_hour"><strong>∞</strong></span>
     <div ng-show="item.event_start_date">
       <i class="fa fa-calendar"></i>
       [% item.event_start_date %]
@@ -79,7 +80,7 @@
     </small>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('end')">
-    <span ng-show="!item.event_end_date && !item.event_end_hour">?</span>
+    <span ng-show="!item.event_end_date && !item.event_end_hour"><strong>∞</strong></span>
     <div ng-show="item.event_end_date">
       <i class="fa fa-calendar"></i>
       [% item.event_end_date %]
