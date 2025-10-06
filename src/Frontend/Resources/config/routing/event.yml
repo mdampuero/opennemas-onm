@@ -25,7 +25,7 @@ frontend_events_tag_list:
         subdirectory: true
 
 frontend_event_show:
-    path: /evento/{category_slug}/{slug}/{created}{id}.html
+    path: /event/{category_slug}/{slug}/{created}{id}.html
     defaults: { _controller: FrontendBundle:Event:show }
     requirements:
         category_slug: '[^/]+'
