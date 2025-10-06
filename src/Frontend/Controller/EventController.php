@@ -12,6 +12,7 @@ namespace Frontend\Controller;
 use Api\Exception\GetItemException;
 use Api\Exception\GetListException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -31,6 +32,11 @@ class EventController extends FrontendController
         'categorytypelist' => 'articles',
         'show'             => 'articles'
     ];
+
+    /**
+     * Control canonical url on "duplicated" list pages
+     */
+    protected $changeCanonical = false;
 
     /**
      * {@inheritdoc}
@@ -200,6 +206,17 @@ class EventController extends FrontendController
     }
 
     /**
+     * Redirects legacy event URLs to the new structure.
+     */
+    public function legacyShowAction(Request $request)
+    {
+        $item     = $this->getItem($request);
+        $expected = $this->getExpectedUri('show', ['item' => $item]);
+
+        return new RedirectResponse($expected, 301);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getParameters($params, $item = null)
@@ -238,9 +255,6 @@ class EventController extends FrontendController
         $eventDate     = date('Y-m-d');
         $publishedDate = gmdate('Y-m-d H:i:s');
 
-        // Flag for canonical url when duplicated list
-        $changeCanonical = false;
-
         $baseSql = sprintf(
             'FROM contents '
             . 'inner join contentmeta as start_date_meta on contents.pk_content = start_date_meta.fk_content '
@@ -262,25 +276,7 @@ class EventController extends FrontendController
 
         // Check for event type, category as type or tag on first url parameter
         if (!empty($type)) {
-            if ($eventType = $this->get('core.helper.event')->getEventTypeBySlug($type)) {
-                $baseSql .= sprintf(
-                    'join contentmeta as event_type_meta on contents.pk_content = event_type_meta.fk_content '
-                    . 'AND event_type_meta.meta_name = "event_type" AND event_type_meta.meta_value = "%s" ',
-                    $eventType['id']
-                );
-            } elseif (empty($categorySlug) && $category = $this->matchCategory($type)) {
-                $changeCanonical = true;
-
-                $baseSql .= sprintf(
-                    'join content_category on contents.pk_content = content_category.content_id '
-                    . 'and content_category.category_id = %d ',
-                    $category->id
-                );
-            } elseif (empty($tag) && $tagItem = $this->matchTag($type)) {
-                $baseSql .= $this->buildTagJoin($tagItem);
-            } else {
-                throw new ResourceNotFoundException();
-            }
+            $baseSql .= $this->checkType($type);
         }
 
         // Check for tag when second parameter
@@ -347,7 +343,7 @@ class EventController extends FrontendController
         }
 
         // Set canonical for pages with same content but diferent uri
-        if ($changeCanonical) {
+        if ($this->changeCanonical) {
             $canonicalAction = [
                 'taglist'  => 'categorytypelist',
                 'typelist' => 'categorylist'
@@ -395,6 +391,41 @@ class EventController extends FrontendController
             $tagItem->id
         );
     }
+
+    /**
+     * Check for event type, category as type or tag on first url parameter.
+     *
+     * @param string $type The request parameter type.
+     *
+     * @return string $baseSql The sql with type or category join.
+     */
+    protected function checkType(string $type)
+    {
+        $baseSql = '';
+
+        if ($eventType = $this->get('core.helper.event')->getEventTypeBySlug($type)) {
+            $baseSql = sprintf(
+                'join contentmeta as event_type_meta on contents.pk_content = event_type_meta.fk_content '
+                . 'AND event_type_meta.meta_name = "event_type" AND event_type_meta.meta_value = "%s" ',
+                $eventType['id']
+            );
+        } elseif (empty($categorySlug) && $category = $this->matchCategory($type)) {
+            $this->changeCanonical = true;
+
+            $baseSql = sprintf(
+                'join content_category on contents.pk_content = content_category.content_id '
+                . 'and content_category.category_id = %d ',
+                $category->id
+            );
+        } elseif (empty($tag) && $tagItem = $this->matchTag($type)) {
+            $baseSql = $this->buildTagJoin($tagItem);
+        } else {
+            throw new ResourceNotFoundException();
+        }
+
+        return $baseSql;
+    }
+
 
     /**
      * Matches a category by its slug.
