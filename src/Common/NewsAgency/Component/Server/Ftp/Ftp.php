@@ -89,6 +89,13 @@ class Ftp extends Server
 
         $files = @ftp_rawlist($this->conn, ftp_pwd($this->conn), true);
 
+        if (!$files) {
+            throw new \Exception(sprintf(
+                _('Can\'t get the file list from server %s'),
+                $this->params['name']
+            ));
+        }
+
         $this->remoteFiles = $this->filterOldFiles(
             $this->formatFtpFileList($files),
             $this->params['sync_from']
@@ -303,7 +310,7 @@ class Ftp extends Server
 
         return [
             'filename' => $info[8],
-            'isDir'    => $info[0]{0} == 'd',
+            'isDir'    => $info[0][0] == 'd',
             'size'     => $this->byteConvert($info[4]),
             'chmod'    => $this->chmodNum($info[0]),
             'date'     => \DateTime::createFromFormat(

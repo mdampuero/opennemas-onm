@@ -107,11 +107,30 @@ class SynchronizeCommand extends Command
                 ->isLocked();
 
             if ($isLocked) {
-                $output->writeln(sprintf(
-                    '- <fg=yellow;options=bold>SKIPPED (%s)</>',
-                    $instance->internal_name
-                ));
-                continue;
+                $file = $this->getContainer()->get('news_agency.service.synchronizer')->getLockFilePath();
+
+                // use filemtime to show when it was locked
+                $filetime = file_exists($file) ? date('Y-m-d H:i:s', filemtime($file)) : 'unknown time';
+
+                // Filetime is more old than 3 hours, unlock it
+                if ($filetime !== 'unknown time'
+                    && (time() - filemtime($file)) > 10800
+                ) {
+                    $this->getContainer()->get('news_agency.service.synchronizer')
+                        ->setInstance($instance)
+                        ->unlockSync();
+
+                    $output->writeln(sprintf(
+                        '- <fg=yellow;options=bold>UNLOCKED (was locked since %s)</>',
+                        $filetime
+                    ));
+                } else {
+                    $output->writeln(sprintf(
+                        '- <fg=yellow;options=bold>SKIPPED (%s)</>',
+                        $instance->internal_name
+                    ));
+                    continue;
+                }
             }
 
             $j = 1;
