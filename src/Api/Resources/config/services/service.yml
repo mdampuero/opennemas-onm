@@ -139,6 +139,11 @@ services:
         arguments: [ '@service_container' ]
         public:    true
 
+    api.service.redis_session:
+        class:     Api\Service\V1\RedisSessionService
+        arguments: [ '@service_container' ]
+        public:    true
+
     api.service.smarty:
         class:     Api\Service\V1\SmartyService
         arguments: [ '@service_container' ]
