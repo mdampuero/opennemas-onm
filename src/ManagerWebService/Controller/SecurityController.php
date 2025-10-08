@@ -129,6 +129,39 @@ class SecurityController extends Controller
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
+        $em            = $this->get('orm.manager');
+        $repository    = $em->getRepository('Instance');
+        $sessionRedis  = $this->get('api.service.redis_session');
+        $instances     = [];
+
+        foreach ($ids as $id) {
+            $instance = $repository->find($id);
+
+            if (!$instance) {
+                $msg->add(_('Instance not found'), 'error', 404);
+
+                return new JsonResponse($msg->getMessages(), $msg->getCode());
+            }
+
+            if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
+                throw new AccessDeniedException();
+            }
+
+            $instances[] = $instance;
+        }
+
+        try {
+            foreach ($instances as $instance) {
+                $pattern = sprintf('PHPREDIS_SESSION:__%s__*', $instance->internal_name);
+
+                $sessionRedis->deleteByPattern($pattern);
+            }
+        } catch (\Exception $exception) {
+            $msg->add(_('There was an error deleting the two-factor sessions'), 'error', 500);
+
+            return new JsonResponse($msg->getMessages(), $msg->getCode());
+        }
+
         if (count($ids) > 1) {
             $msg->add(_('Two-factor sessions deleted successfully'), 'success');
         } else {
