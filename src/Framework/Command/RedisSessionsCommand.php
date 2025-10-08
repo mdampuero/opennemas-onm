@@ -11,6 +11,8 @@
 namespace Framework\Command;
 
 use Common\Core\Command\Command;
+use Common\Core\Component\Session\RedisSessionKeyHelper;
+use Common\Model\Entity\Instance;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,6 +24,11 @@ use Symfony\Component\Yaml\Yaml;
  */
 class RedisSessionsCommand extends Command
 {
+    /**
+     * @var Instance|null
+     */
+    private $loadedInstance;
+
     /**
      * {@inheritdoc}
      */
@@ -80,10 +87,12 @@ class RedisSessionsCommand extends Command
      */
     protected function do()
     {
+        $this->loadedInstance = null;
+
         $pattern  = $this->input->getOption('pattern');
         $limit    = (int) $this->input->getOption('limit');
         $delete   = (bool) $this->input->getOption('delete');
-        $instance = $this->input->getOption('instance');
+        $instance = $this->normaliseInstanceName($this->input->getOption('instance'));
 
         $this->writeStep('Resolving redis connection');
         $connection = $this->resolveRedisConnection();
@@ -99,11 +108,13 @@ class RedisSessionsCommand extends Command
         $emails = $this->normaliseEmails((array) $this->input->getOption('emails'));
         $this->writeStatus('info', sprintf(' (%d emails from option)', count($emails)));
 
-        if (!empty($instance)) {
+        if ($instance !== null) {
             $instanceEmails = $this->getInstanceEmails($instance);
             $emails         = array_values(array_unique(array_merge($emails, $instanceEmails)));
             $this->writeStatus('info', sprintf(' (%d emails after loading instance %s)', count($emails), $instance));
         }
+
+        $pattern = $this->normalisePatternForInstance($pattern, $instance);
 
         $this->writeStatus('success', ' DONE', true);
 
@@ -273,12 +284,15 @@ class RedisSessionsCommand extends Command
     }
 
     /**
-     * Retrieves all emails that belong to the given instance.
+     * Retrieves all emails that belong to the given instance internal name.
      */
     private function getInstanceEmails(string $instance) : array
     {
         $loader = $this->getContainer()->get('core.loader');
         $loader->load($instance)->onlyEnabled();
+
+        $instanceLoader = $this->getContainer()->get('core.loader.instance');
+        $this->loadedInstance = $instanceLoader->getInstance();
 
         $connection = $this->getContainer()->get('dbal_connection');
         $emails     = [];
@@ -302,6 +316,58 @@ class RedisSessionsCommand extends Command
         }
 
         return array_values(array_unique($emails));
+    }
+
+    /**
+     * Normalises the provided instance option so only valid internal names are used.
+     */
+    private function normaliseInstanceName($raw) : ?string
+    {
+        if (!is_string($raw)) {
+            return null;
+        }
+
+        $name = trim($raw);
+
+        return $name === '' ? null : $name;
+    }
+
+    /**
+     * Normalises the provided pattern so it only targets the loaded instance.
+     */
+    private function normalisePatternForInstance(string $pattern, ?string $instance) : string
+    {
+        if ($instance === null) {
+            return $pattern;
+        }
+
+        $entity = $this->loadedInstance instanceof Instance
+            ? $this->loadedInstance
+            : $this->loadInstanceByName($instance);
+
+        if (!$entity instanceof Instance) {
+            return $pattern;
+        }
+
+        $this->loadedInstance = $entity;
+
+        $identifier = RedisSessionKeyHelper::extractInstanceIdentifier($entity);
+        $prefix     = RedisSessionKeyHelper::buildInstancePrefix($identifier);
+
+        return RedisSessionKeyHelper::normalisePatternWithPrefix($pattern, $prefix);
+    }
+
+    private function loadInstanceByName(string $name) : ?Instance
+    {
+        $instanceLoader = $this->getContainer()->get('core.loader.instance');
+
+        try {
+            $instanceLoader->loadInstanceByName($name);
+        } catch (\Exception $exception) {
+            return null;
+        }
+
+        return $instanceLoader->getInstance();
     }
 
     /**
