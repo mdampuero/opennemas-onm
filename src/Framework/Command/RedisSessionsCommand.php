@@ -36,7 +36,7 @@ class RedisSessionsCommand extends Command
     {
         $this
             ->setName('core:redis:sessions')
-            ->setDescription('List, filter and delete Redis sessions using redis-cli output.')
+            ->setDescription('List and optionally delete Redis session keys using redis-cli output.')
             ->addOption(
                 'pattern',
                 'P',
@@ -45,29 +45,16 @@ class RedisSessionsCommand extends Command
                 '*'
             )
             ->addOption(
-                'emails',
-                null,
-                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'Email or comma separated list of emails to match inside the session payload.'
-            )
-            ->addOption(
                 'instance',
                 'I',
                 InputOption::VALUE_OPTIONAL,
-                'Instance internal name used to load its users and match their sessions.'
+                'Instance internal name used to match session keys.'
             )
             ->addOption(
                 'delete',
                 null,
                 InputOption::VALUE_NONE,
                 'Delete the sessions that match the filters instead of only listing them.'
-            )
-            ->addOption(
-                'limit',
-                'L',
-                InputOption::VALUE_OPTIONAL,
-                'Maximum number of session keys inspected from the SCAN output (0 for no limit).',
-                0
             );
     }
 
@@ -78,7 +65,9 @@ class RedisSessionsCommand extends Command
     {
         parent::initialize($input, $output);
 
-        $this->steps = [7 + ($input->getOption('delete') ? 1 : 0)];
+        $totalSteps = 5 + ($input->getOption('delete') ? 1 : 0);
+
+        $this->steps = [$totalSteps];
         $this->step  = [1, 1, 1];
     }
 
@@ -90,80 +79,44 @@ class RedisSessionsCommand extends Command
         $this->loadedInstance = null;
 
         $pattern  = $this->input->getOption('pattern');
-        $limit    = (int) $this->input->getOption('limit');
         $delete   = (bool) $this->input->getOption('delete');
         $instance = $this->normaliseInstanceName($this->input->getOption('instance'));
 
-        $this->writeStep('Resolving redis connection');
         $connection = $this->resolveRedisConnection();
         $host       = $connection['host'];
         $port       = $connection['port'];
         $database   = $connection['database'];
+        $portInfo   = $port === null ? '' : sprintf(', port: %d', $port);
 
-        $portInfo = $port === null ? '' : sprintf(', port: %d', $port);
-        $this->writeStatus('info', sprintf(' (host: %s, database: %d%s)', $host, $database, $portInfo));
-        $this->writeStatus('success', ' DONE', true);
+        $this->writeStatus(
+            'info',
+            sprintf('Redis connection (host: %s, database: %d%s)', $host, $database, $portInfo),
+            true
+        );
 
-        $this->writeStep('Collecting filters');
-        $emails = $this->normaliseEmails((array) $this->input->getOption('emails'));
-        $this->writeStatus('info', sprintf(' (%d emails from option)', count($emails)));
-
-        if ($instance !== null) {
-            $instanceEmails = $this->getInstanceEmails($instance);
-            $emails         = array_values(array_unique(array_merge($emails, $instanceEmails)));
-            $this->writeStatus('info', sprintf(' (%d emails after loading instance %s)', count($emails), $instance));
-        }
-
+        $this->writeStep('Preparing key pattern');
         $pattern = $this->normalisePatternForInstance($pattern, $instance);
-
+        $this->writeStatus('info', sprintf(' (%s)', $pattern));
         $this->writeStatus('success', ' DONE', true);
 
-        $this->writeStep('Scanning redis for sessions');
-        $sessionIds = $this->scanSessions($host, $port, $database, $pattern, $limit);
+        $this->writeStep('Scanning redis for session keys');
+        $sessionIds = $this->scanSessions($host, $port, $database, $pattern);
         $this->writeStatus('info', sprintf(' (%d keys)', count($sessionIds)));
         $this->writeStatus('success', ' DONE', true);
 
-        $matched = [];
-        $this->writeStep('Inspecting session payloads');
-        foreach ($sessionIds as $sessionId) {
-            $payload = $this->getSessionPayload($host, $port, $database, $sessionId);
-
-            if (empty($emails) || $this->payloadMatchesEmails($payload, $emails)) {
-                $matched[$sessionId] = [
-                    'payload' => $payload,
-                    'emails'  => $this->emailsFoundInPayload($payload, $emails),
-                ];
-            }
-        }
-        $this->writeStatus('info', sprintf(' (%d matches)', count($matched)));
-        $this->writeStatus('success', ' DONE', true);
-
-        if (empty($matched)) {
+        if (empty($sessionIds)) {
             $this->writeStep('No sessions matched the provided filters', true);
             return;
         }
 
         $this->writeStep('Matched sessions', true);
-        foreach ($matched as $sessionId => $data) {
-            $emailsFound = empty($data['emails']) ? 'N/A' : implode(', ', $data['emails']);
-            $excerpt     = $this->truncatePayload($data['payload']);
-
-            $this->output->writeln(sprintf(
-                '<info>%s</info> | emails: [%s] | %s',
-                $sessionId,
-                $emailsFound,
-                $excerpt
-            ));
+        foreach ($sessionIds as $sessionId) {
+            $this->output->writeln(sprintf('<info>%s</info>', $sessionId));
         }
 
         if ($delete) {
             $this->writeStep('Deleting matched sessions');
-            $deleted = 0;
-            foreach (array_keys($matched) as $sessionId) {
-                if ($this->deleteSession($host, $port, $database, $sessionId)) {
-                    $deleted++;
-                }
-            }
+            $deleted = $this->deleteSessions($host, $port, $database, $sessionIds);
             $this->writeStatus('info', sprintf(' (%d removed)', $deleted));
             $this->writeStatus('success', ' DONE', true);
         }
@@ -261,64 +214,6 @@ class RedisSessionsCommand extends Command
     }
 
     /**
-     * Normalises the emails provided via the CLI option.
-     */
-    private function normaliseEmails(array $raw) : array
-    {
-        $emails = [];
-        foreach ($raw as $chunk) {
-            if (!is_string($chunk)) {
-                continue;
-            }
-
-            $parts = preg_split('/[,;\s]+/', $chunk, -1, PREG_SPLIT_NO_EMPTY);
-            foreach ($parts as $email) {
-                $email = trim($email);
-                if (!empty($email)) {
-                    $emails[] = strtolower($email);
-                }
-            }
-        }
-
-        return array_values(array_unique($emails));
-    }
-
-    /**
-     * Retrieves all emails that belong to the given instance internal name.
-     */
-    private function getInstanceEmails(string $instance) : array
-    {
-        $loader = $this->getContainer()->get('core.loader');
-        $loader->load($instance)->onlyEnabled();
-
-        $instanceLoader = $this->getContainer()->get('core.loader.instance');
-        $this->loadedInstance = $instanceLoader->getInstance();
-
-        $connection = $this->getContainer()->get('dbal_connection');
-        $emails     = [];
-
-        try {
-            $rows = $connection->fetchAll('SELECT email FROM users WHERE email IS NOT NULL AND email != ""');
-        } catch (\Exception $exception) {
-            throw new \RuntimeException(sprintf(
-                'Unable to fetch users for instance "%s": %s',
-                $instance,
-                $exception->getMessage()
-            ));
-        }
-
-        foreach ($rows as $row) {
-            if (empty($row['email'])) {
-                continue;
-            }
-
-            $emails[] = strtolower(trim($row['email']));
-        }
-
-        return array_values(array_unique($emails));
-    }
-
-    /**
      * Normalises the provided instance option so only valid internal names are used.
      */
     private function normaliseInstanceName($raw) : ?string
@@ -373,7 +268,7 @@ class RedisSessionsCommand extends Command
     /**
      * Uses redis-cli to retrieve the list of session ids.
      */
-    private function scanSessions(string $host, ?int $port, int $database, string $pattern, int $limit) : array
+    private function scanSessions(string $host, ?int $port, int $database, string $pattern) : array
     {
         $command = ['redis-cli', '-h', $host];
 
@@ -395,51 +290,18 @@ class RedisSessionsCommand extends Command
             throw new \RuntimeException(trim($process->getErrorOutput()) ?: $process->getOutput());
         }
 
-        $sessions = array_values(array_filter(array_map('trim', explode("\n", $process->getOutput()))));
-
-        if ($limit > 0) {
-            $sessions = array_slice($sessions, 0, $limit);
-        }
-
-        return $sessions;
+        return array_values(array_filter(array_map('trim', explode("\n", $process->getOutput()))));
     }
 
     /**
-     * Returns the payload stored in redis for a given session id.
+     * Deletes sessions using redis-cli.
      */
-    private function getSessionPayload(string $host, ?int $port, int $database, string $sessionId) : string
+    private function deleteSessions(string $host, ?int $port, int $database, array $sessionIds) : int
     {
-        $command = ['redis-cli', '-h', $host];
-
-        if ($port !== null) {
-            $command[] = '-p';
-            $command[] = (string) $port;
+        if (empty($sessionIds)) {
+            return 0;
         }
 
-        $command[] = '-n';
-        $command[] = (string) $database;
-        $command[] = 'get';
-        $command[] = $sessionId;
-
-        $process = new Process($command);
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new \RuntimeException(sprintf(
-                'Unable to fetch session %s: %s',
-                $sessionId,
-                trim($process->getErrorOutput()) ?: $process->getOutput()
-            ));
-        }
-
-        return rtrim($process->getOutput(), "\r\n");
-    }
-
-    /**
-     * Deletes a session using redis-cli.
-     */
-    private function deleteSession(string $host, ?int $port, int $database, string $sessionId) : bool
-    {
         $command = ['redis-cli', '-h', $host];
 
         if ($port !== null) {
@@ -450,70 +312,17 @@ class RedisSessionsCommand extends Command
         $command[] = '-n';
         $command[] = (string) $database;
         $command[] = 'del';
-        $command[] = $sessionId;
+        foreach ($sessionIds as $sessionId) {
+            $command[] = $sessionId;
+        }
 
         $process = new Process($command);
         $process->run();
 
         if (!$process->isSuccessful()) {
-            $this->output->writeln(sprintf(
-                '<error>Failed to delete %s: %s</error>',
-                $sessionId,
-                trim($process->getErrorOutput()) ?: $process->getOutput()
-            ));
-
-            return false;
+            throw new \RuntimeException(trim($process->getErrorOutput()) ?: $process->getOutput());
         }
 
-        return (int) trim($process->getOutput()) === 1;
-    }
-
-    /**
-     * Checks whether a payload contains any of the provided emails.
-     */
-    private function payloadMatchesEmails(string $payload, array $emails) : bool
-    {
-        if (empty($emails)) {
-            return true;
-        }
-
-        $haystack = strtolower($payload);
-        foreach ($emails as $email) {
-            if (strpos($haystack, $email) !== false) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns the list of emails found in the payload.
-     */
-    private function emailsFoundInPayload(string $payload, array $emails) : array
-    {
-        $found = [];
-        $haystack = strtolower($payload);
-
-        foreach ($emails as $email) {
-            if (strpos($haystack, $email) !== false) {
-                $found[] = $email;
-            }
-        }
-
-        return $found;
-    }
-
-    /**
-     * Creates a single-line representation of the payload content.
-     */
-    private function truncatePayload(string $payload, int $length = 120) : string
-    {
-        $singleLine = preg_replace('/\s+/', ' ', trim($payload));
-        if (mb_strlen($singleLine) <= $length) {
-            return $singleLine;
-        }
-
-        return mb_substr($singleLine, 0, $length - 3) . '...';
+        return (int) trim($process->getOutput());
     }
 }
