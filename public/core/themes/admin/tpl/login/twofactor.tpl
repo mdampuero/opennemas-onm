@@ -58,7 +58,7 @@
                       <span class="help-block">{t}Enter the 6-digit code from the email.{/t}</span>
                     </div>
                     <div class="form-group text-right">
-                      {* <a class="btn btn-link" href="{url name=backend_authentication_login}">{t}Resend code{/t}</a> *}
+                      <a class="btn btn-link" href="{url name=backend_authentication_two_factor_cancel}">{t}Back to login{/t}</a>
                       <button class="btn btn-primary" type="submit">{t}Verify{/t}</button>
                     </div>
                   </div>

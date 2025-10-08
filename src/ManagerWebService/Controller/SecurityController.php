@@ -14,13 +14,37 @@ class SecurityController extends Controller
     public function twoFactorAction(Request $request)
     {
         $oql = $request->query->get('oql', '');
+        $twoFactorFilter = $request->query->get('two_factor_enabled');
+
+        $oqlFixer = $this->get('orm.oql.fixer')->fix($oql);
 
         if (!$this->get('core.security')->hasPermission('MASTER')) {
             $condition = sprintf('owner_id = %s ', $this->get('core.user')->id);
 
-            $oql = $this->get('orm.oql.fixer')->fix($oql)
-                ->addCondition($condition)->getOql();
+            $oqlFixer->addCondition($condition);
         }
+
+        if ($twoFactorFilter !== null && $twoFactorFilter !== '') {
+            $truthyPatterns = $this->getSerializedBooleanPatterns(true);
+
+            if ($this->toBoolean($twoFactorFilter)) {
+                $oqlFixer->addCondition($this->buildSerializedPresenceCondition($truthyPatterns));
+            } elseif ($this->isFalseLike($twoFactorFilter)) {
+                $absenceCondition = $this->buildSerializedAbsenceCondition($truthyPatterns);
+                $falsyPatterns    = $this->getSerializedBooleanPatterns(false);
+                $explicitFalse    = $this->buildSerializedPresenceCondition($falsyPatterns);
+
+                $conditions = array_filter([
+                    'settings is null',
+                    $explicitFalse,
+                    $absenceCondition,
+                ]);
+
+                $oqlFixer->addCondition('(' . implode(' or ', $conditions) . ')');
+            }
+        }
+
+        $oql = $oqlFixer->getOql();
 
         $repository = $this->get('orm.manager')->getRepository('Instance');
         $converter  = $this->get('orm.manager')->getConverter('Instance');
@@ -73,6 +97,9 @@ class SecurityController extends Controller
         }
 
         $this->persistTwoFactorSetting($em, $instance, $enabled);
+
+        $this->get('core.dispatcher')
+            ->dispatch('instance.update', [ 'instance' => $instance ]);
 
         if ($enabled) {
             $msg->add(_('Two-factor authentication enabled successfully'), 'success');
@@ -137,6 +164,17 @@ class SecurityController extends Controller
         return in_array($value, ['1', 'true', 'yes', 'on'], true);
     }
 
+    private function isFalseLike($value): bool
+    {
+        if (is_bool($value)) {
+            return !$value;
+        }
+
+        $value = strtolower((string) $value);
+
+        return in_array($value, ['0', 'false', 'no', 'off'], true);
+    }
+
     private function isTwoFactorEnabled($instance): bool
     {
         $settings = $instance->settings;
@@ -148,5 +186,83 @@ class SecurityController extends Controller
         }
 
         return $this->toBoolean($settings[self::TWO_FACTOR_SETTINGS_KEY]);
+    }
+
+    /**
+     * @param bool $value
+     *
+     * @return string[]
+     */
+    private function getSerializedBooleanPatterns(bool $value): array
+    {
+        $keyLength    = strlen(self::TWO_FACTOR_SETTINGS_KEY);
+        $serializedKey = sprintf('s:%d:"%s";', $keyLength, self::TWO_FACTOR_SETTINGS_KEY);
+
+        if ($value) {
+            return [
+                $serializedKey . 'b:1;',
+                $serializedKey . 'i:1;',
+                $serializedKey . 's:1:"1";',
+                sprintf('\\"%s\\":true', self::TWO_FACTOR_SETTINGS_KEY),
+                sprintf('\\"%s\\":1', self::TWO_FACTOR_SETTINGS_KEY),
+            ];
+        }
+
+        return [
+            $serializedKey . 'b:0;',
+            $serializedKey . 'i:0;',
+            $serializedKey . 's:1:"0";',
+            sprintf('\\"%s\\":false', self::TWO_FACTOR_SETTINGS_KEY),
+            sprintf('\\"%s\\":0', self::TWO_FACTOR_SETTINGS_KEY),
+        ];
+    }
+
+    /**
+     * @param string[] $patterns
+     */
+    private function buildSerializedPresenceCondition(array $patterns): string
+    {
+        $patterns = array_filter($patterns);
+
+        if (empty($patterns)) {
+            return '';
+        }
+
+        $conditions = array_map(function ($pattern) {
+            return sprintf('settings ~ "%s"', $this->escapeOqlPattern($pattern));
+        }, $patterns);
+
+        if (count($conditions) === 1) {
+            return $conditions[0];
+        }
+
+        return '(' . implode(' or ', $conditions) . ')';
+    }
+
+    /**
+     * @param string[] $patterns
+     */
+    private function buildSerializedAbsenceCondition(array $patterns): string
+    {
+        $patterns = array_filter($patterns);
+
+        if (empty($patterns)) {
+            return '';
+        }
+
+        $conditions = array_map(function ($pattern) {
+            return sprintf('settings !~ "%s"', $this->escapeOqlPattern($pattern));
+        }, $patterns);
+
+        if (count($conditions) === 1) {
+            return $conditions[0];
+        }
+
+        return '(' . implode(' and ', $conditions) . ')';
+    }
+
+    private function escapeOqlPattern(string $pattern): string
+    {
+        return addcslashes($pattern, "\\\"");
     }
 }

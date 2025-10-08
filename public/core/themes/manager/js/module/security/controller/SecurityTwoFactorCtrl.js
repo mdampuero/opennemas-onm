@@ -30,11 +30,24 @@
             }
           });
 
-          var oql = oqlEncoder.getOql($scope.criteria);
+          var criteriaForOql = angular.extend({}, $scope.criteria);
+          var twoFactorFilter = $scope.criteria.two_factor_enabled;
+
+          delete criteriaForOql.two_factor_enabled;
+
+          var oql = oqlEncoder.getOql(criteriaForOql);
           var route = {
             name: 'manager_ws_security_two_factor',
             params: { oql: oql }
           };
+
+          if (angular.isDefined(twoFactorFilter) && twoFactorFilter !== null && twoFactorFilter !== '') {
+            route.params.two_factor_enabled = twoFactorFilter;
+            $location.search('two_factor_enabled', twoFactorFilter);
+          } else {
+            delete route.params.two_factor_enabled;
+            $location.search('two_factor_enabled', null);
+          }
 
           $location.search('oql', oql);
 
@@ -76,7 +89,7 @@
         });
 
         oqlDecoder.configure({
-          ignore: [ 'internal_name', 'contact_mail', 'domains' ]
+          ignore: [ 'internal_name', 'contact_mail', 'domains', 'settings' ]
         });
 
         if ($location.search().oql) {
@@ -85,6 +98,10 @@
             $scope.criteria,
             oqlDecoder.decode($location.search().oql)
           );
+        }
+
+        if (angular.isDefined($location.search().two_factor_enabled)) {
+          $scope.criteria.two_factor_enabled = $location.search().two_factor_enabled;
         }
 
         $scope.getItemId = function(item) {
