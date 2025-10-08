@@ -143,7 +143,6 @@ services:
                 '@core.decorator.url',
                 '@router',
                 '@orm.manager',
-                '%framework.secret%',
                 '@core.instance'
             ]
         public:    true

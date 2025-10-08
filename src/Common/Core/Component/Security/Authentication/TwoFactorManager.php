@@ -33,6 +33,7 @@ class TwoFactorManager
     const CODE_TTL = 600; // 10 minutes
     const COOKIE_TTL = 2592000; // 30 days
     const TWO_FACTOR_SETTINGS_KEY = 'two_factor_enabled';
+    const DEFAULT_SECRET = 'onm_two_factor_secret';
 
     /**
      * @var SessionInterface
@@ -92,8 +93,8 @@ class TwoFactorManager
         UrlDecorator $urlDecorator,
         UrlGeneratorInterface $router,
         EntityManager $orm,
-        $secret,
-        ?Instance $instance = null
+        ?Instance $instance = null,
+        $secret = null
     ) {
         $this->session      = $session;
         $this->mailer       = $mailer;
@@ -102,8 +103,22 @@ class TwoFactorManager
         $this->urlDecorator = $urlDecorator;
         $this->router       = $router;
         $this->orm          = $orm;
-        $this->secret       = (string) $secret;
         $this->instance     = $instance;
+        $this->secret       = $this->resolveSecret($secret);
+    }
+
+    /**
+     * Normalizes the secret used to sign the two factor cookie.
+     *
+     * @param mixed $secret The provided secret.
+     */
+    protected function resolveSecret($secret)
+    {
+        if (is_string($secret) && $secret !== '') {
+            return $secret;
+        }
+
+        return self::DEFAULT_SECRET;
     }
 
     /**
