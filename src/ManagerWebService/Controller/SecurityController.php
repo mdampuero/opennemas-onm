@@ -158,7 +158,8 @@ class SecurityController extends Controller
             }
         } catch (\Exception $exception) {
             $msg->add(_('There was an error deleting the two-factor sessions'), 'error', 500);
-
+            $this->get('error.log')->error($exception->getMessage());
+            
             return new JsonResponse($msg->getMessages(), $msg->getCode());
         }
 
