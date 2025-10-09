@@ -481,13 +481,14 @@ class InstanceController extends Controller
         $data     = $em->getConverter('Instance')
             ->objectify($request->request->get('instance'));
 
-        // Sanitize subdirectory like slug
+        // Sanitize the subdirectory by converting it into a slug-friendly format
         if ($data['subdirectory']) {
             $subdirectory = getService('data.manager.filter')
                 ->set($data['subdirectory'])
                 ->filter('slug')
                 ->get();
 
+            // Re-add the leading slash removed by the filter
             $data['subdirectory'] = '/' . $subdirectory;
         }
 
@@ -644,13 +645,14 @@ class InstanceController extends Controller
             throw new AccessDeniedException();
         }
 
-        // Sanitize subdirectory like slug
+        // Sanitize the subdirectory by converting it into a slug-friendly format
         if ($data['subdirectory']) {
             $subdirectory = getService('data.manager.filter')
                 ->set($data['subdirectory'])
                 ->filter('slug')
                 ->get();
 
+            // Re-add the leading slash removed by the filter
             $data['subdirectory'] = '/' . $subdirectory;
         }
 
