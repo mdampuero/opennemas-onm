@@ -481,6 +481,16 @@ class InstanceController extends Controller
         $data     = $em->getConverter('Instance')
             ->objectify($request->request->get('instance'));
 
+        // Sanitize subdirectory like slug
+        if ($data['subdirectory']) {
+            $subdirectory = getService('data.manager.filter')
+                ->set($data['subdirectory'])
+                ->filter('slug')
+                ->get();
+
+            $data['subdirectory'] = '/' . $subdirectory;
+        }
+
         $data['internal_name'] = mb_strtolower($data['internal_name']);
 
         $instance = new Instance($data);
@@ -632,6 +642,16 @@ class InstanceController extends Controller
 
         if (!$this->get('core.security')->hasInstance($instance->internal_name)) {
             throw new AccessDeniedException();
+        }
+
+        // Sanitize subdirectory like slug
+        if ($data['subdirectory']) {
+            $subdirectory = getService('data.manager.filter')
+                ->set($data['subdirectory'])
+                ->filter('slug')
+                ->get();
+
+            $data['subdirectory'] = '/' . $subdirectory;
         }
 
         $owners        = [ 'user-' . $instance->owner_id ];
