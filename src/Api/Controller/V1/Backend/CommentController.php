@@ -108,6 +108,10 @@ class CommentController extends ApiController
         $defaultConfigs = $this->get('core.helper.comment')->getDefaultConfigs();
         $config         = $ds->get('comment_settings', []);
 
+        $config['custom_code_comments'] = !empty($config['custom_code_comments']) ?
+            base64_decode($config['custom_code_comments']) :
+            '';
+
         $config = $sh->toInt($config, ['number_elements']);
         $config = $sh->toBoolean($config, $this->tobool);
 
@@ -139,6 +143,10 @@ class CommentController extends ApiController
 
         $config = $request->request->get('config', []);
         $extra  = $request->request->get('extra', []);
+
+        $config['custom_code_comments'] = !empty($config['custom_code_comments']) ?
+            base64_encode($config['custom_code_comments']) :
+            '';
 
         $config = $sh->toInt($config, ['number_elements']);
         $config = $sh->toBoolean($config, $this->tobool);

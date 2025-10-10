@@ -240,6 +240,25 @@
               </div>
             </div>
           {/is_module_activated}
+          {acl isAllowed="MASTER"}
+            <div class="grid simple">
+              <div class="grid-title">
+                <h4>
+                  <i class="fa fa-code m-r-5"></i>
+                  {t}Custom Code{/t}
+                </h4>
+              </div>
+              <div class="grid-body">
+                <div class="col-xs-12">
+                  <h5><i class="fa fa-comments m-r-5"></i> {t}Comments Custom Block{/t}</h5>
+                  <div class="form-group">
+                    <textarea name="custom-code-comments" id="custom_code_comments" class="form-control" rows="10" ng-model="config.custom_code_comments"></textarea>
+                    <div class="help">{t}Insert custom HTML, JavaScript or snippets to extend comments behavior.{/t}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {/acl}
         </div>
         <div ng-if="config.comment_system == 'facebook'">
           <div class="grid simple">

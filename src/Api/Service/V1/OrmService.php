@@ -18,6 +18,7 @@ use Api\Exception\PatchItemException;
 use Api\Exception\PatchListException;
 use Api\Exception\UpdateItemException;
 use Api\Service\Service;
+use Http\Discovery\Exception\NotFoundException;
 
 class OrmService implements Service
 {
