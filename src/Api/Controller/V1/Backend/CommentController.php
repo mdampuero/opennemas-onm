@@ -109,8 +109,13 @@ class CommentController extends ApiController
         $defaultConfigs = $ch->getDefaultConfigs();
         $config         = $ds->get('comment_settings', []);
 
-        $config['custom_code'] = $ch->customCodeHeader();
-        $config['custom_code_footer'] = $ch->customCodeFooter();
+        $config['custom_code_header'] = !empty($config['custom_code_header'])
+            ? $ch->customCodeHeader()
+            : '';
+
+        $config['custom_code_footer'] = !empty($config['custom_code_footer'])
+            ? $ch->customCodeFooter()
+            : '';
 
         $defaultConfigs = $ch->getDefaultConfigs();
 
