@@ -109,7 +109,7 @@ class CommentController extends ApiController
         $defaultConfigs = $ch->getDefaultConfigs();
         $config         = $ds->get('comment_settings', []);
 
-        $config['custom_code'] = $ch->customCode();
+        $config['custom_code'] = $ch->customCodeHeader();
         $config['custom_code_footer'] = $ch->customCodeFooter();
 
         $defaultConfigs = $ch->getDefaultConfigs();
@@ -146,8 +146,8 @@ class CommentController extends ApiController
         $config = $request->request->get('config', []);
         $extra  = $request->request->get('extra', []);
 
-        $config['custom_code'] = !empty($config['custom_code']) ?
-            base64_encode($config['custom_code']) :
+        $config['custom_code_header'] = !empty($config['custom_code_header']) ?
+            base64_encode($config['custom_code_header']) :
             '';
         $config['custom_code_footer'] = !empty($config['custom_code_footer']) ?
             base64_encode($config['custom_code_footer']) :
