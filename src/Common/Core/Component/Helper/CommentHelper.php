@@ -108,8 +108,15 @@ class CommentHelper
 
     public function customCode()
     {
-        $custom = $this->getConfigs()['custom_code_comments'];
+        $custom = $this->getConfigs()['custom_code'] ?? '';
 
-        return base64_decode($custom);
+        return !empty($custom) ? base64_decode($custom) : '';
+    }
+
+    public function customCodeFooter()
+    {
+        $customFooter = $this->getConfigs()['custom_code_footer'] ?? '';
+
+        return !empty($customFooter) ? base64_decode($customFooter) : '';
     }
 }

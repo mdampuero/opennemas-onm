@@ -104,13 +104,15 @@ class CommentController extends ApiController
 
         $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
         $sh = $this->get('core.helper.setting');
+        $ch = $this->get('core.helper.comment');
 
-        $defaultConfigs = $this->get('core.helper.comment')->getDefaultConfigs();
+        $defaultConfigs = $ch->getDefaultConfigs();
         $config         = $ds->get('comment_settings', []);
 
-        $config['custom_code_comments'] = !empty($config['custom_code_comments']) ?
-            base64_decode($config['custom_code_comments']) :
-            '';
+        $config['custom_code'] = $ch->customCode();
+        $config['custom_code_footer'] = $ch->customCodeFooter();
+
+        $defaultConfigs = $ch->getDefaultConfigs();
 
         $config = $sh->toInt($config, ['number_elements']);
         $config = $sh->toBoolean($config, $this->tobool);
@@ -144,8 +146,11 @@ class CommentController extends ApiController
         $config = $request->request->get('config', []);
         $extra  = $request->request->get('extra', []);
 
-        $config['custom_code_comments'] = !empty($config['custom_code_comments']) ?
-            base64_encode($config['custom_code_comments']) :
+        $config['custom_code'] = !empty($config['custom_code']) ?
+            base64_encode($config['custom_code']) :
+            '';
+        $config['custom_code_footer'] = !empty($config['custom_code_footer']) ?
+            base64_encode($config['custom_code_footer']) :
             '';
 
         $config = $sh->toInt($config, ['number_elements']);

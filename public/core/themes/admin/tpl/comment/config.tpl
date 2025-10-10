@@ -252,7 +252,14 @@
                 <div class="col-xs-12">
                   <h5><i class="fa fa-comments m-r-5"></i> {t}Comments Custom Block{/t}</h5>
                   <div class="form-group">
-                    <textarea name="custom-code-comments" id="custom_code_comments" class="form-control" rows="10" ng-model="config.custom_code_comments"></textarea>
+                    <textarea name="custom-code" id="custom_code" class="form-control" rows="10" ng-model="config.custom_code"></textarea>
+                    <div class="help">{t}Insert custom HTML, JavaScript or snippets to extend comments behavior.{/t}</div>
+                  </div>
+                </div>
+                <div class="col-xs-12">
+                  <h5><i class="fa fa-comments m-r-5"></i> {t}Comments Custom Block Footer{/t}</h5>
+                  <div class="form-group">
+                    <textarea name="custom-code-footer" id="custom_code_footer" class="form-control" rows="10" ng-model="config.custom_code_footer"></textarea>
                     <div class="help">{t}Insert custom HTML, JavaScript or snippets to extend comments behavior.{/t}</div>
                   </div>
                 </div>

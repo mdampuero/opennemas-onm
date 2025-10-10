@@ -113,7 +113,7 @@
           var validKeys = {
             onm: [
               'comment_system', 'disable_comments', 'with_comments',
-              'number_elements', 'custom_code_comments'
+              'number_elements', 'custom_code', 'custom_code_footer'
             ],
             facebook: [ 'comment_system', 'disable_comments', 'with_comments',
               'facebook_apikey'
@@ -146,7 +146,7 @@
             onm: [
               'acton_list', 'comment_system', 'disable_comments', 'with_comments',
               'number_elements', 'required_email', 'moderation_manual',
-              'moderation_autoaccept', 'moderation_autoreject', 'custom_code_comments'
+              'moderation_autoaccept', 'moderation_autoreject', 'custom_code', 'custom_code_footer'
             ],
             facebook: [ 'comment_system', 'disable_comments', 'with_comments', 'facebook_apikey' ],
             disqus: [ 'comment_system', 'disable_comments', 'with_comments', 'disqus_secretkey', 'disqus_shortname' ]
