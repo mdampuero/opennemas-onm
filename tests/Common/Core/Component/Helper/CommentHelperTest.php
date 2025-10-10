@@ -145,11 +145,11 @@ class CommentHelperTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests customCode.
      */
-    public function testCustomCode()
+    public function testCustomCodeHead()
     {
         $encoded = base64_encode('<script>alert("Hi!")</script>');
         $configs = array_merge($this->defaultConfigs, [
-            'custom_code' => $encoded
+            'custom_code_header' => $encoded
         ]);
 
         $this->dataSet->expects($this->any())
@@ -158,7 +158,7 @@ class CommentHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->helper = new CommentHelper($this->ormManager, $this->defaultConfigs);
 
-        $this->assertEquals('<script>alert("Hi!")</script>', $this->helper->customCode());
+        $this->assertEquals('<script>alert("Hi!")</script>', $this->helper->customCodeHeader());
     }
 
     /**

@@ -114,9 +114,9 @@ class CommentHelper
      *
      * @return string Decoded custom code to be injected in the comments section.
      */
-    public function customCode()
+    public function customCodeHeader()
     {
-        $custom = $this->getConfigs()['custom_code'];
+        $custom = $this->getConfigs()['custom_code_header'];
 
         return base64_decode($custom);
     }

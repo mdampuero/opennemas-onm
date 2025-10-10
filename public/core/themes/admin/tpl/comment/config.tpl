@@ -250,9 +250,9 @@
               </div>
               <div class="grid-body">
                 <div class="col-xs-12">
-                  <h5><i class="fa fa-comments m-r-5"></i> {t}Comments Custom Block{/t}</h5>
+                  <h5><i class="fa fa-comments m-r-5"></i> {t}Comments Custom Block Header{/t}</h5>
                   <div class="form-group">
-                    <textarea name="custom-code" id="custom_code" class="form-control" rows="10" ng-model="config.custom_code"></textarea>
+                    <textarea name="custom-code-header" id="custom_code_header" class="form-control" rows="10" ng-model="config.custom_code_header"></textarea>
                     <div class="help">{t}Insert custom HTML, JavaScript or snippets to extend comments behavior.{/t}</div>
                   </div>
                 </div>

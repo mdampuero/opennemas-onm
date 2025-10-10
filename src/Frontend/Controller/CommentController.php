@@ -71,7 +71,7 @@ class CommentController extends FrontendController
             'total'              => $comments['total'],
             'comments'           => $comments['items'],
             'contentId'          => $content->id,
-            'custom_code'        => $ch->customCode(),
+            'custom_code_header' => $ch->customCodeHeader(),
             'custom_code_footer' => $ch->customCodeFooter(),
             'elems_per_page'     => $epp,
             'required_email'     => $this->get('core.helper.comment')->isEmailRequired(),
