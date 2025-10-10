@@ -105,4 +105,11 @@ class CommentHelper
     {
         return $this->getConfigs()['moderation_manual'] == 1;
     }
+
+    public function customCode()
+    {
+        $custom = $this->getConfigs()['custom_code_comments'];
+
+        return base64_decode($custom);
+    }
 }

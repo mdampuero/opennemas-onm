@@ -60,6 +60,7 @@ class CommentController extends FrontendController
         }
 
         $comments = $this->getComments($content, $epp, $offset);
+        $ch       = $this->get('core.helper.comment');
         $sh       = $this->get('core.helper.subscription');
 
         if ($sh->hasAdvertisements($sh->getToken($content))) {
@@ -70,6 +71,7 @@ class CommentController extends FrontendController
             'total'          => $comments['total'],
             'comments'       => $comments['items'],
             'contentId'      => $content->id,
+            'custom_code'    => $ch->customCode(),
             'elems_per_page' => $epp,
             'required_email' => $this->get('core.helper.comment')->isEmailRequired(),
             'offset'         => $offset,
