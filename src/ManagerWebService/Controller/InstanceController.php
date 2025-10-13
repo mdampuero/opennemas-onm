@@ -482,7 +482,7 @@ class InstanceController extends Controller
             ->objectify($request->request->get('instance'));
 
         // Sanitize the subdirectory by converting it into a slug-friendly format
-        if ($data['subdirectory']) {
+        if ($data['subdirectory'] ?? null) {
             $subdirectory = getService('data.manager.filter')
                 ->set($data['subdirectory'])
                 ->filter('slug')
@@ -646,7 +646,7 @@ class InstanceController extends Controller
         }
 
         // Sanitize the subdirectory by converting it into a slug-friendly format
-        if ($data['subdirectory']) {
+        if ($data['subdirectory'] ?? null) {
             $subdirectory = getService('data.manager.filter')
                 ->set($data['subdirectory'])
                 ->filter('slug')
