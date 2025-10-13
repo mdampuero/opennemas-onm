@@ -109,11 +109,11 @@ class CommentController extends ApiController
         $defaultConfigs = $ch->getDefaultConfigs();
         $config         = $ds->get('comment_settings', []);
 
-        $config['custom_code_header'] = !empty($config['custom_code_header'])
+        $config['custom_code_header'] = $config['custom_code_header'] ?? null
             ? $ch->customCodeHeader()
             : '';
 
-        $config['custom_code_footer'] = !empty($config['custom_code_footer'])
+        $config['custom_code_footer'] = $config['custom_code_footer'] ?? null
             ? $ch->customCodeFooter()
             : '';
 
@@ -151,12 +151,12 @@ class CommentController extends ApiController
         $config = $request->request->get('config', []);
         $extra  = $request->request->get('extra', []);
 
-        $config['custom_code_header'] = !empty($config['custom_code_header']) ?
-            base64_encode($config['custom_code_header']) :
-            '';
-        $config['custom_code_footer'] = !empty($config['custom_code_footer']) ?
-            base64_encode($config['custom_code_footer']) :
-            '';
+        $config['custom_code_header'] = $config['custom_code_header'] ?? null
+            ? base64_encode($config['custom_code_header'])
+            : '';
+        $config['custom_code_footer'] = $config['custom_code_footer'] ?? null
+            ? base64_encode($config['custom_code_footer'])
+            : '';
 
         $config = $sh->toInt($config, ['number_elements']);
         $config = $sh->toBoolean($config, $this->tobool);
