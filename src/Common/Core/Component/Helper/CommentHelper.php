@@ -105,4 +105,35 @@ class CommentHelper
     {
         return $this->getConfigs()['moderation_manual'] == 1;
     }
+
+    /**
+     * Returns the decoded custom code (HTML, CSS, or JavaScript) configured for comments.
+     *
+     * This method retrieves the Base64-encoded custom code stored in the configuration
+     * under the key 'custom_code', decodes it, and returns it as a string.
+     *
+     * @return string Decoded custom code to be injected in the comments section.
+     */
+    public function customCodeHeader()
+    {
+        $custom = $this->getConfigs()['custom_code_header'];
+
+        return base64_decode($custom);
+    }
+
+    /**
+     * Returns the decoded custom footer code configured for comments.
+     *
+     * This method retrieves the Base64-encoded footer code stored in the configuration
+     * under the key 'custom_code_footer', decodes it, and returns it as a string.
+     * Typically used for JavaScript or other footer scripts.
+     *
+     * @return string Decoded custom footer code to be appended at the bottom of the page.
+     */
+    public function customCodeFooter()
+    {
+        $customFooter = $this->getConfigs()['custom_code_footer'];
+
+        return base64_decode($customFooter);
+    }
 }
