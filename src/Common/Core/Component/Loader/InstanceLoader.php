@@ -68,7 +68,7 @@ class InstanceLoader
         }
 
         $domain = preg_replace('/\.+$/', '', $domain);
-        $match  = preg_match('@(\/[a-zA-Z0-9]+)\/?@', $uri, $subdirectory);
+        $match  = preg_match('@(\/[a-zA-Z0-9-]+)\/?@', $uri, $subdirectory);
 
         $subdirectoryMatch = $match ? $subdirectory[1] : '';
 
