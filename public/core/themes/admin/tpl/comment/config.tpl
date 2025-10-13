@@ -245,22 +245,20 @@
               <div class="grid-title">
                 <h4>
                   <i class="fa fa-code m-r-5"></i>
-                  {t}Custom Code{/t}
+                  {t}Custom code{/t}
                 </h4>
               </div>
               <div class="grid-body">
                 <div class="col-xs-12">
-                  <h5><i class="fa fa-comments m-r-5"></i> {t}Comments Custom Block Header{/t}</h5>
+                  <h5>{t}Scripts in header{/t}</h5>
                   <div class="form-group">
                     <textarea name="custom-code-header" id="custom_code_header" class="form-control" rows="10" ng-model="config.custom_code_header"></textarea>
-                    <div class="help">{t}Insert custom HTML, JavaScript or snippets to extend comments behavior.{/t}</div>
                   </div>
                 </div>
                 <div class="col-xs-12">
-                  <h5><i class="fa fa-comments m-r-5"></i> {t}Comments Custom Block Footer{/t}</h5>
+                  <h5>{t}Scripts at body end{/t}</h5>
                   <div class="form-group">
                     <textarea name="custom-code-footer" id="custom_code_footer" class="form-control" rows="10" ng-model="config.custom_code_footer"></textarea>
-                    <div class="help">{t}Insert custom HTML, JavaScript or snippets to extend comments behavior.{/t}</div>
                   </div>
                 </div>
               </div>
