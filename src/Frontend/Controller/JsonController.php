@@ -167,19 +167,23 @@ class JsonController extends FrontendController
                 );
             }
 
+            $address = !empty($item->event_place)
+                ? $item->event_place . ' - ' . $item->event_address
+                : $item->event_address;
+
             // Build the item array
             $events['items'][] = [
                 'allDay'         => 0,
                 'title'          => $item->title,
                 'url'            => $url,
                 'author'         => $authorName ?? 'Redacción',
-                'longitude'      => $item->event_longitude ?? '',
-                'latitude'       => $item->event_latitude ?? '',
+                'longitude'      => $item->event_map_longitude ?? '',
+                'latitude'       => $item->event_map_latitude ?? '',
                 'thumbnail'      => $imageUrl,
                 'content'        => $item->body,
                 'subtype'        => $categoryName,
                 'nbParticipants' => 0,
-                'address'        => $item->event_address ?? '',
+                'address'        => $address ?? '',
                 'type'           => $item->content_type_name,
                 'id'             => 'event_' . $item->pk_content,
                 'date'           => $startDate,
