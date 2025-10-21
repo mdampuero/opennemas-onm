@@ -179,8 +179,9 @@
         </ng-container>
         <div class="row">
           <div class="col-lg-12" ng-if="item.type === 'upload'">
-            <iframe 
-              src="https://iframe.mediadelivery.net/play/513420/24100b2d-4e8a-4fac-b583-c94e362e4e4e" 
+            
+             <iframe 
+              ng-src='https://iframe.mediadelivery.net/embed/513420/24100b2d-4e8a-4fac-b583-c94e362e4e4e'
               loading="lazy" 
               allow="autoplay" 
               allowfullscreen
