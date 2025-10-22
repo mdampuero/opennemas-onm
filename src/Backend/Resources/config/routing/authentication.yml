@@ -1,3 +1,13 @@
 backend_authentication_login:
     path:     /login
     defaults: { _controller: BackendBundle:Authentication:login }
+
+backend_authentication_two_factor:
+    path:     /login/two-factor
+    defaults: { _controller: BackendBundle:Authentication:twoFactor }
+    methods:  [GET, POST]
+    
+backend_authentication_two_factor_cancel:
+    path:     /login/two-factor/cancel
+    defaults: { _controller: BackendBundle:Authentication:twoFactorCancel }
+    methods:  [GET]

@@ -9,8 +9,9 @@
  */
 namespace Backend\Controller;
 
-use Common\Core\Annotation\Template;
+use Common\Core\Component\Security\Authentication\TwoFactorManager;
 use Common\Core\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
@@ -93,5 +94,81 @@ class AuthenticationController extends Controller
             'target'           => $target,
             'token'            => $auth->getCsrfToken()
         ]);
+    }
+
+    /**
+     * Displays and processes the two factor challenge.
+     *
+     * @return Response The response object.
+     */
+    public function twoFactorAction(Request $request)
+    {
+        $twoFactor = $this->get('core.security.authentication.two_factor');
+        $logger    = $this->get('application.log');
+
+        if (!$twoFactor->isPending()) {
+            return $this->redirect($this->generateUrl('admin_welcome'));
+        }
+        
+        if ($request->isMethod('POST')) {
+            $code = $request->request->get('verification_code');
+
+            if ($twoFactor->verify($code)) {
+                $target = $twoFactor->getTarget();
+
+                if (empty($target)) {
+                    $target = $this->generateUrl('admin_welcome');
+                }
+
+                $response = new RedirectResponse(
+                    $this->get('core.decorator.url')->prefixUrl($target)
+                );
+
+                $twoFactor->complete($response);
+
+                return $response;
+            }
+
+            $logger->error('2FA - Verification challenge failed.');
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                _('The verification code is not valid or has expired. Please try again.')
+            );
+        }
+
+        return $this->render('login/twofactor.tpl', [
+            'email'            => $twoFactor->getMaskedEmail(),
+            'locale'           => $this->get('core.locale')->getLocale(),
+            'availableLocales' => $this->get('core.locale')->getAvailableLocales(),
+        ]);
+    }
+
+    /**
+     * Cancels the two factor challenge and returns to the login form.
+     */
+    public function twoFactorCancelAction(Request $request)
+    {
+        $twoFactor = $this->get('core.security.authentication.two_factor');
+
+        if ($twoFactor) {
+            $twoFactor->clear();
+        }
+
+        $tokenStorage = $this->get('security.token_storage');
+
+        if ($tokenStorage) {
+            $tokenStorage->setToken(null);
+        }
+
+        $session = $request->getSession();
+
+        if ($session) {
+            $session->invalidate();
+        }
+
+        $response = $this->redirect($this->generateUrl('backend_authentication_login'));
+        $response->headers->clearCookie(TwoFactorManager::COOKIE_NAME);
+
+        return $response;
     }
 }

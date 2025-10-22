@@ -81,12 +81,22 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->request->headers = $this->headers;
 
+        $this->twoFactor = $this->getMockBuilder('Common\\Core\\Component\\Security\\Authentication\\TwoFactorManager')
+            ->disableOriginalConstructor()
+            ->setMethods(['shouldChallenge'])
+            ->getMock();
+
+        $this->twoFactor->expects($this->any())
+            ->method('shouldChallenge')
+            ->willReturn(false);
+
         $this->handler = new AuthenticationSuccessHandler(
             $this->auth,
             $this->logger,
             $this->router,
             $this->ts,
-            $this->decorator
+            $this->decorator,
+            $this->twoFactor
         );
     }
 

@@ -1,0 +1,20 @@
+manager_ws_security_two_factor:
+    path:     /security/two-factor
+    defaults: { _controller: ManagerWebServiceBundle:Security:twoFactor }
+    methods:  [ GET ]
+    options:
+        expose: true
+
+manager_ws_security_two_factor_save:
+    path:     /security/two-factor/save
+    defaults: { _controller: ManagerWebServiceBundle:Security:twoFactorSave }
+    methods:  [ PUT ]
+    options:
+        expose: true
+
+manager_ws_security_two_factor_delete_session:
+    path:     /security/two-factor/session/delete
+    defaults: { _controller: ManagerWebServiceBundle:Security:twoFactorDeleteSession }
+    methods:  [ DELETE ]
+    options:
+        expose: true

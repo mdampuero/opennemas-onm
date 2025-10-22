@@ -11,6 +11,7 @@ namespace Common\Core\Component\Loader;
 
 use Common\Core\Component\Exception\Instance\InstanceNotActivatedException;
 use Common\Core\Component\Exception\Instance\InstanceNotFoundException;
+use Common\Core\Component\Session\RedisSessionKeyHelper;
 use Common\Model\Entity\Instance;
 use Common\Model\Entity\Theme;
 
@@ -179,6 +180,8 @@ class CoreLoader
         define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
         define('CACHE_PREFIX', INSTANCE_UNIQUE_NAME);
 
+        $this->configureSessionPrefix($instance);
+
         $cachepath = APPLICATION_PATH . DS . 'tmp' . DS . 'instances' . DS . INSTANCE_UNIQUE_NAME;
         if (!file_exists($cachepath)) {
             mkdir($cachepath, 0755, true);
@@ -313,5 +316,28 @@ class CoreLoader
     {
         $this->container->get('core.template.layout')
             ->addLayouts($layouts);
+    }
+
+    /**
+     * Ensures the redis session handler uses the instance aware prefix.
+     */
+    private function configureSessionPrefix(Instance $instance) : void
+    {
+        if (!function_exists('ini_get') || !function_exists('ini_set')) {
+            return;
+        }
+
+        $savePath = ini_get('session.save_path');
+        if (!is_string($savePath) || trim($savePath) === '') {
+            return;
+        }
+
+        $identifier = RedisSessionKeyHelper::extractInstanceIdentifier($instance);
+        $prefix     = RedisSessionKeyHelper::buildInstancePrefix($identifier);
+        $normalised = RedisSessionKeyHelper::applyPrefixToSavePath($savePath, $prefix);
+
+        if ($normalised !== $savePath) {
+            ini_set('session.save_path', $normalised);
+        }
     }
 }
