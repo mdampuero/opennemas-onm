@@ -25,8 +25,21 @@ frontend_events_tag_list:
         subdirectory: true
 
 frontend_event_show:
+    path: /event/{category_slug}/{slug}/{created}{id}.html
+    defaults: { _controller: FrontendBundle:Event:show }
+    requirements:
+        category_slug: '[^/]+'
+        slug:          '[^/]+'
+        created:       '[0-9]{14}'
+        id:            '[0-9]+'
+    options:
+        expose: true
+        l10n: true
+        subdirectory: true
+
+frontend_event_show_legacy:
     path: /event/{slug}/
-    defaults: { _controller: FrontendBundle:Event:show, _format: html }
+    defaults: { _controller: FrontendBundle:Event:legacyShow }
     requirements:
         slug : '[^/.]+'
     options:

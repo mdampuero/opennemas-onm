@@ -139,14 +139,19 @@ class JsonController extends FrontendController
 
             // Add buy ticket button
             if (!empty($item->event_tickets_link)) {
+                $price = strpos($item->event_tickets_price, '€') !== false
+                    ? $item->event_tickets_price
+                    : $item->event_tickets_price . '€';
+
                 $item->body = sprintf(
-                    '<a href="%s" title="%s" style="%s">%s</a><span>Precio: <strong>%s€</strong></span> %s',
+                    '<a href="%s" title="%s" style="%s">%s</a>%s %s',
                     $item->event_tickets_link,
                     "COMPRAR ENTRADAS",
                     "background-color: #009ddd;border-radius: 4px;color: #fff;"
                     . "display: inline-block;margin: 0 10px 10px 0;padding: 10px 20px;",
                     "COMPRAR ENTRADAS",
-                    $item->event_tickets_price,
+                    empty($item->event_tickets_price)
+                        ? '' : '<span>Precio: <strong>' . $price . '</strong></span>',
                     $item->body
                 );
             }
@@ -154,12 +159,17 @@ class JsonController extends FrontendController
             // Add image at the beggining of the body
             if (!empty($imageUrl)) {
                 $item->body = sprintf(
-                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" /> </br> %s',
+                    '<img src="%s" alt="%s" style="display:none; '
+                    . 'max-width:100%%; height:auto; margin-bottom:20px;" /> </br> %s',
                     $imageUrl,
                     $item->title ?? '',
                     $item->body
                 );
             }
+
+            $address = !empty($item->event_place)
+                ? $item->event_place . ' - ' . $item->event_address
+                : $item->event_address;
 
             // Build the item array
             $events['items'][] = [
@@ -167,13 +177,13 @@ class JsonController extends FrontendController
                 'title'          => $item->title,
                 'url'            => $url,
                 'author'         => $authorName ?? 'Redacción',
-                'longitude'      => $item->event_longitude ?? '',
-                'latitude'       => $item->event_latitude ?? '',
+                'longitude'      => $item->event_map_longitude ?? '',
+                'latitude'       => $item->event_map_latitude ?? '',
                 'thumbnail'      => $imageUrl,
                 'content'        => $item->body,
                 'subtype'        => $categoryName,
                 'nbParticipants' => 0,
-                'address'        => $item->event_address ?? '',
+                'address'        => $address ?? '',
                 'type'           => $item->content_type_name,
                 'id'             => 'event_' . $item->pk_content,
                 'date'           => $startDate,
@@ -259,7 +269,8 @@ class JsonController extends FrontendController
             // Add image at the beggining of the body
             if (!empty($imageUrl)) {
                 $item->body = sprintf(
-                    '<img src="%s" alt="%s" style="max-width:100%%; height:auto; margin-bottom:20px;" /> %s',
+                    '<img src="%s" alt="%s" style="display:none; '
+                    . 'max-width:100%%; height:auto; margin-bottom:20px;" /> %s',
                     $imageUrl,
                     $item->title ?? '',
                     $item->body

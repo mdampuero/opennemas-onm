@@ -1,0 +1,287 @@
+<?php
+
+/**
+ * This file is part of the Onm package.
+ *
+ * (c) Openhost, S.L. <developers@opennemas.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace Api\Controller\V1\Backend;
+
+use Api\Controller\V1\ApiController;
+use Symfony\Component\HttpFoundation\Request;
+use Common\Core\Annotation\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
+class DataTransferController extends ApiController
+{
+
+    /**
+     * Defines available exportable modules, with format
+     * and excluded columns.
+     *
+     * @var array<string, array{
+     *  type: string,
+     *  excludeColumns: string[]
+     * }>
+     */
+    protected $availableDataTransfers = [
+        'advertisement' => [
+            'config' => [
+                'service' => 'api.service.content'
+            ],
+            'includeColumns' => [
+                'content_type_name',
+                'fk_content_type',
+                'in_litter',
+                'title',
+                'position',
+                'frontpage',
+                'in_litter',
+                'in_home',
+                'params.sizes',
+                'params.openx_zone_id',
+                'params.googledfp_unit_id',
+                'params.smart_format_id',
+                'params.smart_page_id',
+                'params.orientation',
+                'params.devices',
+                'content_status',
+                'advertisements',
+                'ads_positions'
+            ],
+            'excludeMode' => false,
+            'allowImport' => true
+        ],
+        'widget' => [
+            'config' => [
+                'service' => 'api.service.widget'
+            ],
+            'includeColumns' => [
+                'params.category', 'categories', 'tags',
+                'related_contents', 'webpush_notifications', 'starttime',
+                'endtime', 'created', 'changed', 'pk_content'
+            ],
+            'excludeMode' => true,
+            'allowImport' => true
+        ]
+    ];
+
+    /**
+     * The DataTransferHelper.
+     *
+     * @var string
+     */
+    protected $helper = 'core.helper.datatransfer';
+
+    /**
+     * Exports a set of items by ID for a specific content type.
+     *
+     * @param Request $request
+     *   Query parameters expected:
+     *   - contentType (string): The content type to export.
+     *   - ids (array|int[]): Array of IDs to export.
+     *
+     * @return StreamedResponse|JsonResponse
+     *   A downloadable JSON file of exported data or an error response.
+     *
+     *  @Security("hasPermission('MASTER')")
+     */
+    public function exportItemAction(Request $request)
+    {
+        $contentType = $request->query->get('contentType');
+        $config      = $this->availableDataTransfers[$contentType]['config'] ?? null;
+        $ids         = $request->query->get('ids');
+        $helper      = $this->container->get($this->helper);
+
+        if (!$contentType) {
+            return new JsonResponse(['error' => 'Content type is required'], 400);
+        }
+
+        if (!$ids) {
+            return new JsonResponse(['error' => 'IDs are required'], 400);
+        }
+
+        if (!$config || !isset($config['service'])) {
+            return new JsonResponse(['error' => 'Invalid export config for content type'], 400);
+        }
+
+        $idList = implode(',', array_map('intval', $ids));
+
+        $query = sprintf(
+            'content_type_name = "%s" and pk_content in [%s] order by created desc, pk_content desc',
+            $contentType,
+            $idList
+        );
+
+        $service = $this->container->get($config['service']);
+        $method  = $config['method'] ?? 'getList';
+
+        $data = $service->$method($query);
+
+        $items = array_map(function ($item) {
+            return (array) $item->getStored();
+        }, $data['items']);
+
+        $includeColumns = $this->availableDataTransfers[$contentType]['includeColumns'] ?? [];
+        $exclude        = $this->availableDataTransfers[$contentType]['excludeMode'] ?? false;
+        $filtered       = $helper->filterColumns($items, $includeColumns, $exclude);
+        $filtered       = $helper->convertAdvertisementPaths($filtered, $contentType);
+
+        $exportData = [
+            'metadata' => [
+                'content_type' => $contentType,
+                'export_date'  => date('Y-m-d H:i:s'),
+                'items_count'  => count($filtered),
+            ],
+            'items' => $filtered,
+        ];
+
+        $json = json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+        return new Response($json, 200, [
+            'Content-Type' => 'application/json',
+            'Content-Disposition' => sprintf(
+                'attachment; filename="export_%s_%s.json"',
+                $contentType,
+                date('Ymd_His')
+            ),
+        ]);
+    }
+
+    /**
+     * Exports all items of a specific content type using default configuration.
+     *
+     * @param string $contentType
+     *   The content type to export (must exist in $availableDataTransfers).
+     *
+     * @return Response|JsonResponse
+     *   A downloadable JSON file of exported data or an error response.
+     *
+     * @Security("hasPermission('MASTER')")
+     */
+    public function exportListAction(Request $request)
+    {
+        $contentType = $request->query->get('contentType');
+
+        // Validate content type and configuration
+        $config  = $this->availableDataTransfers[$contentType] ?? null;
+        $exclude = $this->availableDataTransfers[$contentType]['excludeMode'] ?? false;
+        if (!$contentType || !$config) {
+            return new JsonResponse(['error' => 'Invalid content type or config'], 400);
+        }
+
+        $helper = $this->container->get($this->helper);
+
+        $service       = $this->container->get($config['config']['service']);
+        $method        = $config['config']['method'] ?? 'getList';
+        $query         = 'content_type_name = "%s" and in_litter = 0
+            order by created desc, pk_content desc';
+        $queryTemplate = sprintf($query, $contentType);
+
+        $data = $service->$method($queryTemplate);
+
+        $items = array_map(function ($item) {
+            return (array) $item->getStored();
+        }, $data['items']);
+
+        $includeColumns = $config['includeColumns'] ?? [];
+
+        $filtered = $helper->filterColumns($items, $includeColumns, $exclude);
+
+        if ($contentType === 'advertisement') {
+            $filtered = $helper->convertAdvertisementPaths($filtered);
+        }
+
+        $exportData = [
+            'metadata' => [
+                'content_type' => $contentType,
+                'export_date'  => date('Y-m-d H:i:s'),
+                'items_count'  => count($filtered),
+            ],
+            'items' => $filtered,
+        ];
+
+        $json = json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        return new Response($json, 200, [
+            'Content-Type' => 'application/json',
+            'Content-Disposition' => sprintf(
+                'attachment; filename="export_%s_%s.json"',
+                $contentType,
+                date('Ymd_His')
+            ),
+        ]);
+    }
+
+    /**
+     * Imports items for a given content type from a JSON request body.
+     *
+     * @param Request $request
+     *   The HTTP request with JSON body containing:
+     *   - metadata.content_type (string): The content type.
+     *   - items (array): The data items to import.
+     *
+     * @return JsonResponse
+     *   Response indicating success or failure with messages.
+     *
+     *  @Security("hasPermission('MASTER')")
+     */
+    public function importAction(Request $request)
+    {
+        $msg         = $this->get('core.messenger');
+        $content     = json_decode($request->getContent(), true);
+        $contentType = $content['metadata']['content_type'] ?? null;
+        $items       = $content['items'] ?? [];
+        $config      = $this->availableDataTransfers[$contentType] ?? null;
+
+        if (!$contentType || empty($items)) {
+            return new JsonResponse(['error' => 'Content type and items are required'], 400);
+        }
+
+        if (!$config || !$config['allowImport']) {
+            return new JsonResponse(['error' => 'Import not allowed for this content type'], 403);
+        }
+
+        $us     = $this->container->get($config['config']['service']);
+        $helper = $this->container->get($this->helper);
+
+        foreach (array_reverse($items) as $item) {
+            if (!is_array($item)) {
+                return new JsonResponse(['error' => 'Invalid item format'], 400);
+            }
+
+            $filteredItem = $item;
+
+            if ($contentType === 'advertisement') {
+                $devices = $filteredItem['params']['devices'];
+
+                $devices = array_map(
+                    function ($value) {
+                        return (int) $value;
+                    },
+                    array_intersect_key($devices, array_flip(['desktop', 'phone', 'tablet']))
+                ) + $devices;
+
+                if ($filteredItem['advertisements'][0]['path']) {
+                    $image = $helper->importPhotoFromUrl(
+                        $filteredItem['advertisements']['0']['path']
+                    );
+
+                    $filteredItem['advertisements'][0]['path'] = $image->pk_content;
+                }
+            }
+
+            $filteredItem['content_status'] = 0;
+
+            $us->createItem($filteredItem);
+        }
+
+        $msg->add(_('Item saved successfully'), 'success');
+
+        return new JsonResponse($msg->getMessages(), $msg->getCode());
+    }
+}

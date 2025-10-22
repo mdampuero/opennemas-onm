@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-19 07:36+0000\n"
-"PO-Revision-Date: 2025-09-19 09:39+0200\n"
+"POT-Creation-Date: 2025-09-25 12:57+0000\n"
+"PO-Revision-Date: 2025-09-25 15:01+0200\n"
 "Last-Translator: Opennemas Developers <developers@opennemas.com>\n"
 "Language-Team: Euskera\n"
 "Language: es\n"
@@ -5103,6 +5103,9 @@ msgstr "Ordua"
 msgid "Display content's readtime"
 msgstr "Bistaratu edukien irakurketa"
 
+msgid "Display sports scoreboard"
+msgstr "Kirol markagailua erakutsi"
+
 msgid "Tiny contents"
 msgstr "Eduki gehiago"
 
@@ -7978,6 +7981,13 @@ msgstr "Izenik gabeko iragarkia"
 msgid "Floating ads (for drop them into columns)"
 msgstr "Iragarki flotagarriak (zutabeetan erortzeko)"
 
+msgid "Event start"
+msgstr "Gertakariaren hasiera"
+
+#, fuzzy
+msgid "Event end"
+msgstr "Gertaeraren data"
+
 msgid "Hide ongoing events"
 msgstr "Ezkutatu etengabeko gertaerak"
 
@@ -9022,6 +9032,14 @@ msgstr "Kostatu"
 
 msgid "Subtotal"
 msgstr "Suptrotal"
+
+#, fuzzy
+#~ msgid "Start event"
+#~ msgstr "Hasiera data"
+
+#, fuzzy
+#~ msgid "End event"
+#~ msgstr "Gertaera"
 
 #~ msgid "Unable to find any advertisement that matches your search."
 #~ msgstr "Ezin da zure bilaketarekin bat datorren iragarkirik aurkitu."

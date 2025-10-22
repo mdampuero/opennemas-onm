@@ -8,9 +8,9 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
-    <input id="checkbox-featured-category" checklist-model="app.columns.selected" checklist-value="'category'" type="checkbox">
-    <label for="checkbox-featured-category">
-      {t}Category{/t}
+    <input id="checkbox-featured-created" checklist-model="app.columns.selected" checklist-value="'created'" type="checkbox">
+    <label for="checkbox-featured-created">
+      {t}Created{/t}
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
@@ -38,6 +38,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-featured-category" checklist-model="app.columns.selected" checklist-value="'category'" type="checkbox">
+    <label for="checkbox-featured-category">
+      {t}Category{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-featured-clicks" checklist-model="app.columns.selected" checklist-value="'clicks'" type="checkbox">
     <label for="checkbox-featured-clicks">
       {t}Clicks{/t}
@@ -61,8 +67,8 @@
   <th class="v-align-middle" ng-if="isColumnEnabled('title')" width="300">
     {t}Title{/t}
   </th>
-  <th class="v-align-middle" ng-if="isColumnEnabled('category')" width="150">
-    {t}Category{/t}
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('created')" width="150">
+    {t}Created{/t}
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('starttime')" width="150">
     {t}Start date{/t}
@@ -73,8 +79,11 @@
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('dimensions')" width="150">
     {t}Dimensions{/t}
   </th>
-  <th class="v-align-middle" ng-if="isColumnEnabled('position')" width="250">
+  <th class="v-align-middle hidden-sm" ng-if="isColumnEnabled('position')" width="250">
     {t}Position{/t}
+  </th>
+  <th class="text-center v-align-middle" ng-if="isColumnEnabled('category')" width="150">
+    {t}Category{/t}
   </th>
   <th class="text-center v-align-middle" ng-if="isColumnEnabled('clicks')" width="75">
     {t}Clicks{/t}
@@ -126,15 +135,15 @@
       {/acl}
     </div>
   </td>
-  <td class="v-align-middle" ng-if="isColumnEnabled('category')">
-    {block name="categoryColumn"}
-      <small class="text-italic" ng-if="!item.fk_content_categories || item.fk_content_categories.length == 0">
-        {t}All{/t}
-      </small>
-      <small ng-if="item.fk_content_categories.length >= 1">
-        {t}Custom{/t}
-      </small>
-    {/block}
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('created')">
+    <div>
+      <i class="fa fa-calendar"></i>
+      [% item.created | moment : 'YYYY-MM-DD' %]
+    </div>
+    <small class="text-bold">
+      <i class="fa fa-clock-o"></i>
+      [% item.created | moment : 'HH:mm:ss' %]
+    </small>
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('starttime')">
     <span class="text-bold" ng-if="!item.starttime">
@@ -193,7 +202,17 @@
     <span ng-repeat="value in item.positions | limitTo:3" class="ad-position">[% map[value].name %]</span>
     <span ng-show="item.positions.length > 3" {* uib-tooltip-template="'ad_position_template'" tooltip-placement="bottom" *}>{t 1="[% item.positions.length - 3 %]"}And %1 more…{/t}</span>
   </td>
-  <td class="hidden-xs text-center" ng-if="isColumnEnabled('clicks')">
+  <td class="text-center v-align-middle" ng-if="isColumnEnabled('category')">
+    {block name="categoryColumn"}
+      <small class="text-italic" ng-if="!item.fk_content_categories || item.fk_content_categories.length == 0">
+        {t}All{/t}
+      </small>
+      <small ng-if="item.fk_content_categories.length >= 1">
+        {t}Custom{/t}
+      </small>
+    {/block}
+  </td>
+  <td class="hidden-xs text-center v-align-middle" ng-if="isColumnEnabled('clicks')">
     [% item.num_clic_count %]
   </td>
   <td class="text-center v-align-middle" ng-if="isColumnEnabled('type')">

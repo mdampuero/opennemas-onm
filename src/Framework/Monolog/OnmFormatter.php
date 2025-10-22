@@ -75,6 +75,10 @@ class OnmFormatter
             return $record;
         }
 
+        if (!empty($request->request->get('_username')) && $record['extra']['user'] === 'anon.') {
+            $record['extra']['user'] = $request->request->get('_username');
+        }
+
         $record['extra']['client_ip']  = $this->getClientIp($request);
         $record['extra']['user_agent'] = $request->headers->get('User-Agent');
         $record['extra']['url']        = $request->getUri();

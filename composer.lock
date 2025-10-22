@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6ea1930fd95dfe00cff9beef6308c3b4",
+    "content-hash": "8a1dacaaee63eb47217c1f5aeafa5fba",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -3376,11 +3376,11 @@
         },
         {
             "name": "opennemas/data",
-            "version": "1.1.3",
+            "version": "1.1.7",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:opennemas/data.git",
-                "reference": "16da8cc3de4b0315a92f1da03836afd04367342a"
+                "reference": "50b8a6ca2496b17b4de406eaba9e0fe84a3a7f06"
             },
             "require": {
                 "ext-intl": "*",
@@ -3437,7 +3437,7 @@
                 "filter",
                 "symfony"
             ],
-            "time": "2025-01-13T14:48:04+00:00"
+            "time": "2025-10-10T09:27:37+00:00"
         },
         {
             "name": "opennemas/orm",

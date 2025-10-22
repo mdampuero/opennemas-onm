@@ -141,4 +141,42 @@ class CommentHelperTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(false, $this->helper->moderateManually());
     }
+
+    /**
+     * Tests customCode.
+     */
+    public function testCustomCodeHead()
+    {
+        $encoded = base64_encode('<script>alert("Hi!")</script>');
+        $configs = array_merge($this->defaultConfigs, [
+            'custom_code_header' => $encoded
+        ]);
+
+        $this->dataSet->expects($this->any())
+            ->method('get')
+            ->willReturn($configs);
+
+        $this->helper = new CommentHelper($this->ormManager, $this->defaultConfigs);
+
+        $this->assertEquals('<script>alert("Hi!")</script>', $this->helper->customCodeHeader());
+    }
+
+    /**
+     * Tests customCodeFooter.
+     */
+    public function testCustomCodeFooter()
+    {
+        $encoded = base64_encode('<footer>Footer content</footer>');
+        $configs = array_merge($this->defaultConfigs, [
+            'custom_code_footer' => $encoded
+        ]);
+
+        $this->dataSet->expects($this->any())
+            ->method('get')
+            ->willReturn($configs);
+
+        $this->helper = new CommentHelper($this->ormManager, $this->defaultConfigs);
+
+        $this->assertEquals('<footer>Footer content</footer>', $this->helper->customCodeFooter());
+    }
 }

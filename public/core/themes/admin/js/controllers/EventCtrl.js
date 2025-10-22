@@ -16,9 +16,9 @@
      */
     .controller('EventCtrl', [
       '$controller', '$scope', 'related', 'routing', 'translator', 'cleaner',
-      'http', '$uibModal',
+      'http', '$uibModal', '$window',
       function($controller, $scope, related, routing, translator, cleaner, http,
-          $uibModal) {
+          $uibModal, $window) {
         $.extend(this, $controller('ContentRestInnerCtrl', { $scope: $scope }));
 
         /**
@@ -142,9 +142,16 @@
          * @return {String} The URL for the content.
          */
         $scope.getFrontendUrl = function(item) {
-          return $scope.getL10nUrl(
+          if (!$scope.selectedCategory || !item.pk_content) {
+            return '';
+          }
+
+          return $scope.data.extra.base_url + $scope.getL10nUrl(
             routing.generate($scope.routes.public, {
+              id: item.pk_content.toString().padStart(6, '0'),
+              created: item.urldatetime || $window.moment(item.created).format('YYYYMMDDHHmmss'),
               slug: item.slug,
+              category_slug: $scope.selectedCategory.name
             })
           );
         };

@@ -10,6 +10,7 @@
 namespace Tests\Common\NewsAgency\Component\Synchronizer;
 
 use Common\NewsAgency\Component\Synchronizer\Synchronizer;
+use Symfony\Component\Config\Resource\ReflectionClassResource;
 use Common\Model\Entity\Instance;
 use Exception;
 
@@ -243,6 +244,17 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertFalse($this->synchronizer->isLocked());
         $this->assertTrue($this->synchronizer->isLocked());
+    }
+
+    /**
+     * Tests getLockFilePath.
+     */
+    public function testgetLockFilePath()
+    {
+        $this->assertEquals(
+            '/plugh/corge/qux/importers/.lock',
+            $this->synchronizer->getLockFilePath()
+        );
     }
 
     /**

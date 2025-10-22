@@ -449,7 +449,7 @@ class Redirector
         $content  = null;
 
         if (empty($id) && empty($slug)) {
-            throw new ResourceNotFoundException();
+            throw new NotFoundHttpException();
         }
 
         $source      = !empty($id) ? $id : $slug;

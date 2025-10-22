@@ -240,6 +240,30 @@
               </div>
             </div>
           {/is_module_activated}
+          {acl isAllowed="MASTER"}
+            <div class="grid simple">
+              <div class="grid-title">
+                <h4>
+                  <i class="fa fa-code m-r-5"></i>
+                  {t}Custom code{/t}
+                </h4>
+              </div>
+              <div class="grid-body">
+                <div class="col-xs-12">
+                  <h5>{t}Scripts in header{/t}</h5>
+                  <div class="form-group">
+                    <textarea name="custom-code-header" id="custom_code_header" class="form-control" rows="10" ng-model="config.custom_code_header"></textarea>
+                  </div>
+                </div>
+                <div class="col-xs-12">
+                  <h5>{t}Scripts at body end{/t}</h5>
+                  <div class="form-group">
+                    <textarea name="custom-code-footer" id="custom_code_footer" class="form-control" rows="10" ng-model="config.custom_code_footer"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {/acl}
         </div>
         <div ng-if="config.comment_system == 'facebook'">
           <div class="grid simple">

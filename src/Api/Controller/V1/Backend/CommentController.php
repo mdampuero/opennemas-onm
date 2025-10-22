@@ -104,9 +104,20 @@ class CommentController extends ApiController
 
         $ds = $this->get('orm.manager')->getDataSet('Settings', 'instance');
         $sh = $this->get('core.helper.setting');
+        $ch = $this->get('core.helper.comment');
 
-        $defaultConfigs = $this->get('core.helper.comment')->getDefaultConfigs();
+        $defaultConfigs = $ch->getDefaultConfigs();
         $config         = $ds->get('comment_settings', []);
+
+        $config['custom_code_header'] = $config['custom_code_header'] ?? null
+            ? $ch->customCodeHeader()
+            : '';
+
+        $config['custom_code_footer'] = $config['custom_code_footer'] ?? null
+            ? $ch->customCodeFooter()
+            : '';
+
+        $defaultConfigs = $ch->getDefaultConfigs();
 
         $config = $sh->toInt($config, ['number_elements']);
         $config = $sh->toBoolean($config, $this->tobool);
@@ -139,6 +150,13 @@ class CommentController extends ApiController
 
         $config = $request->request->get('config', []);
         $extra  = $request->request->get('extra', []);
+
+        $config['custom_code_header'] = $config['custom_code_header'] ?? null
+            ? base64_encode($config['custom_code_header'])
+            : '';
+        $config['custom_code_footer'] = $config['custom_code_footer'] ?? null
+            ? base64_encode($config['custom_code_footer'])
+            : '';
 
         $config = $sh->toInt($config, ['number_elements']);
         $config = $sh->toBoolean($config, $this->tobool);

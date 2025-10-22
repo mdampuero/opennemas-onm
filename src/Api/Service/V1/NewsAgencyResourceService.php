@@ -420,6 +420,37 @@ class NewsAgencyResourceService implements Service
     }
 
     /**
+     * Unlocks the instance if it is locked.
+     *
+     * @return array The response object.
+     */
+    public function unlockInstance()
+    {
+        if (!$this->synchronizer->isLocked()) {
+            throw new ApiException(_('The instance is not locked'), 400);
+        }
+
+        try {
+            $this->synchronizer
+                ->setInstance($this->container->get('core.instance'))
+                ->unlockSync();
+
+            $response = [
+                'status'  => 'success',
+                'message' => _('Instance unlocked successfully')
+            ];
+        } catch (\Exception $e) {
+            throw new ApiException($e->getMessage(), $e->getCode());
+        }
+
+        $this->dispatcher->dispatch($this->getEventName('unlockInstance'), [
+            'response' => $response
+        ]);
+
+        return $response;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getEventName($action)

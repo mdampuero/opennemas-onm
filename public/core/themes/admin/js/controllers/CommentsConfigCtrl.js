@@ -113,11 +113,14 @@
           var validKeys = {
             onm: [
               'comment_system', 'disable_comments', 'with_comments',
-              'number_elements' ],
+              'number_elements', 'custom_code_header', 'custom_code_footer'
+            ],
             facebook: [ 'comment_system', 'disable_comments', 'with_comments',
-              'facebook_apikey' ],
+              'facebook_apikey'
+            ],
             disqus: [ 'comment_system', 'disable_comments', 'with_comments',
-              'disqus_secretkey', 'disqus_shortname' ]
+              'disqus_secretkey', 'disqus_shortname'
+            ]
           };
 
           for (var key in validKeys[$scope.config.comment_system]) {
@@ -143,7 +146,7 @@
             onm: [
               'acton_list', 'comment_system', 'disable_comments', 'with_comments',
               'number_elements', 'required_email', 'moderation_manual',
-              'moderation_autoaccept', 'moderation_autoreject'
+              'moderation_autoaccept', 'moderation_autoreject', 'custom_code_header', 'custom_code_footer'
             ],
             facebook: [ 'comment_system', 'disable_comments', 'with_comments', 'facebook_apikey' ],
             disqus: [ 'comment_system', 'disable_comments', 'with_comments', 'disqus_secretkey', 'disqus_shortname' ]

@@ -179,6 +179,14 @@
         </ng-container>
         <div class="row">
           <div class="col-lg-12" ng-if="item.type === 'upload'">
+            
+             <iframe 
+              ng-src='https://iframe.mediadelivery.net/embed/513420/24100b2d-4e8a-4fac-b583-c94e362e4e4e'
+              loading="lazy" 
+              allow="autoplay" 
+              allowfullscreen
+              style="width:100%;height:480px;border:none;">
+            </iframe>
             <div class="m-t-0 m-b-30" ng-if="!item.pk_content">
               <div class="upload-dropzone" ng-class="{ 'dragover': isDragOver }" ng-click="triggerFileInput()"
                 ng-drop="true" ondragover="angular.element(this).scope().onDragOver(event)"
@@ -279,6 +287,7 @@
                   <source ng-if="preview.ogg" ng-src="[% preview.ogg %]" type="video/ogg">
                   <source ng-if="preview.mp4" ng-src="[% preview.mp4 %]" type="video/mp4">
                 </video>
+                
               </div>
             </div>
           </div>

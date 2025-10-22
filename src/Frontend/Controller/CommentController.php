@@ -60,6 +60,7 @@ class CommentController extends FrontendController
         }
 
         $comments = $this->getComments($content, $epp, $offset);
+        $ch       = $this->get('core.helper.comment');
         $sh       = $this->get('core.helper.subscription');
 
         if ($sh->hasAdvertisements($sh->getToken($content))) {
@@ -67,17 +68,19 @@ class CommentController extends FrontendController
         }
 
         return $this->render('comments/loader.tpl', [
-            'total'          => $comments['total'],
-            'comments'       => $comments['items'],
-            'contentId'      => $content->id,
-            'elems_per_page' => $epp,
-            'required_email' => $this->get('core.helper.comment')->isEmailRequired(),
-            'offset'         => $offset,
-            'more'           => $comments['total'] > ($epp * $offset),
-            'x-cacheable'    => true,
-            'x-tags'         => 'comments-' . $contentId,
-            'o_canonical'    => $request->getUri(),
-            'recaptcha'      => $this->get('core.recaptcha')
+            'total'              => $comments['total'],
+            'comments'           => $comments['items'],
+            'contentId'          => $content->id,
+            'custom_code_header' => $ch->customCodeHeader(),
+            'custom_code_footer' => $ch->customCodeFooter(),
+            'elems_per_page'     => $epp,
+            'required_email'     => $this->get('core.helper.comment')->isEmailRequired(),
+            'offset'             => $offset,
+            'more'               => $comments['total'] > ($epp * $offset),
+            'x-cacheable'        => true,
+            'x-tags'             => 'comments-' . $contentId,
+            'o_canonical'        => $request->getUri(),
+            'recaptcha'          => $this->get('core.recaptcha')
                 ->setVersion(2)
                 ->configureFromSettings()
                 ->getHtml(),

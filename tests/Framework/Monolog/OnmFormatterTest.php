@@ -85,12 +85,16 @@ class OnmFormatterTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())->method('getUri')
             ->willReturn('http://norf.org/qux');
 
+        $this->request->request = new \Symfony\Component\HttpFoundation\ParameterBag([
+            '_username' => 'master',
+        ]);
+
         $record = $this->formatter->processRecord(['message' => "Link user@email.com "
             . "Ñ@@#|!/\º·$%&()=?¿¡'+Ḉç-_.[àè]{}+*^{}<>|:",
             'context' => ["Link user@email.com Ñ@@#|!/\º·$%&()=?¿¡'+Ḉç-_.[àè]{}+*^{}<>|:"]]);
 
         $this->assertEquals('fred', $record['extra']['instance']);
-        $this->assertEquals('anon.', $record['extra']['user']);
+        $this->assertEquals('master', $record['extra']['user']);
         $this->assertEquals('128.0.134.43', $record['extra']['client_ip']);
         $this->assertEquals('glork/plugh', $record['extra']['user_agent']);
         $this->assertEquals('http://norf.org/qux', $record['extra']['url']);
