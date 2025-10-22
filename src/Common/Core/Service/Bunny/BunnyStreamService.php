@@ -53,7 +53,7 @@ class BunnyStreamService
     {
         $this->client = new Client([
             'base_uri' => rtrim(self::API_BASE_URL, '/'),
-            'timeout'  => 60,
+            'timeout'  => 600000,
         ]);
     }
 
