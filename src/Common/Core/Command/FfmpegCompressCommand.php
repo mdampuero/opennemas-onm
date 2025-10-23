@@ -319,10 +319,16 @@ class FfmpegCompressCommand extends ContainerAwareCommand
         $information['fileSize']           = (string) $newSizeBytes;
         $information['fileSizeMB']         = (string) $newSizeMB;
         $information['localPath']          = $localPath;
+        $config                            = $this->getConfig();
+        $providerType                      = $config['provider']['type'] ?? 's3';
+        $label                             = $providerType === 'bunny' ?
+            'Uploading to Bunny Stream' :
+            'Uploading to S3';
         $information['remotePath']         = $remotePath;
         $information['step']['progress']   = '0%';
         $information['status']             = 'done';
-        $information['step']['label']      = 'Uploading to S3';
+        $information['provider']           = $providerType;
+        $information['step']['label']      = $label;
         $information['step']['styleClass'] = 'primary';
 
         $information['thumbnails'] = $this->createThumbnail($information);

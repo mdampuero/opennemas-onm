@@ -132,7 +132,12 @@ class StorageController extends Controller
             ])));
         }
 
-        if ($step['label'] === 'Uploading to S3' && $stepProgress == 0 && $information['status'] === 'done') {
+        $uploadingLabels = ['Uploading to S3', 'Uploading to Bunny Stream'];
+
+        if (in_array($step['label'], $uploadingLabels, true)
+            && $stepProgress == 0
+            && $information['status'] === 'done'
+        ) {
             $information['status'] = 'uploading';
 
             $created = new \Datetime();

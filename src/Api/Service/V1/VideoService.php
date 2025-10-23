@@ -27,13 +27,22 @@ class VideoService extends ContentService
      */
     public function removeFromStorage($itemPK, $instance, string $mode = 'delete')
     {
-        $factory  = $this->container->get('core.helper.storage_factory');
-        $storage  = $factory->create($instance);
-        $s3Client = $factory->getS3Client();
-        $config   = $factory->getConfig();
-        $bucket   = $config['provider']['bucket'];
+        $factory      = $this->container->get('core.helper.storage_factory');
+        $storage      = $factory->create($instance);
+        $config       = $factory->getConfig();
+        $provider     = $config['provider'] ?? [];
+        $providerType = $factory->getProviderType();
 
         $itemPKs = is_array($itemPK) ? $itemPK : [$itemPK];
+
+        if ($providerType === 'bunny') {
+            $this->removeFromBunny($itemPKs, $storage, $instance, $mode);
+            return;
+        }
+
+        $s3Client = $factory->getS3Client();
+        $bucket   = $provider['bucket'] ?? null;
+
         foreach ($itemPKs as $pk) {
             $item = $this->getItem($pk);
             if ($item->type === 'upload' && !empty($item->information['remotePath'])) {
@@ -58,6 +67,33 @@ class VideoService extends ContentService
                         ]);
                     } catch (\Exception $e) {
                     }
+                }
+            }
+        }
+    }
+
+    private function removeFromBunny(array $itemPKs, $storage, $instance, string $mode): void
+    {
+        foreach ($itemPKs as $pk) {
+            $item = $this->getItem($pk);
+
+            if ($item->type !== 'upload') {
+                continue;
+            }
+
+            $remotePath = $item->information['remotePath'] ?? '';
+
+            if (!$remotePath) {
+                continue;
+            }
+
+            if ($mode === 'delete') {
+                $storage->delete($remotePath);
+                $size = $item->information['fileSize'] ?? 0;
+
+                if ($size > 0) {
+                    $instance->storage_size = max(0, $instance->storage_size - $size);
+                    $this->container->get('orm.manager')->persist($instance);
                 }
             }
         }

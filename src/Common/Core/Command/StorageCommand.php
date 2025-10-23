@@ -26,6 +26,7 @@ class StorageCommand extends ContainerAwareCommand
     private $loggerApp;
     private $loggerErr;
     private $instance;
+    private $providerType = 's3';
 
     /**
      * Configures the command.
@@ -112,6 +113,7 @@ class StorageCommand extends ContainerAwareCommand
         $this->factory = $this->getContainer()->get('core.helper.storage_factory');
         $this->setInstance($instanceId);
         $storage       = $this->factory->create($this->instance);
+        $this->providerType = $this->factory->getProviderType();
 
         switch ($operation) {
             case 'upload':
@@ -277,6 +279,10 @@ class StorageCommand extends ContainerAwareCommand
         $localFile = $item->information['localPath'] ?? null;
         $path      = $item->information['remotePath'] ?? null;
 
+        if ($this->providerType === 'bunny') {
+            return $this->handleUploadByItemBunny($item, $instanceId, $output);
+        }
+
         $this->loggerApp->info('STORAGE - Uploading item', [
             'itemPK'      => $itemPK,
             'instanceId'  => $instanceId,
@@ -310,7 +316,7 @@ class StorageCommand extends ContainerAwareCommand
 
         try {
             $uploader->upload();
-            $this->setNextStep($path);
+            $this->setNextStepS3($path);
             $this->logResult('Upload ', true);
 
             // update storage size
@@ -325,6 +331,66 @@ class StorageCommand extends ContainerAwareCommand
         return 0;
     }
 
+    private function handleUploadByItemBunny($item, $instanceId, OutputInterface $output)
+    {
+        $localFile = $item->information['localPath'] ?? null;
+
+        if (!$localFile || !is_file($localFile)) {
+            $output->writeln('<fg=red;options=bold>FAIL - </> Local file not found for the selected item');
+            return 1;
+        }
+
+        $service = $this->factory->getBunnyService();
+
+        if (!$service) {
+            $output->writeln('<fg=red;options=bold>FAIL - </> Bunny Stream service is not available');
+            return 1;
+        }
+
+        $this->loggerApp->info('STORAGE - Uploading item to Bunny Stream', [
+            'itemPK'     => $item->pk_content,
+            'instanceId' => $instanceId,
+            'localFile'  => $localFile,
+        ]);
+
+        $filesize = filesize($localFile) ?: 0;
+        $title    = $item->title ?: pathinfo($localFile, PATHINFO_FILENAME);
+
+        try {
+            $service->assertConfigured();
+
+            $createPayload = $service->createVideo($title);
+            $videoGuid     = $createPayload['guid'] ?? $createPayload['videoGuid'] ?? $createPayload['id'] ?? null;
+
+            if (!$videoGuid) {
+                throw new \RuntimeException('Missing video identifier from Bunny Stream response.');
+            }
+
+            $mimeType = function_exists('mime_content_type') ? mime_content_type($localFile) : null;
+            $service->uploadVideoFromFile($videoGuid, $localFile, $mimeType);
+
+            $details      = $service->fetchVideo($videoGuid);
+            $playbackGuid = $details['guid'] ?? $details['videoGuid'] ?? $videoGuid;
+            $embedUrl     = $service->getEmbedUrl($playbackGuid);
+
+            $this->setNextStepBunny($videoGuid, $playbackGuid, $embedUrl, $details);
+            $this->logResult('Upload ', true);
+
+            if ($filesize > 0) {
+                $this->instance->storage_size += $filesize;
+                $this->getContainer()->get('orm.manager')->persist($this->instance);
+            }
+        } catch (\Throwable $exception) {
+            $message = $exception->getMessage();
+            $output->writeln('<fg=red;options=bold>Upload failed: </>' . $message);
+            $this->logResult('Upload ', false, $message);
+            return 1;
+        }
+
+        $this->logCommandFinish();
+        return 0;
+    }
+
     /**
      * Finalizes the current step by setting status to 'done', updating the item's path,
      * and removing the local file if it exists.
@@ -332,7 +398,7 @@ class StorageCommand extends ContainerAwareCommand
      * @param array  $config        Configuration array containing 'endpoint' and 'bucket'.
      * @param string $relativePath  The relative path of the file in the remote storage.
      */
-    private function setNextStep($relativePath)
+    private function setNextStepS3($relativePath)
     {
         $config                            = $this->factory->getConfig();
         $item                              = $this->getItem();
@@ -347,6 +413,7 @@ class StorageCommand extends ContainerAwareCommand
         $information['step']['label']      = 'Completed';
         $information['step']['styleClass'] = 'success';
         $information['status']             = 'done';
+        $information['provider']           = 's3';
         $information['path']               = $path;
         $information['source']             = [pathinfo($information['localPath'], PATHINFO_EXTENSION) => $path];
 
@@ -359,6 +426,49 @@ class StorageCommand extends ContainerAwareCommand
         $this->getContentService()->updateItem($item->pk_content, [
             'information' => $information,
             'path'        => $path
+        ]);
+    }
+
+    private function setNextStepBunny($videoGuid, $playbackGuid, $embedUrl, $details = [])
+    {
+        $item        = $this->getItem();
+        $information = $item->information;
+
+        $this->loggerApp->info('STORAGE - Uploading finish (Bunny Stream)', [
+            'embedUrl'  => $embedUrl,
+            'videoGuid' => $videoGuid,
+        ]);
+
+        $information['step']['progress']   = '';
+        $information['step']['label']      = 'Completed';
+        $information['step']['styleClass'] = 'success';
+        $information['status']             = 'done';
+        $information['provider']           = 'bunny';
+        $information['remotePath']         = sprintf('bunny://%s', $videoGuid);
+        $information['path']               = $embedUrl;
+        $information['embedUrl']           = $embedUrl;
+        $information['source']             = ['embed' => $embedUrl];
+        $information['bunny']              = [
+            'videoGuid'     => $videoGuid,
+            'playbackGuid'  => $playbackGuid,
+        ];
+
+        if (isset($details['thumbnailFileName']) && empty($information['thumbnail'])) {
+            $information['thumbnail'] = $details['thumbnailFileName'];
+        }
+
+        $this->loggerApp->info('STORAGE - Remove local file', [
+            'localPath' => $item->information['localPath'] ?? null,
+        ]);
+        if (!empty($item->information['localPath']) && file_exists($item->information['localPath'])) {
+            unlink($item->information['localPath']);
+        }
+
+        $information['localPath'] = null;
+
+        $this->getContentService()->updateItem($item->pk_content, [
+            'information' => $information,
+            'path'        => $embedUrl,
         ]);
     }
 

@@ -85,7 +85,10 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      *
      * @type {Object}
      */
-    $scope.preview = {};
+    $scope.preview             = {};
+    $scope.bunnyEmbedReady     = false;
+    $scope.bunnyEmbedTimer     = null;
+    $scope.bunnyEmbedSignature = null;
 
     /**
      * @memberOf VideoCtrl
@@ -165,6 +168,86 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
     };
 
     /**
+     * @function cancelBunnyEmbedTimer
+     * @memberOf VideoCtrl
+     * @description
+     * Cancels the current Bunny embed timer if it exists.
+     */
+    $scope.cancelBunnyEmbedTimer = function() {
+      if ($scope.bunnyEmbedTimer) {
+        $timeout.cancel($scope.bunnyEmbedTimer);
+        $scope.bunnyEmbedTimer = null;
+      }
+    };
+
+    /**
+     * @function resetBunnyEmbedState
+     * @memberOf VideoCtrl
+     * @description
+     * Resets Bunny embed state and clears timer and signature.
+     */
+    $scope.resetBunnyEmbedState = function() {
+      $scope.cancelBunnyEmbedTimer();
+      $scope.bunnyEmbedReady     = false;
+      $scope.bunnyEmbedSignature = null;
+    };
+
+    /**
+     * @function scheduleBunnyEmbedReady
+     * @memberOf VideoCtrl
+     * @description
+     * Schedules the Bunny embed to become ready after a delay.
+     * Cancels previous timer and resets state if needed.
+     *
+     * @param {string} signature - Unique signature to identify the embed instance.
+     */
+    $scope.scheduleBunnyEmbedReady = function(signature) {
+      if (!signature) {
+        $scope.resetBunnyEmbedState();
+        return;
+      }
+
+      if ($scope.bunnyEmbedSignature === signature && ($scope.bunnyEmbedTimer || $scope.bunnyEmbedReady)) {
+        return;
+      }
+
+      $scope.cancelBunnyEmbedTimer();
+      $scope.bunnyEmbedReady     = false;
+      $scope.bunnyEmbedSignature = signature;
+
+      $scope.bunnyEmbedTimer = $timeout(function() {
+        $scope.bunnyEmbedReady = true;
+        $scope.bunnyEmbedTimer = null;
+      }, 2000);
+    };
+
+    /**
+     * @function isBunnyProvider
+     * @memberOf VideoCtrl
+     * @description
+     * Checks if the current video is hosted by the Bunny provider.
+     *
+     * @returns {boolean} True if the provider or remote path indicates Bunny.
+     */
+    $scope.isBunnyProvider = function() {
+      if (!$scope.item || !$scope.item.information) {
+        return false;
+      }
+
+      if ($scope.item.information.provider === 'bunny') {
+        return true;
+      }
+
+      var remotePath = $scope.item.information.remotePath || '';
+
+      if (typeof remotePath === 'string' && remotePath.indexOf('bunny://') === 0) {
+        return true;
+      }
+
+      return false;
+    };
+
+    /**
      * @function fetchStatus
      * @memberOf VideoCtrl
      *
@@ -198,28 +281,28 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
               var relatedItem = {
                 caption: response.data.item.title,
-                content_type_name: "photo",
+                content_type_name: 'photo',
                 position: 0,
                 target_id: response.data.item.pk_content,
-                type: "featured_frontpage",
+                type: 'featured_frontpage',
               };
 
               // Clone
               var relatedItemInner = angular.copy(relatedItem);
 
               $scope.featuredInner = relatedItemInner;
-              relatedItemInner.type = "featured_inner";
+              relatedItemInner.type = 'featured_inner';
 
               $scope.item.related_contents.push(relatedItem);
               $scope.item.related_contents.push(relatedItemInner);
 
               // Update item
-              route.name   = $scope.routes.updateItem;
+              route.name = $scope.routes.updateItem;
               route.params = { id: $scope.getItemId() };
               http.put(route, $scope.item).then(function(response) {
                 $scope.disableFlags('http');
-                  $window.location.href =
-                    routing.generate($scope.routes.redirect, { id: $scope.getItemId() });
+                $window.location.href =
+                  routing.generate($scope.routes.redirect, { id: $scope.getItemId() });
                 messenger.post(response.data);
               }, $scope.errorCb);
             });
@@ -264,7 +347,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
         return;
       }
 
-      if (type === 'web-source' && !['external', 'script', 'upload'].includes($scope.item.type)) {
+      if (type === 'web-source' && ![ 'external', 'script', 'upload' ].includes($scope.item.type)) {
         return;
       }
 
@@ -342,10 +425,49 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
 
     // Mark preview URLs as trusted on change
     $scope.$watch('item.information.source', function(nv) {
+      if (!nv) {
+        return;
+      }
       for (var type in nv) {
         $scope.preview[type] = $scope.trustSrc(nv[type]);
       }
     }, true);
+
+    $scope.$watch('item.path', function(nv) {
+      if (!$scope.isBunnyProvider()) {
+        $scope.resetBunnyEmbedState();
+        delete $scope.preview.embed;
+        return;
+      }
+
+      if (!nv || typeof nv !== 'string') {
+        $scope.resetBunnyEmbedState();
+        delete $scope.preview.embed;
+        return;
+      }
+
+      $scope.scheduleBunnyEmbedReady(nv);
+      $scope.preview.embed = $scope.trustSrc(nv);
+    });
+
+    $scope.$watch('item.information.provider', function() {
+      if (!$scope.isBunnyProvider()) {
+        $scope.resetBunnyEmbedState();
+        delete $scope.preview.embed;
+        return;
+      }
+
+      var path = $scope.item && $scope.item.path;
+
+      if (path && typeof path === 'string') {
+        $scope.scheduleBunnyEmbedReady(path);
+        $scope.preview.embed = $scope.trustSrc(path);
+      }
+    });
+
+    $scope.$on('$destroy', function() {
+      $scope.cancelBunnyEmbedTimer();
+    });
 
     /**
      * Parses the data and calculates text complexity.
@@ -474,7 +596,7 @@ angular.module('BackendApp.controllers').controller('VideoCtrl', [
      * @returns {string} A unique file ID.
      */
     $scope.generateFileId = function() {
-       return 'file-' + Date.now() + '-' + Math.floor(Math.random() * 1e9);
+      return 'file-' + Date.now() + '-' + Math.floor(Math.random() * 1e9);
     };
 
     /**
