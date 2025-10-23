@@ -178,80 +178,87 @@
           imagepicker=true AI=true AIFieldType="descriptions"}
         </ng-container>
         <div class="row">
-          <div class="col-lg-12" ng-if="item.type === 'upload'">
-            
-             <iframe 
-              ng-src='https://iframe.mediadelivery.net/embed/513420/24100b2d-4e8a-4fac-b583-c94e362e4e4e'
-              loading="lazy" 
-              allow="autoplay" 
-              allowfullscreen
-              style="width:100%;height:480px;border:none;">
-            </iframe>
-            <div class="m-t-0 m-b-30" ng-if="!item.pk_content">
-              <div class="upload-dropzone" ng-class="{ 'dragover': isDragOver }" ng-click="triggerFileInput()"
-                ng-drop="true" ondragover="angular.element(this).scope().onDragOver(event)"
-                ondragleave="angular.element(this).scope().onDragLeave(event)"
-                ondrop="angular.element(this).scope().onDrop(event)">
-                <div class="text-center">
-                  <i class="fa fa-folder-open fa-3x text-warning" ng-if="uploading === -1"></i>
-                  <i class="fa fa-cloud-upload fa-3x text-info" ng-if="uploading === 0"></i>
-                  <i class="fa fa-check-circle fa-3x text-success" ng-if="uploading === 1"></i>
-                </div>
-                <input type="file" id="fileInput" style="display: none" accept="video/*"
-                  onchange="angular.element(this).scope().setFile(this.files)">
-                <p ng-if="uploading !== 1"><strong>{t}Click or drag a file here{/t}</strong></p>
-                <p ng-if="uploading === 1"><strong>{t}Redirecting{/t}...</strong></p>
-                <div class="m-t-15 m-b-30" ng-if="progress >= 0 && !uploadComplete && !uploadError">
-                  <div class="progress" style="margin-top: 10px; height: 20px">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="[% progress %]" aria-valuemin="0"
-                      aria-valuemax="100"
-                      style="width: [% progress %]%; transition: none !important; -webkit-transition: none !important;">
-                      <b>[% progress %]%</b>
-                    </div>
-                  </div>
+            <div class="col-lg-12" ng-if="item.type === 'upload'">
+              <div class="m-t-0 m-b-30" ng-if="!item.pk_content">
+                <div class="upload-dropzone" ng-class="{ 'dragover': isDragOver }" ng-click="triggerFileInput()"
+                  ng-drop="true" ondragover="angular.element(this).scope().onDragOver(event)"
+                  ondragleave="angular.element(this).scope().onDragLeave(event)"
+                  ondrop="angular.element(this).scope().onDrop(event)">
                   <div class="text-center">
-                    <p>{t}Uploading{/t} <b>[% uploadedSizeMB %] {t}to{/t} [% totalSizeMB %] MB</b> (
-                      {t}Estimated time remaining:{/t} <b>[% estimatedTimeRemaining %]</b>)</p>
+                    <i class="fa fa-folder-open fa-3x text-warning" ng-if="uploading === -1"></i>
+                    <i class="fa fa-cloud-upload fa-3x text-info" ng-if="uploading === 0"></i>
+                    <i class="fa fa-check-circle fa-3x text-success" ng-if="uploading === 1"></i>
                   </div>
-                </div>
-              </div>
-            </div>
-            <div class="m-t-0 m-b-30" ng-if="item.pk_content">
-              <div class="upload-file-list">
-                <div class="file-item">
-                  <div class="file-info">
-                    <i class="fa fa-video-camera fa-lg text-[% item.information.step.styleClass %]"></i>
-                    <span class="file-name">[% item.information.fileName %]</span>
-
-                    <input type="hidden" ng-model="item.path" class="form-control" />
-                    <span class="file-size">[% item.information.fileSizeMB %] MB</span>
-                  </div>
-                  <span class="badge badge-[% item.information.step.styleClass %]">
-                    [% item.information.step.label %] [% item.information.step.progress %]
-                  </span>
-                </div>
-                <ng-container ng-if="item.path">
-                  <div class="input-group m-t-20">
-                    <input type="text" class="form-control" ng-model="item.path" readonly="readonly" />
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" ng-click="copyPath()" tooltip="{t}Copy URL{/t}">
-                        <span class="glyphicon glyphicon-copy"></span>
-                      </button>
-                    </span>
-                  </div>
-                  <div class="form-group" ng-if="getItemId(item) && (preview.webm || preview.ogg || preview.mp4)">
-                    <div class="controls">
-                      <div class="thumbnail inline w-100" style="line-height: 0;">
-                        <video style="margin: 0 auto; width:100%" controls>
-                          <source ng-src="[% item.path %]" type="video/mp4">
-                        </video>
+                  <input type="file" id="fileInput" style="display: none" accept="video/*"
+                    onchange="angular.element(this).scope().setFile(this.files)">
+                  <p ng-if="uploading !== 1"><strong>{t}Click or drag a file here{/t}</strong></p>
+                  <p ng-if="uploading === 1"><strong>{t}Redirecting{/t}...</strong></p>
+                  <div class="m-t-15 m-b-30" ng-if="progress >= 0 && !uploadComplete && !uploadError">
+                    <div class="progress" style="margin-top: 10px; height: 20px">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="[% progress %]" aria-valuemin="0"
+                        aria-valuemax="100"
+                        style="width: [% progress %]%; transition: none !important; -webkit-transition: none !important;">
+                        <b>[% progress %]%</b>
                       </div>
                     </div>
+                    <div class="text-center">
+                      <p>{t}Uploading{/t} <b>[% uploadedSizeMB %] {t}to{/t} [% totalSizeMB %] MB</b> (
+                        {t}Estimated time remaining:{/t} <b>[% estimatedTimeRemaining %]</b>)</p>
+                    </div>
                   </div>
-                </ng-container>
+                </div>
+              </div>
+              <div class="m-t-0 m-b-30" ng-if="item.pk_content">
+                <div class="upload-file-list">
+                  <div class="file-item">
+                    <div class="file-info">
+                      <i class="fa fa-video-camera fa-lg text-[% item.information.step.styleClass %]"></i>
+                      <span class="file-name">[% item.information.fileName %]</span>
+
+                      <input type="hidden" ng-model="item.path" class="form-control" />
+                      <span class="file-size">[% item.information.fileSizeMB %] MB</span>
+                    </div>
+                    <span class="badge badge-[% item.information.step.styleClass %]">
+                      [% item.information.step.label %] [% item.information.step.progress %]
+                    </span>
+                  </div>
+                  <ng-container ng-if="item.path">
+                    <div class="input-group m-t-20" ng-if="!isBunnyProvider()">
+                      <input type="text" class="form-control" ng-model="item.path" readonly="readonly" />
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="copyPath()" tooltip="{t}Copy URL{/t}">
+                          <span class="glyphicon glyphicon-copy"></span>
+                        </button>
+                      </span>
+                    </div>
+                    <div class="form-group" ng-if="getItemId(item) && (preview.webm || preview.ogg || preview.mp4 || isBunnyProvider())">
+                      <div class="controls">
+                        <div class="thumbnail inline w-100" style="line-height: 0;">
+                          <div ng-if="isBunnyProvider() && (preview.embed || item.path)" class="video-embed-wrapper">
+                            <div class="video-embed-loading text-center p-b-15 p-t-15" ng-if="!bunnyEmbedReady" style="height:360px; display:flex; align-items:center; justify-content:center; flex-direction:column;">
+                              <i class="fa fa-3x fa-circle-o-notch fa-spin text-info"></i>
+                              <h5 class="spinner-text">Waiting for Bunny...</h5>
+                            </div>
+                            <iframe
+                              ng-if="bunnyEmbedReady"
+                              class="video-embed-frame"
+                              ng-src="[% preview.embed || trustSrc(item.path) %]"
+                              style="width:100%; height:360px; border:0;"
+                              allow="autoplay"
+                              allowfullscreen
+                              loading="lazy">
+                            </iframe>
+                          </div>
+                          <video ng-if="!isBunnyProvider()" style="margin: 0 auto; width:100%" controls>
+                            <source ng-src="[% item.path %]" type="video/mp4">
+                          </video>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
               </div>
             </div>
-          </div>
         </div>
         <span ng-if="item.type === 'external'">
           <div class="form-group">

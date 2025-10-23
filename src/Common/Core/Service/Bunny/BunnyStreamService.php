@@ -42,18 +42,19 @@ class BunnyStreamService
      */
     public const API_KEY = '38fab01c-6ec1-4a68-b9935990ab12-aa91-4ac8';
 
-    /**
-     * HTTP client used to communicate with the Bunny Stream API.
-     *
-     * @var Client
-     */
     private $client;
+    private $apiBaseUrl;
+    private $embedBaseUrl;
+    private $libraryId;
+    private $apiKey;
 
     public function __construct()
     {
-        $this->client = new Client([
-            'base_uri' => rtrim(self::API_BASE_URL, '/'),
-            'timeout'  => 600000,
+        $this->applyConfiguration([
+            'api_base_url'   => self::API_BASE_URL,
+            'embed_base_url' => self::EMBED_BASE_URL,
+            'library_id'     => self::LIBRARY_ID,
+            'api_key'        => self::API_KEY,
         ]);
     }
 
@@ -64,6 +65,16 @@ class BunnyStreamService
     {
         $this->getLibraryId();
         $this->getApiKey();
+    }
+
+    public function configure(array $config): void
+    {
+        $this->applyConfiguration([
+            'api_base_url'   => $config['api_base_url'] ?? $this->apiBaseUrl,
+            'embed_base_url' => $config['embed_base_url'] ?? $this->embedBaseUrl,
+            'library_id'     => $config['library_id'] ?? $this->libraryId,
+            'api_key'        => $config['api_key'] ?? $this->apiKey,
+        ]);
     }
 
     /**
@@ -155,16 +166,31 @@ class BunnyStreamService
      */
     public function getEmbedUrl(string $playbackGuid): string
     {
-        return sprintf('%s/%s/%s', rtrim(self::EMBED_BASE_URL, '/'), $this->getLibraryId(), $playbackGuid);
+        return sprintf('%s/%s/%s', rtrim($this->embedBaseUrl, '/'), $this->getLibraryId(), $playbackGuid);
+    }
+
+    public function deleteVideo(string $videoGuid): void
+    {
+        try {
+            $this->client->delete(
+                sprintf('/library/%s/videos/%s', $this->getLibraryId(), $videoGuid),
+                ['headers' => ['AccessKey' => $this->getApiKey()]]
+            );
+        } catch (GuzzleException $exception) {
+            throw new \RuntimeException(
+                sprintf('Unable to delete the Bunny Stream video: %s', $exception->getMessage()),
+                0,
+                $exception
+            );
+        }
     }
 
     private function getLibraryId(): string
     {
-        $libraryId = trim(self::LIBRARY_ID);
+        $libraryId = trim($this->libraryId);
 
-        if ('' === $libraryId) {
-            throw new \RuntimeException('Bunny Stream library ID is not configured. 
-            Set the LIBRARY_ID constant in BunnyStreamService.');
+        if ($libraryId === '') {
+            throw new \RuntimeException('Bunny Stream library ID is not configured. Set it in the storage settings.');
         }
 
         return $libraryId;
@@ -172,11 +198,10 @@ class BunnyStreamService
 
     private function getApiKey(): string
     {
-        $apiKey = trim(self::API_KEY);
+        $apiKey = trim($this->apiKey);
 
-        if ('' === $apiKey) {
-            throw new \RuntimeException('Bunny Stream API key is not configured. 
-            Set the API_KEY constant in BunnyStreamService.');
+        if ($apiKey === '') {
+            throw new \RuntimeException('Bunny Stream API key is not configured. Set it in the storage settings.');
         }
 
         return $apiKey;
@@ -189,5 +214,18 @@ class BunnyStreamService
             'Accept'       => 'application/json',
             'Content-Type' => 'application/json',
         ];
+    }
+
+    private function applyConfiguration(array $config): void
+    {
+        $this->apiBaseUrl   = rtrim($config['api_base_url'] ?? self::API_BASE_URL, '/');
+        $this->embedBaseUrl = rtrim($config['embed_base_url'] ?? self::EMBED_BASE_URL, '/');
+        $this->libraryId    = (string) ($config['library_id'] ?? '');
+        $this->apiKey       = (string) ($config['api_key'] ?? '');
+
+        $this->client = new Client([
+            'base_uri' => $this->apiBaseUrl,
+            'timeout'  => 600000,
+        ]);
     }
 }

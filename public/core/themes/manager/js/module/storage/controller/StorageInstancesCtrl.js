@@ -5,10 +5,59 @@
     .controller('StorageInstancesCtrl', [
       '$controller', '$uibModal', '$location', '$scope', '$timeout', 'http', 'messenger', 'oqlDecoder', 'oqlEncoder', 'webStorage',
       function($controller, $uibModal, $location, $scope, $timeout, http, messenger, oqlDecoder, oqlEncoder, webStorage) {
+        function ensureProvider(provider, createDefault) {
+          if (!provider) {
+            if (createDefault === false) {
+              return null;
+            }
+            provider = {};
+          }
+
+          if (!provider.type) {
+            var hasBunnyFields = provider.api_base_url || provider.embed_base_url ||
+              provider.library_id || provider.api_key;
+
+            provider.type = hasBunnyFields ? 'bunny' : 's3';
+          }
+
+          return provider;
+        }
+
         $.extend(this, $controller('ListCtrl', {
           $scope: $scope,
           $timeout: $timeout
         }));
+
+        $scope.isBunnyProvider = function(provider) {
+          provider = ensureProvider(provider, false);
+          return provider ? provider.type === 'bunny' : false;
+        };
+
+        $scope.isS3Provider = function(provider) {
+          return !$scope.isBunnyProvider(provider);
+        };
+
+        $scope.getProviderField = function(provider, field) {
+          provider = ensureProvider(provider, false);
+
+          if (!provider) {
+            return '';
+          }
+          if (provider.type === 'bunny') {
+            switch (field) {
+              case 'endpoint':
+                return provider.api_base_url || '';
+              case 'bucket':
+                return provider.library_id || '';
+              case 'public_endpoint':
+                return provider.embed_base_url || '';
+              default:
+                return provider[field] || '';
+            }
+          }
+
+          return provider && provider[field] ? provider[field] : '';
+        };
 
         $scope.columns = {
           collapsed: 1,
@@ -48,7 +97,11 @@
 
           return http.get(route).then(function(response) {
             $scope.loading = 0;
-            $scope.items = response.data.results;
+            $scope.items = response.data.results.map(function(item) {
+              item.storage_settings = item.storage_settings || {};
+              item.storage_settings.provider = ensureProvider(item.storage_settings.provider, false);
+              return item;
+            });
             $scope.total = response.data.total;
             $scope.extra = response.data.extra;
 
@@ -84,12 +137,19 @@
             controller: 'modalCtrl',
             resolve: {
               template: function() {
+                var settings = angular.copy(item.storage_settings) || { };
+
+                settings.provider = ensureProvider(settings.provider, true);
+
                 return {
-                  storage_settings: angular.copy(item.storage_settings)
+                  storage_settings: settings
                 };
               },
               success: function() {
                 return function(modalWindow, template) {
+                  template.storage_settings = template.storage_settings || {};
+                  template.storage_settings.provider = ensureProvider(template.storage_settings.provider, true);
+
                   var route = {
                     name: 'manager_ws_storage_instances_save',
                     params: {

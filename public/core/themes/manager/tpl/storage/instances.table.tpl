@@ -8,6 +8,12 @@
     </label>
   </div>
   <div class="checkbox column-filters-checkbox">
+    <input id="checkbox-provider" checklist-model="columns.selected" checklist-value="'provider_type'" type="checkbox">
+    <label for="checkbox-provider">
+      {t}Provider{/t}
+    </label>
+  </div>
+  <div class="checkbox column-filters-checkbox">
     <input id="checkbox-endpoint" checklist-model="columns.selected" checklist-value="'endpoint'" type="checkbox">
     <label for="checkbox-endpoint">
       {t}Upload endpoint{/t}
@@ -43,6 +49,9 @@
     <i
       ng-class="{ 'fa fa-caret-up': isOrderedBy('name') == 'asc', 'fa fa-caret-down': isOrderedBy('name') == 'desc'}"></i>
   </th>
+  <th class="pointer" ng-show="isColumnEnabled('provider_type')" >
+    {t}Provider{/t}
+  </th>
   <th class="pointer" ng-show="isColumnEnabled('endpoint')" >
     {t}Upload endpoint{/t}
   </th>
@@ -76,19 +85,27 @@
       </div>
     </div>
   </td>
-  <td class="v-align-middle" ng-show="isColumnEnabled('endpoint')" title="[% item.storage_settings.provider.endpoint %]">
+  <td class="v-align-middle" ng-show="isColumnEnabled('provider_type')">
+    <span class="badge badge-info" ng-if="isBunnyProvider(item.storage_settings.provider)">
+      {t}Bunny Stream{/t}
+    </span>
+    <span class="badge badge-default" ng-if="isS3Provider(item.storage_settings.provider)">
+      {t}S3 Provider{/t}
+    </span>
+  </td>
+  <td class="v-align-middle" ng-show="isColumnEnabled('endpoint')" title="[% getProviderField(item.storage_settings.provider, 'endpoint') %]">
     <div class="table-text">
-      [% item.storage_settings.provider.endpoint %]
+      [% getProviderField(item.storage_settings.provider, 'endpoint') %]
     </div>
   </td>
-  <td class="v-align-middle" ng-show="isColumnEnabled('bucket')" title="[% item.storage_settings.provider.bucket %]">
+  <td class="v-align-middle" ng-show="isColumnEnabled('bucket')" title="[% getProviderField(item.storage_settings.provider, 'bucket') %]">
     <div class="table-text">
-      [% item.storage_settings.provider.bucket %]
+      [% getProviderField(item.storage_settings.provider, 'bucket') %]
     </div>
   </td>
-  <td class="v-align-middle" ng-show="isColumnEnabled('public_endpoint')" title="[% item.storage_settings.provider.public_endpoint %]">
+  <td class="v-align-middle" ng-show="isColumnEnabled('public_endpoint')" title="[% getProviderField(item.storage_settings.provider, 'public_endpoint') %]">
     <div class="table-text">
-      [% item.storage_settings.provider.public_endpoint %]
+      [% getProviderField(item.storage_settings.provider, 'public_endpoint') %]
     </div>
   </td>
   <td class="text-center v-align-middle" ng-show="isColumnEnabled('manager_config')" title="{t}Manager config{/t}">

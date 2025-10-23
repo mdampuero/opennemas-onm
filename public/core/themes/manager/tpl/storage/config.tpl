@@ -83,9 +83,21 @@
         <div class="col-sm-6">
           <div class="showcase-info showcase-info-score showcase-info-top showcase-info-height-auto panel m-t-5 p-15 bg-light">
             <div class="form-status text-left">
-              <label class="m-b-10"><b>{t}S3 Provider{/t}</b></label>
+              <label class="m-b-10"><b>{t}Storage{/t}</b></label>
               <hr>
               <div class="row">
+                <div class="col-xs-12 form-group">
+                  <label class="form-label" for="provider_type">{t}Provider{/t}</label>
+                  <select
+                    id="provider_type"
+                    class="form-control"
+                    ng-model="storage_settings.provider.type">
+                    <option value="s3">{t}S3 Provider{/t}</option>
+                    <option value="bunny">{t}Bunny Stream{/t}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row" ng-if="isS3Provider()">
                 <div class="col-xs-12 form-group">
                   <label class="form-label" for="endpoint">{t}Upload endpoint{/t}</label>
                   <input
@@ -127,6 +139,36 @@
                     type="text"
                     class="form-control"
                     ng-model="storage_settings.provider.public_endpoint">
+                </div>
+              </div>
+              <div class="row" ng-if="isBunnyProvider()">
+                <div class="col-xs-12 form-group">
+                  <label class="form-label" for="api_base_url">{t}API Base URL{/t}</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ng-model="storage_settings.provider.api_base_url">
+                </div>
+                <div class="col-xs-12 form-group">
+                  <label class="form-label" for="embed_base_url">{t}Embed Base URL{/t}</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ng-model="storage_settings.provider.embed_base_url">
+                </div>
+                <div class="col-xs-6 form-group">
+                  <label class="form-label" for="library_id">{t}Library ID{/t}</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ng-model="storage_settings.provider.library_id">
+                </div>
+                <div class="col-xs-6 form-group">
+                  <label class="form-label" for="api_key">{t}API Key{/t}</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ng-model="storage_settings.provider.api_key">
                 </div>
               </div>
             </div>
